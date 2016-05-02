@@ -1,7 +1,7 @@
 /obj/effect/decal/cleanable
 	var/list/random_icon_states = list()
 	var/targeted_by = null	//Used so cleanbots can claim a mess.
-	mouse_opacity = 0 //So it's not completely impossible to fix the brig after some asshole bombs and then dirt grenades the place. - N3X
+	mouse_opacity = 1 //N3X made this 0, which made it impossible to click things, and in the current 510 version right-click things.
 	w_type = NOT_RECYCLABLE
 
 	// For tracking shit across the floor.
@@ -13,6 +13,8 @@
 	var/basecolor="#A10808" // Color when wet.
 	var/list/datum/disease2/disease/virus2 = list()
 	var/list/absorbs_types=list() // Types to aggregate.
+
+	var/on_wall = 0 //Wall on which this decal is placed on
 
 /obj/effect/decal/cleanable/New()
 	if(random_icon_states && length(src.random_icon_states) > 0)
@@ -31,12 +33,13 @@
 		D.cure(0)
 		D.holder = null
 
-	if(counts_as_blood && ticker.mode && ticker.mode.name == "cult")
-		var/datum/game_mode/cult/mode_ticker = ticker.mode
-		var/turf/T = get_turf(src)
-		if(T && (T.z == map.zMainStation))
-			mode_ticker.bloody_floors -= T
-			mode_ticker.blood_check()
+	if(counts_as_blood)
+		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
+		if(cult_round)
+			var/turf/T = get_turf(src)
+			if(T && (T.z == map.zMainStation))
+				cult_round.bloody_floors -= T
+				cult_round.blood_check()
 	..()
 
 /obj/effect/decal/cleanable/proc/dry()
@@ -79,14 +82,15 @@
 	blood_list += src
 	update_icon()
 
-	if(counts_as_blood && ticker && ticker.mode && ticker.mode.name == "cult")
-		var/datum/game_mode/cult/mode_ticker = ticker.mode
-		var/turf/T = get_turf(src)
-		if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-			if(!(locate("\ref[T]") in mode_ticker.bloody_floors))
-				mode_ticker.bloody_floors += T
-				mode_ticker.bloody_floors[T] = T
-				mode_ticker.blood_check()
+	if(counts_as_blood)
+		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
+		if(cult_round)
+			var/turf/T = get_turf(src)
+			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
+				if(!(locate("\ref[T]") in cult_round.bloody_floors))
+					cult_round.bloody_floors += T
+					cult_round.bloody_floors[T] = T
+					cult_round.blood_check()
 		if(src.loc && isturf(src.loc))
 			for(var/obj/effect/decal/cleanable/C in src.loc)
 				if(C.type in absorbs_types && C != src)
@@ -107,7 +111,7 @@
 		return
 	if(perp.shoes)
 		var/obj/item/clothing/shoes/S = perp.shoes
-		S.track_blood = max(0,amount,S.track_blood)                //Adding blood to shoes
+		S.track_blood = max(0, amount, S.track_blood)                //Adding blood to shoes
 
 		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
 			S.generate_blood_overlay()
@@ -126,9 +130,9 @@
 		if(blood_DNA)
 			S.blood_DNA |= blood_DNA.Copy()
 		perp.update_inv_shoes(1)
-	else
 
-		perp.track_blood = Clamp(amount, 0, perp.track_blood)                                //Or feet
+	else
+		perp.track_blood = max(amount, 0, perp.track_blood)                                //Or feet
 		if(!perp.feet_blood_DNA)
 			perp.feet_blood_DNA = list()
 		if(!istype(blood_DNA, /list))

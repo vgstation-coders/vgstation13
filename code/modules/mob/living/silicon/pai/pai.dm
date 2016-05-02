@@ -79,7 +79,7 @@
 		pda.name = pda.owner + " (" + pda.ownjob + ")"
 		pda.toff = 1
 
-	add_language("Sol Common", 1)
+	add_language("Galactic Common", 1)
 	add_language("Tradeband", 1)
 	add_language("Gutter", 1)
 
@@ -167,7 +167,7 @@
 	if(prob(20) && !software.Find("redundant threading"))
 		var/turf/T = get_turf(src.loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 3, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
+			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 1, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
 		return src.death(0)
 
 	switch(pick(1,2,3))
@@ -193,8 +193,7 @@
 	if(flags & INVULNERABLE)
 		return
 
-	if(!blinded)
-		flick("flash", src.flash)
+	flash_eyes(visual = 1, affects_silicon = 1)
 
 	switch(severity)
 		if(1.0)

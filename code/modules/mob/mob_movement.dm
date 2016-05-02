@@ -1,4 +1,4 @@
-/mob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/mob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
@@ -48,13 +48,13 @@
 	if(iscarbon(usr))
 		var/mob/living/carbon/C = usr
 		if(!C.get_active_hand())
-			to_chat(usr, "<span class='warning'> You have nothing to drop in your hand.</span>")
+			to_chat(usr, "<span class='warning'>You have nothing to drop in your hand.</span>")
 			return
 		drop_item()
 	else if(isMoMMI(usr))
 		var/mob/living/silicon/robot/mommi/M = usr
 		if(!M.get_active_hand())
-			to_chat(M, "<span class='warning'> You have nothing to drop or store.</span>")
+			to_chat(M, "<span class='warning'>You have nothing to drop or store.</span>")
 			return
 		M.uneq_active()
 	else if(isrobot(usr))
@@ -63,7 +63,7 @@
 			return
 		R.uneq_active()
 	else
-		to_chat(usr, "<span class='warning'> This mob type cannot drop items.</span>")
+		to_chat(usr, "<span class='warning'>This mob type cannot drop items.</span>")
 	return
 
 //This gets called when you press the delete button.
@@ -71,7 +71,7 @@
 	set hidden = 1
 
 	if(!usr.pulling)
-		to_chat(usr, "<span class='notice'> You are not pulling anything.</span>")
+		to_chat(usr, "<span class='notice'>You are not pulling anything.</span>")
 		return
 	usr.stop_pulling()
 
@@ -201,10 +201,6 @@
 		O.dir = direct
 
 /client/Move(loc,dir)
-	if(!mob)
-		return // Moved here to avoid nullrefs below. - N3X
-	if(mob.timestopped)
-		return 0
 	if(move_delayer.next_allowed > world.time)
 		return 0
 
@@ -223,10 +219,6 @@
 	if(mob.incorporeal_move)
 		Process_Incorpmove(dir)
 		return
-
-	for(var/obj/effect/stop/S in mob.loc)
-		if(S.victim == mob)
-			return
 
 	if(mob.stat == DEAD)
 		return
@@ -272,7 +264,7 @@
 			for(var/mob/M in range(mob, 1))
 				if(M.pulling == mob)
 					if(!M.restrained() && M.stat == 0 && M.canmove && mob.Adjacent(M))
-						to_chat(src, "<span class='notice'> You're restrained! You can't move!</span>")
+						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
 						return 0
 					else
 						M.stop_pulling()
@@ -280,15 +272,15 @@
 				var/datum/chain/chain_datum = mob.tether.chain_datum
 				if(chain_datum.extremity_A == mob)
 					if(istype(chain_datum.extremity_B,/mob/living))
-						to_chat(src, "<span class='notice'> You're restrained! You can't move!</span>")
+						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
 						return 0
 				else if(chain_datum.extremity_B == mob)
 					if(istype(chain_datum.extremity_A,/mob/living))
-						to_chat(src, "<span class='notice'> You're restrained! You can't move!</span>")
+						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
 						return 0
 
 		if(mob.pinned.len)
-			to_chat(src, "<span class='notice'> You're pinned to a wall by [mob.pinned[1]]!</span>")
+			to_chat(src, "<span class='notice'>You're pinned to a wall by [mob.pinned[1]]!</span>")
 			return 0
 
 		// COMPLEX MOVE DELAY SHIT
@@ -310,6 +302,8 @@
 
 		//We are now going to move
 		move_delay = max(move_delay,1)
+		if(mob.movement_speed_modifier)
+			move_delay *= (1/mob.movement_speed_modifier)
 		mob.delayNextMove(move_delay)
 		//Something with pulling things
 		if(Findgrab)
@@ -386,7 +380,11 @@
 	var/turf/mobloc = get_turf(mob)
 
 	switch(mob.incorporeal_move)
-		if(1)
+		if(INCORPOREAL_GHOST)
+			if(isobserver(mob)) //Typecast time
+				var/mob/dead/observer/observer = mob
+				if(observer.locked_to) //Ghosts can move at any time to unlock themselves (in theory from following a mob)
+					observer.manual_stop_follow(observer.locked_to)
 			var/turf/T = get_step(mob, direct)
 			var/area/A = get_area(T)
 			if(A && A.anti_ethereal && !isAdminGhost(mob))
@@ -397,7 +395,12 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
-		if(2)
+			if(isobserver(mob))
+				var/mob/dead/observer/observer = mob
+				mob.delayNextMove(observer.movespeed)
+			else
+				mob.delayNextMove(1)
+		if(INCORPOREAL_NINJA)
 			if(prob(50))
 				var/locx
 				var/locy
@@ -435,7 +438,8 @@
 				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 				mob.forceEnter(get_step(mob, direct))
 			mob.dir = direct
-		if(3) //Jaunting, without needing to be done through relaymove
+			mob.delayNextMove(1)
+		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.flags & NOJAUNT))
 				mob.forceEnter(newLoc)
@@ -448,7 +452,6 @@
 	for(var/obj/S in mob.loc)
 		if(istype(S,/obj/effect/step_trigger) || istype(S,/obj/effect/beam))
 			S.Crossed(mob)
-	mob.delayNextMove(1)
 
 	return 1
 
@@ -525,6 +528,8 @@
 	if(!canmove || restrained() || !pulling)
 		return
 	if(pulling.anchored)
+		return
+	if(src.locked_to == pulling)
 		return
 	if(!pulling.Adjacent(src))
 		return

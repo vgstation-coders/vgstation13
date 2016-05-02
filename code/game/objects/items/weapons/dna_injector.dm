@@ -21,6 +21,10 @@
 /obj/item/weapon/dnainjector/New()
 	. = ..()
 
+	if(ticker)
+		initialize()
+
+/obj/item/weapon/dnainjector/initialize()
 	if(datatype && block)
 		buf=new
 		buf.dna=new
@@ -203,7 +207,7 @@
 				*/
 				if(user)//If the user still exists. Their mob may not.
 					if(M)//Runtime fix: If the mob doesn't exist, mob.name doesnt work. - Nodrak
-						user.show_message(text("<span class='warning'>You inject [M.name]</span>"))
+						user.show_message(text("<span class='warning'>You inject [M.name].</span>"))
 					else
 						user.show_message(text("<span class='warning'>You finish the injection.</span>"))
 	return

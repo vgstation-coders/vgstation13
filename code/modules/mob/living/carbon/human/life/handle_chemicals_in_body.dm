@@ -7,12 +7,15 @@
 
 		var/alien = 0 //Not the best way to handle it, but neater than checking this for every single reagent proc.
 		if(src.species)
+			if(src.species.has_organ["liver"])
+				var/datum/organ/internal/liver/L = src.internal_organs_by_name["liver"]
+				if(!L)
+					src.adjustToxLoss(1)
 			switch(src.species.type)
 				if(/datum/species/diona)	alien = IS_DIONA
 				if(/datum/species/vox)	alien = IS_VOX
 				if(/datum/species/plasmaman)	alien = IS_PLASMA
-		spawn()
-			reagents.metabolize(src,alien)
+		reagents.metabolize(src,alien)
 
 	var/total_plasmaloss = 0
 	for(var/obj/item/I in src)
@@ -77,14 +80,11 @@
 				update_inv_wear_suit()
 
 	//Nutrition decrease
-	if(nutrition > 0 && stat != 2)
-		//Nutrition decreases slower when you're sleeping
+	if(stat != 2)
 		var/reduce_nutrition_by = HUNGER_FACTOR
-
 		if(sleeping)
-			reduce_nutrition_by *= 0.25 //Reduce hunger factor by 75%
-
-		nutrition = max (0, nutrition - reduce_nutrition_by)
+			reduce_nutrition_by *= 0.75 //Reduce hunger factor by 25%
+		burn_calories(reduce_nutrition_by,1)
 
 	if(nutrition > 450)
 		if(overeatduration < 600) //capped so people don't take forever to unfat

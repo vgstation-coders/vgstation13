@@ -75,11 +75,8 @@ FLOOR SAFES
 /obj/structure/safe/attack_hand(mob/user as mob)
 	user.set_machine(src)
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\structures\safe.dm:77: var/dat = "<center>"
 	var/dat = {"<center>
 <a href='?src=\ref[src];open=1'>[open ? "Close" : "Open"] [src]</a> | <a href='?src=\ref[src];decrement=1'>-</a> [dial * 5] <a href='?src=\ref[src];increment=1'>+</a>"}
-	// END AUTOFIX
 	if(open)
 		dat += "<table>"
 		for(var/i = contents.len, i>=1, i--)
@@ -150,10 +147,10 @@ FLOOR SAFES
 /obj/structure/safe/attackby(obj/item/I as obj, mob/user as mob)
 	if(open)
 		if(I.w_class + space <= maxspace)
-			space += I.w_class
-			user.drop_item(I, src)
-			to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
-			updateUsrDialog()
+			if(user.drop_item(I, src))
+				space += I.w_class
+				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+				updateUsrDialog()
 			return
 		else
 			to_chat(user, "<span class='notice'>[I] won't fit in [src].</span>")

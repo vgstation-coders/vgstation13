@@ -41,13 +41,16 @@
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		var/obj/item/weapon/virusdish/D = I
+
+		if(!c.drop_item(D, src)) return 1
+
 		if(!D.analysed)
 			if(!dish)
 				dish = D
 			else
 				toscan += D
-		if(!c.drop_item(D, src)) return 1
-		visible_message("<span class='notice'>[user.name] inserts the [D.name] in the [src.name].</span>", 3)
+
+		visible_message("<span class='notice'>[user.name] inserts the [D.name] in the [src.name].</span>")
 		src.updateUsrDialog()
 
 /obj/machinery/disease2/diseaseanalyser/proc/PrintPaper(var/obj/item/weapon/virusdish/D)
@@ -137,7 +140,7 @@
 				dat += "<br>[B.analysed ? "<A href='?src=\ref[src];print=1;name=["[ID]"];'>Print</a>" : ""]</td>"
 			dat += "</tr>"
 		dat += "</table>"
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "disease_analyzer", "Viral Storage & Analysis Unit", 600, 350, src)
 	popup.set_content(dat)
 	popup.open()

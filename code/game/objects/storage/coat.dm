@@ -1,11 +1,13 @@
 /obj/item/clothing/suit/storage
-	var/list/can_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
-	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_hold isn't set)
-	var/max_w_class = 2 //Max size of objects that this object can store (in effect only if can_hold isn't set)
+	var/list/can_only_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
+	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_only_hold isn't set)
+	var/fits_max_w_class = 2 //Max size of objects that this object can store (in effect only if can_only_hold isn't set)
 	var/max_combined_w_class = 4 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 2 //The number of storage slots in this container.
 	var/obj/screen/storage/boxes = null
 	var/obj/screen/close/closer = null
+	body_parts_covered = FULL_TORSO|ARMS
+
 
 /obj/item/clothing/suit/storage/proc/return_inv()
 
@@ -103,7 +105,7 @@
 				to_chat(user, "<span class='notice'>You can't throw away something built into you.</span>")
 				return //Mommis cant give away their modules but can place other items
 		else
-			to_chat(user, "<span class='notice'> You're a robot. No.</span>")
+			to_chat(user, "<span class='notice'>You're a robot. No.</span>")
 			return //Robots can't interact with storage items.
 
 	if(src.loc == W)
@@ -113,9 +115,9 @@
 		to_chat(user, "<span class='warning'>The [src] is full, make some space.</span>")
 		return //Storage item is full
 
-	if(can_hold.len)
+	if(can_only_hold.len)
 		var/ok = 0
-		for(var/A in can_hold)
+		for(var/A in can_only_hold)
 			if(istype(W, text2path(A) ))
 				ok = 1
 				break
@@ -128,7 +130,7 @@
 			to_chat(user, "<span class='warning'>The [src] cannot hold \the [W].</span>")
 			return
 
-	if (W.w_class > max_w_class)
+	if (W.w_class > fits_max_w_class && !can_only_hold.len) //fits_max_w_class doesn't matter if there's only a specific list of items you can put in
 		to_chat(user, "<span class='warning'>The [W] is too big for \the [src].</span>")
 		return
 
@@ -161,7 +163,7 @@
 		if (!( istype(over_object, /obj/screen) ))
 			return ..()
 		playsound(get_turf(src), "rustle", 50, 1, -5)
-		if ((!( M.restrained() ) && !( M.stat ) && M.wear_suit == src))
+		if (M.wear_suit == src && !M.incapacitated())
 			if (over_object.name == "r_hand")
 				M.u_equip(src,0)
 				M.put_in_r_hand(src)

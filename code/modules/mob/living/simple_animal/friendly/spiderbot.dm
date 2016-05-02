@@ -65,10 +65,11 @@
 		if(jobban_isbanned(B.brainmob, "Cyborg"))
 			to_chat(user, "<span class='warning'>[O] does not seem to fit.</span>")
 			return
+		if(!user.drop_item(O, src))
+			user << "<span class='warning'>You can't let go of \the [O].</span>"
 
 		to_chat(user, "<span class='notice'>You install [O] in [src]!</span>")
 
-		user.drop_item(O, src)
 		src.mmi = O
 		src.transfer_personality(O)
 		src.update_icon()
@@ -284,4 +285,4 @@
 /mob/living/simple_animal/spiderbot/examine(mob/user)
 	..()
 	if(src.held_item)
-		to_chat(user, "It is carrying \a [src.held_item] \icon[src.held_item].")
+		to_chat(user, "It is carrying \a [src.held_item] [bicon(src.held_item)].")

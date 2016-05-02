@@ -4,7 +4,7 @@
 	view = "15x15"
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
-#define RECOMMENDED_VERSION 501
+#define RECOMMENDED_VERSION 510
 
 
 var/savefile/panicfile
@@ -56,7 +56,7 @@ var/savefile/panicfile
  * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
  */
 #ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < 507)
+	if(byond_version < 510)
 		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 507.1248 or comment BORDER_USE_TURF_EXIT in global.dm")
 #elif
 	if(byond_version < RECOMMENDED_VERSION)
@@ -135,6 +135,10 @@ var/savefile/panicfile
 	master_controller = new /datum/controller/game_controller()
 
 	spawn(1)
+		turfs = new/list(maxx*maxy*maxz)
+		world.log << "DEBUG: TURFS LIST LENGTH [turfs.len]"
+		build_turfs_list()
+
 		processScheduler.deferSetupFor(/datum/controller/process/ticker)
 		processScheduler.setup()
 
@@ -155,7 +159,7 @@ var/savefile/panicfile
 	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
-	spawn(3000)		//so we aren't adding to the round-start lag
+	spawn(2000)		//so we aren't adding to the round-start lag
 		if(config.ToRban)
 			ToRban_autoupdate()
 		/*if(config.kick_inactive)
@@ -230,6 +234,10 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
+	if(reason == 1)
+		if(usr && usr.client)
+			if(!usr.client.holder)
+				return 0
 	if(config.map_voting)
 		//testing("we have done a map vote")
 		if(fexists(vote.chosen_map))
@@ -295,7 +303,7 @@ var/savefile/panicfile
 /world/proc/save_mode(var/the_mode)
 	var/F = file("data/mode.txt")
 	fdel(F)
-	to_chat(F, the_mode)
+	F << the_mode
 
 /world/proc/load_motd()
 	join_motd = file2text("config/motd.txt")
@@ -315,7 +323,7 @@ var/savefile/panicfile
 		if (!text)
 			diary << "Failed to load config/mods.txt\n"
 		else
-			var/list/lines = text2list(text, "\n")
+			var/list/lines = splittext(text, "\n")
 			for(var/line in lines)
 				if (!line)
 					continue
@@ -335,15 +343,12 @@ var/savefile/panicfile
 		s += "<b>[config.server_name]</b> &#8212; "
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\world.dm:235: s += "<b>[station_name()]</b>";
 	s += {"<b>[station_name()]</b>"
 		(
 		<a href=\"http://\">" //Change this to wherever you want the hub to link to
 		Default"  //Replace this with something else. Or ever better, delete it and uncomment the game version
 		</a>
 		)"}
-	// END AUTOFIX
 	var/list/features = list()
 
 	if(ticker)
@@ -383,7 +388,7 @@ var/savefile/panicfile
 		features += "hosted by <b>[config.hostedby]</b>"
 
 	if (features)
-		s += ": [list2text(features, ", ")]"
+		s += ": [jointext(features, ", ")]"
 
 	/* does this help? I do not know */
 	if (src.status != s)
@@ -474,3 +479,11 @@ proc/establish_old_db_connection()
 		return 1
 
 #undef FAILED_DB_CONNECTION_CUTOFF
+/world/proc/build_turfs_list()
+	var/count = 0
+	for(var/Z = 1 to world.maxz)
+		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
+			if(!(count % 50000)) sleep(world.tick_lag)
+			count++
+			T.initialize()
+			turfs[count] = T

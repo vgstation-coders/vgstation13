@@ -109,8 +109,9 @@ var/global/list/bombermangear = list()
 /obj/item/weapon/bomberman/proc/lost()
 	if(arena)
 		arena.tools -= src
+		var/datum/bomberman_arena/pastarena = arena
 		spawn()	//we're not waiting for the arena to close to despawn the BBD
-			arena.end()
+			pastarena.end()
 	var/list/turfs = list()
 	for(var/turf/T in range(loc,1))
 		if(!T.density)
@@ -200,6 +201,9 @@ var/global/list/bombermangear = list()
 
 /obj/structure/bomberman/proc/detonate()
 	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
 	playsound(T, 'sound/bomberman/bombexplode.ogg', 100, 1)
 	spawn()
 		new /obj/structure/bomberflame(T,1,bombpower,SOUTH,destroy_environnement,hurt_players)
@@ -207,6 +211,9 @@ var/global/list/bombermangear = list()
 
 /obj/structure/bomberman/power/detonate()
 	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
 	playsound(T, 'sound/bomberman/bombexplode.ogg', 100, 1)
 	spawn()
 		new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,SOUTH,destroy_environnement,hurt_players)
@@ -666,9 +673,6 @@ obj/structure/bomberflame/Destroy()
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	flags = FPRINT  | ONESIZEFITSALL
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
-	flags_inv = HIDEJUMPSUIT
-	heat_protection = UPPER_TORSO|LOWER_TORSO
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -695,8 +699,6 @@ obj/structure/bomberflame/Destroy()
 	icon_state = "bomberman"
 	item_state = "bomberman"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEHAIR
-	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 0
 	species_restricted = list("exclude")
 	var/never_removed = 1
@@ -1077,11 +1079,11 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		if(violence)
 			to_chat(M, "Violence Mode activated! Bombs hurt players! Suits offer no protections! Initial Flame Range increased!")
 		if(M.client)
-			to_chat(M.client, sound('sound/bomberman/start.ogg'))
+			M.client << sound('sound/bomberman/start.ogg')
 		to_chat(M, "<b>READY?</b>")
 
 	for(var/obj/machinery/computer/security/telescreen/entertainment/E in machines)
-		E.visible_message("<span style='color:grey'>\icon[E] \The [E] brightens as it appears that a round is starting in [name].</span>")
+		E.visible_message("<span style='color:grey'>[bicon(E)] \The [E] brightens as it appears that a round is starting in [name].</span>")
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)

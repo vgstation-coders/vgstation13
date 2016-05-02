@@ -26,12 +26,23 @@
 
 			potency = round(S.potency)
 
+			var/totalreagents = 0
 			for(var/rid in S.chems)
 				var/list/reagent_data = S.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				reagents.add_reagent(rid,max(1,rtotal))
+				totalreagents += rtotal
+
+			if(totalreagents)
+				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
+
+				for(var/rid in S.chems)
+					var/list/reagent_data = S.chems[rid]
+					var/rtotal = reagent_data[1]
+					if(reagent_data.len > 1 && potency > 0)
+						rtotal += round(potency/reagent_data[2])
+					reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
 
 /obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
 	potency = newValue
@@ -48,20 +59,14 @@
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=1"
-	attack_verb = list("bashed", "battered", "bludgeoned", "whacked")
+	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
 /obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || (istype(W, /obj/item/weapon/fireaxe) && W:wielded) || istype(W, /obj/item/weapon/melee/energy))
-		user.show_message("<span class='notice'>You make planks out of \the [src]!</span>", 1)
-		for(var/i=0,i<2,i++)
-			var/obj/item/stack/sheet/wood/NG = new (user.loc)
-			for (var/obj/item/stack/sheet/wood/G in user.loc)
-				if(G==NG)
-					continue
-				if(G.amount>=G.max_amount)
-					continue
-				G.attackby(NG, user)
-			to_chat(user, "You add the newly-formed wood to the stack. It now contains [NG.amount] planks.")
+		user.show_message("<span class='notice'>You make two planks out of \the [src].</span>", MESSAGE_SEE)
+
+		drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 2, user)
+
 		qdel(src)
 		return
 
@@ -88,7 +93,7 @@
 
 /obj/item/weapon/grown/sunflower/attack(mob/M as mob, mob/user as mob)
 	to_chat(M, "<font color='green'><b> [user] smacks you with a sunflower! </font><font color='yellow'><b>FLOWER POWER<b></font>")
-	to_chat(user, "<font color='green'> Your sunflower's </font><font color='yellow'><b>FLOWER POWER</b></font><font color='green'> strikes [M]</font>")
+	to_chat(user, "<font color='green'>Your sunflower's </font><font color='yellow'><b>FLOWER POWER</b></font><font color='green'> strikes [M]</font>")
 	//Uh... Doesn't this cancel the rest of attack()?
 
 /obj/item/weapon/grown/novaflower
@@ -105,7 +110,7 @@
 	w_class = 1.0
 	throw_speed = 1
 	throw_range = 3
-	attack_verb = list("seared", "heated", "whacked", "steamed")
+	attack_verb = list("sears", "heats", "whacks", "steams")
 
 /obj/item/weapon/grown/novaflower/New()
 	..()
@@ -164,7 +169,7 @@
 		playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	else
 		to_chat(usr, "All the leaves have fallen off the nettle from violent whacking.")
-		user.drop_item(src)
+		user.drop_item(src, force_drop = 1)
 		qdel(src)
 
 /obj/item/weapon/grown/nettle/changePotency(newValue) //-QualityVan
@@ -173,7 +178,7 @@
 
 /obj/item/weapon/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
-	desc = "The <span class='danger'>glowingnettle incites <span class='warning'>rage\black in you just from looking at it!</span></span>"
+	desc = "A glowing red nettle that incites rage in you just from looking at it."
 	icon = 'icons/obj/weapons.dmi'
 	name = "deathnettle"
 	icon_state = "deathnettle"
@@ -185,16 +190,16 @@
 	throw_speed = 1
 	throw_range = 3
 	origin_tech = "combat=3"
-	attack_verb = list("stung")
+	attack_verb = list("stings, pricks")
 
-	New()
-		..()
-		spawn(5)
-			force = round((5+potency/2.5), 1)
+/obj/item/weapon/grown/deathnettle/New()
+	..()
+	spawn(5)
+		force = round((5+potency/2.5), 1)
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
-		return (BRUTELOSS|TOXLOSS)
+/obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (BRUTELOSS|TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
 	if(!user.gloves)
@@ -234,7 +239,7 @@
 
 	else
 		to_chat(user, "All the leaves have fallen off the deathnettle from violent whacking.")
-		user.drop_item(src)
+		user.drop_item(src, force_drop = 1)
 		qdel(src)
 
 /obj/item/weapon/grown/deathnettle/changePotency(newValue) //-QualityVan
@@ -257,6 +262,6 @@
 	if(istype(W, /obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife) || istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || istype(W, /obj/item/weapon/kitchen/utensil/knife/large/ritual))
 		to_chat(user, "<span class='notice'>You use [W] to fashion a pipe out of the corn cob!</span>")
 		new /obj/item/clothing/mask/cigarette/pipe/cobpipe (user.loc)
-		user.drop_item(src)
+		user.drop_item(src, force_drop = 1)
 		qdel(src)
 		return

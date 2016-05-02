@@ -28,7 +28,7 @@
 	else if(health >= 0.8*initial(health))
 		to_chat(user, "It has a few splinters and a plank is broken.")
 	else if(health >= 0.5*initial(health))
-		to_chat(user, "It has a fair amount of splinters and broken plants.")
+		to_chat(user, "It has a fair amount of splinters and broken planks.")
 	else if(health >= 0.2*initial(health))
 		to_chat(user, "It has most of its planks broken, you can barely tell how much weight the support beams are bearing.")
 	else
@@ -68,7 +68,7 @@
 
 /obj/structure/window/barricade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
-	if(istype(W, /obj/item/weapon/crowbar) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
+	if(iscrowbar(W) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
 		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 		user.visible_message("<span class='warning'>[user] starts struggling to pry \the [src] back into planks.</span>", \
 		"<span class='notice'>You start struggling to pry \the [src] back into planks.</span>")
@@ -94,13 +94,13 @@
 	else
 		..() //Weapon checks for weapons without brute or burn damage type and grab check
 
-/obj/structure/window/barricade/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/window/barricade/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
 	if(air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir)
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
 
@@ -138,11 +138,11 @@
 	..(loc)
 	flags &= ~ON_BORDER
 
-/obj/structure/window/barricade/full/CheckExit(atom/movable/O as mob|obj, target as turf)
+/obj/structure/window/barricade/full/Uncross(atom/movable/O as mob|obj, target as turf)
 
 	return 1
 
-/obj/structure/window/barricade/full/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/window/barricade/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
 	if(air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS

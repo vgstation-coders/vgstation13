@@ -23,6 +23,9 @@
 	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
 	var/last_sound = 0
 
+	holomap = TRUE
+	auto_holomap = TRUE
+
 // create a new disposal
 // find the attached trunk (if present) and init gas resvr.
 /obj/machinery/disposal/New()
@@ -83,7 +86,7 @@
 		return
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
-		if(istype(I, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(I))
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
@@ -124,10 +127,10 @@
 	if(istype(I, /obj/item/weapon/storage/bag/))
 		var/obj/item/weapon/storage/bag/B = I
 		if(B.contents.len == 0)
-			to_chat(user, "<span class='notice'> You throw away the empty [B].</span>")
-			user.drop_item(I, src)
-			return
-		to_chat(user, "<span class='notice'> You empty the [B].</span>")
+			if(user.drop_item(I, src))
+				to_chat(user, "<span class='notice'>You throw away the empty [B].</span>")
+				return
+		to_chat(user, "<span class='notice'>You empty the [B].</span>")
 		B.mass_remove(src)
 		B.update_icon()
 		update_icon()
@@ -153,7 +156,6 @@
 	if(!I)	return
 
 	if(user.drop_item(I, src))
-
 		user.visible_message("[user.name] places \the [I] into the [src].", "You place \the [I] into the [src].")
 
 	update_icon()
@@ -424,7 +426,7 @@
 		H.vent_gas(loc)
 		qdel(H)
 
-/obj/machinery/disposal/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/disposal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
@@ -432,74 +434,73 @@
 		if(prob(75))
 			I.loc = src
 			for(var/mob/M in viewers(src))
-				M.show_message("\the [I] lands in \the [src].", 3)
+				M.show_message("\the [I] lands in \the [src].", 1)
 		else
 			for(var/mob/M in viewers(src))
-				M.show_message("\the [I] bounces off of \the [src]'s rim!.", 3)
+				M.show_message("\the [I] bounces off of \the [src]'s rim!.", 1)
 		return 0
 	else
 		return ..(mover, target, height, air_group)
 
-/obj/machinery/disposal/MouseDrop_T(atom/dropping, mob/user)
-	if(istype(user, /mob/living/silicon/ai))
+/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+
+	if(isAI(user))
 		return
 
-	if(!ismob(dropping))
+	//We are restrained or can't move, this will compromise taking out the trash
+	if(user.restrained() || !user.canmove)
+		return
+
+	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
 		if(istype(dropping, /obj/item))
-			if(!user.restrained() && user.canmove)
-				attackby(dropping, user)
 
+			if(dropping.locked_to) //Items can very specifically be locked to something, check that here
+				return
+
+			attackby(dropping, user)
 		return
+
+	//From there, we are working on a mob (as our target, user is supposed to be a mob)
 
 	var/locHolder = dropping.loc
 	var/mob/target = dropping
 
+	//Our target, now confirmed to be a mob, is locked to something, same thing
+	if(target.locked_to)
+		return
+
 	if(target == user)
-		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] starts climbing into the [src].", "You start climbing into the [src].")
-		else
-			return
+		target.visible_message("[target] starts climbing into \the [src].", "You start climbing into \the [src].")
+
 	else
+
 		if(isanimal(user))
-			return // animals cannot put mobs other than themselves into disposal
+			return //Animals cannot put mobs other than themselves into disposal
 
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
-
-			user.visible_message("[user] starts stuffing [target] into the [src].", "You start stuffing [target] into the [src].")
-		else
-			return
+		user.visible_message("[user] starts stuffing \the [target] into \the [src].", "You start stuffing \the [target] into \the [src].")
 
 	if(!do_after(user, src, 20))
+		return
+
+	if(user.restrained() || !user.canmove)
+		return
+
+	if(target.locked_to)
 		return
 
 	if(locHolder != target.loc)
 		return
 
 	if(target == user)
-		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] climbed into the [src].", "You climbed into the [src].")
-		else
-			return
-	else
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
+		target.visible_message("[target] climbs into \the [src].", "You climb into \the [src].")
 
-			user.visible_message("[user] stuffed [target] into the [src]!", "You stuffed [target] into the [src]!")
-			log_attack("<SPAN CLASS='warning'>[key_name(user)] placed [key_name(target)] in a disposals unit/([src]).</SPAN>")
-		else
-			return
+	else
+
+		user.visible_message("[user] stuffed \the [target] into \the [src]!", "You stuffed \the [target] into \the [src]!")
+		log_attack("<span class='warning'>[key_name(user)] stuffed [key_name(target)] into a disposal unit/([src]).</span>")
 
 	add_fingerprint(user)
-
-	if(target.client)
-		target.client.perspective = EYE_PERSPECTIVE
-		target.client.eye = src
-
-	target.loc = src
-
+	target.forceMove(src)
 	update_icon()
 
 // virtual disposal object
@@ -543,7 +544,7 @@
 			AM.forceMove(src)
 			if(istype(AM, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = AM
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT))		// is a human and fat?
+				if(((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT)) || H.species.flags & IS_BULKY)		// is a human and fat?
 					has_fat_guy = 1			// set flag on holder
 			if(istype(AM, /obj/item/delivery/large) && !hasmob)
 				var/obj/item/delivery/large/T = AM
@@ -656,6 +657,8 @@
 	anchored = 1
 	density = 0
 
+	holomap = TRUE
+	auto_holomap = TRUE
 	level = 1			// underfloor only
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
@@ -1008,7 +1011,10 @@
 /obj/structure/disposalpipe/sortjunction/New()
 	. = ..()
 	if(sortType && !sort_tag)
-		sort_tag = uppertext(DEFAULT_TAGGER_LOCATIONS[sortType])
+		sort_tag = uppertext(map.default_tagger_locations[sortType])
+
+	else if(sort_tag)
+		sort_tag = uppertext(sort_tag)
 
 	updatedir()
 	updatedesc()
@@ -1063,84 +1069,162 @@
 	return P
 
 ////////////////// SortJunctionSubtypes//////////////////
-//Box
+
 /obj/structure/disposalpipe/sortjunction/Disposals
-	sortType = 1
+	sort_tag = DISP_DISPOSALS
+
+/obj/structure/disposalpipe/sortjunction/Disposals/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Cargo
-	sortType = 2
+	sort_tag = DISP_CARGO_BAY
+
+/obj/structure/disposalpipe/sortjunction/Cargo/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/QM
-	sortType = 3
+	sort_tag = DISP_QM_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/QM/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Engineering
-	sortType = 4
+	sort_tag = DISP_ENGINEERING
+
+/obj/structure/disposalpipe/sortjunction/Engineering/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CE
-	sortType = 5
+	sort_tag = DISP_CE_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/CE/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Atmos
-	sortType = 6
+	sort_tag = DISP_ATMOSPHERICS
+
+/obj/structure/disposalpipe/sortjunction/Atmos/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Security
-	sortType = 7
+	sort_tag = DISP_SECURITY
+
+/obj/structure/disposalpipe/sortjunction/Security/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoS
-	sortType = 8
+	sort_tag = DISP_HOS_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/HoS/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Medbay
-	sortType = 9
+	sort_tag = DISP_MEDBAY
+
+/obj/structure/disposalpipe/sortjunction/Medbay/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CMO
-	sortType = 10
+	sort_tag = DISP_CMO_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/CMO/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chemistry
-	sortType = 11
+	sort_tag = DISP_CHEMISTRY
+
+/obj/structure/disposalpipe/sortjunction/Chemistry/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Research
-	sortType = 12
+		sort_tag = DISP_RESEARCH
+
+/obj/structure/disposalpipe/sortjunction/Research/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/RD
-	sortType = 13
+		sort_tag = DISP_RD_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/RD/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Robotics
-	sortType = 14
+		sort_tag = DISP_ROBOTICS
+
+/obj/structure/disposalpipe/sortjunction/Robotics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoP
-	sortType = 15
+		sort_tag = DISP_HOP_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/HoP/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Library
-	sortType = 16
+		sort_tag = DISP_LIBRARY
+
+/obj/structure/disposalpipe/sortjunction/Library/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chapel
-	sortType = 17
+		sort_tag = DISP_CHAPEL
+
+/obj/structure/disposalpipe/sortjunction/Chapel/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Theatre
-	sortType = 18
+		sort_tag = DISP_THEATRE
+
+/obj/structure/disposalpipe/sortjunction/Theatre/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Bar
-	sortType = 19
+		sort_tag = DISP_BAR
+
+/obj/structure/disposalpipe/sortjunction/Bar/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Kitchen
-	sortType = 20
+		sort_tag = DISP_KITCHEN
+
+/obj/structure/disposalpipe/sortjunction/Kitchen/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics
-	sortType = 21
+		sort_tag = DISP_HYDROPONICS
+
+/obj/structure/disposalpipe/sortjunction/Hydroponics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Janitor
-	sortType = 22
+		sort_tag = DISP_JANITOR_CLOSET
+
+/obj/structure/disposalpipe/sortjunction/Janitor/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Genetics
-	sortType = 23
+		sort_tag = DISP_GENETICS
+
+/obj/structure/disposalpipe/sortjunction/Genetics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telecomms
-	sortType = 24
+		sort_tag = DISP_TELECOMMS
+
+/obj/structure/disposalpipe/sortjunction/Telecomms/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Mechanics
-	sortType = 25
+		sort_tag = DISP_MECHANICS
+
+/obj/structure/disposalpipe/sortjunction/Mechanics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telescience
-	sortType = 26
+		sort_tag = DISP_TELESCIENCE
+
+/obj/structure/disposalpipe/sortjunction/Telescience/mirrored
+	icon_state = "pipe-j2s"
 
 //////////////////
 //a three-way junction that sorts objects destined for the mail office mail table (tomail = 1)
@@ -1151,6 +1235,9 @@
 	var/posdir = 0
 	var/negdir = 0
 	var/sortdir = 0
+
+/obj/structure/disposalpipe/wrapsortjunction/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/wrapsortjunction/New()
 	. = ..()
@@ -1366,6 +1453,9 @@
 	var/mode = 0
 	var/obj/structure/disposalpipe/trunk/trunk
 
+	holomap = TRUE
+	auto_holomap = TRUE
+
 	New()
 		. = ..()
 
@@ -1419,7 +1509,7 @@
 		if(!I || !user)
 			return
 		src.add_fingerprint(user)
-		if(istype(I, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(I))
 			if(mode==0)
 				mode=1
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

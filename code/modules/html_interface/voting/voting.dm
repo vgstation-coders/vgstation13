@@ -28,24 +28,26 @@ var/global/datum/controller/vote/vote = new()
 
 
 /datum/controller/vote
-	var/initiator = null
-	var/started_time = null
+	var/initiator      = null
+	var/started_time   = null
 	var/time_remaining = 0
-	var/mode = null
-	var/question = null
-	var/list/choices = list()
-	var/list/voted = list()
-	var/list/voting = list()
+	var/mode           = null
+	var/question       = null
+	var/list/choices   = list()
+	var/list/voted     = list()
+	var/list/voting    = list()
 	var/list/current_votes = list()
 	var/list/ismapvote
 	var/chosen_map
-	var/name = "datum"
+	var/name           = "datum"
 	var/datum/html_interface/nanotrasen/vote/interface
 	var/list/data
 	var/list/status_data
-	var/last_update = 0
-	var/initialized = 0
-	var/lastupdate = 0
+	var/last_update    = 0
+	var/initialized    = 0
+	var/lastupdate     = 0
+	var/total_votes    = 0
+	var/weighted        = FALSE // Whether to use weighted voting.
 
 /datum/controller/vote/New()
 	. = ..()
@@ -94,13 +96,14 @@ var/global/datum/controller/vote/vote = new()
 	choices.len = 0
 	voted.len = 0
 	voting.len = 0
+	total_votes = 0
 	current_votes.len = 0
+	weighted = FALSE
 	update(1)
 
 /datum/controller/vote/proc/get_result()
 	//get the highest number of votes
 	var/greatest_votes = 0
-	var/total_votes = 0
 	for(var/option in choices)
 		var/votes = choices[option]
 		total_votes += votes
@@ -139,10 +142,19 @@ var/global/datum/controller/vote/vote = new()
 
 	//get all options with that many votes and return them in a list
 	. = list()
-	if(greatest_votes)
-		for(var/option in choices)
-			if(choices[option] == greatest_votes)
-				. += option
+	if(weighted)
+		var/list/filteredchoices = choices.Copy()
+		for(var/a in filteredchoices)
+			if(!filteredchoices[a])
+				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+		if(filteredchoices.len)
+			. += pickweight(filteredchoices.Copy())
+	else
+		if(greatest_votes)
+			for(var/option in choices)
+				if(choices[option] == greatest_votes)
+					. += option
+
 	return .
 
 /datum/controller/vote/proc/announce_result()
@@ -154,7 +166,7 @@ var/global/datum/controller/vote/vote = new()
 			text = "<b>Vote Tied Between:</b><br>"
 			for(var/option in winners)
 				text += "\t[option]<br>"
-			feedbackanswer = list2text(winners, " ")
+			feedbackanswer = jointext(winners, " ")
 		. = pick(winners)
 		if(mode == "map")
 			if(!feedbackanswer)
@@ -163,15 +175,14 @@ var/global/datum/controller/vote/vote = new()
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
 
-		text += "<b>Vote Result: [.] with [choices[.]] vote\s</b>"
+		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null]</b>"
 		for(var/choice in choices)
 			if(. == choice) continue
-			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s"
+			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]\s"
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	log_vote(text)
 	to_chat(world, "<font color='purple'>[text]</font>")
-	return .
 
 /datum/controller/vote/proc/result()
 	. = announce_result()
@@ -212,8 +223,6 @@ var/global/datum/controller/vote/vote = new()
 		log_game("Rebooting due to restart vote")
 		world.Reboot()
 
-	return .
-
 /datum/controller/vote/proc/submit_vote(var/ckey, var/vote)
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
@@ -227,7 +236,7 @@ var/global/datum/controller/vote/vote = new()
 			return vote
 	return 0
 
-/datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0)
+/datum/controller/vote/proc/initiate_vote(var/vote_type, var/initiator_key, var/popup = 0, var/weighted_vote = 0)
 	if(!mode)
 		if(started_time != null && !check_rights(R_ADMIN))
 			var/next_allowed_time = (started_time + config.vote_delay)
@@ -270,6 +279,7 @@ var/global/datum/controller/vote/vote = new()
 		mode = vote_type
 		initiator = initiator_key
 		started_time = world.time
+		weighted  = weighted_vote
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		if(mode == "custom")
@@ -283,16 +293,17 @@ var/global/datum/controller/vote/vote = new()
 		else
 			if(istype(usr) && usr.client)
 				interact(usr.client)
+
 		to_chat(world, "<font color='purple'><b>[text]</b><br>Type vote to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
 		switch(vote_type)
 			if("crew_transfer")
-				to_chat(world, sound('sound/voice/Serithi/Shuttlehere.ogg'))
+				world << sound('sound/voice/Serithi/Shuttlehere.ogg')
 			if("gamemode")
-				to_chat(world, sound('sound/voice/Serithi/pretenddemoc.ogg'))
+				world << sound('sound/voice/Serithi/pretenddemoc.ogg')
 			if("custom")
-				to_chat(world, sound('sound/voice/Serithi/weneedvote.ogg'))
+				world << sound('sound/voice/Serithi/weneedvote.ogg')
 			if("map")
-				to_chat(world, sound('sound/misc/rockthevote.ogg'))
+				world << sound('sound/misc/rockthevote.ogg')
 		if(mode == "gamemode" && going)
 			going = 0
 			to_chat(world, "<font color='red'><b>Round start has been delayed.</b></font>")
@@ -313,9 +324,18 @@ var/global/datum/controller/vote/vote = new()
 
 
 /datum/controller/vote/proc/interact(client/user)
+	set waitfor = FALSE // So we don't wait for each individual client's assets to be sent.
+
 	if(!user || !initialized)
 		return
-	if(ismob(user)) user = user:client
+
+	if(ismob(user))
+		var/mob/M = user
+		if(M.client)
+			user = M.client
+		else
+			CRASH("The user [M.name] of type [M.type] has been passed as a mob reference without a client to voting.interact()")
+
 	voting |= user
 	interface.show(user)
 	var/list/client_data = list()

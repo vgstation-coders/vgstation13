@@ -36,7 +36,7 @@
 		return
 
 	if(!blinded)
-		flick("flash", flash)
+		flash_eyes(visual = 1)
 
 	var/shielded = 0
 
@@ -70,8 +70,9 @@
 /mob/living/carbon/alien/humanoid/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if(stat == 2)
+	if(stat == DEAD)
 		return
+	..()
 	var/shielded = 0
 	var/damage = null
 	if(stat != 2)
@@ -81,6 +82,7 @@
 		damage /= 4
 
 	to_chat(src, "<span class='warning'>The blob attacks you!</span>")
+
 
 	adjustFireLoss(damage)
 
@@ -337,5 +339,3 @@ In all, this is a lot like the monkey code. /N
 	user << browse(dat, text("window=mob\ref[src];size=340x480"))
 	onclose(user, "mob\ref[src]")
 	return
-
-

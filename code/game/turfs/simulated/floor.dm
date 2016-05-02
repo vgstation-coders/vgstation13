@@ -56,7 +56,7 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 /turf/simulated/floor/melt() // Melting is different.
 	burn_tile()
 
-//turf/simulated/floor/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+//turf/simulated/floor/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 //	if ((istype(mover, /obj/machinery/vehicle) && !(src.burnt)))
 //		if (!( locate(/obj/machinery/mass_driver, src) ))
 //			return 0
@@ -112,6 +112,7 @@ turf/simulated/floor/update_icon()
 			floor_overlay = T.get_turf_image()
 			icon_state = "light_base"
 			overlays += floor_overlay
+			light_color = floor_overlay.color
 		else
 			set_light(0)
 			icon_state = "light_off"
@@ -479,7 +480,7 @@ turf/simulated/floor/update_icon()
 	if(!C || !user)
 		return 0
 
-	if(istype(C, /obj/item/weapon/crowbar) && (!(is_plating())))
+	if(iscrowbar(C) && (!(is_plating())))
 		if(broken || burnt)
 			to_chat(user, "<span class='warning'>You remove the broken plating.</span>")
 		else
@@ -495,7 +496,7 @@ turf/simulated/floor/update_icon()
 		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
 
 		return
-	else if(istype(C, /obj/item/weapon/screwdriver))
+	else if(isscrewdriver(C))
 		if(is_wood_floor())
 			if(broken || burnt)
 				return
@@ -569,7 +570,7 @@ turf/simulated/floor/update_icon()
 			make_plating()
 		else
 			to_chat(user, "<span class='warning'>You cannot shovel this.</span>")
-	else if(istype(C, /obj/item/weapon/weldingtool))
+	else if(iswelder(C))
 		var/obj/item/weapon/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)

@@ -2,7 +2,7 @@
 
 /obj/machinery/computer/card
 	name = "Identification Computer"
-	desc = "Terminal for programming NanoTrasen employee ID cards to access parts of the station."
+	desc = "Terminal for programming Nanotrasen employee ID cards to access parts of the station."
 	icon_state = "id"
 	req_access = list(access_change_ids)
 	circuit = "/obj/item/weapon/circuitboard/card"
@@ -105,14 +105,14 @@
 		return ..()
 
 	if(!is_centcom() && !scan && (access_change_ids in id_card.access))
-		user.drop_item(id_card, src)
-		scan = id_card
+		if(user.drop_item(id_card, src))
+			scan = id_card
 	else if(is_centcom() && !scan && ((access_cent_creed in id_card.access) || (access_cent_captain in id_card.access)))
-		user.drop_item(id_card, src)
-		scan = id_card
+		if(user.drop_item(id_card, src))
+			scan = id_card
 	else if(!modify)
-		user.drop_item(id_card, src)
-		modify = id_card
+		if(user.drop_item(id_card, src))
+			modify = id_card
 
 	nanomanager.update_uis(src)
 	attack_hand(user)
@@ -148,10 +148,12 @@
 	data["all_centcom_access"] = null
 	data["regions"] = null
 
+	data["head_jobs"] = format_jobs(command_positions)
 	data["engineering_jobs"] = format_jobs(engineering_positions)
 	data["medical_jobs"] = format_jobs(medical_positions)
 	data["science_jobs"] = format_jobs(science_positions)
 	data["security_jobs"] = format_jobs(security_positions)
+	data["cargo_jobs"] = format_jobs(cargo_positions)
 	data["civilian_jobs"] = format_jobs(civilian_positions)
 	data["centcom_jobs"] = format_jobs(get_all_centcom_jobs())
 	data["card_skins"] = format_card_skins(card_skins)
@@ -215,8 +217,8 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					usr.drop_item(I, src)
-					modify = I
+					if(usr.drop_item(I, src))
+						modify = I
 
 		if ("scan")
 			if (scan)
@@ -231,8 +233,8 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					usr.drop_item(I, src)
-					scan = I
+					if(usr.drop_item(I, src))
+						scan = I
 
 		if("access")
 			if(href_list["allowed"])

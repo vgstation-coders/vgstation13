@@ -45,10 +45,10 @@
 	return .
 
 /obj/item/weapon/plastique/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		open_panel = !open_panel
 		to_chat(user, "<span class='notice'>You [open_panel ? "open" : "close"] the wire panel.</span>")
-	else if(istype(I, /obj/item/weapon/wirecutters) || istype(I, /obj/item/device/multitool) || istype(I, /obj/item/device/assembly/signaler ))
+	else if(iswirecutter(I) || ismultitool(I) || istype(I, /obj/item/device/assembly/signaler ))
 		wires.Interact(user)
 	else
 		..()
@@ -73,15 +73,30 @@
 
 		user.visible_message("<span class='warning'>[user.name] is trying to plant some kind of explosive on [target.name]!</span>")
 
-	if(do_after(user, target, 50) && in_range(user, target))
-		user.drop_item(src)
-		src.target = target
+	if(do_after(user, target, 50) && user.Adjacent(target))
+		var/glue_act = 0 //If 1, the C4 is superglued to the guy's hands - produce a funny message
+
+		if(user.drop_item(src))
+			src.target = target
+		else //User can't drop this normally -> stick it to him (but drop it anyways, to prevent unintended features)
+			to_chat(user, "<span class='danger'>\The [src] are glued to your hands!</span>") //Honk
+			src.target = user
+			target = user
+			glue_act = 1
+			user.drop_item(src, force_drop = 1)
+
 		loc = null
+
 		if (ismob(target))
 			var/mob/M=target
 			target:attack_log += "\[[time_stamp()]\]<font color='orange'> Had the [name] planted on them by [user.real_name] ([user.ckey])</font>"
-			user.visible_message("<span class='warning'>[user.name] finished planting an explosive on [target.name]!</span>")
-			playsound(get_turf(src), 'sound/weapons/c4armed.ogg', 60, 1)
+
+			if(!glue_act)
+				user.visible_message("<span class='warning'>[user.name] finished planting an explosive on [target.name]!</span>")
+			else
+				user.visible_message("<span class='warning'>[user] found \himself unable to drop \the [src] after setting the timer on them!</span>")
+
+			playsound(get_turf(target), 'sound/weapons/c4armed.ogg', 60, 1)
 			if(!iscarbon(user))
 				M.LAssailant = null
 			else

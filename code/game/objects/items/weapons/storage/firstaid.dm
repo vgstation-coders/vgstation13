@@ -47,7 +47,7 @@
 		if (empty) return
 		new /obj/item/stack/medical/bruise_pack(src)
 		new /obj/item/stack/medical/bruise_pack(src)
-		new /obj/item/stack/medical/bruise_pack(src)
+		new /obj/item/clothing/suit/spaceblanket(src)
 		new /obj/item/stack/medical/ointment(src)
 		new /obj/item/stack/medical/ointment(src)
 		new /obj/item/device/healthanalyzer(src)
@@ -120,11 +120,12 @@
 	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
 	w_class = 2.0
-	can_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper")
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
 	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 60)
+	var/melted = 0
 	var/image/colour_overlay
 
 /obj/item/weapon/storage/pill_bottle/New()
@@ -134,12 +135,11 @@
 
 
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
-
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
-		var/mob/M = usr
+		var/mob/M = usr //I don't see how this is necessary
 		if (!( istype(over_object, /obj/screen) ))
 			return ..()
-		if ((!( M.restrained() ) && !( M.stat ) /*&& M.pocket == src*/))
+		if (!M.incapacitated())
 			switch(over_object.name)
 				if("r_hand")
 					M.u_equip(src,0)
@@ -156,11 +156,21 @@
 			return
 	return
 
+/obj/item/weapon/storage/pill_bottle/AltClick()
+	if(!usr.isUnconscious() && Adjacent(usr))
+		change()
+		return
+	return ..()
+
 /obj/item/weapon/storage/pill_bottle/attackby(var/obj/item/I, var/mob/user)
 	if(!I) return
+	if(!melted)
+		if(I.is_hot())
+			to_chat(user, "You slightly melt the plastic on the side of \the [src] with \the [I].")
+			melted = 1
 	if(istype(I, /obj/item/weapon/storage/bag/chem))
 		var/obj/item/weapon/storage/bag/chem/C = I
-		to_chat(user, "<span class='notice'> You transfer the contents of [C].<span>")
+		to_chat(user, "<span class='notice'>You transfer the contents of [C].<span>")
 		for(var/obj/item/O in C.contents)
 			if(can_be_inserted(O))
 				handle_item_insertion(O, 1)
@@ -260,3 +270,17 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
 		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
 		new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+
+/obj/item/weapon/storage/pill_bottle/creatine
+	name = "Workout Supplements"
+	desc = "Because working out is far too much effort."
+
+	New()
+		..()
+		new /obj/item/weapon/reagent_containers/pill/creatine_safe( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+

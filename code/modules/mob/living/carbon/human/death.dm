@@ -5,11 +5,6 @@
 	icon = null
 	invisibility = 101
 
-	//If we have brain worms, dump 'em.
-	var/mob/living/simple_animal/borer/B=has_brain_worms()
-	if(B)
-		B.detach()
-
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
@@ -29,24 +24,37 @@
 	icon = null
 	invisibility = 101
 
-	//If we have brain worms, dump 'em.
-	var/mob/living/simple_animal/borer/B=has_brain_worms()
-	if(B)
-		B.detach()
+	dropBorers(1)
 
 	if(istype(src, /mob/living/carbon/human/manifested))
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-hm", sleeptime = 15)
 	else
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
 
-	new /obj/effect/decal/remains/human(loc)
+	var/datum/organ/external/head_organ = get_organ("head")
+	if(head_organ.status & ORGAN_DESTROYED)
+		new /obj/effect/decal/remains/human/noskull(loc)
+	else
+		new /obj/effect/decal/remains/human(loc)
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
 	if(mind && species && (species.name == "Manifested") && (mind in ticker.mode.cult))//manifested ghosts are removed from the cult once their bodies are destroyed
 		ticker.mode.update_cult_icons_removed(mind)
 		ticker.mode.cult -= mind
+
+	species = null
+
+	if(decapitated)
+		decapitated.origin_body = null
+		decapitated = null
+
 	..()
+
+	for(var/obj/Overlays/O in obj_overlays)
+		returnToPool(O)
+
+	obj_overlays = null
 
 /mob/living/carbon/human/death(gibbed)
 	if(stat == DEAD)
@@ -54,7 +62,7 @@
 	if(healths)		healths.icon_state = "health7"
 	stat = DEAD
 	dizziness = 0
-	jitteriness = 0
+	remove_jitter()
 
 	//If we have brain worms, dump 'em.
 	var/mob/living/simple_animal/borer/B=has_brain_worms()
@@ -80,7 +88,6 @@
 		emote("deathgasp") //Let the world KNOW WE ARE DEAD
 
 		update_canmove()
-		if(client)	blind.layer = 0
 
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)
@@ -91,6 +98,7 @@
 //		world.log << "k"
 		sql_report_death(src)
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
+	species.handle_death(src)
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()

@@ -195,7 +195,7 @@
 	if(equipment && equipment.len)
 		to_chat(user, "It's equipped with:")
 		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
-			to_chat(user, "\icon[ME] [ME]")
+			to_chat(user, "[bicon(ME)] [ME]")
 
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
@@ -438,7 +438,7 @@
 	internal_damage |= int_dam_flag
 	pr_internal_damage.start()
 	log_append_to_last("Internal damage of type [int_dam_flag].",1)
-	to_chat(occupant, sound('sound/machines/warning.ogg',wait=0))
+	occupant << sound('sound/machines/warning.ogg',wait=0)
 	return
 
 /obj/mecha/proc/clearInternalDamage(int_dam_flag)
@@ -726,10 +726,10 @@
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()
 			if(E.can_attach(src))
-				user.drop_item(W)
-				E.attach(src)
-				user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				if(user.drop_item(W))
+					E.attach(src)
+					user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			else
 				to_chat(user, "You were unable to attach [W] to [src]")
 		return
@@ -748,7 +748,7 @@
 				to_chat(user, "<span class='warning'>Invalid ID: Access denied.</span>")
 		else
 			to_chat(user, "<span class='warning'>Maintenance protocols disabled by operator.</span>")
-	else if(istype(W, /obj/item/weapon/wrench))
+	else if(iswrench(W))
 		if(state==STATE_BOLTSEXPOSED)
 			state = STATE_BOLTSOPENED
 			to_chat(user, "You undo the securing bolts.")
@@ -758,7 +758,7 @@
 			to_chat(user, "You tighten the securing bolts.")
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		return
-	else if(istype(W, /obj/item/weapon/crowbar))
+	else if(iscrowbar(W))
 		if(state==STATE_BOLTSOPENED)
 			var/list/removable_components = list()
 			if(cell) removable_components += "power cell"
@@ -791,7 +791,7 @@
 			else
 				to_chat(user, "There's not enough wire to finish the task.")
 		return
-	else if(istype(W, /obj/item/weapon/screwdriver))
+	else if(isscrewdriver(W))
 		if(hasInternalDamage(MECHA_INT_TEMP_CONTROL))
 			clearInternalDamage(MECHA_INT_TEMP_CONTROL)
 			to_chat(user, "You repair the damaged temperature controller.")
@@ -799,35 +799,35 @@
 	else if(istype(W, /obj/item/weapon/cell))
 		if(state==STATE_BOLTSOPENED)
 			if(!src.cell)
-				to_chat(user, "You install the powercell.")
-				user.drop_item(W, src)
-				src.cell = W
-				src.log_message("Powercell installed.")
+				if(user.drop_item(W, src))
+					to_chat(user, "You install the powercell.")
+					src.cell = W
+					src.log_message("Powercell installed.")
 			else
 				to_chat(user, "There's already a powercell installed.")
 		return
 	else if(istype(W, /obj/item/mecha_parts/mecha_tracking))
 		if(state==STATE_BOLTSOPENED)
 			if(!src.tracking)
-				to_chat(user, "You install the tracking beacon and safeties.")
-				user.drop_item(W, src)
-				src.tracking = W
-				src.log_message("Exosuit tracking beacon installed.")
+				if(user.drop_item(W, src))
+					to_chat(user, "You install the tracking beacon and safeties.")
+					src.tracking = W
+					src.log_message("Exosuit tracking beacon installed.")
 			else
 				to_chat(user, "There's already a tracking beacon installed.")
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))
 		if(state==STATE_BOLTSOPENED)
 			if(!src.electropack)
-				to_chat(user, "You rig the electropack to the cockpit.")
-				user.drop_item(W, src)
-				src.electropack = W
-				src.log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
+				if(user.drop_item(W, src))
+					to_chat(user, "You rig the electropack to the cockpit.")
+					src.electropack = W
+					src.log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
 			else
 				to_chat(user, "There's already an electropack installed.")
 		return
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent != I_HURT)
+	else if(iswelder(W) && user.a_intent != I_HURT)
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			if (hasInternalDamage(MECHA_INT_TANK_BREACH))
@@ -1033,9 +1033,9 @@
 	set name = "Enter Exosuit"
 	set src in oview(1)
 
-	if(usr.restrained() || usr.isUnconscious() || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if (usr.stat || !ishuman(usr))
+	if (!ishuman(usr))
 		return
 	src.log_message("[usr] tries to move in.")
 	if (src.occupant)
@@ -1054,7 +1054,7 @@
 	else if(src.operation_allowed(usr))
 		passed = 1
 	if(!passed)
-		to_chat(usr, "<span class='warning'>Access denied</span>")
+		to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		src.log_append_to_last("Permission denied.")
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
@@ -1091,7 +1091,7 @@
 		dir = dir_in
 		playsound(src, 'sound/mecha/mechentry.ogg', 50, 1)
 		if(!hasInternalDamage())
-			to_chat(src.occupant, sound('sound/mecha/nominalsyndi.ogg',volume=50))
+			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
 
 		// -- Mode/mind specific stuff goes here
 		if(H.mind)
@@ -1163,7 +1163,7 @@
 		dir = dir_in
 		src.log_message("[mmi_as_oc] moved in as pilot.")
 		if(!hasInternalDamage())
-			to_chat(src.occupant, sound('sound/mecha/nominalsyndi.ogg',volume=50))
+			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
 		return 1
 	else
 		return 0
@@ -1200,7 +1200,7 @@
 	return
 
 /obj/mecha/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(usr!=src.occupant)
+	if(usr != src.occupant || usr.incapacitated())
 		return
 	if(!istype(over_location) || over_location.density)
 		return
@@ -1298,7 +1298,7 @@
 
 /obj/mecha/proc/emergency_eject(var/exit = loc)
 	if (occupant)
-		to_chat(occupant, sound('sound/machines/warning.ogg',wait=0))
+		occupant << sound('sound/machines/warning.ogg',wait=0)
 		log_message("Emergency ejection.",1)
 		occupant_message("<font color='red'>Emergency ejection protocol engaged.</font>")
 		spawn(10)
@@ -1482,11 +1482,8 @@
 		for(var/obj/item/mecha_parts/mecha_equipment/W in equipment)
 			output += "[W.name] <a href='?src=\ref[W];detach=1'>Detach</a><br>"
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\mecha\\mecha.dm:1333: output += "<b>Available equipment slots:</b> [max_equip-equipment.len]"
 		output += {"<b>Available equipment slots:</b> [max_equip-equipment.len]
 			</div></div>"}
-		// END AUTOFIX
 	return output
 
 /obj/mecha/proc/get_equipment_list() //outputs mecha equipment list in html
@@ -1529,11 +1526,8 @@
 		if(!a_name) continue //there's some strange access without a name
 		output += "[a_name] - <a href='?src=\ref[src];add_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Add</a><br>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\mecha\\mecha.dm:1376: output += "<hr><a href='?src=\ref[src];finish_req_access=1;user=\ref[user]'>Finish</a> <font color='red'>(Warning! The ID upload panel will be locked. It can be unlocked only through Exosuit Interface.)</font>"
 	output += {"<hr><a href='?src=\ref[src];finish_req_access=1;user=\ref[user]'>Finish</a> <font color='red'>(Warning! The ID upload panel will be locked. It can be unlocked only through Exosuit Interface.)</font>
 		</body></html>"}
-	// END AUTOFIX
 	user << browse(output, "window=exosuit_add_access")
 	onclose(user, "exosuit_add_access")
 	return
@@ -1565,7 +1559,7 @@
 /obj/mecha/proc/occupant_message(message as text)
 	if(message)
 		if(src.occupant && src.occupant.client)
-			to_chat(src.occupant, "\icon[src] [message]")
+			to_chat(src.occupant, "[bicon(src)] [message]")
 	return
 
 /obj/mecha/proc/log_message(message as text,red=null)
@@ -1681,14 +1675,14 @@
 				log_message("Maintenance protocols engaged.")
 				if(occupant)
 					occupant_message("<font color='red'>Maintenance protocols engaged.</font>")
-					to_chat(occupant, sound('sound/mecha/mechlockdown.ogg',wait=0))
+					occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
 			else if(state==STATE_BOLTSEXPOSED)
 				state = STATE_BOLTSHIDDEN
 				to_chat(user, "The securing bolts are now hidden.")
 				log_message("Maintenance protocols terminated.")
 				if(occupant)
 					occupant_message("Maintenance protocols terminated.")
-					to_chat(occupant, sound('sound/mecha/mechentry.ogg',wait=0))
+					occupant << sound('sound/mecha/mechentry.ogg',wait=0)
 			else
 				to_chat(user, "You can't toggle maintenance mode with the securing bolts unfastened.")
 			output_maintenance_dialog(filter.getObj("id_card"),user)

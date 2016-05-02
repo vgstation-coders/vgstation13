@@ -8,7 +8,7 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = 4.0
-	max_w_class = 3
+	fits_max_w_class = 3
 	max_combined_w_class = 16
 	var/empty = 0
 
@@ -75,7 +75,7 @@
 	throw_speed = 1
 	throw_range = 3
 	w_class = 4.0
-	max_w_class = 2
+	fits_max_w_class = 2
 	max_combined_w_class = 10
 
 	var/busy_hunting = 0
@@ -96,7 +96,7 @@
 	return
 
 /obj/item/weapon/storage/briefcase/false_bottomed/attackby(var/obj/item/item, mob/user)
-	if(istype(item, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(item))
 		if(!bottom_open && !busy_hunting)
 			to_chat(user, "You begin to hunt around the rim of \the [src]...")
 			busy_hunting = 1
@@ -115,9 +115,12 @@
 		if(item.w_class > 3.0)
 			to_chat(user, "<span class='warning'>\The [item] is too big to fit in the false bottom!</span>")
 			return
+		if(!user.drop_item(item))
+			user << "<span class='warning'>\The [item] is stuck to your hands!</span>"
+			return
+
 		stored_item = item
-		user.drop_item(item)
-		max_w_class = 3.0 - stored_item.w_class
+		fits_max_w_class = 3.0 - stored_item.w_class
 		item.loc = null //null space here we go - to stop it showing up in the briefcase
 		to_chat(user, "You place \the [item] into the false bottom of the briefcase.")
 	else
@@ -128,7 +131,7 @@
 		user.put_in_hands(stored_item)
 		to_chat(user, "You pull out \the [stored_item] from \the [src]'s false bottom.")
 		stored_item = null
-		max_w_class = initial(max_w_class)
+		fits_max_w_class = initial(fits_max_w_class)
 	else
 		return ..()
 

@@ -59,16 +59,16 @@
 		if(scan_process++ > target_scan_ticks)
 			FinishScan()
 		else if(temperature > 400)
-			src.visible_message("<span class='notice'>\icon[src] shuts down from the heat!</span>", 2)
+			src.visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>", 2)
 			scan_process = 0
 		else if(temperature > 350 && prob(10))
-			src.visible_message("<span class='notice'>\icon[src] bleets plaintively.</span>", 2)
+			src.visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>", 2)
 			if(temperature > 400)
 				scan_process = 0
 
 		//show we're busy
 		if(prob(5))
-			src.visible_message("<span class='notice'>\icon[src] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>", 2)
+			src.visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>", 2)
 
 		use_power = 2
 
@@ -99,7 +99,7 @@
 			removed.temperature = max(TCMB, removed.temperature + heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("<span class='notice'>\icon[src] hisses softly.</span>", 2)
+				src.visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", 2)
 
 		else
 			//heat up to match the air
@@ -107,7 +107,7 @@
 			removed.temperature = max(TCMB, removed.temperature - heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("<span class='notice'>\icon[src] plinks quietly.</span>", 2)
+				src.visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", 2)
 
 		env.merge(removed)
 
@@ -120,12 +120,9 @@
 	user.machine = src
 	var/dat = "<B>[src.name]</B><BR>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\xenoarchaeology\\machinery\analysis_base.dm:111: dat += "Module heat level: [temperature] kelvin<br>"
 	dat += {"Module heat level: [temperature] kelvin<br>
 		Safeties set at 350k, shielding failure at 400k. Failure to maintain safe heat levels may result in equipment damage.<br>
 		<hr>"}
-	// END AUTOFIX
 	if(scan_process)
 		dat += "Scan in progress<br><br><br>"
 	else
@@ -133,12 +130,9 @@
 		//dat += "[fuel_container ? "<A href='?src=\ref[src];eject_fuel=1'>Eject fuel tank</a>" : "No fuel tank inserted."]<br>"
 		dat += "[held_container ? "<A href='?src=\ref[src];begin=1'>Begin scanning</a>" : ""]"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\research\xenoarchaeology\\machinery\analysis_base.dm:120: dat += "<hr>"
 	dat += {"<hr>
 		<A href='?src=\ref[src];refresh=1'>Refresh</a><BR>
 		<A href='?src=\ref[src];close=1'>Close</a><BR>"}
-	// END AUTOFIX
 	user << browse(dat, "window=anomaly;size=450x500")
 	onclose(user, "anomaly")
 
@@ -148,11 +142,11 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 		if(held_container)
 			to_chat(user, "<span class='warning'>You must remove the [held_container] first.</span>")
 		else
-			to_chat(user, "<span class='notice'>You put the [W] into the [src].</span>")
-			user.drop_item(W, src)
+			if(user.drop_item(W, src))
+				to_chat(user, "<span class='notice'>You put the [W] into the [src].</span>")
 
-			held_container = W
-			updateDialog()
+				held_container = W
+				updateDialog()
 
 		return 1 // avoid afterattack() being called
 	/*else if(istype(W, /obj/item/weapon/tank))
@@ -178,14 +172,14 @@ obj/machinery/anomaly/proc/FinishScan()
 
 	//determine the results and print a report
 	if(held_container)
-		src.visible_message("<span class='notice'>\icon[src] makes an insistent chime.</span>", 2)
+		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", 2)
 		var/obj/item/weapon/paper/P = new(src.loc)
 		P.name = "[src] report #[++report_num]"
 		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults()
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamped")
 	else
-		src.visible_message("<span class='notice'>\icon[src] makes a low buzzing noise.</span>", 2)
+		src.visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", 2)
 
 obj/machinery/anomaly/Topic(href, href_list)
 	if(..()) return

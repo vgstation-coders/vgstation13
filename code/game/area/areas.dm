@@ -6,12 +6,17 @@
 	var/global/global_uid = 0
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
+	var/list/area_turfs
+	var/turret_protected = 0
+	var/list/turretTargets = list()
 
 /area/New()
+	area_turfs = list()
 	icon_state = ""
 	layer = 10
 	uid = ++global_uid
-	areas |= src
+	if (x) // If we're actually located in the world
+		areas |= src
 
 	if(isspace(src))	// override defaults for space. TODO: make space areas of type /area/space rather than /area
 		requires_power = 1
@@ -24,9 +29,9 @@
 		//has_gravity = 0    // Space has gravity.  Because.. because.
 
 	if(!requires_power)
-		power_light = 0			//rastaf0
-		power_equip = 0			//rastaf0
-		power_environ = 0		//rastaf0
+		power_light = 1
+		power_equip = 1
+		power_environ = 1
 
 	..()
 
@@ -84,7 +89,7 @@
 		a.triggerAlarm("Power", src, null, src)
 
 /////////////////////////////////////////
-// BEGIN /VG/ UNFUCKING OF AIR ALARMS
+// BEGIN /vg/ UNFUCKING OF AIR ALARMS
 /////////////////////////////////////////
 
 /area/proc/updateDangerLevel()
@@ -414,6 +419,30 @@
 			spawn(600) // Ewww - this is very very bad.
 				if(M && M.client)
 					M.client.ambience_playing = 0
+
+	if(turret_protected)
+		if(isliving(Obj))
+			turretTargets |= Obj
+		else if(istype(Obj, /obj/mecha))
+			var/obj/mecha/Mech = Obj
+			if(Mech.occupant)
+				turretTargets |= Mech
+		// /vg/ vehicles
+		else if(istype(Obj, /obj/structure/bed/chair/vehicle))
+			turretTargets |= Obj
+		return 1
+
+/area/Exited(atom/movable/Obj)
+	if(turret_protected)
+		if(Obj in turretTargets)
+			turretTargets -= Obj
+	..()
+
+/area/proc/subjectDied(target)
+	if(isliving(target))
+		var/mob/living/L = target
+		if(L.stat)
+			src.Exited(L)
 
 /area/proc/gravitychange(var/gravitystate = 0, var/area/A)
 

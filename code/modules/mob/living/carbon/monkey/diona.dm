@@ -14,9 +14,10 @@
 	holder_type = /obj/item/weapon/holder/diona
 	var/list/donors = list()
 	var/ready_evolve = 0
-	canWearHats = 0
+	canWearHats = 1
 	canWearClothes = 0
 	canWearGlasses = 0
+	languagetoadd = "Rootspeak"
 
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
@@ -32,7 +33,7 @@
 	setGender(NEUTER)
 	dna.mutantrace = "plant"
 	greaterform = "Diona"
-	add_language("Rootspeak")
+	alien = 1
 
 //Verbs after this point.
 
@@ -105,17 +106,18 @@
 	adult.set_species("Diona")
 
 	transferImplantsTo(adult)
+	transferBorers(adult)
 
 	if(istype(loc,/obj/item/weapon/holder/diona))
 		var/obj/item/weapon/holder/diona/L = loc
-		src.loc = L.loc
-		qdel(L)
+		src.forceMove(get_turf(L))
 		L = null
+		qdel(L)
 
 	for(var/datum/language/L in languages)
 		adult.add_language(L.name)
-	adult.regenerate_icons()
 
+	adult.regenerate_icons()
 	adult.name = src.name
 	adult.real_name = src.real_name
 	src.mind.transfer_to(adult)
@@ -125,7 +127,7 @@
 /mob/living/carbon/monkey/diona/say_understands(var/mob/other,var/datum/language/speaking = null)
 	if(other) other = other.GetSource()
 	if (istype(other, /mob/living/carbon/human))
-		if(speaking && speaking.name == "Sol Common")
+		if(speaking && speaking.name == "Galactic Common")
 			if(donors.len >= 2) // They have sucked down some blood.
 				return 1
 	return ..()
@@ -162,13 +164,15 @@
 	if(donors.len == 5)
 		ready_evolve = 1
 		to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
-	else if(donors.len == 2)
-		to_chat(src, "<span class='good'>You feel your awareness expand, and realize you know how to understand the creatures around you.</span>")
 	else if(donors.len == 4)
 		to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
-		add_language("Sol Common")
+		add_language("Galactic Common")
+		default_language = all_languages["Galactic Common"]
 	else if(donors.len == 3)
 		to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
+	else if(donors.len == 2)
+		to_chat(src, "<span class='good'>You feel your awareness expand, and realize you know how to understand the creatures around you.</span>")
+		//say_understands() effectively lets us understand common language at this point
 	else
 		to_chat(src, "<span class='good'>The blood seeps into your small form, and you draw out the echoes of memories and personality from it, working them into your budding mind.</span>")
 

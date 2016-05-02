@@ -6,6 +6,7 @@
 	nodamage = 1
 	layer = 13
 	flag = "energy"
+	fire_sound = 'sound/weapons/ion.ogg'
 
 /obj/item/projectile/ion/Bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
@@ -31,6 +32,7 @@
 	layer = 13
 	flag = "energy"
 	var/temperature = 300
+	fire_sound = 'sound/weapons/pulse3.ogg'
 
 /obj/item/projectile/temp/OnFired()
 	..()
@@ -38,6 +40,8 @@
 	var/obj/item/weapon/gun/energy/temperature/T = shot_from
 	if(istype(T))
 		src.temperature = T.temperature
+	else
+		temperature = rand(100,600) //give it a random temp value if it's not fired from a temp gun
 
 	switch(temperature)
 		if(501 to INFINITY)
@@ -77,38 +81,16 @@
 		var/mob/living/M = target
 		if(M.flags & INVULNERABLE)
 			return 0
-		M.bodytemperature = temperature
+		if(istype(M,/mob/living/carbon/human))
+			M.bodytemperature -= 2*((temperature-T0C)/(-T0C))
+		else
+			M.bodytemperature = temperature
 		if(temperature > 500)//emagged
 			M.adjust_fire_stacks(0.5)
 			M.on_fire = 1
 			M.update_icon = 1
 			playsound(M.loc, 'sound/effects/bamf.ogg', 50, 0)
 	return 1
-
-//This shouldn't fucking exist, just spawn a meteor damnit
-/obj/item/projectile/meteor
-	name = "meteor"
-	icon = 'icons/obj/meteor.dmi'
-	icon_state = "smallf"
-	damage = 0
-	damage_type = BRUTE
-	nodamage = 1
-	flag = "bullet"
-
-/obj/item/projectile/meteor/Bump(atom/A as mob|obj|turf|area)
-	if(A == firer)
-		loc = A.loc
-		return
-
-	//Copied straight from small meteor code
-	spawn(0)
-		for(var/mob/M in range(8, src))
-			if(!M.stat && !istype(M, /mob/living/silicon/ai)) //bad idea to shake an ai's view
-				shake_camera(M, 2, 1) //Poof
-
-		playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 10, 1)
-		explosion(src.loc, -1, 1, 3, 4, 0) //Tiny meteor doesn't cause too much damage
-		qdel(src)
 
 //Simple fireball
 /obj/item/projectile/simple_fireball
@@ -131,6 +113,7 @@
 	nodamage = 1
 	flag = "energy"
 	var/mutstrength = 10
+	fire_sound = 'sound/effects/stealthoff.ogg'
 
 /obj/item/projectile/energy/floramut/on_hit(var/atom/target, var/blocked = 0)
 	var/mob/living/M = target
@@ -142,10 +125,10 @@
 				M.apply_effect((rand(30,80)),IRRADIATE)
 				M.Weaken(5)
 				for (var/mob/V in viewers(src))
-					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 3, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
+					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			if(prob(mutstrength*3))
 			//	for (var/mob/V in viewers(src)) //Public messages commented out to prevent possible metaish genetics experimentation and stuff. - Cheridan
-			//		V.show_message("<span class='warning'>[M] is mutated by the radiation beam.</span>", 3, "<span class='warning'>You hear the snapping of twigs.</span>", 2)
+			//		V.show_message("<span class='warning'>[M] is mutated by the radiation beam.</span>", 1, "<span class='warning'>You hear the snapping of twigs.</span>", 2)
 				if(prob(80))
 					randmutb(M)
 					domutcheck(M,null)
@@ -156,12 +139,12 @@
 				M.adjustFireLoss(rand(mutstrength/3, mutstrength))
 				M.show_message("<span class='warning'>The radiation beam singes you!</span>")
 			//	for (var/mob/V in viewers(src))
-			//		V.show_message("<span class='warning'>[M] is singed by the radiation beam.</span>", 3, "<span class='warning'>You hear the crackle of burning leaves.</span>", 2)
+			//		V.show_message("<span class='warning'>[M] is singed by the radiation beam.</span>", 1, "<span class='warning'>You hear the crackle of burning leaves.</span>", 2)
 		else
 			M.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 	else if(istype(target, /mob/living/carbon/))
 	//	for (var/mob/V in viewers(src))
-	//		V.show_message("The radiation beam dissipates harmlessly through [M]", 3)
+	//		V.show_message("The radiation beam dissipates harmlessly through [M]")
 		M.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 	else
 		return 1
@@ -177,6 +160,7 @@
 	damage_type = TOX
 	nodamage = 1
 	flag = "energy"
+	fire_sound = 'sound/effects/stealthoff.ogg'
 
 /obj/item/projectile/energy/florayield/on_hit(var/atom/target, var/blocked = 0)
 	var/mob/M = target
@@ -209,6 +193,7 @@
 	damage_type = BRUTE
 	flag = "energy"
 	var/range = 2
+	fire_sound = 'sound/weapons/Taser.ogg'
 
 obj/item/projectile/kinetic/New()
 	var/turf/proj_turf = get_turf(src)

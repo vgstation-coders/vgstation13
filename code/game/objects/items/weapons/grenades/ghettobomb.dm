@@ -8,7 +8,7 @@
         user.before_take_item(G)
         user.before_take_item(src)
         user.put_in_hands(W)
-        to_chat(user, "<span  class='notice'>You stuff the [I] in the [src], emptying the contents beforehand.</span>")
+        to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
         W.underlays += image(src.icon, icon_state = src.icon_state)
         qdel(I)
         I = null
@@ -35,7 +35,7 @@
 
 /obj/item/weapon/grenade/iedcasing/afterattack(atom/target, mob/user , flag) //Filling up the can
 	if(assembled == 0)
-		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && in_range(src, target))
+		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
 			if(target.reagents.total_volume < 50)
 				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
 				return

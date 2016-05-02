@@ -44,6 +44,7 @@ var/const/CHAPLAIN			=(1<<10)
 var/const/CLOWN				=(1<<11)
 var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
+var/const/TRADER			=(1<<14)
 
 
 var/list/assistant_occupations = list(
@@ -94,14 +95,19 @@ var/list/civilian_positions = list(
 	"Chef",
 	"Janitor",
 	"Librarian",
-	"Quartermaster",
-	"Cargo Technician",
-	"Shaft Miner",
 	"Internal Affairs Agent",
 	"Chaplain",
+	"Clown",
+	"Mime",
 	"Assistant"
 )
 
+var/list/cargo_positions = list(
+	"Head of Personnel",
+	"Quartermaster",
+	"Cargo Technician",
+	"Shaft Miner"
+)
 
 var/list/security_positions = list(
 	"Head of Security",
@@ -110,7 +116,6 @@ var/list/security_positions = list(
 	"Security Officer"
 )
 
-
 var/list/nonhuman_positions = list(
 	"AI",
 	"Cyborg",
@@ -118,6 +123,9 @@ var/list/nonhuman_positions = list(
 	"Mobile MMI"
 )
 
+var/list/misc_positions = list(
+	"Trader",
+)
 
 /proc/guest_jobbans(var/job)
 	return ((job in command_positions) || (job in nonhuman_positions) || (job in security_positions))

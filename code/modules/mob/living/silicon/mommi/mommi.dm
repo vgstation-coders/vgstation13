@@ -190,8 +190,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/emag_act(mob/user as mob)
 	if(user == src && emagged != 1)//Dont shitpost inside the game, thats just going too far
 		to_chat(user, "<span class='warning'>Nanotrasen Patented Anti-Emancipation Override initiated.</span>")
-		return
-	..()
+		return 1
+	if(..())
+		return 1
 	remove_static_overlays()
 	updateicon()
 
@@ -199,19 +200,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	keeper = 0
 
 /mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/weldingtool))
-		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0))
-			adjustBruteLoss(-30)
-			updatehealth()
-			add_fingerprint(user)
-			for(var/mob/O in viewers(user, null))
-				O.show_message(text("<span class='warning'>[user] has fixed some of the dents on [src]!</span>"), 1)
-		else
-			to_chat(user, "Need more welding fuel!")
-			return
-
-	else if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
+	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
 		var/obj/item/stack/cable_coil/coil = W
 		adjustFireLoss(-30)
 		updatehealth()
@@ -219,7 +208,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		for(var/mob/O in viewers(user, null))
 			O.show_message(text("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
 
-	else if (istype(W, /obj/item/weapon/crowbar))	// crowbar means open or close the cover
+	else if (iscrowbar(W))	// crowbar means open or close the cover
 		if(stat == DEAD)
 			to_chat(user, "You pop the MMI off the base.")
 			spawn(0)
@@ -266,18 +255,18 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 //			chargecount = 0
 		updateicon()
 
-	else if (istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/multitool))
+	else if (iswirecutter(W) || istype(W, /obj/item/device/multitool))
 		if (wiresexposed)
 			wires.Interact(user)
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && opened && !cell)	// haxing
+	else if(isscrewdriver(W) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
-		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && opened && cell)	// radio
+	else if(isscrewdriver(W) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else
@@ -467,6 +456,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/Move(a, b, flag)
 	..()
+
+/mob/living/silicon/robot/mommi/CheckSlip()
+	return -1
 
 /*
 /mob/living/silicon/robot/mommi/proc/ActivateKeeper()

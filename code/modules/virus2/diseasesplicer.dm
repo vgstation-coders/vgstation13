@@ -22,9 +22,9 @@
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		if(!dish)
-
-			dish = I
 			if(!c.drop_item(I, src)) return 1
+			dish = I
+
 	if(istype(I,/obj/item/weapon/diseasedisk))
 		to_chat(user, "You upload the contents of the disk into the buffer")
 		memorybank = I:effect
@@ -85,7 +85,7 @@
 			dat += "<BR><BR><A href='?src=\ref[src];eject=1'>Eject disk</a>"
 		else
 			dat += "<BR>Please insert dish."
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "disease_splicer", "Disease Splicer", 400, 500, src)
 	popup.set_content(dat)
 	popup.open()

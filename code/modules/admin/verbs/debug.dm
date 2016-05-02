@@ -232,14 +232,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\verbs\\debug.dm:145: t+= "Nitrogen : [env.nitrogen]\n"
 	t += {"Nitrogen : [env.nitrogen]
 Oxygen : [env.oxygen]
 Plasma : [env.toxins]
 CO2: [env.carbon_dioxide]
 Pressure: [env.return_pressure()]"}
-	// END AUTOFIX
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -624,10 +621,13 @@ Pressure: [env.return_pressure()]"}
 	set category = "Fun"
 	set name = "Select equipment"
 
+	if(!check_rights(R_SPAWN))
+		return
+
 	if(!ishuman(M))
 		alert("Invalid mob")
 		return
-	//log_admin("[key_name(src)] has alienized [M.key].")
+
 	var/list/dresspacks = list(
 		"strip",
 		"Engineer RIG",
@@ -662,6 +662,7 @@ Pressure: [env.return_pressure()]"}
 		"Bomberman",
 		"Bomberman(arena)",
 		)
+
 	var/dostrip = input("Do you want to strip [M] before equipping them? (0=no, 1=yes)", "STRIPTEASE") as null|anything in list(0,1)
 	if(isnull(dostrip))
 		return
@@ -889,7 +890,7 @@ Pressure: [env.return_pressure()]"}
 
 			var/obj/item/device/pda/heads/pda = new(M)
 			pda.owner = M.real_name
-			pda.ownjob = "NanoTrasen Navy Representative"
+			pda.ownjob = "Nanotrasen Navy Representative"
 			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
 
 			M.equip_if_possible(pda, slot_r_store)
@@ -902,7 +903,7 @@ Pressure: [env.return_pressure()]"}
 			W.item_state = "id_inv"
 			W.access = get_all_accesses()
 			W.access += list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer")
-			W.assignment = "NanoTrasen Navy Representative"
+			W.assignment = "Nanotrasen Navy Representative"
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
@@ -915,7 +916,7 @@ Pressure: [env.return_pressure()]"}
 
 			var/obj/item/device/pda/heads/pda = new(M)
 			pda.owner = M.real_name
-			pda.ownjob = "NanoTrasen Navy Officer"
+			pda.ownjob = "Nanotrasen Navy Officer"
 			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
 
 			M.equip_if_possible(pda, slot_r_store)
@@ -926,7 +927,7 @@ Pressure: [env.return_pressure()]"}
 			W.name = "[M.real_name]'s ID Card"
 			W.access = get_all_accesses()
 			W.access += get_all_centcom_access()
-			W.assignment = "NanoTrasen Navy Officer"
+			W.assignment = "Nanotrasen Navy Officer"
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
@@ -940,7 +941,7 @@ Pressure: [env.return_pressure()]"}
 
 			var/obj/item/device/pda/heads/pda = new(M)
 			pda.owner = M.real_name
-			pda.ownjob = "NanoTrasen Navy Captain"
+			pda.ownjob = "Nanotrasen Navy Captain"
 			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
 
 			M.equip_if_possible(pda, slot_r_store)
@@ -951,7 +952,7 @@ Pressure: [env.return_pressure()]"}
 			W.name = "[M.real_name]'s ID Card"
 			W.access = get_all_accesses()
 			W.access += get_all_centcom_access()
-			W.assignment = "NanoTrasen Navy Captain"
+			W.assignment = "Nanotrasen Navy Captain"
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
@@ -1202,17 +1203,17 @@ Pressure: [env.return_pressure()]"}
 
 	switch(input("Which list?") in list("Players","Admins","Mobs","Living Mobs","Dead Mobs", "Clients"))
 		if("Players")
-			to_chat(usr, list2text(player_list,","))
+			to_chat(usr, jointext(player_list,","))
 		if("Admins")
-			to_chat(usr, list2text(admins,","))
+			to_chat(usr, jointext(admins,","))
 		if("Mobs")
-			to_chat(usr, list2text(mob_list,","))
+			to_chat(usr, jointext(mob_list,","))
 		if("Living Mobs")
-			to_chat(usr, list2text(living_mob_list,","))
+			to_chat(usr, jointext(living_mob_list,","))
 		if("Dead Mobs")
-			to_chat(usr, list2text(dead_mob_list,","))
+			to_chat(usr, jointext(dead_mob_list,","))
 		if("Clients")
-			to_chat(usr, list2text(clients,","))
+			to_chat(usr, jointext(clients,","))
 
 
 /client/proc/cmd_admin_toggle_block(var/mob/M,var/block)
@@ -1238,9 +1239,9 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F=file("data/logs/profiling/[date_string]_instances.csv")
 	fdel(F)
-	to_chat(F, "Types,Number of Instances")
+	F << "Types,Number of Instances"
 	for(var/key in type_instances)
-		to_chat(F, "[key],[type_instances[key]]")
+		F << "[key],[type_instances[key]]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 
@@ -1254,8 +1255,8 @@ Pressure: [env.return_pressure()]"}
 	fdel(F)
 	for(var/obj/effect/decal/cleanable/blood/tracks/T in blood_list)
 		if(!T.loc)
-			to_chat(F, "Found [T] in a null location but still in the blood list")
-			to_chat(F, "--------------------------------------")
+			F << "Found [T] in a null location but still in the blood list"
+			F << "--------------------------------------"
 			continue
 		var/dat
 		for(var/b in cardinal)
@@ -1265,7 +1266,7 @@ Pressure: [env.return_pressure()]"}
 				for(var/key in T.setdirs)
 					dat += (key)
 		dat += "--------------------------------------"
-		to_chat(F, dat)
+		F << dat
 
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 
@@ -1277,18 +1278,18 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/[date_string]_machine_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,nanoseconds")
+	F << "type,nanoseconds"
 	for(var/typepath in machine_profiling)
 		var/ns = machine_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 	var/FF = file("data/logs/profiling/[date_string]_object_profiling.csv")
 	fdel(FF)
-	to_chat(FF, "type,nanoseconds")
+	FF << "type,nanoseconds"
 	for(var/typepath in object_profiling)
 		var/ns = object_profiling[typepath]
-		to_chat(FF, "[typepath],[ns]")
+		FF << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [FF].</span>")
 
@@ -1303,7 +1304,7 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/[date_string]_machine_instances.csv")
 	fdel(F)
-	to_chat(F, "type,count")
+	F << "type,count"
 	var/list/machineinstances = list()
 	for(var/atom/typepath in machines)
 		if(!typepath.type in machineinstances)
@@ -1311,12 +1312,12 @@ Pressure: [env.return_pressure()]"}
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
 		var/count = machineinstances[T]
-		to_chat(F, "[T],[count]")
+		F << "[T],[count]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 	F =file("data/logs/profiling/[date_string]_power_machine_instances.csv")
 	fdel(F)
-	to_chat(F, "type,count")
+	F << "type,count"
 	machineinstances.len = 0
 	for(var/atom/typepath in power_machines)
 		if(!typepath.type in machineinstances)
@@ -1324,7 +1325,7 @@ Pressure: [env.return_pressure()]"}
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
 		var/count = machineinstances[T]
-		to_chat(F, "[T],[count]")
+		F << "[T],[count]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 #endif
@@ -1336,27 +1337,27 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/[date_string]_del_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,deletes")
+	F << "type,deletes"
 	for(var/typepath in del_profiling)
 		var/ns = del_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 	F =file("data/logs/profiling/[date_string]_gdel_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,soft deletes")
+	F << "type,soft deletes"
 	for(var/typepath in gdel_profiling)
 		var/ns = gdel_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 
 	F =file("data/logs/profiling/[date_string]_ghdel_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,hard deletes")
+	F << "type,hard deletes"
 	for(var/typepath in ghdel_profiling)
 		var/ns = ghdel_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 
@@ -1515,9 +1516,13 @@ client/proc/create_bomberman_arena()
 		"15x15 (4 players)",
 		"39x23 (10 players)",
 		)
-	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes
+	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes | null
+
+	if(!arena_type)
+		return
+
 	var/turf/T = get_turf(src.mob)
-	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T,arena_type,src.mob)
+	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T, arena_type, src.mob)
 	arenas += A
 
 client/proc/control_bomberman_arena()

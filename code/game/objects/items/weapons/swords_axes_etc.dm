@@ -12,8 +12,8 @@
  * Banhammer
  */
 /obj/item/weapon/banhammer/attack(mob/M as mob, mob/user as mob)
-	to_chat(M, "<font color='red'><b> You have been banned FOR NO REISIN by [user]<b></font>")
-	to_chat(user, "<font color='red'> You have <b>BANNED</b> [M]</font>")
+	to_chat(M, "<font color='red'><b>You have been banned FOR NO REISIN by [user]<b></font>")
+	to_chat(user, "<font color='red'>You have <b>BANNED</b> [M]</font>")
 
 /*
  * Classic Baton
@@ -25,6 +25,8 @@
 	icon_state = "baton"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	item_state = "classic_baton"
+	origin_tech = "combat=3"
+	mech_flags = MECH_SCAN_FAIL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 10
@@ -78,6 +80,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "telebaton_0"
 	item_state = "telebaton_0"
+	origin_tech = "combat=2"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = 2
@@ -99,7 +102,7 @@
 		item_state = "telebaton_1"
 		w_class = 4
 		force = 15//quite robust
-		attack_verb = list("smacked", "struck", "slapped")
+		attack_verb = list("smacks", "strikes", "slaps")
 	else
 		user.visible_message("<span class='notice'>[user] collapses their telescopic baton.</span>",\
 		"<span class='notice'>You collapse the baton.</span>",\
@@ -108,11 +111,11 @@
 		"<span class='warning'>You collapse the fishing rod.</span>",\
 		"You hear a balloon exploding.")
 
-		icon_state = "telebaton_0"
-		item_state = "telebaton_0"
-		w_class = 2
-		force = 3//not so robust now
-		attack_verb = list("hit", "punched")
+		icon_state = initial(icon_state)
+		item_state = initial(item_state)
+		w_class = initial(w_class)
+		force = initial(force) //not so robust now
+		attack_verb = list("hits", "punches")
 	playsound(get_turf(src), 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
@@ -200,11 +203,9 @@
 		src.sharpness = 1.5
 	else
 		to_chat(user, "<span class='notice'>The axe can now be concealed.</span>")
-		src.force = 40
-		src.icon_state = "axe0"
-		src.w_class = 5
-		src.sharpness = 1.0
+		src.force = initial(src.force)
+		src.icon_state = initial(src.icon_state)
+		src.w_class = initial(src.w_class)
+		src.sharpness = initial(src.sharpness)
 	src.add_fingerprint(user)
 	return
-
-

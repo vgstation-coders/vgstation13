@@ -205,7 +205,7 @@
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel.</span>")
 			return
-	else if(istype(W, /obj/item/weapon/wrench) && state == 0)
+	else if(iswrench(W) && state == 0)
 		busy = 1
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 		if(anchored)
@@ -230,7 +230,7 @@
 			to_chat(user, "<span class='notice'>You wire the Airlock!</span>")
 		busy = 0
 
-	else if(istype(W, /obj/item/weapon/wirecutters) && state == 1 )
+	else if(iswirecutter(W) && state == 1 )
 		busy = 1
 		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
 		user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
@@ -246,10 +246,12 @@
 		busy = 1
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
-		user.drop_item(W, src)
+		user.drop_item(W, src, force_drop = 1)
 
 		if(do_after(user, src, 40))
 			if(!src) return
+			var/obj/item/weapon/circuitboard/airlock/electronic = W
+			electronic.installed = 1
 			to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
 			src.state = 2
 			src.name = "Near finished Airlock Assembly"
@@ -258,7 +260,7 @@
 			W.loc = src.loc
 		busy = 0
 
-	else if(istype(W, /obj/item/weapon/crowbar) && state == 2 )
+	else if(iscrowbar(W) && state == 2 )
 		busy = 1
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
 		user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to install electronics into the airlock assembly.")
@@ -273,6 +275,7 @@
 				ae = new/obj/item/weapon/circuitboard/airlock( src.loc )
 			else
 				ae = electronics
+				electronics.installed = 0
 				electronics = null
 				ae.loc = src.loc
 		busy = 0
@@ -300,7 +303,7 @@
 							glass = "[M]"
 				busy = 0
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && state == 2 )
+	else if(isscrewdriver(W) && state == 2 )
 		busy = 1
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
@@ -331,6 +334,7 @@
 			else
 				door.name = "[istext(glass) ? "[glass] airlock" : base_name]"
 			src.electronics.loc = door
+			src.electronics.installed = 1
 			qdel(src)
 		busy = 0
 	else

@@ -3,8 +3,8 @@
 	update_hud()
 	return
 
-/mob/living/carbon/Bump(var/atom/movable/AM, yes)
-	if(now_pushing || !yes)
+/mob/living/carbon/Bump(var/atom/movable/AM)
+	if(now_pushing)
 		return
 	..()
 	if(istype(AM, /mob/living/carbon) && prob(10))
@@ -16,14 +16,10 @@
 
 	if(.)
 		if(nutrition && stat != DEAD)
-			nutrition -= HUNGER_FACTOR / 10
+			burn_calories(HUNGER_FACTOR / 20)
 
 			if(m_intent == "run")
-				nutrition -= HUNGER_FACTOR / 10
-
-		if((M_FAT in mutations) && m_intent == "run" && bodytemperature <= 360)
-			bodytemperature += 2
-
+				burn_calories(HUNGER_FACTOR / 20)
 		update_minimap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
@@ -79,21 +75,12 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-
-				if(prob(src.getBruteLoss() - 50))
-					for(var/atom/movable/A in stomach_contents)
-						A.loc = loc
-						stomach_contents.Remove(A)
-					src.gib()
+				src.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
-	for(var/mob/M in src)
-		if(M in src.stomach_contents)
-			src.stomach_contents.Remove(M)
-		M.loc = src.loc
-		for(var/mob/N in viewers(src, null))
-			if(N.client)
-				N.show_message(text("<span class='danger'>[M] bursts out of [src]!</span>"), 2)
+	dropBorers(1)
+	drop_stomach_contents()
+	src.visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
 
 /mob/living/carbon/proc/share_contact_diseases(var/mob/M)
@@ -128,12 +115,18 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(take_overall_damage(0, damage, "[source]") == 0) // godmode
-		return 0
-
-	//src.burn_skin(shock_damage)
-	//src.adjustFireLoss(shock_damage) //burn_skin will do this for us
-	//src.updatehealth()
+	if(dna.mutantrace == "slime")
+		heal_overall_damage(damage/2, damage/2)
+		Jitter(10)
+		Stun(5)
+		Weaken(5)
+		//It would be cool if someone added an animation of some electrical shit going through the body
+	else
+		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
+			return 0
+		Jitter(20)
+		Stun(10)
+		Weaken(10)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
@@ -145,12 +138,7 @@
 	)
 
 	//if(src.stunned < shock_damage)	src.stunned = shock_damage
-
-	Stun(10) // this should work for now, more is really silly and makes you lay there forever
-
 	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
-
-	Weaken(10)
 
 	var/datum/effect/effect/system/spark_spread/SparkSpread = new
 	SparkSpread.set_up(5, 1, loc)
@@ -209,16 +197,16 @@
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "bleeding"
+					status = "<span class='warning'>bleeding</span>"
 				if(brutedamage > 40)
-					status = "mangled"
+					status = "<span class='danger'>mangled</span>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
-					status += "peeling away"
+					status += "<span class='orangeb'>peeling away</span>"
 
 				else if(burndamage > 10)
-					status += "blistered"
+					status += "<span class='orangei'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
 				if(org.status & ORGAN_DESTROYED)
@@ -249,8 +237,8 @@
 			M.visible_message( \
 				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
 				"<span class='notice'>You shake [src] trying to wake [t_him] up!</span>", \
-				drugged_message = "<span class='notice'>[M] starts massaging [t_him]'s back.</span>", \
-				self_drugged_message = "<span class='notice'>You start massaging [t_him]'s back.</span>"
+				drugged_message = "<span class='notice'>[M] starts massaging [src]'s back.</span>", \
+				self_drugged_message = "<span class='notice'>You start massaging [src]'s back.</span>"
 				)
 		// BEGIN HUGCODE - N3X
 		else
@@ -300,19 +288,21 @@
 //Throwing stuff
 
 /mob/living/carbon/proc/toggle_throw_mode()
-	if (src.in_throw_mode)
+	if (in_throw_mode)
 		throw_mode_off()
 	else
 		throw_mode_on()
 
 /mob/living/carbon/proc/throw_mode_off()
-	src.in_throw_mode = 0
-	src.throw_icon.icon_state = "act_throw_off"
+	in_throw_mode = 0
+	if(throw_icon)
+		throw_icon.icon_state = "act_throw_off"
 
 /mob/living/carbon/proc/throw_mode_on()
 	if(gcDestroyed) return
-	src.in_throw_mode = 1
-	src.throw_icon.icon_state = "act_throw_on"
+	in_throw_mode = 1
+	if(throw_icon)
+		throw_icon.icon_state = "act_throw_on"
 
 /mob/proc/throw_item(var/atom/target,var/atom/movable/what=null)
 	return
@@ -340,7 +330,7 @@
 			src.throw_item(target, offhand.wielding)
 			return
 
-	if (istype(item, /obj/item/weapon/grab))
+	else if (istype(item, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = item
 		item = G.toss() //throw the person instead of the grab
 		if(ismob(item))
@@ -361,6 +351,11 @@
 					M.LAssailant = usr
 				returnToPool(G)
 	if(!item) return //Grab processing has a chance of returning null
+
+	var/obj/item/I = item
+	if(istype(I) && I.cant_drop > 0)
+		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
+		return
 
 	remove_from_mob(item)
 
@@ -418,9 +413,8 @@
 	var/success = 0
 	if(!W)	return 0
 	else if (W == handcuffed)
-		handcuffed = null
+		handcuffed.handcuffs_remove(src)
 		success = 1
-		update_inv_handcuffed()
 
 	else if (W == legcuffed)
 		legcuffed = null
@@ -503,6 +497,9 @@
 	switch(src.pulse)
 		if(PULSE_NONE)
 			return "0"
+		if(PULSE_2SLOW)
+			temp = rand(20, 40)
+			return num2text(method ? temp : temp + rand(-10, 10))
 		if(PULSE_SLOW)
 			temp = rand(40, 60)
 			return num2text(method ? temp : temp + rand(-10, 10))
@@ -524,7 +521,7 @@
 	set category = "IC"
 
 	if(usr.sleeping)
-		to_chat(usr, "<span class='warning'>You are already sleeping</span>")
+		to_chat(usr, "<span class='warning'>You are already sleeping.</span>")
 		return
 	if(alert(src,"Are you sure you want to sleep for a while?","Sleep","Yes","No") == "Yes")
 		usr.sleeping = 150 //Long nap of 5 minutes. Those are MC TICKS. Don't get fooled
@@ -575,8 +572,6 @@
 
 //Check for brain worms in head.
 /mob/proc/has_brain_worms()
-
-
 	for(var/I in contents)
 		if(istype(I,/mob/living/simple_animal/borer))
 			return I
@@ -589,7 +584,7 @@
 
 /mob/living/carbon/proc/isInCrit()
 	// Health is in deep shit and we're not already dead
-	return (health < config.health_threshold_crit) && stat != 2
+	return (health < config.health_threshold_crit) && (stat != DEAD)
 
 /mob/living/carbon/get_default_language()
 	if(default_language)
@@ -634,3 +629,45 @@
 			for (var/datum/organ/external/affected in H.organs)
 				if(!istype(affected, I.part)) continue
 				affected.implants += I
+
+/mob/living/carbon/proc/dropBorers(var/gibbed = null)
+	var/mob/living/simple_animal/borer/B = has_brain_worms()
+	if(B)
+		B.detach()
+		if(gibbed)
+			to_chat(B, "<span class='danger'>As your host is violently destroyed, so are you!</span>")
+			B.ghostize(0)
+			qdel(B)
+		else
+			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
+
+/mob/living/carbon/proc/transferBorers(mob/living/target)
+	var/mob/living/simple_animal/borer/B = has_brain_worms()
+	if(B)
+		B.detach()
+		if(iscarbon(target))
+			var/mob/living/carbon/C = target
+			B.perform_infestation(C)
+		else
+			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
+
+/mob/living/carbon/proc/drop_stomach_contents(var/target)
+	if(!target)
+		target = get_turf(src)
+
+	var/mob/living/simple_animal/borer/B = src.has_brain_worms()
+	for(var/mob/M in src)//mobs, all of them
+		if(M == B)
+			continue
+		if(M in src.stomach_contents)
+			src.stomach_contents.Remove(M)
+		M.forceMove(target)
+
+	for(var/obj/O in src)//objects, only the ones in the stomach
+		if(O in src.stomach_contents)
+			src.stomach_contents.Remove(O)
+			O.forceMove(target)
+
+/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+	if(eyecheck() < intensity)
+		..()

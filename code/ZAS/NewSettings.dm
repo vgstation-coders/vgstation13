@@ -251,10 +251,10 @@ var/global/ZAS_Settings/zas_settings = new
 	fdel(F)
 	for(var/id in src.settings)
 		var/datum/ZAS_Setting/setting = src.settings[id]
-		to_chat(F, "# [setting.name]")
-		to_chat(F, "#   [setting.desc]")
-		to_chat(F, "[id] [setting.value]")
-		to_chat(F, "")
+		F << "# [setting.name]"
+		F << "#   [setting.desc]"
+		F << "[id] [setting.value]"
+		F << ""
 
 /ZAS_Settings/proc/Load()
 	for(var/t in file2list("config/ZAS.txt"))
@@ -391,11 +391,8 @@ a { color: white; }
 	for(var/id in src.settings)
 		var/datum/ZAS_Setting/s = src.settings[id]
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\ZAS\NewSettings.dm:393: dat += "<dt><b>[s.name]</b> = <i>[s.value]</i> <A href='?src=\ref[src];changevar=[id]'>\[Change\]</A></dt>"
 		dat += {"<dt><b>[s.name]</b> = <i>[s.value]</i> <A href='?src=\ref[src];changevar=[id]'>\[Change\]</A></dt>
 			<dd>[s.desc]</i></dd>"}
-		// END AUTOFIX
 	dat += "</dl></body></html>"
 	user << browse(dat,"window=settings")
 

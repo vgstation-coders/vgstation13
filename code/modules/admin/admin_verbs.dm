@@ -13,6 +13,8 @@ var/list/admin_verbs_default = list(
 	)
 var/list/admin_verbs_admin = list(
 	/client/proc/set_base_turf,
+	/datum/admins/proc/delay,
+	/client/proc/SendCentcommFax,		/*sends a fax to all fax machines*/
 	/client/proc/player_panel,			/*shows an interface for all players, with links to various panels (old style)*/
 	/client/proc/player_panel_new,		/*shows an interface for all players, with links to various panels*/
 	/client/proc/invisimin,				/*allows our mob to go invisible/visible*/
@@ -42,6 +44,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/jumptokey,				/*allows us to jump to the location of a mob with a certain ckey*/
 	/client/proc/jumptomob,				/*allows us to jump to a specific mob*/
 	/client/proc/jumptoturf,			/*allows us to jump to a specific turf*/
+	/client/proc/jumptovault,			/*allows us to jump to a specific vault*/
 	/client/proc/admin_call_shuttle,	/*allows us to call the emergency shuttle*/
 	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcomm*/
 	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
@@ -92,7 +95,6 @@ var/list/admin_verbs_sounds = list(
 var/list/admin_verbs_fun = list(
 	/datum/admins/proc/media_stop_all,
 	/client/proc/object_talk,
-	/client/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,
 	/client/proc/drop_emp,
@@ -116,19 +118,21 @@ var/list/admin_verbs_fun = list(
 	/client/proc/smissmas,
 	/client/proc/achievement,
 	/client/proc/mommi_static,
-	/client/proc/makepAI
+	/client/proc/makepAI,
+	/client/proc/set_blob_looks,
 	)
 var/list/admin_verbs_spawn = list(
-	/datum/admins/proc/spawn_atom,		/*	Allows us to spawn instances.							*/
-	/client/proc/spawn_datum,		/*	Allows us to spawn datums to the marked datum buffer.	*/
-	/client/proc/respawn_character
+	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
+	/client/proc/spawn_datum, //Allows us to spawn datums to the marked datum buffer
+	/client/proc/cmd_admin_dress, //Allows us to spawn clothing and dress a mob with it in one click
+	/client/proc/respawn_character, //Allows us to re-spawn someone
+	/client/proc/debug_reagents //Allows us to spawn reagents in mobs/containers
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
 	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
-	/datum/admins/proc/delay,
 	/datum/admins/proc/toggleaban,
 	/client/proc/toggle_log_hrefs,
 	/datum/admins/proc/immreboot,
@@ -143,6 +147,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
+	/client/proc/save_coordinates
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -195,7 +200,8 @@ var/list/admin_verbs_possess = list(
 	/proc/release
 	)
 var/list/admin_verbs_permissions = list(
-	/client/proc/edit_admin_permissions
+	/client/proc/edit_admin_permissions,
+	/client/proc/create_poll
 	)
 var/list/admin_verbs_rejuv = list(
 	/client/proc/respawn_character
@@ -604,7 +610,7 @@ var/list/admin_verbs_mod = list(
 
 	var/turf/epicenter = mob.loc
 	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb")
-	var/choice = input("What size explosion would you like to produce?") in choices
+	var/choice = input("What size explosion would you like to produce?") in choices | null
 	switch(choice)
 		if(null)
 			return 0
@@ -620,6 +626,7 @@ var/list/admin_verbs_mod = list(
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
 			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+
 	log_admin("[key_name(usr)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
 	message_admins("<span class='notice'>[key_name_admin(src)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>).</span>")
 	feedback_add_details("admin_verb","DB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -631,7 +638,7 @@ var/list/admin_verbs_mod = list(
 
 	var/turf/epicenter = mob.loc
 	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Custom EMP")
-	var/choice = input("What size EMP would you like to produce?") in choices
+	var/choice = input("What size EMP would you like to produce?") in choices | null
 	switch(choice)
 		if(null)
 			return 0
@@ -645,6 +652,7 @@ var/list/admin_verbs_mod = list(
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			empulse(epicenter, heavy_impact_range, light_impact_range)
+
 	log_admin("[key_name(usr)] creating an admin EMP at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
 	message_admins("<span class='notice'>[key_name_admin(src)] creating an admin EMP at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>).</span>")
 	feedback_add_details("admin_verb","DE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -908,7 +916,7 @@ var/list/admin_verbs_mod = list(
 
 	for (var/mob/T as mob in mob_list)
 		to_chat(T, "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>")
-		to_chat(T, 'sound/voice/ManUp1.ogg')
+		T << 'sound/voice/ManUp1.ogg'
 
 	log_admin("[key_name(usr)] told everyone to man up and deal with it.")
 	message_admins("<span class='notice'>[key_name_admin(usr)] told everyone to man up and deal with it.</span>", 1)
@@ -990,12 +998,12 @@ var/list/admin_verbs_mod = list(
 	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
 
 	if(glob == "No!")
-		to_chat(winner.client, sound('sound/misc/achievement.ogg'))
+		winner.client << sound('sound/misc/achievement.ogg')
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='danger'>\icon[cup] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+			to_chat(O, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 	else
-		to_chat(world, sound('sound/misc/achievement.ogg'))
-		to_chat(world, "<span class='danger'>\icon[cup] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+		world << sound('sound/misc/achievement.ogg')
+		to_chat(world, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
 	to_chat(winner, "<span class='danger'>Congratulations!</span>")
 
@@ -1030,6 +1038,19 @@ var/list/admin_verbs_mod = list(
 
 	holder.shuttle_magic()
 
+/client/proc/set_blob_looks()
+	set name = "Set Blob Looks"
+	set category = "Fun"
+
+	var/chosen = input("This will change the looks of every blob currently in the world.", "Blob Looks", blob_looks[1]) as null|anything in blob_looks
+
+	if(chosen)
+		for(var/obj/effect/blob/B in blobs)
+			B.looks = chosen
+			B.update_looks(1)
+
+	log_admin("[key_name(src)] set all blobs to use the \"[chosen]\" look.")
+	message_admins("<span class='notice'>[key_name_admin(src)] set all blobs to use the \"[chosen]\" look.</span>")
 
 /datum/admins/proc/media_stop_all()
 	set name = "Stop All Media"
@@ -1042,3 +1063,18 @@ var/list/admin_verbs_mod = list(
 	message_admins("[key_name_admin(usr)] has stopped all media.", 1)
 
 	stop_all_media()
+
+/client/proc/SendCentcommFax()
+	set	category = "Fun"
+	set name = "Send Fax"
+	set desc = "Sends a fax to all fax machines."
+
+	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
+	if(!sent)	return
+
+	var/sentname = input(src, "Pick a title for the report", "Title") as text|null
+
+	SendFax(sent, sentname, centcomm = 1)
+
+	log_admin("[key_name(src)] sent a fax to all machines.: [sent]")
+	message_admins("[key_name_admin(src)] sent a fax to all machines.", 1)

@@ -32,7 +32,9 @@
 	return I
 
 /datum/organ/internal/proc/rejuvenate()
-	damage=0
+	damage = 0
+	germ_level = 0
+	cancer_stage = 0
 
 /datum/organ/internal/proc/is_bruised()
 	return damage >= min_bruised_damage
@@ -50,6 +52,10 @@
 		H.internal_organs |= src
 		src.owner = H
 
+/datum/organ/internal/proc/Life()
+	// Now organs support Life() processes.
+	return
+
 /datum/organ/internal/process()
 
 	//Process infections
@@ -57,7 +63,7 @@
 		germ_level = 0
 		return
 
-	if(owner.bodytemperature >= 170)	//cryo stops germs from moving and doing their bad stuffs
+	if(owner.bodytemperature >= 170)	//cryo stops germs and cancer from moving and doing their bad stuffs
 		//** Handle antibiotics and curing infections
 		handle_antibiotics()
 
@@ -103,6 +109,33 @@
 						if(501 to INFINITY)
 							take_damage(5)
 							owner.reagents.add_reagent("toxin", rand(3,5))
+
+		if(cancer_stage)
+			handle_cancer()
+
+/datum/organ/internal/handle_cancer()
+
+	if(robotic == 2) //This is a fully robotic limb, no cells for cancer to grow from
+		return 0
+
+	var/datum/organ/external/parent = owner.get_organ(parent_organ)
+
+	switch(cancer_stage)
+		if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR) //Small tumors will not damage your organ, but might flash pain
+			if(prob(1))
+				owner.custom_pain("Something inside your [parent.display_name] hurts a lot.", 1)
+		if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS) //Large tumors will start damaging your organ and give the owner DNA damage (bodywide, can't go per limb)
+			if(prob(20))
+				take_damage(0.25)
+			if(prob(1))
+				owner.apply_damage(0.5, CLONE, parent)
+		if(CANCER_STAGE_METASTASIS to INFINITY) //Metastasis achieved, limb will start breaking down very rapidly, and cancer will spread to all other limbs in short order through bloodstream
+			if(prob(33))
+				take_damage(0.25)
+			if(prob(10))
+				owner.apply_damage(0.5, CLONE, parent)
+			if(prob(1))
+				owner.add_cancer() //Add a new cancerous growth
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
 	if(!owner) return
@@ -155,80 +188,13 @@
 				INTERNAL ORGANS DEFINES
 ****************************************************/
 
-/datum/organ/internal/heart // This is not set to vital because death immediately occurs in blood.dm if it is removed.
+//All the internal organs without specific code to them are below
+//Hopefully this will be filled in soon ?
+
+/datum/organ/internal/heart //This is not set to vital because death immediately occurs in blood.dm if it is removed.
 	name = "heart"
 	parent_organ = "chest"
 	removed_type = /obj/item/organ/heart
-
-/datum/organ/internal/lungs
-	name = "lungs"
-	parent_organ = "chest"
-	removed_type = /obj/item/organ/lungs
-
-	process()
-		..()
-		if (germ_level > INFECTION_LEVEL_ONE)
-			if(prob(5))
-				owner.emote("cough")		//respitory tract infection
-
-		if(is_bruised())
-			if(prob(2))
-				spawn owner.emote("me", 1, "coughs up blood!")
-				owner.drip(10)
-			if(prob(4))
-				spawn owner.emote("me", 1, "gasps for air!")
-				owner.losebreath += 5
-
-/datum/organ/internal/liver
-	name = "liver"
-	parent_organ = "chest"
-	var/process_accuracy = 10
-	removed_type = /obj/item/organ/liver
-
-	Copy()
-		var/datum/organ/internal/liver/I = ..()
-		I.process_accuracy = process_accuracy
-		return I
-
-	process()
-		..()
-		if (germ_level > INFECTION_LEVEL_ONE)
-			if(prob(1))
-				to_chat(owner, "<span class='warning'>Your skin itches.</span>")
-		if (germ_level > INFECTION_LEVEL_TWO)
-			if(prob(1))
-				spawn owner.vomit()
-
-		if(owner.life_tick % process_accuracy == 0)
-			if(src.damage < 0)
-				src.damage = 0
-
-			//High toxins levels are dangerous
-			if(owner.getToxLoss() >= 60 && !owner.reagents.has_reagent("anti_toxin"))
-				//Healthy liver suffers on its own
-				if (src.damage < min_broken_damage)
-					src.damage += 0.2 * process_accuracy
-				//Damaged one shares the fun
-				else
-					var/datum/organ/internal/O = pick(owner.internal_organs)
-					if(O)
-						O.damage += 0.2  * process_accuracy
-
-			//Detox can heal small amounts of damage
-			if (src.damage && src.damage < src.min_bruised_damage && owner.reagents.has_reagent("anti_toxin"))
-				src.damage -= 0.2 * process_accuracy
-
-			// Damaged liver means some chemicals are very dangerous
-			if(src.damage >= src.min_bruised_damage)
-				for(var/datum/reagent/R in owner.reagents.reagent_list)
-					// Ethanol and all drinks are bad
-					if(istype(R, /datum/reagent/ethanol))
-						owner.adjustToxLoss(0.1 * process_accuracy)
-
-				// Can't cope with toxins at all
-				for(var/toxin in list("toxin", "plasma", "sacid", "pacid", "cyanide", "lexorin", "amatoxin", "chloralhydrate", "carpotoxin", "zombiepowder", "mindbreaker"))
-					if(owner.reagents.has_reagent(toxin))
-						owner.adjustToxLoss(0.3 * process_accuracy)
 
 /datum/organ/internal/kidney
 	name = "kidneys"
@@ -241,23 +207,13 @@
 	removed_type = /obj/item/organ/brain
 	vital = 1
 
-/datum/organ/internal/eyes
-	name = "eyes"
-	parent_organ = "head"
-	removed_type = /obj/item/organ/eyes
-
-	process() //Eye damage replaces the old eye_stat var.
-		if(is_bruised())
-			owner.eye_blurry = 20
-		if(is_broken())
-			owner.eye_blind = 20
 
 /datum/organ/internal/appendix
 	name = "appendix"
 	parent_organ = "groin"
 	removed_type = /obj/item/organ/appendix
 
-/datum/organ/internal/proc/remove(var/mob/user)
+/datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
 
 
 	if(!removed_type) return 0

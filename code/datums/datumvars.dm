@@ -177,11 +177,8 @@
 			</script> "}
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:162: body += "<body onload='selectTextField(); updateSearch()' onkeyup='updateSearch()'>"
 	body += {"<body onload='selectTextField(); updateSearch()' onkeyup='updateSearch()'>
 		<div align='center'><table width='100%'><tr><td width='50%'>"}
-	// END AUTOFIX
 	if(sprite)
 		body += "<table align='center' width='100%'><tr><td><img src='view_vars_sprite.png'></td><td>"
 	else
@@ -217,11 +214,8 @@
 		body += "<b>[D]</b>"
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:200: body += "</div>"
 	body += {"</div>
 		</tr></td></table>"}
-	// END AUTOFIX
 	var/formatted_type = text("[D.type]")
 	if(length(formatted_type) > 25)
 		var/middle_point = length(formatted_type) / 2
@@ -237,12 +231,9 @@
 		body += "<br><font size='1' color='red'><b>Marked Object</b></font>"
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:218: body += "</div>"
 	body += {"</div>
 		</div></td>
 		<td width='50%'><div align='center'><a href='?_src_=vars;datumrefresh=\ref[D]'>Refresh</a>"}
-	// END AUTOFIX
 	//if(ismob(D))
 	//	body += "<br><a href='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</a></div></td></tr></table></div><hr>"
 
@@ -275,10 +266,9 @@
 
 	if(ismob(D))
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:247: body += "<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>"
 		body += {"<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>
 			<option value='?_src_=vars;give_disease=\ref[D]'>Give Disease</option>
+			<option value='?_src_=vars;addcancer=\ref[D]'>Inflict Cancer</option>
 			<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>
 			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
 			<option value='?_src_=vars;make_skeleton=\ref[D]'>Make 2spooky</option>
@@ -287,11 +277,8 @@
 			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
 			<option value='?_src_=vars;addlanguage=\ref[D]'>Add Language</option>
 			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>"}
-		// END AUTOFIX
 		if(ishuman(D))
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:262: body += "<option value>---</option>"
 			body += {"<option value>---</option>
 				<option value='?_src_=vars;setmutantrace=\ref[D]'>Set Mutantrace</option>
 				<option value='?_src_=vars;setspecies=\ref[D]'>Set Species</option>
@@ -301,27 +288,18 @@
 				<option value='?_src_=vars;makealien=\ref[D]'>Make alien</option>
 				<option value='?_src_=vars;makeslime=\ref[D]'>Make slime</option>
 				<option value='?_src_=vars;makecluwne=\ref[D]'>Make cluwne</option>"}
-		// END AUTOFIX
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:270: body += "<option value>---</option>"
 		body += {"<option value>---</option>
 			<option value='?_src_=vars;gib=\ref[D]'>Gib</option>"}
-		// END AUTOFIX
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;delete=\ref[D]'>Delete</option>"
 	if(isobj(D))
 		body += "<option value='?_src_=vars;delall=\ref[D]'>Delete all of type</option>"
 	if(isobj(D) || ismob(D) || isturf(D))
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:275: body += "<option value='?_src_=vars;explode=\ref[D]'>Trigger explosion</option>"
 		body += {"<option value='?_src_=vars;explode=\ref[D]'>Trigger explosion</option>
 			<option value='?_src_=vars;emp=\ref[D]'>Trigger EM pulse</option>"}
-		// END AUTOFIX
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:278: body += "</select></form>"
 	body += {"</select></form>
 		</div></td></tr></table></div><hr>
 		<font size='1'><b>E</b> - Edit, tries to determine the variable type by itself.<br>
@@ -329,7 +307,6 @@
 		<b>M</b> - Mass modify: changes this variable for all objects of this type.</font><br>
 		<hr><table width='100%'><tr><td width='20%'><div align='center'><b>Search:</b></div></td><td width='80%'><input type='text' id='filter' name='filter_text' value='' style='width:100%;'></td></tr></table><hr>
 		<ol id='vars'>"}
-	// END AUTOFIX
 	var/list/names = list()
 	for (var/V in D.vars)
 		names += V
@@ -340,7 +317,7 @@
 		body += debug_variable(V, D.vars[V], 0, D)
 
 	body += "</ol>"
-	body = list2text(body)
+	body = jointext(body,"")
 
 	var/html = "<html><head>"
 	if (title)
@@ -428,11 +405,8 @@ body
 			// not sure if this is completely right...
 			if(0)   //(L.vars.len > 0)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\datums\\datumvars.dm:386: html += "<ol>"
 				html += {"<ol>
 					</ol>"}
-				// END AUTOFIX
 			else
 				html += "<ul>"
 				var/index = 1
@@ -567,6 +541,21 @@ body
 
 		src.give_disease(M)
 		href_list["datumrefresh"] = href_list["give_spell"]
+
+	else if(href_list["addcancer"])
+		if(!check_rights(R_ADMIN|R_FUN))	return
+
+		var/mob/living/carbon/human/H = locate(href_list["addcancer"])
+		if(!ishuman(H))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
+			return
+
+		if(alert(usr, "Are you sure you wish to inflict cancer upon [key_name(H)]?",  "Confirm Cancer?" , "Yes" , "No") != "Yes")
+			return
+
+		log_admin("[key_name(H)] was inflicted with cancer, courtesy of [key_name(usr)]")
+		message_admins("[key_name(H)] was inflicted with cancer, courtesy of [key_name(usr)]")
+		H.add_cancer()
 
 	else if(href_list["godmode"])
 		if(!check_rights(R_REJUVINATE))	return
@@ -886,7 +875,7 @@ body
 			to_chat(usr, "Mob doesn't exist anymore")
 			return
 
-		if(H.set_species(new_species))
+		if(H.set_species(new_species, force_organs=1))
 			to_chat(usr, "Set species of [H] to [H.species].")
 			H.regenerate_icons()
 		else

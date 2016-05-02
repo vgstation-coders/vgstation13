@@ -5,9 +5,8 @@
 	item_state = "captain"
 	siemens_coefficient = 0
 	_color = "captain"
-	cold_protection = HANDS
-	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = HANDS
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list("Vox")
 
@@ -26,10 +25,7 @@
 	item_state = "black"
 	siemens_coefficient = 0.6
 	permeability_coefficient = 0.05
-
-	cold_protection = HANDS
-	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = HANDS
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list("Vox")
 
@@ -40,9 +36,7 @@
 	item_state = "black"
 	siemens_coefficient = 0
 	permeability_coefficient = 0.05
-	cold_protection = HANDS
-	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = HANDS
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list("Vox")
 
@@ -119,7 +113,7 @@
 	icon_state = "knuckles"
 	item_state = "knuckles"
 
-	attack_verb = list("punched")
+	attack_verb = list("punches")
 	bonus_knockout = 2 //Slight knockout chance increase.
 	damage_added = 3 //Add 3 damage to unarmed attacks when worn
 	force = 5 //Deal 5 damage if hit with this item in hand
@@ -136,3 +130,10 @@
 	bonus_knockout = 3
 	damage_added = 5
 	force = 7
+
+/obj/item/clothing/gloves/anchor_arms
+	name = "Anchor Arms"
+	desc = "When you're a jerk, everybody loves you."
+	icon_state = "anchorarms"
+	item_state = "anchorarms"
+	species_fit = list("Vox")

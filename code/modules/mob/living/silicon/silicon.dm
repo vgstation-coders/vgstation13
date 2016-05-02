@@ -111,8 +111,8 @@
 			for(var/i = 1; i < alarm_types_clear.len; i++)
 				alarm_types_clear[i] = 0
 
-/mob/living/silicon/drop_item()
-	return
+/mob/living/silicon/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
+	return 1
 
 /mob/living/silicon/generate_static_overlay()
 	return
@@ -134,7 +134,7 @@
 		if(2)
 			src.take_organ_damage(10)
 			Stun(rand(1,5))
-	flick("noise", src:flash)
+	flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 	to_chat(src, "<span class='danger'>*BZZZT*</span>")
 	to_chat(src, "<span class='warning'>Warning: Electromagnetic pulse detected.</span>")
 	..()
@@ -307,4 +307,16 @@
 	return 0
 
 /mob/living/silicon/spook()
-	to_chat(src, "<i>[pick(boo_phrases)]</i>")
+	to_chat(src, "<i>[pick(boo_phrases_silicon)]</i>")
+
+/mob/living/silicon/bite_act(mob/living/carbon/human/H)
+	if(H.hallucinating() || (M_BEAK in H.mutations)) //If we're hallucinating, bite the silicon and lose some of our teeth. Doesn't apply to vox who have beaks
+		..()
+
+		H.knock_out_teeth()
+	else
+		to_chat(H, "<span class='info'>Your self-preservation instinct prevents you from breaking your teeth on \the [src].</span>")
+
+/mob/living/silicon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash/noise)
+	if(affect_silicon)
+		return ..()

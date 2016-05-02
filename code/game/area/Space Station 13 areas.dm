@@ -4,10 +4,10 @@
 
 /area/CATEGORY/OR/DESCRIPTOR/NAME 	(you can make as many subdivisions as you want)
 	name = "NICE NAME" 				(not required but makes things really nice)
-	icon = "ICON FILENAME" 			(defaults to areas.dmi)
-	icon_state = "NAME OF ICON" 	(defaults to "unknown" (blank))
+	icon = "ICON FILENAME" 			(defaults to 'areas.dmi')
+	icon_state = "NAME OF ICON" 	(defaults to 'unknown' (blank))
 	requires_power = 0 				(defaults to 1)
-	music = "music/music.ogg"		(defaults to "music/music.ogg")
+	music = "music/music.ogg"		(defaults to 'music/music.ogg')
 
 NOTE: there are two lists of areas in the end of this file: centcom and station itself. Please maintain these lists valid. --rastaf0
 
@@ -66,7 +66,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
-
 
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
@@ -328,6 +327,21 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/research/outpost
 	icon_state = "shuttle"
+
+/area/shuttle/voxresearch
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
+
+/area/shuttle/voxresearch/station
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
+
+/area/shuttle/voxresearch/outpost
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
 
 /area/shuttle/vox/station
 	name = "\improper Vox Skipjack"
@@ -621,6 +635,22 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "north"
 	requires_power = 0
 
+/area/vox_station/research_lab
+	name = "\improper Research Facility"
+	icon_state = "voxresearch"
+
+/area/vox_station/plasman_lab
+	name = "\improper Plasma Genetic Research"
+	icon_state = "voxtoxins"
+
+/area/vox_station/voxtest_lab
+	name = "\improper Vox Genetic Research"
+	icon_state = "voxgenetics"
+
+/area/vox_station/tradepost
+	name = "\improper Traders Den"
+	icon_state = "tradeden"
+
 //PRISON
 /area/prison
 	name = "\improper Prison Station"
@@ -787,6 +817,14 @@ proc/process_adminbus_teleport_locs()
 /area/maintenance/ghettobar
 	name = "Ghetto Bar"
 	icon_state = "ghettobar"
+
+/area/maintenance/ghettotheatre
+	name = "Ghetto Theatre"
+	icon_state = "ghettotheatre"
+
+/area/maintenance/ghettomorgue
+	name = "Ghetto Morgue"
+	icon_state = "ghettomorgue"
 
 //Hallway
 
@@ -1911,6 +1949,32 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Vox Hallways"
 	icon_state = "hallP"
 
+/area/vox_trading_post/kitchen
+	name = "\improper Vox Kitchen"
+	icon_state = "kitchen"
+
+/area/vox_trading_post/dorms
+	name = "\improper Vox Dormitory"
+	icon_state = "blue"
+
+/area/vox_trading_post/bar
+	name = "\improper Vox Bar"
+	icon_state = "bar"
+
+/area/vox_trading_post/medbay
+	name = "\improper Vox Medbay"
+	icon_state = "medbay"
+
+/area/vox_trading_post/solararray
+	name = "\improper Vox Solar Array"
+	icon_state = "panelsS"
+	requires_power = 0
+	lighting_use_dynamic = 0
+
+/area/vox_trading_post/solars
+	name = "\improper Vox Solar Maintenance"
+	icon_state = "SolarcontrolS"
+
 
 
 // Telecommunications Satellite
@@ -2064,55 +2128,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "null"
 	lighting_use_dynamic = 0
 	requires_power = 0
-	var/sound/mysound = null
 
-/area/awaymission/beach/New()
-	..()
-	var/sound/S = new/sound()
-	mysound = S
-	S.file = 'sound/ambience/shore.ogg'
-	S.repeat = 1
-	S.wait = 0
-	S.channel = 123
-	S.volume = 100
-	S.priority = 255
-	S.status = SOUND_UPDATE
-	process()
-
-/area/awaymission/beach/Entered(atom/movable/Obj,atom/OldLoc)
-	if(ismob(Obj))
-		if(Obj:client)
-			mysound.status = SOUND_UPDATE
-			Obj << mysound
-	return
-
-/area/awaymission/beach/Exited(atom/movable/Obj)
-	if(ismob(Obj))
-		if(Obj:client)
-			mysound.status = SOUND_PAUSED | SOUND_UPDATE
-			Obj << mysound
-
-/area/awaymission/beach/proc/process()
-	//set background = 1
-
-	var/sound/S = null
-	var/sound_delay = 0
-	if(prob(25))
-		S = sound(file=pick('sound/ambience/seag1.ogg','sound/ambience/seag2.ogg','sound/ambience/seag3.ogg'), volume=100)
-		sound_delay = rand(0, 50)
-
-	for(var/mob/living/carbon/human/H in src)
-	/*	if(H.s_tone > -55)
-			H.s_tone--
-			H.update_body()*/
-		if(H.client)
-			mysound.status = SOUND_UPDATE
-			H << mysound
-			if(S)
-				spawn(sound_delay)
-					H << S
-
-	spawn(60) .()
 
 /////////////////////////////////////////////////////////////////////
 /*

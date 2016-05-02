@@ -38,13 +38,14 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/primitive											// Lesser form, if any (ie. monkey for humans)
 	var/tail												// Name of tail image in species effects icon file.
-	var/language = "Sol Common"								// Default racial language, if any.
-	var/default_language = "Sol Common"						// Default language is used when 'say' is used without modifiers.
-	var/attack_verb = "punch"								// Empty hand hurt intent verb.
+	var/language = "Galactic Common"								// Default racial language, if any.
+	var/default_language = "Galactic Common"						// Default language is used when 'say' is used without modifiers.
+	var/attack_verb = "punches"								// Empty hand hurt intent verb.
 	var/punch_damage = 0									// Extra empty hand attack damage.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
 	var/mutantrace											// Safeguard due to old code.
+	var/myhuman												// mob reference
 
 	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
 	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
@@ -77,6 +78,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/burn_mod		// burn multiplier
 
 	var/body_temperature = 310.15
+
+	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint the species leaves if they are not wearing shoes. If we ever get any other than human and vox, maybe this should be explicitly defined for each species.
 
 	// For grays
 	var/max_hurt_damage = 5 // Max melee damage dealt + 5 if hulk
@@ -123,6 +126,20 @@ var/global/list/whitelisted_species = list("Human")
 	var/has_mutant_race = 1
 
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
+	var/can_be_hypothermic = 1
+	var/has_sweat_glands = 1
+
+/datum/species/New()
+	..()
+	if(all_species[name])
+		var/datum/species/globalspeciesholder = all_species[name]
+		default_blocks = globalspeciesholder.default_blocks.Copy()
+		default_mutations = globalspeciesholder.default_mutations.Copy()
+
+/datum/species/Destroy()
+	if(myhuman)
+		myhuman = null
+	..()
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if(H.dna)
@@ -134,6 +151,20 @@ var/global/list/whitelisted_species = list("Human")
 				if(gene.OnSay(H,speech))
 					return 0
 	return 1
+
+/datum/species/proc/clear_organs(var/mob/living/carbon/human/H)
+	if(H.organs)
+		H.organs.len=0
+	if(H.internal_organs)
+		for(var/datum/organ/internal/I in H.internal_organs)
+			// I.Remove(H) // THIS DOES NOTHING AT THE MOMENT
+			qdel(I) // These don't get special garbage collection as is so they never get gotten from pool
+		H.internal_organs.len=0
+	if(H.organs_by_name)
+		H.organs_by_name.len=0
+	if(H.internal_organs_by_name)
+		H.internal_organs_by_name.len=0
+
 
 /datum/species/proc/create_organs(var/mob/living/carbon/human/H) //Handles creation of mob organs.
 
@@ -155,7 +186,10 @@ var/global/list/whitelisted_species = list("Human")
 	H.internal_organs = list()
 	for(var/organ in has_organ)
 		var/organ_type = has_organ[organ]
-		H.internal_organs_by_name[organ] = new organ_type(H)
+		var/datum/organ/internal/O = new organ_type(H)
+		if(O.CanInsert(H))
+			H.internal_organs_by_name[organ] = O
+			O.Insert(H)
 
 	for(var/name in H.organs_by_name)
 		H.organs += H.organs_by_name[name]
@@ -163,173 +197,32 @@ var/global/list/whitelisted_species = list("Human")
 	for(var/datum/organ/external/O in H.organs)
 		O.owner = H
 
-	if(flags & IS_SYNTHETIC)
-		for(var/datum/organ/external/E in H.organs)
-			if(E.status & ORGAN_CUT_AWAY || E.status & ORGAN_DESTROYED) continue
-			E.status |= ORGAN_ROBOT
-		for(var/datum/organ/internal/I in H.internal_organs)
-			I.mechanize()
-
 /datum/species/proc/handle_post_spawn(var/mob/living/carbon/human/H) //Handles anything not already covered by basic species assignment.
 	return
 
-/datum/species/proc/handle_breath(var/datum/gas_mixture/breath, var/mob/living/carbon/human/H)
-	var/safe_oxygen_min = 16 // Minimum safe partial pressure of O2, in kPa
-	//var/safe_oxygen_max = 140 // Maximum safe partial pressure of O2, in kPa (Not used for now)
-	var/safe_co2_max = 10 // Yes it's an arbitrary value who cares?
-	var/safe_toxins_max = 0.5
-	var/safe_toxins_mask = 5
-	var/SA_para_min = 1
-	var/SA_sleep_min = 5
-	var/oxygen_used = 0
-	var/nitrogen_used = 0
-	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
-	var/vox_oxygen_max = 1 // For vox.
+/datum/species/proc/updatespeciescolor(var/mob/living/carbon/human/H) //Handles changing icobase for species that have multiple skin colors.
+	return
 
-	//Partial pressure of the O2 in our breath
-	var/O2_pp = (breath.oxygen/breath.total_moles())*breath_pressure
-	// Same, but for the toxins
-	var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
-	// And CO2, lets say a PP of more than 10 will be bad (It's a little less really, but eh, being passed out all round aint no fun)
-	var/CO2_pp = (breath.carbon_dioxide/breath.total_moles())*breath_pressure // Tweaking to fit the hacky bullshit I've done with atmo -- TLE
-	// Nitrogen, for Vox.
-	var/Nitrogen_pp = (breath.nitrogen/breath.total_moles())*breath_pressure
-
-	// TODO: Split up into Voxs' own proc.
-	if(O2_pp < safe_oxygen_min && name != "Vox") 	// Too little oxygen
-		if(prob(20))
-			spawn(0)
-				H.emote("gasp")
-		if(O2_pp > 0)
-			var/ratio = safe_oxygen_min/O2_pp
-			H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS)) // Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
-			H.failed_last_breath = 1
-			oxygen_used = breath.oxygen*ratio/6
-		else
-			H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-			H.failed_last_breath = 1
-		H.oxygen_alert = max(H.oxygen_alert, 1)
-	else if(Nitrogen_pp < safe_oxygen_min && name == "Vox")  //Vox breathe nitrogen, not oxygen.
-
-		if(prob(20))
-			spawn(0) H.emote("gasp")
-		if(Nitrogen_pp > 0)
-			var/ratio = safe_oxygen_min/Nitrogen_pp
-			H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS))
-			H.failed_last_breath = 1
-			nitrogen_used = breath.nitrogen*ratio/6
-		else
-			H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
-			H.failed_last_breath = 1
-		H.oxygen_alert = max(H.oxygen_alert, 1)
-
-	else								// We're in safe limits
+// Sent from /datum/lung_gas/metabolizable.
+/datum/species/proc/receiveGas(var/gas_id, var/ratio, var/moles, var/mob/living/carbon/human/H)
+	//testing("receiveGas: [gas_id] ? [breath_type] - ratio=[ratio], moles=[moles]")
+	if(ratio <= 0 || gas_id != breath_type)
+		//testing("  ratio is 0 or gas_id doesn't match up, adding oxyLoss.")
+		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+		H.failed_last_breath = 1
+		return 0
+	else if(ratio >= 1)
+		//testing("  we cool")
 		H.failed_last_breath = 0
-
-		var/oxy_restored = 5
-
-		if(hardcore_mode_on && eligible_for_hardcore_mode(H)) //HARDCORE MODE stuff
-			if(H.nutrition < STARVATION_MIN) //Starvation makes oxygen damage heal at a slower rate!
-				oxy_restored = STARVATION_OXY_HEAL_RATE //Defined as 1
-
-		H.adjustOxyLoss(-oxy_restored)
-		oxygen_used = breath.oxygen/6
+		H.adjustOxyLoss(-5)
 		H.oxygen_alert = 0
-
-	breath.oxygen -= oxygen_used
-	breath.nitrogen -= nitrogen_used
-	breath.carbon_dioxide += oxygen_used
-
-	//CO2 does not affect failed_last_breath. So if there was enough oxygen in the air but too much co2, this will hurt you, but only once per 4 ticks, instead of once per tick.
-	if(CO2_pp > safe_co2_max)
-		if(!H.co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
-			H.co2overloadtime = world.time
-		else if(world.time - H.co2overloadtime > 120)
-			H.Paralyse(3)
-			H.adjustOxyLoss(3) // Lets hurt em a little, let them know we mean business
-			if(world.time - H.co2overloadtime > 300) // They've been in here 30s now, lets start to kill them for their own good!
-				H.adjustOxyLoss(8)
-		if(prob(20)) // Lets give them some chance to know somethings not right though I guess.
-			spawn(0) H.emote("cough")
-
+		return moles/6
 	else
-		H.co2overloadtime = 0
-
-	if(Toxins_pp > safe_toxins_max) // Too much toxins
-		var/ratio = (breath.toxins/safe_toxins_max) * 10
-		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
-		if(H.wear_mask)
-			if(H.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)
-				if(breath.toxins > safe_toxins_mask)
-					ratio = (breath.toxins/safe_toxins_mask) * 10
-				else
-					ratio = 0
-		if(ratio)
-			if(H.reagents)
-				H.reagents.add_reagent("plasma", Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
-			H.toxins_alert = max(H.toxins_alert, 1)
-	else if(O2_pp > vox_oxygen_max && name == "Vox") //Oxygen is toxic to vox.
-		var/ratio = (breath.oxygen/vox_oxygen_max) * 1000
-		H.adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
-		H.toxins_alert = max(H.toxins_alert, 1)
-	else
-		H.toxins_alert = 0
-
-	if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
-		for(var/datum/gas/sleeping_agent/SA in breath.trace_gases)
-			var/SA_pp = (SA.moles/breath.total_moles())*breath_pressure
-			if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
-				H.Paralyse(3) // 3 gives them one second to wake up and run away a bit!
-				if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
-					H.sleeping = min(H.sleeping+2, 10)
-			else if(SA_pp > 0.15)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
-				if(prob(20))
-					spawn(0) H.emote(pick("giggle", "laugh"))
-			SA.moles = 0
-
-	if( (abs(310.15 - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
-		if(H.status_flags & GODMODE)	return 1	//godmode
-		if(breath.temperature < cold_level_1)
-			if(prob(20))
-				to_chat(H, "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>")
-		else if(breath.temperature > heat_level_1)
-			if(prob(20))
-				if(H.dna.mutantrace == "slime")
-					to_chat(H, "<span class='warning'>You feel supercharged by the extreme heat!</span>")
-				else
-					to_chat(H, "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>")
-
-		if(H.dna.mutantrace == "slime")
-			if(breath.temperature < cold_level_1)
-				H.adjustToxLoss(round(cold_level_1 - breath.temperature))
-				H.fire_alert = max(H.fire_alert, 1)
-
-		if(H.dna.mutantrace != "slime")
-			switch(breath.temperature)
-				if(-INFINITY to cold_level_3)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, "head", used_weapon = "Excessive Cold")
-					H.fire_alert = max(H.fire_alert, 1)
-
-				if(cold_level_3 to cold_level_2)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_2, BURN, "head", used_weapon = "Excessive Cold")
-					H.fire_alert = max(H.fire_alert, 1)
-
-				if(cold_level_2 to cold_level_1)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_1, BURN, "head", used_weapon = "Excessive Cold")
-					H.fire_alert = max(H.fire_alert, 1)
-
-				if(heat_level_1 to heat_level_2)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_1, BURN, "head", used_weapon = "Excessive Heat")
-					H.fire_alert = max(H.fire_alert, 2)
-
-				if(heat_level_2 to heat_level_3)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_2, BURN, "head", used_weapon = "Excessive Heat")
-					H.fire_alert = max(H.fire_alert, 2)
-
-				if(heat_level_3 to INFINITY)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_3, BURN, "head", used_weapon = "Excessive Heat")
-					H.fire_alert = max(H.fire_alert, 2)
-	return 1
+		//testing("  ratio < 1, adding oxyLoss.")
+		H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS)) // Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
+		H.failed_last_breath = 1
+		H.oxygen_alert = 1
+		return moles*ratio/6
 
 // Used for species-specific names (Vox, etc)
 /datum/species/proc/makeName(var/gender,var/mob/living/carbon/C=null)
@@ -337,15 +230,6 @@ var/global/list/whitelisted_species = list("Human")
 	else				return capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 
 /datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
-	/*
-	if(flags & IS_SYNTHETIC)
-		//H.Jitter(200) //S-s-s-s-sytem f-f-ai-i-i-i-i-lure-ure-ure-ure
-		H.h_style = ""
-		spawn(100)
-			//H.is_jittery = 0
-			//H.jitteriness = 0
-			H.update_hair()
-	*/
 	return
 
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
@@ -372,7 +256,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_lizard.dmi'
 	language = "Sinta'unathi"
 	tail = "sogtail"
-	attack_verb = "scratch"
+	attack_verb = "scratches"
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/unathi
 	darksight = 3
@@ -384,22 +268,22 @@ var/global/list/whitelisted_species = list("Human")
 	heat_level_1 = 420 //Default 360 - Higher is better
 	heat_level_2 = 480 //Default 400
 	heat_level_3 = 1100 //Default 1000
-
+	has_sweat_glands = 0
 	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
 	flesh_color = "#34AF10"
 
 /datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", stutter("ss"))
-	return ..(speech, H)
+	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
+	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
 	icobase = 'icons/mob/human_races/r_skeleton.dmi'
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	language = "Clatter"
-	attack_verb = "punch"
-
+	attack_verb = "punches"
+	has_sweat_glands = 0
 	flags = IS_WHITELISTED | HAS_LIPS | NO_BREATHE | NO_BLOOD | NO_SKIN
 
 	chem_flags = NO_DRINK | NO_EAT | NO_INJECT
@@ -425,7 +309,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_tajaran.dmi'
 	language = "Siik'tajr"
 	tail = "tajtail"
-	attack_verb = "scratch"
+	attack_verb = "scratches"
 	punch_damage = 2 //Claws add 3 damage without gloves, so the total is 5
 	darksight = 8
 
@@ -446,6 +330,16 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#AFA59E"
 
 	var/datum/speech_filter/filter = new
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes/tajaran
+	)
 
 /datum/species/tajaran/New()
 	// Combining all the worst shit the world has ever offered.
@@ -487,7 +381,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_grey.dmi'
 	deform = 'icons/mob/human_races/r_def_grey.dmi'
 	language = "Grey"
-	attack_verb = "punch"
+	attack_verb = "punches"
 	darksight = 5 // BOOSTED from 2
 	eyes = "grey_eyes_s"
 
@@ -503,12 +397,22 @@ var/global/list/whitelisted_species = list("Human")
 
 	has_mutant_race = 0
 
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes/grey
+	)
+
 /datum/species/muton // /vg/
 	name = "Muton"
 	icobase = 'icons/mob/human_races/r_muton.dmi'
 	deform = 'icons/mob/human_races/r_def_muton.dmi'
 	language = "Muton"
-	attack_verb = "punch"
+	attack_verb = "punches"
 	darksight = 1
 	eyes = "eyes_s"
 
@@ -524,10 +428,22 @@ var/global/list/whitelisted_species = list("Human")
 
 	has_mutant_race = 0
 
-	equip(var/mob/living/carbon/human/H)
-		// Unequip existing suits and hats.
-		H.u_equip(H.wear_suit,1)
-		H.u_equip(H.head,1)
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes/muton
+	)
+
+	move_speed_mod = 1
+
+/datum/species/muton/equip(var/mob/living/carbon/human/H)
+	// Unequip existing suits and hats.
+	H.u_equip(H.wear_suit,1)
+	H.u_equip(H.head,1)
 
 	move_speed_mod = 1
 
@@ -544,13 +460,13 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/vox
 	name = "Vox"
-	icobase = 'icons/mob/human_races/r_vox.dmi'
-	deform = 'icons/mob/human_races/r_def_vox.dmi'
+	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
+	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	language = "Vox-pidgin"
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
-	primitive = /mob/living/simple_animal/chicken
+	primitive = /mob/living/carbon/monkey/vox
 
 	warning_low_pressure = 50
 	hazard_low_pressure = 0
@@ -562,11 +478,13 @@ var/global/list/whitelisted_species = list("Human")
 	eyes = "vox_eyes_s"
 	breath_type = "nitrogen"
 
-	default_mutations = list(M_BEAK)
+	default_mutations = list(M_BEAK, M_TALONS)
 	flags = IS_WHITELISTED | NO_SCAN
 
 	blood_color = "#2299FC"
 	flesh_color = "#808D11"
+
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
 
 	uniform_icons = 'icons/mob/species/vox/uniform.dmi'
 //	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
@@ -581,111 +499,141 @@ var/global/list/whitelisted_species = list("Human")
 //	back_icons      = 'icons/mob/back.dmi'
 
 	has_mutant_race = 0
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs/vox,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes/vox
+	)
 
-	equip(var/mob/living/carbon/human/H)
-		// Unequip existing suits and hats.
-		if(H.mind.assigned_role != "MODE")
-			H.u_equip(H.wear_suit,1)
-			H.u_equip(H.head,1)
-		if(H.mind.assigned_role!="Clown")
-			H.u_equip(H.wear_mask,1)
+/datum/species/vox/equip(var/mob/living/carbon/human/H)
+	// Unequip existing suits and hats.
+	if(H.mind.assigned_role != "MODE")
+		H.u_equip(H.wear_suit,1)
+		H.u_equip(H.head,1)
+	if(H.mind.assigned_role!="Clown")
+		H.u_equip(H.wear_mask,1)
 
-		H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
-		var/suit=/obj/item/clothing/suit/space/vox/civ
-		var/helm=/obj/item/clothing/head/helmet/space/vox/civ
-		var/tank_slot = slot_s_store
-		var/tank_slot_name = "suit storage"
-		switch(H.mind.assigned_role)
+	H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
+	var/suit=/obj/item/clothing/suit/space/vox/civ
+	var/helm=/obj/item/clothing/head/helmet/space/vox/civ
+	var/tank_slot = slot_s_store
+	var/tank_slot_name = "suit storage"
+	switch(H.mind.assigned_role)
 
-			if("Bartender")
-				suit=/obj/item/clothing/suit/space/vox/civ/bartender
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
-			if("Chef")
-				suit=/obj/item/clothing/suit/space/vox/civ/chef
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
-			if("Chaplain")
-				suit=/obj/item/clothing/suit/space/vox/civ/chaplain
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
-			if("Librarian")
-				suit=/obj/item/clothing/suit/space/vox/civ/librarian
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
+		if("Bartender")
+			suit=/obj/item/clothing/suit/space/vox/civ/bartender
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
+		if("Chef")
+			suit=/obj/item/clothing/suit/space/vox/civ/chef
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
+		if("Chaplain")
+			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
+		if("Librarian")
+			suit=/obj/item/clothing/suit/space/vox/civ/librarian
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
 
-			if("Chief Engineer")
-				suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
-			if("Station Engineer")
-				suit=/obj/item/clothing/suit/space/vox/civ/engineer
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
-			if("Atmospheric Technician")
-				suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
+		if("Chief Engineer")
+			suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
+		if("Station Engineer")
+			suit=/obj/item/clothing/suit/space/vox/civ/engineer
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
+		if("Atmospheric Technician")
+			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 
-			if("Scientist","Roboticist")
-				suit=/obj/item/clothing/suit/space/vox/civ/science
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/science
-			if("Research Director")
-				suit=/obj/item/clothing/suit/space/vox/civ/science/rd
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
+		if("Scientist","Roboticist")
+			suit=/obj/item/clothing/suit/space/vox/civ/science
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
+		if("Research Director")
+			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
 
-			if("Medical Doctor")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
-			if("Paramedic")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
-			if("Geneticist")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
-			if("Virologist")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
-			if("Chemist")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
-			if("Chief Medical Officer")
-				suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
+		if("Medical Doctor")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
+		if("Paramedic")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
+		if("Geneticist")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
+		if("Virologist")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
+		if("Chemist")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
+		if("Chief Medical Officer")
+			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 
-			if("Head of Security","Warden","Detective","Security Officer")
-				suit=/obj/item/clothing/suit/space/vox/civ/security
-				helm=/obj/item/clothing/head/helmet/space/vox/civ/security
+		if("Head of Security","Warden","Detective","Security Officer")
+			suit=/obj/item/clothing/suit/space/vox/civ/security
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
 
-			if("Clown","Mime")
-				tank_slot=slot_r_hand
-				tank_slot_name = "hand"
-			if("MODE") // Gamemode stuff
-				switch(H.mind.special_role)
-					if("Wizard")
-						suit = null
-						helm = null
-						tank_slot = slot_l_hand
-						tank_slot_name = "hand"
-		if(suit)
-			H.equip_or_collect(new suit(H), slot_wear_suit)
-		if(helm)
-			H.equip_or_collect(new helm(H), slot_head)
-		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
-		to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name]. Your species finds oxygen toxic, so <b>you must breathe nitrogen (AKA N<sub>2</sub>) only</b>.</span>")
-		H.internal = H.get_item_by_slot(tank_slot)
-		if (H.internals)
-			H.internals.icon_state = "internal1"
+		if("Clown","Mime")
+			tank_slot=slot_r_hand
+			tank_slot_name = "hand"
+		if("Trader")
+			suit = /obj/item/clothing/suit/space/vox/pressure
+			helm = /obj/item/clothing/head/helmet/space/vox/pressure
 
-	makeName(var/gender,var/mob/living/carbon/human/H=null)
-		var/sounds = rand(2,8)
-		var/i = 0
-		var/newname = ""
+		if("MODE") // Gamemode stuff
+			switch(H.mind.special_role)
+				if("Wizard")
+					suit = null
+					helm = null
+					tank_slot = slot_l_hand
+					tank_slot_name = "hand"
+	if(suit)
+		H.equip_or_collect(new suit(H), slot_wear_suit)
+	if(helm)
+		H.equip_or_collect(new helm(H), slot_head)
+	H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
+	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name]. Your species finds oxygen toxic, so <b>you must breathe nitrogen (AKA N<sub>2</sub>) only</b>.</span>")
+	H.internal = H.get_item_by_slot(tank_slot)
+	if (H.internals)
+		H.internals.icon_state = "internal1"
 
-		while(i<=sounds)
-			i++
-			newname += pick(vox_name_syllables)
-		return capitalize(newname)
+/datum/species/vox/makeName(var/gender,var/mob/living/carbon/human/H=null)
+	var/sounds = rand(2,8)
+	var/i = 0
+	var/newname = ""
+
+	while(i<=sounds)
+		i++
+		newname += pick(vox_name_syllables)
+	return capitalize(newname)
+
+/datum/species/vox/handle_post_spawn(var/mob/living/carbon/human/H)
+	if(myhuman != H) return
+	updatespeciescolor(H)
+	H.update_icon()
+
+/datum/species/vox/updatespeciescolor(var/mob/living/carbon/human/H)
+	switch(H.s_tone)
+		if(3)
+			icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxgry.dmi'
+		if(2)
+			icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxbrn.dmi'
+		else
+			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 
 /datum/species/diona
 	name = "Diona"
 	icobase = 'icons/mob/human_races/r_plant.dmi'
 	deform = 'icons/mob/human_races/r_def_plant.dmi'
 	language = "Rootspeak"
-	attack_verb = "slash"
+	attack_verb = "slashes"
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
 
@@ -710,3 +658,108 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 7
 
+/datum/species/golem
+	name = "Golem"
+	icobase = 'icons/mob/human_races/r_golem.dmi'
+	deform = 'icons/mob/human_races/r_def_golem.dmi'
+	language = "Golem"
+	attack_verb = "punches"
+	has_sweat_glands = 0
+	flags = HAS_LIPS | NO_BREATHE | NO_BLOOD | NO_SKIN | NO_PAIN | IS_BULKY
+	uniform_icons = 'icons/mob/uniform_fat.dmi'
+	primitive = /mob/living/carbon/monkey/rock
+
+	blood_color = "#B4DBCB"
+	flesh_color = "#B4DBCB"
+
+	warning_low_pressure = -1
+	hazard_low_pressure = -1
+
+	body_temperature = 0
+
+	cold_level_1 = -1  // Cold damage level 1 below this point.
+	cold_level_2 = -1  // Cold damage level 2 below this point.
+	cold_level_3 = -1  // Cold damage level 3 below this point.
+
+	heat_level_1 = 3600
+	heat_level_2 = 4000
+	heat_level_3 = 10000
+
+	burn_mod = 0.0001
+
+	has_mutant_race = 0
+	move_speed_mod = 1
+
+	can_be_hypothermic = 0
+	has_sweat_glands = 0
+
+	chem_flags = NO_INJECT
+
+	has_organ = list(
+		"brain" =    /datum/organ/internal/brain,
+		)
+
+/datum/species/golem/makeName()
+	return capitalize(pick(golem_names))
+
+/datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+	if(!isgolem(H))
+		return
+	var/datum/mind/golemmind = H.mind
+	if(!istype(golemmind,/datum/mind))	//not a mind
+		golemmind = null
+	for(var/atom/movable/I in H.contents)
+		I.forceMove(H.loc)
+	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
+	var/mob/living/adamantine_dust/A = new(H.loc)
+	if(golemmind)
+		A.mind = golemmind
+		H.mind = null
+		golemmind.current = A
+		if(H.real_name)
+			A.real_name = H.real_name
+			A.desc = "The remains of what used to be [A.real_name]."
+		A.key = H.key
+		H.key = null
+	qdel(H)
+
+/mob/living/adamantine_dust //serves as the corpse of adamantine golems
+	name = "adamantine dust"
+	desc = "The remains of an adamantine golem."
+	stat = DEAD
+	icon = 'icons/mob/human_races/r_golem.dmi'
+	icon_state = "golem_dust"
+	density = 0
+
+/mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/slime_extract/adamantine))
+		var/obj/item/slime_extract/adamantine/A = I
+		if(A.Uses)
+			if(!mind)
+				to_chat(user, "<span class='warning'>You press \the [A] into \the [src], but nothing happens.</span>")
+			else
+				if(!client)
+					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it shudders briefly, but falls still.</span>")
+					for(var/mob/dead/observer/ghost in player_list)
+						if(ghost.mind == mind && ghost.client && ghost.can_reenter_corpse)
+							ghost << 'sound/effects/adminhelp.ogg'
+							to_chat(ghost, "<span class='interface'><b><font size = 3>Someone is trying to resurrect you. Return to your body if you want to live again!</b> \
+								(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
+				else
+					anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "reverse-dust-g", sleeptime = 15)
+					var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
+					if(!real_name)
+						real_name = G.species.makeName()
+					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it is consumed. [real_name] reconstitutes itself!.</span>")
+					qdel(A)
+					G.real_name = real_name
+					G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
+					var/datum/mind/dustmind = mind
+					G.mind = dustmind
+					dustmind.current = G
+					mind = null
+					G.key = key
+					to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
+					qdel(src)
+		else
+			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")

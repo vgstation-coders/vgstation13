@@ -155,14 +155,11 @@
 	var/t = "<TT><B>Gas Turbine Generator</B><HR><PRE>"
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\\power\turbine.dm:156: t += "Generated power : [round(lastgen)] W<BR><BR>"
 	t += {"Generated power : [round(lastgen)] W<BR><BR>
 		Turbine: [round(compressor.rpm)] RPM<BR>
 		Starter: [ compressor.starter ? "<A href='?src=\ref[src];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=\ref[src];str=1'>On</A>"]
 		</PRE><HR><A href='?src=\ref[src];close=1'>Close</A>
 		</TT>"}
-	// END AUTOFIX
 	user << browse(t, "window=turbine")
 	onclose(user, "turbine")
 
@@ -222,7 +219,7 @@
 				doors += P
 
 /obj/machinery/computer/turbine_computer/attackby(I as obj, user as mob)
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)

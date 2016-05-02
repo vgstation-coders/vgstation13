@@ -164,9 +164,9 @@ var/global/list/crate_mimic_disguises = list(\
 	.=..()
 
 /mob/living/simple_animal/hostile/mimic/crate/Destroy()
-	..()
-
 	Die()
+	
+	..()
 
 /mob/living/simple_animal/hostile/mimic/crate/initialize()
 	..()
@@ -268,7 +268,7 @@ var/global/list/crate_mimic_disguises = list(\
 	var/can_grab = 1
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/Die()
-	for(var/atom/A in locked_atoms)
+	for(var/atom/movable/A in get_locked(/datum/locking_category/mimic))
 		unlock_atom(A)
 		visible_message("<span class='notice'>\The [src] lets go of \the [A]!</span>")
 	..()
@@ -277,18 +277,20 @@ var/global/list/crate_mimic_disguises = list(\
 	..()
 	if(can_grab && istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = target
-		if(!locked_atoms.len) //Eating nobody
+		var/list/atom/movable/locked = get_locked(/datum/locking_category/mimic)
+		if(!locked.len) //Eating nobody
 			if(prob(60))
-				lock_atom(H)
+				lock_atom(H, /datum/locking_category/mimic)
 				visible_message("<span class='danger'>\The [src] grabs \the [H] with its tongue!")
-		else
-			if(H in locked_atoms)
-				if(prob(20))
-					to_chat(H, "<span class='danger'>You feel very weak!</span>")
-					H.Weaken(3)
+			return
+
+		if(H in locked)
+			if(prob(20))
+				to_chat(H, "<span class='danger'>You feel very weak!</span>")
+				H.Weaken(3)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/LoseTarget()
-	if(target in locked_atoms)
+	if(target in get_locked(/datum/locking_category/mimic))
 		unlock_atom(target)
 
 	var/mob/living/L = target
@@ -300,7 +302,7 @@ var/global/list/crate_mimic_disguises = list(\
 	return ..()
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/relaymove(mob/user)
-	if(user.stat || user.stunned || user.weakened || user.paralysis)
+	if(user.incapacitated())
 		return
 
 	if(user.loc == src) //We're inside the chest
@@ -317,18 +319,17 @@ var/global/list/crate_mimic_disguises = list(\
 				return
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/attackby(obj/item/W, mob/user)
-	if(angry)
-		if(locked_atoms.len)
-			if(W.is_sharp())
-				user.visible_message("<span class='danger'>[user] slashes at \the [src]'s tongue!</span>")
+	var/list/atom/movable/locked = get_locked(/datum/locking_category/mimic)
+	if (angry && locked.len && W.is_sharp())
+		user.visible_message("<span class='danger'>[user] slashes at \the [src]'s tongue!</span>")
 
-				for(var/atom/M in locked_atoms)
-					unlock_atom(M)
-					visible_message("<span class='notice'>\The [src] loses its hold on [M].</span>")
+		for(var/atom/M in locked)
+			unlock_atom(M)
+			visible_message("<span class='notice'>\The [src] loses its hold on [M].</span>")
 
-				if(can_grab && (W.is_sharp() >= 1.2) && prob(20)) //Required sharpness same as the normal kitchen knife's
-					visible_message("<span class='notice'>\The [src]'s tongue has been damaged!</span>")
-					can_grab = 0
+		if(can_grab && (W.is_sharp() >= 1.2) && prob(20)) //Required sharpness same as the normal kitchen knife's
+			visible_message("<span class='notice'>\The [src]'s tongue has been damaged!</span>")
+			can_grab = 0
 	..()
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/environment_disguise(list/L) //We're always chests
@@ -367,7 +368,7 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/lasercannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
 				/obj/item/weapon/melee/cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
 
-	"bar" = (typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable) - /obj/item/weapon/reagent_containers/food/drinks/bottle - /obj/item/weapon/reagent_containers/food/drinks/soda_cans),  //All drinks (except for abstract types)
+	"bar" = (existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
 
 	"emergency" = list(/obj/item/clothing/mask/breath, /obj/item/weapon/tank/jetpack/oxygen, /obj/item/weapon/tank/emergency_oxygen, /obj/item/weapon/tank/air, /obj/item/weapon/crowbar,\
 					/obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack/security, /obj/item/device/maracas, /obj/item/device/multitool,\
@@ -375,12 +376,12 @@ var/global/list/item_mimic_disguises = list(
 
 	"lowhealth" = list(/obj/item/weapon/cigbutt, /obj/item/weapon/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
 
-	//All foods EXCEPT for those with no icons (plenty of them)
-	"kitchen" = (typesof(/obj/item/weapon/reagent_containers/food/snacks) - /obj/item/weapon/reagent_containers/food/snacks - typesof(/obj/item/weapon/reagent_containers/food/snacks/chip) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet)),
+	//All foods except for customizable stuff
+	"kitchen" = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet)),
 
 	"library" = typesof(/obj/item/weapon/book), //All default books
 
-	"botany" = (typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - /obj/item/weapon/reagent_containers/food/snacks/grown), //All grown items
+	"botany" = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown), //All grown items
 
 	//Nuke, nuke disk, all coins, all minerals (except for those with no icons)
 	"vault" = list(/obj/machinery/nuclearbomb, /obj/item/weapon/disk/nuclear) + typesof(/obj/item/weapon/coin) + typesof(/obj/item/stack/sheet/mineral) - /obj/item/stack/sheet/mineral - /obj/item/stack/sheet/mineral/enruranium,
@@ -405,27 +406,28 @@ var/global/list/item_mimic_disguises = list(
 	return //Don't take any items!
 
 /mob/living/simple_animal/hostile/mimic/crate/item/examine(mob/user) //Total override to make the mimics look EXACTLY like items!
-	var/s_size
-	switch(src.size)
-		if(1.0)
-			s_size = "tiny"
-		if(2.0)
-			s_size = "small"
-		if(3.0)
-			s_size = "normal-sized"
-		if(4.0)
-			s_size = "bulky"
-		if(5.0)
-			s_size = "huge"
-		else
-	//if ((M_CLUMSY in usr.mutations) && prob(50)) t = "funny-looking"
+	var/s_size = "normal-sized"
+	if(ispath(copied_object, /obj/item))
+		var/obj/item/I = copied_object
+		switch(initial(I.w_class))
+			if(1.0)
+				s_size = "tiny"
+			if(2.0)
+				s_size = "small"
+			if(3.0)
+				s_size = "normal-sized"
+			if(4.0)
+				s_size = "bulky"
+			if(5.0)
+				s_size = "huge"
+
 	var/pronoun
 	if (src.gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
 
-	to_chat(user, "\icon[src] That's \a [src]. [pronoun] a [s_size] item.")
+	to_chat(user, "[bicon(src)] That's \a [src]. [pronoun] a [s_size] item.")
 	if(desc)
 		to_chat(user, desc)
 
@@ -489,6 +491,8 @@ var/global/list/protected_objects = list(
 
 	health = 100
 	maxHealth = 100
+
+	icon_state = "" //So that existing_typesof() doesn't return this type
 
 	copied_object = null
 	var/mob/living/creator = null // the creator
@@ -599,6 +603,11 @@ var/global/list/protected_objects = list(
 			move_to_delay = 2 * I.w_class
 
 		maxHealth = health
+
+		for(var/atom/movable/AM in O.get_locked(/datum/locking_category/mimic)) //What could go wrong
+			O.unlock_atom(AM)
+			src.lock_atom(AM, /datum/locking_category/mimic)
+
 		if(creator)
 			src.creator = creator
 			faction = "\ref[creator]" // very unique
@@ -619,3 +628,6 @@ var/global/list/protected_objects = list(
 			if(prob(15))
 				L.Weaken(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
+
+
+/datum/locking_category/mimic

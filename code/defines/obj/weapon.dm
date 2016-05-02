@@ -10,7 +10,7 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = 2
-	attack_verb = list("called", "rang")
+	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
 
 /obj/item/weapon/phone/suicide_act(mob/user)
@@ -112,6 +112,7 @@
 	name = "cane"
 	desc = "A cane used by a true gentlemen. Or a clown."
 	icon = 'icons/obj/weapons.dmi'
+	origin_tech = "materials=1"
 	icon_state = "cane"
 	item_state = "stick"
 	flags = FPRINT
@@ -122,7 +123,7 @@
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	attack_verb = list("bludgeoned", "whacked", "disciplined", "thrashed")
+	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
 
 /obj/item/weapon/disk
 	name = "disk"
@@ -181,7 +182,7 @@
 	w_class = 2
 	w_type = RECYK_METAL
 	origin_tech = "materials=1"
-	attack_verb = list("lashed", "bludgeoned", "whipped")
+	attack_verb = list("lashes", "bludgeons", "whips")
 	force = 4
 	breakouttime = 50 //10 seconds
 	throw_speed = 1
@@ -327,7 +328,7 @@
 		var/obj/item/I = O
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
-		if(istype(I, /obj/item/weapon/wirecutters)) //allows you to convert the wire back to a cable coil
+		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				playsound(usr, 'sound/items/Wirecutter.ogg', 50, 1)
@@ -357,19 +358,19 @@
 		if(I.w_class) //if it has a defined weight
 			if(I.w_class == 2.0 || I.w_class == 3.0) //just one is too specific, so don't change this
 				if(!weight1)
-					user.drop_item(I, src)
-					weight1 = I
-					user.show_message("<span class='notice'>You tie [weight1] to the [src].</span>")
-					update_icon()
-					//del(I)
-					return
+					if(user.drop_item(I, src))
+						weight1 = I
+						user.show_message("<span class='notice'>You tie [weight1] to the [src].</span>")
+						update_icon()
+						//del(I)
+						return
 				if(!weight2) //just in case
-					user.drop_item(I, src)
-					weight2 = I
-					user.show_message("<span class='notice'>You tie [weight2] to the [src].</span>")
-					update_icon()
-					//del(I)
-					return
+					if(user.drop_item(I, src))
+						weight2 = I
+						user.show_message("<span class='notice'>You tie [weight2] to the [src].</span>")
+						update_icon()
+						//del(I)
+						return
 				else
 					user.show_message("<span class='rose'>There are already two weights on this [src]!</span>")
 					return
@@ -422,19 +423,19 @@
 				IED = null
 				return
 			if(2,3)
-				user.drop_item(I, src)
-				var/turf/bombturf = get_turf(src)
-				var/area/A = get_area(bombturf)
-				var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
-				message_admins(log_str)
-				log_game(log_str)
-				to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
-				desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
+				if(user.drop_item(I, src))
+					var/turf/bombturf = get_turf(src)
+					var/area/A = get_area(bombturf)
+					var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
+					message_admins(log_str)
+					log_game(log_str)
+					to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
+					desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
 			else
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		if(IED)
 			IED.loc = get_turf(src.loc)
 			IED = null
@@ -499,7 +500,7 @@
 	w_class = 3
 	w_type = RECYK_METAL
 	origin_tech = "combat=5"
-	attack_verb = list("rammed", "bludgeoned")
+	attack_verb = list("rams", "bludgeons")
 	force = 15
 	throw_speed = 1
 	throw_range = 3
@@ -515,7 +516,7 @@
 	throw_range = 5
 	w_class = 2.0
 	flags = FPRINT
-	attack_verb = list("warned", "cautioned", "smashed")
+	attack_verb = list("warns", "cautions", "smashes")
 
 /obj/item/weapon/caution/proximity_sign
 	var/timing = 0
@@ -584,9 +585,29 @@
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 
+/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0, user))
+			to_chat(user, "You begin slicing through \the [src].")
+			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			if(do_after(user, src, 60))
+				to_chat(user, "You cut \the [src] into a gun stock.")
+				if(src.loc == user)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/metal_gun_stock/I = new (get_turf(user))
+					user.put_in_hands(I)
+					qdel(src)
+				else
+					new /obj/item/weapon/metal_gun_stock(get_turf(src.loc))
+					qdel(src)
+		else
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+
 /obj/item/weapon/SWF_uplink
 	name = "station-bounced radio"
-	desc = "used to comunicate it appears."
+	desc = "Used for communication, it appears."
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "radio"
 	var/temp = null
@@ -618,7 +639,7 @@
 	throw_range = 5
 	w_class = 2.0
 	flags = FPRINT
-	attack_verb = list("bludgeoned", "whacked", "disciplined")
+	attack_verb = list("bludgeons", "whacks", "disciplines")
 
 /obj/item/weapon/staff/broom
 	name = "broom"
@@ -632,7 +653,7 @@
 	..()
 	item_state = "broom[wielded ? 1 : 0]"
 	force = wielded ? 5 : 3
-	attack_verb = wielded ? list("rammed into", "charged at") : list("bludgeoned", "whacked", "cleaned")
+	attack_verb = wielded ? list("rams into", "charges at") : list("bludgeons", "whacks", "cleans", "dusts")
 	if(user)
 		user.update_inv_l_hand()
 		user.update_inv_r_hand()
@@ -698,7 +719,7 @@
 	melt_temperature=MELTPOINT_STEEL
 	flags = FPRINT
 	siemens_coefficient = 1
-	attack_verb = list("slammed", "bashed", "battered", "bludgeoned", "thrashed", "whacked")
+	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)
@@ -714,12 +735,27 @@
 	melt_temperature=MELTPOINT_STEEL
 	flags = FPRINT
 	siemens_coefficient = 1
+	
+/obj/item/weapon/table_parts/glass
+	name = "glass table parts"
+	desc = "Glass table parts for the spaceman with style."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "glass_tableparts"
+	starting_materials = list(MAT_GLASS = 3750)
+	w_type = RECYK_GLASS
+	melt_temperature=MELTPOINT_GLASS
+	flags = FPRINT
+	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
 
 /obj/item/weapon/table_parts/wood
 	name = "wooden table parts"
 	desc = "Keep away from fire."
 	icon_state = "wood_tableparts"
 	flags = 0
+
+/obj/item/weapon/table_parts/wood/poker
+	name = "gambling table parts"
+	icon_state = "gambling_tableparts"
 
 /obj/item/weapon/table_parts/wood/cultify()
 	return
@@ -735,7 +771,7 @@
 	starting_materials = list(MAT_IRON = 70)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
-	attack_verb = list("whipped", "lashed", "disciplined", "tickled")
+	attack_verb = list("whips", "lashes", "disciplines", "tickles")
 
 /obj/item/weapon/wire/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -743,7 +779,7 @@
 
 /obj/item/weapon/module
 	icon = 'icons/obj/module.dmi'
-	icon_state = "std_module"
+	//icon_state = "std_module"
 	w_class = 2.0
 	item_state = "electronic"
 	flags = FPRINT
@@ -778,7 +814,7 @@
 
 /obj/item/weapon/syntiflesh
 	name = "syntiflesh"
-	desc = "Meat that appears...strange..."
+	desc = "Meat that appears... strange..."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "meat"
 	flags = FPRINT

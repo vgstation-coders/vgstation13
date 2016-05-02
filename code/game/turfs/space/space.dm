@@ -13,9 +13,11 @@
 	can_border_transition = 1
 
 /turf/space/New()
-	turfs |= src
-	if(!istype(src, /turf/space/transit))
-		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	if(loc)
+		var/area/A = loc
+		A.area_turfs += src
+
+	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -59,10 +61,6 @@
 	var/list/y_arr
 
 	if(src.x <= 1)
-		if(istype(A, /obj/effect/meteor)||istype(A, /obj/effect/space_dust))
-			qdel(A)
-			A = null
-			return
 
 		var/list/cur_pos = src.get_global_map_pos()
 		if(!cur_pos) return
@@ -85,7 +83,7 @@
 				if ((A && A.loc))
 					A.loc.Entered(A)
 	else if (src.x >= world.maxx)
-		if(istype(A, /obj/effect/meteor))
+		if(istype(A, /obj/item/projectile/meteor))
 			qdel(A)
 			A = null
 			return
@@ -111,7 +109,7 @@
 				if ((A && A.loc))
 					A.loc.Entered(A)
 	else if (src.y <= 1)
-		if(istype(A, /obj/effect/meteor))
+		if(istype(A, /obj/item/projectile/meteor))
 			qdel(A)
 			A = null
 			return
@@ -137,7 +135,7 @@
 					A.loc.Entered(A)
 
 	else if (src.y >= world.maxy)
-		if(istype(A, /obj/effect/meteor)||istype(A, /obj/effect/space_dust))
+		if(istype(A, /obj/item/projectile/meteor)||istype(A, /obj/effect/space_dust))
 			qdel(A)
 			A = null
 			return

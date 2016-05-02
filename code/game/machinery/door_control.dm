@@ -54,7 +54,7 @@
 	..()
 	..()
 	/* For later implementation
-	if (istype(W, /obj/item/weapon/screwdriver))
+	if (isscrewdriver(W))
 	{
 		if(wiresexposed)
 			icon_state = "doorctrl0"
@@ -77,7 +77,7 @@
 		return
 
 	if(!allowed(user) && (wires & 1))
-		to_chat(user, "<span class='warning'>Access Denied</span>")
+		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		flick("doorctrl-denied",src)
 		return
 
@@ -145,7 +145,7 @@
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 
-	if(istype(W, /obj/item/weapon/wrench))
+	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			to_chat(user, "<span class='notice'>You detach \the [src] from the wall.</span>")

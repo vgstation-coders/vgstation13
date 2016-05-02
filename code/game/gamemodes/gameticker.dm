@@ -60,6 +60,7 @@ var/global/datum/controller/gameticker/ticker
 		"sound/music/moonbaseoddity.ogg",
 		"sound/music/whatisthissong.ogg",
 		"sound/music/space_asshole.ogg",
+		"sound/music/starman.ogg",
 		))
 	login_music = fcopy_rsc(oursong)
 	// Wait for MC to get its shit together
@@ -70,7 +71,7 @@ var/global/datum/controller/gameticker/ticker
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
 		pregame_timeleft = world.timeofday + delay_timetotal
 		to_chat(world, "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>")
-		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds")
+		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds.")
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
@@ -188,21 +189,22 @@ var/global/datum/controller/gameticker/ticker
 				qdel(obj)
 		stat_collection.death_stats = list() // Get rid of the corpses that spawn on startup.
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
-//		to_chat(world, sound('sound/AI/welcome.ogg'))// Skie //Out with the old, in with the new. - N3X15
+//		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 
-		var/welcome_sentence=list('sound/AI/vox_login.ogg')
-		welcome_sentence += pick(
-			'sound/AI/vox_reminder1.ogg',
-			'sound/AI/vox_reminder2.ogg',
-			'sound/AI/vox_reminder3.ogg',
-			'sound/AI/vox_reminder4.ogg',
-			'sound/AI/vox_reminder5.ogg',
-			'sound/AI/vox_reminder6.ogg',
-			'sound/AI/vox_reminder7.ogg',
-			'sound/AI/vox_reminder8.ogg',
-			'sound/AI/vox_reminder9.ogg')
-		for(var/sound in welcome_sentence)
-			play_vox_sound(sound,STATION_Z,null)
+		if(!config.shut_up_automatic_diagnostic_and_announcement_system)
+			var/welcome_sentence=list('sound/AI/vox_login.ogg')
+			welcome_sentence += pick(
+				'sound/AI/vox_reminder1.ogg',
+				'sound/AI/vox_reminder2.ogg',
+				'sound/AI/vox_reminder3.ogg',
+				'sound/AI/vox_reminder4.ogg',
+				'sound/AI/vox_reminder5.ogg',
+				'sound/AI/vox_reminder6.ogg',
+				'sound/AI/vox_reminder7.ogg',
+				'sound/AI/vox_reminder8.ogg',
+				'sound/AI/vox_reminder9.ogg')
+			for(var/sound in welcome_sentence)
+				play_vox_sound(sound,STATION_Z,null)
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		mode.Clean_Antags()
@@ -393,9 +395,21 @@ var/global/datum/controller/gameticker/ticker
 		spawn
 			declare_completion()
 			if(config.map_voting)
-				vote.initiate_vote("map","The Server", popup = 1)
-				var/options = list2text(vote.choices, " ")
+				//testing("Vote picked [chosen_map]")
+				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = 1)
+				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
+
+			else
+				var/list/maps = get_maps()
+				var/list/choices=list()
+				for(var/key in maps)
+					choices.Add(key)
+				var/mapname=pick(choices)
+				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
+				watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
+				log_game("Server chose [watchdog.chosen_map]!")
+
 
 
 		spawn(50)

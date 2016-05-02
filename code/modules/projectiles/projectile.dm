@@ -36,12 +36,13 @@ var/list/impact_master = list()
 	var/p_x = 16
 	var/p_y = 16 // the pixel location of the tile that the player clicked. Default is the center
 
+	var/grillepasschance = 66
 	var/damage = 10
 	var/damage_type = BRUTE //BRUTE, BURN, TOX, OXY, CLONE are the only things that should be in here
 	var/nodamage = 0 //Determines if the projectile will skip any damage inflictions
 	var/flag = "bullet" //Defines what armor to use when it hits things.  Must be set to bullet, laser, energy,or bomb	//Cael - bio and rad are also valid
 	var/projectile_type = "/obj/item/projectile"
-	var/kill_count = 50 //This will de-increment every process(). When 0, it will delete the projectile.
+	var/kill_count = INFINITY //This will de-increment every process(). When 0, it will delete the projectile.
 	var/total_steps = 0
 		//Effects
 	var/stun = 0
@@ -53,6 +54,8 @@ var/list/impact_master = list()
 	var/drowsy = 0
 	var/agony = 0
 	var/jittery = 0
+
+	hitsound = null
 
 	var/destroy = 0	//if set to 1, will destroy wall, tables and racks on impact (or at least, has a chance to)
 
@@ -93,6 +96,12 @@ var/list/impact_master = list()
 	animate_movement = 0
 	var/linear_movement = 1
 
+	var/projectile_slowdown = 0 //The extra time spent sleeping after each step. Increasing this will make the projectile move more slowly.
+
+	var/penetration_message = 1 //Message that is shown when a projectile penetrates an object
+	var/fire_sound = 'sound/weapons/Gunshot.ogg' //sound that plays when the projectile is fired
+	var/rotate = 1 //whether the projectile is rotated based on angle or not
+
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
 	if(blocked >= 2)		return 0//Full block
 	if(!isliving(atarget))	return 0
@@ -108,6 +117,7 @@ var/list/impact_master = list()
 	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
 	if(jittery)
 		L.Jitter(jittery)
+	playsound(loc, hitsound, 35, 1)
 	return 1
 
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
@@ -201,10 +211,11 @@ var/list/impact_master = list()
 			visible_message("<span class='notice'>\The [src] misses [M] narrowly!</span>")
 			forcedodge = -1
 		else
-			if(silenced)
-				to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
-			else
-				visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+			if(!custom_impact)
+				if(silenced)
+					to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
+				else
+					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
 				if(!iscarbon(firer))
@@ -298,7 +309,8 @@ var/list/impact_master = list()
 			penetration = 0
 			bullet_die()
 			return 1
-		A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
+		if(penetration_message)
+			A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
 		src.forceMove(get_step(src.loc,dir))
 		if(linear_movement)
 			update_pixel()
@@ -322,7 +334,7 @@ var/list/impact_master = list()
 	bullet_die()
 	return 1
 
-/obj/item/projectile/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/item/projectile/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(istype(mover, /obj/item/projectile))
@@ -358,6 +370,9 @@ var/list/impact_master = list()
 	else
 		error = dist_y/2 - dist_x
 
+	if(!rotate)
+		return 1
+
 	target_angle = round(Get_Angle(starting,target))
 
 	if(linear_movement)
@@ -383,6 +398,8 @@ var/list/impact_master = list()
 			pixel_y = PixelY
 
 		bumped = 0
+
+		sleeptime += projectile_slowdown
 
 		sleep(sleeptime)
 
@@ -554,6 +571,9 @@ var/list/impact_master = list()
 		else if(distx < 0)
 			newangle += 360
 
+	if(!rotate)
+		return
+
 	target_angle = round(newangle)
 
 	if(linear_movement)
@@ -605,3 +625,6 @@ var/list/impact_master = list()
 		if((!( ttarget ) || loc == ttarget))
 			ttarget = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z) //Finding the target turf at map edge
 		step_towards(src, ttarget)
+
+/obj/item/projectile/kick_act() //Can't be kicked around
+	return

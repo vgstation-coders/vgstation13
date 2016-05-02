@@ -122,7 +122,7 @@
 
 	var/atom/movable/overlay/animation = new /atom/movable/overlay( loc )
 	H.visible_message("<span class = 'warning'>[src] emits a putrid odor as their torso splits open!</span>")
-	to_chat(world, sound('sound/effects/greaterling.ogg'))
+	world << sound('sound/effects/greaterling.ogg')
 	to_chat(world, "<span class = 'sinister'>A roar pierces the air and makes your blood curdle. Uh oh.</span>")
 	animation.icon_state = "blank"
 	animation.icon = 'icons/mob/mob.dmi'
@@ -355,9 +355,6 @@
 	var/datum/changeling/changeling = changeling_power(1,0,0, deny_horror=1)
 	if(!changeling)	return
 
-	if(src.has_brain_worms())
-		to_chat(src, "<span class='warning'>We cannot perform this ability at the present time!</span>")
-		return
 	var/mob/living/carbon/human/C = src
 
 	if(!istype(C) || !C.species.primitive)
@@ -391,6 +388,7 @@
 	O.dna = C.dna.Clone()
 	C.dna = null
 	C.transferImplantsTo(O)
+	C.transferBorers(O)
 
 	for(var/obj/item/W in C)
 		C.drop_from_inventory(W)
@@ -463,13 +461,13 @@
 	else
 		O.setGender(MALE)
 	C.transferImplantsTo(O)
+	C.transferBorers(O)
 	O.dna = C.dna.Clone()
 	C.dna = null
 	O.real_name = chosen_dna.real_name
 
 	for(var/obj/item/W in src)
 		C.drop_from_inventory(W)
-
 	for(var/obj/T in C)
 		qdel(T)
 
@@ -924,7 +922,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(T.overeatduration>100)
 		to_chat(T, "<span class='danger'>You feel a small prick as your stomach churns violently. You begin to feel skinnier.</span>")
 		T.overeatduration = 0
-		T.nutrition -= 100
+		T.nutrition = max(T.nutrition - 200,0)
 		feedback_add_details("changeling_powers","US")
 	return 1
 
@@ -939,7 +937,7 @@ var/list/datum/dna/hivemind_bank = list()
 	T.silent = 10
 	T.Paralyse(10)
 	T.Jitter(1000)
-	if(T.reagents)	T.reagents.add_reagent("lexorin", 40)
+	if(T.reagents)	T.reagents.add_reagent("cyanide", 20)
 	feedback_add_details("changeling_powers","DTHS")
 	return 1
 
@@ -964,3 +962,4 @@ var/list/datum/dna/hivemind_bank = list()
 
 	feedback_add_details("changeling_powers","ED")
 	return 1
+	

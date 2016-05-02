@@ -66,21 +66,19 @@
 	var/list/obscured = list()
 
 	if(wear_suit)
-		if(wear_suit.flags_inv & HIDEGLOVES)
+		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEGLOVES))
 			obscured |= slot_gloves
-		if(wear_suit.flags_inv & HIDEJUMPSUIT)
+		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
 			obscured |= slot_w_uniform
-		if(wear_suit.flags_inv & HIDESHOES)
+		if(is_slot_hidden(wear_suit.body_parts_covered,HIDESHOES))
 			obscured |= slot_shoes
-
 	if(head)
-		if(head.flags_inv & HIDEMASK)
+		if(is_slot_hidden(head.body_parts_covered,HIDEMASK))
 			obscured |= slot_wear_mask
-		if(head.flags_inv & HIDEEYES)
+		if(is_slot_hidden(head.body_parts_covered,HIDEEYES))
 			obscured |= slot_glasses
-		if(head.flags_inv & HIDEEARS)
+		if(is_slot_hidden(head.body_parts_covered,HIDEEARS))
 			obscured |= slot_ears
-
 	if(obscured.len > 0)
 		return obscured
 	else
@@ -97,11 +95,16 @@
 
 /mob/living/carbon/human/proc/check_hidden_flags(var/list/items, var/hidden_flags = 0)
 	if(!items || !istype(items))
-		items = get_clothing_items() //no argument returns all clothing
+		items = get_clothing_items()
+	items -= list(gloves,shoes,w_uniform,glasses,ears) // now that these can hide stuff they need to be excluded
+	if(!hidden_flags)
+		return
+	var/ignore_slot
 	for(var/obj/item/equipped in items)
+		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
 		if(!equipped)
 			continue
-		if(equipped.flags_inv & hidden_flags)
+		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot))
 			return 1
 
 /mob/living/carbon/human/proc/equip_in_one_of_slots(obj/item/W, list/slots, act_on_fail = 1)
@@ -174,9 +177,9 @@
 	return null
 
 /mob/living/carbon/human/proc/has_organ(name)
-	var/datum/organ/external/O = organs_by_name[name]
 
-	return (O && !(O.status & ORGAN_DESTROYED) )
+	var/datum/organ/external/O = organs_by_name[name]
+	return O.is_existing()
 
 /mob/living/carbon/human/proc/has_organ_for_slot(slot)
 	switch(slot)
@@ -296,9 +299,8 @@
 		success = 1
 		update_inv_back()
 	else if (W == handcuffed)
-		handcuffed = null
+		handcuffed.handcuffs_remove(src)
 		success = 1
-		update_inv_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
@@ -533,7 +535,7 @@
 		if(isrobot(source) && place != "handcuff")
 			qdel(src)
 		for(var/mob/O in viewers(target, null))
-			O.show_message("<span class='danger'>[source] is trying to put \a [item] on [target]</span>", 1)
+			O.show_message("<span class='danger'>[source] is trying to put [item.gender == PLURAL ? "\the [item]" : "\a [item]"] on [target]</span>", 1)
 	else
 		var/message=null
 		switch(place)
@@ -690,7 +692,7 @@
 
 		for(var/mob/M in viewers(target, null))
 			M.show_message(message, 1)
-	spawn(HUMAN_STRIP_DELAY)
+	if(do_after(source, target, HUMAN_STRIP_DELAY))
 		done()
 		return
 	return
@@ -711,7 +713,11 @@ It can still be worn/put on as normal.
 	if(source.loc != s_loc) return		//source has moved
 	if(target.loc != t_loc) return		//target has moved
 	if(!source.Adjacent(target)) return	//Use a proxi!
-	if(item && source.get_active_hand() != item) return	//Swapped hands / removed item from the active one
+
+	if(item)
+		if(source.get_active_hand() != item) return //Swapped hands / removed item from the active one
+		if(item.cant_drop > 0) return //Item can't be dropped
+
 	if ((source.restrained() || source.stat)) return //Source restrained or unconscious / dead
 
 	var/slot_to_process
@@ -893,6 +899,10 @@ It can still be worn/put on as normal.
 		if(strip_item) //Stripping an item from the mob
 
 			var/obj/item/W = strip_item
+			if((W.cant_drop > 0) && ((target.r_hand == W) || (target.l_hand == W))) //If item we're trying to take off can't be dropped AND is in target's hand(s):
+				source << "<span class='notice'>\The [W] is stuck to \the [target]!</span>"
+				return
+
 			target.u_equip(W,1)
 			if (target.client)
 				target.client.screen -= W

@@ -44,7 +44,7 @@
 		return
 
 	if(!blinded)
-		flick("flash", flash)
+		flash_eyes(visual = 1)
 
 	var/b_loss = null
 	var/f_loss = null
@@ -70,6 +70,7 @@
 	updatehealth()
 
 /mob/living/carbon/alien/larva/blob_act()
+	..()
 	if(flags & INVULNERABLE)
 		return
 	if(stat == 2)
@@ -300,7 +301,7 @@
 
 /* Why?
 /mob/living/carbon/alien/larva/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(speaking && speaking.name == LANGUAGE_SOL_COMMON)
+	if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 		return 1
 	return ..()
 */

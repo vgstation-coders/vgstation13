@@ -1,53 +1,5 @@
-/obj/item/clothing/glasses/meson
-	name = "Optical Meson Scanner"
-	desc = "Used for seeing walls, floors, and stuff through anything."
-	icon_state = "meson"
-	item_state = "glasses"
-	origin_tech = "magnets=2;engineering=2"
-	vision_flags = SEE_TURFS
-	eyeprot = -1
-	see_invisible = SEE_INVISIBLE_MINIMUM
-	species_fit = list("Vox")
-	action_button_name = "Toggle Meson Scanner"
-	var/on = 1
 
-/obj/item/clothing/glasses/meson/proc/getMask()
-	return global_hud.darkMask
-
-/obj/item/clothing/glasses/meson/attack_self()
-	toggle()
-
-
-/obj/item/clothing/glasses/meson/verb/toggle() //Zth: I'm sure there's a better way of doing this, DON'T LYNCH ME PLEASE, I'M LEARNING
-	set category = "Object"
-	set name = "Toggle Optical Meson Scanner"
-	set src in usr
-	var/mob/C = usr
-	if(!usr)
-		if(!ismob(loc))
-			return
-		C = loc
-	if(C.canmove && !C.stat && !C.restrained())
-		if(!src.on)
-			src.on = !src.on
-			eyeprot = 2
-			vision_flags |= SEE_TURFS
-			see_invisible |= SEE_INVISIBLE_MINIMUM
-			body_parts_covered |= EYES
-			icon_state = initial(icon_state)
-			to_chat(C, "You turn [src] on.")
-		else //Mesons are like cyclops' visons. When off, your eyes are exposed
-			src.on = !src.on
-			eyeprot = 0
-			body_parts_covered &= ~EYES
-			vision_flags &= ~SEE_TURFS
-			see_invisible &= ~SEE_INVISIBLE_MINIMUM
-			icon_state = "[initial(icon_state)]off"
-			to_chat(C, "You turn [src] off.")
-
-		C.update_inv_glasses()
-
-/obj/item/clothing/glasses/meson/prescription
+/obj/item/clothing/glasses/scanner/meson/prescription
 	name = "prescription mesons"
 	desc = "Optical Meson Scanner with prescription lenses."
 	prescription = 1
@@ -59,6 +11,7 @@
 	desc = "nothing"
 	icon_state = "purple"
 	item_state = "glasses"
+	origin_tech = "materials=1"
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
@@ -89,22 +42,21 @@
 /obj/item/clothing/glasses/monocle/harm_label_update()
 	return //Can't exactly blind someone by covering one eye.
 
-/obj/item/clothing/glasses/material
-	name = "Optical Material Scanner"
-	desc = "Very confusing glasses."
-	icon_state = "material"
-	item_state = "glasses"
-	origin_tech = "magnets=3;engineering=3"
-	vision_flags = SEE_OBJS
-	see_invisible = SEE_INVISIBLE_MINIMUM
-	species_fit = list("Vox")
-
 /obj/item/clothing/glasses/regular
 	name = "Prescription Glasses"
 	desc = "Made by Nerd. Co."
 	icon_state = "glasses"
 	item_state = "glasses"
 	prescription = 1
+
+/obj/item/clothing/glasses/regular/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
+	playsound(get_turf(src), "shatter", 50, 1)
+
+	var/obj/item/weapon/shard/S = new(get_turf(src))
+	S.Crossed()
+
+	qdel(src)
 
 /obj/item/clothing/glasses/regular/hipster
 	name = "Prescription Glasses"
@@ -123,15 +75,26 @@
 	name = "sunglasses"
 	icon_state = "sun"
 	item_state = "sunglasses"
+	origin_tech = "combat=2"
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list("Vox")
+
+/obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
+	playsound(get_turf(src), "shatter", 50, 1)
+
+	var/obj/item/weapon/shard/S = new(get_turf(src))
+	S.Crossed()
+
+	qdel(src)
 
 /obj/item/clothing/glasses/virussunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	name = "sunglasses"
 	icon_state = "sun"
 	item_state = "sunglasses"
+	origin_tech = "combat=2"
 	darkness_view = -1
 	species_fit = list("Vox")
 
@@ -140,13 +103,11 @@
 	desc = "Protects the eyes from welders, approved by the mad scientist association."
 	icon_state = "welding-g"
 	item_state = "welding-g"
+	origin_tech = "engineering=1;materials=2"
 	action_button_name = "Toggle Welding Goggles"
 	var/up = 0
 	eyeprot = 3
 	species_fit = list("Vox")
-
-/obj/item/clothing/glasses/welding/proc/getMask()
-	return global_hud.darkMask
 
 /obj/item/clothing/glasses/welding/attack_self()
 	toggle()
@@ -161,7 +122,7 @@
 		if(!ismob(loc))
 			return
 		C = loc
-	if(C.canmove && !C.stat && !C.restrained())
+	if(!C.incapacitated())
 		if(src.up)
 			src.up = !src.up
 			eyeprot = 2
@@ -182,9 +143,7 @@
 	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles.."
 	icon_state = "rwelding-g"
 	item_state = "rwelding-g"
-
-/obj/item/clothing/glasses/welding/superior/getMask()
-	return null
+	origin_tech = "engineering=3;materials=3"
 
 /obj/item/clothing/glasses/sunglasses/blindfold
 	name = "blindfold"

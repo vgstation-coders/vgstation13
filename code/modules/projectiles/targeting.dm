@@ -159,7 +159,7 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 	else
 		return
 	for(var/mob/living/K in viewers(usr))
-		to_chat(K, 'sound/weapons/TargetOn.ogg')
+		K << 'sound/weapons/TargetOn.ogg'
 
 	if(!targeted_by) targeted_by = list()
 	targeted_by += I
@@ -188,7 +188,7 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 			I.lower_aim()
 			return
 		if(m_intent == "run" && T.client.target_can_move == 1 && T.client.target_can_run == 0 && (ishuman(T)))
-			to_chat(src, "<spanclass='warning'> Your captive is allowing you to walk. Make sure to change your move intent to walk before trying to move, or you will be fired upon.</span>")//Self explanitory.
+			to_chat(src, "<spanclass='warning'>Your captive is allowing you to walk. Make sure to change your move intent to walk before trying to move, or you will be fired upon.</span>")//Self explanitory.
 
 			//set_m_intent("walk") -there's a real fucked up exploit behind this, so it's been removed. Needs testing. -Angelite-
 
@@ -217,18 +217,17 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
 	if(!I.silenced)
 		for(var/mob/living/M in viewers(src))
-			to_chat(M, 'sound/weapons/TargetOff.ogg')
+			M << 'sound/weapons/TargetOff.ogg'
 	targeted_by -= I
 	I.target.Remove(src) //De-target them
 	if(!I.target.len)
-		qdel(I.target)
 		I.target = null
 	var/mob/living/T = I.loc //Remove the targeting icons
 	if(T && ismob(T) && !I.target)
 		T.client.remove_gun_icons()
 	if(!targeted_by.len)
 		del (target_locked) //Remove the overlay
-		del targeted_by
+		targeted_by = null
 	spawn(1) update_targeted()
 
 //If you move out of range, it isn't going to still stay locked on you any more.

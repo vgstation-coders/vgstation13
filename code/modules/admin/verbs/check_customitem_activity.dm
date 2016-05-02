@@ -7,29 +7,20 @@ var/inactive_keys = "None<br>"
 
 	var/dat = "<b>Inactive players with custom items</b><br>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\verbs\check_customitem_activity.dm:9: dat += "<br>"
 	dat += {"<br>
 		The list below contains players with custom items that have not logged
 		in for the past two months, or have not logged in since this system was implemented.
 		This system requires the feedback SQL database to be properly setup and linked.<br>"}
-	// END AUTOFIX
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\verbs\check_customitem_activity.dm:13: dat += "<br>"
 	dat += {"<br>
 		Populating this list is done automatically, but must be manually triggered on a per
 	 round basis. Populating the list may cause a lag spike, so use it sparingly.<br>"}
-	// END AUTOFIX
 	dat += "<hr>"
 	if(checked_for_inactives)
 		dat += inactive_keys
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\admin\verbs\check_customitem_activity.dm:19: dat += "<hr>"
 		dat += {"<hr>
 			This system was implemented on March 1 2013, and the database a few days before that. Root server access is required to add or disable access to specific custom items.<br>"}
-		// END AUTOFIX
 	else
 		dat += "<a href='?src=\ref[src];_src_=holder;populate_inactive_customitems=1'>Populate list (requires an active database connection)</a><br>"
 
@@ -49,11 +40,11 @@ var/inactive_keys = "None<br>"
 	var/list/ckeys_with_customitems = list()
 
 	var/file = file2text("config/custom_items.txt")
-	var/lines = text2list(file, "\n")
+	var/lines = splittext(file, "\n")
 
 	for(var/line in lines)
 		// split & clean up
-		var/list/Entry = text2list(line, ":")
+		var/list/Entry = splittext(line, ":")
 		for(var/i = 1 to Entry.len)
 			Entry[i] = trim(Entry[i])
 

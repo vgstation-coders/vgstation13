@@ -230,8 +230,11 @@
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
 		if(!stat && eggsleft < 8)
+			if(!user.drop_item(O))
+				user << "<span class='notice'>You can't let go of \the [O]!</span>"
+				return
+
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name]! It clucks happily.</span>","<span class='notice'>You feed [O] to [name]! It clucks happily.</span>")
-			user.drop_item(O)
 			qdel(O)
 			eggsleft += rand(1, 4)
 //			to_chat(world, eggsleft)
@@ -256,18 +259,3 @@
 		E.pixel_y = rand(-6,6)
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
-
-/obj/item/weapon/reagent_containers/food/snacks/egg/var/amount_grown = 0
-/obj/item/weapon/reagent_containers/food/snacks/egg/process()
-	if(is_in_valid_nest(src)) //_macros.dm
-		amount_grown += rand(1,2)
-		if(amount_grown >= 100)
-			hatch()
-	else
-		processing_objects.Remove(src)
-
-/obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
-	visible_message("[src] hatches with a quiet cracking sound.")
-	new /mob/living/simple_animal/chick(get_turf(src))
-	processing_objects.Remove(src)
-	qdel(src)

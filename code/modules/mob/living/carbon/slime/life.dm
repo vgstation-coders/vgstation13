@@ -282,7 +282,7 @@
 		src.blinded = 1
 
 	else
-		if (src.paralysis || src.stunned || src.weakened || (status_flags && FAKEDEATH)) //Stunned etc.
+		if (src.incapacitated() || (status_flags && FAKEDEATH)) //Stunned etc.
 			if (src.stunned > 0)
 				AdjustStunned(-1)
 				src.stat = 0
@@ -330,8 +330,8 @@
 
 
 	if(prob(20))
-		if(istype(src, /mob/living/carbon/slime/adult)) nutrition-=rand(4,6)
-		else nutrition-=rand(2,3)
+		if(istype(src, /mob/living/carbon/slime/adult)) burn_calories(rand(4,6))
+		else burn_calories(rand(2,3))
 
 	if(nutrition <= 0)
 		nutrition = 0

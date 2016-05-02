@@ -10,7 +10,7 @@
 	throw_speed = 3
 	throw_range = 5
 	origin_tech = "biotech=3"
-	attack_verb = list("attacked", "slapped", "whacked")
+	attack_verb = list("attacks", "slaps", "whacks")
 	prosthetic_name = "cyberbrain"
 	prosthetic_icon = "brain-prosthetic"
 	organ_tag = "brain"
@@ -54,12 +54,8 @@
 
 	..()
 
-	var/mob/living/simple_animal/borer/borer = target.has_brain_worms()
-
-	if(borer)
-		borer.detach() //Should remove borer if the brain is removed - RR
-
 	var/mob/living/carbon/human/H = target
+	H.dropBorers()
 	var/obj/item/organ/brain/B = src
 	if(istype(B) && istype(H))
 		B.transfer_identity(target)

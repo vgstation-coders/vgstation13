@@ -223,6 +223,9 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 
 		stat("Chemicals", chemicals)
 
+/mob/living/simple_animal/borer/start_pulling(var/atom/movable/AM)
+	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
+
 // VERBS!
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
 	set category = "Alien"
@@ -444,12 +447,17 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 		to_chat(src, "<span class='warning'>You don't have enough energy to synthesize this much!</span>")
 		return
 
+	var/datum/reagent/C = chemical_reagents_list[chemID] //we need to get the datum for this reagent to read the overdose threshold
+	if(units >= C.overdose - host.reagents.get_reagent_amount(chemID) && C.overdose > 0)
+		if(alert("Secreting that much [chemID] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
+			return
+		add_gamelogs(src, "intentionally overdosed \the [host] with '[chemID]'", admin = TRUE, tp_link = TRUE, span_class = "danger")
 
 	if(!host || controlling || !src || stat) //Sanity check.
 		return
 
 	to_chat(src, "<span class='info'>You squirt a measure of [chem.name] from your reservoirs into [host]'s bloodstream.</span>")
-	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "danger")
+	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
 	host.reagents.add_reagent(chem.name, units)
 	chemicals -= chem.cost*units
 
@@ -673,6 +681,9 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Alien"
 
+	if(isUnconscious())
+		return
+
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
@@ -829,3 +840,16 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 			to_chat(src, "<span class='notice'>No active chemical agents found in [host]'s blood.</span>")
 	else
 		to_chat(src, "<span class='notice'>No significant chemical agents found in [host]'s blood.</span>")
+
+
+/mob/living/simple_animal/borer/attack_ghost(var/mob/dead/observer/O)
+	if(!(src.key))
+		if(O.can_reenter_corpse)
+			var/response = alert(O,"Do you want to take it over?","This borer has no soul","Yes","No")
+			if(response == "Yes")
+				if(!(src.key))
+					src.transfer_personality(O.client)
+				else if(src.key)
+					to_chat(src, "<span class='notice'>Somebody jumped your claim on this borer and is already controlling it. Try another </span>")
+		else if(!(O.can_reenter_corpse))
+			to_chat(O,"<span class='notice'>While the borer may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")

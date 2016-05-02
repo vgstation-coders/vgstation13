@@ -35,7 +35,7 @@
 	new /obj/item/device/flashlight/lantern(src)
 	new /obj/item/weapon/pickaxe/shovel(src)
 	new /obj/item/weapon/pickaxe(src)
-	new /obj/item/clothing/glasses/meson(src)
+	new /obj/item/clothing/glasses/scanner/meson(src)
 	new /obj/item/device/gps/mining(src)
 	new /obj/item/weapon/storage/belt/mining(src)
 
@@ -166,6 +166,11 @@ proc/move_mining_shuttle()
 	light_power = 2
 	light_color = LIGHT_COLOR_TUNGSTEN
 
+//Explicit
+/obj/item/device/flashlight/lantern/on
+
+	on = 1
+
 /*****************************Pickaxe********************************/
 
 //Dig constants defined in setup.dm
@@ -186,7 +191,7 @@ proc/move_mining_shuttle()
 	w_type = RECYK_METAL
 	var/digspeed = 40 //moving the delay to an item var so R&D can make improved picks. --NEO
 	origin_tech = "materials=1;engineering=1"
-	attack_verb = list("hit", "pierced", "sliced", "attacked")
+	attack_verb = list("hits", "pierces", "slices", "attacks")
 	var/drill_sound = 'sound/weapons/Genhit.ogg'
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
@@ -239,6 +244,9 @@ proc/move_mining_shuttle()
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
 
+/obj/item/weapon/pickaxe/plasmacutter/is_hot()
+	return 1
+
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
 	icon_state = "dpickaxe"
@@ -289,7 +297,7 @@ proc/move_mining_shuttle()
 	sharpness = 0.5
 	w_type = RECYK_MISC
 	origin_tech = "materials=1;engineering=1"
-	attack_verb = list("bashed", "bludgeoned", "thrashed", "whacked")
+	attack_verb = list("bashes", "bludgeons", "thrashes", "whacks")
 
 
 	digspeed = 40
@@ -397,7 +405,7 @@ proc/move_mining_shuttle()
 			spawn(20)
 				if(L)
 					L.visible_message("<span class='danger'>[L] vomits from travelling through \the [src]!</span>")
-					L.nutrition -= 20
+					L.nutrition = max(L.nutrition-20,0)
 					L.adjustToxLoss(-3)
 					var/turf/V = get_turf(L) //V for Vomit
 					V.add_vomit_floor(L)

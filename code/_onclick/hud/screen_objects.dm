@@ -13,6 +13,8 @@
 	unacidable = 1
 	var/obj/master = null	//A reference to the object in the slot. Grabs or items, generally.
 	var/gun_click_time = -100 //I'm lazy.
+	var/globalscreen = 0 //This screen object is not unique to one screen, can be seen by many
+	appearance_flags = NO_CLIENT_COLOR
 
 /obj/screen/Destroy()
 	master = null
@@ -48,16 +50,12 @@
 	ourschematic = null
 	..()
 
-/obj/screen/proc/pool_on_reset() //This proc should be redefined to 0 for ANY obj/screen that is shared between more than 1 mob, ie storage screens
-	. = 1
-
-
 /obj/screen/inventory
 	var/slot_id	//The indentifier for the slot. It has nothing to do with ID cards.
 
-
 /obj/screen/close
 	name = "close"
+	globalscreen = 1
 
 /obj/screen/close/Click()
 	if(master)
@@ -71,9 +69,6 @@
 			var/obj/item/device/rcd/rcd = master
 			rcd.show_default(usr)
 	return 1
-
-/obj/screen/close/pool_on_reset()
-	. = 0
 
 
 /obj/screen/item_action
@@ -134,11 +129,12 @@
 
 /obj/screen/storage
 	name = "storage"
+	globalscreen = 1
 
 /obj/screen/storage/Click(location, control, params)
 	if(usr.attack_delayer.blocked())
 		return
-	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
+	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
@@ -148,9 +144,6 @@
 			master.attackby(I, usr, params)
 			//usr.next_move = world.time+2
 	return 1
-
-/obj/screen/storage/pool_on_reset()
-	. = 0
 
 /obj/screen/gun
 	name = "gun"
@@ -250,6 +243,29 @@
 	overlays.len = 0
 	overlays += image('icons/mob/zone_sel.dmi', "[selecting]")
 
+/obj/screen/clicker
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "blank"
+	plane = CLICKCATCHER_PLANE
+	mouse_opacity = 2
+	globalscreen = 1
+	screen_loc = ui_entire_screen
+
+/obj/screen/clicker/Click(location, control, params)
+	var/list/modifiers = params2list(params)
+	var/turf/T = screen_loc2turf(modifiers["screen-loc"], get_turf(usr))
+	T.Click(location, control, params)
+	return 1
+
+/proc/screen_loc2turf(scr_loc, turf/origin)
+	var/list/screenxy = splittext(scr_loc, ",")
+	var/list/screenx = splittext(screenxy[1], ":")
+	var/list/screeny = splittext(screenxy[2], ":")
+	var/X = screenx[1]
+	var/Y = screeny[1]
+	X = Clamp((origin.x + text2num(X) - (world.view + 1)), 1, world.maxx)
+	Y = Clamp((origin.y + text2num(Y) - (world.view + 1)), 1, world.maxy)
+	return locate(X, Y, origin.z)
 
 /obj/screen/Click(location, control, params)
 	if(!usr)	return 1
@@ -374,7 +390,7 @@
 												contents.Add(0)
 
 										// ACK ACK ACK Plasmen
-										if ("plasma")
+										if ("toxins")
 											if(t.air_contents.toxins)
 												contents.Add(t.air_contents.toxins)
 											else
@@ -429,6 +445,26 @@
 		if("throw")
 			if(!usr.stat && isturf(usr.loc) && !usr.restrained())
 				usr:toggle_throw_mode()
+
+		if("kick")
+			if(ishuman(usr))
+				var/mob/living/carbon/human/H = usr
+
+				var/list/modifiers = params2list(params)
+				if(modifiers["middle"] || modifiers["right"] || modifiers["ctrl"] || modifiers["shift"] || modifiers["alt"])
+					H.set_attack_type() //Reset
+				else
+					H.set_attack_type(ATTACK_KICK)
+		if("bite")
+			if(ishuman(usr))
+				var/mob/living/carbon/human/H = usr
+
+				var/list/modifiers = params2list(params)
+				if(modifiers["middle"] || modifiers["right"] || modifiers["ctrl"] || modifiers["shift"] || modifiers["alt"])
+					H.set_attack_type() //Reset
+				else
+					H.set_attack_type(ATTACK_BITE)
+
 		if("drop")
 			usr.drop_item_v()
 
@@ -777,7 +813,7 @@
 	// We don't even know if it's a middle click
 	if(usr.attack_delayer.blocked())
 		return
-	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
+	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
@@ -803,8 +839,8 @@
 				usr.delayNextAttack(6)
 	return 1
 
-client/proc/reset_screen()
+/client/proc/reset_screen()
 	for(var/obj/screen/objects in src.screen)
-		if(objects.pool_on_reset())
+		if(!objects.globalscreen)
 			returnToPool(objects)
 	src.screen = null

@@ -1,20 +1,10 @@
-/obj/item/clothing/mask/balaclava
-	name = "balaclava"
-	desc = "LOADSAMONEY"
-	icon_state = "balaclava"
-	item_state = "balaclava"
-	flags = FPRINT
-	flags_inv = HIDEFACE|HIDEHAIR
-	w_class = 2
-	species_fit = list("Vox")
-
 /obj/item/clothing/mask/luchador
 	name = "Luchador Mask"
 	desc = "Worn by robust fighters, flying high to defeat their foes!"
 	icon_state = "luchag"
 	item_state = "luchag"
 	flags = FPRINT|MASKINTERNALS
-	flags_inv = HIDEFACE|HIDEHAIR
+	body_parts_covered = HEAD|EARS|EYES
 	w_class = 2
 	siemens_coefficient = 3.0
 	species_fit = list("Vox")

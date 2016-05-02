@@ -257,7 +257,7 @@
 /obj/machinery/computer/slot_machine/proc/broadcast(var/message)
 	if(!message) return
 
-	Broadcast_Message(radio, all_languages[LANGUAGE_SOL_COMMON], null, radio, message, "[capitalize(src.name)]", "Money Snatcher", "Slot machine #[id]", 0, 0, list(0,1), 1459)
+	Broadcast_Message(radio, all_languages[LANGUAGE_GALACTIC_COMMON], null, radio, message, "[capitalize(src.name)]", "Money Snatcher", "Slot machine #[id]", 0, 0, list(0,1), 1459)
 
 /obj/machinery/computer/slot_machine/attack_hand(mob/user as mob)
 	if(..())
@@ -314,11 +314,11 @@
 		var/obj/item/weapon/spacecash/S = I
 		var/money_add = S.amount * S.worth
 
-		user.drop_item(I)
-		qdel(I)
+		if(user.drop_item(I))
+			qdel(I)
 
-		src.stored_money += money_add
-		src.updateUsrDialog()
+			src.stored_money += money_add
+			src.updateUsrDialog()
 
 /obj/machinery/computer/slot_machine/proc/can_play() //If no money in OUR account, return 0
 	if(!our_money_account)

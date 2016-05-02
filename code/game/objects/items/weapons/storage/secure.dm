@@ -24,7 +24,7 @@
 	var/emagged = 0
 	var/open = 0
 	w_class = 3.0
-	max_w_class = 2
+	fits_max_w_class = 2
 	max_combined_w_class = 14
 
 /obj/item/weapon/storage/secure/examine(mob/user)
@@ -43,7 +43,7 @@
 			to_chat(user, "You short out the lock on [src].")
 			return
 
-		if (istype(W, /obj/item/weapon/screwdriver))
+		if (isscrewdriver(W))
 			if (do_after(user, src, 20))
 				src.open =! src.open
 				user.show_message(text("<span class='notice'>You [] the service panel.</span>", (src.open ? "open" : "close")))
@@ -74,7 +74,8 @@
 
 /obj/item/weapon/storage/secure/MouseDrop(over_object, src_location, over_location)
 	if (locked)
-		src.add_fingerprint(usr)
+		if(Adjacent(usr))
+			src.add_fingerprint(usr)
 		return
 	..()
 
@@ -137,6 +138,7 @@
 	icon_state = "secure"
 	item_state = "sec-case"
 	desc = "A large briefcase with a digital locking system."
+	origin_tech = "materials=2;magnets=2;programming=1"
 	flags = FPRINT
 	force = 8.0
 	throw_speed = 1
@@ -215,7 +217,7 @@
 	flags = FPRINT
 	force = 8.0
 	w_class = 8.0
-	max_w_class = 8
+	fits_max_w_class = 8
 	anchored = 1.0
 	density = 0
 	cant_hold = list("/obj/item/weapon/storage/secure/briefcase")

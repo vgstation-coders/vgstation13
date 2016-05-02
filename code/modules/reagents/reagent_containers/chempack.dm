@@ -67,7 +67,7 @@
 /obj/item/weapon/reagent_containers/chempack/examine(mob/user)
 	..()
 	if(beaker)
-		to_chat(user, "\icon[beaker] There is \a [beaker] in \the [src]'s auxiliary chamber.")
+		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s auxiliary chamber.")
 		to_chat(user, "It contains:")
 		var/obj/item/weapon/reagent_containers/glass/B = beaker
 		if(B.reagents.reagent_list.len)
@@ -124,7 +124,9 @@
 			H.update_inv_l_hand()
 
 	else
-		dynamic_overlay = null
+		dynamic_overlay["[BACK_LAYER]"] = null
+		dynamic_overlay["[L_HAND_LAYER]"] = null
+		dynamic_overlay["[R_HAND_LAYER]"] = null
 		if (istype(loc,/mob/living/carbon/human))
 			H.update_inv_back()
 			H.update_inv_r_hand()
@@ -173,13 +175,13 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				to_chat(user, "There is already a beaker loaded into \the [src].")
 				return
 			else
-				src.beaker = W
-				user.drop_item(W, src)
-				to_chat(user, "You add the beaker to \the [src]'s auxiliary chamber!")
-				if(user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))
-					var/obj/item/clothing/mask/chemmask/C = user.wear_mask
-					C.update_verbs()
-				return 1
+				if(user.drop_item(W, src))
+					src.beaker = W
+					to_chat(user, "You add the beaker to \the [src]'s auxiliary chamber!")
+					if(user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))
+						var/obj/item/clothing/mask/chemmask/C = user.wear_mask
+						C.update_verbs()
+					return 1
 		else
 			return
 

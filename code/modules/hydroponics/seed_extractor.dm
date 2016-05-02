@@ -65,7 +65,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 	if (istype(O,/obj/item/seeds))
 		if (!hasSpaceCheck(user))
 			return
-		user.drop_item()
+		user.drop_item(force_drop = 1)
 		moveToStorage(O)
 		to_chat(user, "<span class='notice'>You add [O] to [src.name].</span>")
 		updateUsrDialog()
@@ -74,7 +74,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 	// Fruits and vegetables.
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O, /obj/item/weapon/grown))
 
-		user.drop_item(O)
+		user.drop_item(O, force_drop = 1)
 
 		var/datum/seed/new_seed_type
 		if(istype(O, /obj/item/weapon/grown))
@@ -107,7 +107,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 		var/obj/item/F = O
 		if(F.nonplant_seed_type)
 			to_chat(user, "<span class='notice'>You extract some seeds from the [F.name].</span>")
-			user.drop_item(O)
+			user.drop_item(O, force_drop = 1)
 			var/t_amount = 0
 			var/t_max = rand(1,4)
 			while(t_amount < t_max)
@@ -174,13 +174,13 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 			if(P.seed.hematophage)  	dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
 			if(P.seed.alter_temp)   	dat += "<span title=\"This plant will gradually alter the local room temperature to match it's ideal habitat.\">TEMP </span>"
 			if(P.seed.exude_gasses.len) dat += "<span title=\"This plant will exude gas into the environment.\">GAS </span>"
-			if(P.seed.thorny)    		dat += "<span title=\"This plant posesses a cover of sharp thorns.\">THORN </span>"
-			if(P.seed.stinging)			dat += "<span title=\"This plant posesses a cover of fine stingers capable of releasing chemicals on touch.\">STING </span>"
+			if(P.seed.thorny)    		dat += "<span title=\"This plant possesses a cover of sharp thorns.\">THORN </span>"
+			if(P.seed.stinging)			dat += "<span title=\"This plant possesses a cover of fine stingers capable of releasing chemicals on touch.\">STING </span>"
 			if(P.seed.ligneous)   		dat += "<span title=\"This is a ligneous plant with strong and robust stems.\">WOOD </span>"
-			if(P.seed.teleporting) 		dat += "<span title=\"This plant posesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.\">TELE </span>"
+			if(P.seed.teleporting) 		dat += "<span title=\"This plant possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.\">TELE </span>"
 			dat += "</td>"
 		dat += "</table>"
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "seed_ext", name, 1000, 400)
 	popup.set_content(dat)
 	popup.open()

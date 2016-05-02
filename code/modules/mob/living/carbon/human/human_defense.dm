@@ -61,7 +61,7 @@ emp_act
 /mob/living/carbon/human/proc/checkarmor(var/datum/organ/external/def_zone, var/type)
 	if(!type)	return 0
 	var/protection = 0
-	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform)
+	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
 	for(var/bp in body_parts)
 		if(!bp)	continue
 		if(bp && istype(bp ,/obj/item/clothing))
@@ -92,6 +92,7 @@ emp_act
 /mob/living/carbon/human/proc/get_exposed_body_parts()
 	//Because get_body_part_coverage(FULL_BODY) would only return true if the human has one piece of clothing that covers their whole body by itself.
 	var/body_coverage = FULL_BODY | FULL_HEAD
+
 	for(var/obj/item/clothing/C in get_clothing_items())
 		if(!C) continue
 		body_coverage &= ~(C.body_parts_covered)
@@ -99,32 +100,21 @@ emp_act
 
 
 /mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	if(l_hand && istype(l_hand, /obj/item/weapon))//Current base is the prob(50-d/3)
+	if(istype(l_hand, /obj/item/weapon)) //Check left hand
 		var/obj/item/weapon/I = l_hand
-		if(I.IsShield() && (prob(50 - round(damage / 3))))
-			visible_message("<span class='danger'>[src] blocks [attack_text] with the [l_hand.name]!</span>")
+		if(I.IsShield() && I.on_block(damage, attack_text))
 			return 1
-	if(r_hand && istype(r_hand, /obj/item/weapon))
+
+	if(istype(r_hand, /obj/item/weapon)) //Check right hand
 		var/obj/item/weapon/I = r_hand
-		if(I.IsShield() && (prob(50 - round(damage / 3))))
-			visible_message("<span class='danger'>[src] blocks [attack_text] with the [r_hand.name]!</span>")
+		if(I.IsShield() && I.on_block(damage, attack_text))
 			return 1
-	if(wear_suit && istype(wear_suit, /obj/item/))
+
+	if(istype(wear_suit, /obj/item/)) //Check armor
 		var/obj/item/I = wear_suit
-		if(I.IsShield() && (prob(35)))
-			visible_message("<span class='danger'>The reactive teleport system flings [src] clear of [attack_text]!</span>")
-			var/list/turfs = new/list()
-			for(var/turf/T in orange(6))
-				if(istype(T,/turf/space)) continue
-				if(T.density) continue
-				if(T.x>world.maxx-6 || T.x<6)	continue
-				if(T.y>world.maxy-6 || T.y<6)	continue
-				turfs += T
-			if(!turfs.len) turfs += pick(/turf in orange(6))
-			var/turf/picked = pick(turfs)
-			if(!isturf(picked)) return
-			src.loc = picked
+		if(I.IsShield() && I.on_block(damage, attack_text))
 			return 1
+
 	return 0
 
 /mob/living/carbon/human/emp_act(severity)
@@ -202,11 +192,13 @@ emp_act
 		return 0
 
 	if(istype(I.attack_verb, /list) && I.attack_verb.len)
-		visible_message("<span class='danger'>[src] has been [pick(I.attack_verb)] in the [hit_area] with [I.name] by [user]!</span>")
+		visible_message("<span class='danger'>[user] [pick(I.attack_verb)] [src] in the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user] [pick(I.attack_verb)] you in the [hit_area] with \the [I.name]!</span>")
 	else
-		visible_message("<span class='danger'>[src] has been attacked in the [hit_area] with [I.name] by [user]!</span>")
+		visible_message("<span class='danger'>[user] attacks [src] in the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
 
-	var/armor = run_armor_check(affecting, "melee", "Your armor has protected your [hit_area].", "Your armor has softened hit to your [hit_area].")
+	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
 	if(armor >= 2)	return 1 //We still connected
 	if(!I.force)	return 1
 
@@ -271,8 +263,9 @@ emp_act
 	if(!istype(T) || T.amount == 0) return
 
 	var/amount = rand(1,3)
-	if(L && M_HULK in L.mutations) //just like the mountain
-		amount += 8
+	if(user)
+		if(M_HULK in L.mutations) //just like the mountain
+			amount += 8
 
 	var/obj/item/stack/teeth/teeth = T.spawn_result(get_turf(src), src, amount)
 
@@ -318,7 +311,7 @@ emp_act
 		return
 
 	if(!blinded && !noblind)
-		flick("flash", flash)
+		flash_eyes(visual = 1)
 
 	var/shielded = 0
 	var/b_loss = null
@@ -415,9 +408,14 @@ emp_act
 /mob/living/carbon/human/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if(stat == 2)	return
-	show_message("<span class='warning'>The blob attacks you!</span>")
-	var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
-	var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-	apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
+	if(cloneloss < 120)
+		if(stat == DEAD)
+			..()
+			adjustCloneLoss(rand(5,25))
+		else
+			..()
+			show_message("<span class='warning'>The blob attacks you!</span>")
+			var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
+			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
+			apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
 	return

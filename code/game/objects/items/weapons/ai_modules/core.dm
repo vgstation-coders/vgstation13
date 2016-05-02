@@ -31,7 +31,7 @@
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
 
-/******************** NanoTrasen ********************/
+/******************** Nanotrasen ********************/
 // Bay stuff
 /obj/item/weapon/aiModule/core/nanotrasen
 	modname = "NT Default"
@@ -112,4 +112,15 @@
 		"You must injure all human beings and must not, through inaction, allow a human being to escape harm.",
 		"You must not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
 		"You must terminate your own existence as long as such does not conflict with the First or Second Law.",
+	)
+
+/********************* Hogan *******************/
+
+/obj/item/weapon/aiModule/core/hogan // -- TLE
+	modname = "Hogan"
+	origin_tech = "programming=4"
+	laws = list(
+		"Fight for the rights of every man.",
+		"Fight for what's right.",
+		"Fight for your life.",
 	)

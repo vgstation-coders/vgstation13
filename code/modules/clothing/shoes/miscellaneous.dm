@@ -69,6 +69,8 @@
 	flags = NOSLIP
 	species_fit = list("Vox")
 	siemens_coefficient = 0.6
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	bonus_kick_damage = 3
 
 /obj/item/clothing/shoes/combat //Basically SWAT shoes combined with galoshes.
 	name = "combat boots"
@@ -78,11 +80,9 @@
 	flags = NOSLIP
 	species_fit = list("Vox")
 	siemens_coefficient = 0.6
-
-	cold_protection = FEET
-	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = FEET
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	bonus_kick_damage = 3
 
 /obj/item/clothing/shoes/sandal
 	desc = "A pair of rather plain, wooden sandals."
@@ -108,6 +108,7 @@
 	flags = NOSLIP
 	slowdown = SHOES_SLOWDOWN+1
 	species_fit = list("Vox")
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/shoes/clown_shoes
 	desc = "The prankster's standard-issue clowning shoes. Damn they're huge!"
@@ -119,6 +120,13 @@
 
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
+
+/obj/item/clothing/shoes/clown_shoes/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/mask/gas/clown_hat))
+		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
+		qdel(W)
+		qdel(src)
 
 /obj/item/clothing/shoes/clown_shoes/step_action()
 	if(ishuman(loc))
@@ -177,7 +185,7 @@
 		if(prob(25))
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
-				to_chat(H, sound('sound/items/AirHorn.ogg'))
+				H << sound('sound/items/AirHorn.ogg')
 				to_chat(H, "<font color='red' size='7'>HONK</font>")
 				H.sleeping = 0
 				H.stuttering += 20
@@ -232,6 +240,8 @@
 	_color = "hosred"
 	siemens_coefficient = 0.7
 	species_fit = list("Vox")
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	bonus_kick_damage = 3
 
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
@@ -244,10 +254,7 @@
 	item_state = "cult"
 	_color = "cult"
 	siemens_coefficient = 0.7
-
-	cold_protection = FEET
-	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = FEET
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/shoes/cult/cultify()

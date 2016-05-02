@@ -19,7 +19,7 @@
 	var/datum/radio_frequency/radio_connection
 	var/deadman = 0
 
-	accessible_values = list("Code (1 to 100)" = "code;number",\
+	accessible_values = list("Code (1 to 100)" = "code;number;1;100",\
 		"Frequency" = "frequency;number")
 
 /obj/item/device/assembly/signaler/New()
@@ -167,7 +167,7 @@
 
 	if(!holder)
 		for(var/mob/O in hearers(1, src.loc))
-			O.show_message(text("\icon[] *beep* *beep*", src), 3, "*beep* *beep*", 2)
+			O.show_message("[bicon(src)] *beep* *beep*", 1, "*beep* *beep*", 2)
 	return
 
 
@@ -257,7 +257,7 @@
 		if(n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"
 		return
-	if(istype(W, /obj/item/weapon/crowbar))
+	if(iscrowbar(W))
 		to_chat(user, "You begin prying \the [src] off the wall.")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src,10))
@@ -274,7 +274,5 @@
 /obj/item/device/assembly/signaler/set_value(var/var_name, var/new_value)
 	if(var_name == "frequency")
 		new_value = sanitize_frequency(new_value)
-	else if(var_name == "code")
-		new_value = Clamp(new_value, 1, 100)
 
 	return ..(var_name, new_value)

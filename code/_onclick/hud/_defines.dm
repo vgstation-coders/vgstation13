@@ -13,6 +13,8 @@
 	Therefore, the top right corner (except during admin shenanigans) is at "15,15"
 */
 
+#define CLICKCATCHER_PLANE -99
+
 //Overlays that cover the entire screen
 #define ui_entire_screen "WEST,SOUTH TO EAST,NORTH"
 
@@ -63,6 +65,7 @@
 #define ui_dropbutton "EAST-4:22,SOUTH:5"
 #define ui_drop_throw "EAST-1:28,SOUTH+1:7"
 #define ui_pull_resist "EAST-2:26,SOUTH+1:7"
+#define ui_kick_bite "EAST-3:24,SOUTH+1:7"
 #define ui_acti "EAST-2:26,SOUTH:5"
 #define ui_movi "EAST-3:24,SOUTH:5"
 #define ui_zonesel "EAST-1:28,SOUTH:5"

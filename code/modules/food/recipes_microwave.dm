@@ -275,6 +275,13 @@
 
 // Pastries ////////////////////////////////////////////////////
 
+/datum/recipe/eclair
+	reagents = list("flour" = 5, "cream" = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/eclair
+
 /datum/recipe/waffles
 	reagents = list("flour" = 10)
 	items = list(
@@ -338,16 +345,9 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/faggot)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donkpocket //SPECIAL
 
-/datum/recipe/donkpocket/proc/warm_up(var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked)
-	being_cooked.warm = 1
-	being_cooked.reagents.add_reagent("tricordrazine", 5)
-	being_cooked.bitesize = 6
-	being_cooked.name = "Warm " + being_cooked.name
-	being_cooked.cooltime()
-
 /datum/recipe/donkpocket/make_food(var/obj/container)
 	var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked = ..(container)
-	warm_up(being_cooked)
+	being_cooked.warm_up()
 	return being_cooked
 
 /datum/recipe/donkpocket/warm
@@ -357,7 +357,11 @@
 
 /datum/recipe/donkpocket/warm/make_food(var/obj/container)
 	var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked = locate() in container
-	if(being_cooked && !being_cooked.warm) warm_up(being_cooked)
+	if(istype(being_cooked))
+		if(being_cooked.warm <= 0)
+			being_cooked.warm_up()
+		else
+			being_cooked.warm = 80
 	return being_cooked
 
 // Bread ///////////////////////////////////////////////////////
@@ -443,6 +447,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
+
+/datum/recipe/eucharist
+	reagents = list("flour" = 5, "holywater" = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/eucharist
 
 // French //////////////////////////////////////////////////////
 
@@ -778,6 +786,11 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinpie
 
+/datum/recipe/nofruitpie
+	reagents = list("flour" = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
+
 // Kebabs //////////////////////////////////////////////////////
 
 /datum/recipe/syntikabob
@@ -1104,6 +1117,14 @@
 
 // Pasta ///////////////////////////////////////////////////////
 
+/datum/recipe/mommispaghetti // Same as roburger, but for mommis
+	reagents = list("flour" = 5)
+	items = list(
+		/obj/item/pipe,
+		/obj/item/stack/sheet/mineral/plasma,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/mommispaghetti
+
 /datum/recipe/boiledspaghetti
 	reagents = list("water" = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/spaghetti)
@@ -1260,7 +1281,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/communist
 
 /datum/recipe/xenochips
-	reagents = list ("sodiumchloride " = 2)
+	reagents = list ("sodiumchloride" = 2)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
@@ -1608,6 +1629,11 @@
 
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/potentham
+
+/datum/recipe/chococoin
+	reagents = list("milk" = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chococoin
 
 /datum/recipe/claypot//it just works
 	reagents = list("water" = 10)

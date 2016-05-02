@@ -1,7 +1,7 @@
 /obj/item/weapon/robot_module
 	name = "robot module"
 	icon = 'icons/obj/module.dmi'
-	icon_state = "std_module"
+	//icon_state = "std_module"
 	w_class = 100.0
 	item_state = "electronic"
 	flags = FPRINT
@@ -36,10 +36,11 @@
 /obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
 	..()
 
-	languages = list(	LANGUAGE_SOL_COMMON = 1, LANGUAGE_TRADEBAND = 1, LANGUAGE_VOX = 0,
+	languages = list(	LANGUAGE_GALACTIC_COMMON = 1, LANGUAGE_TRADEBAND = 1, LANGUAGE_VOX = 0,
 						LANGUAGE_ROOTSPEAK = 0, LANGUAGE_GREY = 0, LANGUAGE_CLATTER = 0,
 						LANGUAGE_MONKEY = 0, LANGUAGE_UNATHI = 0, LANGUAGE_SIIK_TAJR = 0,
-						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0)
+						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0,
+						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0)
 	added_languages = list()
 	if(!isMoMMI(R)) add_languages(R)
 	AddToProfiler()
@@ -122,7 +123,7 @@
 	src.modules += new /obj/item/device/healthanalyzer(src)
 	src.modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	src.modules += new /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg(src,src)
-	src.modules += new /obj/item/weapon/reagent_containers/robodropper(src)
+	src.modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
 	src.modules += new /obj/item/weapon/reagent_containers/syringe(src)
 	src.modules += new /obj/item/weapon/storage/bag/chem(src)
 	src.modules += new /obj/item/weapon/extinguisher/mini(src)
@@ -201,6 +202,7 @@
 	src.modules += new /obj/item/device/rcd/tile_painter(src)
 	src.modules += new /obj/item/device/material_synth/robot(src)
 	src.modules += new /obj/item/device/silicate_sprayer(src)
+	src.modules += new /obj/item/device/holomap(src)
 	sensor_augs = list("Mesons", "Disable")
 
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
@@ -296,7 +298,7 @@
 
 /obj/item/weapon/robot_module/butler/New()
 	languages = list(
-					LANGUAGE_SOL_COMMON	= 1,
+					LANGUAGE_GALACTIC_COMMON	= 1,
 					LANGUAGE_UNATHI		= 1,
 					LANGUAGE_SIIK_TAJR	= 1,
 					LANGUAGE_SKRELLIAN	= 1,
@@ -312,7 +314,7 @@
 
 	src.modules += new /obj/item/device/rcd/borg/rsf(src)
 
-	src.modules += new /obj/item/weapon/reagent_containers/robodropper(src)
+	src.modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
 
 	var/obj/item/weapon/lighter/zippo/L = new /obj/item/weapon/lighter/zippo(src)
 	L.lit = 1

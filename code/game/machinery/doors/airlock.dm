@@ -188,6 +188,12 @@
 	icon = 'icons/obj/doors/doorresearch.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_research
 
+/obj/machinery/door/airlock/research/voxresearch
+	name = "Airlock"
+	icon = 'icons/obj/doors/doorresearch.dmi'
+	assembly_type = /obj/structure/door_assembly/door_assembly_research
+	var/const/AIRLOCK_WIRE_IDSCAN = 0
+
 /obj/machinery/door/airlock/glass_research
 	name = "Maintenance Hatch"
 	icon = 'icons/obj/doors/doorresearchglass.dmi'
@@ -196,6 +202,16 @@
 	glass = 1
 	heat_proof = 1
 	penetration_dampening = 3
+
+/obj/machinery/door/airlock/glass_research/voxresearch
+	name = "Maintenance Hatch"
+	icon = 'icons/obj/doors/doorresearchglass.dmi'
+	opacity = 0
+	assembly_type = /obj/structure/door_assembly/door_assembly_research
+	glass = 1
+	heat_proof = 1
+	penetration_dampening = 3
+	var/const/AIRLOCK_WIRE_IDSCAN = 0
 
 /obj/machinery/door/airlock/glass_mining
 	name = "Maintenance Hatch"
@@ -336,6 +352,7 @@ About the new airlock wires panel:
 			if(!src.justzap)
 				if(src.shock(user, 100))
 					src.justzap = 1
+					user.delayNextMove(10)
 					spawn (10)
 						src.justzap = 0
 					return
@@ -651,8 +668,8 @@ About the new airlock wires panel:
 			if (user)
 				src.attack_ai(user)
 
-/obj/machinery/door/airlock/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (src.isElectrified())
+/obj/machinery/door/airlock/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if (isElectrified())
 		if (istype(mover, /obj/item))
 			var/obj/item/i = mover
 			if (i.materials && (i.materials.getAmount(MAT_IRON) > 0))
@@ -985,12 +1002,14 @@ About the new airlock wires panel:
 	return dat
 
 /obj/machinery/door/airlock/attack_hand(mob/user as mob)
-	if (!istype(user, /mob/living/silicon) && !isobserver(user))
+	if (!istype(user, /mob/living/silicon) && !isobserver(user) && Adjacent(user))
 		if (isElectrified())
 			// TODO: analyze the called proc
 			if (shock(user, 100))
+				user.delayNextAttack(10)
 				return
-	if (!panel_open)
+	//Basically no open panel, not opening already, door has power, area has power, door isn't bolted
+	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN)) && !locked)
 		..(user)
 	//else
 	//	// TODO: logic for adding fingerprints when interacting with wires
@@ -1014,6 +1033,7 @@ About the new airlock wires panel:
 		if (isElectrified())
 			// TODO: analyze the called proc
 			if (shock(user, 75))
+				user.delayNextAttack(10)
 				return
 
 	if(istype(I, /obj/item/weapon/batteringram))
@@ -1041,7 +1061,7 @@ About the new airlock wires panel:
 			qdel(src)
 		return
 
-	if (istype(I, /obj/item/weapon/weldingtool))
+	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/weapon/weldingtool/WT = I
 
@@ -1053,19 +1073,19 @@ About the new airlock wires panel:
 					welded = null
 
 				update_icon()
-	else if (istype(I, /obj/item/weapon/wirecutters))
+	else if (iswirecutter(I))
 		if (!operating && panel_open)
 			wires.Interact(user)
-	else if (istype(I, /obj/item/device/multitool))
+	else if (ismultitool(I))
 		if (!operating)
 			if(panel_open) wires.Interact(user)
 			else update_multitool_menu(user)
 		attack_hand(user)
-	else if(istype(I, /obj/item/weapon/crowbar) || istype(I, /obj/item/weapon/fireaxe) )
+	else if(iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe) )
 		if(src.busy) return
 		src.busy = 1
 		var/beingcrowbarred = null
-		if(istype(I, /obj/item/weapon/crowbar) )
+		if(iscrowbar(I) )
 			beingcrowbarred = 1 //derp, Agouri
 		else
 			beingcrowbarred = 0
@@ -1134,7 +1154,6 @@ About the new airlock wires panel:
 
 	if (!electronics)
 		A = new/obj/item/weapon/circuitboard/airlock(loc)
-
 		if(req_access && req_access.len)
 			A.conf_access = req_access
 		else if(req_one_access && req_one_access.len)
@@ -1144,6 +1163,7 @@ About the new airlock wires panel:
 		A = electronics
 		electronics = null
 		A.loc = loc
+		A.installed = 0
 
 	if (operating == -1)
 		A.icon_state = "door_electronics_smoked"
@@ -1259,3 +1279,6 @@ About the new airlock wires panel:
 		open(1)
 		return 1
 	return 0
+
+/obj/machinery/door/airlock/shake()
+	return //Kinda snowflakish, to stop airlocks from shaking when kicked. I'll be refactorfing the whole thing anyways

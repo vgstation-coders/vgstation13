@@ -61,7 +61,7 @@
 
 	qdel(src)
 
-/mob/living/simple_animal/bee/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/mob/living/simple_animal/bee/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return 1
 
 /mob/living/simple_animal/bee/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -83,6 +83,16 @@
 	..()
 	if((M.a_intent == I_HURT) || (M.a_intent == I_DISARM))
 		panic_attack(M)
+
+/mob/living/simple_animal/bee/kick_act(mob/living/carbon/human/H)
+	if(prob(10)) ..()
+
+	panic_attack(H)
+
+/mob/living/simple_animal/bee/bite_act(mob/living/carbon/human/H)
+	if(prob(10)) ..()
+
+	panic_attack(H)
 
 /mob/living/simple_animal/bee/proc/panic_attack(mob/damagesource)
 	for(var/mob/living/simple_animal/bee/B in range(src,3))

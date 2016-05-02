@@ -80,19 +80,13 @@
 			if(item_quants[O] > 0)
 				var/N = item_quants[O]
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\weapons\hydroponics.dm:82: dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
 				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
 					[N] </font>
 					<a href='byond://?src=\ref[src];vend=[O]'>Vend</A>
 					<br>"}
-				// END AUTOFIX
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\weapons\hydroponics.dm:87: dat += "<br><a href='byond://?src=\ref[src];unload=1'>Unload All</A>"
 		dat += {"<br><a href='byond://?src=\ref[src];unload=1'>Unload All</A>
 			</TT>"}
-		// END AUTOFIX
 	user << browse("<HEAD><TITLE>Seedbag Supplies</TITLE></HEAD><TT>[dat]</TT>", "window=seedbag")
 	onclose(user, "seedbag")
 	return
@@ -135,7 +129,7 @@
 
 /*/obj/item/weapon/grown/sunflower/attack(mob/M as mob, mob/user as mob)
 	to_chat(M, "<font color='green'><b> [user] smacks you with a sunflower!</font><font color='yellow'><b>FLOWER POWER<b></font>")
-	to_chat(user, "<font color='green'> Your sunflower's </font><font color='yellow'><b>FLOWER POWER</b></font><font color='green'> strikes [M]</font>")*/
+	to_chat(user, "<font color='green'>Your sunflower's </font><font color='yellow'><b>FLOWER POWER</b></font><font color='green'> strikes [M]</font>")*/
 
 /*/obj/item/weapon/grown/novaflower
 	name = "novaflower"
@@ -150,7 +144,7 @@
 	w_class = 1.0
 	throw_speed = 1
 	throw_range = 3
-	attack_verb = list("seared", "heated", "whacked", "steamed")*/
+	attack_verb = list("sears", "heats", "whacks", "steams")*/
 
 /*/obj/item/weapon/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(!..()) return

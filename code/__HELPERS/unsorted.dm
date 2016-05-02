@@ -4,6 +4,9 @@
  * A large number of misc global procs.
  */
 
+/proc/SAFE_CRASH(var/msg)
+	CRASH(msg)
+
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end) return 0
 	var/dy
@@ -233,18 +236,21 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 					search_pda = FALSE
 
-		// fixes renames not being reflected in objective text
-		var/length
-		var/position
-
-		for (var/datum/mind/mind in ticker.minds)
-			if (mind)
-				for (var/datum/objective/objective in mind.objectives)
+		for (var/datum/mind/themind in ticker.minds)
+			if (themind)
+				var/found = 0
+				for (var/datum/objective/objective in themind.objectives)
 					if (objective && objective.target == mind)
-						length = length(oldname)
-						position = findtextEx(objective.explanation_text, oldname)
-						objective.explanation_text = copytext(objective.explanation_text, 1, position) + newname + copytext(objective.explanation_text, position + length)
-
+						found = 1
+						objective.explanation_text = replacetext(objective.explanation_text, oldname, newname)
+						themind.memory = replacetext(themind.memory, oldname, newname)
+				if(themind.current && found)
+					var/obj_count = 1
+					to_chat(themind.current, "<span class='danger'>Objectives Updated</span>")
+					to_chat(themind.current, "<span class='notice'>Your current objectives:</span>")
+					for(var/datum/objective/objective in themind.objectives)
+						to_chat(themind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
+						obj_count++
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
@@ -280,7 +286,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 				var/mob/living/silicon/ai/A = src
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
-//				to_chat(world, sound('sound/AI/newAI.ogg'))
+//				world << sound('sound/AI/newAI.ogg')
 				// Set eyeobj name
 				if(A.eyeobj)
 					A.eyeobj.name = "[newname] (AI Eye)"
@@ -696,7 +702,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(user && user.client) user.client.images -= progbar
 					if(progbar) progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || ( user.stat ) || ( user.stunned || user.weakened || user.paralysis || user.lying ) )
+		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -716,12 +722,14 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/delayfraction = round(delay/numticks)
 	var/Location = user.loc
 	var/holding = user.get_active_hand()
+	var/target_location = target.loc
 	var/image/progbar
 	//var/image/barbar
 	if(user && user.client && user.client.prefs.progress_bars && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.pixel_y = 32
+			progbar.appearance_flags = RESET_COLOR
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -730,13 +738,14 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+				progbar.appearance_flags = RESET_COLOR
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
 		sleep(delayfraction)
 		//if(user.client && progbar.icon_state != oldstate)
 			//user.client.images.Remove(progbar)
-		if(!user || user.stat || user.weakened || user.stunned || !(user.loc == Location))
+		if(!user || user.isStunned() || !(user.loc == Location) || !(target.loc == target_location))
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -796,9 +805,12 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		areatype = areatemp.type
 
 	var/list/turfs = new/list()
-	for(var/area/N in areas)
+	/*for(var/area/N in areas)
 		if(istype(N, areatype))
-			for(var/turf/T in N) turfs += T
+			for(var/turf/T in N) turfs += T*/
+	var/area/N = locate(areatype) in areas
+	if(N)
+		turfs += N.area_turfs
 	return turfs
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
@@ -1469,6 +1481,42 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			colour += temp_col
 	return colour
 
-// Use this to send to a client's chat, no exceptions (except this proc itself).
-/proc/to_chat(var/thing, var/output)
-	thing << output
+//We check if a specific game mode is currently undergoing.
+//First by checking if it is the current main mode,
+//Secondly by checking if it is part of a Mixed game mode.
+//If it exists, we return the game mode's datum. If it doesn't exist, we return null
+
+/*
+Game Mode config tags:
+"extended"
+"traitor"
+"double_agents"
+"autotraitor"
+"blob"
+"changeling"
+"traitorchan"
+"cult"
+"heist"
+"malfunction"
+"meteor"
+"mixed"
+"nuclear"
+"revolution"
+"sandbox"
+"vampire"
+"wizard
+"raginmages""
+*/
+
+/proc/find_active_mode(var/mode_ctag)
+	var/found_mode = null
+	if(ticker && ticker.mode)
+		if(ticker.mode.config_tag == mode_ctag)
+			found_mode = ticker.mode
+		else if(ticker.mode.name == "mixed")
+			var/datum/game_mode/mixed/mixed_mode = ticker.mode
+			for(var/datum/game_mode/GM in mixed_mode.modes)
+				if(GM.config_tag == mode_ctag)
+					found_mode = GM
+					break
+	return found_mode

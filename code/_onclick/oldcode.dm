@@ -115,7 +115,7 @@
 		return
 
 	// ------- PARALYSIS, STUN, WEAKENED, DEAD, (And not AI) -------
-	if (((usr.paralysis || usr.stunned || usr.weakened) && !istype(usr, /mob/living/silicon/ai)) || usr.stat != 0)
+	if ((user.incapacitated() && !istype(usr, /mob/living/silicon/ai)))
 		return
 
 	// ------- CLICKING STUFF IN CONTAINERS -------
@@ -355,7 +355,7 @@
 
 
 				if(istype(usr, /mob/living/carbon/human))
-					usr:nutrition -= rand(1,5)
+					usr:burn_calories(rand(1,5))
 					usr:handle_regular_hud_updates()
 
 				var/obj/item/projectile/beam/A = new /obj/item/projectile/beam( usr.loc )

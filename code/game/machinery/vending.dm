@@ -67,7 +67,7 @@ var/global/num_vending_terminals = 1
 	var/shut_up = 0				//Stop spouting those godawful pitches!
 	var/extended_inventory = 0	//can we access the hidden inventory?
 	var/scan_id = 1
-	var/obj/item/weapon/coin/coin
+	var/obj/item/weapon/coin
 	var/datum/wires/vending/wires = null
 	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
 
@@ -104,7 +104,7 @@ var/global/num_vending_terminals = 1
 
 	wires = new(src)
 	spawn(4)
-		src.slogan_list = text2list(src.product_slogans, ";")
+		src.slogan_list = splittext(src.product_slogans, ";")
 
 		// So not all machines speak at the exact same time.
 		// The first time this machine says something will be at slogantime + this random value,
@@ -149,10 +149,10 @@ var/global/num_vending_terminals = 1
 		newpack.coin_records = coin_records
 
 	if(coinbox)
-		coinbox.loc = get_turf(src)
+		coinbox.forceMove(get_turf(src))
 	..()
 
-/obj/machinery/vending/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSMACHINE))
 		return 1
 	return ..()
@@ -174,9 +174,9 @@ var/global/num_vending_terminals = 1
 			sleep(30)
 			if(!user || !P || !src)
 				return
-			if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.stat) && (!user.stunned && !user.weakened && !user.paralysis && !user.lying))
+			if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
 				var/obj/machinery/vending/newmachine = new P.targetvendomat(loc)
-				to_chat(user, "<span class='notice'>\icon[newmachine] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
+				to_chat(user, "<span class='notice'>[bicon(newmachine)] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
 				playsound(newmachine, 'sound/machines/hiss.ogg', 50, 0, 0)
 				newmachine.pack = P.type
 				var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
@@ -204,8 +204,8 @@ var/global/num_vending_terminals = 1
 				sleep(30)
 				if(!user || !P || !src)
 					return
-				if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.stat) && (!user.stunned && !user.weakened && !user.paralysis && !user.lying))
-					to_chat(user, "<span class='notice'>\icon[src] You finish refilling the vending machine.</span>")
+				if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
+					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 					for (var/datum/data/vending_product/D in product_records)
 						D.amount = D.original_amount
@@ -252,9 +252,7 @@ var/global/num_vending_terminals = 1
 			if(prob(25)) malfunction()
 
 /obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
-	var/obj/item/temp
-
-	for (var/typepath in productlist)
+	for(var/typepath in productlist)
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
 
@@ -278,10 +276,9 @@ var/global/num_vending_terminals = 1
 			R.category = CAT_NORMAL
 			product_records.Add(R)
 
-		temp = new typepath(null)
-
-		R.product_name = temp.name
-		R.subcategory = temp.vending_cat
+		var/obj/item/initializer = typepath
+		R.product_name = initial(initializer.name)
+		R.subcategory = initial(initializer.vending_cat)
 
 /obj/machinery/vending/proc/get_item_by_type(var/this_type)
 	var/list/datum_products = list()
@@ -332,7 +329,7 @@ var/global/num_vending_terminals = 1
 			vouchers = list()
 		vouchers.Add(voucher)
 		if(coinbox)
-			voucher.loc = coinbox
+			voucher.forceMove(coinbox)
 	return 1
 
 /obj/machinery/vending/attackby(obj/item/W, mob/user)
@@ -357,24 +354,29 @@ var/global/num_vending_terminals = 1
 			C.use(4)
 			to_chat(user, "<span class='notice'>You slot some cardboard into the machine into [src].</span>")
 			cardboard = 1
-	if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
+			src.updateUsrDialog()
+	if(istype(W, /obj/item/device/multitool)||iswirecutter(W))
 		if(panel_open)
 			attack_hand(user)
 		return
-	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
+	else if(premium.len > 0 && is_type_in_list(W, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
 		if (isnull(coin))
-			user.drop_item(W, src)
-			coin = W
-			to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
+			if(user.drop_item(W, src))
+				coin = W
+				to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
+				src.updateUsrDialog()
 		else
 			to_chat(user, "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>")
-
+		return
+	else if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
+		to_chat(user, "<span class='rose'>That coin is smudgy and oddly soft, you don't think that would work.</span>")
 		return
 	else if(istype(W, /obj/item/voucher))
 		if(can_accept_voucher(W, user))
-			user.drop_item(W, src)
-			to_chat(user, "<span class='notice'>You insert [W] into [src].</span>")
-			return voucher_act(W, user)
+			if(user.drop_item(W, src))
+				to_chat(user, "<span class='notice'>You insert [W] into [src].</span>")
+				return voucher_act(W, user)
+				src.updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>\The [src] refuses to take [W].</span>")
 			return 1
@@ -391,10 +393,12 @@ var/global/num_vending_terminals = 1
 								 "<span class='notice'>You load \the [src] with \the [bag].</span>")
 			if(bag.contents.len > 0)
 				to_chat(user, "<span class='notice'>Some items are refused.</span>")
+			src.updateUsrDialog()
 	else
 		if(is_type_in_list(W, allowed_inputs))
-			user.drop_item(W, src)
-			add_item(W)
+			if(user.drop_item(W, src))
+				add_item(W)
+				src.updateUsrDialog()
 	/*else if(istype(W, /obj/item/weapon/card) && currently_vending)
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
@@ -404,9 +408,9 @@ var/global/num_vending_terminals = 1
 				var/obj/item/weapon/card/I = W
 				scan_card(I)
 			else
-				to_chat(usr, "\icon[src]<span class='warning'>Unable to connect to linked account.</span>")
+				to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account.</span>")
 		else
-			to_chat(usr, "\icon[src]<span class='warning'>Unable to connect to accounts database.</span>")*/
+			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to accounts database.</span>")*/
 
 //H.wear_id
 
@@ -432,22 +436,22 @@ var/global/num_vending_terminals = 1
 				D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0)
 				using_account = "Bank Account"
 				if(!D)								//first we check if there IS a bank account in the first place
-					to_chat(usr, "\icon[src]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "\icon[src]<span class='warning'>Unable to access your bank account.</span>")
+					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
+					to_chat(usr, "[bicon(src)]<span class='warning'>Unable to access your bank account.</span>")
 					return 0
 				else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
-					to_chat(usr, "\icon[src]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "\icon[src]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
+					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
+					to_chat(usr, "[bicon(src)]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
 					return 0
 				else if(D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
-					to_chat(usr, "\icon[src]<span class='warning'>You don't have that much money on your bank account!</span>")
+					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your bank account!</span>")
 					return 0
 
 			//transfer the money
 			D.money -= transaction_amount
 			linked_account.money += transaction_amount
 
-			to_chat(usr, "\icon[src]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
+			to_chat(usr, "[bicon(src)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
 
 			//create an entry on the buy's account's transaction log
 			var/datum/transaction/T = new()
@@ -473,7 +477,7 @@ var/global/num_vending_terminals = 1
 			src.vend(src.currently_vending, usr)
 			currently_vending = null
 		else
-			to_chat(usr, "\icon[src]<span class='warning'>EFTPOS is not connected to an account.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>EFTPOS is not connected to an account.</span>")
 
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -544,33 +548,32 @@ var/global/num_vending_terminals = 1
 	else
 		src.icon_state = "[initial(icon_state)]"
 
-/obj/machinery/vending/attack_hand(mob/living/user as mob)
-	if(user.a_intent == "hurt" && istype(user, /mob/living/carbon/)) //Will make another update later. Hulks will insta-break
-		user.delayNextAttack(10)
-		playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
-		src.shake(1, 3) //1 means x movement, 3 means intensity
-		src.health -= 4
-		if (!Adjacent(user) && (M_TK in usr.mutations))
-			to_chat(user, "<span class='danger'>You slam the [src] with your mind.</span>")
-			src.visible_message("<span class='danger'>[src] dents slightly as if struck.</span>")
-		else
-			user.visible_message(	"<span class='danger'>[user] kicks the [src].</span>", "<span class='danger'>You kick the [src].</span>")
-			if(prob(70))
-				user.apply_damage(rand(2,4), BRUTE, "r_leg")
-
-		if(src.health <= 0)
-			stat |= BROKEN
-			src.update_vicon()
-			return
-		if(prob(2)) //Jackpot!
-			malfunction()
-		if(prob(2))
-			src.TurnOff(600) //A whole minute
-		/*if(prob(1))
-			to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
-			user.emote("scream",,, 1)
-			shake_camera(user, 2, 1)*/
+/obj/machinery/vending/proc/damaged()
+	src.health -= 4
+	if(src.health <= 0)
+		stat |= BROKEN
+		src.update_vicon()
 		return
+	if(prob(2)) //Jackpot!
+		malfunction()
+	if(prob(2))
+		src.TurnOff(600) //A whole minute
+	/*if(prob(1))
+		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
+		user.emote("scream",,, 1)
+		shake_camera(user, 2, 1)*/
+
+/obj/machinery/vending/kick_act(mob/living/carbon/human/user)
+	..()
+
+	damaged()
+
+/obj/machinery/vending/attack_hand(mob/living/user as mob)
+	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
+		if(!Adjacent(user))
+			to_chat(user, "<span class='danger'>You slam the [src] with your mind!</span>")
+			visible_message("<span class='danger'>[src] dents slightly, as if it was struck!</span>")
+			damaged()
 
 	if(stat & (BROKEN|NOPOWER))
 		return
@@ -590,12 +593,9 @@ var/global/num_vending_terminals = 1
 	if(src.currently_vending)
 		var/dat = "<TT><center><b>[vendorname]</b></center><hr /><br>" //display the name, and added a horizontal rule
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\vending.dm:260: dat += "<b>You have selected [currently_vending.product_name].<br>Please ensure your ID is in your ID holder or hand.</b><br>"
 		dat += {"<b>You have selected [currently_vending.product_name].<br>Please ensure your ID is in your ID holder or hand.</b><br>
 			<a href='byond://?src=\ref[src];buy=1'>Pay</a> |
 			<a href='byond://?src=\ref[src];cancel_buying=1'>Cancel</a>"}
-		// END AUTOFIX
 		user << browse(dat, "window=vending")
 		onclose(user, "")
 		return
@@ -699,7 +699,7 @@ var/global/num_vending_terminals = 1
 			to_chat(usr, "There is no coin in this machine.")
 			return
 
-		coin.loc = get_turf(src)
+		coin.forceMove(get_turf(src))
 		if(!usr.get_active_hand())
 			usr.put_in_hands(coin)
 		to_chat(usr, "<span class='notice'>You remove the [coin] from the [src]</span>")
@@ -791,13 +791,19 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<SPAN CLASS='notice'>You need to insert a coin to get this item.</SPAN>")
 			return
 
-		if (coin.string_attached && prob(50))
-			user.put_in_hands(coin)
-			to_chat(user, "<SPAN CLASS='notice'>You successfully pulled the coin out before the [src] could swallow it.</SPAN>")
-		else
-			if(coin.string_attached)
-				to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
+		var/return_coin = 0
+		if(istype(coin, /obj/item/weapon/coin/))
+			var/obj/item/weapon/coin/real_coin = coin
+			if(real_coin.string_attached)
+				if(prob(50))
+					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled the coin out before the [src] could swallow it.</SPAN>")
+					return_coin = 1
+				else
+					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
 
+		if(return_coin)
+			user.put_in_hands(coin)
+		else
 			if (!isnull(coinbox))
 				if (coinbox.can_be_inserted(coin, TRUE))
 					coinbox.handle_item_insertion(coin, TRUE)
@@ -1049,7 +1055,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/snack
 	name = "Getmore Chocolate Corp"
 	desc = "A snack machine courtesy of the Getmore Chocolate Corporation, based out of Mars"
-	product_slogans = "Try our new nougat bar!;Half the calories for double the price!;It's better then Dan's!"
+	product_slogans = "Try our new nougat bar!;Half the calories for double the price!;It's better than Dan's!"
 	product_ads = "The healthiest!;Award-winning chocolate bars!;Mmm! So good!;Oh my god it's so juicy!;Have a snack.;Snacks are good for you!;Have some more Getmore!;Best quality snacks straight from mars.;We love chocolate!;Try our new jerky!"
 	icon_state = "snack"
 	products = list(
@@ -1060,10 +1066,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6,
-		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 2,
 		)
 	contraband = list(
-		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar = 4,
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 13,
@@ -1073,7 +1081,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 60,
 		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 12,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 40,
-		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 0,
+		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
 		)
 
 	pack = /obj/structure/vendomatpack/snack
@@ -1316,7 +1324,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/wallmed_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)
 		if(0) // Empty hull
-			if(istype(W, /obj/item/weapon/screwdriver))
+			if(isscrewdriver(W))
 				to_chat(usr, "You begin removing screws from \the [src] backplate...")
 				if(do_after(user, src, 50))
 					to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
@@ -1331,15 +1339,15 @@ var/global/num_vending_terminals = 1
 					return
 				to_chat(usr, "You begin to insert \the [C] into \the [src].")
 				if(do_after(user, src, 10))
-					to_chat(usr, "<span class='notice'>You secure \the [C]!</span>")
-					user.drop_item(C, src)
-					_circuitboard=C
-					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
-					build++
-					update_icon()
+					if(user.drop_item(C, src))
+						to_chat(usr, "<span class='notice'>You secure \the [C]!</span>")
+						_circuitboard=C
+						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+						build++
+						update_icon()
 				return 1
 		if(1) // Circuitboard installed
-			if(istype(W, /obj/item/weapon/crowbar))
+			if(iscrowbar(W))
 				to_chat(usr, "You begin to pry out \the [W] into \the [src].")
 				if(do_after(user, src, 10))
 					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
@@ -1368,7 +1376,7 @@ var/global/num_vending_terminals = 1
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
 						"You add cables to \the [src].")
 		if(2) // Circuitboard installed, wired.
-			if(istype(W, /obj/item/weapon/wirecutters))
+			if(iswirecutter(W))
 				to_chat(usr, "You begin to remove the wiring from \the [src].")
 				if(do_after(user, src, 50))
 					new /obj/item/stack/cable_coil(loc,5)
@@ -1378,7 +1386,7 @@ var/global/num_vending_terminals = 1
 					build--
 					update_icon()
 				return 1
-			if(istype(W, /obj/item/weapon/screwdriver))
+			if(isscrewdriver(W))
 				to_chat(user, "You begin to complete \the [src]...")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 20))
@@ -1391,7 +1399,7 @@ var/global/num_vending_terminals = 1
 						"You finish \the [src].")
 				return 1
 		if(3) // Waiting for a recharge pack
-			if(istype(W, /obj/item/weapon/screwdriver))
+			if(isscrewdriver(W))
 				to_chat(user, "You begin to unscrew \the [src]...")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 30))
@@ -1411,8 +1419,8 @@ var/global/num_vending_terminals = 1
 				sleep(30)
 				if(!user || !O || !src)
 					return
-				if (user.loc == user_loc && O.loc == pack_loc && anchored && self_loc == src.loc && !(user.stat) && (!user.stunned && !user.weakened && !user.paralysis && !user.lying))
-					to_chat(user, "<span class='notice'>\icon[src] You finish refilling the vending machine.</span>")
+				if (user.loc == user_loc && O.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
+					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 					var/obj/machinery/vending/wallmed1/newnanomed = new /obj/machinery/vending/wallmed1(src.loc)
 					newnanomed.name = "Emergency NanoMed"
@@ -1449,8 +1457,27 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/glasses/sunglasses = 2,
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
+	premium = list(
+		/obj/item/clothing/head/helmet/siren = 2
+		)
 
 	pack = /obj/structure/vendomatpack/security
+
+/obj/machinery/vending/security/used
+	req_access_txt = 0
+	extended_inventory = 1
+	products = list(
+		/obj/item/weapon/handcuffs = 1,
+		/obj/item/weapon/grenade/flashbang = 1,
+		/obj/item/device/flash = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 24,
+		/obj/item/weapon/storage/box/evidence = 1,
+		/obj/item/weapon/legcuffs/bolas = 2,
+		)
+	contraband = list(
+		/obj/item/clothing/glasses/sunglasses = 2,
+		/obj/item/weapon/storage/fancy/donut_box = 2,
+		)
 
 /obj/machinery/vending/hydronutrients
 	name = "NutriMax"
@@ -1641,7 +1668,8 @@ var/global/num_vending_terminals = 1
 	icon_deny = "engivend-deny"
 	req_access_txt = "11" //Engineering Equipment access
 	products = list(
-		/obj/item/clothing/glasses/meson = 2,
+		/obj/item/clothing/glasses/scanner/meson = 2,
+		/obj/item/clothing/glasses/scanner/material = 2,
 		/obj/item/device/multitool = 4,
 		/obj/item/weapon/circuitboard/airlock = 10,
 		/obj/item/weapon/circuitboard/power_control = 10,
@@ -1650,6 +1678,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/intercom_electronics = 10,
 		/obj/item/weapon/cell/high = 10,
 		/obj/item/weapon/reagent_containers/glass/fuelcan = 5,
+		/obj/item/weapon/stock_parts/capacitor = 10,
+		/obj/item/device/holomap = 2
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -1680,7 +1710,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/hardhat/white = 4,
 		/obj/item/clothing/head/hardhat/dblue = 4,
 		/obj/item/weapon/storage/belt/utility = 4,
-		/obj/item/clothing/glasses/meson = 4,
+		/obj/item/clothing/glasses/scanner/meson = 4,
 		/obj/item/clothing/gloves/yellow = 4,
 		/obj/item/weapon/screwdriver = 12,
 		/obj/item/weapon/crowbar = 12,
@@ -1688,6 +1718,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/multitool = 12,
 		/obj/item/weapon/wrench = 12,
 		/obj/item/device/t_scanner = 12,
+		/obj/item/device/analyzer = 12,
 		/obj/item/stack/cable_coil = 8,
 		/obj/item/weapon/cell = 8,
 		/obj/item/weapon/weldingtool = 8,
@@ -1938,6 +1969,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/blackpants = 10,
 		/obj/item/clothing/under/redpants = 10,
 		/obj/item/clothing/under/greypants = 10,
+		/obj/item/clothing/under/greaser = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
@@ -2220,6 +2252,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/sl_suit = 2,
 		/obj/item/weapon/storage/backpack/cultpack = 2,
 		/obj/item/weapon/storage/fancy/candle_box = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/eucharist = 7,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater = 1,

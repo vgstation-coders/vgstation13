@@ -40,7 +40,7 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted)) return 1
 	return (!density)
 
@@ -51,7 +51,7 @@
 
 /obj/structure/closet/proc/can_close()
 	for(var/obj/structure/closet/closet in get_turf(src))
-		if(closet != src)
+		if(closet != src && !closet.wall_mounted)
 			return 0
 	return 1
 
@@ -121,7 +121,7 @@
 			L.client.eye = src
 	else if(!istype(AM, /obj/item) && !istype(AM, /obj/effect/dummy/chameleon))
 		return 0
-	else if(AM.density || AM.anchored)
+	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 		return 0
 	AM.loc = src
 	return 1
@@ -281,7 +281,7 @@
 			var/obj/item/stack/sheet/metal/Met = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 			Met.amount = 2
 			for(var/mob/M in viewers(src))
-				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 3, "You hear welding.", 2)
+				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
 			qdel(src)
 			return
 
@@ -297,7 +297,7 @@
 		src.welded =! src.welded
 		src.update_icon()
 		for(var/mob/M in viewers(src))
-			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 3, "You hear welding.", 2)
+			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
 	else if(!place(user, W))
 		src.attack_hand(user)
 	return
@@ -310,7 +310,7 @@
 		return 0
 	if(!isturf(O.loc))
 		return 0
-	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.lying)
+	if(user.incapacitated())
 		return 0
 	if((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1))
 		return 0
@@ -371,8 +371,8 @@
 			temp_overlay.overlays += spooky_overlay
 
 			C.images += temp_overlay
-			to_chat(L, sound('sound/machines/click.ogg'))
-			to_chat(L, sound('sound/hallucinations/scary.ogg'))
+			L << sound('sound/machines/click.ogg')
+			L << sound('sound/hallucinations/scary.ogg')
 			L.Weaken(5)
 
 			sleep(50)
@@ -396,7 +396,7 @@
 	set category = "Object"
 	set name = "Toggle Open"
 
-	if(!usr.canmove || usr.isUnconscious() || usr.restrained())
+	if(usr.incapacitated())
 		return
 
 	if(ishuman(usr) || isMoMMI(usr))

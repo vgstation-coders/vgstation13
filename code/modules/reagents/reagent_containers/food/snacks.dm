@@ -28,11 +28,21 @@
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
+/obj/item/weapon/reagent_containers/food/snacks/Destroy()
+	var/turf/T = get_turf(src)
+	if(contents.len)
+		for(var/atom/movable/A in src)
+			A.loc = T
+		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
+	..()
+
 //Proc for effects that trigger on eating that aren't directly tied to the reagents.
-/obj/item/weapon/reagent_containers/food/snacks/proc/On_Consume(var/mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/proc/On_Consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
 		return
-	if(!reagents.total_volume) //Are we done eating (determined by the amount of reagents left, here 0)
+	if(reagents)
+		reagentreference = reagents
+	if(!reagentreference || !reagentreference.total_volume) //Are we done eating (determined by the amount of reagents left, here 0)
 		user.visible_message("<span class='notice'>[user] finishes eating \the [src].</span>", \
 		"<span class='notice'>You finish eating \the [src].</span>")
 		score["foodeaten"]++ //For post-round score
@@ -60,6 +70,9 @@
 
 	attack(user, user) //This is painful, but it works, I guess
 	return
+
+/obj/item/weapon/reagent_containers/food/snacks/bite_act(mob/user) //nom nom
+	attack_self(user)
 
 /obj/item/weapon/reagent_containers/food/snacks/New()
 
@@ -142,23 +155,26 @@
 				to_chat(user, "<span class='warning'>[target] doesn't seem to have a mouth. Awkward!</span>")
 				return
 
-		if(reagents)	//Handle ingestion of any reagents (Note : Foods always have reagents)
+		var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
+		if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 			playsound(target.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
-			if(reagents.total_volume)
-				reagents.reaction(target, INGEST)
-				spawn(5) //WHY IS THIS SPAWN() HERE
-					if(reagents.total_volume > bitesize)
+			if(reagentreference.total_volume)
+				reagentreference.reaction(target, INGEST)
+				spawn() //WHY IS THIS SPAWN() HERE
+					if(gcDestroyed)
+						return
+					if(reagentreference.total_volume > bitesize)
 						/*
 						 * I totally cannot understand what this code supposed to do.
 						 * Right now every snack consumes in 2 bites, my popcorn does not work right, so I simplify it. -- rastaf0
 						var/temp_bitesize =  max(reagents.total_volume /2, bitesize)
 						reagents.trans_to(target, temp_bitesize)
 						*/
-						reagents.trans_to(target, bitesize)
+						reagentreference.trans_to(target, bitesize)
 					else
-						reagents.trans_to(target, reagents.total_volume)
+						reagentreference.trans_to(target, reagentreference.total_volume)
 					bitecount++
-					On_Consume(target)
+					On_Consume(target, reagentreference)
 			return 1
 
 	return 0
@@ -189,14 +205,21 @@
 
 	if (..()) return
 
-	if((slices_num <= 0 || !slices_num) || !slice_path) //If the food item isn't sliceable, we have no more business to do here, return
+	//If we have reached this point, then we're either trying to slice the fooditem or trying to slip something inside it. Both require us to be sliceable.
+	if((slices_num <= 0 || !slices_num) || !slice_path || istype(W,/obj/item/weapon/reagent_containers/syringe)) //Let's also not slice with syringes.
 		return 0
 
-	if(W.w_class <= 2 && W.is_sharp() < 0.8 && !istype(W,/obj/item/device/analyzer/plant_analyzer)) //Make sure the item is valid to attempt slipping shit into it
+	if(W.w_class <= 2 && (W.w_class < w_class) && W.is_sharp() < 0.8 && !istype(W,/obj/item/device/analyzer/plant_analyzer)) //Make sure the item is valid to attempt slipping shit into it
 		if(!iscarbon(user))
 			return 0
-		to_chat(user, "<span class='notice'>You slip \the [W] inside [src].</span>")
-		user.drop_item(W, src)
+
+		if(contents.len > slices_num/2) //There's a rational limit to this madness people
+			to_chat(user, "<span class='warning'>\the [src] is already too full to fit \the [W].</span>")
+			return 0
+
+		if(user.drop_item(W, src))
+			to_chat(user, "<span class='notice'>You slip \the [W] inside [src].</span>")
+
 		add_fingerprint(user)
 		contents += W
 		return 1 //No afterattack here
@@ -228,12 +251,6 @@
 		reagents.trans_to(slice, reagents_per_slice)
 	qdel(src) //So long and thanks for all the fish
 	return 1
-
-/obj/item/weapon/reagent_containers/food/snacks/Destroy()
-	if(contents) //Did someone slip shit in the pizza again ?
-		for(var/atom/movable/surprise in contents) //Find it
-			surprise.loc = get_turf(src) //Recover it
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
 	if(isanimal(M))
@@ -642,18 +659,33 @@
 	icon_state = "donkpocket"
 	food_flags = FOOD_MEAT
 
-	New()
-		..()
-		reagents.add_reagent("nutriment", 4)
-
 	var/warm = 0
-	proc/cooltime() //Not working, derp?
-		if(warm)
-			spawn(4200)	//ew
-				warm = 0
-				reagents.del_reagent("tricordrazine")
-				name = initial(name)
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/New()
+	..()
+	reagents.add_reagent("nutriment", 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/process()
+	if(warm <= 0)
+		warm = 0
+		name = initial(name)
+		reagents.del_reagent("tricordrazine")
+		processing_objects.Remove(src)
 		return
+
+	warm--
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/Destroy()
+	processing_objects.Remove(src)
+
+	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/proc/warm_up()
+	warm = 80
+	reagents.add_reagent("tricordrazine", 5)
+	bitesize = 6
+	name = "warm [name]"
+	processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/brainburger
 	name = "brainburger"
@@ -1133,8 +1165,20 @@
 	trash = /obj/item/trash/bustanuts
 	New()
 		..()
+		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("bustanut", 6)
 		reagents.add_reagent("sodiumchloride", 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/oldempirebar
+	name = "Old Empire Bar"
+	icon_state = "old_empire_bar"
+	desc = "You can see a villager from a long lost old empire on the wrap."
+	trash = /obj/item/trash/oldempirebar
+	New()
+		..()
+		reagents.add_reagent("nutriment", rand(2,6))
+		reagents.add_reagent("rogan", 6)
+		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie
 	name = "space twinkie"
@@ -1865,6 +1909,15 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 8)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti
+	name = "bowl of MoMMi spaghetti "
+	desc = "You can feel the autism in this one."
+	icon_state = "spaghettiboiled"
+	New()
+		..()
+		reagents.add_reagent("autistnanites", 2)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti
@@ -2810,15 +2863,16 @@
 				boxestoadd += i
 
 			if( (boxes.len+1) + boxestoadd.len <= 5 )
-				user.drop_item(I, src)
+				if(user.drop_item(I, src))
 
-				box.boxes = list() // Clear the box boxes so we don't have boxes inside boxes. - Xzibit
-				src.boxes.Add( boxestoadd )
+					box.boxes = list() // Clear the box boxes so we don't have boxes inside boxes. - Xzibit
+					src.boxes.Add( boxestoadd )
 
-				box.update_icon()
-				update_icon()
+					box.update_icon()
+					update_icon()
 
-				to_chat(user, "<span class='notice'>You put the [box] ontop of the [src]!</span>")
+					to_chat(user, "<span class='notice'>You put the [box] ontop of the [src]!</span>")
+
 			else
 				to_chat(user, "<span class='warning'>The stack is too high!</span>")
 		else
@@ -2829,11 +2883,12 @@
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)) // Long ass fucking object name
 		if(src.pizza) to_chat(user, "<span class='warning'>[src] already has a pizza in it.</span>")
 		else if(src.open)
-			user.drop_item(I, src)
-			src.pizza = I
-			src.update_icon()
-			to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+			if(user.drop_item(I, src))
+				src.pizza = I
+				src.update_icon()
+				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
 		else to_chat(user, "<span class='warning'>Open [src] first.</span>")
+
 		return
 
 	if( istype(I, /obj/item/weapon/pen/) )
@@ -3021,7 +3076,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
-		reagents.add_reagent("spiritbreaker", 10) // Screaming
+		reagents.add_reagent("mindbreaker", 10) // Screaming
 		reagents.add_reagent("mercury",       10) // Idiot
 		bitesize = 2
 
@@ -3843,10 +3898,10 @@
 
 	spawn(0)
 		if(((M_CLUMSY in H.mutations)) || prob(25))
-			user.visible_message("<span class='warning'>[src] escapes from [H]'s hands!</span>","<span class='warning'>[src] escapes from your grasp!</span>")
-			H.drop_item()
+			if(H.drop_item())
+				user.visible_message("<span class='warning'>[src] escapes from [H]'s hands!</span>","<span class='warning'>[src] escapes from your grasp!</span>")
 
-			jump()
+				jump()
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/potentham
@@ -3880,3 +3935,117 @@
 	var/list/possible_reagents=list("zombiepowder"=5, "mindbreaker"=5, "pacid"=5, "hyperzine"=5, "chloralhydrate"=5, "tricordazine"=5, "doctorsdelight"=5, "mutationtoxin"=5, "mercury"=5, "anti_toxin"=5, "space_drugs"=5, "holywater"=5,  "ryetalyn"=5, "cryptobiolin"=5, "dexalinp"=5, "hamserum"=1)
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin
+	name = "\improper Choco-Coin"
+	desc = "A thin wafer of milky, chocolatey, melt-in-your-mouth goodness. That alone is already worth a hoard."
+	food_flags = FOOD_SWEET
+	icon_state = "chococoin_unwrapped"
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
+	desc = "Still covered in golden foil wrapper."
+	icon_state = "chococoin_wrapped"
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/New()
+	..()
+	reagents.add_reagent("nutriment", 2)
+	reagents.add_reagent("sugar", 2)
+	reagents.add_reagent("coco", 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/chococoin/proc/Unwrap(mob/user)
+	icon_state = "chococoin_unwrapped"
+	desc = "A thin wafer of milky, chocolatey, melt-in-your-mouth goodness. That alone is already worth a hoard."
+	to_chat(user, "<span class='notice'>You remove the golden foil from \the [src].</span>")
+	wrapped = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/eucharist
+	name = "\improper Eucharist Wafer"
+	icon_state = "eucharist"
+	desc = "For the kingdom, the power, and the glory are yours, now and forever."
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/eucharist/New()
+	..()
+	reagents.add_reagent("holywater", 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/eclair
+	name = "\improper eclair"
+	desc = "Plus doux que ses lèvres."
+	icon_state = "eclair"
+	bitesize = 5
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("cream", 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
+	name = "no-fruit pie"
+	desc = "It doesn't really taste like anything."
+	icon_state = "nofruitpie"
+	trash = /obj/item/trash/pietin
+	var/list/available_snacks = list()
+	var/switching = 0
+	var/current_path = null
+	var/counter = 1
+	New()
+		..()
+		reagents.add_reagent("nothing", 20)
+		bitesize = 10
+		available_snacks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf()
+	set name = "Pick no-fruit pie leaf"
+	set category = "Object"
+	set src in range(1)
+
+	if(usr.isUnconscious())
+		to_chat(usr, "You can't do that while unconscious.")
+		return
+
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf
+
+	randomize()
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/attackby(obj/item/weapon/W, mob/user)
+	if(switching)
+		if(!current_path)
+			return
+		switching = 0
+		var/N = rand(1,3)
+		switch(N)
+			if(1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/I = new current_path(get_turf(user))
+			user.put_in_hands(I)
+		else
+			new current_path(get_turf(src))
+		qdel(src)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/randomize()
+	switching = 1
+	spawn()
+		while(switching)
+			current_path = available_snacks[counter]
+			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
+			icon_state = initial(S.icon_state)
+			playsound(src, 'sound/misc/click.ogg', 50, 1)
+			sleep(1)
+			if(counter == available_snacks.len)
+				counter = 0
+			counter++

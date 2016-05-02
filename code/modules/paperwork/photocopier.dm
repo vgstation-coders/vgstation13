@@ -132,6 +132,7 @@
 						p.pixel_x = rand(-10, 10)
 						p.pixel_y = rand(-10, 10)
 						p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
+						p.info = photocopy.info
 
 						sleep(15)
 					else
@@ -268,32 +269,32 @@
 		copying = 0
 	if(istype(O, /obj/item/weapon/paper))
 		if(copier_empty())
-			user.drop_item(O, src)
-			copy = O
-			to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
-			flick("bigscanner1", src)
-			updateUsrDialog()
+			if(user.drop_item(O, src))
+				copy = O
+				to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
+				flick("bigscanner1", src)
+				updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>There is already something in [src].</span>")
 	else if(istype(O, /obj/item/weapon/photo))
 		if(copier_empty())
-			user.drop_item(O, src)
-			photocopy = O
-			to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
-			flick("bigscanner1", src)
-			updateUsrDialog()
+			if(user.drop_item(O, src))
+				photocopy = O
+				to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
+				flick("bigscanner1", src)
+				updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>There is already something in [src].</span>")
 	else if(istype(O, /obj/item/device/toner))
 		if(toner <= 0)
-			user.drop_item(O)
-			qdel(O)
-			toner = 40
-			to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
-			updateUsrDialog()
+			if(user.drop_item(O))
+				qdel(O)
+				toner = 40
+				to_chat(user, "<span class='notice'>You insert [O] into [src].</span>")
+				updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>This cartridge is not yet ready for replacement! Use up the rest of the toner.</span>")
-	else if(istype(O, /obj/item/weapon/wrench))
+	else if(iswrench(O))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] [src].</span>")
@@ -312,7 +313,7 @@
 				copy.loc = src.loc
 				copy = null
 			updateUsrDialog()
-	else if(istype(O, /obj/item/weapon/screwdriver))
+	else if(isscrewdriver(O))
 		if(anchored)
 			to_chat(user, "[src] needs to be unanchored.")
 			return
@@ -326,7 +327,7 @@
 			to_chat(user, "You close the maintenance hatch of [src].")
 		return 1
 	if(opened)
-		if(istype(O, /obj/item/weapon/crowbar))
+		if(iscrowbar(O))
 			to_chat(user, "You begin to remove the circuits from the [src].")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 			if(do_after(user, src, 50))
@@ -376,9 +377,9 @@
 	if (!istype(target) || target.locked_to || !Adjacent(user) || !user.Adjacent(target) || user.stat || istype(user, /mob/living/silicon/ai) || target == ass || copier_blocked(user))
 		return
 	src.add_fingerprint(user)
-	if(target == user && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+	if(target == user && !(user.incapacitated()))
 		visible_message("<span class='warning'>[usr] jumps onto the photocopier!</span>")
-	else if(target != user && !user.restrained() && !user.stat && !user.weakened && !user.stunned && !user.paralysis)
+	else if(target != user && !user.incapacitated())
 		if(target.anchored) return
 		if(!ishuman(user) && !ismonkey(user)) return
 		visible_message("<span class='warning'>[usr] drags [target.name] onto the photocopier!</span>")
@@ -434,13 +435,13 @@
 			continue
 		if(AM.density)
 			if(AM.flags&ON_BORDER)
-				if(!AM.CanPass(user, src.loc))
+				if(!AM.Cross(user, src.loc))
 					return 1
 			else
 				return 1
 	return 0
 
-/obj/machinery/photocopier/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/photocopier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	return (!mover.density || !density || mover.pass_flags)

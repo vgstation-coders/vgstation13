@@ -37,30 +37,21 @@ var/const/max_assembly_amount = 300
 			return
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:39: var/t = "<B>Reactor Fuel Rod Compressor / Assembler</B><BR>"
 	var/t = {"<B>Reactor Fuel Rod Compressor / Assembler</B><BR>
 <A href='?src=\ref[src];close=1'>Close</A><BR>"}
-	// END AUTOFIX
 	if(locked)
 		t += "Swipe your ID to unlock this console."
 	else
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:44: t += "Compressed matter in storage: [compressed_matter] <A href='?src=\ref[src];eject_matter=1'>\[Eject all\]</a><br>"
 		t += {"Compressed matter in storage: [compressed_matter] <A href='?src=\ref[src];eject_matter=1'>\[Eject all\]</a><br>
 			<A href='?src=\ref[src];activate=1'><b>Activate Fuel Synthesis</b></A><BR> (fuel assemblies require no more than [max_assembly_amount] rods).<br>
 			<hr>
 			- New fuel assembly constituents:- <br>"}
-		// END AUTOFIX
 		for(var/reagent in new_assembly_quantities)
 			t += "	[reagent] rods: [new_assembly_quantities[reagent]] \[<A href='?src=\ref[src];change_reagent=[reagent]'>Modify</A>\]<br>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_compressor.dm:50: t += "<hr>"
 	t += {"<hr>
 		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
-	// END AUTOFIX
 	user << browse(t, "window=fuelcomp;size=500x300")
 	user.set_machine(src)
 
@@ -80,9 +71,9 @@ var/const/max_assembly_amount = 300
 			compressed_matter -= 10
 			ejected = 1
 		if(ejected)
-			to_chat(usr, "<span class='notice'>\icon[src] [src] ejects some compressed matter units.</span>")
+			to_chat(usr, "<span class='notice'>[bicon(src)] [src] ejects some compressed matter units.</span>")
 		else
-			to_chat(usr, "<span class='warning'>\icon[src] there are no more compressed matter units in [src].</span>")
+			to_chat(usr, "<span class='warning'>[bicon(src)] there are no more compressed matter units in [src].</span>")
 
 	if( href_list["activate"] )
 //		to_chat(world, "<span class='notice'>New fuel rod assembly</span>")
@@ -108,7 +99,7 @@ var/const/max_assembly_amount = 300
 		if(fail)
 			del(F)
 			compressed_matter = old_matter
-			to_chat(usr, "<span class='warning'>\icon[src] [src] flashes red: \'Out of matter.\'</span>")
+			to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Out of matter.\'</span>")
 		else
 			F.loc = src.loc//get_step(get_turf(src), src.dir)
 			F.percent_depleted = 0

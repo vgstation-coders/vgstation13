@@ -67,13 +67,6 @@ var/list/all_doors = list()
 	if (ismob(AM))
 		var/mob/M = AM
 
-		// can bump open one airlock per second
-		// this is to prevent shock spam
-		if(world.time - M.last_bumped <= 10)
-			return
-
-		M.last_bumped = world.time
-
 		if(!M.restrained() && (M.size > SIZE_TINY))
 			bump_open(M)
 
@@ -94,6 +87,7 @@ var/list/all_doors = list()
 			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
 			else if(!operating)
+				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
 	if (istype(AM, /obj/structure/bed/chair/vehicle))
@@ -105,6 +99,7 @@ var/list/all_doors = list()
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
 			else if(!operating)
+				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
@@ -120,6 +115,7 @@ var/list/all_doors = list()
 	if(allowed(user))
 		open()
 	else if(!operating)
+		playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 		door_animate("deny")
 
 	return
@@ -186,8 +182,9 @@ var/list/all_doors = list()
 		else
 			return open()
 
-	door_animate("deny")
-	return
+	playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
+	if(density) //Why are we playing a denied animation on an OPEN DOOR
+		door_animate("deny")
 
 /obj/machinery/door/blob_act()
 	if(prob(BLOB_PROBABILITY))
@@ -337,7 +334,7 @@ var/list/all_doors = list()
 	all_doors -= src
 	..()
 
-/obj/machinery/door/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/door/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group) return 0
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return !opacity

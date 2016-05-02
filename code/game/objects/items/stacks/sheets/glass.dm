@@ -29,11 +29,13 @@
 	if(issolder(W))
 		src.use(1)
 		new /obj/item/weapon/circuitboard/blank(user.loc)
+		to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
+		playsound(src.loc, 'sound/items/Welder.ogg', 35, 1)
 	if(istype(W, /obj/item/stack/rods) && !reinforced)
 		var/obj/item/stack/rods/V  = W
-		var/obj/item/stack/sheet/glass/RG = new rglass(user.loc)
+		var/obj/item/stack/sheet/glass/RG = new rglass()
+		RG.forceMove(user.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 		RG.add_fingerprint(user)
-		RG.add_to_stacks(user)
 		V.use(1)
 		var/obj/item/stack/sheet/glass/G = src
 		src = null
@@ -201,10 +203,6 @@
 /obj/item/stack/sheet/glass/glass/cyborg
 	starting_materials = null
 
-/obj/item/stack/sheet/glass/glass/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_GLASS, amount)
-	return 1
-
 /obj/item/stack/sheet/glass/glass/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/CC = W
@@ -213,14 +211,10 @@
 			return
 		CC.use(2)
 		src.use(1)
-		to_chat(user, "<span class='notice'>You attach some wires to the [name].</span></span>")
-		var/obj/item/stack/light_w/L=locate(/obj/item/stack/light_w) in get_turf(user)
-		if(L && L.amount<L.max_amount)
-			L.amount++
-			to_chat(user, "You add [L] to the stack. It now contains [L.amount] tiles.")
-			return
-		else
-			new /obj/item/stack/light_w(user.loc)
+
+		to_chat(user, "<span class='notice'>You attach some wires to the [name].</span>")//the dreaded dubblespan
+
+		drop_stack(/obj/item/stack/light_w, get_turf(user), 1, user)
 	else
 		return ..()
 
@@ -247,11 +241,6 @@
 /obj/item/stack/sheet/glass/rglass/cyborg
 	starting_materials = null
 
-/obj/item/stack/sheet/glass/rglass/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_GLASS, amount)
-	rec.addAmount(MAT_IRON,  0.5 * amount)
-	return 1
-
 /*
  * Plasma Glass sheets
  */
@@ -262,7 +251,7 @@
 	singular_name = "glass sheet"
 	icon_state = "sheet-plasmaglass"
 	sname = "plasma"
-	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
 	origin_tech = "materials=3;plasmatech=2"
 	created_window = /obj/structure/window/plasma
 	full_window = /obj/structure/window/full/plasma
@@ -273,11 +262,6 @@
 	shealth = 20
 	shard_type = /obj/item/weapon/shard/plasma
 
-/obj/item/stack/sheet/glass/plasmaglass/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_PLASMA, amount)
-	rec.addAmount(MAT_GLASS, amount)
-	return RECYK_GLASS
-
 /*
  * Reinforced plasma glass sheets
  */
@@ -287,7 +271,7 @@
 	singular_name = "reinforced plasma glass sheet"
 	icon_state = "sheet-plasmarglass"
 	sname = "plasma_ref"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS)
+	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
 	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
 	origin_tech = "materials=4;plasmatech=2"
 	created_window = /obj/structure/window/reinforced/plasma
@@ -298,9 +282,3 @@
 	glass_quality = 1.3
 	shealth = 30
 	shard_type = /obj/item/weapon/shard/plasma
-
-/obj/item/stack/sheet/glass/plasmarglass/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_PLASMA, amount)
-	rec.addAmount(MAT_GLASS, amount)
-	rec.addAmount(MAT_IRON,  0.5 * amount)
-	return 1

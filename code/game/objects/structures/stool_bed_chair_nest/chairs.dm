@@ -2,10 +2,12 @@
 	name = "chair"
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
-	locked_should_lie = 0
-	dense_when_locking = 0
 
 	sheet_amt = 1
+
+	var/overrideghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
+
+	lock_type = /datum/locking_category/chair
 
 /obj/structure/bed/chair/New()
 	..()
@@ -15,22 +17,19 @@
 /obj/structure/bed/chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
-		if(!SK.status)
-			to_chat(user, "<span class='notice'>[SK] is not ready to be attached!</span>")
+		if(user.drop_item(W))
+			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
+			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			E.dir = dir
+			E.part = SK
+			SK.forceMove(E)
+			SK.master = E
+			qdel(src)
 			return
-		user.drop_item(W)
-		var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		E.dir = dir
-		E.part = SK
-		SK.forceMove(E)
-		SK.master = E
-		qdel(src)
-		return
 
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		getFromPool(sheet_type, get_turf(src), 2)
+		getFromPool(sheet_type, get_turf(src), sheet_amt)
 		qdel(src)
 		return
 
@@ -58,7 +57,7 @@
 	if(!usr || !isturf(usr.loc))
 		return
 
-	if(!config.ghost_interaction && !blessed)
+	if((!config.ghost_interaction && !blessed) || overrideghostspin)
 		if(usr.isUnconscious() || usr.restrained())
 			return
 
@@ -75,13 +74,13 @@
 				M.visible_message(\
 					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
 					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking")
+					"You hear metal clanking.")
 
 			else
 				M.visible_message(\
 					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
 					"Having no butt, you slide right out of the [src]",\
-					"You hear metal clanking")
+					"You hear metal clanking.")
 
 			M.Weaken(5)
 		else
@@ -97,6 +96,7 @@
 	// TODO:  Special ash subtype that looks like charred chair legs
 
 	sheet_type = /obj/item/stack/sheet/wood
+	sheet_amt = 3
 
 /obj/structure/bed/chair/wood/normal
 	icon_state = "wooden_chair"
@@ -130,6 +130,8 @@
 	name = "comfy chair"
 	desc = "It looks comfy."
 	icon_state = "comfychair_black"
+
+	sheet_amt = 2
 
 	var/image/armrest
 
@@ -202,3 +204,5 @@
 /obj/structure/bed/chair/office/dark
 	icon_state = "officechair_dark"
 
+// Subtype only for seperation purposes.
+/datum/locking_category/chair

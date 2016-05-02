@@ -117,9 +117,10 @@ var/list/alldepartments = list("Central Command")
 /obj/machinery/faxmachine/Topic(href, href_list)
 	if(href_list["send"])
 		if(tofax)
-
-			log_game("([usr]/([usr.ckey]) sent a fax titled [tofax] to [dpt] - contents: [tofax.info]")
 			if((dpt == "Central Command") | (dpt == "Nanotrasen HR"))
+				if(!map.linked_to_centcomm)
+					to_chat(usr, "<span class='danger'>\The [src] displays a 404 error: Central Command not found</span>")
+					return
 				if(dpt == "Central Command")
 					Centcomm_fax(tofax, tofax.name, usr)
 				if(dpt == "Nanotrasen HR")
@@ -131,7 +132,7 @@ var/list/alldepartments = list("Central Command")
 
 			else
 				SendFax(tofax.info, tofax.name, usr, dpt)
-
+			log_game("([usr]/([usr.ckey]) sent a fax titled [tofax] to [dpt] - contents: [tofax.info]")
 			to_chat(usr, "Message transmitted successfully.")
 			faxtime = world.timeofday + cooldown_time
 
@@ -155,8 +156,8 @@ var/list/alldepartments = list("Central Command")
 		else
 			var/obj/item/I = usr.get_active_hand()
 			if (istype(I, /obj/item/weapon/card/id))
-				usr.drop_item(I, src)
-				scan = I
+				if(usr.drop_item(I, src))
+					scan = I
 		authenticated = 0
 
 	if(href_list["dept"])
@@ -180,11 +181,11 @@ var/list/alldepartments = list("Central Command")
 
 	if(istype(O, /obj/item/weapon/paper))
 		if(!tofax)
-			user.drop_item(O, src)
-			tofax = O
-			to_chat(user, "<span class='notice'>You insert the paper into \the [src].</span>")
-			flick("faxsend", src)
-			updateUsrDialog()
+			if(user.drop_item(O, src))
+				tofax = O
+				to_chat(user, "<span class='notice'>You insert the paper into \the [src].</span>")
+				flick("faxsend", src)
+				updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>There is already something in \the [src].</span>")
 
@@ -192,10 +193,10 @@ var/list/alldepartments = list("Central Command")
 
 		var/obj/item/weapon/card/id/idcard = O
 		if(!scan)
-			usr.drop_item(idcard, src)
-			scan = idcard
+			if(usr.drop_item(idcard, src))
+				scan = idcard
 
-	else if(istype(O, /obj/item/weapon/wrench))
+	else if(iswrench(O))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
@@ -203,19 +204,23 @@ var/list/alldepartments = list("Central Command")
 
 /proc/Centcomm_fax(var/obj/item/weapon/paper/sent, var/sentname, var/mob/Sender)
 
-
+//why the fuck doesnt the thing show as orange
 	var/msg = "<span class='notice'><b><font color='orange'>CENTCOMM FAX: </font>[key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
-	to_chat(admins, msg)
-	to_chat(admins, 'sound/effects/fax.ogg')
+	for (var/client/C in admins)
+		if(C.prefs.special_popup)
+			C << output(msg, "window1.msay_output")//if i get told to make this a proc imma be fuckin mad
+		else
+			to_chat(C, msg)
+		C << 'sound/effects/fax.ogg'
 
-proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt)
+proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 
 
 
 
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 
-		if( F.department == dpt )
+		if(centcomm || F.department == dpt )
 			if(! (F.stat & (BROKEN|NOPOWER) ) )
 
 				flick("faxreceive", F)
@@ -223,8 +228,20 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt)
 				// give the sprite some time to flick
 				spawn(20)
 					var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( F.loc )
-					P.name = "[sentname]"
+					if (centcomm)
+						P.name = "[command_name()]- [sentname]"
+					else//probably a
+						P.name = "[sentname]"
 					P.info = "[sent]"
 					P.update_icon()
 
 					playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
+
+					if(centcomm)
+						var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
+						stampoverlay.icon_state = "paper_stamp-cent"
+						if(!P.stamped)
+							P.stamped = new
+						P.stamped += /obj/item/weapon/stamp
+						P.overlays += stampoverlay
+						P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"

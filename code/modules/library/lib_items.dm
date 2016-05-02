@@ -45,12 +45,14 @@
 		qdel(src)
 
 /obj/structure/bookcase/attackby(obj/O as obj, mob/user as mob)
-
 	if(busy) //So that you can't mess with it while deconstructing
 		return
 	if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
 		update_icon()
+	else if(isscrewdriver(O) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
+		to_chat(user, "<span class='notice'>There are no screws on \the [src], it appears to be nailed together. You could probably disassemble it with just a crowbar.</span>")
+		return
 	else if(iscrowbar(O) && user.a_intent == I_HELP) //Only way to deconstruct, needs help intent
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 		user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
@@ -92,13 +94,22 @@
 	if(contents.len)
 		var/obj/item/weapon/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
 		if(choice)
-			if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting || get_dist(user, src) > 1)
+			if(user.incapacitated() || user.lying || get_dist(user, src) > 1)
 				return
 			if(!user.get_active_hand())
 				user.put_in_hands(choice)
 			else
 				choice.forceMove(get_turf(src))
 			update_icon()
+
+/obj/structure/bookcase/attack_ghost(mob/dead/observer/user as mob)
+	if(contents.len && in_range(user, src))
+		var/obj/item/weapon/book/choice = input("Which book would you like to read?") as null|obj in contents
+		if(choice)
+			if(!istype(choice)) //spellbook, cult tome, or the one weird bible storage
+				to_chat(user,"A mysterious force is keeping you from reading that.")
+				return
+			choice.read_a_motherfucking_book(user)
 
 /obj/structure/bookcase/ex_act(severity)
 	switch(severity)
@@ -174,7 +185,7 @@
 	throw_range = 5
 	w_class = 3		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
 	flags = FPRINT
-	attack_verb = list("bashed", "whacked", "educated")
+	attack_verb = list("bashes", "whacks", "educates")
 
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 3
@@ -195,7 +206,7 @@
 		dat = {"
 		<html>
 			<body>
-				<iframe width='100%' height='100%' src="http://ss13.pomf.se/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
+				<iframe width='100%' height='100%' src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
 			</body>
 		</html>
 		"}
@@ -204,31 +215,40 @@
 	new /obj/item/weapon/tome(loc)
 	..()
 
-/obj/item/weapon/book/attack_self(var/mob/user as mob)
+/obj/item/weapon/book/proc/read_a_motherfucking_book(mob/user)
 	if(carved)
-		if(store)
-			to_chat(user, "<span class='notice'>[store] falls out of [title]!</span>")
-			store.loc = get_turf(src.loc)
-			store = null
-			return
-		else
-			to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
-			return
+		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
+		return
 	if(src.dat)
 		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book")
-		user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
+		if(!isobserver(user))
+			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
 		onclose(user, "book")
 	else
 		to_chat(user, "This book is completely blank!")
+
+/obj/item/weapon/book/attack_self(var/mob/user as mob)
+	if(store)
+		to_chat(user, "<span class='notice'>[store] falls out of [title]!</span>")
+		store.forceMove(get_turf(src))
+		store = null
+		return
+	read_a_motherfucking_book(user)
+
+/obj/item/weapon/book/examine(mob/user)
+	if(isobserver(user) && in_range(src,user))
+		read_a_motherfucking_book(user)
+	else
+		..()
 
 /obj/item/weapon/book/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(carved)
 		if(!store)
 			if(W.w_class < 3)
-				user.drop_item(W, src)
-				store = W
-				to_chat(user, "<span class='notice'>You put [W] in [title].</span>")
-				return
+				if(user.drop_item(W, src))
+					store = W
+					to_chat(user, "<span class='notice'>You put [W] in [title].</span>")
+					return
 			else
 				to_chat(user, "<span class='notice'>[W] won't fit in [title].</span>")
 				return
@@ -294,7 +314,7 @@
 							return
 					scanner.computer.inventory.Add(src)
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
-	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || istype(W, /obj/item/weapon/wirecutters))
+	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || iswirecutter(W))
 		if(carved)	return
 		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
 		if(do_after(user, src, 30))

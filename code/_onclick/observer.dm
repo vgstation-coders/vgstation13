@@ -9,7 +9,7 @@
 
 	// Things you might plausibly want to follow
 	if((ismob(A) && A != src) || istype(A,/obj/machinery/bot) || istype(A,/obj/machinery/singularity))
-		ManualFollow(A)
+		manual_follow(A)
 
 	// Otherwise jump
 	else
@@ -34,6 +34,8 @@
 				to_chat(usr, "<span class='warning'>These are sacred grounds, you cannot go there!</span>")
 			else
 				forceEnter(targetloc)
+				if(locked_to)
+					manual_stop_follow(locked_to)
 
 /mob/dead/observer/ClickOn(var/atom/A, var/params)
 	if(client.buildmode)

@@ -35,19 +35,13 @@
 
 	if(screen==1)
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\mecha\\mecha_control_console.dm:33: dat += "<h3>Log contents</h3>"
 		dat += {"<h3>Log contents</h3>
 			<a href='?src=\ref[src];return=1'>Return</a><hr>
 			[stored_data]"}
-		// END AUTOFIX
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\mecha\\mecha_control_console.dm:37: dat += "<A href='?src=\ref[src];refresh=1'>(Refresh)</A><BR>"
 	dat += {"<A href='?src=\ref[src];refresh=1'>(Refresh)</A><BR>
 		</body></html>"}
-	// END AUTOFIX
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")
 	return
@@ -136,7 +130,7 @@
 	if(M)
 		M.log_message("Exosuit tracking beacon self-destruct activated.",1)
 		M.occupant_message("<font color='red'><b>Exosuit tracking beacon short-circuits!</b></font>")
-		to_chat(M.occupant, sound('sound/machines/warning-buzzer.ogg',wait=0))
+		M.occupant << sound('sound/machines/warning-buzzer.ogg',wait=0)
 		if (M.get_charge())
 			if (M.cell.charge < 5000 && M)
 				M.use_power(M.cell.charge/4)
@@ -155,7 +149,7 @@
 		M.log_message("Emergency maintenance protocols activated.",1)
 		if(M.occupant)
 			M.occupant_message("<font color='red'>Exosuit emergency maintenance protocols activated.</font>")
-			to_chat(M.occupant, sound('sound/mecha/mechlockdown.ogg',wait=0))
+			M.occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
 		M.state = 1
 
 /obj/item/mecha_parts/mecha_tracking/proc/get_mecha_log()

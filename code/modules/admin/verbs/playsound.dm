@@ -7,12 +7,17 @@
 	uploaded_sound.status = SOUND_STREAM | SOUND_UPDATE
 	uploaded_sound.priority = 250
 
+	var/prompt = alert(src, "Do you want to announce the filename to everyone?","Announce?","Yes","No","Cancel")
+	if(prompt == "Cancel")
+		return
+	if(prompt == "Yes")
+		to_chat(world, "<B>[src.key] played sound [S]</B>")
 	log_admin("[key_name(src)] played sound [S]")
 	message_admins("[key_name_admin(src)] played sound [S]", 1)
 	for(var/mob/M in player_list)
 		if(!M.client) continue
 		if(M.client.prefs.toggles & SOUND_MIDI)
-			to_chat(M, uploaded_sound)
+			M << uploaded_sound
 
 	feedback_add_details("admin_verb","PGS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -22,6 +27,10 @@
 	set name = "Play Local Sound"
 	if(!check_rights(R_SOUNDS))	return
 	if(!istype(S)) S = sound(S)
+
+	var/prompt = alert(src, "Are you sure you want to play this sound?","Are you sure?","Yes","Cancel")
+	if(prompt == "Cancel")
+		return
 	log_admin("[key_name(src)] played a local sound [S]")
 	message_admins("[key_name_admin(src)] played a local sound [S]", 1)
 	S.status = SOUND_STREAM | SOUND_UPDATE
@@ -65,7 +74,7 @@ client/proc/space_asshole()
 	for(var/mob/M in world)
 		if(M.client)
 			if(M.client.midis)
-				to_chat(M, 'sound/music/space_asshole.ogg')
+				M << 'sound/music/space_asshole.ogg'
 
 
 client/proc/honk_theme()

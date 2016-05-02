@@ -11,11 +11,12 @@
 	var/cold_speed_protection = 300 //that cloth allows its wearer to keep walking at normal speed at lower temperatures
 
 //BS12: Species-restricted clothing check.
-/obj/item/clothing/mob_can_equip(M as mob, slot)
+/obj/item/clothing/mob_can_equip(mob/M, slot)
 
-	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
+	. = ..(M, slot, 1) //Default return value. If 1, item can be equipped. If 0, it can't be.
+	if(!.) return //Default return value is 0 - don't check for species
 
-	if(species_restricted && istype(M,/mob/living/carbon/human))
+	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
 		var/wearable = null
 		var/exclusive = null
@@ -24,21 +25,49 @@
 		if("exclude" in species_restricted)
 			exclusive = 1
 
-		if(H.species)
-			if(exclusive)
-				if(!(H.species.name in species_restricted))
-					wearable = 1
+		var/datum/species/base_species = H.species
+		if(!base_species) return
+
+		var/base_species_can_wear = 1 //If the body's main species can wear this
+
+		if(exclusive)
+			if(!species_restricted.Find(base_species.name))
+				wearable = 1
 			else
-				if(H.species.name in species_restricted)
+				base_species_can_wear = 0
+		else
+			if(species_restricted.Find(base_species.name))
+				wearable = 1
+			else
+				base_species_can_wear = 0
+
+		//Check ALL organs covered by the slot. If any of the organ's species can't wear this, return 0
+
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot, H)) //Go through all organs covered by the item
+			if(!OE.species) //Species same as of the body
+				if(!base_species_can_wear) //And the body's species can't wear
+					wearable = 0
+					break
+				continue
+
+			if(exclusive)
+				if(!species_restricted.Find(OE.species.name))
 					wearable = 1
-
-			if(.) //If normally we CAN equip this item,
-				if(!wearable && (slot != 15 && slot != 16)) //But we are a species that CAN'T wear it (sidenote: slots 15 and 16 are pockets)
-					to_chat(M, "<span class='warning'>Your species cannot wear [src].</span>")//Let us know
-
+				else
+					to_chat(M, "<span class='warning'>Your misshapen [OE.display_name] prevents you from wearing \the [src].</span>")
+					return 0
+			else
+				if(species_restricted.Find(OE.species.name))
+					wearable = 1
+				else
+					to_chat(M, "<span class='warning'>Your misshapen [OE.display_name] prevents you from wearing \the [src].</span>")
 					return 0
 
-	return ..()
+		if(!wearable) //But we are a species that CAN'T wear it (sidenote: slots 15 and 16 are pockets)
+			to_chat(M, "<span class='warning'>Your species cannot wear [src].</span>")//Let us know
+			return 0
+
+	//return ..()
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
@@ -122,11 +151,11 @@ BLIND     // can't see anything
 	var/clipped = 0
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES
-	attack_verb = list("challenged")
+	attack_verb = list("challenges")
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/pickpocket = 0 //Master pickpocket?
 
-	var/bonus_knockout = 0 //Added to knockout chance. 5 or above is pretty much a 50% chance to weaken per hit
+	var/bonus_knockout = 0 //Knockout chance is multiplied by (1 + bonus_knockout) and is capped at 1/2. 0 = 1/12 chance, 1 = 1/6 chance, 2 = 1/4 chance, 3 = 1/3 chance, etc.
 	var/damage_added = 0 //Added to unarmed damage, doesn't affect knockout chance
 
 /obj/item/clothing/gloves/emp_act(severity)
@@ -157,13 +186,14 @@ BLIND     // can't see anything
 /obj/item/clothing/mask
 	name = "mask"
 	icon = 'icons/obj/clothing/masks.dmi'
-	body_parts_covered = HEAD|MOUTH
+	body_parts_covered = MOUTH
 	slot_flags = SLOT_MASK
 	species_restricted = list("exclude","Muton")
 	var/can_flip = null
 	var/is_flipped = 1
 	var/ignore_flip = 0
 	action_button_name = "Toggle Mask"
+	heat_conductivity = MASK_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/mask/verb/togglemask()
 	set name = "Toggle Mask"
@@ -172,7 +202,7 @@ BLIND     // can't see anything
 	if(ignore_flip)
 		return
 	else
-		if(!usr.canmove || usr.isUnconscious() || usr.restrained())
+		if(usr.incapacitated())
 			return
 		if(!can_flip)
 			to_chat(usr, "You try pushing \the [src] out of the way, but it is very uncomfortable and you look like a fool. You push it back into place.")
@@ -182,7 +212,6 @@ BLIND     // can't see anything
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
 			flags = initial(flags)
-			flags_inv = initial(flags_inv)
 			body_parts_covered = initial(body_parts_covered)
 			to_chat(usr, "You push \the [src] back into place.")
 			src.is_flipped = 1
@@ -192,10 +221,16 @@ BLIND     // can't see anything
 			gas_transfer_coefficient = null
 			permeability_coefficient = null
 			flags = 0
-			flags_inv = null
 			src.is_flipped = 2
-			body_parts_covered &= ~(MOUTH|HEAD)
+			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
+
+/obj/item/clothing/mask/New()
+	..()
+	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
+		action_button_name = null
+		verbs -= /obj/item/clothing/mask/verb/togglemask
+
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()
@@ -209,15 +244,26 @@ BLIND     // can't see anything
 	icon = 'icons/obj/clothing/shoes.dmi'
 	desc = "Comfortable-looking shoes."
 	gender = PLURAL //Carn: for grammarically correct text-parsing
+
 	var/chained = 0
 	var/chaintype = null // Type of chain.
+	var/bonus_kick_damage = 0
+	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
+
 	siemens_coefficient = 0.9
 	body_parts_covered = FEET
 	slot_flags = SLOT_FEET
-
+	heat_conductivity = SHOE_HEAT_CONDUCTIVITY
 	permeability_coefficient = 0.50
 	slowdown = SHOES_SLOWDOWN
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
+
+/obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
+	return
+
+/obj/item/clothing/shoes/clean_blood()
+	..()
+	track_blood = 0
 
 //Suit
 /obj/item/clothing/suit
@@ -228,6 +274,8 @@ BLIND     // can't see anything
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_OCLOTHING
+	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
@@ -244,14 +292,11 @@ BLIND     // can't see anything
 	item_state = "space"
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
-	body_parts_covered = FULL_HEAD
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR
-	cold_protection = HEAD
-	min_cold_protection_temperature = SPACE_HELMET_MIN_COLD_PROTECTION_TEMPERATURE
+	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 0.9
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")
 	eyeprot = 1
-
 	cold_breath_protection = 230
 
 /obj/item/clothing/suit/space
@@ -264,24 +309,23 @@ BLIND     // can't see anything
 	permeability_coefficient = 0.02
 	flags = FPRINT
 	pressure_resistance = 5 * ONE_ATMOSPHERE
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 3
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
-	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
-	cold_protection = UPPER_TORSO | LOWER_TORSO | LEGS | FEET | ARMS | HANDS
-	min_cold_protection_temperature = SPACE_SUIT_MIN_COLD_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
 //Under clothing
 /obj/item/clothing/under
 	icon = 'icons/obj/clothing/uniforms.dmi'
 	name = "under"
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
 	permeability_coefficient = 0.90
 	flags = FPRINT
 	slot_flags = SLOT_ICLOTHING
+	heat_conductivity = JUMPSUIT_HEAT_CONDUCTIVITY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	species_restricted = list("exclude","Muton")
 	var/list/obj/item/clothing/accessory/accessories = list()
@@ -309,13 +353,13 @@ BLIND     // can't see anything
 	if(istype(I, /obj/item/clothing/accessory))
 		var/obj/item/clothing/accessory/A = I
 		if(can_attach_accessory(A))
-			user.drop_item(I, src)
-			accessories.Add(A)
-			A.on_attached(src, user)
-			if(istype(loc, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H = loc
-				H.update_inv_w_uniform()
-			return
+			if(user.drop_item(I, src))
+				accessories.Add(A)
+				A.on_attached(src, user)
+				if(istype(loc, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = loc
+					H.update_inv_w_uniform()
+				return
 		else
 			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to [src]</span>")
 			return
@@ -395,7 +439,7 @@ BLIND     // can't see anything
 /obj/item/clothing/under/proc/set_sensors(mob/usr as mob)
 	var/mob/M = usr
 	if (istype(M, /mob/dead/)) return
-	if (usr.stat || usr.restrained()) return
+	if (usr.incapacitated()) return
 	if(has_sensor >= 2)
 		to_chat(usr, "<span class='warning'>The controls are locked.</span>")
 		return 0
@@ -427,6 +471,10 @@ BLIND     // can't see anything
 	set_sensors(usr)
 	..()
 
+/obj/item/clothing/under/AltClick()
+	if(find_holder_of_type(src, /mob) == usr)
+		set_sensors(usr)
+
 /obj/item/clothing/under/verb/removetie()
 	set name = "Remove Accessory"
 	set category = "Object"
@@ -445,5 +493,3 @@ BLIND     // can't see anything
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)
-
-

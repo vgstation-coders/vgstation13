@@ -413,6 +413,8 @@ var/global/list/damage_icon_parts = list()
 		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
 	else
 		//Icon data is kept in species datums within the mob.
+		if(species && istype(species, /datum/species))
+			species.updatespeciescolor(src)
 		race_icon = species.icobase
 		deform_icon = species.deform
 	overlays -= obj_overlays[MUTANTRACE_LAYER]
@@ -467,7 +469,7 @@ var/global/list/damage_icon_parts = list()
 
 /* --------------------------------------- */
 //For legacy support.
-/mob/living/carbon/human/regenerate_icons()
+/mob/living/carbon/human/regenerate_icons()//Changing the order of those procs doesn't change which layer appears on top! That's what the defines in setup.dm are for.
 	..()
 	if(monkeyizing)		return
 	update_fire(0)
@@ -509,7 +511,7 @@ var/global/list/damage_icon_parts = list()
 		if(!t_color)		t_color = icon_state
 		var/image/standing	= image("icon_state" = "[t_color]_s")
 
-		if((M_FAT in mutations) && (species.flags & CAN_BE_FAT))
+		if(((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) || species.flags & IS_BULKY)
 			if(w_uniform.flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/uniform_fat.dmi'
 			else
@@ -520,6 +522,7 @@ var/global/list/damage_icon_parts = list()
 			standing.icon	= 'icons/mob/uniform.dmi'
 
 		var/obj/item/clothing/under/under_uniform = w_uniform
+
 		if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
 			if(species.uniform_icons)
 				standing.icon = species.uniform_icons
@@ -606,9 +609,18 @@ var/global/list/damage_icon_parts = list()
 		var/image/standing	= image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi'), "icon_state" = "[t_state]")
 
 		var/obj/item/I = gloves
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.gloves_icons)
-				standing.icon = species.gloves_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_gloves, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.gloves_icons)
+				standing.icon = S.gloves_icons
+
+
 		if(gloves.dynamic_overlay)
 			if(gloves.dynamic_overlay["[GLOVES_LAYER]"])
 				var/image/dyn_overlay = gloves.dynamic_overlay["[GLOVES_LAYER]"]
@@ -648,9 +660,16 @@ var/global/list/damage_icon_parts = list()
 		var/image/standing = image("icon" = ((glasses.icon_override) ? glasses.icon_override : 'icons/mob/eyes.dmi'), "icon_state" = "[glasses.icon_state]")
 
 		var/obj/item/I = glasses
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.glasses_icons)
-				standing.icon = species.glasses_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_head, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.glasses_icons)
+				standing.icon = S.glasses_icons
 
 		if(glasses.cover_hair)
 			var/obj/Overlays/O = obj_overlays[GLASSES_OVER_HAIR_LAYER]
@@ -690,9 +709,16 @@ var/global/list/damage_icon_parts = list()
 		var/image/standing = image("icon" = ((ears.icon_override) ? ears.icon_override : 'icons/mob/ears.dmi'), "icon_state" = "[ears.icon_state]")
 
 		var/obj/item/I = ears
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.ears_icons)
-				standing.icon = species.ears_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_head, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.ears_icons)
+				standing.icon = S.ears_icons
 
 		var/obj/Overlays/O = obj_overlays[EARS_LAYER]
 		O.icon = standing
@@ -718,10 +744,16 @@ var/global/list/damage_icon_parts = list()
 		//var/image/standing	= image("icon" = ((shoes.icon_override) ? shoes.icon_override : 'icons/mob/feet.dmi'), "icon_state" = "[shoes.icon_state]")
 
 		var/obj/item/I = shoes
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.shoes_icons)
-				O.icon = species.shoes_icons
-				//standing.icon = species.shoes_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_shoes, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.gloves_icons)
+				O.icon = S.shoes_icons
 
 		O.overlays.len = 0
 		if(shoes.dynamic_overlay)
@@ -742,7 +774,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_s_store(var/update_icons=1)
 	overlays -= obj_overlays[SUIT_STORE_LAYER]
-	if(s_store && !check_hidden_body_flags(HIDESUITSTORAGE))
+	if(s_store)
 		var/t_state = s_store.item_state
 		if(!t_state)	t_state = s_store.icon_state
 		var/obj/Overlays/O = obj_overlays[SUIT_STORE_LAYER]
@@ -775,9 +807,16 @@ var/global/list/damage_icon_parts = list()
 			standing	= image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
 
 		var/obj/item/I = head
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.head_icons)
-				standing.icon = species.head_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_head, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.head_icons)
+				standing.icon = S.head_icons
 
 		if(head.dynamic_overlay)
 			if(head.dynamic_overlay["[HEAD_LAYER]"])
@@ -808,9 +847,17 @@ var/global/list/damage_icon_parts = list()
 		var/image/standing = image("icon" = ((belt.icon_override) ? belt.icon_override : 'icons/mob/belt.dmi'), "icon_state" = "[t_state]")
 
 		var/obj/item/I = belt
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.belt_icons)
-				standing.icon = species.belt_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_belt, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.belt_icons)
+				standing.icon = S.belt_icons
+
 		var/obj/Overlays/O = obj_overlays[BELT_LAYER]
 		O.icon = standing
 		O.icon_state = standing.icon_state
@@ -840,9 +887,16 @@ var/global/list/damage_icon_parts = list()
 			drop_hands()
 
 		var/obj/item/I = wear_suit
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.wear_suit_icons)
-				standing.icon = species.wear_suit_icons
+
+		var/datum/species/SP = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_wear_suit, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				SP = OE.species
+				break
+
+		if(SP.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(SP.wear_suit_icons)
+				standing.icon = SP.wear_suit_icons
 
 		if(wear_suit.dynamic_overlay)
 			if(wear_suit.dynamic_overlay["[SUIT_LAYER]"])
@@ -877,16 +931,23 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_wear_mask(var/update_icons=1)
 	overlays -= obj_overlays[FACEMASK_LAYER]
-	if( wear_mask && ( istype(wear_mask, /obj/item/clothing/mask) || istype(wear_mask, /obj/item/clothing/accessory) ) && !check_hidden_head_flags(HIDEMASK))
+	if( wear_mask && !check_hidden_head_flags(HIDEMASK))
 		var/obj/Overlays/O = obj_overlays[FACEMASK_LAYER]
 		O.overlays.len = 0
 		wear_mask.screen_loc = ui_mask	//TODO
 		var/image/standing	= image("icon" = ((wear_mask.icon_override) ? wear_mask.icon_override : 'icons/mob/mask.dmi'), "icon_state" = "[wear_mask.icon_state]")
 
 		var/obj/item/I = wear_mask
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.wear_mask_icons)   //This REQUIRES the species to be listed in species_fit and also to have an appropriate dmi allocated in their species datum
-				standing.icon = species.wear_mask_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_wear_mask, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.wear_mask_icons)
+				standing.icon = S.wear_mask_icons
 
 		if(wear_mask.dynamic_overlay)
 			if(wear_mask.dynamic_overlay["[FACEMASK_LAYER]"])
@@ -916,9 +977,16 @@ var/global/list/damage_icon_parts = list()
 		var/image/standing	= image("icon" = ((back.icon_override) ? back.icon_override : 'icons/mob/back.dmi'), "icon_state" = "[back.icon_state]")
 
 		var/obj/item/I = back
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.back_icons)
-				standing.icon = species.back_icons
+
+		var/datum/species/S = species
+		for(var/datum/organ/external/OE in get_organs_by_slot(slot_back, src)) //Display species-exclusive species correctly on attached limbs
+			if(OE.species)
+				S = OE.species
+				break
+
+		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+			if(S.back_icons)
+				standing.icon = S.back_icons
 
 		var/obj/Overlays/O = obj_overlays[BACK_LAYER]
 		O.icon = standing
@@ -954,9 +1022,6 @@ var/global/list/damage_icon_parts = list()
 		O.icon_state = "handcuff1"
 		overlays += O
 		obj_overlays[HANDCUFF_LAYER] = O
-		//overlays_standing[HANDCUFF_LAYER]	= image("icon" = 'icons/mob/mob.dmi', "icon_state" = "handcuff1")
-	//else
-		//overlays_standing[HANDCUFF_LAYER]	= null
 
 	if(update_icons)   update_icons()
 
@@ -1037,8 +1102,8 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/proc/update_tail_showing(var/update_icons=1)
 	//overlays_standing[TAIL_LAYER] = null
 	overlays -= obj_overlays[TAIL_LAYER]
-	if(species.tail && species.flags & HAS_TAIL)
-		if(!wear_suit || !(wear_suit.flags_inv & HIDEJUMPSUIT) && !istype(wear_suit, /obj/item/clothing/suit/space))
+	if(species && species.tail && species.flags & HAS_TAIL)
+		if(!wear_suit || !is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
 			var/obj/Overlays/O = obj_overlays[TAIL_LAYER]
 			O.icon = 'icons/effects/species.dmi'
 			O.icon_state = "[species.tail]_s"
@@ -1094,16 +1159,31 @@ var/global/list/damage_icon_parts = list()
 	if(!W)
 		return
 
-	if(W.flags_inv & HIDEHAIR)
+	if(is_slot_hidden(W.body_parts_covered,HIDEHEADHAIR) || is_slot_hidden(W.body_parts_covered,HIDEBEARDHAIR))
 		update_hair()
-	if(W.flags_inv & (HIDEGLOVES | HIDEMASK))
+	if(is_slot_hidden(W.body_parts_covered,(HIDEMASK)))
 		update_inv_wear_mask()
+	if(is_slot_hidden(W.body_parts_covered,(HIDEGLOVES)))
 		update_inv_gloves()
-	if(W.flags_inv & HIDESHOES)
+	if(is_slot_hidden(W.body_parts_covered,HIDESHOES))
 		update_inv_shoes()
-	if(W.flags_inv & (HIDEJUMPSUIT | HIDEEYES))
+	if(is_slot_hidden(W.body_parts_covered,(HIDEJUMPSUIT)))
 		update_inv_w_uniform()
+	if(is_slot_hidden(W.body_parts_covered,(HIDEEYES)))
 		update_inv_glasses()
-	if(W.flags_inv & (HIDESUITSTORAGE | HIDEEARS))
-		update_inv_s_store()
+	if(is_slot_hidden(W.body_parts_covered, (HIDEEARS)))
 		update_inv_ears()
+
+proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0)
+	if(!clothes)
+		return 0
+	var/true_body_parts_covered = clothes
+	if(slot == -1)
+		slot = true_body_parts_covered
+	if(true_body_parts_covered & IGNORE_INV)
+		true_body_parts_covered = 0
+	if(true_body_parts_covered & ignore_slot)
+		true_body_parts_covered ^= ignore_slot
+	if((true_body_parts_covered & slot) == slot)
+		return 1
+	return 0

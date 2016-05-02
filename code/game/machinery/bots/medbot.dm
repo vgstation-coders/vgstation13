@@ -8,6 +8,7 @@
 	desc = "A little medical robot. He looks somewhat underwhelmed."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "medibot0"
+	icon_initial = "medibot"
 	layer = 5.0
 	density = 0
 	anchored = 0
@@ -70,11 +71,19 @@
 
 /obj/machinery/bot/medbot/New()
 	..()
-	src.icon_state = "medibot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	spawn(4)
 		if(src.skin)
 			src.overlays += image('icons/obj/aibots.dmi', "medskin_[src.skin]")
-
+			switch(src.skin)
+				if("tox")
+					treatment_tox = "anti_toxin"
+				if("ointment")
+					treatment_fire = "kelotane"
+				if("o2")
+					treatment_oxy = "dexalin"
+		else
+			treatment_brute = "bicaridine"
 		src.botcard = new /obj/item/weapon/card/id(src)
 		if(isnull(src.botcard_access) || (src.botcard_access.len < 1))
 			var/datum/job/doctor/J = new/datum/job/doctor
@@ -84,7 +93,7 @@
 
 /obj/machinery/bot/medbot/turn_on()
 	. = ..()
-	src.icon_state = "medibot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/medbot/turn_off()
@@ -95,7 +104,7 @@
 	src.path = new()
 	src.currently_healing = 0
 	src.last_found = world.time
-	src.icon_state = "medibot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/medbot/attack_paw(mob/user as mob)
@@ -214,15 +223,15 @@
 			to_chat(user, "<span class='notice'>There is already a beaker loaded.</span>")
 			return
 
-		user.drop_item(W, src)
-		src.reagent_glass = W
-		to_chat(user, "<span class='notice'>You insert [W].</span>")
-		src.updateUsrDialog()
-		return
+		if(user.drop_item(W, src))
+			src.reagent_glass = W
+			to_chat(user, "<span class='notice'>You insert [W].</span>")
+			src.updateUsrDialog()
+			return
 
 	else
 		..()
-		if (health < maxhealth && !istype(W, /obj/item/weapon/screwdriver) && W.force)
+		if (health < maxhealth && !isscrewdriver(W) && W.force)
 			step_to(src, (get_step_away(src,user)))
 
 /obj/machinery/bot/medbot/Emag(mob/user as mob)
@@ -241,7 +250,7 @@
 		src.anchored = 0
 		src.emagged = 2
 		src.on = 1
-		src.icon_state = "medibot[src.on]"
+		src.icon_state = "[src.icon_initial][src.on]"
 
 /obj/machinery/bot/medbot/process()
 	//set background = 1
@@ -251,7 +260,7 @@
 		return
 
 	if(src.stunned)
-		src.icon_state = "medibota"
+		src.icon_state = "[src.icon_initial]a"
 		src.stunned--
 
 		src.oldpatient = src.patient
@@ -259,7 +268,7 @@
 		src.currently_healing = 0
 
 		if(src.stunned <= 0)
-			src.icon_state = "medibot[src.on]"
+			src.icon_state = "[src.icon_initial][src.on]"
 			src.stunned = 0
 		return
 
@@ -442,7 +451,7 @@
 		src.speak(message)
 		return
 	else
-		src.icon_state = "medibots"
+		src.icon_state = "[src.icon_initial]s"
 		visible_message("<span class='danger'>[src] is trying to inject [src.patient]!</span>")
 		spawn(30)
 			if ((get_dist(src, src.patient) <= 1) && (src.on))
@@ -453,7 +462,7 @@
 					src.patient.reagents.add_reagent(reagent_id,src.injection_amount)
 				visible_message("<span class='danger'>[src] injects [src.patient] with the syringe!</span>")
 
-			src.icon_state = "medibot[src.on]"
+			src.icon_state = "[src.icon_initial][src.on]"
 			src.currently_healing = 0
 			return
 
@@ -591,32 +600,32 @@
 		switch(build_step)
 			if(0)
 				if(istype(W, /obj/item/device/healthanalyzer))
-					user.drop_item(W)
-					qdel(W)
-					src.build_step++
-					to_chat(user, "<span class='notice'>You add the health sensor to [src].</span>")
-					src.name = "First aid/robot arm/health analyzer assembly"
-					src.overlays += image('icons/obj/aibots.dmi', "na_scanner")
+					if(user.drop_item(W))
+						qdel(W)
+						src.build_step++
+						to_chat(user, "<span class='notice'>You add the health sensor to [src].</span>")
+						src.name = "First aid/robot arm/health analyzer assembly"
+						src.overlays += image('icons/obj/aibots.dmi', "na_scanner")
 
 			if(1)
 				if(isprox(W))
-					user.drop_item(W)
-					qdel(W)
-					src.build_step++
-					to_chat(user, "<span class='notice'>You complete the Medibot! Beep boop.</span>")
-					var/turf/T = get_turf(src)
-					var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T)
-					S.skin = src.skin
-					S.name = src.created_name
-					user.drop_from_inventory(src)
-					qdel(src)
+					if(user.drop_item(W))
+						qdel(W)
+						src.build_step++
+						to_chat(user, "<span class='notice'>You complete the Medibot! Beep boop.</span>")
+						var/turf/T = get_turf(src)
+						var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T)
+						S.skin = src.skin
+						S.name = src.created_name
+						user.drop_from_inventory(src)
+						qdel(src)
 
 
 /obj/machinery/bot/medbot/declare()
 	if(declare_cooldown)
 		return
 	var/area/location = get_area(src)
-	declare_message = "<span class='info'>\icon[src] Medical emergency! A patient is in critical condition at [location]!</span>"
+	declare_message = "<span class='info'>[bicon(src)] Medical emergency! A patient is in critical condition at [location]!</span>"
 	..()
 	declare_cooldown = 1
 	spawn(100) //Ten seconds

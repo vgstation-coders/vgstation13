@@ -117,7 +117,7 @@
 	if(!src.req_access)
 		src.req_access = list()
 		if(src.req_access_txt)
-			var/list/req_access_str = text2list(req_access_txt,";")
+			var/list/req_access_str = splittext(req_access_txt,";")
 			for(var/x in req_access_str)
 				var/n = text2num(x)
 				if(n)
@@ -126,7 +126,7 @@
 	if(!src.req_one_access)
 		src.req_one_access = list()
 		if(src.req_one_access_txt)
-			var/list/req_one_access_str = text2list(req_one_access_txt,";")
+			var/list/req_one_access_str = splittext(req_one_access_txt,";")
 			for(var/x in req_one_access_str)
 				var/n = text2num(x)
 				if(n)
@@ -186,6 +186,12 @@
 				return 1
 		return 0
 	return 1
+
+/proc/wpermit(var/mob/M) //weapons permit checking
+	var/list/L = M.GetAccess()
+	if(access_weapons in L)
+		return 1
+	return 0
 
 /proc/get_centcom_access(job)
 	switch(job)

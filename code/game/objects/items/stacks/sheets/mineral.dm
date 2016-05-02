@@ -2,6 +2,7 @@
 Mineral Sheets
 	Contains:
 		- Sandstone
+		- Brick
 		- Diamond
 		- Uranium
 		- Plasma
@@ -51,6 +52,21 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 /obj/item/stack/sheet/mineral/sandstone/New(var/loc, var/amount=null)
 	recipes = sandstone_recipes
 	..()
+
+/*
+ * Brick
+ */
+/obj/item/stack/sheet/mineral/brick
+	name ="brick"
+	singular_name = "brick"
+	icon_state = "sheet-brick"
+	force = 5.0
+	throwforce = 5
+	throw_range = 3
+	throw_speed = 3
+	w_class = 3.0
+	melt_temperature = 2473.15
+	sheettype = "brick"
 
 /*
  * Diamond
@@ -151,7 +167,7 @@ var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 var/global/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
 	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
-	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 2, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic fork", /obj/item/weapon/kitchen/utensil/fork/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic spoon", /obj/item/weapon/kitchen/utensil/spoon/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic knife", /obj/item/weapon/kitchen/utensil/knife/plastic, 1, on_floor = 1), \

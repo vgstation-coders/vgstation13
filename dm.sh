@@ -30,6 +30,7 @@ then
 	exit 2
 fi
 
+# map select
 for var
 do
 	arg=`echo $var | sed -r 's/^.{2}//'`
@@ -41,7 +42,7 @@ do
 	if [[ $var == -M* ]]
 	then
 		sed -i '1s/^/#define MAP_OVERRIDE\n/' $dmepath.mdme
-		sed -i 's!#include "maps\\[a-z]+.dm"!#include "maps\\'$arg'.dm"!' $dmepath.mdme
+		sed -ri 's!#include "maps\\[a-zA-Z0-9]+.dm"!#include "maps\\'$arg'.dm"!' $dmepath.mdme
 		continue
 	fi
 done
@@ -68,13 +69,21 @@ then
 		exit 3
 	fi
 
-	"$dm" $dmepath.mdme
+	"$dm" $dmepath.mdme 2>&1 | tee result.log
 	retval=$?
+	if ! grep '0 errors, 0 warnings' result.log
+	then
+		retval=1 #hard fail, due to warnings or errors
+	fi
 else
 	if hash DreamMaker 2>/dev/null
 	then
-		DreamMaker $dmepath.mdme
+		DreamMaker $dmepath.mdme 2>&1 | tee result.log
 		retval=$?
+		if ! grep '0 errors, 0 warnings' result.log
+		then
+			retval=1 #hard fail, due to warnings or errors
+		fi
 	else
 		echo "Couldn't find the DreamMaker executable, aborting."
 		exit 3

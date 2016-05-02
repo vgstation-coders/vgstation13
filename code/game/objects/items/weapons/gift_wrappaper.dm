@@ -37,7 +37,7 @@
 			item_state = "gift-large"
 
 /obj/item/weapon/gift/attack_self(mob/user as mob)
-	user.drop_item(src)
+	user.drop_item(src, force_drop = 1)
 	if(gift)
 		user.put_in_active_hand(gift)
 		gift.add_fingerprint(user)
@@ -295,7 +295,7 @@
 	to_chat(user, "<span class='notice'>You can't move.</span>")
 
 /obj/structure/strange_present/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/wirecutters))
+	if (iswirecutter(W))
 		to_chat(user, "<span class='notice'>You cut open the present.</span>")
 
 		for(var/mob/M in src) //Should only be one but whatever.

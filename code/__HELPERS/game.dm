@@ -243,7 +243,7 @@ proc/isInSight(var/atom/A, var/atom/B)
 
 //i think this is used soley by verb/give(), cael
 proc/check_can_reach(atom/user, atom/target)
-	if(!in_range(user,target))
+	if(!in_range(target,user))
 		return 0
 	return CanReachThrough(get_turf(user), get_turf(target), target)
 
@@ -271,7 +271,7 @@ var/list/DummyCache = list()
 	//Now, check objects to block exit that are on the border
 	for(var/obj/border_obstacle in srcturf)
 		if(border_obstacle.flags & ON_BORDER)
-			if(!border_obstacle.CheckExit(D, targetturf))
+			if(!border_obstacle.Uncross(D, targetturf))
 				D.loc = null
 				DummyCache.Add(D)
 				return 0
@@ -279,7 +279,7 @@ var/list/DummyCache = list()
 	//Next, check objects to block entry that are on the border
 	for(var/obj/border_obstacle in targetturf)
 		if((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
-			if(!border_obstacle.CanPass(D, srcturf, 1, 0))
+			if(!border_obstacle.Cross(D, srcturf, 1, 0))
 				D.loc = null
 				DummyCache.Add(D)
 				return 0

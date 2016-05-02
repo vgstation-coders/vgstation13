@@ -52,30 +52,32 @@
 		return
 
 	var/msg = input("Message:", text("Subtle PM to [M.key]")) as text
-
 	if (!msg)
 		return
+	var/deity = input("Deity: The current chosen deity is [ticker.Bible_deity_name]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), ticker.Bible_deity_name) as text
+	if(!deity)
+		deity = "a voice"
 	if(usr)
 		if (usr.client)
 			if(usr.client.holder)
-				M.get_subtle_message(msg)
-
-	log_admin("SubtlePM: [key_name(usr)] -> [key_name(M)] : [msg]")
-	message_admins("<span class='notice'><B>SubtleMessage: [key_name_admin(usr)] -> [key_name_admin(M)] : [msg]</B></span>", 1)
+				M.get_subtle_message(msg, deity)
+	log_admin("SubtlePM: [key_name(usr)] as [deity] -> [key_name(M)] : [msg]")
+	message_admins("<span class='notice'><B>SubtleMessage: [key_name_admin(usr)] as [deity] -> [key_name_admin(M)] : [msg]</B></span>", 1)
 	feedback_add_details("admin_verb","SMS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_world_narrate() // Allows administrators to fluff events a little easier -- TLE
 	set category = "Special Verbs"
 	set name = "Global Narrate"
 
-	if (!holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to everyone:")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to everyone, input nothing to cancel.")) as text
 
-	if (!msg)
+	if(!msg)
 		return
+
 	to_chat(world, "[msg]")
 	log_admin("GlobalNarrate: [key_name(usr)] : [msg]")
 	message_admins("<span class='notice'><B>GlobalNarrate: [key_name_admin(usr)] : [msg]<BR></B></span>", 1)
@@ -95,9 +97,9 @@
 	if(!M)
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to your target:")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as text
 
-	if( !msg )
+	if(!msg)
 		return
 
 	to_chat(M, msg)
@@ -113,9 +115,9 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to your target:")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as text
 
-	if( !msg )
+	if(!msg)
 		return
 
 	for(var/mob/M in view())
@@ -205,8 +207,7 @@ proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
 
 	var/show_log = alert(src, "Show ion message?", "Message", "Yes", "No")
 	if(show_log == "Yes")
-		command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert")
-		to_chat(world, sound('sound/AI/ionstorm.ogg'))
+		command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert",alert='sound/AI/ionstorm.ogg')
 
 	generate_ion_law()
 	feedback_add_details("admin_verb","ION") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -380,7 +381,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	var/input = ckey(input(src, "Please specify which key will be respawned.", "Key", ""))
+
+	var/input = ckey(input(src, "Please specify which key will be respawned. Input nothing to cancel.", "Key", ""))
 	if(!input)
 		return
 
@@ -445,7 +447,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		new_character.real_name = record_found.fields["name"]
 		new_character.setGender(record_found.fields["sex"])
 		new_character.age = record_found.fields["age"]
-		new_character.b_type = record_found.fields["b_type"]
 	else
 		new_character.setGender(pick(MALE,FEMALE))
 		var/datum/preferences/A = new()
@@ -467,6 +468,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(record_found)//Pull up their name from database records if they did have a mind.
 		new_character.dna = new()//Let's first give them a new DNA.
 		new_character.dna.unique_enzymes = record_found.fields["b_dna"]//Enzymes are based on real name but we'll use the record for conformity.
+		new_character.dna.b_type = record_found.fields["b_type"]
 
 		// I HATE BYOND.  HATE.  HATE. - N3X
 		var/list/newSE= record_found.fields["enzymes"]
@@ -564,8 +566,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	var/show_log = alert(src, "Show ion message?", "Message", "Yes", "No")
 	if(show_log == "Yes")
-		command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert")
-		to_chat(world, sound('sound/AI/ionstorm.ogg'))
+		command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert",alert='sound/AI/ionstorm.ogg')
 	feedback_add_details("admin_verb","IONC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_rejuvenate(mob/living/M as mob in mob_list)
@@ -597,12 +598,16 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
+	if(!map.linked_to_centcomm)
+		var/confirmation = alert("The station is not linked to central command by a relay. Ruin immersion?",,"Yes","No")
+		if(confirmation == "No")
+			return
 	var/input = input(usr, "Please enter anything you want. Anything. Serious.", "What?", "") as message|null
 	var/customname = input(usr, "Pick a title for the report.", "Title") as text|null
 	if(!input)
 		return
 	if(!customname)
-		customname = "NanoTrasen Update"
+		customname = "Nanotrasen Update"
 	for (var/obj/machinery/computer/communications/C in machines)
 		if(! (C.stat & (BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
@@ -614,11 +619,11 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	switch(alert("Should this be announced to the general population?",,"Yes","No"))
 		if("Yes")
-			command_alert(input, customname);
+			command_alert(input, customname,1);
 		if("No")
-			to_chat(world, "<span class='warning'>New NanoTrasen Update available at all communication consoles.</span>")
+			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
 
-	to_chat(world, sound('sound/AI/commandreport.ogg'))
+	world << sound('sound/AI/commandreport.ogg', volume = 60)
 	log_admin("[key_name(src)] has created a command report: [input]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -808,7 +813,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	for (var/content in get_contents_in_object(L))
 		if (content)
-			to_chat(usr, "\icon[content] [content]")
+			to_chat(usr, "[bicon(content)] [content]")
 
 	feedback_add_details("admin_verb","CC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -867,9 +872,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	if(!check_rights(R_ADMIN))	return
 
-	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
-	if(confirm != "Yes") return
-
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction" || ticker.mode.name == "confliction")
 		var/choice = input("The shuttle will just return if you call it. Call anyway?") in list("Confirm", "Cancel")
 		if(choice == "Confirm")
@@ -877,9 +879,13 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		else
 			return
 
+	var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification") as text|null
+	var/confirm = alert(src, "Are you sure you want to call the shuttle?", "Confirm", "Yes", "Cancel")
+	if(confirm != "Yes") return
+
 	emergency_shuttle.incall()
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-	to_chat(world, sound('sound/AI/shuttlecalled.ogg'))
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.[justification ? " Justification : '[justification]'" : ""]")
+	world << sound('sound/AI/shuttlecalled.ogg')
 	feedback_add_details("admin_verb","CSHUT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] admin-called the emergency shuttle.")
 	message_admins("<span class='notice'>[key_name_admin(usr)] admin-called the emergency shuttle.</span>", 1)
@@ -972,8 +978,47 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		config.allow_random_events = 1
 		to_chat(usr, "Random events enabled")
 		message_admins("Admin [key_name_admin(usr)] has enabled random events.", 1)
+
 	else
 		config.allow_random_events = 0
 		to_chat(usr, "Random events disabled")
 		message_admins("Admin [key_name_admin(usr)] has disabled random events.", 1)
+
 	feedback_add_details("admin_verb","TRE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/save_coordinates(var/x1 as num, var/y1 as num, var/z1 as num, var/x2 as num, var/y2 as num, var/z2 as num, var/mapname as text)
+	set name     = "Save map by coordinates"
+	set category = "Fun"
+	set desc     = "(x1, y1, z1, x2, y2, z2, mapname) Saves the map beetween (x1, y1, z1) and (x2, y2, z2), and it will be sent to your client, it will also be stored in data/logs/saved_maps."
+
+	if(!check_rights(R_SERVER))
+		return
+
+	if(!(x1 && x2 && y1 && y2 && z1 && z2))
+		usr << "Not all coordinates supplied."
+		return
+
+	if(ckeyEx(mapname) != mapname || !mapname)
+		usr << "Map name contains invalid characters or is empty."
+		return
+
+	var/confirm = alert("Are you sure you want to save the map between coordinates ([x1], [y1], [z1]) and ([x2], [y2], [z2])? This can cause quite a bit of lag!", "Save map", "Yes, do it!", "No")
+	if(confirm == "No")
+		return
+
+	var/dmm_suite/DMM = new
+
+	var/turf/T1 = locate(x1, y1, z1)
+	var/turf/T2 = locate(x2, y2, z2)
+
+	var/output = DMM.write_map(T1, T2, DMM_IGNORE_MOBS)
+
+	if(fexists("data/logs/saved_maps/[mapname].dmm"))
+		fdel("data/logs/saved_maps/[mapname].dmm")
+
+	var/F = file("data/logs/saved_maps/[mapname].dmm")
+	F   << output
+	usr << ftp(F)
+
+	feedback_add_details("admin_verb", "SCO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+

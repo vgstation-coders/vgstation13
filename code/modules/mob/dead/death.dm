@@ -35,3 +35,9 @@
 
 /mob/dead/singuloCanEat()
 	return 0
+
+/mob/dead/update_canmove()
+	return
+
+/mob/dead/blob_act()
+	return

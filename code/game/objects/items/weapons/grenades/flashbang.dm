@@ -18,6 +18,7 @@
 	for(var/obj/effect/blob/B in get_hear(8,flashbang_turf))     		//Blob damage here
 		var/damage = round(15/(get_dist(B,get_turf(src))+1))
 		B.health -= damage
+		B.update_health()
 		B.update_icon()
 	qdel(src)
 
@@ -46,7 +47,7 @@
 
 //Flashing everyone
 	if(eye_safety < 1)
-		flick("e_flash", M.flash)
+		M.flash_eyes(visual = 1)
 		M.Stun(2)
 		M.Weaken(10)
 

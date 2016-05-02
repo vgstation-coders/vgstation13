@@ -128,7 +128,6 @@
 <A href='?src=\ref[src];rune=soulstone'>Kal om neth</A> - Summons a soul stone<BR>
 <A href='?src=\ref[src];rune=construct'>Da A'ig Osk</A> - Summons a construct shell for use with captured souls. It is too large to carry on your person.<BR>"}
 //<A href='?src=\ref[src];rune=armor'>Sa tatha najin</A> - Allows you to summon armoured robes and an unholy blade<BR> //Kept for reference
-	// END AUTOFIX
 	usr << browse(dat, "window=id_com;size=350x200")
 	return
 
@@ -191,7 +190,7 @@
 
 		else if(iscarbon(T))
 			var/mob/living/carbon/C = T
-			flick("e_flash", C.flash)
+			C.flash_eyes(visual = 1)
 			if (!(M_HULK in C.mutations))
 				C.silent += 15
 			C.Weaken(25)
@@ -230,11 +229,11 @@
 			continue
 		C.ear_deaf += 30
 		//talismans is weaker.
-		C.show_message("\<span class='warning'>The world around you suddenly becomes quiet.</span>", 3)
+		C.show_message("\<span class='warning'>The world around you suddenly becomes quiet.</span>")
 		affected++
 	if(affected)
 		usr.whisper("Sti[pick("'","`")] kaliedir!")
 		to_chat(usr, "<span class='warning'>Your talisman turns into gray dust, deafening everyone around.</span>")
 		for (var/mob/V in orange(1,src))
 			if(!(iscultist(V)))
-				V.show_message("<span class='warning'>Dust flows from [usr]'s hands for a moment, and the world suddenly becomes quiet..</span>", 3)
+				V.show_message("<span class='warning'>Dust flows from [usr]'s hands for a moment, and the world suddenly becomes quiet..</span>")

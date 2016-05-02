@@ -1,3 +1,4 @@
+// NOTE: If you edit these edit the chat's CSS file (/goon/browserassets/css/browserOutput.css) too.
 #define world_style {"\"body 					{font-family: Verdana, sans-serif;}
 h1, h2, h3, h4, h5, h6	{color: #0000ff;font-family: Georgia, Verdana, sans-serif;}
 em						{font-style: normal;	font-weight: bold;}
@@ -32,7 +33,8 @@ em						{font-style: normal;	font-weight: bold;}
 .supradio				{color: #5F4519;}
 .serradio				{color: #3399CC;}
 .djradio				{color: #663300;}
-.mommi					{color: navy;}
+.binaryradio			{color: #300050;	font-family: 'Courier New', Courier, monospace;}
+.mommiradio				{color: navy;}
 .alert					{color: #ff0000;}
 h1.alert, h2.alert		{color: #000000;}
 .emote					{					font-style: italic;}
@@ -42,6 +44,7 @@ h1.alert, h2.alert		{color: #000000;}
 .disarm					{color: #990000;}
 .passive				{color: #660000;}
 .danger					{color: #ff0000;	font-weight: bold;}
+.userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
 .warning				{color: #ff0000;	font-style: italic;}
 .sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
 .blob					{color: #006221;	font-weight: bold;	font-style: italic;}
@@ -73,6 +76,10 @@ h1.alert, h2.alert		{color: #000000;}
 .grey					{color: #585858; font-family: Dotum, sans-serif;}
 .skeleton				{color: #585858; font-weight: bold; font-style: italic;}
 .gutter					{color: #61380B; font-style: italic;}
+.orange					{color: #ffa500;}
+.orangei				{color: #ffa500; font-style: italic;}
+.orangeb				{color: #ffa500; font-weight: bold;}
+
 /* /vg/ */
 .good					{color: green;}
 .average				{color: #FF8000;}

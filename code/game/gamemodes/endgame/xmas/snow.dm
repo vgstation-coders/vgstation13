@@ -42,7 +42,6 @@
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		snow_amount = SNOWCOVERING_LITTLE
 		icon_state = "snow_dug"
-		mouse_opacity = 0
 		new /obj/item/stack/sheet/snow(get_turf(src), 1)
 		new /obj/item/stack/sheet/snow(get_turf(src), 1)
 		new /obj/item/stack/sheet/snow(get_turf(src), 1)
@@ -277,8 +276,8 @@
 		C.Weaken(1)
 		C.Stun(1)
 		playsound(C.loc, "swing_hit", 50, 1)
-		if(C.bodytemperature >= 265)
-			C.bodytemperature -= 5
+		if(C.bodytemperature >= T0C+30)
+			C.bodytemperature -= 0.5
 	else if(istype(hit_atom,/mob/living/simple_animal/hostile/retaliate/snowman))
 		var/mob/living/simple_animal/hostile/retaliate/snowman/S = hit_atom
 		playsound(S.loc, "swing_hit", 50, 1)
@@ -294,7 +293,7 @@
 			S.say(pick("A fight? With pleasure.","Don't forget that you're the one who started it all."))
 			S.Retaliate()
 		if(S.bodytemperature >= COSMICSNOW_MINIMALTEMP)
-			S.bodytemperature -= 5
+			S.bodytemperature -= 2
 	else	..()
 
 var/global/list/datum/stack_recipe/snow_recipes = list (
@@ -366,7 +365,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		qdel(src)
 	return
 
-/obj/structure/window/barricade/snow/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
+/obj/structure/window/barricade/snow/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
 	if(air_group || (height==0))
 		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))

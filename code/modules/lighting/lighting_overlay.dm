@@ -115,6 +115,7 @@
 
 	color = "#000000"
 
+	invisibility = INVISIBILITY_LIGHTING // Fuck you whoever put invisibility = 101 in the parent Destroy().
 
 	needs_update = 0
 
@@ -140,6 +141,15 @@
 
 /atom/movable/lighting_overlay/can_shuttle_move()
 	return 0
+
+/atom/movable/lighting_overlay/singularity_act()
+	return
+
+/atom/movable/lighting_overlay/singularity_pull()
+	return
+
+/atom/movable/lighting_overlay/blob_act()
+	return
 
 // Override here to prevent things accidentally moving around overlays.
 /atom/movable/lighting_overlay/forceMove(atom/destination, var/harderforce = 0)
