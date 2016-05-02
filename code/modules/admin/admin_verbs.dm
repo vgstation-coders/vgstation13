@@ -1092,8 +1092,12 @@ var/list/admin_verbs_mod = list(
 		return
 
 	for(var/datum/away_mission/AM in L)
-		choices[AM.name] = AM
-		to_chat(src, "<b>[AM.file_dir]</b> - <span class='info'>[(AM.desc ? AM.desc : "No description")]</span>")
+		if(AM.name)
+			choices[AM.name] = AM
+		else
+			choices[AM.file_dir] = AM
+
+		to_chat(src, "<b>[(AM.name ? AM.name : AM.file_dir)]</b> - <span class='info'>[(AM.desc ? AM.desc : "No description")]</span>")
 
 	var/choice = input(src, "Select an away mission to load. See chat for descriptions!", "AWAY MISSIONS") as null|anything in choices
 	if(!choice) return

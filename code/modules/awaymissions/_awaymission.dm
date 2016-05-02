@@ -32,7 +32,7 @@ Example of the second method:
 */
 
 /datum/away_mission
-	var/name = "My first away mission" //Name of the mission
+	var/name = "" //Name of the mission
 	var/file_dir = "" //Path of the file. Example: "maps/RandomZLevels/test.dmm"
 	var/desc //Short description. It will be visible to admins when they attempt to create an away mission
 	var/generate_randomly = 1 //If 0, don't generate this away mission randomly
