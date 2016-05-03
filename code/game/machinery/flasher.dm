@@ -97,6 +97,8 @@ var/list/obj/machinery/flasher/flashers = list()
 			var/mob/living/carbon/C = O
 			if(C.eyecheck() <= 0) // Identical to handheld flash safety check
 				C.Weaken(strength)
+		else
+			O.Weaken(strength)
 
 
 /obj/machinery/flasher/emp_act(severity)
