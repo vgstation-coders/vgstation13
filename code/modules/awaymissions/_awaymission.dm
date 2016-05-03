@@ -1,15 +1,15 @@
 //#define DISABLE_AWAYMISSIONS_ON_ROUNDSTART
 
-var/global/list/datum/away_mission/existing_away_missions = list()
+var/list/datum/away_mission/existing_away_missions = list()
 
-var/global/list/awaydestinations = list() //List of landmarks
+var/list/awaydestinations = list() //List of landmarks
 /obj/effect/landmark/awaystart
 	name = "awaystart"
 /*
 There are two ways to add an away mission to the game
 
  A) Add the map file's location to maps/RandomZLevels/fileList.txt
- B) Create a subtype of /datum/away_mission and set its file_dir to the map file's location (see below)
+ B) Create a subtype of /datum/away_mission and set its file_path to the map file's location (see below)
 
 First method sucks
 
@@ -19,7 +19,7 @@ It also lets you write a description for the away mission, as well as many other
 Example of the second method:
 
 /datum/away_mission/my_shit
-	file_dir = "maps/RandomZLevels/fresh_dump.dmm"
+	file_path = "maps/RandomZLevels/fresh_dump.dmm"
 	desc = "This stinks"
 
 ****READ THIS****
@@ -33,7 +33,7 @@ Example of the second method:
 
 /datum/away_mission
 	var/name = "" //Name of the mission
-	var/file_dir = "" //Path of the file. Example: "maps/RandomZLevels/test.dmm"
+	var/file_path = "" //Path of the file. Example: "maps/RandomZLevels/test.dmm"
 	var/desc //Short description. It will be visible to admins when they attempt to create an away mission
 	var/generate_randomly = 1 //If 0, don't generate this away mission randomly
 
@@ -60,7 +60,7 @@ Example of the second method:
 
 /datum/away_mission/empty_space
 	name = "empty space"
-	file_dir = "maps/RandomZLevels/space.dmm" //1x1 space tile. It changes its size according to the map's dimensions
+	file_path = "maps/RandomZLevels/space.dmm" //1x1 space tile. It changes its size according to the map's dimensions
 	generate_randomly = 0
 
 /datum/away_mission/empty_space/New()
@@ -69,46 +69,46 @@ Example of the second method:
 
 /datum/away_mission/arcticwaste
 	name = "arctic waste"
-	file_dir = "maps/RandomZLevels/arcticwaste.dmm"
+	file_path = "maps/RandomZLevels/arcticwaste.dmm"
 	desc = "A frozen wasteland with an underground bunker. Features a gateway."
 
 /datum/away_mission/assistantchamber
 	name = "assistant chamber"
-	file_dir = "maps/RandomZLevels/assistantChamber.dmm"
+	file_path = "maps/RandomZLevels/assistantChamber.dmm"
 	desc = "A tiny unbreachable room full of angry turrets and loot."
 
 /datum/away_mission/challenge
 	name = "emitter hell"
-	file_dir = "maps/RandomZLevels/unused/challenge.dmm"
+	file_path = "maps/RandomZLevels/unused/challenge.dmm"
 	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
 
 /datum/away_mission/spaceship
 	name = "stranded spaceship"
-	file_dir = "maps/RandomZLevels/unused/blackmarketpackers.dmm"
+	file_path = "maps/RandomZLevels/unused/blackmarketpackers.dmm"
 	desc = "A mysteriously empty shuttle crashed into the asteroid."
 
 /datum/away_mission/academy
 	name = "academy"
-	file_dir = "maps/RandomZLevels/unused/Academy.dmm"
+	file_path = "maps/RandomZLevels/unused/Academy.dmm"
 
 /datum/away_mission/beach
 	name = "beach"
-	file_dir = "maps/RandomZLevels/unused/beach.dmm"
+	file_path = "maps/RandomZLevels/unused/beach.dmm"
 	desc = "A comfy seaside area with a bar."
 
 /datum/away_mission/listeningpost
 	name = "listening post"
-	file_dir = "maps/RandomZLevels/unused/listeningpost.dmm"
+	file_path = "maps/RandomZLevels/unused/listeningpost.dmm"
 	desc = "A large asteroid with a hidden syndicate listening post. Don't forget to bring pickaxes!"
 
 /datum/away_mission/stationcollision
 	name = "station collision"
-	file_dir = "maps/RandomZLevels/unused/stationCollision.dmm"
+	file_path = "maps/RandomZLevels/unused/stationCollision.dmm"
 	desc = "A shuttlecraft crashed into a small space station, bringing aboard aliens and cultists. Features the Lord Nar-Sie himself."
 
 /datum/away_mission/wildwest
 	name = "wild west"
-	file_dir = "maps/RandomZLevels/unused/wildwest.dmm"
+	file_path = "maps/RandomZLevels/unused/wildwest.dmm"
 	desc = "An exciting adventure for the toughest adventures your station can offer. Those who defeat all of the final area's guardians will find a wish granter."
 
 
@@ -151,7 +151,7 @@ Example of the second method:
 			continue
 
 		var/datum/away_mission/AM = new /datum/away_mission
-		AM.file_dir = name
+		AM.file_path = name
 
 		potentialRandomZlevels.Add(AM)
 
@@ -179,9 +179,9 @@ Example of the second method:
 	else
 		to_chat(messages, "<span class='danger'>Loading an away mission...</span>")
 
-	log_game("Loading away mission [AM.file_dir]")
+	log_game("Loading away mission [AM.file_path]")
 
-	var/file = file(AM.file_dir)
+	var/file = file(AM.file_path)
 	if(isfile(file))
 		AM.pre_load()
 		var/list/L = maploader.load_map(file)
@@ -191,4 +191,4 @@ Example of the second method:
 		to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
 		existing_away_missions.Add(AM)
 		return
-	to_chat(messages, "<span class='danger'>Failed to load away mission [AM.file_dir] (file doesn't exist).</span>")
+	to_chat(messages, "<span class='danger'>Failed to load away mission [AM.file_path] (file doesn't exist).</span>")

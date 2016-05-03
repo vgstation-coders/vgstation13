@@ -148,7 +148,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates,
+	/client/proc/save_coordinates
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -1084,6 +1084,9 @@ var/list/admin_verbs_mod = list(
 	set name = "Create Away Mission"
 	set desc = "Creates an away mission and links it to the station's gateway."
 
+	if(!check_rights(R_SPAWN))
+		return
+
 	var/list/L = getRandomZlevels(1)
 	var/list/choices = list()
 
@@ -1095,9 +1098,9 @@ var/list/admin_verbs_mod = list(
 		if(AM.name)
 			choices[AM.name] = AM
 		else
-			choices[AM.file_dir] = AM
+			choices[AM.file_path] = AM
 
-		to_chat(src, "<b>[(AM.name ? AM.name : AM.file_dir)]</b> - <span class='info'>[(AM.desc ? AM.desc : "No description")]</span>")
+		to_chat(src, "<b>[(AM.name ? AM.name : AM.file_path)]</b> - <span class='info'>[(AM.desc ? AM.desc : "No description")]</span>")
 
 	var/choice = input(src, "Select an away mission to load. See chat for descriptions!", "AWAY MISSIONS") as null|anything in choices
 	if(!choice) return
@@ -1109,12 +1112,12 @@ var/list/admin_verbs_mod = list(
 
 	var/override = 0
 	if(existing_away_missions.len)
-		var/abba = input(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway?") as null|anything in list("Yes", "No")
+		var/abba = alert(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway?", "AWAY MISSIONS", "Yes", "No")
 		if(!abba) return
 
 		if(abba == "Yes")
 			override = 1
 
-	to_chat(src, "Attempting to load [AM.name] ([AM.file_dir])...")
+	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
 	createRandomZlevel(override, AM, usr)
 	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")

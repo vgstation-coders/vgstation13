@@ -510,15 +510,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(ticker)
 		initialize()
 
-/turf/unsimulated/floor/asteroid/fast
-	oxygen = 0
-	nitrogen = 0
-	dynamic_lighting = 0
-	luminosity = 1
-
-/turf/unsimulated/floor/asteroid/fast/initialize() //This subtype exists in case you want to fill a 500x500 square with asteroid floors without the server dying
-	return
-
 /turf/unsimulated/floor/asteroid/initialize()
 	updateMineralOverlays()
 
