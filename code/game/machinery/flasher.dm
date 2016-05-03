@@ -93,7 +93,10 @@ var/list/obj/machinery/flasher/flashers = list()
 		if(istype(O, /mob/living))
 			var/mob/living/L = O
 			L.flash_eyes(affect_silicon = 1)
-		O.Weaken(strength)
+		if(isype(O, /mob/living/carbon))
+			var/mob/living/carbon/C = O
+			if(O.eyecheck() <= 0) // Identical to handheld flash safety check
+				O.Weaken(strength)
 
 
 /obj/machinery/flasher/emp_act(severity)
