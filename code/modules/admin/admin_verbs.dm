@@ -1083,7 +1083,7 @@ var/list/admin_verbs_mod = list(
 	set category = "Admin"
 	set name = "Create Away Mission"
 	set desc = "Creates an away mission and links it to the station's gateway."
-
+	//Check admin rights
 	if(!check_rights(R_SPAWN))
 		return
 
