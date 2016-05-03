@@ -38,6 +38,7 @@ Example of the second method:
 	var/generate_randomly = 1 //If 0, don't generate this away mission randomly
 
 	var/datum/zLevel/zLevel
+	var/turf/location
 
 /datum/away_mission/proc/pre_load() //Called before loading the map
 	return
@@ -54,7 +55,8 @@ Example of the second method:
 	for(var/obj/effect/landmark/awaystart/L in landmarks_list)
 		awaydestinations.Add(L)
 
-
+	if(objects.len)
+		location = get_turf(pick(objects))
 
 /datum/away_mission/empty_space
 	name = "empty space"

@@ -1117,4 +1117,4 @@ var/list/admin_verbs_mod = list(
 
 	to_chat(src, "Attempting to load [AM.name] ([AM.file_dir])...")
 	createRandomZlevel(override, AM, usr)
-	to_chat(src, "The away mission has been generated on z-level [world.maxz]")
+	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
