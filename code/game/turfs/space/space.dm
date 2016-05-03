@@ -3,6 +3,7 @@
 	name = "\proper space"
 	desc = "The final frontier."
 	icon_state = "0"
+	plane = VOID_LAYER_PLANE //Crunch this into the void for hot parallax stuff
 
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
@@ -17,7 +18,8 @@
 		var/area/A = loc
 		A.area_turfs += src
 
-	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	//icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	icon_state = "parallax_void" //New parallax needs space to be straight up white
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

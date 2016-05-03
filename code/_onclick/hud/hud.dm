@@ -165,6 +165,7 @@ var/global/obj/screen/clicker/catcher = new()
 		mymob:schematics_background = using
 
 	reload_fullscreen()
+	initialize_parallax()
 
 //Triggered when F12 is pressed (Unless someone changed something in the DMF)
 /mob/verb/button_pressed_F12()

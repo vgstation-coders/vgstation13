@@ -14,13 +14,6 @@
 			to_chat(user, "<span class='sinister'>All you hear on the frequency is static and panicked screaming. There will be no shuttle call today.</span>")
 	return 0
 
-/datum/universal_state/supermatter_cascade/OnTurfChange(var/turf/T)
-	if(T.name == "space")
-		T.overlays += "end01"
-		T.underlays -= "end01"
-	else
-		T.overlays -= "end01"
-
 /datum/universal_state/supermatter_cascade/DecayTurf(var/turf/T)
 	if(istype(T,/turf/simulated/wall))
 		var/turf/simulated/wall/W=T
@@ -43,10 +36,15 @@
 
 	world << sound('sound/effects/cascade.ogg')
 
+	for(var/area/A in areas)
+		if(A.parallax_icon_state == "space") //Bit hardcoded, but we don't want to swap warpspace sprites
+			A.parallax_icon_state = "space_worldend" //Space slowly strobes in and out
+
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/living))
 			var/mob/living/L = M
 			L.flash_eyes(visual = 1)
+			L.hud_used.update_parallax() //Update the parallax
 
 	if(emergency_shuttle.direction==2)
 		captain_announce("The emergency shuttle has returned due to bluespace distortion.")

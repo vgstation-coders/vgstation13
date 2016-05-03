@@ -376,6 +376,8 @@
 
 	var/mob/M = Obj
 
+	M.hud_used.update_parallax()
+
 	// /vg/ - EVENTS!
 	CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea))
 

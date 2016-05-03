@@ -31,15 +31,7 @@ In short:
 			qdel(L)
 	return
 
-
-/datum/universal_state/hell/OnTurfChange(var/turf/T)
-	if(T.name == "space")
-		T.overlays += "hell01"
-		T.underlays -= "hell01"
-	else
-		T.overlays -= "hell01"
-
-// Apply changes when entering state
+//Apply changes when entering state
 /datum/universal_state/hell/OnEnter()
 	set background = 1
 	/*
@@ -48,6 +40,13 @@ In short:
 
 	emergency_shuttle.force_shutdown()
 	*/
+
+	for(var/area/A in areas)
+		if(A.parallax_icon_state == "space") //Bit hardcoded, but we don't want to swap warpspace sprites
+			A.parallax_icon_state = "space_worldend" //Space slowly strobes in and out
+
+	for(var/mob/M in player_list)
+		M.hud_used.update_parallax() //Update the parallax
 
 	escape_list = get_area_turfs(locate(/area/hallway/secondary/exit))
 	tcheck(80,1)
