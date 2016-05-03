@@ -1,7 +1,7 @@
 //Restores our verbs. It will only restore verbs allowed during lesser (monkey) form if we are not human
 /mob/proc/make_changeling()
 	if(!mind)				return
-	if(!mind.changeling)	mind.changeling = new /datum/changeling(gender)
+	if(!mind.changeling)	mind.changeling = new /datum/changeling(src, gender)
 	verbs += /datum/changeling/proc/EvolutionMenu
 
 	var/lesser_form = !ishuman(src)
@@ -962,4 +962,4 @@ var/list/datum/dna/hivemind_bank = list()
 
 	feedback_add_details("changeling_powers","ED")
 	return 1
-	
+

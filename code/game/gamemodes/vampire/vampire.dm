@@ -283,25 +283,10 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		obj_count++
 	return
 
-/datum/vampire
-	var/bloodtotal = 0 // CHANGE TO ZERO WHEN PLAYTESTING HAPPENS
-	var/bloodusable = 0 // CHANGE TO ZERO WHEN PLAYTESTING HAPPENS
-	var/mob/living/owner = null
-	var/gender = FEMALE
-	var/iscloaking = 0 // handles the vampire cloak toggle
-	var/ismenacing = 0 // handles the vampire menace toggle
-	var/list/powers = list() // list of available powers and passives, see defines in setup.dm
-	var/mob/living/carbon/human/draining // who the vampire is draining of blood
-	var/nullified = 0 //Nullrod makes them useless for a short while.
-	var/smitecounter = 0 //Keeps track of how badly the vampire has been affected by holy tiles.
-
-/datum/vampire/New(gend = FEMALE)
-	gender = gend
-
 /mob/living/proc/make_vampire()
 	if(!mind) return
 	if(!mind.vampire)
-		mind.vampire = new /datum/vampire(gender)
+		mind.vampire = new /datum/vampire(src, gender)
 		mind.vampire.owner = src
 	callOnLife += list("\ref[mind.vampire]" = "OnLife")
 	verbs += /client/proc/vampire_rejuvinate
