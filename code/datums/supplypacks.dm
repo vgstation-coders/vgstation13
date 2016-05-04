@@ -420,12 +420,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/under/dress/dress_pink,
 					/obj/item/clothing/under/dress/dress_yellow,
 					/obj/item/clothing/under/dress/dress_saloon,
+					/obj/item/clothing/head/hairflower,
 					/obj/item/clothing/under/wedding/bride_orange,
 					/obj/item/clothing/under/wedding/bride_purple,
 					/obj/item/clothing/under/wedding/bride_blue,
 					/obj/item/clothing/under/wedding/bride_red,
 					/obj/item/clothing/under/wedding/bride_white,
 					/obj/item/clothing/under/sundress,
+					/obj/item/clothing/under/color/blackf,
 					/obj/item/weapon/lipstick/random,
 					/obj/item/weapon/lipstick/random)
 	cost = 30
