@@ -329,7 +329,8 @@
 		fC.yo = target.y - start.y
 		fC.xo = target.x - start.x
 
-		if(!CanAttack(fC.process()))
+		var/atom/potentialImpact = fC.process()
+		if(potentialImpact && !CanAttack(potentialImpact))
 			returnToPool(fC)
 			return 0
 		returnToPool(fC)
