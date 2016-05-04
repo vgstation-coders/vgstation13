@@ -5,6 +5,7 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+	/*
 	var/dira=""
 	var/i=0
 	switch(pushdirection)
@@ -35,6 +36,8 @@
 			icon_state="black"
 	if(icon_state != "black")
 		icon_state = "speedspace_[dira]_[i]"
+	*/
+	icon_state = "parallax_void" //New parallax needs space to be straight up white
 
 /turf/space/transit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 0)
 	return ..(N, tell_universe, 1, allow)
