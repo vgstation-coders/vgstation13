@@ -52,10 +52,18 @@ Example of the second method:
 	if(accessable_z_levels.len >= z)
 		zLevel = accessable_z_levels[z]
 
-	for(var/obj/effect/landmark/awaystart/L in landmarks_list)
+	for(var/obj/effect/landmark/L in objects) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
+		if(L.name != "awaystart") continue
+
 		awaydestinations.Add(L)
 
-	if(objects.len)
+		if(!location)
+			location = get_turf(L)
+
+	for(var/obj/machinery/gateway/G in objects)
+		G.initialize()
+
+	if(objects.len && !location)
 		location = get_turf(pick(objects))
 
 /datum/away_mission/empty_space
@@ -76,6 +84,7 @@ Example of the second method:
 	name = "assistant chamber"
 	file_path = "maps/RandomZLevels/assistantChamber.dmm"
 	desc = "A tiny unbreachable room full of angry turrets and loot."
+	generate_randomly = 0
 
 /datum/away_mission/challenge
 	name = "emitter hell"
@@ -94,7 +103,8 @@ Example of the second method:
 /datum/away_mission/beach
 	name = "beach"
 	file_path = "maps/RandomZLevels/unused/beach.dmm"
-	desc = "A comfy seaside area with a bar."
+	desc = "A small, comfy seaside area with a bar."
+	generate_randomly = 0
 
 /datum/away_mission/listeningpost
 	name = "listening post"
@@ -111,10 +121,11 @@ Example of the second method:
 	file_path = "maps/RandomZLevels/unused/wildwest.dmm"
 	desc = "An exciting adventure for the toughest adventures your station can offer. Those who defeat all of the final area's guardians will find a wish granter."
 
+var/static/list/away_mission_subtypes = typesof(/datum/away_mission) - /datum/away_mission
 
 //Returns a list containing /datum/away_mission objects.
 /proc/getRandomZlevels(include_unrandom = 0)
-	var/list/potentialRandomZlevels = typesof(/datum/away_mission) - /datum/away_mission
+	var/list/potentialRandomZlevels = away_mission_subtypes.Copy()
 	for(var/T in potentialRandomZlevels) //Fill the list with away mission datums (because currently it only contains paths)
 		potentialRandomZlevels.Add(new T)
 		potentialRandomZlevels.Remove(T)

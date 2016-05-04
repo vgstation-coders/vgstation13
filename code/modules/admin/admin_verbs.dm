@@ -45,6 +45,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/jumptomob,				/*allows us to jump to a specific mob*/
 	/client/proc/jumptoturf,			/*allows us to jump to a specific turf*/
 	/client/proc/jumptovault,			/*allows us to jump to a specific vault*/
+	/client/proc/jumptoaway,			/*allows us to jump to a specific away mission*/
 	/client/proc/admin_call_shuttle,	/*allows us to call the emergency shuttle*/
 	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcomm*/
 	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
@@ -1094,6 +1095,8 @@ var/list/admin_verbs_mod = list(
 		to_chat(src, "No away missions found.")
 		return
 
+	to_chat(src, "<span class='danger'>WARNING: Loading large away missions may temporarily hang up the server. Usually the lag will last for less than a minute.</span><hr>")
+
 	for(var/datum/away_mission/AM in L)
 		if(AM.name)
 			choices[AM.name] = AM
@@ -1112,7 +1115,7 @@ var/list/admin_verbs_mod = list(
 
 	var/override = 0
 	if(existing_away_missions.len)
-		var/abba = alert(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway?", "AWAY MISSIONS", "Yes", "No")
+		var/abba = alert(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway? If there are more than two away mission gateways, the station gateway will be able to teleport its users to both of them.", "AWAY MISSIONS", "Yes", "No")
 		if(!abba) return
 
 		if(abba == "Yes")
