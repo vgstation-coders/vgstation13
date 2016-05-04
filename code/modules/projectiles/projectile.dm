@@ -649,27 +649,6 @@ var/list/impact_master = list()
 			bresenham_step(dist_y,dist_x,dy,dx)
 	return impact
 
-/obj/item/projectile/friendlyCheck/bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	kill_count--
-	total_steps++
-	if(error < 0)
-		var/atom/step = get_step(src, dB)
-		if(!step)
-			bullet_die()
-		src.Move(step)
-		error += distA
-		bump_original_check()
-	else
-		var/atom/step = get_step(src, dA)
-		if(!step)
-			bullet_die()
-		src.Move(step)
-		error -= distB
-		dir = dA
-		if(error < 0)
-			dir = dA + dB
-		bump_original_check()
-
 /obj/item/projectile/friendlyCheck/Bump(var/atom/A)
 	if(bumped)	return 0
 
