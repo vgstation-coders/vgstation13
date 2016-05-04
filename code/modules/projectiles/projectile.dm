@@ -670,7 +670,7 @@ var/list/impact_master = list()
 			dir = dA + dB
 		bump_original_check()
 
-/obj/item/projectile/friendlyCheck/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/friendlyCheck/Bump(var/atom/A)
 	if(bumped)	return 0
 
 	bumped = 1
@@ -679,12 +679,6 @@ var/list/impact_master = list()
 		var/obj/structure/bed/chair/vehicle/JC = A
 		if(JC.occupant)
 			impact = JC.occupant
-			return
-
-	if(istype(A, /obj/mecha))
-		var/obj/mecha/M = A
-		if(M.occupant)
-			impact = M.occupant
 			return
 
 	if(ismob(A) || isturf(A) || isobj(A))
