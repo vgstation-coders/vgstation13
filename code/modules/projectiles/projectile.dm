@@ -632,3 +632,63 @@ var/list/impact_master = list()
 /obj/item/projectile/attack_hand(mob/user)
 	if(timestopped)
 		..()
+
+/obj/item/projectile/friendlyCheck
+	invisibility = 101
+	rotate = 0
+	damage = 0
+	nodamage = 1
+	var/atom/impact = null
+
+/obj/item/projectile/friendlyCheck/process()
+	OnFired()
+	while(!impact && loc && (kill_count > 0))
+		if(dist_x > dist_y)
+			bresenham_step(dist_x,dist_y,dx,dy)
+		else
+			bresenham_step(dist_y,dist_x,dy,dx)
+	return impact
+
+/obj/item/projectile/friendlyCheck/bresenham_step(var/distA, var/distB, var/dA, var/dB)
+	kill_count--
+	total_steps++
+	if(error < 0)
+		var/atom/step = get_step(src, dB)
+		if(!step)
+			bullet_die()
+		src.Move(step)
+		error += distA
+		bump_original_check()
+	else
+		var/atom/step = get_step(src, dA)
+		if(!step)
+			bullet_die()
+		src.Move(step)
+		error -= distB
+		dir = dA
+		if(error < 0)
+			dir = dA + dB
+		bump_original_check()
+
+/obj/item/projectile/friendlyCheck/Bump(atom/A as mob|obj|turf|area)
+	if(bumped)	return 0
+
+	bumped = 1
+
+	if(istype(A, /obj/structure/bed/chair/vehicle))
+		var/obj/structure/bed/chair/vehicle/JC = A
+		if(JC.occupant)
+			impact = JC.occupant
+			return
+
+	if(istype(A, /obj/mecha))
+		var/obj/mecha/M = A
+		if(M.occupant)
+			impact = M.occupant
+			return
+
+	if(ismob(A) || isturf(A) || isobj(A))
+		impact = A
+		return
+
+	return
