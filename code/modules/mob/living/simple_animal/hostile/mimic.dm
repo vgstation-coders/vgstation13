@@ -168,7 +168,7 @@ var/global/list/crate_mimic_disguises = list(\
 		var/obj/structure/C = new copied_object(get_turf(src))
 		//Drop all loot!
 		for(var/atom/movable/AM in src)
-			AM.loc = C
+			AM.forceMove(C)
 	
 	..()
 
