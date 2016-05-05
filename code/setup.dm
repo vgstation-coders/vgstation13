@@ -447,6 +447,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 	//2spooky
 #define SKELETON 29
 #define PLANT 30
+#define SKELEVOX 31
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe

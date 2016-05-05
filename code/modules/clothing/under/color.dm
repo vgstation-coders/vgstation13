@@ -33,7 +33,7 @@
 	item_state = "gy_suit"
 	_color = "grey"
 	flags = FPRINT  | ONESIZEFITSALL
-	species_fit = list("Vox")
+	species_fit = list(vox_shaped)
 
 /obj/item/clothing/under/color/orange
 	name = "orange jumpsuit"

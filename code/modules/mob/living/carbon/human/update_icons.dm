@@ -184,6 +184,7 @@ var/global/list/damage_icon_parts = list()
 	var/fat = (M_FAT in src.mutations) && (species && species.flags & CAN_BE_FAT)
 	var/hulk = (M_HULK in src.mutations) && species.name == "Horror" // Part of the species.
 	var/skeleton = (SKELETON in src.mutations)
+	var/skelevox = (SKELEVOX in src.mutations)
 
 	var/g = "m"
 	if(gender == FEMALE)	g = "f"
@@ -242,7 +243,7 @@ var/global/list/damage_icon_parts = list()
 				stand_icon.Blend(temp, ICON_OVERLAY)
 
 	//Skin tone
-	if(!skeleton && !husk && !hulk && (species.flags & HAS_SKIN_TONE))
+	if(!skeleton && !skelevox && !husk && !hulk && (species.flags & HAS_SKIN_TONE))
 		if(s_tone >= 0)
 			stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 		else
@@ -411,6 +412,9 @@ var/global/list/damage_icon_parts = list()
 	var/skeleton = (SKELETON in src.mutations)
 	if(skeleton)
 		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
+	var/skelevox = (SKELEVOX in src.mutations)
+	if(skelevox)
+		race_icon = 'icons/mob/human_races/vox/r_voxboney.dmi'
 	else
 		//Icon data is kept in species datums within the mob.
 		if(species && istype(species, /datum/species))

@@ -7,7 +7,7 @@
 	w_class = 2
 	gas_transfer_coefficient = 0.10
 	permeability_coefficient = 0.50
-	species_fit = list("Vox")
+	species_fit = list(vox_shaped)
 	can_flip = 1
 
 
@@ -18,7 +18,7 @@
 	icon_state = "medical"
 	item_state = "medical"
 	permeability_coefficient = 0.01
-	species_fit = list("Vox")
+	species_fit = list(vox_shaped)
 
 /obj/item/clothing/mask/breath/vox
 	desc = "A weirdly-shaped breath mask."
@@ -26,4 +26,4 @@
 	icon_state = "voxmask"
 	item_state = "voxmask"
 	permeability_coefficient = 0.01
-	species_restricted = list("Vox")
+	species_restricted = list(vox_shaped)

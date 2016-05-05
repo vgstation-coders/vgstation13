@@ -29,6 +29,8 @@
 
 #define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
+#define isskelevox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skelevox))
+
 #define isbrain(A) istype(A, /mob/living/carbon/brain)
 
 #define isalien(A) istype(A, /mob/living/carbon/alien)
@@ -130,6 +132,10 @@
 #define isclient(A) (istype(A, /client))
 
 #define isatom(A) (istype(A, /atom))
+
+#define isskeletal(A) (isskellington(A) || isskelevox(A))
+
+#define isvoxish(A) (isvox(A) || isskelevox(A))
 
 //Macros for antags
 
