@@ -1984,7 +1984,9 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Vox Solar Maintenance"
 	icon_state = "SolarcontrolS"
 
-
+/area/vox_trading_post/docking
+	name = "\improper Vox Trade Docks"
+	icon_state = "hallS"
 
 // Telecommunications Satellite
 /area/tcommsat
