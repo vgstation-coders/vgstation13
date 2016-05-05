@@ -11,6 +11,7 @@
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = 3.21 // Windows are at 3.2.
+	density = 1
 
 	penetration_dampening = 1
 
