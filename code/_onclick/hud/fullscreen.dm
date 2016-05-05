@@ -51,7 +51,7 @@
 		var/list/screens = mymob.screens
 		for(var/category in screens)
 			var/obj/A = screens[category]
-			if(!istype(A, /obj/screen))
+			if(istype(A, /atom) && !istype(A, /obj/screen))
 				log_debug("Wrong type of object in screens, type [A.type]")
 				continue
 			mymob.client.screen |= A
