@@ -275,40 +275,26 @@
 	if(istype(H))
 		src.friends |= H.friends
 
-/mob/living/simple_animal/hostile/proc/OpenFire(var/target)
-	var/tturf = get_turf(target)
+/mob/living/simple_animal/hostile/proc/OpenFire(var/atom/ttarget)
+	var/target_turf = get_turf(ttarget)
 	if(rapid)
 		spawn(1)
-			if(Shoot(tturf, src.loc, src))
-				ranged_cooldown = ranged_cooldown_cap
-				if(ranged_message)
-					visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
-				if(casingtype)
-					new casingtype(get_turf(src))
+			TryToShoot(target_turf)
 		spawn(4)
-			if(Shoot(tturf, src.loc, src))
-				ranged_cooldown = ranged_cooldown_cap
-				if(ranged_message)
-					visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
-				if(casingtype)
-					new casingtype(get_turf(src))
+			TryToShoot(target_turf)
 		spawn(6)
-			if(Shoot(tturf, src.loc, src))
-				ranged_cooldown = ranged_cooldown_cap
-				if(ranged_message)
-					visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
-				if(casingtype)
-					new casingtype(get_turf(src))
+			TryToShoot(target_turf)
 	else
-		if(Shoot(tturf, src.loc, src))
-			ranged_cooldown = ranged_cooldown_cap
-			if(ranged_message)
-				visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
-			if(casingtype)
-				new casingtype(get_turf(src))
-
-
+		TryToShoot(target_turf)
 	return
+
+/mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf)
+	if(Shoot(target_turf, src.loc, src))
+		ranged_cooldown = ranged_cooldown_cap
+		if(ranged_message)
+			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
+		if(casingtype)
+			new casingtype(get_turf(src))
 
 /mob/living/simple_animal/hostile/proc/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(target == start)
