@@ -35,8 +35,17 @@
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "remains_skull"
 
-/obj/structure/skulltest/attack_hand(mob/user)
-	animate(src, color = "#FFFFFF", time = 10, loop = -1, easing = SINE_EASING)
+/obj/structure/skulltest/A/attack_hand(mob/user)
+	animate(src, color = list(list(1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0)), time = 10, loop = -1, easing = SINE_EASING)
+
+/obj/structure/skulltest/B/attack_hand(mob/user)
+	animate(src, color = list(1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0), time = 10, loop = -1, easing = SINE_EASING)
+
+/obj/structure/skulltest/C/attack_hand(mob/user)
+	animate(src, color = list(list(1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0),list(0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0)), time = 10, loop = -1, easing = SINE_EASING)
+
+/obj/structure/skulltest/D/attack_hand(mob/user)
+	animate(src, color = list(list(1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0),list(0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0),list(1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0)), time = 10, loop = -1, easing = SINE_EASING)
 
 /obj/effect/decal/remains/xeno
 	name = "remains"
