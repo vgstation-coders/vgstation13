@@ -318,6 +318,15 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "shuttlered2"
 // === Trying to remove these areas:
 
+/area/shuttle/trade
+	name = "\improper Vox Trade Ship"
+	icon_state = "yellow"
+
+/area/shuttle/trade/start
+	name = "\improper Vox Trade Ship"
+	icon_state = "yellow"
+	requires_power = 0
+
 /area/shuttle/research
 	name = "\improper Research Shuttle"
 	music = "music/escape.ogg"
@@ -1912,6 +1921,10 @@ proc/process_adminbus_teleport_locs()
 
 	general_area = /area/vox_trading_post
 	general_area_name = "Vox Trade Outpost"
+
+/area/vox_trading_post/start
+	name = "\improper Vox Trade Ship"
+	icon_state = "yellow"
 
 /area/vox_trading_post/trading_floor
 	name = "\improper Vox Trading Floor"
