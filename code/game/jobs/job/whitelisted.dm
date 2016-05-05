@@ -7,8 +7,8 @@
 	spawn_positions = 3
 	supervisors = "nobody"
 	selection_color = "#dddddd"
-	access = list()
-	minimal_access = list()
+	access = list(access_trade)
+	minimal_access = list(access_trade)
 	alt_titles = list("Merchant","Traveler","Vagabond")
 
 	species_whitelist = list("Vox")
