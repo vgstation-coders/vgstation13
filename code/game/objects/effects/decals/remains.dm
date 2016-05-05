@@ -28,6 +28,16 @@
 	force = 5
 	throwforce = 10
 
+
+/obj/structure/skulltest
+	name = "skull"
+	desc = "To be or not to be..."
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "remains_skull"
+
+/obj/structure/skulltest/attack_hand(mob/user)
+	animate(src, color = "#FFFFFF", time = 10, loop = -1, easing = SINE_EASING)
+
 /obj/effect/decal/remains/xeno
 	name = "remains"
 	desc = "They look like the remains of something... alien. They have a strange aura about them."

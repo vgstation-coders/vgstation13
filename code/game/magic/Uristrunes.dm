@@ -20,7 +20,7 @@ var/list/word_to_uristrune_table = null
 
 
 
-/proc/get_uristrune_cult(word1, word2, word3,var/mob/living/M = null)
+/obj/effect/rune/proc/get_uristrune_cult(word1, word2, word3,var/mob/living/M = null)
 	var/animated
 
 	if((word1 == cultwords["travel"] && word2 == cultwords["self"])						\
@@ -115,7 +115,7 @@ var/list/word_to_uristrune_table = null
 
 var/list/uristrune_cache = list()
 
-/proc/get_uristrune(symbol_bits, animated = 0, bloodcolor = "#A10808")
+/obj/effect/rune/proc/get_uristrune(symbol_bits, animated = 0, bloodcolor = "#A10808")
 	var/lookup = "[symbol_bits]-[animated]-[bloodcolor]"
 
 	if(lookup in uristrune_cache)
@@ -262,4 +262,4 @@ var/list/uristrune_cache = list()
 
 	uristrune_cache[lookup] = result
 
-	return result
+	icon = result

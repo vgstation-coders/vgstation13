@@ -197,7 +197,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	return
 
 /obj/effect/rune/proc/check_icon(var/mob/M = null)
-	icon = get_uristrune_cult(word1, word2, word3, M)
+	get_uristrune_cult(word1, word2, word3, M)
 
 /obj/item/weapon/tome
 	name = "arcane tome"
