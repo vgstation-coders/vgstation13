@@ -232,15 +232,16 @@ By design, d1 is the smallest direction and d2 is the highest
 
 // shock the user with probability prb
 /obj/structure/cable/proc/shock(mob/user, prb, siemens_coeff = 1.0)
-	if((get_powernet()) && (powernet.avail > 1000))
-		if(!prob(prb))
-			return 0
+	if(src.d1 == 0) // Same as get_cable_node except that we're checking the cable clicked, not the turf.
+		if((get_powernet()) && (powernet.avail > 1000))
+			if(!prob(prb))
+				return 0
 
-		if(electrocute_mob(user, powernet, src, siemens_coeff))
-			var/datum/effect/effect/system/spark_spread/s = new
-			s.set_up(5,1,src)
-			s.start()
-			return 1
+			if(electrocute_mob(user, powernet, src, siemens_coeff))
+				var/datum/effect/effect/system/spark_spread/s = new
+				s.set_up(5,1,src)
+				s.start()
+				return 1
 
 	return 0
 
