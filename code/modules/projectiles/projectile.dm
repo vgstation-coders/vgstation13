@@ -649,19 +649,17 @@ var/list/impact_master = list()
 			bresenham_step(dist_y,dist_x,dy,dx)
 	return impact
 
-/obj/item/projectile/friendlyCheck/Bump(var/atom/A)
-	if(bumped)	return 0
-
-	bumped = 1
-
+/obj/item/projectile/proc/get_hit_atom(var/atom/A)
 	if(istype(A, /obj/structure/bed/chair/vehicle))
 		var/obj/structure/bed/chair/vehicle/JC = A
 		if(JC.occupant)
-			impact = JC.occupant
-			return
+			return JC.occupant
+	return A
+
+/obj/item/projectile/friendlyCheck/Bump(var/atom/A)
+	if(bumped)
+		return 0
+	bumped = 1
 
 	if(ismob(A) || isturf(A) || isobj(A))
-		impact = A
-		return
-
-	return
+		impact = get_hit_atom(A)
