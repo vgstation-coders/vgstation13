@@ -693,7 +693,7 @@
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)
-		new /obj/item/weapon/rack_parts(src.loc)
+		new /obj/item/weapon/rack_parts(loc)
 		qdel(src)
 
 /obj/structure/rack/kick_act()
