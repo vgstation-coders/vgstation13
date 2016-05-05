@@ -163,103 +163,24 @@ var/list/uristrune_cache = list()
 					if(ne == "#000000" || se == "#000000" || nw == "#000000" || sw == "#000000")
 						I.DrawBox(bc2, x, y)
 
-	var/icon/result = icon(I, "")
-
 	I.MapColors(0.5,0,0,0,0.5,0,0,0,0.5)//we'll darken that color a bit
 
-	var/icon/I1 = icon(I, "")
-	I1.MapColors(1,0.05,0,0,1,0.05,0.05,0,1)
-	result.Insert(I1,  "", frame = 1, delay = 10)
+	icon = I
 
-/*
-	I.MapColors(rgb(0x80,0,0,0), rgb(0,0x80,0,0), rgb(0,0,0x80,0), rgb(0,0,0,0xff))//we'll darken that color a bit
-
-	var/icon/I1 = icon(I, "")
-	I1.MapColors(rgb(0xff,0x08,0,0), rgb(0,0xff,0x08,0), rgb(0x08,0,0xff,0), rgb(0,0,0,0xff))
-	result.Insert(I1,  "", frame = 1, delay = 10)
-*/
-
-	if(animated == 1)
-		var/icon/I2 = icon(I, "")
-		I2.MapColors(1.125,0.06,0,0,1.125,0.06,0.06,0,1.125)
-
-		var/icon/I3 = icon(I, "")
-		I3.MapColors(1.25,0.12,0,0,1.25,0.12,0.12,0,1.25)
-
-		var/icon/I4 = icon(I, "")
-		I4.MapColors(1.375,0.19,0,0,1.375,0.19,0.19,0,1.375)
-
-		var/icon/I5 = icon(I, "")
-		I5.MapColors(1.5,0.27,0,0,1.5,0.27,0.27,0,1.5)
-
-		var/icon/I6 = icon(I, "")
-		I6.MapColors(1.625,0.35,0.06,0.06,1.625,0.35,0.35,0.06,1.625)
-
-		var/icon/I7 = icon(I, "")
-		I7.MapColors(1.75,0.45,0.12,0.12,1.75,0.45,0.45,0.12,1.75)
-
-		var/icon/I8 = icon(I, "")
-		I8.MapColors(1.875,0.56,0.19,0.19,1.875,0.56,0.56,0.19,1.875)
-
-		var/icon/I9 = icon(I, "")
-		I9.MapColors(2,0.67,0.27,0.27,2,0.67,0.67,0.27,2)
-
-/*
-	I.MapColors(rgb(0x80,0,0,0), rgb(0,0x80,0,0), rgb(0,0,0x80,0), rgb(0,0,0,0xff))//we'll darken that color a bit
-
-	var/icon/I1 = icon(I, "")
-	I1.MapColors(rgb(0xff,0x08,0,0), rgb(0,0xff,0x08,0), rgb(0x08,0,0xff,0), rgb(0,0,0,0xff))
-	result.Insert(I1,  "", frame = 1, delay = 10)
-
-	if(animated == 1)
-		var/icon/I2 = icon(I, "")
-		I2.MapColors(rgb(0xff,0x0c,0,0), rgb(0,0xff,0x0c,0), rgb(0x0c,0,0xff,0), rgb(0,0,0,0xff))
-		I2.SetIntensity(1.125)
-
-		var/icon/I3 = icon(I, "")
-		I3.MapColors(rgb(0xff,0x18,0,0), rgb(0,0xff,0x18,0), rgb(0x18,0,0xff,0), rgb(0,0,0,0xff))
-		I3.SetIntensity(1.25)
-
-		var/icon/I4 = icon(I, "")
-		I4.MapColors(rgb(0xff,0x24,0,0), rgb(0,0xff,0x24,0), rgb(0x24,0,0xff,0), rgb(0,0,0,0xff))
-		I4.SetIntensity(1.375)
-
-		var/icon/I5 = icon(I, "")
-		I5.MapColors(rgb(0xff,0x30,0,0), rgb(0,0xff,0x30,0), rgb(0x30,0,0xff,0), rgb(0,0,0,0xff))
-		I5.SetIntensity(1.5)
-
-		var/icon/I6 = icon(I, "")
-		I6.MapColors(rgb(0xff,0x36,0x0c,0), rgb(0x0c,0xff,0x36,0), rgb(0x36,0x0c,0xff,0), rgb(0,0,0,0xff))
-		I6.SetIntensity(1.625)
-
-		var/icon/I7 = icon(I, "")
-		I7.MapColors(rgb(0xff,0x42,0x18,0), rgb(0x18,0xff,0x42,0), rgb(0x42,0x18,0xff,0), rgb(0,0,0,0xff))
-		I7.SetIntensity(1.75)
-
-		var/icon/I8 = icon(I, "")
-		I8.MapColors(rgb(0xff,0x48,0x24,0), rgb(0x24,0xff,0x48,0), rgb(0x48,0x24,0xff,0), rgb(0,0,0,0xff))
-		I8.SetIntensity(1.875)
-
-		var/icon/I9 = icon(I, "")
-		I9.MapColors(rgb(0xff,0x54,0x30,0), rgb(0x30,0xff,0x54,0), rgb(0x54,0x30,0xff,0), rgb(0,0,0,0xff))
-		I9.SetIntensity(2)
-*/
-		result.Insert(I2, "", frame = 2, delay = 2)
-		result.Insert(I3, "", frame = 3, delay = 2)
-		result.Insert(I4, "", frame = 4, delay = 1.5)
-		result.Insert(I5, "", frame = 5, delay = 1.5)
-		result.Insert(I6, "", frame = 6, delay = 1)
-		result.Insert(I7, "", frame = 7, delay = 1)
-		result.Insert(I8, "", frame = 8, delay = 1)
-		result.Insert(I9, "", frame = 9, delay = 5)
-		result.Insert(I8, "", frame = 10, delay = 1)
-		result.Insert(I7, "", frame = 11, delay = 1)
-		result.Insert(I6, "", frame = 12, delay = 1)
-		result.Insert(I5, "", frame = 13, delay = 1)
-		result.Insert(I4, "", frame = 14, delay = 1)
-		result.Insert(I3, "", frame = 15, delay = 1)
-		result.Insert(I2, "", frame = 16, delay = 1)
-
-	uristrune_cache[lookup] = result
-
-	icon = result
+	if(animated)//This masterpiece of a color matrix stack produces a nice animation no matter which color was the blood used for the rune.
+		animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
+		animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
+		animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
+		animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)//4
+		animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)//5
+		animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+		animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+		animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+		animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)//9
+		animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+		animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+		animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+		animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)//5
+		animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
+		animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
+		animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2
