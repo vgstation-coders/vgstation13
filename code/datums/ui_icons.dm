@@ -38,3 +38,19 @@
 	var/obj/screen/adminbus_tdarena = null
 	var/obj/screen/adminbus_tdgreen = null
 	var/obj/screen/adminbus_tdobs = null
+
+	//Blob HUD stuff
+	var/list/specialblobs[24]
+	var/obj/screen/blob_bgs = null
+	var/obj/screen/blob_covers = null
+	var/obj/screen/blob_powerbar = null
+	var/obj/screen/blob_healthbar = null
+	var/obj/screen/blob_spawnblob = null
+	var/obj/screen/blob_spawnstrong = null
+	var/obj/screen/blob_spawnresource = null
+	var/obj/screen/blob_spawnfactory = null
+	var/obj/screen/blob_spawnnode = null
+	var/obj/screen/blob_spawncore = null
+	var/obj/screen/blob_ping = null
+	var/obj/screen/blob_rally = null
+	var/obj/screen/blob_taunt = null

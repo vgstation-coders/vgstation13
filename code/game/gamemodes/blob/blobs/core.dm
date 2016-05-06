@@ -140,6 +140,11 @@
 		B.key = C.key
 		B.blob_core = src
 		src.overmind = B
+
+		B.special_blobs += src
+		B.hud_used.blob_hud()
+		B.update_specialblobs()
+
 		if(!B.blob_core.creator)//If this core is the first of its lineage (created by game mode/event/admins, instead of another overmind) it gets to choose its looks.
 			var/new_name = "Blob Overmind ([rand(1, 999)])"
 			B.name = new_name
@@ -159,9 +164,13 @@
 			var/new_name = "Blob Cerebrate ([rand(1, 999)])"
 			B.name = new_name
 			B.real_name = new_name
+			B.gui_icons.blob_spawncore.icon_state = ""
+			B.gui_icons.blob_spawncore.name = ""
 			for(var/mob/camera/blob/O in blob_overminds)
 				if(O != B)
 					to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
+
+
 
 		if(istype(ticker.mode, /datum/game_mode/blob))
 			var/datum/game_mode/blob/mode = ticker.mode
