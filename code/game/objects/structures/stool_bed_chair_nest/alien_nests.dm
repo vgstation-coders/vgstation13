@@ -7,6 +7,7 @@
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "nest"
 	var/health = 100
+	var/random_key = 9999
 
 /obj/structure/bed/nest/New()
 	..()
@@ -31,14 +32,20 @@
 				"<span class='warning'>[M.name] struggles to break free of the gelatinous resin...</span>",\
 				"<span class='warning'>You struggle to break free from the gelatinous resin...</span>",\
 				"<span class='notice'>You hear squelching...</span>")
+			var/current_key = random_key
 			spawn(1200)
-				if(user && M && user.locked_to == src)
+				if(user && M && (user.locked_to == src) && (current_key == random_key))
 					unlock_atom(M)
 					overlays.len = 0
 		src.add_fingerprint(user)
 
 /obj/structure/bed/nest/buckle_mob(mob/M as mob, mob/user as mob)
 	if (locked_atoms.len || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
+		return
+
+	if(ishuman(M) && M.client && !M.lying)
+		to_chat(user,"<span class='warning'>You must tackle them down before you can trap them on \the [src]</span>")
+		to_chat(M,"<span class='warning'>\The [user] is trying in vain to trap you on \the [src]</span>")
 		return
 
 	if(istype(M,/mob/living/carbon/alien))
@@ -56,6 +63,7 @@
 	lock_atom(M, /datum/locking_category/bed/nest)
 	src.add_fingerprint(user)
 	overlays += image(icon,"nest-covering",MOB_LAYER)
+	random_key = rand(9999)
 	stabilize()
 
 /obj/structure/bed/nest/attackby(obj/item/weapon/W as obj, mob/user as mob)
