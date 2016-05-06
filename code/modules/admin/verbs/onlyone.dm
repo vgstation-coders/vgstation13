@@ -4,7 +4,7 @@
 		return
 
 	for(var/mob/living/silicon/S in player_list) //All silicons get made into humans so they can be highlanders, too.
-		if(S.stat == 2 || !(S.client)) continue
+		if(S.isDead() || !S.client) continue
 		if(is_special_character(S)) continue
 
 		var/mob/living/carbon/human/new_human = new /mob/living/carbon/human(S.loc, delay_ready_dna=1)
@@ -21,7 +21,7 @@
 		qdel(S)
 
 	for(var/mob/living/carbon/human/H in player_list)
-		if(H.stat == 2 || !(H.client)) continue
+		if(H.isDead() || !H.client) continue
 		if(is_special_character(H)) continue
 
 		ticker.mode.traitors += H.mind
