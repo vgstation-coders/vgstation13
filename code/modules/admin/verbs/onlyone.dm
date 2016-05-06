@@ -3,12 +3,29 @@
 		alert("The game hasn't started yet!")
 		return
 
+	for(var/mob/living/silicon/S in player_list) //All silicons get made into humans so they can be highlanders, too.
+		if(S.stat == 2 || !(S.client)) continue
+		if(is_special_character(S)) continue
+
+		var/mob/living/carbon/human/new_human = new /mob/living/carbon/human(S.loc, delay_ready_dna=1)
+		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
+		var/datum/preferences/A = new()	//Randomize appearance for the human
+		A.randomize_appearance_for(new_human)
+		new_human.generate_name()
+		new_human.languages |= S.languages
+		if(S.default_language) new_human.default_language = S.default_language
+		if(S.mind)
+			S.mind.transfer_to(new_human)
+		else
+			new_human.key = S.key
+		qdel(S)
+
 	for(var/mob/living/carbon/human/H in player_list)
 		if(H.stat == 2 || !(H.client)) continue
 		if(is_special_character(H)) continue
 
 		ticker.mode.traitors += H.mind
-		H.mind.special_role = "traitor"
+		H.mind.special_role = "highlander"
 
 		/* This never worked.
 		var/datum/objective/steal/steal_objective = new
@@ -21,7 +38,7 @@
 		hijack_objective.owner = H.mind
 		H.mind.objectives += hijack_objective
 
-		to_chat(H, "<B>You are the traitor.</B>")
+		to_chat(H, "<B>You are a highlander!</B>")
 		var/obj_count = 1
 		for(var/datum/objective/OBJ in H.mind.objectives)
 			to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")

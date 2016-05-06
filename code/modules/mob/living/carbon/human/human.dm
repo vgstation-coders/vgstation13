@@ -964,6 +964,8 @@
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
+	if(mind && mind.special_role == "highlander")
+		return 0 //Using a gun during highlander is poor form.
 	return 1//Humans can use guns and such
 
 

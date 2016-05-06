@@ -1,0 +1,7 @@
+author: Shadowmech88
+delete-after: True
+changes: 
+- rscadd: A highlander will be fully healed if he decapitates another highlander.
+- tweak: Upon pressing the highlander button, all silicons will be made into humans so that they can also be highlanders.
+- rscdel: Highlanders can no longer use advanced tools like machinery or guns.
+- rscdel: Highlanders can no longer be buckled to vehicles.

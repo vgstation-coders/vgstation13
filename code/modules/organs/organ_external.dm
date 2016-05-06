@@ -625,7 +625,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_BLEEDING
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
-		
+
 		for(var/implant in implants)
 			qdel(implant)
 
@@ -1381,6 +1381,20 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 
 	brainmob.stat = 2
 	brainmob.death()
+
+	if(brainmob.mind && brainmob.mind.special_role == "highlander")
+		if(H.lastattacker && istype(H.lastattacker, /mob/living/carbon/human))
+			var/mob/living/carbon/human/L = H.lastattacker
+			if(L.mind && L.mind.special_role == "highlander")
+				L.revive(0)
+				to_chat(L, "<span class='notice'>You absorb \the [brainmob]'s power!</span>")
+				var/turf/T1 = get_turf(H)
+				spawn()
+					for(var/i = 0;i < 10;i++)
+						var/obj/effect/tracker/soul/Tr = getFromPool(/obj/effect/tracker/soul, T1)
+						Tr.target = L
+						Tr.icon_state = pick("soul1","soul2","soul3")
+						sleep(1)
 
 obj/item/weapon/organ/head/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->head
 	brainmob = new(src)
