@@ -41,7 +41,7 @@
 							 "glass" = /obj/item/stack/sheet/glass/glass,
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 							 "plasteel" = /obj/item/stack/sheet/plasteel)
-	can_scan = list(/obj/item/stack/tile/carpet, /obj/item/stack/tile/arcade, /obj/item/stack/sheet/wood)
+	can_scan = list(/obj/item/stack/tile/carpet, /obj/item/stack/tile/arcade, /obj/item/stack/sheet/wood, /obj/item/stack/sheet/mineral/plastic)
 
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
