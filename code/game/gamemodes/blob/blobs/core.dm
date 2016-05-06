@@ -81,7 +81,7 @@
 	if(!overmind)
 		create_overmind()
 	else
-		var/points_to_collect = Clamp(point_rate*round(world_time-last_resource_collection)/(1 SECOND)), 0, 10)
+		var/points_to_collect = Clamp(point_rate*round((world.time-last_resource_collection)/10), 0, 10)
 		overmind.add_points(points_to_collect)
 		last_resource_collection = world.time
 
