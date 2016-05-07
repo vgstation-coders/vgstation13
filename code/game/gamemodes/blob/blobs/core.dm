@@ -92,7 +92,7 @@
 		if(blob_looks[looks] == 64)
 			anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
 			for(var/mob/M in viewers(src))
-				M.playsound_local(loc, 'sound/effects/blob_pulse.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
+				M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
 		var/turf/T = get_turf(overmind) //The overmind's mind can expand the blob
 		var/obj/effect/blob/O = locate() in T //As long as it is 'thinking' about a blob already
@@ -155,7 +155,8 @@
 
 			B.verbs += /mob/camera/blob/proc/create_core
 			spawn()
-				var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks[1]) as null|anything in blob_looks
+				var/can_choose_from = blob_looks - "adminbus"
+				var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks[1]) as null|anything in can_choose_from
 				if(chosen)
 					for(var/obj/effect/blob/nearby_blob in range(src,5))
 						nearby_blob.looks = chosen
