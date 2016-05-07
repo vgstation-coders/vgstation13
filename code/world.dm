@@ -278,6 +278,7 @@ var/savefile/panicfile
 			'sound/misc/duckgame.ogg',
 			'sound/misc/FTLvictory.ogg',
 			'sound/misc/tfvictory.ogg',
+			'sound/misc/megamanX.ogg',
 			)) // random end sounds!! - LastyBatsy
 
 
