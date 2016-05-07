@@ -101,9 +101,21 @@
 		qdel(src)
 		return
 
-	if(loc.density)
-		loc.ex_act(2)
-		if(prob(25))
+	if(loc && !istype(loc,/turf/space))
+		if(loc.density)
+			if(istype(loc,/turf/simulated/wall/r_wall))
+				loc.ex_act(1)
+			else
+				loc.ex_act(2)
+		else
+			loc.ex_act(3)
+			if(istype(loc,/turf/simulated/floor))
+				var/turf/simulated/floor/under = loc
+				under.break_tile_to_plating()
+
+		for(var/turf/T in orange(loc,1))
+			T.ex_act(3)
+		if(prob(50))
 			clong()
 
 	for(var/atom/clong in loc)
@@ -127,5 +139,6 @@
 			clong()
 
 /obj/item/projectile/immovablerod/proc/clong()
-	playsound(src, 'sound/effects/bang.ogg', 50, 1)
-	visible_message("CLANG")
+	for (var/mob/M in range(loc,20))
+		to_chat(M,"<FONT size=[max(0, 5 - round(get_dist(src, M)/4))]>CLANG!</FONT>")
+		M.playsound_local(loc, 'sound/effects/immovablerod_clong.ogg', 100 - (get_dist(src,M)*5), 1)
