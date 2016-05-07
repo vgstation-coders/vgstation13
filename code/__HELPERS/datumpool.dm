@@ -132,20 +132,23 @@
 	return 0
 
 /client/proc/debug_pooling()
-	set name = "Debug Pooling Type"
+	set name = "Debug Pooling Type1"
 	set category = "Debug"
 
-	var/type = input("What is the typepath for the pooled object variables you wish to view?", "Pooled Variables") as text|null
+	var/type = input("What is the typepath for the pooled object variables you wish to view?", "Pooled Variables") in pooledvariables|null
 
 	if(!type)
 		return
 
 	if(!pooledvariables[type])
-		to_chat(src, "The type [type] doesn't have a generated list holding variables for pooled objects")
+		to_chat(src, "The type [type] inexplicably doesn't have a generated list holding variables for pooled objects")
 		return
 
 	var/list/L = list()
 	L += "<b>Stored Variables for Pooling for this type</b><br>"
 	for(var/key in pooledvariables[type])
-		L += "<br>[key] = [pooledvariables[type][key]]"
+		if(L)
+			L += "<br>[key] = [pooledvariables[type][key]]"
+		else
+			L += "<br>[key] = null"
 	usr << browse(jointext(L,""),"window=poolingvariablelogs")
