@@ -271,6 +271,13 @@ var/savefile/panicfile
 			'sound/misc/slugmissioncomplete.ogg',
 			'sound/misc/bayojingle.ogg',
 			'sound/misc/gameoveryeah.ogg',
+			'sound/misc/rayman.ogg',
+			'sound/misc/marioworld.ogg',
+			'sound/misc/soniclevelcomplete.ogg',
+			'sound/misc/calamitytrigger.ogg',
+			'sound/misc/duckgame.ogg',
+			'sound/misc/FTLvictory.ogg',
+			'sound/misc/tfvictory.ogg',
 			)) // random end sounds!! - LastyBatsy
 
 
