@@ -279,6 +279,7 @@ var/savefile/panicfile
 			'sound/misc/FTLvictory.ogg',
 			'sound/misc/tfvictory.ogg',
 			'sound/misc/megamanX.ogg',
+			'sound/misc/castlevania.ogg',
 			)) // random end sounds!! - LastyBatsy
 
 
