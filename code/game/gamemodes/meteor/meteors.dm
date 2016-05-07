@@ -176,7 +176,7 @@
 	explosion(get_turf(src), 2, 4, 6, 8, 0, 1, 0) //Medium meteor, medium boom
 	qdel(src)
 
-/obj/item/projectile/meteor/process()
+/obj/item/projectile/meteor/process_step()
 	if(z != starting.z)
 		qdel(src)
 		return
@@ -434,7 +434,7 @@ var/list/blob_candidates = list()
 		blob_candidate = null
 	..()
 
-/obj/item/projectile/meteor/blob/core/process_step()
+/obj/item/projectile/meteor/process_step()
 	if(z != starting.z)
 		qdel(src)
 		return
