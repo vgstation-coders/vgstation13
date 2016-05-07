@@ -436,12 +436,6 @@ var/list/blob_candidates = list()
 		blob_candidate = null
 	..()
 
-/obj/item/projectile/meteor/process_step()
-	if(z != starting.z)
-		qdel(src)
-		return
-	..()
-
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))
 		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
