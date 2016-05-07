@@ -78,6 +78,8 @@
 		var/total_offset = 60 + (100*(blob_core.health/blob_core.maxhealth))
 		hud_used.mymob.gui_icons.blob_healthbar.transform = M
 		hud_used.mymob.gui_icons.blob_healthbar.screen_loc = "15:14,[round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_coverRIGHT.maptext = "[blob_core.health]"
+
 		var/severity = 0
 		switch(round(blob_core.health))
 			if(167 to 199)
@@ -114,6 +116,10 @@
 		var/total_offset = 60 + (100*(blob_points/max_blob_points))
 		hud_used.mymob.gui_icons.blob_powerbar.transform = M
 		hud_used.mymob.gui_icons.blob_powerbar.screen_loc = "1:0,[round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_coverLEFT.maptext = "[blob_points]"
+		hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 4
+		if(blob_points >= 100)
+			hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 1
 
 		hud_used.mymob.gui_icons.blob_spawnblob.color = grayscale
 		hud_used.mymob.gui_icons.blob_spawnstrong.color = grayscale

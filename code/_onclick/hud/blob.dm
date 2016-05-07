@@ -8,13 +8,23 @@
 	mymob.gui_icons.blob_bgs.screen_loc = ui_blob_bg
 	mymob.gui_icons.blob_bgs.mouse_opacity = 0
 
-	mymob.gui_icons.blob_covers = getFromPool(/obj/screen/specialblob)
-	mymob.gui_icons.blob_covers.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
-	mymob.gui_icons.blob_covers.icon_state = "covers"
-	mymob.gui_icons.blob_covers.name = "Blob HUD"
-	mymob.gui_icons.blob_covers.layer = 21
-	mymob.gui_icons.blob_covers.screen_loc = ui_blob_bg
-	mymob.gui_icons.blob_covers.mouse_opacity = 0
+	mymob.gui_icons.blob_coverLEFT = getFromPool(/obj/screen/specialblob)
+	mymob.gui_icons.blob_coverLEFT.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
+	mymob.gui_icons.blob_coverLEFT.icon_state = "coverLEFT"
+	mymob.gui_icons.blob_coverLEFT.name = "Points"
+	mymob.gui_icons.blob_coverLEFT.layer = 21
+	mymob.gui_icons.blob_coverLEFT.screen_loc = ui_blob_bg
+	mymob.gui_icons.blob_coverLEFT.maptext_x = 1
+	mymob.gui_icons.blob_coverLEFT.maptext_y = 126
+
+	mymob.gui_icons.blob_coverRIGHT = getFromPool(/obj/screen/specialblob)
+	mymob.gui_icons.blob_coverRIGHT.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
+	mymob.gui_icons.blob_coverRIGHT.icon_state = "coverRIGHT"
+	mymob.gui_icons.blob_coverRIGHT.name = "Health"
+	mymob.gui_icons.blob_coverRIGHT.layer = 21
+	mymob.gui_icons.blob_coverRIGHT.screen_loc = ui_blob_bg
+	mymob.gui_icons.blob_coverRIGHT.maptext_x = 464
+	mymob.gui_icons.blob_coverRIGHT.maptext_y = 126
 
 	mymob.gui_icons.blob_powerbar = getFromPool(/obj/screen/specialblob)
 	mymob.gui_icons.blob_powerbar.icon = 'icons/mob/screen1_blob_bars.dmi'
@@ -97,7 +107,8 @@
 
 	mymob.client.screen += list(
 		mymob.gui_icons.blob_bgs,
-		mymob.gui_icons.blob_covers,
+		mymob.gui_icons.blob_coverLEFT,
+		mymob.gui_icons.blob_coverRIGHT,
 		mymob.gui_icons.blob_powerbar,
 		mymob.gui_icons.blob_healthbar,
 		mymob.gui_icons.blob_spawnblob,
@@ -129,7 +140,8 @@
 
 	mymob.client.screen -= list(
 		mymob.gui_icons.blob_bgs,
-		mymob.gui_icons.blob_covers,
+		mymob.gui_icons.blob_coverLEFT,
+		mymob.gui_icons.blob_coverRIGHT,
 		mymob.gui_icons.blob_powerbar,
 		mymob.gui_icons.blob_healthbar,
 		mymob.gui_icons.blob_spawnblob,
