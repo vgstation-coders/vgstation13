@@ -381,7 +381,9 @@
 
 	T.blob_act(destroy = 1)
 
-	if(istype(A,/obj/effect/blob))
+	var/obj/effect/blob/is_there_a_blob = (locate(/obj/effect/blob) in T)
+
+	if(is_there_a_blob)
 		do_blob_stuff(loc)
 	else
 		do_blob_stuff(T)
