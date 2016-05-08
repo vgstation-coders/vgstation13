@@ -164,9 +164,9 @@ obj/machinery/gateway/centerstation/process()
 	gateways.Add(src)
 
 /obj/machinery/gateway/centeraway/Destroy()
-	..()
-
 	gateways.Remove(src)
+	
+	..()
 
 /obj/machinery/gateway/centeraway/initialize()
 	update_icon()
