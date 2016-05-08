@@ -141,6 +141,7 @@
 		C = new_overmind
 
 	if(C)
+		C.view = world.view
 		var/mob/camera/blob/B = new(src.loc)
 		B.key = C.key
 		B.blob_core = src
