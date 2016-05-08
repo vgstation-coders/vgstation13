@@ -7,7 +7,6 @@
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "nest"
 	var/health = 100
-	var/random_key = 9999
 
 /obj/structure/bed/nest/New()
 	..()
@@ -32,9 +31,9 @@
 				"<span class='warning'>[M.name] struggles to break free of the gelatinous resin...</span>",\
 				"<span class='warning'>You struggle to break free from the gelatinous resin...</span>",\
 				"<span class='notice'>You hear squelching...</span>")
-			var/current_key = random_key
-			spawn(1200)
-				if(user && M && (user.locked_to == src) && (current_key == random_key))
+
+			if(do_after(user,src,1200,60,needhand = FALSE))
+				if(user && M && (user.locked_to == src))
 					unlock_atom(M)
 					overlays.len = 0
 		src.add_fingerprint(user)
@@ -63,7 +62,6 @@
 	lock_atom(M, /datum/locking_category/bed/nest)
 	src.add_fingerprint(user)
 	overlays += image(icon,"nest-covering",MOB_LAYER)
-	random_key = rand(9999)
 	stabilize()
 
 /obj/structure/bed/nest/attackby(obj/item/weapon/W as obj, mob/user as mob)
