@@ -1115,10 +1115,10 @@ var/list/admin_verbs_mod = list(
 
 	var/override = 0
 	if(existing_away_missions.len)
-		var/abba = alert(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway? If there are more than two away mission gateways, the station gateway will be able to teleport its users to both of them.", "AWAY MISSIONS", "Yes", "No")
-		if(!abba) return
+		var/continue_loading = alert(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway? If there are more than two away mission gateways, the station gateway will be able to teleport its users to both of them.", "AWAY MISSIONS", "Yes", "No")
+		if(!continue_loading) return
 
-		if(abba == "Yes")
+		if(continue_loading == "Yes")
 			override = 1
 
 	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
