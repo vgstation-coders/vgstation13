@@ -51,7 +51,7 @@
 
 	var/datum/faction/faction 			//associated faction
 
-	var/datum/antagonist/antagonist = null
+	var/datum/antagonistholder/antagonist = null
 
 	var/rev_cooldown = 0
 
