@@ -38,9 +38,8 @@
 
 	var/memory
 
-	var/assigned_role
-	var/special_role
-	var/list/wizard_spells // So we can track our wizmen spells that we learned from the book of magicks.
+	var/assigned_role // job
+
 
 	var/role_alt_title
 
@@ -50,22 +49,16 @@
 	var/list/datum/objective/objectives = list()
 	var/list/datum/objective/special_verbs = list()
 
-	var/has_been_rev = 0//Tracks if this mind has been a rev or not
-
 	var/datum/faction/faction 			//associated faction
-	var/datum/changeling/changeling		//changeling holder
-	var/datum/vampire/vampire			//vampire holder
+
+	var/datum/antagonist/antagonist = null
 
 	var/rev_cooldown = 0
 
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
 
-		//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
-	var/list/uplink_items_bought = list()
-	var/total_TC = 0
-	var/spent_TC = 0
 
 	//fix scrying raging mages issue.
 	var/isScrying = 0
@@ -73,17 +66,17 @@
 
 /datum/mind/New(var/key)
 	src.key = key
+	antagonist = new datum/antagonistholder (src.current)
 
 /datum/mind/proc/transfer_to(mob/living/new_character)
 	if(!istype(new_character))
 		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
 	if(current)					//remove ourself from our old body's mind variable
-		if(changeling)
-			current.remove_changeling_powers()
-			current.verbs -= /datum/changeling/proc/EvolutionMenu
-		if(vampire)
-			current.remove_vampire_powers()
+		if(antagonist.changeling)
+			antagonist.changeling.remove_changeling_powers()
+		if(antagonist.vampire)
+			antagonist.changeling.remove_vampire_powers()
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
@@ -93,9 +86,9 @@
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
 
-	if(changeling)
+	if(antagonist.changeling)
 		new_character.make_changeling()
-	if(vampire)
+	if(antagonist.vampire)
 		new_character.make_vampire()
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
@@ -738,19 +731,16 @@
 			if("clear")
 				if(src in ticker.mode.changelings)
 					ticker.mode.changelings -= src
-					special_role = null
-					current.remove_changeling_powers()
-					current.verbs -= /datum/changeling/proc/EvolutionMenu
-					if(changeling)
+					antagonist.remove_changeling_powers()
+					if(antagonist.changeling)
 						qdel(changeling)
-						changeling = null
+						antagonist.changeling = null
 					to_chat(current, "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a changeling and are stuck in your current form!</B></FONT>")
 					log_admin("[key_name_admin(usr)] has de-changeling'ed [current].")
 			if("changeling")
 				if(!(src in ticker.mode.changelings))
 					ticker.mode.changelings += src
 					ticker.mode.grant_changeling_powers(current)
-					special_role = "Changeling"
 					to_chat(current, "<B><font color='red'>Your powers are awoken. A flash of memory returns to us...we are a changeling!</font></B>")
 					var/wikiroute = role_wiki[ROLE_CHANGELING]
 					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")

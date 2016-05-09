@@ -58,7 +58,7 @@
 			break
 		var/datum/mind/traitor = pick(possible_traitors)
 		traitors += traitor
-		traitor.special_role = "traitor"
+		traitor.antagonist.traitor = new datum/antagonist/traitor/da
 		possible_traitors.Remove(traitor)
 
 	if(!traitors.len)
@@ -82,7 +82,7 @@
 		kill_objective.owner = traitor
 		kill_objective.target = target_list[traitor]
 		if(kill_objective.target && kill_objective.target != traitor)
-			kill_objective.explanation_text = "Assassinate [kill_objective.target.current.real_name], the [kill_objective.target.special_role]."
+			kill_objective.explanation_text = "Assassinate [kill_objective.target.current.real_name], the Double Agent."
 		else //Something went wrong, so give them a random assasinate objective
 			kill_objective.find_target()
 		traitor.objectives += kill_objective

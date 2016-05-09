@@ -60,7 +60,7 @@
 			break
 		var/datum/mind/traitor = pick(possible_traitors)
 		traitors += traitor
-		traitor.special_role = "traitor"
+		traitor.antagonist.traitor = new datum/antagonist/traitor
 		possible_traitors.Remove(traitor)
 
 	if(!traitors.len)
@@ -105,18 +105,6 @@
 				kill_objective.owner = traitor
 				kill_objective.find_target()
 				traitor.objectives += kill_objective
-				/*vg edit
-			if(34 to 50)
-				var/datum/objective/brig/brig_objective = new
-				brig_objective.owner = traitor
-				brig_objective.find_target()
-				traitor.objectives += brig_objective
-			if(51 to 66)
-				var/datum/objective/harm/harm_objective = new
-				harm_objective.owner = traitor
-				harm_objective.find_target()
-				traitor.objectives += harm_objective
-				*/
 			else
 				var/datum/objective/steal/steal_objective = new
 				steal_objective.owner = traitor
@@ -422,7 +410,6 @@
 		implanter[ref] -= traitor_mind
 	implanted -= traitor_mind
 	traitors -= traitor_mind
-	traitor_mind.special_role = null
+	traitor_mind.antagonist.traitor = null
 	update_traitor_icons_removed(traitor_mind)
-//	to_chat(world, "Removed [traitor_mind.current.name] from traitor shit")
 	to_chat(traitor_mind.current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now.(You don't remember who implanted you)</FONT></span>")

@@ -12,14 +12,14 @@
   * Nuke Agent
   * Vox Raider
   * Xeno
-  * Special
   * ERT/Deathsquad
 
 */
 
 //This is applied to the antagonist var in a mob's mind, it holds the antag datums
 /datum/antagonistholder
-	var/mob/holder
+	var/mob/holdermob
+	var/datum/mind/holdermind
 
 	var/datum/blob
 	var/datum/changeling
@@ -29,30 +29,50 @@
 	var/datum/nuclear
 	var/datum/raider
 	var/datum/revolutionary
-	var/datum/special //This is for adminbus, it will show up on round end report as whatever the name var is set to. The special antagonists were: [holder] was a [name].
 	var/datum/traitor
 	var/datum/vampire
 	var/datum/wizard //apprentices are also considered wizards
 	var/datum/xeno
 
+	var/has_been_rev = 0 //keep track of whether they've been a rev and got deconverted
+
 /datum/antagonistholder/New(var/mob/M)
 	..()
-	holder = M
+	holdermob = M
+	holdermind = M.mind
 
 
 //This is purely for the inherited holder define
 
 /datum/antagonist
-	var/mob/holder = null
+	var/mob/holdermob
+	var/datum/mind/holdermind
 
 /datum/antagonist/New(var/mob/M)
 	..()
-	holder = M
+	holdermob = M
+	holdermind = M.mind
+
 
 /*
-******************
+***************
+	TRAITOR
+***************
+*/
+
+/datum/antagonist/traitor
+	var/isdoubleagent = 0
+	var/list/uplink_items_bought = list()
+	var/total_TC = 0
+	var/spent_TC = 0
+
+/datum/antagonist/traitor/da
+	isdoubleagent = 1
+
+/*
+*******************
 	CHANGELING
-******************
+*******************
 */
 
 /datum/antagonist/changeling //stores changeling powers, changeling recharge thingie, changeling absorbed DNA and changeling ID (for changeling hivemind)
@@ -73,7 +93,7 @@
 
 /datum/antagonist/changeling/New(var/mob/M, var/gender=FEMALE)
 	..(M)
-	M.antagonist.changeling = src
+	holdermind.antagonist.changeling = src
 	var/honorific
 	if(gender == FEMALE)	honorific = "Ms."
 	else					honorific = "Mr."
@@ -96,13 +116,21 @@
 			break
 	return chosen_dna
 
+//removes our changeling verbs
+/datum/antagonist/changeling/proc/remove_changeling_powers()
+	if(!holdermob || !holdermind.changeling)	return
+	for(var/datum/power/changeling/P in holdermind.changeling.purchasedpowers)
+		if(P.isVerb)
+			verbs -= P.verbpath
+	verbs -= /datum/changeling/proc/EvolutionMenu
+
 /*
-******************
+****************
 	VAMPIRE
-******************
+****************
 */
 
-/datum/vampire
+/datum/antagonist/vampire
 	var/bloodtotal = 0 // CHANGE TO ZERO WHEN PLAYTESTING HAPPENS
 	var/bloodusable = 0 // CHANGE TO ZERO WHEN PLAYTESTING HAPPENS
 	var/mob/living/owner = null
@@ -114,7 +142,23 @@
 	var/nullified = 0 //Nullrod makes them useless for a short while.
 	var/smitecounter = 0 //Keeps track of how badly the vampire has been affected by holy tiles.
 
-/datum/vampire/New(var/mob/M, gend = FEMALE)
+/datum/antagonist/vampire/New(var/mob/M, gend = FEMALE)
 	..(M)
-	M.antagonist.vampire = src
+	holdermind.antagonist.vampire = src
 	gender = gend
+
+/*
+**************
+	WIZARD
+**************
+*/
+
+/datum/antagonist/wizard
+	var/list/wizard_spells // So we can track our wizmen spells that we learned from the book of magicks.
+	var/isapprentice = 0
+
+/datum/antagonist/revolutionary
+	var/headrev = 0
+
+/datum/antagonist/revolutionary/headrev
+	headrev = 1
