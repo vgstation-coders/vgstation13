@@ -124,7 +124,6 @@
 		to_chat(rev_mind.current, "<span class='notice'>You are a member of the revolutionaries' leadership!</span>")
 	for(var/datum/objective/objective in rev_mind.objectives)
 		to_chat(rev_mind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
-		rev_mind.special_role = "Head Revolutionary"
 		obj_count++
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -202,7 +201,6 @@
 
 	revolutionaries += rev_mind
 	to_chat(rev_mind.current, "<span class='warning'><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>")
-	rev_mind.special_role = "Revolutionary"
 	update_rev_icons_added(rev_mind)
 
 	return 1
@@ -212,7 +210,6 @@
 /datum/game_mode/proc/remove_revolutionary(datum/mind/rev_mind , beingborged)
 	if(rev_mind in revolutionaries)
 		revolutionaries -= rev_mind
-		rev_mind.special_role = null
 
 		if(beingborged)
 			to_chat(rev_mind.current, "<span class='danger'><FONT size = 3>The frame's firmware detects and deletes your neural reprogramming!  You remember nothing from the moment you were flashed until now.</FONT></span>")
@@ -424,14 +421,6 @@
 				text += {"<br><img src="logo_[tempstate].png"> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
-			if(headrev.total_TC)
-				if(headrev.spent_TC)
-					text += "<br><span class='sinister'>TC Remaining: [headrev.total_TC - headrev.spent_TC]/[headrev.total_TC] - The tools used by the Head Revolutionary were:"
-					for(var/entry in headrev.uplink_items_bought)
-						text += "<br>[entry]"
-					text += "</span>"
-				else
-					text += "<br><span class='sinister'>The Head Revolutionary was a smooth operator this round (did not purchase any uplink items)</span>"
 
 			for(var/datum/objective/mutiny/objective in headrev.objectives)
 				targets |= objective.target

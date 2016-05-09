@@ -216,7 +216,7 @@
 			if( antagonist.changeling && antagonist.changeling.absorbed_dna.len && (current.real_name != antagonist.changeling.absorbed_dna[1]) )
 				text += "<br><a href='?src=\ref[src];changeling=initialdna'>Transform to initial appearance.</a>"
 			if( antagonist.changeling )
-				text += "<br><a href='?src=\ref[src];changeling=set_genomes'>[changeling.geneticpoints] genomes</a>"
+				text += "<br><a href='?src=\ref[src];changeling=set_genomes'>[antagonist.changeling.geneticpoints] genomes</a>"
 		else
 			text += "<a href='?src=\ref[src];changeling=changeling'>yes</a>|<b>NO</b>"
 //			var/datum/game_mode/changeling/changeling = ticker.mode
@@ -725,7 +725,7 @@
 					ticker.mode.changelings -= src
 					antagonist.remove_changeling_powers()
 					if(antagonist.changeling)
-						qdel(changeling)
+						qdel(antagonist.changeling)
 						antagonist.changeling = null
 					to_chat(current, "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a changeling and are stuck in your current form!</B></FONT>")
 					log_admin("[key_name_admin(usr)] has de-changeling'ed [current].")
@@ -742,21 +742,21 @@
 				to_chat(usr, "<span class='notice'>The objectives for changeling [key] have been generated. You can edit them and anounce manually.</span>")
 
 			if("initialdna")
-				if( !changeling || !changeling.absorbed_dna.len )
+				if( !antagonist.changeling || !antagonist.changeling.absorbed_dna.len )
 					to_chat(usr, "<span class='warning'>Resetting DNA failed!</span>")
 				else
-					current.dna = changeling.absorbed_dna[1]
+					current.dna = antagonist.changeling.absorbed_dna[1]
 					current.real_name = current.dna.real_name
 					current.UpdateAppearance()
 					domutcheck(current, null)
 
 			if("set_genomes")
-				if( !changeling )
+				if( !antagonist.changeling )
 					to_chat(usr, "<span class='warning'>No changeling!</span>")
 					return
-				var/new_g = input(usr,"Number of genomes","Changeling",changeling.geneticpoints) as num
-				changeling.geneticpoints = Clamp(new_g, 0, 100)
-				log_admin("[key_name_admin(usr)] has set changeling [current] to [changeling.geneticpoints] genomes.")
+				var/new_g = input(usr,"Number of genomes","Changeling",antagonist.changeling.geneticpoints) as num
+				antagonist.changeling.geneticpoints = Clamp(new_g, 0, 100)
+				log_admin("[key_name_admin(usr)] has set changeling [current] to [antagonist.changeling.geneticpoints] genomes.")
 
 	else if (href_list["vampire"])
 		switch(href_list["vampire"])
@@ -765,7 +765,7 @@
 					ticker.mode.vampires -= src
 					antagonist.vampire.remove_vampire_powers()
 					if(antagonist.vampire)
-						qdel(vampire)
+						qdel(antagonist.vampire)
 						antagonist.vampire = null
 					to_chat(current, "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a vampire and are stuck in your current form!</B></FONT>")
 					log_admin("[key_name_admin(usr)] has de-vampired [current].")
@@ -1002,7 +1002,7 @@
 						if (suplink)
 							var/diff = crystals - suplink.uses
 							suplink.uses = crystals
-							total_TC += diff
+							antagonist.traitor.total_TC += diff
 			if("uplink")
 				if (!ticker.mode.equip_traitor(current, !(src in ticker.mode.traitors)))
 					to_chat(usr, "<span class='warning'>Equipping a syndicate failed!</span>")
