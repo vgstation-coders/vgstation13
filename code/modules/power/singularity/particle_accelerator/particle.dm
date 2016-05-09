@@ -8,7 +8,7 @@
 	anchored = 1
 	density = 1
 	var/movement_range = 10
-	var/energy = 10		//energy in eV
+	var/energy = 20		//energy in eV
 	var/mega_energy = 0	//energy in MeV
 	var/frequency = 1
 	var/ionizing = 0
@@ -29,29 +29,29 @@
 
 /obj/effect/accelerated_particle/weak
 	movement_range = 8
-	energy = 5
+	energy = 10
 	icon_state="particle0"
 	resetVariables()
 		..("energy", "movement_range")
 		movement_range = 8
-		energy = 5
+		energy = 10
 
 /obj/effect/accelerated_particle/strong
 	movement_range = 15
-	energy = 15
+	energy = 30
 	icon_state="particle2"
 	resetVariables()
 		..("energy", "movement_range")
-		energy = 15
+		energy = 30
 		movement_range = 15
 
 /obj/effect/accelerated_particle/powerful
 	movement_range = 20
-	energy = 50
+	energy = 100
 	icon_state="particle3"
 	resetVariables()
 		..("energy", "movement_range")
-		energy = 50
+		energy = 100
 		movement_range = 20
 
 /obj/effect/accelerated_particle/New(loc, dir = 2, move = 0)
@@ -99,7 +99,7 @@
 	return
 
 /obj/effect/accelerated_particle/proc/toxmob(var/mob/living/M)
-	var/radiation = (energy*2)
+	var/radiation = (energy)
 /*			if(istype(M,/mob/living/carbon/human))
 		if(M:wear_suit) //TODO: check for radiation protection
 			radiation = round(radiation/2,1)
