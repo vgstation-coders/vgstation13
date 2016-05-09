@@ -12,8 +12,8 @@
 	invocation = "ZAP MUTHA FUH KA"
 	invocation_type = SpI_SHOUT
 	hud_state = "wiz_zap"
+	channeled = 1
 
-	var/chargedkey
 	var/basedamage = 50
 	var/bounces = 0
 	var/bounce_range = 6
@@ -78,62 +78,41 @@
 	return temp
 
 /spell/lightning/process()
-	if(chargedkey) return //do not charge while we are gonna zap
+	if(currently_channeled) return //do not charge while we are gonna zap
 	..()
 
-/spell/lightning/perform(mob/user = usr, skipcharge = 0)
-	if(!holder)
-		holder = user //just in case
-	if(!chargedkey)
-		if(!cast_check(skipcharge, user))
-			return
-		chargedkey = user.on_uattack.Add(src, "charged_click")
-		connected_button.name = "(Ready) [name]"
+/spell/lightning/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
+	if(!..()) //We only make it to this point if we succeeded in channeling or are removing channeling
+		return 0
+	if(user.spell_channeling && !force_remove)
 		user.overlays += chargeoverlay
 		if(world.time >= last_active_sound + 50)
 			playsound(get_turf(user), 'sound/effects/lightning/chainlightning_activate.ogg', 100, 1, "vary" = 0)
+			last_active_sound = world.time
 		zapzap = multicast
-
 		//give user overlay
 	else
 		//remove overlay
 		connected_button.name = name
-		var/event/E = user.on_uattack
-		E.handlers.Remove(chargedkey)
-		chargedkey = null
+		user.spell_channeling = null
 		charge_counter = charge_max
 		user.overlays -= chargeoverlay
 		if(zapzap != multicast) //partial cast
 			take_charge(holder, 0)
 		zapzap = 0
-	return
-
-
+	return 1
 
 // Listener for /atom/movable/on_moved
-/spell/lightning/proc/charged_click(var/list/args)
-	var/event/E = args["event"]
-	if(!chargedkey)
-		E.handlers.Remove("\ref[src]:charged_click")
-		return
-
-	var/atom/A = args["atom"]
-
-	if(E.holder != holder)
-		E.handlers.Remove("\ref[src]:charged_click")
-		return
-	holder:attack_delayer.delayNext(0)
-	if(isliving(A))
+/spell/lightning/cast(var/list/targets)
+	var/mob/living/L = targets[1]
+	if(istype(L))
 		zapzap--
-		if(zapzap) to_chat(holder, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
+		if(zapzap)
+			to_chat(holder, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
 		else
-			usr.overlays -= chargeoverlay
 			take_charge(holder, 0)
-			E.handlers.Remove(chargedkey)
-			chargedkey = null
-			connected_button.name = name
+			channel_spell(force_remove = 1)
 
-		var/mob/living/L = A
 		invocation(holder)
 		spawn()
 			zapmuthafucka(holder, L, bounces)

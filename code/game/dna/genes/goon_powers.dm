@@ -150,7 +150,7 @@
 
 	override_base = "genetic"
 	hud_state = "gen_ice"
-
+	channeled = 1
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/cryokinesis/cast(list/targets)
