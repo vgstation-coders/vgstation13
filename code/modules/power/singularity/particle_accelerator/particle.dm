@@ -1,5 +1,7 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
 
+#define PARTICLE_ENERGY 20 //Of the base particle type.
+
 /obj/effect/accelerated_particle
 	name = "Accelerated Particles"
 	desc = "Small things moving very fast."
@@ -8,7 +10,7 @@
 	anchored = 1
 	density = 1
 	var/movement_range = 10
-	var/energy = 20		//energy in eV
+	var/energy = PARTICLE_ENERGY		//energy in eV
 	var/mega_energy = 0	//energy in MeV
 	var/frequency = 1
 	var/ionizing = 0
@@ -27,32 +29,39 @@
 	source = null
 	movetotarget = 1
 
+
 /obj/effect/accelerated_particle/weak
 	movement_range = 8
-	energy = 10
+	energy = PARTICLE_ENERGY / 2
 	icon_state="particle0"
-	resetVariables()
-		..("energy", "movement_range")
-		movement_range = 8
-		energy = 10
+
+/obj/effect/accelerated_particle/weak/resetVariables()
+	..("energy", "movement_range")
+	movement_range = 8
+	energy = PARTICLE_ENERGY / 2
+
 
 /obj/effect/accelerated_particle/strong
 	movement_range = 15
-	energy = 30
+	energy = PARTICLE_ENERGY * 1.5
 	icon_state="particle2"
-	resetVariables()
-		..("energy", "movement_range")
-		energy = 30
-		movement_range = 15
+
+/obj/effect/accelerated_particle/strong/resetVariables()
+	..("energy", "movement_range")
+	energy = PARTICLE_ENERGY * 1.5
+	movement_range = 15
+
 
 /obj/effect/accelerated_particle/powerful
 	movement_range = 20
-	energy = 100
+	energy = PARTICLE_ENERGY * 5
 	icon_state="particle3"
-	resetVariables()
-		..("energy", "movement_range")
-		energy = 100
-		movement_range = 20
+	
+/obj/effect/accelerated_particle/powerful/resetVariables()
+	..("energy", "movement_range")
+	energy = PARTICLE_ENERGY * 5
+	movement_range = 20
+	
 
 /obj/effect/accelerated_particle/New(loc, dir = 2, move = 0)
 	. = ..()
@@ -134,3 +143,5 @@
 	else
 		sleep(lag)
 		move(lag)
+
+#undef PARTICLE_ENERGY
