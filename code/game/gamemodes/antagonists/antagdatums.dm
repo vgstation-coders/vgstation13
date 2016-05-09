@@ -118,8 +118,8 @@
 
 //removes our changeling verbs
 /datum/antagonist/changeling/proc/remove_changeling_powers()
-	if(!holdermob || !holdermind.changeling)	return
-	for(var/datum/power/changeling/P in holdermind.changeling.purchasedpowers)
+	if(!holdermob || !holdermind.antagonist.changeling)	return
+	for(var/datum/power/changeling/P in holdermind.antagonist.changeling.purchasedpowers)
 		if(P.isVerb)
 			verbs -= P.verbpath
 	verbs -= /datum/changeling/proc/EvolutionMenu
