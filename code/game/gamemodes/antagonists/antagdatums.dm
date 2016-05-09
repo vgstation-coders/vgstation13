@@ -147,6 +147,11 @@
 	holdermind.antagonist.vampire = src
 	gender = gend
 
+/datum/antagonist/vampire/proc/remove_vampire_powers()
+	for(var/handler in typesof(/client/proc))
+		if(findtext("[handler]","vampire_"))
+			verbs -= handler
+
 /*
 **************
 	WIZARD
