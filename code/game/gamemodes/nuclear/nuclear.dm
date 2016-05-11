@@ -233,6 +233,11 @@
 	var/radio_freq = SYND_FREQ
 	var/tank_slot = slot_r_hand
 
+	synd_mob.mutations.Add(M_PSY_RESIST) //Boy I sure hope this works!
+	synd_mob.update_mutantrace(0)
+	synd_mob.update_mutations(0)
+//  synd_mob.default_block_names=list("PSYRESISTBLOCK") //Prevent project mind from detecting them too early
+
 	if(synd_mob.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
 		to_chat(synd_mob, "<span class='notice'>Your intensive physical training to become a Nuclear Operative has paid off and made you fit again!</span>")
 		synd_mob.overeatduration = 0 //Fat-B-Gone
@@ -286,8 +291,6 @@
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(synd_mob)
 	E.imp_in = synd_mob
 	E.implanted = 1
-	synd_mob.mutuations.Add(M_PSY_RESIST)       //Boy I sure hope this works!
-	//synd_mob.default_block_names=list("PSYRESISTBLOCK") //Prevent project mind from detecting them too early
 	synd_mob.update_icons()
 	return 1
 
