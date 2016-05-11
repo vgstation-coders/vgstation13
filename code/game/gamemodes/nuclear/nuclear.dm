@@ -286,6 +286,8 @@
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(synd_mob)
 	E.imp_in = synd_mob
 	E.implanted = 1
+	synd_mob.mutuations.Add(M_PSY_RESIST)       //Boy I sure hope this works!
+	//synd_mob.default_block_names=list("PSYRESISTBLOCK") //Prevent project mind from detecting them too early
 	synd_mob.update_icons()
 	return 1
 
