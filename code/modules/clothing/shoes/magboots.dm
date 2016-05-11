@@ -7,7 +7,7 @@
 	var/mag_slow = 2
 //	flags = NOSLIP //disabled by default
 	action_button_name = "Toggle Magboots"
-	species_fit = list(vox_shaped)
+	species_fit = list(VOX_SHAPED)
 
 	var/stomp_attack_power = 20
 

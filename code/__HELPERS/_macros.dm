@@ -29,7 +29,7 @@
 
 #define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
-#define isskelevox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skelevox))
+#define isskelevox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skellington/skelevox))
 
 #define isbrain(A) istype(A, /mob/living/carbon/brain)
 

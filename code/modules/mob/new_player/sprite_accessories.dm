@@ -708,43 +708,43 @@
 	vox_quills_short
 		name = "Short Vox Quills"
 		icon_state = "vox_shortquills"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_quills_kingly
 		name = "Vox Kingly"
 		icon_state = "vox_kingly"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_quills_afro
 		name = "Vox Afro"
 		icon_state = "vox_afro"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_quills_mohawk
 		name = "Vox Mohawk"
 		icon_state = "vox_mohawk"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_quills_yasu
 		name = "Vox Yasuhiro"
 		icon_state = "vox_yasu"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_quills_horns
 		name = "Vox Quorns"
 		icon_state = "vox_horns"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_quills_nights
 		name = "Vox Nights"
 		icon_state = "vox_nights"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 /datum/sprite_accessory/facial_hair
@@ -788,25 +788,25 @@
 	vox_face_colonel
 		name = "Vox Colonel"
 		icon_state = "vox_colonel"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_face_fu
 		name = "Quill Fu"
 		icon_state = "vox_fu"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_face_neck
 		name = "Neck Quills"
 		icon_state = "vox_neck"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 	vox_face_beard
 		name = "Quill Beard"
 		icon_state = "vox_beard"
-		species_allowed = list(vox_shaped)
+		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
 //skin styles - WIP
