@@ -244,3 +244,30 @@
 		to_chat(usr, "You will no longer see progress bars when doing delayed actions.")
 	else
 		to_chat(usr, "You will now see progress bars when doing delayed actions")
+
+/client/verb/toggle_space_parallax()
+	set name = "Change Space Parallax"
+	set category = "Preferences"
+	set desc = "Change the parallax effect of space turfs."
+
+	var/parallax_list = list(
+		"Multi-layered",
+		"Single-layered (static background)",
+		"Disabled",
+		)
+
+	var/parallax_pref = input("How do you want space to look like?","Space Parallax Preferences") in parallax_list
+
+	switch(parallax_pref)
+		if("Multi-layered")
+			prefs.space_parallax = 2
+			to_chat(usr, "Space parallax is now multi-layered.")
+		if("Single-layered (static background)")
+			prefs.space_parallax = 1
+			to_chat(usr, "Space parallax is now single-layered.")
+		if("Disabled")
+			prefs.space_parallax = 0
+			to_chat(usr, "Space parallax is now deactivated.")
+
+	prefs.save_preferences_sqlite(src,ckey)
+

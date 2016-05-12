@@ -17,7 +17,10 @@
 		var/area/A = loc
 		A.area_turfs += src
 
-	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	icon_state = "test[((x + y) ^ ~(x * y) + z) % 3]"
+	var/image/I = image(icon,"[icon_state]over")
+	I.plane = -3
+	overlays += "[icon_state]over"
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

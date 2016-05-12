@@ -1520,3 +1520,11 @@ Game Mode config tags:
 					found_mode = GM
 					break
 	return found_mode
+
+/atom/proc/get_mobs_in_contents() //returns mobs recursively inside the atom
+	. = list()
+	for(var/atom/A in contents)
+		. += A.get_mobs_in_contents()
+
+/mob/get_mobs_in_contents()
+	. = ..() + src

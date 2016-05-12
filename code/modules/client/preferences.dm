@@ -94,6 +94,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/toggles = TOGGLES_DEFAULT
 	var/UI_style_color = "#ffffff"
 	var/UI_style_alpha = 255
+	var/space_parallax = 1
 	var/special_popup = 0
 
 	//character preferences
@@ -274,6 +275,7 @@ var/const/MAX_SAVE_SLOTS = 8
 /datum/preferences/proc/setup_special(var/dat, var/user)
 	dat += {"<table><tr><td width='340px' height='300px' valign='top'>
 	<h2>General Settings</h2>
+	<b>Space Parallax:</b> <a href='?_src_=prefs;preference=parallax'><b>[space_parallax]</b></a><br>
 	<b>Play admin midis:</b> <a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
 	<b>Play lobby music:</b> <a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
 	<b>Hear streamed media:</b> <a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
@@ -1421,6 +1423,26 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					var/UI_style_alpha_new = input(user, "Select a new alpha(transparency) parameter for UI, between 50 and 255") as num
 					if(!UI_style_alpha_new | !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50)) return
 					UI_style_alpha = UI_style_alpha_new
+
+				if("parallax")
+					var/parallax_list = list(
+						"Multi-layered",
+						"Single-layered (static background)",
+						"Disabled",
+						)
+
+					var/parallax_pref = input("How do you want space to look like?","Space Parallax Preferences") in parallax_list
+
+					switch(parallax_pref)
+						if("Multi-layered")
+							space_parallax = 2
+							to_chat(user, "Space parallax is now multi-layered.")
+						if("Single-layered (static background)")
+							space_parallax = 1
+							to_chat(user, "Space parallax is now single-layered.")
+						if("Disabled")
+							space_parallax = 0
+							to_chat(user, "Space parallax is now deactivated.")
 
 				if("name")
 					be_random_name = !be_random_name
