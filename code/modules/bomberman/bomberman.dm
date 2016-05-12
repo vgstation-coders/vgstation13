@@ -826,7 +826,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 					if(opacity)
 						T.opacity = 1
 				else
-					T.ChangeTurf(/turf/simulated/floor/plating)
+					T.ChangeTurf(/turf/unsimulated/floor)
 					turfs += T
 				pencil.x++
 			sleep(2)	//giving the game some time to process to avoid unbearable lag spikes when we create an arena, plus it looks cool.
@@ -909,7 +909,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			pencil.x = x
 			while(pencil.x <= (x+w))
 				T = pencil.loc
-				if(istype(T, /turf/simulated/floor/plating))
+				if(istype(T, /turf/unsimulated/floor))
 					if(prob(60))
 						T = pencil.loc
 						var/obj/structure/softwall/W = new(T)
@@ -1180,7 +1180,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		while(pencil.x <= (x+w))
 			T = pencil.loc
-			if(istype(T, /turf/simulated/floor/plating))
+			if(istype(T, /turf/unsimulated/floor))
 				if(prob(60))
 					T = pencil.loc
 					var/obj/structure/softwall/W = new(T)
