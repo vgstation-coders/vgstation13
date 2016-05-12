@@ -98,6 +98,21 @@
 	user.mind.isScrying = 1
 	return
 
+/obj/structure/scrying
+	name = "orb of beholder"
+	desc = "Staring into the eye gives you vision beyond mortal means."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "scryingpool"
+	density = 1
+	anchored = 1
+
+/obj/structure/scrying/attack_hand(mob/user as mob)
+	to_chat(user, "<span class='notice'>You can see...everything!</span>")
+	visible_message("<span class='danger'>[usr] stares into [src], their eyes glazing over.</span>")
+	user.ghostize(1)
+	user.mind.isScrying = 1
+	return
+
 
 ////////////////////Necromancy//////////////////////
 #define ZOMBIE 0

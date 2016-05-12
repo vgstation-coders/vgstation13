@@ -130,6 +130,9 @@ var/global/list/available_paintings = list(
 		if("carp")
 			name = "\improper 'Singing' Mounted Carp"
 			desc = "Too unrobust to beat a carp to death with your bare hands and mount it on a plank of wood? Then this professionally taxidermied trophy is just for you! Note: Does not actually sing."
+		if("beatrice")
+			name = "\improper Beatrice"
+			desc = "A painting of Beatrice the Golden Witch."
 
 		else
 			name = "painting"
@@ -267,6 +270,9 @@ var/global/list/available_paintings = list(
 		if("carp")
 			name = "\improper 'Singing' Mounted Carp"
 			desc = "Too unrobust to beat a carp to death with your bare hands and mount it on a plank of wood? Then this professionally taxidermied trophy is just for you! Note: Does not actually sing."
+		if("beatrice")
+			name = "\improper Beatrice"
+			desc = "A painting of Beatrice the Golden Witch."
 
 		else
 			name = "painting"
@@ -294,6 +300,8 @@ var/global/list/available_paintings = list(
 
 	H.apply_damage(rand(1,2), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
 
+/obj/structure/painting/beatrice
+	icon_state = "beatrice"
 
 /obj/structure/painting/cultify()
 	var/obj/structure/painting/narsie/N = new(loc)
