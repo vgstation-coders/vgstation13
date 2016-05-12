@@ -142,6 +142,7 @@
 		user.show_message("<span class='notice'>You project your mind into [target.name]: [say]</span>")//A really shitty fix but targeted.dm is a bit too dense
 		for(var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
+		log_game("Telepathic message from [user] to [target]: [say]") //Logs what was said to game logs.
 
 /datum/dna/gene/basic/morph
 	name="Morph"

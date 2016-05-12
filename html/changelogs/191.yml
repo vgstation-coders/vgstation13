@@ -35,4 +35,5 @@ delete-after: True
 changes: 
 - tweak: Project mind no longer tells the mob's real name on projection
 - tweak: Nuclear Operatives now start with psy resist to prevent mind projection
-- tweak: When using mind targeting spells, a full list of mobs that are resisting, off z-level, or unconscious is no longer a guarantee 
+- tweak: When using mind targeting spells, a full list of mobs that are resisting, off z-level, or unconscious is no longer a guarantee
+- rscadd: Adds logging for telepathic speech 
