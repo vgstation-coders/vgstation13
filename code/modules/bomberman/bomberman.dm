@@ -348,6 +348,14 @@ obj/structure/bomberflame/Destroy()
 		var/obj/structure/softwall/wall_break = obstacle
 		wall_break.pulverized()
 
+	else if(istype(obstacle, /obj/effect/blob/))
+		if(fuel <= 2)
+			obstacle.ex_act(3)
+		else if(fuel <= 10)
+			obstacle.ex_act(2)
+		else
+			obstacle.ex_act(1)
+
 	if(destroy_environnement)
 		if(istype(obstacle, /obj/structure/closet/))
 			qdel(obstacle)
