@@ -56,12 +56,19 @@ var/list/event_last_fired = list()
 	if(!spacevines_spawned)
 		possibleEvents[/datum/event/spacevine] = 15
 
-	if(minutes_passed >= 30 && active_with_role["Engineer"] > 1) // Give engineers time to not set up the engine
+	if(active_with_role["Engineer"] > 1)
 		possibleEvents[/datum/event/meteor_wave] = 15
 		possibleEvents[/datum/event/meteor_shower] = 40
-		possibleEvents[/datum/event/thing_storm/blob_shower] = 25
-		possibleEvents[/datum/event/thing_storm/blob_storm] = 10
 		possibleEvents[/datum/event/immovable_rod] = 15
+		possibleEvents[/datum/event/thing_storm/blob_shower] = 25//Blob Cluster
+
+	if((active_with_role["Engineer"] > 1) && (active_with_role["Security"] > 1))
+		var/living = 0
+		for(var/mob/living/M in player_list)
+			if(M.stat == CONSCIOUS)
+				living++
+		if(living >= 25)
+			possibleEvents[/datum/event/thing_storm/blob_storm] = 10//Blob Conglomerate
 
 	possibleEvents[/datum/event/radiation_storm] = 50
 	if(active_with_role["Medical"] > 1)
