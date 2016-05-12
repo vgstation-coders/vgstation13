@@ -46,7 +46,7 @@
 	h_style = "Bald"
 	..(new_loc, "Skellington", delay_ready_dna)
 
-/mob/living/carbon/human/skellington/skelevox/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/skelevox/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Skeletal Vox")
 
@@ -67,7 +67,6 @@
 	..(new_loc, "Golem")
 	gender = NEUTER
 	meat_type = /obj/item/weapon/ore/diamond
-
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
