@@ -90,6 +90,7 @@
 	randomslot		=	text2num(preference_list_client["randomslot"])
 	usenanoui		=	text2num(preference_list_client["usenanoui"])
 	progress_bars	=	text2num(preference_list_client["progress_bars"])
+	space_parallax	=	text2num(preference_list_client["space_parallax"])
 
 	ooccolor		= 	sanitize_hexcolor(ooccolor, initial(ooccolor))
 	lastchangelog	= 	sanitize_text(lastchangelog, initial(lastchangelog))
@@ -105,6 +106,7 @@
 	special_popup	= 	sanitize_integer(special_popup, 0, 1, initial(special_popup))
 	usenanoui		= 	sanitize_integer(usenanoui, 0, 1, initial(usenanoui))
 	progress_bars	= 	sanitize_integer(progress_bars, 0, 1, initial(progress_bars))
+	space_parallax	=	sanitize_integer(space_parallax, 0, 2, initial(space_parallax))
 	return 1
 
 
@@ -165,15 +167,15 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, progress_bars) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, progress_bars, space_parallax) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars, space_parallax)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,progress_bars=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,progress_bars=?,space_parallax=? WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars, space_parallax, ckey)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -207,6 +209,7 @@
 	S["warnbans"]       << warnbans
 	S["randomslot"]     << randomslot
 	S["volume"]         << volume
+	S["space_parallax"] << space_parallax
 	return 1
 
 //saving volume changes

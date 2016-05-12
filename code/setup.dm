@@ -1508,3 +1508,6 @@ var/proccalls = 1
 #define EVENT_PROC_INDEX "p"
 
 #define HIGHLANDER "highlander"
+
+#define VOID_LAYER_PLANE -4
+#define PARALLAX_LAYER_PLANE -3
