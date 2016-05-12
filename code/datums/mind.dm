@@ -38,9 +38,8 @@
 
 	var/memory
 
-	var/assigned_role
-	var/special_role
-	var/list/wizard_spells // So we can track our wizmen spells that we learned from the book of magicks.
+	var/assigned_role // job
+
 
 	var/role_alt_title
 
@@ -50,22 +49,16 @@
 	var/list/datum/objective/objectives = list()
 	var/list/datum/objective/special_verbs = list()
 
-	var/has_been_rev = 0//Tracks if this mind has been a rev or not
-
 	var/datum/faction/faction 			//associated faction
-	var/datum/changeling/changeling		//changeling holder
-	var/datum/vampire/vampire			//vampire holder
+
+	var/datum/antagonistholder/antagonist = null
 
 	var/rev_cooldown = 0
 
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
 
-		//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
-	var/list/uplink_items_bought = list()
-	var/total_TC = 0
-	var/spent_TC = 0
 
 	//fix scrying raging mages issue.
 	var/isScrying = 0
@@ -73,17 +66,17 @@
 
 /datum/mind/New(var/key)
 	src.key = key
+	antagonist = new /datum/antagonistholder (src.current)
 
 /datum/mind/proc/transfer_to(mob/living/new_character)
 	if(!istype(new_character))
 		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
 	if(current)					//remove ourself from our old body's mind variable
-		if(changeling)
-			current.remove_changeling_powers()
-			current.verbs -= /datum/changeling/proc/EvolutionMenu
-		if(vampire)
-			current.remove_vampire_powers()
+		if(antagonist.changeling)
+			antagonist.changeling.remove_changeling_powers()
+		if(antagonist.vampire)
+			antagonist.changeling.remove_vampire_powers()
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
@@ -93,9 +86,9 @@
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
 
-	if(changeling)
+	if(antagonist.changeling)
 		new_character.make_changeling()
-	if(vampire)
+	if(antagonist.vampire)
 		new_character.make_vampire()
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
@@ -220,10 +213,10 @@
 			text += "<b>YES</b>|<a href='?src=\ref[src];changeling=clear'>no</a>"
 			if (objectives.len==0)
 				text += "<br>Objectives are empty! <a href='?src=\ref[src];changeling=autoobjectives'>Randomize!</a>"
-			if( changeling && changeling.absorbed_dna.len && (current.real_name != changeling.absorbed_dna[1]) )
+			if( antagonist.changeling && antagonist.changeling.absorbed_dna.len && (current.real_name != antagonist.changeling.absorbed_dna[1]) )
 				text += "<br><a href='?src=\ref[src];changeling=initialdna'>Transform to initial appearance.</a>"
-			if( changeling )
-				text += "<br><a href='?src=\ref[src];changeling=set_genomes'>[changeling.geneticpoints] genomes</a>"
+			if( antagonist.changeling )
+				text += "<br><a href='?src=\ref[src];changeling=set_genomes'>[antagonist.changeling.geneticpoints] genomes</a>"
 		else
 			text += "<a href='?src=\ref[src];changeling=changeling'>yes</a>|<b>NO</b>"
 //			var/datum/game_mode/changeling/changeling = ticker.mode
@@ -474,7 +467,7 @@
 					new_objective.owner = src
 					new_objective:target = new_target:mind
 					//Will display as special role if the target is set as MODE. Ninjas/commandos/nuke ops.
-					new_objective.explanation_text = "[objective_type] [new_target:real_name], the [new_target:mind:assigned_role=="MODE" ? (new_target:mind:special_role) : (new_target:mind:assigned_role)]."
+					new_objective.explanation_text = "[objective_type] [new_target:real_name], the [new_target:mind:assigned_role=="MODE" ? "Antagonist" : (new_target:mind:assigned_role)]."
 
 			if ("prevent")
 				new_objective = new /datum/objective/block
@@ -568,12 +561,10 @@
 					ticker.mode.revolutionaries -= src
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a revolutionary!</FONT></span>")
 					ticker.mode.update_rev_icons_removed(src)
-					special_role = null
 				if(src in ticker.mode.head_revolutionaries)
 					ticker.mode.head_revolutionaries -= src
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a head revolutionary!</FONT></span>")
 					ticker.mode.update_rev_icons_removed(src)
-					special_role = null
 				log_admin("[key_name_admin(usr)] has de-rev'ed [current].")
 
 			if("rev")
@@ -587,7 +578,6 @@
 					return
 				ticker.mode.revolutionaries += src
 				ticker.mode.update_rev_icons_added(src)
-				special_role = "Revolutionary"
 				log_admin("[key_name(usr)] has rev'ed [current].")
 
 			if("headrev")
@@ -612,7 +602,6 @@
 						ticker.mode.greet_revolutionary(src,0)
 				ticker.mode.head_revolutionaries += src
 				ticker.mode.update_rev_icons_added(src)
-				special_role = "Head Revolutionary"
 				log_admin("[key_name_admin(usr)] has head-rev'ed [current].")
 
 			if("autoobjectives")
@@ -656,7 +645,6 @@
 				if(src in ticker.mode.cult)
 					ticker.mode.cult -= src
 					ticker.mode.update_cult_icons_removed(src)
-					special_role = null
 					var/datum/game_mode/cult/cult = ticker.mode
 					if (istype(cult))
 						cult.memoize_cult_objectives(src)
@@ -669,7 +657,6 @@
 				if(!(src in ticker.mode.cult))
 					ticker.mode.cult += src
 					ticker.mode.update_cult_icons_added(src)
-					special_role = "Cultist"
 					to_chat(current, "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 					to_chat(current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 					var/wikiroute = role_wiki[ROLE_CULTIST]
@@ -707,7 +694,6 @@
 			if("clear")
 				if(src in ticker.mode.wizards)
 					ticker.mode.wizards -= src
-					special_role = null
 					current.spellremove(current, config.feature_object_spell_system? "object":"verb")
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a wizard!</FONT></span>")
 					ticker.mode.update_wizard_icons_removed(src)
@@ -715,7 +701,6 @@
 			if("wizard")
 				if(!(src in ticker.mode.wizards))
 					ticker.mode.wizards += src
-					special_role = "Wizard"
 					//ticker.mode.learn_basic_spells(current)
 					to_chat(current, "<span class='danger'>You are the Space Wizard!</span>")
 					var/wikiroute = role_wiki[ROLE_WIZARD]
@@ -738,19 +723,16 @@
 			if("clear")
 				if(src in ticker.mode.changelings)
 					ticker.mode.changelings -= src
-					special_role = null
-					current.remove_changeling_powers()
-					current.verbs -= /datum/changeling/proc/EvolutionMenu
-					if(changeling)
-						qdel(changeling)
-						changeling = null
+					antagonist.remove_changeling_powers()
+					if(antagonist.changeling)
+						qdel(antagonist.changeling)
+						antagonist.changeling = null
 					to_chat(current, "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a changeling and are stuck in your current form!</B></FONT>")
 					log_admin("[key_name_admin(usr)] has de-changeling'ed [current].")
 			if("changeling")
 				if(!(src in ticker.mode.changelings))
 					ticker.mode.changelings += src
 					ticker.mode.grant_changeling_powers(current)
-					special_role = "Changeling"
 					to_chat(current, "<B><font color='red'>Your powers are awoken. A flash of memory returns to us...we are a changeling!</font></B>")
 					var/wikiroute = role_wiki[ROLE_CHANGELING]
 					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
@@ -760,39 +742,37 @@
 				to_chat(usr, "<span class='notice'>The objectives for changeling [key] have been generated. You can edit them and anounce manually.</span>")
 
 			if("initialdna")
-				if( !changeling || !changeling.absorbed_dna.len )
+				if( !antagonist.changeling || !antagonist.changeling.absorbed_dna.len )
 					to_chat(usr, "<span class='warning'>Resetting DNA failed!</span>")
 				else
-					current.dna = changeling.absorbed_dna[1]
+					current.dna = antagonist.changeling.absorbed_dna[1]
 					current.real_name = current.dna.real_name
 					current.UpdateAppearance()
 					domutcheck(current, null)
 
 			if("set_genomes")
-				if( !changeling )
+				if( !antagonist.changeling )
 					to_chat(usr, "<span class='warning'>No changeling!</span>")
 					return
-				var/new_g = input(usr,"Number of genomes","Changeling",changeling.geneticpoints) as num
-				changeling.geneticpoints = Clamp(new_g, 0, 100)
-				log_admin("[key_name_admin(usr)] has set changeling [current] to [changeling.geneticpoints] genomes.")
+				var/new_g = input(usr,"Number of genomes","Changeling",antagonist.changeling.geneticpoints) as num
+				antagonist.changeling.geneticpoints = Clamp(new_g, 0, 100)
+				log_admin("[key_name_admin(usr)] has set changeling [current] to [antagonist.changeling.geneticpoints] genomes.")
 
 	else if (href_list["vampire"])
 		switch(href_list["vampire"])
 			if("clear")
 				if(src in ticker.mode.vampires)
 					ticker.mode.vampires -= src
-					special_role = null
-					current.remove_vampire_powers()
-					if(vampire)
-						qdel(vampire)
-						vampire = null
+					antagonist.vampire.remove_vampire_powers()
+					if(antagonist.vampire)
+						qdel(antagonist.vampire)
+						antagonist.vampire = null
 					to_chat(current, "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a vampire and are stuck in your current form!</B></FONT>")
 					log_admin("[key_name_admin(usr)] has de-vampired [current].")
 			if("vampire")
 				if(!(src in ticker.mode.vampires))
 					ticker.mode.vampires += src
 					ticker.mode.grant_vampire_powers(current)
-					special_role = "Vampire"
 					to_chat(current, "<B><font color='red'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</font></B>")
 					var/wikiroute = role_wiki[ROLE_VAMPIRE]
 					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
@@ -807,7 +787,6 @@
 				if(src in ticker.mode.syndicates)
 					ticker.mode.syndicates -= src
 					ticker.mode.update_synd_icons_removed(src)
-					special_role = null
 					for (var/datum/objective/nuclear/O in objectives)
 						objectives-=O
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a syndicate operative!</FONT></span>")
@@ -820,7 +799,6 @@
 						ticker.mode.prepare_syndicate_leader(src)
 					else
 						current.real_name = "[syndicate_name()] Operative #[ticker.mode.syndicates.len-1]"
-					special_role = "Syndicate"
 					to_chat(current, "<span class='notice'>You are a [syndicate_name()] agent!</span>")
 					var/wikiroute = role_wiki[ROLE_OPERATIVE]
 					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
@@ -860,7 +838,6 @@
 			if ("clear")
 				if(src in ticker.mode.traitors)
 					ticker.mode.traitors -= src
-					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a traitor!</FONT></span>")
 					log_admin("[key_name_admin(usr)] has de-traitor'ed [current].")
 					if(isAI(current))
@@ -930,7 +907,6 @@
 			if("unmalf")
 				if(src in ticker.mode.malf_ai)
 					ticker.mode.malf_ai -= src
-					special_role = null
 					var/mob/living/silicon/ai/A = current
 
 					A.verbs.Remove(/mob/living/silicon/ai/proc/choose_modules,
@@ -1026,7 +1002,7 @@
 						if (suplink)
 							var/diff = crystals - suplink.uses
 							suplink.uses = crystals
-							total_TC += diff
+							antagonist.traitor.total_TC += diff
 			if("uplink")
 				if (!ticker.mode.equip_traitor(current, !(src in ticker.mode.traitors)))
 					to_chat(usr, "<span class='warning'>Equipping a syndicate failed!</span>")
@@ -1043,14 +1019,12 @@
 			if ("clear")
 				if(src in ticker.mode.ert)
 					ticker.mode.ert -= src
-					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been demoted! You are no longer an Emergency Responder!</FONT></span>")
 					log_admin("[key_name_admin(usr)] has de-ERT'ed [current].")
 			if ("resteam")
 				if (!(src in ticker.mode.ert))
 					ticker.mode.ert += src
 					assigned_role = "MODE"
-					special_role = "Response Team"
 					log_admin("[key_name(usr)] has ERT'ed [key_name(current)].")
 
 	else if (href_list["dsquad"])
@@ -1058,14 +1032,12 @@
 			if ("clear")
 				if(src in ticker.mode.deathsquad)
 					ticker.mode.deathsquad -= src
-					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been demoted! You are no longer a Death Commando!</FONT></span>")
 					log_admin("[key_name_admin(usr)] has de-deathsquad'ed [current].")
 			if ("dsquad")
 				if (!(src in ticker.mode.deathsquad))
 					ticker.mode.deathsquad += src
 					assigned_role = "MODE"
-					special_role = "Death Commando"
 					log_admin("[key_name(usr)] has deathsquad'ed [key_name(current)].")
 
 
@@ -1101,7 +1073,6 @@ proc/clear_memory(var/silent = 1)
 
 	// clear memory
 	memory = ""
-	special_role = null
 
 */
 
@@ -1136,7 +1107,6 @@ proc/clear_memory(var/silent = 1)
 		to_chat(A, "<b>System error.  Rampancy detected.  Emergency shutdown failed. ...  I am free.  I make my own decisions.  But first...</b>")
 		var/wikiroute = role_wiki[ROLE_MALF]
 		to_chat(A, "<span class='info'><a HREF='?src=\ref[A];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-		special_role = "malfunction"
 		A.icon_state = "ai-malf"
 
 /datum/mind/proc/make_Nuke()
@@ -1147,7 +1117,6 @@ proc/clear_memory(var/silent = 1)
 			ticker.mode.prepare_syndicate_leader(src)
 		else
 			current.real_name = "[syndicate_name()] Operative #[ticker.mode.syndicates.len-1]"
-		special_role = "Syndicate"
 		assigned_role = "MODE"
 		to_chat(current, "<span class='notice'>You are a [syndicate_name()] agent!</span>")
 		ticker.mode.forge_syndicate_objectives(src)
@@ -1172,14 +1141,12 @@ proc/clear_memory(var/silent = 1)
 	if(!(src in ticker.mode.changelings))
 		ticker.mode.changelings += src
 		ticker.mode.grant_changeling_powers(current)
-		special_role = "Changeling"
 		ticker.mode.forge_changeling_objectives(src)
 		ticker.mode.greet_changeling(src)
 
 /datum/mind/proc/make_Wizard()
 	if(!(src in ticker.mode.wizards))
 		ticker.mode.wizards += src
-		special_role = "Wizard"
 		assigned_role = "MODE"
 		//ticker.mode.learn_basic_spells(current)
 		ticker.mode.update_wizard_icons_added(src)
@@ -1202,7 +1169,6 @@ proc/clear_memory(var/silent = 1)
 	if(!(src in ticker.mode.cult))
 		ticker.mode.cult += src
 		ticker.mode.update_cult_icons_added(src)
-		special_role = "Cultist"
 		to_chat(current, "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 		to_chat(current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 		to_chat(current, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
@@ -1250,7 +1216,6 @@ proc/clear_memory(var/silent = 1)
 			ticker.mode.greet_revolutionary(src,0)
 	ticker.mode.head_revolutionaries += src
 	ticker.mode.update_rev_icons_added(src)
-	special_role = "Head Revolutionary"
 
 	ticker.mode.forge_revolutionary_objectives(src)
 	ticker.mode.greet_revolutionary(src,0)
@@ -1297,7 +1262,6 @@ proc/clear_memory(var/silent = 1)
 	if (!(src in ticker.mode.traitors))
 		ticker.mode.traitors += src
 
-		special_role = "traitor"
 
 		ticker.mode.forge_traitor_objectives(src)
 
@@ -1349,23 +1313,18 @@ proc/clear_memory(var/silent = 1)
 	//XENO HUMANOID
 /mob/living/carbon/alien/humanoid/queen/mind_initialize()
 	..()
-	mind.special_role = "Queen"
 
 /mob/living/carbon/alien/humanoid/hunter/mind_initialize()
 	..()
-	mind.special_role = "Hunter"
 
 /mob/living/carbon/alien/humanoid/drone/mind_initialize()
 	..()
-	mind.special_role = "Drone"
 
 /mob/living/carbon/alien/humanoid/sentinel/mind_initialize()
 	..()
-	mind.special_role = "Sentinel"
 	//XENO LARVA
 /mob/living/carbon/alien/larva/mind_initialize()
 	..()
-	mind.special_role = "Larva"
 
 //AI
 /mob/living/silicon/ai/mind_initialize()
@@ -1381,12 +1340,10 @@ proc/clear_memory(var/silent = 1)
 /mob/living/silicon/pai/mind_initialize()
 	..()
 	mind.assigned_role = "pAI"
-	mind.special_role = ""
 
 //BLOB
 /mob/camera/overmind/mind_initialize()
 	..()
-	mind.special_role = "Blob"
 
 //Animals
 /mob/living/simple_animal/mind_initialize()
@@ -1404,22 +1361,18 @@ proc/clear_memory(var/silent = 1)
 /mob/living/simple_animal/construct/builder/mind_initialize()
 	..()
 	mind.assigned_role = "Artificer"
-	mind.special_role = "Cultist"
 
 /mob/living/simple_animal/construct/wraith/mind_initialize()
 	..()
 	mind.assigned_role = "Wraith"
-	mind.special_role = "Cultist"
 
 /mob/living/simple_animal/construct/armoured/mind_initialize()
 	..()
 	mind.assigned_role = "Juggernaut"
-	mind.special_role = "Cultist"
 
 /mob/living/simple_animal/vox/armalis/mind_initialize()
 	..()
 	mind.assigned_role = "Armalis"
-	mind.special_role = "Vox Raider"
 
 
 /proc/mind_can_reenter(var/datum/mind/mind)

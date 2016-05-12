@@ -1,7 +1,7 @@
 //Restores our verbs. It will only restore verbs allowed during lesser (monkey) form if we are not human
 /mob/proc/make_changeling()
 	if(!mind)				return
-	if(!mind.changeling)	mind.changeling = new /datum/changeling(gender)
+	if(!mind.changeling)	mind.changeling = new /datum/changeling(src, gender)
 	verbs += /datum/changeling/proc/EvolutionMenu
 
 	var/lesser_form = !ishuman(src)
@@ -141,14 +141,6 @@
 	H.set_species("Horror")
 	H.client.verbs |= H.species.abilities // Force ability equip.
 	H.update_icons()
-
-//removes our changeling verbs
-/mob/proc/remove_changeling_powers()
-	if(!mind || !mind.changeling)	return
-	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
-		if(P.isVerb)
-			verbs -= P.verbpath
-
 
 //Helper proc. Does all the checks and stuff for us to avoid copypasta
 /mob/proc/changeling_power(var/required_chems=0, var/required_dna=0, var/max_genetic_damage=100, var/max_stat=0, var/deny_horror=0)
@@ -962,4 +954,4 @@ var/list/datum/dna/hivemind_bank = list()
 
 	feedback_add_details("changeling_powers","ED")
 	return 1
-	
+
