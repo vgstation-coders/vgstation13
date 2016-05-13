@@ -67,22 +67,16 @@
 	switch(severity)
 		if(1)
 			qdel(src)
-			return
 		if(2)
 			deflate(1)
-			return
 		if(3)
 			if(prob(50))
 				deflate(1)
-				return
 
 /obj/structure/inflatable/attack_hand(mob/user)
-	user.delayNextAttack(10)
 	add_fingerprint(user)
-	return
 
 /obj/structure/inflatable/attackby(obj/item/weapon/W, mob/user)
-	user.delayNextAttack(10)
 	if(W.is_sharp())
 		visible_message("<span class='danger'>[user] pierces [src] with [W]!</span>")
 		deflate(1)
@@ -157,24 +151,16 @@
 
 /obj/structure/inflatable/door
 	name = "inflatable door"
-	density = 1
-	anchored = 1
-	opacity = 0
-
 	icon_state = "door_closed"
 	undeploy_path = /obj/item/inflatable/door
-
 	var/state = 0 //closed, 1 == open
 	var/isSwitchingStates = 0
 
-/obj/structure/inflatable/door/attack_ai(mob/user as mob) //those aren't machinery, they're just big fucking slabs of a mineral
-	if(isAI(user)) //so the AI can't open it
-		return
-	else if(isrobot(user)) //but cyborgs can
-		if(get_dist(user,src) <= 1) //not remotely though
-			return TryToSwitchState(user)
+/obj/structure/inflatable/door/attack_robot(mob/user) //those aren't machinery, they're just big fucking slabs of a mineral
+	if(get_dist(user,src) <= 1) //not remotely though
+		return TryToSwitchState(user)
 
-/obj/structure/inflatable/door/attack_hand(mob/user as mob)
+/obj/structure/inflatable/door/attack_hand(mob/user)
 	return TryToSwitchState(user)
 
 /obj/structure/inflatable/door/Cross(atom/movable/mover, turf/target, height=0, air_group=0)
@@ -211,7 +197,7 @@
 	playsound(loc, 'sound/effects/attackblob.ogg', 75, 1)
 	sleep(10)
 	density = 0
-	opacity = 0
+	set_opacity(0)
 	state = 1
 	update_icon()
 	isSwitchingStates = 0
@@ -222,20 +208,17 @@
 	playsound(loc, 'sound/effects/attackblob.ogg', 75, 1)
 	sleep(10)
 	density = 1
-	opacity = 0
+	set_opacity(0)
 	state = 0
 	update_icon()
 	isSwitchingStates = 0
 
 /obj/structure/inflatable/proc/update_nearby_tiles()
 	if (isnull(air_master))
-		return 0
-
+		return
 	var/T = loc
-
 	if (isturf(T))
 		air_master.mark_for_update(T)
-
 	return 1
 
 /obj/structure/inflatable/door/update_icon()

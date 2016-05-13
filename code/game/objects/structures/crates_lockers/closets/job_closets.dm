@@ -93,6 +93,8 @@
 
 /obj/structure/closet/paramedic/New()
 	..()
+	new /obj/item/weapon/storage/box/inflatable(src)
+	new /obj/item/weapon/storage/box/inflatable(src)
 	new /obj/item/clothing/under/rank/medical/paramedic(src)
 	new /obj/item/clothing/under/rank/medical/paramedic(src)
 	new /obj/item/device/radio/headset/headset_med(src)
