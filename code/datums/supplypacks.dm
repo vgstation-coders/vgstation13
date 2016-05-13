@@ -1100,6 +1100,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 	access = access_ce
 
+/datum/supply_packs/inflatable
+	name = "Inflatable barriers"
+	contains = list(/obj/item/weapon/storage/box/inflatable,
+					/obj/item/weapon/storage/box/inflatable,
+					/obj/item/weapon/storage/box/inflatable)
+	cost = 20
+	containertype = /obj/structure/closet/crate
+	containername = "\improper Inflatable Barrier Crate"
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical

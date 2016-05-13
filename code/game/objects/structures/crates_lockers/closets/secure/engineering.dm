@@ -16,6 +16,7 @@
 			new /obj/item/weapon/storage/backpack/industrial(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
+		new /obj/item/weapon/storage/box/inflatable(src)
 		new /obj/item/blueprints(src)
 		new /obj/item/clothing/under/rank/chief_engineer(src)
 		new /obj/item/clothing/head/hardhat/white(src)
@@ -109,6 +110,7 @@
 			new /obj/item/weapon/storage/backpack/industrial(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
+		new /obj/item/weapon/storage/box/inflatable(src)
 		new /obj/item/clothing/under/rank/engineer(src)
 		new /obj/item/clothing/shoes/orange(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
@@ -140,6 +142,7 @@
 			new /obj/item/weapon/storage/backpack(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_norm(src)
+		new /obj/item/weapon/storage/box/inflatable(src)
 		new /obj/item/clothing/under/rank/atmospheric_technician(src)
 		new /obj/item/clothing/shoes/black(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
