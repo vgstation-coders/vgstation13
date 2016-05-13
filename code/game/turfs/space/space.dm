@@ -4,6 +4,8 @@
 	desc = "The final frontier."
 	icon_state = "0"
 
+	plane = -10
+
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 700000
