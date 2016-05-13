@@ -1103,8 +1103,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/inflatable
 	name = "Inflatable barriers"
 	contains = list(/obj/item/weapon/storage/box/inflatable,
-					/obj/item/weapon/storage/box/inflatable,
-					/obj/item/weapon/storage/box/inflatable)
+                    /obj/item/weapon/storage/box/inflatable,
+                    /obj/item/weapon/storage/box/inflatable)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "\improper Inflatable Barrier Crate"

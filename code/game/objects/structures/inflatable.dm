@@ -8,7 +8,7 @@
 	if(!deploy_path)
 		return
 	playsound(loc, 'sound/items/zip.ogg', 75, 1)
-	user << "<span class='notice'>You inflate \the [src].</span>"
+	to_chat(user, "<span class='notice'>You inflate \the [src].</span>")
 	var/obj/structure/inflatable/R = new deploy_path(user.loc)
 	src.transfer_fingerprints_to(R)
 	R.add_fingerprint(user)
@@ -37,7 +37,7 @@
 	penetration_dampening = 3
 
 	var/undeploy_path = null
-	var/health = 50.0
+	var/health = 50
 
 /obj/structure/inflatable/wall
 	name = "inflatable wall"
@@ -55,7 +55,6 @@
 	return 0
 
 /obj/structure/inflatable/bullet_act(var/obj/item/projectile/Proj)
-
 	health -= Proj.damage
 	..()
 	if(health <= 0)
@@ -67,25 +66,25 @@
 
 /obj/structure/inflatable/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(1)
 			qdel(src)
 			return
-		if(2.0)
+		if(2)
 			deflate(1)
 			return
-		if(3.0)
+		if(3)
 			if(prob(50))
 				deflate(1)
 				return
 
-/obj/structure/inflatable/attack_hand(mob/user as mob)
+/obj/structure/inflatable/attack_hand(mob/user)
 	user.delayNextAttack(10)
 	add_fingerprint(user)
 	return
 
-/obj/structure/inflatable/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/inflatable/attackby(obj/item/weapon/W, mob/user)
 	user.delayNextAttack(10)
-	if (W.is_sharp())
+	if(W.is_sharp())
 		visible_message("<span class='danger'>[user] pierces [src] with [W]!</span>")
 		deflate(1)
 	if(W.damtype == BRUTE || W.damtype == BURN)
@@ -93,16 +92,14 @@
 		..()
 	return
 
-/obj/structure/inflatable/attack_alien(mob/user as mob)
-
+/obj/structure/inflatable/attack_alien(mob/user)
 	user.delayNextAttack(10)
 	if(islarva(user))
 		return
 	visible_message("<span class='danger'>[user] rips [src] apart!</span>")
 	deflate(1)
 
-/obj/structure/inflatable/attack_animal(mob/user as mob)
-
+/obj/structure/inflatable/attack_animal(mob/user)
 	user.delayNextAttack(10)
 	var/mob/living/simple_animal/M = user
 	if(M.melee_damage_upper <= 0)
@@ -110,8 +107,7 @@
 	user.visible_message("<span class='danger'>[user] attacks [src]!</span>")
 	attack_generic(M, M.melee_damage_upper)
 
-/obj/structure/inflatable/attack_slime(mob/user as mob)
-
+/obj/structure/inflatable/attack_slime(mob/user)
 	user.delayNextAttack(10)
 	if(!isslimeadult(user))
 		return
