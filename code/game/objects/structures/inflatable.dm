@@ -45,7 +45,7 @@
 
 /obj/structure/inflatable/New(location)
 	..()
-	update_nearby_tiles(need_rebuild=1)
+	update_nearby_tiles()
 
 /obj/structure/inflatable/Destroy()
 	update_nearby_tiles()
@@ -269,7 +269,7 @@
 
 /obj/item/weapon/storage/box/inflatable/New()
 	..()
-	for(var/i = 0 to 3)
+	for(var/i = 1 to 3)
 		new /obj/item/inflatable/door(src)
-	for(var/i = 0 to 4)
+	for(var/i = 1 to 4)
 		new /obj/item/inflatable/wall(src)
