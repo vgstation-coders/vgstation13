@@ -247,9 +247,9 @@
 	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "folded_wall_torn"
 
-	attack_self(mob/user)
-		to_chat(user, "<span class='notice'>The inflatable wall is too torn to be inflated!</span>")
-		add_fingerprint(user)
+/obj/item/inflatable/torn/attack_self(mob/user)
+	to_chat(user, "<span class='notice'>The inflatable wall is too torn to be inflated!</span>")
+	add_fingerprint(user)
 
 /obj/item/inflatable/door/torn
 	name = "torn inflatable door"
@@ -257,9 +257,9 @@
 	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "folded_door_torn"
 
-	attack_self(mob/user)
-		to_chat(user, "<span class='notice'>The inflatable door is too torn to be inflated!</span>")
-		add_fingerprint(user)
+/obj/item/inflatable/door/torn/attack_self(mob/user)
+	to_chat(user, "<span class='notice'>The inflatable door is too torn to be inflated!</span>")
+	add_fingerprint(user)
 
 /obj/item/weapon/storage/box/inflatable
 	name = "inflatable barrier box"
