@@ -161,7 +161,7 @@
 		spawn(1) deflate(1)
 	return 1
 
-/obj/structure/inflatable/door //Based on mineral door code
+/obj/structure/inflatable/door
 	name = "inflatable door"
 	density = 1
 	anchored = 1
