@@ -30,10 +30,11 @@ var/global/media_receivers=list()
 
 	// Check if there's a broadcast to tune into.
 	if(freq in media_transmitters)
-		// Pick a random broadcast in that frequency.
-		var/obj/machinery/media/transmitter/B = pick(media_transmitters[freq])
-		if(B.media_crypto == media_crypto) // Crypto-key check, if needed.
-			receive_broadcast(B.media_url,B.media_start_time)
+		// Pick a random broadcast in that frequency, if there is one.
+		if(media_transmitters.len)
+			var/obj/machinery/media/transmitter/B = pick(media_transmitters[freq])
+			if(B.media_crypto == media_crypto) // Crypto-key check, if needed.
+				receive_broadcast(B.media_url,B.media_start_time)
 
 /obj/machinery/media/receiver/proc/disconnect_frequency()
 	var/list/receivers=list()
