@@ -59,7 +59,6 @@
 	..()
 	if(health <= 0)
 		deflate(1)
-	return
 
 /obj/structure/inflatable/projectile_check()
 	return PROJREACT_WINDOWS
@@ -90,13 +89,12 @@
 	if(W.damtype == BRUTE || W.damtype == BURN)
 		hit(W.force)
 		..()
-	return
 
 /obj/structure/inflatable/attack_alien(mob/user)
 	user.delayNextAttack(10)
 	if(islarva(user))
 		return
-	visible_message("<span class='danger'>[user] rips [src] apart!</span>")
+	visible_message("<span class='danger'>\The [user] rips [src] apart!</span>")
 	deflate(1)
 
 /obj/structure/inflatable/attack_animal(mob/user)
@@ -104,14 +102,14 @@
 	var/mob/living/simple_animal/M = user
 	if(M.melee_damage_upper <= 0)
 		return
-	user.visible_message("<span class='danger'>[user] attacks [src]!</span>")
+	user.visible_message("<span class='danger'>\The [user] attacks [src]!</span>")
 	attack_generic(M, M.melee_damage_upper)
 
 /obj/structure/inflatable/attack_slime(mob/user)
 	user.delayNextAttack(10)
 	if(!isslimeadult(user))
 		return
-	user.visible_message("<span class='danger'>[user] glomps [src]!</span>")
+	user.visible_message("<span class='danger'>\The [user] glomps [src]!</span>")
 	attack_generic(user, rand(10, 15))
 
 /obj/structure/inflatable/proc/hit(var/damage, var/sound_effect = 1)
@@ -127,17 +125,17 @@
 /obj/structure/inflatable/proc/deflate(var/violent=0)
 	playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
 	if(violent)
-		visible_message("[src] rapidly deflates!")
+		visible_message("\The [src] rapidly deflates!")
 		var/obj/item/inflatable/torn/R = new /obj/item/inflatable/torn(loc)
-		src.transfer_fingerprints_to(R)
+		transfer_fingerprints_to(R)
 		qdel(src)
 	else
 		if(!undeploy_path)
 			return
 		visible_message("\The [src] slowly deflates.")
 		spawn(50)
-			var/obj/item/inflatable/R = new undeploy_path(src.loc)
-			src.transfer_fingerprints_to(R)
+			var/obj/item/inflatable/R = new undeploy_path(loc)
+			transfer_fingerprints_to(R)
 			qdel(src)
 
 /obj/structure/inflatable/verb/hand_deflate()
@@ -249,7 +247,7 @@
 /obj/structure/inflatable/door/deflate(var/violent=0)
 	playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
 	if(violent)
-		visible_message("[src] rapidly deflates!")
+		visible_message("\The [src] rapidly deflates!")
 		var/obj/item/inflatable/door/torn/R = new /obj/item/inflatable/door/torn(loc)
 		src.transfer_fingerprints_to(R)
 		qdel(src)
