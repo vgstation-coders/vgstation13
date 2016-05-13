@@ -20,7 +20,7 @@
 	icon_state = "folded_wall"
 	deploy_path = /obj/structure/inflatable/wall
 
-/obj/item/inflatable/door/
+/obj/item/inflatable/door
 	name = "inflatable door"
 	desc = "A folded membrane which rapidly expands into a simple door on activation."
 	icon_state = "folded_door"
@@ -265,7 +265,7 @@
 	icon_state = "folded_wall_torn"
 
 	attack_self(mob/user)
-		user << "<span class='notice'>The inflatable wall is too torn to be inflated!</span>"
+		to_chat(user, "<span class='notice'>The inflatable wall is too torn to be inflated!</span>"
 		add_fingerprint(user)
 
 /obj/item/inflatable/door/torn
@@ -275,7 +275,7 @@
 	icon_state = "folded_door_torn"
 
 	attack_self(mob/user)
-		user << "<span class='notice'>The inflatable door is too torn to be inflated!</span>"
+		to_chat(user, "<span class='notice'>The inflatable door is too torn to be inflated!</span>"
 		add_fingerprint(user)
 
 /obj/item/weapon/storage/box/inflatable
@@ -286,7 +286,7 @@
 
 /obj/item/weapon/storage/box/inflatable/New()
 	..()
-	for(var/i = 0; i < 3; i++)
+	for(var/i = 0 to 3)
 		new /obj/item/inflatable/door(src)
-	for(var/i = 0; i < 4; i++)
+	for(var/i = 0 to 4)
 		new /obj/item/inflatable/wall(src)
