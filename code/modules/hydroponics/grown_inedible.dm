@@ -162,7 +162,7 @@
 		to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
 
 /obj/item/weapon/grown/nettle/afterattack(atom/A as mob|obj, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity || destroyed) return
 	user.delayNextAttack(8)
 	if(force > 0)
 		force -= rand(1,(force/3)+1) // When you whack someone with it, leaves fall off
