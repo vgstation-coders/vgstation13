@@ -10,7 +10,7 @@
 	playsound(loc, 'sound/items/zip.ogg', 75, 1)
 	to_chat(user, "<span class='notice'>You inflate \the [src].</span>")
 	var/obj/structure/inflatable/R = new deploy_path(user.loc)
-	src.transfer_fingerprints_to(R)
+	transfer_fingerprints_to(R)
 	R.add_fingerprint(user)
 	qdel(src)
 
@@ -232,13 +232,13 @@
 	if(violent)
 		visible_message("\The [src] rapidly deflates!")
 		var/obj/item/inflatable/door/torn/R = new /obj/item/inflatable/door/torn(loc)
-		src.transfer_fingerprints_to(R)
+		transfer_fingerprints_to(R)
 		qdel(src)
 	else
-		visible_message("[src] slowly deflates.")
+		visible_message("\The [src] slowly deflates.")
 		spawn(50)
 			var/obj/item/inflatable/door/R = new /obj/item/inflatable/door(loc)
-			src.transfer_fingerprints_to(R)
+			transfer_fingerprints_to(R)
 			qdel(src)
 
 /obj/item/inflatable/torn
