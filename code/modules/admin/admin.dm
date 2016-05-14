@@ -677,7 +677,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
 		"}
 
-	if(istype(wagePayoutController, /datum/controller/process/wagePayout))
+	if(wages_enabled)
 		dat += "<A href='?src=\ref[src];wages_enabled=disable'>Disable wages</A><br>"
 	else
 		dat += "<A href='?src=\ref[src];wages_enabled=enable'>Enable wages</A><br>"
