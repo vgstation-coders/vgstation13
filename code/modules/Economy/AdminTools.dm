@@ -12,7 +12,6 @@
             if("finalise_create_account")
                 var/account_name = hrefs["holder_name"]
                 var/starting_funds = max(text2num(hrefs["starting_funds"]), 0)
-                if(starting_funds >0)
                 create_account(account_name, starting_funds, src)
                 creating_new_account = 0
             if("view_account_detail")
