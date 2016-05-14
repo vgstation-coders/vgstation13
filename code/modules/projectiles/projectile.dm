@@ -93,6 +93,9 @@ var/list/impact_master = list()
 	var/PixelX = 0
 	var/PixelY = 0
 
+	var/initial_pixel_x = 0
+	var/initial_pixel_y = 0
+
 	animate_movement = 0
 	var/linear_movement = 1
 
@@ -101,6 +104,11 @@ var/list/impact_master = list()
 	var/penetration_message = 1 //Message that is shown when a projectile penetrates an object
 	var/fire_sound = 'sound/weapons/Gunshot.ogg' //sound that plays when the projectile is fired
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
+
+/obj/item/projectile/New()
+	..()
+	initial_pixel_x = pixel_x
+	initial_pixel_y = pixel_y
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
 	if(blocked >= 2)		return 0//Full block
@@ -438,7 +446,10 @@ var/list/impact_master = list()
 		var/AY = (override_starting_Y - src.y)*32
 		var/BX = (override_target_X - src.x)*32
 		var/BY = (override_target_Y - src.y)*32
-		var/XX = (((BX-AX)*(-BX))+((BY-AY)*(-BY)))/(((BX-AX)*(BX-AX))+((BY-AY)*(BY-AY)))
+		var/XXcheck = ((BX-AX)*(BX-AX))+((BY-AY)*(BY-AY))
+		if(!XXcheck)
+			return
+		var/XX = (((BX-AX)*(-BX))+((BY-AY)*(-BY)))/XXcheck
 
 		PixelX = round(BX+((BX-AX)*XX))
 		PixelY = round(BY+((BY-AY)*XX))
@@ -451,6 +462,9 @@ var/list/impact_master = list()
 				PixelX -= 16
 			if(WEST)
 				PixelX += 16
+
+		PixelX += initial_pixel_x
+		PixelY += initial_pixel_y
 	return
 
 /obj/item/projectile/proc/bullet_die()
