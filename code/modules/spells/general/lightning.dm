@@ -76,10 +76,6 @@
 	connected_button.name = name
 	return temp
 
-/spell/lightning/process()
-	if(currently_channeled) return //do not charge while we are gonna zap
-	..()
-
 /spell/lightning/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!..()) //We only make it to this point if we succeeded in channeling or are removing channeling
 		return 0
