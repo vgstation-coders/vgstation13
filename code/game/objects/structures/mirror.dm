@@ -142,3 +142,10 @@
 /obj/structure/mirror/kick_act()
 	..()
 	shatter()
+
+//magic mirror, not actually magic because I can't code
+
+/obj/structure/mirror/magic
+	name = "magic mirror"
+	icon_state = "magic_mirror"
+	desc = "Everyone knows a wizard is only as good as the length of his beard."
