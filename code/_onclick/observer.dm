@@ -97,12 +97,6 @@
 	if(target)
 		user.loc = get_turf(target)
 
-/obj/machinery/gateway/centerstation/attack_ghost(mob/user as mob)
-	return src.Bumped(user)
-
-/obj/machinery/gateway/centeraway/attack_ghost(mob/user as mob)
-	return src.Bumped(user)
-
 // -------------------------------------------
 // This was supposed to be used by adminghosts
 // I think it is a *terrible* idea
