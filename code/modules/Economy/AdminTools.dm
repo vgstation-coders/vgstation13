@@ -1,13 +1,12 @@
 /datum/admins/proc/EconomyPanel(action, hrefs)
-    to_chat(world, "honk")
-    if(!check_rights(0))	return
+    if(!check_rights(R_FUN))	return
 
-    var/dat= ""
+    var/dat= "<head><title>Economy Tools</title></head>"
     var/datum/money_account/detailed_account_view
     var/creating_new_account
 
-    if(hrefs["choice"])
-        switch(hrefs["choice"])
+    if(hrefs["econ_panel"] != "open")
+        switch(hrefs["econ_panel"])
             if("create_account")
                 creating_new_account = 1
             if("finalise_create_account")
@@ -34,6 +33,21 @@
             if("view_accounts_list")
                 detailed_account_view = null
                 creating_new_account = 0
+            if("edit_balance")
+                var/index = text2num(hrefs["account_index"])
+                if(index && index <= all_money_accounts.len)
+                    var/new_balance = input(usr, "Select a new balance for this account", "New balance", all_money_accounts) as num
+                    var/acc = all_money_accounts[index]
+                    acc.money = new_balance
+                    detailed_account_view = acc
+            if("edit_wage_payout")
+                var/index = text2num(hrefs["account_index"])
+                if(index && index <= all_money_accounts.len)
+                    var/new_payout = input(usr, "Select a new payout for this account", "New payout", all_money_accounts) as num
+                    var/acc = all_money_accounts[index]
+                    acc.wage_gain = new_payout
+                    detailed_account_view = acc
+
 
     if(creating_new_account)
 
@@ -55,8 +69,8 @@
                 <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a><hr>
                 <b>Account number:</b> #[detailed_account_view.account_number]<br>
                 <b>Account holder:</b> [detailed_account_view.owner_name]<br>
-                <b>Account balance:</b> $[detailed_account_view.money]<br>
-                <b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
+                <b>Account balance:</b> $[detailed_account_view.money] <a href='?src=\ref[src];econ_panel=edit_balance;account_index=[detailed_account_view.account_number]'>Edit</a><br>
+                <b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=\ref[src];econ_panel=edit_wage_payout;account_index=[detailed_account_view.account_number]'>Edit</a><br>
                 <table border=1 style='width:100%'>
                 <tr>
                 <td><b>Date</b></td>
@@ -87,6 +101,7 @@
                 dat += {"<tr>
                     <td>#[D.account_number]</td>
                     <td>[D.owner_name]</td>
+                    <td>$[D.money]</td>
                     <td><a href='?src=\ref[src];econ_panel=view_account_detail;account_index=[i]'>View in detail</a></td>
                     </tr>"}
             dat += "</table>"

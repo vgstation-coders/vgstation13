@@ -681,7 +681,7 @@ var/global/floorIsLava = 0
 		dat += "<A href='?src=\ref[src];wages_enabled=disable'>Disable wages</A><br>"
 	else
 		dat += "<A href='?src=\ref[src];wages_enabled=enable'>Enable wages</A><br>"
-	dat += "<A href ='?src=\ref[src];econ_panel'>Manage accounts database</A><br>"
+	dat += "<A href ='?src=\ref[src];econ_panel=open'>Manage accounts database</A><br>"
 
 	usr << browse(dat, "window=admin2;size=280x370")
 	return
