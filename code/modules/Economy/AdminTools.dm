@@ -12,20 +12,9 @@
             if("finalise_create_account")
                 var/account_name = hrefs["holder_name"]
                 var/starting_funds = max(text2num(hrefs["starting_funds"]), 0)
-                if ((station_account.money - starting_funds) > 0)
-                    station_account.money -= starting_funds
-                    if(starting_funds >0)
-                        //Create a transaction log entry if you need to
-                        var/datum/transaction/T = new()
-                        T.target_name = account_name
-                        T.purpose = "New account funds initialisation"
-                        T.amount = "([starting_funds])"
-                        T.date = current_date_string
-                        T.time = worldtime2text()
-                        T.source_terminal = "$EE^$%$%ERROR$%#@#"
-                        station_account.transaction_log.Add(T)
-                    create_account(account_name, starting_funds, src)
-                    creating_new_account = 0
+                if(starting_funds >0)
+                create_account(account_name, starting_funds, src)
+                creating_new_account = 0
             if("view_account_detail")
                 var/index = text2num(hrefs["account_index"])
                 if(index && index <= all_money_accounts.len)
@@ -34,43 +23,44 @@
                 detailed_account_view = null
                 creating_new_account = 0
             if("edit_balance")
-                var/index = text2num(hrefs["account_index"])
-                if(index && index <= all_money_accounts.len)
-                    var/new_balance = input(usr, "Select a new balance for this account", "New balance", all_money_accounts) as num
-                    var/datum/money_account/acc = all_money_accounts[index]
-                    acc.money = new_balance
+                var/acc_num = text2num(hrefs["account_num"])
+                var/datum/money_account/acc = get_money_account_global(acc_num)
+                if(acc)
+                    var/new_balance = input(usr, "Select a new balance for this account", "New balance", acc.money) as null|num
+                    if(new_balance && new_balance >= 0)
+                        acc.money = new_balance
                     detailed_account_view = acc
             if("edit_wage_payout")
-                var/index = text2num(hrefs["account_index"])
-                if(index && index <= all_money_accounts.len)
-                    var/new_payout = input(usr, "Select a new payout for this account", "New payout", all_money_accounts) as num
-                    var/datum/money_account/acc = all_money_accounts[index]
-                    acc.wage_gain = new_payout
+                var/acc_num = text2num(hrefs["account_num"])
+                var/datum/money_account/acc = get_money_account_global(acc_num)
+                if(acc)
+                    var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
+                    if(new_payout && new_payout >= 0)
+                        acc.wage_gain = new_payout
                     detailed_account_view = acc
 
 
     if(creating_new_account)
 
-        dat += {"<br>
+        dat += {"
             <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a>
             <form name='create_account' action='?src=\ref[src]' method='get'>
             <input type='hidden' name='src' value='\ref[src]'>
             <input type='hidden' name='choice' value='finalise_create_account'>
             <b>Holder name:</b> <input type='text' id='holder_name' name='holder_name' style='width:250px; background-color:white;'><br>
-            <b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' style='width:250px; background-color:white;'> (subtracted from station account.)<br>
-            <i>New accounts are automatically assigned a secret number and pin, which are printed separately in a sealed package.</i><br>
-            <b>Ensure that the station account has enough money to create the account, or it will not be created</b>
+            <b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' style='width:250px; background-color:white;'><br>
+            <i>New accounts are automatically assigned a secret number and pin</i>
             <input type='submit' value='Create'><br>
             </form>"}
     else
         if(detailed_account_view)
 
-            dat += {"<br>
+            dat += {"
                 <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a><hr>
                 <b>Account number:</b> #[detailed_account_view.account_number]<br>
                 <b>Account holder:</b> [detailed_account_view.owner_name]<br>
-                <b>Account balance:</b> $[detailed_account_view.money] <a href='?src=\ref[src];econ_panel=edit_balance;account_index=[detailed_account_view.account_number]'>Edit</a><br>
-                <b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=\ref[src];econ_panel=edit_wage_payout;account_index=[detailed_account_view.account_number]'>Edit</a><br>
+                <b>Account balance:</b> $[detailed_account_view.money] <a href='?src=\ref[src];econ_panel=edit_balance;account_num=[detailed_account_view.account_number]'>Edit</a><br>
+                <b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=\ref[src];econ_panel=edit_wage_payout;account_num=[detailed_account_view.account_number]'>Edit</a><br>
                 <table border=1 style='width:100%'>
                 <tr>
                 <td><b>Date</b></td>

@@ -18,8 +18,8 @@ var/global/list/all_money_accounts = list()
 		station_account.owner_name = "[station_name()] Station Account"
 		station_account.account_number = rand(11111, 99999)
 		station_account.remote_access_pin = rand(1111, 9999)
-		station_account.money = 5000
-		station_account.wage_gain = 500
+		station_account.money = DEPARTMENT_START_FUNDS
+		station_account.wage_gain = DEPARTMENT_START_WAGE
 
 		//create an entry in the account transaction log for when it was created
 		var/datum/transaction/T = new()
@@ -41,9 +41,9 @@ var/global/list/all_money_accounts = list()
 	department_account.owner_name = "[department] Account"
 	department_account.account_number = rand(11111, 99999)
 	department_account.remote_access_pin = rand(1111, 9999)
-	department_account.money = 5000
+	department_account.money = DEPARTMENT_START_FUNDS
 	if(recieves_wage == 1)
-		department_account.wage_gain = 500
+		department_account.wage_gain = DEPARTMENT_START_WAGE
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
