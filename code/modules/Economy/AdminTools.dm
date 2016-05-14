@@ -37,14 +37,14 @@
                 var/index = text2num(hrefs["account_index"])
                 if(index && index <= all_money_accounts.len)
                     var/new_balance = input(usr, "Select a new balance for this account", "New balance", all_money_accounts) as num
-                    var/acc = all_money_accounts[index]
+                    var/datum/money_account/acc = all_money_accounts[index]
                     acc.money = new_balance
                     detailed_account_view = acc
             if("edit_wage_payout")
                 var/index = text2num(hrefs["account_index"])
                 if(index && index <= all_money_accounts.len)
                     var/new_payout = input(usr, "Select a new payout for this account", "New payout", all_money_accounts) as num
-                    var/acc = all_money_accounts[index]
+                    var/datum/money_account/acc = all_money_accounts[index]
                     acc.wage_gain = new_payout
                     detailed_account_view = acc
 
