@@ -20,8 +20,7 @@ var/global/obj/screen/clicker/catcher = new()
 
 	var/obj/screen/lingchemdisplay
 	var/obj/screen/vampire_blood_display // /vg/
-	var/obj/screen/r_hand_hud_object
-	var/obj/screen/l_hand_hud_object
+	var/list/obj/screen/hand_hud_objects = list()
 	var/obj/screen/action_intent
 	var/obj/screen/move_intent
 
@@ -44,8 +43,7 @@ var/global/obj/screen/clicker/catcher = new()
 	help_intent = null
 	lingchemdisplay = null
 	vampire_blood_display = null
-	r_hand_hud_object = null
-	l_hand_hud_object = null
+	hand_hud_objects = null
 	action_intent = null
 	move_intent = null
 	adding = null
@@ -182,8 +180,7 @@ var/global/obj/screen/clicker/catcher = new()
 
 				//Due to some poor coding some things need special treatment:
 				//These ones are a part of 'adding', 'other' or 'hotkeybuttons' but we want them to stay
-				src.client.screen += src.hud_used.l_hand_hud_object	//we want the hands to be visible
-				src.client.screen += src.hud_used.r_hand_hud_object	//we want the hands to be visible
+				src.client.screen += src.hud_used.hand_hud_objects
 				src.client.screen += src.hud_used.action_intent		//we want the intent swticher visible
 				src.hud_used.action_intent.screen_loc = ui_acti_alt	//move this to the alternative position, where zone_select usually is.
 

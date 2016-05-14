@@ -51,6 +51,9 @@
 		if(GRASP_LEFT_HAND) return "left hand"
 		if(GRASP_RIGHT_HAND) return "right hand"
 
+/mob/proc/get_item_offset_by_index(index) //Return a list with x and y offsets depending on index. Example: list("x"=5, "y"=4)
+	return list()
+
 // Get the organ of the active hand
 /mob/proc/get_active_hand_organ()
 	if(!istype(src, /mob/living/carbon)) return

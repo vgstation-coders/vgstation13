@@ -129,8 +129,6 @@ var/global/list/whitelisted_species = list("Human")
 	var/can_be_hypothermic = 1
 	var/has_sweat_glands = 1
 
-	var/base_mob_type = /mob/living/carbon/human
-
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -718,15 +716,6 @@ var/global/list/whitelisted_species = list("Human")
 	burn_mod = 2.5 //treeeeees
 
 	move_speed_mod = 7
-
-/datum/species/martian
-	name = "Martian"
-	attack_verb = "slaps"
-	has_sweat_glands = 0
-	flags = NO_BLOOD | NO_SKIN | IS_SLOW | RAD_ABSORB
-	chem_flags = NO_INJECT
-
-	base_mob_type = /mob/living/carbon/human/martian
 
 /datum/species/golem
 	name = "Golem"

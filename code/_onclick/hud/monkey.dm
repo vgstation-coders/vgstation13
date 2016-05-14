@@ -84,6 +84,22 @@
 	using.layer = 19
 	src.adding += using
 
+	for(var/i = 1 to mymob.held_items.len)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "hand-[i]"
+		inv_box.dir = (i%2 == 0 ? EAST : WEST) //Magic I'm not explaining shit
+		inv_box.icon = ui_style
+		inv_box.icon_state = "hand_inactive"
+		if(mymob && mymob.active_hand == i)
+			inv_box.icon_state = "hand_active"
+		inv_box.screen_loc = mymob.get_held_item_ui_location(i)
+		inv_box.slot_id = null
+		inv_box.hand_index = i
+		inv_box.layer = 19
+		src.hand_hud_objects += inv_box
+		src.adding += inv_box
+
+	/*
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "r_hand"
 	inv_box.dir = WEST
@@ -111,6 +127,7 @@
 	inv_box.layer = 19
 	src.l_hand_hud_object = inv_box
 	src.adding += inv_box
+	*/
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"

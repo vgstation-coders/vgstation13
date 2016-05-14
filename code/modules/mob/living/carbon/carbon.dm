@@ -149,28 +149,22 @@
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
-	if(hud_used.l_hand_hud_object && hud_used.r_hand_hud_object)
-		if(active_hand == GRASP_LEFT_HAND)
-			hud_used.l_hand_hud_object.icon_state = "hand_active"
-			hud_used.r_hand_hud_object.icon_state = "hand_inactive"
+	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if(active_hand == hand_hud_object.hand_index)
+			hand_hud_object.icon_state = "hand_active"
 		else
-			hud_used.l_hand_hud_object.icon_state = "hand_inactive"
-			hud_used.r_hand_hud_object.icon_state = "hand_active"
+			hand_hud_object.icon_state = "hand_inactive"
+
 	return
 
-/mob/living/carbon/proc/activate_hand(var/selhand) //0 or "r" or "right" for right hand; 1 or "l" or "left" for left hand.
+/mob/living/carbon/proc/activate_hand(var/selhand)
+	active_hand = selhand
 
-
-	if(istext(selhand))
-		selhand = lowertext(selhand)
-
-		if(selhand == "right" || selhand == "r")
-			selhand = 0
-		if(selhand == "left" || selhand == "l")
-			selhand = 1
-
-	if(selhand != src.active_hand)
-		swap_hand()
+	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if(active_hand == hand_hud_object.hand_index)
+			hand_hud_object.icon_state = "hand_active"
+		else
+			hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
 	if (src.health >= config.health_threshold_crit)
