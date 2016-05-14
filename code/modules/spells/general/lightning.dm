@@ -109,9 +109,7 @@
 		zapzap--
 		if(zapzap)
 			to_chat(holder, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
-		else
-			take_charge(holder, 0)
-			channel_spell(force_remove = 1)
+			. = 1
 
 		invocation(holder)
 		spawn()

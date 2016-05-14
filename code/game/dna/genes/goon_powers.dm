@@ -144,7 +144,7 @@
 
 	spell_flags = 0
 	invocation_type = SpI_NONE
-	range = 1
+	range = 7
 	max_targets = 1
 	selection_type = "range"
 
@@ -180,23 +180,7 @@
 
 			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target]!</span>")
 
-		new/obj/effects/self_deleting(target.loc, icon('icons/effects/genetics.dmi', "cryokinesis"))
-	return
-
-/obj/effects/self_deleting
-	density = 0
-	opacity = 0
-	anchored = 1
-	icon = null
-	desc = ""
-	//layer = 15
-
-	New(var/atom/location, var/icon/I, var/duration = 20, var/oname = "something")
-		src.name = oname
-		loc=location
-		src.icon = I
-		spawn(duration)
-			qdel(src)
+		anim(target = target, a_icon = 'icons/effects/genetics.dmi', flick_anim = "cryokinesis")
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 

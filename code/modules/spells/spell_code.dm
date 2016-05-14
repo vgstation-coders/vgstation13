@@ -158,13 +158,15 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/target = list(A)
 	holder:attack_delayer.delayNext(0)
 	if(cast_check(1, holder) && is_valid_target(A))
-		take_charge(holder, 1)
 		before_cast(target)
 		if(prob(critfailchance))
 			critfail(target, holder)
 		else
-			cast(target, holder)
+			. = cast(target, holder)
 		after_cast(target)
+		if(!.) //Returning 1 will prevent us from removing the channeling and taking charge
+			channel_spell(force_remove = 1)
+			take_charge(holder, 0)
 
 /spell/proc/cast(list/targets, mob/user) //the actual meat of the spell
 	return
