@@ -57,6 +57,7 @@
 
 /obj/screen/inventory
 	var/slot_id	//The indentifier for the slot. It has nothing to do with ID cards.
+	var/hand_index
 
 /obj/screen/close
 	name = "close"
@@ -359,12 +360,16 @@
 							if(ishuman(C))
 								var/mob/living/carbon/human/H = C
 								breathes = H.species.breath_type
-								nicename = list ("suit", "back", "belt", "right hand", "left hand", "left pocket", "right pocket")
-								tankcheck = list (H.s_store, C.back, H.belt, C.r_hand, C.l_hand, H.l_store, H.r_store)
+								nicename = list ("suit", "back", "belt", "left pocket", "right pocket") //Hands are added below
+								tankcheck = list (H.s_store, C.back, H.belt, H.l_store, H.r_store)
 
 							else
-								nicename = list("Right Hand", "Left Hand", "Back")
-								tankcheck = list(C.r_hand, C.l_hand, C.back)
+								nicename = list("back")
+								tankcheck = list(C.back)
+
+							tankcheck = tankcheck + C.held_items
+							for(var/i = 1 to C.held_items.len)
+								nicename.Add(C.get_index_limb_name(i))
 
 							for(var/i=1, i<tankcheck.len+1, ++i)
 								if(istype(tankcheck[i], /obj/item/weapon/tank))

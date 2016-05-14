@@ -146,10 +146,12 @@
 		"backpack" = slot_in_backpack,
 		"left pocket" = slot_l_store,
 		"right pocket" = slot_r_store,
-		"left hand" = slot_l_hand,
-		"right hand" = slot_r_hand,
 	)
 	var/where = mob.equip_in_one_of_slots(T, slots)
+	if(!where)
+		if(mob.put_in_hands(T))
+			where = "hand"
+
 	if (!where)
 		to_chat(mob, "The Syndicate were unfortunately unable to get you a flash.")
 	else

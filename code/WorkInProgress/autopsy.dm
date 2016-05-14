@@ -162,14 +162,7 @@
 
 	if(istype(usr,/mob/living/carbon))
 		// place the item in the usr's hand if possible
-		if(!usr.r_hand)
-			P.loc = usr
-			usr.r_hand = P
-			P.layer = 20
-		else if(!usr.l_hand)
-			P.loc = usr
-			usr.l_hand = P
-			P.layer = 20
+		usr.put_in_hands(P)
 
 	if(istype(usr,/mob/living/carbon/human))
 		usr:update_inv_l_hand()

@@ -94,9 +94,8 @@
 /mob/living/carbon/attack_hand(mob/M as mob)
 	if(!istype(M, /mob/living/carbon)) return
 	if (hasorgans(M))
-		var/datum/organ/external/temp = M:organs_by_name["r_hand"]
-		if (M.hand)
-			temp = M:organs_by_name["l_hand"]
+		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
+
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
@@ -147,18 +146,16 @@
 	return damage
 
 /mob/living/carbon/proc/swap_hand()
-	src.hand = !( src.hand )
+	if(++active_hand > held_items.len)
+		active_hand = 1
+
 	if(hud_used.l_hand_hud_object && hud_used.r_hand_hud_object)
-		if(hand)	//This being 1 means the left hand is in use
+		if(active_hand == GRASP_LEFT_HAND)
 			hud_used.l_hand_hud_object.icon_state = "hand_active"
 			hud_used.r_hand_hud_object.icon_state = "hand_inactive"
 		else
 			hud_used.l_hand_hud_object.icon_state = "hand_inactive"
 			hud_used.r_hand_hud_object.icon_state = "hand_active"
-	/*if (!( src.hand ))
-		src.hands.dir = NORTH
-	else
-		src.hands.dir = SOUTH*/
 	return
 
 /mob/living/carbon/proc/activate_hand(var/selhand) //0 or "r" or "right" for right hand; 1 or "l" or "left" for left hand.
@@ -172,7 +169,7 @@
 		if(selhand == "left" || selhand == "l")
 			selhand = 1
 
-	if(selhand != src.hand)
+	if(selhand != src.active_hand)
 		swap_hand()
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
@@ -460,10 +457,9 @@
 	if(handcuffed)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=handcuff'>Remove</A>"
 	else
-		dat += {"
-		<B>Left Hand:</B> <A href='?src=\ref[src];item=l_hand'>		[(l_hand && !( src.l_hand.abstract ))		? l_hand	: "<font color=grey>Empty</font>"]</A><BR>
-		<B>Right Hand:</B> <A href='?src=\ref[src];item=r_hand'>		[(r_hand && !( src.r_hand.abstract ))		? r_hand	: "<font color=grey>Empty</font>"]</A><BR>
-		"}
+		for(var/i = 1 to held_items.len) //Hands
+			var/obj/item/I = held_items[i]
+			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];item=hand;hand_index=[i]'>		[(I && !I.abstract) ? I : "<font color=grey>Empty</font>"]</A><BR>"
 
 	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=back'> [(back && !(src.back.abstract)) ? back : "<font color=grey>Empty</font>"]</A>"
 	if(has_breathable_mask && istype(back, /obj/item/weapon/tank))

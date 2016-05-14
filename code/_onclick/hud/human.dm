@@ -118,10 +118,11 @@
 	inv_box.dir = WEST
 	inv_box.icon = ui_style
 	inv_box.icon_state = "hand_inactive"
-	if(mymob && !mymob.hand)	//This being 0 or null means the right hand is in use
+	if(mymob && mymob.active_hand == GRASP_RIGHT_HAND)
 		inv_box.icon_state = "hand_active"
 	inv_box.screen_loc = ui_rhand
-	inv_box.slot_id = slot_r_hand
+	inv_box.slot_id = null
+	inv_box.hand_index = GRASP_RIGHT_HAND
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
@@ -134,10 +135,11 @@
 	inv_box.dir = EAST
 	inv_box.icon = ui_style
 	inv_box.icon_state = "hand_inactive"
-	if(mymob && mymob.hand)	//This being 1 means the left hand is in use
+	if(mymob && mymob.active_hand == GRASP_LEFT_HAND)
 		inv_box.icon_state = "hand_active"
 	inv_box.screen_loc = ui_lhand
-	inv_box.slot_id = slot_l_hand
+	inv_box.slot_id = null
+	inv_box.hand_index = GRASP_LEFT_HAND
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha

@@ -225,16 +225,12 @@ var/global/obj/screen/clicker/catcher = new()
 	var/mob/living/L = mymob
 
 	if(L.shown_schematics_background && !clear)
+
 		if(!istype(R))
-			switch(L.hand)
-				if(1)
-					R = L.l_hand
-					if(!istype(R))
-						return
-				else
-					R = L.r_hand
-					if(!istype(R))
-						return
+			R = L.get_active_hand()
+			if(!istype(R))
+				return
+
 		if((!R.schematics || !R.schematics.len) && !override)
 			to_chat(usr, "<span class='danger'>This [R] has no schematics to choose from.</span>")
 			return

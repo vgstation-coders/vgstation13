@@ -150,8 +150,7 @@
 	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/Overlays/head_layer)
 	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/Overlays/handcuff_layer)
 	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/Overlays/legcuff_layer)
-	obj_overlays[L_HAND_LAYER]		= getFromPool(/obj/Overlays/l_hand_layer)
-	obj_overlays[R_HAND_LAYER]		= getFromPool(/obj/Overlays/r_hand_layer)
+	obj_overlays[HAND_LAYER]		= getFromPool(/obj/Overlays/hand_layer)
 	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/Overlays/tail_layer)
 	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/Overlays/targeted_layer)
 
@@ -390,10 +389,12 @@
 	var/has_breathable_mask = istype(wear_mask, /obj/item/clothing/mask)
 	var/list/obscured = check_obscured_slots()
 	var/TAB = "&nbsp;&nbsp;&nbsp;&nbsp;"
-	var/dat = {"
-	<B>Left Hand:</B> <A href='?src=\ref[src];item=l_hand'>		[(l_hand && !( src.l_hand.abstract ))		? l_hand	: "<font color=grey>Empty</font>"]</A><BR>
-	<B>Right Hand:</B> <A href='?src=\ref[src];item=r_hand'>		[(r_hand && !( src.r_hand.abstract ))		? r_hand	: "<font color=grey>Empty</font>"]</A><BR>
-	"}
+	var/dat
+
+	for(var/i = 1 to held_items.len) //Hands
+		var/obj/item/I = held_items[i]
+		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];item=hand;hand_index=[i]'>		[(I && !I.abstract) ? I : "<font color=grey>Empty</font>"]</A><BR>"
+
 	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=back'> [(back && !(src.back.abstract)) ? back : "<font color=grey>Empty</font>"]</A>"
 	if(has_breathable_mask && istype(back, /obj/item/weapon/tank))
 		dat += "<BR>[TAB]&#8627;<A href='?src=\ref[src];item=internal'>[internal ? "Disable Internals" : "Set Internals"]</A>"
@@ -552,10 +553,6 @@
 			return "mask"
 		if (slot_handcuffed)
 			return "handcuffed"
-		if (slot_l_hand)
-			return "l_hand"
-		if (slot_r_hand)
-			return "r_hand"
 		if (slot_belt)
 			return "belt"
 		if (slot_wear_id)
@@ -968,10 +965,12 @@
 
 
 /mob/living/carbon/human/abiotic(var/full_body = 0)
-	if(full_body && ((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )) || (src.back || src.wear_mask || src.head || src.shoes || src.w_uniform || src.wear_suit || src.glasses || src.ears || src.gloves)))
+	for(var/obj/item/I in held_items)
+		if(I.abstract) continue
+
 		return 1
 
-	if( (src.l_hand && !src.l_hand.abstract) || (src.r_hand && !src.r_hand.abstract) )
+	if(full_body && (src.back || src.wear_mask || src.head || src.shoes || src.w_uniform || src.wear_suit || src.glasses || src.ears || src.gloves))
 		return 1
 
 	return 0
@@ -1596,14 +1595,14 @@
 		if(lasercolor == "b")//Lasertag turrets target the opposing team.
 			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
 				threatcount += 4
-			if((istype(r_hand,/obj/item/weapon/gun/energy/laser/redtag)) || (istype(l_hand,/obj/item/weapon/gun/energy/laser/redtag)))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
 				threatcount += 4
 			if(istype(belt, /obj/item/weapon/gun/energy/laser/redtag))
 				threatcount += 2
 		if(lasercolor == "r")
 			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
 				threatcount += 4
-			if((istype(r_hand,/obj/item/weapon/gun/energy/laser/bluetag)) || (istype(l_hand,/obj/item/weapon/gun/energy/laser/bluetag)))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
 				threatcount += 4
 			if(istype(belt, /obj/item/weapon/gun/energy/laser/bluetag))
 				threatcount += 2
@@ -1615,10 +1614,10 @@
 	//Check for weapons
 	if(judgebot.weaponscheck)
 		if(!idcard || !(access_weapons in idcard.access))
-			if(judgebot.check_for_weapons(l_hand))
-				threatcount += 4
-			if(judgebot.check_for_weapons(r_hand))
-				threatcount += 4
+			for(var/obj/item/I in held_items)
+				if(judgebot.check_for_weapons(I))
+					threatcount += 4
+
 			if(judgebot.check_for_weapons(belt))
 				threatcount += 2
 	//Check for arrest warrant
@@ -1672,12 +1671,11 @@
 /mob/living/carbon/human/singularity_pull(S, current_size,var/radiations = 3)
 	if(src.flags & INVULNERABLE)
 		return 0
-	if(current_size >= STAGE_THREE)
-		var/list/handlist = list(l_hand, r_hand)
-		for(var/obj/item/hand in handlist)
-			if(prob(current_size*5) && hand.w_class >= ((11-current_size)/2) && u_equip(hand,1))
-				step_towards(hand, src)
-				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [hand] from your grip!</span>")
+	if(current_size >= STAGE_THREE) //Pull items from hand
+		for(var/obj/item/I in held_items)
+			if(prob(current_size*5) && I.w_class >= ((11-current_size)/2) && u_equip(I,1))
+				step_towards(I, src)
+				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
 	if(radiations)
 		apply_effect(current_size * radiations, IRRADIATE)
 	if(shoes)

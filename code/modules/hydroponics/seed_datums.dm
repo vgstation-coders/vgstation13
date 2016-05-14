@@ -615,9 +615,13 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	if(ligneous)
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
-			if((!M.l_hand || !M.l_hand.is_sharp()) && (!M.r_hand || !M.r_hand.is_sharp()))
-				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
-				success = 0
+			for(var/obj/item/I in M.held_items)
+				if(I.is_sharp())
+					return success
+
+			to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
+			success = 0
+
 	return success
 
 // Create a seed packet directly from the plant.

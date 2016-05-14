@@ -66,7 +66,8 @@
 	var/mob/living/carbon/M = user
 	if(!M) return 0
 
-	var/left_hand_exists = 1
+	return 1
+	/*var/left_hand_exists = 1
 	var/right_hand_exists = 1
 
 	if(M.handcuffed)
@@ -95,7 +96,7 @@
 		right_hand_exists = 0
 		if(user.r_hand == null) right_hand_exists++
 
-	return ( left_hand_exists + right_hand_exists )
+	return ( left_hand_exists + right_hand_exists )*/
 
 /obj/structure/bed/chair/vehicle/wheelchair/getMovementDelay()
 	//Speed is determined by amount of usable hands and whether they're carrying something

@@ -77,7 +77,7 @@
 	if (istype(loc,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = loc
 		var/image/DNA_overlay = null
-		if(H.l_hand == src || H.r_hand == src)
+		if(H.held_items.Find(src))
 			if(dna_profile)
 				if(dna_profile == H.dna.unique_enzymes)
 					DNA_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)]DNAgood")
@@ -226,6 +226,7 @@
 
 /obj/item/weapon/gun/lawgiver/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0) //Overriding this due to introducing the DNA check, and the fact that the round is to be chambered only just before it is fired
 	..()
+
 	if(firing_mode == RAPID)
 		var/obj/item/ammo_casing/a12mm/A = new /obj/item/ammo_casing/a12mm(user.loc)
 		A.BB = null

@@ -121,7 +121,7 @@
 
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
-		if(user.l_hand != src && user.r_hand != src)	//if we're not in his hands
+		if(!user.held_items.Find(src))	//if we're not in his hands
 			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 			return
 
@@ -190,7 +190,7 @@
 			update_icon()
 			return
 		if(silenced)
-			if(user.l_hand != src && user.r_hand != src)
+			if(!user.held_items.Find(src))
 				..()
 				return
 			to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")

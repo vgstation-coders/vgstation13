@@ -159,22 +159,14 @@
 			if(N == Q.cardname)
 				C = Q
 		var/mob/living/M = usr
-		if(M.r_hand == src)
-			if(M.l_hand)
-				to_chat(usr, "<span class = 'warning'>Your other hand is full.</span>")
-				return
-			else
-				src.cards -= C
-				C.Flip()
-				usr.put_in_l_hand(C)
-		else if(M.l_hand == src)
-			if(M.r_hand)
-				to_chat(usr, "<span class = 'warning'>Your other hand is full.</span>")
-				return
-			else
-				src.cards -= C
-				C.Flip()
-				usr.put_in_r_hand(C)
+		if(!M.find_empty_hand_index())
+			to_chat(usr, "<span class = 'warning'>Your other hand is full.</span>")
+			return
+
+		src.cards -= C
+		C.Flip()
+		usr.put_in_hands(C)
+
 		usr.visible_message("<span class = 'notice'>[usr] draws a specific card from the deck.</span>",
 							"<span class = 'notice'>You draw the [N] from the deck.")
 		update_icon()
@@ -336,7 +328,7 @@
 	..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/cardUser = user
-		if(cardUser.get_item_by_slot(slot_l_hand) == src || cardUser.get_item_by_slot(slot_r_hand) == src)
+		if(cardUser.held_items.Find(src))
 			cardUser.visible_message("<span class = 'notice'>[cardUser] checks \his card.",
 									 "<span class = 'notice'>The card reads: [src.name]</span>")
 		else

@@ -1513,8 +1513,8 @@
 						oldhat = K.hat
 						K.hat = null
 						oldhat.loc = pack
-					K.equip_to_slot_or_del(ident, slot_r_hand)
-					K.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(K), slot_l_hand)
+					K.put_in_hands(ident)
+					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/green(K))
 					K.regenerate_icons()
 
 			if("Red")
@@ -1540,8 +1540,8 @@
 						oldhat = K.hat
 						K.hat = null
 						oldhat.loc = pack
-					K.equip_to_slot_or_del(ident, slot_r_hand)
-					K.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(K), slot_l_hand)
+					K.put_in_hands(ident)
+					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/red(K))
 					K.regenerate_icons()
 
 		if(pack.contents.len == 0)
@@ -1914,22 +1914,16 @@
 	else if(href_list["adminspawncookie"])
 		if(!check_rights(R_ADMIN|R_FUN))	return
 
-		var/mob/living/carbon/human/H = locate(href_list["adminspawncookie"])
-		if(!ishuman(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
+		var/mob/living/carbon/H = locate(href_list["adminspawncookie"])
+		if(!iscarbon(H))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon")
 			return
 
-		H.equip_to_slot_or_del( new /obj/item/weapon/reagent_containers/food/snacks/cookie(H), slot_l_hand )
-		if(!(istype(H.l_hand,/obj/item/weapon/reagent_containers/food/snacks/cookie)))
-			H.equip_to_slot_or_del( new /obj/item/weapon/reagent_containers/food/snacks/cookie(H), slot_r_hand )
-			if(!(istype(H.r_hand,/obj/item/weapon/reagent_containers/food/snacks/cookie)))
-				log_admin("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
-				message_admins("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
-				return
-			else
-				H.update_inv_r_hand()//To ensure the icon appears in the HUD
-		else
-			H.update_inv_l_hand()
+		if(!H.put_in_hands( new /obj/item/weapon/reagent_containers/food/snacks/cookie(H)))
+			log_admin("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
+			message_admins("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
+			return
+
 		log_admin("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 		message_admins("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 		feedback_inc("admin_cookies_spawned",1)

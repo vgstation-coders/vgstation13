@@ -114,8 +114,8 @@
 		fillinghandl.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		dynamic_overlay["[BACK_LAYER]"] = fillingback
-		dynamic_overlay["[L_HAND_LAYER]"] = fillinghandl
-		dynamic_overlay["[R_HAND_LAYER]"] = fillinghandr
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = fillinghandl
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = fillinghandr
 
 		overlays += filling
 		if (istype(loc,/mob/living/carbon/human)) //Needs to always update its own overlay, but only update mob overlays if it's actually on a mob.
@@ -125,8 +125,8 @@
 
 	else
 		dynamic_overlay["[BACK_LAYER]"] = null
-		dynamic_overlay["[L_HAND_LAYER]"] = null
-		dynamic_overlay["[R_HAND_LAYER]"] = null
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
 		if (istype(loc,/mob/living/carbon/human))
 			H.update_inv_back()
 			H.update_inv_r_hand()
