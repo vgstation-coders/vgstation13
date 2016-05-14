@@ -29,6 +29,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	//IGNOREPREV to make each new target not overlap with the previous one
 	//CONSTRUCT_CHECK used by construct spells - checks for nullrods
 	//NO_BUTTON to prevent spell from showing up in the HUD
+	//WAIT_FOR_CLICK to make the spell cast on the next target you click
 
 	//For targeted spells:
 		//INCLUDEUSER to include user in the target selection
@@ -69,7 +70,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/override_base = ""
 
 	var/obj/screen/spell/connected_button
-	var/channeled = 0
 	var/currently_channeled = 0
 
 ///////////////////////
@@ -102,7 +102,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
 	if(!holder)
 		holder = user //just in case
-	if(channeled)
+	if(spell_flags & WAIT_FOR_CLICK)
 		channel_spell(user, skipcharge)
 		return
 	if(!cast_check(skipcharge, user))
@@ -124,6 +124,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			cast(targets, user)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 
+//This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
 /spell/proc/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!holder)
 		holder = user //just in case
@@ -156,7 +157,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return
 	var/list/target = list(A)
-	holder:attack_delayer.delayNext(0)
+	var/mob/user = holder
+	user.attack_delayer.delayNext(0)
 	if(cast_check(1, holder) && is_valid_target(A))
 		before_cast(target)
 		if(prob(critfailchance))

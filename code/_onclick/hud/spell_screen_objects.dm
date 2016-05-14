@@ -166,7 +166,7 @@
 		spellmaster.spell_objects -= src
 		if(spellmaster.spell_holder && spellmaster.spell_holder.client)
 			spellmaster.spell_holder.client.screen -= src
-			spellmaster.spell_holder.client.images -= channeling_image
+			remove_channeling()
 	if(spellmaster && !spellmaster.spell_objects.len)
 		returnToPool(spellmaster)
 	spellmaster = null

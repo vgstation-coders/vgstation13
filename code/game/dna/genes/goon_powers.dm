@@ -142,7 +142,7 @@
 	charge_type = Sp_RECHARGE
 	charge_max = 600
 
-	spell_flags = 0
+	spell_flags = WAIT_FOR_CLICK
 	invocation_type = SpI_NONE
 	range = 7
 	max_targets = 1
@@ -150,7 +150,6 @@
 
 	override_base = "genetic"
 	hud_state = "gen_ice"
-	channeled = 1
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/cryokinesis/cast(list/targets)

@@ -1199,6 +1199,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //End split flags
 #define CONSTRUCT_CHECK	256	//used by construct spells - checks for nullrods
 #define NO_BUTTON		512	//spell won't show up in the HUD with this
+#define WAIT_FOR_CLICK	1024//spells wait for you to click on a target to cast
 
 //invocation
 #define SpI_SHOUT	"shout"
