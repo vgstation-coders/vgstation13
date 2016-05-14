@@ -1,4 +1,5 @@
-var/global/enable_wages = 0
+var/global/wages_enabled = 0
+var/global/roundstart_enable_wages = 0
 
 /proc/wageSetup()
 	WageLoop()
@@ -23,5 +24,5 @@ var/global/enable_wages = 0
 	src = null
 	while(1)
 		sleep(15 MINUTES)
-		if(enable_wages)
+		if(wages_enabled)
 			wagePayout()
