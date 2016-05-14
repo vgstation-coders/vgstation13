@@ -79,9 +79,11 @@
 
 /mob/proc/put_in_hand(index, obj/item/W)
 	if(!is_valid_hand_index(index) || !is_valid_hand_index(active_hand))
+		to_chat(src, "Invalid index [index]")
 		return 0
 
 	if(!put_in_hand_check(W, active_hand))
+		to_chat(src, "PIHC failed")
 		return 0
 
 	if(!held_items[index])
@@ -100,6 +102,8 @@
 		update_inv_hand(index)
 		W.pickup(src)
 		return 1
+	else
+		to_chat(src, "Held_items\[[index]\] isn't null")
 
 //Puts the item into your left hand if possible and calls all necessary triggers/updates. returns 1 on success.
 /mob/proc/put_in_l_hand(var/obj/item/W)
@@ -125,11 +129,11 @@
 
 //Puts the item into our active hand if possible. returns 1 on success.
 /mob/proc/put_in_active_hand(var/obj/item/W)
-	return put_in_hand(active_hand)
+	return put_in_hand(active_hand, W)
 
 //Puts the item into our inactive hand if possible. returns 1 on success.
 /mob/proc/put_in_inactive_hand(var/obj/item/W)
-	return put_in_hand(get_inactive_hand_index())
+	return put_in_hand(get_inactive_hand_index(), W)
 
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.

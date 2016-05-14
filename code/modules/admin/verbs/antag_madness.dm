@@ -512,7 +512,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.equip_to_slot_or_del(new/obj/item/clothing/shoes/sandal/marisa, slot_shoes)
 				M.equip_to_slot_or_del(new/obj/item/clothing/head/wizard/marisa, slot_head)
 				M.equip_to_slot_or_del(new/obj/item/clothing/suit/wizrobe/marisa, slot_wear_suit)
-				M.put_in_hand(new/obj/item/weapon/staff/broom)
+				M.put_in_hands(new/obj/item/weapon/staff/broom)
 
 				M.r_eyes = 153
 				M.g_eyes = 102

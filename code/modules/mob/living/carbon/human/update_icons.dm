@@ -1044,12 +1044,12 @@ var/global/list/damage_icon_parts = list()
 	if(update_icons)   update_icons()
 
 /mob/living/carbon/human/update_inv_hand(index, var/update_icons = 1)
-	var/obj/Overlays/O = obj_overlays[HAND_LAYER]
+	var/obj/Overlays/hand_layer/O = obj_overlays[HAND_LAYER]
 	overlays.Remove(O)
 
 	var/obj/Overlays/new_item_overlay
 
-	for(var/obj/Overlays/OV in O.overlays) //Go through all item overlays and remove those with the same index
+	for(var/obj/Overlays/OV in O.hands_overlays) //Go through all item overlays and remove those with the same index
 		if(OV.name == "[index]")
 			O.overlays.Remove(OV)
 			new_item_overlay = OV
@@ -1058,11 +1058,16 @@ var/global/list/damage_icon_parts = list()
 
 	if(I)
 		var/t_state = I.item_state
-		var/t_inhand_state = I.inhand_states[get_direction_by_index()]
+		var/t_inhand_state = I.inhand_states[get_direction_by_index(index)]
 		var/icon/check_dimensions = new(t_inhand_state)
 		if(!t_state)	t_state = I.icon_state
 
-		if(!new_item_overlay) new_item_overlay = new()
+		if(!new_item_overlay)
+			new_item_overlay = new()
+
+			if(!istype(O.hands_overlays, /list)) O.hands_overlays = list()
+			to_chat(src, "[O.hands_overlays]")
+			O.hands_overlays.Add(new_item_overlay)
 
 		new_item_overlay.name = "[index]"
 		new_item_overlay.icon = t_inhand_state

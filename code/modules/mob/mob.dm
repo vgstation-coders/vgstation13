@@ -486,10 +486,14 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return
 
 //This proc is called whenever someone clicks an inventory ui slot.
-/mob/proc/attack_ui(slot)
+/mob/proc/attack_ui(slot, hand_index)
 	var/obj/item/W = get_active_hand()
 	if(istype(W))
-		equip_to_slot_if_possible(W, slot)
+		if(slot)
+			equip_to_slot_if_possible(W, slot)
+		else if(hand_index)
+			put_in_hand(hand_index, W)
+
 	if(ishuman(src) && W == src:head)
 		src:update_hair()
 
