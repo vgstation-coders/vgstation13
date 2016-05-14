@@ -322,7 +322,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	eyes = "vox_eyes_s"
 
-	default_mutations = list(M_BEAK, M_TALONS, SKELEVOX)
+	default_mutations = list(M_BEAK, M_TALONS)
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox
 

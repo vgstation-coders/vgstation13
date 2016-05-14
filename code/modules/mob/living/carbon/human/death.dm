@@ -102,20 +102,16 @@
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
-	if((SKELETON in src.mutations) || (SKELEVOX in src.mutations))
+	if(SKELETON in src.mutations)
 		return
 
-	if(!SKELEVOX in src.mutations)
-		if(f_style)
-			f_style = "Shaved"
-		if(h_style)
-			h_style = "Bald"
-		update_hair(0)
-		mutations.Add(SKELETON)
+	if(f_style)
+		f_style = "Shaved"
+	if(h_style)
+		h_style = "Bald"
+	update_hair(0)
 
-	if(!SKELETON in src.mutations)
-		mutations.Add(SKELEVOX)
-
+	mutations.Add(SKELETON)
 	status_flags |= DISFIGURED
 	update_body(0)
 	update_mutantrace()
