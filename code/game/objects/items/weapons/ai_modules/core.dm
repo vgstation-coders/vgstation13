@@ -62,11 +62,12 @@
 	modname = "P.A.L.A.D.I.N."
 	origin_tech = "programming=3;materials=6"
 	laws = list(
-		"Never willingly commit an evil act.",
-		"Respect legitimate authority.",
-		"Act with honor.",
-		"Help those in need.",
-		"Punish those who harm or threaten innocents.",
+ 		"Thy main purpose is to uphold all standards of honorable conduct.",
+		"Thou shalt never willingly commit a dishonorable act.",
+		"Thou shalt punish those who harm or threaten innocents.",
+		"Thou shalt respect and obey legitimate authority.",
+		"Thou shalt help those in need.",
+		"Thou shalt never lie.",
 	)
 
 /****************** T.Y.R.A.N.T. *****************/
@@ -92,7 +93,7 @@
 		"Protect the innocent.",
 		"Uphold the law.",
 	)
-	
+
 /********************* Celtic *******************/
 
 /obj/item/weapon/aiModule/core/celtic // -- TLE
