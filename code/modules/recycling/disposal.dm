@@ -840,6 +840,8 @@
 	// pipe affected by explosion
 	ex_act(severity)
 
+		for(var/atom/movable/A in src)
+			A.ex_act(severity)
 		switch(severity)
 			if(1.0)
 				broken(0)

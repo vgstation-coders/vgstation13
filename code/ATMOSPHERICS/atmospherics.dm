@@ -62,7 +62,10 @@ Pipelines + Other Objects -> Pipe network
 	centre_overlay = null
 	..()
 
-
+/obj/machinery/atmospherics/ex_act(severity)
+	for(var/atom/movable/A in src) //ventcrawling is serious business
+		A.ex_act(severity)
+	..()
 
 /obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list)
 	if(!can_be_coloured && color)
