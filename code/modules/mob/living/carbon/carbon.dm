@@ -145,7 +145,7 @@
 
 	return damage
 
-/mob/living/carbon/proc/swap_hand()
+/mob/living/carbon/swap_hand()
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
@@ -157,7 +157,7 @@
 
 	return
 
-/mob/living/carbon/proc/activate_hand(var/selhand)
+/mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 
 	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)

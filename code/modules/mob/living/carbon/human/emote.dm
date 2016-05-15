@@ -423,9 +423,9 @@
 
 				if (isnum(t1))
 					t1 = Clamp(t1, 0, maximum_finger_amount)
-					if(t1 == 0) t1 = 2
 
-					message = "<B>[src]</B> raises [t1] finger\s."
+					if(t1 > 0)
+						message = "<B>[src]</B> raises [t1] finger\s."
 			m_type = VISIBLE
 
 		if ("smile")

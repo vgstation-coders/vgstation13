@@ -2,7 +2,7 @@
 /mob/living/carbon/alien/humanoid/u_equip(obj/item/W as obj, dropped = 1)
 	if(!W) return 0
 	var/success = 0
-	var/index = held_items.Find(W)
+	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
 		success = 1

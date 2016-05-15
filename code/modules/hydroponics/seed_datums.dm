@@ -612,15 +612,16 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 										var/drawing = min(15, H.vessel.get_reagent_amount("blood"))
 										H.vessel.remove_reagent("blood", drawing)
 										tray.reagents.add_reagent("blood", drawing)
-	if(ligneous)
+	if(ligneous && success)
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
 			for(var/obj/item/I in M.held_items)
 				if(I.is_sharp())
-					return success
+					success = 1
+					break
 
-			to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
-			success = 0
+			if(!success)
+				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
 
 	return success
 

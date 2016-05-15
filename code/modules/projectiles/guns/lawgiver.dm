@@ -77,7 +77,7 @@
 	if (istype(loc,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = loc
 		var/image/DNA_overlay = null
-		if(H.held_items.Find(src))
+		if(H.is_holding_item(src))
 			if(dna_profile)
 				if(dna_profile == H.dna.unique_enzymes)
 					DNA_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)]DNAgood")

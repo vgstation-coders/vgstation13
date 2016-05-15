@@ -1,5 +1,7 @@
 /mob/living/carbon/monkey/martian
 	name = "martian"
+	voice_name = "martian"
+	icon_state = "martian1"
 	held_items = list(null, null, null, null)
 
 	canWearHats = 0
@@ -7,6 +9,7 @@
 	canWearGlasses = 0
 
 /mob/living/carbon/monkey/martian/New()
+	..()
 	overlays_standing.len = 14
 
 #define ui_rhand "CENTER-1:16,SOUTH:5"
@@ -40,9 +43,9 @@
 /mob/living/carbon/monkey/martian/get_item_offset_by_index(index)
 	switch(index)
 		if(3)
-			return list("x"=0, "y"=10)
+			return list("x"=0, "y"=18)
 		if(4)
-			return list("x"=0, "y"=10)
+			return list("x"=0, "y"=18)
 
 	return list()
 
@@ -64,12 +67,12 @@
 
 	if(I)
 		var/t_state = I.item_state
-		var/t_inhand_states = I.inhand_states["right_hand"]
+		var/t_inhand_states = I.inhand_states[get_direction_by_index(index)]
 		if(!t_state)	t_state = I.icon_state
-		overlays_standing["[10 + index]"]	= image("icon" = t_inhand_states, "icon_state" = t_state, "pixel_x" = pixelx, "pixel_y" = pixely)
+		overlays_standing[10 + index]	= image("icon" = t_inhand_states, "icon_state" = t_state, "pixel_x" = pixelx, "pixel_y" = pixely)
 		I.screen_loc = get_held_item_ui_location(index)
 		if (handcuffed)
 			drop_item(I)
 	else
-		overlays_standing["[10 + index]"]	= null
+		overlays_standing[10 + index]	= null
 	if(update_icons)		update_icons()

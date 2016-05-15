@@ -10,16 +10,22 @@
 	return held_items[index]
 
 /mob/proc/find_held_item_by_type(type) //Returns the list index
-	if(!held_items.len) return null
+	if(!held_items.len) return 0
 
 	for(var/i = 1 to held_items.len)
 		if(istype(held_items[i], type))
 			return i
 
+	return 0
+
+/mob/proc/is_holding_item(item)
+	return held_items.Find(item)
+
 /mob/proc/find_empty_hand_index()
 	for(var/i = 1 to held_items.len)
 		if(!held_items[i])
 			return i
+
 	return 0
 
 /mob/proc/empty_hand_indexes_amount()
@@ -40,9 +46,10 @@
 		if(GRASP_RIGHT_HAND)return ui_rhand
 
 /mob/proc/get_direction_by_index(index)
-	switch(index)
-		if(GRASP_LEFT_HAND) return "left_hand"
-		if(GRASP_RIGHT_HAND)return "right_hand"
+	if(index % 2 == GRASP_LEFT_HAND)
+		return "left_hand"
+	else
+		return "right_hand"
 
 /mob/proc/get_index_limb_name(var/index)
 	if(!index) index = active_hand
@@ -50,6 +57,7 @@
 	switch(index)
 		if(GRASP_LEFT_HAND) return "left hand"
 		if(GRASP_RIGHT_HAND) return "right hand"
+		else return "hand"
 
 /mob/proc/get_item_offset_by_index(index) //Return a list with x and y offsets depending on index. Example: list("x"=5, "y"=4)
 	return list()
@@ -80,13 +88,36 @@
 
 	return new_index
 
+/mob/proc/swap_hand()
+	if(++active_hand > held_items.len)
+		active_hand = 1
+
+	if(!hud_used) return
+
+	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if(active_hand == hand_hud_object.hand_index)
+			hand_hud_object.icon_state = "hand_active"
+		else
+			hand_hud_object.icon_state = "hand_inactive"
+
+	return
+
+/mob/proc/activate_hand(var/selhand)
+	active_hand = selhand
+
+	if(!hud_used) return
+
+	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if(active_hand == hand_hud_object.hand_index)
+			hand_hud_object.icon_state = "hand_active"
+		else
+			hand_hud_object.icon_state = "hand_inactive"
+
 /mob/proc/put_in_hand(index, obj/item/W)
 	if(!is_valid_hand_index(index) || !is_valid_hand_index(active_hand))
-		to_chat(src, "Invalid index [index]")
 		return 0
 
 	if(!put_in_hand_check(W, active_hand))
-		to_chat(src, "PIHC failed")
 		return 0
 
 	if(!held_items[index])
@@ -105,8 +136,6 @@
 		update_inv_hand(index)
 		W.pickup(src)
 		return 1
-	else
-		to_chat(src, "Held_items\[[index]\] isn't null")
 
 //Puts the item into your left hand if possible and calls all necessary triggers/updates. returns 1 on success.
 /mob/proc/put_in_l_hand(var/obj/item/W)
@@ -234,7 +263,7 @@
 	if(!W) return 0
 	var/success = 0
 
-	var/index = held_items.Find(W)
+	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
 		success = 1

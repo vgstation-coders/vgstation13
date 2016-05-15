@@ -164,10 +164,6 @@
 		// place the item in the usr's hand if possible
 		usr.put_in_hands(P)
 
-	if(istype(usr,/mob/living/carbon/human))
-		usr:update_inv_l_hand()
-		usr:update_inv_r_hand()
-
 /obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
 		return

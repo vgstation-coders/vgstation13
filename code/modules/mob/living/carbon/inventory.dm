@@ -14,7 +14,7 @@
 	return list(handcuffed,
 				legcuffed,
 				back,
-				wear_mask)
+				wear_mask) + held_items
 
 //everything on the mob that is not in its pockets, hands belt, etc.
 /mob/living/carbon/get_clothing_items()

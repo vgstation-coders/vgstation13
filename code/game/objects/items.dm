@@ -146,7 +146,7 @@
 	else
 		pronoun = "It is"
 	..(user, " [pronoun] a [size] item.")
-	if((cant_drop > 0) && user.held_items.Find(src)) //Item can't be dropped, and is either in left or right hand!
+	if((cant_drop > 0) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		user << "<span class='danger'>It's stuck to your hands!</span>"
 
 
@@ -730,7 +730,10 @@
 		//(user.get_active_hand() in list(null, src)) is the part which checks whether the ACTIVE hand is either nothing, or the wielded item. Otherwise, abort!
 
 		//The second half is the same, except that the proc assumes that the wielded item is held in the INACTIVE hand. So the INACTIVE hand is checked for holding either nothing or wielded item.
-		if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
+		//if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
+
+		//^ Dude what the heck were you smoking
+		if(user.put_in_hands(wielded))
 			wielded.attach_to(src)
 			update_wield(user)
 			return 1

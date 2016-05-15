@@ -561,8 +561,11 @@
 		if(user.get_item_by_slot(slot_id))
 			to_chat(user, "<span class='warning'>You can't fit inside while wearing that \the [user.get_item_by_slot(slot_id)].</span>")
 			return 0
+
 	for(var/obj/item/I in user.held_items)
 		to_chat(user, "<span class='warning'>You can't fit inside while holding \the [I].</span>")
+		return 0
+
 	return 1
 
 /obj/item/clothing/under/clownpiece

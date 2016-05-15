@@ -100,10 +100,14 @@
 		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot))
 			return 1
 
-/mob/living/carbon/human/proc/equip_in_one_of_slots(obj/item/W, list/slots, act_on_fail = 1)
+/mob/living/carbon/human/proc/equip_in_one_of_slots(obj/item/W, list/slots, act_on_fail = 1, put_in_hand_if_fail = 0)
 	for (var/slot in slots)
 		if (equip_to_slot_if_possible(W, slots[slot], 0))
 			return slot
+	if(put_in_hand_if_fail)
+		if (put_in_hands(W))
+			return "hand"
+
 	switch (act_on_fail)
 		if(EQUIP_FAILACTION_DELETE)
 			qdel(W)
@@ -206,7 +210,7 @@
 
 	var/success
 
-	var/index = held_items.Find(W)
+	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
 		success = 1
@@ -314,7 +318,7 @@
 	if(!istype(W)) return
 	if(!has_organ_for_slot(slot)) return
 
-	if(src.held_items.Find(W))
+	if(src.is_holding_item(W))
 		src.u_equip(W)
 
 	switch(slot)
@@ -854,7 +858,7 @@ It can still be worn/put on as normal.
 	if(strip_item) //Stripping an item from the mob
 
 		var/obj/item/W = strip_item
-		if((W.cant_drop > 0) && (target.held_items.Find(W))) //If item we're trying to take off can't be dropped AND is in target's hand(s):
+		if((W.cant_drop > 0) && (target.is_holding_item(W))) //If item we're trying to take off can't be dropped AND is in target's hand(s):
 			source << "<span class='notice'>\The [W] is stuck to \the [target]!</span>"
 			return
 

@@ -527,7 +527,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 			if(1)
 				equip_to_slot(W, slot, redraw_mob)
 			if(2)
-				var/in_the_hand = (held_items.Find(W))
+				var/in_the_hand = (is_holding_item(W))
 				var/obj/item/wearing = get_item_by_slot(slot)
 				if(wearing)
 					if(!in_the_hand) //if we aren't holding it, the proc is abstract so get rid of it

@@ -708,12 +708,8 @@ Auto Patrol: []"},
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 
 		if(weaponscheck && !wpermit(perp))
-			for(var/i = 1 to perp.held_items.len)
-				var/obj/item/item = perp.held_items[i]
-				if(safe_weapons.Find(item.type))
-					continue
-
-				if(istype(item, /obj/item/weapon/gun) || istype(item, /obj/item/weapon/melee))
+			for(var/obj/item/I in perp.held_items)
+				if(check_for_weapons(I))
 					threatcount += 4
 
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))

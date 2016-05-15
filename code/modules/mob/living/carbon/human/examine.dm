@@ -112,9 +112,9 @@
 	//hands
 	for(var/obj/item/I in held_items)
 		if(I.blood_DNA && I.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_is] holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood_stained [I.name] in [t_his] [get_index_limb_name(held_items.Find(I))]!</span>\n"
+			msg += "<span class='warning'>[t_He] [t_is] holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood_stained [I.name] in [t_his] [get_index_limb_name(is_holding_item(I))]!</span>\n"
 		else
-			msg += "[t_He] [t_is] holding [bicon(I)] \a [I] in [t_his] [get_index_limb_name(held_items.Find(I))].\n"
+			msg += "[t_He] [t_is] holding [bicon(I)] \a [I] in [t_his] [get_index_limb_name(is_holding_item(I))].\n"
 
 	//gloves
 	if(gloves && !(slot_gloves in obscured))

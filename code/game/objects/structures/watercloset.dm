@@ -323,7 +323,7 @@
 		for(var/obj/item/I in M.held_items)
 			if(prob(CLEAN_PROB))
 				I.clean_blood()
-				M.update_inv_hand(M.held_items.Find(I))
+				M.update_inv_hand(M.is_holding_item(I))
 		if(M.back && prob(CLEAN_PROB))
 			if(M.back.clean_blood())
 				M.update_inv_back(0)

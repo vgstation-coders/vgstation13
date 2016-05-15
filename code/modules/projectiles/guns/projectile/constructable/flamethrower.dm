@@ -55,7 +55,7 @@
 	var/turf/location = loc
 	if(istype(location, /mob/))
 		var/mob/M = location
-		if(M.held_items.Find(src))
+		if(M.is_holding_item(src))
 			location = M.loc
 	if(isturf(location)) //start a fire if possible
 		location.hotspot_expose(700, 2,surfaces=istype(loc,/turf))

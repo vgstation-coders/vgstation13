@@ -328,7 +328,7 @@
 	..()
 	if(ishuman(user))
 		var/mob/living/carbon/human/cardUser = user
-		if(cardUser.held_items.Find(src))
+		if(cardUser.is_holding_item(src))
 			cardUser.visible_message("<span class = 'notice'>[cardUser] checks \his card.",
 									 "<span class = 'notice'>The card reads: [src.name]</span>")
 		else

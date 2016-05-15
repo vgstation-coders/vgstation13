@@ -875,11 +875,8 @@
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
 
-	if(copytext(name,1,6)=="hand-")
-		var/new_hand_index = text2num(copytext(name, 6))
-		var/mob/living/carbon/C = usr
-
-		C.activate_hand(new_hand_index)
+	if(name=="hand slot")
+		usr.activate_hand(hand_index)
 
 	switch(name)
 		if("swap")

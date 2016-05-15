@@ -690,10 +690,7 @@
 						"left pocket" = slot_l_store,
 						"right pocket" = slot_r_store,
 					)
-					var/where = H.equip_in_one_of_slots(T, slots)
-					if(!where)
-						if(H.put_in_hands(T))
-							where = "hand"
+					var/where = H.equip_in_one_of_slots(T, slots,  )
 
 					if (!where)
 						to_chat(usr, "<span class='warning'>Spawning tome failed!</span>")
@@ -1205,10 +1202,7 @@ proc/clear_memory(var/silent = 1)
 			"left pocket" = slot_l_store,
 			"right pocket" = slot_r_store,
 		)
-		var/where = H.equip_in_one_of_slots(T, slots)
-		if (!where)
-			if(H.put_in_hands(T))
-				where = "hand"
+		var/where = H.equip_in_one_of_slots(T, slots, put_in_hand_if_fail = 1)
 
 		if(where)
 			to_chat(H, "A tome, a message from your new master, appears in your [where].")

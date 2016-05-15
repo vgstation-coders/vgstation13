@@ -25,7 +25,7 @@
 
 
 	attack_hand(mob/user as mob)
-		if ((src.case && user.held_items.Find(src)))
+		if ((src.case && user.is_holding_item(src)))
 			user.put_in_active_hand(case)
 
 			src.case.add_fingerprint(user)

@@ -388,10 +388,7 @@
 		"right pocket" = slot_r_store,
 	)
 
-	var/where = mob.equip_in_one_of_slots(T, slots, EQUIP_FAILACTION_DROP)
-	if(!where)
-		if(mob.put_in_hands(T))
-			where = "hand"
+	var/where = mob.equip_in_one_of_slots(T, slots, EQUIP_FAILACTION_DROP, put_in_hand_if_fail = 1)
 
 	if (!where)
 		to_chat(mob, "<span class='sinister'>Unfortunately, you weren't able to sneak in a talisman. Pray, and He most likely shall get you one.</span>")

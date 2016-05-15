@@ -1066,7 +1066,6 @@ var/global/list/damage_icon_parts = list()
 			new_item_overlay = new()
 
 			if(!istype(O.hands_overlays, /list)) O.hands_overlays = list()
-			to_chat(src, "[O.hands_overlays]")
 			O.hands_overlays.Add(new_item_overlay)
 
 		new_item_overlay.name = "[index]"
@@ -1074,6 +1073,7 @@ var/global/list/damage_icon_parts = list()
 		new_item_overlay.icon_state = t_state
 		new_item_overlay.pixel_x = -1*(check_dimensions.Width() - 32)/2
 		new_item_overlay.pixel_y = -1*(check_dimensions.Height() - 32)/2
+		new_item_overlay.layer = O.layer
 
 		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[index]"])
 			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[index]"]

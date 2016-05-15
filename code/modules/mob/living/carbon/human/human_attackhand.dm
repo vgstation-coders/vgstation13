@@ -351,7 +351,7 @@
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 
 			for(var/obj/item/weapon/gun/G in held_items)
-				var/index = held_items.Find(G)
+				var/index = is_holding_item(G)
 				var/chance = (index == active_hand ? 40 : 20)
 
 				if (prob(chance))

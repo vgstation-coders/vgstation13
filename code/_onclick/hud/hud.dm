@@ -100,6 +100,23 @@ var/global/obj/screen/clicker/catcher = new()
 			if(H.l_store)	H.l_store.screen_loc = null
 			if(H.r_store)	H.r_store.screen_loc = null
 
+/datum/hud/proc/init_hand_icons(var/new_icon, var/new_color, var/new_alpha)
+	for(var/i = 1 to mymob.held_items.len) //Hands
+		var/obj/screen/inventory/inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "hand slot"
+		inv_box.dir = (i%2 == 1 ? WEST : EAST) //1 = left hand, 2 = right hand. WEST dir is for left hands, EAST dir is for right hands
+		inv_box.icon = new_icon ? new_icon : 'icons/mob/screen1_White.dmi'
+		inv_box.icon_state = "hand_inactive"
+		if(mymob && mymob.active_hand == i)
+			inv_box.icon_state = "hand_active"
+		inv_box.screen_loc = mymob.get_held_item_ui_location(i)
+		inv_box.slot_id = null
+		inv_box.hand_index = i
+		inv_box.layer = UI_HAND_LAYER
+		inv_box.color = new_color ? new_color : inv_box.color
+		inv_box.alpha = new_alpha ? new_alpha : inv_box.alpha
+		src.hand_hud_objects += inv_box
+		src.adding += inv_box
 
 /datum/hud/proc/instantiate()
 	if(!ismob(mymob))

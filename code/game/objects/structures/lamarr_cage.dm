@@ -103,7 +103,7 @@
 			for (var/datum/reagent/current_reagent in src.reagents.reagent_list)
 				if (current_reagent.id == "creatine")
 					to_chat(H, "<span class='warning'>[src]'s body contorts and expands!</span>")
-					var/index = H.held_items.Find(src)
+					var/index = H.is_holding_item(src)
 
 					H.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/hivehand/I = new (get_turf(H))
@@ -117,7 +117,7 @@
 
 /obj/item/clothing/mask/facehugger/lamarr/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers/syringe))
-		if(src.loc == user && user.held_items.Find(W))
+		if(src.loc == user && user.is_holding_item(W))
 			processing_objects.Add(src)
 	else
 		..(W, user)
