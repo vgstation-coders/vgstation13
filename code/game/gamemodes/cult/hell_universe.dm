@@ -114,10 +114,14 @@ In short:
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
 		tcheck(85,1)
-	for(var/atom/movable/lighting_overlay/L in all_lighting_overlays)
+	for(var/datum/lighting_corner/C in global.all_lighting_corners)
+		if (!C.active)
+			continue
 		count++
-		if(!(count % 50000)) sleep(world.tick_lag)
-		L.update_lumcount(0.5, 0, 0)
+		if(!(count % 50000))
+			sleep(world.tick_lag)
+
+		C.update_lumcount(0.5, 0, 0)
 		tcheck(80,1)
 
 /datum/universal_state/hell/proc/MiscSet()
