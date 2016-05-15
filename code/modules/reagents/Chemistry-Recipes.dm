@@ -94,11 +94,10 @@
 	result_amount = 2
 
 /datum/chemical_reaction/emp_pulse/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
-		var/location = get_turf(holder.my_atom)
-		//100 created volume = 4 heavy range & 7 light range. A few tiles smaller than traitor EMP grandes.
-		//200 created volume = 8 heavy range & 14 light range. 4 tiles larger than traitor EMP grenades.
-		empulse(location, round(created_volume / 24), round(created_volume / 14), 1)
+	var/location = get_turf(holder.my_atom)
+	//100 created volume = 4 heavy range & 7 light range. A few tiles smaller than traitor EMP grandes.
+	//200 created volume = 8 heavy range & 14 light range. 4 tiles larger than traitor EMP grenades.
+	empulse(location, round(created_volume / 24), round(created_volume / 14), 1)
 	holder.clear_reagents()
 
 /datum/chemical_reaction/silicate
@@ -437,7 +436,7 @@
 	result_amount = null
 
 /datum/chemical_reaction/flash_powder/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(2, 1, location)
@@ -468,7 +467,7 @@
 	result_amount = 1
 
 /datum/chemical_reaction/napalm/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/turf/location = get_turf(holder.my_atom.loc)
 
 		for(var/turf/simulated/floor/target_tile in range(0,location))
@@ -493,7 +492,7 @@
 	secondary = 1
 
 /datum/chemical_reaction/chemsmoke/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
 		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
 		S.attach(location)
@@ -642,7 +641,7 @@
 	result_amount = 2
 
 /datum/chemical_reaction/foam/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
 		for(var/mob/M in viewers(5, location))
 			to_chat(M, "<span class='warning'>The solution violently bubbles!</span>")
@@ -665,7 +664,7 @@
 	result_amount = 5
 
 /datum/chemical_reaction/metalfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
 
 		for(var/mob/M in viewers(5, location))
@@ -683,7 +682,7 @@
 	result_amount = 5
 
 /datum/chemical_reaction/ironfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
 
 		for(var/mob/M in viewers(5, location))
@@ -760,7 +759,7 @@
 	required_other = 1
 
 /datum/chemical_reaction/slimespawn/on_reaction(var/datum/reagents/holder)
-	if(!is_in_pipe(holder.my_atom)) //Don't pop while ventcrawling.
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		if(istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
 			send_admin_alert(holder, reaction_name = "grey slime in a grenade")
 		else
