@@ -1434,6 +1434,10 @@
 
 	if(attack_delayer.blocked()) return
 
+	if(isVentCrawling())
+		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+		return
+
 	if(stat == DEAD) return
 	var/obj/item/W = get_active_hand()
 	if (W)
