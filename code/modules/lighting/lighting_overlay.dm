@@ -3,6 +3,8 @@
 /atom/movable/lighting_overlay
 	name             = ""
 
+	anchored         = TRUE
+
 	icon             = LIGHTING_ICON
 	color            = LIGHTING_BASE_MATRIX
 
@@ -29,13 +31,14 @@
 	update_overlay()
 
 /atom/movable/lighting_overlay/Destroy()
+	global.all_lighting_overlays    -= src
+	global.lighting_update_overlays -= src
+
 	var/turf/T   = loc
 	if(istype(T))
 		T.lighting_overlay = null
 
 	T.luminosity = 1
-
-	lighting_update_overlays -= src;
 
 	..()
 
@@ -83,3 +86,34 @@
 
 	src.color  = L
 	luminosity = (max > LIGHTING_SOFT_THRESHOLD)
+	/*
+	if(max <= LIGHTING_SOFT_THRESHOLD)
+		alpha = 255 - round(LIGHTING_SOFT_THRESHOLD * 255) // BYOND I fucking hope you do this at compile time.
+
+	else
+		alpha = 255
+*/
+	// Variety of overrides so the overlays don't get affected by weird things.
+
+/atom/movable/lighting_overlay/ex_act(severity)
+	return 0
+
+/atom/movable/lighting_overlay/shuttle_act()
+	return 0
+
+/atom/movable/lighting_overlay/can_shuttle_move()
+	return 0
+
+/atom/movable/lighting_overlay/singularity_act()
+	return
+
+/atom/movable/lighting_overlay/singularity_pull()
+	return
+
+/atom/movable/lighting_overlay/blob_act()
+	return
+
+// Override here to prevent things accidentally moving around overlays.
+/atom/movable/lighting_overlay/forceMove(atom/destination, var/harderforce = 0)
+	if(harderforce)
+		. = ..()

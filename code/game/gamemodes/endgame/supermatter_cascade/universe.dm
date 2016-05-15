@@ -146,6 +146,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 		tcheck(80,1)
 
 /datum/universal_state/supermatter_cascade/OverlayAndAmbientSet()
+	set waitfor = FALSE
 	var/count = 0
 	for(var/turf/T in turfs)
 		count++
@@ -161,7 +162,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 		if (!C.active)
 			continue
 			count++
-		if(!(count % 50000))
+		if(!(count % 200000))
 			sleep(world.tick_lag)
 
 		if(C.z != map.zCentcomm)
