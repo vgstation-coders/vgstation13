@@ -104,7 +104,7 @@ var/global/obj/screen/clicker/catcher = new()
 	for(var/i = 1 to mymob.held_items.len) //Hands
 		var/obj/screen/inventory/inv_box = getFromPool(/obj/screen/inventory)
 		inv_box.name = "hand slot"
-		inv_box.dir = (i%2 == 1 ? WEST : EAST) //1 = left hand, 2 = right hand. WEST dir is for left hands, EAST dir is for right hands
+		inv_box.dir = (i%2 == 0 ? WEST : EAST) //1 = left hand, 2 = right hand. WEST dir is for left hands, EAST dir is for right hands
 		inv_box.icon = new_icon ? new_icon : 'icons/mob/screen1_White.dmi'
 		inv_box.icon_state = "hand_inactive"
 		if(mymob && mymob.active_hand == i)

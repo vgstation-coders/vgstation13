@@ -1472,6 +1472,6 @@ obj/item/weapon/organ/head/Destroy()
 
 /mob/living/carbon/human/find_organ_by_grasp_index(index)
 	for(var/datum/organ/external/OE in grasp_organs)
-		if(OE.grasp_id == index)
+		if(OE.grasp_id == index && OE.can_grasp)
 			return OE
 	return null
