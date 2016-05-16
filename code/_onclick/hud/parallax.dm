@@ -37,9 +37,10 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 	icon = 'icons/turf/space.dmi'
 	icon_state = "blank"
 	name = "space parallax"
-	blend_mode = BLEND_MULTIPLY
+	blend_mode = BLEND_OVERLAY
 	layer = AREA_LAYER
-	plane = PLANE_SPACE_PARALLAX_BACK//changing this var doesn't actually change the plane of its overlays
+	plane = PLANE_SPACE_PARALLAX//changing this var doesn't actually change the plane of its overlays
+	var/parallax_speed = 0
 
 /obj/screen/parallax_void
 	mouse_opacity = 0
@@ -49,9 +50,10 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 	*/
 	name = "space parallax"
 	layer = AREA_LAYER
-	plane = PLANE_SPACE_PARALLAX_CANVAS
+	plane = PLANE_SPACE_PARALLAX
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	appearance_flags = PLANE_MASTER
+	blend_mode = BLEND_MULTIPLY
 	color = list(0, 0, 0,
 				 0, 0, 0,
 				 0, 0, 0,
@@ -61,10 +63,11 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 	mouse_opacity = 0
 	icon = 'icons/turf/space.dmi'
 	icon_state = "white"
+	color = space_color
 	name = "space parallax"
-	blend_mode = BLEND_MULTIPLY
+	blend_mode = BLEND_OVERLAY
 	layer = AREA_LAYER
-	plane = PLANE_SPACE_PARALLAX_CANVAS
+	plane = PLANE_SPACE_PARALLAX
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 
 /datum/hud/proc/update_parallax()
@@ -119,26 +122,26 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 			var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
 			var/image/parallax_layer = space_parallax_0[i]
 			bgobj.overlays |= parallax_layer.overlays
-			bgobj.plane = PLANE_SPACE_PARALLAX_BACK
+			bgobj.parallax_speed = 0
 			calibrate_parallax(C,bgobj,i)
 		for(var/i=1;i<=9;i++)
 			var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
 			var/image/parallax_layer = space_parallax_1[i]
 			bgobj.overlays |= parallax_layer.overlays
-			bgobj.plane = PLANE_SPACE_PARALLAX_MIDDLE
+			bgobj.parallax_speed = 1
 			calibrate_parallax(C,bgobj,i)
 		for(var/i=1;i<=9;i++)
 			var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
 			var/image/parallax_layer = space_parallax_2[i]
 			bgobj.overlays |= parallax_layer.overlays
-			bgobj.plane = PLANE_SPACE_PARALLAX_FRONT
+			bgobj.parallax_speed = 2
 			calibrate_parallax(C,bgobj,i)
-
+/*
 	if(C.prefs.space_dust)
 		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_CANVAS
 	else
 		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_NODUST_CANVAS
-
+*/
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
 		C.parallax_offset["vertical"] = 0
@@ -159,45 +162,26 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 
 	for(var/obj/screen/parallax/bgobj in C.parallax)
 		if(C.prefs.space_parallax >= 2)
-			switch(bgobj.plane)//only the middle and front layers actually move
-				if(PLANE_SPACE_PARALLAX_MIDDLE)
-					var/accumulated_offset_x = bgobj.base_offset_x + C.parallax_offset["horizontal"]
-					var/accumulated_offset_y = bgobj.base_offset_y + C.parallax_offset["vertical"]
+			if(bgobj.parallax_speed)//only the middle and front layers actually move
+				var/accumulated_offset_x = bgobj.base_offset_x + (C.parallax_offset["horizontal"] * bgobj.parallax_speed)
+				var/accumulated_offset_y = bgobj.base_offset_y + (C.parallax_offset["vertical"] * bgobj.parallax_speed)
 
-					while(accumulated_offset_x > 720)
-						bgobj.base_offset_x -= 1440
-						accumulated_offset_x -= 1440
-					while(accumulated_offset_x < -720)
-						bgobj.base_offset_x += 1440
-						accumulated_offset_x += 1440
+				while(accumulated_offset_x > 720)
+					bgobj.base_offset_x -= 1440
+					accumulated_offset_x -= 1440
+				while(accumulated_offset_x < -720)
+					bgobj.base_offset_x += 1440
+					accumulated_offset_x += 1440
 
-					while(accumulated_offset_y > 720)
-						bgobj.base_offset_y -= 1440
-						accumulated_offset_y -= 1440
-					while(accumulated_offset_y < -720)
-						bgobj.base_offset_y += 1440
-						accumulated_offset_y += 1440
-					bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x-C.parallax_offset["horizontal"]],CENTER-7:[bgobj.base_offset_y-C.parallax_offset["vertical"]]"
-				if(PLANE_SPACE_PARALLAX_FRONT)
-					var/accumulated_offset_x = bgobj.base_offset_x + (C.parallax_offset["horizontal"] * 2)
-					var/accumulated_offset_y = bgobj.base_offset_y + (C.parallax_offset["vertical"] * 2)
-
-					while(accumulated_offset_x > 720)
-						bgobj.base_offset_x -= 1440
-						accumulated_offset_x -= 1440
-					while(accumulated_offset_x < -720)
-						bgobj.base_offset_x += 1440
-						accumulated_offset_x += 1440
-
-					while(accumulated_offset_y > 720)
-						bgobj.base_offset_y -= 1440
-						accumulated_offset_y -= 1440
-					while(accumulated_offset_y < -720)
-						bgobj.base_offset_y += 1440
-						accumulated_offset_y += 1440
-					bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x-(C.parallax_offset["horizontal"] * 2)],CENTER-7:[bgobj.base_offset_y-(C.parallax_offset["vertical"] * 2)]"
-				else
-					bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
+				while(accumulated_offset_y > 720)
+					bgobj.base_offset_y -= 1440
+					accumulated_offset_y -= 1440
+				while(accumulated_offset_y < -720)
+					bgobj.base_offset_y += 1440
+					accumulated_offset_y += 1440
+				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x-(C.parallax_offset["horizontal"] * bgobj.parallax_speed)],CENTER-7:[bgobj.base_offset_y-(C.parallax_offset["vertical"] * bgobj.parallax_speed)]"
+			else
+				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
 		else
 			bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
 
