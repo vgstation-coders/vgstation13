@@ -105,11 +105,9 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 	var/recalibrate = 0
 	if(!C.parallax.len)
 		recalibrate = 1
-		to_chat(world,"no parallax.len, gotta recalibrate")
 	else
 		var/obj/screen/parallax/sample = C.parallax[1]
 		if(!sample.overlays.len)
-			to_chat(world,"no sample.overlays.len, gotta recalibrate")
 			recalibrate = 1
 
 	if(recalibrate)
