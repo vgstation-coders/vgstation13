@@ -187,7 +187,7 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			var/image/I = image('icons/turf/space_parallax4.dmi',"[rand(26)]")
 			I.pixel_x = fake_x
 			I.pixel_y = fake_y
-			I.plane = PLANE_SPACE_PARALLAX_BACK
+			I.plane = PLANE_SPACE_PARALLAX
 			parallax_layer.overlays += I
 		space_parallax_0[i] = parallax_layer
 	log_startup_progress("Middle layer...")
@@ -199,7 +199,7 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			var/image/I = image('icons/turf/space_parallax3.dmi',"[((fake_x + fake_y) ^ ~(fake_x * fake_y) + 1) % 26]")
 			I.pixel_x = 32 * (j%15)
 			I.pixel_y = 32 * round(j/15)
-			I.plane = PLANE_SPACE_PARALLAX_MIDDLE
+			I.plane = PLANE_SPACE_PARALLAX
 			parallax_layer.overlays += I
 		space_parallax_1[i] = parallax_layer
 	log_startup_progress("Front layer...")
@@ -211,7 +211,7 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			var/image/I = image('icons/turf/space_parallax2.dmi',"[((fake_x + fake_y) ^ ~(fake_x * fake_y) + 1) % 26]")
 			I.pixel_x = 32 * (j%15)
 			I.pixel_y = 32 * round(j/15)
-			I.plane = PLANE_SPACE_PARALLAX_FRONT
+			I.plane = PLANE_SPACE_PARALLAX
 			parallax_layer.overlays += I
 		space_parallax_2[i] = parallax_layer
 	parallax_initialized = 1
