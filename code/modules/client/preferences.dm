@@ -94,7 +94,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/toggles = TOGGLES_DEFAULT
 	var/UI_style_color = "#ffffff"
 	var/UI_style_alpha = 255
-	var/space_parallax = 1
+	var/space_parallax = 2
+	var/space_dust = 1
 	var/special_popup = 0
 
 	//character preferences
@@ -275,7 +276,8 @@ var/const/MAX_SAVE_SLOTS = 8
 /datum/preferences/proc/setup_special(var/dat, var/user)
 	dat += {"<table><tr><td width='340px' height='300px' valign='top'>
 	<h2>General Settings</h2>
-	<b>Space Parallax:</b> <a href='?_src_=prefs;preference=parallax'><b>[space_parallax]</b></a><br>
+	<b>Space Parallax:</b> <a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
+	<b>Space Dust:</b> <a href='?_src_=prefs;preference=dust'><b>[space_dust ? "Yes" : "No"]</b></a><br>
 	<b>Play admin midis:</b> <a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
 	<b>Play lobby music:</b> <a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
 	<b>Hear streamed media:</b> <a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
@@ -1426,23 +1428,33 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("parallax")
 					var/parallax_list = list(
-						"Multi-layered",
-						"Single-layered (static background)",
+						"Multi-Layered Parallax",
+						"Static Background",
 						"Disabled",
 						)
 
 					var/parallax_pref = input("How do you want space to look like?","Space Parallax Preferences") in parallax_list
 
 					switch(parallax_pref)
-						if("Multi-layered")
+						if("Multi-Layered Parallax")
 							space_parallax = 2
 							to_chat(user, "Space parallax is now multi-layered.")
-						if("Single-layered (static background)")
+						if("Static Background")
 							space_parallax = 1
 							to_chat(user, "Space parallax is now single-layered.")
 						if("Disabled")
 							space_parallax = 0
 							to_chat(user, "Space parallax is now deactivated.")
+
+				if("dust")
+					var/choice = alert(src,"Do you wish for space dust to be rendered?","Space Dust Preferences","Yes","No","Cancel")
+					switch(choice)
+						if("Yes")
+							space_dust = 1
+							to_chat(user, "Space dust is now activated.")
+						if("No")
+							space_dust = 0
+							to_chat(user, "Space dust is now deactivated.")
 
 				if("name")
 					be_random_name = !be_random_name

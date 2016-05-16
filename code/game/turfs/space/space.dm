@@ -4,7 +4,7 @@
 	desc = "The final frontier."
 	icon_state = "0"
 
-	plane = -10
+	plane = PLANE_SPACE_BACKGROUND
 
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
@@ -19,10 +19,11 @@
 		var/area/A = loc
 		A.area_turfs += src
 
-	icon_state = "test[((x + y) ^ ~(x * y) + z) % 3]"
-	var/image/I = image(icon,"[icon_state]over")
-	I.plane = -3
-	overlays += "[icon_state]over"
+	icon_state = "[((x + y) ^ ~(x * y) + z) % 26]"
+	var/image/I = image('icons/turf/space_parallax1.dmi',"[icon_state]")
+	I.plane = PLANE_SPACE_DUST
+	I.alpha = 80
+	overlays += I
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

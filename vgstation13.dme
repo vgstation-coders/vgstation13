@@ -1191,6 +1191,7 @@
 #include "code\modules\migrations\SS13_Prefs\001-create.dm"
 #include "code\modules\migrations\SS13_Prefs\002-add-progress-bars.dm"
 #include "code\modules\migrations\SS13_Prefs\003-add-space-parallax.dm"
+#include "code\modules\migrations\SS13_Prefs\004-add-space-dust.dm"
 #include "code\modules\migrations\SS13_Prefs\_base.dm"
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\debug_shit.dm"
