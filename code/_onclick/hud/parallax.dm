@@ -24,11 +24,16 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 
 */
 
+var/area/space/global_space_area = null
+var/list/parallax_on_clients = list()
+
 /client/var/list/parallax = list()
 /client/var/list/parallax_offset = list()
 /client/var/turf/previous_turf = null
-/client/var/obj/screen/parallax_void/parallax_void = null
 /client/var/obj/screen/parallax_canvas/parallax_canvas = null
+/client/var/obj/screen/parallax_master/parallax_master = null
+/client/var/obj/screen/parallax_dustmaster/parallax_dustmaster = null
+/client/var/obj/screen/parallax_voidmaster/parallax_voidmaster = null
 
 /obj/screen/parallax
 	var/base_offset_x = 0
@@ -37,72 +42,101 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 	icon = 'icons/turf/space.dmi'
 	icon_state = "blank"
 	name = "space parallax"
-	blend_mode = BLEND_OVERLAY
+	blend_mode = BLEND_ADD
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX//changing this var doesn't actually change the plane of its overlays
 	var/parallax_speed = 0
 
-/obj/screen/parallax_void
-	mouse_opacity = 0
-	/*
-	icon = 'icons/turf/space.dmi'
-	icon_state = "white"
-	*/
-	name = "space parallax"
-	layer = AREA_LAYER
+/obj/screen/parallax_master
 	plane = PLANE_SPACE_PARALLAX
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	appearance_flags = PLANE_MASTER
 	blend_mode = BLEND_MULTIPLY
+
+/obj/screen/parallax_voidmaster
+	plane = PLANE_SPACE_BACKGROUND
 	color = list(0, 0, 0,
-				 0, 0, 0,
-				 0, 0, 0,
-				 1, 1, 1)
+				0, 0, 0,
+				0, 0, 0,
+				1, 1, 1) // This will cause space to be solid white
+	appearance_flags = PLANE_MASTER
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
 
 /obj/screen/parallax_canvas
 	mouse_opacity = 0
 	icon = 'icons/turf/space.dmi'
 	icon_state = "white"
-	color = space_color
+	color = "#151515"
 	name = "space parallax"
-	blend_mode = BLEND_OVERLAY
+	blend_mode = BLEND_ADD
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 
+/obj/screen/parallax_dustmaster
+	plane = PLANE_SPACE_PARALLAX_DUST
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	appearance_flags = PLANE_MASTER
+	blend_mode = BLEND_MULTIPLY
+
 /datum/hud/proc/update_parallax()
 	if(!parallax_initialized) return
-	update_parallax1()
-	update_parallax2()
-	update_parallax3()
+	if(update_parallax1())
+		update_parallax2(0)
+		update_parallax3()
+
+/datum/hud/proc/update_parallax_and_dust()
+	if(!parallax_initialized) return
+	if(update_parallax1())
+		update_parallax2(1)
+		update_parallax3()
 
 /datum/hud/proc/update_parallax1()
 	var/client/C = mymob.client
 	//DO WE UPDATE PARALLAX
 	if((mymob.z != map.zCentcomm) && C.prefs.space_parallax)//have to exclude Centcom so parallax doens't appear during hyperspace
+		parallax_on_clients |= C
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
+
 	else
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
 			C.parallax -= bgobj
 			qdel(bgobj)
+		parallax_on_clients -= C
+		qdel(C.parallax_master)
+		C.parallax_master = null
 		qdel(C.parallax_canvas)
 		C.parallax_canvas = null
-		qdel(C.parallax_void)
-		C.parallax_void = null
-		return
+		qdel(C.parallax_voidmaster)
+		C.parallax_voidmaster = null
+		qdel(C.parallax_dustmaster)
+		C.parallax_dustmaster = null
+		return 0
 
+	if(!C.parallax_master)
+		C.parallax_master = new
 	if(!C.parallax_canvas)
 		C.parallax_canvas = new
-	if(!C.parallax_void)
-		C.parallax_void = new
+	if(!C.parallax_voidmaster)
+		C.parallax_voidmaster = new
+	if(!C.parallax_dustmaster)
+		C.parallax_dustmaster = new
 
-	//C.parallax_canvas.color = space_color
+	C.parallax_master.appearance_flags = PLANE_MASTER
+	C.parallax_voidmaster.appearance_flags = PLANE_MASTER
+	C.parallax_dustmaster.appearance_flags = PLANE_MASTER
+	C.parallax_canvas.color = space_color
+
+	C.screen |= C.parallax_master
 	C.screen |= C.parallax_canvas
-	C.screen |= C.parallax_void
+	C.screen |= C.parallax_voidmaster
+	C.screen |= C.parallax_dustmaster
 
-/datum/hud/proc/update_parallax2()
+	return 1
+
+/datum/hud/proc/update_parallax2(forcerecalibrate = 0)
 	var/client/C = mymob.client
 	//DO WE HAVE TO REPLACE ALL THE LAYERS
 	var/recalibrate = 0
@@ -113,35 +147,58 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 		if(!sample.overlays.len)
 			recalibrate = 1
 
-	if(recalibrate)
+	if(recalibrate || forcerecalibrate)
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
 			C.parallax -= bgobj
 			qdel(bgobj)
-		for(var/i=1;i<=9;i++)
-			var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-			var/image/parallax_layer = space_parallax_0[i]
-			bgobj.overlays |= parallax_layer.overlays
-			bgobj.parallax_speed = 0
-			calibrate_parallax(C,bgobj,i)
-		for(var/i=1;i<=9;i++)
-			var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-			var/image/parallax_layer = space_parallax_1[i]
-			bgobj.overlays |= parallax_layer.overlays
-			bgobj.parallax_speed = 1
-			calibrate_parallax(C,bgobj,i)
-		for(var/i=1;i<=9;i++)
-			var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-			var/image/parallax_layer = space_parallax_2[i]
-			bgobj.overlays |= parallax_layer.overlays
-			bgobj.parallax_speed = 2
-			calibrate_parallax(C,bgobj,i)
-/*
-	if(C.prefs.space_dust)
-		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_CANVAS
-	else
-		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_NODUST_CANVAS
-*/
+		if(C.prefs.space_dust)
+			for(var/i=1;i<=9;i++)
+				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
+				var/image/parallax_layer = space_parallax_dust_0[i]
+				bgobj.overlays |= parallax_layer.overlays
+				bgobj.parallax_speed = 0
+				bgobj.plane = PLANE_SPACE_PARALLAX_DUST
+				calibrate_parallax(C,bgobj,i)
+			for(var/i=1;i<=9;i++)
+				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
+				var/image/parallax_layer = space_parallax_dust_1[i]
+				bgobj.overlays |= parallax_layer.overlays
+				bgobj.parallax_speed = 1
+				bgobj.plane = PLANE_SPACE_PARALLAX_DUST
+				calibrate_parallax(C,bgobj,i)
+			for(var/i=1;i<=9;i++)
+				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
+				var/image/parallax_layer = space_parallax_dust_2[i]
+				bgobj.overlays |= parallax_layer.overlays
+				bgobj.parallax_speed = 2
+				bgobj.plane = PLANE_SPACE_PARALLAX_DUST
+				calibrate_parallax(C,bgobj,i)
+			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
+		else
+			for(var/i=1;i<=9;i++)
+				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
+				var/image/parallax_layer = space_parallax_0[i]
+				bgobj.overlays |= parallax_layer.overlays
+				bgobj.parallax_speed = 0
+				bgobj.plane = PLANE_SPACE_PARALLAX
+				calibrate_parallax(C,bgobj,i)
+			for(var/i=1;i<=9;i++)
+				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
+				var/image/parallax_layer = space_parallax_1[i]
+				bgobj.overlays |= parallax_layer.overlays
+				bgobj.parallax_speed = 1
+				bgobj.plane = PLANE_SPACE_PARALLAX
+				calibrate_parallax(C,bgobj,i)
+			for(var/i=1;i<=9;i++)
+				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
+				var/image/parallax_layer = space_parallax_2[i]
+				bgobj.overlays |= parallax_layer.overlays
+				bgobj.parallax_speed = 2
+				bgobj.plane = PLANE_SPACE_PARALLAX
+				calibrate_parallax(C,bgobj,i)
+			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
+
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
 		C.parallax_offset["vertical"] = 0
@@ -161,27 +218,21 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 	C.previous_turf = posobj
 
 	for(var/obj/screen/parallax/bgobj in C.parallax)
-		if(C.prefs.space_parallax >= 2)
-			if(bgobj.parallax_speed)//only the middle and front layers actually move
-				var/accumulated_offset_x = bgobj.base_offset_x + (C.parallax_offset["horizontal"] * bgobj.parallax_speed)
-				var/accumulated_offset_y = bgobj.base_offset_y + (C.parallax_offset["vertical"] * bgobj.parallax_speed)
+		if(bgobj.parallax_speed)//only the middle and front layers actually move
+			var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
+			var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
 
-				while(accumulated_offset_x > 720)
-					bgobj.base_offset_x -= 1440
-					accumulated_offset_x -= 1440
-				while(accumulated_offset_x < -720)
-					bgobj.base_offset_x += 1440
-					accumulated_offset_x += 1440
+			while(accumulated_offset_x > 720)
+				accumulated_offset_x -= 1440
+			while(accumulated_offset_x < -720)
+				accumulated_offset_x += 1440
 
-				while(accumulated_offset_y > 720)
-					bgobj.base_offset_y -= 1440
-					accumulated_offset_y -= 1440
-				while(accumulated_offset_y < -720)
-					bgobj.base_offset_y += 1440
-					accumulated_offset_y += 1440
-				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x-(C.parallax_offset["horizontal"] * bgobj.parallax_speed)],CENTER-7:[bgobj.base_offset_y-(C.parallax_offset["vertical"] * bgobj.parallax_speed)]"
-			else
-				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
+			while(accumulated_offset_y > 720)
+				accumulated_offset_y -= 1440
+			while(accumulated_offset_y < -720)
+				accumulated_offset_y += 1440
+
+			bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
 		else
 			bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
 

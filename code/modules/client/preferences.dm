@@ -94,8 +94,9 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/toggles = TOGGLES_DEFAULT
 	var/UI_style_color = "#ffffff"
 	var/UI_style_alpha = 255
-	var/space_parallax = 2
+	var/space_parallax = 1
 	var/space_dust = 1
+	var/parallax_speed = 2
 	var/special_popup = 0
 
 	//character preferences
@@ -277,6 +278,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	dat += {"<table><tr><td width='340px' height='300px' valign='top'>
 	<h2>General Settings</h2>
 	<b>Space Parallax:</b> <a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
+	<b>Parallax Speed:</b> <a href='?_src_=prefs;preference=p_speed'><b>[parallax_speed]</b></a><br>
 	<b>Space Dust:</b> <a href='?_src_=prefs;preference=dust'><b>[space_dust ? "Yes" : "No"]</b></a><br>
 	<b>Play admin midis:</b> <a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
 	<b>Play lobby music:</b> <a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
@@ -1427,27 +1429,18 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					UI_style_alpha = UI_style_alpha_new
 
 				if("parallax")
-					var/parallax_list = list(
-						"Multi-Layered Parallax",
-						"Static Background",
-						"Disabled",
-						)
+					var/choice = alert(user,"Do you wish to activate Space Parallax?","Space Parallax Preferences","Yes","No","Cancel")
 
-					var/parallax_pref = input("How do you want space to look like?","Space Parallax Preferences") in parallax_list
-
-					switch(parallax_pref)
-						if("Multi-Layered Parallax")
-							space_parallax = 2
-							to_chat(user, "Space parallax is now multi-layered.")
-						if("Static Background")
+					switch(choice)
+						if("Yes")
 							space_parallax = 1
-							to_chat(user, "Space parallax is now single-layered.")
-						if("Disabled")
+							to_chat(user, "Space parallax is now activated.")
+						if("No")
 							space_parallax = 0
 							to_chat(user, "Space parallax is now deactivated.")
 
 				if("dust")
-					var/choice = alert(src,"Do you wish for space dust to be rendered?","Space Dust Preferences","Yes","No","Cancel")
+					var/choice = alert(user,"Do you wish for space dust to be rendered?","Space Dust Preferences","Yes","No","Cancel")
 					switch(choice)
 						if("Yes")
 							space_dust = 1
@@ -1455,6 +1448,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if("No")
 							space_dust = 0
 							to_chat(user, "Space dust is now deactivated.")
+
+				if("p_speed")
+					parallax_speed = sanitize_integer(input(user, "Enter an integer between 0 and 5 included (default=2)","Parallax Speed Preferences"), 0, 5, 2)
 
 				if("name")
 					be_random_name = !be_random_name

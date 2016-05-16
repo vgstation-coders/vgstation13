@@ -18,7 +18,6 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 26]"
 	var/image/I = image('icons/turf/space_parallax1.dmi',"[icon_state]")
 	I.plane = PLANE_SPACE_DUST

@@ -114,6 +114,8 @@ proc/process_adminbus_teleport_locs()
 
 /*-----------------------------------------------------------------------------*/
 
+/area/space
+
 /area/station//TODO: make every area in the MAIN station inherit from this.
 	name = "Station"
 
@@ -2148,7 +2150,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/awaymission/leviathan
 	name = "Leviathan"
-		
+
 /area/awaymission/leviathan/research
 	name = "Leviathan"
 	icon_state = "anolab"

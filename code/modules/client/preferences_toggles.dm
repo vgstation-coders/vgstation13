@@ -250,22 +250,13 @@
 	set category = "Preferences"
 	set desc = "Change the parallax effect of space turfs."
 
-	var/parallax_list = list(
-		"Multi-Layered Parallax",
-		"Static Background",
-		"Disabled",
-		)
+	var/choice = alert(usr,"Do you wish to activate Space Parallax?","Space Parallax Preferences","Yes","No","Cancel")
 
-	var/parallax_pref = input("How do you want space to look like?","Space Parallax Preferences") in parallax_list
-
-	switch(parallax_pref)
-		if("Multi-Layered Parallax")
-			prefs.space_parallax = 2
-			to_chat(usr, "Space parallax is now multi-layered.")
-		if("Static Background")
+	switch(choice)
+		if("Yes")
 			prefs.space_parallax = 1
-			to_chat(usr, "Space parallax is now single-layered.")
-		if("Disabled")
+			to_chat(usr, "Space parallax is now activated.")
+		if("No")
 			prefs.space_parallax = 0
 			to_chat(usr, "Space parallax is now deactivated.")
 
@@ -289,4 +280,13 @@
 
 	prefs.save_preferences_sqlite(src,ckey)
 	if(mob && mob.hud_used)
-		mob.hud_used.update_parallax()
+		mob.hud_used.update_parallax_and_dust()
+
+/client/verb/toggle_parallax_speed()
+	set name = "Change Parallax Speed"
+	set category = "Preferences"
+	set desc = "Change the speed at which parallax moves."
+
+	prefs.parallax_speed = sanitize_integer(input(usr, "Enter an integer between 0 and 5 included (default=2)","Parallax Speed Preferences") as num, 0, 5, 2)
+
+	prefs.save_preferences_sqlite(src,ckey)
