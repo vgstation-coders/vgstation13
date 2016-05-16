@@ -24,8 +24,6 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 
 */
 
-#define PARALLAX_LAYER_PLANE -3
-
 /client/var/list/parallax = list()
 /client/var/list/parallax_offset = list()
 /client/var/turf/previous_turf = null
