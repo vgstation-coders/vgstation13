@@ -27,7 +27,8 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 /client/var/list/parallax = list()
 /client/var/list/parallax_offset = list()
 /client/var/turf/previous_turf = null
-/client/var/obj/screen/parallax_void/parallax_canvas = null
+/client/var/obj/screen/parallax_void/parallax_void = null
+/client/var/obj/screen/parallax_canvas/parallax_canvas = null
 
 /obj/screen/parallax
 	var/base_offset_x = 0
@@ -36,23 +37,45 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 	icon = 'icons/turf/space.dmi'
 	icon_state = "blank"
 	name = "space parallax"
+	blend_mode = BLEND_MULTIPLY
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX_BACK//changing this var doesn't actually change the plane of its overlays
 
 /obj/screen/parallax_void
 	mouse_opacity = 0
+	/*
+	icon = 'icons/turf/space.dmi'
+	icon_state = "white"
+	*/
+	name = "space parallax"
+	layer = AREA_LAYER
+	plane = PLANE_SPACE_PARALLAX_CANVAS
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	appearance_flags = PLANE_MASTER
+	color = list(0, 0, 0,
+				 0, 0, 0,
+				 0, 0, 0,
+				 1, 1, 1)
+
+/obj/screen/parallax_canvas
+	mouse_opacity = 0
 	icon = 'icons/turf/space.dmi'
 	icon_state = "white"
 	name = "space parallax"
+	blend_mode = BLEND_MULTIPLY
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX_CANVAS
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 
 /datum/hud/proc/update_parallax()
 	if(!parallax_initialized) return
+	update_parallax1()
+	update_parallax2()
+	update_parallax3()
 
+/datum/hud/proc/update_parallax1()
 	var/client/C = mymob.client
-
+	//DO WE UPDATE PARALLAX
 	if((mymob.z != map.zCentcomm) && C.prefs.space_parallax)//have to exclude Centcom so parallax doens't appear during hyperspace
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
@@ -63,23 +86,37 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 			qdel(bgobj)
 		qdel(C.parallax_canvas)
 		C.parallax_canvas = null
+		qdel(C.parallax_void)
+		C.parallax_void = null
 		return
 
 	if(!C.parallax_canvas)
 		C.parallax_canvas = new
+	if(!C.parallax_void)
+		C.parallax_void = new
 
-	C.parallax_canvas.color = space_color
+	//C.parallax_canvas.color = space_color
 	C.screen |= C.parallax_canvas
+	C.screen |= C.parallax_void
 
+/datum/hud/proc/update_parallax2()
+	var/client/C = mymob.client
+	//DO WE HAVE TO REPLACE ALL THE LAYERS
 	var/recalibrate = 0
 	if(!C.parallax.len)
 		recalibrate = 1
+		to_chat(world,"no parallax.len, gotta recalibrate")
 	else
 		var/obj/screen/parallax/sample = C.parallax[1]
 		if(!sample.overlays.len)
+			to_chat(world,"no sample.overlays.len, gotta recalibrate")
 			recalibrate = 1
 
 	if(recalibrate)
+		for(var/obj/screen/parallax/bgobj in C.parallax)
+			C.screen -= bgobj
+			C.parallax -= bgobj
+			qdel(bgobj)
 		for(var/i=1;i<=9;i++)
 			var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
 			var/image/parallax_layer = space_parallax_0[i]
@@ -108,6 +145,9 @@ Parallax will be automatically disabled in areas that have a custom "parallax_ic
 		C.parallax_offset["horizontal"] = 0
 		C.parallax_offset["vertical"] = 0
 
+/datum/hud/proc/update_parallax3()
+	var/client/C = mymob.client
+	//ACTUALLY MOVING THE PARALLAX
 	var/turf/posobj = get_turf(mymob.client.eye)
 
 	if(!C.previous_turf || (C.previous_turf.z != posobj.z))
