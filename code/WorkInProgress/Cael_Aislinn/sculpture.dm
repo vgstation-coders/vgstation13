@@ -24,7 +24,7 @@
 
 /mob/living/simple_animal/sculpture/New()
 	. = ..()
-	flags |= INVULNERABLE //Make SCP-173 invulnerable. Now we just need to fix the invulnerable flag, isn't it swell ?
+	flags |= INVULNERABLE
 
 /mob/living/simple_animal/sculpture/Life()
 	if(timestopped)
