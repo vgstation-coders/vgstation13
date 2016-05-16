@@ -970,8 +970,9 @@
 
 		return 1
 
-	if(full_body && (src.back || src.wear_mask || src.head || src.shoes || src.w_uniform || src.wear_suit || src.glasses || src.ears || src.gloves))
-		return 1
+	if(full_body)
+		for(var/obj/item/I in get_all_slots())
+			return 1
 
 	return 0
 

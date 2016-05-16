@@ -75,7 +75,8 @@
 	for(var/i = 1 to M.held_items.len)
 
 		var/datum/organ/external/OE = M.find_organ_by_grasp_index(i)
-		if(!OE || !OE.status & ORGAN_DESTROYED) //Arm
+
+		if(hasorgans(M) && (!OE || (OE.status & ORGAN_DESTROYED))) //Mob has organs, and the used hand is missing or unusable
 			available_hands -= 2
 		else if(M.held_items[i])
 			available_hands -= 1

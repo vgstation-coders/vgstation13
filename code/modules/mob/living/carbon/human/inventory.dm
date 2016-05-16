@@ -859,7 +859,7 @@ It can still be worn/put on as normal.
 
 		var/obj/item/W = strip_item
 		if((W.cant_drop > 0) && (target.is_holding_item(W))) //If item we're trying to take off can't be dropped AND is in target's hand(s):
-			source << "<span class='notice'>\The [W] is stuck to \the [target]!</span>"
+			to_chat(source, "<span class='notice'>\The [W] is stuck to \the [target]!</span>")
 			return
 
 		target.u_equip(W,1)
@@ -871,18 +871,20 @@ It can still be worn/put on as normal.
 			//W.dropped(target)
 		W.stripped(target,source)
 		W.add_fingerprint(source)
-		if(slot_to_process == slot_l_store) //pockets! Needs to process the other one too. Snowflake code, wooo! It's not like anyone will rewrite this anytime soon. If I'm wrong then... CONGRATULATIONS! ;)
-			if(target.r_store)
-				target.u_equip(target.r_store,0) //At this stage l_store is already processed by the code above, we only need to process r_store.
-	else if(slot_to_process)
-		if(item && target.has_organ_for_slot(slot_to_process)) //Placing an item on the mob
-			if(item.mob_can_equip(target, slot_to_process, 0))
-				source.u_equip(item,1)
-				//if(item)
-					//item.dropped(source)
-				target.equip_to_slot_if_possible(item, slot_to_process, 0, 1, 1)
-				source.update_icons()
-				target.update_icons()
+
+	else //Putting an item on the mob
+
+		if(slot_to_process) //Putting on an equipment slot
+			if(item && target.has_organ_for_slot(slot_to_process))
+				if(item.mob_can_equip(target, slot_to_process, 0))
+					source.u_equip(item,1)
+
+					target.equip_to_slot_if_possible(item, slot_to_process, 0, 1, 1)
+					source.update_icons()
+					target.update_icons()
+		else if(hand_index) //Putting in hand
+			if(target.put_in_hand(hand_index, item))
+				source.u_equip(item)
 
 	if(source && target)
 		if(source.machine == target)
