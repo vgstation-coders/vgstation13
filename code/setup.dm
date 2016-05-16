@@ -1501,3 +1501,13 @@ var/proccalls = 1
 #define CANCER_STAGE_SMALL_TUMOR 300 //Cancer starts to have small effects depending on what the affected limb is, generally inconclusive ones. 5 minutes
 #define CANCER_STAGE_LARGE_TUMOR 600 //Cancer starts to have serious effects depending on what the affected limb is, generally obvious one, up to visible tumor growth. 15 minutes
 #define CANCER_STAGE_METASTASIS 1200 //Cancer has maximal effects, growing out of control in the organ, and can start "colonizing" other organs very quickly, dooming the patient. 30 minutes
+
+#define PLANE_BASE 0
+#define PLANE_SPACE_PARALLAX_FRONT -4
+#define PLANE_SPACE_PARALLAX_MIDDLE -5
+#define PLANE_SPACE_PARALLAX_BACK -6
+#define PLANE_SPACE_PARALLAX -9
+#define PLANE_SPACE_PARALLAX_NODUST_CANVAS -7
+#define PLANE_SPACE_DUST -8
+#define PLANE_SPACE_PARALLAX_CANVAS -9
+#define PLANE_SPACE_BACKGROUND -10
