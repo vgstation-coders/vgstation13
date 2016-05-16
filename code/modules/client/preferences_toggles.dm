@@ -251,18 +251,18 @@
 	set desc = "Change the parallax effect of space turfs."
 
 	var/parallax_list = list(
-		"Multi-layered",
-		"Single-layered (static background)",
+		"Multi-Layered Parallax",
+		"Static Background",
 		"Disabled",
 		)
 
 	var/parallax_pref = input("How do you want space to look like?","Space Parallax Preferences") in parallax_list
 
 	switch(parallax_pref)
-		if("Multi-layered")
+		if("Multi-Layered Parallax")
 			prefs.space_parallax = 2
 			to_chat(usr, "Space parallax is now multi-layered.")
-		if("Single-layered (static background)")
+		if("Static Background")
 			prefs.space_parallax = 1
 			to_chat(usr, "Space parallax is now single-layered.")
 		if("Disabled")
@@ -270,4 +270,23 @@
 			to_chat(usr, "Space parallax is now deactivated.")
 
 	prefs.save_preferences_sqlite(src,ckey)
+	if(mob && mob.hud_used)
+		mob.hud_used.update_parallax()
 
+/client/verb/toggle_space_dust()
+	set name = "Change Space Dust"
+	set category = "Preferences"
+	set desc = "Change the appearance of space turfs."
+
+	var/choice = alert(src,"Do you wish for space dust to be rendered?","Space Dust Preferences","Yes","No","Cancel")
+	switch(choice)
+		if("Yes")
+			prefs.space_dust = 1
+			to_chat(usr, "Space dust is now activated.")
+		if("No")
+			prefs.space_dust = 0
+			to_chat(usr, "Space dust is now deactivated.")
+
+	prefs.save_preferences_sqlite(src,ckey)
+	if(mob && mob.hud_used)
+		mob.hud_used.update_parallax()
