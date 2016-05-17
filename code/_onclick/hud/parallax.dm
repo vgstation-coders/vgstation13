@@ -50,6 +50,7 @@ var/list/parallax_on_clients = list()
 
 /datum/hud/proc/update_parallax()
 	if(!parallax_initialized) return
+	//multiple sub-procs for profiling purposes
 	if(update_parallax1())
 		update_parallax2(0)
 		update_parallax3()
@@ -63,25 +64,19 @@ var/list/parallax_on_clients = list()
 /datum/hud/proc/update_parallax1()
 	var/client/C = mymob.client
 	//DO WE UPDATE PARALLAX
-	if((mymob.z != map.zCentcomm) && C.prefs.space_parallax)//have to exclude Centcom so parallax doens't appear during hyperspace
+	if((mymob.z != map.zCentcomm) && (universe.name != "Christmas") && C.prefs.space_parallax)//have to exclude Centcom so parallax doens't appear during hyperspace
 		parallax_on_clients |= C
-		for(var/obj/screen/parallax/bgobj in C.parallax)
-			C.screen |= bgobj
-
 	else
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
-			C.parallax -= bgobj
-			qdel(bgobj)
+		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
+			C.screen -= bgobj
 		parallax_on_clients -= C
-		qdel(C.parallax_master)
-		C.parallax_master = null
-		qdel(C.parallax_canvas)
-		C.parallax_canvas = null
-		qdel(C.parallax_voidmaster)
-		C.parallax_voidmaster = null
-		qdel(C.parallax_dustmaster)
-		C.parallax_dustmaster = null
+
+		C.screen -= C.parallax_master
+		C.screen -= C.parallax_canvas
+		C.screen -= C.parallax_voidmaster
+		C.screen -= C.parallax_dustmaster
 		return 0
 
 	if(!C.parallax_master)
@@ -108,65 +103,27 @@ var/list/parallax_on_clients = list()
 /datum/hud/proc/update_parallax2(forcerecalibrate = 0)
 	var/client/C = mymob.client
 	//DO WE HAVE TO REPLACE ALL THE LAYERS
-	var/recalibrate = 0
-	if(!C.parallax.len)
-		recalibrate = 1
-	else
-		var/obj/screen/parallax/sample = C.parallax[1]
-		if(!sample.overlays.len)
-			recalibrate = 1
 
-	if(recalibrate || forcerecalibrate)
+	C.parallax |= space_parallax_dust_0 + space_parallax_dust_1 + space_parallax_dust_2
+	C.parallax_nodust |= space_parallax_0 + space_parallax_1 + space_parallax_2
+
+	if(forcerecalibrate)
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
-			C.parallax -= bgobj
-			qdel(bgobj)
-		if(C.prefs.space_dust)
-			for(var/i=1;i<=9;i++)
-				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-				var/image/parallax_layer = space_parallax_dust_0[i]
-				bgobj.overlays |= parallax_layer.overlays
-				bgobj.parallax_speed = 0
-				bgobj.plane = PLANE_SPACE_PARALLAX_DUST
-				calibrate_parallax(C,bgobj,i)
-			for(var/i=1;i<=9;i++)
-				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-				var/image/parallax_layer = space_parallax_dust_1[i]
-				bgobj.overlays |= parallax_layer.overlays
-				bgobj.parallax_speed = 1
-				bgobj.plane = PLANE_SPACE_PARALLAX_DUST
-				calibrate_parallax(C,bgobj,i)
-			for(var/i=1;i<=9;i++)
-				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-				var/image/parallax_layer = space_parallax_dust_2[i]
-				bgobj.overlays |= parallax_layer.overlays
-				bgobj.parallax_speed = 2
-				bgobj.plane = PLANE_SPACE_PARALLAX_DUST
-				calibrate_parallax(C,bgobj,i)
-			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
-		else
-			for(var/i=1;i<=9;i++)
-				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-				var/image/parallax_layer = space_parallax_0[i]
-				bgobj.overlays |= parallax_layer.overlays
-				bgobj.parallax_speed = 0
-				bgobj.plane = PLANE_SPACE_PARALLAX
-				calibrate_parallax(C,bgobj,i)
-			for(var/i=1;i<=9;i++)
-				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-				var/image/parallax_layer = space_parallax_1[i]
-				bgobj.overlays |= parallax_layer.overlays
-				bgobj.parallax_speed = 1
-				bgobj.plane = PLANE_SPACE_PARALLAX
-				calibrate_parallax(C,bgobj,i)
-			for(var/i=1;i<=9;i++)
-				var/obj/screen/parallax/bgobj = new /obj/screen/parallax()
-				var/image/parallax_layer = space_parallax_2[i]
-				bgobj.overlays |= parallax_layer.overlays
-				bgobj.parallax_speed = 2
-				bgobj.plane = PLANE_SPACE_PARALLAX
-				calibrate_parallax(C,bgobj,i)
-			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
+		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
+			C.screen -= bgobj
+
+	if(C.prefs.space_dust)
+		for(var/obj/screen/parallax/bgobj in C.parallax)
+			C.screen |= bgobj
+	else
+		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
+			C.screen |= bgobj
+
+	if(C.prefs.space_dust)
+		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
+	else
+		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
 
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
@@ -186,34 +143,53 @@ var/list/parallax_on_clients = list()
 
 	C.previous_turf = posobj
 
-	for(var/obj/screen/parallax/bgobj in C.parallax)
-		if(bgobj.parallax_speed)//only the middle and front layers actually move
-			var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
-			var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
+	if(C.prefs.space_dust)
+		for(var/obj/screen/parallax/bgobj in C.parallax)
+			if(bgobj.parallax_speed)//only the middle and front layers actually move
+				var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
+				var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
 
-			while(accumulated_offset_x > 720)
-				accumulated_offset_x -= 1440
-			while(accumulated_offset_x < -720)
-				accumulated_offset_x += 1440
+				while(accumulated_offset_x > 720)
+					accumulated_offset_x -= 1440
+				while(accumulated_offset_x < -720)
+					accumulated_offset_x += 1440
 
-			while(accumulated_offset_y > 720)
-				accumulated_offset_y -= 1440
-			while(accumulated_offset_y < -720)
-				accumulated_offset_y += 1440
+				while(accumulated_offset_y > 720)
+					accumulated_offset_y -= 1440
+				while(accumulated_offset_y < -720)
+					accumulated_offset_y += 1440
 
-			bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
-		else
-			bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
+				bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
+			else
+				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
+	else
+		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
+			if(bgobj.parallax_speed)//only the middle and front layers actually move
+				var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
+				var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
 
-/datum/hud/proc/calibrate_parallax(var/client/C,var/obj/screen/parallax/p_layer,var/i)
-	if(!C || !p_layer || !i) return
+				while(accumulated_offset_x > 720)
+					accumulated_offset_x -= 1440
+				while(accumulated_offset_x < -720)
+					accumulated_offset_x += 1440
+
+				while(accumulated_offset_y > 720)
+					accumulated_offset_y -= 1440
+				while(accumulated_offset_y < -720)
+					accumulated_offset_y += 1440
+
+				bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
+			else
+				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
+
+/proc/calibrate_parallax(var/obj/screen/parallax/p_layer,var/i)
+	if(!p_layer || !i) return
 
 	/*
 	1	2	3
 	4	5	6
 	7	8	9
 	*/
-
 	switch(i)
 		if(1,4,7)
 			p_layer.base_offset_x = -480
@@ -224,5 +200,3 @@ var/list/parallax_on_clients = list()
 			p_layer.base_offset_y = 480
 		if(7,8,9)
 			p_layer.base_offset_y = -480
-	C.parallax += p_layer
-	C.screen += p_layer

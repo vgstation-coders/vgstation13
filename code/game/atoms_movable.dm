@@ -166,9 +166,9 @@
 					else if (step(src, WEST))
 						. = step(src, SOUTH)
 
-	for(var/mob/M in get_mobs_in_contents())
-		if(M.hud_used)
-			M.hud_used.update_parallax()
+	for(var/client/C in clients)
+		if((C.eye == src) && (C.mob.hud_used))
+			C.mob.hud_used.update_parallax()
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
@@ -318,9 +318,9 @@
 			var/datum/locking_category/category = locked_atoms[AM]
 			category.update_lock(AM)
 
-		for(var/mob/M in get_mobs_in_contents())
-			if(M.hud_used)
-				M.hud_used.update_parallax()
+		for(var/client/C in clients)
+			if((C.eye == src) && (C.mob.hud_used))
+				C.mob.hud_used.update_parallax()
 
 		// Update on_moved listeners.
 		INVOKE_EVENT(on_moved,list("loc"=loc))
@@ -340,10 +340,11 @@
 		for(var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)
 
-		for(var/mob/M in get_mobs_in_contents())
-			if(M.hud_used)
-				M.hud_used.update_parallax()
+		for(var/client/C in clients)
+			if((C.eye == src) && (C.mob.hud_used))
+				C.mob.hud_used.update_parallax()
 
+		INVOKE_EVENT(on_moved,list("loc"=loc))
 		return 1
 	return 0
 

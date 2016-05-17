@@ -67,6 +67,7 @@
 		//PARALLAX//
 		////////////
 	var/list/parallax = list()
+	var/list/parallax_nodust = list()
 	var/list/parallax_offset = list()
 	var/turf/previous_turf = null
 	var/obj/screen/parallax_canvas/parallax_canvas = null
