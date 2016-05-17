@@ -158,4 +158,4 @@
 /obj/item/projectile/immovablerod/proc/clong()
 	for (var/mob/M in range(loc,20))
 		to_chat(M,"<FONT size=[max(0, 5 - round(get_dist(src, M)/4))]>CLANG!</FONT>")
-		M.playsound_local(loc, 'sound/effects/immovablerod_clong.ogg', 100 - (get_dist(src,M)*5), 1)
+		M.playsound_local(loc, 'sound/effects/bang.ogg', 100 - (get_dist(src,M)*5), 1)
