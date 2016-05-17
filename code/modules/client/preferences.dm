@@ -1450,7 +1450,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							to_chat(user, "Space dust is now deactivated.")
 
 				if("p_speed")
-					parallax_speed = sanitize_integer(input(user, "Enter an integer between 0 and 5 included (default=2)","Parallax Speed Preferences"), 0, 5, 2)
+					parallax_speed = min(max(input(user, "Enter a number between 0 and 5 included (default=2)","Parallax Speed Preferences",parallax_speed),0),5)
 
 				if("name")
 					be_random_name = !be_random_name

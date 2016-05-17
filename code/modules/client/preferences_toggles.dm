@@ -287,6 +287,6 @@
 	set category = "Preferences"
 	set desc = "Change the speed at which parallax moves."
 
-	prefs.parallax_speed = sanitize_integer(input(usr, "Enter an integer between 0 and 5 included (default=2)","Parallax Speed Preferences") as num, 0, 5, 2)
+	prefs.parallax_speed = min(max(input(usr, "Enter a number between 0 and 5 included (default=2)","Parallax Speed Preferences",prefs.parallax_speed),0),5)
 
 	prefs.save_preferences_sqlite(src,ckey)
