@@ -2,38 +2,7 @@
  * This file handles all parallax-related business once the parallax itself is initialized with the rest of the HUD
  */
 
-/*
-Short explanation of how Space Parallax works in Space Station 13
-
-On startup, the game generates 3 lists (space_parallax_0, space_parallax_1 and space_parallax_2) in 0.8 seconds,
-Each of those lists contains 9 blank images, which in turn have a staggering 255 overlays. And each of those lists corresponds to a layer.
-Since those overlays aren't blended in, this allows animated sprites (twinkling stars namely)
-space_parallax_0 is the back layer, the one that doesn't move.
-space_parallax_1 is the middle layer, the one that moves 1 pixel per movements
-space_parallax_2 is the front layer, the one that moves 2 pixels per movements
-When a player arrives, and has parallax enabled, the game will make him generate 9 /obj/screen/parallax for each of the 3 layers (so 27 in total, stored in the client's "parallax" list),
-And will copy the corresponding list's images' overlays to those objects. Thus, all players share the same space backgrounds for the round.
-
-Every time a player moves/is moved, the parallax will update. The parallax_offset client list lets the game know how much the player has moved in one direction
-And this is what the game uses to update the /obj/screen/parallax's screen_loc offsets. This prevents space from "jumping" when you drift from a Z Level to the next.
-
-The client's parallax_canvas variable is a fullscreen screen object that displays a given color. It appears behind the parallax objects.
-The player can hide the space turf's "space dust" in his preferences, which will move the canvas' plane above the dust. Therefore hiding it.
-
-Parallax will be automatically disabled in areas that have a custom "parallax_icon_state". Furthermore, parallax is disabled on the centcom Z level, so it doesn't conflict with Hyperspace.
-
-*/
-
-var/area/space/global_space_area = null
 var/list/parallax_on_clients = list()
-
-/client/var/list/parallax = list()
-/client/var/list/parallax_offset = list()
-/client/var/turf/previous_turf = null
-/client/var/obj/screen/parallax_canvas/parallax_canvas = null
-/client/var/obj/screen/parallax_master/parallax_master = null
-/client/var/obj/screen/parallax_dustmaster/parallax_dustmaster = null
-/client/var/obj/screen/parallax_voidmaster/parallax_voidmaster = null
 
 /obj/screen/parallax
 	var/base_offset_x = 0

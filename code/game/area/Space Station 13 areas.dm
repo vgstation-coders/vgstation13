@@ -67,8 +67,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
 
-	var/parallax_icon_state = "space" //Parallax attached to the area
-
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -113,8 +111,6 @@ proc/process_adminbus_teleport_locs()
 
 
 /*-----------------------------------------------------------------------------*/
-
-/area/space
 
 /area/station//TODO: make every area in the MAIN station inherit from this.
 	name = "Station"
@@ -188,7 +184,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod1/transit
 	icon_state = "shuttle"
-	parallax_icon_state = "warpspace_ns"
 
 /area/shuttle/escape_pod2
 	name = "\improper Escape Pod Two"
@@ -202,7 +197,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod2/transit
 	icon_state = "shuttle"
-	parallax_icon_state = "warpspace_ns"
 
 /area/shuttle/escape_pod3
 	name = "\improper Escape Pod Three"
@@ -216,7 +210,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod3/transit
 	icon_state = "shuttle"
-	parallax_icon_state = "warpspace_ew"
 
 /area/shuttle/escape_pod5 //Pod 4 was lost to meteors
 	name = "\improper Escape Pod Five"
@@ -230,7 +223,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod5/transit
 	icon_state = "shuttle"
-	parallax_icon_state = "warpspace_ew"
 
 /area/shuttle/supply
 	name = "supply shuttle"

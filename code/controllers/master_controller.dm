@@ -238,35 +238,6 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			J.pixel_y = I.pixel_y
 			parallax_layer.overlays += J
 		space_parallax_dust_2[i] = parallax_layer
-		/*
-	for(var/i=1;i<=9;i++)
-		var/image/parallax_layer = image('icons/turf/space.dmi',"blank")
-		for(var/j=0;j<225;j++)
-			var/image/I = image('icons/turf/space_parallax4.dmi',"[rand(26)]")
-			I.pixel_x = 32 * (j%15)
-			I.pixel_y = 32 * round(j/15)
-			I.plane = PLANE_SPACE_PARALLAX_DUST
-			parallax_layer.overlays += I
-		space_parallax_dust_0[i] = parallax_layer
-	for(var/i=1;i<=9;i++)
-		var/image/parallax_layer = image('icons/turf/space.dmi',"blank")
-		for(var/j=0;j<225;j++)
-			var/image/I = image('icons/turf/space_parallax3.dmi',"[rand(26)]")
-			I.pixel_x = 32 * (j%15)
-			I.pixel_y = 32 * round(j/15)
-			I.plane = PLANE_SPACE_PARALLAX_DUST
-			parallax_layer.overlays += I
-		space_parallax_dust_1[i] = parallax_layer
-	for(var/i=1;i<=9;i++)
-		var/image/parallax_layer = image('icons/turf/space.dmi',"blank")
-		for(var/j=0;j<225;j++)
-			var/image/I = image('icons/turf/space_parallax2.dmi',"[rand(26)]")
-			I.pixel_x = 32 * (j%15)
-			I.pixel_y = 32 * round(j/15)
-			I.plane = PLANE_SPACE_PARALLAX_DUST
-			parallax_layer.overlays += I
-		space_parallax_dust_2[i] = parallax_layer
-		*/
 	parallax_initialized = 1
 
 /datum/controller/game_controller/proc/setup_objects()
