@@ -104,10 +104,7 @@
 /obj/item/projectile/immovablerod/proc/break_stuff()
 	if(loc && !istype(loc,/turf/space))
 		if(loc.density)
-			if(istype(loc,/turf/simulated/wall/r_wall))
-				loc.ex_act(1)
-			else
-				loc.ex_act(2)
+			loc.ex_act(2)
 		else
 			loc.ex_act(3)
 			if(istype(loc,/turf/simulated/floor))
