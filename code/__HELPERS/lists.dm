@@ -60,14 +60,14 @@
 /proc/is_type_in_list(atom/A, list/L)
 	if (!L.len)
 		return 0
-	if (!isnum(L[L[1]]))
-		generate_type_list_cache(L)
+	if (!isnum(L[L[1]])) //Has this not been converted to an associative list?
+		generate_type_list_cache(L) //Convert it to an associative list
 	return L[A.type]
 
 /proc/generate_type_list_cache(L)
 	for(var/type in L)
-		for(var/T in typesof(type))
-			L[T] = 1
+		for(var/T in typesof(type)) //Gather all possible typepaths into an associative list
+			L[T] = 1 //Set them equal to one
 
 //Empties the list by setting the length to 0. Hopefully the elements get garbage collected
 /proc/clearlist(list/list)
