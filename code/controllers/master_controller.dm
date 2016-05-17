@@ -188,7 +188,6 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			parallax_layer.overlays += I
 			parallax_layer.parallax_speed = 0
 			parallax_layer.plane = PLANE_SPACE_PARALLAX
-			parallax_layer.globalscreen = 1
 			calibrate_parallax(parallax_layer,i)
 		space_parallax_0[i] = parallax_layer
 	for(var/i in 1 to 9)
@@ -201,7 +200,6 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			parallax_layer.overlays += I
 			parallax_layer.parallax_speed = 1
 			parallax_layer.plane = PLANE_SPACE_PARALLAX
-			parallax_layer.globalscreen = 1
 			calibrate_parallax(parallax_layer,i)
 		space_parallax_1[i] = parallax_layer
 	for(var/i in 1 to 9)
@@ -214,7 +212,6 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			parallax_layer.overlays += I
 			parallax_layer.parallax_speed = 2
 			parallax_layer.plane = PLANE_SPACE_PARALLAX
-			parallax_layer.globalscreen = 1
 			calibrate_parallax(parallax_layer,i)
 		space_parallax_2[i] = parallax_layer
 	for(var/i in 1 to 9)
@@ -229,7 +226,6 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			parallax_layer.overlays += J
 			parallax_layer.parallax_speed = 0
 			parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
-			parallax_layer.globalscreen = 1
 			calibrate_parallax(parallax_layer,i)
 		space_parallax_dust_0[i] = parallax_layer
 	for(var/i in 1 to 9)
@@ -244,7 +240,6 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			parallax_layer.overlays += J
 			parallax_layer.parallax_speed = 1
 			parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
-			parallax_layer.globalscreen = 1
 			calibrate_parallax(parallax_layer,i)
 		space_parallax_dust_1[i] = parallax_layer
 	for(var/i in 1 to 9)
@@ -259,7 +254,6 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			parallax_layer.overlays += J
 			parallax_layer.parallax_speed = 2
 			parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
-			parallax_layer.globalscreen = 1
 			calibrate_parallax(parallax_layer,i)
 		space_parallax_dust_2[i] = parallax_layer
 	parallax_initialized = 1

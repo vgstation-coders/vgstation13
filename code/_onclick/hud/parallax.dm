@@ -14,6 +14,7 @@ var/list/parallax_on_clients = list()
 	blend_mode = BLEND_ADD
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX//changing this var doesn't actually change the plane of its overlays
+	globalscreen = 1
 	var/parallax_speed = 0
 
 /obj/screen/parallax_master
@@ -21,6 +22,7 @@ var/list/parallax_on_clients = list()
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	appearance_flags = PLANE_MASTER
 	blend_mode = BLEND_MULTIPLY
+	globalscreen = 1
 
 /obj/screen/parallax_voidmaster
 	plane = PLANE_SPACE_BACKGROUND
@@ -30,6 +32,7 @@ var/list/parallax_on_clients = list()
 				1, 1, 1) // This will cause space to be solid white
 	appearance_flags = PLANE_MASTER
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	globalscreen = 1
 
 /obj/screen/parallax_canvas
 	mouse_opacity = 0
@@ -41,12 +44,14 @@ var/list/parallax_on_clients = list()
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	globalscreen = 1
 
 /obj/screen/parallax_dustmaster
 	plane = PLANE_SPACE_PARALLAX_DUST
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	appearance_flags = PLANE_MASTER
 	blend_mode = BLEND_MULTIPLY
+	globalscreen = 1
 
 /datum/hud/proc/update_parallax()
 	var/client/C = mymob.client
@@ -118,8 +123,29 @@ var/list/parallax_on_clients = list()
 	var/client/C = mymob.client
 	//DO WE HAVE TO REPLACE ALL THE LAYERS
 
-	C.parallax |= space_parallax_dust_0 + space_parallax_dust_1 + space_parallax_dust_2
-	C.parallax_nodust |= space_parallax_0 + space_parallax_1 + space_parallax_2
+	if(!C.parallax.len)
+		var/list/wantDatParallax = list()
+		wantDatParallax |= space_parallax_dust_0 + space_parallax_dust_1 + space_parallax_dust_2
+		for(var/obj/screen/parallax/bgobj in wantDatParallax)
+			var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+			parallax_layer.overlays |= bgobj.overlays
+			parallax_layer.base_offset_x = bgobj.base_offset_x
+			parallax_layer.base_offset_y = bgobj.base_offset_y
+			parallax_layer.plane = bgobj.plane
+			parallax_layer.parallax_speed = bgobj.parallax_speed
+			C.parallax |= parallax_layer
+
+	if(!C.parallax_nodust.len)
+		var/list/wantDatParallax = list()
+		wantDatParallax |= space_parallax_0 + space_parallax_1 + space_parallax_2
+		for(var/obj/screen/parallax/bgobj in wantDatParallax)
+			var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+			parallax_layer.overlays |= bgobj.overlays
+			parallax_layer.base_offset_x = bgobj.base_offset_x
+			parallax_layer.base_offset_y = bgobj.base_offset_y
+			parallax_layer.plane = bgobj.plane
+			parallax_layer.parallax_speed = bgobj.parallax_speed
+			C.parallax_nodust |= parallax_layer
 
 	if(forcerecalibrate)
 		for(var/obj/screen/parallax/bgobj in C.parallax)
