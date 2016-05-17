@@ -324,10 +324,11 @@
 		return 1
 	return 0
 
-/proc/move_parallax(atom/destination)
-	for(var/client/C in clients)
-		if((get_turf(C.eye) == destination) && (C.mob.hud_used))
-			C.mob.hud_used.update_parallax()
+/atom/movable/proc/move_parallax(atom/destination)
+	spawn()
+		for(var/client/C in clients)
+			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+				C.mob.hud_used.update_parallax()
 
 
 /atom/movable/proc/forceEnter(atom/destination)
