@@ -89,7 +89,7 @@ var/list/parallax_on_clients = list()
 /datum/hud/proc/update_parallax1()
 	var/client/C = mymob.client
 	//DO WE UPDATE PARALLAX
-	if((mymob.z != map.zCentcomm) && (universe.name != "Christmas") && C.prefs.space_parallax)//have to exclude Centcom so parallax doens't appear during hyperspace
+	if(C.prefs.space_parallax)//have to exclude Centcom so parallax doens't appear during hyperspace
 		parallax_on_clients |= C
 	else
 		for(var/obj/screen/parallax/bgobj in C.parallax)
