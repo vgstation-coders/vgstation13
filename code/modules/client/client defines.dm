@@ -66,6 +66,7 @@
 		////////////
 		//PARALLAX//
 		////////////
+	var/updating_parallax = 0
 	var/list/parallax = list()
 	var/list/parallax_nodust = list()
 	var/list/parallax_offset = list()

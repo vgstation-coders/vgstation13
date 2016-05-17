@@ -166,9 +166,6 @@
 					else if (step(src, WEST))
 						. = step(src, SOUTH)
 
-	for(var/client/C in clients)
-		if((C.eye == src) && (C.mob.hud_used))
-			C.mob.hud_used.update_parallax()
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
@@ -181,6 +178,8 @@
 	if(!loc || (loc == oldloc && oldloc != newLoc))
 		last_move = 0
 		return
+
+	move_parallax(loc)
 
 	if(tether && can_pull_tether && !tether_pull)
 		tether.follow(src,oldloc)
@@ -318,14 +317,18 @@
 			var/datum/locking_category/category = locked_atoms[AM]
 			category.update_lock(AM)
 
-		for(var/client/C in clients)
-			if((C.eye == src) && (C.mob.hud_used))
-				C.mob.hud_used.update_parallax()
+		move_parallax(destination)
 
 		// Update on_moved listeners.
 		INVOKE_EVENT(on_moved,list("loc"=loc))
 		return 1
 	return 0
+
+/proc/move_parallax(atom/destination)
+	for(var/client/C in clients)
+		if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+			C.mob.hud_used.update_parallax()
+
 
 /atom/movable/proc/forceEnter(atom/destination)
 	if(destination)
@@ -340,9 +343,7 @@
 		for(var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)
 
-		for(var/client/C in clients)
-			if((C.eye == src) && (C.mob.hud_used))
-				C.mob.hud_used.update_parallax()
+		move_parallax(destination)
 
 		INVOKE_EVENT(on_moved,list("loc"=loc))
 		return 1
