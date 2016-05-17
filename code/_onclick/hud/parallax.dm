@@ -67,18 +67,24 @@ var/list/parallax_on_clients = list()
 
 	//multiple sub-procs for profiling purposes
 	if(update_parallax1())
-		update_parallax2(0)
-		update_parallax3()
-	C.updating_parallax = 0
+		spawn()
+			update_parallax2(0)
+			update_parallax3()
+			C.updating_parallax = 0
+	else
+		C.updating_parallax = 0
 
 /datum/hud/proc/update_parallax_and_dust()
 	var/client/C = mymob.client
 	if(!parallax_initialized || C.updating_parallax) return
 	C.updating_parallax = 1
 	if(update_parallax1())
-		update_parallax2(1)
-		update_parallax3()
-	C.updating_parallax = 0
+		spawn()
+			update_parallax2(1)
+			update_parallax3()
+			C.updating_parallax = 0
+	else
+		C.updating_parallax = 0
 
 /datum/hud/proc/update_parallax1()
 	var/client/C = mymob.client
