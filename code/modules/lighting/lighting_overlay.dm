@@ -15,6 +15,7 @@
 	blend_mode       = BLEND_MULTIPLY
 
 	var/needs_update = FALSE
+	var/wa = FALSE
 
 /atom/movable/lighting_overlay/New(var/atom/loc, var/no_update = FALSE)
 	. = ..()
@@ -25,7 +26,7 @@
 	T.lighting_overlay = src
 	T.luminosity       = 0
 
-	if(no_update)
+	if (no_update)
 		return
 
 	update_overlay()
@@ -78,21 +79,26 @@
 		if(mx > 1)
 			. = 1 / mx
 
-		max = max(., mx)
+		else if (mx < LIGHTING_SOFT_THRESHOLD)
+			. = 0 // 0 means soft lighting.
 
-		L[i + 0]   = C.lum_r * .
-		L[i + 1]   = C.lum_g * .
-		L[i + 2]   = C.lum_b * .
+		if (wa)
+			to_chat(world, "[.] [mx] [max] ")
+
+		max = max(max, mx)
+
+		if (.)
+			L[i + 0]   = C.lum_r * .
+			L[i + 1]   = C.lum_g * .
+			L[i + 2]   = C.lum_b * .
+		else
+			L[i + 0]   = LIGHTING_SOFT_THRESHOLD
+			L[i + 1]   = LIGHTING_SOFT_THRESHOLD
+			L[i + 2]   = LIGHTING_SOFT_THRESHOLD
 
 	src.color  = L
 	luminosity = (max > LIGHTING_SOFT_THRESHOLD)
-	/*
-	if(max <= LIGHTING_SOFT_THRESHOLD)
-		alpha = 255 - round(LIGHTING_SOFT_THRESHOLD * 255) // BYOND I fucking hope you do this at compile time.
 
-	else
-		alpha = 255
-*/
 	// Variety of overrides so the overlays don't get affected by weird things.
 
 /atom/movable/lighting_overlay/ex_act(severity)

@@ -26,9 +26,9 @@
 /proc/create_lighting_corners_zlevel(var/zlevel)
 	for (var/turf/T in block(locate(1, 1, zlevel), locate(world.maxx, world.maxy, zlevel)))
 		if (istype(T, /turf/space)) // Don't generate corners, do it later during ChangeTurf when needed.
-			T.lighting_corners_initialised = FALSE
 			continue
 
+		T.lighting_corners_initialised = TRUE
 		for (var/i = 1 to 4)
 			if (T.corners[i]) // Already have a corner on this direction.
 				continue
