@@ -12,6 +12,10 @@
 
 /datum/event/immovable_rod/start()
 	immovablerod()
+/datum/event/immovable_rod/big/start()
+	immovablerod(1)
+/datum/event/immovable_rod/hyper/start()
+	immovablerod(2)
 
 /proc/immovablerod(var/hyperRod = 0)
 	var/startx = 0
@@ -39,10 +43,16 @@
 	endx = rand((world.maxx/2)-30,(world.maxx/2)+30)
 	endy = rand((world.maxy/2)-30,(world.maxy/2)+30)
 
-	if(hyperRod)
-		new /obj/item/projectile/immovablerod/hyper(locate(startx, starty, 1), locate(endx, endy, 1))
-	else
-		new /obj/item/projectile/immovablerod(locate(startx, starty, 1), locate(endx, endy, 1))
+	switch(hyperRod)
+		if(0)
+			new /obj/item/projectile/immovablerod(locate(startx, starty, 1), locate(endx, endy, 1))
+		if(1)
+			new /obj/item/projectile/immovablerod/big(locate(startx, starty, 1), locate(endx, endy, 1))
+		if(2)
+			new /obj/item/projectile/immovablerod/hyper(locate(startx, starty, 1), locate(endx, endy, 1))
+
+
+/datum/event/immovable_rod/start()
 
 /obj/item/projectile/immovablerod
 	name = "\improper Immovable Rod"
@@ -56,14 +66,31 @@
 	grillepasschance = 0
 	mouse_opacity = 1
 
-/obj/item/projectile/immovablerod/hyper
-	name = "\improper Immovable Hyper Rod"
-
 /obj/item/projectile/immovablerod/New(atom/start, atom/end)
 	..()
 	step_delay = round(0.5, world.tick_lag)
 	if(end)
 		throw_at(end)
+
+/obj/item/projectile/immovablerod/big
+	name = "\improper Immovable Big Rod"
+	icon = 'icons/obj/objects_64x64.dmi'
+	pixel_x = -16
+	pixel_y = -16
+
+/obj/item/projectile/immovablerod/hyper
+	name = "\improper Immovable Hyper Rod"
+	icon = 'icons/obj/objects_96x96.dmi'
+	pixel_x = -32
+	pixel_y = -32
+	lock_angle = 1
+
+/obj/item/projectile/immovablerod/hyper/New()
+	..()
+	var/image/I = image('icons/obj/objects_96x96.dmi',"immrod_bottom")
+	I.layer = layer-1
+	I.plane = -1
+	overlays += I
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
 	for(var/mob/dead/observer/people in observers)
@@ -109,10 +136,29 @@
 			loc.ex_act(3)
 			if(istype(loc,/turf/simulated/floor))
 				var/turf/simulated/floor/under = loc
+				under.break_tile()
+				under.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+
+		for(var/turf/T in orange(loc,1))
+			if(prob(20))
+				T.add_dust()
+
+		if(prob(50))
+			clong()
+
+/obj/item/projectile/immovablerod/big/break_stuff()
+	if(loc && !istype(loc,/turf/space))
+		if(loc.density)
+			loc.ex_act(2)
+		else
+			loc.ex_act(3)
+			if(istype(loc,/turf/simulated/floor))
+				var/turf/simulated/floor/under = loc
 				under.break_tile_to_plating()
 
 		for(var/turf/T in orange(loc,1))
 			T.ex_act(3)
+
 		if(prob(50))
 			clong()
 
@@ -120,7 +166,21 @@
 	if(loc && !istype(loc,/turf/space))
 		loc.ex_act(1)
 		for(var/turf/T in orange(loc,1))
-			T.ex_act(3)
+			if(prob(50))
+				if(istype(T,/turf/simulated/floor))
+					var/turf/simulated/floor/under = T
+					under.break_tile_to_plating()
+				else
+					T.ex_act(3)
+			else
+				T.ex_act(3)
+
+		for(var/turf/T in orange(loc,2))
+			if(prob(50))
+				T.ex_act(3)
+			else
+				T.add_dust()
+
 		if(prob(50))
 			clong()
 

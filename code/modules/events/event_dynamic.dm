@@ -64,6 +64,8 @@ var/list/event_last_fired = list()
 		possibleEvents[/datum/event/meteor_wave] = 15
 		possibleEvents[/datum/event/meteor_shower] = 40
 		possibleEvents[/datum/event/immovable_rod] = 15
+		possibleEvents[/datum/event/immovable_rod/big] = 10
+		possibleEvents[/datum/event/immovable_rod/hyper] = 5
 		possibleEvents[/datum/event/thing_storm/blob_shower] = 25//Blob Cluster
 
 	if((active_with_role["Engineer"] > 1) && (active_with_role["Security"] > 1) && (living >= 25))

@@ -317,6 +317,9 @@
 		qdel (L)
 		L = null
 
+/turf/proc/add_dust()
+	return
+
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	if(loc)
@@ -324,6 +327,7 @@
 		A.area_turfs -= src
 	if (!N || !allow)
 		return
+
 
 #ifdef ENABLE_TRI_LEVEL
 // Fuck this, for now - N3X
