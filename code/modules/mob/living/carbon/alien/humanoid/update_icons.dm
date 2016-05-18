@@ -45,8 +45,7 @@
 
 	update_inv_head(0)
 	update_inv_wear_suit(0)
-	update_inv_r_hand(0)
-	update_inv_l_hand(0)
+	update_inv_hands(0)
 	update_inv_pockets(0)
 	update_hud()
 	update_icons()

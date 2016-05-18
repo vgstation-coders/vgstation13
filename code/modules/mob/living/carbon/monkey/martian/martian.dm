@@ -1,7 +1,6 @@
 /mob/living/carbon/monkey/martian
-	name = "martian"
-	voice_name = "martian"
-	icon_state = "martian1"
+	name = "mutated monkey"
+	voice_name = "mutated monkey"
 	held_items = list(null, null, null, null)
 
 	canWearHats = 0
@@ -12,9 +11,6 @@
 	..()
 	overlays_standing.len = 14
 
-#define ui_rhand "CENTER-1:16,SOUTH:5"
-#define ui_lhand "CENTER:16,SOUTH:5"
-
 /mob/living/carbon/monkey/martian/get_held_item_ui_location(index)
 	if(!is_valid_hand_index(index)) return
 
@@ -23,13 +19,6 @@
 		if(GRASP_RIGHT_HAND)return "CENTER:16,SOUTH:5"
 		if(3) return "CENTER-1:16,SOUTH+1:5"
 		if(4) return "CENTER:16,SOUTH+1:5"
-
-/mob/living/carbon/monkey/martian/get_direction_by_index(index)
-	switch(index)
-		if(GRASP_LEFT_HAND) return "left_hand"
-		if(GRASP_RIGHT_HAND)return "right_hand"
-		if(3) return "left_hand"
-		if(4) return "right_hand"
 
 /mob/living/carbon/monkey/martian/get_index_limb_name(var/index)
 	if(!index) index = active_hand
@@ -49,11 +38,11 @@
 
 	return list()
 
-/mob/living/carbon/monkey/martian/update_inv_l_hand()
-	return update_inv_hand(GRASP_LEFT_HAND)
+/mob/living/carbon/monkey/martian/update_inv_l_hand(update_icons = 1)
+	return update_inv_hand(GRASP_LEFT_HAND, update_icons)
 
-/mob/living/carbon/monkey/martian/update_inv_r_hand()
-	return update_inv_hand(GRASP_RIGHT_HAND)
+/mob/living/carbon/monkey/martian/update_inv_r_hand(update_icons = 1)
+	return update_inv_hand(GRASP_RIGHT_HAND, update_icons)
 
 /mob/living/carbon/monkey/martian/update_inv_hand(index, var/update_icons=1)
 	var/obj/item/I = get_held_item_by_index(index)

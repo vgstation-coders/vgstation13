@@ -1729,6 +1729,23 @@
 			if(new_mob.client == CLIENT) usr = new_mob //We probably transformed ourselves
 			show_player_panel(new_mob)
 
+	else if(href_list["changehands"])
+		if(!check_rights(R_SPAWN))	return
+
+		var/mob/M = locate(href_list["changehands"])
+		if(!istype(M))
+			return
+
+		var/max_hands = 40 //This number is randomly chosen
+
+		var/new_amount = input(usr, "Input a new amount of hands for [M] (current: [M.held_items.len]). WARNING: values larger than 4 may significantly clutter the UI. Maximum amount is [max_hands].", "Hands", M.held_items.len) as num
+		if(!new_amount) return
+
+		new_amount = Clamp(new_amount, 0, max_hands)
+
+		M.set_hand_amount(new_amount)
+		to_chat(usr, "<span class='info'>Changed [M]'s amount of hands to [new_amount].</span>")
+
 	else if(href_list["togmutate"])
 		if(!check_rights(R_SPAWN))	return
 

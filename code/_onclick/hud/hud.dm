@@ -103,8 +103,13 @@ var/global/obj/screen/clicker/catcher = new()
 /datum/hud/proc/init_hand_icons(var/new_icon, var/new_color, var/new_alpha)
 	for(var/i = 1 to mymob.held_items.len) //Hands
 		var/obj/screen/inventory/inv_box = getFromPool(/obj/screen/inventory)
-		inv_box.name = "hand slot"
-		inv_box.dir = (i%2 == 0 ? WEST : EAST) //1 = left hand, 2 = right hand. WEST dir is for left hands, EAST dir is for right hands
+		inv_box.name = "[mymob.get_index_limb_name(i)]"
+
+		if(mymob.get_direction_by_index(i) == "right_hand")
+			inv_box.dir = WEST
+		else
+			inv_box.dir = EAST
+
 		inv_box.icon = new_icon ? new_icon : 'icons/mob/screen1_White.dmi'
 		inv_box.icon_state = "hand_inactive"
 		if(mymob && mymob.active_hand == i)
@@ -117,6 +122,30 @@ var/global/obj/screen/clicker/catcher = new()
 		inv_box.alpha = new_alpha ? new_alpha : inv_box.alpha
 		src.hand_hud_objects += inv_box
 		src.adding += inv_box
+
+/datum/hud/proc/update_hand_icons()
+	var/obj/screen/inventory/example = locate(/obj/screen/inventory) in hand_hud_objects
+
+	var/new_icon = 'icons/mob/screen1_White.dmi'
+	var/new_color = null
+	var/new_alpha = 255
+
+	if(example)
+		new_icon = example.icon
+		new_color = example.color
+		new_alpha = example.alpha
+
+	for(var/obj/screen/inventory/IN in hand_hud_objects)
+		if(mymob.client)
+			adding -= IN
+			mymob.client.screen -= IN
+
+		returnToPool(IN)
+
+	if(mymob.client)
+		adding = list()
+		init_hand_icons(new_icon, new_color, new_alpha)
+		mymob.client.screen += adding
 
 /datum/hud/proc/instantiate()
 	if(!ismob(mymob))
@@ -163,6 +192,7 @@ var/global/obj/screen/clicker/catcher = new()
 		construct_hud()
 	else if(isobserver(mymob))
 		ghost_hud()
+
 	if(isliving(mymob))
 		var/obj/screen/using
 		using = getFromPool(/obj/screen)

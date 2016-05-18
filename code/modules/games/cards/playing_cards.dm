@@ -179,16 +179,16 @@
 		if(over_object == M)
 			M.put_in_hands(src)
 			to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
-		else if(istype(over_object, /obj/screen))
-			switch(over_object.name)
-				if("r_hand")
-					M.u_equip(src, 0)
-					M.put_in_r_hand(src)
-					to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
-				if("l_hand")
-					M.u_equip(src, 0)
-					M.put_in_l_hand(src)
-					to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
+		else if(istype(over_object, /obj/screen/inventory))
+			var/obj/screen/inventory/OI = over_object
+
+			if(OI.hand_index)
+				M.u_equip(src, 0)
+				M.put_in_hand(OI.hand_index, src)
+				src.add_fingerprint(usr)
+				to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
+
+			return
 	else
 		to_chat(usr, "<span class = 'warning'>You can't reach it from here.</span>")
 

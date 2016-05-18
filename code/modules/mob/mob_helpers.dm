@@ -20,6 +20,9 @@
 	if(M_NOIR in mutations)
 		return NOIRMATRIX
 
+/mob/proc/can_wield()
+	return 0
+
 /mob/dead/observer/get_screen_colour()
 	return default_colour_matrix
 

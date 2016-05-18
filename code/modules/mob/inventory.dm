@@ -41,15 +41,24 @@
 /mob/proc/get_held_item_ui_location(index)
 	if(!is_valid_hand_index(index)) return
 
+	var/x_offset = -(index % 2) //Index is 1 -> one unit to the left
+	var/y_offset = round((index-1) / 2) //Two slots per row, then go higher. Rounded down
+
+	return "CENTER[x_offset ? x_offset : ""]:16,SOUTH[y_offset ? "+[y_offset]" : ""]:5"
+
+	/*
 	switch(index)
-		if(GRASP_LEFT_HAND) return ui_lhand
-		if(GRASP_RIGHT_HAND)return ui_rhand
+		if(1) return "CENTER-1:16,SOUTH:5"
+		if(2)return "CENTER:16,SOUTH:5"
+		if(3) return "CENTER-1:16,SOUTH+1:5"
+		if(4) return "CENTER:16,SOUTH+1:5"
+	*/
 
 /mob/proc/get_direction_by_index(index)
-	if(index % 2 == GRASP_LEFT_HAND)
-		return "left_hand"
-	else
+	if(index % 2 == GRASP_RIGHT_HAND)
 		return "right_hand"
+	else
+		return "left_hand"
 
 /mob/proc/get_index_limb_name(var/index)
 	if(!index) index = active_hand
@@ -117,7 +126,7 @@
 	if(!is_valid_hand_index(index) || !is_valid_hand_index(active_hand))
 		return 0
 
-	if(!put_in_hand_check(W, active_hand))
+	if(!put_in_hand_check(W, index))
 		return 0
 
 	if(!held_items[index])
@@ -182,7 +191,20 @@
 		W.dropped()
 		return 0
 
+/mob/proc/set_hand_amount(new_amount)
+	if(new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!
+		for(var/i = (new_amount+1) to held_items.len)
+			var/obj/item/I = held_items[i]
 
+			if(I)
+				drop_item(I, force_drop = 1)
+	if(new_amount < active_hand)
+		active_hand = new_amount //Don't update the HUD - it'll be redrawn anyways
+
+	held_items.len = new_amount
+
+	if(hud_used)
+		hud_used.update_hand_icons()
 
 /mob/proc/drop_item_v()		//this is dumb.
 	if(stat == CONSCIOUS && isturf(loc))
@@ -247,8 +269,8 @@
 	return 0
 
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
-	drop_item(get_active_hand(), Target, force_drop)
-	drop_item(get_inactive_hand(), Target, force_drop)
+	for(var/obj/item/I in held_items)
+		drop_item(I, Target, force_drop = force_drop)
 
 //TODO: phase out this proc
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?

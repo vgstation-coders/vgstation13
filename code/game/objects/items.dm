@@ -716,7 +716,7 @@
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = 0)
-	if(!ishuman(user))
+	if(!user.can_wield())
 		user.show_message("You can't wield \the [src] as it's too heavy.")
 		return
 
@@ -732,11 +732,15 @@
 		//The second half is the same, except that the proc assumes that the wielded item is held in the INACTIVE hand. So the INACTIVE hand is checked for holding either nothing or wielded item.
 		//if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
 
-		//^ Dude what the heck were you smoking
-		if(user.put_in_hands(wielded))
-			wielded.attach_to(src)
-			update_wield(user)
-			return 1
+		for(var/i = 1 to user.held_items.len)
+			if(user.held_items[i]) continue
+			if(user.active_hand == i) continue
+
+			if(user.put_in_hand(i, wielded))
+				wielded.attach_to(src)
+				update_wield(user)
+				return 1
+
 		unwield(user)
 		return
 

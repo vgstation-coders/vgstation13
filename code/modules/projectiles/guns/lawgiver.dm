@@ -84,8 +84,7 @@
 				else
 					DNA_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)]DNAbad")
 				overlays += DNA_overlay
-		H.update_inv_r_hand()
-		H.update_inv_l_hand()
+		H.update_inv_hands()
 
 
 /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample()

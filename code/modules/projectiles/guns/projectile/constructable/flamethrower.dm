@@ -226,8 +226,7 @@
 	update_icon()
 	if(istype(loc, /mob/living/carbon))
 		var/mob/living/carbon/C = loc
-		C.update_inv_r_hand()
-		C.update_inv_l_hand()
+		C.update_inv_hands()
 	return
 
 /obj/item/weapon/gun/projectile/flamethrower/full/New(var/loc)

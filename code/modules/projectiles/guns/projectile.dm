@@ -49,8 +49,7 @@
 		update_icon()
 
 		if(user)
-			user.update_inv_r_hand()
-			user.update_inv_l_hand()
+			user.update_inv_hands()
 		return 1
 	return 0
 
@@ -64,8 +63,7 @@
 		stored_magazine = null
 		update_icon()
 		if(user)
-			user.update_inv_r_hand()
-			user.update_inv_l_hand()
+			user.update_inv_hands()
 		return 1
 	return 0
 

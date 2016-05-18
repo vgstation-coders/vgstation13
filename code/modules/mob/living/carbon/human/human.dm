@@ -1170,6 +1170,9 @@
 		return 0
 	return 1
 
+/mob/living/carbon/human/can_wield()
+	return 1
+
 /mob/living/carbon/human/proc/get_visible_gender()
 	if(wear_suit && is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT) && ((is_slot_hidden(head.body_parts_covered,HIDEMASK)) || is_slot_hidden(wear_mask.body_parts_covered,HIDEMASK)))
 		return NEUTER
@@ -1843,3 +1846,15 @@
 		layer = MOB_LAYER - 0.1 //so we move under bedsheets
 	else
 		layer = MOB_LAYER
+
+/mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
+	if(new_amount > held_items.len)
+		for(var/i = (held_items.len + 1) to new_amount) //For all the new indexes, create a hand organ
+			if(!find_organ_by_grasp_index(i))
+				var/datum/organ/external/OE = new/datum/organ/external/r_hand(organs_by_name["groin"]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
+				OE.grasp_id = i
+
+				organs_by_name["hand[i]"] = OE
+				grasp_organs.Add(OE)
+				organs.Add(OE)
+	..()

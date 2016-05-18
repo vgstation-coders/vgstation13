@@ -875,7 +875,7 @@
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
 
-	if(name=="hand slot")
+	if(hand_index)
 		usr.activate_hand(hand_index)
 
 	switch(name)
@@ -885,8 +885,7 @@
 			usr:swap_hand()
 		else
 			if(usr.attack_ui(slot_id))
-				usr.update_inv_l_hand(0)
-				usr.update_inv_r_hand(0)
+				usr.update_inv_hands()
 				usr.delayNextAttack(6)
 	return 1
 

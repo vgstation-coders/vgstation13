@@ -120,8 +120,7 @@
 		overlays += filling
 		if (istype(loc,/mob/living/carbon/human)) //Needs to always update its own overlay, but only update mob overlays if it's actually on a mob.
 			H.update_inv_back()
-			H.update_inv_r_hand()
-			H.update_inv_l_hand()
+			H.update_inv_hands()
 
 	else
 		dynamic_overlay["[BACK_LAYER]"] = null
@@ -129,8 +128,7 @@
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
 		if (istype(loc,/mob/living/carbon/human))
 			H.update_inv_back()
-			H.update_inv_r_hand()
-			H.update_inv_l_hand()
+			H.update_inv_hands()
 
 /obj/item/weapon/reagent_containers/chempack/verb/flush_tanks() //Completely empties the chempack's tanks, since you can't pour it onto the floor or into something else.
 	set name = "Flush chemical tanks"
@@ -235,8 +233,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 					slot_flags = null
 					to_chat(user, "<span class='notice'>You unscrew the maintenance panel of \the [src].</span>")
 					icon_state = "[initial(icon_state)]3"
-					user.update_inv_r_hand() //These procs are to force the item's in_hand mob overlay to update to reflect the different stages of building. It was the only way I could find to accomplish this.
-					user.update_inv_l_hand()
+					user.update_inv_hands() //These procs are to force the item's in_hand mob overlay to update to reflect the different stages of building. It was the only way I could find to accomplish this.
 					return
 		if(1)
 			if (iscrowbar(W))
@@ -246,8 +243,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 					stage = 3
 				to_chat(user, "<span class='notice'>You pry open the maintenance panel of \the [src].</span>")
 				icon_state = "[initial(icon_state)]2"
-				user.update_inv_r_hand()
-				user.update_inv_l_hand()
+				user.update_inv_hands()
 				return
 			else if (isscrewdriver(W))
 				stage = 0
@@ -255,12 +251,10 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				to_chat(user, "<span class='notice'>You secure the maintenance panel of \the [src].</span>")
 				if (safety == 0)
 					icon_state = "[initial(icon_state)]"
-					user.update_inv_r_hand()
-					user.update_inv_l_hand()
+					user.update_inv_hands()
 				else
 					icon_state = "[initial(icon_state)]1"
-					user.update_inv_r_hand()
-					user.update_inv_l_hand()
+					user.update_inv_hands()
 				return
 		if(2)
 			if (iswirecutter(W))
@@ -272,8 +266,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				stage = 1
 				to_chat(user, "<span class='notice'>You close the maintenance panel of \the [src].</span>")
 				icon_state = "[initial(icon_state)]3"
-				user.update_inv_r_hand()
-				user.update_inv_l_hand()
+				user.update_inv_hands()
 				return
 		if(3)
 			if (ismultitool(W))
@@ -290,8 +283,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				stage = 1
 				to_chat(user, "<span class='notice'>You close the maintenance panel of \the [src].</span>")
 				icon_state = "[initial(icon_state)]3"
-				user.update_inv_r_hand()
-				user.update_inv_l_hand()
+				user.update_inv_hands()
 				return
 
 /obj/item/weapon/reagent_containers/chempack/override
