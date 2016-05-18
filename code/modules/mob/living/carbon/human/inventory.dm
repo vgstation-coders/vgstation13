@@ -389,6 +389,7 @@
 	W.layer = 20
 	W.equipped(src, slot)
 	W.loc = src
+	if(client) client.screen |= W
 
 
 /obj/effect/equip_e
