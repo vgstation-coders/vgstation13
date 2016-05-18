@@ -343,6 +343,9 @@
 					temp += W
 					c.add(temp,3,1) // report the new open space to the zcontroller
 
+					for(var/obj/effect/decal/cleanable/C in src)
+						qdel(C)//enough with footprints floating in space
+
 					if(opacity != initialOpacity)
 						UpdateAffectingLights()
 
