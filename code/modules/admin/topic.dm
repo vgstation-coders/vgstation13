@@ -1739,7 +1739,7 @@
 		var/max_hands = 40 //This number is randomly chosen
 
 		var/new_amount = input(usr, "Input a new amount of hands for [M] (current: [M.held_items.len]). WARNING: values larger than 4 may significantly clutter the UI. Maximum amount is [max_hands].", "Hands", M.held_items.len) as num
-		if(!new_amount) return
+		if(new_amount == null) return
 
 		new_amount = Clamp(new_amount, 0, max_hands)
 
