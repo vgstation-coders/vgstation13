@@ -1853,6 +1853,7 @@
 			if(!find_organ_by_grasp_index(i))
 				var/datum/organ/external/OE = new/datum/organ/external/r_hand(organs_by_name["groin"]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
 				OE.grasp_id = i
+				OE.owner = src
 
 				organs_by_name["hand[i]"] = OE
 				grasp_organs.Add(OE)
