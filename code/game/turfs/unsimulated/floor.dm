@@ -49,7 +49,7 @@
 	dynamic_lighting = 0
 	luminosity = 1
 
-/turf/unsimulated/floor/snow/New()
+/turf/unsimulated/floor/snow/initialize()
 	..()
 	icon_state = "snow[rand(0,6)]"
 	relativewall_neighbours()
@@ -67,6 +67,8 @@
 /turf/unsimulated/floor/snow/undersnow/New()
 	..()
 	snowballs = 0
+	update_icon()
+	relativewall_neighbours()
 
 /turf/unsimulated/floor/snow/undersnow/update_icon()
 	..()
@@ -123,6 +125,7 @@
 				snowballs = min(snowballs-10,0)
 			if(snowballs <= 0)
 				src.ChangeTurf(/turf/unsimulated/floor/snow/undersnow)
+				src.relativewall_neighbours()
 
 /turf/unsimulated/floor/snow/undersnow/canBuildCatwalk()
 	return BUILD_FAILURE
