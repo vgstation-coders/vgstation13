@@ -211,7 +211,7 @@
 	range = 1
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE
+	spell_flags = WAIT_FOR_CLICK
 
 	override_base = "genetic"
 	hud_state = "gen_eat"
