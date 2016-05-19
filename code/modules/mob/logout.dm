@@ -8,9 +8,7 @@
 			if(VH.attached == src)
 				returnToPool(VH)
 
-	if(spell_channeling)
-		var/spell/thespell = on_uattack.handlers[spell_channeling][EVENT_OBJECT_INDEX]
-		thespell.channel_spell(force_remove = 1) //remove spell channeling before we log out
+	remove_spell_channeling() //remove spell channeling before we log out
 
 	nanomanager.user_logout(src) // this is used to clean up (remove) this user's Nano UIs
 

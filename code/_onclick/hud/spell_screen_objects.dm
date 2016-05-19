@@ -217,6 +217,7 @@
 	spell.perform(usr)
 	update_charge(1)
 
+//Helper proc, does not remove channeling
 /obj/screen/spell/proc/add_channeling()
 	var/image/channel = image(icon = icon, loc = src, icon_state = "channeled", layer = src.layer + 1)
 	channeling_image = channel

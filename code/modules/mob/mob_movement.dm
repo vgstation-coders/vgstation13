@@ -45,6 +45,8 @@
 
 
 /client/Northwest()
+	if(mob.remove_spell_channeling()) //Interrupt to remove spell channeling on dropping
+		return
 	if(iscarbon(usr))
 		var/mob/living/carbon/C = usr
 		if(!C.get_active_hand())
