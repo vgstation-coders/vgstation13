@@ -1606,6 +1606,19 @@
 	var/obj/item/weapon/slimepotion2/P = new /obj/item/weapon/slimepotion2
 	P.loc = get_turf(holder.my_atom)
 
+/datum/chemical_reaction/slimeparalyze
+	name = "Slime Paralyzer"
+	id = "slimepara"
+	result = null
+	result_amount = 1
+	required_container = /obj/item/slime_extract/lightpink
+	required_reagents = list("blood" = 5)
+	required_other = 1
+
+/datum/chemical_reaction/slimeparalyze/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	new /obj/item/weapon/slimeparapotion(get_turf(holder.my_atom))
+
 //Adamantine
 /datum/chemical_reaction/slimegolem
 	name = "Slime Golem"
