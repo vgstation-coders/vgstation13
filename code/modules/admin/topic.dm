@@ -3135,7 +3135,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SpaceColor")
 
-				var/newcolor  = input("Set the color of space. This will only affect  players with parallax enabled. (default=#151515)","Space Color") as null|text
+				var/newcolor  = input("Set the color of space. This will only affect  players with parallax enabled. (default=#050505)","Space Color") as null|text
 
 				if(newcolor)
 					space_color = newcolor

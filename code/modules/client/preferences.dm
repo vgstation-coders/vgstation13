@@ -1429,25 +1429,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					UI_style_alpha = UI_style_alpha_new
 
 				if("parallax")
-					var/choice = alert(user,"Do you wish to activate Space Parallax?","Space Parallax Preferences","Yes","No","Cancel")
-
-					switch(choice)
-						if("Yes")
-							space_parallax = 1
-							to_chat(user, "Space parallax is now activated.")
-						if("No")
-							space_parallax = 0
-							to_chat(user, "Space parallax is now deactivated.")
+					space_parallax = !space_parallax
 
 				if("dust")
-					var/choice = alert(user,"Do you wish for space dust to be rendered?","Space Dust Preferences","Yes","No","Cancel")
-					switch(choice)
-						if("Yes")
-							space_dust = 1
-							to_chat(user, "Space dust is now activated.")
-						if("No")
-							space_dust = 0
-							to_chat(user, "Space dust is now deactivated.")
+					space_dust = !space_dust
 
 				if("p_speed")
 					parallax_speed = min(max(input(user, "Enter a number between 0 and 5 included (default=2)","Parallax Speed Preferences",parallax_speed),0),5)

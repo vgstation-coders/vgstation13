@@ -105,13 +105,13 @@ var/list/parallax_on_clients = list()
 		return 0
 
 	if(!C.parallax_master)
-		C.parallax_master = new
+		C.parallax_master = getFromPool(/obj/screen/parallax_master)
 	if(!C.parallax_canvas)
-		C.parallax_canvas = new
+		C.parallax_canvas = getFromPool(/obj/screen/parallax_canvas)
 	if(!C.parallax_voidmaster)
-		C.parallax_voidmaster = new
+		C.parallax_voidmaster = getFromPool(/obj/screen/parallax_voidmaster)
 	if(!C.parallax_dustmaster)
-		C.parallax_dustmaster = new
+		C.parallax_dustmaster = getFromPool(/obj/screen/parallax_dustmaster)
 
 	C.parallax_master.appearance_flags = PLANE_MASTER
 	C.parallax_voidmaster.appearance_flags = PLANE_MASTER
@@ -133,7 +133,7 @@ var/list/parallax_on_clients = list()
 		var/list/wantDatParallax = list()
 		wantDatParallax |= space_parallax_dust_0 + space_parallax_dust_1 + space_parallax_dust_2
 		for(var/obj/screen/parallax/bgobj in wantDatParallax)
-			var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+			var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 			parallax_layer.overlays |= bgobj.overlays
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
@@ -145,7 +145,7 @@ var/list/parallax_on_clients = list()
 		var/list/wantDatParallax = list()
 		wantDatParallax |= space_parallax_0 + space_parallax_1 + space_parallax_2
 		for(var/obj/screen/parallax/bgobj in wantDatParallax)
-			var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+			var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 			parallax_layer.overlays |= bgobj.overlays
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
@@ -159,17 +159,17 @@ var/list/parallax_on_clients = list()
 		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
 			C.screen -= bgobj
 
-	if(C.prefs.space_dust)
-		for(var/obj/screen/parallax/bgobj in C.parallax)
-			C.screen |= bgobj
-	else
-		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
-			C.screen |= bgobj
+		if(C.prefs.space_dust)
+			for(var/obj/screen/parallax/bgobj in C.parallax)
+				C.screen |= bgobj
+		else
+			for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
+				C.screen |= bgobj
 
-	if(C.prefs.space_dust)
-		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
-	else
-		C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
+		if(C.prefs.space_dust)
+			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
+		else
+			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
 
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
