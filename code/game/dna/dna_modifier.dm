@@ -333,7 +333,7 @@
 
 /obj/machinery/computer/scan_consolenew
 	name = "DNA Modifier Access Console"
-	desc = "Scand DNA."
+	desc = "Scans DNA."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "dna"
 	density = 1
@@ -396,10 +396,10 @@
 
 /obj/machinery/computer/scan_consolenew/New()
 	..()
-	for(var/i=0;i<3;i++)
-		buffers[i+1] = new /datum/dna2/record
-	for(var/i=0;i<DNA_SE_LENGTH;i++)
-		labels[i+1] = new /datum/block_label
+	for(var/i=1;i<=3;i++)
+		buffers[i] = new /datum/dna2/record
+	for(var/i=1;i<=DNA_SE_LENGTH;i++)
+		labels[i] = new /datum/block_label
 	spawn(5)
 		connected = findScanner()
 		spawn(250)
@@ -802,9 +802,13 @@
 		var/which = text2num(href_list["changeBlockLabel"])
 		var/datum/block_label/label = labels[which]
 		var/text = copytext(sanitize(input(usr, "New Label:", "Edit Label", label.name) as text|null),1,MAX_NAME_LEN)
-		if(text)
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+			return
+		if(text) //you can color the tab without a label, sure why not
 			label.name = text
 		var/newcolor = input("Select Tab Color", "Edit Label", label.color) as color
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+			return
 		if(newcolor)
 			label.color = newcolor
 		return 1

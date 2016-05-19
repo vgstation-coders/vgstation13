@@ -80,8 +80,8 @@
 	var/read_only = 0 //Well,it's still a floppy disk
 
 /obj/item/weapon/disk/data/New()
-	for(var/i=0;i<DNA_SE_LENGTH;i++)
-		labels[i+1] = new /datum/block_label
+	for(var/i=1;i<=DNA_SE_LENGTH;i++)
+		labels[i] = new /datum/block_label
 
 /obj/item/weapon/disk/data/proc/Initialize()
 	buf = new
