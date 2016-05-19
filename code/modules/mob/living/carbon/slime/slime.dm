@@ -925,7 +925,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(M.stat)
 			to_chat(user, "<span class='warning'>The slime is dead!</span>")
 			return..()
-		var/mob/living/simple_animal/adultslime/pet = new /mob/living/simple_animal/adultslime(M.loc)
+		var/mob/living/simple_animal/slime/adult/pet = new /mob/living/simple_animal/slime/adult(M.loc)
 		pet.icon_state = "[M.colour] adult slime"
 		pet.icon_living = "[M.colour] adult slime"
 		pet.icon_dead = "[M.colour] baby slime dead"
@@ -946,44 +946,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		pet.name = newname
 		pet.real_name = newname
 		qdel (src)
-
-/obj/item/weapon/slimeparapotion
-	name = "slime paralyzing solution"
-	desc = "An exotic chemical which paralyzes a slime, allowing it to be safely picked up and transported."
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle9"
-
-/obj/item/weapon/slimeparapotion/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
-	if(!istype(M))//If target is not a slime.
-		to_chat(user, "<span class='warning'>The potion only works on slimes!</span>")
-		return ..()
-	var/obj/item/weapon/paraslime/F = new /obj/item/weapon/paraslime(get_turf(M))
-	F.icon_state = "[M.colour] [istype(M,/mob/living/carbon/slime/adult) ? "adult" : "baby"] slime dead"
-	F.name = "frozen [M.colour] slime"
-	F.stored = M
-	M.forceMove(F)
-	qdel(src)
-
-/obj/item/weapon/paraslime
-	name = "paralyzed slime"
-	desc = "A paralyzed slime that can be revived by throwing or use in hand."
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "grey baby slime"
-	var/mob/living/carbon/slime/stored
-
-/obj/item/weapon/paraslime/throw_impact(atom/hit_atom)
-	..()
-	unfreeze()
-
-/obj/item/weapon/paraslime/attack_hand(mob/living/user as mob)
-	if(user.get_active_hand() == src)
-		unfreeze()
-	else return ..()
-
-/obj/item/weapon/paraslime/proc/unfreeze()
-	if(!stored) return
-	stored.forceMove(get_turf(src))
-	qdel(src)
 
 /obj/item/weapon/slimesteroid
 	name = "slime steroid"
