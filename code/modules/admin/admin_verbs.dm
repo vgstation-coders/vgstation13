@@ -1149,8 +1149,12 @@ var/list/admin_verbs_mod = list(
 			var/y_coord = input(usr, "Input the Y coordinate (X = [x_coord]): ", "Map element loading") as null|num
 			if(y_coord == null) return
 
-			var/z_coord = input(usr, "Input the Z coordinate (X = [x_coord], Y = [y_coord]): ", "Map element loading") as null|num
+			var/z_coord = input(usr, "Input the Z coordinate. If it's higher than [world.maxz], a new Z-level will be created (X = [x_coord], Y = [y_coord]): ", "Map element loading") as null|num
 			if(z_coord == null) return
+
+			if(z_coord > world.maxz)
+				world.maxz++
+				z_coord = world.maxz //So that some lardass can't create 60 empty zlevels after his fat fingers type in "66" instead of "6"
 
 			new_location = locate(x_coord, y_coord, z_coord)
 			if(!new_location)
