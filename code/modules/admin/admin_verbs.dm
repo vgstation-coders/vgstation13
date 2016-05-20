@@ -1114,20 +1114,22 @@ var/list/admin_verbs_mod = list(
 		return
 
 	var/datum/map_element/ME
-	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Input a file path", "Cancel")
+	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Load external .dmm file", "Cancel")
 	switch(mission_to_load)
 		if("Choose a /datum/map_element object")
 			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
 			if(!new_map_element) return
 
 			ME = new new_map_element
+			log_admin("[key_name(src)] is trying to load [ME.file_path].")
 
-		if("Input a file path")
+		if("Load external .dmm file")
 			ME = new /datum/map_element
-			var/new_file_path = input(usr, "Please type in the file path (for example: maps/randomvaults/clown_base.dmm ):", "Map element loading") as null|text
+			log_admin("[key_name(src)] is trying to load an external map file.")
+			var/new_file_path = input(usr, "Select a .dmm file.    WARNING: Very large map files WILL crash the server. Loading them is punishable by death.", "Map element loading") as null|file
 			if(!new_file_path) return
-			if(!file(new_file_path)) return
 
+			log_admin("[key_name(src)] has selected [new_file_path] for loading.")
 			ME.file_path = new_file_path
 		else
 			return
@@ -1158,6 +1160,8 @@ var/list/admin_verbs_mod = list(
 		if("Cancel")
 			return
 
+	log_admin("[key_name(src)] is loading [ME.file_path] at [formatJumpTo(new_location)]")
+	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [formatJumpTo(new_location)]")
 	ME.load(new_location.x, new_location.y, new_location.z)
 
 /client/proc/create_awaymission()
