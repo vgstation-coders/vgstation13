@@ -12,8 +12,8 @@
 	response_disarm = "shoos"
 	response_harm   = "stomps on"
 	emote_see = list("jiggles", "bounces in place")
+	holder_type = /obj/item/weapon/holder/animal/slime
 	var/colour = "grey"
-
 	can_butcher = 0
 	meat_type = null
 
@@ -23,11 +23,8 @@
 
 /mob/living/simple_animal/slime/attackby(var/obj/item/weapon/slimeparapotion/O as obj, var/mob/user as mob)
 	if(istype(O))
-		var/obj/item/weapon/paraslime/F = new /obj/item/weapon/paraslime(get_turf(src))
-		F.icon_state = icon_dead
-		F.name = "paralyzed [colour] slime"
-		F.stored = src
-		forceMove(F)
+		canmove = 0
+		icon_state = "[src.colour] baby slime dead"
 		qdel(O)
 	else
 		..()
@@ -72,30 +69,15 @@
 	pet.colour = "[colour]"
 	qdel (src)
 
+/mob/living/simple_animal/slime/attack_hand(mob/living/carbon/human/M as mob)
+
+	//Shamelessly stolen from Dionacode
+	if(!canmove && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
+		scoop_up(M)
+	..()
 
 /obj/item/weapon/slimeparapotion
 	name = "slime paralyzing solution"
 	desc = "An exotic chemical which paralyzes a slime, allowing it to be safely picked up and transported."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle9"
-
-/obj/item/weapon/paraslime
-	name = "paralyzed slime"
-	desc = "A paralyzed slime that can be revived by throwing or use in hand."
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "grey baby slime"
-	var/mob/living/carbon/slime/stored
-
-/obj/item/weapon/paraslime/throw_impact(atom/hit_atom)
-	..()
-	unfreeze()
-
-/obj/item/weapon/paraslime/attack_hand(mob/living/user as mob)
-	if(user.get_active_hand() == src)
-		unfreeze()
-	else return ..()
-
-/obj/item/weapon/paraslime/proc/unfreeze()
-	if(!stored) return
-	stored.forceMove(get_turf(src))
-	qdel(src)
