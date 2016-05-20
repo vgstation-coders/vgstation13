@@ -1124,6 +1124,7 @@ var/list/admin_verbs_mod = list(
 			log_admin("[key_name(src)] is trying to load [ME.file_path].")
 
 		if("Load external .dmm file")
+			to_chat(src, "<span class='danger'>Do not load very large maps or files that aren't BYOND maps. If you want to be sure that your map won't hang up the game, try loading it on a local server first.</span>")
 			ME = new /datum/map_element
 			log_admin("[key_name(src)] is trying to load an external map file.")
 			var/new_file_path = input(usr, "Select a .dmm file.    WARNING: Very large map files WILL crash the server. Loading them is punishable by death.", "Map element loading") as null|file
@@ -1134,39 +1135,37 @@ var/list/admin_verbs_mod = list(
 		else
 			return
 
-	var/turf/new_location
+	var/x_coord
+	var/y_coord
+	var/z_coord
 
 	switch(alert(usr, "Select a location for the new map element", "Map element loading", "Use my current location", "Input coordinates", "Cancel"))
 		if("Use my current location")
-			new_location = get_turf(usr)
+			var/turf/new_location = get_turf(usr)
 			if(!new_location)
 				return
+
+			x_coord = new_location.x
+			y_coord = new_location.y
+			z_coord = new_location.z
 
 		if("Input coordinates")
-			var/x_coord = input(usr, "Input the X coordinate: ", "Map element loading") as null|num
+			x_coord = input(usr, "Input the X coordinate: ", "Map element loading") as null|num
 			if(x_coord == null) return
 
-			var/y_coord = input(usr, "Input the Y coordinate (X = [x_coord]): ", "Map element loading") as null|num
+			y_coord = input(usr, "Input the Y coordinate (X = [x_coord]): ", "Map element loading") as null|num
 			if(y_coord == null) return
 
-			var/z_coord = input(usr, "Input the Z coordinate. If it's higher than [world.maxz], a new Z-level will be created (X = [x_coord], Y = [y_coord]): ", "Map element loading") as null|num
+			z_coord = input(usr, "Input the Z coordinate. If it's higher than [world.maxz], a new Z-level will be created (X = [x_coord], Y = [y_coord]): ", "Map element loading") as null|num
 			if(z_coord == null) return
-
-			if(z_coord > world.maxz)
-				world.maxz++
-				z_coord = world.maxz //So that some lardass can't create 60 empty zlevels after his fat fingers type in "66" instead of "6"
-
-			new_location = locate(x_coord, y_coord, z_coord)
-			if(!new_location)
-				to_chat(usr, "Unable to find the turf at [x_coord], [y_coord], [z_coord]!")
-				return
 
 		if("Cancel")
 			return
 
-	log_admin("[key_name(src)] is loading [ME.file_path] at [formatJumpTo(new_location)]")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [formatJumpTo(new_location)]")
-	ME.load(new_location.x, new_location.y, new_location.z)
+	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
+	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
+	ME.load(x_coord, y_coord, z_coord)
+	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
 
 /client/proc/create_awaymission()
 	set category = "Admin"

@@ -5,6 +5,7 @@ var/list/datum/map_element/map_elements = list()
 /datum/map_element
 	var/name //Name of the map element. Optional
 	var/desc //Short description. Optional
+	var/type_abbreviation //Very short string that determines the map element's type (whether it's an away mission, a small vault, or something else)
 
 	var/file_path = "maps/randomvaults/new.dmm"
 

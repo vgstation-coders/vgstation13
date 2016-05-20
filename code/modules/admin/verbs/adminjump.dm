@@ -121,15 +121,11 @@
 		var/list/vaults = list()
 
 		for(var/datum/map_element/V in map_elements)
-			var/name = "[V.name ? V.name : V.file_path] at [V.location ? "[V.location.x], [V.location.y], [V.location.z]" : "UNKNOWN"]"
-			if(istype(V, /datum/map_element/vault))
-				name = "VAULT [name]"
-			else if(istype(V, /datum/map_element/away_mission))
-				name = "AWAY MISSION [name]"
+			var/name = "[V.type_abbreviation] [V.name ? V.name : V.file_path] @ [V.location ? "[V.location.x],[V.location.y],[V.location.z]" : "UNKNOWN"]"
 
 			vaults[name] = V
 
-		var/selection = input("Select a map element to teleport to.", "Admin Jumping", null, null) as null|anything in sortList(vaults)
+		var/selection = input("Select a map element to teleport to. AM = Away Mission, V = Vault.", "Admin Jumping", null, null) as null|anything in sortList(vaults)
 		if(!selection)
 			return
 

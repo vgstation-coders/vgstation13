@@ -1,6 +1,8 @@
 var/list/existing_vaults = list()
 
 /datum/map_element/vault
+	type_abbreviation = "V"
+
 	var/list/exclusive_to_maps = list() //Only spawn on these maps (accepts nameShort and nameLong, for more info see maps/_map.dm). No effect if empty
 	var/list/map_blacklist = list() //Don't spawn on these maps
 
