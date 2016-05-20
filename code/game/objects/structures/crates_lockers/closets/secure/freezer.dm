@@ -31,12 +31,13 @@
 	if(!isemptylist(bombs)) // You're fucked.
 		..(severity)
 
-	if(!opened && severity == 1)
+	if(severity == 1)
 		//If it's not open, we need to override the normal open proc and set everything ourselves
 		//Otherwise, you can cheese this by simply welding it shut, or if the lock is engaged
-		opened = 1
-		density = 0
-		dump_contents()
+		if(!opened)
+			opened = 1
+			density = 0
+			dump_contents()
 
 		//Now, set our special variables
 		exploded = 1
