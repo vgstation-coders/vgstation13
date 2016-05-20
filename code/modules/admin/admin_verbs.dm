@@ -44,8 +44,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/jumptokey,				/*allows us to jump to the location of a mob with a certain ckey*/
 	/client/proc/jumptomob,				/*allows us to jump to a specific mob*/
 	/client/proc/jumptoturf,			/*allows us to jump to a specific turf*/
-	/client/proc/jumptovault,			/*allows us to jump to a specific vault*/
-	/client/proc/jumptoaway,			/*allows us to jump to a specific away mission*/
+	/client/proc/jumptomapelement,			/*allows us to jump to a specific vault*/
 	/client/proc/admin_call_shuttle,	/*allows us to call the emergency shuttle*/
 	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcomm*/
 	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
@@ -129,6 +128,7 @@ var/list/admin_verbs_spawn = list(
 	/client/proc/respawn_character, //Allows us to re-spawn someone
 	/client/proc/debug_reagents, //Allows us to spawn reagents in mobs/containers
 	/client/proc/create_awaymission, //Allows us to summon away missions
+	/client/proc/create_map_element
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
@@ -285,7 +285,8 @@ var/list/admin_verbs_hideable = list(
 	/proc/possess,
 	/proc/release,
 	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling
+	/client/proc/debug_pooling,
+	/client/proc/create_map_element
 	)
 var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
@@ -1104,6 +1105,61 @@ var/list/admin_verbs_mod = list(
 	log_admin("[key_name(src)] sent a fax to all machines.: [sent]")
 	message_admins("[key_name_admin(src)] sent a fax to all machines.", 1)
 
+/client/proc/create_map_element()
+	set category = "Admin"
+	set name = "Load Map Element"
+	set desc = "Loads a map element - a vault, an away mission or something else."
+
+	if(!check_rights(R_SPAWN))
+		return
+
+	var/datum/map_element/ME
+	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Input a file path", "Cancel")
+	switch(mission_to_load)
+		if("Choose a /datum/map_element object")
+			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
+			if(!new_map_element) return
+
+			ME = new new_map_element
+
+		if("Input a file path")
+			ME = new /datum/map_element
+			var/new_file_path = input(usr, "Please type in the file path (for example: maps/randomvaults/clown_base.dmm ):", "Map element loading") as null|text
+			if(!new_file_path) return
+			if(!file(new_file_path)) return
+
+			ME.file_path = new_file_path
+		else
+			return
+
+	var/turf/new_location
+
+	switch(alert(usr, "Select a location for the new map element", "Map element loading", "Use my current location", "Input coordinates", "Cancel"))
+		if("Use my current location")
+			new_location = get_turf(usr)
+			if(!new_location)
+				return
+
+		if("Input coordinates")
+			var/x_coord = input(usr, "Input the X coordinate: ", "Map element loading") as null|num
+			if(x_coord == null) return
+
+			var/y_coord = input(usr, "Input the Y coordinate (X = [x_coord]): ", "Map element loading") as null|num
+			if(y_coord == null) return
+
+			var/z_coord = input(usr, "Input the Z coordinate (X = [x_coord], Y = [y_coord]): ", "Map element loading") as null|num
+			if(z_coord == null) return
+
+			new_location = locate(x_coord, y_coord, z_coord)
+			if(!new_location)
+				to_chat(usr, "Unable to find the turf at [x_coord], [y_coord], [z_coord]!")
+				return
+
+		if("Cancel")
+			return
+
+	ME.load(new_location.x, new_location.y, new_location.z)
+
 /client/proc/create_awaymission()
 	set category = "Admin"
 	set name = "Create Away Mission"
@@ -1121,7 +1177,7 @@ var/list/admin_verbs_mod = list(
 
 	to_chat(src, "<span class='danger'>WARNING: Loading large away missions may temporarily hang up the server. Usually the lag will last for less than a minute.</span><hr>")
 
-	for(var/datum/away_mission/AM in L)
+	for(var/datum/map_element/away_mission/AM in L)
 		if(AM.name)
 			choices[AM.name] = AM
 		else
@@ -1135,7 +1191,7 @@ var/list/admin_verbs_mod = list(
 	log_admin("[key_name(src)] is loading an away mission: [choice]")
 	message_admins("[key_name_admin(src)] is loading an away mission: [choice]", 1)
 
-	var/datum/away_mission/AM = choices[choice]
+	var/datum/map_element/away_mission/AM = choices[choice]
 
 	var/override = 0
 	if(existing_away_missions.len)
