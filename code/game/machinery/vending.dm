@@ -1574,6 +1574,30 @@ var/global/num_vending_terminals = 1
 		)
 	pack = /obj/structure/vendomatpack/hydroseeds
 
+/obj/machinery/vending/voxseeds
+	name = "Vox Seed 'n' Feed"
+	desc = "When not having time to steal human seeds!"
+	product_slogans = "SEEDS LIVING HERE! GETTING SOME!;Claws down, best seed selection on Vox Outpost.;Sell, sell!"
+	product_ads = "Making more gravy soon?;Growing profits!;Is good!;Vox food being best."
+	icon_state = "seeds"
+	products = list(
+		/obj/item/seeds/breadfruit = 3,
+		/obj/item/seeds/woodapple = 3,
+		/obj/item/seeds/chickenshroom = 3,
+		/obj/item/seeds/garlic = 3,
+		)
+	contraband = list(
+		/obj/item/seeds/eggyseed = 2,
+		/obj/item/seeds/nofruitseed = 2,
+		)
+	premium = list(
+		/obj/item/seeds/glowshroom = 2,
+		)
+
+	allowed_inputs = list(
+		/obj/item/seeds,
+		)
+
 /obj/machinery/vending/magivend
 	name = "MagiVend"
 	desc = "A magic vending machine."
