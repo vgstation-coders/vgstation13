@@ -343,9 +343,6 @@
 					temp += W
 					c.add(temp,3,1) // report the new open space to the zcontroller
 
-					for(var/obj/effect/decal/cleanable/C in src)
-						qdel(C)//enough with footprints floating in space
-
 					if(opacity != initialOpacity)
 						UpdateAffectingLights()
 
@@ -363,6 +360,10 @@
 //	to_chat(world, "Replacing [src.type] with [N]")
 
 	if(connections) connections.erase_all()
+
+	if(N == /turf/space)
+		for(var/obj/effect/decal/cleanable/C in src)
+			qdel(C)//enough with footprints floating in space
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.
