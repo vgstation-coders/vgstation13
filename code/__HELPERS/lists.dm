@@ -58,7 +58,7 @@
 
 //Checks for specific types in a list
 /proc/is_type_in_list(datum/A, list/L)
-	if (!L.len)
+	if (!L.len || !A)
 		return 0
 	if (!isnum(L[L[1]])) //Has this not been converted to an associative list?
 		generate_type_list_cache(L) //Convert it to an associative list
