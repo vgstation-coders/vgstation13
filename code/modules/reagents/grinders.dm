@@ -105,7 +105,7 @@ Contains:
 			return 1
 
 	if(holdingitems && holdingitems.len >= limit)
-		to_chat(usr, "The machine cannot hold any more items.")
+		to_chat(user, "The machine cannot hold any more items.")
 		return 1
 
 	//Fill machine with bags
@@ -213,9 +213,9 @@ Contains:
 	usr.set_machine(src)
 	switch(href_list["action"])
 		if ("process")
-			grind(1)
+			grind(1,usr)
 		if("extract")
-			grind(0)
+			grind(0,usr)
 		if("eject")
 			eject()
 		if ("detach")
@@ -249,14 +249,14 @@ Contains:
 	if(I.grindable_reagent || is_type_in_list(I, list(/obj/item/weapon/reagent_containers/food/snacks,/obj/item/weapon/grown))) return 1
 	return 0
 
-/obj/machinery/reagentgrinder/proc/grind(var/process = 0) //passed to grind_item
+/obj/machinery/reagentgrinder/proc/grind(var/process = 0,mob/user) //passed to grind_item
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
 	playsound(get_turf(src), speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
 	inuse = 1
 	spawn(60/speed_multiplier)
 		inuse = 0
-		interact(usr)
+		interact(user)
 
 		for(var/obj/item/I in holdingitems)
 			holdingitems -= I
@@ -295,6 +295,8 @@ Begin Mortar
 		new /obj/item/trash/bowl(user.loc)
 		qdel(src) //Important detail
 		return
+	if(istype(O, /obj/item/weapon/reagent_containers/) && (!istype(O, /obj/item/weapon/reagent_containers/food) || istype(O, /obj/item/weapon/reagent_containers/food/drinks)))
+        return 0 //Let their afterattack handle it, so we can pour things into the mortar.
 	if (crushable)
 		to_chat(user, "<span class ='warning'>There's already something inside!</span>")
 		return 1
