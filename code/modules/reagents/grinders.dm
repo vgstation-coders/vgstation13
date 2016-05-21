@@ -202,7 +202,7 @@ Contains:
 			dat += "<A href='?src=\ref[src];action=detach'>Detach beaker</a><BR>"
 	else
 		dat += "Please wait..."
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "reagentgrinder", "All-In-One Grinder", src)
 	popup.set_content(dat)
 	popup.open()
@@ -296,7 +296,7 @@ Begin Mortar
 		qdel(src) //Important detail
 		return
 	if(istype(O, /obj/item/weapon/reagent_containers/) && (!istype(O, /obj/item/weapon/reagent_containers/food) || istype(O, /obj/item/weapon/reagent_containers/food/drinks)))
-        return 0 //Let their afterattack handle it, so we can pour things into the mortar.
+		return 0 //Let their afterattack handle it, so we can pour things into the mortar.
 	if (crushable)
 		to_chat(user, "<span class ='warning'>There's already something inside!</span>")
 		return 1
