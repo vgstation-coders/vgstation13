@@ -1542,7 +1542,7 @@
 	display_name = "chicken of the stars"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)
 	mutants = null
-	packet_icon = "chickenshroom"
+	packet_icon = "mycelium-chickenshroom"
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "chickenshroom"
 	chems = list("nutriment" = list(2,10))
