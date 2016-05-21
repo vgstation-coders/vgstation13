@@ -611,6 +611,7 @@ var/list/mechtoys = list(
 			temp = "You aren't able to establish contact with central command, so the shuttle won't move. <BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
 		else if(!supply_shuttle.can_move())
 			temp = "For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
+		else if(!supply_shuttle.shoppinglist.len) temp = "To conserve fuel, central command will not authorize a supply shuttle with zero orders.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
 		else if(supply_shuttle.at_station)
 			supply_shuttle.moving = -1
 			supply_shuttle.sell()
