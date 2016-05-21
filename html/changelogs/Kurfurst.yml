@@ -1,0 +1,5 @@
+author: Kurfurst
+delete-after: True
+
+changes: 
+- rscadd: "In an effort to conserve fuel, Central Command will no longer authorize sending the supply shuttle if no orders have been approved."
