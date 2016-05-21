@@ -57,7 +57,7 @@
 	return 0
 
 //Checks for specific types in a list
-/proc/is_type_in_list(atom/A, list/L)
+/proc/is_type_in_list(datum/A, list/L)
 	if (!L.len)
 		return 0
 	if (!isnum(L[L[1]])) //Has this not been converted to an associative list?
