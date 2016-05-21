@@ -1,5 +1,5 @@
-var/list/datum/pipe_network/pipe_networks = list()
-var/list/obj/machinery/atmospherics/atmos_machines = list()
+var/global/list/datum/pipe_network/pipe_networks = list()
+var/global/list/obj/machinery/atmospherics/atmos_machines = list()
 var/event/on_pipenet_tick = new()
 
 /datum/controller/process/pipenet
