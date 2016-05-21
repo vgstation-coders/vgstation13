@@ -14,6 +14,7 @@
 	emote_see = list("jiggles", "bounces in place")
 	holder_type = /obj/item/weapon/holder/animal/slime
 	var/colour = "grey"
+	var/paralyzed = 0
 	can_butcher = 0
 	meat_type = null
 
@@ -25,7 +26,7 @@
 	if(istype(O))
 		canmove = 0
 		icon_state = "[colour] baby slime dead"
-		to_chat(user, "<span class='info'>The [src] stops moving and coalesces.</span>")
+		to_chat(user, "<span class='info'>\The [src] stops moving and coalesces.</span>")
 		qdel(O)
 	else
 		..()
@@ -73,7 +74,7 @@
 /mob/living/simple_animal/slime/attack_hand(mob/living/carbon/human/M as mob)
 
 	//Shamelessly stolen from Dionacode
-	if(!canmove && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null))
+	if(!canmove && !locked_to && isturf(loc) && !M.get_active_hand())
 		scoop_up(M)
 	..()
 

@@ -150,7 +150,7 @@
 	var/mob/living/simple_animal/slime/S = stored_mob
 	S.canmove = 1
 	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
-	Destroy()
+	returnToPool(src)
 
 /obj/item/weapon/holder/animal/slime/throw_impact(atom/hit_atom)
 	..()
