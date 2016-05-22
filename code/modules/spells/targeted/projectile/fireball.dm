@@ -26,6 +26,12 @@
 	var/ex_flash = 5
 
 	hud_state = "wiz_fireball"
+	cast_sound = 'sound/effects/fireball.ogg'
+
+/spell/targeted/projectile/dumbfire/fireball/cast(list/targets, mob/user)
+	..()
+
+	playsound(get_turf(user), cast_sound, 50, 0)
 
 /spell/targeted/projectile/dumbfire/fireball/prox_cast(var/list/targets, spell_holder)
 	for(var/mob/living/M in targets)
