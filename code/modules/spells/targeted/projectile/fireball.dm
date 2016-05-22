@@ -28,8 +28,8 @@
 	hud_state = "wiz_fireball"
 	cast_sound = 'sound/effects/fireball.ogg'
 
-/spell/targeted/projectile/dumbfire/fireball/cast()
-	..()
+/spell/targeted/projectile/dumbfire/fireball/cast(list/targets, mob/user)
+	..(targets, user)
 
 	playsound(get_turf(user), cast_sound, 50, 0)
 
