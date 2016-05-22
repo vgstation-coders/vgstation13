@@ -676,6 +676,13 @@
 		return 0 //Unsupported slot
 		//END MOMMI
 
+/obj/item/reveal_blood()
+	if(was_bloodied && !fluorescent)
+		fluorescent = 1
+		blood_color = COLOR_LUMINOL
+		blood_overlay.color = COLOR_LUMINOL
+		update_icon()
+
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return 0

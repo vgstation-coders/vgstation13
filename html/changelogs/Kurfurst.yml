@@ -1,0 +1,10 @@
+author: Kurfurst
+delete-after: True
+
+changes: 
+- rscadd: Ports Luminol and the UV Light.
+- rscadd: New recipe. Luminol is made from hydrogen, carbon, and ammonia.
+- rscadd: The UV light reveals cleaned-away bloodstains if they have been sprayed by luminol, allowing you to scan them.
+- rscadd: One bottle of luminol and a UV light spawn in the Detective Office.
+- rscadd: UV light available at R&D.
+- tweak: Sterilizine permanently removes blood, hiding it from even luminol.

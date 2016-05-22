@@ -35,7 +35,8 @@
 	if(user.client && (target in user.client.screen) && !(user.l_hand == target || user.r_hand == target))
 		user.simple_message("<span class='notice'>You need to take that [target.name] off before cleaning it.</span>",
 			"<span class='notice'>You need to take that [target.name] off before destroying it.</span>")
-
+	else if(istype(target,/obj/effect/decal/cleanable/blood)) //Catches the blood early, but if it's not that it can be cleaned
+		target.clean_blood()
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")

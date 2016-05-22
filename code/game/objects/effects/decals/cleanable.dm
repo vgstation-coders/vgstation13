@@ -16,6 +16,9 @@
 
 	var/on_wall = 0 //Wall on which this decal is placed on
 
+/obj/effect/decal/cleanable/clean_blood()
+	qdel(src)
+
 /obj/effect/decal/cleanable/New()
 	if(random_icon_states && length(src.random_icon_states) > 0)
 		src.icon_state = pick(src.random_icon_states)

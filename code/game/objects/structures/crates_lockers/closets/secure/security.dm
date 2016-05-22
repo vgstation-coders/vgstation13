@@ -263,6 +263,8 @@
 		new /obj/item/ammo_storage/box/c38(src)
 		new /obj/item/weapon/gun/projectile/detective(src)
 		new /obj/item/clothing/accessory/holster/armpit(src)
+		new /obj/item/device/uv_light(src)
+		new /obj/item/weapon/reagent_containers/spray/luminol(src)
 		new /obj/item/device/gps/secure(src)
 		return
 
