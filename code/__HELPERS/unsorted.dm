@@ -1089,7 +1089,8 @@ proc/get_mob_with_client_list()
 	The weird for loop with an empty statement is apparently the fastest way possible to do this.
 */
 /proc/get_turf(const/atom/O)
-	ASSERT(istype(O) && !isarea(O))
+	if(!istype(O) || isarea(O))
+		return
 	var/atom/A
 	for(A=O, A && !isturf(A), A=A.loc);  // semicolon is for the empty statement
 	return A
@@ -1099,7 +1100,8 @@ proc/get_mob_with_client_list()
 	Example: A fork inside a box inside a locker will return the locker. Essentially, get_just_before_turf().
 */
 /proc/get_holder_at_turf_level(const/atom/movable/O)
-	ASSERT(istype(O))
+	if(!istype(O)) //atom/movable does not include areas
+		return
 	var/atom/A
 	for(A=O, A && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 	return A
@@ -1119,7 +1121,7 @@ proc/get_mob_with_client_list()
 
 /*
 	is_holder_of(): Returns 1 if A is a holder of B, meaning, A is B.loc or B.loc.loc or B.loc.loc.loc etc.
-	This is essentially the same as calling (locate(B) in A), but probably faster since it doesn't check recursively for contents.
+	This is essentially the same as calling (locate(B) in A), but a little clearer as to what you're doing, and locate() has been known to bug out or be extremely slow in the past.
 */
 /proc/is_holder_of(const/atom/movable/A, const/atom/movable/B)
 	ASSERT(istype(A) && istype(B))
