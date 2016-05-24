@@ -29,7 +29,7 @@
 		to_chat(user, "<span class='info'>\The [src] stops moving and coalesces.</span>")
 		qdel(O)
 	else
-		..()
+		return ..()
 
 /mob/living/simple_animal/slime/adult
 	health = 200
@@ -76,7 +76,7 @@
 	//Shamelessly stolen from Dionacode
 	if(!canmove && !locked_to && isturf(loc) && !M.get_active_hand())
 		scoop_up(M)
-	..()
+	return ..()
 
 /obj/item/weapon/slimeparapotion
 	name = "slime paralyzing solution"
