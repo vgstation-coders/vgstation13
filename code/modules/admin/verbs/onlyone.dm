@@ -25,7 +25,11 @@
 		if(is_special_character(H)) continue
 
 		ticker.mode.traitors += H.mind
-		H.mind.special_role = "highlander"
+		H.mind.special_role = HIGHLANDER
+
+		H.mutations.Add(M_HULK) //all highlanders are permahulks
+		H.update_mutations()
+		H.update_body()
 
 		/* This never worked.
 		var/datum/objective/steal/steal_objective = new

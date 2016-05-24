@@ -219,10 +219,10 @@
 		return 0
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.mind && H.mind.special_role == "highlander")
+		if(H.mind && H.mind.special_role == HIGHLANDER)
 			if(user == M)
 				to_chat(user, "<span class='warning'>A true highlander has no need for a mount!</span>")
-			return
+			return 0
 	return 1
 
 /obj/structure/bed/chair/vehicle/buckle_mob(mob/M, mob/user)
