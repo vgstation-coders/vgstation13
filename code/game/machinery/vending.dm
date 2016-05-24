@@ -1118,6 +1118,7 @@ var/global/num_vending_terminals = 1
 	name = "PTech"
 	desc = "Cartridges for PDAs"
 	product_slogans = "Carts to go!"
+	req_access_txt = "57"
 	icon_state = "cart"
 	icon_deny = "cart-deny"
 	products = list(
