@@ -1117,8 +1117,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/cart
 	name = "PTech"
 	desc = "Cartridges for PDAs"
-	product_slogans = "Carts to go!"
 	req_access = list(access_change_ids)
+	product_slogans = "Carts to go!"
 	icon_state = "cart"
 	icon_deny = "cart-deny"
 	products = list(
