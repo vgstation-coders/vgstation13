@@ -171,7 +171,7 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, progress_bars, space_parallax, space_dust, parallax_speed) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, progress_bars, space_parallax, space_dust, parallax_speed) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
 			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars, space_parallax, space_dust, parallax_speed)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
