@@ -57,7 +57,7 @@ var/list/parallax_on_clients = list()
 	var/client/C = mymob.client
 	if(!parallax_initialized || C.updating_parallax) return
 
-	for(var/turf/T in view(C))
+	for(var/turf/T in range(get_turf(C.eye),C.view))
 		if(istype(T,/turf/space))
 			C.updating_parallax = 1
 			break
@@ -67,10 +67,9 @@ var/list/parallax_on_clients = list()
 
 	//multiple sub-procs for profiling purposes
 	if(update_parallax1())
-		spawn()
-			update_parallax2(0)
-			update_parallax3()
-			C.updating_parallax = 0
+		update_parallax2(0)
+		update_parallax3()
+		C.updating_parallax = 0
 	else
 		C.updating_parallax = 0
 
@@ -79,10 +78,9 @@ var/list/parallax_on_clients = list()
 	if(!parallax_initialized || C.updating_parallax) return
 	C.updating_parallax = 1
 	if(update_parallax1())
-		spawn()
-			update_parallax2(1)
-			update_parallax3()
-			C.updating_parallax = 0
+		update_parallax2(1)
+		update_parallax3()
+		C.updating_parallax = 0
 	else
 		C.updating_parallax = 0
 
@@ -153,7 +151,13 @@ var/list/parallax_on_clients = list()
 			parallax_layer.parallax_speed = bgobj.parallax_speed
 			C.parallax_nodust |= parallax_layer
 
-	if(forcerecalibrate)
+	var/parallax_loaded = 0
+	for(var/obj/screen/S in C.screen)
+		if(istype(S,/obj/screen/parallax))
+			parallax_loaded = 1
+			break
+
+	if(forcerecalibrate || !parallax_loaded)
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
 		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
@@ -178,7 +182,7 @@ var/list/parallax_on_clients = list()
 /datum/hud/proc/update_parallax3()
 	var/client/C = mymob.client
 	//ACTUALLY MOVING THE PARALLAX
-	var/turf/posobj = get_turf(mymob.client.eye)
+	var/turf/posobj = get_turf(C.eye)
 
 	if(!C.previous_turf || (C.previous_turf.z != posobj.z))
 		C.previous_turf = posobj
