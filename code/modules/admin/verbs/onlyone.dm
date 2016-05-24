@@ -51,11 +51,19 @@
 		for (var/obj/item/I in H)
 			if (istype(I, /obj/item/weapon/implant))
 				continue
-			del(I)
+			if(isplasmaman(H)) //Plasmamen don't lose their plasma gear since they need it to live.
+				if(!(istype(I, /obj/item/clothing/suit/space/plasmaman) || istype(I, /obj/item/clothing/head/helmet/space/plasmaman) || istype(I, /obj/item/weapon/tank/plasma/plasmaman) || istype(I, /obj/item/clothing/mask/breath)))
+					qdel(I)
+			else if(isvox(H)) //Vox don't lose their N2 gear since they need it to live.
+				if(!(istype(I, /obj/item/weapon/tank/nitrogen) || istype(I, /obj/item/clothing/mask/breath/vox)))
+					qdel(I)
+			else
+				qdel(I)
 
 		H.equip_to_slot_or_del(new /obj/item/clothing/under/kilt(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(H), slot_ears)
-		H.equip_to_slot_or_del(new /obj/item/clothing/head/beret(H), slot_head)
+		if(!isplasmaman(H)) //Plasmamen don't get a beret since they need their helmet to not burn to death.
+			H.equip_to_slot_or_del(new /obj/item/clothing/head/beret(H), slot_head)
 		H.equip_to_slot_or_del(new /obj/item/weapon/claymore(H), slot_l_hand)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/weapon/pinpointer(H.loc), slot_l_store)
