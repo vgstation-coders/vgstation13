@@ -1656,6 +1656,18 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cinnamonpie
 
+/datum/recipe/ijzerkoekje
+	reagents = list("flour" = 30, "iron" = 30)
+	items = list()
+	result = list(
+	/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+	/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+	/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+	/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+	/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+	/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
+	)
+
 // Currently Disabled //////////////////////////////////////////
 
 /*
