@@ -1385,6 +1385,13 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			return 1
 	return 0
 
+//Checks if there are any atoms in the turf that aren't system-only (currently only lighting overlays count)
+//Returns 1 is there's something, 0 if it finds nothing
+/turf/proc/has_contents()
+	if(!is_type_in_list(/atom/movable/lighting_overlay, contents))
+		return 1
+	return 0
+
 /proc/multinum_display(var/number,var/digits)//multinum_display(42,4) = "0042"; multinum_display(-137,6) = "-000137"; multinum_display(4572,3) = "999"
 	var/result = ""
 	if((digits < 1))
