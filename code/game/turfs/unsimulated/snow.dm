@@ -1,7 +1,7 @@
 //Arctic atmospheric defines
 
-#define ARCTIC_ATMOSPHERE 681.3 //Pretty low pressure, very thin air, but not enough for pressure damage
-#define T_ARCTIC 216.15 //- 57 Celcius, taken from Antarctica averages
+#define ARCTIC_ATMOSPHERE 68.13 //Pretty low pressure, very thin air, might be hard to breathe, but not enough for pressure damage
+#define T_ARCTIC 223.65 //- 49.5 Celcius, taken from South Pole averages
 #define MOLES_ARCTICSTANDARD (ARCTIC_ATMOSPHERE*CELL_VOLUME/(T_ARCTIC*R_IDEAL_GAS_EQUATION)) //Note : Open air tiles obviously aren't 2.5 meters in height, but abstracted for now with infinite atmos
 #define MOLES_O2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*O2STANDARD	//O2 standard value (21%)
 #define MOLES_N2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*N2STANDARD	//N2 standard value (79%)
@@ -32,25 +32,6 @@
 	relativewall_neighbours()
 	snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
 	update_icon()
-
-	generate_nature()
-
-//Nature is generated on a tile by tile basis, includes trees, rocks and what have you
-/turf/unsimulated/floor/snow/proc/generate_nature()
-
-	if(contents.len) //There's already something on this tile. Abort
-		return
-
-	/*
-	 * Why have simple nature generation when you can have complex nature generation ?
-	 * Instead of putting individual nature items at random, we have a much smaller chance of putting "generation seeds"
-	 * Once that's down, tiles in a certain radius have a very high chance of generating more clutter of the same type
-	 * So for example you'll have patches of pines, grass or exposed permafrost
-	 */
-
-	if(prob(5))
-		new /obj/structure/flora/tree/pine(src)
-		return
 
 /turf/unsimulated/floor/snow/relativewall_neighbours()
 	for(var/direction in alldirs)
@@ -132,6 +113,8 @@
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
 		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
 
+//This shit's fucked, should use relativewall. Problem is, relativewall is terrible and doesn't include diagonal directions
+//So in short relativewall needs to be reworked, along with all things relying on it. Fun times ahead
 /turf/unsimulated/floor/snow/update_icon()
 	if(overlays.len > 2) //?
 		overlays.Cut()
@@ -142,7 +125,7 @@
 		for(var/dirtdir in alldirs)
 			dirt_layers["side[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_side" ,dir = dirtdir)
 		for(var/diagdir in diagonal)
-			dirt_layers["diag[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost_corner", dir = diagdir, layer =2.1)
+			dirt_layers["diag[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost_corner", dir = diagdir, layer = 2.1)
 			dirt_layers["snow[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost", dir = diagdir)
 		for(var/dirtdir in cardinal)
 			dirt_layers["snow[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_half", dir = dirtdir)
@@ -161,6 +144,8 @@
 		dirt_layers["snow0"] = image('icons/turf/new_snow.dmi', "permafrost_circle")
 		dirt_layers["snow3"] = image('icons/turf/new_snow.dmi', "permafrost", dir = NORTH)
 		dirt_layers["snow12"] = image('icons/turf/new_snow.dmi', "permafrost", dir = WEST)
+
+	//Projecting snowfall on adjacent tiles, might remove this eventually
 	var/lights_on = 0
 	for(var/direction in alldirs)
 		if(!istype(get_step(src, direction), /turf/unsimulated/floor/snow))
@@ -201,20 +186,11 @@
 	if(lights_on)
 		set_light(5, 0.5)
 	else
-		set_light(0,0)
+		set_light(0, 0)
 	overlays += snow_layers["1"]
 	overlays += snow_layers["2"]
 
-//Not to be confused with permafrost, this is a mapping instance to prevent nature generation. Use this in front of doors, for example
-//The icon WILL be changed on map initialization, but is clearly different for mapping ease
-/turf/unsimulated/floor/snow/barren
-
-	icon_state = "snow_barren"
-
-/turf/unsimulated/floor/snow/barren/generate_nature()
-
-	return
-
+//Permafrost is frozen dirt, this shows up below the snow tiles when you dig them out
 /turf/unsimulated/floor/snow/permafrost
 
 	name = "permafrost"
@@ -248,13 +224,3 @@
 		overlays += dirt_layers["snow[junction]"]
 	else
 		overlays += dirt_layers["snow0"]
-
-//No nature generation on this tile
-//Also yes, nature can generate on permafrost. If you want to make covered paths or unfinished interiors, make sure to use this instance
-/turf/unsimulated/floor/snow/permafrost/barren
-
-	icon_state = "permafrost_barren"
-
-/turf/unsimulated/floor/snow/permafrost/barren/generate_nature()
-
-	return
