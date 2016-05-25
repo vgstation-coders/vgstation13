@@ -1657,8 +1657,17 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/cinnamonpie
 
 /datum/recipe/ijzerkoekje
-	reagents = list("flour" = 5, "iron" = 5)
-	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
+	reagents = list("flour" = 30, "iron" = 30)
+	result = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
+
+/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy
+	name = "Helper Dummy"
+	desc = "You should never see this text."
+
+/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy/New()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
+	qdel(src)
 
 // Currently Disabled //////////////////////////////////////////
 
