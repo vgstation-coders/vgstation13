@@ -13,9 +13,6 @@
 	icon_state = "plasma"
 
 /turf/simulated/floor/mineral/plasma/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/plasma, null)
 	..()
 
@@ -26,9 +23,6 @@
 	icon_state = "gold"
 
 /turf/simulated/floor/mineral/gold/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/gold, null)
 	..()
 
@@ -39,9 +33,6 @@
 	icon_state = "silver"
 
 /turf/simulated/floor/mineral/silver/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/silver, null)
 	..()
 
@@ -52,9 +43,6 @@
 	icon_state = "bananium"
 
 /turf/simulated/floor/mineral/clown/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/clown, null)
 	..()
 
@@ -65,9 +53,6 @@
 	icon_state = "diamond"
 
 /turf/simulated/floor/mineral/diamond/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/diamond, null)
 	..()
 
@@ -78,9 +63,6 @@
 	icon_state = "uranium"
 
 /turf/simulated/floor/mineral/uranium/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/uranium, null)
 	..()
 
@@ -88,11 +70,9 @@
 
 /turf/simulated/floor/mineral/plastic
 	name = "plastic floor"
+	icon_state = "plastic"
 
 /turf/simulated/floor/mineral/plastic/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/plastic, null)
 	..()
 
@@ -103,8 +83,5 @@
 	icon_state = "phazon"
 
 /turf/simulated/floor/mineral/phazon/New()
-	if(floor_tile)
-		returnToPool(floor_tile)
-		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/phazon, null)
 	..()
