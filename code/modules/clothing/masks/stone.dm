@@ -35,16 +35,11 @@
 		H.visible_message("<span class='warning'>Stone spikes shoot out from the sides of \the [src]!</span>")
 		if(H.wear_mask == src) //the mob is wearing this mask
 			if(H.mind)
-				if(!(H.mind in ticker.mode.vampires)) //They are not already a vampire
+				var/datum/mind/M = H.mind
+				if(!isvampire(H)) //They are not already a vampire
 					to_chat(H, "<span class='danger'>The mask's stone spikes pierce your skull and enter your brain!</span>")
-					ticker.mode.vampires += H.mind
-					ticker.mode.grant_vampire_powers(H)
-					H.mind.special_role = "Vampire"
-					to_chat(H, "<B><font color='red'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</font></B>")
-					var/wikiroute = role_wiki[ROLE_VAMPIRE]
-					to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+					M.make_new_vampire()
 					log_admin("[H] has become a vampire using a stone mask.")
-					ticker.mode.forge_vampire_objectives(H.mind)
 					H.mind.vampire.bloodtotal = blood_to_give
 					H.mind.vampire.bloodusable = blood_to_give
 					to_chat(H, "<span class='notice'>You have accumulated [H.mind.vampire.bloodtotal] [H.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood and have [H.mind.vampire.bloodusable] left to use.</span>")
