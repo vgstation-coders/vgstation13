@@ -27,6 +27,7 @@
 
 	melee_damage_lower = 3
 	melee_damage_upper = 6
+	stat_attack = UNCONSCIOUS //Attack unconscious dudes too
 
 	faction = "mummy"
 	corpse = /obj/effect/landmark/corpse/mummy
@@ -91,6 +92,7 @@
 	ranged_message = "invokes a curse"
 
 	ranged_cooldown_cap = 40
+	stat_attack = 0 //Only attack living dudes
 
 	items_to_drop = list(/obj/item/weapon/hatchet/unathiknife)
 
@@ -154,7 +156,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/mummy/high_priest
 	name = "mummy high priest"
-	desc = "The high priest of Riniel. He possesses the power to mutate his foes."
+	desc = "The high priest of Riniel. He possesses the power to polymorph his foes."
 	icon_state = "mummy_high_priest"
 
 	health = 150
@@ -170,6 +172,7 @@
 	speed = 2
 
 	ranged_message = "invokes a powerful curse"
+	stat_attack = 0 //Only attack living dudes
 
 	ranged_cooldown_cap = 20
 	projectilesound = 'sound/weapons/radgun.ogg'
