@@ -52,23 +52,22 @@
 
 	..()
 
-/datum/effect/effect/system/smoke_spread/chem/rot
-	set_up(var/mob/M, n = 5, c = 0, loca, direct)
-		if(n > 20)
-			n = 20
-		number = n
-		cardinals = c
+/datum/effect/effect/system/smoke_spread/chem/rot/set_up(var/mob/M, n = 5, c = 0, loca, direct)
+	if(n > 20)
+		n = 20
+	number = n
+	cardinals = c
 
-		chemholder.reagents.add_reagent("toxin", 50)
-		chemholder.reagents.add_reagent("cyanide", 20)
-		chemholder.reagents.add_reagent("blackcolor", 100) //For the color
+	chemholder.reagents.add_reagent("toxin", 40)
+	chemholder.reagents.add_reagent("cyanide", 16)
+	chemholder.reagents.add_reagent("blackcolor", 120) //For the color
 
-		if(istype(loca, /turf/))
-			location = loca
-		else
-			location = get_turf(loca)
-		if(direct)
-			direction = direct
+	if(istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
+	if(direct)
+		direction = direct
 
 //Mummy priests
 //Less health than normal mummies, can curse their enemies with blindness, deafness, hallucinations or damage from distance
@@ -91,7 +90,7 @@
 
 	ranged_message = "invokes a curse"
 
-	ranged_cooldown_cap = 40
+	ranged_cooldown_cap = 30
 	stat_attack = 0 //Only attack living dudes
 
 	items_to_drop = list(/obj/item/weapon/hatchet/unathiknife)
@@ -132,6 +131,8 @@
 			to_chat(L, "<span class='userdanger'>Your mind feels weak.</span>")
 			H.adjustBrainLoss(rand(1,12))
 			H.hallucination += 20
+
+	return 1
 
 //Mummy warriors
 //More health, they wield a spear and a shield. They're still slow though
@@ -219,3 +220,5 @@
 			to_chat(L, "<span class='userdanger'>Your mind is crumbling.</span>")
 			H.adjustBrainLoss(rand(6,24))
 			H.hallucination += 40
+
+	return 1
