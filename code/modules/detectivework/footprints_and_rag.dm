@@ -52,7 +52,7 @@
 			target.clean_blood()
 			if(isturf(target))
 				for(var/obj/effect/O in target)
-					if(istype(O,/obj/effect/rune) || istype(O,/obj/effect/decal/cleanable) || istype(O,/obj/effect/overlay))
+					if(istype(O,/obj/effect/rune) || (istype(O,/obj/effect/decal/cleanable)&&!istype(target,/obj/effect/decal/cleanable/blood)) || istype(O,/obj/effect/overlay))
 						qdel(O)
 			reagents.remove_any(1)
 			user.visible_message("<span class='notice'>[user] finishes wiping down \the [target].</span>", "<span class='notice'>You have finished wiping down \the [target]!</span>")

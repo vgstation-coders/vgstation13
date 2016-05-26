@@ -1505,3 +1505,6 @@ var/proccalls = 1
 
 #define EVENT_OBJECT_INDEX "o"
 #define EVENT_PROC_INDEX "p"
+
+//Detective
+#define COLOR_LUMINOL "#66FFFF"

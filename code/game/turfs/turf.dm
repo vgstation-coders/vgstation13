@@ -667,6 +667,9 @@
 			)
 		new powerup(src)
 
+/turf/proc/update_blood_overlays()
+	return
+
 // Holomap stuff!
 /turf/proc/add_holomap(var/atom/movable/AM)
 	var/image/I = new

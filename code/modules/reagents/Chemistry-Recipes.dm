@@ -193,6 +193,13 @@
 	required_reagents = list("sulfur" = 2, "oxygen" = 3, "water" = 2)
 	result_amount = 2
 
+/datum/chemical_reaction/luminol
+	name = "Luminol"
+	id = "luminol"
+	result = "luminol"
+	required_reagents = list("hydrogen" = 1, "carbon" = 1, "ammonia" = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/thermite
 	name = "Thermite"
 	id = "thermite"

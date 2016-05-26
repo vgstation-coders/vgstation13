@@ -1326,6 +1326,19 @@
 	M.reagents.add_reagent("sugar", 5)
 	M.reagents.add_reagent("phosphorus", 5)
 
+/datum/reagent/luminol
+	name = "Luminol"
+	id = "luminol"
+	description = "A compound that interacts with blood on the molecular level."
+	reagent_state = LIQUID
+	color = "#F2F3F4"
+
+/datum/reagent/luminol/reaction_obj(var/obj/O, var/volume)
+	O.reveal_blood()
+
+/datum/reagent/luminol/reaction_turf(var/turf/T, var/volume)
+	T.reveal_blood()
+
 /datum/reagent/thermite
 	name = "Thermite"
 	id = "thermite"
@@ -1425,7 +1438,7 @@
 /datum/reagent/sterilizine
 	name = "Sterilizine"
 	id = "sterilizine"
-	description = "Sterilizes wounds in preparation for surgery."
+	description = "Sterilizes wounds in preparation for surgery and thoroughly removes blood."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 
@@ -1545,7 +1558,7 @@
 	if(..()) return 1
 
 	O.clean_blood()
-	if(istype(O, /obj/effect/decal/cleanable))
+	if(istype(O, /obj/effect/decal/cleanable) && !(istype(O,/obj/effect/decal/cleanable/blood)))
 		qdel(O)
 	else if(O.color && istype(O, /obj/item/weapon/paper))
 		O.color = null
@@ -1557,7 +1570,7 @@
 	if(volume >= 1)
 		T.clean_blood()
 		for(var/obj/effect/decal/cleanable/C in src)
-			qdel(C)
+			T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))

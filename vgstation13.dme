@@ -1050,6 +1050,7 @@
 #include "code\modules\customitems\definitions\base.dm"
 #include "code\modules\customitems\definitions\N3X15.dm"
 #include "code\modules\detectivework\detective_scanner.dm"
+#include "code\modules\detectivework\detective_tools.dm"
 #include "code\modules\detectivework\detective_work.dm"
 #include "code\modules\detectivework\evidence.dm"
 #include "code\modules\detectivework\footprints_and_rag.dm"
