@@ -1388,7 +1388,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 //Checks if there are any atoms in the turf that aren't system-only (currently only lighting overlays count)
 //Returns 1 is there's something, 0 if it finds nothing
 /turf/proc/has_contents()
-	if(!contents.len || !is_type_in_list(/atom/movable/lighting_overlay, contents))
+	if(!contents.len)
 		return 0
 	for(var/atom/A in contents)
 		if(!istype(A, /atom/movable/lighting_overlay))
