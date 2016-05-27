@@ -39,10 +39,14 @@
 		"tree_6",
 		)
 
-	//Trees Z-fight due to being bigger than one tile, so we need to perform layer fuckery to hide this obvious defect)
+
+	//Trees Z-fight due to being bigger than one tile, so we need to perform serious layer fuckery to hide this obvious defect)
+
+	layer += (world.maxy - y)/10000 //We start by giving each y line its own layer, goes up to .05
 	for(var/obj/structure/flora/tree/tree in orange(src, 1))
-		if(tree.layer == layer)
-			layer += 0.001 //Would need to chain a hundred times to have a significant layer change, but enough for this
+		if(tree.layer == layer) //We have a layer conflict
+			if(tree.y == y) //This is on the same y line, as expected
+				layer += 0.00001 //Perform a tweak
 
 /obj/structure/flora/tree/examine(mob/user)
 	.=..()

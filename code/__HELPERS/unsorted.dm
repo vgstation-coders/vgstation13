@@ -1399,7 +1399,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 //Includes an exception list if you don't want to delete some stuff
 /turf/proc/clear_contents(var/list/ignore = list())
 	for(var/atom/turf_contents in contents)
-		if(!istype(turf_contents, /atom/movable/lighting_overlay) && !is_type_in_list(turf_contents, ignore))
+		if(!istype(turf_contents, /atom/movable/lighting_overlay) && !is_type_in_list(turf_contents, ignore) && !(flags & INVULNERABLE))
 			qdel(turf_contents)
 
 /proc/multinum_display(var/number,var/digits)//multinum_display(42,4) = "0042"; multinum_display(-137,6) = "-000137"; multinum_display(4572,3) = "999"
