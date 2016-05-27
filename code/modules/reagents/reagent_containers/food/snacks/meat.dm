@@ -149,3 +149,11 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		atom_to_copy = pick(valid_random_food_types)
 
 	src.appearance = initial(atom_to_copy.appearance) //This works!
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rabbit
+	name = "rabbit meat"
+	desc = "A slice of rabbit"
+
+	New()
+		..()
+		reagents.add_reagent("hyperzine", rand(0,3))

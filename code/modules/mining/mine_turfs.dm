@@ -967,12 +967,20 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(floortype == /turf/unsimulated/floor/asteroid)
 		var/turf/unsimulated/floor/asteroid/G = ChangeTurf(floortype)
 		G.fullUpdateMineralOverlays()
+	else if(floortype == /turf/unsimulated/floor/snow/undersnow)
+		floortype = /turf/unsimulated/floor/snow/undersnow/gibtonite_remains
+		ChangeTurf(floortype)
 	else
 		ChangeTurf(floortype)
 
 /turf/unsimulated/floor/asteroid/gibtonite_remains
 	var/det_time = 0
 	var/stage = 0
+
+/turf/unsimulated/floor/snow/undersnow/gibtonite_remains
+	var/det_time = 0
+	var/stage = 0
+
 
 ////////////////////////////////End Gibtonite
 
