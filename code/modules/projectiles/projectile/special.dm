@@ -333,13 +333,14 @@ obj/item/projectile/kinetic/New()
 	bounce_sound = null
 	custom_impact = 1
 	penetration_message = 0
+	grillepasschance = 100
 
 	var/stepped_range = 0
-	var/max_range = 8
+	var/max_range = 9
 
 	var/fire_damage = 10
-	var/pressure = ONE_ATMOSPHERE * 2.5
-	var/temperature = T0C + 150
+	var/pressure = ONE_ATMOSPHERE * 5
+	var/temperature = T0C + 200
 
 /obj/item/projectile/fire_breath/process_step()
 	..()

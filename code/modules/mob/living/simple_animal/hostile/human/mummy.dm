@@ -32,6 +32,8 @@
 	faction = "mummy"
 	corpse = /obj/effect/landmark/corpse/mummy
 
+	heat_damage_per_tick = 20
+
 /obj/effect/landmark/corpse/mummy
 	name = "mummy"
 
@@ -157,7 +159,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/mummy/high_priest
 	name = "mummy high priest"
-	desc = "The high priest of Riniel. He possesses the power to polymorph his foes."
+	desc = "The high priest of Riniel. He is immune to fire, and he possesses the power to polymorph his foes."
 	icon_state = "mummy_high_priest"
 
 	health = 150
@@ -178,6 +180,8 @@
 	ranged_cooldown_cap = 20
 	projectilesound = 'sound/weapons/radgun.ogg'
 	projectiletype = /obj/item/projectile/change
+
+	heat_damage_per_tick = 0
 
 	items_to_drop = list(/obj/item/weapon/hatchet/unathiknife, /obj/item/weapon/coin/adamantine)
 

@@ -26,6 +26,7 @@
 	attacktext = "claws"
 
 	stat_attack = UNCONSCIOUS
+	heat_damage_per_tick = 0
 
 	faction = "mummy"
 	corpse = null
@@ -35,6 +36,9 @@
 
 	..()
 	//qdel(src) is called in the parent
+
+/mob/living/simple_animal/hostile/humanoid/jackal/adjustFireLoss() //Immune to fire
+	return
 
 /mob/living/simple_animal/hostile/humanoid/jackal/embalmer
 	name = "jackal embalmer"
@@ -81,3 +85,29 @@
 	projectilesound = 'sound/weapons/flamethrower.ogg'
 
 	ranged_message = "breathes fire"
+
+/mob/living/simple_animal/hostile/humanoid/jackal/firebreather/pyromaniac
+	name = "jackal pyromaniac"
+	desc = "An undead pyromaniac with the head of a jackal."
+
+	icon_state = "pyromaniac"
+
+	rapid = 1
+
+	health = 125
+	maxHealth = 125
+
+
+/mob/living/simple_animal/hostile/humanoid/jackal/firebreather/pyromaniac/New()
+	..()
+
+	overlays.Add("pyromaniac_eyes")
+
+/mob/living/simple_animal/hostile/humanoid/jackal/firebreather/pyromaniac/Shoot()
+	var/old_target = src.target
+
+	target = get_step(target, pick(alldirs))
+
+	..()
+
+	target = old_target
