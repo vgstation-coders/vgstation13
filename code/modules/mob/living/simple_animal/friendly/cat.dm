@@ -79,6 +79,7 @@
 				stop_automated_movement = 1
 				walk_to(src,movement_target,0,3)
 
+
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
@@ -92,7 +93,6 @@
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
-
 	desc = "D'aaawwww"
 	icon_state = "kitten"
 	icon_living = "kitten"
@@ -102,7 +102,6 @@
 
 /mob/living/simple_animal/cat/snek
 	name = "snake"
-
 	desc = "sssSSSSsss"
 	icon_state = "snek"
 	icon_living = "snek"

@@ -23,6 +23,9 @@ mineral
 	///Path to the resultant ore.
 	var/ore
 
+	///For snow snowflake nonsense, so certain minerals can inherit it
+	var/turf/floortype
+
 	New()
 		. = ..()
 		if(!display_name)
@@ -165,9 +168,10 @@ mineral/gibtonite
 	result_amount = 1
 	spread = 1
 	ore = /obj/item/weapon/gibtonite
-	UpdateTurf(var/turf/T)
+	UpdateTurf(var/turf/unsimulated/mineral/T)
 		if(!istype(T,/turf/unsimulated/mineral/gibtonite))
 			T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
+			T.floortype = floortype
 		else
 			..()
 
@@ -177,8 +181,11 @@ mineral/cave
 	result_amount = 1
 	spread = 1
 	ore = null
-	UpdateTurf(var/turf/T)
+	UpdateTurf(var/turf/unsimulated/floor/asteroid/T)
 		if(!istype(T,/turf/unsimulated/floor/asteroid/cave))
-			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
+			if(floortype == /turf/unsimulated/floor/asteroid) //Because all the cave stuff's made in New(), can't give it floortype here like gibtonite, instead ya gotta make a new type and reference that.
+				T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
+			else if(floortype == /turf/unsimulated/floor/snow)
+				T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave/snow)
 		else
 			..()

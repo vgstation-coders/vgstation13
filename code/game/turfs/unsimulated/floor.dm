@@ -49,7 +49,7 @@
 	dynamic_lighting = 0
 	luminosity = 1
 
-/turf/unsimulated/floor/snow/New()
+/turf/unsimulated/floor/snow/initialize()
 	..()
 	icon_state = "snow[rand(0,6)]"
 	relativewall_neighbours()
@@ -67,6 +67,8 @@
 /turf/unsimulated/floor/snow/undersnow/New()
 	..()
 	snowballs = 0
+	update_icon()
+	relativewall_neighbours()
 
 /turf/unsimulated/floor/snow/undersnow/update_icon()
 	..()
@@ -77,6 +79,29 @@
 			if((direction & junction) == direction)
 				overlays += dirtlayers["diag[direction]"]
 				dircount += 1
+	if(!(dirtlayers.len))
+		for(var/dirtdir in alldirs)
+			dirtlayers["side[dirtdir]"] = image('icons/turf/newsnow.dmi',"snowpath-Side",dir = dirtdir)
+		for(var/diagdir in diagonal)
+			dirtlayers["diag[diagdir]"] = image('icons/turf/newsnow.dmi',"dirtquarter",dir = diagdir,layer=2.1)
+			dirtlayers["snow[diagdir]"] = image('icons/turf/newsnow.dmi',"snowpath",dir = diagdir)
+		for(var/dirtdir in cardinal)
+			dirtlayers["snow[dirtdir]"] = image('icons/turf/newsnow.dmi',"snowpath-half",dir = dirtdir)
+			var/realdir = null
+			switch(dirtdir)
+				if(NORTH)
+					realdir = EAST|SOUTH|WEST
+				if(SOUTH)
+					realdir = WEST|NORTH|EAST
+				if(EAST)
+					realdir = SOUTH|WEST|NORTH
+				if(WEST)
+					realdir = NORTH|EAST|SOUTH
+			dirtlayers["snow[realdir]"] = image('icons/turf/newsnow.dmi',"snowpath-TJunction",dir = dirtdir)
+		dirtlayers["snow15"] = image('icons/turf/newsnow.dmi',"snowpath-Crossroads")
+		dirtlayers["snow0"] = image('icons/turf/newsnow.dmi',"snowpath-circle")
+		dirtlayers["snow3"] = image('icons/turf/newsnow.dmi',"snowpath",dir = 1)
+		dirtlayers["snow12"] = image('icons/turf/newsnow.dmi',"snowpath",dir = 8)
 	if(dircount == 4)
 		overlays.Cut()
 		icon_state = "snowpath-Full"
@@ -100,6 +125,7 @@
 				snowballs = min(snowballs-10,0)
 			if(snowballs <= 0)
 				src.ChangeTurf(/turf/unsimulated/floor/snow/undersnow)
+				src.relativewall_neighbours()
 
 /turf/unsimulated/floor/snow/undersnow/canBuildCatwalk()
 	return BUILD_FAILURE
@@ -146,7 +172,7 @@
 	if(!(snowlayers.len))
 		snowlayers["1"] = image('icons/turf/snowfx.dmi',"snowlayer1",17)
 		snowlayers["2"] = image('icons/turf/snowfx.dmi',"snowlayer2",17)
-	if(!(dirtlayers.len))
+	/*if(!(dirtlayers.len))
 		for(var/dirtdir in alldirs)
 			dirtlayers["side[dirtdir]"] = image('icons/turf/newsnow.dmi',"snowpath-Side",dir = dirtdir)
 		for(var/diagdir in diagonal)
@@ -168,7 +194,7 @@
 		dirtlayers["snow15"] = image('icons/turf/newsnow.dmi',"snowpath-Crossroads")
 		dirtlayers["snow0"] = image('icons/turf/newsnow.dmi',"snowpath-circle")
 		dirtlayers["snow3"] = image('icons/turf/newsnow.dmi',"snowpath",dir = 1)
-		dirtlayers["snow12"] = image('icons/turf/newsnow.dmi',"snowpath",dir = 8)
+		dirtlayers["snow12"] = image('icons/turf/newsnow.dmi',"snowpath",dir = 8)*/
 	var/lightson = 0
 	for(var/direction in alldirs)
 		if(!istype(get_step(src, direction),/turf/unsimulated/floor/snow))
