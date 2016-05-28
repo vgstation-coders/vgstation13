@@ -204,7 +204,7 @@
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/virologist(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		return 1
