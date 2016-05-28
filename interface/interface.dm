@@ -60,6 +60,7 @@
 	set category = "OOC"
 
 	var/hotkey_mode = {"<font color='purple'>
+For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 Hotkey-Mode: (hotkey-mode must be on)
 \tTAB = toggle hotkey-mode
 \ta = left
