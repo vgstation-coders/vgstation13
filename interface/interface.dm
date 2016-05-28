@@ -60,7 +60,6 @@
 	set category = "OOC"
 
 	var/hotkey_mode = {"<font color='purple'>
-For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 Hotkey-Mode: (hotkey-mode must be on)
 \tTAB = toggle hotkey-mode
 \ta = left
@@ -110,6 +109,8 @@ Any-Mode: (hotkey doesn't need to be on)
 \tPGUP = swap-hand
 \tPGDN = activate held object
 \tEND = throw
+
+For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 </font>"}
 
 	var/admin = {"<font color='purple'>
