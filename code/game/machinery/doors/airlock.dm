@@ -1073,7 +1073,7 @@ About the new airlock wires panel:
 					welded = null
 
 				update_icon()
-	else if (iswirecutter(I))
+	else if (iswirecutter(I) || issignaler(I))
 		if (!operating && panel_open)
 			wires.Interact(user)
 	else if (ismultitool(I))

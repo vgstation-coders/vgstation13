@@ -176,7 +176,7 @@ var/list/camera_names=list()
 		//if(toggle_panel(user)) // No delay because no one likes screwdrivers trying to be hip and have a duration cooldown
 		togglePanelOpen(W, user, icon_state, icon_state)
 
-	else if((iswirecutter(W) || istype(W, /obj/item/device/multitool)) && panel_open)
+	else if((iswirecutter(W) || ismultitool(W) || issignaler(W)) && panel_open)
 		wires.Interact(user)
 
 	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
