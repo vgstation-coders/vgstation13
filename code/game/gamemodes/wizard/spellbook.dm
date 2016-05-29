@@ -669,7 +669,7 @@
 
 /obj/item/weapon/spellbook/oneuse/disabletech
 	spell = /spell/aoe_turf/disable_tech
-	spellname = "disabling tech"
+	spellname = "disable tech"
 	icon_state = "bookdisabletech"
 	desc = "This book was written with luddites in mind."
 
@@ -681,7 +681,7 @@
 
 /obj/item/weapon/spellbook/oneuse/magicmissle
 	spell = /spell/targeted/projectile/magic_missile
-	spellname = "magic missles"
+	spellname = "magic missle"
 	icon_state = "bookmm"
 	desc = "This book is a perfect prop for LARPers."
 
@@ -803,11 +803,9 @@
 
 /obj/item/weapon/storage/box/spellbook/New()
 	..()
-	var/list/possible_books = list(/obj/item/weapon/spellbook/oneuse/fireball, /obj/item/weapon/spellbook/oneuse/smoke, /obj/item/weapon/spellbook/oneuse/blind, /obj/item/weapon/spellbook/oneuse/mindswap,
-/obj/item/weapon/spellbook/oneuse/forcewall, /obj/item/weapon/spellbook/oneuse/knock, /obj/item/weapon/spellbook/oneuse/horsemask, /obj/item/weapon/spellbook/oneuse/clown, /obj/item/weapon/spellbook/oneuse/mime,
-/obj/item/weapon/spellbook/oneuse/shoesnatch, /obj/item/weapon/spellbook/oneuse/robesummon, /obj/item/weapon/spellbook/oneuse/disabletech, /obj/item/weapon/spellbook/oneuse/magicmissle, /obj/item/weapon/spellbook/oneuse/mutate,
-/obj/item/weapon/spellbook/oneuse/subjugate, /obj/item/weapon/spellbook/oneuse/teleport, /obj/item/weapon/spellbook/oneuse/teleport/blink, /obj/item/weapon/spellbook/oneuse/teleport/jaunt, /obj/item/weapon/spellbook/oneuse/buttbot,
-/obj/item/weapon/spellbook/oneuse/lightning, /obj/item/weapon/spellbook/oneuse/timestop, /obj/item/weapon/spellbook/oneuse/timestop/statute)
+	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
+	possible_books -= /obj/item/weapon/spellbook/oneuse
+	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
 	for(var/i =1; i <= 7; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)
