@@ -71,11 +71,11 @@ var/global/dmm_suite/preloader/_preloader = null
 		var/x_depth = length(copytext(zgrid,1,findtext(zgrid,"\n",2,0))) / key_len //This is the length of an encoded line (like "aaaaaaaaBBBBaaaaccccaaa"). It must be divided by the length of the key
 
 		if(world.maxx < x_depth + x_offset)
-			world.maxx=x_depth
+			world.maxx = x_depth + x_offset
 
 		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
 		if(world.maxy < y_depth + y_offset)
-			world.maxy=y_depth
+			world.maxy = y_depth + y_offset
 
 		//then proceed it line by line, starting from top
 		ycrd = y_offset + y_depth
