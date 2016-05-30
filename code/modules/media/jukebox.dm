@@ -378,7 +378,7 @@ var/global/list/loopModeNames=list(
 	. = ..()
 	if(.)
 		return .
-	if(ismultitool(W) || issignaler(W) || iswirecutter(W))
+	if(iswiretool(W))
 		if(panel_open)
 			wires.Interact(user)
 		return

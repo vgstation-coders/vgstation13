@@ -255,7 +255,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 //			chargecount = 0
 		updateicon()
 
-	else if (iswirecutter(W) || ismultitool(W) || issignaler(W))
+	else if (iswiretool(W))
 		if (wiresexposed)
 			wires.Interact(user)
 		else
