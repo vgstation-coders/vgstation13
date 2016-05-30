@@ -42,7 +42,7 @@
 					for(var/b = 1 to icon_size)
 						//Finding turf and all turf contents
 						var/turf/currentturf = locate(x+a,y+b,z)
-						if(!currentturf)
+						if(!currentturf || (currentturf.flags & NO_MINIMAP))
 							continue
 						var/list/allturfcontents = currentturf.contents.Copy()
 
@@ -99,7 +99,7 @@
 					map_icon.Blend(icontoblend, ICON_OVERLAY, (((A.x % icon_size)-1)*world.icon_size)+1+A.pixel_x, (((A.y % icon_size)-1)*world.icon_size)+1+A.pixel_y)
 
 				world.log << "Completed image z: [z], x: [x] to [x+icon_size], y: [y] to [y+icon_size]"
-				var/resultpath = "maprendering/renderoutput/[z]/maprender[x/icon_size]-[y/icon_size].png"
+				var/resultpath = "maprendering/renderoutput/[map.nameLong]/[z]/maprender[x/icon_size]-[y/icon_size].png"
 				// BYOND BUG: map_icon now contains 4 directions? Create a new icon with only a single state.
 				var/icon/result_icon = new/icon()
 
