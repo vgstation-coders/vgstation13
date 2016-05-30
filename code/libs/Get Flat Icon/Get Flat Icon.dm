@@ -26,7 +26,7 @@ var/list/directional = list(
 	/obj/machinery/door/window,
 	/obj/machinery/power/emitter,
 	/obj/structure/disposalpipe,
-	/obj/machinery/atmospherics/pipe,
+	/obj/machinery/atmospherics,
 	/obj/structure/window,
 	/obj/structure/window/full,
 	/obj/structure/bed/chair,
@@ -38,11 +38,13 @@ var/list/directional = list(
 	/obj/machinery/door/firedoor/border_only,
 	/obj/item/projectile,
 	/obj/effect/beam/emitter,
-	/obj/machinery/conveyor
+	/obj/machinery/conveyor,
+	/obj/machinery/gateway
 	)
 
 var/list/exception = list(
-	/obj/structure/window/full
+	/obj/structure/window/full,
+	/obj/machinery/atmospherics/unary/tank
 	)
 
 proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
@@ -68,6 +70,8 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	// Add the atom's icon itself
 	if(A.icon)
 		// Make a copy without pixel_x/y settings
+		if(A.pixel_x || A.pixel_y) //Lets assume any pixel shifted icon is directional
+			dir = A.dir
 		var/image/copy = image(icon=A.icon,icon_state=A.icon_state,layer=A.layer,dir=dir)
 		layers[copy] = A.layer
 
@@ -142,10 +146,13 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	var/addY2
 
 	for(var/I in layers)
+		var/layerdir = I:dir //We want overlays/underlays to use their correct directional icon state
+		if(I == A || !layerdir)
+			layerdir = dir
 
 		add = icon(I:icon || A.icon
 		         , I:icon_state || (I:icon && (A.icon_state in icon_states(I:icon)) && A.icon_state)
-		         , dir
+		         , layerdir
 		         , 1
 		         , 0)
 
