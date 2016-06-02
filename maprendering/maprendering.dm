@@ -105,8 +105,8 @@
 				if(x >= world.maxx)
 					map_icon.DrawBox(rgb(255,255,255,255), x1 = 32*(icon_size - world.maxx % icon_size), y1 = 1, x2 = 32*icon_size, y2 = 32*icon_size)
 
-				world.log << "Completed image z: [z], x: [x] to [x+icon_size], y: [y] to [y+icon_size]"
-				var/resultpath = "maprendering/renderoutput/[mapname]/[z]/maprender[x/icon_size]-[Ceiling((world.maxy-y)/icon_size)].png"
+				world.log << "Completed image z: [z], x: [x] to [x/icon_size], y: [round((world.maxy-y)/icon_size)]"
+				var/resultpath = "maprendering/renderoutput/[mapname]/[z]/maprender[round((world.maxy-y)/icon_size)]-[x/icon_size].png"
 				// BYOND BUG: map_icon now contains 4 directions? Create a new icon with only a single state.
 				var/icon/result_icon = new/icon()
 
