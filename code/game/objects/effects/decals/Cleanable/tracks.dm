@@ -17,6 +17,7 @@ var/global/list/image/fluidtrack_cache=list()
 /datum/fluidtrack
 	var/direction=0
 	var/basecolor="#A10808"
+	var/color="#A10808"
 	var/wet=0
 	var/fresh=1
 	var/crusty=0
@@ -25,6 +26,7 @@ var/global/list/image/fluidtrack_cache=list()
 /datum/fluidtrack/New(_direction,_color,_wet)
 	src.direction=_direction
 	src.basecolor=_color
+	src.color=_color
 	src.wet=_wet
 
 // Footprints, tire trails...
@@ -199,7 +201,8 @@ var/global/list/image/fluidtrack_cache=list()
 			state=going_state
 			truedir=truedir>>4
 		var/icon/add = icon('icons/effects/fluidtracks.dmi', state, truedir)
-		add.SwapColor("#FFFFFF",track.basecolor)
+		// add.color = track.color
+		// color var is per obj so overlays dont need a color
 		overlays += add
 
 		track.fresh=0
@@ -228,4 +231,3 @@ var/global/list/image/fluidtrack_cache=list()
 	gender = PLURAL
 	random_icon_states = null
 	amount = 0
-
