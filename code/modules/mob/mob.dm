@@ -495,6 +495,10 @@ var/global/obj/screen/fuckstat/FUCK = new
 	var/obj/item/W = get_active_hand()
 	if(istype(W))
 		equip_to_slot_if_possible(W, slot)
+	else
+		W = get_item_by_slot(slot)
+		if(W)
+			W.attack_hand(src)
 	if(ishuman(src) && W == src:head)
 		src:update_hair()
 

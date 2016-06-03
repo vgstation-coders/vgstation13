@@ -143,6 +143,7 @@
 
 	if(display_contents_with_number)
 		for(var/datum/numbered_display/ND in display_contents)
+			ND.sample_object.mouse_opacity = 2
 			ND.sample_object.screen_loc = "[cx]:16,[cy]:16"
 			ND.sample_object.maptext = "<font color='white'>[(ND.number > 1)? "[ND.number]" : ""]</font>"
 			ND.sample_object.layer = 20
@@ -152,6 +153,7 @@
 				cy--
 	else
 		for(var/obj/O in contents)
+			O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
 			O.screen_loc = "[cx]:16,[cy]:16"
 			O.maptext = ""
 			O.layer = 20
@@ -325,6 +327,7 @@
 		src.orient2hud(usr)
 		if(usr.s_active)
 			usr.s_active.show_to(usr)
+	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
 	update_icon()
 	return 1
 
@@ -373,6 +376,7 @@
 	W.layer = initial(W.layer)
 	W.on_exit_storage(src)
 	update_icon()
+	W.mouse_opacity = initial(W.mouse_opacity)
 	return 1
 
 //This proc is called when you want to place an item into the storage item.
