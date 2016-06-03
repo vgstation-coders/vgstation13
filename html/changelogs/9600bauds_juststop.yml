@@ -34,3 +34,4 @@ delete-after: True
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
 - rscadd: "Added targeted use for hailers: You can now click on people to hail at them, like you would click to shoot a gun or throw an item. Directly hailing at someone will give them a big red bold message telling them to halt, and will specifically call them out by name in chat with the line '(You) hails for X to halt!'. This also has aim assist in the form of working in a 3x3 square around where you clicked, to make it easier to hail moving targets."
+- imageadd: "New Hailer warning sprites courtesy of Blithering."
