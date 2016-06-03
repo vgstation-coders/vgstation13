@@ -246,7 +246,7 @@
 		src:give_item(user)
 		return
 	var/turf/T = get_turf(src)
-	if(T && T.Adjacent(user))
+	if(T) //Even if shenanigans are used to Alt+click on something you can't see (which is difficult, though not impossible), the check in Stat() will immediately close the Alt+click statpanel anyway
 		if(user.listed_turf == T)
 			user.listed_turf = null
 		else

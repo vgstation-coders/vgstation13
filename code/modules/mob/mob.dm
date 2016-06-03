@@ -1432,7 +1432,7 @@ var/list/slot_equipment_priority = list( \
 					stat(null, "processScheduler is not running.")
 	if(client && client.inactivity < (1200))
 		if(listed_turf)
-			if(get_dist(listed_turf,src) > 1)
+			if(!(listed_turf in view(client.view, src)))
 				listed_turf = null
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
