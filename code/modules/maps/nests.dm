@@ -44,6 +44,11 @@
 	mob_type = /mob/living/simple_animal/mouse
 	breed_time = 1200
 
+/obj/map/nest/mouse/limited
+	name = "limited mouse breeding ground"
+	pop = 4
+	pop_max = 4
+
 /obj/map/nest/spider
 	name = "spider breeding ground"
 	icon_state = "spider"
@@ -56,9 +61,23 @@
 	mob_type = /mob/living/simple_animal/hostile/carp
 	pop_max = 10
 
+/obj/map/nest/carp/limited
+	name = "limited carp breeding ground"
+	pop = 2
+	pop_max = 2
+
 /obj/map/nest/bear
 	name = "bear breeding ground"
 	icon_state = "bear"
 	mob_type = /mob/living/simple_animal/hostile/carp
 	breed_time = 9000
+	pop = 5
 	pop_max = 5
+
+/obj/map/nest/necrozombie
+	name = "necro zombie breeding ground" //Yep
+	icon_state = "bear"
+	mob_type = /mob/living/simple_animal/hostile/necro/zombie
+	breed_time = 9000
+	pop = 6
+	pop_max = 6
