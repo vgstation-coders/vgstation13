@@ -43,7 +43,9 @@ var/list/directional = list(
 	/obj/structure/shuttle/engine,
 	/obj/machinery/power/terminal,
 	/obj/machinery/power/generator,
-	/obj/structure/particle_accelerator
+	/obj/structure/particle_accelerator,
+	/obj/structure/hanging_lantern,
+	/turf/simulated/shuttle/wall
 	)
 
 var/list/exception = list(

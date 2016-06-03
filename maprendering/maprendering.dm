@@ -50,6 +50,11 @@
 						//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
 						allturfcontents -= locate(/atom/movable/lighting_overlay) in allturfcontents
 
+						for(var/atom/movable/A in allturfcontents)
+							if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
+								if(A.locs[1] != A.loc)
+									allturfcontents -= A
+
 						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
 						if(!istype(currentturf,/turf/space))
 							allturfcontents += currentturf
