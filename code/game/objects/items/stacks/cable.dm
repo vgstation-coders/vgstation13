@@ -29,6 +29,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	throw_speed = 2
 	throw_range = 5
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
+	grindable_reagent = "copper"
 	w_type = RECYK_METAL
 	flags =  FPRINT
 	siemens_coefficient = 1.5 //Extra conducting

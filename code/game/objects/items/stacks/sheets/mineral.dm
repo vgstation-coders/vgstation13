@@ -111,6 +111,7 @@ var/global/list/datum/stack_recipe/diamond_recipes = list ( \
 	sheettype = "uranium"
 	melt_temperature = 1132+T0C
 	recyck_mat = MAT_URANIUM
+	grindable_reagent = "uranium"
 
 var/global/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium floor tile", /obj/item/stack/tile/mineral/uranium, 1, 4, 20), \
@@ -138,6 +139,7 @@ var/global/list/datum/stack_recipe/uranium_recipes = list ( \
 	sheettype = "plasma"
 	melt_temperature = MELTPOINT_STEEL + 500
 	recyck_mat = MAT_PLASMA
+	grindable_reagent = "plasma"
 
 var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
@@ -199,6 +201,7 @@ var/global/list/datum/stack_recipe/plastic_recipes = list ( \
 	melt_temperature = 1064+T0C
 	sheettype = "gold"
 	recyck_mat = MAT_GOLD
+	grindable_reagent = "gold"
 
 var/global/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
@@ -251,6 +254,7 @@ var/global/list/datum/stack_recipe/phazon_recipes = list( \
 	perunit = 2000
 	sheettype = "silver"
 	recyck_mat = MAT_SILVER
+	grindable_reagent = "silver"
 
 var/global/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe("silver floor tile", /obj/item/stack/tile/mineral/silver, 1, 4, 20), \
@@ -277,6 +281,7 @@ var/global/list/datum/stack_recipe/silver_recipes = list ( \
 	perunit = 2000
 	sheettype = "clown"
 	recyck_mat = MAT_CLOWN
+	grindable_reagent = "banana"
 
 var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	new/datum/stack_recipe("bananium floor tile", /obj/item/stack/tile/mineral/clown, 1, 4, 20), \

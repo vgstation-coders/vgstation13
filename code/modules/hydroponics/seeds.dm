@@ -5,6 +5,7 @@
 	icon_state = "seed"
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
+	grindable_reagent = "blackpepper"
 
 	var/seed_type
 	var/datum/seed/seed
@@ -483,7 +484,7 @@
 	packet_icon = "seed-nettle"
 	plant_icon = "nettle"
 	harvest_repeat = 1
-	chems = list("nutriment" = list(1,50), "sacid" = list(0,1))
+	chems = list("sacid" = list(0,1))
 	lifespan = 30
 	maturation = 6
 	production = 6
@@ -499,7 +500,7 @@
 	mutants = null
 	packet_icon = "seed-deathnettle"
 	plant_icon = "deathnettle"
-	chems = list("nutriment" = list(1,50), "pacid" = list(0,1))
+	chems = list("pacid" = list(0,1))
 
 	maturation = 8
 	yield = 2
@@ -1133,7 +1134,7 @@
 	maturation = 4
 	production = 4
 	yield = 3
-	potency = 5
+	potency = 25
 
 /datum/seed/koiseed
 	name = "koibean"
@@ -1164,7 +1165,7 @@
 	maturation = 6
 	production = 1
 	yield = 4
-	potency = 5
+	potency = 25
 	ideal_light = 8
 	nutrient_consumption = 0.15
 
@@ -1181,7 +1182,7 @@
 	maturation = 6
 	production = 1
 	yield = 4
-	potency = 5
+	potency = 25
 	growth_stages = 4
 	water_consumption = 6
 	nutrient_consumption = 0.15
