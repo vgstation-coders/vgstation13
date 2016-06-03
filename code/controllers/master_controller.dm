@@ -102,6 +102,10 @@ datum/controller/game_controller/proc/setup()
 	cachedamageicons()
 	log_startup_progress("  Finished caching damage icons in [stop_watch(watch)]s.")
 
+	log_startup_progress("Caching space parallax simulation...")
+	cachespaceparallax()
+	log_startup_progress("  Finished caching space parallax simulation in [stop_watch(watch)]s.")
+
 	buildcamlist()
 
 	if(config.media_base_url)
@@ -172,6 +176,97 @@ datum/controller/game_controller/proc/cachedamageicons()
 					//testing("Completed [damage_state]/[O.icon_name]/[species_blood]")
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
 	del(H)
+
+datum/controller/game_controller/proc/cachespaceparallax()
+	var/list/plane1 = list()
+	var/list/plane2 = list()
+	var/list/plane3 = list()
+	var/list/pixel_x = list()
+	var/list/pixel_y = list()
+	for(var/i = 0 to 224)
+		for(var/j = 1 to 9)
+			plane1 += "[rand(26)]"
+			plane2 += "[rand(26)]"
+			plane3 += "[rand(26)]"
+		pixel_x += 32 * (i%15)
+		pixel_y += 32 * round(i/15)
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+
+		var/icon/temp = icon('icons/turf/space.dmi', "blank")
+		temp.Crop(1,1,480,480)
+		for(var/j in 1 to 225)
+			var/icon/I = icon('icons/turf/space_parallax4.dmi',plane1[j+i*225])
+			temp.Blend(I, ICON_OVERLAY, x = pixel_x[j], y = pixel_y[j])
+
+		parallax_layer.icon = temp
+		parallax_layer.parallax_speed = 0
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		space_parallax_0[i+1] = parallax_layer
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+
+		var/icon/temp = icon('icons/turf/space.dmi', "blank")
+		temp.Crop(1,1,480,480)
+		for(var/j in 1 to 225)
+			var/icon/I = icon('icons/turf/space_parallax3.dmi', plane2[j+i*225])
+			temp.Blend(I, ICON_OVERLAY, x = pixel_x[j], y = pixel_y[j])
+
+		parallax_layer.icon = temp
+		parallax_layer.parallax_speed = 1
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		space_parallax_1[i+1] = parallax_layer
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+
+		var/icon/temp = icon('icons/turf/space.dmi', "blank")
+		temp.Crop(1,1,480,480)
+		for(var/j in 1 to 225)
+			var/icon/I = icon('icons/turf/space_parallax2.dmi', plane3[j+i*225])
+			temp.Blend(I, ICON_OVERLAY, x = pixel_x[j], y = pixel_y[j])
+
+		parallax_layer.icon = temp
+		parallax_layer.parallax_speed = 2
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		space_parallax_2[i+1] = parallax_layer
+
+	for(var/i = 1 to space_parallax_0.len)
+		var/obj/screen/parallax/oldparallax = space_parallax_0[i]
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		parallax_layer.appearance = oldparallax.appearance
+		parallax_layer.base_offset_x = oldparallax.base_offset_x
+		parallax_layer.base_offset_y = oldparallax.base_offset_y
+		parallax_layer.parallax_speed = 0
+		parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
+		space_parallax_dust_0[i] = parallax_layer
+
+	for(var/i = 1 to space_parallax_1.len)
+		var/obj/screen/parallax/oldparallax = space_parallax_1[i]
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		parallax_layer.appearance = oldparallax.appearance
+		parallax_layer.base_offset_x = oldparallax.base_offset_x
+		parallax_layer.base_offset_y = oldparallax.base_offset_y
+		parallax_layer.parallax_speed = 1
+		parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
+		space_parallax_dust_1[i] = parallax_layer
+
+	for(var/i = 1 to space_parallax_2.len)
+		var/obj/screen/parallax/oldparallax = space_parallax_2[i]
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		parallax_layer.appearance = oldparallax.appearance
+		parallax_layer.base_offset_x = oldparallax.base_offset_x
+		parallax_layer.base_offset_y = oldparallax.base_offset_y
+		parallax_layer.parallax_speed = 2
+		parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
+		space_parallax_dust_2[i] = parallax_layer
+
+	parallax_initialized = 1
 
 /datum/controller/game_controller/proc/setup_objects()
 	var/watch = start_watch()
