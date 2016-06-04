@@ -9,7 +9,7 @@
 	icon_state = "gavelhammer"
 	force = 5
 	throwforce = 6
-	w_class = 2
+	w_class = W_CLASS_MEDIUM
 	attack_verb = list("bashed", "battered", "judged", "whacked")
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 2
@@ -26,7 +26,7 @@
 	icon_state = "gavelblock"
 	force = 2
 	throwforce = 2
-	w_class = 1
+	w_class = W_CLASS_MEDIUM
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 2
 	var/cooldown = 0
@@ -37,5 +37,5 @@
 			playsound(loc, 'sound/items/gavel.ogg', 100, 1)
 			user.visible_message("<span class='warning'>[user] strikes \the [src] with \the [I].</span>")
 			cooldown = world.time
-		return
+		return 1
 	return ..()
