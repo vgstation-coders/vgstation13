@@ -33,6 +33,8 @@
 		"eyes" =     /datum/organ/internal/eyes
 	)
 
+	blood_color = "#7E09A1"
+
 	move_speed_mod = 1
 
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
