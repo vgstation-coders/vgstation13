@@ -24,8 +24,7 @@
 			O.ex_act(severity)
 
 /obj/structure/closet/secure_closet/vault/emp_act(severity) //EMP-proof
-	for(var/obj/O in src)
-		O.emp_act(severity)
+	return
 
 /obj/structure/closet/secure_closet/vault/armory
 	name = "\improper Armory vault locker"
