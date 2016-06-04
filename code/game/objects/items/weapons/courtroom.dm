@@ -15,9 +15,9 @@
 	fire_fuel = 2
 
 /obj/item/weapon/gavelhammer/suicide_act(mob/user)
-	user.visible_message("<span class='danger'>[user] has sentenced \himself to death with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	user.visible_message("<span class='danger'>[user] has sentenced \himself to death with the \the [src]! It looks like \he's trying to commit suicide.</span>")
 	playsound(loc, 'sound/items/gavel.ogg', 50, 1, -1)
-	return (BRUTELOSS)
+	return BRUTELOSS
 
 /obj/item/weapon/gavelblock
 	name = "gavel block"
