@@ -11,6 +11,7 @@
 	flags = IS_WHITELISTED
 	
 	//default_mutations=list(SKELETON) // This screws things up
+	default_mutations = list(M_NOCLONE)
 
 	breath_type = "toxins"
 
@@ -31,8 +32,6 @@
 	)
 
 	blood_color = "#7E09A1"
-
-	move_speed_mod = 1
 
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.

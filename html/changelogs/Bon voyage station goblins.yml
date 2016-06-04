@@ -1,5 +1,5 @@
 author: Albinobigfoot
 delete-after: True
 changes: 
-- tweak: Plasmamen are now slower, take 1.5x brute damage, and bleed.
-
+- tweak: "Plasmamen now take 1.5x brute damage, can bleed, and are incapable of being cloned."
+- tweak: "Plasmamen burn resistance reduced from 50% to 25%"
