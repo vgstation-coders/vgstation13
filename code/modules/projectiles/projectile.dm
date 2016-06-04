@@ -104,14 +104,15 @@ var/list/impact_master = list()
 	var/penetration_message = 1 //Message that is shown when a projectile penetrates an object
 	var/fire_sound = 'sound/weapons/Gunshot.ogg' //sound that plays when the projectile is fired
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
+	var/superspeed = 0 //When set to 1, the projectile will travel at twice the normal speed
+	var/super_speed = 0 //This exists just for proper functionality
 
 /obj/item/projectile/New()
 	..()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
-
-	var/superspeed = 0 //When set to 1, the projectile will travel at twice the normal speed
-	var/super_speed = 0 //This exists just for proper functionality
+	if(superspeed)
+		super_speed = 1
 
 /obj/item/projectile/New()
 	..()

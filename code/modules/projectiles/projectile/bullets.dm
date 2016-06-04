@@ -78,7 +78,6 @@
 	damage = 30
 	stun = 0
 	weaken = 0
-	kill_count = 100
 
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "CO2 bullet"
