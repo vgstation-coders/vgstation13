@@ -117,9 +117,9 @@
 	..()
 
 /turf/simulated/wall/mineral/plasma/proc/PlasmaBurn(temperature)
-	var/pdiff=performWallPressureCheck(src.loc)
-	if(pdiff>0)
-		message_admins("Plasma wall with pdiff [pdiff] at [formatJumpTo(loc)] just caught fire!")
+	var/pdiff = performWallPressureCheck(src.loc)
+	if(pdiff > 0)
+		investigation_log(I_ATMOS, "with a pdiff of [pdiff] caught on fire at [formatJumpTo(get_turf(src))]!")
 	spawn(2)
 	new /obj/structure/girder(src)
 	src.ChangeTurf(/turf/simulated/floor)
