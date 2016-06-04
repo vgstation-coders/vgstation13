@@ -10,15 +10,13 @@
 	// These things are just really, really griefy. IS_WHITELISTED removed for now - N3X
 	flags = IS_WHITELISTED
 	
-	chem_flags = NO_DRINK | NO_EAT | NO_INJECT
-	
 	//default_mutations=list(SKELETON) // This screws things up
 
 	breath_type = "toxins"
 
-	cold_level_1 = 300 //Default 260 - Lower is better
-	cold_level_2 = 240 //Default 200
-	cold_level_3 = 170 //Default 120
+	cold_level_1 = 290 //Default 260 - Lower is better
+	cold_level_2 = 230 //Default 200
+	cold_level_3 = 160 //Default 120
 	heat_level_1 = 350  // Heat damage level 1 above this point.
 	heat_level_2 = 400  // Heat damage level 2 above this point.
 	heat_level_3 = 500  // Heat damage level 3 above this point.
