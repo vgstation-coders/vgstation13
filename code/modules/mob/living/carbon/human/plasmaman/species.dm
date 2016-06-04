@@ -14,14 +14,11 @@
 
 	breath_type = "toxins"
 
-	cold_level_1 = 290 //Default 260 - Lower is better
-	cold_level_2 = 230 //Default 200
-	cold_level_3 = 160 //Default 120
-	heat_level_1 = 440  // Heat damage level 1 above this point.
-	heat_level_2 = 490  // Heat damage level 2 above this point.
-	heat_level_3 = 1230  // Heat damage level 3 above this point.
-	burn_mod = 0.5
-	brute_mod = 1.7
+	heat_level_1 = 350  // Heat damage level 1 above this point.
+	heat_level_2 = 400  // Heat damage level 2 above this point.
+	heat_level_3 = 500  // Heat damage level 3 above this point.
+	burn_mod = 0.75
+	brute_mod = 1.5
 	
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
