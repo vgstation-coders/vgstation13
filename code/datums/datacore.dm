@@ -146,7 +146,8 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 		if(E.status & ORGAN_PEG)
 			o_icobase='icons/mob/human_races/o_peg.dmi'
 		else if(E.status & ORGAN_ROBOT)
-			o_icobase='icons/mob/human_races/o_robot.dmi'
+			var/limbTier = E.limbTier
+			o_icobase="icons/mob/human_races/robotic/o_robot_[limbTier].dmi"
 		temp = new /icon(o_icobase, "[E.name]")
 		//if(E.status & ORGAN_ROBOT)
 		//	temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))

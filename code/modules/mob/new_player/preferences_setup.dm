@@ -183,7 +183,7 @@ datum/preferences
 			if(organ_data[name] == "peg")
 				o_icobase='icons/mob/human_races/o_peg.dmi'
 			else if(organ_data[name] == "cyborg")
-				o_icobase='icons/mob/human_races/o_robot.dmi'
+				o_icobase="icons/mob/human_races/robotic/o_robot_0.dmi" //By assumption, you can only choose the base limb type in preferences
 
 			var/icon/temp = new /icon(o_icobase, "[name]")
 

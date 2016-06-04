@@ -174,7 +174,8 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
-	affected.robotize()
+	var/limbTier = L.limbTier
+	affected.robotize(limbTier)
 	if(L.sabotaged)
 		affected.sabotaged = 1
 	else
