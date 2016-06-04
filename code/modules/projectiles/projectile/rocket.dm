@@ -27,7 +27,7 @@
 
 /obj/item/projectile/rocket/Bump(var/atom/A)
 	explosion(A, 1, 4, 6, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
-	if(src)
+	if(!gcDestroyed)
 		qdel(src)
 
 /obj/item/projectile/nikita
@@ -156,7 +156,7 @@
 
 /obj/item/projectile/nikita/proc/detonate(var/atom/A)
 	explosion(A, 1, 4, 6, 8) //Nikita rockets pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
-	if(src)
+	if(!gcDestroyed)
 		qdel(src)
 
 /obj/item/projectile/nikita/proc/reset_view()
