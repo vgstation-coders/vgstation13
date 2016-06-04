@@ -1,5 +1,6 @@
 author: Albinobigfoot
 delete-after: True
 changes: 
-- tweak: Plasmamen are now slower; take 2x brute damage; bleed; and are greatly susceptible to cold.
+- tweak: Plasmamen are now slower; take 1.7x brute damage; bleed; and are greatly susceptible to cold.
+- tweak: They are more resilient to atmospheric heat, however.
 
