@@ -73,7 +73,8 @@
 				eject_shade(U)
 				src.icon_state = "soulstone"
 				src.item_state = "shard-soulstone"
-				U.update_inv_hands()
+				U.update_inv_l_hand()
+				U.update_inv_r_hand()
 				src.name = "Soul Stone Shard"
 
 	attack_self(U)
@@ -284,7 +285,8 @@
 	//Changing the soulstone's icon and description
 	icon_state = "soulstone2"
 	item_state = "shard-soulstone2"
-	user.update_inv_hands()
+	user.update_inv_l_hand()
+	user.update_inv_r_hand()
 	name = "Soul Stone: [true_name]"
 	to_chat(shadeMob, "Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
@@ -351,7 +353,8 @@
 					T.health = T.maxHealth
 					C.icon_state = "soulstone2"
 					C.item_state = "shard-soulstone2"
-					U.update_inv_hands()
+					U.update_inv_l_hand()
+					U.update_inv_r_hand()
 					C.name = "Soul Stone: [T.real_name]"
 					to_chat(T, "Your soul has been recaptured by the soul stone, its arcane energies are reknitting your ethereal form")
 					to_chat(U, "<span class='notice'><b>Capture successful!</b>: </span>[T.name]'s has been recaptured and stored within the soul stone.")

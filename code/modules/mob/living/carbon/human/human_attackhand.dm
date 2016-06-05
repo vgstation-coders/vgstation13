@@ -158,7 +158,9 @@
 		to_chat(M, "No attacking people at spawn, you jackass.")
 		return
 
-	var/datum/organ/external/temp = M.get_active_hand_organ()
+	var/datum/organ/external/temp = M:organs_by_name["r_hand"]
+	if (M.hand)
+		temp = M:organs_by_name["l_hand"]
 	if(temp && !temp.is_usable())
 		to_chat(M, "<span class='warning'>You can't use your [temp.display_name].</span>")
 		return
@@ -350,17 +352,25 @@
 				w_uniform.add_fingerprint(M)
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 
-			for(var/obj/item/weapon/gun/G in held_items)
-				var/index = is_holding_item(G)
-				var/chance = (index == active_hand ? 40 : 20)
+			if (istype(r_hand,/obj/item/weapon/gun) || istype(l_hand,/obj/item/weapon/gun))
+				var/obj/item/weapon/gun/W = null
+				var/chance = 0
+
+				if (istype(l_hand,/obj/item/weapon/gun))
+					W = l_hand
+					chance = hand ? 40 : 20
+
+				if (istype(r_hand,/obj/item/weapon/gun))
+					W = r_hand
+					chance = !hand ? 40 : 20
 
 				if (prob(chance))
-					visible_message("<spawn class=danger>[G], held by [src], goes off during struggle!")
+					visible_message("<spawn class=danger>[W], held by [src], goes off during struggle!")
 					var/list/turfs = list()
 					for(var/turf/T in view())
 						turfs += T
 					var/turf/target = pick(turfs)
-					return G.afterattack(target,src, "struggle" = 1)
+					return W.afterattack(target,src, "struggle" = 1)
 
 			var/randn = rand(1, 100)
 			if (randn <= 25)
@@ -387,13 +397,22 @@
 					stop_pulling()
 
 				//BubbleWrap: Disarming also breaks a grab - this will also stop someone being choked, won't it?
-				for(var/obj/item/weapon/grab/G in held_items)
-					if(G.affecting)
-						visible_message("<span class='danger'>[M] has broken [src]'s grip on [G.affecting]!</span>")
+				if(istype(l_hand, /obj/item/weapon/grab))
+					var/obj/item/weapon/grab/lgrab = l_hand
+					if(lgrab.affecting)
+						visible_message("<span class='danger'>[M] has broken [src]'s grip on [lgrab.affecting]!</span>")
 						talked = 1
 					spawn(1)
-						qdel(G)
-						G = null
+						qdel(lgrab)
+						lgrab = null
+				if(istype(r_hand, /obj/item/weapon/grab))
+					var/obj/item/weapon/grab/rgrab = r_hand
+					if(rgrab.affecting)
+						visible_message("<span class='danger'>[M] has broken [src]'s grip on [rgrab.affecting]!</span>")
+						talked = 1
+					spawn(1)
+						qdel(rgrab)
+						rgrab = null
 				//End BubbleWrap
 
 				if(!talked)	//BubbleWrap

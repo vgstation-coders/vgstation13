@@ -153,8 +153,9 @@
 	if(istype(user))
 		if(!user.gloves)
 			to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
-			var/datum/organ/external/affecting = user.get_active_hand_organ()
-			if(affecting && affecting.take_damage(0,force))
+			var/organ = ((user.hand ? "l_":"r_") + "arm")
+			var/datum/organ/external/affecting = user.get_organ(organ)
+			if(affecting.take_damage(0,force))
 				user.UpdateDamageIcon()
 	else
 		user.take_organ_damage(0,force)
@@ -203,7 +204,8 @@
 /obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
 	if(!user.gloves)
 		if(istype(user, /mob/living/carbon/human))
-			var/datum/organ/external/affecting = user.get_active_hand_organ()
+			var/organ = ((user.hand ? "l_":"r_") + "arm")
+			var/datum/organ/external/affecting = user.get_organ(organ)
 			if(affecting.take_damage(0,force))
 				user.UpdateDamageIcon()
 		else

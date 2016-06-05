@@ -53,7 +53,8 @@
 		item_state = "[initial(item_state)][wielded ? itemstate_twohand_suffix : ""]"
 
 		if(user)
-			user.update_inv_hands()
+			user.update_inv_l_hand()
+			user.update_inv_r_hand()
 
 //
 

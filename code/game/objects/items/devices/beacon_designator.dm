@@ -66,7 +66,7 @@
 	var/area/oldarea = get_area(usr)
 	newarea.name = input(usr, "Select a name for the new area.") as text
 	newarea.tag = "[newarea.type]/[md5(newarea.name)]"
-	newarea.set_dynamic_lighting(FALSE)
+	newarea.lighting_use_dynamic = 0
 	newarea.contents.Add(turfs)
 	for(var/turf/T in turfs)
 		T.change_area(oldarea,newarea)

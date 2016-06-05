@@ -251,12 +251,9 @@
 								"<span class='warning'>You start to apply \the [src] to [M]'s [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")
 		else
-			var/datum/organ/external/OE = user.get_active_hand_organ()
-
-			if(affecting.grasp_id == OE.grasp_id)
+			if((!user.hand && affecting.name == "r_arm") || (user.hand && affecting.name == "l_arm"))
 				to_chat(user, "<span class='warning'>You can't apply a splint to the arm you're using!</span>")
 				return
-
 			user.visible_message("<span class='warning'>[user] starts to apply \the [src] to their [limb].</span>", \
 								"<span class='warning'>You start to apply \the [src] to your [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")

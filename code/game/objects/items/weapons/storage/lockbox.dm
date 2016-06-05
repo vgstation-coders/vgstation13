@@ -112,7 +112,7 @@
 	return
 
 /obj/item/weapon/storage/lockbox/loyalty
-	name = "lockbox (loyalty implants)"
+	name = "Lockbox (Loyalty Implants)"
 	req_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/loyalty/New()
@@ -123,7 +123,7 @@
 	new /obj/item/weapon/implanter/loyalty(src)
 
 /obj/item/weapon/storage/lockbox/tracking
-	name = "lockbox (tracking implants)"
+	name = "Lockbox (Tracking Implants)"
 	req_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/tracking/New()
@@ -135,7 +135,7 @@
 	new /obj/item/weapon/implanter(src)
 
 /obj/item/weapon/storage/lockbox/chem
-	name = "lockbox (chemical implants)"
+	name = "Lockbox (Chemical Implants)"
 	req_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/chem/New()
@@ -201,11 +201,3 @@
 	icon_locked = "coinbox+l"
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
-
-/obj/item/weapon/storage/lockbox/lawgiver
-	name = "lockbox (lawgiver)"
-	req_access = list(access_armory)
-
-/obj/item/weapon/storage/lockbox/lawgiver/New()
-	..()
-	new /obj/item/weapon/gun/lawgiver(src)

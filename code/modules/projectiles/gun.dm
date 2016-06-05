@@ -239,7 +239,10 @@
 
 	update_icon()
 
-	user.update_inv_hand(user.active_hand)
+	if(user.hand)
+		user.update_inv_l_hand()
+	else
+		user.update_inv_r_hand()
 
 	return 1
 

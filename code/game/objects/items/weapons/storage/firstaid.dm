@@ -137,16 +137,17 @@
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
 		var/mob/M = usr //I don't see how this is necessary
-		if (!( istype(over_object, /obj/screen/inventory) ))
+		if (!( istype(over_object, /obj/screen) ))
 			return ..()
 		if (!M.incapacitated())
-			var/obj/screen/inventory/SI = over_object
-
-			if(SI.hand_index)
-				M.u_equip(src, 0)
-				M.put_in_hand(SI.hand_index, src)
-				src.add_fingerprint(usr)
-
+			switch(over_object.name)
+				if("r_hand")
+					M.u_equip(src,0)
+					M.put_in_r_hand(src)
+				if("l_hand")
+					M.u_equip(src,0)
+					M.put_in_l_hand(src)
+			src.add_fingerprint(usr)
 			return
 		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
 			if (usr.s_active)

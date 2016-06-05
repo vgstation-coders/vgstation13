@@ -162,7 +162,18 @@
 
 	if(istype(usr,/mob/living/carbon))
 		// place the item in the usr's hand if possible
-		usr.put_in_hands(P)
+		if(!usr.r_hand)
+			P.loc = usr
+			usr.r_hand = P
+			P.layer = 20
+		else if(!usr.l_hand)
+			P.loc = usr
+			usr.l_hand = P
+			P.layer = 20
+
+	if(istype(usr,/mob/living/carbon/human))
+		usr:update_inv_l_hand()
+		usr:update_inv_r_hand()
 
 /obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))

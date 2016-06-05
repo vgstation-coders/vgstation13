@@ -51,7 +51,8 @@
 		to_chat(user, "You load \the [W] into \the [src].")
 		cylinder = W
 		icon_state = "revialver1"
-		user.update_inv_hands()
+		user.update_inv_r_hand()
+		user.update_inv_l_hand()
 	update_verbs()
 
 /obj/item/weapon/gun/projectile/revialver/proc/update_verbs()
@@ -80,7 +81,8 @@
 	cylinder = null
 	to_chat(usr, "You remove \the [C] from \the [src].")
 	icon_state = "revialver0"
-	usr.update_inv_hands()
+	usr.update_inv_r_hand()
+	usr.update_inv_l_hand()
 
 	update_verbs()
 

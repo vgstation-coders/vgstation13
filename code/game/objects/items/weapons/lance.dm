@@ -43,7 +43,10 @@
 	if(isliving(loc))
 		var/mob/living/owner = loc
 
-		owner.update_inv_hand(owner.active_hand)
+		if(src == owner.l_hand)
+			owner.update_inv_l_hand()
+		else
+			owner.update_inv_r_hand()
 
 /obj/item/weapon/melee/lance/proc/raise_lance(mob/user)
 	if(trigger)
@@ -60,7 +63,10 @@
 	if(isliving(loc))
 		var/mob/living/owner = loc
 
-		owner.update_inv_hand(owner.active_hand)
+		if(src == owner.l_hand)
+			owner.update_inv_l_hand()
+		else
+			owner.update_inv_r_hand()
 
 /obj/item/weapon/melee/lance/attack(mob/living/M, mob/living/user)
 	if(istype(M) && trigger) //Lance is couched
