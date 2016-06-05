@@ -15,7 +15,6 @@ var/global/list/narsie_list = list()
 	grav_pull = 10 //How many tiles out do we pull?
 	consume_range = 3 //How many tiles out do we eat
 
-
 /obj/machinery/singularity/narsie/New()
 	..()
 	narsie_list.Add(src)
@@ -216,7 +215,7 @@ var/global/list/narsie_list = list()
 
 //OLD BEHAVIOUR
 	else if(narsie_behaviour == "Nar-Singulo")
-		
+
 		if (istype(A, /mob/living/))
 			var/mob/living/C2 = A
 
@@ -246,7 +245,7 @@ var/global/list/narsie_list = list()
 					continue
 
 				if (dist > consume_range && canPull(AM2))
-					
+
 					if (101 == AM2.invisibility)
 						continue
 
@@ -259,7 +258,7 @@ var/global/list/narsie_list = list()
 
 
 /obj/machinery/singularity/narsie/consume(const/atom/A) //This one is for the small ones.
-	
+
 	if (istype(A, /mob/living/))
 		var/mob/living/C2 = A
 
