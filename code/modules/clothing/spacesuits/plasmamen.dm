@@ -291,13 +291,12 @@
 	icon_state = "plasmaman_prisoner_suit"
 	max_heat_protection_temperature = null
 	pressure_resistance = null
-	has_sensor = 2
-	sensor_mode = 3
 	allowed = list(/obj/item/weapon/tank)
 	
 /obj/item/clothing/head/helmet/space/plasmaman/prisoner
 	name = "plasmaman prisoner helmet"
-	icon_state = "plasmaman_prisoner_helmet"
+	icon_state = "plasmaman_prisoner_helmet0"
+	base_state = "plasmaman_prisoner_helmet"
 	pressure_resistance = null
 	
 //NUKEOPS
