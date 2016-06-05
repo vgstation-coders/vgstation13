@@ -357,7 +357,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	R.my_atom = src.emag
 	R.add_reagent("beer2", 50)
 	src.emag.name = "Mickey Finn's Special Brew"
-	return
+	fix_modules()
 
 
 
