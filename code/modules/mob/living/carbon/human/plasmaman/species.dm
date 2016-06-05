@@ -6,19 +6,21 @@
 	attack_verb = "punches"
 	has_sweat_glands = 0
 
-	//flags = IS_WHITELISTED /*| HAS_LIPS | HAS_TAIL | NO_EAT | NO_BREATHE | NON_GENDERED*/ | NO_BLOOD
+	//flags = IS_WHITELISTED /*| HAS_LIPS | HAS_TAIL | NO_EAT | NO_BREATHE | NON_GENDERED | NO_BLOOD*/
 	// These things are just really, really griefy. IS_WHITELISTED removed for now - N3X
-	flags = NO_BLOOD|IS_WHITELISTED
-
+	flags = IS_WHITELISTED
+	
 	//default_mutations=list(SKELETON) // This screws things up
+	default_mutations = list(M_NOCLONE)
 
 	breath_type = "toxins"
 
 	heat_level_1 = 350  // Heat damage level 1 above this point.
 	heat_level_2 = 400  // Heat damage level 2 above this point.
 	heat_level_3 = 500  // Heat damage level 3 above this point.
-	burn_mod = 0.5
-
+	burn_mod = 0.75
+	brute_mod = 1.5
+	
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs/plasmaman,
@@ -28,6 +30,8 @@
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 	)
+
+	blood_color = "#7E09A1"
 
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
