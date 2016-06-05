@@ -50,6 +50,7 @@
 	var/list/obj/screen/movable/spell_master/spell_masters = null
 
 	//thou shall always be able to see the Geometer of Blood
+	var/image/narsimage = null
 	var/image/narglow = null
 
 	//thou shall always be able to see the Bluespace Rift
