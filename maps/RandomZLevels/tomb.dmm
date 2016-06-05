@@ -14,7 +14,7 @@
 "an" = (/mob/living/simple_animal/hostile/humanoid/mummy/priest,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
 "ao" = (/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
 "ap" = (/obj/structure/button{activate_id = "6"; name = "drawbridge (6)"; pixel_x = 0; pixel_y = 32},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"aq" = (/turf/unsimulated/beach/sand{color = "#FF0000"; density = 1},/area)
+"aq" = (/turf/unsimulated/beach/sand{color = ""; density = 1},/area)
 "ar" = (/mob/living/simple_animal/hostile/humanoid/mummy,/turf/simulated/floor/damaged,/area/awaymission/tomb/tomb_of_rafid)
 "as" = (/obj/effect/landmark/corpse/skellington,/turf/simulated/floor/plating,/area/awaymission/tomb/tomb_of_rafid)
 "at" = (/turf/unsimulated/wall/rock,/area/awaymission/tomb/spider_cave)
@@ -202,136 +202,136 @@
 "dT" = (/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
 "dU" = (/mob/living/simple_animal/hostile/mimic/crate,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
 "dV" = (/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
-"dW" = (/mob/living/simple_animal/hostile/scarybat,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
-"dX" = (/obj/structure/closet/statue{health = 1; name = "marble statue"; pixel_y = 12},/obj/structure/table,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
-"dY" = (/turf/simulated/floor/wood,/area/awaymission/tomb/pyramid_outside)
-"dZ" = (/mob/living/simple_animal/hostile/humanoid/mummy/warrior,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"ea" = (/obj/structure/closet/statue{health = 1; name = "marble statue"; pixel_y = 12},/obj/structure/table,/mob/living/simple_animal/hostile/scarybat,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
-"eb" = (/obj/structure/ladder{id = "alt_path"; name = "Abandoned Passage"},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"ec" = (/obj/machinery/door/mineral/sandstone,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
-"ed" = (/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/pyramid_outside)
-"ee" = (/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/pyramid_outside)
-"ef" = (/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/pyramid_outside)
-"eg" = (/obj/structure/sacrificial_altar,/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/ash,/turf/simulated/floor/mineral/diamond,/area/awaymission/tomb/pyramid_outside)
-"eh" = (/turf/unsimulated/wall/fakeglass{dir = 8},/area/awaymission/tomb/tomb_of_rafid)
-"ei" = (/turf/unsimulated/wall/fakeglass{dir = 4},/area/awaymission/tomb/tomb_of_rafid)
-"ej" = (/turf/simulated/floor{icon_state = "stage_stairs"},/area/awaymission/tomb/pyramid_outside)
-"ek" = (/turf/unsimulated/wall/fakeglass{dir = 8},/area/awaymission/tomb/tower_of_madness)
-"el" = (/turf/unsimulated/wall/fakeglass{icon_state = "fakewindows2"; dir = 8},/area/awaymission/tomb/tower_of_madness)
-"em" = (/turf/unsimulated/wall/fakeglass{dir = 4},/area/awaymission/tomb/tower_of_madness)
-"en" = (/obj/effect/landmark/corpse/skellington,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"eo" = (/obj/structure/ladder{height = 0; id = "3-4"; name = "Tower of Madness level 4"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"ep" = (/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
-"eq" = (/obj/structure/wooden_support,/obj/effect/decal/cleanable/liquid_fuel,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
-"er" = (/obj/effect/hidden_door{icon_state = "1"},/turf/unsimulated/wall{icon = 'icons/obj/doors/mineral.dmi'; icon_state = "sandstonedoor_closed"; name = "sealed gate"},/area/awaymission/tomb/tomb_of_rafid)
-"es" = (/obj/structure/hanging_lantern/hook{dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
-"et" = (/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
-"eu" = (/obj/structure/hanging_lantern{dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
-"ev" = (/obj/structure/button{activate_id = "2"; name = "fire chamber button (2)"; pixel_y = -32},/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
-"ew" = (/obj/structure/table/flipped,/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
-"ex" = (/mob/living/simple_animal/hostile/humanoid/mummy/priest{dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
-"ey" = (/obj/item/stack/sheet/mineral/sandstone,/turf/unsimulated/beach/sand,/area)
-"ez" = (/obj/effect/hidden_door{icon_state = "2"},/turf/unsimulated/wall{icon = 'icons/obj/doors/mineral.dmi'; icon_state = "sandstonedoor_closed"; name = "sealed gate"},/area/awaymission/tomb/tomb_of_rafid)
-"eA" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/obj/structure/grille/invulnerable,/turf/simulated/floor/plating,/area/awaymission/tomb/tomb_of_rafid)
-"eB" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor{icon_state = "hydrofloor"},/area/awaymission/tomb/tower_of_madness)
-"eC" = (/mob/living/simple_animal/hostile/humanoid/mummy/warrior,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"eD" = (/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/plating,/area/awaymission/tomb/pyramid_outside)
-"eE" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"eF" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
-"eG" = (/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
-"eH" = (/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
-"eI" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
-"eJ" = (/turf/simulated/floor{icon_state = "hydrofloor"},/area/awaymission/tomb/tower_of_madness)
-"eK" = (/obj/item/weapon/skull/rigged,/turf/simulated/floor{icon_state = "hydrofloor"},/area/awaymission/tomb/tower_of_madness)
-"eL" = (/obj/effect/landmark/corpse/skellington,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
-"eM" = (/obj/machinery/door/mineral/sandstone,/turf/simulated/floor/plating,/area/awaymission/tomb/pyramid_outside)
-"eN" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/unsimulated/wall/rock,/area/awaymission/tomb/tomb_of_rafid)
-"eO" = (/obj/structure/ladder{height = -1; id = "alt_path"; name = "Abandoned Passage"},/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
-"eP" = (/obj/machinery/door/mineral/gold,/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"eQ" = (/obj/structure/grille/invulnerable,/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"eR" = (/obj/structure/fire_trap{dir = 8},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"eS" = (/turf/simulated/floor{dir = 2; icon_state = "ramptop"},/area/awaymission/tomb/tower_of_madness)
-"eT" = (/obj/structure/ladder{id = "1-0"; name = "Tower of Madness level 1"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"eU" = (/obj/effect/landmark/corpse/miner,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"eV" = (/obj/structure/ladder{height = 1; id = "2-3"; name = "Tower of Madness level 2"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"eW" = (/obj/effect/decal/cleanable/blood/drip,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"eX" = (/obj/effect/gibspawner/human,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"eY" = (/obj/item/stack/sheet/mineral/sandstone,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"eZ" = (/turf/unsimulated/wall/fakeglass{dir = 1},/area/awaymission/tomb/tower_of_madness)
-"fa" = (/obj/effect/decal/cleanable/blood/splatter,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"fb" = (/obj/structure/fire_trap{dir = 1},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"fc" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/obj/structure/button{name = "entrance button (1)"; one_time = 1; pixel_y = 32},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"fd" = (/turf/unsimulated/wall/fakeglass{icon_state = "fakewindows2"; dir = 1},/area/awaymission/tomb/tower_of_madness)
-"fe" = (/turf/unsimulated/wall/fakeglass,/area/awaymission/tomb/tower_of_madness)
-"ff" = (/turf/simulated/floor{dir = 1; icon_state = "ramptop"},/area/awaymission/tomb/tower_of_madness)
-"fg" = (/obj/effect/overlay/palmtree_r,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area)
-"fh" = (/mob/living/simple_animal/hostile/mimic/crate/item,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"fi" = (/obj/structure/fire_trap{dir = 4},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"fj" = (/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area)
-"fk" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
-"fl" = (/mob/living/simple_animal/hostile/humanoid/jackal,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
-"fm" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
-"fn" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
-"fo" = (/obj/item/weapon/skull/rigged{name = "hanging skull"; pixel_y = 26},/mob/living/simple_animal/hostile/humanoid/jackal,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
-"fp" = (/mob/living/simple_animal/hostile/humanoid/jackal,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
-"fq" = (/obj/item/weapon/skull/rigged{name = "hanging skull"; pixel_y = 26},/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
-"fr" = (/obj/structure/window/barricade,/turf/unsimulated/beach/sand,/area)
-"fs" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/wall/mineral/sandstone,/area/awaymission/tomb/tomb_of_rafid)
-"ft" = (/obj/structure/table/woodentable,/obj/item/weapon/paper,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fu" = (/obj/structure/bed/chair/wood/normal{dir = 8},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fv" = (/obj/structure/ladder{height = 0; id = "2-3"; name = "Tower of Madness level 3"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fw" = (/obj/structure/bookcase,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fx" = (/obj/structure/window/barricade{dir = 4},/turf/unsimulated/beach/sand,/area)
-"fy" = (/obj/structure/reagent_dispensers,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fz" = (/obj/item/weapon/wrench/socket,/obj/item/weapon/storage/toolbox/mechanical,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fA" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fB" = (/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fC" = (/obj/structure/window/barricade{dir = 8},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"fD" = (/obj/structure/table/woodentable,/obj/item/weapon/paper,/obj/item/weapon/pen,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fE" = (/obj/structure/table/flipped,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fF" = (/obj/item/weapon/reagent_containers/glass/bucket,/obj/effect/decal/cleanable/vomit,/obj/effect/decal/cleanable/molten_item,/turf/unsimulated/beach/sand,/area)
-"fG" = (/obj/structure/reagent_dispensers,/obj/item/stack/rods,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fH" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fI" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/machinery/atmospherics/binary/valve{dir = 4},/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fJ" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/simulated/wall,/area/awaymission/tomb/expedition_camp)
-"fK" = (/obj/machinery/shower{dir = 4},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"fL" = (/obj/structure/table/woodentable,/obj/item/weapon/paper_bin,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fM" = (/obj/item/device/rcd/rpd,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
-"fN" = (/mob/living/simple_animal/hostile/humanoid/mummy/priest,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
-"fO" = (/mob/living/simple_animal/hostile/humanoid/jackal,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fP" = (/obj/structure/closet/statue{health = 1; name = "marble statue"; pixel_y = 16},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fQ" = (/obj/structure/table/woodentable,/obj/item/weapon/pen,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fR" = (/obj/structure/window/barricade,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"fS" = (/obj/effect/decal/cleanable/clay_fragments{pixel_y = -8},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"fT" = (/obj/structure/window/barricade{dir = 8},/turf/unsimulated/beach/sand,/area)
-"fU" = (/obj/effect/decal/cleanable/clay_fragments,/turf/unsimulated/beach/sand,/area)
-"fV" = (/mob/living/simple_animal/hostile/humanoid/mummy/warrior,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
-"fW" = (/obj/structure/ladder{height = 1; id = "1-2"; name = "Tower of Madness level 1"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
-"fX" = (/obj/effect/overlay/palmtree_r,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"fY" = (/obj/structure/bed,/obj/item/weapon/bedsheet,/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
-"fZ" = (/obj/structure/hanging_lantern{dir = 1},/mob/living/simple_animal/hostile/retaliate/mime{name = "Frere Jacques"},/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
-"ga" = (/obj/structure/bed,/obj/item/weapon/bedsheet,/obj/effect/landmark/corpse/scientist,/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
-"gb" = (/obj/effect/decal/cleanable/campfire,/turf/unsimulated/beach/sand,/area)
-"gc" = (/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
-"gd" = (/obj/structure/bedsheetbin,/obj/structure/table,/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
-"ge" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gf" = (/obj/structure/painting/random{pixel_y = 32},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gg" = (/obj/effect/decal/cleanable/liquid_fuel,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gh" = (/obj/structure/painting/random{pixel_y = 32},/mob/living/simple_animal/hostile/humanoid/jackal/embalmer,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gi" = (/obj/structure/button{activate_id = "3"; name = "burial vault button 1"; pixel_x = -32},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gj" = (/obj/structure/bed/chair/wood/wings,/mob/living/simple_animal/hostile/humanoid/mummy,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gk" = (/obj/structure/window/barricade{dir = 1},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
-"gl" = (/obj/structure/table/woodentable,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gm" = (/obj/structure/table/woodentable,/obj/item/weapon/coin/silver,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gn" = (/obj/structure/table/woodentable,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"go" = (/obj/structure/table/woodentable,/obj/item/weapon/coin/gold,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gp" = (/obj/structure/table/woodentable,/obj/item/trash/bowl,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gq" = (/obj/structure/bed/chair/wood/wings{dir = 1},/mob/living/simple_animal/hostile/humanoid/mummy,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gr" = (/turf/unsimulated/wall/fakeglass{dir = 1},/area/awaymission/tomb/tomb_of_rafid)
-"gs" = (/turf/unsimulated/wall/fakeglass,/area/awaymission/tomb/tomb_of_rafid)
-"gt" = (/obj/effect/hidden_door{icon_state = "5"},/turf/simulated/floor/beach/water{density = 1; name = "deep water"},/area/awaymission/tomb/tomb_of_rafid)
-"gu" = (/obj/machinery/door/mineral/iron,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
-"gv" = (/mob/living/simple_animal/hostile/humanoid/jackal/embalmer,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"dW" = (/mob/living/simple_animal/hostile/humanoid/jackal/embalmer,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"dX" = (/mob/living/simple_animal/hostile/scarybat,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
+"dY" = (/obj/structure/closet/statue{health = 1; name = "marble statue"; pixel_y = 12},/obj/structure/table,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
+"dZ" = (/turf/simulated/floor/wood,/area/awaymission/tomb/pyramid_outside)
+"ea" = (/mob/living/simple_animal/hostile/humanoid/mummy/warrior,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"eb" = (/obj/structure/closet/statue{health = 1; name = "marble statue"; pixel_y = 12},/obj/structure/table,/mob/living/simple_animal/hostile/scarybat,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
+"ec" = (/obj/structure/ladder{id = "alt_path"; name = "Abandoned Passage"},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"ed" = (/obj/machinery/door/mineral/sandstone,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
+"ee" = (/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/pyramid_outside)
+"ef" = (/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/pyramid_outside)
+"eg" = (/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/pyramid_outside)
+"eh" = (/obj/structure/sacrificial_altar,/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/ash,/turf/simulated/floor/mineral/diamond,/area/awaymission/tomb/pyramid_outside)
+"ei" = (/turf/unsimulated/wall/fakeglass{dir = 8},/area/awaymission/tomb/tomb_of_rafid)
+"ej" = (/turf/unsimulated/wall/fakeglass{dir = 4},/area/awaymission/tomb/tomb_of_rafid)
+"ek" = (/turf/simulated/floor{icon_state = "stage_stairs"},/area/awaymission/tomb/pyramid_outside)
+"el" = (/turf/unsimulated/wall/fakeglass{dir = 8},/area/awaymission/tomb/tower_of_madness)
+"em" = (/turf/unsimulated/wall/fakeglass{icon_state = "fakewindows2"; dir = 8},/area/awaymission/tomb/tower_of_madness)
+"en" = (/turf/unsimulated/wall/fakeglass{dir = 4},/area/awaymission/tomb/tower_of_madness)
+"eo" = (/obj/effect/landmark/corpse/skellington,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"ep" = (/obj/structure/ladder{height = 0; id = "3-4"; name = "Tower of Madness level 4"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"eq" = (/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor/carpet,/area/awaymission/tomb/pyramid_outside)
+"er" = (/obj/structure/wooden_support,/obj/effect/decal/cleanable/liquid_fuel,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
+"es" = (/obj/effect/hidden_door{icon_state = "1"},/turf/unsimulated/wall{icon = 'icons/obj/doors/mineral.dmi'; icon_state = "sandstonedoor_closed"; name = "sealed gate"},/area/awaymission/tomb/tomb_of_rafid)
+"et" = (/obj/structure/hanging_lantern/hook{dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
+"eu" = (/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
+"ev" = (/obj/structure/hanging_lantern{dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
+"ew" = (/obj/structure/button{activate_id = "2"; name = "fire chamber button (2)"; pixel_y = -32},/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
+"ex" = (/obj/structure/table/flipped,/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
+"ey" = (/mob/living/simple_animal/hostile/humanoid/mummy/priest{dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/awaymission/tomb/tower_of_madness)
+"ez" = (/obj/item/stack/sheet/mineral/sandstone,/turf/unsimulated/beach/sand,/area)
+"eA" = (/obj/effect/hidden_door{icon_state = "2"},/turf/unsimulated/wall{icon = 'icons/obj/doors/mineral.dmi'; icon_state = "sandstonedoor_closed"; name = "sealed gate"},/area/awaymission/tomb/tomb_of_rafid)
+"eB" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/obj/structure/grille/invulnerable,/turf/simulated/floor/plating,/area/awaymission/tomb/tomb_of_rafid)
+"eC" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor{icon_state = "hydrofloor"},/area/awaymission/tomb/tower_of_madness)
+"eD" = (/mob/living/simple_animal/hostile/humanoid/mummy/warrior,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"eE" = (/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/plating,/area/awaymission/tomb/pyramid_outside)
+"eF" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"eG" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
+"eH" = (/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
+"eI" = (/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
+"eJ" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
+"eK" = (/turf/simulated/floor{icon_state = "hydrofloor"},/area/awaymission/tomb/tower_of_madness)
+"eL" = (/obj/item/weapon/skull/rigged,/turf/simulated/floor{icon_state = "hydrofloor"},/area/awaymission/tomb/tower_of_madness)
+"eM" = (/obj/effect/landmark/corpse/skellington,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
+"eN" = (/obj/machinery/door/mineral/sandstone,/turf/simulated/floor/plating,/area/awaymission/tomb/pyramid_outside)
+"eO" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/unsimulated/wall/rock,/area/awaymission/tomb/tomb_of_rafid)
+"eP" = (/obj/structure/ladder{height = -1; id = "alt_path"; name = "Abandoned Passage"},/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
+"eQ" = (/obj/machinery/door/mineral/gold,/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"eR" = (/obj/structure/grille/invulnerable,/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"eS" = (/obj/structure/fire_trap{dir = 8},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"eT" = (/turf/simulated/floor{dir = 2; icon_state = "ramptop"},/area/awaymission/tomb/tower_of_madness)
+"eU" = (/obj/structure/ladder{id = "1-0"; name = "Tower of Madness level 1"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"eV" = (/obj/effect/landmark/corpse/miner,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"eW" = (/obj/structure/ladder{height = 1; id = "2-3"; name = "Tower of Madness level 2"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"eX" = (/obj/effect/decal/cleanable/blood/drip,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"eY" = (/obj/effect/gibspawner/human,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"eZ" = (/obj/item/stack/sheet/mineral/sandstone,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fa" = (/turf/unsimulated/wall/fakeglass{dir = 1},/area/awaymission/tomb/tower_of_madness)
+"fb" = (/obj/effect/decal/cleanable/blood/splatter,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fc" = (/obj/structure/fire_trap{dir = 1},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"fd" = (/obj/effect/decal/cleanable/liquid_fuel{name = "oil"},/obj/structure/button{name = "entrance button (1)"; one_time = 1; pixel_y = 32},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"fe" = (/turf/unsimulated/wall/fakeglass{icon_state = "fakewindows2"; dir = 1},/area/awaymission/tomb/tower_of_madness)
+"ff" = (/turf/unsimulated/wall/fakeglass,/area/awaymission/tomb/tower_of_madness)
+"fg" = (/turf/simulated/floor{dir = 1; icon_state = "ramptop"},/area/awaymission/tomb/tower_of_madness)
+"fh" = (/obj/effect/overlay/palmtree_r,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area)
+"fi" = (/mob/living/simple_animal/hostile/mimic/crate/item,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fj" = (/obj/structure/fire_trap{dir = 4},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"fk" = (/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area)
+"fl" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
+"fm" = (/mob/living/simple_animal/hostile/humanoid/jackal,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
+"fn" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
+"fo" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
+"fp" = (/obj/item/weapon/skull/rigged{name = "hanging skull"; pixel_y = 26},/mob/living/simple_animal/hostile/humanoid/jackal,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
+"fq" = (/mob/living/simple_animal/hostile/humanoid/jackal,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
+"fr" = (/obj/item/weapon/skull/rigged{name = "hanging skull"; pixel_y = 26},/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tower_of_madness)
+"fs" = (/obj/structure/window/barricade,/turf/unsimulated/beach/sand,/area)
+"ft" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/wall/mineral/sandstone,/area/awaymission/tomb/tomb_of_rafid)
+"fu" = (/obj/structure/table/woodentable,/obj/item/weapon/paper,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fv" = (/obj/structure/bed/chair/wood/normal{dir = 8},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fw" = (/obj/structure/ladder{height = 0; id = "2-3"; name = "Tower of Madness level 3"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fx" = (/obj/structure/bookcase,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fy" = (/obj/structure/window/barricade{dir = 4},/turf/unsimulated/beach/sand,/area)
+"fz" = (/obj/structure/reagent_dispensers,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fA" = (/obj/item/weapon/wrench/socket,/obj/item/weapon/storage/toolbox/mechanical,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fB" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fC" = (/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fD" = (/obj/structure/window/barricade{dir = 8},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fE" = (/obj/structure/table/woodentable,/obj/item/weapon/paper,/obj/item/weapon/pen,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fF" = (/obj/structure/table/flipped,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fG" = (/obj/item/weapon/reagent_containers/glass/bucket,/obj/effect/decal/cleanable/vomit,/obj/effect/decal/cleanable/molten_item,/turf/unsimulated/beach/sand,/area)
+"fH" = (/obj/structure/reagent_dispensers,/obj/item/stack/rods,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fI" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fJ" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/machinery/atmospherics/binary/valve{dir = 4},/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fK" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/turf/simulated/wall,/area/awaymission/tomb/expedition_camp)
+"fL" = (/obj/machinery/shower{dir = 4},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fM" = (/obj/structure/table/woodentable,/obj/item/weapon/paper_bin,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fN" = (/obj/item/device/rcd/rpd,/turf/unsimulated/beach/sand{color = "#DDDDDD"},/area/awaymission/tomb/expedition_camp)
+"fO" = (/mob/living/simple_animal/hostile/humanoid/mummy/priest,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
+"fP" = (/mob/living/simple_animal/hostile/humanoid/jackal,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fQ" = (/obj/structure/closet/statue{health = 1; name = "marble statue"; pixel_y = 16},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fR" = (/obj/structure/table/woodentable,/obj/item/weapon/pen,/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fS" = (/obj/structure/window/barricade,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fT" = (/obj/effect/decal/cleanable/clay_fragments{pixel_y = -8},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fU" = (/obj/structure/window/barricade{dir = 8},/turf/unsimulated/beach/sand,/area)
+"fV" = (/obj/effect/decal/cleanable/clay_fragments,/turf/unsimulated/beach/sand,/area)
+"fW" = (/mob/living/simple_animal/hostile/humanoid/mummy/warrior,/turf/simulated/floor{icon_state = "yellow_tint"},/area/awaymission/tomb/tomb_of_rafid)
+"fX" = (/obj/structure/ladder{height = 1; id = "1-2"; name = "Tower of Madness level 1"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
+"fY" = (/obj/effect/overlay/palmtree_r,/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"fZ" = (/obj/structure/bed,/obj/item/weapon/bedsheet,/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
+"ga" = (/obj/structure/hanging_lantern{dir = 1},/mob/living/simple_animal/hostile/retaliate/mime{name = "Frere Jacques"},/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
+"gb" = (/obj/structure/bed,/obj/item/weapon/bedsheet,/obj/effect/landmark/corpse/scientist,/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
+"gc" = (/obj/effect/decal/cleanable/campfire,/turf/unsimulated/beach/sand,/area)
+"gd" = (/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
+"ge" = (/obj/structure/bedsheetbin,/obj/structure/table,/turf/simulated/floor/carpet,/area/awaymission/tomb/expedition_camp)
+"gf" = (/mob/living/simple_animal/hostile/humanoid/jackal/firebreather,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gg" = (/obj/structure/painting/random{pixel_y = 32},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gh" = (/obj/effect/decal/cleanable/liquid_fuel,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gi" = (/obj/structure/painting/random{pixel_y = 32},/mob/living/simple_animal/hostile/humanoid/jackal/embalmer,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gj" = (/obj/structure/button{activate_id = "3"; name = "burial vault button 1"; pixel_x = -32},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gk" = (/obj/structure/bed/chair/wood/wings,/mob/living/simple_animal/hostile/humanoid/mummy,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gl" = (/obj/structure/window/barricade{dir = 1},/turf/unsimulated/beach/sand{color = "#EEEEEE"},/area)
+"gm" = (/obj/structure/table/woodentable,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gn" = (/obj/structure/table/woodentable,/obj/item/weapon/coin/silver,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"go" = (/obj/structure/table/woodentable,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gp" = (/obj/structure/table/woodentable,/obj/item/weapon/coin/gold,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gq" = (/obj/structure/table/woodentable,/obj/item/trash/bowl,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gr" = (/obj/structure/bed/chair/wood/wings{dir = 1},/mob/living/simple_animal/hostile/humanoid/mummy,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
+"gs" = (/turf/unsimulated/wall/fakeglass{dir = 1},/area/awaymission/tomb/tomb_of_rafid)
+"gt" = (/turf/unsimulated/wall/fakeglass,/area/awaymission/tomb/tomb_of_rafid)
+"gu" = (/obj/effect/hidden_door{icon_state = "5"},/turf/simulated/floor/beach/water{density = 1; name = "deep water"},/area/awaymission/tomb/tomb_of_rafid)
+"gv" = (/obj/machinery/door/mineral/iron,/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
 "gw" = (/obj/item/weapon/skull/rigged{desc = "It's stuck to the floor!"; name = "cursed skull"; pixel_y = 0},/turf/simulated/floor,/area/awaymission/tomb/tomb_of_rafid)
 "gx" = (/obj/effect/hidden_door{icon_state = "4"},/turf/unsimulated/wall{icon = 'icons/obj/doors/mineral.dmi'; icon_state = "sandstonedoor_closed"; name = "sealed gate"},/area/awaymission/tomb/tomb_of_rafid)
 "gy" = (/obj/effect/hidden_door{icon_state = "3"},/turf/unsimulated/wall{icon = 'icons/obj/doors/mineral.dmi'; icon_state = "sandstonedoor_closed"; name = "sealed gate"},/area/awaymission/tomb/tomb_of_rafid)
@@ -415,56 +415,56 @@ aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbWcacadxdxdx
 aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbWcacacacacacacacacacacacadydzdzdzdAcacacacacacacacacacacacabWbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababahcxdndndndndndDdEdFdEdGdndndnahacahdsdsdscUcxcxcxcxcxahcxcxcxcxcxcUcUcUcxcxcxcxcxcxahacabababababababababababababababab
 aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbWbWbWbWbWbWbWbWbWbWbWbWbWbWbWdHbWbWbWbWbWbWbWbWbWbWbWbWbWbWbWbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababahcxdnahdIahahdJdKdKdKdLahahdIahacahcxcxdsdsdscxcxcxcxdMcxcxcxcxcUdNdNdNcUcxcxcxcxcxahacabababababababababababababababab
 aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQdObQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahcxdnahdIahdPdQahdBahdQdRahdIahacahcxcxcxcxcDcxcxcxcxahcxcxcxcUdNdNdSdNdNcUcxcxcxcxahacabababababababababababababababab
-aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQdTdUdVbQbQbQbQbQdObQbQbQbQbQdVdVdVbQbQbQbQbQbQbQbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahcxdqahdIahahahahaoahahahahdIahacahcDcxcxcxcxcxcxcDcxahcxcxcxcUdNdSbldSdNcUcxcxcxcxahacabababababababababababababababab
-aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQdWdVdVbQbQbQbQbQdObQbQbQbQbQdVdXdVbQbQbQbQdYdVdVdVdWdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahcxdnahaodBdZaoaoaoaoaodZdBaoahacahcxcxcxcxcxcxcxcxcxahcxcxcxcUdNdNdSdNdNcUcxcxcxcxahacabababababababababababababababab
-aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQdVdVdVbQbQbQbQbQdObQbQbQbQbQdVdVdVbQbQbQbQdYeadWdVdXdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahcxdnahahahahebcyaoaoahahahahahacahcxcxcxcDcxcxcUcxcxahcxcxcxcxcUdNdNdNcUcxcxcxcxcxahacabababababababababababababababab
-abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQbQecbQbQbQbQbQededeebQbQbQbQbQecbQbQbQbQbQdYdVdVdVdVdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxdndndnacahahahaoaoahacacacacacahcxcxcDcxcxcxcxcDcxahcxcxcxcxcxcUcUcUcxcxcxcxcxcxahacabababababababababababababababab
-abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQefefefefbQbQbQdOdOedegeddOdObQbQbQefefefefbQbQdYdXdVdVdXdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxcxahacacacacaheheiahaccxcUcxcxdMcxcxcxcxcxcxcxcxcxahcxcxcxcxcxcxcxcxcxcxcxcxcxcxahacabababababadadadadadadadadadadab
-abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQefbQbQecbQbQbQejbQedededbQejbQbQbQecbQbQefbQbQdYdVdVdWdVdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxcxahcxdsacacaccxcxacaccxcxcxcxahcxcxcxbGbGekelelembGbGcxcxdncxcxcxcxcxcxcxdwcxcxahacabababababadenafcdaueobGafenadab
-aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQefbQdVdVdVbQbQejbQbQdObQbQejbQbQdVdVepbQefbQbQbQbQbQbQecbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxcxahdsdseqeqercxcxcxcxcxahahahahahahahbGeseteteteteubGahcxcxcxcxcxcxcxcxcxcxcxcxahacabababababadafafbGbGbGbGafafadab
-aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQefbQdVdXdVbQbQejbQbQdObQbQejbQbQdVdXdWbQefefefefefefefefbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxevcxdsdsacacahcxcxcxcxahahacacacacacahetewetexexetewetahacacacacaccxcUcxcxcxcxcxahacabababababadenafafcdafafafenadab
-abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQefbQdVdVdVbQbQejbQbQdObQbQejbQbQdVdVdVbQefbQbQbQbQbQbQbQbQbQbMeyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahahahahezeAacacahahahahahahacacbGbGbGbGbGbGeBbGbGbGbGeBbGbGbGbGbGbGdgcxcxcxcxcxcxcxahacabababababadafeCafafcdafcdafadab
-abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQefbQbQbQbQbQdOdObQbQeDbQbQdOdObQbQbQbQbQefbQbQbQbQbQbQbQbQbQbMeyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababacaceEeFacacacacacaceGeGeGacbGeHeIeHbGeJeKeJeJeJeJeKeJbGeHeIeLbGacdsdsdsdsdsdscxahacabababababadafcdafafafeCafafadab
-abaqaqaqaqaqaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQefefefefefeMdObQbQbQdObQbQbQdOeMefefefefefbQbQbQbQbQbQbQbQbQbMeyeyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacacacacaceNeEaceNayayaceNacacaceGacbGeHeHeHbGeHeHeHeHeHeHeHeHbGeHeHeHbGaccxcxcxcxcxcxcxahacabababababadenafafafafafafenadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQdObQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaceOacacacaceEePeEeEeEeEeEeQeRaceGacbGeHeHeLbGeHadadadadadadeHbGeHeHeHbGacdsdmdsdscUdscxahacabababababadafafbGafcdbGafafadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQeMbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaceGacacacaceEacacacacacePacacaceGacbGeHeHeHbGeSadafeTeUafadeSbGeHeHeHbGdgcxdscxcxdscxcxahacabababababadenafafeVafafafenadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebeeWeXeWbebeeYbebeeYbebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaceGeGacacaceQacacacacaceEacacaceGacbGbGeHeHbGeSeZafafafafeZeSbGeHeHbGbGdgcxcxcxcxdCcxcxahacabababababadadadadadadadadadadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebefabebebebebebebebebebebebebebebebebebebebebebeeYbeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaceGacacacfbacacfcacaceEayacaceGacacbGeHeHbGeSfdafafafaffdeSbGeHeHbGabacdsdsdsdsdsdscxahacabababababababababababababababab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebeeWbebebebebebebebebebebebebebebebebebeeYbebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceGeGeGacacacacacaceEacaceEacacaceGeGacbGeHeHbGeSfefffffffffeeSbGeHeHbGabaccxcxcxdmcxcxcxahacabababababababababababababababab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebebebebefgbebefhbebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceGacacacacfieQeEeEeEeEePeEacabacaceGacbGbGeHbGeSadffffffffcSeSbGeHbGbGbMaccUdscxcxdscxcxahacabababababababababababababababab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebebebefjbebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceGacababacacacacacacacaceQacacacaceGacacbGeHfkeHadffffffffadeHfkeHbGabbMahdscxdsdscxdscxahacabababababababababababababababab
-abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebebefjbebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceGacacacacacacacacacacacfbacaceGeGfleGacbGbGbGeSeZffffffffeZeSbGbGbGababahcxcxcxcxcxcxcxahacabababababababababababababababab
-abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabefgbebebebebebebebebebebebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceGeGeGeGeGeGacacacacacacacacaceGacacacacacabbGeSfefffffffffeeSbGababababahdsdsdsdsdsdsdsahacabababababababababababababababab
-abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafjbebebebebebebebebebebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaceGeGeGeGfleGeGacfmaceGacfmaceGaceGeGeGacabbGeSbGffffffffbGeSbGababababahcxfncxcxfncxcxahacabababababababababababababababab
-abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafjbebebebebebebebebebebebebebebebebebebebebebebebebeaaaaaafgaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacacacacaceGaceGaceGaceGaceGacflaceGacabbGeHfoeHfpeHfpfqeHbGababababahcxcxcxcxcxcxcxahacabababababababababababababababab
-abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafraaaafraaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebeaaaaaaaafjaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacaceGeGeGeGaceGaceGaceGacflaceGaceGacabbGeHeHfpeHfpeHfpeHbGababababahcxcxcxcxcxcxdsahacabababababadadadadadadadadadadab
-abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawawawawawawaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebeaaaaaaaaaafjaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceGeGeGeGeGacacacaceGaceGaceGaceGaceGaceGacabbGbGbGbGfkfkbGbGbGbGababababfscxcxcxcxcxcxcxahacabababababadftfubGfvafbGaffwadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafxawfyfzfAfBawfCaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacflacacacacacacacaceGaceGaceGaceGaceGaceGacababababaheHeHahababacaccxcxacahcxcxcxcxdCcxcxahacabababababadfDfubGfEfEbGaffwadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafFawfGfHfIfHfJfKbeaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceGacaceGeGeGeGeGeGeGeGeGeGeGeGeGeGeGaceGacababababaheHeHahababaccxcxcxacfscxcxcxdscxcxcxahacabababababadfLfuafafafafaffwadab
-abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaafxawfyfBfBfMawfCaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaceGeGfleGacacacacacacacacacacacacacacaceGacababahahaheHeHahahahaccxfNcxacahcxcxcxcxcxcxcxahacabababababadafafaffOfOafenfwadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaawawfBawawawaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacacacacacacababababababababaceGaceGeGfleGacabahahfncxcxcxcxcxahahdCcxdCahahcxcxcxcxcxcxahahacabababababadfPaffOenaffOaffwadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaabebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababaceGeGeGacacacahahahcxcxcxcxcxcxcxcxahfscxahahcxcxcxcxcxcxcxfsahacabababababadfQfuaffOfOafaffwcSab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaafrfraafrfRbebebefSbeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababaceGaceGeGeGacahcxcxcxcxcxcxdCcxcxcxcxcxcxahcxcxcxcxcxcxcxcxcxahacabababababcSfQfubGafafbGaffwadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafxawawawawawfTaaaaaafUaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababacacacacacacacahdrcxfVfVfVcxcxcxcxcxcxdrcxahcxcxcxcxcxcxcxdmcxahacabababababadftfuafaffWafaffwadab
-abaaaaaaaaaaaaaaaaaafXaaaaaaaaaaaafxawfYfZgaawfTaagbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababahcxcxcDcxfVcxdCcxcxcxcxcxcxdMcxcxcxcxcxcxdvdmcxahacabababababadadadcScScSadadadadab
-abaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaawgcgcgcfBaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababahcxcxfVfVfVcxcxcxcxcxcxcxcxahcxcxcxcxcxcxdvdmcxahacabababababababababababababababab
-ababaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaawgdgcgcfBaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacacacacacacacacacacacacacacacacaccxcxcxcxcDcxdCcxcxcxcxcxcxahcxcxcxcxcxcDcxdmcxahacabababababababababababababababab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawfYgcfYawfTaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacgegfaogfgggfaogfaogfaoghaogfaogfaogfacacaccxcxcxcxcxcxcxcxahahcxfsahcxcxcxcxcxcxcxcxahacabababababababababababababababab
-abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafxawawawawawfTaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacgiaoaoaoggaoaogjaoaogjaoaogjaoaogjaoaoaoacacfncxcxcxcxcxahahdsdsdsahfscxcxcxcxcxcxahahacabababababababababababababababab
-abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagkbebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacaoaoaoggglgmglgngogpglgpglglglglgpglaoaoacahahahfsahahahahdsdsdsfsahahahfsahahahahacacabababababababababababababababab
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacaoggaoaoaoaogqaoaogqaoaogqaoaogqaoaogrcxdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsfncxahabababababababababababababababababab
-aaaaaaaaaaaaaaaaaaaaaaaaaaaafXaaaaaabebebebebeaaaaaaaaaaaaaaaabaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacaoggaoaoaoaoaoaoaoaoaoaoaoaoaoaoaoaogscxaeaeaeaeaeaeaeaegtaeaeaeaeaeaeaeaeaeahabababababababababababababababababab
-aaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaabebebebebeaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacacacacacacacacacacacguacacacacacacdgdgcxaeaeaeaeaeaeaeaegtaeaeaeaeaeaeaeaeaeahabababababababababababababababababab
-aaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacacacazaoaoaoaodZacanaogvaogwdZgwdZgwdgcxaeaeaeaeaeaeaeaegtaeaeaeaeaeaeaeaeaeahabababababababadadadadadadcSadadadab
-ababaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacgggggxgyaoaoaoaoaoaoguaoaoaoaogwaogwaogwgzcxaeaeaeaeaeaeaecxcxcxaeaeaeaeaeaeaeaeahabababababababadafafafaugAafafafadab
-ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacacgggggxgyaoaoaoaoaoaoguaoaoaoaogwaogwaogwgzcxaeaeaeaeaeaeaecxcxcxaeaeaeaeaeaeaeaeahabababababababadgBafbGgCgDbGafgBadab
-abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacacgEgFacacazaoaoaoaodZacanaogvaogwdZgwdZgwaccxaeaeaeaeaeaeaecxcxcxaeaeaeaeaeaeaeaeahabababababababadafafafafafafafafadab
-abaaaaaaaaaaaaaaaaaaaaaaaaaaabababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababacacacbcbcacacacacacacacacacacguacacacacacacacaccxaeaeaeaeaeaeaeaecBaeaeaeaeaeaeaeaeaeahabababababababadafafcogGgHcoafafadab
-abaaaaaaaaaaaaaaaaaaaaabababababababababaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacgwgwgwgwgwgwacacaoaoaoaoaoaoaogIaogIaogIaogIgrcxacacacacacacacaccBacacacacacacacacacacacacacababababcSafafcoeCeCcoafafadab
-abaaaaaaaaaaaaaaaaaaaaababababababababaaaaaaaaaaaaaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacgwgwgwgwgwgwacacgJaoaoaoazaoaogKazgKaogKazgKgscxacacacacacacacaceGeGeGeGeGeGacgLgLgLgLgLgLacababababadafafafafafafafafadab
+aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQdTdUdVbQbQbQbQbQdObQbQbQbQbQdVdVdVbQbQbQbQbQbQbQbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahcxdqahdIahahahahaoahahahahdIahacahcDcxcxcxcxcxcxcDcxahcxcxcxcUdNdSdWdSdNcUcxcxcxcxahacabababababababababababababababab
+aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQdXdVdVbQbQbQbQbQdObQbQbQbQbQdVdYdVbQbQbQbQdZdVdVdVdXdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahcxdnahaodBeaaoaoaoaoaoeadBaoahacahcxcxcxcxcxcxcxcxcxahcxcxcxcUdNdNdSdNdNcUcxcxcxcxahacabababababababababababababababab
+aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQdVdVdVbQbQbQbQbQdObQbQbQbQbQdVdVdVbQbQbQbQdZebdXdVdYdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahcxdnahahahaheccyaoaoahahahahahacahcxcxcxcDcxcxcUcxcxahcxcxcxcxcUdNdNdNcUcxcxcxcxcxahacabababababababababababababababab
+abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQbQedbQbQbQbQbQeeeeefbQbQbQbQbQedbQbQbQbQbQdZdVdVdVdVdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxdndndnacahahahaoaoahacacacacacahcxcxcDcxcxcxcxcDcxahcxcxcxcxcxcUcUcUcxcxcxcxcxcxahacabababababababababababababababab
+abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQegegegegbQbQbQdOdOeeeheedOdObQbQbQegegegegbQbQdZdYdVdVdYdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxcxahacacacacaheiejahaccxcUcxcxdMcxcxcxcxcxcxcxcxcxahcxcxcxcxcxcxcxcxcxcxcxcxcxcxahacabababababadadadadadadadadadadab
+abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQegbQbQedbQbQbQekbQeeeeeebQekbQbQbQedbQbQegbQbQdZdVdVdXdVdVbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxcxahcxdsacacaccxcxacaccxcxcxcxahcxcxcxbGbGelememenbGbGcxcxdncxcxcxcxcxcxcxdwcxcxahacabababababadeoafcdauepbGafeoadab
+aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQegbQdVdVdVbQbQekbQbQdObQbQekbQbQdVdVeqbQegbQbQbQbQbQbQedbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxcxahdsdsererescxcxcxcxcxahahahahahahahbGeteueueueuevbGahcxcxcxcxcxcxcxcxcxcxcxcxahacabababababadafafbGbGbGbGafafadab
+aaaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQegbQdVdYdVbQbQekbQbQdObQbQekbQbQdVdYdXbQegegegegegegegegbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababahcxewcxdsdsacacahcxcxcxcxahahacacacacacaheuexeueyeyeuexeuahacacacacaccxcUcxcxcxcxcxahacabababababadeoafafcdafafafeoadab
+abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQegbQdVdVdVbQbQekbQbQdObQbQekbQbQdVdVdVbQegbQbQbQbQbQbQbQbQbQbMezaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababahahahaheAeBacacahahahahahahacacbGbGbGbGbGbGeCbGbGbGbGeCbGbGbGbGbGbGdgcxcxcxcxcxcxcxahacabababababadafeDafafcdafcdafadab
+abaaaaaaaaaaaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQegbQbQbQbQbQdOdObQbQeEbQbQdOdObQbQbQbQbQegbQbQbQbQbQbQbQbQbQbMezaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababacaceFeGacacacacacaceHeHeHacbGeIeJeIbGeKeLeKeKeKeKeLeKbGeIeJeMbGacdsdsdsdsdsdscxahacabababababadafcdafafafeDafafadab
+abaqaqaqaqaqaqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQegegegegegeNdObQbQbQdObQbQbQdOeNegegegegegbQbQbQbQbQbQbQbQbQbMezezaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacacacacaceOeFaceOayayaceOacacaceHacbGeIeIeIbGeIeIeIeIeIeIeIeIbGeIeIeIbGaccxcxcxcxcxcxcxahacabababababadeoafafafafafafeoadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQdObQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacePacacacaceFeQeFeFeFeFeFeReSaceHacbGeIeIeMbGeIadadadadadadeIbGeIeIeIbGacdsdmdsdscUdscxahacabababababadafafbGafcdbGafafadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabMbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQeNbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbQbMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaceHacacacaceFacacacacaceQacacaceHacbGeIeIeIbGeTadafeUeVafadeTbGeIeIeIbGdgcxdscxcxdscxcxahacabababababadeoafafeWafafafeoadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebeeXeYeXbebeeZbebeeZbebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaceHeHacacaceRacacacacaceFacacaceHacbGbGeIeIbGeTfaafafafaffaeTbGeIeIbGbGdgcxcxcxcxdCcxcxahacabababababadadadadadadadadadadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebefbbebebebebebebebebebebebebebebebebebebebebebeeZbeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaceHacacacfcacacfdacaceFayacaceHacacbGeIeIbGeTfeafafafaffeeTbGeIeIbGabacdsdsdsdsdsdscxahacabababababababababababababababab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebeeXbebebebebebebebebebebebebebebebebebeeZbebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceHeHeHacacacacacaceFacaceFacacaceHeHacbGeIeIbGeTfffgfgfgfgffeTbGeIeIbGabaccxcxcxdmcxcxcxahacabababababababababababababababab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebebebebefhbebefibebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceHacacacacfjeReFeFeFeFeQeFacabacaceHacbGbGeIbGeTadfgfgfgfgcSeTbGeIbGbGbMaccUdscxcxdscxcxahacabababababababababababababababab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebebebefkbebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceHacababacacacacacacacaceRacacacaceHacacbGeIfleIadfgfgfgfgadeIfleIbGabbMahdscxdsdscxdscxahacabababababababababababababababab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebebefkbebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceHacacacacacacacacacacacfcacaceHeHfmeHacbGbGbGeTfafgfgfgfgfaeTbGbGbGababahcxcxcxcxcxcxcxahacabababababababababababababababab
+abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabefhbebebebebebebebebebebebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceHeHeHeHeHeHacacacacacacacacaceHacacacacacabbGeTfffgfgfgfgffeTbGababababahdsdsdsdsdsdsdsahacabababababababababababababababab
+abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafkbebebebebebebebebebebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaceHeHeHeHfmeHeHacfnaceHacfnaceHaceHeHeHacabbGeTbGfgfgfgfgbGeTbGababababahcxfocxcxfocxcxahacabababababababababababababababab
+abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafkbebebebebebebebebebebebebebebebebebebebebebebebebeaaaaaafhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacacacacaceHaceHaceHaceHaceHacfmaceHacabbGeIfpeIfqeIfqfreIbGababababahcxcxcxcxcxcxcxahacabababababababababababababababab
+abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafsaaaafsaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebebebeaaaaaaaafkaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacaceHeHeHeHaceHaceHaceHacfmaceHaceHacabbGeIeIfqeIfqeIfqeIbGababababahcxcxcxcxcxcxdsahacabababababadadadadadadadadadadab
+abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawawawawawawaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebebebeaaaaaaaaaafkaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceHeHeHeHeHacacacaceHaceHaceHaceHaceHaceHacabbGbGbGbGflflbGbGbGbGababababftcxcxcxcxcxcxcxahacabababababadfufvbGfwafbGaffxadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafyawfzfAfBfCawfDaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacfmacacacacacacacaceHaceHaceHaceHaceHaceHacababababaheIeIahababacaccxcxacahcxcxcxcxdCcxcxahacabababababadfEfvbGfFfFbGaffxadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafGawfHfIfJfIfKfLbeaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaceHacaceHeHeHeHeHeHeHeHeHeHeHeHeHeHeHaceHacababababaheIeIahababaccxcxcxacftcxcxcxdscxcxcxahacabababababadfMfvafafafafaffxadab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaafyawfzfCfCfNawfDaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaceHeHfmeHacacacacacacacacacacacacacacaceHacababahahaheIeIahahahaccxfOcxacahcxcxcxcxcxcxcxahacabababababadafafaffPfPafeofxadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaawawfCawawawaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacacacacacacababababababababaceHaceHeHfmeHacabahahfocxcxcxcxcxahahdCcxdCahahcxcxcxcxcxcxahahacabababababadfQaffPeoaffPaffxadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaabebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababaceHeHeHacacacahahahcxcxcxcxcxcxcxcxahftcxahahcxcxcxcxcxcxcxftahacabababababadfRfvaffPfPafaffxcSab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaafsfsaafsfSbebebefTbeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababaceHaceHeHeHacahcxcxcxcxcxcxdCcxcxcxcxcxcxahcxcxcxcxcxcxcxcxcxahacabababababcSfRfvbGafafbGaffxadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafyawawawawawfUaaaaaafVaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababacacacacacacacahdrcxfWfWfWcxcxcxcxcxcxdrcxahcxcxcxcxcxcxcxdmcxahacabababababadfufvafaffXafaffxadab
+abaaaaaaaaaaaaaaaaaafYaaaaaaaaaaaafyawfZgagbawfUaagcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababahcxcxcDcxfWcxdCcxcxcxcxcxcxdMcxcxcxcxcxcxdvdmcxahacabababababadadadcScScSadadadadab
+abaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaawgdgdgdfCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababababababababababababababababababahcxcxfWfWfWcxcxcxcxcxcxcxcxahcxcxcxcxcxcxdvdmcxahacabababababababababababababababab
+ababaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaawgegdgdfCaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacacacacacacacacacacacacacacacacaccxcxcxcxcDcxdCcxcxcxcxcxcxahcxcxcxcxcxcDcxdmcxahacabababababababababababababababab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawfZgdfZawfUaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacgfggaoggghggaoggaoggaogiaoggaoggaoggacacaccxcxcxcxcxcxcxcxahahcxftahcxcxcxcxcxcxcxcxahacabababababababababababababababab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafyawawawawawfUaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacgjaoaoaoghaoaogkaoaogkaoaogkaoaogkaoaoaoacacfocxcxcxcxcxahahdsdsdsahftcxcxcxcxcxcxahahacabababababababababababababababab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaglbebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacaoaoaoghgmgngmgogpgqgmgqgmgmgmgmgqgmaoaoacahahahftahahahahdsdsdsftahahahftahahahahacacabababababababababababababababab
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabebebebebeaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacaoghaoaoaoaograoaograoaograoaograoaogscxdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsfocxahabababababababababababababababababab
+aaaaaaaaaaaaaaaaaaaaaaaaaaaafYaaaaaabebebebebeaaaaaaaaaaaaaaaabaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacaoghaoaoaoaoaoaoaoaoaoaoaoaoaoaoaoaogtcxaeaeaeaeaeaeaeaeguaeaeaeaeaeaeaeaeaeahabababababababababababababababababab
+aaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaabebebebebeaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacacacacacacacacacacacgvacacacacacacdgdgcxaeaeaeaeaeaeaeaeguaeaeaeaeaeaeaeaeaeahabababababababababababababababababab
+aaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacacacacacazaoaoaoaoeaacanaodWaogweagweagwdgcxaeaeaeaeaeaeaeaeguaeaeaeaeaeaeaeaeaeahabababababababadadadadadadcSadadadab
+ababaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababacacghghgxgyaoaoaoaoaoaogvaoaoaoaogwaogwaogwgzcxaeaeaeaeaeaeaecxcxcxaeaeaeaeaeaeaeaeahabababababababadafafafaugAafafafadab
+ababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacacghghgxgyaoaoaoaoaoaogvaoaoaoaogwaogwaogwgzcxaeaeaeaeaeaeaecxcxcxaeaeaeaeaeaeaeaeahabababababababadgBafbGgCgDbGafgBadab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacacgEgFacacazaoaoaoaoeaacanaodWaogweagweagwaccxaeaeaeaeaeaeaecxcxcxaeaeaeaeaeaeaeaeahabababababababadafafafafafafafafadab
+abaaaaaaaaaaaaaaaaaaaaaaaaaaabababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababacacacbcbcacacacacacacacacacacgvacacacacacacacaccxaeaeaeaeaeaeaeaecBaeaeaeaeaeaeaeaeaeahabababababababadafafcogGgHcoafafadab
+abaaaaaaaaaaaaaaaaaaaaabababababababababaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacgwgwgwgwgwgwacacaoaoaoaoaoaoaogIaogIaogIaogIgscxacacacacacacacaccBacacacacacacacacacacacacacababababcSafafcoeDeDcoafafadab
+abaaaaaaaaaaaaaaaaaaaaababababababababaaaaaaaaaaaaaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacgwgwgwgwgwgwacacgJaoaoaoazaoaogKazgKaogKazgKgtcxacacacacacacacaceHeHeHeHeHeHacgLgLgLgLgLgLacababababadafafafafafafafafadab
 abaaaaaaaaaaaaaaaaaaaaababababababababaaaaaaaaaaaaababababaaaaaaaaaaaaababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacbcbbbbbcbbbcacacacaoaoaoaoaoazaoaoaoazaoaoaoacacacacacacacacacacacacacacacgMacgLgNgNgNgOgLacababababadgBafbGgPgQbGafgBadab
-ababaaaaaaaaaaaaaaaaaaaaabababababababaaaaaaaaaaaabebebebeaaaaaaaaaaaaababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababaaaaaaaaaaaaaaaaaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababacdZdZdZdZdZdZacacacacacaogvgRgRgRgRgRgRgRgRgRacacacacaceGgSgTgTgTacacacacacacacgLgNgNgUgVgLacababababadafafafgWakafafafadab
-ababababababaaaaaaaaaaababababababababababaaaaaaaabebebebeaaaaaaaaaaababababababababaaaaaaaaaaaaaaababababaaaaababababababaaaaaaaaaaabababaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababaaaaaaaaaaaaaaaaababacbcgXbbbcbcbcacacacacacacacacacacacacacacacacacaceGeGeGeGeGgTgTgTgTgXazazazbceGgLgNgNgNgYgLacababababadadadadadadadadadadab
-ababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababaaaaabababaaabababababababababababababaaaaaaaaaaababababababababaaaaaaaaaaaaababacgTgTgTgTeGeGeGgZgTgTeGgSeGeGgTgThagTgTeGgSeGgTgTeGeGacacacacacacgTbbaohbhcbceGgLgLgLgLgLgLacababababababababababababababab
+ababaaaaaaaaaaaaaaaaaaaaabababababababaaaaaaaaaaaabebebebeaaaaaaaaaaaaababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababababaaaaaaaaaaaaaaaaaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababaceaeaeaeaeaeaacacacacacaodWgRgRgRgRgRgRgRgRgRacacacacaceHgSgTgTgTacacacacacacacgLgNgNgUgVgLacababababadafafafgWakafafafadab
+ababababababaaaaaaaaaaababababababababababaaaaaaaabebebebeaaaaaaaaaaababababababababaaaaaaaaaaaaaaababababaaaaababababababaaaaaaaaaaabababaaababaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababaaaaaaaaaaaaaaaaababacbcgXbbbcbcbcacacacacacacacacacacacacacacacacacaceHeHeHeHeHgTgTgTgTgXazazazbceHgLgNgNgNgYgLacababababadadadadadadadadadadab
+ababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababaaaaabababaaabababababababababababababaaaaaaaaaaababababababababaaaaaaaaaaaaababacgTgTgTgTeHeHeHgZgTgTeHgSeHeHgTgThagTgTeHgSeHgTgTeHeHacacacacacacgTbbaohbhcbceHgLgLgLgLgLgLacababababababababababababababab
 ababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacababababababababababababababab
 "}
