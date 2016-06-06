@@ -56,9 +56,6 @@
 	processing_objects.Remove(src)
 	..()
 
-/obj/effect/blob/core/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	return
-
 /obj/effect/blob/core/update_health()
 	if(overmind)
 		overmind.update_health()
