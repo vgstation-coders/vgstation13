@@ -21,9 +21,6 @@
 	if((blob_looks[looks] == 64) && !no_morph)
 		flick("morph_node",src)
 
-/obj/effect/blob/node/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	return
-
 /obj/effect/blob/node/Destroy()
 	blob_nodes -= src
 	if(!manual_remove && overmind)
