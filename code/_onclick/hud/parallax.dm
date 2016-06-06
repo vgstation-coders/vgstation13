@@ -89,10 +89,10 @@ var/list/parallax_on_clients = list()
 
 	if(!C.parallax_canvas)
 		C.parallax_canvas = getFromPool(/obj/screen/parallax_canvas)
-		var/icon/temp = icon(parallax_canvas.icon, parallax_canvas.icon_state)
-		temp.Scale((2*view+1)*32, (2*view+1)*32)
-		parallax_canvas.icon = temp
-		parallax_canvas.screen_loc = "WEST,SOUTH"
+		var/icon/temp = icon(C.parallax_canvas.icon, C.parallax_canvas.icon_state)
+		temp.Scale((2*C.view+1)*32, (2*C.view+1)*32)
+		C.parallax_canvas.icon = temp
+		C.parallax_canvas.screen_loc = "WEST,SOUTH"
 
 	if(!C.parallax_dustmaster)
 		C.parallax_dustmaster = getFromPool(/obj/plane_master/parallax_dustmaster)
