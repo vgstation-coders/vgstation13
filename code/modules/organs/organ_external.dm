@@ -76,10 +76,10 @@
 	if(severity == 2)
 		probability = 1
 		damage = 3
-	if(prob(probability))
+	if(prob(probability) && emp_resist > 0.5) //If a limb can resist half of the EMP damage, it can't be blown off so easily by EMPs
 		droplimb(1)
 	else
-		take_damage(damage, 0, 1, used_weapon = "EMP")
+		take_damage(damage*emp_resist, 0, 1, used_weapon = "EMP")
 
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	if((brute <= 0) && (burn <= 0))
@@ -89,8 +89,8 @@
 		return 0
 
 	if(!is_organic())
-		brute *= 0.66 //~2/3 damage for ROBOLIMBS
-		burn *= (status & (ORGAN_PEG) ? 2 : 0.66) //~2/3 damage for ROBOLIMBS 2x for peg
+		brute *= brute_resist
+		burn *= (status & (ORGAN_PEG) ? 2 : burn_resist) //~2/3 damage for ROBOLIMBS 2x for peg
 	else
 		if(owner.species)
 			if(owner.species.brute_mod)
