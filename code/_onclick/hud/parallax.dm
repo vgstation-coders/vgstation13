@@ -22,30 +22,18 @@ var/list/parallax_on_clients = list()
 
 /obj/plane_master/parallax_master
 	plane = PLANE_SPACE_PARALLAX
-	screen_loc = "WEST,SOUTH to EAST,NORTH"
-
-/obj/plane_master/parallax_voidmaster
-	plane = PLANE_SPACE_BACKGROUND
-	color = list(0, 0, 0,
-				0, 0, 0,
-				0, 0, 0,
-				1, 1, 1) // This will cause space to be solid white
-	screen_loc = "WEST,SOUTH to EAST,NORTH"
 
 /obj/plane_master/parallax_dustmaster
 	plane = PLANE_SPACE_PARALLAX_DUST
-	screen_loc = "WEST,SOUTH to EAST,NORTH"
 
 /obj/screen/parallax_canvas
 	mouse_opacity = 0
 	icon = 'icons/turf/space.dmi'
 	icon_state = "white"
-	color = "#000000"
 	name = "space parallax"
 	blend_mode = BLEND_ADD
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX
-	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	globalscreen = 1
 
 /datum/hud/proc/update_parallax()
@@ -93,16 +81,19 @@ var/list/parallax_on_clients = list()
 
 		C.screen -= C.parallax_master
 		C.screen -= C.parallax_canvas
-		C.screen -= C.parallax_voidmaster
 		C.screen -= C.parallax_dustmaster
 		return 0
 
 	if(!C.parallax_master)
 		C.parallax_master = getFromPool(/obj/plane_master/parallax_master)
+
 	if(!C.parallax_canvas)
 		C.parallax_canvas = getFromPool(/obj/screen/parallax_canvas)
-	if(!C.parallax_voidmaster)
-		C.parallax_voidmaster = getFromPool(/obj/plane_master/parallax_voidmaster)
+		var/icon/temp = icon(parallax_canvas.icon, parallax_canvas.icon_state)
+		temp.Scale((2*view+1)*32, (2*view+1)*32)
+		parallax_canvas.icon = temp
+		parallax_canvas.screen_loc = "WEST,SOUTH"
+
 	if(!C.parallax_dustmaster)
 		C.parallax_dustmaster = getFromPool(/obj/plane_master/parallax_dustmaster)
 
@@ -110,7 +101,6 @@ var/list/parallax_on_clients = list()
 
 	C.screen |= C.parallax_master
 	C.screen |= C.parallax_canvas
-	C.screen |= C.parallax_voidmaster
 	C.screen |= C.parallax_dustmaster
 
 	return 1
@@ -127,9 +117,8 @@ var/list/parallax_on_clients = list()
 			parallax_layer.appearance = bgobj.appearance
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
-			parallax_layer.plane = bgobj.plane
 			parallax_layer.parallax_speed = bgobj.parallax_speed
-			C.parallax |= parallax_layer
+			C.parallax += parallax_layer
 
 	if(!C.parallax_nodust.len)
 		var/list/wantDatParallax = list()
@@ -139,9 +128,8 @@ var/list/parallax_on_clients = list()
 			parallax_layer.appearance = bgobj.appearance
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
-			parallax_layer.plane = bgobj.plane
 			parallax_layer.parallax_speed = bgobj.parallax_speed
-			C.parallax_nodust |= parallax_layer
+			C.parallax_nodust += parallax_layer
 
 	var/parallax_loaded = 0
 	for(var/obj/screen/S in C.screen)
@@ -157,15 +145,17 @@ var/list/parallax_on_clients = list()
 
 		if(C.prefs.space_dust)
 			for(var/obj/screen/parallax/bgobj in C.parallax)
-				C.screen |= bgobj
+				C.screen += bgobj
 		else
 			for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
-				C.screen |= bgobj
+				C.screen += bgobj
 
 		if(C.prefs.space_dust)
 			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
+			C.parallax_dustmaster.screen_loc = "WEST,SOUTH to EAST,NORTH"
 		else
 			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
+			C.parallax_master.screen_loc = "WEST,SOUTH to EAST,NORTH"
 
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
