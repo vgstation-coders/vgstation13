@@ -396,52 +396,6 @@
 		return 1
 	return
 
-/mob/living/carbon/u_equip(obj/item/W as obj, dropped = 1)
-	var/success = 0
-	if(!W)	return 0
-	else if (W == handcuffed)
-		handcuffed.handcuffs_remove(src)
-		success = 1
-
-	else if (W == legcuffed)
-		legcuffed = null
-		success = 1
-		update_inv_legcuffed()
-	else
-		..()
-	if(success)
-		if (W)
-			if (client)
-				client.screen -= W
-			if(dropped)
-				W.loc = loc
-				W.dropped(src)
-			if(W)
-				W.layer = initial(W.layer)
-
-	return
-/*
-/mob/living/carbon/show_inv(mob/living/carbon/user as mob)
-	user.set_machine(src)
-	var/dat = {"
-	<B><HR><FONT size=3>[name]</FONT></B>
-	<BR><HR>
-	<BR><B>Head(Mask):</B> <A href='?src=\ref[src];item=mask'>[(wear_mask ? wear_mask : "Nothing")]</A>
-	<BR><B>Left Hand:</B> <A href='?src=\ref[src];item=l_hand'>[(l_hand ? l_hand  : "Nothing")]</A>
-	<BR><B>Right Hand:</B> <A href='?src=\ref[src];item=r_hand'>[(r_hand ? r_hand : "Nothing")]</A>
-	<BR><B>Back:</B> <A href='?src=\ref[src];item=back'>[(back ? back : "Nothing")]</A> [((istype(wear_mask, /obj/item/clothing/mask) && istype(back, /obj/item/weapon/tank) && !( internal )) ? text(" <A href='?src=\ref[];item=internal'>Set Internal</A>", src) : "")]
-	<BR>[(handcuffed ? text("<A href='?src=\ref[src];item=handcuff'>Handcuffed</A>") : text("<A href='?src=\ref[src];item=handcuff'>Not Handcuffed</A>"))]
-	<BR>[(internal ? text("<A href='?src=\ref[src];item=internal'>Remove Internal</A>") : "")]
-	<BR><A href='?src=\ref[src];item=pockets'>Empty Pockets</A>
-	<BR><A href='?src=\ref[user];refresh=1'>Refresh</A>
-	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
-	<BR>"}
-	user << browse(dat, text("window=mob\ref[src];size=325x500"))
-	onclose(user, "mob\ref[src]")
-	return
-*/
-
-
 /mob/living/carbon/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)
 	var/has_breathable_mask = istype(wear_mask, /obj/item/clothing/mask)
@@ -473,9 +427,24 @@
 	popup.set_content(dat)
 	popup.open()
 
+/mob/living/carbon/Topic(href, href_list)
+	..()
+	if (href_list["mach_close"])
+		var/t1 = text("window=[]", href_list["mach_close"])
+		unset_machine()
+		src << browse(null, t1)
 
+	if(href_list["hands"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
 
+	else if(href_list["item"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
 
+	else ..()
 
 //generates realistic-ish pulse output based on preset levels
 /mob/living/carbon/proc/get_pulse(var/method)	//method 0 is for hands, 1 is for machines, more accurate

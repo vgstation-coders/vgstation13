@@ -300,13 +300,13 @@
 			to_chat(M, "<span class='danger'>It's stuck to your hands!</span>")
 		return 0
 
-	if(ishuman(M))
+	if(ishuman(M)) //Crimes Against OOP: This is first on the list if anybody ever feels like unfucking inventorycode
 		//START HUMAN
 		var/mob/living/carbon/human/H = M
 
 		if(istype(src, /obj/item/clothing/under) || istype(src, /obj/item/clothing/suit))
 			if(M_FAT in H.mutations)
-				testing("[M] TOO FAT TO WEAR [src]!")
+				//testing("[M] TOO FAT TO WEAR [src]!")
 				if(!(flags & ONESIZEFITSALL))
 					if(!disable_warning)
 						to_chat(H, "<span class='warning'>You're too fat to wear the [name].</span>")
@@ -636,10 +636,28 @@
 		//START MONKEY
 		var/mob/living/carbon/monkey/MO = M
 		switch(slot)
+			if(slot_head)
+				if(MO.hat)
+					return 0
+				if( !(slot_flags & SLOT_HEAD) )
+					return 0
+				return 1
 			if(slot_wear_mask)
 				if(MO.wear_mask)
 					return 0
 				if( !(slot_flags & SLOT_MASK) )
+					return 0
+				return 1
+			if(slot_glasses)
+				if(MO.glasses)
+					return 0
+				if( !(slot_flags & SLOT_EYES) )
+					return 0
+				return 1
+			if(slot_w_uniform)
+				if(MO.uniform)
+					return 0
+				if( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
 				return 1
 			if(slot_back)
@@ -650,6 +668,42 @@
 				return 1
 		return 0 //Unsupported slot
 		//END MONKEY
+
+	else if(isalienadult(M))
+		//START ALIEN HUMANOID
+		var/mob/living/carbon/alien/humanoid/AH = M
+		switch(slot)
+			//Maybe when someone sprites an "alien lying down" version of every exosuit and hat in the game.
+			/*if(slot_head)
+				if(AH.head)
+					return 0
+				if( !(slot_flags & SLOT_HEAD) )
+					return 0
+				return 1
+			if(slot_wear_suit)
+				if(AH.wear_suit)
+					return 0
+				if( !(slot_flags & SLOT_OCLOTHING) )
+					return 0
+				return 1*/
+			if(slot_l_store)
+				if(slot_flags & SLOT_DENYPOCKET)
+					return 0
+				if(AH.l_store)
+					return 0
+				if( !(w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET)) )
+					return 0
+				return 1
+			if(slot_r_store)
+				if(slot_flags & SLOT_DENYPOCKET)
+					return 0
+				if(AH.r_store)
+					return 0
+				if( !(w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET)) )
+					return 0
+				return 1
+		return 0 //Unsupported slot
+		//END ALIEN HUMANOID
 
 	else if(isMoMMI(M))
 		//START MOMMI ALSO THIS SO FUCKING SILLY

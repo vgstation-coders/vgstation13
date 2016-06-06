@@ -487,6 +487,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 //This proc is called whenever someone clicks an inventory ui slot.
 /mob/proc/attack_ui(slot, hand_index)
+	to_chat(world, "HITLERS: [src] has attacked UI on slot [slot]!")
 	var/obj/item/W = get_active_hand()
 	if(istype(W))
 		if(slot)
@@ -498,7 +499,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 		if(W)
 			W.attack_hand(src)
 
-	if(ishuman(src) && W == src:head)
+	if(ishuman(src) && W == src:head) //AAAAAUGH
 		src:update_hair()
 
 /mob/proc/put_in_any_hand_if_possible(obj/item/W as obj)
@@ -513,84 +514,37 @@ var/global/obj/screen/fuckstat/FUCK = new
 //unset redraw_mob to prevent the mob from being redrawn at the end.
 /mob/proc/equip_to_slot_if_possible(obj/item/W as obj, slot, act_on_fail = 0, disable_warning = 0, redraw_mob = 1, automatic = 0)
 	if(!istype(W)) return 0
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		switch(W.mob_can_equip(src, slot, disable_warning, automatic))
-			if(0)
-				switch(act_on_fail)
-					if(EQUIP_FAILACTION_DELETE)
-						qdel(W)
-						W = null
-					if(EQUIP_FAILACTION_DROP)
-						W.loc=get_turf(src) // I think.
-					else
-						if(!disable_warning)
-							to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
 
-				return 0
-			if(1)
-				equip_to_slot(W, slot, redraw_mob)
-			if(2)
-				var/in_the_hand = (is_holding_item(W))
-				var/obj/item/wearing = get_item_by_slot(slot)
-				if(wearing)
-					if(!in_the_hand) //if we aren't holding it, the proc is abstract so get rid of it
-						switch(act_on_fail)
-							if(EQUIP_FAILACTION_DELETE)
-								qdel(W)
-							if(EQUIP_FAILACTION_DROP)
-								W.loc=get_turf(src) // I think.
-						return
+	if(!W.mob_can_equip(src, slot, disable_warning))
+		switch(act_on_fail)
+			if(EQUIP_FAILACTION_DELETE)
+				qdel(W)
+				W = null
+			if(EQUIP_FAILACTION_DROP)
+				W.loc=get_turf(src) // I think.
+			else
+				if(!disable_warning)
+					to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
 
-					if(drop_item(W))
-						if(!(put_in_active_hand(wearing)))
-							equip_to_slot(wearing, slot, redraw_mob)
-							switch(act_on_fail)
-								if(EQUIP_FAILACTION_DELETE)
-									qdel(W)
-								else
-									if(!disable_warning && act_on_fail != EQUIP_FAILACTION_DROP)
-										to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
+		return 0
 
-							return
-						else
-							equip_to_slot(W, slot, redraw_mob)
-							u_equip(wearing,0)
-							put_in_active_hand(wearing)
-						if(H.s_store && !H.s_store.mob_can_equip(src, slot_s_store, 1))
-							u_equip(H.s_store,1)
-		return 1
-	else
-		if(!W.mob_can_equip(src, slot, disable_warning))
-			switch(act_on_fail)
-				if(EQUIP_FAILACTION_DELETE)
-					qdel(W)
-					W = null
-				if(EQUIP_FAILACTION_DROP)
-					W.loc=get_turf(src) // I think.
-				else
-					if(!disable_warning)
-						to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
-
-			return 0
-
-		equip_to_slot(W, slot, redraw_mob) //This proc should not ever fail.
-		return 1
+	equip_to_slot(W, slot, redraw_mob) //This proc should not ever fail.
+	return 1
 
 //This is an UNSAFE proc. It merely handles the actual job of equipping. All the checks on whether you can or can't eqip need to be done before! Use mob_can_equip() for that task.
 //In most cases you will want to use equip_to_slot_if_possible()
 /mob/proc/equip_to_slot(obj/item/W as obj, slot)
 	return
 
-//This is just a commonly used configuration for the equip_to_slot_if_possible() proc, used to equip people when the rounds tarts and when events happen and such.
+//This is just a commonly used configuration for the equip_to_slot_if_possible() proc, used to equip people when the round starts and when events happen and such.
 /mob/proc/equip_to_slot_or_del(obj/item/W as obj, slot)
 	return equip_to_slot_if_possible(W, slot, EQUIP_FAILACTION_DELETE, 1, 0)
 
-//This is just a commonly used configuration for the equip_to_slot_if_possible() proc, used to equip people when the rounds tarts and when events happen and such.
+//This is just a commonly used configuration for the equip_to_slot_if_possible() proc, used to equip people when the round starts and when events happen and such.
 /mob/proc/equip_to_slot_or_drop(obj/item/W as obj, slot)
 	return equip_to_slot_if_possible(W, slot, EQUIP_FAILACTION_DROP, 1, 0)
 
-// Convinience proc.  Collects crap that fails to equip either onto the mob's back, or drops it.
+// Convenience proc.  Collects crap that fails to equip either onto the mob's back, or drops it.
 // Used in job equipping so shit doesn't pile up at the start loc.
 /mob/living/carbon/human/proc/equip_or_collect(var/obj/item/W, var/slot)
 	if(!equip_to_slot_or_drop(W, slot))

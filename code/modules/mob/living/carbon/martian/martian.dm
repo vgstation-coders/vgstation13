@@ -94,9 +94,9 @@
 		if (W)
 			if(client)
 				client.screen -= W
-			if(dropped)
-				W.forceMove(loc)
-				W.dropped(src)
+			W.forceMove(loc)
+			W.unequipped()
+			if(dropped) W.dropped(src)
 			if(W)
 				W.layer = initial(W.layer)
 

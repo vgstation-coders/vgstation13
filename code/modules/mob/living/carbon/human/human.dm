@@ -439,12 +439,6 @@
 	if(!ears) return 0
 	return is_on_ears(/obj/item/device/radio/headset/headset_earmuffs)
 
-/proc/makeStrippingButton(var/obj/item/I)
-	if(!istype(I) || I.abstract)
-		return "<font color=grey>Empty</font>"
-	else
-		return I
-
 /mob/living/carbon/human/show_inv(mob/user)
 	user.set_machine(src)
 	var/has_breathable_mask = istype(wear_mask, /obj/item/clothing/mask)

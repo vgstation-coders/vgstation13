@@ -1,3 +1,9 @@
+/proc/makeStrippingButton(var/obj/item/I) //Not actually the stripping button, just what's written on it
+	if(!istype(I) || I.abstract)
+		return "<font color=grey>Empty</font>"
+	else
+		return I
+
 /mob/living/carbon/proc/strip_hand(var/mob/living/user, var/index)
 	if(!index || !isnum(index))	return
 

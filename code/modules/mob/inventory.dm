@@ -305,10 +305,11 @@
 		return 0
 
 	if(success)
+		to_chat(world, "HITLERS: We're [src] unequipping the [W] and dropped is [dropped] here we gooo")
 		if(client)
 			client.screen -= W
 		if(dropped)
-			W.loc = loc
+			W.forceMove(loc)
 			W.dropped(src)
 		if(W)
 			W.layer = initial(W.layer)

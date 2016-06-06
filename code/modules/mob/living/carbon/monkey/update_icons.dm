@@ -54,6 +54,7 @@
 		var/t_state = uniform.item_state
 		if(!t_state)	t_state = uniform.icon_state
 		overlays_standing[M_UNIFORM_LAYER]	= image("icon" = 'icons/mob/monkey.dmi', "icon_state" = t_state)
+		uniform.screen_loc = ui_monkey_uniform
 	else
 		overlays_standing[M_UNIFORM_LAYER]	= null
 	if(update_icons)		update_icons()
@@ -63,6 +64,7 @@
 	if(hat)
 		var/t_state = hat.icon_state
 		overlays_standing[M_HAT_LAYER]	= image("icon" = 'icons/mob/monkey_head.dmi', "icon_state" = t_state)
+		hat.screen_loc = ui_monkey_hat
 	else
 		overlays_standing[M_HAT_LAYER]	= null
 	if(update_icons)		update_icons()
@@ -71,6 +73,7 @@
 	if(hat)
 		var/t_state = hat.icon_state
 		overlays_standing[M_HAT_LAYER]	= image("icon" = 'icons/mob/monkey_head.dmi', "icon_state" = t_state, "pixel_y" = -7)
+		hat.screen_loc = ui_monkey_hat
 	else
 		overlays_standing[M_HAT_LAYER]	= null
 	if(update_icons)		update_icons()
@@ -79,6 +82,7 @@
 	if(hat)
 		var/t_state = hat.icon_state
 		overlays_standing[M_HAT_LAYER]	= image("icon" = 'icons/mob/monkey_head.dmi', "icon_state" = t_state, "pixel_y" = -12)
+		hat.screen_loc = ui_monkey_hat
 	else
 		overlays_standing[M_HAT_LAYER]	= null
 	if(update_icons)		update_icons()
@@ -89,6 +93,7 @@
 	if(glasses)
 		var/t_state = glasses.icon_state
 		overlays_standing[M_GLASSES_LAYER]	= image("icon" = 'icons/mob/monkey_eyes.dmi', "icon_state" = t_state)
+		glasses.screen_loc = ui_monkey_glasses
 	else
 		overlays_standing[M_GLASSES_LAYER]	= null
 	if(update_icons)		update_icons()
