@@ -55,7 +55,7 @@
 				s_store)
 	return filter
 
-/mob/living/carbon/human/proc/check_obscured_slots()
+/mob/living/carbon/human/check_obscured_slots()
 	var/list/obscured = list()
 
 	if(wear_suit)
@@ -162,12 +162,12 @@
 			return s_store
 	return null
 
-/mob/living/carbon/human/proc/has_organ(name)
+/mob/living/carbon/human/has_organ(name)
 
 	var/datum/organ/external/O = organs_by_name[name]
 	return O.is_existing()
 
-/mob/living/carbon/human/proc/has_organ_for_slot(slot)
+/mob/living/carbon/human/has_organ_for_slot(slot)
 	switch(slot)
 		if(slot_back)
 			return has_organ("chest")
@@ -388,7 +388,7 @@
 
 	W.layer = 20
 	W.equipped(src, slot)
-	W.loc = src
+	W.forceMove(src)
 	if(client) client.screen |= W
 
 

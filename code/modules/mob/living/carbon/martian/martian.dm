@@ -114,4 +114,4 @@
 
 	W.layer = 20
 	W.equipped(src, slot)
-	W.loc = src
+	W.forceMove(src)

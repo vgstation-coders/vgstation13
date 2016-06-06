@@ -175,25 +175,24 @@
 	switch(slot)
 		if(slot_back)
 			src.back = W
-			W.equipped(src, slot)
 			update_inv_back(redraw_mob)
 		if(slot_wear_mask)
 			src.wear_mask = W
-			W.equipped(src, slot)
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
 			src.handcuffed = W
 			update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
 			src.legcuffed = W
-			W.equipped(src, slot)
 			update_inv_legcuffed(redraw_mob)
 		if(slot_in_backpack)
 			W.loc = src.back
 		else
-			to_chat(usr, "<span class='warning'>You are trying to eqip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
+			to_chat(usr, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
 			return
 
 	W.layer = 20
+	W.equipped(src, slot)
+	W.forceMove(src)
 
 	return

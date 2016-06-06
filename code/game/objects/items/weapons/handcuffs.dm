@@ -30,7 +30,7 @@
 		return
 
 	if((M_CLUMSY in user.mutations) && prob(50))
-		to_chat(usr, "<span class='warning'>Uh ... how do those things work?!</span>")
+		to_chat(usr, "<span class='warning'>Uh... how do these things work?!</span>")
 		handcuffs_apply(M, user, TRUE)
 		return
 
@@ -48,57 +48,45 @@
 
 	handcuffs_apply(M, user)
 
-//Our inventory procs should be able to handle the following, but our inventory code is hot spaghetti bologni, so here we go
+//Our inventory procs should be able to handle the following, but our inventory code is hot spaghetti bologni, so here we go //There's no real reason for this to be a separate proc now but whatever
 /obj/item/weapon/handcuffs/proc/handcuffs_apply(var/mob/living/carbon/C, var/mob/user, var/clumsy = FALSE)
 	if(!istype(C)) //Sanity doesn't hurt, right ?
 		return FALSE
 
 	if(ishuman(C))
-		var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human()
-		O.source = user
-		O.target = C
-		O.t_loc = C.loc
-		O.item = user.get_active_hand()
-		O.s_loc = user.loc
-		O.place = "handcuff"
-		C.requests += O
-		spawn()
-			if(istype(src, /obj/item/weapon/handcuffs/cable))
-				feedback_add_details("handcuffs", "C")
-			else
-				feedback_add_details("handcuffs", "H")
-			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
-			O.process()
+		var/mob/living/carbon/human/H = C
+		if (!H.has_organ_for_slot(slot_handcuffed))
+			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
+			return
 
-	else
-		var/obj/effect/equip_e/monkey/O = new /obj/effect/equip_e/monkey()
-		O.source = user
-		O.target = C
-		O.item = user.get_active_hand()
-		O.s_loc = user.loc
-		O.t_loc = C.loc
-		O.place = "handcuff"
-		C.requests += O
-		spawn()
-			playsound(get_turf(src), cuffing_sound, 30, 1, -2)
-			O.process()
+	playsound(get_turf(src), cuffing_sound, 30, 1, -2)
+	user.visible_message("<span class='danger'>[user] is trying to handcuff \the [C]!</span>",
+						 "<span class='danger'>You try to handcuff \the [C]!</span>")
+
+	if(do_after(user, C, 3 SECONDS))
+		//HITLERS: Logging
+		if(istype(src, /obj/item/weapon/handcuffs/cable)) //HITLERS: what is this
+			feedback_add_details("handcuffs", "C")
+		else
+			feedback_add_details("handcuffs", "H")
+
+		user.visible_message("<span class='danger'>\The [user] has put \the [src] on \the [C]!</span>")
+
+		var/obj/item/weapon/handcuffs/cuffs = src
+		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
+			cuffs = new(get_turf(user))
+		else
+			user.drop_from_inventory(cuffs)
+		cuffs.loc = C
+		C.handcuffed = cuffs
+		C.update_inv_handcuffed()
+
+/obj/item/weapon/handcuffs/cyborg
+//This space intentionally left blank
 
 /obj/item/weapon/handcuffs/proc/handcuffs_remove(var/mob/living/carbon/C)
 	C.handcuffed = null
 	C.update_inv_handcuffed()
-
-/obj/item/weapon/handcuffs/cyborg/attack(var/mob/living/carbon/M, var/mob/living/user, var/def_zone)
-	if (!istype(M) || M.handcuffed)
-		return FALSE
-
-	playsound(get_turf(src), cuffing_sound, 30, 1, -2)
-	user.visible_message("<span class='danger'>[user] is trying to handcuff \the [M]!</span>",
-						 "<span class='danger'>You try to handcuff \the [M]!</span>")
-	if(do_after(user, M, 30))
-		M.handcuffed = new/obj/item/weapon/handcuffs(M)
-		M.update_inv_handcuffed()
-
-	return TRUE
 
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate

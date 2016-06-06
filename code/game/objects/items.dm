@@ -288,14 +288,16 @@
 	if(!M) return 0
 
 	if(wielded)
-		if(flags & MUSTTWOHAND)
-			M.show_message("\The [src] is too cumbersome to carry in anything other than your hands.")
-		else
-			M.show_message("You have to unwield \the [wielded.wielding] first.")
+		if(!disable_warning)
+			if(flags & MUSTTWOHAND)
+				M.show_message("\The [src] is too cumbersome to carry in anything other than your hands.")
+			else
+				M.show_message("You have to unwield \the [wielded.wielding] first.")
 		return 0
 
 	if(cant_drop > 0)
-		M << "<span class='danger'>It's stuck to your hands!</span>"
+		if(!disable_warning)
+			to_chat(M, "<span class='danger'>It's stuck to your hands!</span>")
 		return 0
 
 	if(ishuman(M))

@@ -340,6 +340,18 @@
 	equipped -= list(get_active_hand(), get_inactive_hand())
 	return equipped
 
+//inventory slots which would be hidden by other clothing items. currently only used for humans because fuck you
+/mob/proc/check_obscured_slots()
+	return null
+
+//currently only used for humans because fuck you
+/mob/proc/has_organ(name)
+	return TRUE
+
+//currently only used for humans because fuck you
+/mob/proc/has_organ_for_slot(slot)
+	return TRUE
+
 /mob/living/carbon/human/proc/equip_if_possible(obj/item/W, slot, act_on_fail = EQUIP_FAILACTION_DELETE) // since byond doesn't seem to have pointers, this seems like the best way to do this :/
 	//warning: icky code
 	var/equipped = 0

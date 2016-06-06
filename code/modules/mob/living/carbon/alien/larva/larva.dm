@@ -191,19 +191,25 @@
 				help_shake_act(M)
 			else
 				if(M.health >= -75.0)
-					if ((M.head && M.head.flags & 4) || (M.wear_mask && !( M.wear_mask.flags & 32 )) )
+					if ((M.head && M.head.flags & 4) || (M.wear_mask && !( M.wear_mask.flags & 32 )) ) //Why can we even give CPR to an alien larva?
 						to_chat(M, "<span class='notice'>Remove that mask!</span>")
 						return
-					var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human()
-					O.source = M
-					O.target = src
-					O.s_loc = M.loc
-					O.t_loc = loc
-					O.place = "CPR"
-					requests += O
-					spawn(0)
-						O.process()
-						return
+
+					if (!cpr_time)
+						return 0
+
+					cpr_time = 0
+					spawn(30)
+						cpr_time = 1
+
+					M.visible_message("<span class='danger'>\The [M] is trying perform CPR on \the [src]!</span>")
+
+					if(do_after(M, src, 3 SECONDS))
+						adjustOxyLoss(-(min(getOxyLoss(), 7)))
+						updatehealth()
+						M.visible_message("<span class='danger'>\The [M] performs CPR on \the [src]!</span>")
+						to_chat(src, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
+						to_chat(M, "<span class='warning'>Repeat at least every 7 seconds.</span>")
 
 		if(I_GRAB)
 			if(M == src)

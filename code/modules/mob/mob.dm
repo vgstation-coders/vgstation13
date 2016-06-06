@@ -507,7 +507,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 			return 1
 	return 0
 
-//This is a SAFE proc. Use this instead of equip_to_splot()!
+//This is a SAFE proc. Use this instead of equip_to_slot()!
 //set del_on_fail to have it delete W if it fails to equip
 //set disable_warning to disable the 'you are unable to equip that' warning.
 //unset redraw_mob to prevent the mob from being redrawn at the end.
@@ -990,7 +990,7 @@ var/list/slot_equipment_priority = list( \
 	if(isVentCrawling())
 		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
 		return
-	
+
 	var/obj/item/W = get_held_item_by_index(active_hand)
 	if(W)
 		W.attack_self(src)
@@ -1543,6 +1543,8 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0
 
+/mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
+	return 0
 
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
