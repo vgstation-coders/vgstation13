@@ -22,7 +22,12 @@ namespace DecTalk
         {
             lock (storedStreams)
             {
-                return storedStreams[guid];
+                Stream returned;
+                if (storedStreams.TryGetValue(guid, out returned))
+                {
+                    return returned;
+                }
+                return null;
             }
         }
 
@@ -133,16 +138,19 @@ namespace DecTalk
                     Guid requested;
                     if (Guid.TryParse(context.Request.Url.Segments.Last(), out requested))
                     {
-                        using (Stream stream = GetStream(requested))
-                        {
-                            Console.WriteLine("Sent file to client");
-                            System.IO.Stream output = context.Response.OutputStream;
-                            context.Response.ContentType = "audio/mpeg";
-                            await stream.CopyToAsync(output);
-                            output.Close();
-                        }
+                        Stream stream = GetStream(requested);
+                        if(stream != null) {
+                            using (stream)
+                            {
+                                Console.WriteLine("Sent file to client");
+                                System.IO.Stream output = context.Response.OutputStream;
+                                context.Response.ContentType = "audio/mpeg";
+                                await stream.CopyToAsync(output);
+                                output.Close();
+                            }
 
-                        RemoveStream(requested);
+                            RemoveStream(requested);
+                        }
                     }
                 }
                 catch (FileNotFoundException e)
