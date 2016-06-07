@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using NAudio.Wave;
 using NAudio.Lame;
+using System.Configuration;
 
 namespace DecTalk
 {
@@ -14,11 +15,16 @@ namespace DecTalk
         {
             HttpListener listener = null;
             var path = "./temp.mp3";
+            var server = ConfigurationManager.AppSettings["server"];
+            var port = ConfigurationManager.AppSettings["port"];
+            string entirePath = null;
 
+            if (port == "0") entirePath = "http://" + server + "/";
+            else entirePath = "http://" + server + ":" + port + "/";
 
             try {
                 listener = new HttpListener();
-                listener.Prefixes.Add("http://localhost:1203/");
+                listener.Prefixes.Add(entirePath);
                 listener.Start();
                 while (true)
                 {
@@ -36,7 +42,7 @@ namespace DecTalk
                         WaveToMP3("temp.wav", "temp.mp3");
 
 
-                        string filePath = "http://localhost:1203/temp.mp3";
+                        string filePath = entirePath + "temp.mp3";
                         byte[] getBytes = Encoding.ASCII.GetBytes(filePath);
                         System.IO.Stream output = context.Response.OutputStream;
                         context.Response.ContentType = "text/plain";
