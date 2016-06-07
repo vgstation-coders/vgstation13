@@ -66,6 +66,8 @@
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 
+	var/image/viewblock
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -76,6 +78,7 @@
 
 /turf/New()
 	..()
+	viewblock = image('icons/turf/overlays.dmi',src,"black_box",10)
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src

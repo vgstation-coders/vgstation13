@@ -209,6 +209,8 @@
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
 
+	SeenTurfs = list()
+
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -432,3 +434,33 @@
 	if(!(colour_to.len))
 		colour_to = default_colour_matrix
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
+
+/client/proc/UpdateViewFilter()		//Needed for one-way windows to work.
+	var/Image						//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
+	var/turf/Oneway
+	var/obj/structure/window/W
+	var/list/newimages = list()
+	var/list/v = view(world.view,mob)
+	var/list/onewaylist = list()
+	var/inverse_dir
+
+	for(W in v)
+		if(W.one_way)
+			inverse_dir = turn(W.dir, 180)
+			if(inverse_dir & get_dir(W,mob))
+				Oneway = get_turf(W)
+				Oneway.opacity = 1
+				onewaylist += Oneway
+
+	if(onewaylist.len)
+		var/list/List = v - view(world.view,mob)
+		for(var/turf/T in List)
+			src << T.viewblock
+			newimages += T.viewblock
+
+		for(var/turf/I in onewaylist)
+			I.opacity = 0
+
+	for(Image in ViewFilter-newimages)
+		images -= Image
+	ViewFilter = newimages
