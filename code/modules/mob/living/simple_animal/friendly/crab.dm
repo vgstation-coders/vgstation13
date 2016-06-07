@@ -43,15 +43,16 @@
 
 //LOOK AT THIS - ..()??
 /mob/living/simple_animal/crab/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == DEAD)
-		return
 	if(iswirecutter(O))
+		if(stat == DEAD)
+			return ..()
 		if(prob(50))
 			to_chat(user, "<span class='danger'>This kills the crab.</span>")
 			health -= 20
 			Die()
 		else
 			to_chat(user, "<span class='danger'>You can't help but feel you've just done something terribly wrong.</span>")
+			add_gamelogs(user, "attacked a crab with wirecutters, and made it angry", admin = TRUE, tp_link = TRUE, span_class = "danger")
 			GetMad()
 	else
 		return ..()
