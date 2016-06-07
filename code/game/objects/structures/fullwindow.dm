@@ -63,6 +63,9 @@
 	set category = "Object"
 	set src in oview(1)
 
+	if(!is_living_and_able(usr))
+		return 0
+
 	if(anchored)
 		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
 		return 0
