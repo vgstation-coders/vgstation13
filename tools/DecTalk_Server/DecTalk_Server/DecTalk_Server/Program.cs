@@ -22,7 +22,12 @@ namespace DecTalk
         {
             lock (storedStreams)
             {
-                return storedStreams[guid];
+                Stream returned;
+                if (storedStreams.TryGetValue(guid, out returned))
+                {
+                    return returned;
+                }
+                return null;
             }
         }
 
@@ -56,25 +61,23 @@ namespace DecTalk
             listener = new HttpListener();
             listener.Prefixes.Add(entirePath);
             listener.Start();
-            Task.Run(async () =>
+           
+            try
             {
-                try
+                while (true)
                 {
-                    while (true)
-                    {
-                        Console.WriteLine("Awaiting Connection...");
-                        HttpListenerContext context = await listener.GetContextAsync();
-                        Task.Run(async () => await ProcessRequest(context));
-                    }
+                    Console.WriteLine("Awaiting Connection...");
+                    HttpListenerContext context = listener.GetContext();
+                    Task.Run(async () => await ProcessRequest(context));
                 }
-                catch (HttpListenerException e)
-                {
-                    Console.WriteLine("Error Code: " + e.ErrorCode);
-                    Console.WriteLine(e.Message);
-                    Console.ReadLine();
+            }
+            catch (HttpListenerException e)
+            {
+                Console.WriteLine("Error Code: " + e.ErrorCode);
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
 
-                }
-            });
+            }
         }
 
         public static async Task<Stream> WaveToMP3(Stream wavStream, int bitRate = 128)
@@ -135,16 +138,19 @@ namespace DecTalk
                     Guid requested;
                     if (Guid.TryParse(context.Request.Url.Segments.Last(), out requested))
                     {
-                        using (Stream stream = GetStream(requested))
-                        {
-                            Console.WriteLine("Sent file to client");
-                            System.IO.Stream output = context.Response.OutputStream;
-                            context.Response.ContentType = "audio/mpeg";
-                            await stream.CopyToAsync(output);
-                            output.Close();
-                        }
+                        Stream stream = GetStream(requested);
+                        if(stream != null) {
+                            using (stream)
+                            {
+                                Console.WriteLine("Sent file to client");
+                                System.IO.Stream output = context.Response.OutputStream;
+                                context.Response.ContentType = "audio/mpeg";
+                                await stream.CopyToAsync(output);
+                                output.Close();
+                            }
 
-                        RemoveStream(requested);
+                            RemoveStream(requested);
+                        }
                     }
                 }
                 catch (FileNotFoundException e)
