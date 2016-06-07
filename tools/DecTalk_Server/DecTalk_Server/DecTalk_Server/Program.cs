@@ -56,25 +56,23 @@ namespace DecTalk
             listener = new HttpListener();
             listener.Prefixes.Add(entirePath);
             listener.Start();
-            Task.Run(async () =>
+           
+            try
             {
-                try
+                while (true)
                 {
-                    while (true)
-                    {
-                        Console.WriteLine("Awaiting Connection...");
-                        HttpListenerContext context = await listener.GetContextAsync();
-                        Task.Run(async () => await ProcessRequest(context));
-                    }
+                    Console.WriteLine("Awaiting Connection...");
+                    HttpListenerContext context = listener.GetContext();
+                    Task.Run(async () => await ProcessRequest(context));
                 }
-                catch (HttpListenerException e)
-                {
-                    Console.WriteLine("Error Code: " + e.ErrorCode);
-                    Console.WriteLine(e.Message);
-                    Console.ReadLine();
+            }
+            catch (HttpListenerException e)
+            {
+                Console.WriteLine("Error Code: " + e.ErrorCode);
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
 
-                }
-            });
+            }
         }
 
         public static async Task<Stream> WaveToMP3(Stream wavStream, int bitRate = 128)
