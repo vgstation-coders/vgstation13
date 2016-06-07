@@ -1219,6 +1219,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Special Verbs"
 	set desc = "Sends a message as voice to all players"
 	set popup_menu = 0
+	
+	if(!check_rights(R_DEBUG)) return 0
 
 	var/msg
 	if (args && args.len > 0)
