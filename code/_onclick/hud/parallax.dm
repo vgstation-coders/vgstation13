@@ -152,10 +152,10 @@ var/list/parallax_on_clients = list()
 
 		if(C.prefs.space_dust)
 			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
-			C.parallax_dustmaster.screen_loc = "WEST,SOUTH to EAST,NORTH"
+			C.parallax_dustmaster.screen_loc = "1,1"
 		else
 			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
-			C.parallax_master.screen_loc = "WEST,SOUTH to EAST,NORTH"
+			C.parallax_master.screen_loc = "1,1"
 
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0

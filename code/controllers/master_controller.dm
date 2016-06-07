@@ -194,13 +194,15 @@ datum/controller/game_controller/proc/cachespaceparallax()
 	for(var/i in 0 to 8)
 		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
 
-		var/icon/temp = icon('icons/turf/space.dmi', "blank")
-		temp.Crop(1,1,480,480)
+		var/list/L = list()
 		for(var/j in 1 to 225)
-			var/icon/I = icon('icons/turf/space_parallax4.dmi',plane1[j+i*225])
-			temp.Blend(I, ICON_OVERLAY, x = pixel_x[j], y = pixel_y[j])
+			var/image/I = image('icons/turf/space_parallax4.dmi',plane1[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
 
-		parallax_layer.icon = temp
+		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 0
 		parallax_layer.plane = PLANE_SPACE_PARALLAX
 		calibrate_parallax(parallax_layer,i+1)
@@ -209,13 +211,15 @@ datum/controller/game_controller/proc/cachespaceparallax()
 	for(var/i in 0 to 8)
 		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
 
-		var/icon/temp = icon('icons/turf/space.dmi', "blank")
-		temp.Crop(1,1,480,480)
+		var/list/L = list()
 		for(var/j in 1 to 225)
-			var/icon/I = icon('icons/turf/space_parallax3.dmi', plane2[j+i*225])
-			temp.Blend(I, ICON_OVERLAY, x = pixel_x[j], y = pixel_y[j])
+			var/image/I = image('icons/turf/space_parallax3.dmi',plane2[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
 
-		parallax_layer.icon = temp
+		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 1
 		parallax_layer.plane = PLANE_SPACE_PARALLAX
 		calibrate_parallax(parallax_layer,i+1)
@@ -223,14 +227,16 @@ datum/controller/game_controller/proc/cachespaceparallax()
 
 	for(var/i in 0 to 8)
 		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-
-		var/icon/temp = icon('icons/turf/space.dmi', "blank")
-		temp.Crop(1,1,480,480)
+		var/list/L = list()
 		for(var/j in 1 to 225)
-			var/icon/I = icon('icons/turf/space_parallax2.dmi', plane3[j+i*225])
-			temp.Blend(I, ICON_OVERLAY, x = pixel_x[j], y = pixel_y[j])
+			var/image/I = image('icons/turf/space_parallax2.dmi',plane1[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
 
-		parallax_layer.icon = temp
+		parallax_layer.overlays = L
+		parallax_layer.appearance_flags = KEEP_TOGETHER
 		parallax_layer.parallax_speed = 2
 		parallax_layer.plane = PLANE_SPACE_PARALLAX
 		calibrate_parallax(parallax_layer,i+1)
@@ -239,7 +245,11 @@ datum/controller/game_controller/proc/cachespaceparallax()
 	for(var/i = 1 to space_parallax_0.len)
 		var/obj/screen/parallax/oldparallax = space_parallax_0[i]
 		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-		parallax_layer.appearance = oldparallax.appearance
+		var/list/newoverlays = list()
+		for(var/image/I in oldparallax.overlays)
+			I.plane = PLANE_SPACE_PARALLAX_DUST
+			newoverlays += I
+		parallax_layer.overlays = newoverlays
 		parallax_layer.base_offset_x = oldparallax.base_offset_x
 		parallax_layer.base_offset_y = oldparallax.base_offset_y
 		parallax_layer.parallax_speed = 0
@@ -249,7 +259,11 @@ datum/controller/game_controller/proc/cachespaceparallax()
 	for(var/i = 1 to space_parallax_1.len)
 		var/obj/screen/parallax/oldparallax = space_parallax_1[i]
 		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-		parallax_layer.appearance = oldparallax.appearance
+		var/list/newoverlays = list()
+		for(var/image/I in oldparallax.overlays)
+			I.plane = PLANE_SPACE_PARALLAX_DUST
+			newoverlays += I
+		parallax_layer.overlays = newoverlays
 		parallax_layer.base_offset_x = oldparallax.base_offset_x
 		parallax_layer.base_offset_y = oldparallax.base_offset_y
 		parallax_layer.parallax_speed = 1
@@ -259,7 +273,11 @@ datum/controller/game_controller/proc/cachespaceparallax()
 	for(var/i = 1 to space_parallax_2.len)
 		var/obj/screen/parallax/oldparallax = space_parallax_2[i]
 		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-		parallax_layer.appearance = oldparallax.appearance
+		var/list/newoverlays = list()
+		for(var/image/I in oldparallax.overlays)
+			I.plane = PLANE_SPACE_PARALLAX_DUST
+			newoverlays += I
+		parallax_layer.overlays = newoverlays
 		parallax_layer.base_offset_x = oldparallax.base_offset_x
 		parallax_layer.base_offset_y = oldparallax.base_offset_y
 		parallax_layer.parallax_speed = 2
