@@ -22,9 +22,7 @@ var/list/parallax_on_clients = list()
 
 /obj/plane_master/parallax_master
 	plane = PLANE_SPACE_PARALLAX
-
-/obj/plane_master/parallax_dustmaster
-	plane = PLANE_SPACE_PARALLAX_DUST
+	screen_loc = "1,1"
 
 /obj/screen/parallax_canvas
 	mouse_opacity = 0
@@ -75,13 +73,10 @@ var/list/parallax_on_clients = list()
 	else
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
-		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
-			C.screen -= bgobj
 		parallax_on_clients -= C
 
 		C.screen -= C.parallax_master
 		C.screen -= C.parallax_canvas
-		C.screen -= C.parallax_dustmaster
 		return 0
 
 	if(!C.parallax_master)
@@ -94,14 +89,10 @@ var/list/parallax_on_clients = list()
 		C.parallax_canvas.icon = temp
 		C.parallax_canvas.screen_loc = "WEST,SOUTH"
 
-	if(!C.parallax_dustmaster)
-		C.parallax_dustmaster = getFromPool(/obj/plane_master/parallax_dustmaster)
-
 	C.parallax_canvas.color = space_color
 
 	C.screen |= C.parallax_master
 	C.screen |= C.parallax_canvas
-	C.screen |= C.parallax_dustmaster
 
 	return 1
 
@@ -111,17 +102,6 @@ var/list/parallax_on_clients = list()
 
 	if(!C.parallax.len)
 		var/list/wantDatParallax = list()
-		wantDatParallax |= space_parallax_dust_0 + space_parallax_dust_1 + space_parallax_dust_2
-		for(var/obj/screen/parallax/bgobj in wantDatParallax)
-			var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
-			parallax_layer.appearance = bgobj.appearance
-			parallax_layer.base_offset_x = bgobj.base_offset_x
-			parallax_layer.base_offset_y = bgobj.base_offset_y
-			parallax_layer.parallax_speed = bgobj.parallax_speed
-			C.parallax += parallax_layer
-
-	if(!C.parallax_nodust.len)
-		var/list/wantDatParallax = list()
 		wantDatParallax |= space_parallax_0 + space_parallax_1 + space_parallax_2
 		for(var/obj/screen/parallax/bgobj in wantDatParallax)
 			var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
@@ -129,7 +109,7 @@ var/list/parallax_on_clients = list()
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
 			parallax_layer.parallax_speed = bgobj.parallax_speed
-			C.parallax_nodust += parallax_layer
+			C.parallax += parallax_layer
 
 	var/parallax_loaded = 0
 	for(var/obj/screen/S in C.screen)
@@ -140,22 +120,19 @@ var/list/parallax_on_clients = list()
 	if(forcerecalibrate || !parallax_loaded)
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
-		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
-			C.screen -= bgobj
+
+		for(var/obj/screen/parallax/bgobj in C.parallax)
+			C.screen += bgobj
 
 		if(C.prefs.space_dust)
-			for(var/obj/screen/parallax/bgobj in C.parallax)
-				C.screen += bgobj
+			C.parallax_master.color = list(
+			1,0,0,0,
+			0,1,0,0,
+			0,0,1,0,
+			0,0,0,1,
+			0,0,0,1)
 		else
-			for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
-				C.screen += bgobj
-
-		if(C.prefs.space_dust)
-			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX_DUST
-			C.parallax_dustmaster.screen_loc = "1,1"
-		else
-			C.parallax_canvas.plane = PLANE_SPACE_PARALLAX
-			C.parallax_master.screen_loc = "1,1"
+			C.parallax_master.color = null
 
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
@@ -175,44 +152,24 @@ var/list/parallax_on_clients = list()
 
 	C.previous_turf = posobj
 
-	if(C.prefs.space_dust)
-		for(var/obj/screen/parallax/bgobj in C.parallax)
-			if(bgobj.parallax_speed)//only the middle and front layers actually move
-				var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
-				var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
+	for(var/obj/screen/parallax/bgobj in C.parallax)
+		if(bgobj.parallax_speed)//only the middle and front layers actually move
+			var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
+			var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
 
-				while(accumulated_offset_x > 720)
-					accumulated_offset_x -= 1440
-				while(accumulated_offset_x < -720)
-					accumulated_offset_x += 1440
+			while(accumulated_offset_x > 720)
+				accumulated_offset_x -= 1440
+			while(accumulated_offset_x < -720)
+				accumulated_offset_x += 1440
 
-				while(accumulated_offset_y > 720)
-					accumulated_offset_y -= 1440
-				while(accumulated_offset_y < -720)
-					accumulated_offset_y += 1440
+			while(accumulated_offset_y > 720)
+				accumulated_offset_y -= 1440
+			while(accumulated_offset_y < -720)
+				accumulated_offset_y += 1440
 
-				bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
-			else
-				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
-	else
-		for(var/obj/screen/parallax/bgobj in C.parallax_nodust)
-			if(bgobj.parallax_speed)//only the middle and front layers actually move
-				var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
-				var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
-
-				while(accumulated_offset_x > 720)
-					accumulated_offset_x -= 1440
-				while(accumulated_offset_x < -720)
-					accumulated_offset_x += 1440
-
-				while(accumulated_offset_y > 720)
-					accumulated_offset_y -= 1440
-				while(accumulated_offset_y < -720)
-					accumulated_offset_y += 1440
-
-				bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
-			else
-				bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
+			bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
+		else
+			bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
 
 /proc/calibrate_parallax(var/obj/screen/parallax/p_layer,var/i)
 	if(!p_layer || !i) return

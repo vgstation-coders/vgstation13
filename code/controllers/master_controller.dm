@@ -236,53 +236,10 @@ datum/controller/game_controller/proc/cachespaceparallax()
 			L += I
 
 		parallax_layer.overlays = L
-		parallax_layer.appearance_flags = KEEP_TOGETHER
 		parallax_layer.parallax_speed = 2
 		parallax_layer.plane = PLANE_SPACE_PARALLAX
 		calibrate_parallax(parallax_layer,i+1)
 		space_parallax_2[i+1] = parallax_layer
-
-	for(var/i = 1 to space_parallax_0.len)
-		var/obj/screen/parallax/oldparallax = space_parallax_0[i]
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-		var/list/newoverlays = list()
-		for(var/image/I in oldparallax.overlays)
-			I.plane = PLANE_SPACE_PARALLAX_DUST
-			newoverlays += I
-		parallax_layer.overlays = newoverlays
-		parallax_layer.base_offset_x = oldparallax.base_offset_x
-		parallax_layer.base_offset_y = oldparallax.base_offset_y
-		parallax_layer.parallax_speed = 0
-		parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
-		space_parallax_dust_0[i] = parallax_layer
-
-	for(var/i = 1 to space_parallax_1.len)
-		var/obj/screen/parallax/oldparallax = space_parallax_1[i]
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-		var/list/newoverlays = list()
-		for(var/image/I in oldparallax.overlays)
-			I.plane = PLANE_SPACE_PARALLAX_DUST
-			newoverlays += I
-		parallax_layer.overlays = newoverlays
-		parallax_layer.base_offset_x = oldparallax.base_offset_x
-		parallax_layer.base_offset_y = oldparallax.base_offset_y
-		parallax_layer.parallax_speed = 1
-		parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
-		space_parallax_dust_1[i] = parallax_layer
-
-	for(var/i = 1 to space_parallax_2.len)
-		var/obj/screen/parallax/oldparallax = space_parallax_2[i]
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-		var/list/newoverlays = list()
-		for(var/image/I in oldparallax.overlays)
-			I.plane = PLANE_SPACE_PARALLAX_DUST
-			newoverlays += I
-		parallax_layer.overlays = newoverlays
-		parallax_layer.base_offset_x = oldparallax.base_offset_x
-		parallax_layer.base_offset_y = oldparallax.base_offset_y
-		parallax_layer.parallax_speed = 2
-		parallax_layer.plane = PLANE_SPACE_PARALLAX_DUST
-		space_parallax_dust_2[i] = parallax_layer
 
 	parallax_initialized = 1
 

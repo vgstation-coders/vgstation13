@@ -16,8 +16,18 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+<<<<<<< fe7f944d7f71bd67a81b31c46663a4b42c8c68ae
 
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+=======
+	icon_state = "[((x + y) ^ ~(x * y) + z) % 26]"
+	var/image/I = image('icons/turf/space_parallax1.dmi',"[icon_state]")
+	I.plane = PLANE_SPACE_PARALLAX
+	I.alpha = 0
+	I.layer = EFFECTS_LAYER
+	I.blend_mode = BLEND_ADD
+	overlays += I
+>>>>>>> 0ef125c5eeb946bcb08d67ee3030d30bca6e24a6
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

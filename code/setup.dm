@@ -1470,6 +1470,13 @@ var/proccalls = 1
 
 #define HIGHLANDER "highlander"
 
+<<<<<<< fe7f944d7f71bd67a81b31c46663a4b42c8c68ae
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
+=======
+//New planes stuff, currently only used by Space Parallax
+#define PLANE_BASE 0
+#define PLANE_SPACE_PARALLAX -5
+#define PLANE_SPACE_BACKGROUND -10
+>>>>>>> 0ef125c5eeb946bcb08d67ee3030d30bca6e24a6
