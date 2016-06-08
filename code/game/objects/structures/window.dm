@@ -77,7 +77,9 @@
 		if(M) //Did someone pass a mob ? If so, perform a pressure check
 			var/pdiff = performWallPressureCheck(src.loc)
 			if(pdiff > 0)
-				investigation_log(I_ATMOS, "with a pdiff of [pdiff] destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
+					message_admins("\The [src] with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		Destroy(brokenup = 1)
 	else
 		if(sound)
