@@ -60,13 +60,14 @@ namespace DecTalk
 
             listener = new HttpListener();
             listener.Prefixes.Add(entirePath);
-            listener.Start();
            
             try
             {
+                listener.Start();
+                Console.WriteLine("Server Started");
                 while (true)
                 {
-                    Console.WriteLine("Awaiting Connection...");
+                    //Console.WriteLine("Awaiting Connection...");
                     HttpListenerContext context = listener.GetContext();
                     Task.Run(async () => await ProcessRequest(context));
                 }
@@ -82,15 +83,21 @@ namespace DecTalk
 
         public static async Task<Stream> WaveToMP3(Stream wavStream, int bitRate = 128)
         {
+
+
             Stream outStream = new MemoryStream();
-            using (var reader = new RawSourceWaveStream(wavStream, new WaveFormat()))
+            wavStream.Seek(0, SeekOrigin.Begin);
+            try
             {
-                using (var writer = new LameMP3FileWriter(outStream, new Mp3WaveFormat(11025, 1, 16, bitRate), bitRate))
-                {
-                    await reader.CopyToAsync(writer);
-                    return outStream;
-                }
+                RawSourceWaveStream rawReader = new RawSourceWaveStream(wavStream, new WaveFormat(11025, 1));
+                var writer = new LameMP3FileWriter(outStream, rawReader.WaveFormat, bitRate);
+
+                await rawReader.CopyToAsync(writer);
+            } catch (Exception e)
+            {
+                Console.WriteLine("Exception:" + e.Message);
             }
+            return outStream;
         }
 
         public static async Task ProcessRequest(HttpListenerContext context)
@@ -98,14 +105,21 @@ namespace DecTalk
             if (!String.IsNullOrEmpty(context.Request.QueryString["tts"]))
             {
                 string msg = Convert.ToString(context.Request.QueryString["tts"]);
-                Console.WriteLine(msg);
+                Console.WriteLine("Incoming DecTalk: " + msg);
 
                 Stream voiceStream = new MemoryStream();
 
-                using (var tts = new FonixTalkEngine(LanguageCode.EnglishUS))
+                FonixTalkEngine tts = new FonixTalkEngine(LanguageCode.EnglishUS);
+                try
                 {
                     tts.SpeakToStream(voiceStream, msg);
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Exception : " + e.Message);
+                }
+
+
 
                 //We've written, so we have to go back to the top
                 voiceStream.Seek(0, SeekOrigin.Begin);
@@ -120,7 +134,6 @@ namespace DecTalk
                 Guid fileGuid = Guid.NewGuid();
 
                 AddStream(fileGuid, voiceStream);
-
                 string streampath = entirePath + fileGuid.ToString();
 
                 byte[] getBytes = Encoding.ASCII.GetBytes(streampath);
@@ -140,22 +153,25 @@ namespace DecTalk
                     {
                         Stream stream = GetStream(requested);
                         if(stream != null) {
-                            using (stream)
+                            try
                             {
-                                Console.WriteLine("Sent file to client");
+                                //Console.WriteLine("Requested : " + requested);
+                                //Console.WriteLine("Stream Length: " + stream.Length);
                                 System.IO.Stream output = context.Response.OutputStream;
                                 context.Response.ContentType = "audio/mpeg";
                                 await stream.CopyToAsync(output);
                                 output.Close();
+                                stream.Seek(0, SeekOrigin.Begin);
+                            } catch (Exception e)
+                            {
+                                Console.WriteLine("Exception: " + e.Message);
                             }
-
-                            RemoveStream(requested);
                         }
                     }
                 }
-                catch (FileNotFoundException e)
+                catch (KeyNotFoundException e)
                 {
-                    Console.WriteLine("File was not found with: " + context.Request.Url.LocalPath);
+                    Console.WriteLine("Key Not Located: " + context.Request.Url.LocalPath);
 
                 }
             }
