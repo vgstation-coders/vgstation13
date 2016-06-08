@@ -219,7 +219,10 @@
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna=1)
 	occupant = H
 
-	src.icon_state = "pod_1"
+	if(!connected.emagged)
+		src.icon_state = "pod_1"
+	else
+		src.icon_state = "pod_e"
 
 	connected.update_icon()
 
