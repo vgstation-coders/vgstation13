@@ -4,11 +4,25 @@
 
 var/list/parallax_on_clients = list()
 
-/obj/plane_master
+/obj/screen/parallax
+	var/base_offset_x = 0
+	var/base_offset_y = 0
+	mouse_opacity = 1
+	icon = 'icons/turf/space.dmi'
+	icon_state = "blank"
+	name = "space parallax"
+	blend_mode = BLEND_ADD
+	layer = AREA_LAYER
+	plane = PLANE_SPACE_PARALLAX//changing this var doesn't actually change the plane of its overlays
+	globalscreen = 1
+	var/parallax_speed = 0
+
+/obj/screen/plane_master
 	appearance_flags = PLANE_MASTER
 	screen_loc = "1,1"
+	globalscreen = 1
 
-/obj/plane_master/parallax_master
+/obj/screen/plane_master/parallax_master
 	plane = PLANE_SPACE_PARALLAX
 	color = list(
 	1,0,0,0,
@@ -17,19 +31,8 @@ var/list/parallax_on_clients = list()
 	0,0,0,0,
 	0,0,0,1)
 
-/obj/plane_master/parallax_dustmaster
+/obj/screen/plane_master/parallax_dustmaster
 	plane = PLANE_SPACE_DUST
-	blend_mode = BLEND_MULTIPLY
-
-/obj/screen/parallax_canvas
-	mouse_opacity = 0
-	icon = 'icons/turf/space.dmi'
-	icon_state = "white"
-	name = "space parallax"
-	blend_mode = BLEND_ADD
-	layer = AREA_LAYER
-	plane = PLANE_SPACE_PARALLAX
-	globalscreen = 1
 
 /datum/hud/proc/update_parallax()
 	var/client/C = mymob.client
@@ -76,9 +79,9 @@ var/list/parallax_on_clients = list()
 		return 0
 
 	if(!C.parallax_master)
-		C.parallax_master = getFromPool(/obj/plane_master/parallax_master)
+		C.parallax_master = getFromPool(/obj/screen/plane_master/parallax_master)
 	if(!C.parallax_dustmaster)
-		C.parallax_dustmaster = getFromPool(/obj/plane_master/parallax_dustmaster)
+		C.parallax_dustmaster = getFromPool(/obj/screen/plane_master/parallax_dustmaster)
 	return 1
 
 /datum/hud/proc/update_parallax2(forcerecalibrate = 0)
@@ -86,9 +89,7 @@ var/list/parallax_on_clients = list()
 	//DO WE HAVE TO REPLACE ALL THE LAYERS
 
 	if(!C.parallax.len)
-		var/list/wantDatParallax = list()
-		wantDatParallax |= space_parallax_0 + space_parallax_1 + space_parallax_2
-		for(var/obj/screen/parallax/bgobj in wantDatParallax)
+		for(var/obj/screen/parallax/bgobj in parallax_icon)
 			var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 			parallax_layer.appearance = bgobj.appearance
 			parallax_layer.base_offset_x = bgobj.base_offset_x
@@ -104,10 +105,10 @@ var/list/parallax_on_clients = list()
 
 	if(forcerecalibrate || !parallax_loaded)
 		for(var/obj/screen/parallax/bgobj in C.parallax)
-			C.screen += bgobj
+			C.screen |= bgobj
 
-		C.screen += C.parallax_master
-		C.screen += C.parallax_dustmaster
+		C.screen |= C.parallax_master
+		C.screen |= C.parallax_dustmaster
 		C.parallax_dustmaster.color = list(0,0,0,0)
 		if(C.prefs.space_dust)
 			C.parallax_dustmaster.color = list(
@@ -154,10 +155,89 @@ var/list/parallax_on_clients = list()
 		else
 			bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
 
+//Parallax generation code below
+
+#define PARALLAX4_ICON_NUMBER 20
+#define PARALLAX3_ICON_NUMBER 14
+#define PARALLAX2_ICON_NUMBER 10
+
+/datum/controller/game_controller/proc/cachespaceparallax()
+	var/list/plane1 = list()
+	var/list/plane2 = list()
+	var/list/plane3 = list()
+	var/list/pixel_x = list()
+	var/list/pixel_y = list()
+	var/index = 1
+	for(var/i = 0 to 224)
+		for(var/j = 1 to 9)
+			plane1 += "[rand(1,26)]"
+			plane2 += "[rand(1,26)]"
+			plane3 += "[rand(1,26)]"
+		pixel_x += 32 * (i%15)
+		pixel_y += 32 * round(i/15)
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+
+		var/list/L = list()
+		for(var/j in 1 to 225)
+//			if(plane1[j+i*225] > PARALLAX4_ICON_NUMBER)
+			var/image/I = image('icons/turf/space_parallax4.dmi',plane1[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
+
+		parallax_layer.overlays = L
+		parallax_layer.parallax_speed = 0
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		parallax_icon[index] = parallax_layer
+		index++
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+
+		var/list/L = list()
+		for(var/j in 1 to 225)
+//			if(plane2[j+i*225] > PARALLAX3_ICON_NUMBER)
+			var/image/I = image('icons/turf/space_parallax3.dmi',plane2[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
+
+		parallax_layer.overlays = L
+		parallax_layer.parallax_speed = 1
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		parallax_icon[index] = parallax_layer
+		index++
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		var/list/L = list()
+		for(var/j in 1 to 225)
+//			if(plane3[j+i*225] > PARALLAX2_ICON_NUMBER)
+			var/image/I = image('icons/turf/space_parallax2.dmi',plane3[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
+
+		parallax_layer.overlays = L
+		parallax_layer.parallax_speed = 2
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		parallax_icon[index] = parallax_layer
+		index++
+
+	parallax_initialized = 1
+
 /proc/calibrate_parallax(var/obj/screen/parallax/p_layer,var/i)
 	if(!p_layer || !i) return
 
-	/*
+	/* Placement of screen objects
 	1	2	3
 	4	5	6
 	7	8	9
@@ -173,68 +253,6 @@ var/list/parallax_on_clients = list()
 		if(7,8,9)
 			p_layer.base_offset_y = -480
 
-/datum/controller/game_controller/proc/cachespaceparallax()
-	var/list/plane1 = list()
-	var/list/plane2 = list()
-	var/list/plane3 = list()
-	var/list/pixel_x = list()
-	var/list/pixel_y = list()
-	for(var/i = 0 to 224)
-		for(var/j = 1 to 9)
-			plane1 += "[rand(26)]"
-			plane2 += "[rand(26)]"
-			plane3 += "[rand(26)]"
-		pixel_x += 32 * (i%15)
-		pixel_y += 32 * round(i/15)
-
-	for(var/i in 0 to 8)
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-
-		var/list/L = list()
-		for(var/j in 1 to 225)
-			var/image/I = image('icons/turf/space_parallax4.dmi',plane1[j+i*225])
-			I.pixel_x = pixel_x[j]
-			I.pixel_y = pixel_y[j]
-			I.plane = PLANE_SPACE_PARALLAX
-			L += I
-
-		parallax_layer.overlays = L
-		parallax_layer.parallax_speed = 0
-		parallax_layer.plane = PLANE_SPACE_PARALLAX
-		calibrate_parallax(parallax_layer,i+1)
-		space_parallax_0[i+1] = parallax_layer
-
-	for(var/i in 0 to 8)
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-
-		var/list/L = list()
-		for(var/j in 1 to 225)
-			var/image/I = image('icons/turf/space_parallax3.dmi',plane2[j+i*225])
-			I.pixel_x = pixel_x[j]
-			I.pixel_y = pixel_y[j]
-			I.plane = PLANE_SPACE_PARALLAX
-			L += I
-
-		parallax_layer.overlays = L
-		parallax_layer.parallax_speed = 1
-		parallax_layer.plane = PLANE_SPACE_PARALLAX
-		calibrate_parallax(parallax_layer,i+1)
-		space_parallax_1[i+1] = parallax_layer
-
-	for(var/i in 0 to 8)
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
-		var/list/L = list()
-		for(var/j in 1 to 225)
-			var/image/I = image('icons/turf/space_parallax2.dmi',plane1[j+i*225])
-			I.pixel_x = pixel_x[j]
-			I.pixel_y = pixel_y[j]
-			I.plane = PLANE_SPACE_PARALLAX
-			L += I
-
-		parallax_layer.overlays = L
-		parallax_layer.parallax_speed = 2
-		parallax_layer.plane = PLANE_SPACE_PARALLAX
-		calibrate_parallax(parallax_layer,i+1)
-		space_parallax_2[i+1] = parallax_layer
-
-	parallax_initialized = 1
+#undef PARALLAX4_ICON_NUMBER
+#undef PARALLAX3_ICON_NUMBER
+#undef PARALLAX2_ICON_NUMBER

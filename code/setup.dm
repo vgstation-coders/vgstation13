@@ -1470,6 +1470,7 @@ var/proccalls = 1
 
 #define HIGHLANDER "highlander"
 
+<<<<<<< cf75bb63b42254bcb64ee7b9329e127a2b41f002
 <<<<<<< fe7f944d7f71bd67a81b31c46663a4b42c8c68ae
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
@@ -1481,3 +1482,5 @@ var/proccalls = 1
 #define PLANE_SPACE_PARALLAX -5
 #define PLANE_SPACE_BACKGROUND -10
 >>>>>>> 0ef125c5eeb946bcb08d67ee3030d30bca6e24a6
+=======
+>>>>>>> e92afc359f6349ce27b49a1761e60284fa80a5fc

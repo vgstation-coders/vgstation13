@@ -74,6 +74,7 @@
 	var/list/parallax_offset = list()
 	var/turf/previous_turf = null
 	var/obj/screen/parallax_canvas/parallax_canvas = null
+<<<<<<< cf75bb63b42254bcb64ee7b9329e127a2b41f002
 	var/obj/plane_master/parallax_master/parallax_master = null
 	var/obj/plane_master/parallax_dustmaster/parallax_dustmaster = null
 <<<<<<< dca6e2d6a2fb2924dabe9e7adb76d43a7a150752
@@ -81,3 +82,7 @@
 >>>>>>> 39562c024c96ce8ffd0a4e68c491d329412136cd
 =======
 >>>>>>> 7721e4616c9fad65ebd7dfb38d890f9684f6526f
+=======
+	var/obj/screen/plane_master/parallax_master/parallax_master = null
+	var/obj/screen/plane_master/parallax_dustmaster/parallax_dustmaster = null
+>>>>>>> e92afc359f6349ce27b49a1761e60284fa80a5fc

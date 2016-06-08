@@ -423,7 +423,11 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 //SPACE PARALLAX
 var/parallax_initialized = 0
 var/space_color = "#050505"
+<<<<<<< cf75bb63b42254bcb64ee7b9329e127a2b41f002
 var/list/space_parallax_0[9]
 var/list/space_parallax_1[9]
 var/list/space_parallax_2[9]
 >>>>>>> 0ef125c5eeb946bcb08d67ee3030d30bca6e24a6
+=======
+var/list/parallax_icon[27]
+>>>>>>> e92afc359f6349ce27b49a1761e60284fa80a5fc
