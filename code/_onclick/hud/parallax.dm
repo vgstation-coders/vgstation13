@@ -115,8 +115,7 @@ var/list/parallax_on_clients = list()
 			1,0,0,0,
 			0,1,0,0,
 			0,0,1,0,
-			0,0,0,0,
-			0,0,0,80/255)
+			0,0,0,1)
 
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
@@ -170,9 +169,9 @@ var/list/parallax_on_clients = list()
 	var/index = 1
 	for(var/i = 0 to 224)
 		for(var/j = 1 to 9)
-			plane1 += "[rand(1,26)]"
-			plane2 += "[rand(1,26)]"
-			plane3 += "[rand(1,26)]"
+			plane1 += rand(1,26)
+			plane2 += rand(1,26)
+			plane3 += rand(1,26)
 		pixel_x += 32 * (i%15)
 		pixel_y += 32 * round(i/15)
 
@@ -181,12 +180,12 @@ var/list/parallax_on_clients = list()
 
 		var/list/L = list()
 		for(var/j in 1 to 225)
-//			if(plane1[j+i*225] > PARALLAX4_ICON_NUMBER)
-			var/image/I = image('icons/turf/space_parallax4.dmi',plane1[j+i*225])
-			I.pixel_x = pixel_x[j]
-			I.pixel_y = pixel_y[j]
-			I.plane = PLANE_SPACE_PARALLAX
-			L += I
+			if(plane1[j+i*225] <= PARALLAX4_ICON_NUMBER)
+				var/image/I = image('icons/turf/space_parallax4.dmi',"[plane1[j+i*225]]")
+				I.pixel_x = pixel_x[j]
+				I.pixel_y = pixel_y[j]
+				I.plane = PLANE_SPACE_PARALLAX
+				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 0
@@ -200,12 +199,12 @@ var/list/parallax_on_clients = list()
 
 		var/list/L = list()
 		for(var/j in 1 to 225)
-//			if(plane2[j+i*225] > PARALLAX3_ICON_NUMBER)
-			var/image/I = image('icons/turf/space_parallax3.dmi',plane2[j+i*225])
-			I.pixel_x = pixel_x[j]
-			I.pixel_y = pixel_y[j]
-			I.plane = PLANE_SPACE_PARALLAX
-			L += I
+			if(plane2[j+i*225] <= PARALLAX3_ICON_NUMBER)
+				var/image/I = image('icons/turf/space_parallax3.dmi',"[plane2[j+i*225]]")
+				I.pixel_x = pixel_x[j]
+				I.pixel_y = pixel_y[j]
+				I.plane = PLANE_SPACE_PARALLAX
+				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 1
@@ -218,12 +217,12 @@ var/list/parallax_on_clients = list()
 		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
 		var/list/L = list()
 		for(var/j in 1 to 225)
-//			if(plane3[j+i*225] > PARALLAX2_ICON_NUMBER)
-			var/image/I = image('icons/turf/space_parallax2.dmi',plane3[j+i*225])
-			I.pixel_x = pixel_x[j]
-			I.pixel_y = pixel_y[j]
-			I.plane = PLANE_SPACE_PARALLAX
-			L += I
+			if(plane3[j+i*225] <= PARALLAX2_ICON_NUMBER)
+				var/image/I = image('icons/turf/space_parallax2.dmi',"[plane3[j+i*225]]")
+				I.pixel_x = pixel_x[j]
+				I.pixel_y = pixel_y[j]
+				I.plane = PLANE_SPACE_PARALLAX
+				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 2
