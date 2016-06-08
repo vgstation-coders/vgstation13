@@ -143,7 +143,7 @@
 	build_path = /obj/item/device/assembly/light_tile_control
 	category = "Engineering"
 
-/datum/design/t-ray_scanner
+/datum/design/t_ray_scanner
 	name = "T-Ray Scanner"
 	desc = "A terahertz ray device used to pick up the faintest traces of energy, used to detect the invisible."
 	id = "tray_scanner"
@@ -153,7 +153,7 @@
 	build_path = /obj/item/device/t_scanner
 	category = "Engineering"
 
-/datum/design/p-ray_scanner
+/datum/design/p_ray_scanner
 	name = "P-Ray Scanner"
 	desc = "A petahertz ray device used to pick up the faintest traces of energy, used to detect the invisible."
 	id = "pray_scanner"
