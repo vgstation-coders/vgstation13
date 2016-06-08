@@ -325,24 +325,17 @@
 	return 0
 
 /atom/movable/proc/update_client_hook(atom/destination)
-/*
-	for(var/client/C in clients)
-		if((get_turf(C.eye) == destination) && (C.mob.hud_used))
-			C.mob.hud_used.update_parallax()*/
-
 	if(locate(/mob) in src)
-		for(var/client/C in clients)
+		for(var/client/C in parallax_on_clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.mob.hud_used.update_parallax()
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
-		to_chat(world, "mob within mob")
-		for(var/client/C in clients)
+		for(var/client/C in parallax_on_clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.mob.hud_used.update_parallax()
 	else if(client && hud_used)
-		to_chat(world, "parallax on client")
 		hud_used.update_parallax()
 
 /atom/movable/proc/forceEnter(atom/destination)
