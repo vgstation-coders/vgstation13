@@ -2,7 +2,7 @@
 	icon = 'icons/turf/space.dmi'
 	name = "\proper space"
 	desc = "The final frontier."
-	icon_state = "0"
+	icon_state = null
 
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
@@ -22,9 +22,8 @@
 =======
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 26]"
 	var/image/I = image('icons/turf/space_parallax1.dmi',"[icon_state]")
-	I.plane = PLANE_SPACE_PARALLAX
-	I.alpha = 0
-	I.layer = EFFECTS_LAYER
+	I.plane = PLANE_SPACE_DUST
+	I.alpha = 80
 	I.blend_mode = BLEND_ADD
 	overlays += I
 >>>>>>> 0ef125c5eeb946bcb08d67ee3030d30bca6e24a6

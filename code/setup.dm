@@ -1477,6 +1477,7 @@ var/proccalls = 1
 =======
 //New planes stuff, currently only used by Space Parallax
 #define PLANE_BASE 0
+#define PLANE_SPACE_DUST -4
 #define PLANE_SPACE_PARALLAX -5
 #define PLANE_SPACE_BACKGROUND -10
 >>>>>>> 0ef125c5eeb946bcb08d67ee3030d30bca6e24a6

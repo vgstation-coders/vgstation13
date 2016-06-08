@@ -4,25 +4,22 @@
 
 var/list/parallax_on_clients = list()
 
-/obj/screen/parallax
-	var/base_offset_x = 0
-	var/base_offset_y = 0
-	mouse_opacity = 0
-	icon = 'icons/turf/space.dmi'
-	icon_state = "blank"
-	name = "space parallax"
-	blend_mode = BLEND_ADD
-	layer = AREA_LAYER
-	plane = PLANE_SPACE_PARALLAX//changing this var doesn't actually change the plane of its overlays
-	globalscreen = 1
-	var/parallax_speed = 0
-
 /obj/plane_master
 	appearance_flags = PLANE_MASTER
+	screen_loc = "1,1"
 
 /obj/plane_master/parallax_master
 	plane = PLANE_SPACE_PARALLAX
-	screen_loc = "1,1"
+	color = list(
+	1,0,0,0,
+	0,1,0,0,
+	0,0,1,0,
+	0,0,0,0,
+	0,0,0,1)
+
+/obj/plane_master/parallax_dustmaster
+	plane = PLANE_SPACE_DUST
+	blend_mode = BLEND_MULTIPLY
 
 /obj/screen/parallax_canvas
 	mouse_opacity = 0
@@ -74,26 +71,14 @@ var/list/parallax_on_clients = list()
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
 		parallax_on_clients -= C
-
 		C.screen -= C.parallax_master
-		C.screen -= C.parallax_canvas
+		C.screen -= C.parallax_dustmaster
 		return 0
 
 	if(!C.parallax_master)
 		C.parallax_master = getFromPool(/obj/plane_master/parallax_master)
-
-	if(!C.parallax_canvas)
-		C.parallax_canvas = getFromPool(/obj/screen/parallax_canvas)
-		var/icon/temp = icon(C.parallax_canvas.icon, C.parallax_canvas.icon_state)
-		temp.Scale((2*C.view+1)*32, (2*C.view+1)*32)
-		C.parallax_canvas.icon = temp
-		C.parallax_canvas.screen_loc = "WEST,SOUTH"
-
-	C.parallax_canvas.color = space_color
-
-	C.screen |= C.parallax_master
-	C.screen |= C.parallax_canvas
-
+	if(!C.parallax_dustmaster)
+		C.parallax_dustmaster = getFromPool(/obj/plane_master/parallax_dustmaster)
 	return 1
 
 /datum/hud/proc/update_parallax2(forcerecalibrate = 0)
@@ -119,20 +104,18 @@ var/list/parallax_on_clients = list()
 
 	if(forcerecalibrate || !parallax_loaded)
 		for(var/obj/screen/parallax/bgobj in C.parallax)
-			C.screen -= bgobj
-
-		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen += bgobj
 
+		C.screen += C.parallax_master
+		C.screen += C.parallax_dustmaster
+		C.parallax_dustmaster.color = list(0,0,0,0)
 		if(C.prefs.space_dust)
-			C.parallax_master.color = list(
+			C.parallax_dustmaster.color = list(
 			1,0,0,0,
 			0,1,0,0,
 			0,0,1,0,
-			0,0,0,1,
-			0,0,0,1)
-		else
-			C.parallax_master.color = null
+			0,0,0,0,
+			0,0,0,80/255)
 
 	if(!C.parallax_offset.len)
 		C.parallax_offset["horizontal"] = 0
@@ -189,3 +172,69 @@ var/list/parallax_on_clients = list()
 			p_layer.base_offset_y = 480
 		if(7,8,9)
 			p_layer.base_offset_y = -480
+
+/datum/controller/game_controller/proc/cachespaceparallax()
+	var/list/plane1 = list()
+	var/list/plane2 = list()
+	var/list/plane3 = list()
+	var/list/pixel_x = list()
+	var/list/pixel_y = list()
+	for(var/i = 0 to 224)
+		for(var/j = 1 to 9)
+			plane1 += "[rand(26)]"
+			plane2 += "[rand(26)]"
+			plane3 += "[rand(26)]"
+		pixel_x += 32 * (i%15)
+		pixel_y += 32 * round(i/15)
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+
+		var/list/L = list()
+		for(var/j in 1 to 225)
+			var/image/I = image('icons/turf/space_parallax4.dmi',plane1[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
+
+		parallax_layer.overlays = L
+		parallax_layer.parallax_speed = 0
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		space_parallax_0[i+1] = parallax_layer
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+
+		var/list/L = list()
+		for(var/j in 1 to 225)
+			var/image/I = image('icons/turf/space_parallax3.dmi',plane2[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
+
+		parallax_layer.overlays = L
+		parallax_layer.parallax_speed = 1
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		space_parallax_1[i+1] = parallax_layer
+
+	for(var/i in 0 to 8)
+		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		var/list/L = list()
+		for(var/j in 1 to 225)
+			var/image/I = image('icons/turf/space_parallax2.dmi',plane1[j+i*225])
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			I.plane = PLANE_SPACE_PARALLAX
+			L += I
+
+		parallax_layer.overlays = L
+		parallax_layer.parallax_speed = 2
+		parallax_layer.plane = PLANE_SPACE_PARALLAX
+		calibrate_parallax(parallax_layer,i+1)
+		space_parallax_2[i+1] = parallax_layer
+
+	parallax_initialized = 1
