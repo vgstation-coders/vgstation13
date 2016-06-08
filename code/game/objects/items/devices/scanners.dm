@@ -8,7 +8,7 @@ REAGENT SCANNER
 */
 
 /obj/item/device/t_scanner
-	name = "t-ray scanner"
+	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
 	icon_state = "t-ray0"
 	flags = FPRINT
@@ -77,7 +77,7 @@ REAGENT SCANNER
 
 /obj/item/device/t_scanner/adv
 
-	name = "p-ray scanner"
+	name = "\improper P-ray scanner"
 	desc = "A petahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible. Has a significantly better range than t-ray scanners."
 	icon_state = "p-ray0"
 	origin_tech = "magnets=3;engineering=3"
