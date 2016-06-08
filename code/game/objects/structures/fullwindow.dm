@@ -63,7 +63,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!is_living_and_able(usr))
+	if(usr.incapacitated())
 		return 0
 
 	if(anchored)
