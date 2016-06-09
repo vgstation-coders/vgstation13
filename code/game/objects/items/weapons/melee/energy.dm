@@ -167,3 +167,8 @@
 	..()
 	_color = null
 	update_icon()
+
+/obj/item/weapon/melee/energy/sword/armblade
+	name = "arm blade"
+	desc = "A vicious looking blade made of flesh and bone that tears through people with horrifying ease."
+	icon_state = "armblade"
