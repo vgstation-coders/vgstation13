@@ -100,8 +100,8 @@ var/list/datum/power/changeling/powerinstances = list()
 /datum/power/changeling/extractdna
 	name = "Extract DNA"
 	desc = "We stealthily sting a target and extract the DNA from them."
-	helptext = "Will give you the DNA of your target, allowing you to transform into them. Does not count towards absorb objectives."
-	genomecost = 3
+	helptext = "Will give you the DNA of your target, allowing you to transform into them. Does not count towards absorb objectives and yields fewer evolution points than absorption."
+	genomecost = 0
 	allowduringlesserform = 1
 	verbpath = /mob/proc/changeling_extract_dna_sting
 
