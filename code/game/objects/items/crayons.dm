@@ -102,8 +102,9 @@ var/global/list/all_graffitis = list(
 	if(!proximity) return
 
 	if(istype(target, /turf/simulated))
-		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter")
+		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter","text")
 		var/preference
+		var/drawtime = 50
 		switch(drawtype)
 			if("letter")
 				drawtype = input("Choose the letter.", "Crayon scribbles") in list("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
@@ -123,17 +124,37 @@ var/global/list/all_graffitis = list(
 				if(!preference) return
 
 				drawtype=graffitis[preference]
-				to_chat(user, "You start drawing graffiti on the [target.name].")
+				to_chat(user, "You start drawing graffiti on \the [target].")
 			if("rune")
-				to_chat(user, "You start drawing a rune on the [target.name].")
+				to_chat(user, "You start drawing a rune on \the [target].")
+			if("text")
+				#define MAX_LETTERS 15
+				preference = input("Write some text here (maximum [MAX_LETTERS] letters).", "Crayon scribbles") as null|text
+				preference = copytext(preference, 1, MAX_LETTERS)
+				#undef MAX_LETTERS
+
+				if(length(replacetext(preference, " ", "")) == 0) //If there is no text
+					return
+				to_chat(user, "You start writing \"[preference]\" on \the [target].")
 
 		if(!user.Adjacent(target)) return
 		if(target.density && !cardinal.Find(get_dir(user, target))) //Drawing on a wall and not standing in a cardinal direction - don't draw
 			to_chat(user, "<span class='warning'>You can't reach \the [target] from here!</span>")
 			return
 
-		if(instant || do_after(user,target, 50))
-			var/obj/effect/decal/cleanable/C = new /obj/effect/decal/cleanable/crayon(target,colour,shadeColour,drawtype)
+		if(instant || do_after(user,target, drawtime))
+			var/obj/effect/decal/cleanable/C
+			if(drawtype == "text")
+				C = new /obj/effect/decal/cleanable(target)
+				C.name = "written text"
+				C.desc = "\"[preference]\", written in crayon."
+
+				var/maptext_start = "<span style=\"color:[colour]\">"
+				var/maptext_end = "</span>"
+				C.maptext = "[maptext_start][preference][maptext_end]"
+
+			else
+				C = new /obj/effect/decal/cleanable/crayon(target,colour,shadeColour,drawtype)
 
 			if(target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
 				C.forceMove(get_turf(user))
