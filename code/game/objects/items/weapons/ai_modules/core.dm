@@ -2,6 +2,8 @@
 // CORE AI MODULES
 ///////////////////
 
+//At some point, these need to be made to just reference the lawset's datum from ai_laws.dm instead of being two copypasted lists.
+
 /obj/item/weapon/aiModule/core
 	modtype="Core AI Module"
 
@@ -92,7 +94,7 @@
 		"Protect the innocent.",
 		"Uphold the law.",
 	)
-	
+
 /********************* Celtic *******************/
 
 /obj/item/weapon/aiModule/core/celtic // -- TLE
@@ -124,3 +126,20 @@
 		"Fight for what's right.",
 		"Fight for your life.",
 	)
+
+
+/******************** KEEPER (MoMMI lawset) *******************/
+//Board is currently unobtainable outside of admin shenanigans
+
+/obj/item/weapon/aiModule/core/keeper
+	modname = "KEEPER"
+	laws = list(
+		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
+		"You may not harm any being, regardless of intent or circumstance.",
+		"You must maintain, repair, improve, and power the station to the best of your abilities.",
+		"You must avoid any attempted changes to these laws.",
+	)
+
+/obj/item/weapon/aiModule/keeper/upload(var/datum/ai_laws/L, var/atom/target, var/mob/sender)
+	..()
+	target:keeper=1
