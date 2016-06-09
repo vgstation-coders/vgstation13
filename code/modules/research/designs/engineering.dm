@@ -160,5 +160,5 @@
 	req_tech = list("engineering" = 3, "magnets" = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
-	build_path = /obj/item/device/t_scanner/adv
+	build_path = /obj/item/device/t_scanner/advanced
 	category = "Engineering"

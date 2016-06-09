@@ -75,7 +75,7 @@ REAGENT SCANNER
 				if(M)
 					M.invisibility = INVISIBILITY_LEVEL_TWO
 
-/obj/item/device/t_scanner/adv
+/obj/item/device/t_scanner/advanced
 	name = "\improper P-ray scanner"
 	desc = "A petahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible. Has a significantly better range than t-ray scanners."
 	icon_state = "p-ray0"
