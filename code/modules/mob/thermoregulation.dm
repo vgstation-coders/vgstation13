@@ -65,8 +65,11 @@
 	if(loc_temp < bodytemperature)
 		// We're going to try and just use exposed area(temperature difference)/cold divisor, and assume we're only conducting.
 		var/thermal_loss = (1-get_cold_protection())  				// How much of your skin is exposed.
-		if(environment.total_moles > MOLES_CELLSTANDARD || !IS_SPACE_COLD)
-			thermal_loss	*= environment.total_moles/MOLES_CELLSTANDARD	// Multiplied by how many moles are in the environment over 103.934, the normal value of a station. - More moles means more heat transfer, that's basic science.
+		if(!isVentCrawling() && (environment.total_moles > MOLES_CELLSTANDARD || !IS_SPACE_COLD))
+			var/pressure_diff   = environment.total_moles/MOLES_CELLSTANDARD // How many moles are in the environment over 103.934, the normal value of a station.
+			var/pressure_factor = (1/3)*(pressure_diff) + 1
+			pressure_factor = min(pressure_factor,pressure_diff)	// up until pressure_diff is 1.5, will use pressure_diff, afterwards the marginal return is less, eg 3 times is only 2 times.
+			thermal_loss *= pressure_factor
 		thermal_loss	*= (get_skin_temperature() - loc_temp)		// Multiplied by the difference between you and the room temperature
 		thermal_loss	/= BODYTEMP_COLD_DIVISOR					// Divided by the cold_divisor
 		return thermal_loss
