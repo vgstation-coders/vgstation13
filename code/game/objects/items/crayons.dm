@@ -105,6 +105,7 @@ var/global/list/all_graffitis = list(
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter","text")
 		var/preference
 		var/drawtime = 50
+
 		switch(drawtype)
 			if("letter")
 				drawtype = input("Choose the letter.", "Crayon scribbles") in list("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
@@ -133,8 +134,11 @@ var/global/list/all_graffitis = list(
 				preference = copytext(preference, 1, MAX_LETTERS)
 				#undef MAX_LETTERS
 
-				if(length(replacetext(preference, " ", "")) == 0) //If there is no text
+				var/letter_amount = length(replacetext(preference, " ", ""))
+				if(!letter_amount) //If there is no text
 					return
+				drawtime = 4 * letter_amount //10 letters = 4 seconds
+
 				to_chat(user, "You start writing \"[preference]\" on \the [target].")
 
 		if(!user.Adjacent(target)) return
@@ -149,7 +153,11 @@ var/global/list/all_graffitis = list(
 				C.name = "written text"
 				C.desc = "\"[preference]\", written in crayon."
 
-				var/maptext_start = "<span style=\"color:[colour]\">"
+				//Text properties
+				var/font_size = "6pt"
+				var/font_name = "SansSerif"
+
+				var/maptext_start = {"<span style="color:[colour];font-size:[font_size];font-family:'[font_name]';">"}
 				var/maptext_end = "</span>"
 				C.maptext = "[maptext_start][preference][maptext_end]"
 
