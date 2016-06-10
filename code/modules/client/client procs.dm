@@ -435,14 +435,35 @@
 		colour_to = default_colour_matrix
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
 
-/client/proc/UpdateViewFilter()		//Needed for one-way windows to work.
+/client/proc/update_special_views()
+	var/list/vi = view(world.view,mob)
+
+	if(src in parallax_on_clients)
+		for(var/turf/T in vi)
+			if(istype(T,/turf/space))
+				if(!parallax_initialized || updating_parallax)
+					break
+				else
+					updating_parallax = 1
+					mob.hud_used.update_parallax()
+					break
+
+	for(var/obj/structure/window/W in vi)
+		if(W.one_way)
+			update_one_way_windows(vi)
+			break
+
+/client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.
 	var/Image						//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
 	var/turf/Oneway
 	var/obj/structure/window/W
 	var/list/newimages = list()
-	var/list/v = view(world.view,mob)
+//	var/list/v = view(world.view,mob)
 	var/list/onewaylist = list()
 	var/inverse_dir
+
+	if(!v)
+		return
 
 	for(W in v)
 		if(W.one_way)
