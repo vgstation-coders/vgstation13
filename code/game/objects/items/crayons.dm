@@ -98,12 +98,15 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
+#define FONT_SIZE "6pt"
+#define FONT_NAME "Comic Sans MS"
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
 	if(!proximity) return
 
 	if(istype(target, /turf/simulated))
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter","text")
 		var/preference
+		var/alignment = "center" //For text
 		var/drawtime = 50
 
 		switch(drawtype)
@@ -139,6 +142,25 @@ var/global/list/all_graffitis = list(
 					return
 				drawtime = 4 * letter_amount //10 letters = 4 seconds
 
+				alignment = input("Select vertical text alignment (your text is \"[preference]\")", "Crayon scribbles") as null|anything in list("middle", "bottom", "top")
+				if(!alignment) return
+
+				if(user.client)
+					var/image/I = image(icon = null)
+					I.maptext = {"<span style="color:[colour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">[preference]</span>"}
+					I.loc = get_turf(target)
+					animate(I, alpha = 100, 10, -1)
+					animate(alpha = 255, 10, -1)
+
+					user.client.images.Add(I)
+					var/continue_drawing = alert(user, "This is how your drawing will look. Continue?", "Crayon scribbles", "Yes", "Cancel")
+
+					user.client.images.Remove(I)
+					del(I)
+
+					if(continue_drawing != "Yes")
+						return
+
 				to_chat(user, "You start writing \"[preference]\" on \the [target].")
 
 		if(!user.Adjacent(target)) return
@@ -153,11 +175,7 @@ var/global/list/all_graffitis = list(
 				C.name = "written text"
 				C.desc = "\"[preference]\", written in crayon."
 
-				//Text properties
-				var/font_size = "6pt"
-				var/font_name = "SansSerif"
-
-				var/maptext_start = {"<span style="color:[colour];font-size:[font_size];font-family:'[font_name]';">"}
+				var/maptext_start = {"<span style="color:[colour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">"}
 				var/maptext_end = "</span>"
 				C.maptext = "[maptext_start][preference][maptext_end]"
 
@@ -181,6 +199,9 @@ var/global/list/all_graffitis = list(
 					to_chat(user, "<span class='warning'>You used up your crayon!</span>")
 					qdel(src)
 	return
+
+#undef FONT_SIZE
+#undef FONT_NAME
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
 	if(M == user)
