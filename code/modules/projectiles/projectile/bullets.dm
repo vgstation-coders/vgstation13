@@ -69,6 +69,8 @@
 
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
+	stun = 0
+	weaken = 0
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
