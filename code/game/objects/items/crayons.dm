@@ -156,7 +156,7 @@ var/global/list/all_graffitis = list(
 					var/continue_drawing = alert(user, "This is how your drawing will look. Continue?", "Crayon scribbles", "Yes", "Cancel")
 
 					user.client.images.Remove(I)
-					del(I)
+					qdel(I)
 
 					if(continue_drawing != "Yes")
 						return
