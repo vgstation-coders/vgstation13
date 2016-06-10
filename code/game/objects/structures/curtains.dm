@@ -16,10 +16,10 @@
 
 /obj/structure/curtain/bullet_act(obj/item/projectile/P, def_zone)
 	if(!P.nodamage)
-		visible_message("<span class='warning'>[P] tears [src] down!</span>")
+		visible_message("<span class='warning'>[P] tears \the [src] down!</span>")
 		qdel(src)
 	else
-		..(P, def_zone)
+		..()
 
 /obj/structure/curtain/attack_hand(mob/user)
 	playsound(get_turf(loc), "rustle", 15, 1, -5)
@@ -37,16 +37,14 @@
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
 	if(iswirecutter(W))
-		playsound(src.loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You cut the shower curtains down.</span>")
 			var/obj/item/stack/sheet/mineral/plastic/A = getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src))
 			A.amount = 4
 			qdel(src)
-		return
-	else
-		src.attack_hand(user)
-	return
+		return 1
+	src.attack_hand(user)
 
 /obj/structure/curtain/black
 	name = "black curtain"
