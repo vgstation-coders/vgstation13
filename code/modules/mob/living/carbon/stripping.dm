@@ -4,47 +4,49 @@
 	else
 		return I
 
-/mob/living/carbon/proc/strip_hand(var/mob/living/user, var/index)
-	if(!index || !isnum(index))	return
+//This proc is unsafe, it assumes that the mob is holding the item, that the item can be removed, etc.
+/mob/living/carbon/proc/strip_item_from(var/mob/living/user, var/obj/item/target_item, var/slot = null, var/pickpocket = FALSE)
+	var/temp_loc = target_item.loc //do_mob will make sure nobody goes anywhere, including the item to be placed, but sadly it doesn't keep track of the item to be stripped
 
-	var/obj/item/held = user.get_active_hand()
-	var/obj/item/target_item = src.held_items[index]
-	var/pickpocket = user.isGoodPickpocket()
-	to_chat(world, "HITLERS: We are holding [held], our target is [target_item] in hand index [index] and our pickpocketness level is [pickpocket]")
-
-	var/stripping
-	if(istype(target_item))
-		if(target_item.cant_drop > 0)
-			to_chat(user, "<span class='notice'>\The [target_item] is stuck to \the [src]!</span>")
-			return
-		stripping = TRUE
-	else if(istype(held))
-		stripping = FALSE
-	else //Nothing to plant and nothing to take, why are we here?
-		return
-
-	//HITLERS: Fingerprints?
-	//HITLERS: Logging
-
-	if(!pickpocket)
-		if(stripping) visible_message("<span class='warning'>\The [user] is trying to take \the [target_item] from \the [src]'s [src.get_index_limb_name(index)]!</span>")
-		else visible_message("<span class='warning'>\The [user] is trying to put \a [held] on \the [src]'s [src.get_index_limb_name(index)]!</span>")
+	target_item.add_fingerprint(user) //We don't need to be successful in order to get our prints on the thing
 
 	if(do_mob(user, src, HUMAN_STRIP_DELAY)) //Fails if the user moves, changes held item, is incapacitated, etc.
-		if(stripping)
-			drop_from_inventory(target_item)
-			if(pickpocket) user.put_in_hands(target_item)
-		else
-			if(src.put_in_hand_check(held, index))
-				user.drop_from_inventory(held)
-				src.put_in_hand(index, held)
+		if(temp_loc != target_item.loc) //This will also fail if the item to strip went anywhere, necessary because do_mob() doesn't keep track of it.
+			return
 
-		if(in_range(src, user)) //HITLERS: Don't reopen the window
-			show_inv(usr)
+		if(target_item.before_stripped(src, user)) //If this returns 1, then the stripping process was interrupted!
+			return
 
-/mob/living/carbon/proc/strip_slot(var/mob/living/user, var/slot)
-	if(!slot) return
+		drop_from_inventory(target_item)
+		target_item.stripped(src, user)
+		if(pickpocket)
+			user.put_in_hands(target_item)
 
+		return TRUE
+
+//This proc is unsafe, it assumes that the mob has the given slot free, that the item can be put there etc.
+/mob/living/carbon/proc/reversestrip_into_slot(var/mob/living/user, var/slot, var/pickpocket = FALSE)
+	var/obj/item/held = user.get_active_hand()
+
+	if(do_mob(user, src, HUMAN_STRIP_DELAY)) //Fails if the user moves, changes held item, is incapacitated, etc.
+		if(held.mob_can_equip(src, slot, disable_warning = 1))
+			user.drop_from_inventory(held)
+			src.equip_to_slot(held, slot) //Not using equip_to_slot_if_possible() because we want to check that the guy can wear this before dropping it
+
+			return TRUE
+
+//This proc is unsafe, it assumes hand stuff.
+/mob/living/carbon/proc/reversestrip_into_hand(var/mob/living/user, var/index, var/pickpocket = FALSE)
+	var/obj/item/held = user.get_active_hand()
+
+	if(do_mob(user, src, HUMAN_STRIP_DELAY)) //Fails if the user moves, changes held item, is incapacitated, etc.
+		if(src.put_in_hand_check(held, index))
+			user.drop_from_inventory(held)
+			src.put_in_hand(index, held)
+
+			return TRUE
+
+/mob/living/carbon/proc/handle_strip_slot(var/mob/living/user, var/slot)
 	if(slot in src.check_obscured_slots()) //Ideally they wouldn't even get the button to do this, but they could have an outdated menu or something
 		to_chat(user, "<span class='warning'>You can't reach that, something is covering it.</span>")
 		return
@@ -52,148 +54,214 @@
 	var/obj/item/held = user.get_active_hand()
 	var/obj/item/target_item = src.get_item_by_slot(slot)
 	var/pickpocket = user.isGoodPickpocket()
-	to_chat(world, "HITLERS: We are holding [held], our target is [target_item] in slot [slot] and our pickpocketness level is [pickpocket]")
 
-	//HITLERS: Fingerprints?
-	var/stripping
+	to_chat(world, "HITLERS: We are [user], stripping [src], our target item is [target_item] in slot [src.slotID2slotname(slot)] and our held item is [held] please advice")
+
 	if(istype(target_item)) //We want the player to be able to strip someone while holding an item in their hands, for convenience and because otherwise people will bitch about it.
 		if(!target_item.canremove)
 			to_chat(user, "<span class='warning'>You can't seem to be able to take that off!</span>")
 			return
-		stripping = TRUE
+
+		if(!pickpocket)
+			visible_message("<span class='danger'>\The [user] is trying to remove \a [target_item] from \the [src]'s [src.slotID2slotname(slot)]!</span>")
+
+		if(strip_item_from(user, target_item, slot, pickpocket))
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has stripped \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [target_item] stripped from their [src.slotID2slotname(slot)] by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has stripped \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
+			show_inv(user)
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to strip \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to strip \a [target_item] from this mob's [src.slotID2slotname(slot)]</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to strip \a [target_item] from [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
+
 	else if(istype(held))
 		if(!held.mob_can_equip(src, slot, disable_warning = 1)) //This also checks for glued items, target being too fat for the clothing item, and such
 			to_chat(user, "<span class='warning'>You can't put that there!</span>") //Ideally we could have a more descriptive message since this can fail for a variety of reasons, but whatever
 			return
-		stripping = FALSE
-	else //We're not holding anything and the guy is not wearing anything in that slot, what are we even doing here?
-		return
+		if(!src.has_organ_for_slot(slot))
+			to_chat(user, "<span class='warning'>\The [src] has no [src.slotID2slotname(slot)].</span>") //blunt
+			return
 
-	if(!pickpocket)
-		if(stripping) visible_message("<span class='danger'>\The [user] is trying to take off \the [target_item] from \the [src]'s TARGETAREA!</span>") //HITLERS: Targetarea
-		else visible_message("<span class='danger'>\The [user] is trying to put \a [held] on \the [src]!</span>")
+		if(!pickpocket)
+			visible_message("<span class='danger'>\The [user] is trying to put \a [held] on \the [src]!</span>")
 
-	if(!do_mob(user, src, HUMAN_STRIP_DELAY)) //Fails if the user moves, changes held item, is incapacitated, etc.
-		return
+		if(reversestrip_into_slot(user, slot, pickpocket))
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [held] put into their [src.slotID2slotname(slot)] by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has put \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
+			show_inv(user)
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to place \a [held] into this mob's [src.slotID2slotname(slot)]</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
 
-	if(!src.has_organ_for_slot(slot))
-		to_chat(user, "<span class='warning'>It takes you way too long to realize \the [src] has no TARGETAREA.</span>") //intentionally not throwing the error earlier :^) //HITLERS: targetarea
-		return
+/mob/living/carbon/proc/handle_strip_hand(var/mob/living/user, var/index)
+	if(!index || !isnum(index))	return
 
-	if(stripping)
-		if(is_holder_of(src, target_item)) //do_mob makes sure the item to be placed hasn't gone anywhere, but it doesn't check for the item to be stripped
-			if(slot == slot_w_uniform) //I'm so sorry, really, I am
-				var/list/obj/item/pocket_items = list(src.get_item_by_slot(slot_l_store), src.get_item_by_slot(slot_r_store))
-				for(var/obj/item/I in pocket_items)
-					if(I.on_found(user)) //if this returns 1, then the action was interrupted
-						return 1
-				for(var/obj/item/I in pocket_items) //doing the for loop again because we don't want to trigger this on the first pocket if the second has an on_found
-					I.stripped(src, user)
+	var/obj/item/held = user.get_active_hand()
+	var/obj/item/target_item = src.held_items[index]
+	var/pickpocket = user.isGoodPickpocket()
 
-			drop_from_inventory(target_item)
-			target_item.stripped(src, user)
-			if(pickpocket) user.put_in_hands(target_item)
-	else
-		if(held.mob_can_equip(src, slot, disable_warning = 1))
-			user.drop_from_inventory(held)
-			src.equip_to_slot(held, slot)
-	if(in_range(src, user)) //HITLERS: Don't reopen the window
-		show_inv(usr)
+	to_chat(world, "HITLERS: We are [user], stripping [src], our target item is [target_item] in hand [src.get_index_limb_name(index)] index [index] and our held item is [held] please advice")
 
-/mob/living/carbon/proc/strip_id(var/mob/living/user)
+	if(istype(target_item))
+		if(target_item.cant_drop > 0)
+			to_chat(user, "<span class='warning'>\a [target_item] is stuck to \the [src]!</span>")
+			return
+
+		if(!pickpocket)
+			visible_message("<span class='warning'>\The [user] is trying to take \a [target_item] from \the [src]'s [src.get_index_limb_name(index)]!</span>")
+
+		if(strip_item_from(user, target_item, null, pickpocket)) //slot is null since it's a hand index
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has stripped \a [target_item] from [src.name] ([src.ckey])'s [src.get_index_limb_name(index)]</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [target_item] stripped from their [src.get_index_limb_name(index)] by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has stripped \a [target_item] from [user.name]'s ([src.ckey])'s [src.get_index_limb_name(index)]")
+			show_inv(user)
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to strip \a [target_item] from [src.name]'s ([src.ckey]) [src.get_index_limb_name(index)]</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to strip \a [target_item] from this mob's [src.get_index_limb_name(index)]</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to strip \a [target_item] from [src.name]'s ([src.ckey]) [src.get_index_limb_name(index)]")
+
+	else if(istype(held))
+		if(!src.put_in_hand_check(held, index))
+			to_chat(user, "<span class='warning'>\The [src] cannot hold [held]!</span>")
+			return
+
+		if(!pickpocket)
+			visible_message("<span class='warning'>\The [user] is trying to put \a [held] on \the [src]'s [src.get_index_limb_name(index)]!</span>")
+
+		if(reversestrip_into_hand(user, index, pickpocket))
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \a [held] into [src.name]'s ([src.ckey]) [src.get_index_limb_name(index)]</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [held] put into their [src.get_index_limb_name(index)] by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has put \a [held] into [src.name]'s ([src.ckey]) [src.get_index_limb_name(index)]")
+			show_inv(user)
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to place \a [held] into [src.name]'s ([src.ckey]) [src.get_index_limb_name(index)]</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to place \a [held] into this mob's [src.get_index_limb_name(index)]</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to place \a [held] into [src.name]'s '([src.ckey]) [src.get_index_limb_name(index)]")
+
+/mob/living/carbon/proc/handle_strip_id(var/mob/living/user)
 	var/obj/item/id_item = src.get_item_by_slot(slot_wear_id)
 	var/obj/item/place_item = user.get_active_hand()
 	var/pickpocket = user.isGoodPickpocket()
 
+	to_chat(world, "HITLERS: We are [user], stripping [src], our target item is [id_item] in slot [src.slotID2slotname(slot_wear_id)] and our held item is [place_item] please advice")
+
 	if(id_item)
+		if(!id_item.canremove)
+			to_chat(user, "<span class='warning'>You can't seem to be able to take that off!</span>")
+			return
+
 		to_chat(user, "<span class='notice'>You try to take [src]'s ID.</span>")
-	else if(place_item && place_item.mob_can_equip(src, slot_wear_id, disable_warning = 1))
-		to_chat(user, "<span class='notice'>You try to place [place_item] on [src].</span>")
-	else return //Nothing to do here
 
-	if(do_mob(user, src, HUMAN_STRIP_DELAY)) //Fails if the user moves, changes held item, is incapacitated, etc.
-		if(id_item)
-			u_equip(id_item,1)
-			if(pickpocket) user.put_in_hands(id_item)
-		else
-			if(place_item)
-				user.u_equip(place_item,1)
-				equip_to_slot_if_possible(place_item, slot_wear_id, 0, 1)
-		// Update strip window
-		if(in_range(src, user))
+		if(strip_item_from(user, id_item, slot_wear_id, pickpocket))
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has pickpocketed \a [id_item] from [src.name]'s ([src.ckey]) ID slot.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='red'>Has had \a [id_item] pickpocketed by [user.name] ([user.ckey]) from their ID slot.</font>")
+			log_attack("[user.name] ([user.ckey]) has pickpocketed \a [id_item] from [src.name]'s ([src.ckey]) ID slot.")
 			show_inv(user)
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to pickpocket \a [id_item] from [src.name]'s ([src.ckey]) ID slot.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to pickpocket \a [id_item] from this mob's ID slot.</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to pickpocket \a [id_item] from [src.name]'s ([src.ckey]) ID slot.")
+			if(!pickpocket) // Display a warning if the user mocks up. Unless they're just that good of a pickpocket.
+				to_chat(src, "<span class='warning'>You feel your ID being fumbled with!</span>")
+	else if(place_item)
+		if(!place_item.mob_can_equip(src, slot_wear_id, disable_warning = 1))
+			to_chat(user, "<span class='warning'>You can't put that there!</span>")
+			return
 
-	else if(!pickpocket) // Display a warning if the user mocks up. Unless they're just that good of a pickpocket.
-		to_chat(src, "<span class='warning'>You feel your ID being fumbled with!</span>")
+		to_chat(user, "<span class='notice'>You try to place [place_item] on [src].</span>")
 
-/mob/living/carbon/proc/strip_pocket(var/mob/living/user, var/pocket_side)
-	if(!pocket_side) return
+		if(reversestrip_into_slot(user, slot_wear_id, pickpocket))
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has reverse-pickpocketed \a [place_item] into [src.name]'s ([src.ckey]) ID slot.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [place_item] reverse-pickpocketed into their ID slot by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has reverse-pickpocketed \a [place_item] into [src.name]'s ([src.ckey]) ID slot.")
+			show_inv(user)
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to reverse-pickpocket \a [place_item] into [src.name]'s ([src.ckey]) ID slot.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to reverse-pickpocket \a [place_item] into this mob's ID slot.</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to reverse-pickpocket \a [place_item] into [src.name]'s ([src.ckey]) ID slot.")
 
+/mob/living/carbon/proc/handle_strip_pocket(var/mob/living/user, var/pocket_side)
 	var/pocket_id = (pocket_side == "right" ? slot_r_store : slot_l_store)
 	var/obj/item/pocket_item = get_item_by_slot(pocket_id)
-	var/obj/item/place_item = user.get_active_hand() // Item to place in the pocket, if it's empty
+	var/obj/item/place_item = user.get_active_hand()
 	var/pickpocket = user.isGoodPickpocket()
 
+	to_chat(world, "HITLERS: We are [user], stripping [src], our target item is [pocket_item] in slot [src.slotID2slotname(pocket_id)] [pocket_side] pocket .and our held item is [place_item] please advice")
+
 	if(pocket_item)
+		if(!pocket_item.canremove)
+			to_chat(user, "<span class='warning'>You can't seem to be able to take that off!</span>")
+			return
+
 		to_chat(user, "<span class='notice'>You try to empty [src]'s [pocket_side] pocket.</span>")
-	else if(place_item && place_item.mob_can_equip(src, pocket_id, disable_warning = 1))
-		to_chat(user, "<span class='notice'>You try to place [place_item] into [src]'s [pocket_side] pocket.</span>")
-	else return //Nothing to do here
 
-	if(do_mob(usr, src, HUMAN_STRIP_DELAY)) //Fails if the user moves, changes held item, is incapacitated, etc.
-		if(pocket_item)
-			if(pocket_item.on_found(usr)) //If this returns 1, then the action was interrupted
-				return
-			u_equip(pocket_item,1)
-			pocket_item.stripped(src,usr)
-			if(pickpocket) usr.put_in_hands(pocket_item)
+		if(strip_item_from(user, pocket_item, pocket_id, pickpocket))
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has pickpocketed \the [pocket_item] from [src.name]'s ([src.ckey]) [pocket_side] pocket.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='red'>Has had \the [pocket_item] pickpocketed by [user.name] ([user.ckey]) from their [pocket_side] pocket.</font>")
+			log_attack("[user.name] ([user.ckey]) has pickpocketed \the [pocket_item] from [src.name]'s ([src.ckey]) [pocket_side] pocket.")
+			show_inv(user)
 		else
-			if(place_item)
-				usr.u_equip(place_item,1)
-				equip_to_slot_if_possible(place_item, pocket_id, 0, 1)
-		// Update strip window
-		if(in_range(src, usr))
-			show_inv(usr)
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to pickpocket \the [pocket_item] from [src.name]'s ([src.ckey]) [pocket_side] pocket.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to pickpocket \the [pocket_item] from this mob's [pocket_side] pocket.</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to pickpocket \the [pocket_item] from [src.name]'s ([src.ckey]) [pocket_side] pocket.")
+			if(!pickpocket) // Display a warning if the user mocks up. Unless they're just that good of a pickpocket.
+				to_chat(src, "<span class='warning'>You feel your [pocket_side] pocket being fumbled with!</span>")
+	else if(place_item)
+		if(!place_item.mob_can_equip(src, pocket_id, disable_warning = 1))
+			to_chat(user, "<span class='warning'>You can't put that there!</span>")
+			return
 
-	else if(!pickpocket) // Display a warning if the user mocks up. Unless they're just that good of a pickpocket.
-		to_chat(src, "<span class='warning'>You feel your [pocket_side] pocket being fumbled with!</span>")
+		to_chat(user, "<span class='notice'>You try to place [place_item] on [src]'s [pocket_side] pocket.</span>")
+
+		if(reversestrip_into_slot(user, pocket_id, pickpocket))
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has reverse-pickpocketed \a [place_item] into [src.name]'s ([src.ckey]) [pocket_side] pocket.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had \a [place_item] reverse-pickpocketed into their [pocket_side] pocket by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has reverse-pickpocketed \a [place_item] into [src.name]'s ([src.ckey]) [pocket_side] pocket.")
+			show_inv(user)
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to reverse-pickpocket \a [place_item] into [src.name]'s ([src.ckey]) [pocket_side] pocket.</font>")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to reverse-pickpocket \a [place_item] into this mob's [pocket_side] pocket.</font>")
+			log_attack("[user.name] ([user.ckey]) has failed to reverse-pickpocket \a [place_item] into [src.name]'s ([src.ckey]) [pocket_side] pocket.")
 
 // Modify the current target sensor level.
 /mob/living/carbon/human/proc/toggle_sensors(var/mob/living/user)
 	var/obj/item/clothing/under/suit = w_uniform
 	if(!suit)
-		user << "<span class='warning'>\The [src] is not wearing a suit with sensors.</span>"
+		to_chat(user, "<span class='warning'>\The [src] is not wearing a suit.</span>")
 		return
-	if (suit.has_sensor >= 2)
-		user << "<span class='warning'>\The [src]'s suit sensor controls are locked.</span>"
+	if(!suit.has_sensor)
+		to_chat(user, "<span class='warning'>\The [src]'s suit does not have sensors.</span>")
 		return
-	attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors toggled by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to toggle [name]'s ([ckey]) sensors</font>")
-	suit.set_sensors(user)
+	if(suit.has_sensor >= 2)
+		to_chat(user, "<span class='warning'>\The [src]'s suit sensor controls are locked.</span>")
+		return
+	if(!user.isGoodPickpocket())
+		visible_message("<span class='warning'>\The [user] is trying to set [src]'s suit sensors.</span>", "<span class='danger'>\The [user] is trying to set your suit sensors!</span>")
+	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+		var/newmode = suit.set_sensors(user)
+		if(newmode)
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [newmode] by [user.name] ([user.ckey])</font>")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Set [src.name]'s suit sensors ([src.ckey]) to [newmode]'</font>")
+		else
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.name] ([user.ckey]) has failed to set this mob's suit sensors to [newmode]</font>")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has failed to set [src.name]'s ([src.ckey]) suit sensors to [newmode]</font>")
 
 // Set internals on or off.
-/mob/living/carbon/human/proc/toggle_internals(var/mob/living/user)
-	if(internal)
-		internal.add_fingerprint(user)
-		internal = null
-		if(internals)
-			internals.icon_state = "internal0"
-	else
-		// Check for airtight mask/helmet.
-		if(!(istype(wear_mask, /obj/item/clothing/mask) || istype(head, /obj/item/clothing/head/helmet/space)))
-			return
-		// Find an internal source.
-		if(istype(back, /obj/item/weapon/tank))
-			internal = back
-		else if(istype(s_store, /obj/item/weapon/tank))
-			internal = s_store
-		else if(istype(belt, /obj/item/weapon/tank))
-			internal = belt
+/mob/living/carbon/proc/set_internals(var/mob/living/user)
+	if(!has_breathing_mask())
+		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
+		return
 
-	if(internal)
-		visible_message("<span class='warning'>\The [src] is now running on internals.</span>")
-		internal.add_fingerprint(user)
-		if (internals)
-			internals.icon_state = "internal1"
-	else
-		visible_message("<span class='danger'>\The [user] disables \the [src]'s internals!</span>")
+	var/obj/item/weapon/tank/T = src.get_internals_tank()
+	if(!T)
+		to_chat(user, "<span class='warning'>\The [src] does not have a tank to connect to.</span>")
+		return
+
+	if(!user.isGoodPickpocket())
+		visible_message("<span class='warning'>\The [user] is trying to set [src]'s internals.</span>", "<span class='danger'>\The [user] is trying to set your internals!</span>")
+
+	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+		src.toggle_internals(user, T)

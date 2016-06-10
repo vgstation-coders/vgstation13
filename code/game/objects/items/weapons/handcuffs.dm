@@ -64,13 +64,15 @@
 						 "<span class='danger'>You try to handcuff \the [C]!</span>")
 
 	if(do_after(user, C, 3 SECONDS))
-		//HITLERS: Logging
-		if(istype(src, /obj/item/weapon/handcuffs/cable)) //HITLERS: what is this
+		if(istype(src, /obj/item/weapon/handcuffs/cable))
 			feedback_add_details("handcuffs", "C")
 		else
 			feedback_add_details("handcuffs", "H")
 
 		user.visible_message("<span class='danger'>\The [user] has put \the [src] on \the [C]!</span>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \the [src] on [C.name] ([C.ckey])</font>")
+		C.attack_log += text("\[[time_stamp()]\] <font color='red'>Handcuffed with \the [src] by [user.name] ([user.ckey])</font>")
+		log_attack("[user.name] ([user.ckey]) has cuffed [C.name] ([C.ckey]) with \the [src]")
 
 		var/obj/item/weapon/handcuffs/cuffs = src
 		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.

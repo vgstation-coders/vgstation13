@@ -166,7 +166,6 @@
 
 /mob/living/carbon/monkey/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)
-	var/has_breathable_mask = istype(wear_mask, /obj/item/clothing/mask)
 	var/TAB = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
 	var/dat
@@ -183,6 +182,8 @@
 		dat +=	"<br><b>Headwear:</b> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(hat)]</A>"
 
 	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+	if(has_breathing_mask())
+		dat += "<BR>[TAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
 
 	if(canWearGlasses)
 		dat +=	"<br><b>Glasses:</b> <A href='?src=\ref[src];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"

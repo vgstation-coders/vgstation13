@@ -441,7 +441,6 @@
 
 /mob/living/carbon/human/show_inv(mob/user)
 	user.set_machine(src)
-	var/has_breathable_mask = istype(wear_mask, /obj/item/clothing/mask)
 	var/pickpocket = usr.isGoodPickpocket()
 	var/list/obscured = check_obscured_slots()
 	var/TAB = "&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -458,6 +457,8 @@
 		dat += "<BR><font color=grey><B>Mask:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+	if(has_breathing_mask())
+		dat += "<BR>[TAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
 	if(slot_glasses in obscured)
 		dat += "<BR><font color=grey><B>Eyes:</B> Obscured by [head]</font>"
 	else
@@ -483,6 +484,7 @@
 	else
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
 	if(w_uniform)
+		dat += "<BR>[TAB]&#8627; <A href='?src=\ref[src];sensors=1'>Set suit sensors</A>"
 		dat += "<BR>[TAB]&#8627;<B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		if(pickpocket)
 			dat += "<BR>[TAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
@@ -508,33 +510,33 @@
 	if(href_list["hands"])
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
-		strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
+		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
 
 	else if(href_list["item"])
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
-		strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
+		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
 
 	else if(href_list["id"])
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
-		strip_id(usr)
+		handle_strip_id(usr)
 
 	else if(href_list["pockets"]) //href_list "pockets" would be "left" or "right"
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
-		strip_pocket(usr, href_list["pockets"])
+		handle_strip_pocket(usr, href_list["pockets"])
 
-	/*else if(href_list["sensors"])
-		visible_message("<span class='danger'>\The [user] is trying to set \the [src]'s sensors!</span>") //HITLERS
-		if(do_after(user,HUMAN_STRIP_DELAY))
-			toggle_sensors(user)
-		return
+	else if(href_list["sensors"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		toggle_sensors(usr)
+
 	else if(href_list["internals"])
-		visible_message("<span class='danger'>\The [usr] is trying to set \the [src]'s internals!</span>") //HITLERS //HITLERS: Logging
-		if(do_after(user,HUMAN_STRIP_DELAY))
-			toggle_internals(user)
-		return*/
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		set_internals(usr)
+
 	else if (href_list["refresh"])
 		if((machine)&&(in_range(src, usr)))
 			show_inv(machine)

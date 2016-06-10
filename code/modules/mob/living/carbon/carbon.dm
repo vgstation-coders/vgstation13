@@ -398,7 +398,6 @@
 
 /mob/living/carbon/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)
-	var/has_breathable_mask = istype(wear_mask, /obj/item/clothing/mask)
 	var/TAB = "&nbsp;&nbsp;&nbsp;&nbsp;"
 	var/dat = ""
 
@@ -407,16 +406,16 @@
 	else
 		for(var/i = 1 to held_items.len) //Hands
 			var/obj/item/I = held_items[i]
-			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];item=hand;hand_index=[i]'>		[(I && !I.abstract) ? I : "<font color=grey>Empty</font>"]</A><BR>"
+			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=back'> [(back && !(src.back.abstract)) ? back : "<font color=grey>Empty</font>"]</A>"
-	if(has_breathable_mask && istype(back, /obj/item/weapon/tank))
-		dat += "<BR>[TAB]&#8627;<A href='?src=\ref[src];item=internal'>[internal ? "Disable Internals" : "Set Internals"]</A>"
+	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
 
 	dat += "<BR>"
 
 
-	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=mask'>		[(wear_mask && !(src.wear_mask.abstract))	? wear_mask	: "<font color=grey>Empty</font>"]</A>"
+	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+	if(has_breathing_mask())
+		dat += "<BR>[TAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
 
 	dat += {"
 	<BR>
@@ -437,13 +436,17 @@
 	if(href_list["hands"])
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
-		strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
+		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
 
 	else if(href_list["item"])
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
-		strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
+		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
 
+	else if(href_list["internals"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		set_internals(usr)
 	else ..()
 
 //generates realistic-ish pulse output based on preset levels

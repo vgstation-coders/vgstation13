@@ -360,4 +360,4 @@ In all, this is a lot like the monkey code. /N
 	if(href_list["pockets"]) //href_list "pockets" would be "left" or "right"
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
-		strip_pocket(usr, href_list["pockets"])
+		handle_strip_pocket(usr, href_list["pockets"])

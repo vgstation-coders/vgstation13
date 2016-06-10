@@ -487,7 +487,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 //This proc is called whenever someone clicks an inventory ui slot.
 /mob/proc/attack_ui(slot, hand_index)
-	to_chat(world, "HITLERS: [src] has attacked UI on slot [slot]!")
 	var/obj/item/W = get_active_hand()
 	if(istype(W))
 		if(slot)

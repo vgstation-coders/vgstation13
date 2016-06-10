@@ -5,7 +5,6 @@
 	icon_state = "dnainjector"
 	var/block=0
 	var/datum/dna2/record/buf=null
-	var/s_time = 10.0
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY
@@ -132,7 +131,6 @@
 
 	user.visible_message("<span class='danger'>\The [user] is trying to inject \the [M] with \the [src]!</span>")
 	inuse = 1
-	s_time = world.time //Hitlers: what's this?
 	spawn(50)
 		inuse = 0
 
@@ -144,9 +142,22 @@
 		to_chat(user, "<span class='warning'>Apparently, the DNA injector didn't work...</span>")
 		return
 
-	//Hitlers: Logging
-
 	inject(M, user)
+	if(buf.types & DNA2_BUF_SE)
+		if(block)// Isolated injector
+			if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human)  )
+				message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
+				log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name] (MONKEY)")
+				log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
+			else
+				log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name]")
+		else
+			if (GetState(MONKEYBLOCK) && istype(M, /mob/living/carbon/human))
+				message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the [name] <span class='warning'>(MONKEY)</span>")
+				log_game("[key_name(user)] injected [key_name(M)] with the [name] (MONKEY)")
+			else
+				log_game("[key_name(user)] injected [key_name(M)] with the [name]")
+
 
 /obj/item/weapon/dnainjector/nofail
 	nofail = MUTCHK_FORCED

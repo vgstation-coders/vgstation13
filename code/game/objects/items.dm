@@ -240,8 +240,13 @@
 	if(wielded)
 		unwield(user)
 
+///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
+/obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
+	if(slot in list(slot_l_store, slot_r_store)) //is in pockets
+		return on_found(wearer, stripper)
+
 ///called when an item is stripped off by another person, called AFTER it is on the ground
-/obj/item/proc/stripped(mob/wearer as mob, mob/stripper as mob)
+/obj/item/proc/stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	return unequipped(wearer)
 
 // called just as an item is picked up (loc is not yet changed). return 1 to prevent the item from being actually picked up.
