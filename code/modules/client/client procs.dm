@@ -209,8 +209,6 @@
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
 
-	SeenTurfs = list()
-
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -436,10 +434,10 @@
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
 
 /client/proc/update_special_views()
-	var/list/vi = view(world.view,mob)
+	var/list/vi = view(world.view,get_holder_at_turf_level(mob))
 
-	if(src in parallax_on_clients)
-		for(var/turf/T in vi)
+	if(src in parallax_on_clients)	//Updating parallax for clients that have parallax turned on.
+		for(var/turf/T in range(get_turf(eye),view))
 			if(istype(T,/turf/space))
 				if(!parallax_initialized || updating_parallax)
 					break
@@ -450,15 +448,14 @@
 
 	for(var/obj/structure/window/W in vi)
 		if(W.one_way)
-			update_one_way_windows(vi)
+			update_one_way_windows(vi)	//Updating the one-way window overlay if the client has one in view.
 			break
 
 /client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.
-	var/Image						//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
+	var/Image										//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
 	var/turf/Oneway
 	var/obj/structure/window/W
 	var/list/newimages = list()
-//	var/list/v = view(world.view,mob)
 	var/list/onewaylist = list()
 	var/inverse_dir
 
@@ -468,13 +465,13 @@
 	for(W in v)
 		if(W.one_way)
 			inverse_dir = turn(W.dir, 180)
-			if(inverse_dir & get_dir(W,mob))
+			if(inverse_dir & get_dir(W,get_holder_at_turf_level(mob)))
 				Oneway = get_turf(W)
 				Oneway.opacity = 1
 				onewaylist += Oneway
 
 	if(onewaylist.len)
-		var/list/List = v - view(world.view,mob)
+		var/list/List = v - view(world.view,get_holder_at_turf_level(mob))
 		for(var/turf/T in List)
 			src << T.viewblock
 			newimages += T.viewblock

@@ -75,4 +75,3 @@
 
 	//One-way windows
 	var/list/ViewFilter = list()
-	var/list/SeenTurfs = list()
