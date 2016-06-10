@@ -437,7 +437,7 @@
 	var/list/vi = view(world.view,get_holder_at_turf_level(mob))
 
 	if(src in parallax_on_clients)	//Updating parallax for clients that have parallax turned on.
-		for(var/turf/T in range(get_turf(eye),view))
+		for(var/turf/T in vi)
 			if(istype(T,/turf/space))
 				if(!parallax_initialized || updating_parallax)
 					break
