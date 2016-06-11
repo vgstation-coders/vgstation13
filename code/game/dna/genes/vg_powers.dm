@@ -121,6 +121,20 @@ Obviously, requires DNA2.
 		return 0
 	return ..(M,flags)
 
+// NOIR
+
+/obj/screen/plane_master/noir_master
+	plane = PLANE_NOIR_BLOOD
+	color = list(1,0,0,0,
+				 0,1,0,0,
+				 0,0,1,0,
+				 0,0,0,0,
+				 0,0,0,1)
+	appearance_flags = NO_CLIENT_COLOR
+
+
+var/noir_master = /obj/screen/plane_master/noir_master
+
 /datum/dna/gene/basic/noir
 	name="Noir"
 	desc = "In recent years, there's been a real push towards 'Detective Noir' movies, but since the last black and white camera was lost many centuries ago, Scientists had to develop a way to turn any movie noir."
@@ -136,7 +150,9 @@ Obviously, requires DNA2.
 /datum/dna/gene/basic/noir/activate(var/mob/M)
 	..()
 	M.update_colour()
+	M.client.screen += noir_master
 
 /datum/dna/gene/basic/noir/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
 		M.update_colour()
+		M.client.screen -= noir_master

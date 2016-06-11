@@ -161,6 +161,7 @@
 	if(!put_in_hand_check(W, index))
 		return 0
 
+
 	if(W.prepickup(src))
 		return 0
 
@@ -253,6 +254,7 @@
 		u_equip(W,1)
 		if(!W) return 1 // self destroying objects (tk, grabs)
 		W.layer = initial(W.layer)
+		W.plane = initial(W.plane)
 		W.forceMove(loc)
 
 		//W.dropped(src)
@@ -354,6 +356,7 @@
 		src.client.screen -= O
 	if(!O) return
 	O.layer = initial(O.layer)
+	O.plane = initial(O.plane)
 	O.screen_loc = null
 	return 1
 

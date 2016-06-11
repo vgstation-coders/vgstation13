@@ -37,6 +37,7 @@
 	max_n2 = 0
 
 	layer = TURF_LAYER + 0.01
+	plane = PLANE_TURF
 
 	treadmill_speed = 0
 	turns_per_move = 2 //2 life ticks / move

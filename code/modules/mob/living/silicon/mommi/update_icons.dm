@@ -37,7 +37,9 @@
 	var/overlay_layer = LIGHTING_LAYER + 1
 	if(layer != MOB_LAYER)
 		overlay_layer=TURF_LAYER+0.2
-	overlays += image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
+	var/image/eyes = image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
+	eyes.plane = PLANE_LIGHTING
+	overlays += eyes
 	if(anchored)
 		overlays += image(icon,"[subtype]-park",overlay_layer)
 

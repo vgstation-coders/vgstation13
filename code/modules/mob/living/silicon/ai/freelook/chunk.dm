@@ -115,6 +115,7 @@
 		if(obscuredTurfs[t])
 			if(!t.obscured)
 				t.obscured = image('icons/effects/cameravis.dmi', t, "black", 15)
+				t.obscured.plane = PLANE_STATIC
 
 			obscured += t.obscured
 			for(var/eye in seenby)

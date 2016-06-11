@@ -183,6 +183,7 @@ var/const/tk_maxrange = 15
 		O.anchored = 1
 		O.density = 0
 		O.layer = FLY_LAYER
+		O.plane = PLANE_EFFECTS
 		O.dir = pick(cardinal)
 		O.icon = 'icons/effects/effects.dmi'
 		O.icon_state = "nothing"
