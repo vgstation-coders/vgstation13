@@ -131,8 +131,12 @@ Obviously, requires DNA2.
 				 0,0,0,1)
 	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER
 
+/obj/screen/plane_master/noir_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	appearance_flags = 0
+	plane = PLANE_NOIR_BLOOD
 
-var/obj/screen/plane_master/noir_master/noir_master = new /obj/screen/plane_master/noir_master()
+var/noir_master = list(new /obj/screen/plane_master/noir_master(),new /obj/screen/plane_master/noir_dummy())
 
 /datum/dna/gene/basic/noir
 	name="Noir"
