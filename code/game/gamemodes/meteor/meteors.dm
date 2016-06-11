@@ -470,7 +470,7 @@ var/list/blob_candidates = list()
 
 	var/obj/item/projectile/meteor/in_chamber = new projectile_type(get_turf(src), get_turf(A))
 
-	log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [A] [ismob(A) ? "([A:ckey])" : ""] ([A.x],[A.y],[A.z])" )
+	add_logs(user,A,"fired \the [src] (proj:[in_chamber.name]) at ",addition="([A.x],[A.y],[A.z])")
 
 /obj/item/weapon/meteor_gun/attack_self(mob/user as mob)
 	projectile_type = input(user, "Pick a meteor type.", "Projectile Choice") in typesof(/obj/item/projectile/meteor)
