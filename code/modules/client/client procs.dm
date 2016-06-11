@@ -462,6 +462,8 @@
 	if(!v)
 		return
 
+	ObscuredTurfs.len = 0
+
 	for(W in v)
 		if(W.one_way)
 			inverse_dir = turn(W.dir, 180)
@@ -475,6 +477,7 @@
 		for(var/turf/T in List)
 			src << T.viewblock
 			newimages += T.viewblock
+			ObscuredTurfs += T
 
 		for(var/turf/I in onewaylist)
 			I.opacity = 0

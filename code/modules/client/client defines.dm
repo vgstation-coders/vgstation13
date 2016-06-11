@@ -75,3 +75,4 @@
 
 	//One-way windows
 	var/list/ViewFilter = list()
+	var/list/ObscuredTurfs = list()
