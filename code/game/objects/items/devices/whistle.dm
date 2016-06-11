@@ -8,7 +8,8 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 
-	var/spamcheck = 0
+	var/nextuse = 0
+	var/cooldown = 2 SECONDS
 	var/emagged = 0
 	var/insults = 0//just in case
 
@@ -30,12 +31,10 @@
 	if(user)
 		var/list/bystanders = get_hearers_in_view(world.view, src)
 		flick_overlay(image('icons/mob/talk.dmi', user, "hail", MOB_LAYER+1), clients_in_moblist(bystanders), 2 SECONDS)
-	spamcheck = 1
-	spawn(20)
-		spamcheck = 0
+	nextuse = world.time + cooldown
 
 /obj/item/device/hailer/attack_self(mob/living/carbon/user as mob)
-	if(spamcheck)
+	if(world.time < nextuse)
 		return
 	if(emagged && !insults)
 		to_chat(user, "<span class='warning'>[say_your_thing()]</span>")
@@ -56,7 +55,7 @@
 	return
 
 /obj/item/device/hailer/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(spamcheck)
+	if(world.time < nextuse)
 		return
 	if(proximity_flag && !ismob(target)) //Don't do anything when being put in a backpack, on a table, or anything within one tile of us like opening an airlock. Exception is when used on people, I guess to rub it in someone's face
 		return
