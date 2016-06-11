@@ -168,6 +168,7 @@
 	W.forceMove(src)
 	held_items[index] = W
 	W.layer = 20
+	W.plane = PLANE_HUD
 	W.pixel_x = initial(W.pixel_x)
 	W.pixel_y = initial(W.pixel_y)
 	W.equipped(src, null, index)
@@ -313,6 +314,7 @@
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?
 	W.loc = null
 	W.layer = initial(W.layer)
+	W.plane = initial(W.plane)
 	u_equip(W,0)
 	update_icons()
 	return
@@ -346,6 +348,7 @@
 			W.dropped(src)
 		if(W)
 			W.layer = initial(W.layer)
+			W.plane = initial(W.plane)
 	return 1
 
 
@@ -460,6 +463,7 @@
 
 	if(equipped)
 		W.layer = 20
+		W.plane = PLANE_HUD
 		if(src.back && W.loc != src.back)
 			W.loc = src
 	else

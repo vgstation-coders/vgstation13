@@ -131,6 +131,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
+					I.plane = initial(I.plane)
 					//I.dropped(M)
 					I.loc = pack
 
@@ -189,6 +190,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
+					I.plane = initial(I.plane)
 					//I.dropped(M)
 					I.loc = pack
 
@@ -247,6 +249,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
+					I.plane = initial(I.plane)
 					//I.dropped(M)
 					I.loc = pack
 
@@ -330,6 +333,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
+					I.plane = initial(I.plane)
 					//I.dropped(M)
 					I.loc = pack
 
@@ -434,6 +438,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
+					I.plane = initial(I.plane)
 					//I.dropped(M)
 					I.loc = pack
 
@@ -484,6 +489,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				if(I)
 					I.loc = M.loc
 					I.layer = initial(I.layer)
+					I.plane = initial(I.plane)
 					//I.dropped(M)
 					I.loc = pack
 

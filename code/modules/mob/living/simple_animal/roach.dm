@@ -165,6 +165,7 @@
 
 	if(!flying)
 		layer = initial(layer) //Since cucarachas can hide under trash (which modifies their layer), this is kinda necessary
+		plane = initial(plane)
 
 /mob/living/simple_animal/cockroach/adjustBruteLoss() //When receiving damage
 	..()
@@ -217,6 +218,7 @@
 	response_harm   = initial(response_harm)
 
 	layer = initial(layer)
+	plane = initial(plane)
 
 	if(anim) animate(src, pixel_y = pixel_y - 8, 5, 1, ELASTIC_EASING)
 

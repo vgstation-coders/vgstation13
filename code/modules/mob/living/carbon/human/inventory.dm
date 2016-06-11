@@ -310,6 +310,7 @@
 				W.dropped(src)
 			if(W)
 				W.layer = initial(W.layer)
+				W.plane = initial(W.plane)
 	update_action_buttons()
 	return 1
 

@@ -698,6 +698,7 @@
 			if(I)
 				I.loc = M.loc
 				I.layer = initial(I.layer)
+				I.plane = initial(I.plane)
 				I.dropped(M)
 				I.loc = pack
 

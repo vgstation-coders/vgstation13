@@ -9,7 +9,7 @@
 
 	if(layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
-		plane = TURF_LAYER
+		plane = PLANE_TURF
 		visible_message("<span class='danger'>[src] scurries to the ground !</span>", "<span class='alien'>You are now hiding.</span>")
 	else
 		layer = MOB_LAYER

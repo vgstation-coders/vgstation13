@@ -73,6 +73,7 @@ var/const/tk_maxrange = 15
 	//item_state = null
 	w_class = W_CLASS_GIANT
 	layer = 20
+	plane = PLANE_HUD
 	abstract = 1
 
 	var/last_throw = 0

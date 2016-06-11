@@ -69,6 +69,7 @@
 	if (src.client)
 		src.client.screen -= O
 	O.layer = initial(O.layer)
+	O.plane = initial(O.plane)
 	O.screen_loc = null
 	return 1
 

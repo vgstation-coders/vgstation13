@@ -376,6 +376,7 @@
 	if(W.maptext)
 		W.maptext = ""
 	W.layer = initial(W.layer)
+	W.plane = initial(W.plane)
 	W.on_exit_storage(src)
 	update_icon()
 	W.mouse_opacity = initial(W.mouse_opacity)
