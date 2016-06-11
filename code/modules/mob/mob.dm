@@ -498,8 +498,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		if(W)
 			W.attack_hand(src)
 
-	if(ishuman(src) && W == src:head) //AAAAAUGH
-		src:update_hair()
+	/*if(ishuman(src) && W == src:head) //AAAAAUGH
+		src:update_hair()*/
 
 /mob/proc/put_in_any_hand_if_possible(obj/item/W as obj)
 	for(var/index = 1 to held_items.len)

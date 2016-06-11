@@ -6,8 +6,7 @@
 
 /mob/living/carbon/human/internals_candidates() //Humans have a lot of slots, so let's give priority to some of them
 	var/list/priority = list(s_store, back, belt, l_store, r_store)
-	priority |= get_all_slots()
-	return priority + held_items
+	return priority | get_all_slots() | held_items //| operator ensures there are no duplicates
 
 /mob/living/carbon/proc/get_internals_tank()
 	for(var/obj/item/weapon/tank/T in internals_candidates())

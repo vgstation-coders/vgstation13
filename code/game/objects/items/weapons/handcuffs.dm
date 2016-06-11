@@ -79,9 +79,7 @@
 			cuffs = new(get_turf(user))
 		else
 			user.drop_from_inventory(cuffs)
-		cuffs.loc = C
-		C.handcuffed = cuffs
-		C.update_inv_handcuffed()
+		C.equip_to_slot(cuffs, slot_handcuffed)
 
 /obj/item/weapon/handcuffs/cyborg
 //This space intentionally left blank

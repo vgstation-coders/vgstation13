@@ -443,7 +443,6 @@
 	user.set_machine(src)
 	var/pickpocket = usr.isGoodPickpocket()
 	var/list/obscured = check_obscured_slots()
-	var/TAB = "&nbsp;&nbsp;&nbsp;&nbsp;"
 	var/dat
 
 	for(var/i = 1 to held_items.len) //Hands
@@ -458,7 +457,7 @@
 	else
 		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[TAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
 	if(slot_glasses in obscured)
 		dat += "<BR><font color=grey><B>Eyes:</B> Obscured by [head]</font>"
 	else
@@ -470,7 +469,7 @@
 	dat += "<BR>"
 	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
 	if(wear_suit)
-		dat += "<BR>[TAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
 	if(slot_shoes in obscured)
 		dat += "<BR><font color=grey><B>Shoes:</B> Obscured by [wear_suit]</font>"
 	else
@@ -484,15 +483,15 @@
 	else
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
 	if(w_uniform)
-		dat += "<BR>[TAB]&#8627; <A href='?src=\ref[src];sensors=1'>Set suit sensors</A>"
-		dat += "<BR>[TAB]&#8627;<B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
+		dat += "<BR>[HTMLTAB]&#8627; <A href='?src=\ref[src];sensors=1'>Set suit sensors</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		if(pickpocket)
-			dat += "<BR>[TAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
+			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
 		else
-			dat += "<BR>[TAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
+			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
-		dat += "<BR>[TAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
 	dat += "<BR>"
 	if(handcuffed)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
@@ -507,17 +506,8 @@
 	popup.open()
 
 /mob/living/carbon/human/Topic(href, href_list)
-	if(href_list["hands"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
-			return
-		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
-
-	else if(href_list["item"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
-			return
-		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
-
-	else if(href_list["id"])
+	..() //Slot stripping, hand stripping, and internals setting in /mob/living/carbon/Topic()
+	if(href_list["id"])
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		handle_strip_id(usr)
@@ -532,18 +522,10 @@
 			return
 		toggle_sensors(usr)
 
-	else if(href_list["internals"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
-			return
-		set_internals(usr)
-
 	else if (href_list["refresh"])
 		if((machine)&&(in_range(src, usr)))
 			show_inv(machine)
-	else if (href_list["mach_close"])
-		var/t1 = text("window=[]", href_list["mach_close"])
-		unset_machine()
-		src << browse(null, t1)
+
 	else if (href_list["criminal"])
 		if(hasHUD(usr,"security"))
 			var/perpname = "wot"

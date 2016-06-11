@@ -130,12 +130,12 @@
 		return 0
 
 	user.visible_message("<span class='danger'>\The [user] is trying to inject \the [M] with \the [src]!</span>")
-	inuse = 1
-	spawn(50)
-		inuse = 0
 
+	inuse = 1
 	if(!do_after(user, M, 5 SECONDS))
+		inuse = 0 //If you've got a better idea on how to not repeat this twice I'd like to hear it
 		return
+	inuse = 0
 
 	M.visible_message("<span class='danger'>\The [M] has been injected with \the [src] by \the [user].</span>")
 	if (!istype(M, /mob/living/carbon/human) && !istype(M, /mob/living/carbon/monkey))
@@ -145,7 +145,7 @@
 	inject(M, user)
 	if(buf.types & DNA2_BUF_SE)
 		if(block)// Isolated injector
-			if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human)  )
+			if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human))
 				message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
 				log_attack("[key_name(user)] injected [key_name(M)] with the Isolated [name] (MONKEY)")
 				log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")

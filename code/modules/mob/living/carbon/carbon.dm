@@ -398,7 +398,6 @@
 
 /mob/living/carbon/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)
-	var/TAB = "&nbsp;&nbsp;&nbsp;&nbsp;"
 	var/dat = ""
 
 	if(handcuffed)
@@ -415,7 +414,7 @@
 
 	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[TAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
 
 	dat += {"
 	<BR>
@@ -447,7 +446,6 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		set_internals(usr)
-	else ..()
 
 //generates realistic-ish pulse output based on preset levels
 /mob/living/carbon/proc/get_pulse(var/method)	//method 0 is for hands, 1 is for machines, more accurate
