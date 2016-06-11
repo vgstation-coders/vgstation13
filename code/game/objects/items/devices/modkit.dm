@@ -132,7 +132,7 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/gun/energy/polarstar
 	finished[1] = /obj/item/weapon/gun/energy/polarstar/spur
-	
+
 /obj/item/device/modkit/aeg_parts
 	name = "advanced energy gun modkit"
 	desc = "A kit containing all the needed tools and parts to modify an energy gun into an advanced energy gun, granting it the ability to recharge itself."

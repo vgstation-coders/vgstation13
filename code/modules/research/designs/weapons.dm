@@ -1,14 +1,14 @@
 /datum/design/nuclear_gun
-	name = "Advanced Energy Gun Modkit"
-	desc = "Can be used on an energy gun to grant it the ability to recharge itself over time."
+	name = "Advanced Energy Gun"
+	desc = "An energy gun enhanced to automatically charge itself."
 	id = "nuclear_gun"
 	req_tech = list("combat" = 3, "materials" = 5, "powerstorage" = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_URANIUM = 500)
-	reliability_base = 76
+	materials = list(MAT_IRON = 12000, MAT_GLASS = 2500, MAT_PHAZON = 2000)
 	category = "Weapons"
-	build_path = /obj/item/device/modkit/aeg_parts
-
+	build_path = /obj/item/weapon/gun/energy/gun/nuclear
+	locked = 1
+	req_lock_access = list(access_armory)
 
 /datum/design/stunrevolver
 	name = "Stun Revolver"
