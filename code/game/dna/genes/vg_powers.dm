@@ -128,12 +128,11 @@ Obviously, requires DNA2.
 	color = list(1,0,0,0,
 				 0,1,0,0,
 				 0,0,1,0,
-				 0,0,0,0,
 				 0,0,0,1)
-	appearance_flags = NO_CLIENT_COLOR
+	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER
 
 
-var/noir_master = /obj/screen/plane_master/noir_master
+var/obj/screen/plane_master/noir_master/noir_master = new /obj/screen/plane_master/noir_master()
 
 /datum/dna/gene/basic/noir
 	name="Noir"
