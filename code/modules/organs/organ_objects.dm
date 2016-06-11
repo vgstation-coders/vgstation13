@@ -14,6 +14,7 @@
 	var/datum/organ/internal/organ_data       // Stores info when removed.
 	var/prosthetic_name = "prosthetic organ"  // Flavour string for robotic organ.
 	var/prosthetic_icon                       // Icon for robotic organ.
+	var/uber = 0
 
 /obj/item/organ/attack_self(mob/user as mob)
 
@@ -36,12 +37,12 @@
 
 /obj/item/organ/process()
 
-	if(robotic)
+	if(robotic || uber)
 		processing_objects -= src
 		return
 
 	// Don't process if we're in a freezer, an MMI or a stasis bag. //TODO: ambient temperature?
-	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
+	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer) || istype(loc,/obj/structure/closet/secure_closet/freezer))
 		return
 
 	if(fresh && prob(40))
@@ -99,6 +100,33 @@
 	fresh = 6 // Juicy.
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
+
+/obj/item/organ/heart/examine(mob/user)
+	..()
+	if(uber)
+		to_chat(user,"<span class='info'>There's a mechanical device stuck onto the heart. You can read Uber on it.</span>")
+
+/obj/item/organ/heart/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(istype(W,/obj/item/uberdevice))
+		if(robotic)
+			to_chat(user,"<span class='warning'>You can't seem to find yourself able to stick the device onto the organ.</span>")
+		else if(uber)
+			to_chat(user,"<span class='warning'>There's another device already planted on the heart.</span>")
+		else if(health > 0)
+			user.u_equip(W)
+			qdel(W)
+			uber = 1
+			organ_data.uber = 1
+			icon_state = "uberheart"
+			to_chat(user,"<span class='notice'>The device fits perfectly on the heart.</span>")
+		else
+			to_chat(user,"<span class='warning'>Sticking that device on a dead heart feels beyond wasteful.</span>")
+	else
+		return ..()
+
+/obj/item/organ/heart/update_icon()
+	if(uber)
+		icon_state = "uberheart"
 
 /obj/item/organ/lungs
 	name = "human lungs"

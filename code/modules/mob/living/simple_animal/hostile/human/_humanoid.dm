@@ -31,6 +31,7 @@
 	var/list/items_to_drop = list()
 
 	var/list/visible_items = list()
+	var/persist = 0
 
 /mob/living/simple_animal/hostile/humanoid/New()
 	..()
@@ -54,5 +55,6 @@
 				var/atom/movable/A = object
 				A.forceMove(get_turf(src))
 
-	qdel(src)
+	if(!persist)
+		qdel(src)
 	return

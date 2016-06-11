@@ -15,6 +15,7 @@
 	var/rejecting            // Is this organ already being rejected?
 	var/obj/item/organ/organ_holder
 	var/datum/dna/owner_dna
+	var/uber = 0
 
 
 /datum/organ/internal/Copy()
@@ -196,6 +197,7 @@
 	parent_organ = "chest"
 	removed_type = /obj/item/organ/heart
 
+
 /datum/organ/internal/kidney
 	name = "kidneys"
 	parent_organ = "groin"
@@ -222,6 +224,9 @@
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
+		if(uber)
+			removed_organ.uber = 1
+			removed_organ.update_icon()
 		removed_organ.update()
 		organ_holder = removed_organ
 
