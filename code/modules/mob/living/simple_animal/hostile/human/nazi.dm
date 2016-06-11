@@ -89,7 +89,7 @@
 			ammo = 6
 		else
 			//we be going berserker
-			emote("me",1,"puts away his mateba and tighten the grip on his knife.")
+			emote("me",1,"puts away his mateba and tightens the grip on his knife.")
 			icon_state = "naziknife"
 			icon_living = "naziknife"
 			melee_damage_lower = 40
@@ -98,4 +98,5 @@
 			minimum_distance = 0
 			ranged = 0
 			spawn(10)
-				say("Come over here. I promise I will heal you!")
+				if(health > 0)
+					say("Come over here. I promise I will heal you!")

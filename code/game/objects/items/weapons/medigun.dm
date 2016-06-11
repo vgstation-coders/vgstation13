@@ -1,4 +1,10 @@
 /////Medi-Gun, coded by Deity Link, inspired by Valve's Team Fortress 2/////
+
+#define MAX_UBERCHARGE	100
+#define MEDIHEAL		0.5
+#define MEDIUBER		1
+#define MEDIHARM		-1
+
 /obj/item/medigunpack
 	name = "\improper Medi-Gun"
 	desc = "You wear this on your back and heal people with it."
@@ -30,7 +36,7 @@
 /obj/item/medigunpack/MouseDrop(atom/over_object)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
-		if (!( istype(over_object, /obj/screen/inventory) ))
+		if (!istype(over_object, /obj/screen/inventory))
 			return ..()
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 
@@ -38,23 +44,21 @@
 			if(istype(medigun.loc,/mob))
 				var/mob/M = medigun.loc
 				M.u_equip(medigun)
-			medigun.loc = src
+			medigun.forceMove(src)
 			update_icon()
 
-		if (H.back == src && !H.incapacitated())
+		if ((src == H.get_item_by_slot(slot_back)) && !H.incapacitated())
 			var/obj/screen/inventory/OI = over_object
 
 			if(OI.hand_index)
 				H.u_equip(src, 1)
 				H.put_in_hand(OI.hand_index, src)
 				H.update_inv_wear_suit()
-				src.add_fingerprint(H)
-			return
-	return
+				add_fingerprint(H)
 
 /obj/item/medigunpack/attack_hand(mob/user)
 	if (medigun && (src.loc == user))
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		user.put_in_hands(medigun)
 		update_icon()
 	else
@@ -62,12 +66,15 @@
 
 /obj/item/medigunpack/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(W == medigun)
-		user.u_equip(W)
-		W.loc = src
+		user.drop_item(W,get_turf(src))
+		W.forceMove(W)
 		update_icon()
-		return
-	else if(istype(W, /obj/item/weapon/card/emag) && !emagged)
-		to_chat(user, "<span class='warning'>You swipe \the [W] through the circuits.</span>")
+		return 1
+	return ..()
+
+/obj/item/medigunpack/emag_act(mob/user as mob)
+	if(!emagged)
+		to_chat(user, "<span class='warning'>You swipe the cryptographic sequencer through the circuits.</span>")
 		emagged = 1
 		medigun.emagged = 1
 		medigun.icon_state = "medigunred"
@@ -75,9 +82,6 @@
 		item_state = "medigunred"
 		user.update_inv_back()
 		user.update_inv_hands()
-		return
-	else
-		return ..()
 
 
 /obj/item/medigunpack/dropped(mob/user)
@@ -85,7 +89,7 @@
 		if(istype(medigun.loc,/mob))
 			var/mob/M = medigun.loc
 			M.u_equip(medigun)
-		medigun.loc = src
+		medigun.forceMove(src)
 		update_icon()
 	else
 		medigun = new(src)
@@ -135,7 +139,7 @@
 
 /obj/item/medigun/examine(mob/user)
 	..()
-	to_chat(user,"<span class=\"info\">Ccharge = [ubercharge]%</span>")
+	to_chat(user,"<span class='info'>Charge = [ubercharge]%</span>")
 
 /obj/item/medigun/New()
 	..()
@@ -163,9 +167,6 @@
 
 /obj/item/medigun/afterattack(var/atom/A, var/mob/living/user)
 	add_fingerprint(user)
-	if(A == medigunpack)
-		dropped(user)
-		return
 	if(get_dist(user,A) > 3)
 		playsound(user, empty_sound, 50, 1)
 		return
@@ -203,7 +204,7 @@
 		playsound(user, empty_sound, 50, 1)
 
 /obj/item/medigun/attack_self(mob/user)
-	if((ubercharge >= 100) && healtarget)
+	if((ubercharge >= MAX_UBERCHARGE) && healtarget)
 		ubercharge = 0
 		playsound(user, 'sound/weapons/medigun_ubercharge.ogg', 75, 1)
 
@@ -231,16 +232,18 @@
 			if(prob(chance_of_death))//...But I'm fairly certain your heart-"...
 				to_chat(ubertarget,"<span class='danger'>THIS--THIS IS TOO MUCH POWER")
 				spawn(160)
-					ubertarget.flags &= ~INVULNERABLE
-					ubertarget.gib()
+					if(ubertarget)
+						ubertarget.flags &= ~INVULNERABLE
+						ubertarget.gib()
 			else
 				to_chat(ubertarget,"<span class='danger'>YOU ARE BULLETPROOF")
 				spawn(80)
-					animate(ubertarget)
-					ubertarget.color = null
-					ubertarget.flags &= ~INVULNERABLE
-					if(heartcheck)
-						heartcheck.damage += rand(5,60)
+					if(ubertarget)
+						animate(ubertarget)
+						ubertarget.color = null
+						ubertarget.flags &= ~INVULNERABLE
+						if(heartcheck)
+							heartcheck.damage += rand(5,60)
 		else
 			var/duration = 40
 
@@ -248,15 +251,17 @@
 				duration = 60
 
 			spawn(duration)
-				animate(ubertarget)
-				ubertarget.color = null
-				ubertarget.flags &= ~INVULNERABLE
-				if(heartcheck && !target_has_uberheart)
-					heartcheck.damage += rand(5,30)
+				if(ubertarget)
+					animate(ubertarget)
+					ubertarget.color = null
+					ubertarget.flags &= ~INVULNERABLE
+					if(heartcheck && !target_has_uberheart)
+						heartcheck.damage += rand(5,30)
 
-/obj/item/medigun/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
-		to_chat(user, "<span class='warning'>You swipe \the [W] through the circuits.</span>")
+
+/obj/item/medigun/emag_act(mob/user as mob)
+	if(!emagged)
+		to_chat(user, "<span class='warning'>You swipe the cryptographic sequencer through the circuits.</span>")
 		emagged = 1
 		medigunpack.emagged = 1
 		medigunpack.update_icon()
@@ -264,19 +269,17 @@
 		item_state = "medigunred"
 		user.update_inv_back()
 		user.update_inv_hands()
-		return
-	else
-		return ..()
 
 /obj/item/medigun/proc/heal(var/mob/living/M)
-	var/healing = 0.5
+	var/healing = MEDIHEAL
 	if(emagged)
-		healing = -1
+		healing = MEDIHARM
+
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/heartcheck = H.internal_organs_by_name["heart"]
 		if(heartcheck.uber)
-			healing = 1
+			healing = MEDIUBER
 
 	M.adjustOxyLoss(-2*healing)
 	M.heal_organ_damage(healing*2, 0)
@@ -288,26 +291,21 @@
 	M.adjustFireLoss(-2*healing)
 
 	if(healing > 0)
-		if(M.reagents.has_reagent("toxin"))
-			M.reagents.remove_reagent("toxin", healing)
-		if(M.reagents.has_reagent("stoxin"))
-			M.reagents.remove_reagent("stoxin", healing)
-		if(M.reagents.has_reagent("plasma"))
-			M.reagents.remove_reagent("plasma", healing)
-		if(M.reagents.has_reagent("sacid"))
-			M.reagents.remove_reagent("sacid", healing)
-		if(M.reagents.has_reagent("pacid"))
-			M.reagents.remove_reagent("pacid", healing)
-		if(M.reagents.has_reagent("cyanide"))
-			M.reagents.remove_reagent("cyanide", healing)
-		if(M.reagents.has_reagent("amatoxin"))
-			M.reagents.remove_reagent("amatoxin", healing)
-		if(M.reagents.has_reagent("chloralhydrate"))
-			M.reagents.remove_reagent("chloralhydrate", healing)
-		if(M.reagents.has_reagent("carpotoxin"))
-			M.reagents.remove_reagent("carpotoxin", healing)
-		if(M.reagents.has_reagent("mindbreaker"))
-			M.reagents.remove_reagent("mindbreaker", healing)
+		var/list/reagents_to_check = list(
+			"toxin",
+			"stoxin",
+			"plasma",
+			"sacid",
+			"pacid",
+			"cyanide",
+			"amatoxin",
+			"chloralhydrate",
+			"carpotoxin",
+			"mindbreaker",
+			)
+		for(var/reagent in reagents_to_check)
+			if(M.reagents.has_reagent(reagent))
+				M.reagents.remove_reagent(reagent, healing)
 
 		if(istype(M,/mob/living/simple_animal))
 			var/mob/living/simple_animal/SA = M
@@ -340,16 +338,16 @@
 		make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
 	spawn(8)
 		make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
-	if(healing == 1)
-		if((ubercharge == 99) && istype(loc,/mob))
+	if(healing == MEDIUBER)
+		if((ubercharge == (MAX_UBERCHARGE-1)) && istype(loc,/mob))
 			to_chat(loc,"<span class='info'>CHARGE READY</span>")
 			playsound(loc, 'sound/weapons/medigun_charged.ogg', 50, 1)
-		ubercharge = min(ubercharge+1,100)
+		ubercharge = min(ubercharge+1,MAX_UBERCHARGE)
 
 /obj/item/medigun/dropped(mob/user)
 	spawn(1)//to prevent a few exploits
 		if(medigunpack)
-			loc = medigunpack
+			forceMove(medigunpack)
 			medigunpack.update_icon()
 		else
 			qdel(src)
@@ -358,3 +356,8 @@
 	var/turf/T = get_turf(A)
 	playsound(T, get_sfx("soulstone"), 50,1)
 	//todo: add a custom /obj/effect/tracker
+
+#undef MAX_UBERCHARGE
+#undef MEDIHEAL
+#undef MEDIUBER
+#undef MEDIHARM

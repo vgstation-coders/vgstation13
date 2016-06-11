@@ -14,7 +14,6 @@
 	var/datum/organ/internal/organ_data       // Stores info when removed.
 	var/prosthetic_name = "prosthetic organ"  // Flavour string for robotic organ.
 	var/prosthetic_icon                       // Icon for robotic organ.
-	var/uber = 0
 
 /obj/item/organ/attack_self(mob/user as mob)
 
@@ -37,7 +36,7 @@
 
 /obj/item/organ/process()
 
-	if(robotic || uber)
+	if(robotic || (organ_data && organ_data.uber))
 		processing_objects -= src
 		return
 
@@ -103,19 +102,18 @@
 
 /obj/item/organ/heart/examine(mob/user)
 	..()
-	if(uber)
+	if(organ_data && organ_data.uber)
 		to_chat(user,"<span class='info'>There's a mechanical device stuck onto the heart. You can read Uber on it.</span>")
 
 /obj/item/organ/heart/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W,/obj/item/uberdevice))
 		if(robotic)
 			to_chat(user,"<span class='warning'>You can't seem to find yourself able to stick the device onto the organ.</span>")
-		else if(uber)
+		else if(organ_data && organ_data.uber)
 			to_chat(user,"<span class='warning'>There's another device already planted on the heart.</span>")
 		else if(health > 0)
 			user.u_equip(W)
 			qdel(W)
-			uber = 1
 			organ_data.uber = 1
 			icon_state = "uberheart"
 			to_chat(user,"<span class='notice'>The device fits perfectly on the heart.</span>")
@@ -124,8 +122,9 @@
 	else
 		return ..()
 
-/obj/item/organ/heart/update_icon()
-	if(uber)
+/obj/item/organ/heart/update()
+	..()
+	if(organ_data && organ_data.uber)
 		icon_state = "uberheart"
 
 /obj/item/organ/lungs

@@ -224,9 +224,6 @@
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
-		if(uber)
-			removed_organ.uber = 1
-			removed_organ.update_icon()
 		removed_organ.update()
 		organ_holder = removed_organ
 
