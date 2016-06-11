@@ -15,7 +15,7 @@
 	var/rejecting            // Is this organ already being rejected?
 	var/obj/item/organ/organ_holder
 	var/datum/dna/owner_dna
-	var/uber = 0
+	var/list/modifiers = list()
 
 
 /datum/organ/internal/Copy()
