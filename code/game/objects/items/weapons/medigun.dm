@@ -309,7 +309,8 @@
 
 		if(istype(M,/mob/living/simple_animal))
 			var/mob/living/simple_animal/SA = M
-			SA.health = min(SA.maxHealth,SA.health+2)
+			if(SA.health > 0)
+				SA.health = min(SA.maxHealth,SA.health+2)
 
 		if(istype(M,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
