@@ -37,6 +37,8 @@
 	var/burn_dmg = 0
 	var/toxin_dmg = 0
 
+	var/uberheart = 0
+
 /obj/effect/landmark/corpse/New()
 	if(ticker)
 		initialize()
@@ -83,6 +85,10 @@
 
 	if(husk)
 		M.ChangeToHusk()
+
+	if(uberheart)
+		var/datum/organ/internal/heart/heartcheck = M.internal_organs_by_name["heart"]
+		heartcheck.modifiers += "uber"
 
 	qdel(src)
 	return M
@@ -393,6 +399,7 @@
 
 /obj/effect/landmark/corpse/nazi
 	name = "Nazi"
+	uberheart = 1
 	corpseshoes = /obj/item/clothing/shoes/jackboots
 	corpseuniform = /obj/item/clothing/under/soldieruniform
 	corpsehelmet = /obj/item/clothing/head/panzer
