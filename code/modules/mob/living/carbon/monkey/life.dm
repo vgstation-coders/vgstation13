@@ -5,7 +5,7 @@
 	var/toxins_alert = 0
 	var/fire_alert = 0
 	var/pressure_alert = 0
-
+	base_insulation = 0.5
 	var/temperature_alert = 0
 
 
@@ -426,7 +426,7 @@
 	if(uniform)
 		thermal_protection += uniform.return_thermal_protection()
 
-	var/max_protection = max(get_thermal_protection(get_thermal_protection_flags()),0.5) // monkies have fur, silly!
+	var/max_protection = max(get_thermal_protection(get_thermal_protection_flags()),base_insulation) // monkies have fur, silly!
 	return min(thermal_protection,max_protection)
 
 /mob/living/carbon/monkey/get_heat_protection_flags(temperature)
