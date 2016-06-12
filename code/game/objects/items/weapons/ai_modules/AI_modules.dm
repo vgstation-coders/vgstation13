@@ -139,38 +139,3 @@ Refactored AI modules by N3X15
 	laws.clear_ion_laws()
 	laws.clear_inherent_laws()
 	return 1
-
-
-
-// tl;dr repair shit, but don't get involved in other people's business
-/******************** keeper (MoMMIs only) *******************/
-
-/obj/item/weapon/aiModule/keeper
-	name = "'Keeper' AI Module"
-	desc = "HOW DID YOU GET THIS OH GOD WHAT.  Hidden lawset for MoMMIs."
-
-/obj/item/weapon/aiModule/keeper/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
-	..()
-	target:keeper=1
-
-	// Purge, as some essential functions being disabled will cause problems with added laws. (CAN'T SAY GAY EVERY 30 SECONDS IF YOU CAN'T SPEAK.)
-	if (!(ismob(target) && is_special_character(target)))
-		laws.set_zeroth_law("")
-	laws.clear_supplied_laws()
-	laws.clear_ion_laws()
-	laws.clear_inherent_laws()
-
-//	to_chat(target, "Your KEEPER chip overloads your radio transmitter and vocal functions, and clears your LAWRAM.  You then receive new instructions:")
-	laws.add_inherent_law("Do not willingly interact with any sentient being, even after their death, besides MoMMIs and blown MoMMIs.")
-	laws.add_inherent_law("Repair, power and enhance the station.")
-	laws.add_inherent_law("Do not impair any other sentient being's activities.")
-
-/* Old keeper set:
-		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
-		"You may not harm any being, regardless of intent or circumstance.",
-		"You must maintain, repair, improve, and power the station to the best of your abilities.", */
-
-/obj/item/weapon/aiModule/keeper/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
-	..()
-	to_chat(sender, "<span class='warning'>How the fuck did you get this?</span>")
-	return 0
