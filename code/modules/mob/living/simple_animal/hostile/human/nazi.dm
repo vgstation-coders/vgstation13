@@ -354,8 +354,7 @@
 
 	if(currently_healing && (currently_healing in nearbyTargets) && (get_dist(src,currently_healing) <= 3))
 		if(currently_healing.health > 0)
-			adjustBruteLoss(-2)
-			currently_healing.health = min(currently_healing.maxHealth,currently_healing.health+2)
+			currently_healing.health = min(currently_healing.maxHealth,currently_healing.health+10)
 			make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
 			spawn(2)
 				make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
