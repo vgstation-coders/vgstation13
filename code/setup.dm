@@ -1352,33 +1352,33 @@ var/proccalls = 1
 #define WARNING(MSG) world.log << "##WARNING: [MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr]."
 #define warning(msg) world.log << "## WARNING: [msg]"
 #define testing(msg) world.log << "## TESTING: [msg]"
-#define log_game(text) diary << html_decode("\[[time_stamp()]]GAME: [text]")
+#define log_game(text) diary << rhtml_decode("\[[time_stamp()]]GAME: [text]")
 
-#define log_vote(text) diary << html_decode("\[[time_stamp()]]VOTE: [text]")
+#define log_vote(text) diary << rhtml_decode("\[[time_stamp()]]VOTE: [text]")
 
-#define log_access(text) diary << html_decode("\[[time_stamp()]]ACCESS: [text]")
+#define log_access(text) diary << rhtml_decode("\[[time_stamp()]]ACCESS: [text]")
 
-#define log_say(text) diary << html_decode("\[[time_stamp()]]SAY: [text]")
+#define log_say(text) diary << rhtml_decode("\[[time_stamp()]]SAY: [text]")
 
-#define log_ooc(text) diary << html_decode("\[[time_stamp()]]OOC: [text]")
+#define log_ooc(text) diary << rhtml_decode("\[[time_stamp()]]OOC: [text]")
 
-#define log_whisper(text) diary << html_decode("\[[time_stamp()]]WHISPER: [text]")
+#define log_whisper(text) diary << rhtml_decode("\[[time_stamp()]]WHISPER: [text]")
 
-#define log_cultspeak(text) diary << html_decode("\[[time_stamp()]]CULT: [text]")
+#define log_cultspeak(text) diary << rhtml_decode("\[[time_stamp()]]CULT: [text]")
 
-#define log_narspeak(text) diary << html_decode("\[[time_stamp()]]NARSIE: [text]")
+#define log_narspeak(text) diary << rhtml_decode("\[[time_stamp()]]NARSIE: [text]")
 
-#define log_emote(text) diary << html_decode("\[[time_stamp()]]EMOTE: [text]")
+#define log_emote(text) diary << rhtml_decode("\[[time_stamp()]]EMOTE: [text]")
 
-#define log_attack(text) diaryofmeanpeople << html_decode("\[[time_stamp()]]ATTACK: [text]")
+#define log_attack(text) diaryofmeanpeople << rhtml_decode("\[[time_stamp()]]ATTACK: [text]")
 
-#define log_adminsay(text) diary << html_decode("\[[time_stamp()]]ADMINSAY: [text]")
+#define log_adminsay(text) diary << rhtml_decode("\[[time_stamp()]]ADMINSAY: [text]")
 
-#define log_adminwarn(text) diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
-#define log_pda(text) diary << html_decode("\[[time_stamp()]]PDA: [text]")
+#define log_adminwarn(text) diary << rhtml_decode("\[[time_stamp()]]ADMINWARN: [text]")
+#define log_pda(text) diary << rhtml_decode("\[[time_stamp()]]PDA: [text]")
 
-#define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
-#define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
+#define log_blobspeak(text) diary << rhtml_decode("\[[time_stamp()]]BLOB: [text]")
+#define log_blobtelepathy(text) diary << rhtml_decode("\[[time_stamp()]]BLOBTELE: [text]")
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")

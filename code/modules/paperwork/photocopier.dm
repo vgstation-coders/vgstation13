@@ -88,7 +88,7 @@
 							c.info = "<font color = #101010>"
 						else			//no toner? shitty copies for you!
 							c.info = "<font color = #808080>"
-						var/copied = html_decode(copy.info)
+						var/copied = rhtml_decode(copy.info)
 						copied = replacetext(copied, "color:", "nocolor:")	//state of the art techniques in action
 						c.info += copied
 						c.info += "</font>"

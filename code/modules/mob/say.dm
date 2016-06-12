@@ -56,7 +56,7 @@
 
 
 	var/turf/T = get_turf(src)
-	message = src.say_quote("\"[html_encode(message)]\"")
+	message = src.say_quote("\"[rhtml_encode(message)]\"")
 	log_say("[name]/[key_name(src)] (@[T.x],[T.y],[T.z]) Deadsay: [message]")
 	//var/rendered = "<span class='game deadsay'><span class='prefix'>DEAD:</span> <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
 	var/rendered2 = null//edited

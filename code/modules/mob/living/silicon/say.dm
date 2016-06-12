@@ -20,7 +20,7 @@
 	var/turf/T = get_turf(src)
 	log_say("[key_name(src)] (@[T.x],[T.y],[T.z] Binary: [message]")
 
-	var/message_a = say_quote("\"[html_encode(message)]\"")
+	var/message_a = say_quote("\"[rhtml_encode(message)]\"")
 	var/rendered = text("<i><span class='binaryradio'>Robotic Talk, <span class='name'>[]</span> <span class='message'>[]</span></span></i>",name,message_a)
 
 	for (var/mob/S in player_list)

@@ -990,7 +990,7 @@ var/list/slot_equipment_priority = list( \
 	if(isVentCrawling())
 		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
 		return
-	
+
 	var/obj/item/W = get_held_item_by_index(active_hand)
 	if(W)
 		W.attack_self(src)
@@ -1068,11 +1068,11 @@ var/list/slot_equipment_priority = list( \
 
 	if(usr != src)
 		to_chat(usr, "No.")
-	var/msg = input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",html_decode(flavor_text)) as message|null
+	var/msg = input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",rhtml_decode(flavor_text)) as message|null
 
 	if(msg != null)
 		msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-		msg = html_encode(msg)
+		msg = rhtml_encode(msg)
 
 		flavor_text = msg
 

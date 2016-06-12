@@ -25,8 +25,8 @@
 /datum/speech_filter_action/bbcode/img/Run(var/text, var/mob/user, var/atom/movable/P)
 	expr.index = 1
 	while(expr.Find(text, expr.index))
-		message_admins("[key_name_admin(user)] added an image ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
-		var/rtxt   = "<img src=\"[html_encode(expr.group[1])]\" />"
+		message_admins("[key_name_admin(user)] added an image ([rhtml_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
+		var/rtxt   = "<img src=\"[rhtml_encode(expr.group[1])]\" />"
 		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
 		expr.index = expr.index + length(rtxt)
 	return text
@@ -34,8 +34,8 @@
 /datum/speech_filter_action/bbcode/video/Run(var/text, var/mob/user, var/atom/movable/P)
 	expr.index = 1
 	while(expr.Find(text, expr.index))
-		message_admins("[key_name_admin(user)] added a video ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
-		var/rtxt   = "<embed src=\"[html_encode(expr.group[1])]\" width=\"420\" height=\"344\" type=\"x-ms-wmv\" volume=\"85\" autoStart=\"0\" autoplay=\"true\" />"
+		message_admins("[key_name_admin(user)] added a video ([rhtml_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
+		var/rtxt   = "<embed src=\"[rhtml_encode(expr.group[1])]\" width=\"420\" height=\"344\" type=\"x-ms-wmv\" volume=\"85\" autoStart=\"0\" autoplay=\"true\" />"
 		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
 		expr.index = expr.index + length(rtxt)
 	return text

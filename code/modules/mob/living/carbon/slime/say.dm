@@ -19,7 +19,7 @@
 		if(speaker in Friends)
 			speech_buffer = list()
 			speech_buffer += speech.name
-			speech_buffer += lowertext(html_encode(rendered_speech))
+			speech_buffer += lowertext(rhtml_encode(rendered_speech))
 	..()
 
 /mob/living/carbon/slime/say_understands(var/other)
