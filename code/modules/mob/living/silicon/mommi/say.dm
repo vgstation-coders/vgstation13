@@ -19,10 +19,10 @@
 
 		var/turf/T = get_turf(src)
 		var/msg = !T ? "Nullspace" : "[T.x],[T.y],[T.z]"
-		log_say("[key_name(src)] (@[msg]) [damage_control_network]: [html_encode(speech.message)]")
+		log_say("[key_name(src)] (@[msg]) [damage_control_network]: [rhtml_encode(speech.message)]")
 
 
-		var/interior_message = say_quote("\"[html_encode(speech.message)]\"")
+		var/interior_message = say_quote("\"[rhtml_encode(speech.message)]\"")
 		var/rendered = "<i><span class='mommiradio'>[damage_control_network], <span class='name'>[name]</span> <span class='message'>[interior_message]</span></span></i>"
 
 		for (var/mob/S in player_list)

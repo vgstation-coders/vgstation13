@@ -48,10 +48,10 @@
 		return 1
 	if(message_mode == MODE_HEADSET && construct_chat_check(0))
 		var/turf/T = get_turf(src)
-		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
+		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [rhtml_encode(speech.message)]")
 		for(var/mob/M in mob_list)
 			if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
-				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
+				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [rhtml_encode(speech.message)]</span>")
 		return 1
 
 /mob/living/simple_animal/construct/gib()

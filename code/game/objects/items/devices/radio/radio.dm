@@ -225,13 +225,13 @@
 */
 
 /obj/item/device/radio/talk_into(var/datum/speech/speech_orig, var/channel=null)
-	say_testing(loc, "\[Radio\] - Got radio/talk_into([html_encode(speech_orig.message)], [channel!=null ? channel : "null"]).")
+	say_testing(loc, "\[Radio\] - Got radio/talk_into([rhtml_encode(speech_orig.message)], [channel!=null ? channel : "null"]).")
 	if(!on)
 		say_testing(loc, "\[Radio\] - Not on.")
 		return // the device has to be on
 	//  Fix for permacell radios, but kinda eh about actually fixing them.
 	if(!speech_orig.speaker || !speech_orig.message)
-		say_testing(loc, "\[Radio\] - speech.speaker or speech.message are null. [speech_orig.speaker], [html_encode(speech_orig.message)]")
+		say_testing(loc, "\[Radio\] - speech.speaker or speech.message are null. [speech_orig.speaker], [rhtml_encode(speech_orig.message)]")
 		return
 
 	//  Uncommenting this. To the above comment:

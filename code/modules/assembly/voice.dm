@@ -21,7 +21,7 @@
 	if(listening && !speech.frequency)
 		recorded = speech.message
 		listening = 0
-		say("Activation message is '[html_encode(speech.message)]'.")
+		say("Activation message is '[rhtml_encode(speech.message)]'.")
 	else
 		if(findtext(speech.message, recorded))
 			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))

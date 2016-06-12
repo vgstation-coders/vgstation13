@@ -226,7 +226,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		var/list/level)          // z-levels that can hear us
 #ifdef SAY_DEBUG
 	if(speech.speaker)
-		say_testing(speech.speaker, "broadcast_message start - Sending \"[html_encode(speech.message)]\" to [speech.frequency]")
+		say_testing(speech.speaker, "broadcast_message start - Sending \"[rhtml_encode(speech.message)]\" to [speech.frequency]")
 #endif
 
 	// Cut down on the message sizes.
@@ -293,7 +293,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 			// --- This following recording is intended for research and feedback in the use of department radio channels ---
 
-		var/enc_message = speech.speaker.say_quote("\"[speech.message]\"") // Does not need to be html_encoded - N3X
+		var/enc_message = speech.speaker.say_quote("\"[speech.message]\"") // Does not need to be rhtml_encoded - N3X
 		var/blackbox_msg = "[speech.speaker] [enc_message]"
 
 		if(istype(blackbox))

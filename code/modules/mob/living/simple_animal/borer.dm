@@ -189,7 +189,7 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 		to_chat(src, "You have no host to speak to.")
 		return //No host, no audible speech.
 
-	var/encoded_message = html_encode(message)
+	var/encoded_message = rhtml_encode(message)
 
 	to_chat(src, "You drop words into [host]'s mind: <span class='borer2host'>\"[encoded_message]\"</span>")
 	to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
@@ -209,7 +209,7 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 	/*
 	for(var/mob/M in mob_list)
 		if(M.mind && (istype(M, /mob/dead/observer)))
-			to_chat(M, "<i>Thought-speech, <b>[truename]</b> -> <b>[host]:</b> [copytext(html_encode(message), 2)]</i>")
+			to_chat(M, "<i>Thought-speech, <b>[truename]</b> -> <b>[host]:</b> [copytext(rhtml_encode(message), 2)]</i>")
 	*/
 
 /mob/living/simple_animal/borer/Stat()

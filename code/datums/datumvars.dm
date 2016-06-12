@@ -362,7 +362,7 @@ body
 		html += "[name] = <span class='value'>null</span>"
 
 	else if (istext(value))
-		html += "[name] = <span class='value'>\"[html_encode(value)]\"</span>"
+		html += "[name] = <span class='value'>\"[rhtml_encode(value)]\"</span>"
 
 	else if (isicon(value))
 		#ifdef VARSICON

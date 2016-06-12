@@ -116,7 +116,7 @@ var/list/freqtoname = list(
 		</span>"}
 	*/
 	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
-	say_testing(src, html_encode(.))
+	say_testing(src, rhtml_encode(.))
 	if(pooled)
 		returnToPool(filtered_speech)
 
@@ -177,7 +177,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 		else
 			say_testing(speech.speaker," We <i>do</i> understand this gentle\[wo\]man.")
 
-		rendered="[speech.lquote][html_encode(rendered)][speech.rquote]"
+		rendered="[speech.lquote][rhtml_encode(rendered)][speech.rquote]"
 
 		if(AM)
 			return AM.say_quote(rendered)

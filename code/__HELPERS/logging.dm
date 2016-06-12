@@ -9,30 +9,30 @@
 #define WARNING(MSG) to_chat(world, "##WARNING: [MSG] in [__FILE__] at line [__LINE__] src: [src] usr: [usr].")
 #define warning(msg) world.log << "## WARNING: [msg]"
 #define testing(msg) world.log << "## TESTING: [msg]"
-#define log_game(text) diary << html_decode("\[[time_stamp()]]GAME: [text]")
+#define log_game(text) diary << rhtml_decode("\[[time_stamp()]]GAME: [text]")
 
-#define log_vote(text) diary << html_decode("\[[time_stamp()]]VOTE: [text]")
+#define log_vote(text) diary << rhtml_decode("\[[time_stamp()]]VOTE: [text]")
 
-#define log_access(text) diary << html_decode("\[[time_stamp()]]ACCESS: [text]")
+#define log_access(text) diary << rhtml_decode("\[[time_stamp()]]ACCESS: [text]")
 
-#define log_say(text) diary << html_decode("\[[time_stamp()]]SAY: [text]")
+#define log_say(text) diary << rhtml_decode("\[[time_stamp()]]SAY: [text]")
 
-#define log_ooc(text) diary << html_decode("\[[time_stamp()]]OOC: [text]")
+#define log_ooc(text) diary << rhtml_decode("\[[time_stamp()]]OOC: [text]")
 
-#define log_whisper(text) diary << html_decode("\[[time_stamp()]]WHISPER: [text]")
+#define log_whisper(text) diary << rhtml_decode("\[[time_stamp()]]WHISPER: [text]")
 
-#define log_cultspeak(text) diary << html_decode("\[[time_stamp()]]CULT: [text]")
+#define log_cultspeak(text) diary << rhtml_decode("\[[time_stamp()]]CULT: [text]")
 
-#define log_narspeak(text) diary << html_decode("\[[time_stamp()]]NARSIE: [text]")
+#define log_narspeak(text) diary << rhtml_decode("\[[time_stamp()]]NARSIE: [text]")
 
-#define log_emote(text) diary << html_decode("\[[time_stamp()]]EMOTE: [text]")
+#define log_emote(text) diary << rhtml_decode("\[[time_stamp()]]EMOTE: [text]")
 
-#define log_attack(text) diaryofmeanpeople << html_decode("\[[time_stamp()]]ATTACK: [text]")
+#define log_attack(text) diaryofmeanpeople << rhtml_decode("\[[time_stamp()]]ATTACK: [text]")
 
-#define log_adminsay(text) diary << html_decode("\[[time_stamp()]]ADMINSAY: [text]")
+#define log_adminsay(text) diary << rhtml_decode("\[[time_stamp()]]ADMINSAY: [text]")
 
-#define log_adminwarn(text) diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
-#define log_pda(text) diary << html_decode("\[[time_stamp()]]PDA: [text]")
+#define log_adminwarn(text) diary << rhtml_decode("\[[time_stamp()]]ADMINWARN: [text]")
+#define log_pda(text) diary << rhtml_decode("\[[time_stamp()]]PDA: [text]")
 */
 
 /proc/log_admin(raw_text)
@@ -41,14 +41,14 @@
 	admin_log.Add(text_to_log)
 
 	if(config.log_admin)
-		diary << html_decode(text_to_log)
+		diary << rhtml_decode(text_to_log)
 
 	if(config.log_admin_only)
-		admin_diary << html_decode(text_to_log)
+		admin_diary << rhtml_decode(text_to_log)
 
 /proc/log_debug(text)
 	if (config.log_debug)
-		diary << html_decode("\[[time_stamp()]]DEBUG: [text]")
+		diary << rhtml_decode("\[[time_stamp()]]DEBUG: [text]")
 
 	for(var/client/C in admins)
 		if(C.prefs.toggles & CHAT_DEBUGLOGS)
@@ -59,12 +59,12 @@
 
 /proc/log_adminghost(text)
 	if (config.log_adminghost)
-		diary << html_decode("\[[time_stamp()]]ADMINGHOST: [text]")
+		diary << rhtml_decode("\[[time_stamp()]]ADMINGHOST: [text]")
 		message_admins("\[ADMINGHOST\] [text]")
 
 /proc/log_ghost(text)
 	if (config.log_adminghost)
-		diary << html_decode("\[[time_stamp()]]GHOST: [text]")
+		diary << rhtml_decode("\[[time_stamp()]]GHOST: [text]")
 		message_admins("\[GHOST\] [text]")
 
 

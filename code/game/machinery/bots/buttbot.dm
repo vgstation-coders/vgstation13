@@ -61,7 +61,7 @@ Here it is: Buttbot.
 
 			split_phrase[index] = "butt"
 
-		say(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		say(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically rhtml_encoded at render-time.
 
 
 

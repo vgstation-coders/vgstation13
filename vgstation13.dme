@@ -13,6 +13,7 @@
 #include "code\global.dm"
 #include "code\hub.dm"
 #include "code\names.dm"
+#include "code\russianfix.dm"
 #include "code\setup.dm"
 #include "code\stylesheet.dm"
 #include "code\world.dm"
