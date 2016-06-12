@@ -1572,7 +1572,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		else if(status == "cyborg")
 			O.status &= ~ORGAN_PEG
 			O.status |= ORGAN_ROBOT
-			O.limbTier = 0
+			O.limb_tier = 0
 		else if(status == "peg")
 			O.status &= ~ORGAN_ROBOT
 			O.status |= ORGAN_PEG

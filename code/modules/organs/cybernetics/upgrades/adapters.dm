@@ -8,18 +8,20 @@
 	..()
 	name = "[name] Tier [tier]"
 
-/obj/item/cybernetics/enhancer/apply(var/obj/item/O)
-	if(istype(O, obj/item/organ))
-		var/currentTier = O.organTier
-		if(currentTier >= tier)
-			to_chat(usr, "\the [src]'s tier is lower or equal that of \the [O]'s tier.")
+/obj/item/cybernetics/enhancer/apply(var/obj/item/O, mob/user)
+	if(istype(O, /obj/item/organ))
+		var/obj/item/organ/I = O
+		var/current_tier = I.organ_tier
+		if(current_tier >= tier)
+			to_chat(user, "\the [src]'s tier is lower or equal that of \the [O]'s tier.")
 			return
-		else if(tier = currentTier + 1)
+		else if(tier == current_tier + 1)
 			//This is so hacky
-			switch(currentTier)
+			switch(current_tier)
 				if(0)
-					O.organTier = 1
+					I.organ_tier = 1
+
 
 				if(1)
-					O.organTier = 2
+					I.organ_tier = 2
 

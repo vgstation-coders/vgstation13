@@ -50,7 +50,7 @@
 	var/wound_update_accuracy = 1
 
 	var/has_fat = 0 //Has a _fat variant
-	var/limbTier = 0 //For cybernetic upgrades, tier 0 being the base robotic limb
+	var/limb_tier = 0 //For cybernetic upgrades, tier 0 being the base robotic limb
 
 	var/grasp_id = 0 //Does this organ affect other grasping organs?
 	var/can_grasp = 0 //Can this organ actually grasp something?
@@ -778,7 +778,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	return
 
-/datum/organ/external/proc/robotize(limbTier)
+/datum/organ/external/proc/robotize(limb_tier)
 	src.status &= ~ORGAN_BROKEN
 	src.status &= ~ORGAN_BLEEDING
 	src.status &= ~ORGAN_SPLINTED
@@ -789,7 +789,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status |= ORGAN_ROBOT
 	src.species = null
 	src.destspawn = 0
-	src.limbTier = limbTier
+	src.limb_tier = limb_tier
 	for (var/datum/organ/external/T in children)
 		if(T)
 			T.robotize()
@@ -862,7 +862,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	else if(is_peg())
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	else if(is_robotic())
-		baseicon = "icons/mob/human_races/robotic/o_robot_[limbTier].dmi"
+		baseicon = "icons/mob/human_races/robotic/o_robot_[limb_tier].dmi"
 	return new /icon(baseicon, icon_state)
 
 //Our external limb is a peg
@@ -1151,7 +1151,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_peg())
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	if(is_robotic())
-		baseicon = "icons/mob/human_races/robotic/o_robot_[limbTier].dmi"
+		baseicon = "icons/mob/human_races/robotic/o_robot_[limb_tier].dmi"
 	return new /icon(baseicon, "[icon_name]_[g]")
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
