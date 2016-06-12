@@ -316,7 +316,7 @@
 	corpseback = /obj/item/weapon/storage/backpack
 	corpseshoes = /obj/item/clothing/shoes/white
 	corpseid = 0
-	
+
 /obj/effect/landmark/corpse/miner
 	corpseradio = /obj/item/device/radio/headset/headset_mining
 	corpseuniform = /obj/item/clothing/under/rank/miner
@@ -390,6 +390,41 @@
 
 /obj/effect/landmark/corpse/russian/ranged
 	corpsehelmet = /obj/item/clothing/head/ushanka
+
+/obj/effect/landmark/corpse/nazi
+	name = "Nazi"
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpseuniform = /obj/item/clothing/under/soldieruniform
+	corpsehelmet = /obj/item/clothing/head/panzer
+
+/obj/effect/landmark/corpse/nazi/soldier
+	name = "Nazi Soldier"
+	corpsehelmet = /obj/item/clothing/head/stalhelm
+	corpsesuit = /obj/item/clothing/suit/soldiercoat
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpsemask = /obj/item/clothing/mask/gas
+
+/obj/effect/landmark/corpse/nazi/mateba
+	name = "Nazi Officer"
+	corpseuniform = /obj/item/clothing/under/officeruniform
+	corpsehelmet = /obj/item/clothing/head/naziofficer
+	corpsesuit = /obj/item/clothing/suit/officercoat
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+
+/obj/effect/landmark/corpse/nazi/mateba/spacetrooper
+	name = "Nazi Trooper"
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/nazi
+	corpsesuit = /obj/item/clothing/suit/space/rig/nazi
+
+/obj/effect/landmark/corpse/nazi/medic
+	name = "Nazi Medic"
+	corpsehelmet = /obj/item/clothing/head/stalhelm
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat
+	corpsegloves = /obj/item/clothing/gloves/latex
+	corpseglasses = /obj/item/clothing/glasses/hud/health
+	corpsemask = /obj/item/clothing/mask/gas
+	corpseback = /obj/item/medigunpack
 
 //////////////////Misc Corpses///////////////////////////
 

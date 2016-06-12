@@ -29,6 +29,7 @@
 
 /obj/item/medigunpack/Destroy()
 	if(medigun)
+		medigun.medigunpack = null
 		qdel(medigun)
 	medigun = null
 	..()
@@ -73,16 +74,7 @@
 	return ..()
 
 /obj/item/medigunpack/emag_act(mob/user as mob)
-	if(!emagged)
-		to_chat(user, "<span class='warning'>You swipe the cryptographic sequencer through the circuits.</span>")
-		emagged = 1
-		medigun.emagged = 1
-		medigun.icon_state = "medigunred"
-		medigun.item_state = "medigunred"
-		item_state = "medigunred"
-		user.update_inv_back()
-		user.update_inv_hands()
-
+	medigun.emag_act(user)
 
 /obj/item/medigunpack/dropped(mob/user)
 	if(medigun)
@@ -147,6 +139,7 @@
 
 /obj/item/medigun/Destroy()
 	if(medigunpack)
+		medigunpack.medigun = null
 		qdel(medigunpack)
 	medigunpack = null
 	..()
@@ -155,6 +148,17 @@
 	if(!healtarget || (wielder != loc) || (get_dist(src,healtarget) > 3))
 		processing_objects.Remove(src)
 		return
+	var/obj/item/I = new(get_turf(src))
+	for(var/i=1;i<=5;i++)
+		if(healtarget in loc.contents)
+			break
+		else
+			step_towards(I,healtarget)
+			var/turf/T = I.loc
+			if(T.density)
+				healtarget = null
+				return
+
 	heal(healtarget)
 	return
 
@@ -291,21 +295,22 @@
 	M.adjustFireLoss(-2*healing)
 
 	if(healing > 0)
-		var/list/reagents_to_check = list(
-			"toxin",
-			"stoxin",
-			"plasma",
-			"sacid",
-			"pacid",
-			"cyanide",
-			"amatoxin",
-			"chloralhydrate",
-			"carpotoxin",
-			"mindbreaker",
-			)
-		for(var/reagent in reagents_to_check)
-			if(M.reagents.has_reagent(reagent))
-				M.reagents.remove_reagent(reagent, healing)
+		if(M.reagents)
+			var/list/reagents_to_check = list(
+				"toxin",
+				"stoxin",
+				"plasma",
+				"sacid",
+				"pacid",
+				"cyanide",
+				"amatoxin",
+				"chloralhydrate",
+				"carpotoxin",
+				"mindbreaker",
+				)
+			for(var/reagent in reagents_to_check)
+				if(M.reagents.has_reagent(reagent))
+					M.reagents.remove_reagent(reagent, healing)
 
 		if(istype(M,/mob/living/simple_animal))
 			var/mob/living/simple_animal/SA = M

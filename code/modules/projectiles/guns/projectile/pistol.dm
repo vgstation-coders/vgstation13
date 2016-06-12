@@ -87,3 +87,22 @@
 	return
 
 
+/obj/item/weapon/gun/projectile/luger
+	name = "\improper Luger P08"
+	desc = "The wraith of the SS"
+	icon_state = "p08"
+	max_shells = 8
+	origin_tech = "combat=2;materials=2"
+	caliber = list("9mm" = 1)
+	silenced = 0
+	origin_tech = "combat=2;materials=2"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/mc9mm"
+	load_method = 2
+
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/luger/update_icon()
+	..()
+	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
+	return
