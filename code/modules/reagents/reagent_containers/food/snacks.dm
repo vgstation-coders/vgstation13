@@ -3985,7 +3985,7 @@
 		..()
 		reagents.add_reagent("nutriment", 3)
 		reagents.add_reagent("cream", 2)
-		
+
 /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 	name = "IJzerkoekje"
 	desc = "Bevat geen ijzer."
@@ -4060,3 +4060,14 @@
 			if(counter == available_snacks.len)
 				counter = 0
 			counter++
+
+
+/obj/item/weapon/reagent_containers/food/snacks/croissant
+	name = "croissant"
+	desc = "A plain croissant."
+	icon_state = "croissant"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 6)
+		bitesize = 2
