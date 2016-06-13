@@ -1,4 +1,4 @@
-/proc/sanitize_simple(var/t,var/list/repl_chars = list("ÿ"="&#255;", "\n"="#","\t"="#","ï¿½"="ï¿½"))  //Âûðåçàíèå ïåðåíîñîâ â õòìë ýòî óáîãî, ïîýòîìó âñåãäà çàìåíÿåì íà èíòåðôåéñíóþ ß
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("�"="&#255;", "\n"="#","\t"="#","???"="???"))
         for(var/char in repl_chars)
                 var/index = findtext(t, char)
                 while(index)
@@ -6,25 +6,19 @@
                         index = findtext(t, char)
         return t
 
-proc/sanitize_russian(var/msg, var/html = 0) //Ñïåöèàëüíî äëÿ âñåãî, ãäå íå íóæíî óáèðàòü ïåðåíîñû ñòðîê è ïðî÷åå.
+proc/sanitize_russian(var/msg, var/html = 0)
         var/rep
-        if(html)
-                rep = "&#x44F;"
-        else
-                rep = "&#255;"
-        var/index = findtext(msg, "ÿ")
+        rep = "&#1103;"
+        var/index = findtext(msg, "�")
         while(index)
                 msg = copytext(msg, 1, index) + rep + copytext(msg, index + 1)
-                index = findtext(msg, "ÿ")
+                index = findtext(msg, "�")
         return msg
 
 /proc/rhtml_encode(var/msg, var/html = 0)
         var/rep
-        if(html)
-                rep = "&#x44F;"
-        else
-                rep = "&#255;"
-        var/list/c = splittext(msg, "ÿ")
+        rep = "&#1103;"
+        var/list/c = splittext(msg, "�")
         if(c.len == 1)
                 c = splittext(msg, rep)
                 if(c.len == 1)
@@ -40,13 +34,10 @@ proc/sanitize_russian(var/msg, var/html = 0) //Ñïåöèàëüíî äëÿ âñ�
 
 /proc/rhtml_decode(var/msg, var/html = 0)
         var/rep
-        if(html)
-                rep = "&#x44F;"
-        else
-                rep = "&#255;"
-        var/list/c = splittext(msg, "ÿ")
+        rep = "&#1103;"
+        var/list/c = splittext(msg, "�")
         if(c.len == 1)
-                c = splittext(msg, "&#255;")
+                c = splittext(msg, "&#1103;")
                 if(c.len == 1)
                         c = splittext(msg, "&#x4FF")
                         if(c.len == 1)

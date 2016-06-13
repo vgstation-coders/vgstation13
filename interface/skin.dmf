@@ -143,6 +143,10 @@ macro "macro"
 		name = "CTRL+SHIFT+F1+REP"
 		command = ".options"
 		is-disabled = false
+	elem 
+		name = "F2"
+		command = "ooc"
+		is-disabled = false
 	elem "F2+REP"
 		name = "F2+REP"
 		command = ".screenshot auto"
@@ -464,7 +468,7 @@ macro "hotkeymode"
 
 
 menu "menu"
-	elem
+	elem 
 		name = "&File"
 		command = ""
 		category = ""
@@ -473,7 +477,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quick screenshot\tF2"
 		command = ".screenshot auto"
 		category = "&File"
@@ -482,7 +486,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Save screenshot as...\tShift+F2"
 		command = ".screenshot"
 		category = "&File"
@@ -491,7 +495,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&File"
@@ -500,7 +504,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Quit"
 		command = ".quit"
 		category = "&File"
@@ -509,7 +513,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Icons"
 		command = ""
 		category = ""
@@ -545,7 +549,7 @@ menu "menu"
 		group = "size"
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = ""
 		command = ""
 		category = "&Icons"
@@ -563,7 +567,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Help"
 		command = ""
 		category = ""
@@ -572,7 +576,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Admin help\tF1"
 		command = "adminhelp"
 		category = "&Help"
@@ -581,7 +585,7 @@ menu "menu"
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem
+	elem 
 		name = "&Hotkeys"
 		command = "hotkeys-help"
 		category = "&Help"
@@ -1092,7 +1096,7 @@ window "mainwindow"
 		right-click = false
 		saved-params = "pos;size;is-minimized;is-maximized"
 		on-size = ""
-		/*title = "Space Station 13"*/
+		title = ""
 		titlebar = true
 		statusbar = true
 		can-close = true
@@ -2043,3 +2047,4 @@ window "window1"
 		enable-http-images = false
 		max-lines = 1000
 		image = ""
+
