@@ -25,7 +25,7 @@
 
 /obj/item/medigunpack/New()
 	..()
-	medigun = new(src)
+	medigun = new(src,src)
 
 /obj/item/medigunpack/Destroy()
 	if(medigun)
@@ -84,7 +84,7 @@
 		medigun.forceMove(src)
 		update_icon()
 	else
-		medigun = new(src)
+		medigun = new(src,src)
 		medigun.emagged = emagged
 
 /obj/item/medigunpack/stripped(mob/wearer,mob/stripper)
@@ -133,9 +133,11 @@
 	..()
 	to_chat(user,"<span class='info'>Charge = [ubercharge]%</span>")
 
-/obj/item/medigun/New()
+/obj/item/medigun/New(var/turf/loc,var/pack=null)
 	..()
-	medigunpack = loc
+	if(!pack)
+		qdel(src)
+	medigunpack = pack
 
 /obj/item/medigun/Destroy()
 	if(medigunpack)
