@@ -264,7 +264,7 @@
 						ubertarget.color = null
 						ubertarget.flags &= ~INVULNERABLE
 						if(heartcheck)
-							heartcheck.damage += rand(5,60)
+							heartcheck.take_damage(rand(5,60))
 		else
 			var/duration = 40
 
@@ -277,7 +277,7 @@
 					ubertarget.color = null
 					ubertarget.flags &= ~INVULNERABLE
 					if(heartcheck && !target_has_uberheart)
-						heartcheck.damage += rand(5,30)
+						heartcheck.take_damage(rand(5,30))
 
 
 /obj/item/medigun/emag_act(mob/user as mob)
