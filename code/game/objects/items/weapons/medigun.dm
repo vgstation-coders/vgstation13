@@ -236,7 +236,7 @@
 		if(istype(ubertarget,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = ubertarget
 			heartcheck = H.internal_organs_by_name["heart"]
-			if("uber" in heartcheck.modifiers)
+			if(heartcheck.modifiers & OMODIFER_UBER)
 				target_has_uberheart = 1
 
 		ubertarget.flags |= INVULNERABLE
@@ -299,7 +299,7 @@
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/heartcheck = H.internal_organs_by_name["heart"]
-		if("uber" in heartcheck.modifiers)
+		if(heartcheck.modifiers & OMODIFER_UBER)
 			healing = MEDIUBER
 
 	M.adjustOxyLoss(-2*healing)

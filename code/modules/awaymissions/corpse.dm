@@ -88,7 +88,7 @@
 
 	if(uberheart)
 		var/datum/organ/internal/heart/heartcheck = M.internal_organs_by_name["heart"]
-		heartcheck.modifiers += "uber"
+		heartcheck.modifiers |= OMODIFER_UBER
 
 	qdel(src)
 	return M

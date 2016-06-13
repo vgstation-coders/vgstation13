@@ -36,7 +36,7 @@
 
 /obj/item/organ/process()
 
-	if(robotic || (organ_data && ("uber" in organ_data.modifiers)))
+	if(robotic || (organ_data && (organ_data.modifiers & OMODIFER_UBER)))
 		processing_objects -= src
 		return
 
@@ -102,19 +102,19 @@
 
 /obj/item/organ/heart/examine(mob/user)
 	..()
-	if(organ_data && ("uber" in organ_data.modifiers))
+	if(organ_data && (organ_data.modifiers & OMODIFER_UBER))
 		to_chat(user,"<span class='info'>There's a mechanical device stuck onto the heart. You can read Uber on it.</span>")
 
 /obj/item/organ/heart/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W,/obj/item/uberdevice))
 		if(robotic)
 			to_chat(user,"<span class='warning'>You can't seem to find yourself able to stick the device onto the organ.</span>")
-		else if(organ_data && ("uber" in organ_data.modifiers))
+		else if(organ_data && (organ_data.modifiers & OMODIFER_UBER))
 			to_chat(user,"<span class='warning'>There's another device already planted on the heart.</span>")
 		else if(health > 0)
 			user.u_equip(W)
 			qdel(W)
-			organ_data.modifiers |= "uber"
+			organ_data.modifiers |= OMODIFER_UBER
 			icon_state = "uberheart"
 			to_chat(user,"<span class='notice'>The device fits perfectly on the heart.</span>")
 		else
@@ -124,7 +124,7 @@
 
 /obj/item/organ/heart/update()
 	..()
-	if(organ_data && ("uber" in organ_data.modifiers))
+	if(organ_data && (organ_data.modifiers & OMODIFER_UBER))
 		icon_state = "uberheart"
 
 /obj/item/organ/lungs
