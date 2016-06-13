@@ -472,7 +472,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/baguette
 
 /datum/recipe/croissant
-	reagents = list("flour" = 10, "water" = 10, "milk" = 5)
+	reagents = list("flour" = 5, "water" = 5, "milk" = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/croissant
 

@@ -4064,10 +4064,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/croissant
 	name = "croissant"
-	desc = "A plain croissant."
+	desc = "True french quisine."
 	icon_state = "croissant"
 
 	New()
 		..()
-		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("nutriment", 10)
 		bitesize = 2
