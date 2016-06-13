@@ -8,7 +8,7 @@
 
 proc/sanitize_russian(var/msg, var/html = 0)
         var/rep
-        rep = "&#1103;"
+        rep = "&#x4FF;"
         var/index = findtext(msg, "ÿ")
         while(index)
                 msg = copytext(msg, 1, index) + rep + copytext(msg, index + 1)
@@ -17,7 +17,7 @@ proc/sanitize_russian(var/msg, var/html = 0)
 
 /proc/rhtml_encode(var/msg, var/html = 0)
         var/rep
-        rep = "&#1103;"
+        rep = "&#x4FF;"
         var/list/c = splittext(msg, "ÿ")
         if(c.len == 1)
                 c = splittext(msg, rep)
@@ -34,10 +34,10 @@ proc/sanitize_russian(var/msg, var/html = 0)
 
 /proc/rhtml_decode(var/msg, var/html = 0)
         var/rep
-        rep = "&#1103;"
+        rep = "&#x4FF;"
         var/list/c = splittext(msg, "ÿ")
         if(c.len == 1)
-                c = splittext(msg, "&#1103;")
+                c = splittext(msg, "&#x4FF;")
                 if(c.len == 1)
                         c = splittext(msg, "&#x4FF")
                         if(c.len == 1)
