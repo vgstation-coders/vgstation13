@@ -345,10 +345,10 @@
 		if(M.losebreath >= 10)
 			M.losebreath = max(10, M.losebreath - 5)
 
-		if(M.bodytemperature > 310)
-			M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
-		else if(M.bodytemperature < 311)
-			M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
+		if(M.bodytemperature > BODYTEMP_IDEAL)
+			M.bodytemperature = max(BODYTEMP_IDEAL, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
+		else if(M.bodytemperature < (BODYTEMP_IDEAL+1))
+			M.bodytemperature = min(BODYTEMP_IDEAL, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 	M.UpdateDamageIcon()
 	var/tracker_effect = "heal"
