@@ -62,7 +62,7 @@ For the main html chat area
 			owner << browse_rsc(file(asset))
 
 		// world.log << "Sending main chat window to client [owner.ckey]"
-		owner << browse(file("goon/browserassets/html/browserOutput.html"), "window=browseroutput")
+		owner << browse(file("maps/goon/browserassets/html/browserOutput.html"), "window=browseroutput")
 		sleep(20 SECONDS)
 		if(!owner || loaded)
 			break
