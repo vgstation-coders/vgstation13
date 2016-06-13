@@ -72,7 +72,8 @@
 			client.screen -= W
 		W.forceMove(loc)
 		W.unequipped()
-		if(dropped) W.dropped(src)
+		if(dropped)
+			W.dropped(src)
 		if(W)
 			W.layer = initial(W.layer)
 	return 1

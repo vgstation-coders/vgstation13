@@ -520,7 +520,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 				qdel(W)
 				W = null
 			if(EQUIP_FAILACTION_DROP)
-				W.loc=get_turf(src) // I think.
+				W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 			else
 				if(!disable_warning)
 					to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING

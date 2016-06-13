@@ -286,8 +286,11 @@
 		success = 1
 		update_inv_back()
 	else if (W == handcuffed)
-		handcuffed.handcuffs_remove(src)
+		if(handcuffed.on_remove(src)) //If this returns 1, then the unquipping action was interrupted
+			return 0
+		handcuffed = null
 		success = 1
+		update_inv_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
@@ -303,7 +306,8 @@
 				client.screen -= W
 			W.forceMove(loc)
 			W.unequipped()
-			if(dropped) W.dropped(src)
+			if(dropped)
+				W.dropped(src)
 			if(W)
 				W.layer = initial(W.layer)
 	update_action_buttons()
@@ -315,21 +319,21 @@
 //unset redraw_mob to prevent the mob from being redrawn at the end.
 /mob/living/carbon/human/equip_to_slot_if_possible(obj/item/W as obj, slot, act_on_fail = 0, disable_warning = 0, redraw_mob = 1, automatic = 0)
 	switch(W.mob_can_equip(src, slot, disable_warning, automatic))
-		if(0)
+		if(CANNOT_EQUIP)
 			switch(act_on_fail)
 				if(EQUIP_FAILACTION_DELETE)
 					qdel(W)
 					W = null
 				if(EQUIP_FAILACTION_DROP)
-					W.loc=get_turf(src) // I think.
+					W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 				else
 					if(!disable_warning)
 						to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
 
 			return 0
-		if(1)
+		if(CAN_EQUIP)
 			equip_to_slot(W, slot, redraw_mob)
-		if(2)
+		if(CAN_EQUIP_BUT_SLOT_TAKEN)
 			var/in_the_hand = (is_holding_item(W))
 			var/obj/item/wearing = get_item_by_slot(slot)
 			if(wearing)
@@ -338,11 +342,11 @@
 						if(EQUIP_FAILACTION_DELETE)
 							qdel(W)
 						if(EQUIP_FAILACTION_DROP)
-							W.loc=get_turf(src) // I think.
+							W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 					return
 
 				if(drop_item(W))
-					if(!(put_in_active_hand(wearing)))
+					if(!put_in_active_hand(wearing))
 						equip_to_slot(wearing, slot, redraw_mob)
 						switch(act_on_fail)
 							if(EQUIP_FAILACTION_DELETE)

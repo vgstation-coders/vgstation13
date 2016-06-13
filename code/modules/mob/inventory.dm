@@ -247,7 +247,7 @@
 	return 0
 
 
-/mob/proc/drop_from_inventory(var/obj/item/W)
+/mob/proc/drop_from_inventory(var/obj/item/W) //I'm fairly sure the entirety of this proc is redundant and can be replaced by just u_equip(W,1)
 	if(W)
 		if(client)	client.screen -= W
 		u_equip(W,1)

@@ -55,17 +55,17 @@
 					wearable = 1
 				else
 					to_chat(M, "<span class='warning'>Your misshapen [OE.display_name] prevents you from wearing \the [src].</span>")
-					return 0
+					return CANNOT_EQUIP
 			else
 				if(species_restricted.Find(OE.species.name))
 					wearable = 1
 				else
 					to_chat(M, "<span class='warning'>Your misshapen [OE.display_name] prevents you from wearing \the [src].</span>")
-					return 0
+					return CANNOT_EQUIP
 
 		if(!wearable) //But we are a species that CAN'T wear it (sidenote: slots 15 and 16 are pockets)
 			to_chat(M, "<span class='warning'>Your species cannot wear [src].</span>")//Let us know
-			return 0
+			return CANNOT_EQUIP
 
 	//return ..()
 

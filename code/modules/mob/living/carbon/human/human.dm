@@ -770,9 +770,7 @@
 	else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)
-	else
-		..()
-	return
+
 /**
  * Returns a number between -1 to 2.
  * TODO: What's the default return value?

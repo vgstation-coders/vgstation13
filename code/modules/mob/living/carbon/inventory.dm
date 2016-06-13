@@ -14,9 +14,11 @@
 	var/success = 0
 	if(!W)	return 0
 	else if (W == handcuffed)
-		handcuffed.handcuffs_remove(src)
+		if(handcuffed.on_remove(src)) //If this returns 1, then the unquipping action was interrupted
+			return 0
+		handcuffed = null
 		success = 1
-
+		update_inv_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
@@ -29,7 +31,8 @@
 				client.screen -= W
 			W.forceMove(loc)
 			W.unequipped()
-			if(dropped) W.dropped(src)
+			if(dropped)
+				W.dropped(src)
 			if(W)
 				W.layer = initial(W.layer)
 

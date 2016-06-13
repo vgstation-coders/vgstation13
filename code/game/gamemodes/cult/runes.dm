@@ -1067,12 +1067,9 @@
 			return
 		cultist.unlock_from()
 		if (cultist.handcuffed)
-			cultist.handcuffed.loc = cultist.loc
-			cultist.handcuffed.handcuffs_remove(cultist)
+			cultist.drop_from_inventory(cultist.handcuffed)
 		if (cultist.legcuffed)
-			cultist.legcuffed.loc = cultist.loc
-			cultist.legcuffed = null
-			cultist.update_inv_legcuffed()
+			cultist.drop_from_inventory(cultist.legcuffed)
 		if (istype(cultist.wear_mask, /obj/item/clothing/mask/muzzle))
 			cultist.u_equip(cultist.wear_mask, 1)
 		if(istype(cultist.loc, /obj/structure/closet))

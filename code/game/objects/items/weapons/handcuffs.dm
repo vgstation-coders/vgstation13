@@ -84,9 +84,6 @@
 /obj/item/weapon/handcuffs/cyborg
 //This space intentionally left blank
 
-/obj/item/weapon/handcuffs/proc/handcuffs_remove(var/mob/living/carbon/C)
-	C.handcuffed = null
-	C.update_inv_handcuffed()
 
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate
@@ -110,12 +107,13 @@
 	if(slot == slot_handcuffed && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
 		detonate(1)
 
-/obj/item/weapon/handcuffs/syndicate/handcuffs_remove(mob/living/carbon/C)
+/obj/item/weapon/handcuffs/proc/on_remove(var/mob/living/carbon/C) //Needed for syndicuffs
+	return
+
+/obj/item/weapon/handcuffs/syndicate/on_remove(mob/living/carbon/C)
 	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
 		detonate(0) //This handles cleaning up the inventory already
 		return //Don't clean up twice, we don't want runtimes
-
-	..()
 
 //C4 and EMPs don't mix, will always explode at severity 1, and likely to explode at severity 2
 /obj/item/weapon/handcuffs/syndicate/emp_act(severity)
@@ -158,16 +156,6 @@
 
 	explosion(get_turf(src), 0, 1, 3, 0)
 	qdel(src)
-
-/obj/item/weapon/handcuffs/Destroy()
-
-	if(iscarbon(loc)) //Inventory shit
-		var/mob/living/carbon/C = loc
-		if(C.handcuffed)
-			C.handcuffed.loc = C.loc //Standby while we delete this shit
-			C.drop_from_inventory(src)
-
-	..()
 
 /obj/item/weapon/handcuffs/cable
 	name = "cable restraints"
