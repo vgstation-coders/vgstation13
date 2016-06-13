@@ -84,9 +84,6 @@
 			M.u_equip(medigun)
 		medigun.forceMove(src)
 		update_icon()
-	else
-		medigun = new(src,src)
-		medigun.emagged = emagged
 
 /obj/item/medigunpack/stripped(mob/wearer,mob/stripper)
 	dropped(wearer)
