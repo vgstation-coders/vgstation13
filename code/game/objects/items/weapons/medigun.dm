@@ -276,7 +276,7 @@
 					animate(ubertarget)
 					ubertarget.color = null
 					ubertarget.flags &= ~INVULNERABLE
-					if(heartcheck && !target_has_uberheart)
+					if(heartcheck)
 						heartcheck.take_damage(rand(5,30))
 
 
