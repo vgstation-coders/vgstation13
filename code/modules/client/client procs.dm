@@ -436,7 +436,7 @@
 /client/proc/update_special_views()
 	var/list/vi = view(world.view,get_holder_at_turf_level(mob))
 
-	if(src in parallax_on_clients)	//Updating parallax for clients that have parallax turned on.
+	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.
 		for(var/turf/space/T in vi)
 			if(!parallax_initialized || updating_parallax)
 				break
