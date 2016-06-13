@@ -116,7 +116,7 @@ Admin:
 		to_chat(src, admin)
 
 // Needed to circumvent a bug where .winset does not work when used on the window.on-size event in skins.
-// Used by /datum/html_interface/nanotrasen (code/modules/html_interface/nanotrasen/nanotrasen.dm)
+// Used by /datum/html_interface/nanotrasen (maps/html_interface/nanotrasen/nanotrasen.dm)
 /client/verb/_swinset(var/x as text)
 	set name = ".swinset"
 	set hidden = 1

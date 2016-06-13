@@ -370,7 +370,7 @@
 		hi.registerResources()
 
 /datum/asset/simple/chartJS
-	assets = list("Chart.js" = 'code/modules/html_interface/Chart.js')
+	assets = list("Chart.js" = 'maps/html_interface/Chart.js')
 
 /datum/asset/simple/power_chart
-	assets = list("powerChart.js" = 'code/modules/power/powerChart.js')
+	assets = list("powerChart.js" = 'maps/powerChart.js')
