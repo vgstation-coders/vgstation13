@@ -243,7 +243,7 @@
 	var/age
 	testing("sql_ckey = [sql_ckey]")
 
-	var/list/query1 = Query1()
+	var/list/query1 = Query1(sql_ckey = sql_ckey)
 	sql_id = query1[1]
 	player_age = query1[2]
 	age = query1[3]
