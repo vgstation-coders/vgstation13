@@ -15,6 +15,7 @@
 	var/rejecting            // Is this organ already being rejected?
 	var/obj/item/organ/organ_holder
 	var/datum/dna/owner_dna
+	var/list/modifiers = list()
 
 
 /datum/organ/internal/Copy()
@@ -195,6 +196,7 @@
 	name = "heart"
 	parent_organ = "chest"
 	removed_type = /obj/item/organ/heart
+
 
 /datum/organ/internal/kidney
 	name = "kidneys"
