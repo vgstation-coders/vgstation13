@@ -33,7 +33,8 @@
 		message_admins("Meteor storm confirmed by Space Weather Incorporated. Announcement arrives in approximately [round((meteor_announce_delay-200)/600)] minutes, further information will be given then.")
 
 	spawn(rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 
 	spawn(meteor_announce_delay)
 
