@@ -40,7 +40,7 @@
 
 		codes = new()
 
-		var/list/entries = text2list(codes_txt, ";")	// entries are separated by semicolons
+		var/list/entries = splittext(codes_txt, ";")	// entries are separated by semicolons
 
 		for(var/e in entries)
 			var/index = findtext(e, "=")		// format is "key=value"
@@ -170,19 +170,13 @@ Transponder Codes:<UL>"}
 
 			for(var/key in codes)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\navbeacon.dm:174: t += "<LI>[key] ... [codes[key]]"
 				t += {"<LI>[key] ... [codes[key]]
 					<small><A href='byond://?src=\ref[src];edit=1;code=[key]'>(edit)</A>
 					<A href='byond://?src=\ref[src];delete=1;code=[key]'>(delete)</A></small><BR>"}
-			// END AUTOFIX
 				t += "<LI>[key] ... [codes[key]]"
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\navbeacon.dm:177: t += "<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>"
 			t += {"<small><A href='byond://?src=\ref[src];add=1;'>(add new)</A></small><BR>
 				<UL></TT>"}
-			// END AUTOFIX
 		user << browse(t, "window=navbeacon")
 		onclose(user, "navbeacon")
 		return

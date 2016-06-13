@@ -6,17 +6,22 @@
 	var/global/global_uid = 0
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
+	var/list/area_turfs
+	var/turret_protected = 0
+	var/list/turretTargets = list()
 
 /area/New()
+	area_turfs = list()
 	icon_state = ""
 	layer = 10
 	uid = ++global_uid
-	areas |= src
+	if (x) // If we're actually located in the world
+		areas |= src
 
 	if(isspace(src))	// override defaults for space. TODO: make space areas of type /area/space rather than /area
 		requires_power = 1
 		always_unpowered = 1
-		lighting_use_dynamic = 0
+		dynamic_lighting = 0
 		power_light = 0
 		power_equip = 0
 		power_environ = 0
@@ -24,9 +29,9 @@
 		//has_gravity = 0    // Space has gravity.  Because.. because.
 
 	if(!requires_power)
-		power_light = 0			//rastaf0
-		power_equip = 0			//rastaf0
-		power_environ = 0		//rastaf0
+		power_light = 1
+		power_equip = 1
+		power_environ = 1
 
 	..()
 
@@ -84,7 +89,7 @@
 		a.triggerAlarm("Power", src, null, src)
 
 /////////////////////////////////////////
-// BEGIN /VG/ UNFUCKING OF AIR ALARMS
+// BEGIN /vg/ UNFUCKING OF AIR ALARMS
 /////////////////////////////////////////
 
 /area/proc/updateDangerLevel()
@@ -415,6 +420,30 @@
 				if(M && M.client)
 					M.client.ambience_playing = 0
 
+	if(turret_protected)
+		if(isliving(Obj))
+			turretTargets |= Obj
+		else if(istype(Obj, /obj/mecha))
+			var/obj/mecha/Mech = Obj
+			if(Mech.occupant)
+				turretTargets |= Mech
+		// /vg/ vehicles
+		else if(istype(Obj, /obj/structure/bed/chair/vehicle))
+			turretTargets |= Obj
+		return 1
+
+/area/Exited(atom/movable/Obj)
+	if(turret_protected)
+		if(Obj in turretTargets)
+			turretTargets -= Obj
+	..()
+
+/area/proc/subjectDied(target)
+	if(isliving(target))
+		var/mob/living/L = target
+		if(L.stat)
+			src.Exited(L)
+
 /area/proc/gravitychange(var/gravitystate = 0, var/area/A)
 
 
@@ -490,7 +519,7 @@
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(old_area,src)
 
-var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group","contents","air","light","areaMaster","underlays","lighting_overlay")
+var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group","contents","air","light","areaMaster","underlays","lighting_overlay","corners")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
 var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 
@@ -628,7 +657,7 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 
 //					var/area/AR = X.loc
 
-//					if(AR.lighting_use_dynamic)							//TODO: rewrite this code so it's not messed by lighting ~Carn
+//					if(AR.dynamic_lighting)							//TODO: rewrite this code so it's not messed by lighting ~Carn
 //						X.opacity = !X.opacity
 //						X.SetOpacity(!X.opacity)
 

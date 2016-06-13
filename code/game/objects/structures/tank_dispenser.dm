@@ -46,11 +46,8 @@
 	user.set_machine(src)
 	var/dat = "[src]<br><br>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\structures\tank_dispenser.dm:38: dat += "Oxygen tanks: [oxygentanks] - [oxygentanks ? "<A href='?src=\ref[src];oxygen=1'>Dispense</A>" : "empty"]<br>"
 	dat += {"Oxygen tanks: [oxygentanks] - [oxygentanks ? "<A href='?src=\ref[src];oxygen=1'>Dispense</A>" : "empty"]<br>
 		Plasma tanks: [plasmatanks] - [plasmatanks ? "<A href='?src=\ref[src];plasma=1'>Dispense</A>" : "empty"]"}
-	// END AUTOFIX
 	user << browse(dat, "window=dispenser")
 	onclose(user, "dispenser")
 	return
@@ -59,30 +56,32 @@
 /obj/structure/dispenser/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/tank/oxygen) || istype(I, /obj/item/weapon/tank/air) || istype(I, /obj/item/weapon/tank/anesthetic))
 		if(oxygentanks < 10)
-			user.drop_item(I, src)
-			oxytanks.Add(I)
-			oxygentanks++
-			to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+			if(user.drop_item(I, src))
+				oxytanks.Add(I)
+				oxygentanks++
+				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
 		return
 	if(istype(I, /obj/item/weapon/tank/plasma))
 		if(plasmatanks < 10)
-			user.drop_item(I, src)
-			platanks.Add(I)
-			plasmatanks++
-			to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+			if(user.drop_item(I, src))
+				platanks.Add(I)
+				plasmatanks++
+				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
 		return
-	if(istype(I, /obj/item/weapon/wrench))
+	if(iswrench(I))
 		if(anchored)
 			to_chat(user, "<span class='notice'>You lean down and unwrench [src].</span>")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 0
 		else
 			to_chat(user, "<span class='notice'>You wrench [src] into place.</span>")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 1
 		return
 

@@ -57,9 +57,10 @@
 /obj/item/weapon/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
 	for(var/obj/item/weapon/ore/glass/sandToConvert in location)
-		new /obj/item/stack/sheet/mineral/sandstone(location)
+		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
 		qdel(sandToConvert)
-	new /obj/item/stack/sheet/mineral/sandstone(location)
+
+	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
 	qdel(src)
 
 /obj/item/weapon/ore/plasma
@@ -231,7 +232,7 @@
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "Gibtonite ore"
 	item_state = "Gibtonite ore"
-	w_class = 4
+	w_class = W_CLASS_LARGE
 	throw_range = 0
 	anchored = 1 //Forces people to carry it by hand, no pulling!
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
@@ -315,7 +316,7 @@
 	siemens_coefficient = 1
 	force = 0.0
 	throwforce = 0.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?

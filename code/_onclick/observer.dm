@@ -9,7 +9,7 @@
 
 	// Things you might plausibly want to follow
 	if((ismob(A) && A != src) || istype(A,/obj/machinery/bot) || istype(A,/obj/machinery/singularity))
-		ManualFollow(A)
+		manual_follow(A)
 
 	// Otherwise jump
 	else
@@ -34,6 +34,8 @@
 				to_chat(usr, "<span class='warning'>These are sacred grounds, you cannot go there!</span>")
 			else
 				forceEnter(targetloc)
+				if(locked_to)
+					manual_stop_follow(locked_to)
 
 /mob/dead/observer/ClickOn(var/atom/A, var/params)
 	if(client.buildmode)
@@ -94,18 +96,6 @@
 /obj/effect/portal/attack_ghost(mob/user as mob)
 	if(target)
 		user.loc = get_turf(target)
-
-/obj/machinery/gateway/centerstation/attack_ghost(mob/user as mob)
-	if(awaygate)
-		user.loc = awaygate.loc
-	else
-		to_chat(user, "[src] has no destination.")
-
-/obj/machinery/gateway/centeraway/attack_ghost(mob/user as mob)
-	if(stationgate)
-		user.loc = stationgate.loc
-	else
-		to_chat(user, "[src] has no destination.")
 
 // -------------------------------------------
 // This was supposed to be used by adminghosts

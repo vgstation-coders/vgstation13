@@ -10,6 +10,7 @@
 	var/to_be_destroyed = 0 //Used for fire, if a melting temperature was reached, it will be destroyed
 	var/max_fire_temperature_sustained = 0 //The max temperature of the fire which it was subjected to
 	var/drying = 0 // tracking if something is currently drying
+	var/can_exist_under_lattice = 0 //If 1, RemoveLattice() is not called when a turf is changed to this.
 /turf/simulated/New()
 	..()
 
@@ -53,16 +54,10 @@
 					H.track_blood = max(round(H.track_blood - 1, 1),0)
 
 			if (bloodDNA)
-				if(istype(M,/mob/living/carbon/human/vox))
-					src.AddTracks(/obj/effect/decal/cleanable/blood/tracks/footprints/vox,bloodDNA,H.dir,0,bloodcolor) // Coming
-				else
-					src.AddTracks(/obj/effect/decal/cleanable/blood/tracks/footprints,bloodDNA,H.dir,0,bloodcolor) // Coming
+				src.AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor) // Coming
 				var/turf/simulated/from = get_step(H,reverse_direction(H.dir))
 				if(istype(from) && from)
-					if(istype(M,/mob/living/carbon/human/vox))
-						from.AddTracks(/obj/effect/decal/cleanable/blood/tracks/footprints/vox,bloodDNA,0,H.dir,bloodcolor) // Going
-					else
-						from.AddTracks(/obj/effect/decal/cleanable/blood/tracks/footprints,bloodDNA,0,H.dir,bloodcolor) // Going
+					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor) // Going
 
 			bloodDNA = null
 

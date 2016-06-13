@@ -3,7 +3,7 @@
 	desc = "The basic construction for Nanotrasen-Always-Watching-You cameras."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "cameracase"
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	anchored = 0
 
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 300)
@@ -89,7 +89,7 @@
 					to_chat(usr, "No input found, please hang up and try your call again.")
 					return
 
-				var/list/tempnetwork = text2list(input, ",")
+				var/list/tempnetwork = splittext(input, ",")
 				if(tempnetwork.len < 1)
 					to_chat(usr, "No network found, please hang up and try your call again.")
 					return

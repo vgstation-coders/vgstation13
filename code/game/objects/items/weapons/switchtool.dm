@@ -6,7 +6,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 3
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
@@ -96,10 +96,10 @@
 				to_chat(user, "\The [src] already has a [get_module_name(module)].")
 				return
 			else
-				stored_modules[module] = used_item
-				user.drop_item(used_item, src)
-				to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
-				return 1
+				if(user.drop_item(used_item, src))
+					stored_modules[module] = used_item
+					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
+					return 1
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
 	deployed.loc = get_turf(user)
@@ -164,7 +164,6 @@
 	icon_state = "surg_switchtool"
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
 
-	w_class = 3.0
 	origin_tech = "materials=4;bluespace=3;biotech=3"
 	stored_modules = list("/obj/item/weapon/scalpel:scalpel" = null,
 						"/obj/item/weapon/circular_saw:circular saw" = null,

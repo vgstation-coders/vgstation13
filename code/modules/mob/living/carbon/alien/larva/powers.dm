@@ -47,8 +47,9 @@
 			new_xeno.add_language(L.name)
 		if(mind)	mind.transfer_to(new_xeno)
 		transferImplantsTo(new_xeno)
-		qdel(src)
+		transferBorers(new_xeno)
 		playsound(get_turf(src), 'sound/effects/evolve.ogg', 40, 1)
+		qdel(src)
 		return
 	else
 		to_chat(src, "<span class='warning'>You are not fully grown yet.</span>")

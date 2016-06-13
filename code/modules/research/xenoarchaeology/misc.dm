@@ -3,7 +3,7 @@
 #define ARTIFACT_SPAWN_CHANCE 20
 
 proc/SetupXenoarch()
-	for(var/turf/unsimulated/mineral/M in block(locate(1,1,1), locate(world.maxx, world.maxy, world.maxz)))
+	for(var/turf/unsimulated/mineral/M in mineral_turfs)
 		if(!prob(XENOARCH_SPAWN_CHANCE))
 			continue
 
@@ -157,7 +157,7 @@ proc/SetupXenoarch()
 		new /obj/item/device/gps(src)
 		new /obj/item/device/beacon_locator(src)
 		new /obj/item/beacon(src)
-		new /obj/item/clothing/glasses/meson(src)
+		new /obj/item/clothing/glasses/scanner/meson(src)
 		new /obj/item/weapon/pickaxe(src)
 		new /obj/item/device/measuring_tape(src)
 		new /obj/item/weapon/pickaxe/hand(src)

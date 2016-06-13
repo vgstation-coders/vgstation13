@@ -9,8 +9,8 @@
 	throwforce = 2.0
 	throw_speed = 1
 	throw_range = 4
-	w_class = 2
-	attack_verb = list("called", "rang")
+	w_class = W_CLASS_SMALL
+	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
 
 /obj/item/weapon/phone/suicide_act(mob/user)
@@ -29,7 +29,7 @@
 	var/mob/currentUser = null
 	var/obj/item/device/radio/origradio = null
 	flags = FPRINT  | CONDUCT | ONBELT
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	item_state = "radio"
 	throw_speed = 4
 	throw_range = 20
@@ -46,7 +46,7 @@
 	anchored = 0.0
 	var/matter = 0
 	var/mode = 1
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 
 /obj/item/weapon/bananapeel
 	name = "banana peel"
@@ -54,7 +54,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "banana_peel"
 	item_state = "banana_peel"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -69,7 +69,7 @@
 	icon = 'icons/obj/harvest.dmi'
 	icon_state = "corncob"
 	item_state = "corncob"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -80,7 +80,7 @@
 	gender = PLURAL
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -104,7 +104,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "c_tube"
 	throwforce = 1
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 5
 
@@ -112,17 +112,18 @@
 	name = "cane"
 	desc = "A cane used by a true gentlemen. Or a clown."
 	icon = 'icons/obj/weapons.dmi'
+	origin_tech = "materials=1"
 	icon_state = "cane"
 	item_state = "stick"
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	attack_verb = list("bludgeoned", "whacked", "disciplined", "thrashed")
+	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
 
 /obj/item/weapon/disk
 	name = "disk"
@@ -152,7 +153,7 @@
 	var/data = ""
 	var/base_url = "http://svn.slurm.us/public/spacestation13/misc/game_kit"
 	item_state = "sheet-metal"
-	w_class = 5.0
+	w_class = W_CLASS_HUGE
 */
 
 /obj/item/weapon/legcuffs
@@ -164,7 +165,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	throwforce = 0
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	origin_tech = "materials=1"
 	var/breakouttime = 300	//Deciseconds = 30s = 0.5 minute
 
@@ -178,10 +179,10 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throwforce = 2
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	w_type = RECYK_METAL
 	origin_tech = "materials=1"
-	attack_verb = list("lashed", "bludgeoned", "whipped")
+	attack_verb = list("lashes", "bludgeons", "whips")
 	force = 4
 	breakouttime = 50 //10 seconds
 	throw_speed = 1
@@ -327,7 +328,7 @@
 		var/obj/item/I = O
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
-		if(istype(I, /obj/item/weapon/wirecutters)) //allows you to convert the wire back to a cable coil
+		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				playsound(usr, 'sound/items/Wirecutter.ogg', 50, 1)
@@ -355,28 +356,28 @@
 				update_icon()
 				return
 		if(I.w_class) //if it has a defined weight
-			if(I.w_class == 2.0 || I.w_class == 3.0) //just one is too specific, so don't change this
+			if(I.w_class == W_CLASS_SMALL || I.w_class == W_CLASS_MEDIUM) //just one is too specific, so don't change this
 				if(!weight1)
-					user.drop_item(I, src)
-					weight1 = I
-					user.show_message("<span class='notice'>You tie [weight1] to the [src].</span>")
-					update_icon()
-					//del(I)
-					return
+					if(user.drop_item(I, src))
+						weight1 = I
+						user.show_message("<span class='notice'>You tie [weight1] to the [src].</span>")
+						update_icon()
+						//del(I)
+						return
 				if(!weight2) //just in case
-					user.drop_item(I, src)
-					weight2 = I
-					user.show_message("<span class='notice'>You tie [weight2] to the [src].</span>")
-					update_icon()
-					//del(I)
-					return
+					if(user.drop_item(I, src))
+						weight2 = I
+						user.show_message("<span class='notice'>You tie [weight2] to the [src].</span>")
+						update_icon()
+						//del(I)
+						return
 				else
 					user.show_message("<span class='rose'>There are already two weights on this [src]!</span>")
 					return
-			else if (I.w_class < 2.0)
+			else if (I.w_class < W_CLASS_SMALL)
 				user.show_message("<span class='rose'>\The [I] is too small to be used as a weight.</span>")
-			else if (I.w_class > 3.0)
-				user.show_message("<span class='rose'>\The [I] is [I.w_class > 4.0 ? "far " : ""] too big to be used a weight.</span>")
+			else if (I.w_class > W_CLASS_MEDIUM)
+				user.show_message("<span class='rose'>\The [I] is [I.w_class > W_CLASS_LARGE ? "far " : ""] too big to be used a weight.</span>")
 			else
 				user.show_message("<span class='rose'>There are already two weights on this [src]!</span>")
 
@@ -422,19 +423,19 @@
 				IED = null
 				return
 			if(2,3)
-				user.drop_item(I, src)
-				var/turf/bombturf = get_turf(src)
-				var/area/A = get_area(bombturf)
-				var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
-				message_admins(log_str)
-				log_game(log_str)
-				to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
-				desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
+				if(user.drop_item(I, src))
+					var/turf/bombturf = get_turf(src)
+					var/area/A = get_area(bombturf)
+					var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
+					message_admins(log_str)
+					log_game(log_str)
+					to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
+					desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
 			else
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		if(IED)
 			IED.loc = get_turf(src.loc)
 			IED = null
@@ -496,10 +497,10 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	siemens_coefficient = 0
 	throwforce = 15
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_METAL
 	origin_tech = "combat=5"
-	attack_verb = list("rammed", "bludgeoned")
+	attack_verb = list("rams", "bludgeons")
 	force = 15
 	throw_speed = 1
 	throw_range = 3
@@ -513,9 +514,9 @@
 	throwforce = 3.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
-	attack_verb = list("warned", "cautioned", "smashed")
+	attack_verb = list("warns", "cautions", "smashes")
 
 /obj/item/weapon/caution/proximity_sign
 	var/timing = 0
@@ -584,9 +585,29 @@
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 
+/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0, user))
+			to_chat(user, "You begin slicing through \the [src].")
+			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			if(do_after(user, src, 60))
+				to_chat(user, "You cut \the [src] into a gun stock.")
+				if(src.loc == user)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/metal_gun_stock/I = new (get_turf(user))
+					user.put_in_hands(I)
+					qdel(src)
+				else
+					new /obj/item/weapon/metal_gun_stock(get_turf(src.loc))
+					qdel(src)
+		else
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+
 /obj/item/weapon/SWF_uplink
 	name = "station-bounced radio"
-	desc = "used to comunicate it appears."
+	desc = "Used for communication, it appears."
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "radio"
 	var/temp = null
@@ -599,7 +620,7 @@
 	slot_flags = SLOT_BELT
 	item_state = "radio"
 	throwforce = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 4
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 100)
@@ -616,9 +637,9 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
-	attack_verb = list("bludgeoned", "whacked", "disciplined")
+	attack_verb = list("bludgeons", "whacks", "disciplines")
 
 /obj/item/weapon/staff/broom
 	name = "broom"
@@ -632,10 +653,9 @@
 	..()
 	item_state = "broom[wielded ? 1 : 0]"
 	force = wielded ? 5 : 3
-	attack_verb = wielded ? list("rammed into", "charged at") : list("bludgeoned", "whacked", "cleaned")
+	attack_verb = wielded ? list("rams into", "charges at") : list("bludgeons", "whacks", "cleans", "dusts")
 	if(user)
-		user.update_inv_l_hand()
-		user.update_inv_r_hand()
+		user.update_inv_hands()
 		if(user.mind in ticker.mode.wizards)
 			user.flying = wielded ? 1 : 0
 			if(wielded)
@@ -684,7 +704,7 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 
 /obj/item/weapon/table_parts
@@ -698,7 +718,7 @@
 	melt_temperature=MELTPOINT_STEEL
 	flags = FPRINT
 	siemens_coefficient = 1
-	attack_verb = list("slammed", "bashed", "battered", "bludgeoned", "thrashed", "whacked")
+	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)
@@ -715,11 +735,26 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 
+/obj/item/weapon/table_parts/glass
+	name = "glass table parts"
+	desc = "Glass table parts for the spaceman with style."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "glass_tableparts"
+	starting_materials = list(MAT_GLASS = 3750)
+	w_type = RECYK_GLASS
+	melt_temperature=MELTPOINT_GLASS
+	flags = FPRINT
+	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
+
 /obj/item/weapon/table_parts/wood
 	name = "wooden table parts"
 	desc = "Keep away from fire."
 	icon_state = "wood_tableparts"
 	flags = 0
+
+/obj/item/weapon/table_parts/wood/poker
+	name = "gambling table parts"
+	icon_state = "gambling_tableparts"
 
 /obj/item/weapon/table_parts/wood/cultify()
 	return
@@ -735,7 +770,7 @@
 	starting_materials = list(MAT_IRON = 70)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
-	attack_verb = list("whipped", "lashed", "disciplined", "tickled")
+	attack_verb = list("whips", "lashes", "disciplines", "tickles")
 
 /obj/item/weapon/wire/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -743,8 +778,8 @@
 
 /obj/item/weapon/module
 	icon = 'icons/obj/module.dmi'
-	icon_state = "std_module"
-	w_class = 2.0
+	//icon_state = "std_module"
+	w_class = W_CLASS_SMALL
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -778,12 +813,12 @@
 
 /obj/item/weapon/syntiflesh
 	name = "syntiflesh"
-	desc = "Meat that appears...strange..."
+	desc = "Meat that appears... strange..."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "meat"
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "biotech=2"
 
 /*
@@ -793,7 +828,7 @@
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "cigarpacket"
 	item_state = "cigarpacket"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 2
 	var/cigarcount = 6
 	flags = ONBELT  */

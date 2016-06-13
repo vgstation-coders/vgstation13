@@ -33,7 +33,7 @@
 	item_state = "gy_suit"
 	_color = "grey"
 	flags = FPRINT  | ONESIZEFITSALL
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/under/color/orange
 	name = "orange jumpsuit"
@@ -159,21 +159,25 @@
 	icon_state = "blpants"
 	_color = "blpants"
 	flags = FPRINT  | ONESIZEFITSALL
+	gender = PLURAL
 
 /obj/item/clothing/under/redpants
 	name = "red pants"
 	icon_state = "rpants"
 	_color = "rpants"
 	flags = FPRINT  | ONESIZEFITSALL
+	gender = PLURAL
 
 /obj/item/clothing/under/bluepants
 	name = "blue pants"
 	icon_state = "bpants"
 	_color = "bpants"
 	flags = FPRINT  | ONESIZEFITSALL
+	gender = PLURAL
 
 /obj/item/clothing/under/greypants
 	name = "grey pants"
 	icon_state = "gpants"
 	_color = "gpants"
 	flags = FPRINT  | ONESIZEFITSALL
+	gender = PLURAL

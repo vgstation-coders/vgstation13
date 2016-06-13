@@ -74,19 +74,25 @@
 	icon = 'icons/obj/cloning.dmi'
 	icon_state = "datadisk0" //Gosh I hope syndies don't mistake them for the nuke disk.
 	item_state = "card-id"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/datum/dna2/record/buf=null
+	var/list/datum/block_label/labels[DNA_SE_LENGTH] //This is not related to cloning, these are colored tabs for Genetics machinery. Multipurpose floppies, why not?
 	var/read_only = 0 //Well,it's still a floppy disk
+
+/obj/item/weapon/disk/data/New()
+	for(var/i=1;i<=DNA_SE_LENGTH;i++)
+		labels[i] = new /datum/block_label
 
 /obj/item/weapon/disk/data/proc/Initialize()
 	buf = new
-	buf.dna=new
+	buf.dna = new
 
 /obj/item/weapon/disk/data/demo
 	name = "data disk - 'God Emperor of Mankind'"
 	read_only = 1
 
 /obj/item/weapon/disk/data/demo/New()
+	..()
 	Initialize()
 	buf.types=DNA2_BUF_UE|DNA2_BUF_UI
 	//data = "066000033000000000AF00330660FF4DB002690"
@@ -102,6 +108,7 @@
 	read_only = 1
 
 /obj/item/weapon/disk/data/monkey/New()
+	..()
 	Initialize()
 	buf.types=DNA2_BUF_SE
 	var/list/new_SE=list(0x098,0x3E8,0x403,0x44C,0x39F,0x4B0,0x59D,0x514,0x5FC,0x578,0x5DC,0x640,0x6A4)
@@ -365,11 +372,11 @@
 			src.locked = 0
 			to_chat(user, "System unlocked.")
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		to_chat(user, "<span class='notice'>\The [src] processes \the [W].</span>")
-		biomass += 50
-		user.drop_item(W)
-		qdel(W)
-		return
+		if(user.drop_item(W))
+			to_chat(user, "<span class='notice'>\The [src] processes \the [W].</span>")
+			biomass += 50
+			qdel(W)
+			return
 
 //Put messages in the connected computer's temp var for display.
 /obj/machinery/cloning/clonepod/proc/connected_message(var/message)
@@ -393,14 +400,14 @@
 	add_fingerprint(usr)
 	return
 
-/obj/machinery/cloning/clonepod/proc/go_out()
-	if (src.locked)
+/obj/machinery/cloning/clonepod/proc/go_out(var/exit = src.loc)
+	if (locked)
 		return
 
-	if (src.mess) //Clean that mess and dump those gibs!
-		src.mess = 0
-		gibs(src.loc)
-		src.icon_state = "pod_0"
+	if (mess) //Clean that mess and dump those gibs!
+		mess = 0
+		gibs(loc)
+		icon_state = "pod_0"
 
 		/*
 		for(var/obj/O in src)
@@ -416,23 +423,45 @@
 		O.loc = src.loc
 	*/
 
-	if (src.occupant.client)
-		src.occupant.client.eye = src.occupant.client.mob
-		src.occupant.client.perspective = MOB_PERSPECTIVE
-	src.occupant.loc = src.loc
-	src.icon_state = "pod_0"
-	src.eject_wait = 0 //If it's still set somehow.
-	domutcheck(src.occupant) //Waiting until they're out before possible monkeyizing.
-	src.occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
-	src.occupant = null
+	if (occupant.client)
+		occupant.client.eye = occupant.client.mob
+		occupant.client.perspective = MOB_PERSPECTIVE
+	occupant.forceMove(exit)
+	icon_state = "pod_0"
+	eject_wait = 0 //If it's still set somehow.
+	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
+	occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
+	occupant = null
 	if(biomass > 0)
-		src.biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass
+		biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass
 	else
 		biomass = 0
 
 	connected.update_icon()
 
-	return
+	return 1
+
+/obj/machinery/cloning/clonepod/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!occupant || occupant == usr || (!ishuman(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
+		return
+	if(!istype(over_location) || over_location.density)
+		return
+	if(!Adjacent(over_location) || !Adjacent(usr) || !usr.Adjacent(over_location))
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	if(isrobot(usr))
+		var/mob/living/silicon/robot/robit = usr
+		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
+			return
+
+	if(go_out(over_location))
+		visible_message("[usr] removes [occupant.name] from \the [src].")
+		add_fingerprint(usr)
 
 /obj/machinery/cloning/clonepod/proc/malfunction()
 	if(src.occupant)

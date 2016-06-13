@@ -33,7 +33,7 @@ var/global/list/bombermangear = list()
 /obj/item/weapon/bomberman/
 	name = "Bomberman's Bomb Dispenser"
 	desc = "Now to not get yourself stuck in a corner."
-	w_class = 5.0
+	w_class = W_CLASS_HUGE
 	icon = 'icons/obj/bomberman.dmi'
 	icon_state = "dispenser"
 	var/bomblimit = 1	//how many bombs are currently in the dispenser
@@ -109,8 +109,9 @@ var/global/list/bombermangear = list()
 /obj/item/weapon/bomberman/proc/lost()
 	if(arena)
 		arena.tools -= src
+		var/datum/bomberman_arena/pastarena = arena
 		spawn()	//we're not waiting for the arena to close to despawn the BBD
-			arena.end()
+			pastarena.end()
 	var/list/turfs = list()
 	for(var/turf/T in range(loc,1))
 		if(!T.density)
@@ -200,6 +201,9 @@ var/global/list/bombermangear = list()
 
 /obj/structure/bomberman/proc/detonate()
 	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
 	playsound(T, 'sound/bomberman/bombexplode.ogg', 100, 1)
 	spawn()
 		new /obj/structure/bomberflame(T,1,bombpower,SOUTH,destroy_environnement,hurt_players)
@@ -207,6 +211,9 @@ var/global/list/bombermangear = list()
 
 /obj/structure/bomberman/power/detonate()
 	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
 	playsound(T, 'sound/bomberman/bombexplode.ogg', 100, 1)
 	spawn()
 		new /obj/structure/bomberflame(T,1,MAX_BOMB_POWER,SOUTH,destroy_environnement,hurt_players)
@@ -246,9 +253,6 @@ var/global/list/bombermangear = list()
 
 /obj/structure/bomberman/cultify()
 	return
-
-/obj/structure/bomberman/singuloCanEat()
-	return 0
 
 ///////////////////////////////FLAME/EXPLOSION//////////////////////////
 /obj/structure/bomberflame
@@ -344,6 +348,14 @@ obj/structure/bomberflame/Destroy()
 		var/obj/structure/softwall/wall_break = obstacle
 		wall_break.pulverized()
 
+	else if(istype(obstacle, /obj/effect/blob/))
+		if(fuel <= 2)
+			obstacle.ex_act(3)
+		else if(fuel <= 10)
+			obstacle.ex_act(2)
+		else
+			obstacle.ex_act(1)
+
 	if(destroy_environnement)
 		if(istype(obstacle, /obj/structure/closet/))
 			qdel(obstacle)
@@ -405,9 +417,6 @@ obj/structure/bomberflame/Destroy()
 /obj/structure/bomberflame/cultify()
 	return
 
-/obj/structure/bomberflame/singuloCanEat()
-	return 0
-
 
 ///////////////////////////////SOFT WALLS/////////////////////////////
 /obj/structure/softwall
@@ -456,9 +465,6 @@ obj/structure/bomberflame/Destroy()
 /obj/structure/softwall/cultify()
 	return
 
-/obj/structure/softwall/singuloCanEat()
-	return 0
-
 ///////////////////////////////HARD WALLS/////////////////////////////
 /turf/unsimulated/wall/bomberman
 	name = "hard wall"
@@ -471,9 +477,6 @@ obj/structure/bomberflame/Destroy()
 
 /turf/unsimulated/wall/cultify()
 	return
-
-/turf/unsimulated/wall/singuloCanEat()
-	return 0
 
 ///////////////////////////////POWER-UPS//////////////////////////////
 /obj/structure/powerup
@@ -652,10 +655,6 @@ obj/structure/bomberflame/Destroy()
 /obj/structure/powerup/cultify()
 	return
 
-/obj/structure/powerup/singuloCanEat()
-	return 0
-
-
 ///////////////////////////////CLOTHING///////////////////////////////
 /obj/item/clothing/suit/space/bomberman
 	name = "Bomberman's suit"
@@ -666,9 +665,6 @@ obj/structure/bomberflame/Destroy()
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	flags = FPRINT  | ONESIZEFITSALL
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
-	flags_inv = HIDEJUMPSUIT
-	heat_protection = UPPER_TORSO|LOWER_TORSO
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -695,8 +691,6 @@ obj/structure/bomberflame/Destroy()
 	icon_state = "bomberman"
 	item_state = "bomberman"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEHAIR
-	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 0
 	species_restricted = list("exclude")
 	var/never_removed = 1
@@ -832,7 +826,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 					if(opacity)
 						T.opacity = 1
 				else
-					T.ChangeTurf(/turf/simulated/floor/plating)
+					T.ChangeTurf(/turf/unsimulated/floor)
 					turfs += T
 				pencil.x++
 			sleep(2)	//giving the game some time to process to avoid unbearable lag spikes when we create an arena, plus it looks cool.
@@ -915,7 +909,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			pencil.x = x
 			while(pencil.x <= (x+w))
 				T = pencil.loc
-				if(istype(T, /turf/simulated/floor/plating))
+				if(istype(T, /turf/unsimulated/floor))
 					if(prob(60))
 						T = pencil.loc
 						var/obj/structure/softwall/W = new(T)
@@ -1077,11 +1071,11 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		if(violence)
 			to_chat(M, "Violence Mode activated! Bombs hurt players! Suits offer no protections! Initial Flame Range increased!")
 		if(M.client)
-			to_chat(M.client, sound('sound/bomberman/start.ogg'))
+			M.client << sound('sound/bomberman/start.ogg')
 		to_chat(M, "<b>READY?</b>")
 
 	for(var/obj/machinery/computer/security/telescreen/entertainment/E in machines)
-		E.visible_message("<span style='color:grey'>\icon[E] \The [E] brightens as it appears that a round is starting in [name].</span>")
+		E.visible_message("<span style='color:grey'>[bicon(E)] \The [E] brightens as it appears that a round is starting in [name].</span>")
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)
@@ -1186,7 +1180,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		while(pencil.x <= (x+w))
 			T = pencil.loc
-			if(istype(T, /turf/simulated/floor/plating))
+			if(istype(T, /turf/unsimulated/floor))
 				if(prob(60))
 					T = pencil.loc
 					var/obj/structure/softwall/W = new(T)
@@ -1385,9 +1379,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 /obj/structure/planner/cultify()
 	return
-
-/obj/structure/planner/singuloCanEat()
-	return 0
 
 /obj/structure/planner/spawnpoint
 	name = "Spawn Point"

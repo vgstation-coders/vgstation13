@@ -93,9 +93,9 @@
 		stance = HOSTILE_STANCE_ATTACK
 		if(isliving(target))
 			var/mob/living/L = target
-			if(L.bodytemperature > 261)
-				L.bodytemperature = 261
-				visible_message("<span class='danger'>The [src.name]'s stare chills [L.name] to the bone!</span>")
+			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
+			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
+			visible_message("<span class='danger'>The [src.name]'s stare chills [L.name] to the bone!</span>")
 	return
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
@@ -432,7 +432,7 @@
 	desc = "Pieces of a goliath's rocky hide, these might be able to make your suit a bit more durable to attack from the local fauna."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "goliath_hide"
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	layer = 4
 
 /obj/item/asteroid/goliath_hide/afterattack(atom/target, mob/user, proximity_flag)

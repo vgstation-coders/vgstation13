@@ -72,8 +72,8 @@
 /obj/item/weapon/tank/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 
-	if (istype(W, /obj/item/weapon/flamethrower))
-		var/obj/item/weapon/flamethrower/F = W
+	if (istype(W, /obj/item/weapon/gun/projectile/flamethrower))
+		var/obj/item/weapon/gun/projectile/flamethrower/F = W
 		if ((!F.status)||(F.ptank))	return
 		src.master = F
 		F.ptank = src
@@ -84,6 +84,7 @@
 /obj/item/weapon/tank/plasma/plasmaman
 	desc = "The lifeblood of plasmamen.  Warning:  Extremely flammable, do not inhale (unless you're a plasmaman)."
 	icon_state = "plasma_fr"
+	slot_flags = SLOT_BACK
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 
 /*
@@ -95,7 +96,7 @@
 	icon_state = "emergency"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	force = 4.0
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 	volume = 2 //Tiny. Real life equivalents only have 21 breaths of oxygen in them. They're EMERGENCY tanks anyway -errorage (dangercon 2011)
@@ -119,7 +120,7 @@
 	desc = "Used for emergencies. Not useful unless you only breathe nitrogen."
 	icon_state = "emergency_nitrogen"
 	slot_flags = SLOT_BELT
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	volume = 2
 
 /obj/item/weapon/tank/emergency_nitrogen/New()

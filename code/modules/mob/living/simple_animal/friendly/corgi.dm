@@ -34,11 +34,14 @@
 	var/obj/item/inventory_back
 	var/facehugger
 	var/list/spin_emotes = list("dances around","chases its tail")
+//	colourmatrix = list(1,0.0,0.0,0,\
+						0,0.5,0.5,0,\
+						0,0.5,0.5,0,\
+						0,0.0,0.0,1,)
 
 /mob/living/simple_animal/corgi/Life()
 	if(timestopped) return 0 //under effects of time magick
 	spinaroo(spin_emotes)
-
 	. = ..()
 	if(.)
 		if(fire)
@@ -178,6 +181,7 @@
 					//The objects that corgis can wear on their backs.
 					var/list/allowed_types = list(
 						/obj/item/clothing/suit/armor/vest,
+						/obj/item/clothing/suit/armor/vest/security,
 						/obj/item/device/radio,
 						/obj/item/device/radio/off,
 						/obj/item/clothing/suit/cardborg,
@@ -190,6 +194,7 @@
 					if( ! ( item_to_add.type in allowed_types ) )
 						to_chat(usr, "You set [item_to_add] on [src]'s back, but \he shakes it off!")
 						usr.drop_item(item_to_add, get_turf(src))
+
 						if(prob(25))
 							step_rand(item_to_add)
 						if (ckey == null)
@@ -198,7 +203,7 @@
 								sleep(1)
 						return
 
-					usr.drop_item(item_to_add, src)
+					usr.drop_item(item_to_add, src, force_drop = 1)
 					src.inventory_back = item_to_add
 					regenerate_icons()
 
@@ -232,9 +237,14 @@
 				/obj/item/clothing/head/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/hardhat/white, /obj/item/weapon/paper )
 			valid = 1
 
-		if(/obj/item/clothing/head/helmet)
+		if(/obj/item/clothing/head/helmet/tactical/sec)
 			name = "Sergeant [real_name]"
 			desc = "The ever-loyal, the ever-vigilant."
+			valid = 1
+
+		if(/obj/item/clothing/head/helmet/tactical/swat)
+			name = "Lieutenant [real_name]"
+			desc = "When the going gets ruff..."
 			valid = 1
 
 		if(/obj/item/clothing/head/chefhat,	/obj/item/clothing/head/collectable/chef)
@@ -347,8 +357,8 @@
 			valid = 1
 
 		if(/obj/item/clothing/head/helmet/space/rig)
-			name = "Spessman [real_name]"
-			desc = "Boldly going where no Corgi has gone before!"
+			name = "Station Engineer [real_name]"
+			desc = "Ian want a cracker! ...Wait."
 			valid = 1
 			min_oxy = 0
 			minbodytemp = 0
@@ -368,7 +378,7 @@
 			usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
 				"You put [item_to_add] on [real_name]'s head.  [src] gives you a peculiar look, then wags \his tail once and barks.",
 				"You hear a friendly-sounding bark.")
-			usr.drop_item(item_to_add, src)
+			usr.drop_item(item_to_add, src, force_drop = 1)
 		else
 			item_to_add.loc = src
 		src.inventory_head = item_to_add
@@ -377,6 +387,7 @@
 	else
 		to_chat(usr, "You set [item_to_add] on [src]'s head, but \he shakes it off!")
 		usr.drop_item(item_to_add, src.loc)
+
 		if(prob(25))
 			step_rand(item_to_add)
 		if (ckey == null)
@@ -538,11 +549,11 @@
 /mob/living/simple_animal/corgi/proc/wuv(change, mob/M)
 	if(change)
 		if(change > 0)
-			if(M && stat != DEAD) // Added check to see if this mob (the corgi) is dead to fix issue 2454
+			if(M && !isUnconscious()) // Added check to see if this mob (the corgi) is dead to fix issue 2454
 				flick_overlay(image('icons/mob/animal.dmi',src,"heart-ani2",MOB_LAYER+1), list(M.client), 20)
 				emote("yaps happily")
 		else
-			if(M && stat != DEAD) // Same check here, even though emote checks it as well (poor form to check it only in the help case)
+			if(M && !isUnconscious()) // Same check here, even though emote checks it as well (poor form to check it only in the help case)
 				emote("growls")
 
 
@@ -556,6 +567,9 @@
 	icon_living = "doby"
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around","chases her nub of a tail")
+
+	species_type = /mob/living/simple_animal/corgi/sasha
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
 
 //Sasha can't wear hats!
 /mob/living/simple_animal/corgi/sasha/Topic(href, href_list)

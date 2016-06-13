@@ -3,7 +3,8 @@
 	name = "universal recorder"
 	icon_state = "taperecorderidle"
 	item_state = "analyzer"
-	w_class = 1.0
+	origin_tech = "magnets=1;programming=1"
+	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 60, MAT_GLASS = 30)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC

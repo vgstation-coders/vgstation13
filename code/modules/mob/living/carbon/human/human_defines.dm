@@ -25,7 +25,7 @@
 	mob_swap_flags = ALLMOBS
 
 	var/age = 30		//Player's age (pure fluff)
-	var/b_type = "A+"	//Player's bloodtype
+	//var/b_type = "A+"	//Player's bloodtype //NOW HANDLED IN THEIR DNA
 
 	var/underwear = 1	//Which underwear the player wants
 	var/backbag = 2		//Which backpack type the player has chosen. Nothing, Satchel or Backpack.
@@ -45,6 +45,9 @@
 	var/obj/item/s_store = null
 	var/obj/item/l_ear	 = null
 	var/obj/item/r_ear	 = null
+
+	//Special attacks (bite, kicks, ...)
+	var/attack_type = NORMAL_ATTACK
 
 	var/used_skillpoints = 0
 	var/skill_specialization = null
@@ -74,6 +77,7 @@
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/lastScream = 0 // Prevent scream spam in some situations
 
+	var/obj/item/weapon/organ/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"

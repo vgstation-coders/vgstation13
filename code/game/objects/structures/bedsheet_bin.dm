@@ -8,13 +8,14 @@ LINEN BINS
 	name = "bedsheet"
 	desc = "A surprisingly soft linen bedsheet."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "sheet"
+	icon_state = "sheetwhite"
 	item_state = "bedsheet"
+	slot_flags = SLOT_BACK
 	layer = 4.0
 	throwforce = 1
 	throw_speed = 1
 	throw_range = 2
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	_color = "white"
 
 //cutting the bedsheet into rags
@@ -47,9 +48,9 @@ LINEN BINS
 //todo: sharp thing code/game/objects/objs.dm
 
 /obj/item/weapon/bedsheet/attack_self(mob/user as mob)
-	user.drop_item(src)
+	user.drop_item(src, force_drop = 1)
 	if(layer == initial(layer))
-		layer = 5
+		layer = MOB_LAYER + 0.1
 	else
 		layer = initial(layer)
 	add_fingerprint(user)
@@ -157,15 +158,14 @@ LINEN BINS
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/bedsheet))
-		user.drop_item(I, src)
-		sheets.Add(I)
-		amount++
-		to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
-	else if(amount && !hidden && I.w_class < 4)	//make sure there's sheets to hide it among, make sure nothing else is hidden in there.
-		user.drop_item(I, src)
-		hidden = I
-		to_chat(user, "<span class='notice'>You hide [I] among the sheets.</span>")
-
+		if(user.drop_item(I, src))
+			sheets.Add(I)
+			amount++
+			to_chat(user, "<span class='notice'>You put \the [I] in \the [src].</span>")
+	else if(amount && !hidden && I.w_class < W_CLASS_LARGE)	//make sure there's sheets to hide it among, make sure nothing else is hidden in there.
+		if(user.drop_item(I, src))
+			hidden = I
+			to_chat(user, "<span class='notice'>You hide [I] among the sheets.</span>")
 
 
 /obj/structure/bedsheetbin/attack_paw(mob/user as mob)

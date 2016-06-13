@@ -8,7 +8,7 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	origin_tech = "syndicate=4;magnets=4"
 	var/cham_proj_scan = 1 //Scanning function starts on
 	var/can_use = 1
@@ -19,7 +19,8 @@
 	var/saved_overlays
 
 /obj/item/device/chameleon/dropped()
-	disrupt()
+	spawn() //So the chammy project is dropped into the dummy before the dummy empties itself out
+		disrupt()
 
 /obj/item/device/chameleon/equipped()
 	disrupt()
@@ -37,7 +38,7 @@
 	cham_proj_scan = !cham_proj_scan
 	to_chat(usr, "You [cham_proj_scan ? "activate":"deactivate"] [src]'s scanning function")
 
-/obj/item/device/chameleon/afterattack(atom/target, mob/user , proximity)
+/obj/item/device/chameleon/preattack(atom/target, mob/user , proximity)
 	if(!proximity)
 		return
 	if(!cham_proj_scan) //Is scanning disabled ?
@@ -50,6 +51,7 @@
 			saved_icon = target.icon
 			saved_icon_state = target.icon_state
 			saved_overlays = target.overlays
+			return 1
 
 /obj/item/device/chameleon/proc/toggle()
 	if(!can_use || !saved_item)

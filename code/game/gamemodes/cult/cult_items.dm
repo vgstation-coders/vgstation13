@@ -4,11 +4,11 @@
 	icon_state = "cultblade"
 	item_state = "cultblade"
 	flags = FPRINT
-	w_class = 4
+	w_class = W_CLASS_LARGE
 	force = 30
 	throwforce = 10
 	sharpness = 1.35
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/melee/cultblade/cultify()
 	return
@@ -20,9 +20,8 @@
 	else
 		user.Paralyse(5)
 		to_chat(user, "<span class='warning'>An unexplicable force powerfully repels the sword from [target]!</span>")
-		var/organ = ((user.hand ? "l_":"r_") + "arm")
-		var/datum/organ/external/affecting = user.get_organ(organ)
-		if(affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
+		var/datum/organ/external/affecting = user.get_active_hand_organ()
+		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
 	return
 
@@ -36,13 +35,11 @@
 	name = "cult hood"
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
-	flags_inv = HIDEFACE
 	flags = FPRINT
 	armor = list(melee = 30, bullet = 10, laser = 5,energy = 5, bomb = 0, bio = 0, rad = 0)
-	cold_protection = HEAD
-	body_parts_covered = HEAD | EYES
-	min_cold_protection_temperature = SPACE_HELMET_MIN_COLD_PROTECTION_TEMPERATURE
+	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/head/culthood/cultify()
 	return
@@ -61,10 +58,8 @@
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
 	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade)
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
-	flags_inv = HIDEJUMPSUIT
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/cultrobes/cultify()
@@ -75,9 +70,8 @@
 	icon_state = "magus"
 	item_state = "magus"
 	desc = "A helm worn by the followers of Nar-Sie."
-	flags_inv = HIDEFACE|HIDEHAIR
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|BEARD
 	armor = list(melee = 30, bullet = 30, laser = 30,energy = 20, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
 
@@ -87,10 +81,9 @@
 	icon_state = "magusred"
 	item_state = "magusred"
 	flags = FPRINT
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade)
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
-	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 	siemens_coefficient = 0
 
 
@@ -107,7 +100,7 @@
 	icon_state = "cult_armour"
 	item_state = "cult_armour"
 	desc = "A bulky suit of armour, bristling with spikes. It looks space proof."
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 0
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)

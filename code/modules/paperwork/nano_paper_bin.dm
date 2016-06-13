@@ -5,7 +5,7 @@
 	icon_state = "np_dispenser"
 	item_state = "sheet-metal"
 	throwforce = 1
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	var/ressources = 30	// how much nano paper it contains
@@ -15,7 +15,7 @@
 
 
 /obj/item/weapon/paper_bin/nano/MouseDrop(mob/user as mob)
-	if((user == usr && (!( usr.restrained() ) && (!( usr.stat ) && (usr.contents.Find(src) || in_range(src, usr))))))
+	if(user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
 		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
 			if( !usr.get_active_hand() )		//if active hand is empty
 				src.loc = user
@@ -36,7 +36,7 @@
 		p = new /obj/item/weapon/paper/nano
 		p.loc = user.loc
 		user.put_in_hands(p)
-		to_chat(user, "<span class='notice'>the [src] spits out a [p]</span>")
+		to_chat(user, "<span class='notice'>\The [src] spits out a piece of nano paper.</span>")
 		if(ressources == 0)
 			to_chat(user, "<span class=notice> The dispenser is now empty!")
 	else

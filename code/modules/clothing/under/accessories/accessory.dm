@@ -13,7 +13,7 @@
 	_color = "bluetie"
 	flags = FPRINT
 	slot_flags = 0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/under/has_suit = null
 	var/image/inv_overlay
@@ -28,9 +28,9 @@
 		return
 	has_suit = S
 	if(user)
-		user.drop_item(src, has_suit)
-		to_chat(user, "<span class='notice'>You attach [src] to [has_suit].</span>")
-		src.add_fingerprint(user)
+		if(user.drop_item(src, has_suit))
+			to_chat(user, "<span class='notice'>You attach [src] to [has_suit].</span>")
+			src.add_fingerprint(user)
 	else
 		loc = has_suit
 	has_suit.overlays += inv_overlay
@@ -77,6 +77,7 @@
 	desc = "An outdated medical apparatus for listening to the sounds of the human body. It also makes you look like you know what you're doing."
 	icon_state = "stethoscope"
 	_color = "stethoscope"
+	origin_tech = "biotech=1"
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -187,7 +188,7 @@
 		to_chat(user, "Waving around a badge before swiping an ID would be pretty pointless.")
 		return
 	if(isliving(user))
-		user.visible_message("<span class='warning'>[user] displays their NanoTrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>","<span class='warning'>You display your NanoTrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>")
+		user.visible_message("<span class='warning'>[user] displays their Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>","<span class='warning'>You display your Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>")
 
 /obj/item/clothing/accessory/holobadge/attackby(var/obj/item/O as obj, var/mob/user as mob)
 

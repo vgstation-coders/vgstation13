@@ -11,7 +11,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pda"
 	item_state = "electronic"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	flags = FPRINT
 	slot_flags = SLOT_ID | SLOT_BELT
 
@@ -77,26 +77,26 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"The 'Universes Largest Oven' has been completed today in Space Germany. Prime Minister Adole Himmler has invited Space Isreal to see the oven first at its grand opening."
 		)
 	var/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
-		"NanoTrasen has inducted a new policy wherein clowns will be spanked for stealing milk.",
+		"Nanotrasen has inducted a new policy wherein clowns will be spanked for stealing milk.",
 		"Discount Dan's has created a new line of Discountu Danu food product for Space Japan. The food is comprised of Space Carp on rice. More at ten.",
 		"Discount Dan's has come under fire for their new 'Horsemeat Lasagna'",
-		"NanoTrasen's official website has been hacked this morning. The site read 'NT SUXZ, GO SYNDIEKATTZ!!1!1!!' for 48 hours until the site was fixed.",
-		"Read the all new book by a former unnamed syndicate, 'NanoTrasen sucks but the dental is good so whatever.'",
-		"NanoTrasen has released a new study that has been made useless by the internet.",
+		"Nanotrasen's official website has been hacked this morning. The site read 'NT SUXZ, GO SYNDIEKATTZ!!1!1!!' for 48 hours until the site was fixed.",
+		"Read the all new book by a former unnamed syndicate, 'Nanotrasen sucks but the dental is good so whatever.'",
+		"Nanotrasen has released a new study that has been made useless by the internet.",
 		"Discount Dan's 'Spooky Dan' line of product has come under fire for being unintentionally racist toward ghosts.",
 		"Discount Dan's 'Discounto Danito' line of product has come out with a new 'fiesta size' burrito. CEO Discount Dan has been quoted as saying, 'A big 'ol clot for a big 'ol family!'",
-		"The Syndicate has issued a press release stating that 'NanoTrasen sucks dicks.'",
-		"NanoTrasen CEO Johnson Lovelocker has been photographed kicking a Tajaran to death. This shameful publicity stunt is part of the new 'NT Hates Catbeasts, do you?' campaign.",
-		"NanoTrasen CEO Johnson Lovelocker has been photographed kicking a Vox in the cloaca. He commented that, 'BIRDS BELONG IN MY FUCKING MEALS DAMN IT'.",
-		"NanoTrasen CEO Johnson Lovelocker is in hot water for an alleged sex scandal with a confused syndicate woman that took the motto 'Fuck NT' too seriously.",
-		"NanoTrasen CEO Johnson Lovelocker issued a press release stating, 'Anybody who's fucking impersonating me is going to get fucking bluespaced unto a spike.'. We do not condone Lovelocker's use of foul language in the newsroom.",
-		"NanoTrasen CEO Johnson Lovelocker and Discount Dan's CEO Discount Dan have been photographed buying a new friend necklace. The Syndicate issued a statement that 'That's totally gay.'",
+		"The Syndicate has issued a press release stating that 'Nanotrasen sucks dicks.'",
+		"Nanotrasen CEO Johnson Lovelocker has been photographed kicking a Tajaran to death. This shameful publicity stunt is part of the new 'NT Hates Catbeasts, do you?' campaign.",
+		"Nanotrasen CEO Johnson Lovelocker has been photographed kicking a Vox in the cloaca. He commented that, 'BIRDS BELONG IN MY FUCKING MEALS DAMN IT'.",
+		"Nanotrasen CEO Johnson Lovelocker is in hot water for an alleged sex scandal with a confused syndicate woman that took the motto 'Fuck NT' too seriously.",
+		"Nanotrasen CEO Johnson Lovelocker issued a press release stating, 'Anybody who's fucking impersonating me is going to get fucking bluespaced unto a spike.'. We do not condone Lovelocker's use of foul language in the newsroom.",
+		"Nanotrasen CEO Johnson Lovelocker and Discount Dan's CEO Discount Dan have been photographed buying a new friend necklace. The Syndicate issued a statement that 'That's totally gay.'",
 		"Discount Dan has been photographed this evening hunting the endangered albino space panda. When questioned, he replied that the endangered animal was 'Good eats'.",
-		"NanoTrasen's head programmer quit this evening when people did not respond well to his new features on NTOS. Said features included the ability to instantly transmit pictures of your butt to people by blinking.",
-		"NanoTrasen CEO Johnson Lovelocker was photographed this morning celebrating his birthday will well deserved hookers and blow.",
+		"Nanotrasen's head programmer quit this evening when people did not respond well to his new features on NTOS. Said features included the ability to instantly transmit pictures of your butt to people by blinking.",
+		"Nanotrasen CEO Johnson Lovelocker was photographed this morning celebrating his birthday will well deserved hookers and blow.",
 		"Discount Dan's stock has risen 20 points today after CEO Discount Dan promised to include a free toy in every 'Happy Dan' meal. In other news, we have over 300 confirmed reports of broken teeth and lead poisoning in children 6 and under.",
 		"Discount Dan has come under fire today after trying to hug a plasmaman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
-		"NanoTrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
+		"Nanotrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
 		)
 	var/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
 		"Tajarans continue to protest in their 'Trillion Fur March' today. We have reports that the Space American army is giving a KOS order on all non-humans in the area.",
@@ -122,7 +122,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"The first man to step on Pluto slipped and was impaled on an ice spike shortly after landing.",
 		"North Korea became the first country to land a rocket on the sun.",
 		"Kim Jong Long Dong Silver, 58th generation leader of North Korea, died after being shot seventy two times in the chest.",
-		"NanoTrasen's new 'Space Station 13' project was announced.",
+		"Nanotrasen's new 'Space Station 13' project was announced.",
 		"Jupiter and Neptune became sentient for a period of 78 hours, Jupiter was heard screaming 'WHY AM I ALIVE DEAR GOD.', whilst curiously, Neptune only said 'Well here we go again.'.",
 		"The first furry in space was thrown out an airlock, along with his fursuit.",
 		"The 89th President of Space America read Woody's Got Wood aloud in his first State of the Union, and was beaten to death shortly after.",
@@ -138,7 +138,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Odontophobia is the fear of teeth.",
 		"The surface area of an average-sized brick is 79 cm squared.",
 		"According to suicide statistics, Monday is the favoured day for self-destruction.",
-		"When you die your hair still grows for a couple of months.",
 		"The Neanderthal's brain was bigger than yours is.",
 		"The pancreas produces Insulin.",
 		"The word 'lethologica' describes the state of not being able to remember the word you want.",
@@ -164,8 +163,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Zero is an even number.",
 		"The longest English word that can be spelled without repeating any letters is 'uncopyrightable'.",
 		"10! (Ten factorial) seconds equals exactly six Earth weeks.",
-		"Moths don't have a stomach or mouth. They never eat again after undergoing metamorphosis.",
-		"'J' is the only letter that doesn't appear in the Periodic Table of Elements.",
 		"Want to remember the first digits of Pi easily? You can do it by counting each word's letters in 'May I have a large container of plasma?'"
 		)
 	var/currentevent1 = null
@@ -579,7 +576,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
-		if(user.stat || user.restrained() || user.paralysis || user.stunned || user.weakened)
+		if(user.incapacitated())
 			return 0
 		if(loc == user)
 			return 1
@@ -608,28 +605,19 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(active_uplink_check(user))
 		return
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:313: var/dat = "<html><head><title>Personal Data Assistant</title></head><body bgcolor=\"#808000\"><style>a, a:link, a:visited, a:active, a:hover { color: #000000; }img {border-style:none;}</style>"
 	var/dat = {"<html><head><title>Personal Data Assistant</title></head><body bgcolor=\"#808000\"><style>a, a:link, a:visited, a:active, a:hover { color: #000000; }img {border-style:none;}</style>
 <a href='byond://?src=\ref[src];choice=Close'><img src=pda_exit.png> Close</a>"}
-	// END AUTOFIX
 	if ((!isnull(cartridge)) && (mode == 0))
 		dat += " | <a href='byond://?src=\ref[src];choice=Eject'><img src=pda_eject.png> Eject [cartridge]</a>"
 	if (mode)
 		dat += " | <a href='byond://?src=\ref[src];choice=Return'><img src=pda_menu.png> Return</a>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:321: dat += " | <a href='byond://?src=\ref[src];choice=Refresh'><img src=pda_refresh.png> Refresh</a>"
 	dat += {"| <a href='byond://?src=\ref[src];choice=Refresh'><img src=pda_refresh.png> Refresh</a>
 		<br>"}
-	// END AUTOFIX
 	if (!owner)
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:326: dat += "Warning: No owner information entered.  Please swipe card.<br><br>"
 		dat += {"Warning: No owner information entered.  Please swipe card.<br><br>
 			<a href='byond://?src=\ref[src];choice=Refresh'><img src=pda_refresh.png> Retry</a>"}
-		// END AUTOFIX
 	else
 		switch (mode)
 			if (0)
@@ -638,17 +626,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					var/datum/asset/simple/C = new/datum/asset/simple/pda()
 					send_asset_list(user.client, C.assets)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:331: dat += "<h2>PERSONAL DATA ASSISTANT v.1.3</h2>"
 				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.3</h2>
 					Owner: [owner], [ownjob]<br>"}
-				// END AUTOFIX
 				dat += text("ID: <A href='?src=\ref[src];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
 				dat += text("<br><A href='?src=\ref[src];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
 
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:336: dat += "Station Time: [worldtime2text()]"//:[world.time / 100 % 6][world.time / 100 % 10]"
 				dat += {"Station Time: [worldtime2text()]
 					<br><br>
 					<h4>General Functions</h4>
@@ -656,7 +639,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<li><a href='byond://?src=\ref[src];choice=1'><img src=pda_notes.png> Notekeeper</a></li>
 					<li><a href='byond://?src=\ref[src];choice=2'><img src=pda_mail.png> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=50'><img src=pda_clock.png> Current Events</a></li>"}
-				// END AUTOFIX
 				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><img src=pda_chatroom.png> Nanotrasen Relay Chat</a></li>"
 
 				dat += "<li><a href='byond://?src=\ref[src];choice=41'><img src=pda_notes.png> View Crew Manifest</a></li>"
@@ -697,47 +679,32 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 					if (cartridge.access_medical)
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:360: dat += "<h4>Medical Functions</h4>"
 						dat += {"<h4>Medical Functions</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=44'><img src=pda_medical.png> Medical Records</a></li>
 							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><img src=pda_scanner.png> [scanmode == 1 ? "Disable" : "Enable"] Medical Scanner</a></li>
 							</ul>"}
-						// END AUTOFIX
 					if (cartridge.access_security)
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:366: dat += "<h4>Security Functions</h4>"
 						dat += {"<h4>Security Functions</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=45'><img src=pda_cuffs.png> Security Records</A></li>"}
-						// END AUTOFIX
 					if(istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:370: dat += "<li><a href='byond://?src=\ref[src];choice=46'><img src=pda_cuffs.png> Security Bot Access</a></li>"
 						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><img src=pda_cuffs.png> Security Bot Access</a></li>
 							</ul>"}
-						// END AUTOFIX
 					else	dat += "</ul>"
 					if(cartridge.access_quartermaster)
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:374: dat += "<h4>Quartermaster Functions:</h4>"
 						dat += {"<h4>Quartermaster Functions:</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=47'><img src=pda_crate.png> Supply Records</A></li>
 							<li><a href='byond://?src=\ref[src];choice=48'><img src=pda_mule.png> Delivery Bot Control</A></li>
 							</ul>"}
-				// END AUTOFIX
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:379: dat += "</ul>"
 				dat += {"</ul>
 					<h4>Utilities</h4>
 					<ul>"}
-				// END AUTOFIX
 				if (cartridge)
 					if (cartridge.access_janitor)
 						dat += "<li><a href='byond://?src=\ref[src];choice=49'><img src=pda_bucket.png> Custodial Locator</a></li>"
@@ -752,42 +719,30 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if (cartridge.access_remote_door)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><img src=pda_rdoor.png> Toggle Remote Door</a></li>"
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:396: dat += "<li><a href='byond://?src=\ref[src];choice=3'><img src=pda_atmos.png> Atmospheric Scan</a></li>"
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><img src=pda_atmos.png> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><img src=pda_flashlight.png> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
-				// END AUTOFIX
 				if (pai)
 					if(pai.loc != src)
 						pai = null
 					else
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:402: dat += "<li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>"
 						dat += {"<li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
 							<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li>"}
-						// END AUTOFIX
 				dat += "</ul>"
 
 			if (1)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:407: dat += "<h4><img src=pda_notes.png> Notekeeper V2.1</h4>"
 				dat += {"<h4><img src=pda_notes.png> Notekeeper V2.1</h4>
 					<a href='byond://?src=\ref[src];choice=Edit'> Edit</a><br>"}
-				// END AUTOFIX
 				dat += note
 
 			if (2)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:412: dat += "<h4><img src=pda_mail.png> SpaceMessenger V3.9.4</h4>"
 				dat += {"<h4><img src=pda_mail.png> SpaceMessenger V3.9.4</h4>
 					<a href='byond://?src=\ref[src];choice=Toggle Ringer'><img src=pda_bell.png> Ringer: [silent == 1 ? "Off" : "On"]</a> |
 					<a href='byond://?src=\ref[src];choice=Toggle Messenger'><img src=pda_mail.png> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
 					<a href='byond://?src=\ref[src];choice=Ringtone'><img src=pda_bell.png> Set Ringtone</a> |
 					<a href='byond://?src=\ref[src];choice=21'><img src=pda_mail.png> Messages</a><br>"}
-				// END AUTOFIX
 				if (istype(cartridge, /obj/item/weapon/cartridge/syndicate))
 					dat += "<b>[cartridge:shock_charges] detonation charges left.</b><HR>"
 				if (istype(cartridge, /obj/item/weapon/cartridge/clown))
@@ -796,11 +751,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += "<b>[cartridge:mime_charges] viral files left.</b><HR>"
 
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:425: dat += "<h4><img src=pda_menu.png> Detected PDAs</h4>"
 				dat += {"<h4><img src=pda_menu.png> Detected PDAs</h4>
 					<ul>"}
-				// END AUTOFIX
 				var/count = 0
 
 				if (!toff)
@@ -824,12 +776,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if(21)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:448: dat += "<h4><img src=pda_mail.png> SpaceMessenger V3.9.4</h4>"
 				dat += {"<h4><img src=pda_mail.png> SpaceMessenger V3.9.4</h4>
 					<a href='byond://?src=\ref[src];choice=Clear'><img src=pda_blank.png> Clear Messages</a>
 					<h4><img src=pda_mail.png> Messages</h4>"}
-				// END AUTOFIX
 				dat += tnote
 				dat += "<br>"
 
@@ -854,13 +803,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						var/plasma_level = environment.toxins/total_moles
 						var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:476: dat += "Nitrogen: [round(n2_level*100)]%<br>"
 						dat += {"Nitrogen: [round(n2_level*100)]%<br>
 							Oxygen: [round(o2_level*100)]%<br>
 							Carbon Dioxide: [round(co2_level*100)]%<br>
 							Plasma: [round(plasma_level*100)]%<br>"}
-						// END AUTOFIX
 						if(unknown_level > 0.01)
 							dat += "OTHER: [round(unknown_level)]%<br>"
 					dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
@@ -868,11 +814,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if (5)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\\\pDA.dm:486: dat += "<h4><img src=pda_chatroom.png> Nanotrasen Relay Chat</h4>"
 				dat += {"<h4><img src=pda_chatroom.png> Nanotrasen Relay Chat</h4>
 					<h4><img src=pda_menu.png> Detected Channels</h4>: <li>"}
-				// END AUTOFIX
 				for(var/datum/chatroom/C in chatrooms)
 					dat += "<a href='byond://?src=\ref[src];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
 					if(C.password != "")
@@ -881,11 +824,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if (41) //Allows everyone to access crew
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\objects\items\\devices\\\pDA\cart.dm:281: menu = "<h4><img src=pda_notes.png> Crew Manifest</h4>"
 				dat += {"<h4><img src=pda_notes.png> Crew Manifest</h4>
 					Entries cannot be modified from this terminal.<br><br>"}
-				// END AUTOFIX
 				if(data_core)
 					dat += data_core.get_manifest(1) // make it monochrome
 				dat += "<br>"
@@ -1457,12 +1397,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/mob/user = usr
 				var/amount = round(input("How much money do you wish to print?", "Currency Printer", 0) as num)
 				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
-					to_chat(user, "\icon[src]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
+					to_chat(user, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
 					return
 				if(amount > id.virtual_wallet.money)
 					amount = id.virtual_wallet.money
 				if(amount > 10000) // prevent crashes
-					to_chat(user, "\icon[src]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
+					to_chat(user, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
 					amount = 10000
 
 				id.virtual_wallet.money -= amount
@@ -1744,6 +1684,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if (mode == 1)
 						note = replacetext(n, "\n", "<BR>")
 						notehtml = n
+
+						var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
+						log_say("[src] notes - [U] changed the text to: [log]")
+						message_admins("[src] notes - [U] changed the text to: [log]", 1)
+						for(var/mob/dead/observer/M in player_list)
+							if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
+								M.show_message("<span class='game say'>[src] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")
 				else
 					U << browse(null, "window=pda")
 					return
@@ -1777,18 +1724,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/obj/item/device/pda/P = locate(href_list["target"])
 				var/amount = round(input("How much money do you wish to transfer to [P.owner]?", "Money Transfer", 0) as num)
 				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
-					to_chat(usr, "\icon[src]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
 					return
 				if(amount > id.virtual_wallet.money)
 					amount = id.virtual_wallet.money
 
 				switch(P.receive_funds(owner,amount,name))
 					if(1)
-						to_chat(usr, "\icon[src]<span class='notice'>The PDA's screen flashes, 'Transaction complete!'</span>")
+						to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete!'</span>")
 					if(2)
-						to_chat(usr, "\icon[src]<span class='notice'>The PDA's screen flashes, 'Transaction complete! The recipient will earn the funds once he enters his ID in his PDA.'</span>")
+						to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete! The recipient will earn the funds once he enters his ID in his PDA.'</span>")
 					else
-						to_chat(usr, "\icon[src]<span class='warning'>The PDA's screen flashes, 'Error, transaction canceled'</span>")
+						to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, transaction canceled'</span>")
 						return
 
 				id.virtual_wallet.money -= amount
@@ -1924,7 +1871,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		var/mob/living/carbon/human/H = user
 		if(istype(H.wear_id,/obj/item/weapon/storage/wallet))
 			dispense_cash(arbitrary_sum,H.wear_id)
-			to_chat(usr, "\icon[src]<span class='notice'>Funds were transferred into your physical wallet!</span>")
+			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return
 	dispense_cash(arbitrary_sum,get_turf(src))
 
@@ -1935,16 +1882,16 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 
 	for (var/mob/O in hearers(3, U))
-		if(!silent) O.show_message(text("\icon[src] *[src.ttone]*"))
+		if(!silent) O.show_message(text("[bicon(src)] *[src.ttone]*"))
 
 	var/mob/living/L = null
 	if(src.loc && isliving(src.loc))
 		L = src.loc
 	else
-		L = get(src, /mob/living/silicon)
+		L = get_holder_of_type(src, /mob/living/silicon)
 
 	if(L)
-		to_chat(L, "\icon[src] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
+		to_chat(L, "[bicon(src)] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
 
 	tnote += "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
 
@@ -1985,7 +1932,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/mob/living/L = null
 	if(src.loc && isliving(src.loc))
 		L = src.loc
-	to_chat(L, "\icon[src]<span class='notice'> <b>Transactions successfully received! </b></span>")
+	to_chat(L, "[bicon(src)]<span class='notice'> <b>Transactions successfully received! </b></span>")
 
 
 /obj/item/device/pda/proc/remove_id()
@@ -2066,17 +2013,17 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if (!P.silent)
 			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
 		for (var/mob/O in hearers(3, P.loc))
-			if(!P.silent) O.show_message(text("\icon[P] *[P.ttone]*"))
+			if(!P.silent) O.show_message(text("[bicon(P)] *[P.ttone]*"))
 		//Search for holder of the PDA.
 		var/mob/living/L = null
 		if(P.loc && isliving(P.loc))
 			L = P.loc
 		//Maybe they are a pAI!
 		else
-			L = get(P, /mob/living/silicon)
+			L = get_holder_of_type(P, /mob/living/silicon)
 
 		if(L)
-			L.show_message("\icon[P] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
+			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
 
 		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
@@ -2143,15 +2090,15 @@ obj/item/device/pda/AltClick()
 		else
 			var/obj/item/I = user.get_active_hand()
 			if (istype(I, /obj/item/weapon/card/id))
-				user.drop_item(I, src)
-				id = I
+				if(user.drop_item(I, src))
+					id = I
 	else
 		var/obj/item/weapon/card/I = user.get_active_hand()
 		if (istype(I, /obj/item/weapon/card/id) && I:registered_name)
 			var/obj/old_id = id
-			user.drop_item(I, src)
-			id = I
-			user.put_in_hands(old_id)
+			if(user.drop_item(I, src))
+				id = I
+				user.put_in_hands(old_id)
 	if(id && incoming_transactions.len)
 		receive_incoming_transactions(id)
 	return
@@ -2160,11 +2107,11 @@ obj/item/device/pda/AltClick()
 /obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
 	..()
 	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
-		cartridge = C
-		user.drop_item(C, src)
-		to_chat(user, "<span class='notice'>You insert [cartridge] into [src].</span>")
-		if(cartridge.radio)
-			cartridge.radio.hostpda = src
+		if(user.drop_item(C, src))
+			cartridge = C
+			to_chat(user, "<span class='notice'>You insert [cartridge] into [src].</span>")
+			if(cartridge.radio)
+				cartridge.radio.hostpda = src
 
 	else if(istype(C, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/idcard = C
@@ -2188,20 +2135,20 @@ obj/item/device/pda/AltClick()
 			return	//Return in case of failed check or when successful.
 		updateSelfDialog()//For the non-input related code.
 	else if(istype(C, /obj/item/device/paicard) && !src.pai)
-		user.drop_item(C, src)
-		pai = C
-		to_chat(user, "<span class='notice'>You slot \the [C] into [src].</span>")
-		updateUsrDialog()
+		if(user.drop_item(C, src))
+			pai = C
+			to_chat(user, "<span class='notice'>You slot \the [C] into [src].</span>")
+			updateUsrDialog()
 	else if(istype(C, /obj/item/weapon/pen))
 		var/obj/item/weapon/pen/O = locate() in src
 		if(O)
 			to_chat(user, "<span class='notice'>There is already a pen in \the [src].</span>")
 		else
-			user.drop_item(C, src)
-			to_chat(user, "<span class='notice'>You slide \the [C] into \the [src].</span>")
+			if(user.drop_item(C, src))
+				to_chat(user, "<span class='notice'>You slide \the [C] into \the [src].</span>")
 	else if(istype(C,/obj/item/weapon/spacecash))
 		if(!id)
-			to_chat(user, "\icon[src]<span class='warning'>There is no ID in the PDA!</span>")
+			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
 		id.virtual_wallet.money += dosh.worth * dosh.amount
@@ -2276,6 +2223,8 @@ obj/item/device/pda/AltClick()
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
 		if(3)
+			if(!A.Adjacent(user))
+				return
 			if(!isnull(A.reagents))
 				if(A.reagents.reagent_list.len > 0)
 					var/reagents_length = A.reagents.reagent_list.len

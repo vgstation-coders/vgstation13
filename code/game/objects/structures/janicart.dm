@@ -15,6 +15,7 @@
 	nick = "pimpin' ride"
 	keytype = /obj/item/key/janicart
 	flags = OPENCONTAINER
+	overrideghostspin = 0
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
 
@@ -36,26 +37,26 @@
 		if(1 to 39)
 			to_chat(user, "<span class='warning'>It appears severely dented.</span>")
 		if((INFINITY * -1) to 0)
-			to_chat(user, "<span class='danger'>It appears completely unsalvageable</span>")
+			to_chat(user, "<span class='danger'>It appears completely unsalvageable.</span>")
 	if(mybag)
 		to_chat(user, "\A [mybag] is hanging on \the [nick].")
 
 /obj/structure/bed/chair/vehicle/janicart/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/mecha_parts/janicart_upgrade) && !upgraded && !destroyed)
-		user.drop_item(W)
-		qdel(W)
-		to_chat(user, "<span class='notice'>You upgrade \the [nick].</span>")
-		upgraded = 1
-		name = "upgraded [name]"
-		icon_state = "pussywagon_upgraded"
+		if(user.drop_item(W))
+			qdel(W)
+			to_chat(user, "<span class='notice'>You upgrade \the [nick].</span>")
+			upgraded = 1
+			name = "upgraded [name]"
+			icon_state = "pussywagon_upgraded"
 	else if(istype(W, /obj/item/weapon/storage/bag/trash))
 		if(mybag)
 			to_chat(user, "<span class='warning'>There's already a [W.name] on \the [nick]!</span>")
 			return
-		to_chat(user, "<span class='notice'>You hook \the [W] onto \the [nick].</span>")
-		user.drop_item(W, src)
-		mybag = W
+		if(user.drop_item(W, src))
+			to_chat(user, "<span class='notice'>You hook \the [W] onto \the [nick].</span>")
+			mybag = W
 
 /obj/structure/bed/chair/vehicle/janicart/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(istype(M))
@@ -67,21 +68,29 @@
 			to_chat(user, "<span class='notice'>\The [nick] is out of water!</span>")
 	return 1
 
-/obj/structure/bed/chair/vehicle/janicart/attack_hand(mob/user)
-	if(mybag)
-		if(occupant && occupant == user)
-			switch(alert("Choose an action.","Janicart","Get off the ride","Remove the bag","Cancel"))
-				if("Get off the ride")
-					return ..()
+/obj/structure/bed/chair/vehicle/janicart/verb/remove_trashbag()
+	set name = "Remove Trash Bag"
+	set category = "Object"
+	set src in oview(1)
 
-				if("Cancel")
-					return
-
-		mybag.forceMove(get_turf(user))
-		user.put_in_hands(mybag)
+	if(mybag && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+		mybag.forceMove(get_turf(usr))
+		usr.put_in_hands(mybag)
 		mybag = null
+
+/obj/structure/bed/chair/vehicle/janicart/attack_hand(mob/user)
+	if(occupant && occupant == user)
+		return ..()
+	if(mybag)
+		remove_trashbag()
 	else
 		..()
+
+/obj/structure/bed/chair/vehicle/janicart/AltClick()
+	if(mybag)
+		remove_trashbag()
+		return
+	..()
 
 /obj/structure/bed/chair/vehicle/janicart/Move()
 	..()

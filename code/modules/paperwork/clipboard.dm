@@ -4,7 +4,7 @@
 	icon_state = "clipboard"
 	item_state = "clipboard"
 	throwforce = 0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 10
 	var/obj/item/weapon/pen/haspen		//The stored pen.
@@ -19,19 +19,16 @@
 /obj/item/weapon/clipboard/MouseDrop(obj/over_object as obj) //Quick clipboard fix. -Agouri
 	if(ishuman(usr))
 		var/mob/M = usr
-		if(!(istype(over_object, /obj/screen) ))
+		if(!(istype(over_object, /obj/screen/inventory) ))
 			return ..()
 
-		if(!M.restrained() && !M.stat)
-			switch(over_object.name)
-				if("r_hand")
-					M.u_equip(src,0)
-					M.put_in_r_hand(src)
-				if("l_hand")
-					M.u_equip(src,0)
-					M.put_in_l_hand(src)
+		if(!M.incapacitated())
+			var/obj/screen/inventory/OI = over_object
 
-			add_fingerprint(usr)
+			if(OI.hand_index)
+				M.u_equip(src, 0)
+				M.put_in_hand(OI.hand_index, src)
+				src.add_fingerprint(usr)
 			return
 
 /obj/item/weapon/clipboard/update_icon()
@@ -46,11 +43,11 @@
 
 /obj/item/weapon/clipboard/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
-		user.drop_item(W, src)
-		if(istype(W, /obj/item/weapon/paper))
-			toppaper = W
-		to_chat(user, "<span class='notice'>You clip the [W] onto \the [src].</span>")
-		update_icon()
+		if(user.drop_item(W, src))
+			if(istype(W, /obj/item/weapon/paper))
+				toppaper = W
+			to_chat(user, "<span class='notice'>You clip the [W] onto \the [src].</span>")
+			update_icon()
 	else if(toppaper)
 		toppaper.attackby(usr.get_active_hand(), usr)
 		update_icon()
@@ -97,9 +94,9 @@
 			if(!haspen)
 				if(istype(usr.get_active_hand(), /obj/item/weapon/pen))
 					var/obj/item/weapon/pen/W = usr.get_active_hand()
-					usr.drop_item(W, src)
-					haspen = W
-					to_chat(usr, "<span class='notice'>You slot the pen into \the [src].</span>")
+					if(usr.drop_item(W, src))
+						haspen = W
+						to_chat(usr, "<span class='notice'>You slot the pen into \the [src].</span>")
 
 		if(href_list["write"])
 			var/obj/item/P = locate(href_list["write"])

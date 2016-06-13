@@ -8,14 +8,14 @@ REAGENT SCANNER
 */
 
 /obj/item/device/t_scanner
-	name = "T-ray scanner"
+	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
 	icon_state = "t-ray0"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	item_state = "electronic"
-	starting_materials = list(MAT_IRON = 150, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = "magnets=1;engineering=1"
@@ -75,6 +75,15 @@ REAGENT SCANNER
 				if(M)
 					M.invisibility = INVISIBILITY_LEVEL_TWO
 
+/obj/item/device/t_scanner/advanced
+	name = "\improper P-ray scanner"
+	desc = "A petahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible. Has a significantly better range than t-ray scanners."
+	icon_state = "p-ray0"
+	origin_tech = "magnets=3;engineering=3"
+
+	base_state = "p-ray"
+	ray_range = 3
+
 /obj/item/device/healthanalyzer
 	name = "health analyzer"
 	icon_state = "health"
@@ -84,7 +93,7 @@ REAGENT SCANNER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throwforce = 3
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 5
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
@@ -125,7 +134,7 @@ proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, va
 			to_chat(user, {"<span class='notice'>Analyzing Results for the floor:<br>Overall Status: Healthy</span>
 Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<font color='red'>Brute</font>
 Damage Specifics: <font color='blue'>0</font> - <font color='green'>0</font> - <font color='#FFA500'>0</font> - <font color='red'>0</font>
-<span class='notice'>Body Temperature: ???&deg;C (???&deg;F)</span>
+[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: ???&deg;C (???&deg;F)</span>
 <span class='notice'>Localized Damage, Brute/Burn:</span>
 <span class='notice'>No limb damage detected.</span>
 Subject bloodstream oxygen level normal | Subject bloodstream toxin level normal | Subject burn injury status clear | Subject brute injury status clear
@@ -148,7 +157,7 @@ Subject's pulse: ??? BPM"})
 		message += "<br><span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
 	message += "<br>Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<font color='red'>Brute</font>"
 	message += "<br>Damage Specifics: <font color='blue'>[OX]</font> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <font color='red'>[BR]</font>"
-	message += "<br><span class='notice'>Body Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)</span>"
+	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)</span>"
 	if(M.tod && M.isDead())
 		message += "<br><span class='notice'>Time of Death: [M.tod]</span>"
 	if(istype(M, /mob/living/carbon/human) && mode)
@@ -237,6 +246,9 @@ Subject's pulse: ??? BPM"})
 				if(W.internal)
 					message += text("<br><span class='danger'>Internal bleeding detected. Advanced scan required for location.</span>")
 					break
+			if(e.cancer_stage > CANCER_STAGE_LARGE_TUMOR) //Health analyzers can detect large tumors and above in external limbs, if all else fails
+				message += text("<br><span class='danger'>Serious cancerous growth detected. Advanced scan required for location.</span>")
+				break
 		if(H.vessel)
 			var/blood_volume = round(H.vessel.get_reagent_amount("blood"))
 			var/blood_percent =  round((blood_volume / 560) * 100)
@@ -268,7 +280,7 @@ Subject's pulse: ??? BPM"})
 	name = "atmospheric analyzer"
 	icon_state = "atmos"
 	item_state = "analyzer"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -297,7 +309,7 @@ Subject's pulse: ??? BPM"})
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	user << output_gas_scan(environment, location, 1)
+	to_chat(user, output_gas_scan(environment, location, 1))
 
 	src.add_fingerprint(user)
 	return
@@ -313,7 +325,7 @@ Subject's pulse: ??? BPM"})
 	if(!container || istype(container, /turf))
 		message += "<span class='bnotice'>Results:</span>"
 	else
-		message += "<span class='bnotice'><B>\icon [container] Results of [container] scan:</span>"
+		message += "<span class='bnotice'><B>[bicon(container)] Results of [container] scan:</span></B>"
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
 		var/o2_concentration = scanned.oxygen/total_moles
@@ -344,7 +356,7 @@ Subject's pulse: ??? BPM"})
 	name = "mass-spectrometer"
 	icon_state = "spectrometer"
 	item_state = "analyzer"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT | OPENCONTAINER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -433,7 +445,7 @@ Subject's pulse: ??? BPM"})
 	desc = "A hand-held reagent scanner which identifies chemical agents."
 	icon_state = "spectrometer"
 	item_state = "analyzer"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT

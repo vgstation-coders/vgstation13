@@ -14,7 +14,7 @@
 	var/loadone = 0 //whether or not it should load just one at a time. 0 is all at once, 1 is one at a time
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	item_state = "electronic"
 	starting_materials = null
 	w_type = RECYK_ELECTRONIC
@@ -25,7 +25,7 @@
 /obj/item/device/device_analyser/attack_self()
 	..()
 	loadone = !loadone
-	to_chat(usr, "<span class='notice'> You set the Device Analyzer to [loadone ? "transfer one design" : "transfer all designs"] on use.</span>")
+	to_chat(usr, "<span class='notice'>You set the Device Analyzer to [loadone ? "transfer one design" : "transfer all designs"] on use.</span>")
 
 /obj/item/device/device_analyser/preattack(var/atom/A, mob/user, proximity_flag) //Hurrah for after-attack
 	/*if(get_turf(src) != get_turf(user)) //we aren't in the same place as our holder, so we have been moved and can ignore scanning
@@ -36,7 +36,7 @@
 		var/obj/O = A
 		if(istype(O, /obj/machinery/r_n_d/reverse_engine) && loaded_designs.len)
 			return //don't try to scan the reverse engine if we have any designs to upload! let the reverse engine's attackby handle it instead
-		for(var/datum/design/mechanic_design/current_design in loaded_designs)
+		for(var/datum/design/current_design in loaded_designs)
 			if(current_design.build_path == O.type)
 				to_chat(user, "<span class='rose'>You've already got a schematic of \the [O]!</span>")
 				return
@@ -49,11 +49,11 @@
 						user.visible_message("[user] scans \the [O].", "<span class='notice'>You successfully scan \the [O].</span>")
 						return 1
 					else
-						to_chat(user, "\icon [src] \The [src] flashes a message on-screen: \"Too many designs loaded.\"")
+						to_chat(user, "[bicon(src)] \The [src] flashes a message on-screen: \"Too many designs loaded.\"")
 				if(-1)
-					to_chat(user, "<span class='rose'>\icon [src] \The [src]'s safety features prevent you from scanning that object.</span>")
+					to_chat(user, "<span class='rose'>[bicon(src)] \The [src]'s safety features prevent you from scanning that object.</span>")
 				if(-2)
-					to_chat(user, "<span class='rose'>\icon [src] \The [src]'s access requirements prevent you from scanning that object.</span>")
+					to_chat(user, "<span class='rose'>[bicon(src)] \The [src]'s access requirements prevent you from scanning that object.</span>")
 				else //no origin_tech, no scans.
 					to_chat(user, "<span class='rose'>\The [src] can't seem to scan \the [O]!</span>")
 		else //no origin_tech, no scans.
@@ -81,16 +81,22 @@
 	if((O.mech_flags & MECH_SCAN_FAIL)==MECH_SCAN_FAIL)
 		return 0
 
-	var/list/techlist
+	var/list/techlist = O.give_tech_list() //Some items may have a specific techlist. Currently only used for solar assemblies, since they don't hold a circuitboard.
+	if(techlist)
+		return 1
+
 	if(istype(O, /obj/machinery))
 		var/obj/machinery/M = O
+
 		if(user && (!M.allowed(user) && M.mech_flags & MECH_SCAN_ACCESS) && !src.access_avoidance) //if we require access, and don't have it, and the scanner can't bypass it
 			return -2
+
 		if(M.component_parts)
 			for(var/obj/item/weapon/circuitboard/CB in M.component_parts) //fetching the circuit by looking in the parts
 				if(istype(CB))
 					techlist = ConvertReqString2List(CB.origin_tech)
 					break
+
 		else if(istype(M, /obj/machinery/computer))
 			var/obj/machinery/computer/C = M
 			if(C.circuit)
@@ -110,4 +116,3 @@
 		if((techlist && techlist["syndicate"]) || (O.mech_flags & MECH_SCAN_ILLEGAL))
 			return -1 //special negative return case
 	return 1
-

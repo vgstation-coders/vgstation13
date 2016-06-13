@@ -24,22 +24,16 @@
 /mob/new_player/proc/new_player_panel_proc()
 	var/output = "<div align='center'><B>New Player Options</B>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\new_player.dm:28: output +="<hr>"
 	output += {"<hr>
 		<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
-	// END AUTOFIX
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 		if(!ready)	output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
 		else	output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
 
 	else
 		ready = 0 // prevent setup character issues
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\new_player.dm:36: output += "<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br><br>"
 		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br><br>
 			<p><a href='byond://?src=\ref[src];late_join=1'>Join Game!</A></p>"}
-		// END AUTOFIX
 
 	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
 
@@ -106,10 +100,16 @@
 	if(!client)	return 0
 
 	if(href_list["show_preferences"])
+		if(!client.prefs.saveloaded)
+			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
+			return
 		client.prefs.ShowChoices(src)
 		return 1
 
 	if(href_list["ready"])
+		if(!client.prefs.saveloaded)
+			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
+			return
 		switch(text2num(href_list["ready"]))
 			if(1)
 				ready = 1
@@ -125,13 +125,16 @@
 		new_player_panel_proc()
 
 	if(href_list["observe"])
-
+		if(!client.prefs.saveloaded)
+			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
+			return
 		if(alert(src,"Are you sure you wish to observe? You will not be able to play this round!","Player Setup","Yes","No") == "Yes")
 			if(!client)	return 1
+			sleep(1)
 			var/mob/dead/observer/observer = new()
 
 			spawning = 1
-			to_chat(src, sound(null, repeat = 0, wait = 0, volume = 85, channel = 1))// MAD JAMS cant last forever yo
+			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS cant last forever yo
 
 
 			observer.started_as_observer = 1
@@ -185,44 +188,6 @@
 
 		AttemptLateSpawn(href_list["SelectedJob"])
 		return
-
-	if(href_list["privacy_poll"])
-		establish_db_connection()
-		if(!dbcon.IsConnected())
-			return
-		var/voted = 0
-
-		//First check if the person has not voted yet.
-		var/DBQuery/query = dbcon.NewQuery("SELECT * FROM erro_privacy WHERE ckey='[src.ckey]'")
-		query.Execute()
-		while(query.NextRow())
-			voted = 1
-			break
-
-		//This is a safety switch, so only valid options pass through
-		var/option = "UNKNOWN"
-		switch(href_list["privacy_poll"])
-			if("signed")
-				option = "SIGNED"
-			if("anonymous")
-				option = "ANONYMOUS"
-			if("nostats")
-				option = "NOSTATS"
-			if("later")
-				usr << browse(null,"window=privacypoll")
-				return
-			if("abstain")
-				option = "ABSTAIN"
-
-		if(option == "UNKNOWN")
-			return
-
-		if(!voted)
-			var/sql = "INSERT INTO erro_privacy VALUES (null, Now(), '[src.ckey]', '[option]')"
-			var/DBQuery/query_insert = dbcon.NewQuery(sql)
-			query_insert.Execute()
-			to_chat(usr, "<b>Thank you for your vote!</b>")
-			usr << browse(null,"window=privacypoll")
 
 	if(!ready && href_list["preference"])
 		if(client)
@@ -353,7 +318,7 @@
 	// WHY THE FUCK IS THIS HERE
 	// FOR GOD'S SAKE USE EVENTS
 	if(bomberman_mode)
-		to_chat(character.client, sound('sound/bomberman/start.ogg'))
+		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
 			var/obj/item/O = character.wear_suit
 			character.u_equip(O,1)
@@ -402,11 +367,8 @@
 	var/hours = mills / 36000
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\new_player.dm:322: var/dat = "<html><body><center>"
 	var/dat = {"<html><body><center>
 Round Duration: [round(hours)]h [round(mins)]m<br>"}
-	// END AUTOFIX
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
 			dat += "<font color='red'><b>The station has been evacuated.</b></font><br>"
@@ -457,7 +419,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	else
 		client.prefs.copy_to(new_character)
 
-	to_chat(src, sound(null, repeat = 0, wait = 0, volume = 85, channel = 1))// MAD JAMS cant last forever yo
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)// MAD JAMS cant last forever yo
 
 
 	if (mind)
@@ -467,7 +429,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	new_character.name = real_name
 	new_character.dna.ready_dna(new_character)
-	new_character.dna.b_type = client.prefs.b_type
+
+	if(new_character.mind)
+		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>")
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
@@ -496,11 +460,8 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 /mob/new_player/proc/ViewManifest()
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\new_player.dm:410: var/dat = "<html><body>"
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
-	// END AUTOFIX
 	dat += data_core.get_manifest(OOC = 1)
 
 	src << browse(dat, "window=manifest;size=370x420;can_close=1")
@@ -515,6 +476,3 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 /mob/new_player/cultify()
 	return
-
-/mob/new_player/singuloCanEat()
-	return 0

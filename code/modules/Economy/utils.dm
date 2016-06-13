@@ -12,6 +12,12 @@
 		if(!acct) continue
 		return acct
 
+// Added this proc for admin tools. Not even sure we need the above proc as it is
+/proc/get_money_account_global(account_number)
+	for(var/datum/money_account/D in all_money_accounts)
+		if(D.account_number == account_number)
+			return D
+
 
 /obj/proc/get_card_account(var/obj/item/weapon/card/I, var/mob/user=null, var/terminal_name="", var/transaction_purpose="", var/require_pin=0)
 	if(terminal_name=="")
@@ -81,5 +87,5 @@
 		transaction_log.Add(T)
 		return 1
 	else
-		to_chat(usr, "\icon[src]<span class='warning'>You don't have that much money!</span>")
+		to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money!</span>")
 		return 0

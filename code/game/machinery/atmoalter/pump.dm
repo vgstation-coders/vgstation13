@@ -43,6 +43,7 @@
 
 	target_pressure = rand(0,1300)
 	update_icon()
+	nanomanager.update_uis(src)
 
 	..(severity)
 
@@ -86,8 +87,9 @@
 
 				air_contents.merge(removed)
 		//src.update_icon()
+		nanomanager.update_uis(src)
 
-	src.updateDialog()
+	//src.updateDialog()
 	return
 
 /obj/machinery/portable_atmospherics/pump/return_air()
@@ -128,7 +130,7 @@
 		// open the new ui window
 		ui.open()
 		// auto update every Master Controller tick
-		ui.set_auto_update(1)
+		//ui.set_auto_update(1)
 
 /obj/machinery/portable_atmospherics/pump/Topic(href, href_list)
 	. = ..()
@@ -144,9 +146,8 @@
 
 	if (href_list["remove_tank"])
 		if(holding)
-			holding.loc = loc
-			holding = null
-		update_icon()
+			eject_holding()
+			update_icon()
 
 	if (href_list["pressure_adj"])
 		var/diff = text2num(href_list["pressure_adj"])
@@ -154,3 +155,10 @@
 		update_icon()
 
 	src.add_fingerprint(usr)
+	return 1
+
+/obj/machinery/portable_atmospherics/pump/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+		eject_holding()
+		return
+	return ..()

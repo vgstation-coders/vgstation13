@@ -3,6 +3,8 @@
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "shutter1"
 	power_channel = ENVIRON
+	var/sound_open = 'sound/machines/shutter_open.ogg'
+	var/sound_close = 'sound/machines/shutter_close.ogg'
 
 /obj/machinery/door/poddoor/shutters/New()
 	..()
@@ -15,7 +17,7 @@
 
 /obj/machinery/door/poddoor/shutters/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
-	if(!(istype(C, /obj/item/weapon/crowbar) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
+	if(!(iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
 	if(density && (stat & NOPOWER) && !operating)
 		operating = 1
@@ -31,7 +33,6 @@
 
 /obj/machinery/door/poddoor/shutters/open()
 	if(operating == 1) //doors can still open when emag-disabled
-	//if(welded) //These are not airlocks
 		return
 	if(!ticker)
 		return 0
@@ -39,6 +40,7 @@
 		operating = 1
 	flick("shutterc0", src)
 	icon_state = "shutter0"
+	playsound(src.loc, sound_open, 100, 1)
 	sleep(10)
 	density = 0
 	set_opacity(0)
@@ -58,6 +60,7 @@
 	operating = 1
 	flick("shutterc1", src)
 	icon_state = "shutter1"
+	playsound(src.loc, sound_close, 100, 1)
 	density = 1
 	if(visible)
 		set_opacity(1)

@@ -7,7 +7,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throwforce = 1
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/caliber = ""							//Which kind of guns it can be loaded into
 	var/projectile_type = ""//The bullet type to create when New() is called
 	var/obj/item/projectile/BB = null 			//The loaded bullet
@@ -23,6 +23,7 @@
 	pixel_x = rand(-10.0, 10)
 	pixel_y = rand(-10.0, 10)
 	dir = pick(cardinal)
+	name = "[BB ? "" : "spent "][initial(name)]"
 	icon_state = "[initial(icon_state)][BB ? "-live" : ""]"
 	desc = "[initial(desc)][BB ? "" : " This one is spent."]"
 
@@ -40,7 +41,7 @@
 	starting_materials = list(MAT_IRON = 50000)
 	w_type = RECYK_METAL
 	throwforce = 2
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 5
 	var/list/stored_ammo = list()
@@ -71,9 +72,15 @@
 		if((exact && (AC.type == text2path(ammo_type))) || (!exact && istype(AC, text2path(ammo_type))))//if it's the exact type we want, or the general class
 			accepted = 1
 		if(AC.BB && accepted && stored_ammo.len < max_ammo)
+			if(user.drop_item(A, src))
+				to_chat(user, "<span class='notice'>You successfully load the [src] with \the [AC]. </span>")
+			else
+				to_chat(user, "<span class='warning'>You can't let go of \the [A]!</span>")
+				return
+
+
 			stored_ammo += AC
-			user.drop_item(A, src)
-			to_chat(user, "<span class='notice'>You successfully load the [src] with \the [AC]. </span>")
+
 			update_icon()
 		else if(!AC.BB)
 			to_chat(user, "<span class='notice'>You can't load a spent bullet.</span>")

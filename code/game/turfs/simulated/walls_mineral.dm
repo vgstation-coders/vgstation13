@@ -13,6 +13,13 @@
 	walltype = "wood"
 	mineral = "wood"
 
+/turf/simulated/wall/mineral/brick
+	name = "brick wall"
+	desc = "A wall with brick siding, it looks nice"
+	icon_state = "brick0"
+	walltype = "brick"
+	mineral = "brick"
+
 /turf/simulated/wall/mineral/gold
 	name = "gold wall"
 	desc = "A wall with gold plating. Swag!"
@@ -110,9 +117,10 @@
 	..()
 
 /turf/simulated/wall/mineral/plasma/proc/PlasmaBurn(temperature)
-	var/pdiff=performWallPressureCheck(src.loc)
-	if(pdiff>0)
-		message_admins("Plasma wall with pdiff [pdiff] at [formatJumpTo(loc)] just caught fire!")
+	var/pdiff = performWallPressureCheck(src.loc)
+	if(pdiff > 0)
+		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has caught on fire at [formatJumpTo(get_turf(src))]!")
+		message_admins("\The [src] with a pdiff of [pdiff] has caught of fire at [formatJumpTo(get_turf(src))]!")
 	spawn(2)
 	new /obj/structure/girder(src)
 	src.ChangeTurf(/turf/simulated/floor)

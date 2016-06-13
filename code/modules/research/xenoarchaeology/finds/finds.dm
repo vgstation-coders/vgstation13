@@ -96,7 +96,7 @@
 	if(new_item_type)
 		find_type = new_item_type
 	else
-		find_type = rand(1,34)	//update this when you add new find types
+		find_type = rand(1,39)	//update this when you add new find types
 
 	var/item_type = "object"
 	icon_state = "unknown[rand(1,4)]"
@@ -283,10 +283,17 @@
 			new_item.icon_state = "unknown[rand(1,4)]"
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.desc = ""
-		if(19)
+		if(19) //weapons
+			apply_material_decorations = 0
+			var/list/possible_spawns=list(/obj/item/weapon/claymore, /obj/item/weapon/melee/morningstar, /obj/item/weapon/spear/wooden)
+
+			var/new_type = pick(possible_spawns)
+
+			new_item = new new_type(src.loc)
 			apply_prefix = 0
-			new_item = new /obj/item/weapon/claymore(src.loc)
-			new_item.force = 10
+
+			if(istype(new_item, /obj/item/weapon/claymore)) new_item.force = 10
+
 			item_type = new_item.name
 		if(20)
 			//arcane clothing
@@ -319,9 +326,7 @@
 			apply_image_decorations = 0
 			apply_material_decorations = 0
 		if(24)
-			var/list/possible_spawns = typesof(/obj/item/weapon/stock_parts)
-			possible_spawns -= /obj/item/weapon/stock_parts
-			possible_spawns -= /obj/item/weapon/stock_parts/subspace
+			var/list/possible_spawns = existing_typesof(/obj/item/weapon/stock_parts)
 
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
@@ -484,6 +489,33 @@
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/clothing/mask/happy
 			//possible_spawns += /obj/item/clothing/mask/stone WHEN I CODE IT
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
+		if(36)
+			//dice
+			apply_material_decorations = 0
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/weapon/dice/d20/cursed
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
+		if(37)
+			//space suit
+			apply_material_decorations = 0
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/clothing/suit/space/ancient
+			possible_spawns += /obj/item/clothing/head/helmet/space/ancient
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
+		if(38)
+			//lance
+			apply_material_decorations = 1
+			apply_image_decorations = 1
+			new_item = new /obj/item/weapon/melee/lance(src.loc)
+		if(39)
+			//roulette revolver
+			apply_material_decorations = 0
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/weapon/gun/projectile/roulette_revolver
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 

@@ -5,7 +5,7 @@
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity."
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mmi_empty"
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	origin_tech = "biotech=3"
 
 	var/list/mommi_assembly_parts = list(
@@ -89,8 +89,11 @@ obj/item/device/mmi/Destroy()
 				if(!brainmob)
 					to_chat(user, "<span class='warning'>Why are you sticking robot legs on an empty [src], you idiot?</span>")
 					return TRUE
+				if(!user.drop_item(O, src))
+					to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+					return FALSE
+
 				contents += O
-				user.drop_item(O, src)
 				to_chat(user, "<span class='notice'>You successfully add \the [O] to the contraption,</span>")
 				return TRUE
 			else if(cc==mommi_assembly_parts[t])
@@ -111,12 +114,15 @@ obj/item/device/mmi/Destroy()
 		if(!BO.brainmob)
 			to_chat(user, "<span class='warning'>You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>")
 			return
-
 		// Checking to see if the ghost has been moused/borer'd/etc since death.
 		var/mob/living/carbon/brain/BM = BO.brainmob
 		if(!BM.client)
 			to_chat(user, "<span class='notice'>\The [src] indicates that their mind is completely unresponsive; there's no point.</span>")
 			return
+		if(!user.drop_item(O))
+			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+			return
+
 		src.visible_message("<span class='notice'>[user] sticks \a [O] into \the [src].</span>")
 
 		brainmob = BO.brainmob
@@ -126,7 +132,6 @@ obj/item/device/mmi/Destroy()
 		brainmob.stat = 0
 		brainmob.resurrect()
 
-		user.drop_item(O)
 		qdel(O)
 		O = null
 

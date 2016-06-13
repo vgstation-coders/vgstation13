@@ -22,7 +22,7 @@
 	//Hopefully this will stop the icon from remaining on human mobs.
 	if(istype(loc,/mob/living))
 		var/mob/living/A = src.loc
-		A.drop_item(src)
+		A.drop_item(src, force_drop = 1)
 		A.update_icons()
 
 	for(var/mob/M in contents)
@@ -53,8 +53,7 @@
 		item_state = "[initial(item_state)][wielded ? itemstate_twohand_suffix : ""]"
 
 		if(user)
-			user.update_inv_l_hand()
-			user.update_inv_r_hand()
+			user.update_inv_hands()
 
 //
 
@@ -89,7 +88,7 @@
 
 		throw_range = 6 - w_class
 
-		if(w_class > 1)
+		if(w_class > W_CLASS_TINY)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
 
 //MICE
@@ -140,3 +139,22 @@
 	item_state = "cat1"
 
 	update_itemstate_on_twohand = 1
+
+//SLIMES
+/obj/item/weapon/holder/animal/slime
+	name = "slime holder"
+	desc = "It seeps through your fingers"
+
+/obj/item/weapon/holder/animal/slime/proc/unfreeze()
+	var/mob/living/simple_animal/slime/S = stored_mob
+	S.canmove = 1
+	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
+	returnToPool(src)
+
+/obj/item/weapon/holder/animal/slime/throw_impact(atom/hit_atom)
+	..()
+	unfreeze()
+
+/obj/item/weapon/holder/animal/slime/attack_self(mob/user)
+	..()
+	unfreeze()

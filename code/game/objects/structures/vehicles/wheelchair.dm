@@ -19,6 +19,16 @@
 	. = ..()
 	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
 
+/obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
+	if(occupant)
+		return
+	if(istype(W, /obj/item/weapon/gun_barrel))
+		to_chat(user, "You place \the [W] on \the [src].")
+		var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/I = new (get_turf(src.loc))
+		I.dir = dir
+		qdel(src)
+		qdel(W)
+
 /obj/structure/bed/chair/vehicle/wheelchair/unlock_atom(var/atom/movable/AM)
 	. = ..()
 	density = 1
@@ -56,7 +66,27 @@
 	var/mob/living/carbon/M = user
 	if(!M) return 0
 
-	var/left_hand_exists = 1
+	//Speed is determined by availability of hands
+	//Initial score is amount of hands * 2
+	//Each hand is checked. If the hand isn't usable, 2 is subtraced from the score. If the hand is holding an item, 1 is subtracted from the score.
+	//Because you only need two hands to use a wheelchair, the end score is capped at 4.
+
+	var/available_hands = M.held_items.len * 2
+	for(var/i = 1 to M.held_items.len)
+
+		var/datum/organ/external/OE = M.find_organ_by_grasp_index(i)
+
+		if(hasorgans(M) && (!OE || (OE.status & ORGAN_DESTROYED))) //Mob has organs, and the used hand is missing or unusable
+			available_hands -= 2
+		else if(M.held_items[i])
+			available_hands -= 1
+
+	available_hands = Clamp(available_hands, 0, 4)
+
+	return available_hands
+
+	return 1
+	/*var/left_hand_exists = 1
 	var/right_hand_exists = 1
 
 	if(M.handcuffed)
@@ -85,7 +115,7 @@
 		right_hand_exists = 0
 		if(user.r_hand == null) right_hand_exists++
 
-	return ( left_hand_exists + right_hand_exists )
+	return ( left_hand_exists + right_hand_exists )*/
 
 /obj/structure/bed/chair/vehicle/wheelchair/getMovementDelay()
 	//Speed is determined by amount of usable hands and whether they're carrying something
@@ -242,7 +272,7 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "wheelchair-item"
 	item_state = "syringe_kit" //This is just a grayish square
-	w_class = 4
+	w_class = W_CLASS_LARGE
 
 /obj/item/syndicate_wheelchair_kit/attack_self(mob/user)
 	new /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate(get_turf(user))

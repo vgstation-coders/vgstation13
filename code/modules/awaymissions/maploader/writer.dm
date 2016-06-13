@@ -1,9 +1,3 @@
-#define DMM_IGNORE_AREAS 1
-#define DMM_IGNORE_TURFS 2
-#define DMM_IGNORE_OBJS 4
-#define DMM_IGNORE_NPCS 8
-#define DMM_IGNORE_PLAYERS 16
-#define DMM_IGNORE_MOBS 24
 /dmm_suite
 	var/quote = "\""
 	var/list/letter_digits = list(
@@ -22,8 +16,10 @@
 	)
 	var/list/blacklist = list(
 			/atom/movable/lighting_overlay,
-			/obj/effect/beam,
-			/obj/item/projectile
+			/obj/effect,
+			/obj/item/projectile,
+			/mob/dview,
+			/mob/virtualhearer
 	)
 /dmm_suite/save_map(var/turf/t1 as turf, var/turf/t2 as turf, var/map_name as text, var/flags as num)
 	//Check for illegal characters in file name... in a cheap way.
@@ -40,7 +36,8 @@
 		fdel("[map_name].dmm")
 
 	var/saved_map = file("[map_name].dmm")
-	to_chat(saved_map, file_text)
+	saved_map << file_text
+
 	return saved_map
 
 /dmm_suite/write_map(var/turf/t1 as turf, var/turf/t2 as turf, var/flags as num)
@@ -168,7 +165,7 @@
 			attributes_text += "[V] = [A.vars[V]]"
 
 		else if(isicon(A.vars[V]) || isfile(A.vars[V]))
-			if(!fexists(A.vars[V]))	//The file doesn't actually exist and would cause DM to be unable to read the map.
+			if(!fexists(A.vars[V]))	//The file doesn't actually exist and would cause DM to be unable to read the map (this can happen by admin-uploaded files and icon datums created at runtime).
 				continue
 
 			attributes_text += "[V] = '[A.vars[V]]'"

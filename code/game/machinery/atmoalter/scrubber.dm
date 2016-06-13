@@ -22,6 +22,7 @@
 		on = !on
 		update_icon()
 
+	nanomanager.update_uis(src)
 	..(severity)
 
 /obj/machinery/portable_atmospherics/scrubber/huge
@@ -52,7 +53,7 @@
 			icon_state = "scrubber:0"
 
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-		if(istype(W, /obj/item/weapon/wrench))
+		if(iswrench(W))
 			if(on)
 				to_chat(user, "<span class='notice'>Turn it off first!</span>")
 				return
@@ -69,7 +70,7 @@
 	name = "Stationary Air Scrubber"
 
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-		if(istype(W, /obj/item/weapon/wrench))
+		if(iswrench(W))
 			to_chat(user, "<span class='notice'>The bolts are too tight for you to unscrew!</span>")
 			return
 
@@ -143,7 +144,8 @@
 			else
 				loc.assume_air(removed)
 		//src.update_icon()
-	src.updateDialog()
+		nanomanager.update_uis(src)
+	//src.updateDialog()
 	return
 
 /obj/machinery/portable_atmospherics/scrubber/return_air()
@@ -184,7 +186,7 @@
 		// open the new ui window
 		ui.open()
 		// auto update every Master Controller tick
-		ui.set_auto_update(1)
+		//ui.set_auto_update(1)
 
 /obj/machinery/portable_atmospherics/scrubber/Topic(href, href_list)
 	. = ..()
@@ -197,11 +199,17 @@
 
 	if(href_list["remove_tank"])
 		if(holding)
-			holding.loc = loc
-			holding = null
+			eject_holding()
 
 	if(href_list["volume_adj"])
 		var/diff = text2num(href_list["volume_adj"])
 		volume_rate = Clamp(volume_rate+diff, minrate, maxrate)
 
 	src.add_fingerprint(usr)
+	return 1
+
+/obj/machinery/portable_atmospherics/scrubber/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+		eject_holding()
+		return
+	return ..()

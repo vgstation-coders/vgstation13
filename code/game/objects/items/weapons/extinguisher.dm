@@ -9,14 +9,14 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	throwforce = 10
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 2
 	throw_range = 10
 	force = 10.0
 	starting_materials = list(MAT_IRON = 90) // TODO: Check against autolathe.
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	attack_verb = list("slammed", "whacked", "bashed", "thunked", "battered", "bludgeoned", "thrashed")
+	attack_verb = list("slams", "whacks", "bashes", "thunks", "batters", "bludgeons", "thrashes")
 	var/max_water = 50
 	var/last_use = 1.0
 	var/safety = 1
@@ -35,7 +35,7 @@
 	hitsound = null	//it is much lighter, after all.
 	flags = FPRINT
 	throwforce = 2
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	force = 3.0
 	starting_materials = null
 	max_water = 30
@@ -83,7 +83,7 @@
 
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)	return
-	if (istype(W, /obj/item/weapon/wrench))
+	if (iswrench(W))
 		if(!is_open_container())
 			user.visible_message("[user] begins to unwrench the fill cap on \the [src].","<span class='notice'>You begin to unwrench the fill cap on \the [src].</span>")
 			if(do_after(user, src, 25))
@@ -100,7 +100,7 @@
 
 	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/evidencebag))
 		if(W.is_open_container()) return //We're probably trying to fill it
-		if(W.w_class>1)
+		if(W.w_class > W_CLASS_TINY)
 			to_chat(user, "\The [W] won't fit into the nozzle!")
 			return
 		if(locate(/obj) in src)
@@ -109,9 +109,9 @@
 		if(isrobot(user) && !isMoMMI(user)) // MoMMI's can but borgs can't
 			to_chat(user, "You're a robot. No.")
 			return
-		user.drop_item(W, src)
-		to_chat(user, "You cram \the [W] into the nozzle of \the [src].")
-		message_admins("[user]/[user.ckey] has crammed \a [W] into a [src].")
+		if(user.drop_item(W, src))
+			to_chat(user, "You cram \the [W] into the nozzle of \the [src].")
+			message_admins("[user]/[user.ckey] has crammed \a [W] into a [src].")
 
 /obj/item/weapon/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)

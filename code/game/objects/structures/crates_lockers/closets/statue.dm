@@ -10,7 +10,7 @@
 	var/intialFire = 0	//it's a little sloppy I know but it was this or the GODMODE flag. Lesser of two evils.
 	var/intialBrute = 0
 	var/intialOxy = 0
-	var/timer = 240 //eventually the person will be freed
+	var/timer = 80 // time in seconds = 2.5(timer) - 50, this makes 150 seconds = 2.5m
 
 /obj/structure/closet/statue/New(loc, var/mob/living/L)
 
@@ -35,18 +35,19 @@
 			if(L.gender == "female")
 				icon_state = "human_female"
 		else if(ismonkey(L))
-			name = "statue of a monkey"
+			name = "statue of [L.name]"
 			icon_state = "monkey"
 		else if(iscorgi(L))
-			name = "statue of a corgi"
+			name = "statue of [L.name]"
 			icon_state = "corgi"
 			desc = "If it takes forever, I will wait for you..."
+
+		processing_objects.Add(src)
 
 	if(health == 0) //meaning if the statue didn't find a valid target
 		qdel(src)
 		return
 
-	processing_objects.Add(src)
 	..()
 
 /obj/structure/closet/statue/process()
@@ -140,9 +141,9 @@
 
 /obj/structure/closet/statue/proc/shatter(mob/user as mob)
 	if (user)
-		user.dust()
+		user.gib()
 	dump_contents()
-	visible_message("<span class='warning'>[src] shatters!. </span>")
+	visible_message("<span class='warning'>[src] shatters into pieces!. </span>")
 	qdel(src)
 
 /obj/structure/closet/statue/container_resist()

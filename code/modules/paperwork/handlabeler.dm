@@ -3,6 +3,7 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "labeler0"
 	item_state = "labeler0"
+	origin_tech = "materials=1"
 	var/label = null
 	var/chars_left = 250 //Like in an actual label maker, uses an amount per character rather than per label.
 	var/mode = 0	//off or on.
@@ -134,7 +135,7 @@
 	name = "label roll"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "label_cart" //Placeholder image; recolored police tape
-	w_class = 1
+	w_class = W_CLASS_TINY
 	var/left = 250
 
 /obj/item/device/label_roll/examine(mob/user) //Shamelessly stolen from above.

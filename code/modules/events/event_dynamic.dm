@@ -7,10 +7,14 @@ var/list/event_last_fired = list()
 
 	var/minutes_passed = world.time/600
 	var/roundstart_delay = 50
-
 	if(minutes_passed < roundstart_delay) //Self-explanatory
 		message_admins("Too early to trigger random event, aborting.")
 		return
+
+	var/living = 0
+	for(var/mob/living/M in player_list)
+		if(M.stat == CONSCIOUS)
+			living++
 
 	if(universe.name != "Normal")
 		message_admins("Universe isn't normal, aborting random event spawn.")
@@ -44,6 +48,8 @@ var/list/event_last_fired = list()
 	possibleEvents[/datum/event/rogue_drone] = 25
 	possibleEvents[/datum/event/infestation] = 50
 	possibleEvents[/datum/event/communications_blackout] = 25
+	possibleEvents[/datum/event/thing_storm/meaty_gore] = 25
+	possibleEvents[/datum/event/unlink_from_centcomm] = 10
 
 	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
 		possibleEvents[/datum/event/ionstorm] = 30
@@ -53,10 +59,15 @@ var/list/event_last_fired = list()
 
 	if(!spacevines_spawned)
 		possibleEvents[/datum/event/spacevine] = 15
-	if(minutes_passed >= 30 && active_with_role["Engineer"] > 1) // Give engineers time to not set up the engine
+
+	if(active_with_role["Engineer"] > 1)
 		possibleEvents[/datum/event/meteor_wave] = 15
 		possibleEvents[/datum/event/meteor_shower] = 40
-		possibleEvents[/datum/event/blob] = 10
+		possibleEvents[/datum/event/immovable_rod] = 15
+		possibleEvents[/datum/event/thing_storm/blob_shower] = 25//Blob Cluster
+
+	if((active_with_role["Engineer"] > 1) && (active_with_role["Security"] > 1) && (living >= 25))
+		possibleEvents[/datum/event/thing_storm/blob_storm] = 10//Blob Conglomerate
 
 	possibleEvents[/datum/event/radiation_storm] = 50
 	if(active_with_role["Medical"] > 1)
@@ -71,6 +82,7 @@ var/list/event_last_fired = list()
 			possibleEvents[/datum/event/spider_infestation] = 15
 		if(aliens_allowed && !sent_aliens_to_station)
 			possibleEvents[/datum/event/alien_infestation] = 10
+		possibleEvents[/datum/event/hostile_infestation] = 25
 	for(var/event_type in event_last_fired) if(possibleEvents[event_type])
 		var/time_passed = world.time - event_last_fired[event_type]
 		var/full_recharge_after = 60 * 60 * 10 // Was 3 hours, changed to 1 hour since rounds rarely last that long anyways

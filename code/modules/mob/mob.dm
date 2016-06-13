@@ -24,6 +24,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(mind && mind.current == src)
 		mind.current = null
 	spellremove(src)
+	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
+		var/mob/living/carbon/Ca = src
+		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
 		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
@@ -33,7 +36,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 		for(var/atom/movable/AM in client.screen)
 			var/obj/screen/screenobj = AM
 			if(istype(screenobj))
-				if(screenobj.pool_on_reset())
+				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
 					returnToPool(AM)
 			else
 				qdel(AM)
@@ -41,7 +44,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	mob_list.Remove(src)
 	dead_mob_list.Remove(src)
 	living_mob_list.Remove(src)
-	ghostize()
+	ghostize(0)
 	//Fuck datums amirite
 	click_delayer = null
 	attack_delayer = null
@@ -49,11 +52,13 @@ var/global/obj/screen/fuckstat/FUCK = new
 	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
-	for(var/obj/leftovers in src)
+	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 	if(on_uattack)
 		on_uattack.holder = null
 		on_uattack = null
+	qdel(on_logout)
+	on_logout = null
 	..()
 
 /mob/projectile_check()
@@ -202,6 +207,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	store_position()
 	on_uattack = new("owner"=src)
+	on_logout = new("owner"=src)
+
+	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
 	if(flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
@@ -238,14 +246,11 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	var/t = "<span class='notice'> Coordinates: [x],[y] \n</span>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\\mob.dm:25: t+= "<span class='warning'> Temperature: [environment.temperature] \n"
 	t += {"<span class='warning'> Temperature: [environment.temperature] \n</span>
 <span class='notice'> Nitrogen: [environment.nitrogen] \n</span>
 <span class='notice'> Oxygen: [environment.oxygen] \n</span>
 <span class='notice'> Plasma : [environment.toxins] \n</span>
 <span class='notice'> Carbon Dioxide: [environment.carbon_dioxide] \n</span>"}
-	// END AUTOFIX
 	for(var/datum/gas/trace_gas in environment.trace_gases)
 		to_chat(usr, "<span class='notice'> [trace_gas.type]: [trace_gas.moles] \n</span>")
 
@@ -264,8 +269,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	if(!client) //We dun goof
 		return
-
-	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 
 	if(type)
 		if((type & MESSAGE_SEE) && is_blind()) //Vision related //We can't see all those emotes no-one ever does !
@@ -449,8 +452,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		narsimage.loc = src.loc
 		narglow.loc = src.loc
 		//Display the new narsimage to the player
-		to_chat(src, narsimage)
-		to_chat(src, narglow)
+		src << narsimage
+		src << narglow
 	else
 		if(narsimage)
 			del(narsimage)
@@ -475,11 +478,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 			del(riftimage)
 
 /mob/proc/get_item_by_slot(slot_id)
-	switch(slot_id)
-		if(slot_l_hand)
-			return l_hand
-		if(slot_r_hand)
-			return r_hand
 	return null
 
 
@@ -488,20 +486,25 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return
 
 //This proc is called whenever someone clicks an inventory ui slot.
-/mob/proc/attack_ui(slot)
+/mob/proc/attack_ui(slot, hand_index)
 	var/obj/item/W = get_active_hand()
 	if(istype(W))
-		equip_to_slot_if_possible(W, slot)
+		if(slot)
+			equip_to_slot_if_possible(W, slot)
+		else if(hand_index)
+			put_in_hand(hand_index, W)
+	else
+		W = get_item_by_slot(slot)
+		if(W)
+			W.attack_hand(src)
+
 	if(ishuman(src) && W == src:head)
 		src:update_hair()
 
-/mob/proc/put_in_any_hand_if_possible(obj/item/W as obj, act_on_fail = 0, disable_warning = 1, redraw_mob = 1)
-	if(equip_to_slot_if_possible(W, slot_l_hand, act_on_fail, disable_warning, redraw_mob))
-		update_inv_l_hand()
-		return 1
-	else if(equip_to_slot_if_possible(W, slot_r_hand, act_on_fail, disable_warning, redraw_mob))
-		update_inv_r_hand()
-		return 1
+/mob/proc/put_in_any_hand_if_possible(obj/item/W as obj)
+	for(var/index = 1 to held_items.len)
+		if(put_in_hand(index, W))
+			return 1
 	return 0
 
 //This is a SAFE proc. Use this instead of equip_to_splot()!
@@ -522,13 +525,13 @@ var/global/obj/screen/fuckstat/FUCK = new
 						W.loc=get_turf(src) // I think.
 					else
 						if(!disable_warning)
-							to_chat(src, "<span class='warning'> You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
+							to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
 
 				return 0
 			if(1)
 				equip_to_slot(W, slot, redraw_mob)
 			if(2)
-				var/in_the_hand = (src.get_active_hand() == W || src.get_inactive_hand() == W)
+				var/in_the_hand = (is_holding_item(W))
 				var/obj/item/wearing = get_item_by_slot(slot)
 				if(wearing)
 					if(!in_the_hand) //if we aren't holding it, the proc is abstract so get rid of it
@@ -538,23 +541,24 @@ var/global/obj/screen/fuckstat/FUCK = new
 							if(EQUIP_FAILACTION_DROP)
 								W.loc=get_turf(src) // I think.
 						return
-					drop_item(W)
-					if(!(put_in_active_hand(wearing)))
-						equip_to_slot(wearing, slot, redraw_mob)
-						switch(act_on_fail)
-							if(EQUIP_FAILACTION_DELETE)
-								qdel(W)
-							else
-								if(!disable_warning && act_on_fail != EQUIP_FAILACTION_DROP)
-									to_chat(src, "<span class='warning'> You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
 
-						return
-					else
-						equip_to_slot(W, slot, redraw_mob)
-						u_equip(wearing,0)
-						put_in_active_hand(wearing)
-					if(H.s_store && !H.s_store.mob_can_equip(src, slot_s_store, 1))
-						u_equip(H.s_store,1)
+					if(drop_item(W))
+						if(!(put_in_active_hand(wearing)))
+							equip_to_slot(wearing, slot, redraw_mob)
+							switch(act_on_fail)
+								if(EQUIP_FAILACTION_DELETE)
+									qdel(W)
+								else
+									if(!disable_warning && act_on_fail != EQUIP_FAILACTION_DROP)
+										to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
+
+							return
+						else
+							equip_to_slot(W, slot, redraw_mob)
+							u_equip(wearing,0)
+							put_in_active_hand(wearing)
+						if(H.s_store && !H.s_store.mob_can_equip(src, slot_s_store, 1))
+							u_equip(H.s_store,1)
 		return 1
 	else
 		if(!W.mob_can_equip(src, slot, disable_warning))
@@ -566,7 +570,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 					W.loc=get_turf(src) // I think.
 				else
 					if(!disable_warning)
-						to_chat(src, "<span class='warning'> You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
+						to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
 
 			return 0
 
@@ -595,7 +599,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 		// Do I have a plastic bag?
 		if(!B)
-			B=is_in_hands(/obj/item/weapon/storage/bag/plasticbag)
+			var/index = find_held_item_by_type(/obj/item/weapon/storage/bag/plasticbag)
+			if(index)
+				B = held_items[index]
 
 		if(!B)
 			// Gimme one.
@@ -650,17 +656,12 @@ var/list/slot_equipment_priority = list( \
 		var/mob/living/carbon/human/H = M
 
 		switch(slot)
-			if(slot_l_hand)
-				if(H.l_hand)
-					return 0
-				return 1
-			if(slot_r_hand)
-				if(H.r_hand)
-					return 0
-				return 1
 			if(slot_wear_mask)
 				if( !(slot_flags & SLOT_MASK) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
+//					return 0
 				if(H.wear_mask)
 					return 0
 				return 1
@@ -676,6 +677,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_suit)
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+//					return 0
 				if(H.wear_suit)
 					if(H.wear_suit.canremove)
 						return 2
@@ -685,6 +689,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_gloves)
 				if( !(slot_flags & SLOT_GLOVES) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky fingers!</span>")
+//					return 0
 				if(H.gloves)
 					if(H.gloves.canremove)
 						return 2
@@ -694,6 +701,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
 					return 0
+//				if(H.species.flags & IS_BULKY)
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky feet!</span>")
+//					return 0
 				if(H.shoes)
 					if(H.shoes.canremove)
 						return 2
@@ -703,7 +713,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_belt)
 				if(!H.w_uniform)
 					if(!disable_warning)
-						to_chat(H, "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>")
+						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
 				if( !(slot_flags & SLOT_BELT) )
 					return 0
@@ -745,6 +755,9 @@ var/list/slot_equipment_priority = list( \
 					return 0
 				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(flags & ONESIZEFITSALL))
 					return 0
+//				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+//					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+//					return 0
 				if(H.w_uniform)
 					if(H.w_uniform.canremove)
 						return 2
@@ -754,7 +767,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_id)
 				if(!H.w_uniform)
 					if(!disable_warning)
-						to_chat(H, "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>")
+						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
 				if( !(slot_flags & SLOT_ID) )
 					return 0
@@ -769,34 +782,34 @@ var/list/slot_equipment_priority = list( \
 					return 0
 				if(!H.w_uniform)
 					if(!disable_warning)
-						to_chat(H, "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>")
+						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
 				if(slot_flags & SLOT_DENYPOCKET)
 					return
-				if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+				if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 					return 1
 			if(slot_r_store)
 				if(H.r_store)
 					return 0
 				if(!H.w_uniform)
 					if(!disable_warning)
-						to_chat(H, "<span class='warning'> You need a jumpsuit before you can attach this [name].</span>")
+						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
 				if(slot_flags & SLOT_DENYPOCKET)
 					return 0
-				if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+				if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 					return 1
 				return 0
 			if(slot_s_store)
 				if(!H.wear_suit)
 					if(!disable_warning)
-						to_chat(H, "<span class='warning'> You need a suit before you can attach this [name].</span>")
+						to_chat(H, "<span class='warning'>You need a suit before you can attach this [name].</span>")
 					return 0
 				if(!H.wear_suit.allowed)
 					if(!disable_warning)
 						to_chat(usr, "You somehow have a suit with no defined allowed items for suit storage, stop that.")
 					return 0
-				if(src.w_class > 3)
+				if(src.w_class > W_CLASS_MEDIUM)
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return 0
@@ -824,7 +837,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_in_backpack)
 				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = H.back
-					if(B.contents.len < B.storage_slots && w_class <= B.max_w_class)
+					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return 1
 				return 0
 		return 0 //Unsupported slot
@@ -849,9 +862,13 @@ var/list/slot_equipment_priority = list( \
 	var/dat = {"
 	<B><HR><FONT size=3>[name]</FONT></B>
 	<BR><HR>
-	<BR><B>Head(Mask):</B> <A href='?src=\ref[src];item=mask'>[(wear_mask ? wear_mask : "Nothing")]</A>
-	<BR><B>Left Hand:</B> <A href='?src=\ref[src];item=l_hand'>[(l_hand ? l_hand  : "Nothing")]</A>
-	<BR><B>Right Hand:</B> <A href='?src=\ref[src];item=r_hand'>[(r_hand ? r_hand : "Nothing")]</A>
+	<BR><B>Head(Mask):</B> <A href='?src=\ref[src];item=mask'>[(wear_mask ? wear_mask : "Nothing")]</A>"}
+
+	for(var/i = 1 to held_items.len) //Hands
+		var/obj/item/I = held_items[i]
+		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];item=hand;hand_index=[i]'>		[(I && !I.abstract) ? I : "<font color=grey>Empty</font>"]</A><BR>"
+
+	dat += {"
 	<BR><B>Back:</B> <A href='?src=\ref[src];item=back'>[(back ? back : "Nothing")]</A> [((istype(wear_mask, /obj/item/clothing/mask) && istype(back, /obj/item/weapon/tank) && !( internal )) ? text(" <A href='?src=\ref[];item=internal'>Set Internal</A>", src) : "")]
 	<BR>[(internal ? text("<A href='?src=\ref[src];item=internal'>Remove Internal</A>") : "")]
 	<BR><A href='?src=\ref[src];item=pockets'>Empty Pockets</A>
@@ -863,7 +880,7 @@ var/list/slot_equipment_priority = list( \
 	return
 
 /mob/proc/ret_grab(obj/effect/list_container/mobl/L as obj, flag)
-	if ((!( istype(l_hand, /obj/item/weapon/grab) ) && !( istype(r_hand, /obj/item/weapon/grab) )))
+	if (!find_held_item_by_type(/obj/item/weapon/grab)) //No grab in hands
 		if (!( L ))
 			return null
 		else
@@ -873,14 +890,10 @@ var/list/slot_equipment_priority = list( \
 			L = new /obj/effect/list_container/mobl( null )
 			L.container += src
 			L.master = src
-		if (istype(l_hand, /obj/item/weapon/grab))
-			var/obj/item/weapon/grab/G = l_hand
-			if (!( L.container.Find(G.affecting) ))
-				L.container += G.affecting
-				if (G.affecting)
-					G.affecting.ret_grab(L, 1)
-		if (istype(r_hand, /obj/item/weapon/grab))
-			var/obj/item/weapon/grab/G = r_hand
+
+		var/grab_in_hands = find_held_item_by_type(/obj/item/weapon/grab)
+		if(grab_in_hands)
+			var/obj/item/weapon/grab/G = held_items[grab_in_hands]
 			if (!( L.container.Find(G.affecting) ))
 				L.container += G.affecting
 				if (G.affecting)
@@ -970,22 +983,18 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 	set src = usr
 
+	if(attack_delayer.blocked()) return
 
 	if(istype(loc,/obj/mecha)) return
 
-	if(hand)
-		var/obj/item/W = l_hand
-		if (W)
-			W.attack_self(src)
-			update_inv_l_hand()
-	else
-		var/obj/item/W = r_hand
-		if (W)
-			W.attack_self(src)
-			update_inv_r_hand()
-	//if(next_move < world.time)
-	//	next_move = world.time + 2
-	return
+	if(isVentCrawling())
+		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+		return
+	
+	var/obj/item/W = get_held_item_by_index(active_hand)
+	if(W)
+		W.attack_self(src)
+		update_inv_hand(active_hand)
 
 /*
 /mob/verb/dump_source()
@@ -1152,7 +1161,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Revision: [return_revision()]
-					<iframe src='http://ss13.pomf.se/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1193,7 +1202,7 @@ var/list/slot_equipment_priority = list( \
 	if(client.holder && (client.holder.rights & R_ADMIN))
 		is_admin = 1
 	else if(stat != DEAD || istype(src, /mob/new_player))
-		to_chat(usr, "<span class='notice'> You must be observing to use this!</span>")
+		to_chat(usr, "<span class='notice'>You must be observing to use this!</span>")
 		return
 
 	if(is_admin && stat == DEAD)
@@ -1444,16 +1453,18 @@ var/list/slot_equipment_priority = list( \
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
-	if(locked_to)
-		canmove = 0
-		lying = locked_to.locked_should_lie
+	if (locked_to)
+		var/datum/locking_category/category = locked_to.locked_atoms[src]
+		if (category && category.flags ^ LOCKED_CAN_LIE_AND_STAND)
+			canmove = 0
+			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
-	else if( isUnconscious() || weakened || paralysis || resting || sleeping )
+	else if(isUnconscious() || weakened || paralysis || resting || !can_stand)
 		stop_pulling()
 		lying = 1
 		canmove = 0
-	else if( stunned )
+	else if(stunned)
 //		lying = 0
 		canmove = 0
 	else if(captured)
@@ -1461,17 +1472,14 @@ var/list/slot_equipment_priority = list( \
 		canmove = 0
 		lying = 0
 	else
-		lying = !can_stand
+		lying = 0
 		canmove = has_limbs
 
+	reset_layer() //Handles layer setting in hiding
 	if(lying)
-		if(ishuman(src))
-			layer = 3.9
 		density = 0
 		drop_hands()
 	else
-		if(ishuman(src))
-			layer = 4
 		density = 1
 
 	//Temporarily moved here from the various life() procs
@@ -1485,6 +1493,8 @@ var/list/slot_equipment_priority = list( \
 
 	return canmove
 
+/mob/proc/reset_layer()
+	return
 
 /mob/verb/eastface()
 	set hidden = 1
@@ -1648,7 +1658,7 @@ var/list/slot_equipment_priority = list( \
 		self = 1 // Removing object from yourself.
 
 	for(var/obj/item/weapon/W in embedded)
-		if(W.w_class >= 2)
+		if(W.w_class <= W_CLASS_SMALL)
 			valid_objects += W
 
 	if(!valid_objects.len)
@@ -1739,13 +1749,13 @@ mob/proc/on_foot()
 			return 1
 	return 0
 
-/mob/proc/get_subtle_message(var/msg)
-	var/pre_msg = "You hear a voice in your head..."
-	if(mind && mind.assigned_role == "Chaplain")
-		pre_msg = "You hear the voice of [ticker.Bible_deity_name] in your head... "
+/mob/proc/get_subtle_message(var/msg, var/deity = null)
+	if(!deity)
+		deity = "a voice" //sanity
+	var/pre_msg = "You hear [deity] in your head... "
 	if(src.hallucinating()) //If hallucinating, make subtle messages more fun
-		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet")
-		var/location = pick(" from above"," from below"," in your head","")
+		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet","an evil", "an angelic")
+		var/location = pick(" from above"," from below"," in your head"," from behind you"," from everywhere"," from nowhere in particular","")
 		pre_msg = pick("You hear [adjective] voice[location]...")
 
 	to_chat(src, "<b>[pre_msg] <em>[msg]</em></b>")
@@ -1764,6 +1774,22 @@ mob/proc/on_foot()
 
 /mob/proc/teleport_to(var/atom/A)
 	forceMove(get_turf(A))
+
+/mob/proc/nuke_act() //Called when caught in a nuclear blast
+	return
+
+/mob/proc/remove_jitter()
+	if(jitteriness)
+		jitteriness = 0
+		animate(src)
+
+//High order proc to remove a mobs spell channeling, removes channeling fully
+/mob/proc/remove_spell_channeling()
+	if(spell_channeling)
+		var/spell/thespell = on_uattack.handlers[spell_channeling][EVENT_OBJECT_INDEX]
+		thespell.channel_spell(force_remove = 1)
+		return 1
+	return 0
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

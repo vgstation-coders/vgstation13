@@ -73,8 +73,10 @@
 	if(istype(I,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = I
 		S.use(1)
-		new/obj/item/weapon/reagent_containers/mortar(get_turf(src))
+		var/obj/item/weapon/reagent_containers/glass/mortar/mortimer = new(get_turf(src))
+		to_chat(user, "<span class='notice'>You fashion a crude mortar out of the wooden bowl and a metal sheet.</span>")
 		qdel(src)
+		user.put_in_hands(mortimer)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
@@ -111,18 +113,21 @@
 		if((src.contents.len >= src.ingMax) || (src.contents.len >= ingredientLimit))
 			to_chat(user, "<span class='warning'>That's already looking pretty stuffed.</span>")
 			return
+
 		var/obj/item/weapon/reagent_containers/food/snacks/S = I
 		if(istype(S,/obj/item/weapon/reagent_containers/food/snacks/customizable))
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/SC = S
 			if(src.fullyCustom && SC.fullyCustom)
 				to_chat(user, "<span class='warning'>You slap yourself on the back of the head for thinking that stacking plates is an interesting dish.</span>")
-				message_admins("<span class='warning'>POSSIBLE EXPLOIT ATTEMPT:</span> [key_name_admin(user)] tried to stack multiple plates together, which used to generate excessive atom names, resulting in crashes. See <a href='https://github.com/d3athrow/vgstation13/issues/6402'>#6402</a>.")
 				return
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
-			to_chat(user, "<span class='warning'>[pick("Sorry, no recursive food.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
+			to_chat(user, "<span class='warning'>[pick("As uniquely original as that idea is, you can't figure out how to perform it.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 			return
+		if(!user.drop_item(I, src))
+			user << "<span class='warning'>\The [I] is stuck to your hands!</span>"
+			return
+
 		S.reagents.trans_to(src,S.reagents.total_volume)
-		user.drop_item(I, src)
 		src.ingredients += S
 
 		if(src.addTop) src.overlays -= src.topping //thank you Comic
@@ -379,18 +384,19 @@
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(src.ingredients.len < src.ingMax)
 			var/obj/item/weapon/reagent_containers/food/snacks/S = I
+
 			if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 				to_chat(user, "<span class='warning'>[pick("Sorry, no recursive food.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 				return
-			user.drop_item(I, src)
-			to_chat(user, "<span class='notice'>You add the [S.name] to the [src.name].</span>")
-			S.reagents.trans_to(src,S.reagents.total_volume)
-			src.ingredients += S
-			src.updateName()
-			src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
-			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-			src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
-			src.overlays += src.filling
+			if(user.drop_item(I, src))
+				to_chat(user, "<span class='notice'>You add the [S.name] to the [src.name].</span>")
+				S.reagents.trans_to(src,S.reagents.total_volume)
+				src.ingredients += S
+				src.updateName()
+				src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
+				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+				src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
+				src.overlays += src.filling
 		else to_chat(user, "<span class='warning'>That won't fit.</span>")
 	else . = ..()
 	return

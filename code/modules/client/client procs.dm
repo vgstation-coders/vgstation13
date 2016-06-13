@@ -3,7 +3,7 @@
 	////////////
 #define TOPIC_SPAM_DELAY	2		//2 ticks is about 2/10ths of a second; it was 4 ticks, but that caused too many clicks to be lost due to lag
 #define UPLOAD_LIMIT		10485760	//Restricts client uploads to the server to 10MB //Boosted this thing. What's the worst that can happen?
-#define MIN_CLIENT_VERSION	0		//Just an ambiguously low version for now, I don't want to suddenly stop people playing.
+#define MIN_CLIENT_VERSION	510		//Just an ambiguously low version for now, I don't want to suddenly stop people playing.
 									//I would just like the code ready should it ever need to be used.
 	/*
 	When somebody clicks a link in game, this Topic is called first.
@@ -51,13 +51,22 @@
 		cmd_admin_pm(C,null)
 		return
 
+	//Wiki shortcuts
+	if(href_list["getwiki"])
+		var/url = href_list["getwiki"]
+		usr << link(getVGWiki(url))
+		return
+
 	// Global Asset cache stuff.
 	if(href_list["asset_cache_confirm_arrival"])
 //		to_chat(src, "ASSET JOB [href_list["asset_cache_confirm_arrival"]] ARRIVED.")
 		var/job = text2num(href_list["asset_cache_confirm_arrival"])
 		completed_asset_jobs += job
 		return
-		
+
+	if(href_list["_src_"] == "chat") // Oh god the ping hrefs.
+		return chatOutput.Topic(href, href_list)
+
 	//Logs all hrefs
 	if(config && config.log_hrefs && investigations[I_HREFS])
 		var/datum/log_controller/I = investigations[I_HREFS]
@@ -68,6 +77,10 @@
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
+
+	switch(href_list["action"])
+		if ("openLink")
+			src << link(href_list["link"])
 
 	..()	//redirect to hsrc.Topic()
 	//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
@@ -106,6 +119,9 @@
 	//CONNECT//
 	///////////
 /client/New(TopicData)
+	// world.log << "creating chatOutput"
+	chatOutput = new /datum/chatOutput(src) // Right off the bat.
+	// world.log << "Done creating chatOutput"
 	if(config)
 		winset(src, null, "outputwindow.output.style=[config.world_style_config];")
 		winset(src, null, "window1.msay_output.style=[config.world_style_config];") // it isn't possible to set two window elements in the same winset so we need to call it for each element we're assigning a stylesheet.
@@ -120,12 +136,18 @@
 		admins += src
 		holder.owner = src
 
-	if(connection != "seeker")					//Invalid connection type.
-		return null
-	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
-		return null
+	if(connection != "seeker")			//Invalid connection type.
+		if(connection == "web")
+			if(!holder) return null
+		else return null
 
-	if(IsGuestKey(key))
+	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
+		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
+		alert(src,"Your BYOND client is out of date. Please make sure you have have at least version [world.byond_version] installed. Check for a beta update if necessary.", "Update Yo'Self", "OK")
+		spawn(5 SECONDS)
+			del(src)
+
+	if(!guests_allowed && IsGuestKey(key))
 		alert(src,"This server doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
 		del(src)
 		return
@@ -150,6 +172,7 @@
 	prefs.last_id = computer_id			//these are gonna be used for banning
 
 	. = ..()	//calls mob.Login()
+	chatOutput.start()
 
 	if(custom_event_msg && custom_event_msg != "")
 		to_chat(src, "<h1 class='alert'>Custom Event</h1>")
@@ -185,7 +208,7 @@
 
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
-	
+
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -215,34 +238,21 @@
 
 	account_joined = Joined
 
+	var/sql_id = 0
 	var/sql_ckey = sanitizeSQL(ckey)
 	var/age
 	testing("sql_ckey = [sql_ckey]")
-	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
-	query.Execute()
-	var/sql_id = 0
-	while(query.NextRow())
-		sql_id = query.item[1]
-		player_age = text2num(query.item[2])
-		age = text2num(query.item[3])
-		break
+
+	var/list/query1 = Query1()
+	sql_id = query1[1]
+	player_age = query1[2]
+	age = query1[3]
 
 	var/sql_address = sanitizeSQL(address)
-
-	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[sql_address]'")
-	query_ip.Execute()
-	related_accounts_ip = ""
-	while(query_ip.NextRow())
-		related_accounts_ip += "[query_ip.item[1]], "
-
+	Query2(sql_address)
 
 	var/sql_computerid = sanitizeSQL(computer_id)
-
-	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[sql_computerid]'")
-	query_cid.Execute()
-	related_accounts_cid = ""
-	while(query_cid.NextRow())
-		related_accounts_cid += "[query_cid.item[1]], "
+	Query3(sql_computerid)
 
 	//Just the standard check to see if it's actually a number
 	if(sql_id)
@@ -267,23 +277,12 @@
 	var/sql_admin_rank = sanitizeSQL(admin_rank)
 
 	if(sql_id)
-		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
-		var/DBQuery/query_update
-		if(isnum(age))
-			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
-		else
-			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
-		query_update.Execute()
+		Query4(age, sql_address, sql_computerid, sql_admin_rank, sql_id, Joined)
 	else
-		//New player!! Need to insert all the stuff
-		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
-		query_insert.Execute()
+		Query5(sql_ckey, sql_address, sql_computerid, sql_admin_rank, Joined)
 
 	if(!isnum(age))
-		var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
-		query_age.Execute()
-		while(query_age.NextRow())
-			age = text2num(query_age.item[1])
+		age = Query6(sql_ckey, age)
 	if(age < 14)
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
@@ -291,12 +290,62 @@
 	account_age = age
 
 	// logging player access
+	Query7(sql_ckey, sql_address, sql_computerid)
+
+/client/proc/Query1(sql_address, sql_computerid, sql_ckey)
+	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
+	query.Execute()
+	var/sql_id
+	var/player_age
+	var/age
+	while(query.NextRow())
+		sql_id = query.item[1]
+		player_age = text2num(query.item[2])
+		age = text2num(query.item[3])
+		break
+	return list(sql_id, player_age, age)
+
+/client/proc/Query2(sql_address)
+	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[sql_address]'")
+	query_ip.Execute()
+	related_accounts_ip = ""
+	while(query_ip.NextRow())
+		related_accounts_ip += "[query_ip.item[1]], "
+
+/client/proc/Query3(sql_computerid)
+	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[sql_computerid]'")
+	query_cid.Execute()
+	related_accounts_cid = ""
+	while(query_cid.NextRow())
+		related_accounts_cid += "[query_cid.item[1]], "
+
+/client/proc/Query4(age, sql_address, sql_computerid, sql_admin_rank, sql_id, Joined)
+	//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
+	var/DBQuery/query_update
+	if(isnum(age))
+		query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
+	else
+		query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
+	query_update.Execute()
+
+/client/proc/Query5(sql_ckey, sql_address, sql_computerid, sql_admin_rank, Joined)
+	//New player!! Need to insert all the stuff
+	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
+	query_insert.Execute()
+
+/client/proc/Query6(sql_ckey)
+	var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
+	var/age
+	query_age.Execute()
+	while(query_age.NextRow())
+		age = text2num(query_age.item[1])
+	return age
+
+/client/proc/Query7(sql_ckey, sql_address, sql_computerid)
 	var/server_address_port = "[world.internet_address]:[world.port]"
 	var/sql_server_address_port = sanitizeSQL(server_address_port)
 	var/DBQuery/query_connection_log = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[sql_server_address_port]','[sql_ckey]','[sql_address]','[sql_computerid]');")
-
 	query_connection_log.Execute()
-
 
 #undef TOPIC_SPAM_DELAY
 #undef UPLOAD_LIMIT
@@ -315,6 +364,7 @@
 
 	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
 	nanomanager.send_resources(src)
+	send_html_resources()
 
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()
@@ -375,3 +425,10 @@
 		else
 			to_chat(src, "<span style='recruit'>The game is currently looking for [role_id] candidates.  Your current answer is <a href='?src=\ref[prefs]&preference=set_role&role_id=[role_id]'>[get_role_desire_str(role_desired)]</a>.</span>")
 	return role_desired & ROLEPREF_ENABLE
+
+/client/proc/colour_transition(var/list/colour_to = default_colour_matrix,var/time = 10)	// call this with no parametres to reset to default.
+	if(!color)
+		color = default_colour_matrix
+	if(!(colour_to.len))
+		colour_to = default_colour_matrix
+	animate(src, color=colour_to, time=time, easing=SINE_EASING)

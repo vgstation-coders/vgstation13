@@ -22,25 +22,25 @@
 
 	switch(construct_op)
 		if(0)
-			if(istype(P, /obj/item/weapon/screwdriver))
+			if(isscrewdriver(P))
 				to_chat(user, "You unfasten the bolts.")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				construct_op ++
 		if(1)
-			if(istype(P, /obj/item/weapon/screwdriver))
+			if(isscrewdriver(P))
 				to_chat(user, "You fasten the bolts.")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				construct_op --
-			if(istype(P, /obj/item/weapon/wrench))
+			if(iswrench(P))
 				to_chat(user, "You dislodge the external plating.")
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 				construct_op ++
 		if(2)
-			if(istype(P, /obj/item/weapon/wrench))
+			if(iswrench(P))
 				to_chat(user, "You secure the external plating.")
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 				construct_op --
-			if(istype(P, /obj/item/weapon/wirecutters))
+			if(iswirecutter(P))
 				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 				to_chat(user, "You remove the cables.")
 				construct_op ++
@@ -54,13 +54,13 @@
 					to_chat(user, "You insert the cables.")
 					A.amount -= 5
 					if(A.amount <= 0)
-						user.drop_item(A)
+						user.drop_item(A, force_drop = 1)
 						returnToPool(A)
 					construct_op --
 					stat &= ~BROKEN // the machine's not borked anymore!
 				else
 					to_chat(user, "You need more cable")
-			if(istype(P, /obj/item/weapon/crowbar))
+			if(iscrowbar(P))
 				to_chat(user, "You begin prying out the circuit board and components...")
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				if(do_after(user, src,60))
@@ -143,11 +143,8 @@
 				continue
 			dat += "<li>\ref[T] [T.name] ([T.id])  <a href='?src=\ref[src];unlink=[i]'>\[X\]</a></li>"
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\\machine_interactions.dm:140: dat += "</ol>"
 		dat += {"</ol>
 			<h2>Filtering Frequencies:</h2>"}
-		// END AUTOFIX
 		i = 0
 		if(length(freq_listening))
 			dat += "<ul>"
@@ -158,11 +155,8 @@
 			dat += "<li>NONE</li>"
 
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\\machine_interactions.dm:155: dat += "<br>  <a href='?src=\ref[src];input=freq'>\[Add Filter\]</a>"
 		dat += {"<p><a href='?src=\ref[src];input=freq'>\[Add Filter\]</a></p>
 			<hr />"}
-		// END AUTOFIX
 
 	return dat
 
@@ -227,11 +221,8 @@
 	if(src.z == TELECOMM_Z)
 		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == STATION_Z ? "TRUE" : "FALSE"]</a>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\telecomms\\machine_interactions.dm:236: dat += "<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>"
 	dat += {"<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
 		<br>Receiving:    <A href='?src=\ref[src];receive=1'>[receiving ? "YES" : "NO"]</a>"}
-	// END AUTOFIX
 	return dat
 
 /obj/machinery/telecomms/relay/Options_Topic(href, href_list)
@@ -375,6 +366,6 @@
 		return 0
 
 /obj/machinery/telecomms/proc/canAccess(var/mob/user)
-	if(issilicon(user) || in_range(user, src))
+	if(issilicon(user) || in_range(src,user))
 		return 1
 	return 0

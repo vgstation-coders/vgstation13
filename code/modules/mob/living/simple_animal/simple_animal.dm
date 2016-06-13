@@ -82,10 +82,17 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/supernatural = 0
 	var/purge = 0
 
+	//For those that we want to just pop back up a little while after they're killed
+	var/canRegenerate = 0 //If 1, it qualifies for regeneration
+	var/isRegenerating = 0 //To stop life calling the proc multiple times
+	var/minRegenTime = 0
+	var/maxRegenTime = 0
+
 	universal_speak = 1
 	universal_understand = 1
 
 	var/life_tick = 0
+	var/list/colourmatrix = list()
 
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -141,6 +148,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			stat = CONSCIOUS
 			density = 1
 			update_canmove()
+		if(canRegenerate && !isRegenerating)
+			src.delayedRegen()
 		return 0
 
 
@@ -162,9 +171,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		purge -= 1
 
+	isRegenerating = 0
+
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
-		if(isturf(src.loc) && !resting && !locked_to && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
@@ -291,6 +302,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /mob/living/simple_animal/blob_act()
+	..()
 	adjustBruteLoss(20)
 	return
 
@@ -318,11 +330,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='warning'><B>\The [M]</B> [M.attacktext] [src]!</span>", 1)
+
+		visible_message("<span class='warning'><B>\The [M]</B> [M.attacktext] \the [src]!</span>")
+
 		add_logs(M, src, "attacked", admin=0)
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage,M.melee_damage_type)
+		if(M.melee_damage_type == "BRAIN") //because brain damage is apparently not a proper damage type like all the others
+			adjustBrainLoss(damage)
+		else
+			adjustBruteLoss(damage,M.melee_damage_type)
 		updatehealth()
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
@@ -363,24 +379,21 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			G.affecting = src
 			LAssailant = M
 
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
+			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
 
 		if(I_HURT, I_DISARM)
 			adjustBruteLoss(harm_intent_damage)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message("<span class='warning'>[M] [response_harm] [src]!</span>")
+
+			visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
 
 	return
 
 /mob/living/simple_animal/MouseDrop(mob/living/carbon/human/M)
-	if(M != usr)		return
-	if(!istype(M))		return
-	if(M.stat)			return
-	if(M.restrained())	return
-	if(!Adjacent(M))	return
+	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())
+		return
+
+	if(locked_to) //Atom locking
+		return
 
 	var/strength_of_M = (M.size - 1) //Can only pick up mobs whose size is less or equal to this value. Normal human's size is 3, so his strength is 2 - he can pick up TINY and SMALL animals. Varediting human's size to 5 will allow him to pick up goliaths.
 
@@ -472,12 +485,16 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			if(health < maxHealth)
 				if(MED.use(1))
 					adjustBruteLoss(-MED.heal_brute)
-					src.visible_message("<span class='notice'>[user] applies \the [MED] on [src].</span>")
+					src.visible_message("<span class='notice'>[user] applies \the [MED] to \the [src].</span>")
 		else
-			to_chat(user, "<span class='notice'>this [src] is dead, medical items won't bring it back to life.</span>")
+			to_chat(user, "<span class='notice'>This [src] is dead, medical items won't bring it back to life.</span>")
 	else if((meat_type || butchering_drops) && (stat == DEAD))	//if the animal has a meat, and if it is dead.
 		if(O.is_sharp())
-			butcher()
+			if(user.a_intent != I_HELP)
+				to_chat(user, "<span class='info'>You must be on <b>help</b> intent to do this!</span>")
+			else
+				butcher()
+				return 1
 	else
 		user.delayNextAttack(8)
 		if(O.force)
@@ -572,6 +589,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(health < 1 && stat != DEAD)
 		Die()
 
+/mob/living/simple_animal/adjustFireLoss(damage)
+	health = Clamp(health - damage, 0, maxHealth)
+	if(health < 1 && stat != DEAD)
+		Die()
+
 /mob/living/simple_animal/proc/SA_attackable(target)
 	return CanAttack(target)
 
@@ -605,7 +627,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/update_fire()
 	return
 /mob/living/simple_animal/IgniteMob()
-	return
+	return 0
 /mob/living/simple_animal/ExtinguishMob()
 	return
 
@@ -624,8 +646,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/alone = 1
 	var/mob/living/simple_animal/partner
 	var/children = 0
-	for(var/mob/M in oview(7, src))
-		if(M.stat != CONSCIOUS) //Check if it's concious FIRSTER.
+	for(var/mob/living/M in oview(7, src))
+		if(M.isUnconscious()) //Check if it's concious FIRSTER.
 			continue
 		else if(istype(M, childtype)) //Check for children FIRST.
 			children++
@@ -644,14 +666,58 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/give_birth()
 	for(var/i=1; i<=child_amount; i++)
 		if(animal_count[childtype] > ANIMAL_CHILD_CAP)
-			break
+			return 0
 
 		var/mob/living/simple_animal/child = new childtype(loc)
 		if(istype(child))
-			child.faction = src.faction
+			child.inherit_mind(src)
+
+	return 1
+
+/mob/living/simple_animal/proc/grow_up()
+	if(src.type == species_type) //Already grown up
+		return
+
+	var/mob/living/simple_animal/new_animal = new species_type(src.loc)
+
+	if(locked_to) //Handle atom locking
+		var/atom/movable/A = locked_to
+		A.unlock_atom(src)
+		A.lock_atom(new_animal, /datum/locking_category/simple_animal)
+
+	new_animal.inherit_mind(src)
+	new_animal.ckey = src.ckey
+	new_animal.key = src.key
+
+	forceMove(get_turf(src))
+	qdel(src)
+
+/mob/living/simple_animal/proc/inherit_mind(mob/living/simple_animal/from)
+	src.faction = from.faction
 
 /mob/living/simple_animal/say_understands(var/mob/other,var/datum/language/speaking = null)
 	if(other) other = other.GetSource()
 	if(issilicon(other))
 		return 1
 	return ..()
+
+/mob/living/simple_animal/proc/reagent_act(id, method, volume)
+	if(isDead()) return
+
+	switch(id)
+		if("sacid")
+			if(!supernatural)
+				adjustBruteLoss(volume * 0.5)
+		if("pacid")
+			if(!supernatural)
+				adjustBruteLoss(volume * 0.5)
+
+/mob/living/simple_animal/proc/delayedRegen()
+	set waitfor = 0
+	isRegenerating = 1
+	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
+	src.resurrect()
+	src.revive()
+	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+
+/datum/locking_category/simple_animal

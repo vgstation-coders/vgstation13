@@ -129,7 +129,7 @@ var/list/valid_secondary_effect_types = list(\
 			if(pulledby.pulling == src)
 				pulledby.stop_pulling()
 			pulledby = null
-		else if(pulledby.stat || pulledby.sleeping || pulledby.lying || pulledby.weakened || pulledby.stunned) //To prevent getting stuck stunned forever due to not being able to break the pull.
+		else if(pulledby.incapacitated()) //To prevent getting stuck stunned forever due to not being able to break the pull.
 			if(pulledby.pulling == src)
 				pulledby.stop_pulling()
 			pulledby = null
@@ -264,8 +264,7 @@ var/list/valid_secondary_effect_types = list(\
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	if (istype(W, /obj/item/weapon/reagent_containers/glass) && W.is_open_container() ||\
-		istype(W, /obj/item/weapon/reagent_containers/dropper) ||\
-		istype(W, /obj/item/weapon/reagent_containers/robodropper))
+		istype(W, /obj/item/weapon/reagent_containers/dropper))
 		if(W.reagents.has_reagent("hydrogen", 1) || W.reagents.has_reagent("water", 1))
 			if(my_effect.trigger == TRIGGER_WATER)
 				my_effect.ToggleActivate()

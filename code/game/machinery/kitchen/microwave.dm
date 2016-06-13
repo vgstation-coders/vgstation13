@@ -84,7 +84,7 @@
 ********************/
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
-		if(src.broken == 2 && istype(O, /obj/item/weapon/screwdriver)) // If it's broken and they're using a screwdriver
+		if(src.broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -95,7 +95,7 @@
 					"<span class='notice'>You have fixed part of the microwave.</span>" \
 				)
 				src.broken = 1 // Fix it a bit
-		else if(src.broken == 1 && istype(O, /obj/item/weapon/wrench)) // If it's broken and they're doing the wrench
+		else if(src.broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -157,10 +157,9 @@
 				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
 				return 1
 
-		user.before_take_item(O)
-		O.loc = src
-		holdingitems += O
-		src.updateUsrDialog()
+		if(user.drop_item(O, src))
+			holdingitems += O
+			src.updateUsrDialog()
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
 		if (istype(O,/obj/item/stack) && O:amount>1)
@@ -171,10 +170,10 @@
 				"<span class='notice'>You add one of [O] to \the [src].</span>")
 		else
 		//	user.before_take_item(O)	//This just causes problems so far as I can tell. -Pete
-			user.drop_item(O, src)
-			user.visible_message( \
-				"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
-				"<span class='notice'>You add \the [O] to \the [src].</span>")
+			if(user.drop_item(O, src))
+				user.visible_message( \
+					"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
+					"<span class='notice'>You add \the [O] to \the [src].</span>")
 	else if(is_type_in_list(O,accepts_reagents_from))
 		if (!O.reagents)
 			return 1
@@ -428,6 +427,12 @@
 	ffuu.reagents.add_reagent("carbon", amount)
 	ffuu.reagents.add_reagent("toxin", amount/10)
 	return ffuu
+
+/obj/machinery/microwave/AltClick(mob/user)
+    if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+        cook() //Cook checks for power, brokenness, and contents internally
+        return
+    return ..()
 
 /obj/machinery/microwave/Topic(href, href_list)
 	if(..())

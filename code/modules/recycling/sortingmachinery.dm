@@ -1,34 +1,5 @@
 //Default list destination taggers and such can use.
 
-var/list/DEFAULT_TAGGER_LOCATIONS = list(
-	"Disposals",
-	"Cargo Bay",
-	"QM Office",
-	"Engineering",
-	"CE Office",
-	"Atmospherics",
-	"Security",
-	"HoS Office",
-	"Medbay",
-	"CMO Office",
-	"Chemistry",
-	"Research",
-	"RD Office",
-	"Robotics",
-	"HoP Office",
-	"Library",
-	"Chapel",
-	"Theatre",
-	"Bar",
-	"Kitchen",
-	"Hydroponics",
-	"Janitor Closet",
-	"Genetics",
-	"Telecomms",
-	"Mechanics",
-	"Telescience"
-	)
-
 /obj/item/device/destTagger
 	name = "destination tagger"
 	desc = "Used to set the destination of properly wrapped packages."
@@ -38,9 +9,9 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 	var/mode  = 0 //If the tagger is "hacked" so you can add extra tags.
 
 	var/currTag = 0
-	var/list/destinations
+	var/list/destinations  = list()
 
-	w_class = 1
+	w_class = W_CLASS_TINY
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -55,7 +26,11 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 
 /obj/item/device/destTagger/New()
 	. = ..()
-	destinations = DEFAULT_TAGGER_LOCATIONS.Copy() //T-thanks BYOND.
+
+	// Make sure to not copy any null ones, null is for map overrides to remove.
+	for(var/dest in map.default_tagger_locations)
+		if(dest)
+			destinations += dest
 
 /obj/item/device/destTagger/interact(mob/user as mob)
 
@@ -209,7 +184,7 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 	if(!I || !user)
 		return
 
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		if(c_mode==0)
 			c_mode=1
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
@@ -298,7 +273,7 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 	var/turf/out_T = get_step(src, output_dir)
 	var/turf/filter_T = get_step(src, filter_dir)
 
-	if(!out_T.CanPass(mover, out_T) || !out_T.Enter(mover) || !filter_T.CanPass(mover, filter_T) || !filter_T.Enter(mover))
+	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
 		return
 
 	var/affecting = in_T.contents
@@ -464,7 +439,7 @@ var/list/DEFAULT_TAGGER_LOCATIONS = list(
 /obj/machinery/sorting_machine/destination/New()
 	. = ..()
 
-	destinations = DEFAULT_TAGGER_LOCATIONS.Copy() //Here because BYOND.
+	destinations = map.default_tagger_locations.Copy() //Here because BYOND.
 
 	for(var/i = 1, i <= destinations.len, i++)
 		destinations[i] = uppertext(destinations[i])

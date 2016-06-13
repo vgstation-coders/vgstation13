@@ -178,48 +178,60 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 //Gives the plant a new, random icon from a list, with matching growth stages number.
 /datum/seed/proc/add_random_chemical(var/severity = 15)
 	var/list/possible_chems = list(
-		"bicaridine",
-		"hyperzine",
-		"cryoxadone",
-		"blood",
-		"potassium",
-		"plasticide",
-		"mutationtoxin",
-		"amutationtoxin",
-		"inaprovaline",
-		"space_drugs",
-		"paroxetine",
-		"mercury",
-		"sugar",
-		"radium",
-		"ryetalyn",
-		"alkysine",
-		"thermite",
-		"tramadol",
-		"cryptobiolin",
-		"dermaline",
-		"dexalin",
-		"plasma",
-		"synaptizine",
-		"impedrezene",
-		"hyronalin",
-		"peridaxon",
-		"toxin",
-		"rezadone",
-		"ethylredoxrazine",
-		"slimejelly",
-		"cyanide",
-		"mindbreaker",
-		"neurotoxin",
-		"leporazine",
-		"stoxin"
+		// Important Medicines
+		"rezadone" = 200,
+		"peridaxon" = 200,
+		// Items of Botany Importance
+		"cryoxadone" = 100,
+		"radium" = 100,
+		"plasticide" = 100,
+		// Items of Botanist Importance
+		"hyperzine" = 100,
+		"thermite" = 100,
+		"synaptizine" = 100,
+		"leporazine" = 100,
+		"potassium" = 100,
+		"plasma" = 100,
+		// Misc Medicines
+		"bicaridine" = 100,
+		"inaprovaline" = 100,
+		"ryetalyn" = 100,
+		"alkysine" = 100,
+		"dermaline" = 100,
+		"dexalin" = 100,
+		"dexalinp" = 75,
+		"hyronalin" = 100,
+		"blood" = 100,
+		// Misc Poisons
+		"cryptobiolin" = 100,
+		"mercury" = 100,
+		"impedrezene" = 100,
+		"stoxin" = 100,
+		"cyanide" = 100,
+		"neurotoxin" = 100,
+		"toxin" = 100,
+		"slimejelly" = 75,
+		// Fun Things
+		"mutationtoxin" = 50,
+		"amutationtoxin" = 10,
+		"space_drugs" = 100,
+		"methylin" = 100,
+		"carppheromones" = 40,
+		"nothing" = 50,
+		"mindbreaker" = 100,
+		"minttoxin" = 60,
+		// Things of Dubious Use
+		"sugar" = 100,
+		"ethylredoxrazine" = 100,
+		"paroxetine" = 100,
+		"tramadol" = 100,
 	)
 
 	for(var/rid in chems)
 		possible_chems -= rid
 	if(!possible_chems.len)
 		return 0
-	var/new_chem = pick(possible_chems)
+	var/new_chem = pickweight(possible_chems)
 	chems[new_chem] = list(rand(1,severity/3),rand(10-Ceiling(severity/3),15))
 	return 1
 
@@ -535,7 +547,13 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		currently_querying = list()
 		for(var/i = 0;i<total_yield;i++)
 			var/product_type = pick(products)
-			var/obj/item/product = new product_type(get_turf(user))
+
+			var/obj/item/product
+
+			if(ispath(product_type, /obj/item/stack))
+				product = drop_stack(product_type, get_turf(user), 1, user)
+			else
+				product = new product_type(get_turf(user))
 
 			score["stuffharvested"] += 1 //One point per product unit
 
@@ -594,12 +612,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 										var/drawing = min(15, H.vessel.get_reagent_amount("blood"))
 										H.vessel.remove_reagent("blood", drawing)
 										tray.reagents.add_reagent("blood", drawing)
-	if(ligneous)
+	if(ligneous && success)
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
-			if((!M.l_hand || !M.l_hand.is_sharp()) && (!M.r_hand || !M.r_hand.is_sharp()))
+			for(var/obj/item/I in M.held_items)
+				if(I.is_sharp())
+					success = 1
+					break
+
+			if(!success)
 				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
-				success = 0
+
 	return success
 
 // Create a seed packet directly from the plant.

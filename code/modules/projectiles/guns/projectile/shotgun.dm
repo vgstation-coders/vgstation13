@@ -6,7 +6,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 4
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	force = 10
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -74,8 +74,9 @@
 	desc = "A true classic."
 	icon_state = "dshotgun"
 	item_state = "shotgun"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 2
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	force = 10
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -127,10 +128,13 @@
 			return
 		if(do_after(user, src, 30))	//SHIT IS STEALTHY EYYYYY
 			icon_state = "sawnshotgun"
-			w_class = 3.0
-			item_state = "gun"
+			w_class = W_CLASS_MEDIUM
+			item_state = "sawnshotgun"
 			slot_flags &= ~SLOT_BACK	//you can't sling it on your back
 			slot_flags |= SLOT_BELT		//but you can wear it on your belt (poorly concealed under a trenchcoat, ideally)
 			name = "sawn-off shotgun"
 			desc = "Omar's coming!"
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
+			if(istype(user, /mob/living/carbon/human) && src.loc == user)
+				var/mob/living/carbon/human/H = user
+				H.update_inv_hands()

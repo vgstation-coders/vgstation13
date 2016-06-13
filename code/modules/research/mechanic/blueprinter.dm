@@ -79,11 +79,11 @@
 //Creates a blueprint of a given design datum
 //use_nano controls if the design is printed using nanopaper or regular paper
 //nanopaper designs are better, see blueprint.dm for the code details
-/obj/machinery/r_n_d/blueprinter/proc/PrintDesign(var/datum/design/mechanic_design/design, var/use_nano = 0)
+/obj/machinery/r_n_d/blueprinter/proc/PrintDesign(var/datum/design/design, var/use_nano = 0)
 	if(!istype(design)) //sanity checks yay
 		return
 	if((use_nano && nano_loaded == 0) || (!use_nano && paper_loaded == 0)) //material checks
-		visible_message("\icon [src]<span class='notice'> \The [src] beeps: 'Out of [use_nano ? "nanopaper" : "paper"]!'</span>")
+		visible_message("[bicon(src)]<span class='notice'> \The [src] beeps: 'Out of [use_nano ? "nanopaper" : "paper"]!'</span>")
 		return
 
 	busy = 1
@@ -96,7 +96,7 @@
 	else
 		new/obj/item/research_blueprint(get_output(), design)
 		paper_loaded -= 1
-	src.visible_message("\icon [src]<span class='notice'>\The [src] beeps: Successfully printed the [design.name] design.</span>")
+	src.visible_message("[bicon(src)]<span class='notice'>\The [src] beeps: 'Successfully printed the [design.name] design'.</span>")
 	spawn(20)
 		overlays -= "[base_state]_ani"
 	return 1

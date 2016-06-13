@@ -83,15 +83,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(speech.speaker && hologram && master && !speech.frequency && speech.speaker != master)//Master is mostly a safety in case lag hits or something. Radio_freq so AIs dont hear holopad stuff through radios.
 		if(!master.say_understands(speech.speaker, speech.language)) //previously if(!master.languages & speaker.languages)//The AI will be able to understand most mobs talking through the holopad.
 			rendered_message = speech.render_message()
-		var/name_used = speech.name
-		rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Holopad received, <span class='name'>[name_used]</span> <span class='message'>[rendered_message]</span></span></i>"
+		rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Holopad received, <span class='message'>[rendered_message]</span></span></i>"
 		master.show_message(rendered_message, 2)
 
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
 	hologram = new(T)//Spawn a blank effect at the location.
 	hologram.icon = A.holo_icon
-	hologram.mouse_opacity = 0//So you can't click on it.
+	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	hologram.layer = FLY_LAYER//Above all the other objects/mobs. Or the vast majority of them.
 	hologram.anchored = 1//So space wind cannot drag it.
 	hologram.name = "[A.name] (Hologram)"//If someone decides to right click.

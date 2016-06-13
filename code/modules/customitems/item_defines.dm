@@ -5,7 +5,7 @@ hi
 
 /obj/item/fluff // so that they don't spam up the object tree
 	icon = 'icons/obj/custom_items.dmi'
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 
 //////////////////////////////////
 ////////// Fluff Items ///////////
@@ -99,12 +99,12 @@ hi
 
 /obj/item/fluff/victor_kaminsky_1 //chinsky: Victor Kaminski
 	name = "golden detective's badge"
-	desc = "NanoTrasen Security Department detective's badge, made from gold. Badge number is 564."
+	desc = "Nanotrasen Security Department detective's badge, made from gold. Badge number is 564."
 	icon_state = "victor_kaminsky_1"
 
 /obj/item/fluff/victor_kaminsky_1/attack_self(mob/user as mob)
 	for(var/mob/O in viewers(user, null))
-		O.show_message(text("[] shows you: \icon[] [].", user, src, src.name), 1)
+		O.show_message("[user] shows you: [bicon(src)] [name].", 1)
 	src.add_fingerprint(user)
 
 /obj/item/weapon/clipboard/fluff/smallnote //lexusjjss: Lexus Langg, Zachary Tomlinson
@@ -178,7 +178,7 @@ hi
 /obj/item/weapon/fluff/cado_keppel_1 //sparklysheep: Cado Keppel
 	name = "purple comb"
 	desc = "A pristine purple comb made from flexible plastic. It has a small K etched into its side."
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "purplecomb"
 	item_state = "purplecomb"
@@ -215,7 +215,7 @@ hi
 
 /obj/item/weapon/card/id/fluff/lifetime	//fastler: Fastler Greay; it seemed like something multiple people would have
 	name = "Lifetime ID Card"
-	desc = "A modified ID card given only to those people who have devoted their lives to the better interests of NanoTrasen. It sparkles blue."
+	desc = "A modified ID card given only to those people who have devoted their lives to the better interests of Nanotrasen. It sparkles blue."
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "lifetimeid"
 
@@ -271,7 +271,7 @@ hi
 	icon_state = "cigon"
 	throw_speed = 0.5
 	item_state = "ciglit"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	body_parts_covered = null
 	flags = FPRINT|TABLEPASS
 
@@ -410,7 +410,7 @@ hi
 
 //////////// Eye Wear ////////////
 
-/obj/item/clothing/glasses/meson/fluff/book_berner_1 //asanadas: Book Berner
+/obj/item/clothing/glasses/scanner/meson/fluff/book_berner_1 //asanadas: Book Berner
 	name = "bespectacled mesonic surveyors"
 	desc = "One of the older meson scanner models retrofitted to perform like its modern counterparts."
 	icon = 'icons/obj/custom_items.dmi'
@@ -582,7 +582,7 @@ hi
 
 /obj/item/clothing/under/fluff/jane_sidsuit
 	name = "NT-SID jumpsuit"
-	desc = "A NanoTrasen Synthetic Intelligence Division jumpsuit, issued to 'volunteers'. On other people it looks fine, but right here a scientist has noted: on you it looks stupid."
+	desc = "A Nanotrasen Synthetic Intelligence Division jumpsuit, issued to 'volunteers'. On other people it looks fine, but right here a scientist has noted: on you it looks stupid."
 
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "jane_sid_suit"
@@ -598,7 +598,7 @@ hi
 	set category = "Object"
 	set src in usr
 
-	if(!usr.canmove || usr.stat || usr.restrained() || (usr.status_flags & FAKEDEATH))
+	if(usr.incapacitated())
 		return 0
 
 	if(src.icon_state == "jane_sid_suit_down")
@@ -632,7 +632,7 @@ hi
 	icon_state = "flagmask"
 	item_state = "flagmask"
 	flags = FPRINT|TABLEPASS|MASKCOVERSMOUTH
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 */
 
@@ -642,7 +642,7 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "mara_kilpatrick_1"
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 ////// Small locket - Altair An-Nasaqan - Serithi
 
@@ -655,7 +655,7 @@ hi
 	color = "altair_locket"
 	slot_flags = 0
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 	slot_flags = SLOT_MASK
 
 //////  Medallion - Nasir Khayyam - Jamini
@@ -666,7 +666,7 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "nasir_khayyam_1"
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 	slot_flags = SLOT_MASK
 
 ////// Emerald necklace - Ty Foster - Nega
@@ -677,7 +677,7 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "ty_foster"
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 //////////// Shoes ////////////
 

@@ -9,12 +9,13 @@
 	recoil = 2
 	slot_flags = SLOT_BACK
 	fire_delay = 30
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 	caliber = list(".50BMG" = 1)
 	ammo_type = "/obj/item/ammo_casing/BMG50"
 	max_shells = 1
 	load_method = 0
+	slowdown = 10
 	var/backup_view = 7
 
 /obj/item/weapon/gun/projectile/hecate/isHandgun()
@@ -33,7 +34,6 @@
 
 /obj/item/weapon/gun/projectile/hecate/update_wield(mob/user)
 	if(wielded)
-		slowdown = 10
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_64x64.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_64x64.dmi')
 		if(user && user.client)
 			user.regenerate_icons()
@@ -41,7 +41,6 @@
 			backup_view = C.view
 			C.view = C.view * 2
 	else
-		slowdown = 0
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 		if(user && user.client)
 			user.regenerate_icons()

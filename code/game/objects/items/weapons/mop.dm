@@ -8,9 +8,9 @@
 	throwforce = 10.0
 	throw_speed = 5
 	throw_range = 3
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
-	attack_verb = list("mopped", "bashed", "bludgeoned", "whacked", "slapped", "whipped")
+	attack_verb = list("mops", "bashes", "bludgeons", "whacks", "slaps", "whips")
 
 /obj/item/weapon/mop/New()
 	. = ..()

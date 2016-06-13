@@ -38,7 +38,7 @@
 	if(temp)
 		left_part = temp
 	else if(src.stat == 2)						// Show some flavor text if the pAI is dead
-		left_part = "<b><font color=red>»Rr÷R –aÜƒ «÷Rr⁄˛ÜÃoÒ</font></b>"
+		left_part = "<b><font color=red>√àRr√ñR √êa‚Ä†√Ñ √á√ñRr√ö√æ‚Ä†√åo√±</font></b>"
 		right_part = "<pre>Program index hash not found</pre>"
 
 	else
@@ -202,7 +202,7 @@
 
 				sradio.send_signal("ACTIVATE")
 				for(var/mob/O in hearers(1, src.loc))
-					O.show_message(text("\icon[] *beep* *beep*", src), 3, "*beep* *beep*", 2)
+					O.show_message("[bicon(src)] *beep* *beep*", 1, "*beep* *beep*", 2)
 
 			if(href_list["freq"])
 
@@ -305,7 +305,7 @@
 						F = new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(get_turf(src))
 					else
 						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
-				var/mob/M = find_holder_of_type(src, /mob)
+				var/mob/M = get_holder_of_type(src, /mob)
 				if(M) M.put_in_hands(F)
 				playsound(get_turf(src.loc), 'sound/machines/foodsynth.ogg', 50, 1)
 		if("flashlight")
@@ -326,12 +326,9 @@
 	dat += "<A href='byond://?src=\ref[src];software=refresh'>Refresh</A><br>"
 	// Built-in
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:283: dat += "<A href='byond://?src=\ref[src];software=directives'>Directives</A><br>"
 	dat += {"<A href='byond://?src=\ref[src];software=directives'>Directives</A><br>
 		<A href='byond://?src=\ref[src];software=radio;sub=0'>Radio Configuration</A><br>
 		<A href='byond://?src=\ref[src];software=image'>Screen Display</A><br>"}
-	// END AUTOFIX
 	//dat += "Text Messaging <br>"
 	dat += "<br>"
 
@@ -362,7 +359,7 @@
 		if(s == SOFT_WJ)
 			dat += "<a href='byond://?src=\ref[src];software=wirejack;sub=0'>Wire Jack</a> <br>"
 		if(s == SOFT_UT)
-			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>ï</font>" : "<font color=#FF5555>ï</font>"] <br>"
+			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>ÔøΩ</font>" : "<font color=#FF5555>ÔøΩ</font>"] <br>"
 		if(s == SOFT_CS)
 			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
 		if(s == SOFT_FS)
@@ -384,7 +381,7 @@
 /mob/living/silicon/pai/proc/downloadSoftware()
 	var/dat = ""
 
-	dat += {"<h2>CentComm pAI Module Subversion Network</h2><br>
+	dat += {"<h2>CentComm pAI Module CVS Network</h2><br>
 		<pre>Remaining Available Memory: [src.ram]</pre><br>
 		<p style=\"text-align:center\"><b>Trunks available for checkout</b><br>"}
 	for(var/s in available_software)
@@ -426,7 +423,7 @@
 	if(answer == "Yes")
 		var/turf/T = get_turf(P.loc)
 		for (var/mob/v in viewers(T))
-			v.show_message("<span class='notice'>[M] presses \his thumb against [P].</span>", 3, "<span class='notice'>[P] makes a sharp clicking sound as it extracts DNA material from [M].</span>", 2)
+			v.show_message("<span class='notice'>[M] presses \his thumb against [P].</span>", 1, "<span class='notice'>[P] makes a sharp clicking sound as it extracts DNA material from [M].</span>", 2)
 		var/datum/dna/dna = M.dna
 		to_chat(P, "<font color = red><h3>[M]'s UE string : [dna.unique_enzymes]</h3></font>")
 		if(dna.unique_enzymes == P.master_dna)
@@ -583,22 +580,16 @@
 			var/plasma_level = environment.toxins/total_moles
 			var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:547: dat += "Nitrogen: [round(n2_level*100)]%<br>"
 			dat += {"Nitrogen: [round(n2_level*100)]%<br>
 				Oxygen: [round(o2_level*100)]%<br>
 				Carbon Dioxide: [round(co2_level*100)]%<br>
 				Plasma: [round(plasma_level*100)]%<br>"}
-			// END AUTOFIX
 			if(unknown_level > 0.01)
 				dat += "OTHER: [round(unknown_level)]%<br>"
 		dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:554: dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>"
 	dat += {"<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>
 		<br>"}
-	// END AUTOFIX
 	return dat
 
 /mob/living/silicon/pai/proc/softwareDoor()
@@ -713,15 +704,9 @@ Target Machine: "}
 		for (var/obj/item/device/pda/P in sortNames(PDAs))
 			if (!P.owner||P.toff||P == src.pda||P.hidden)	continue
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:642: dat += "<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>"
 			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
 				</li>"}
-			// END AUTOFIX
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\\\pai\software.dm:644: dat += "</ul>"
 	dat += {"</ul>
 		<br><br>
 		Messages: <hr> [pda.tnote]"}
-	// END AUTOFIX
 	return dat

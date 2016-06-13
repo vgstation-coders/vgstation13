@@ -14,31 +14,45 @@
 	desc = "A suit that protects against fire and heat."
 	icon_state = "fire"
 	item_state = "fire_suit"
-	w_class = 4//bulky item
+	origin_tech = "materials=2;engineering=1"
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
 	slowdown = 1.0
-	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 	flags = FPRINT  | ONESIZEFITSALL
 	pressure_resistance = 3 * ONE_ATMOSPHERE
-	heat_protection = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	cold_protection = UPPER_TORSO | LOWER_TORSO | LEGS | FEET | ARMS | HANDS
 
 
 /obj/item/clothing/suit/fire/firefighter
 	icon_state = "firesuit"
 	item_state = "firefighter"
+	var/stage = 0
 
+/obj/item/clothing/suit/fire/firefighter/attackby(obj/item/W,mob/user)
+	..()
+	if(istype(W,/obj/item/clothing/suit/spaceblanket) && !stage)
+		stage = 1
+		to_chat(user,"<span class='notice'>you add \the [W] to \the [src]</span>")
+		qdel(W)
+	if(istype(W,/obj/item/stack/cable_coil) && stage == 1)
+		var/obj/item/stack/cable_coil/C = W
+		if(C.amount <= 4)
+			return
+		to_chat(user,"<span class='notice'>you tie up \the [src] with some of \the [C]</span>")
+		C.use(4)
+		var/obj/ghetto = new /obj/item/clothing/suit/space/rig/ghettorig (src.loc)
+		qdel(src)
+		user.put_in_hands(ghetto)
 
 /obj/item/clothing/suit/fire/heavy
 	name = "firesuit"
 	desc = "A suit that protects against extreme fire and heat."
 	//icon_state = "thermal"
 	item_state = "ro_suit"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	slowdown = 1.5
 
 /*
@@ -50,28 +64,24 @@
 	icon_state = "bombsuit"
 	flags = FPRINT
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEHAIR
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 0
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/bomb_suit
 	name = "bomb suit"
 	desc = "A suit designed for safety when handling explosives."
 	icon_state = "bombsuit"
 	item_state = "bombsuit"
-	w_class = 4 //Bulky item
+	w_class = W_CLASS_LARGE //Bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
 	slowdown = 2
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
-	flags_inv = HIDEJUMPSUIT
-	heat_protection = UPPER_TORSO|LOWER_TORSO
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/bomb_hood/security
 	icon_state = "bombsuitsec"
@@ -90,9 +100,8 @@
 	item_state = "advancedeod_helmet"
 	flags = FPRINT
 	armor = list(melee = 80, bullet = 80, laser = 40,energy = 20, bomb = 100, bio = 0, rad = 0)
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEHAIR
-	body_parts_covered = FULL_HEAD
-	species_restricted = list("exclude","Vox")
+	body_parts_covered = FULL_HEAD|BEARD
+	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
 
 
@@ -101,43 +110,39 @@
 	desc = "A heavy suit designed for heavy protection."
 	icon_state = "advancedeod"
 	item_state = "advancedeod"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	slowdown = 6
 	armor = list(melee = 80, bullet = 80, laser = 40,energy = 20, bomb = 100, bio = 0, rad = 0)
-	flags_inv = HIDEJUMPSUIT|HIDESHOES
-	heat_protection = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("exclude","Vox")
+	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
 
 /*
  * Radiation protection
  */
 /obj/item/clothing/head/radiation
-	name = "Radiation Hood"
+	name = "radiation hood"
 	icon_state = "rad"
 	desc = "A hood with radiation protective properties. Label: Made with lead, do not eat insulation"
 	flags = FPRINT
-	flags_inv = HIDEHAIR
 	body_parts_covered = FULL_HEAD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/radiation
-	name = "Radiation suit"
+	name = "radiation suit"
 	desc = "A suit that protects against radiation. Label: Made with lead, do not eat insulation."
 	icon_state = "rad"
 	item_state = "rad_suit"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
+	body_parts_covered = FULL_BODY
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 1.5
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
-	flags_inv = HIDEJUMPSUIT
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)

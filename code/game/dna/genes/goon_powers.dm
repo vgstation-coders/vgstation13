@@ -142,15 +142,14 @@
 	charge_type = Sp_RECHARGE
 	charge_max = 600
 
-	spell_flags = 0
+	spell_flags = WAIT_FOR_CLICK
 	invocation_type = SpI_NONE
-	range = 1
+	range = 7
 	max_targets = 1
 	selection_type = "range"
 
 	override_base = "genetic"
 	hud_state = "gen_ice"
-
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/cryokinesis/cast(list/targets)
@@ -171,32 +170,16 @@
 					else
 						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
 											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!.</span>")
-						H.bodytemperature = max(0, H.bodytemperature - 50)
+						H.bodytemperature = max(T0C + 31, H.bodytemperature - 3)
 						H.adjustFireLoss(5)
 		if(!handle_suit)
-			target.bodytemperature = max(0, target.bodytemperature - 100)
+			target.bodytemperature = max(T0C + 29, target.bodytemperature - 5)
 			target.adjustFireLoss(10)
 			target.ExtinguishMob()
 
 			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target]!</span>")
 
-		new/obj/effects/self_deleting(target.loc, icon('icons/effects/genetics.dmi', "cryokinesis"))
-	return
-
-/obj/effects/self_deleting
-	density = 0
-	opacity = 0
-	anchored = 1
-	icon = null
-	desc = ""
-	//layer = 15
-
-	New(var/atom/location, var/icon/I, var/duration = 20, var/oname = "something")
-		src.name = oname
-		loc=location
-		src.icon = I
-		spawn(duration)
-			qdel(src)
+		anim(target = target, a_icon = 'icons/effects/genetics.dmi', flick_anim = "cryokinesis")
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -228,7 +211,7 @@
 	range = 1
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE
+	spell_flags = WAIT_FOR_CLICK
 
 	override_base = "genetic"
 	hud_state = "gen_eat"
@@ -247,7 +230,6 @@
 		/mob/living/carbon/slime,
 		/mob/living/carbon/alien/larva,
 		/mob/living/simple_animal/slime,
-		/mob/living/simple_animal/adultslime,
 		/mob/living/simple_animal/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
@@ -269,6 +251,13 @@
 			affecting.heal_damage(4, 0)
 		H.UpdateDamageIcon()
 		H.updatehealth()
+
+/spell/targeted/eat/is_valid_target(var/target)
+	if(!(spell_flags & INCLUDEUSER) && target == usr)
+		return 0
+	if(get_dist(usr, target) > range)
+		return 0
+	return is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/eat/choose_targets(mob/user = usr)
 	var/list/targets = list()
@@ -361,7 +350,13 @@
 	var/atom/movable/the_item = targets[1]
 	if(!the_item || !the_item.Adjacent(user))
 		return
-	if(ishuman(the_item))
+	// if(istype(the_item, /obj/item/weapon/organ/head))
+	// 	to_chat(user, "<span class='warning'>You try to put the [the_item] in your mouth, but the ears tickle your throat!</span>")
+	// 	return 0
+	// else if(isbrain(the_item))
+	// 	to_chat(user, "<span class='warning'>You try to put [the_item] in your mouth, but the texture makes you gag!</span>")
+	// 	return 0
+	else if(ishuman(the_item))
 		//My gender
 		var/m_his = "its"
 		if(user.gender == MALE)
@@ -391,11 +386,16 @@
 		else
 			user.visible_message("<span class='danger'>[user] eats [the_item]'s [limb.display_name].</span>", \
 			"<span class='danger'>You eat [the_item]'s [limb.display_name].</span>")
+			playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+			message_admins("[user] ate [the_item]'s [limb]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
+			log_game("[user] ate \the [the_item]'s [limb] at [user.x], [user.y], [user.z]")
 			limb.droplimb("override" = 1, "spawn_limb" = 0)
 			doHeal(user)
 	else
 		user.visible_message("<span class='warning'>[usr] eats \the [the_item].")
 		playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+		message_admins("[user] ate \the [the_item]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
+		log_game("[user] ate \the [the_item] at [user.x], [user.y], [user.z]")
 		qdel(the_item)
 		doHeal(usr)
 	return
@@ -672,9 +672,9 @@
 	to_chat(user, "<span class='notice'> <b>Thoughts</b>: [M.name] is currently [thoughts].</span>")
 
 	if (/spell/targeted/empath in M.spell_list)
-		to_chat(M, "<span class='warning'> You sense [usr.name] reading your mind.</span>")
+		to_chat(M, "<span class='warning'>You sense [usr.name] reading your mind.</span>")
 	else if (prob(5) || (M.mind && M.mind.assigned_role=="Chaplain"))
-		to_chat(M, "<span class='warning'> You sense someone intruding upon your thoughts...</span>")
+		to_chat(M, "<span class='warning'>You sense someone intruding upon your thoughts...</span>")
 
 ////////////////////////////////////////////////////////////////////////
 

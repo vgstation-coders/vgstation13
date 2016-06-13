@@ -141,7 +141,7 @@
 
 //copied from computer.dm
 /obj/machinery/power/monitor/attackby(I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/screwdriver) && circuit)
+	if(isscrewdriver(I) && circuit)
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user,src,20))
 			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
@@ -220,7 +220,7 @@
 					tbl += "<td colspan='2' align='right'>N/C</td>"
 				tbl += "</tr>"
 
-		tbl = list2text(tbl)
+		tbl = jointext(tbl,"")
 		src.interface.updateContent("APCTable", tbl)
 
 #undef POWER_MONITOR_HIST_SIZE

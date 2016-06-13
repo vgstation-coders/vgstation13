@@ -17,6 +17,12 @@
 	var/on = 0
 	var/visible = 0
 	var/obj/effect/beam/infrared/beam = null
+
+	accessible_values = list(
+		"Visible" = "visible;number",\
+		"On" = "on;number"
+	)
+
 	New() del(src)
 
 
@@ -105,7 +111,7 @@
 	if((!secured)||(!on)||(cooldown > 0))	return 0
 	pulse(0)
 	if(!holder)
-		visible_message("\icon[src] *beep* *beep*")
+		visible_message("[bicon(src)] *beep* *beep*")
 	cooldown = 2
 	spawn(10)
 		process_cooldown()
@@ -117,11 +123,8 @@
 	user.set_machine(src)
 	var/dat = text("<TT><B>Infrared Laser</B>\n<B>Status</B>: []<BR>\n<B>Visibility</B>: []<BR>\n</TT>", (on ? text("<A href='?src=\ref[];state=0'>On</A>", src) : text("<A href='?src=\ref[];state=1'>Off</A>", src)), (src.visible ? text("<A href='?src=\ref[];visible=0'>Visible</A>", src) : text("<A href='?src=\ref[];visible=1'>Invisible</A>", src)))
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\assembly\infrared.dm:117: dat += "<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>"
 	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
-	// END AUTOFIX
 	user << browse(dat, "window=infra")
 	onclose(user, "infra")
 	return
@@ -161,8 +164,6 @@
 
 	dir = turn(dir, 90)
 	return
-
-
 
 /***************************IBeam*********************************/
 

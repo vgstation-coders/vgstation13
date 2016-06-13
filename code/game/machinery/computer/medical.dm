@@ -102,12 +102,9 @@
 					dat += "<br><a href='?src=\ref[src];screen=1'>Back</a>"
 				if(6.0)
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\machinery\computer\\medical.dm:96: dat += "<center><b>Medical Robot Monitor</b></center>"
 					dat += {"<center><b>Medical Robot Monitor</b></center>
 						<a href='?src=\ref[src];screen=1'>Back</a>
 						<br><b>Medical Robots:</b>"}
-					// END AUTOFIX
 					var/bdat = null
 					for(var/obj/machinery/bot/medbot/M in machines)
 
@@ -160,8 +157,8 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					usr.drop_item(I, src)
-					src.scan = I
+					if(usr.drop_item(I, src))
+						src.scan = I
 		else if (href_list["logout"])
 			src.authenticated = null
 			src.screen = null

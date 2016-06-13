@@ -2,7 +2,6 @@
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "hydrotray3"
-	density = 1
 	anchored = 1
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
@@ -85,14 +84,6 @@
 	//decay_reduction = scancount
 	weed_coefficient = 2/mattercount
 	internal_light = capcount
-
-/obj/machinery/portable_atmospherics/hydroponics/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-	if(air_group || (height==0)) return 1
-
-	if(istype(mover) && mover.checkpass(PASSTABLE))
-		return 1
-	else
-		return 0
 
 //Makes the plant not-alive, with proper sanity.
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
@@ -190,9 +181,6 @@
 	if(O.is_open_container())
 		return 0
 
-	if(..())
-		return 1
-
 	if (istype(O, /obj/item/seeds))
 
 		if(!seed)
@@ -251,7 +239,7 @@
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		if(do_after(user, src, 50))
 			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
-									"<span class='notice'>\icon[src] You transplant \the [seed.display_name] into \the [C].</span>",
+									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>You hear a ratchet.</span>")
 
 			var/obj/structure/claypot/S = new(get_turf(C))
@@ -336,7 +324,7 @@
 	else if ( istype(O, /obj/item/weapon/plantspray) )
 
 		var/obj/item/weapon/plantspray/spray = O
-		user.drop_item(spray)
+		user.drop_item(spray, force_drop = 1)
 		toxins += spray.toxicity
 		pestlevel -= spray.pest_kill_str
 		weedlevel -= spray.weed_kill_str
@@ -350,22 +338,15 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(istype(O, /obj/item/weapon/wrench))
-
-		//If there's a connector here, the portable_atmospherics setup can handle it.
-		if(locate(/obj/machinery/atmospherics/unary/portables_connector/) in loc)
-			return ..()
-
-		/*playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-		anchored = !anchored
-		to_chat(user, "You [anchored ? "wrench" : "unwrench"] \the [src].")*/
+	else if(iswrench(O) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
 	else if(istype(O, /obj/item/apiary))
 
 		if(seed)
 			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
 		else
-			user.drop_item(O)
+			user.drop_item(O, force_drop = 1)
 			qdel(O)
 
 			var/obj/machinery/apiary/A = new(src.loc)
@@ -380,6 +361,9 @@
 
 	else if(O.is_sharp() && harvest)
 		attack_hand(user)
+
+	else
+		return ..()
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 
@@ -522,8 +506,7 @@
 				visible_message("<span class='warning'>\The [seed.display_name] hungrily lashes a vine at \the [M]!</span>")
 				if(M.health > 0)
 					M.Die()
-				M.forceMove(src.loc)
-				lock_atom(M)
+				lock_atom(M, /datum/locking_category/hydro_tray)
 				spawn(30)
 					if(M && M.loc == get_turf(src))
 						unlock_atom(M)
@@ -558,3 +541,5 @@
 			return
 
 	..()
+
+/datum/locking_category/hydro_tray

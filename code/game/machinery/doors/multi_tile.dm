@@ -1,10 +1,7 @@
 //Terribly sorry for the code doubling, but things go derpy otherwise.
 /obj/machinery/door/airlock/multi_tile
 	width = 2
-
-/obj/machinery/door/airlock/multi_tile/shuttle_act(datum/shuttle/S)
-	//Not destroyed to prevent shuttles from destroying their own multi_tile doors (most notable case is the salvage shuttle)
-	return
+	appearance_flags = 0
 
 /obj/machinery/door/airlock/multi_tile/glass
 	name = "Glass Airlock"

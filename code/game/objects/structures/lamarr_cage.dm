@@ -94,4 +94,31 @@
 	setGender(FEMALE)
 
 /obj/item/clothing/mask/facehugger/lamarr/New()//to prevent deleting it if aliums are disabled
-	return
+	create_reagents(15)
+
+/obj/item/clothing/mask/facehugger/lamarr/process()
+	if(istype(loc, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = loc
+		if(src.reagents)
+			for (var/datum/reagent/current_reagent in src.reagents.reagent_list)
+				if (current_reagent.id == "creatine")
+					to_chat(H, "<span class='warning'>[src]'s body contorts and expands!</span>")
+					var/index = H.is_holding_item(src)
+
+					H.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/gun/projectile/hivehand/I = new (get_turf(H))
+
+					if(index)
+						H.put_in_hand(index, I)
+					qdel(src)
+
+		src.reagents.clear_reagents()
+	..()
+
+/obj/item/clothing/mask/facehugger/lamarr/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/reagent_containers/syringe))
+		if(src.loc == user && user.is_holding_item(W))
+			processing_objects.Add(src)
+	else
+		..(W, user)
+		return

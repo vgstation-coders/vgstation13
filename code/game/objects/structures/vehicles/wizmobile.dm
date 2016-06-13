@@ -37,7 +37,7 @@
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
 // Shit be ethereal.
-/obj/structure/bed/chair/vehicle/wizmobile/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/bed/chair/vehicle/wizmobile/Cross(atom/movable/mover, turf/target height=1.5, air_group = 0)
 	return 1
 */
 
@@ -97,3 +97,8 @@
 		. = ..()
 	return
 */
+
+/obj/structure/bed/chair/vehicle/wizmobile/santa
+	name = "snowmobile"
+	desc = "After a complaint from space PETA, santa's been forced to take a less elegant ride."
+	icon_state = "snowmobile"

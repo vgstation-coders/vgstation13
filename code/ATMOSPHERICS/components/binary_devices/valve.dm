@@ -3,7 +3,7 @@
 	icon_state = "hvalve0"
 
 	name = "manual valve"
-	desc = "A pipe valve"
+	desc = "A pipe valve."
 	var/open = 0
 	var/openDuringInit = 0
 
@@ -219,7 +219,7 @@
 
 // Just for digital valves.
 /obj/machinery/atmospherics/binary/valve/digital/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(src.frequency && istype(W, /obj/item/weapon/wrench))
+	if(src.frequency && iswrench(W))
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's digitally connected to another device.</span>")
 		return 1
 	return ..() 	// Pass to the method below (does stuff ALL valves should do)

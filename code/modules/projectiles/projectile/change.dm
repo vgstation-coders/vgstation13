@@ -6,6 +6,7 @@
 	nodamage = 1
 	flag = "energy"
 	var/changetype=null
+	fire_sound = 'sound/weapons/radgun.ogg'
 
 /obj/item/projectile/change/on_hit(var/atom/change)
 	var/type = changetype
@@ -17,8 +18,6 @@
 	if(istype(M, /mob/living) && M.stat != DEAD)
 		if(M.monkeyizing)
 			return
-		if(M.has_brain_worms())
-			return //Borer stuff - RR
 		if(istype(M, /mob/living/carbon/human/manifested))
 			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
 			return
@@ -36,7 +35,7 @@
 				qdel(Robot.mmi)
 		else
 			for(var/obj/item/W in M)
-				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
+				if(istype(W, /obj/item/weapon/implant))
 					qdel(W)
 					continue
 				W.layer = initial(W.layer)
@@ -155,6 +154,17 @@
 				H.languages |= M.languages
 				if(M.default_language) H.default_language = M.default_language
 				H.generate_name()
+			if("frankenstein")
+				new_mob = new /mob/living/carbon/human/frankenstein(M.loc, delay_ready_dna=1)
+
+				if((M.gender == MALE) || (M.gender == FEMALE)) //If the transformed mob is MALE or FEMALE
+					new_mob.setGender(M.gender) //The new human will inherit its gender
+				else //If its gender is NEUTRAL or PLURAL,
+					new_mob.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
+
+				var/mob/living/carbon/human/frankenstein/H = new_mob
+				H.generate_name()
+
 			/* RIP
 			if("cluwne")
 				new_mob = new /mob/living/simple_animal/hostile/retaliate/cluwne(M.loc)
@@ -176,6 +186,10 @@
 			M.mind.transfer_to(new_mob)
 		else
 			new_mob.key = M.key
+
+		if(iscarbon(M))
+			var/mob/living/carbon/I = M
+			I.transferBorers(new_mob)
 
 		to_chat(new_mob, "<B>Your form morphs into that of a [randomize].</B>")
 

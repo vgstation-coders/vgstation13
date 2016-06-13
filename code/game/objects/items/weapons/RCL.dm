@@ -12,7 +12,7 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 10
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = "engineering=2;materials=4"
@@ -24,9 +24,9 @@
 /obj/item/weapon/rcl/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/stack/cable_coil))
 		if(!loaded)
-			loaded = W
-			loaded.max_amount = max_amount //We store a lot.
-			user.drop_item(W,src)
+			if(user.drop_item(W,src))
+				loaded = W
+				loaded.max_amount = max_amount //We store a lot.
 		else
 			loaded.preattack(W,user,1)
 		update_icon()

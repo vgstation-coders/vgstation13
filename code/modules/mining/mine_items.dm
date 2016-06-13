@@ -35,7 +35,7 @@
 	new /obj/item/device/flashlight/lantern(src)
 	new /obj/item/weapon/pickaxe/shovel(src)
 	new /obj/item/weapon/pickaxe(src)
-	new /obj/item/clothing/glasses/meson(src)
+	new /obj/item/clothing/glasses/scanner/meson(src)
 	new /obj/item/device/gps/mining(src)
 	new /obj/item/weapon/storage/belt/mining(src)
 
@@ -166,6 +166,11 @@ proc/move_mining_shuttle()
 	light_power = 2
 	light_color = LIGHT_COLOR_TUNGSTEN
 
+//Explicit
+/obj/item/device/flashlight/lantern/on
+
+	on = 1
+
 /*****************************Pickaxe********************************/
 
 //Dig constants defined in setup.dm
@@ -180,13 +185,13 @@ proc/move_mining_shuttle()
 	force = 15.0
 	throwforce = 4.0
 	item_state = "pickaxe"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	sharpness = 0.6
 	starting_materials = list(MAT_IRON = 3750) //one sheet, but where can you make them?
 	w_type = RECYK_METAL
 	var/digspeed = 40 //moving the delay to an item var so R&D can make improved picks. --NEO
 	origin_tech = "materials=1;engineering=1"
-	attack_verb = list("hit", "pierced", "sliced", "attacked")
+	attack_verb = list("hits", "pierces", "slices", "attacks")
 	var/drill_sound = 'sound/weapons/Genhit.ogg'
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
@@ -228,7 +233,7 @@ proc/move_mining_shuttle()
 	name = "plasma cutter"
 	icon_state = "plasmacutter"
 	item_state = "gun"
-	w_class = 3.0 //it is smaller than the pickaxe
+	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
 	heat_production = 3800
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
@@ -238,6 +243,9 @@ proc/move_mining_shuttle()
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
+
+/obj/item/weapon/pickaxe/plasmacutter/is_hot()
+	return 1
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
@@ -285,11 +293,11 @@ proc/move_mining_shuttle()
 	force = 8.0
 	throwforce = 4.0
 	item_state = "shovel"
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	sharpness = 0.5
 	w_type = RECYK_MISC
 	origin_tech = "materials=1;engineering=1"
-	attack_verb = list("bashed", "bludgeoned", "thrashed", "whacked")
+	attack_verb = list("bashes", "bludgeons", "thrashes", "whacks")
 
 
 	digspeed = 40
@@ -303,7 +311,7 @@ proc/move_mining_shuttle()
 	force = 5.0
 	sharpness = 0.8
 	throwforce = 7.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 
 	digspeed = 60 //slower than the large shovel
 
@@ -328,7 +336,7 @@ proc/move_mining_shuttle()
 	icon_state = "Jaunter"
 	item_state = "electronic"
 	throwforce = 0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
 	origin_tech = "bluespace=2"
@@ -397,7 +405,7 @@ proc/move_mining_shuttle()
 			spawn(20)
 				if(L)
 					L.visible_message("<span class='danger'>[L] vomits from travelling through \the [src]!</span>")
-					L.nutrition -= 20
+					L.nutrition = max(L.nutrition-20,0)
 					L.adjustToxLoss(-3)
 					var/turf/V = get_turf(L) //V for Vomit
 					V.add_vomit_floor(L)
@@ -413,7 +421,7 @@ proc/move_mining_shuttle()
 	icon_state = "resonator"
 	item_state = "resonator"
 	desc = "A handheld device that creates small fields of energy that resonate until they detonate, crushing rock. It can also be activated without a target to create a field at the user's location, to act as a delayed time trap. It's more effective in a vaccuum."
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	force = 10
 	throwforce = 10
 	var/cooldown = 0
@@ -646,7 +654,7 @@ proc/move_mining_shuttle()
 	icon_state = "lazarus_hypo"
 	item_state = "hypo"
 	throwforce = 0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
 	var/loaded = 1
@@ -801,7 +809,7 @@ proc/move_mining_shuttle()
 	name = "mining scanner"
 	icon_state = "mining"
 	item_state = "analyzer"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = 0
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT

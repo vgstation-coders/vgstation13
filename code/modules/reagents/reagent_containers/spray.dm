@@ -10,17 +10,37 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 	flags = OPENCONTAINER|FPRINT
 	slot_flags = SLOT_BELT
 	throwforce = 3
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 10
 	amount_per_transfer_from_this = 10
 	volume = 250
 	possible_transfer_amounts = null
+	var/melted = 0
 
 	var/delay_spraying = TRUE // Whether to delay the next attack after using it
 
 	//! List of things to avoid spraying on close range. TODO Remove snowflake, handle this in every attackby() properly.
 	var/list/ignore_spray_types = list(/obj/item/weapon/storage, /obj/structure/table, /obj/structure/rack, /obj/structure/closet, /obj/structure/sink)
+
+/obj/item/weapon/reagent_containers/spray/attackby(obj/item/weapon/W, mob/user)
+	if(!melted)
+		if(W.is_hot())
+			to_chat(user, "You slightly melt the plastic on the top of \the [src] with \the [W].")
+			melted = 1
+	if(melted)
+		if(istype(W, /obj/item/stack/rods))
+			to_chat(user, "You press \the [W] into the melted plastic on the top of \the [src].")
+			var/obj/item/stack/rods/R = W
+			if(src.loc == user)
+				user.drop_item(src, force_drop = 1)
+				var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "spraybottle_assembly")
+				user.put_in_hands(I)
+			else
+				new /obj/item/weapon/gun_assembly(get_turf(src.loc), "spraybottle_assembly")
+			R.use(1)
+			qdel(src)
+
 
 /obj/item/weapon/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user as mob, var/adjacency_flag, var/click_params)
 	if (adjacency_flag && is_type_in_list(A, ignore_spray_types))
@@ -70,6 +90,12 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
 	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this] units per spray.</span>")
 
+/obj/item/weapon/reagent_containers/spray/restock()
+	if(name == "Polyacid spray")
+		reagents.add_reagent("pacid", 2)
+	else if(name == "Lube spray")
+		reagents.add_reagent("lube", 2)
+
 /obj/item/weapon/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puff
 	var/transfer_amount = amount_per_transfer_from_this
@@ -89,18 +115,6 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 		returnToPool(D)
 
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
-
-/obj/item/weapon/reagent_containers/spray/verb/empty()
-
-
-	set name = "Empty Spray Bottle"
-	set category = "Object"
-	set src in usr
-
-	if(isturf(usr.loc))
-		to_chat(usr, "<span class='notice'>You empty the [src] onto the floor.</span>")
-		reagents.reaction(usr.loc)
-		spawn(5) src.reagents.clear_reagents()
 
 //space cleaner
 /obj/item/weapon/reagent_containers/spray/cleaner
@@ -149,7 +163,7 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 	icon_state = "chemsprayer"
 	item_state = "chemsprayer"
 	throwforce = 3
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	volume = 600
 	origin_tech = "combat=3;materials=3;engineering=3;syndicate=5"
 
@@ -193,4 +207,3 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 			returnToPool(D)
 
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
-

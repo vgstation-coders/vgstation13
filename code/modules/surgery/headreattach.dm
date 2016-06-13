@@ -197,6 +197,11 @@
 	affected.status = 0
 	affected.amputated = 0
 	affected.destspawn = 0
+
+	var/obj/item/weapon/organ/O = tool
+	if(istype(O))
+		affected.species = O.species
+
 	target.update_body()
 	target.updatehealth()
 	target.UpdateDamageIcon()
@@ -212,8 +217,10 @@
 				target.butchering_drops -= match //Remove it!
 				qdel(match)
 
-			target.butchering_drops += BP //Transfer
-			B.butchering_drops -= BP
+			target.butchering_drops.Add(BP) //Transfer
+			B.butchering_drops.Remove(BP)
+
+	affected.cancer_stage = B.cancer_stage
 
 	var/datum/organ/internal/brain/copied
 	if(B.organ_data)
@@ -224,11 +231,11 @@
 	copied.owner = target
 	target.internal_organs_by_name["brain"] = copied
 	target.internal_organs += copied
+	target.decapitated = null
 	affected.internal_organs += copied
 
 	user.u_equip(B,1)
-	B.loc = target
-	affected.organ_item = B //this stores the organ for continuity
+	qdel(B)
 
 
 /datum/surgery_step/head/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

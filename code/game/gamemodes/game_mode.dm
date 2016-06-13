@@ -175,11 +175,8 @@
 /datum/game_mode/proc/send_intercept()
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\gamemodes\game_mode.dm:230: var/intercepttext = "<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>"
 	var/intercepttext = {"<FONT size = 3><B>[command_name()] Update</B> Requested status information:</FONT><HR>
 <B> In case you have misplaced your copy, attached is a list of personnel whom reliable sources&trade; suspect may be affiliated with the Syndicate:</B><br> <I>Reminder: Acting upon this information without solid evidence will result in termination of your working contract with Nanotrasen.</I></br>"}
-	// END AUTOFIX
 	var/list/suspects = list()
 	for(var/mob/living/carbon/human/man in player_list) if(man.client && man.mind)
 		// NT relation option
@@ -228,12 +225,11 @@
 
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(intercepttext)
-		world << sound('sound/AI/commandreport.ogg')
 
 	command_alert("Summary downloaded and printed out at all communications consoles.", "Enemy communication intercept.")
 /*	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
-			to_chat(M, sound('sound/AI/intercept.ogg'))
+			M << sound('sound/AI/intercept.ogg')
 	if(security_level < SEC_LEVEL_BLUE)
 		set_security_level(SEC_LEVEL_BLUE)*/
 
@@ -269,9 +265,10 @@
 	if(candidates.len < recommended_enemies)
 		for(var/mob/new_player/player in players)
 			if(player.client && player.ready)
-				if(player.client.desires_role(role, display_to_user=poll)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
-					if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
-						drafted += player.mind
+				if(!player.mind in drafted || !player.mind in candidates) // Players were getting placed in candidates AND drafted lists.
+					if(player.client.desires_role(role, display_to_user=poll)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
+						if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
+							drafted += player.mind
 
 	if(restricted_jobs)
 		for(var/datum/mind/player in drafted)				// Remove people who can't be an antagonist

@@ -10,7 +10,7 @@ var/global/list/cached_icons = list()
 	item_state = "paintcan"
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_METAL
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	melt_temperature = MELTPOINT_STEEL
 	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(10,20,30,50,70)
@@ -26,6 +26,9 @@ var/global/list/cached_icons = list()
 	return 0
 
 /obj/item/weapon/reagent_containers/glass/paint/afterattack(turf/simulated/target, mob/user , flag)
+	if(!flag || user.stat)
+		return ..()
+
 	if(istype(target) && reagents.total_volume > 5)
 		for(var/mob/O in viewers(user))
 			O.show_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>", 1)
@@ -81,7 +84,7 @@ var/global/list/cached_icons = list()
 	icon_state = "paint_neutral"
 	color = "FFFFFF"
 	item_state = "paintcan"
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 
 /obj/item/weapon/paint/red
 	name = "Red paint"

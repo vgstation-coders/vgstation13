@@ -27,7 +27,7 @@
 			update_icon()
 
 /obj/machinery/portable_atmospherics/process()
-	if(!connected_port) //only react when pipe_network will ont it do it for you
+	if(!connected_port) //only react when pipe_network will not it do it for you
 		//Allow for reactions
 		air_contents.react()
 	else
@@ -79,6 +79,10 @@
 
 	return 1
 
+/obj/machinery/portable_atmospherics/proc/eject_holding()
+	holding.forceMove(loc)
+	holding = null
+
 /obj/machinery/portable_atmospherics/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 
 	var/obj/icon = src
@@ -86,12 +90,12 @@
 		if (src.holding)
 			return 0
 		var/obj/item/weapon/tank/T = W
-		user.drop_item(T, src)
-		src.holding = T
-		update_icon()
-		return 1
+		if(user.drop_item(T, src))
+			src.holding = T
+			update_icon()
+			return 1
 
-	else if (istype(W, /obj/item/weapon/wrench))
+	else if (iswrench(W))
 		if(connected_port)
 			disconnect()
 			to_chat(user, "<span class='notice'>You disconnect [name] from the port.</span>")
@@ -122,7 +126,7 @@
 		return 1
 
 	else if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)
-		user.visible_message("<span class='attack'>[user] has used [W] on \icon[icon] [src]</span>", "<span class='attack'>You use \the [W] on \icon[icon] [src]</span>")
+		user.visible_message("<span class='attack'>[user] has used [W] on [bicon(icon)] [src]</span>", "<span class='attack'>You use \the [W] on [bicon(icon)] [src]</span>")
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(src.air_contents, src, 0), 1)
 		src.add_fingerprint(user)

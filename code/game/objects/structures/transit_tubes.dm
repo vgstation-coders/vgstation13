@@ -99,18 +99,18 @@ obj/structure/ex_act(severity)
 		var/list/large_dense = list()
 		for(var/atom/movable/border_obstacle in T)
 			if(border_obstacle.flags&ON_BORDER)
-				if(!border_obstacle.CanPass(AM, AM.loc) && AM != border_obstacle)
+				if(!border_obstacle.Cross(AM, AM.loc) && AM != border_obstacle)
 					return ..()
 			else if(border_obstacle != src)
 				large_dense += border_obstacle
 
 		//Then, check the turf itself
-		if (!T.CanPass(AM, T))
+		if (!T.Cross(AM, T))
 			return ..()
 
 		//Finally, check objects/mobs to block entry that are not on the border
 		for(var/atom/movable/obstacle in large_dense)
-			if(!obstacle.CanPass(AM, AM.loc) && AM != obstacle)
+			if(!obstacle.Cross(AM, AM.loc) && AM != obstacle)
 				return ..()
 		AM.loc = src.loc
 		to_chat(AM, "<span class='info'>You slip under the tube.</span>")
@@ -333,7 +333,7 @@ obj/structure/ex_act(severity)
 			last_delay = current_tube.enter_delay(src, next_dir)
 			sleep(last_delay)
 			dir = next_dir
-			loc = next_loc // When moving from one tube to another, skip collision and such.
+			forceMove(next_loc) // When moving from one tube to another, skip collision and such.
 			density = current_tube.density
 
 			if(current_tube && current_tube.should_stop_pod(src, next_dir))
@@ -578,7 +578,7 @@ obj/structure/ex_act(severity)
 	if(text in direction_table)
 		return direction_table[text]
 
-	var/list/split_text = text2list(text, "-")
+	var/list/split_text = splittext(text, "-")
 
 	// If the first token is D, the icon_state represents
 	//  a purely decorative tube, and doesn't actually

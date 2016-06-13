@@ -25,13 +25,12 @@
 	for(var/mob/living/target in targets)
 		target.visible_message(	"<span class='danger'>[target]'s face lights up in fire, and after the event a horse's head takes its place!</span>", \
 								"<span class='danger'>Your face burns up, and shortly after the fire you realise you have the face of a horse!</span>")
-		flick("e_flash", target.flash)
+		target.flash_eyes(visual = 1)
 
 /spell/targeted/equip_item/horsemask/summon_item(var/new_type)
 	var/obj/item/new_item = new new_type
 	if(istype(new_item, /obj/item/clothing/mask/horsehead))
 		var/obj/item/clothing/mask/horsehead/magichead = new_item
 		magichead.canremove = 0		//curses!
-		magichead.flags_inv = null	//so you can still see their face
 		magichead.voicechange = 1	//NEEEEIIGHH
 	return new_item

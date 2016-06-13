@@ -77,7 +77,7 @@ datum
 	icon_state = "solution_tray"
 	starting_materials = list(MAT_GLASS = 20)
 	w_type = RECYK_GLASS
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	amount_per_transfer_from_this = 1
 	possible_transfer_amounts = list(1, 2)
 	volume = 2
@@ -90,7 +90,7 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 		var/new_label = copytext(sanitize(input("What should the new label be?","Label solution tray") as text|null), 1, MAX_NAME_LEN)
 		if(new_label && Adjacent(user) && !user.stat)
 			name = "solution tray ([new_label])"
-			to_chat(user, "<span class='notice'> You write on the label of the solution tray.</span>")
+			to_chat(user, "<span class='notice'>You write on the label of the solution tray.</span>")
 	else
 		..(W, user)
 

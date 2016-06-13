@@ -56,6 +56,10 @@
 	move_to_delay = 6
 	maxHealth = 100
 	health = 100
+	canRegenerate = 1
+	minRegenTime = 300
+	maxRegenTime = 1800
+
 
 	harm_intent_damage = 15
 	melee_damage_lower = 10
@@ -99,3 +103,12 @@
 /mob/living/simple_animal/hostile/necro/copy/ListTargets()
 	. = ..()
 	return . - creator
+
+/mob/living/simple_animal/hostile/necro/zombie/leatherman
+	..()
+	name = "leatherman"
+	icon_dead = "zombie_leather_dead"
+	icon_gib = "zombie_leather_dead"
+	icon_state = "zombie_leather"
+	icon_living = "zombie_leather"
+	desc = "Fuck you!"

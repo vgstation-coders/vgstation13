@@ -101,7 +101,7 @@
 		return drop_item()
 	return 0
 
-/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/Target)
+/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
 	if(tool_state)
 		//var/obj/item/found = locate(tool_state) in src.module.modules
 		if(is_in_modules(tool_state))
@@ -323,10 +323,8 @@
 /mob/living/silicon/robot/mommi/attack_ui(slot)
 	var/obj/item/W = tool_state
 	if(istype(W))
-		if(equip_to_slot(W, slot))
+		if(equip_to_slot_if_possible(W, slot))
 			update_items()
-		else
-			to_chat(src, "<span class='warning'>You are unable to equip that.</span>")
 
 // Quickly equip a hat by pressing "e"
 /mob/living/silicon/robot/mommi/verb/quick_equip()
@@ -351,4 +349,3 @@
 			update_items()
 		else
 			to_chat(M, "<span class='warning'>You are unable to equip that.</span>")
-

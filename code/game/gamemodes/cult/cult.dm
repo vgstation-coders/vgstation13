@@ -152,7 +152,8 @@
 		grant_runeword(cult_mind.current)
 		update_cult_icons_added(cult_mind)
 		cult_mind.special_role = "Cultist"
-		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span>")
+		var/wikiroute = role_wiki[ROLE_CULTIST]
+		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=\ref[cult_mind.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		to_chat(cult_mind.current, "<span class='sinister'>You can now speak and understand the forgotten tongue of Nar-Sie.</span>")
 		cult_mind.current.add_language("Cult")
 		//memoize_cult_objectives(cult_mind)
@@ -385,10 +386,10 @@
 		"backpack" = slot_in_backpack,
 		"left pocket" = slot_l_store,
 		"right pocket" = slot_r_store,
-		"left hand" = slot_l_hand,
-		"right hand" = slot_r_hand,
 	)
-	var/where = mob.equip_in_one_of_slots(T, slots, EQUIP_FAILACTION_DROP)
+
+	var/where = mob.equip_in_one_of_slots(T, slots, EQUIP_FAILACTION_DROP, put_in_hand_if_fail = 1)
+
 	if (!where)
 		to_chat(mob, "<span class='sinister'>Unfortunately, you weren't able to sneak in a talisman. Pray, and He most likely shall get you one.</span>")
 	else
@@ -420,6 +421,10 @@
 		return 0
 	if(!(cult_mind in cult) && is_convertable_to_cult(cult_mind))
 		cult += cult_mind
+
+		if(mixed)
+			ticker.mode.cult += cult_mind
+
 		update_cult_icons_added(cult_mind)
 		if(name == "cult")
 			var/datum/game_mode/cult/C = src
@@ -441,6 +446,9 @@
 		to_chat(cult_mind.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
 		cult_mind.current.remove_language("Cult")
 		cult_mind.memory = ""
+
+		if(mixed)
+			ticker.mode.cult -= cult_mind
 
 		if(show_message)
 			for(var/mob/M in viewers(cult_mind.current))

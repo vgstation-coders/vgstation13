@@ -7,9 +7,10 @@
 	desc = "It's a g-g-g-g-ghooooost!" //jinkies!
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "ghost1"
-	layer = 4
+	layer = 8
 	stat = DEAD
 	density = 0
+	lockflags = 0 //Neither dense when locking or dense when locked to something
 	canmove = 0
 	blinded = 0
 	anchored = 1	//  don't get pushed around
@@ -35,6 +36,7 @@
 	var/atom/movable/following = null
 	var/mob/canclone = null
 	incorporeal_move = INCORPOREAL_GHOST
+	var/movespeed = 0.75
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	sight |= SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
@@ -101,6 +103,8 @@
 	if(!name)							//To prevent nameless ghosts
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
+
+	start_poltergeist_cooldown() //FUCK OFF GHOSTS
 	..()
 
 /mob/dead/observer/Destroy()
@@ -144,7 +148,7 @@
 	return ghostMulti
 
 
-/mob/dead/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/mob/dead/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return 1
 /*
 Transfer_mind is there to check if mob is being deleted/not going to have a body.
@@ -277,7 +281,7 @@ Works together with spawning an observer, noted above.
 	return 1
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER)
-	if(key)
+	if(key && !(copytext(key,1,2)=="@"))
 		var/mob/dead/observer/ghost = new(src, flags)	//Transfer safety to observer spawning proc.
 		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
 		ghost.key = key
@@ -293,10 +297,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(stat == DEAD)
+	if(src.health < 0 && stat != DEAD) //crit people
+		succumb()
+		ghostize(1)
+	else if(stat == DEAD)
 		ghostize(1)
 	else
-		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you won't be able to play this round for another 30 minutes! You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
+		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you will not be able to re-enter your current body!  You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
 		if(response != "Ghost")	return	//didn't want to ghost after-all
 		resting = 1
 		if(client && key)
@@ -417,7 +424,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	var/mob/dead/observer/M = src
 	if(jobban_isbanned(M, "AntagHUD"))
-		to_chat(src, "<span class='danger'>You have been banned from using this feature</span>")
+		to_chat(src, "<span class='danger'>You have been banned from using this feature.</span>")
 		return
 	if(config.antag_hud_restricted && !M.has_enabled_antagHUD &&!client.holder)
 		var/response = alert(src, "If you turn this on, you will not be able to take any part in the round.","Are you sure you want to turn this feature on?","Yes","No")
@@ -472,46 +479,54 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			to_chat(usr, "No area available.")
 
 	usr.loc = pick(L)
+	if(locked_to)
+		manual_stop_follow(locked_to)
 
 /mob/dead/observer/verb/follow()
 	set category = "Ghost"
-	set name = "Follow" // "Haunt"
-	set desc = "Follow and haunt a mob."
+	set name = "Haunt" //Flavor name for following mobs
+	set desc = "Haunt a mob, stalking them everywhere they go."
 
 	var/list/mobs = getmobs()
 	var/input = input("Please, select a mob!", "Haunt", null, null) as null|anything in mobs
 	var/mob/target = mobs[input]
-	ManualFollow(target)
+	manual_follow(target)
 
-// This is the ghost's follow verb with an argument
-/mob/dead/observer/proc/ManualFollow(var/atom/movable/target)
+/mob/dead/observer/verb/end_follow()
+	set category = "Ghost"
+	set name = "Stop Haunting"
+	set desc = "Stop haunting a mob. They weren't worth your eternal time anyways."
+
+	if(locked_to)
+		manual_stop_follow(locked_to)
+
+//This is the ghost's follow verb with an argument
+/mob/dead/observer/proc/manual_follow(var/atom/movable/target)
 	if(target)
 		var/turf/targetloc = get_turf(target)
 		var/area/targetarea = get_area(target)
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to follow it.</span>")
 			return
-		if(targetloc.holy && ((src.invisibility == 0) || (src.mind in ticker.mode.cult)))
+		if(targetloc && targetloc.holy && ((!invisibility) || (mind in ticker.mode.cult)))
 			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
 			return
 		if(target != src)
-			if(following && following == target)
-				return
-			following = target
-			to_chat(src, "<span class='notice'>Now following [target]</span>")
-			spawn(0)
-				var/turf/pos = get_turf(src)
-				while(loc == pos && target && following == target && client)
-					var/turf/T = get_turf(target)
-					if(!T)
-						break
-					// To stop the ghost flickering.
-					if(loc != T)
-						loc = T
-					pos = loc
-					sleep(15)
-				following = null
+			if(locked_to)
+				if(locked_to == target) //Trying to follow same target, don't do anything
+					return
+				manual_stop_follow(locked_to) //So you can switch follow target on a whim
+			target.lock_atom(src, /datum/locking_category/observer)
+			to_chat(src, "<span class='sinister'>You are now haunting \the [target]</span>")
 
+/mob/dead/observer/proc/manual_stop_follow(var/atom/movable/target)
+
+	if(!target)
+		to_chat(src, "<span class='warning'>You are not currently haunting anyone.</span>")
+		return
+	else
+		to_chat(src, "<span class='sinister'>You are no longer haunting \the [target].</span>")
+		unlock_from()
 
 /mob/dead/observer/verb/jumptomob() //Moves the ghost instead of just changing the ghosts's eye -Nodrak
 	set category = "Ghost"
@@ -544,6 +559,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 			if(T && isturf(T))	//Make sure the turf exists, then move the source to that destination.
 				A.loc = T
+				if(locked_to)
+					manual_stop_follow(locked_to)
 			else
 				to_chat(A, "This mob is not located in the game world.")
 
@@ -837,31 +854,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	..()
 
-	if (href_list["follow"])
+	if(href_list["follow"])
 		var/target = locate(href_list["follow"])
-		if(following == target) return
-		var/mob/A = usr;
-		to_chat(A, "You are now following [target]")
-		if(istype(target,/mob/living/silicon/ai))
-			var/mob/living/silicon/ai/M = target
-			target = M.eyeobj
-		if(target && target != usr)
-			following = target
-			spawn(0)
-				var/turf/pos = get_turf(A)
-				while(A.loc == pos)
-
-					var/turf/T = get_turf(target)
-					if(!T)
-						break
-					if(following != target)
-						break
-					if(!client)
-						break
-					A.loc = T
-					pos = A.loc
-					sleep(15)
-				following = null
+		if(target)
+			if(isAI(target))
+				var/mob/living/silicon/ai/M = target
+				target = M.eyeobj
+			manual_follow(target)
 
 	if (href_list["jump"])
 		var/mob/target = locate(href_list["jump"])
@@ -913,3 +912,16 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/Logout()
 	observers -= src
 	..()
+
+/mob/dead/observer/verb/modify_movespeed()
+	set name = "Change Speed"
+	set category = "Ghost"
+	var/speed = input(usr,"What speed would you like to move at?","Observer Move Speed") in list("100%","125%","150%","175%","200%","FUCKING HYPERSPEED")
+	if(speed == "FUCKING HYPERSPEED") //April fools
+		client.move_delayer.min_delay = 0
+		movespeed = 0
+		return
+	speed = text2num(copytext(speed,1,4))/100
+	movespeed = 1/speed
+
+/datum/locking_category/observer

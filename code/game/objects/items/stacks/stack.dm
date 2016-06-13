@@ -1,4 +1,4 @@
-#define CORRECT_STACK_NAME ((irregular_plural && amount > 1) ? irregular_plural : "[singular_name]\s")
+#define CORRECT_STACK_NAME(stack) ((stack.irregular_plural && stack.amount > 1) ? stack.irregular_plural : "[stack.singular_name]")
 
 /* Stack type objects!
  * Contains:
@@ -24,6 +24,7 @@
 	..()
 	if (amount)
 		src.amount=amount
+	update_materials()
 	return
 
 /obj/item/stack/Destroy()
@@ -37,7 +38,7 @@
 	var/be = "are"
 	if(amount == 1) be = "is"
 
-	to_chat(user, "<span class='info'>There [be] [src.amount] [CORRECT_STACK_NAME] in the stack.</span>")
+	to_chat(user, "<span class='info'>There [be] [src.amount] [CORRECT_STACK_NAME(src)][amount == 1 ? " in" : "s in"] the stack.</span>")
 
 /obj/item/stack/attack_self(mob/user as mob)
 	list_recipes(user)
@@ -89,7 +90,7 @@
 			else
 				title+= "[R.title]"
 			//title+= " ([R.req_amount] [src.singular_name]\s)"
-			title+= " ([R.req_amount] [CORRECT_STACK_NAME]"
+			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)]"
 
 			if (can_build)
 				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")
@@ -134,15 +135,7 @@
 			else
 				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.title]!</span>")
 			return
-		if (R.one_per_turf && (locate(R.result_type) in usr.loc))
-			for(var/atom/movable/AM in usr.loc)
-				if(istype(AM, /obj/structure/bed/chair/vehicle)) //Bandaid to allow people in vehicles (and wheelchairs) build chairs
-					continue
-				else if(istype(AM, R.result_type))
-					to_chat(usr, "<span class='warning'>There is another [R.title] here!</span>")
-					return
-		if (R.on_floor && (istype(usr.loc, /turf/space)))
-			to_chat(usr, "<span class='warning'>\The [R.title] must be constructed on the floor!</span>")
+		if (!R.can_build_here(usr, usr.loc))
 			return
 		if (R.time)
 			to_chat(usr, "<span class='notice'>Building [R.title] ...</span>")
@@ -150,15 +143,26 @@
 				return
 		if (src.amount < R.req_amount*multiplier)
 			return
-		var/atom/O = new R.result_type( usr.loc )
+
+		var/atom/O
+		if(ispath(R.result_type, /obj/item/stack))
+			O = drop_stack(R.result_type, usr.loc, (R.max_res_amount>1 ? R.res_amount*multiplier : 1), usr)
+			var/obj/item/stack/S = O
+			S.update_materials()
+		else
+			O = new R.result_type( usr.loc )
+
 		O.dir = usr.dir
 		if(R.start_unanchored)
 			var/obj/A = O
 			A.anchored = 0
-		if (R.max_res_amount>1)
-			var/obj/item/stack/new_item = O
-			new_item.amount = R.res_amount*multiplier
-			//new_item.add_to_stacks(usr)
+		R.finish_building(usr, src, O)
+
+		//if (R.max_res_amount>1)
+		//	var/obj/item/stack/new_item = O
+		//	new_item.amount = R.res_amount*multiplier
+		//	//new_item.add_to_stacks(usr)
+
 		src.use(R.req_amount*multiplier)
 		if (src.amount<=0)
 			var/oldsrc = src
@@ -168,15 +172,10 @@
 			if (istype(O,/obj/item))
 				usr.put_in_hands(O)
 		O.add_fingerprint(usr)
-		//BubbleWrap - so newly formed boxes are empty
+		//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
 		if ( istype(O, /obj/item/weapon/storage) )
 			for (var/obj/item/I in O)
 				qdel(I)
-		//BubbleWrap END
-		if(istype(O, /obj/item/weapon/handcuffs/cable))
-			var/obj/item/weapon/handcuffs/cable/C = O
-			C._color = _color
-			C.update_icon()
 	if (src && usr.machine==src) //do not reopen closed window
 		spawn( 0 )
 			src.interact(usr)
@@ -188,6 +187,7 @@
 
 	if(src.amount>=amount)
 		src.amount-=amount
+		update_materials()
 	else
 		return 0
 	. = 1
@@ -213,19 +213,35 @@
 			usr.before_take_item(src)
 		spawn returnToPool(src)
 
-/obj/item/stack/proc/add_to_stacks(mob/usr as mob)
-	for (var/obj/item/stack/item in usr.loc)
-		if (src == item)
-			continue
-		if(!can_stack_with(item))
-			continue
-		if (item.amount>=item.max_amount)
-			continue
-		src.preattack(item, usr,1)
-		break
+/obj/item/stack/proc/add(var/amount)
+	src.amount += amount
+	update_materials()
+
+/obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
+	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
+		return
+	var/transfer = min(amount, S.max_amount - S.amount)
+	if(transfer <= 0)
+		return
+	if(pulledby)
+		pulledby.start_pulling(S)
+	S.copy_evidences(src)
+	use(transfer)
+	S.add(transfer)
+
+/obj/item/stack/proc/update_materials()
+	if(amount && starting_materials)
+		for(var/matID in starting_materials)
+			materials.storage[matID] = max(0, starting_materials[matID]*amount)
+	if(amount < 2)
+		gender = NEUTER
+	else
+		gender = PLURAL
 
 /obj/item/stack/proc/can_stack_with(obj/item/other_stack)
-	return src.type == other_stack.type
+	if(ispath(other_stack)) return (src.type == other_stack)
+
+	return (src.type == other_stack.type)
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
@@ -248,15 +264,15 @@
 	if (can_stack_with(target))
 		var/obj/item/stack/S = target
 		if (amount >= max_amount)
-			to_chat(user, "\The [src] cannot hold anymore [CORRECT_STACK_NAME].")
+			to_chat(user, "\The [src] cannot hold anymore [CORRECT_STACK_NAME(src)].")
 			return 1
 		var/to_transfer as num
 		if (user.get_inactive_hand()==S)
 			to_transfer = 1
 		else
 			to_transfer = min(S.amount, max_amount-amount)
-		amount+=to_transfer
-		to_chat(user, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [src]. It now contains [amount] [CORRECT_STACK_NAME].")
+		add(to_transfer)
+		to_chat(user, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [src]. It now contains [amount] [CORRECT_STACK_NAME(src)].")
 		if (S && user.machine==S)
 			spawn(0) interact(user)
 		S.use(to_transfer)
@@ -267,6 +283,17 @@
 		return 1
 	return ..()
 
+//Ported from -tg-station/#10973, credit to MrPerson
+/obj/item/stack/Crossed(obj/o)
+	if(src != o && istype(o, src.type) && !o.throwing)
+		merge(o)
+	return ..()
+
+/obj/item/stack/hitby(atom/movable/AM) //Doesn't seem to ever be called since stacks are not dense but whatever
+	if(src != AM && istype(AM, src.type))
+		merge(AM)
+	return ..()
+
 /obj/item/stack/proc/copy_evidences(obj/item/stack/from as obj)
 	src.blood_DNA = from.blood_DNA
 	src.fingerprints  = from.fingerprints
@@ -275,40 +302,34 @@
 	//TODO bloody overlay
 
 /*
- * Recipe datum
- */
-/datum/stack_recipe
-	var/title = "ERROR"
-	var/result_type
-	var/req_amount = 1
-	var/res_amount = 1
-	var/max_res_amount = 1
-	var/time = 0
-	var/one_per_turf = 0
-	var/on_floor = 0
-	var/start_unanchored = 0
-	New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0)
-		src.title = title
-		src.result_type = result_type
-		src.req_amount = req_amount
-		src.res_amount = res_amount
-		src.max_res_amount = max_res_amount
-		src.time = time
-		src.one_per_turf = one_per_turf
-		src.on_floor = on_floor
-		src.start_unanchored = start_unanchored
+ drop_stack() helper proc
 
-/*
- * Recipe list datum
+ Arguments:
+   - new_stack_type = type of stack to spawn (for example /obj/item/stack/tile/light)
+   - loc = where to spawn the stack
+   - add_amount = how much items to create in the stack
+   - user = non-essential, whom to send the messages to
+
+ This proc sees if there are any stacks of the same type in *loc. If there are, and it's possible to add *amount items to them,
+ add *amount items to them and return.
+ If unable to add to any already existing stack, create a new instance of *new_stack_type
+
+ Returns stack
+
  */
-/datum/stack_recipe_list
-	var/title = "ERROR"
-	var/list/recipes = null
-	var/req_amount = 1
-	New(title, recipes, req_amount = 1)
-		src.title = title
-		src.recipes = recipes
-		src.req_amount = req_amount
+
+/proc/drop_stack(new_stack_type = /obj/item/stack, turf/loc, add_amount = 1, mob/user)
+	for(var/obj/item/stack/S in loc)
+		if(S.can_stack_with(new_stack_type))
+			if(S.max_amount >= S.amount + add_amount)
+				S.add(add_amount)
+
+				to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
+				return S
+
+	var/obj/item/stack/S = getFromPool(new_stack_type, loc)
+	S.amount = add_amount
+	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)
 	var/obj/item/I = user.get_active_hand()
@@ -316,5 +337,12 @@
 		I.preattack(src, user, 1)
 		return
 	return ..()
+
+/obj/item/stack/restock()
+	if(istype(src,/obj/item/stack/cable_coil) || istype(src,/obj/item/stack/medical))
+		if(amount < max_amount)
+			amount += 2
+		if(amount > max_amount)
+			amount = max_amount
 
 #undef CORRECT_STACK_NAME

@@ -3,7 +3,7 @@
 	desc = "A folder."
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "folder"
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	pressure_resistance = 2
 
 	autoignition_temperature = 522 // Kelvin
@@ -33,9 +33,9 @@
 
 /obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
-		user.drop_item(W, src)
-		to_chat(user, "<span class='notice'>You put the [W] into \the [src].</span>")
-		update_icon()
+		if(user.drop_item(W, src))
+			to_chat(user, "<span class='notice'>You put the [W] into \the [src].</span>")
+			update_icon()
 	else if(istype(W, /obj/item/weapon/pen))
 		var/n_name = copytext(sanitize(input(user, "What would you like to label the folder?", "Folder Labelling", null)  as text), 1, MAX_NAME_LEN)
 		if(in_range(src, user) && user.stat == CONSCIOUS)

@@ -9,8 +9,8 @@
 	var/const/meteorannouncedelay_h = 3000 //Upper bound on announcement, here 5 minutes
 	var/meteorannouncedelay = 2400 //Default final announcement delay
 	var/const/supplydelay = 100 //Delay before meteor supplies are spawned in tenth of seconds
-	var/const/meteordelay_l = 3000 //Lower bound to meteor wave arrival, here 5 minutes
-	var/const/meteordelay_h = 4500 //Higher bound to meteor wave arrival, here 7 and a half minutes
+	var/const/meteordelay_l = 4500 //Lower bound to meteor wave arrival, here 7.5 minutes
+	var/const/meteordelay_h = 6000 //Higher bound to meteor wave arrival, here 10 minutes
 	var/const/meteorshuttlemultiplier = 3 //How much more will we need to hold out ? Here 30 minutes until the shuttle arrives. Multiplies by 10
 	var/meteordelay = 7500 //Default final meteor delay
 	var/meteors_allowed = 0 //Can we send the meteors ?
@@ -55,11 +55,10 @@
 	spawn(meteorannouncedelay)
 		if(prob(70)) //Slighty off-scale
 			command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteordelay - 600, meteordelay + 600))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supplydelay/10] seconds.", \
-			"Space Weather Automated Announcements")
+			"Space Weather Automated Announcements",alert='sound/AI/meteorround.ogg')
 		else //Oh boy
 			command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteordelay - 1800, meteordelay + 1800))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supplydelay/10] seconds.", \
-			"Space Weather Automated Announcements")
-		world << sound('sound/AI/meteorround.ogg')
+			"Space Weather Automated Announcements",alert='sound/AI/meteorround.ogg')
 		/*
 		for(var/obj/item/mecha_parts/mecha_equipment/tool/rcd/rcd in world) //Borg RCDs are fairly cheap, so disabling those
 			rcd.disabled = 1
@@ -80,7 +79,7 @@
 
 /datum/game_mode/meteor/process()
 	if(meteors_allowed)
-		var/meteors_in_wave = rand(50, 100) //Between 25 and 50 meteors per wave
+		var/meteors_in_wave = rand(150, 200) //Between 150 and 200 meteors per wave
 		meteor_wave(meteors_in_wave, 3)
 	return
 

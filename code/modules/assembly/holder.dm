@@ -6,7 +6,7 @@
 	flags = FPRINT | PROXMOVE
 	siemens_coefficient = 1
 	throwforce = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 10
 
@@ -34,21 +34,28 @@
 /obj/item/device/assembly_holder/Destroy()
 	if(a_left)
 		a_left.holder = null
+		a_left.disconnected(a_right)
 	if(a_right)
 		a_right.holder = null
+		a_right.disconnected(a_left)
+
 	..()
 
-/obj/item/device/assembly_holder/attach(var/obj/item/device/D, var/obj/item/device/D2, var/mob/user)
+/obj/item/device/assembly_holder/attach(var/obj/item/device/assembly/D, var/obj/item/device/assembly/D2, var/mob/user)
 	if((!D)||(!D2))	return 0
 	if((!isassembly(D))||(!isassembly(D2)))	return 0
-	if((D:secured)||(D2:secured))	return 0
+	if((D.secured)||(D2.secured))	return 0
 	if(user)
 		user.remove_from_mob(D)
 		user.remove_from_mob(D2)
-	D:holder = src
-	D2:holder = src
+	D.holder = src
+	D2.holder = src
 	D.loc = src
 	D2.loc = src
+
+	D.connected(D2)
+	D2.connected(D)
+
 	a_left = D
 	a_right = D2
 	name = "[D.name]-[D2.name] assembly"
@@ -209,9 +216,11 @@
 		if(a_left)
 			a_left:holder = null
 			a_left.loc = T
+			a_left.disconnected(a_right)
 		if(a_right)
 			a_right:holder = null
 			a_right.loc = T
+			a_right.disconnected(a_left)
 		spawn(0)
 			del(src)
 	return
@@ -220,7 +229,7 @@
 /obj/item/device/assembly_holder/process_activation(var/obj/D, var/normal = 1, var/special = 1)
 	if(!D)	return 0
 	if(!secured)
-		visible_message("\icon[src] *beep* *beep*", "*beep* *beep*")
+		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	if((normal) && (a_right) && (a_left))
 		if(istype(src.loc, /obj/machinery/igniter))
 			src.loc:toggle_state()

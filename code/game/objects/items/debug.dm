@@ -11,10 +11,10 @@
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle1"
 	item_state = "candle1"
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 	var/on=1
-	var/lang_id=LANGUAGE_SOL_COMMON
+	var/lang_id=LANGUAGE_GALACTIC_COMMON
 	var/list/things_to_say=list("FUCK","SHIT","PISS","BALLS","DICK","CUNT","ASS","PISS")
 
 /obj/item/debug/screamer/New(var/_loc)

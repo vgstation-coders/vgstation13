@@ -4,6 +4,8 @@
 	name = "meat"
 	desc = "A slab of meat."
 	icon_state = "meat"
+	food_flags = FOOD_MEAT
+
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 	New()
 		..()
@@ -112,6 +114,11 @@
 		reagents.add_reagent("hyperzine", 5)
 		src.bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach
+	name = "cockroach meat"
+	desc = "A cockroach's severed abdomen, small but nonetheless nutritious."
+	icon_state = "roachmeat"
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"
@@ -135,7 +142,7 @@
 	visible_message("<span class='info'>\The [src] transforms into a pile of bones!</span>")
 	shapeshift(/obj/effect/decal/remains/human) //Turn into human remains
 
-var/global/list/valid_random_food_types = typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - /obj/item/weapon/reagent_containers/food/snacks
+var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/proc/shapeshift(atom/atom_to_copy = null)
 	if(!atom_to_copy)

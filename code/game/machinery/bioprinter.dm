@@ -21,12 +21,16 @@
 	var/stored_matter = 200
 	var/loaded_dna //Blood sample for DNA hashing.
 	var/list/products = list(
-		"heart" =   list(/obj/item/organ/heart,  50),
-		"lungs" =   list(/obj/item/organ/lungs,  40),
-		"kidneys" = list(/obj/item/organ/kidneys,20),
-		"eyes" =    list(/obj/item/organ/eyes,   30),
-		"liver" =   list(/obj/item/organ/liver,  50)
-		)
+		"heart"            = list(/obj/item/organ/heart,  50),
+		"human lungs"      = list(/obj/item/organ/lungs,  30),
+		"vox lungs"        = list(/obj/item/organ/lungs/vox,  30),
+		"plasmaman lungs"  = list(/obj/item/organ/lungs/plasmaman,  30),
+		"kidneys"          = list(/obj/item/organ/kidneys,20),
+		"human eyes"       = list(/obj/item/organ/eyes,   30),
+		"grey eyes"        = list(/obj/item/organ/eyes/grey,   30),
+		"vox eyes"        = list(/obj/item/organ/eyes/vox,   30),
+		"liver"            = list(/obj/item/organ/liver,  50)
+	)
 
 /obj/machinery/bioprinter/New()
 	. = ..()
@@ -86,20 +90,20 @@
 		return
 	// Meat for biomass.
 	else if(!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
-		stored_matter += 50
-		user.drop_item(W)
-		qdel(W)
-		return
+		if(user.drop_item(W))
+			visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
+			stored_matter += 50
+			qdel(W)
+			return
 	// Steel for matter.
 	else if(prints_prosthetics && istype(W, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/M = W
-		visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
-		stored_matter += M.amount * 10
-		user.drop_item(M)
-		returnToPool(M)
-		return
-	else if(istype(W, /obj/item/weapon/wrench))
+		if(user.drop_item(M))
+			visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
+			stored_matter += M.amount * 10
+			returnToPool(M)
+			return
+	else if(iswrench(W))
 		user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You begin to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))

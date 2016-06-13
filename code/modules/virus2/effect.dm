@@ -88,7 +88,7 @@
 	stage = 4
 /datum/disease2/effect/minttoxin/activate(var/mob/living/carbon/mob,var/multiplier)
 	if(istype(mob) && mob.reagents.get_reagent_amount("minttoxin") < 5)
-		to_chat(mob, "<span class = 'notice'>You feel a minty freshness")
+		to_chat(mob, "<span class='notice'>You feel a minty freshness</span>")
 		mob.reagents.add_reagent("minttoxin", 5)
 
 /datum/disease2/effect/gibbingtons
@@ -246,7 +246,7 @@
 	if(!ishuman(mob)) return 0
 	var/mob/living/carbon/human/H = mob
 	mob.reagents.add_reagent("pacid", 10)
-	to_chat(mob, "<span class = 'warning'> Your body burns as your cells break down.</span>")
+	to_chat(mob, "<span class = 'warning'>Your body burns as your cells break down.</span>")
 	shake_camera(mob,5*multiplier)
 
 	for (var/datum/organ/external/E in H.organs)
@@ -330,7 +330,7 @@
 	name = "Delightful Effect"
 	stage = 4
 /datum/disease2/effect/delightful/activate(var/mob/living/carbon/mob,var/multiplier)
-	to_chat(mob, "<span class = 'notice'> You feel delightful!</span>")
+	to_chat(mob, "<span class = 'notice'>You feel delightful!</span>")
 	if (mob.reagents.get_reagent_amount("doctorsdelight") < 1)
 		mob.reagents.add_reagent("doctorsdelight", 1)
 
@@ -339,14 +339,21 @@
 /datum/disease2/effect/spawn
 	name = "Arachnogenesis Effect"
 	stage = 4
+	var/spawn_type=/mob/living/simple_animal/hostile/giant_spider/spiderling
+	var/spawn_name="spiderling"
 /datum/disease2/effect/spawn/activate(var/mob/living/carbon/mob,var/multiplier)
 	//var/mob/living/carbon/human/H = mob
 	var/placemob = locate(mob.x + pick(1,-1), mob.y, mob.z)
 	playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 
-	new /mob/living/simple_animal/hostile/giant_spider/spiderling(placemob)
-	mob.emote("me",1,"vomits up a live spiderling!")
+	new spawn_type(placemob)
+	mob.emote("me",1,"vomits up a live [spawn_name]!")
 
+/datum/disease2/effect/spawn/roach
+	name = "Blattogenesis Effect"
+	stage = 4
+	spawn_type=/mob/living/simple_animal/cockroach
+	spawn_name="cockroach"
 
 
 /datum/disease2/effect/orbweapon
@@ -354,7 +361,7 @@
 	stage = 4
 /datum/disease2/effect/orbweapon/activate(var/mob/living/carbon/mob,var/multiplier)
 	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus
-	mob.equip_to_slot_or_drop(virus, slot_l_hand)
+	mob.put_in_hands(virus)
 
 /obj/item/clothing/mask/gas/virusclown_hat
 
@@ -362,8 +369,8 @@
 	canremove = 1
 	..()
 
-/obj/item/clothing/mask/gas/virusclown_hat/equipped(var/mob/user, var/slot)
-	if (slot == slot_l_hand)
+/obj/item/clothing/mask/gas/virusclown_hat/equipped(var/mob/user, var/slot, hand_index)
+	if(hand_index == GRASP_LEFT_HAND) //what the heck
 		canremove = 1		//curses!
 	..()
 
@@ -624,7 +631,6 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 
 /obj/item/clothing/mask/horsehead/magic
-	//flags_inv = null	//so you can still see their face... no. How can you recognize someone when their face is completely different?
 	voicechange = 1		//NEEEEIIGHH
 
 /obj/item/clothing/mask/horsehead/magic/dropped(mob/user as mob)
@@ -847,7 +853,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Headache"
 	stage = 1
 /datum/disease2/effect/headache/activate(var/mob/living/carbon/mob,var/multiplier)
-	to_chat(mob, "<span class = 'notice'> Your head hurts a bit</span>")
+	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
 
 /datum/disease2/effect/itching
 	name = "Itching"
@@ -878,6 +884,6 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Full Glass Syndrome"
 	stage = 1
 /datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob,var/multiplier)
-	to_chat(mob, "<span class = 'notice'> You feel optimistic!</span>")
+	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
 	if (mob.reagents.get_reagent_amount("tricordrazine") < 1)
 		mob.reagents.add_reagent("tricordrazine", 1)

@@ -73,10 +73,10 @@
 
 	if(istype(W, /obj/item/weapon/fuel_assembly) && !cur_assembly)
 		if(emergency_insert_ready)
-			cur_assembly = W
-			user.drop_item(W, src)
-			emergency_insert_ready = 0
-			return
+			if(user.drop_item(W, src))
+				cur_assembly = W
+				emergency_insert_ready = 0
+				return
 
 	..()
 	return
@@ -104,15 +104,12 @@
 		dat += "<i>The console is dark and nonresponsive.</i>"
 	else
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_injector.dm:149: dat += "<B>Reactor Core Fuel Injector</B><hr>"
 		dat += {"<B>Reactor Core Fuel Injector</B><hr>
 			<b>Device ID tag:</b> [id_tag] <a href='?src=\ref[src];modify_tag=1'>\[Modify\]</a><br>
 			<b>Status:</b> [injecting ? "<font color=green>Active</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Disable\]</a>" : "<font color=blue>Standby</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Enable\]</a>"]<br>
 			<b>Fuel usage:</b> [fuel_usage*100]% <a href='?src=\ref[src];fuel_usage=1'>\[Modify\]</a><br>
 			<b>Fuel assembly port:</b>
 			<a href='?src=\ref[src];fuel_assembly=1'>\[[cur_assembly ? "Eject assembly to port" : "Draw assembly from port"]\]</a> "}
-		// END AUTOFIX
 		if(cur_assembly)
 			dat += "<a href='?src=\ref[src];emergency_fuel_assembly=1'>\[Emergency eject\]</a><br>"
 		else
@@ -123,14 +120,11 @@
 		else if(cached_power_avail < active_power_usage * 2)
 			font_colour = "orange"
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Rust\fuel_injector.dm:164: dat += "<b>Power status:</b> <font color=[font_colour]>[active_power_usage]/[cached_power_avail] W</font><br>"
 		dat += {"<b>Power status:</b> <font color=[font_colour]>[active_power_usage]/[cached_power_avail] W</font><br>
 			<a href='?src=\ref[src];toggle_remote=1'>\[[remote_access_enabled ? "Disable remote access" : "Enable remote access"]\]</a><br>
 			<hr>
 			<A href='?src=\ref[src];refresh=1'>Refresh</A>
 			<A href='?src=\ref[src];close=1'>Close</A><BR>"}
-		// END AUTOFIX
 	user << browse(dat, "window=fuel_injector;size=500x300")
 	onclose(user, "fuel_injector")
 	user.set_machine(src)
@@ -246,10 +240,10 @@
 
 		break
 	if(success)
-		src.visible_message("<span class='notice'>\icon[src] a green light flashes on [src].</span>")
+		src.visible_message("<span class='notice'>[bicon(src)] a green light flashes on [src].</span>")
 		updateDialog()
 	else
-		src.visible_message("<span class='warning'>\icon[src] a red light flashes on [src].</span>")
+		src.visible_message("<span class='warning'>[bicon(src)] a red light flashes on [src].</span>")
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_clock()
 	set category = "Object"

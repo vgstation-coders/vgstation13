@@ -5,7 +5,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "riotgun"
 	item_state = "riotgun"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	throw_speed = 2
 	throw_range = 10
 	force = 5.0
@@ -21,16 +21,16 @@
 		return
 	to_chat(user, "<span class='info'>It has [grenades.len] / [max_grenades] grenades loaded.</span>")
 	for(var/obj/item/weapon/grenade/G in grenades)
-		to_chat(user, "\icon [G] [G.name]")
+		to_chat(user, "[bicon(G)] [G.name]")
 
 /obj/item/weapon/gun/grenadelauncher/attackby(obj/item/I as obj, mob/user as mob)
 
 	if((istype(I, /obj/item/weapon/grenade)))
 		if(grenades.len < max_grenades)
-			user.drop_item(I, src)
-			grenades += I
-			to_chat(user, "<span class='notice'>You load the [I.name] into the [src.name].</span>")
-			to_chat(user, "<span class='notice'>[grenades.len] / [max_grenades] grenades loaded.</span>")
+			if(user.drop_item(I, src))
+				grenades += I
+				to_chat(user, "<span class='notice'>You load the [I.name] into the [src.name].</span>")
+				to_chat(user, "<span class='notice'>[grenades.len] / [max_grenades] grenades loaded.</span>")
 		else
 			to_chat(user, "<span class='warning'>The [src.name] cannot hold more grenades.</span>")
 

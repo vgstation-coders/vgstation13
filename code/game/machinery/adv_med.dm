@@ -94,7 +94,7 @@
 		return
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 		return
-	if(user.restrained() || user.stat || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
@@ -140,7 +140,7 @@
 	return
 
 /obj/machinery/bodyscanner/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr))
+	if(!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The scanner is unoccupied!</span>")
@@ -162,9 +162,9 @@
 				continue
 			return
 	if(occupant == usr)
-		visible_message("[usr] climbs out of \the [src].", 3)
+		visible_message("[usr] climbs out of \the [src].")
 	else
-		visible_message("[usr] removes [occupant.name] from \the [src].", 3)
+		visible_message("[usr] removes [occupant.name] from \the [src].")
 	go_out(over_location)
 
 /obj/machinery/bodyscanner/relaymove(mob/user as mob)
@@ -410,14 +410,14 @@
 
 	if(href_list["print"])
 		if(!src.connected)
-			to_chat(usr, "\icon[src]<span class='warning'>Error: No body scanner connected.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>Error: No body scanner connected.</span>")
 			return
 		var/mob/living/carbon/human/occupant = src.connected.occupant
 		if(!src.connected.occupant)
-			to_chat(usr, "\icon[src]<span class='warning'>\The [src.connected] is empty.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] is empty.</span>")
 			return
 		if(!istype(occupant,/mob/living/carbon/human))
-			to_chat(usr, "\icon[src]<span class='warning'>\The [src.connected] cannot scan that lifeform.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] cannot scan that lifeform.</span>")
 			return
 		var/obj/item/weapon/paper/R = new(src.loc)
 		R.name = "paper - 'body scan report'"
@@ -525,6 +525,7 @@
 		var/splint = ""
 		var/internal_bleeding = ""
 		var/lung_ruptured = ""
+		var/e_cancer = ""
 
 		dat += "<tr>"
 
@@ -571,10 +572,20 @@
 			if(unknown_body || e.hidden)
 				imp += "Unknown body present:"
 
-		if(!AN && !open && !infected & !imp)
+		switch(e.cancer_stage)
+			if(CANCER_STAGE_BENIGN to CANCER_STAGE_SMALL_TUMOR)
+				e_cancer = "Benign Tumor:"
+			if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR)
+				e_cancer = "Small Tumor:"
+			if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS)
+				e_cancer = "Large Tumor:"
+			if(CANCER_STAGE_METASTASIS to INFINITY)
+				e_cancer = "Metastatic Tumor:"
+
+		if(!AN && !open && !infected && !e_cancer & !imp)
 			AN = "None:"
 		if(!(e.status & ORGAN_DESTROYED))
-			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][internal_bleeding][lung_ruptured]</td>"
+			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured]</td>"
 		else
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
 		dat += "</tr>"
@@ -601,8 +612,19 @@
 			if (INFECTION_LEVEL_TWO + 300 to INFINITY)
 				infection = "Acute Infection++:"
 
+		var/i_cancer
+		switch(i.cancer_stage)
+			if(CANCER_STAGE_BENIGN to CANCER_STAGE_SMALL_TUMOR)
+				i_cancer = "Benign Tumor:"
+			if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR)
+				i_cancer = "Small Tumor:"
+			if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS)
+				i_cancer = "Large Tumor:"
+			if(CANCER_STAGE_METASTASIS to INFINITY)
+				i_cancer = "Metastatic Tumor:"
+
 		dat += "<tr>"
-		dat += "<td>[i.name]</td><td>N/A</td><td>[i.damage]</td><td>[infection]:[mech]</td><td></td>"
+		dat += "<td>[i.name]</td><td>N/A</td><td>[i.damage]</td><td>[infection][i_cancer][mech]</td><td></td>"
 		dat += "</tr>"
 	dat += "</table>"
 

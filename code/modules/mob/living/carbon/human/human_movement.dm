@@ -1,31 +1,30 @@
 /mob/living/carbon/human/movement_delay()
+	if(istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
+
+	if(flying) return -1
+
+	if(istype(loc,/turf/simulated/floor))
+		var/turf/simulated/floor/T = loc
+		if(T.material=="phazon")
+			return -1 // Phazon floors make us go fast
+
 	var/tally = 0
 	if(species && species.move_speed_mod)
 		tally += species.move_speed_mod
-	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
 
-	//(VG EDIT disabling for now) handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
+	if(dna.mutantrace == "slime")
+		if (bodytemperature >= 330.23) // 135 F
+			return -1	// slimes become supercharged at high temperatures
+		if (bodytemperature < 183.222)
+			tally += (283.222 - bodytemperature) / 10 * 1.75
+	else if (undergoing_hypothermia())
+		tally += 2*undergoing_hypothermia()
 
-	if(flying)
-		return -1
-
-	if(reagents.has_reagent("hyperzine"))
-		if(dna.mutantrace == "slime")
-			tally *= 2
-		else
-			tally -= 10
+	//(/vg/ EDIT disabling for now) handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
 
 	if(reagents.has_reagent("nuka_cola")) tally -= 10
 
 	if((M_RUN in mutations)) tally -= 10
-
-	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
-
-	if(istype(loc,/turf/simulated/floor))
-		var/turf/simulated/floor/T = loc
-
-		if(T.material=="phazon")
-			return -1 // Phazon floors make us go fast
 
 	var/health_deficiency = (100 - health - halloss)
 	if(health_deficiency >= 40) tally += (health_deficiency / 25)
@@ -39,14 +38,9 @@
 	if(shoes)
 		tally += shoes.slowdown
 
-	if(l_hand)
-		tally += l_hand.slowdown
-
-	if(r_hand)
-		tally += r_hand.slowdown
-
-	if(reagents.has_reagent("frostoil") && dna.mutantrace == "slime")
-		tally *= 5
+	for(var/obj/item/I in held_items)
+		if(I.flags & SLOWDOWN_WHEN_CARRIED)
+			tally += I.slowdown
 
 	for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
 		var/datum/organ/external/E = get_organ(organ_name)
@@ -61,14 +55,6 @@
 
 	if(M_FAT in src.mutations)
 		tally += 1.5
-	if(dna.mutantrace == "slime")
-		if (bodytemperature >= 330.23) // 135 F
-			return -1	// slimes become supercharged at high temperatures
-		if (bodytemperature < 183.222)
-			tally += (283.222 - bodytemperature) / 10 * 1.75
-	else if (bodytemperature < 283.222)
-
-		tally += (283.222 - bodytemperature) / 10 * 1.75
 
 	var/skate_bonus = 0
 	var/disease_slow = 0
@@ -76,6 +62,15 @@
 		disease_slow = max(disease_slow, dispenser.slow)
 		skate_bonus = max(skate_bonus, dispenser.speed_bonus)//if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
 	tally = tally - skate_bonus + (6 * disease_slow)
+
+	if(reagents.has_reagent("hyperzine"))
+		if(dna.mutantrace == "slime")
+			tally *= 2
+		else
+			tally -= 10
+
+	if(reagents.has_reagent("frostoil") && dna.mutantrace == "slime")
+		tally *= 5
 
 	return max((tally+config.human_delay), -1) //cap at -1 as the 'fastest'
 
@@ -112,10 +107,13 @@
 		prob_slip = 0
 
 	//Check hands and mod slip
-	if(!l_hand)	prob_slip -= 2
-	else if(l_hand.w_class <= 2)	prob_slip -= 1
-	if (!r_hand)	prob_slip -= 2
-	else if(r_hand.w_class <= 2)	prob_slip -= 1
+	for(var/i = 1 to held_items.len)
+		var/obj/item/I = held_items[i]
+
+		if(!I)
+			prob_slip -= 2
+		else if(I.w_class <= W_CLASS_SMALL)
+			prob_slip -= 1
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
@@ -125,8 +123,8 @@
 
 	. = ..(NewLoc, Dir, step_x, step_y)
 
-	if(status_flags & FAKEDEATH)
-		return 0
+	/*if(status_flags & FAKEDEATH)
+		return 0*/
 
 	if(.)
 		if (old_z != src.z) crewmonitor.queueUpdate(old_z)
@@ -135,6 +133,10 @@
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
+
+		if(wear_suit && istype(wear_suit, /obj/item/clothing/suit))
+			var/obj/item/clothing/suit/SU = wear_suit
+			SU.step_action()
 
 		for(var/obj/item/weapon/bomberman/dispenser in src)
 			if(dispenser.spam_bomb)

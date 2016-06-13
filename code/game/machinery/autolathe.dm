@@ -33,6 +33,7 @@
 
 	light_color = LIGHT_COLOR_CYAN
 
+	one_part_set_only = 0
 	part_sets = list(
 		"Tools"=list(
 		new /obj/item/device/multitool(), \
@@ -43,7 +44,6 @@
 		new /obj/item/weapon/wrench(), \
 		new /obj/item/weapon/solder(),\
 		new /obj/item/device/analyzer(), \
-		new /obj/item/device/t_scanner(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
 		),
@@ -64,6 +64,9 @@
 		new /obj/item/device/assembly/speaker(), \
 		new /obj/item/device/assembly/addition(), \
 		new /obj/item/device/assembly/comparison(), \
+		new /obj/item/device/assembly/randomizer(), \
+		new /obj/item/device/assembly/read_write(), \
+		new /obj/item/device/assembly/math(), \
 		),
 		"Stock_Parts"=list(
 		new /obj/item/weapon/stock_parts/console_screen(), \
@@ -112,7 +115,7 @@
 		new /obj/item/stack/rods(), \
 		),
 		"Hidden_Items" = list(
-		new /obj/item/weapon/flamethrower/full(), \
+		new /obj/item/weapon/gun/projectile/flamethrower/full(), \
 		new /obj/item/ammo_storage/box/flare(), \
 		new /obj/item/device/rcd/matter/engineering(), \
 		new /obj/item/device/rcd/rpd(),\
@@ -174,9 +177,10 @@
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
 				return 1
-		user.drop_item(I, src)
-		materials.removeFrom(I.materials)
-		user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
-							"You put \the [I] in \the [src]'s reycling unit.")
-		qdel(I)
+
+		if(user.drop_item(I, src))
+			materials.removeFrom(I.materials)
+			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
+								"You put \the [I] in \the [src]'s reycling unit.")
+			qdel(I)
 		return 1

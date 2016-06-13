@@ -46,7 +46,9 @@
 		/obj/machinery/cooking/icemachine,
 		/obj/machinery/sleeper,
 		/obj/machinery/anomaly,
-		/obj/machinery/bunsen_burner
+		/obj/machinery/bunsen_burner,
+		/obj/item/weapon/sword/venom,
+		/obj/item/weapon/cylinder
 		)
 
 /obj/item/weapon/reagent_containers/glass/get_rating()
@@ -112,6 +114,22 @@
 	item_state = "beaker"
 	starting_materials = list(MAT_GLASS = 500)
 	origin_tech = "materials=1"
+
+/obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
+	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
+		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
+		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
+		if(do_after(user, src, 60))
+			to_chat(user, "You drill six holes through the bottom of \the [src].")
+			if(src.loc == user)
+				user.drop_item(src, force_drop = 1)
+				var/obj/item/weapon/cylinder/I = new (get_turf(user))
+				user.put_in_hands(I)
+			else
+				new /obj/item/weapon/cylinder(get_turf(src.loc))
+			qdel(src)
+		return
+	return ..()
 
 /obj/item/weapon/reagent_containers/glass/beaker/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
@@ -274,7 +292,7 @@
 	item_state = "bucket"
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_METAL
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,30,50,70)
 	volume = 70
@@ -347,7 +365,7 @@
 	item_state = "canister"
 	m_amt = 300
 	g_amt = 0
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,30,60)

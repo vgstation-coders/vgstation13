@@ -10,7 +10,7 @@
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	var/charge = 0	// note %age conveted to actual charge in New
 	var/maxcharge = 1000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 50)
@@ -117,7 +117,7 @@
 	origin_tech = "powerstorage=2;biotech=4"
 	icon = 'icons/mob/slimes.dmi' //'icons/obj/harvest.dmi'
 	icon_state = "yellow slime extract" //"potato_battery"
-	maxcharge = 10000
+	maxcharge = 30000
 	starting_materials =  null
 	w_type = RECYK_BIOLOGICAL
 

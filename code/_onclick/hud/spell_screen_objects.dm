@@ -4,16 +4,13 @@
 	icon_state = "wiz_spell_ready"
 	var/list/obj/screen/spell/spell_objects = list()
 	var/showing = 0
-
+	globalscreen = 1
 	var/open_state = "master_open"
 	var/closed_state = "master_closed"
 
 	screen_loc = ui_spell_master
 
 	var/mob/spell_holder
-
-/obj/screen/movable/spell_master/pool_on_reset()
-	. = 0
 
 /obj/screen/movable/spell_master/Destroy()
 	..()
@@ -60,15 +57,15 @@
 		overlays.Add(open_state)
 
 /obj/screen/movable/spell_master/proc/open_spellmaster()
-	var/list/screen_loc_xy = text2list(screen_loc,",")
+	var/list/screen_loc_xy = splittext(screen_loc,",")
 
 	//Create list of X offsets
-	var/list/screen_loc_X = text2list(screen_loc_xy[1],":")
+	var/list/screen_loc_X = splittext(screen_loc_xy[1],":")
 	var/x_position = decode_screen_X(screen_loc_X[1])
 	var/x_pix = screen_loc_X[2]
 
 	//Create list of Y offsets
-	var/list/screen_loc_Y = text2list(screen_loc_xy[2],":")
+	var/list/screen_loc_Y = splittext(screen_loc_xy[2],":")
 	var/y_position = decode_screen_Y(screen_loc_Y[1])
 	var/y_pix = screen_loc_Y[2]
 
@@ -153,15 +150,13 @@
 	icon_state = "wiz_spell_base"
 	var/spell_base = "wiz"
 	var/last_charge = 0 //not a time, but the last remembered charge value
-
+	globalscreen = 1
 	var/spell/spell = null
 	var/handle_icon_updates = 0
 	var/obj/screen/movable/spell_master/spellmaster
 
 	var/icon/last_charged_icon
-
-/obj/screen/spell/pool_on_reset()
-	. = 0
+	var/channeling_image
 
 /obj/screen/spell/Destroy()
 	..()
@@ -171,6 +166,7 @@
 		spellmaster.spell_objects -= src
 		if(spellmaster.spell_holder && spellmaster.spell_holder.client)
 			spellmaster.spell_holder.client.screen -= src
+			remove_channeling()
 	if(spellmaster && !spellmaster.spell_objects.len)
 		returnToPool(spellmaster)
 	spellmaster = null
@@ -220,3 +216,13 @@
 
 	spell.perform(usr)
 	update_charge(1)
+
+//Helper proc, does not remove channeling
+/obj/screen/spell/proc/add_channeling()
+	var/image/channel = image(icon = icon, loc = src, icon_state = "channeled", layer = src.layer + 1)
+	channeling_image = channel
+	spellmaster.spell_holder.client.images += channeling_image
+
+/obj/screen/spell/proc/remove_channeling()
+	spellmaster.spell_holder.client.images -= channeling_image
+	channeling_image = null

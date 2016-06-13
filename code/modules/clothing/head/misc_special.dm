@@ -5,6 +5,7 @@
  *		Ushanka
  *		Pumpkin head
  *		Kitty ears
+ *		Butt
  *		Tinfoil Hat
  */
 
@@ -22,11 +23,10 @@
 	var/up = 0
 	eyeprot = 3
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags_inv = (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
-	body_parts_covered = HEAD|EYES|MOUTH|EARS //using this instead of FULL_HEAD to show how the flags change in the code
+	body_parts_covered = FACE
 	action_button_name = "Toggle Welding Helmet"
 	siemens_coefficient = 0.9
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -37,18 +37,16 @@
 	set name = "Adjust welding mask"
 	set src in usr
 	if(!usr) return //PANIC
-	if(usr.canmove && !usr.stat && !usr.restrained())
+	if(!usr.incapacitated())
 		if(src.up)
 			src.up = !src.up
-			src.body_parts_covered |= (EYES|MOUTH|EARS)
-			flags_inv |= (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
+			src.body_parts_covered |= FACE
 			eyeprot = 3
 			icon_state = initial(icon_state)
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
-			src.body_parts_covered &= ~(EYES|MOUTH|EARS)
-			flags_inv &= ~(HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
+			src.body_parts_covered = HEAD
 			icon_state = "[initial(icon_state)]up"
 			eyeprot = 0
 			to_chat(usr, "You push the [src] up out of your face.")
@@ -82,7 +80,7 @@
 	if(istype(location, /mob/))
 		var/mob/living/carbon/human/M = location
 		if(istype(M))
-			if(M.l_hand == src || M.r_hand == src || M.head == src)
+			if(M.head == src || M.is_holding_item(src))
 				location = M.loc
 		else
 			return
@@ -115,17 +113,19 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushankadown"
 	item_state = "ushankadown"
-	flags_inv = HIDEEARS
+	body_parts_covered = EARS|HEAD
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
 	if(src.icon_state == "ushankadown")
 		src.icon_state = "ushankaup"
 		src.item_state = "ushankaup"
+		body_parts_covered = HEAD
 		to_chat(user, "You raise the ear flaps on the ushanka.")
 	else
 		src.icon_state = "ushankadown"
 		src.item_state = "ushankadown"
 		to_chat(user, "You lower the ear flaps on the ushanka.")
+		body_parts_covered = EARS|HEAD
 
 /*
  * Pumpkin head
@@ -137,8 +137,7 @@
 	item_state = "hardhat0_pumpkin"
 	_color = "pumpkin"
 	flags = FPRINT
-	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|BEARD
 	var/brightness_on = 2 //luminosity when on
 	var/on = 0
 
@@ -185,7 +184,7 @@
 	item_state = "butt"
 	flags = 0
 	force = 4.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 2
 	throw_speed = 3
 	throw_range = 5
@@ -205,4 +204,3 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
-	flags_inv = HIDEHAIR

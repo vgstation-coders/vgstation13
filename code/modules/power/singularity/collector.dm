@@ -69,10 +69,10 @@ var/global/list/rad_collectors = list()
 		if(src.P)
 			to_chat(user, "<span class='warning'>A plasma tank is already loaded.</span>")
 			return 1
-		user.drop_item(W, src)
-		src.P = W
-		update_icons()
-	else if(istype(W, /obj/item/weapon/crowbar))
+		if(user.drop_item(W, src))
+			src.P = W
+			update_icons()
+	else if(iscrowbar(W))
 		if(P && !src.locked)
 			eject()
 			return 1

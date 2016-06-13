@@ -46,6 +46,10 @@
 		else
 			assignment = "Unassigned"
 
+		var/datum/job/job = job_master.GetJob(H.job)
+		if(job && job.no_crew_manifest)
+			return
+
 		var/id = add_zero(num2hex(rand(1, 1.6777215E7)), 6)	//this was the best they could come up with? A large random number? *sigh*
 
 
@@ -72,7 +76,7 @@
 		var/datum/data/record/M = new()
 		M.fields["id"]			= id
 		M.fields["name"]		= H.real_name
-		M.fields["b_type"]		= H.b_type
+		M.fields["b_type"]		= H.dna.b_type
 		M.fields["b_dna"]		= H.dna.unique_enzymes
 		M.fields["mi_dis"]		= "None"
 		M.fields["mi_dis_d"]	= "No minor disabilities have been declared."
@@ -111,7 +115,7 @@
 		L.fields["rank"] 		= H.mind.assigned_role
 		L.fields["age"]			= H.age
 		L.fields["sex"]			= H.gender
-		L.fields["b_type"]		= H.b_type
+		L.fields["b_type"]		= H.dna.b_type
 		L.fields["b_dna"]		= H.dna.unique_enzymes
 		L.fields["enzymes"]		= H.dna.SE // Used in respawning
 		L.fields["identity"]	= H.dna.UI // "

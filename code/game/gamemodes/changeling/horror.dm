@@ -3,7 +3,7 @@
 	icobase = 'icons/mob/human_races/r_horror.dmi'
 	deform = 'icons/mob/human_races/r_horror.dmi'  // TODO: Need deform.
 	language = "Clatter"
-	attack_verb = "slams"
+	attack_verb = "smashes"
 	flags = NO_BREATHE /*| NON_GENDERED*/ | NO_PAIN
 	pressure_resistance = 30 * ONE_ATMOSPHERE /*No longer will our ascent be foiled by depressurization!*/
 	//h_style = null
@@ -31,7 +31,7 @@
 
 	throw_mult = 1.5 // +0.5 for hulk
 	fireloss_mult = 2 // double the damage, half the fun
-
+	can_be_hypothermic = 0
 
 	abilities = list(
 		/client/proc/changeling_force_airlock

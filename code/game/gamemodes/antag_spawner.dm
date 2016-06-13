@@ -1,7 +1,7 @@
 /obj/item/weapon/antag_spawner
 	throw_speed = 1
 	throw_range = 5
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/used = 0
 
 /obj/item/weapon/antag_spawner/proc/spawn_antag(var/client/C, var/turf/T, var/type = "")
@@ -129,6 +129,8 @@
 	M.mind.objectives += new_objective
 	ticker.mode.traitors += M.mind
 	M.mind.special_role = "apprentice"
+
+	M.make_all_robot_parts_organic()
 
 /obj/item/weapon/antag_spawner/contract/equip_antag(mob/target as mob)
 	target.equip_to_slot_or_del(new /obj/item/device/radio/headset(target), slot_ears)

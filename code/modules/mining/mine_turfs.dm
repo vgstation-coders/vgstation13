@@ -31,9 +31,17 @@
 	return
 
 /turf/unsimulated/mineral/New()
+	mineral_turfs += src
 	. = ..()
 	MineralSpread()
+	if(ticker)
+		initialize()
 
+turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	mineral_turfs -= src
+	return ..(N, tell_universe, 1, allow)
+
+/turf/unsimulated/mineral/initialize()
 	spawn(1)
 		var/turf/T
 		if((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor)))
@@ -214,7 +222,7 @@
 		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
 		busy = 1
 		if(do_after(user, src,25))
-			to_chat(user, "<span class='notice'>\icon[P] [src] has been excavated to a depth of [2*excavation_level]cm.</span>")
+			to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*excavation_level]cm.</span>")
 			busy = 0
 		else
 			busy = 0
@@ -392,7 +400,7 @@
 				if(prob(50))
 					M.adjustBruteLoss(5)
 			else
-				flick("flash",M.flash)
+				M.flash_eyes(visual = 1)
 				if(prob(50))
 					M.Stun(5)
 			M.apply_effect(25, IRRADIATE)
@@ -448,7 +456,7 @@
 				R.amount = rand(5,25)
 
 			if(2)
-				var/obj/item/stack/tile/R = new(src)
+				var/obj/item/stack/tile/plasteel/R = new(src)
 				R.amount = rand(1,5)
 
 			if(3)
@@ -499,6 +507,10 @@
 
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
+	if(ticker)
+		initialize()
+
+/turf/unsimulated/floor/asteroid/initialize()
 	updateMineralOverlays()
 
 /turf/unsimulated/floor/asteroid/ex_act(severity)
@@ -533,7 +545,7 @@
 		to_chat(user, "<span class='rose'>You start digging.<span>")
 		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
-		if(do_after(user, used_digging.digspeed) && user) //the better the drill, the faster the digging
+		if(do_after(user, src, used_digging.digspeed) && user) //the better the drill, the faster the digging
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You dug a hole.</span>")
 			gets_dug()
@@ -557,15 +569,18 @@
 
 /turf/unsimulated/floor/asteroid/proc/updateMineralOverlays()
 	src.overlays.len = 0
-
-	if(istype(get_step(src, NORTH), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
-	if(istype(get_step(src, SOUTH), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
-	if(istype(get_step(src, EAST), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
-	if(istype(get_step(src, WEST), /turf/unsimulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
+	spawn(1)
+		for(var/dir in cardinal)
+			if(istype(get_step(src,dir), /turf/unsimulated/mineral))
+				switch(dir)
+					if(NORTH)
+						src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
+					if(SOUTH)
+						src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
+					if(EAST)
+						src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
+					if(WEST)
+						src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
 
 /turf/unsimulated/floor/asteroid/proc/fullUpdateMineralOverlays()
 	var/turf/unsimulated/floor/asteroid/A
@@ -998,6 +1013,7 @@
 			// We can't go a full loop though
 			next_angle = -next_angle
 			dir = angle2dir(dir2angle(dir) + next_angle)
+
 /turf/unsimulated/floor/asteroid/cave/proc/SpawnFloor(var/turf/T)
 	for(var/turf/S in range(2,T))
 		if(istype(S, /turf/space) || istype(S.loc, /area/mine/explored))

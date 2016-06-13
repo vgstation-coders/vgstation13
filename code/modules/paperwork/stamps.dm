@@ -6,14 +6,14 @@
 	item_state = "stamp"
 	flags = FPRINT
 	throwforce = 0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 7
 	throw_range = 15
 	starting_materials = list(MAT_IRON = 60)
 	w_type = RECYK_MISC
 	_color = "cargo"
 	pressure_resistance = 2
-	attack_verb = list("stamped")
+	attack_verb = list("stamps")
 
 /obj/item/weapon/stamp/captain
 	name = "captain's rubber stamp"

@@ -8,7 +8,7 @@
 	var/s_time = 10.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/uses = 1
 	var/nofail = 0
 	var/is_bullet = 0
@@ -21,6 +21,10 @@
 /obj/item/weapon/dnainjector/New()
 	. = ..()
 
+	if(ticker)
+		initialize()
+
+/obj/item/weapon/dnainjector/initialize()
 	if(datatype && block)
 		buf=new
 		buf.dna=new
@@ -203,7 +207,7 @@
 				*/
 				if(user)//If the user still exists. Their mob may not.
 					if(M)//Runtime fix: If the mob doesn't exist, mob.name doesnt work. - Nodrak
-						user.show_message(text("<span class='warning'>You inject [M.name]</span>"))
+						user.show_message(text("<span class='warning'>You inject [M.name].</span>"))
 					else
 						user.show_message(text("<span class='warning'>You finish the injection.</span>"))
 	return

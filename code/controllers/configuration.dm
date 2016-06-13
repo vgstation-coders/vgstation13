@@ -86,7 +86,7 @@
 	var/server
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
-	var/vgws_base_url = "http://ss13.pomf.se" // No hanging slashes.
+	var/vgws_base_url = "http://ss13.moe" // No hanging slashes.
 	var/forumurl = "http://baystation12.net/forums/"
 
 	var/media_base_url = "" // http://ss13.nexisonline.net/media
@@ -167,6 +167,12 @@
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
+	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
+	var/skip_vault_generation = 0 //If 1, don't generate vaults
+	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
+
+	var/enable_roundstart_away_missions = 0
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -217,7 +223,7 @@
 		if(type == "config")
 			switch (name)
 				if ("resource_urls")
-					config.resource_urls = text2list(value, " ")
+					config.resource_urls = splittext(value, " ")
 
 				if ("admin_legacy_system")
 					config.admin_legacy_system = 1
@@ -524,6 +530,16 @@
 					renders_url = value
 				if("mommi_static")
 					mommi_static = 1
+				if("skip_minimap_generation")
+					skip_minimap_generation = 1
+				if("skip_vault_generation")
+					skip_vault_generation = 1
+				if("shut_up_automatic_diagnostic_and_announcement_system")
+					shut_up_automatic_diagnostic_and_announcement_system = 1
+				if("enable_roundstart_away_missions")
+					enable_roundstart_away_missions = 1
+				if("enable_wages")
+					roundstart_enable_wages = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

@@ -121,7 +121,7 @@
 	set category = "Object"
 	set name = "Enter DNA Scanner"
 
-	if(usr.restrained() || usr.isUnconscious() || usr.weakened || usr.stunned || usr.paralysis || usr.resting) //are you cuffed, dying, lying, stunned or other
+	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
 		to_chat(usr, "<span class='notice'> Try as you might, you can not climb up into the scanner.</span>")
@@ -149,7 +149,7 @@
 		return
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 		return
-	if(user.restrained() || usr.isUnconscious() || user.weakened || user.stunned || user.paralysis || user.resting) //are you cuffed, dying, lying, stunned or other
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
@@ -192,7 +192,7 @@
 		user.pulling = null
 
 /obj/machinery/dna_scannernew/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr))
+	if(!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The sleeper is unoccupied!</span>")
@@ -214,9 +214,9 @@
 				continue
 			return
 	if(occupant == usr)
-		visible_message("[usr] climbs out of \the [src].", 3)
+		visible_message("[usr] climbs out of \the [src].")
 	else
-		visible_message("[usr] removes [occupant.name] from \the [src].", 3)
+		visible_message("[usr] removes [occupant.name] from \the [src].")
 	eject_occupant(over_location)
 
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
@@ -224,11 +224,10 @@
 		if(beaker)
 			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
 			return
-
-		beaker = item
-		user.drop_item(beaker, src)
-		user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
-		return
+		if(user.drop_item(beaker, src))
+			beaker = item
+			user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
+			return
 	else if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
 		var/obj/item/weapon/grab/G = item
 		if (!ismob(G.affecting))
@@ -292,11 +291,14 @@
 	return 1
 
 /obj/machinery/dna_scannernew/ex_act(severity)
+	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
-				ex_act(severity)
+				//A.loc = src.loc
+				A.forceMove(src.loc)
+				//ex_act(severity)
+				A.ex_act(severity)
 				//Foreach goto(35)
 			//SN src = null
 			qdel(src)
@@ -304,8 +306,10 @@
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
-					ex_act(severity)
+					//A.loc = src.loc
+					A.forceMove(src.loc)
+					//ex_act(severity)
+					A.ex_act(severity)
 					//Foreach goto(108)
 				//SN src = null
 				qdel(src)
@@ -319,8 +323,8 @@
 				//SN src = null
 				qdel(src)
 				return
-		else
-	return
+		//else
+	//return
 
 
 /obj/machinery/dna_scannernew/blob_act()
@@ -329,7 +333,7 @@
 
 /obj/machinery/computer/scan_consolenew
 	name = "DNA Modifier Access Console"
-	desc = "Scand DNA."
+	desc = "Scans DNA."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "dna"
 	density = 1
@@ -349,6 +353,7 @@
 	var/radiation_intensity = 1.0
 	var/list/datum/dna2/record/buffers[3]
 	var/irradiating = 0
+	var/list/datum/block_label/labels[DNA_SE_LENGTH]
 
 	// Quick fix for issue 286 (screwdriver the screen twice to restore injector) -Pete.
 	var/injector_ready = 0
@@ -362,6 +367,10 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+/datum/block_label
+	var/name = ""
+	var/color = "#1c1c1c"
+
 /obj/machinery/computer/scan_consolenew/attackby(obj/O as obj, mob/user as mob)
 	..()
 	if (istype(O, /obj/item/weapon/disk/data)) //INSERT SOME diskS
@@ -372,29 +381,25 @@
 	return
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
-
 	switch(severity)
 		if(1.0)
-			//SN src = null
 			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
-				//SN src = null
 				qdel(src)
 				return
-		else
-	return
 
 /obj/machinery/computer/scan_consolenew/blob_act()
-
 	if(prob(75))
 		qdel(src)
 
 /obj/machinery/computer/scan_consolenew/New()
 	..()
-	for(var/i=0;i<3;i++)
-		buffers[i+1]=new /datum/dna2/record
+	for(var/i=1;i<=3;i++)
+		buffers[i] = new /datum/dna2/record
+	for(var/i=1;i<=DNA_SE_LENGTH;i++)
+		labels[i] = new /datum/block_label
 	spawn(5)
 		connected = findScanner()
 		spawn(250)
@@ -471,7 +476,7 @@
 		if(user == connected.occupant || user.isUnconscious())
 			return
 	else
-		src.visible_message("\icon[src]<span class='notice'>No scanner connected!<span>")
+		src.visible_message("[bicon(src)]<span class='notice'>No scanner connected!<span>")
 		return
 
 	// this is the data which will be sent to the ui
@@ -511,6 +516,11 @@
 	data["selectedSESubBlock"] = selected_se_subblock
 	data["selectedUITarget"] = selected_ui_target
 	data["selectedUITargetHex"] = selected_ui_target_hex
+	var/list/new_labels = list()
+	for(var/datum/block_label/lmao2list in src.labels)
+		new_labels += list(list("name" = lmao2list.name, "color" = lmao2list.color)) //Yes, you are reading this right, "list(list())"[sic]. If you're a sane person you're probably wondering what the fuck this is.
+		//You know those weird, creepy twins that only speak between themselves in a made-up language that nobody else understands? NanoUI is it's OWN retarded twin.
+	data["block_labels"] = new_labels
 
 	var/occupantData[0]
 	if (!src.connected.occupant || !src.connected.occupant.dna)
@@ -786,6 +796,31 @@
 			var/obj/item/weapon/reagent_containers/glass/B = connected.beaker
 			B.loc = connected.loc
 			connected.beaker = null
+		return 1
+
+	if(href_list["changeBlockLabel"])
+		var/which = text2num(href_list["changeBlockLabel"])
+		var/datum/block_label/label = labels[which]
+		var/text = copytext(sanitize(input(usr, "New Label:", "Edit Label", label.name) as text|null),1,MAX_NAME_LEN)
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+			return
+		if(text) //you can color the tab without a label, sure why not
+			label.name = text
+		var/newcolor = input("Select Tab Color", "Edit Label", label.color) as color
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+			return
+		if(newcolor)
+			label.color = newcolor
+		return 1
+
+	if(href_list["copyLabelsFromDisk"])
+		if(disk)
+			labels = disk.labels.Copy()
+		return 1
+
+	if(href_list["copyLabelsToDisk"])
+		if(disk)
+			disk.labels = labels.Copy()
 		return 1
 
 	if(href_list["ejectOccupant"])

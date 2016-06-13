@@ -95,7 +95,7 @@
 	set_ready_state(1)
 
 	chassis.empty_bad_contents()
-	
+
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/detach()
@@ -386,7 +386,7 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
-	name = "Syringe Gun"
+	name = "Exosuit-Mounted Syringe Gun"
 	desc = "Exosuit-mounted chem synthesizer with syringe gun. Reagents inside are held in stasis, so no reactions will occur. (Can be attached to: Medical Exosuits)"
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "syringegun"
@@ -564,12 +564,9 @@
 	var/inputs
 	if(r_list)
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\game\\mecha\equipment\tools\\medical_tools.dm:567: inputs += "<input type=\"hidden\" name=\"src\" value=\"\ref[src]\">"
 		inputs += {"<input type=\"hidden\" name=\"src\" value=\"\ref[src]\">
 			<input type=\"hidden\" name=\"select_reagents\" value=\"1\">
 			<input id=\"submit\" type=\"submit\" value=\"Apply settings\">"}
-		// END AUTOFIX
 	var/output = {"<form action="byond://" method="get">
 						[r_list || "No known reagents"]
 						[inputs]
@@ -600,11 +597,11 @@
 			occupant_message("The syringe is too far away.")
 			return 0
 		for(var/obj/structure/D in S.loc)//Basic level check for structures in the way (Like grilles and windows)
-			if(!(D.CanPass(S,src.loc)))
+			if(!(D.Cross(S,src.loc)))
 				occupant_message("Unable to load syringe.")
 				return 0
 		for(var/obj/machinery/door/D in S.loc)//Checks for doors
-			if(!(D.CanPass(S,src.loc)))
+			if(!(D.Cross(S,src.loc)))
 				occupant_message("Unable to load syringe.")
 				return 0
 		S.reagents.trans_to(src, S.reagents.total_volume)

@@ -18,7 +18,8 @@ var/global/list/all_money_accounts = list()
 		station_account.owner_name = "[station_name()] Station Account"
 		station_account.account_number = rand(11111, 99999)
 		station_account.remote_access_pin = rand(1111, 9999)
-		station_account.money = 5000
+		station_account.money = DEPARTMENT_START_FUNDS
+		station_account.wage_gain = DEPARTMENT_START_WAGE
 
 		//create an entry in the account transaction log for when it was created
 		var/datum/transaction/T = new()
@@ -33,14 +34,16 @@ var/global/list/all_money_accounts = list()
 		station_account.transaction_log.Add(T)
 		all_money_accounts.Add(station_account)
 
-/proc/create_department_account(department)
+/proc/create_department_account(department, var/recieves_wage = 0)
 	next_account_number = rand(111111, 999999)
 
 	var/datum/money_account/department_account = new()
 	department_account.owner_name = "[department] Account"
 	department_account.account_number = rand(11111, 99999)
 	department_account.remote_access_pin = rand(1111, 9999)
-	department_account.money = 5000
+	department_account.money = DEPARTMENT_START_FUNDS
+	if(recieves_wage == 1)
+		department_account.wage_gain = DEPARTMENT_START_WAGE
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -60,7 +63,7 @@ var/global/list/all_money_accounts = list()
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db)
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0)
 
 
 	//create a new account
@@ -68,6 +71,7 @@ var/global/list/all_money_accounts = list()
 	M.owner_name = new_owner_name
 	M.remote_access_pin = rand(1111, 9999)
 	M.money = starting_funds
+	M.wage_gain = wage_payout
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -97,8 +101,6 @@ var/global/list/all_money_accounts = list()
 		P.wrapped = R
 		R.name = "Account information: [M.owner_name]"
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:94: R.info = "<b>Account details (confidential)</b><br><hr><br>"
 		R.info = {"<b>Account details (confidential)</b><br><hr><br>
 			<i>Account holder:</i> [M.owner_name]<br>
 			<i>Account number:</i> [M.account_number]<br>
@@ -107,7 +109,6 @@ var/global/list/all_money_accounts = list()
 			<i>Date and time:</i> [worldtime2text()], [current_date_string]<br><br>
 			<i>Creation terminal ID:</i> [source_db.machine_id]<br>
 			<i>Authorised NT officer overseeing creation:</i> [source_db.held_card.registered_name]<br>"}
-		// END AUTOFIX
 		//stamp the paper
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 		stampoverlay.icon_state = "paper_stamp-cent"
@@ -133,6 +134,7 @@ var/global/list/all_money_accounts = list()
 							//1 - require manual login / account number and pin
 							//2 - require card and manual login
 	var/virtual = 0
+	var/wage_gain = 0 // How much an account gains per 'wage' tick.
 
 /datum/transaction
 	var/target_name = ""
@@ -168,7 +170,7 @@ var/global/list/all_money_accounts = list()
 
 	if(department_accounts.len == 0)
 		for(var/department in station_departments)
-			create_department_account(department)
+			create_department_account(department, recieves_wage = 1)
 	if(!vendor_account)
 		create_department_account("Vendor")
 		vendor_account = department_accounts["Vendor"]
@@ -200,22 +202,14 @@ var/global/list/all_money_accounts = list()
 	if(ishuman(user) && !user.stat && get_dist(src,user) <= 1)
 		var/dat = "<b>Accounts Database</b><br>"
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:171: dat += "<i>[machine_id]</i><br>"
 		dat += {"<i>[machine_id]</i><br>
 			Confirm identity: <a href='?src=\ref[src];choice=insert_card'>[held_card ? held_card : "-----"]</a><br>"}
-		// END AUTOFIX
 		if(access_level > 0)
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:175: dat += "<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>"
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
 				You may not edit accounts at this terminal, only create and view them.<br>"}
-			// END AUTOFIX
 			if(creating_new_account)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:178: dat += "<br>"
 				dat += {"<br>
 					<a href='?src=\ref[src];choice=view_accounts_list;'>Return to accounts list</a>
 					<form name='create_account' action='?src=\ref[src]' method='get'>
@@ -227,17 +221,15 @@ var/global/list/all_money_accounts = list()
 					<b>Ensure that the station account has enough money to create the account, or it will not be created</b>
 					<input type='submit' value='Create'><br>
 					</form>"}
-				// END AUTOFIX
 			else
 				if(detailed_account_view)
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:190: dat += "<br>"
 					dat += {"<br>
 						<a href='?src=\ref[src];choice=view_accounts_list;'>Return to accounts list</a><hr>
 						<b>Account number:</b> #[detailed_account_view.account_number]<br>
-						<b>Account holder:<	/b> [detailed_account_view.owner_name]<br>
+						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
+						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
 						<table border=1 style='width:100%'>
 						<tr>
 						<td><b>Date</b></td>
@@ -247,11 +239,8 @@ var/global/list/all_money_accounts = list()
 						<td><b>Value</b></td>
 						<td><b>Source terminal ID</b></td>
 						</tr>"}
-					// END AUTOFIX
 					for(var/datum/transaction/T in detailed_account_view.transaction_log)
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:205: dat += "<tr>"
 						dat += {"<tr>
 							<td>[T.date]</td>
 							<td>[T.time]</td>
@@ -260,26 +249,19 @@ var/global/list/all_money_accounts = list()
 							<td>$[T.amount]</td>
 							<td>[T.source_terminal]</td>
 							</tr>"}
-						// END AUTOFIX
 					dat += "</table>"
 				else
 
-					// AUTOFIXED BY fix_string_idiocy.py
-					// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:215: dat += "<a href='?src=\ref[src];choice=create_account;'>Create new account</a><br><br>"
 					dat += {"<a href='?src=\ref[src];choice=create_account;'>Create new account</a><br><br>
 						<table border=1 style='width:100%'>"}
-					// END AUTOFIX
 					for(var/i=1, i<=all_money_accounts.len, i++)
 						var/datum/money_account/D = all_money_accounts[i]
 
-						// AUTOFIXED BY fix_string_idiocy.py
-						// C:\Users\Rob\\documents\\\projects\vgstation13\code\WorkInProgress\Cael_Aislinn\Economy\Accounts.dm:219: dat += "<tr>"
 						dat += {"<tr>
 							<td>#[D.account_number]</td>
 							<td>[D.owner_name]</td>
 							<td><a href='?src=\ref[src];choice=view_account_detail;account_index=[i]'>View in detail</a></td>
 							</tr>"}
-						// END AUTOFIX
 					dat += "</table>"
 		user << browse(dat,"window=account_db;size=700x650")
 	else
@@ -294,13 +276,13 @@ var/global/list/all_money_accounts = list()
 			emag(user)
 			return
 		if(!held_card)
-			usr.drop_item(O, src)
-			held_card = idcard
+			if(usr.drop_item(O, src))
+				held_card = idcard
 
-			if(access_cent_captain in idcard.access)
-				access_level = 2
-			else if(access_hop in idcard.access || access_captain in idcard.access)
-				access_level = 1
+				if(access_cent_captain in idcard.access)
+					access_level = 2
+				else if(access_hop in idcard.access || access_captain in idcard.access)
+					access_level = 1
 	else
 		..()
 
@@ -363,13 +345,13 @@ var/global/list/all_money_accounts = list()
 						return
 					if (istype(I, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/C = I
-						usr.drop_item(C, src)
-						held_card = C
-						if(access_level < 3)
-							if(access_cent_captain in C.access)
-								access_level = 2
-							else if(access_hop in C.access || access_captain in C.access)
-								access_level = 1
+						if(usr.drop_item(C, src))
+							held_card = C
+							if(access_level < 3)
+								if(access_cent_captain in C.access)
+									access_level = 2
+								else if(access_hop in C.access || access_captain in C.access)
+									access_level = 1
 			if("view_account_detail")
 				var/index = text2num(href_list["account_index"])
 				if(index && index <= all_money_accounts.len)

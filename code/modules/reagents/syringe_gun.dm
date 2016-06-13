@@ -8,7 +8,7 @@
 	icon_state = "syringegun"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 2
 	throw_range = 10
 	force = 4.0
@@ -26,10 +26,10 @@
 		var/obj/item/weapon/reagent_containers/syringe/S = I
 		if(S.mode != 2)//SYRINGE_BROKEN in syringes.dm
 			if(syringes.len < max_syringes)
-				user.drop_item(I, src)
-				syringes += I
-				to_chat(user, "<span class='notice'>You put the syringe in [src].</span>")
-				to_chat(user, "<span class='notice'>[syringes.len] / [max_syringes] syringes.</span>")
+				if(user.drop_item(I, src))
+					syringes += I
+					to_chat(user, "<span class='notice'>You put the syringe in [src].</span>")
+					to_chat(user, "<span class='notice'>[syringes.len] / [max_syringes] syringes.</span>")
 			else
 				to_chat(user, "<span class='warning'>[src] cannot hold more syringes.</span>")
 		else

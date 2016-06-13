@@ -6,7 +6,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 5
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	force = 10
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -83,7 +83,7 @@
 	icon_state = "obrez"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/gun/projectile/nagant/obrez/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
@@ -100,9 +100,12 @@
 			flame_turf(turflist)
 
 		if(prob(15))
-			to_chat(user, "<span class='danger'>[src] flies out of your hands.</span>")
-			user.take_organ_damage(0,10)
-			user.drop_item(src)
+			if(user.drop_item(src))
+				to_chat(user, "<span class='danger'>\The [src] flies out of your hands.</span>")
+				user.take_organ_damage(0,10)
+			else
+				to_chat(user, "<span class='notice'>\The [src] almost flies out of your hands!</span>")
+
 	Fire(A,user,params, "struggle" = struggle)
 	return 1
 

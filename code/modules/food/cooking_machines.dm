@@ -141,6 +141,9 @@ var/global/ingredientLimit = 10
 		return
 	else if(..())
 		return 1
+	else if(stat & (NOPOWER | BROKEN))
+		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
+		return
 	else if(istype(user,/mob/living/silicon))
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
@@ -183,11 +186,12 @@ var/global/ingredientLimit = 10
 		if(src.foodChoices) . = src.foodChoices[(input("Select production.") in src.foodChoices)]
 		if (!Adjacent(user) || user.stat || user.get_active_hand() != I)
 			return 0
-		user.drop_item(I, src)
-		src.ingredient = I
-		spawn() src.cook(.)
-		to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
-		return 1
+
+		if(user.drop_item(I, src))
+			src.ingredient = I
+			spawn() src.cook(.)
+			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
+			return 1
 	else to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
 	return 0
 
@@ -236,6 +240,8 @@ var/global/ingredientLimit = 10
 
 	var/obj/item/I = src.ingredient
 	var/obj/item/weapon/reagent_containers/food/new_food = new foodType(src.loc,I)
+	for(var/obj/item/embedded in I.contents)
+		embedded.forceMove(src.loc)
 	if(cooks_in_reagents)
 		transfer_reagents_to_food(new_food)
 
@@ -317,6 +323,8 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/cerealmaker/makeFood()
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
+	for(var/obj/item/embedded in src.ingredient.contents)
+		embedded.forceMove(src.loc)
 	if(src.ingredient.reagents)
 		src.ingredient.reagents.trans_to(C,src.ingredient.reagents.total_volume)
 	if(cooks_in_reagents)
@@ -349,9 +357,8 @@ var/global/ingredientLimit = 10
 	icon_state = "fryer_off"
 	icon_state_on = "fryer_on"
 	foodChoices = null
-	cookTime = 200
+	cookTime = 170
 	recursive_ingredients = 1
-
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 
@@ -363,6 +370,7 @@ var/global/ingredientLimit = 10
 	reagents.update_total() //make the values refresh
 	if(ingredient)
 		icon_state = "fryer_on"
+		playsound(get_turf(src),'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
 	else if(reagents.total_volume < DEEPFRY_MINOIL)
 		icon_state = "fryer_empty"
 	else
@@ -397,6 +405,8 @@ var/global/ingredientLimit = 10
 		src.ingredient.name = "deep fried [src.ingredient.name]"
 		src.ingredient.color = "#FFAD33"
 		src.ingredient.loc = src.loc
+		for(var/obj/item/embedded in src.ingredient.contents)
+			embedded.forceMove(src.loc)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 		if(cooks_in_reagents)
@@ -413,6 +423,9 @@ var/global/ingredientLimit = 10
 				H.stored_mob.ghostize()
 				H.stored_mob.death()
 				qdel(H.stored_mob)
+
+		for(var/obj/item/embedded in src.ingredient.contents)
+			embedded.forceMove(src.loc)
 
 		qdel(src.ingredient)
 
@@ -481,6 +494,8 @@ var/global/ingredientLimit = 10
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
+	for(var/obj/item/embedded  in src.ingredient.contents)
+		embedded.forceMove(src.loc)
 	src.ingredient = null
 	return
 

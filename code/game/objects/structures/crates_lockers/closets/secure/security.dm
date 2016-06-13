@@ -21,7 +21,7 @@
 		new /obj/item/clothing/under/rank/captain(src)
 		new /obj/item/clothing/suit/armor/vest(src)
 		new /obj/item/weapon/cartridge/captain(src)
-		new /obj/item/clothing/head/helmet/swat(src)
+		new /obj/item/clothing/head/helmet/tactical/swat(src)
 		new /obj/item/clothing/shoes/brown(src)
 		new /obj/item/device/radio/headset/heads/captain(src)
 		new /obj/item/clothing/gloves/captain(src)
@@ -29,6 +29,7 @@
 		new /obj/item/clothing/suit/armor/captain(src)
 		new /obj/item/weapon/melee/telebaton(src)
 		new /obj/item/clothing/under/dress/dress_cap(src)
+		new /obj/item/device/gps/secure(src)
 		return
 
 
@@ -52,9 +53,10 @@
 		new /obj/item/weapon/cartridge/hop(src)
 		new /obj/item/device/radio/headset/heads/hop(src)
 		new /obj/item/weapon/storage/box/ids(src)
-		new /obj/item/weapon/storage/box/ids( src )
+		new /obj/item/weapon/storage/box/ids(src)
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/device/flash(src)
+		new /obj/item/device/gps/secure(src)
 		return
 
 /obj/structure/closet/secure_closet/hop2
@@ -102,11 +104,12 @@
 			new /obj/item/weapon/storage/backpack/security(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_sec(src)
-		new /obj/item/clothing/head/helmet/HoS(src)
+		new /obj/item/clothing/head/helmet/tactical/HoS(src)
+		new /obj/item/device/flashlight/tactical(src)
 		new /obj/item/clothing/suit/armor/vest(src)
 		new /obj/item/clothing/under/rank/head_of_security/jensen(src)
 		new /obj/item/clothing/suit/armor/hos/jensen(src)
-		new /obj/item/clothing/head/helmet/HoS/dermal(src)
+		new /obj/item/clothing/head/helmet/tactical/HoS/dermal(src)
 		new /obj/item/weapon/cartridge/hos(src)
 		new /obj/item/device/detective_scanner(src)
 		new /obj/item/device/radio/headset/heads/hos(src)
@@ -120,6 +123,7 @@
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/clothing/accessory/holster/waist(src)
 		new /obj/item/weapon/melee/telebaton(src)
+		new /obj/item/device/gps/secure(src)
 		return
 
 
@@ -145,7 +149,8 @@
 		new /obj/item/clothing/suit/armor/vest/security(src)
 		new /obj/item/clothing/under/rank/warden(src)
 		new /obj/item/clothing/suit/armor/vest/warden(src)
-		new /obj/item/clothing/head/helmet/warden(src)
+		new /obj/item/clothing/head/helmet/tactical/warden(src)
+		new /obj/item/device/flashlight/tactical(src)
 //		new /obj/item/weapon/cartridge/security(src)
 		new /obj/item/device/radio/headset/headset_sec(src)
 		new /obj/item/clothing/glasses/sunglasses/sechud(src)
@@ -156,6 +161,7 @@
 		new /obj/item/weapon/gun/energy/taser(src)
 		new /obj/item/weapon/storage/box/bolas(src)
 		new /obj/item/weapon/batteringram(src)
+		new /obj/item/device/gps/secure(src)
 		return
 
 
@@ -178,7 +184,7 @@
 		else
 			new /obj/item/weapon/storage/backpack/satchel_sec(src)
 		new /obj/item/clothing/suit/armor/vest/security(src)
-		new /obj/item/clothing/head/helmet(src)
+		new /obj/item/clothing/head/helmet/tactical/sec/preattached(src)
 //		new /obj/item/weapon/cartridge/security(src)
 		new /obj/item/device/radio/headset/headset_sec(src)
 		new /obj/item/weapon/storage/belt/security(src)
@@ -257,6 +263,7 @@
 		new /obj/item/ammo_storage/box/c38(src)
 		new /obj/item/weapon/gun/projectile/detective(src)
 		new /obj/item/clothing/accessory/holster/armpit(src)
+		new /obj/item/device/gps/secure(src)
 		return
 
 /obj/structure/closet/secure_closet/detective/update_icon()
@@ -293,8 +300,8 @@
 
 	New()
 		..()
-		new /obj/item/clothing/under/color/prisoner( src )
-		new /obj/item/clothing/shoes/orange( src )
+		new /obj/item/clothing/under/color/prisoner(src)
+		new /obj/item/clothing/shoes/orange(src)
 		return
 
 
@@ -307,12 +314,12 @@
 		..()
 		sleep(2)
 		new /obj/item/clothing/shoes/brown(src)
-		new /obj/item/weapon/paper/Court (src)
-		new /obj/item/weapon/paper/Court (src)
-		new /obj/item/weapon/paper/Court (src)
+		new /obj/item/weapon/paper/Court(src)
+		new /obj/item/weapon/paper/Court(src)
+		new /obj/item/weapon/paper/Court(src)
 		new /obj/item/weapon/pen (src)
-		new /obj/item/clothing/suit/judgerobe (src)
-		new /obj/item/clothing/head/powdered_wig (src)
+		new /obj/item/clothing/suit/judgerobe(src)
+		new /obj/item/clothing/head/powdered_wig(src)
 		new /obj/item/weapon/storage/briefcase(src)
 		return
 

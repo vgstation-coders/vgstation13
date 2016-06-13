@@ -1,8 +1,15 @@
+#define DNA_SE_LENGTH 55
+
+#define VOX_SHAPED "Vox","Skeletal Vox"
+
 //Content of the Round End Information window
 var/round_end_info = ""
 
 //List of ckeys that have de-adminned themselves during this round
 var/global/list/deadmins = list()
+
+//List of vars that require DEBUG on top of VAREDIT to be able to edit
+var/list/lockedvars = list("vars", "client")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
@@ -52,7 +59,7 @@ var/GLASSESBLOCK = 0
 var/EPILEPSYBLOCK = 0
 var/TWITCHBLOCK = 0
 var/NERVOUSBLOCK = 0
-var/MONKEYBLOCK = 54 // Monkey block will always be the DNA_SE_LENGTH
+var/MONKEYBLOCK = DNA_SE_LENGTH
 
 var/BLOCKADD = 0
 var/DIFFMUT = 0
@@ -109,6 +116,7 @@ var/LOUDBLOCK = 0
 var/WHISPERBLOCK = 0
 var/DIZZYBLOCK = 0
 var/SANSBLOCK = 0
+var/NOIRBLOCK = 0
 
 
 
@@ -245,9 +253,6 @@ var/datum/nanomanager/nanomanager = new()
 
 #define shuttle_time_in_station 1800 // 3 minutes in the station
 #define shuttle_time_to_arrive 6000 // 10 minutes to arrive
-
-	//away missions
-var/list/awaydestinations = list()	//a list of landmarks that the warpgate can take you to
 
 	// MySQL configuration
 
@@ -386,6 +391,7 @@ var/global/list/minesweeper_best_players = list()
 var/nanocoins_rates = 1
 var/nanocoins_lastchange = 0
 
+var/speciesinit = 0
 var/minimapinit = 0
 
 var/datum/stat_collector/stat_collection = new
@@ -393,3 +399,26 @@ var/datum/stat_collector/stat_collection = new
 //Hardcore mode
 //When enabled, starvation kills
 var/global/hardcore_mode = 0
+
+//Global list of all unsimulated mineral turfs for xenoarch
+var/global/list/mineral_turfs = list()
+var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/effects/static/static2.ogg','sound/effects/static/static3.ogg','sound/effects/static/static4.ogg','sound/effects/static/static5.ogg',)
+
+//Used to set an atom's color var to "grayscale". The magic of color matrixes.
+var/list/grayscale = list(0.3,0.3,0.3,0,0.59,0.59,0.59,0,0.11,0.11,0.11,0,0,0,0,1,0,0,0,0)
+
+//For adminbus blob looks
+var/adminblob_icon = null
+var/adminblob_size = 64
+var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
+
+// ECONOMY
+// Account default values
+#define DEPARTMENT_START_FUNDS 5000
+#define DEPARTMENT_START_WAGE 500
+#define PLAYER_START_WAGE 50
+
+//SPACE PARALLAX
+var/parallax_initialized = 0
+var/space_color = "#050505"
+var/list/parallax_icon[27]

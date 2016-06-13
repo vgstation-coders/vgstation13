@@ -102,7 +102,7 @@
 	WHISPERBLOCK   = getAssignedBlock("WHISPER",    numsToAssign)
 	DIZZYBLOCK     = getAssignedBlock("DIZZY",      numsToAssign)
 	SANSBLOCK      = getAssignedBlock("SANS",       numsToAssign)
-
+	NOIRBLOCK      = getAssignedBlock("NOIR",       numsToAssign)
 
 	//
 	// Static Blocks
@@ -154,6 +154,8 @@
 
 			if(species.default_blocks.len)
 				all_species[name]=species
+
+	speciesinit = 1
 
 
 /proc/setupfactions()

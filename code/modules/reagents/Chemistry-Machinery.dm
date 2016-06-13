@@ -245,6 +245,13 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			else
 				beaker.loc = beaker:holder
 		beaker = null
+		return 1
+
+/obj/machinery/chem_dispenser/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+		detach()
+		return
+	return ..()
 
 /obj/machinery/chem_dispenser/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(beaker)
@@ -266,12 +273,17 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			to_chat(user, "A beaker is already loaded into the machine.")
 			return
 		else if(!panel_open)
+			if(!user.drop_item(D, src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [D]!</span>")
+				return
+
 			src.beaker =  D
 			if(user.type == /mob/living/silicon/robot)
 				var/mob/living/silicon/robot/R = user
 				R.uneq_active()
-			user.drop_item(D, src)
+
 			to_chat(user, "You add the beaker to the machine!")
+
 			nanomanager.update_uis(src) // update all UIs attached to src
 			return 1
 		else
@@ -401,6 +413,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
+	var/pillamount = 10
 	//var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
 
@@ -496,14 +509,18 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(src.beaker)
 			to_chat(user, "<span class='warning'>There already is a beaker loaded in the machine.</span>")
 			return
+		if(!user.drop_item(B, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+			return
+
 		src.beaker = B
 		if(user.type == /mob/living/silicon/robot)
 			var/mob/living/silicon/robot/R = user
 			R.uneq_active()
 			targetMoveKey =  R.on_moved.Add(src, "user_moved")
 
-		user.drop_item(B, src)
 		to_chat(user, "<span class='notice'>You add the beaker into \the [src]!</span>")
+
 		src.updateUsrDialog()
 		update_icon()
 		return 1
@@ -515,10 +532,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(src.loaded_pill_bottle)
 			to_chat(user, "<span class='warning'>There already is a pill bottle loaded in the machine.</span>")
 			return
+		if(!user.drop_item(B, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+			return
 
 		src.loaded_pill_bottle = B
-		user.drop_item(B, src)
+
 		to_chat(user, "<span class='notice'>You add the pill bottle into \the [src]'s dispenser slot!</span>")
+
 		src.updateUsrDialog()
 		return 1
 
@@ -561,7 +582,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			else
 				dat += "Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			//usr << browse(dat, "window=chem_master;size=575x400")
-			dat = list2text(dat)
+			dat = jointext(dat,"")
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
 			popup.set_content(dat)
 			popup.open()
@@ -629,7 +650,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
 			var/count = 1
-			if(href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", 10, max_pill_count) as num)
+			if(href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", 10, pillamount) as num)
 			count = min(max_pill_count, count)
 			if(!count)
 				return
@@ -643,6 +664,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			var/name = reject_bad_text(input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)") as null|text)
 			if(!name)
 				return
+
 			while(count--)
 				if((amount_per_pill == 0 || reagents.total_volume == 0) && !href_list["createempty"]) //Don't create empty pills unless "createempty" is 1!
 					break
@@ -664,18 +686,17 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 		else if (href_list["createbottle"] || href_list["createbottle_multiple"])
 			if(!condi)
-				var/name = reject_bad_text(input(usr,"Name:", "Name your bottle!", reagents.get_master_reagent_name()))
-				if(!name)
-					name = reagents.get_master_reagent_name()
 				var/count = 1
 				if(href_list["createbottle_multiple"])
 					count = isgoodnumber(input("Select the number of bottles to make.", 10, count) as num)
-				if(count > 4)
-					count = 4
-				if(count < 1)
-					count = 1
+				count = Clamp(count, 1, 4)
 				var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
 				amount_per_bottle = min(amount_per_bottle,max_bottle_size)
+
+				var/name = reject_bad_text(input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)") as null|text)
+				if(!name)
+					return
+
 				while(count--)
 					var/obj/item/weapon/reagent_containers/glass/bottle/P = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc,max_bottle_size)
 					P.name = "[name] bottle"
@@ -705,7 +726,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					dat +="</tr>"
 
 			dat += "</table>"
-			dat = list2text(dat)
+			dat = jointext(dat,"")
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
 			popup.set_content(dat)
 			popup.open()
@@ -741,8 +762,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			bottlesprite = href_list["bottle_sprite"]
 		*/
 
-	return
-
 /obj/machinery/chem_master/proc/detach()
 	if(beaker)
 		beaker.loc = src.loc
@@ -757,6 +776,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		beaker = null
 		reagents.clear_reagents()
 		update_icon()
+
+/obj/machinery/chem_master/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+		detach()
+		return
+	return ..()
 
 /obj/machinery/chem_master/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -804,8 +829,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			dat += "Add to buffer:<BR>"
 			for(var/datum/reagent/G in R.reagent_list)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:518: dat += "[G.name] , [G.volume] Units - "
 				dat += {"[G.name] , [G.volume] Units -
 					<A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(Analyze)</A>
 					<A href='?src=\ref[src];add=[G.id];amount=1'>(1)</A>
@@ -813,14 +836,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					<A href='?src=\ref[src];add=[G.id];amount=10'>(10)</A>
 					<A href='?src=\ref[src];add=[G.id];amount=[G.volume]'>(All)</A>
 					<A href='?src=\ref[src];addcustom=[G.id]'>(Custom)</A><BR>"}
-				// END AUTOFIX
 
 		dat += "<HR>Transfer to <A href='?src=\ref[src];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A><BR>"
 		if(reagents.total_volume)
 			for(var/datum/reagent/N in reagents.reagent_list)
 
-				// AUTOFIXED BY fix_string_idiocy.py
-				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:529: dat += "[N.name] , [N.volume] Units - "
 				dat += {"[N.name] , [N.volume] Units -
 					<A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(Analyze)</A>
 					<A href='?src=\ref[src];remove=[N.id];amount=1'>(1)</A>
@@ -828,13 +848,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					<A href='?src=\ref[src];remove=[N.id];amount=10'>(10)</A>
 					<A href='?src=\ref[src];remove=[N.id];amount=[N.volume]'>(All)</A>
 					<A href='?src=\ref[src];removecustom=[N.id]'>(Custom)</A><BR>"}
-				// END AUTOFIX
 		else
 			dat += "Buffer is empty.<BR>"
 		if(!condi)
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:539: dat += "<HR><BR><A href='?src=\ref[src];createpill=1'>Create pill (50 units max)</A><a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"
 			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><a href=\"?src=\ref[src]&change_bottle=1\"><img src=\"bottle[bottlesprite].png\" /></a><BR>"}
 			dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"}
 			dat += {"<HR><BR><A href='?src=\ref[src];createpill=1'>Create single pill (50 units max)</A><BR>
@@ -842,10 +859,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
 					<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
 					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}
-			// END AUTOFIX
 		else
 			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 400, src)
 	popup.set_content(dat)
 	popup.open()
@@ -899,7 +915,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	density = 1
 	anchored = 1
 	icon = 'icons/obj/chemical.dmi'
-	icon_state = "mixer0"
+	icon_state = "mixer"
 	use_power = 1
 	idle_power_usage = 20
 	var/temphtml = ""
@@ -936,22 +952,22 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 
 /obj/machinery/computer/pandemic/set_broken()
-	icon_state = (src.beaker?"mixer1_b":"mixer0_b")
+	icon_state = "mixer_b"
 	stat |= BROKEN
 
 
 /obj/machinery/computer/pandemic/power_change()
 
 	if(stat & BROKEN)
-		icon_state = (src.beaker?"mixer1_b":"mixer0_b")
+		icon_state = "mixer_b"
 
 	else if(powered())
-		icon_state = (src.beaker?"mixer1":"mixer0")
+		icon_state = "mixer"
 		stat &= ~NOPOWER
 
 	else
 		spawn(rand(0, 15))
-			src.icon_state = (src.beaker?"mixer1_nopower":"mixer0_nopower")
+			icon_state = "mixer_nopower"
 			stat |= NOPOWER
 
 
@@ -1065,8 +1081,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			beaker.loc = beaker:holder
 	beaker = null
-	icon_state = "mixer0"
+	overlays -= "mixer_overlay"
 	src.updateUsrDialog()
+
 /obj/machinery/computer/pandemic/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -1083,11 +1100,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		dat = "[src.temphtml]<BR><BR><A href='?src=\ref[src];clear=1'>Main Menu</A>"
 	else if(!beaker)
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:722: dat += "Please insert beaker.<BR>"
 		dat += {"Please insert beaker.<BR>
 			<A href='?src=\ref[user];mach_close=pandemic'>Close</A>"}
-		// END AUTOFIX
 	else
 		var/datum/reagents/R = beaker.reagents
 		var/datum/reagent/blood/Blood = null
@@ -1103,12 +1117,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			dat += "No blood data found in beaker."
 		else
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:738: dat += "<h3>Blood sample data:</h3>"
 			dat += {"<h3>Blood sample data:</h3>
 				<b>Blood DNA:</b> [(Blood.data["blood_DNA"]||"none")]<BR>
 				<b>Blood Type:</b> [(Blood.data["blood_type"]||"none")]<BR>"}
-			// END AUTOFIX
 			if(Blood.data["viruses"])
 				var/list/vir = Blood.data["viruses"]
 				if(vir.len)
@@ -1129,14 +1140,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 								CRASH("We weren't able to get the advance disease from the archive.")
 
 
-							// AUTOFIXED BY fix_string_idiocy.py
-							// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:762: dat += "<b>Disease Agent:</b> [D?"[D.agent] - <A href='?src=\ref[src];create_virus_culture=[disease_creation]'>Create virus culture bottle</A>":"none"]<BR>"
 							dat += {"<b>Disease Agent:</b> [D?"[D.agent] - <A href='?src=\ref[src];create_virus_culture=[disease_creation]'>Create virus culture bottle</A>":"none"]<BR>
 								<b>Common name:</b> [(D.name||"none")]<BR>
 								<b>Description: </b> [(D.desc||"none")]<BR>
 								<b>Spread:</b> [(D.spread||"none")]<BR>
 								<b>Possible cure:</b> [(D.cure||"none")]<BR><BR>"}
-							// END AUTOFIX
 							if(istype(D, /datum/disease/advance))
 								var/datum/disease/advance/A = D
 								dat += "<b>Symptoms:</b> "
@@ -1169,11 +1177,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			else
 				dat += "nothing<BR>"
 
-		// AUTOFIXED BY fix_string_idiocy.py
-		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:799: dat += "<BR><A href='?src=\ref[src];eject=1'>Eject beaker</A>[((R.total_volume&&R.reagent_list.len) ? "-- <A href='?src=\ref[src];empty_beaker=1'>Empty beaker</A>":"")]<BR>"
 		dat += {"<BR><A href='?src=\ref[src];eject=1'>Eject beaker</A>[((R.total_volume&&R.reagent_list.len) ? "-- <A href='?src=\ref[src];empty_beaker=1'>Empty beaker</A>":"")]<BR>
 			<A href='?src=\ref[user];mach_close=pandemic'>Close</A>"}
-		// END AUTOFIX
 	user << browse("<TITLE>[src.name]</TITLE><BR>[dat]", "window=pandemic;size=575x400")
 	onclose(user, "pandemic")
 	return
@@ -1187,6 +1192,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(src.beaker)
 			to_chat(user, "A beaker is already loaded into the machine.")
 			return
+		if(!user.drop_item(I, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
+			return
 
 		src.beaker =  I
 		if(user.type == /mob/living/silicon/robot)
@@ -1194,10 +1202,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			R.uneq_active()
 			targetMoveKey =  R.on_moved.Add(src, "user_moved")
 
-		user.drop_item(I, src)
 		to_chat(user, "You add the beaker to the machine!")
+
 		src.updateUsrDialog()
-		icon_state = "mixer1"
+		overlays += "mixer_overlay"
 
 	else
 		..()
@@ -1351,13 +1359,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			to_chat(user, "You can't load a beaker while the maintenance panel is open.")
 			return 0
 		else
+			if(!user.drop_item(O, src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+				return
+
 			src.beaker =  O
 			if(user.type == /mob/living/silicon/robot)
 				var/mob/living/silicon/robot/R = user
 				R.uneq_active()
 				targetMoveKey =  R.on_moved.Add(src, "user_moved")
 
-			user.drop_item(O, src)
 			update_icon()
 			src.updateUsrDialog()
 			return 1
@@ -1386,8 +1397,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		to_chat(user, "Cannot refine into a reagent.")
 		return 1
 
-	user.before_take_item(O)
-	O.loc = src
+	if(!user.drop_item(O, src))
+		user << "<span class='notice'>\The [O] is stuck to your hands!</span>"
+		return 1
+
 	holdingitems += O
 	src.updateUsrDialog()
 	return 0
@@ -1439,18 +1452,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	"}
 		if (is_beaker_ready && !is_chamber_empty && !(stat & (NOPOWER|BROKEN)))
 
-			// AUTOFIXED BY fix_string_idiocy.py
-			// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\reagents\Chemistry-Machinery.dm:1016: dat += "<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>"
 			dat += {"<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>
 				<A href='?src=\ref[src];action=juice'>Juice the reagents</a><BR><BR>"}
-			// END AUTOFIX
 		if(holdingitems && holdingitems.len > 0)
 			dat += "<A href='?src=\ref[src];action=eject'>Eject the reagents</a><BR>"
 		if (beaker)
 			dat += "<A href='?src=\ref[src];action=detach'>Detach the beaker</a><BR>"
 	else
 		dat += "Please wait..."
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "reagentgrinder", "All-In-One Grinder", src)
 	popup.set_content(dat)
 	popup.open()
@@ -1475,13 +1485,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	return
 
 /obj/machinery/reagentgrinder/proc/detach()
-
-
-	if (usr.stat != 0)
-		return
 	if (!beaker)
 		return
-	beaker.loc = src.loc
+	beaker.forceMove(src.loc)
 	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 		var/mob/living/silicon/robot/R = beaker:holder:loc
 		if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
@@ -1491,9 +1497,13 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	beaker = null
 	update_icon()
 
+/obj/machinery/reagentgrinder/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+		detach()
+		return
+	return ..()
+
 /obj/machinery/reagentgrinder/proc/eject()
-
-
 	if (usr.stat != 0)
 		return
 	if (holdingitems && holdingitems.len == 0)
@@ -1693,10 +1703,22 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	icon_state = "chemg_wired"
 	item_state = "chemg_wired"
 	desc = "A refurbished grenade-casing jury rigged to split simple chemicals."
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	force = 2.0
 	var/list/beakers = new/list()
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/)
+	var/datum/effect/effect/system/spark_spread/spark_system
+
+/obj/item/weapon/electrolyzer/New()
+	. = ..()
+	spark_system = new
+	spark_system.set_up(5, 0, src)
+	spark_system.attach(src)
+
+/obj/item/weapon/electrolyzer/Destroy()
+	qdel(spark_system)
+	spark_system	= null
+	. = ..()
 
 /obj/item/weapon/electrolyzer/attack_self(mob/user as mob)
 	if(beakers.len)
@@ -1783,13 +1805,17 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			else
 				empty.reagents.add_reagent(E, unreaction.required_reagents[E]*total_reactions)
 		to_chat(user, "<span class='warning'>The system electrolyzes!</span>")
+		spark_system.start()
 	else
 		..()
 
 /obj/item/weapon/electrolyzer/proc/insert_beaker(obj/item/weapon/W as obj, mob/user as mob)
-	W.loc = src
-	beakers += W
-	user.drop_item(W, src)
+	if(user.drop_item(W, src))
+		W.loc = src
+		beakers += W
+	else
+		to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		return
 
 
 /obj/structure/centrifuge
@@ -1820,20 +1846,18 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		qdel(src)
 	if(W.is_open_container())
 		if(!W.reagents.total_volume)
-			W.loc = src
-			cans += W
-			user.drop_item(W, src)
-			to_chat(user, "<span class='notice'>You add a passive container. It now contains [cans.len].</span>")
+			if(user.drop_item(W, src))
+				cans += W
+				to_chat(user, "<span class='notice'>You add a passive container. It now contains [cans.len].</span>")
 		else
 			if(!beaker)
-				to_chat(user, "<span class='notice'>You insert an active container.</span>")
-				src.beaker =  W
-				if(user.type == /mob/living/silicon/robot)
-					var/mob/living/silicon/robot/R = user
-					R.uneq_active()
-					targetMoveKey =  R.on_moved.Add(src, "user_moved")
-
-				user.drop_item(W, src)
+				if(user.drop_item(W, src))
+					to_chat(user, "<span class='notice'>You insert an active container.</span>")
+					src.beaker =  W
+					if(user.type == /mob/living/silicon/robot)
+						var/mob/living/silicon/robot/R = user
+						R.uneq_active()
+						targetMoveKey =  R.on_moved.Add(src, "user_moved")
 			else
 				to_chat(user, "<span class='warning'>There is already an active container.</span>")
 		return
@@ -1868,6 +1892,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	set name = "Flush"
 	set category = "Object"
 	set src in view(1)
+
+	if(usr.incapacitated() || !Adjacent(usr)) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
+		return
+
+	if(!cans || !beaker)
+		to_chat(usr, "<span class='warning'>\The [src] needs an active container and multiple passive containers to work.</span>")
+		return
+
 	add_fingerprint(usr)
 	to_chat(usr, "<span class='notice'>\The [src] groans as it spits out containers.</span>")
 	while(cans.len>0 && beaker.reagents.reagent_list.len>0)
@@ -1884,9 +1916,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		detach()
 		return
 
+/obj/structure/centrifuge/AltClick()
+	if(Adjacent(usr)) //Further sanity in the verb itself
+		flush()
+		return
+	return ..()
+
 /obj/structure/centrifuge/proc/detach()
 	if(beaker)
-		beaker.loc = src.loc
+		beaker.forceMove(src.loc)
 		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = beaker:holder:loc
 			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
@@ -1896,7 +1934,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		beaker = null
 		return
 
-/obj/item/weapon/reagent_containers/mortar
+/obj/item/weapon/reagent_containers/glass/mortar
 	name = "mortar"
 	desc = "This is a reinforced bowl, used for crushing reagents. Ooga booga Rockstop."
 	icon = 'icons/obj/food.dmi'
@@ -1913,16 +1951,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/stack/sheet/mineral/clown   = list("banana",20),
 		/obj/item/stack/sheet/mineral/silver  = list("silver",20),
 		/obj/item/stack/sheet/mineral/gold    = list("gold",20),
-		/obj/item/weapon/grown/nettle         = list("sacid",0),
-		/obj/item/weapon/grown/deathnettle    = list("pacid",0),
+		/obj/item/weapon/grown/nettle         = list("sacid",10),
+		/obj/item/weapon/grown/deathnettle    = list("pacid",10),
 		/obj/item/stack/sheet/charcoal        = list("charcoal",20),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list("soymilk",1),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list("ketchup",2),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/corn = list("cornoil",3),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat = list("flour",5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk = list("rice",5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries = list("cherryjelly",1),
-		/obj/item/seeds = list("blackpepper",5),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans   = list("soymilk",1),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato     = list("ketchup",2),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/corn       = list("cornoil",3),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat      = list("flour",5),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk  = list("rice",5),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries   = list("cherryjelly",1),
+		/obj/item/seeds	                      = list("blackpepper",5),
 		/obj/item/device/flashlight/flare     = list("sulfur",10),
 		/obj/item/stack/cable_coil            = list("copper", 10),
 		/obj/item/weapon/cell                 = list("lithium", 10),
@@ -1950,19 +1988,18 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	var/obj/item/crushable = null
 
+/obj/item/weapon/reagent_containers/glass/mortar/Destroy()
+	qdel(crushable)
+	crushable = null
+	. = ..()
 
-/obj/item/weapon/reagent_containers/mortar/afterattack(var/obj/target, var/mob/user, var/adjacency_flag)
-	if (!adjacency_flag)
-		return
-
-	transfer(target, user, can_send = TRUE, can_receive = TRUE, splashable_units = -1)
-
-/obj/item/weapon/reagent_containers/mortar/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/glass/mortar/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (isscrewdriver(O))
 		if(crushable)
-			crushable.loc = src.loc
+			crushable.forceMove(user.loc)
 		new /obj/item/stack/sheet/metal(user.loc)
 		new /obj/item/trash/bowl(user.loc)
+		qdel(src) //Important detail
 		return
 	if (crushable)
 		to_chat(user, "<span class ='warning'>There's already something inside!</span>")
@@ -1970,26 +2007,32 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if (!is_type_in_list(O, blend_items) && !is_type_in_list(O, juice_items))
 		to_chat(user, "<span class ='warning'>You can't grind that!</span>")
 		return ..()
+
 	if(istype(O, /obj/item/stack/))
 		var/obj/item/stack/N = new O.type(src, amount=1)
 		var/obj/item/stack/S = O
 		S.use(1)
 		crushable = N
+		to_chat(user, "<span class='notice'>You place \the [N] in \the [src].</span>")
 		return 0
-	user.drop_item(O, src)
+	else if(!user.drop_item(O, src))
+		to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+		return
+
 	crushable = O
+	to_chat(user, "<span class='notice'>You place \the [O] in \the [src].</span>")
 	return 0
 
-/obj/item/weapon/reagent_containers/mortar/attack_hand(mob/user as mob)
+/obj/item/weapon/reagent_containers/glass/mortar/attack_hand(mob/user as mob)
 	add_fingerprint(user)
 	if(user.get_inactive_hand() != src) return ..()
 	if(crushable)
-		crushable.loc = src.loc
+		crushable.forceMove(user.loc)
 		user.put_in_active_hand(crushable)
 		crushable = null
 	return
 
-/obj/item/weapon/reagent_containers/mortar/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/glass/mortar/attack_self(mob/user as mob)
 	if(!crushable)
 		to_chat(user, "<span class='notice'>There is nothing to be crushed.</span>")
 		return
@@ -2039,6 +2082,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	crushable = null
 	return
 
-/obj/item/weapon/reagent_containers/mortar/examine(mob/user)
+/obj/item/weapon/reagent_containers/glass/mortar/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It has [crushable ? "an unground \the [crushable] inside." : "nothing to be crushed."]</span>")
+	to_chat(user, "<span class='info'>It has [crushable ? "an unground [crushable] inside." : "nothing to be crushed."]</span>")

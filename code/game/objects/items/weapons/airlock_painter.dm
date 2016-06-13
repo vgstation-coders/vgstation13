@@ -5,7 +5,7 @@
 	icon_state = "paint sprayer"
 	item_state = "paint sprayer"
 
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
@@ -60,11 +60,10 @@
 		if(ink)
 			to_chat(user, "<span class='notice'>\the [name] already contains \a [ink].</span>")
 			return
-		user.drop_item(W, src)
-		to_chat(user, "<span class='notice'>You install \the [W] into \the [name].</span>")
-		ink = W
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-
+		if(user.drop_item(W, src))
+			to_chat(user, "<span class='notice'>You install \the [W] into \the [name].</span>")
+			ink = W
+			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 
 /obj/item/weapon/airlock_painter/attack_self(mob/user)
 	if(ink)

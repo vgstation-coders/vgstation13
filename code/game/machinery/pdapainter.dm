@@ -91,10 +91,10 @@ Feel free to do whatever with this if you think it lacks.
 		else
 			var/obj/item/device/pda/P = O
 			if(istype(P))
-				user.drop_item(P, src)
-				storedpda = P
-				//P.add_fingerprint(usr)
-				update_icon()
+				if(user.drop_item(P, src))
+					storedpda = P
+					//P.add_fingerprint(usr)
+					update_icon()
 
 /obj/machinery/pdapainter/attack_hand(mob/user as mob)
 	..()
@@ -120,7 +120,7 @@ Feel free to do whatever with this if you think it lacks.
 			storedpda.name = initial(P.name)
 
 		sleep(10)
-		src.visible_message("\icon [src] \The [src] beeps: \"Successfully recolored to \a [storedpda]\"")
+		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully recolored to \a [storedpda]\"")
 		busy = 0 //do not forget this
 
 	else

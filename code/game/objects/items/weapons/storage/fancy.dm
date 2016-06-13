@@ -58,7 +58,7 @@
 	icon_type = "donut"
 	name = "donut box"
 	storage_slots = 6
-	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/donut", \
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/donut", \
 					"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut")
 
 	foldable = /obj/item/stack/sheet/cardboard
@@ -88,7 +88,8 @@
 	icon_type = "egg"
 	name = "egg box"
 	storage_slots = 12
-	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/egg")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/egg")
+	var/egg_type = "chicken"
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -98,13 +99,19 @@
 	empty = 1
 	icon_state = "eggbox0"
 
+/obj/item/weapon/storage/fancy/egg_box/vox
+	egg_type = "vox"
+
 /obj/item/weapon/storage/fancy/egg_box/New()
 	..()
 	if(empty)
 		update_icon() //Make it look actually empty
 		return
 	for(var/i = 1; i <= storage_slots; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/egg(src)
+		if(egg_type == "chicken")
+			new /obj/item/weapon/reagent_containers/food/snacks/egg(src)
+		if(egg_type == "vox")
+			new /obj/item/weapon/reagent_containers/food/snacks/egg/vox(src)
 	return
 
 /*
@@ -150,10 +157,10 @@
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	storage_slots = 6
 	icon_type = "crayon"
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/toy/crayon"
 	)
 
@@ -201,10 +208,11 @@
 	icon_type = "match"
 	plural_type = "es"
 	storage_slots = 21 //3 rows of 7 items
-	w_class = 1
+	max_combined_w_class = 21
+	w_class = W_CLASS_TINY
 	flags = 0
 	var/matchtype = /obj/item/weapon/match
-	can_hold = list("/obj/item/weapon/match") // Strict type check.
+	can_only_hold = list("/obj/item/weapon/match") // Strict type check.
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/storage/fancy/matchbox/empty
@@ -260,12 +268,12 @@
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "cigpacket"
 	item_state = "cigpacket"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 2
 	flags = 0
 	slot_flags = SLOT_BELT
 	storage_slots = 6
-	can_hold = list("=/obj/item/clothing/mask/cigarette", "/obj/item/weapon/lighter") // Strict type check.
+	can_only_hold = list("=/obj/item/clothing/mask/cigarette", "/obj/item/weapon/lighter") // Strict type check.
 	icon_type = "cigarette"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
@@ -326,7 +334,7 @@
 	icon_type = "vial"
 	name = "vial storage box"
 	storage_slots = 6
-	can_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
 
 	foldable = null
 
@@ -345,8 +353,7 @@
 	icon = 'icons/obj/vialbox.dmi'
 	icon_state = "vialbox0"
 	item_state = "syringe_kit"
-	max_w_class = 3
-	can_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/beaker/vial")
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 6
 	req_access = list(access_virology)
@@ -381,7 +388,7 @@
 	icon_type = "flare"
 	name = "box of flares"
 	storage_slots = 6
-	can_hold = list("/obj/item/device/flashlight/flare")
+	can_only_hold = list("/obj/item/device/flashlight/flare")
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -420,7 +427,7 @@
 	icon_state = "kfc_drumsticks"
 	item_state = "kfc_bucket"
 	icon_type = "drumstick"
-	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick")
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
@@ -448,7 +455,7 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "slider_box"
 	storage_slots = 6
-	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
 
 /obj/item/weapon/storage/fancy/food_box/update_icon(var/itemremoved = 0) //this is so that your box doesn't turn into a donut box, see line 29
 	return
@@ -460,7 +467,7 @@
 	desc = "I wonder what's inside."
 	icon_type = "slider"
 	storage_slots = 4
-	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/slider")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/slider")
 	var/slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider//set this as the spawn path of your slider
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC

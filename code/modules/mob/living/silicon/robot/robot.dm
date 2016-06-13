@@ -144,9 +144,10 @@
 		cell_component.installed = 1
 
 	playsound(loc, startup_sound, 75, 1)
-	add_language(LANGUAGE_SOL_COMMON)
+	add_language(LANGUAGE_GALACTIC_COMMON)
 	add_language(LANGUAGE_TRADEBAND)
 	add_language(LANGUAGE_VOX, 0)
+	add_language(LANGUAGE_HUMAN, 0)
 	add_language(LANGUAGE_ROOTSPEAK, 0)
 	add_language(LANGUAGE_GREY, 0)
 	add_language(LANGUAGE_CLATTER, 0)
@@ -156,7 +157,8 @@
 	add_language(LANGUAGE_SKRELLIAN, 0)
 	add_language(LANGUAGE_GUTTER, 0)
 	add_language(LANGUAGE_MONKEY, 0)
-	default_language = all_languages[LANGUAGE_SOL_COMMON]
+	add_language(LANGUAGE_MOUSE, 0)
+	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
@@ -254,6 +256,7 @@
 			module_sprites["Marina-SD"] = "marinaSD"
 			module_sprites["Sleek"] = "sleekstandard"
 			module_sprites["#11"] = "servbot"
+			module_sprites["Spider"] = "spider-standard"
 			speed = 0
 
 		if("Service")
@@ -397,11 +400,11 @@
 	/* Oh jesus fucking christ bay
 	if(!custom_sprite) //Check for custom sprite
 		var/file = file2text("config/custom_sprites.txt")
-		var/lines = text2list(file, "\n")
+		var/lines = splittext(file, "\n")
 
 		for(var/line in lines)
 		// split & clean up
-			var/list/Entry = text2list(line, "-")
+			var/list/Entry = splittext(line, "-")
 			for(var/i = 1 to Entry.len)
 				Entry[i] = trim(Entry[i])
 
@@ -446,11 +449,8 @@
 /mob/living/silicon/robot/proc/robot_alerts()
 
 
-	// AUTOFIXED BY fix_string_idiocy.py
-	// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\living\silicon\robot\robot.dm:322: var/dat = "<HEAD><TITLE>Current Station Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
 	var/dat = {"<HEAD><TITLE>Current Station Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n
 <A HREF='?src=\ref[src];mach_close=robotalerts'>Close</A><BR><BR>"}
-	// END AUTOFIX
 	for (var/cat in alarms)
 		dat += text("<B>[cat]</B><BR>\n")
 		var/list/L = alarms[cat]
@@ -521,7 +521,9 @@
 /mob/living/silicon/robot/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if (stat != 2)
+	..()
+	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
+	if (stat != DEAD)
 		adjustBruteLoss(60)
 		updatehealth()
 		return 1
@@ -628,8 +630,7 @@
 		to_chat(src, "The bus' robustness protects you from the explosion.")
 		return
 
-	if(!blinded)
-		flick("flash", flash)
+	flash_eyes(visual = 1, affect_silicon = 1)
 
 	switch(severity)
 		if(1.0)
@@ -699,7 +700,7 @@
 
 
 /mob/living/silicon/robot/emag_act(mob/user as mob)
-	if(!user != src)
+	if(user != src)
 		if(!opened)
 			if(locked)
 				if(prob(90))
@@ -711,12 +712,10 @@
 						to_chat(src, "Hack attempt detected.")
 			else
 				to_chat(user, "The cover is already open.")
-			return
-		if(opened)
-			if(emagged == 1) return
+		else
+			if(emagged == 1) return 1
 			if(wiresexposed)
 				to_chat(user, "The wires get in your way.")
-				return
 			else
 				if(prob(50))
 					sleep(6)
@@ -744,7 +743,7 @@
 					to_chat(src, "<span class='danger'>Would you like to send a report to NanoTraSoft? Y/N</span>")
 					sleep(10)
 					to_chat(src, "<span class='danger'>> N</span>")
-					to_chat(src, sound('sound/voice/AISyndiHack.ogg'))
+					src << sound('sound/voice/AISyndiHack.ogg')
 					sleep(20)
 					to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
 					to_chat(src, "<b>Obey these laws:</b>")
@@ -752,10 +751,12 @@
 					to_chat(src, "<span class='danger'>ALERT: [user.real_name] is your new master. Obey your new laws and their commands.</span>")
 					SetLockdown(0)
 					update_icons()
+					return 0
 				else
 					to_chat(user, "You fail to unlock [src]'s interface.")
 					if(prob(25))
 						to_chat(src, "Hack attempt detected.")
+	return 1
 
 
 /mob/living/silicon/robot/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -799,7 +800,7 @@
 		for(var/mob/O in viewers(user, null))
 			O.show_message(text("<span class='attack'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
 
-	else if (istype(W, /obj/item/weapon/crowbar))	// crowbar means open or close the cover
+	else if (iscrowbar(W))	// crowbar means open or close the cover
 		if(opened)
 			if(cell)
 				to_chat(user, "You close the cover.")
@@ -874,18 +875,18 @@
 			C.wrapped = W
 			C.install()
 
-	else if (istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/multitool))
+	else if (iswiretool(W))
 		if (wiresexposed)
 			wires.Interact(user)
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && opened && !cell)	// haxing
+	else if(isscrewdriver(W) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
-		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"]")
+		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && opened && cell)	// radio
+	else if(isscrewdriver(W) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else
@@ -990,7 +991,7 @@
 				for(var/mob/O in viewers(src, null))
 					O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 				if(prob(8))
-					flick("noise", flash)
+					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
@@ -1062,7 +1063,7 @@
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>The [M.name] has electrified []!</span>", src), 1)
 
-				flick("noise", flash)
+				flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(5, 1, src)
@@ -1433,6 +1434,12 @@
 	set category = "IC"
 	set src = usr
 
+	if(attack_delayer.blocked()) return
+
+	if(isVentCrawling())
+		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+		return
+
 	if(stat == DEAD) return
 	var/obj/item/W = get_active_hand()
 	if (W)
@@ -1533,3 +1540,6 @@
 
 /mob/living/silicon/robot/proc/help_shake_act(mob/user)
 	user.visible_message("<span class='notice'>[user.name] pats [src.name] on the head.</span>")
+
+/mob/living/silicon/robot/CheckSlip()
+	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)

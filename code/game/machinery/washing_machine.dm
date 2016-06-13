@@ -1,5 +1,5 @@
 /obj/machinery/washing_machine
-	name = "Washing Machine"
+	name = "washing machine"
 	icon = 'icons/obj/machines/washing_machine.dmi'
 	icon_state = "wm_10"
 	density = 1
@@ -45,7 +45,7 @@
 	set src in oview(1)
 
 	if( wash_state != 4 )
-		to_chat(usr, "The washing machine cannot run in this state.")
+		to_chat(usr, "\The [src] cannot run in this state.")
 		return
 
 	if( locate(/mob,contents) )
@@ -225,6 +225,12 @@
 		wash_state = 4
 	update_icon()
 
+/obj/machinery/washing_machine/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+		start()
+		return
+	return ..()
+
 /obj/machinery/washing_machine/verb/climb_out()
 	set name = "Climb out"
 	set category = "Object"
@@ -245,8 +251,8 @@
 	else if(istype(W,/obj/item/toy/crayon) ||istype(W,/obj/item/weapon/stamp))
 		if( wash_state in list(	1, 3, 6 ) )
 			if(!crayon)
-				user.drop_item(W, src)
-				crayon = W
+				if(user.drop_item(W, src))
+					crayon = W
 	else if(istype(W,/obj/item/weapon/grab))
 		if( (wash_state == 1) && hacked)
 			var/obj/item/weapon/grab/G = W
@@ -305,12 +311,12 @@
 
 		if(contents.len < 5)
 			if ( wash_state in list(1, 3) )
-				user.drop_item(W, src)
-				wash_state = 3
+				if(user.drop_item(W, src))
+					wash_state = 3
 			else
 				to_chat(user, "<span class='notice'>You can't put the item in right now.</span>")
 		else
-			to_chat(user, "<span class='notice'>The washing machine is full.</span>")
+			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 	update_icon()
 
 /obj/machinery/washing_machine/attack_hand(mob/user as mob)
@@ -333,7 +339,7 @@
 			crayon = null
 			wash_state = 1
 		if(5)
-			to_chat(user, "<span class='warning'>The [src] is busy.</span>")
+			to_chat(user, "<span class='warning'>\The [src] is busy.</span>")
 		if(6)
 			wash_state = 7
 		if(7)

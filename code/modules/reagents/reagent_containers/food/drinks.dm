@@ -106,7 +106,7 @@
 			//Display an attack message.
 			for(var/mob/O in viewers(user, null))
 				if(M != user) O.show_message(text("<span class='danger'>[M] has been hit over the head with a [smashtext][src.name], by [user]!</span>"), 1)
-				else O.show_message(text("<span class='danger'>[M] hit himself with a [smashtext][src.name] on the head!</span>"), 1)
+				else O.show_message(text("<span class='danger'>[M] hits \himself with a [smashtext][src.name] on the head!</span>"), 1)
 			//Weaken the target for the duration that we calculated and divide it by 5.
 			if(armor_duration)
 				M.apply_effect(min(armor_duration, 10) , WEAKEN) // Never weaken more than a flash!
@@ -196,6 +196,9 @@
 	if (!adjacency_flag)
 		return
 
+	if(!reagents)
+		return
+
 	// Attempt to transfer to our glass
 	if (transfer(target, user, can_send = FALSE, can_receive = TRUE))
 		return
@@ -226,7 +229,7 @@
 	if(viewcontents)
 		..()
 	else
-		to_chat(user, "\icon[src] That's \a [src].")
+		to_chat(user, "[bicon(src)] That's \a [src].")
 		to_chat(user, desc)
 		to_chat(user, "<span class='info'>You can't quite make out its content!</span>")
 
@@ -248,7 +251,8 @@
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
 	if(lit)
-		user.bodytemperature += 30 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
+		user.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
+		lit = 0
 
 	if(isrobot(user))
 		reagents.remove_any(gulp_size)
@@ -280,7 +284,7 @@
 	name = "golden cup"
 	icon_state = "golden_cup"
 	item_state = "" //nope :(
-	w_class = 4
+	w_class = W_CLASS_LARGE
 	force = 14
 	throwforce = 10
 	amount_per_transfer_from_this = 20
@@ -613,6 +617,32 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans
 	vending_cat = "carbonated drinks"
+	flags = FPRINT //Starts sealed until you pull the tab! Lacks OPENCONTAINER for this purpose
+	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
+	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(mob/user as mob)
+	if(!is_open_container())
+		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+		flags |= OPENCONTAINER
+		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
+		playsound(user, pick(open_sounds), 50, 1)
+		return
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(iswirecutter(W))
+		to_chat(user, "You cut out the top and bottom of \the [src] with \the [W].")
+		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/aluminum_cylinder/I = new (get_turf(user))
+			user.put_in_hands(I)
+			qdel(src)
+		else
+			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
+			qdel(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola
 	name = "Space Cola"
@@ -767,13 +797,28 @@
 	name = "Shaker"
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
+	origin_tech = "materials=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 
+/obj/item/weapon/reagent_containers/food/drinks/thermos
+	name = "Thermos"
+	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
+	icon_state = "shaker"
+	origin_tech = "materials=1"
+	amount_per_transfer_from_this = 10
+	volume = 100
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos/full/New()
+	..()
+	var/new_reagent = pick("coffee", "hot_coco", "icecoffee", "tea", "icetea", "water", "ice", "iced_beer")
+	reagents.add_reagent(new_reagent, rand(50,100))
+
 /obj/item/weapon/reagent_containers/food/drinks/flask
 	name = "Captain's Flask"
-	desc = "A metal flask belonging to the captain"
+	desc = "A metal flask belonging to the captain."
 	icon_state = "flask"
+	origin_tech = "materials=1"
 	volume = 60
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/detflask
@@ -825,9 +870,9 @@
 	throw_speed = 3
 	throw_range = 5
 	sharpness = 0.8 //same as glass shards
-	w_class = 1
+	w_class = W_CLASS_TINY
 	item_state = "beer"
-	attack_verb = list("stabbed", "slashed", "attacked")
+	attack_verb = list("stabs", "slashes", "attacks")
 	var/icon/broken_outline = icon('icons/obj/drinks.dmi', "broken")
 	starting_materials = list(MAT_GLASS = 500)
 	melt_temperature = MELTPOINT_GLASS
@@ -1047,10 +1092,10 @@
 			new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 
 	//Creates a shattering noise and replaces the bottle with a broken_bottle
-	user.drop_item()
+	user.drop_item(force_drop = 1)
 	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(user.loc)
 	B.icon_state = src.icon_state
-	B.force = src.force
+	//B.force = src.force //Who thought this was a good idea? It makes bottles broken by throwing deal no damage and bottles smashed over someone's head continue to deal a ton.
 	B.name = src.smashname
 
 	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses

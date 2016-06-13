@@ -265,6 +265,14 @@
 	score["crewscore"] -= plaguepoints
 	score["arenafights"] = arena_rounds
 
+	var/transfer_total = 0
+	for(var/datum/money_account/A in all_money_accounts)
+		for(var/datum/transaction/T in A.transaction_log)
+			var/amt = text2num(T.amount)
+			if(amt <= 0) // This way we don't track payouts or starting funds, only money transferred to terminals or between players
+				transfer_total += abs(amt)
+	score["totaltransfer"] = transfer_total
+
 	arena_top_score = 0
 	for(var/x in arena_leaderboard)
 		if(arena_leaderboard[x] > arena_top_score)
@@ -422,7 +430,8 @@
 	dat += {"<B>Food Eaten:</b> [score["foodeaten"]]<BR>
 	<B>Times a Clown was Abused:</B> [score["clownabuse"]]<BR>
 	<B>Number of Explosions This Shift:</B> [score["explosions"]]<BR>
-	<B>Number of Arena Rounds:</B> [score["arenafights"]]<BR>"}
+	<B>Number of Arena Rounds:</B> [score["arenafights"]]<BR>
+	<B>Total money trasferred:</B> [score["totaltransfer"]]<BR>"}
 
 	if(arena_top_score)
 		dat += "<B>Best Arena Fighter (won [arena_top_score] rounds!):</B> [score["arenabest"]]<BR>"
@@ -457,7 +466,7 @@
 		if(1000 to 4999) score["rating"] = "Promotions for Everyone"
 		if(5000 to 9999) score["rating"] = "Ambassadors of Discovery"
 		if(10000 to 49999) score["rating"] = "The Pride of Science Itself"
-		if(50000 to INFINITY) score["rating"] = "NanoTrasen's Finest"
+		if(50000 to INFINITY) score["rating"] = "Nanotrasen's Finest"
 	dat += "<B><U>RATING:</U></B> [score["rating"]]"
 
 	for(var/i = 1; i <= end_icons.len; i++)

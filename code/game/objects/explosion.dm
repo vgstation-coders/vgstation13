@@ -25,6 +25,9 @@
  * @param ignored            Do not notify explosion listeners
  * @param verbose            Explosion listeners will treat as an important explosion worth reporting on radio
  */
+
+var/explosion_shake_message_cooldown = 0
+
 /proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1)
 	src = null	//so we don't abort once src is deleted
 
@@ -34,7 +37,7 @@
 			explosion_rec(epicenter, power)
 			return
 
-		var/start = world.timeofday
+		var/watch = start_watch()
 		epicenter = get_turf(epicenter)
 		if(!epicenter)
 			return
@@ -53,6 +56,7 @@
 //3/7/14 will calculate to 80 + 35
 		var/far_dist = (devastation_range * 20) + (heavy_impact_range * 5)
 		var/frequency = get_rand_frequency()
+		var/skip_shake = 0 //Will not display shaking-related messages
 
 		for (var/mob/M in player_list)
 			//Double check for client
@@ -64,10 +68,10 @@
 					if(dist <= round(max_range + world.view - 2, 1))
 						if(devastation_range > 0)
 							M.playsound_local(epicenter, get_sfx("explosion"), 100, 1, frequency, falloff = 5) // get_sfx() is so that everyone gets the same sound
-							shake_camera(M, 10, 2)
+							shake_camera(M, Clamp(devastation_range, 3, 10), 2)
 						else
 							M.playsound_local(epicenter, get_sfx("explosion_small"), 100, 1, frequency, falloff = 5)
-							shake_camera(M, 4, 1)
+							shake_camera(M, 3, 1)
 
 						//You hear a far explosion if you're outside the blast radius. Small bombs shouldn't be heard all over the station.
 
@@ -76,17 +80,23 @@
 						far_volume += (dist <= far_dist * 0.5 ? 50 : 0) // add 50 volume if the mob is pretty close to the explosion
 						if(devastation_range > 0)
 							M.playsound_local(epicenter, 'sound/effects/explosionfar.ogg', far_volume, 1, frequency, falloff = 5)
-							to_chat(M, "<span class='warning'>You feel something shake the structure...</span>")
-							shake_camera(M, 4, 1)
+							shake_camera(M, 3, 1)
 						else
 							M.playsound_local(epicenter, 'sound/effects/explosionsmallfar.ogg', far_volume, 1, frequency, falloff = 5)
+							skip_shake = 1
+
+					if(!explosion_shake_message_cooldown && !skip_shake)
+						to_chat(M, "<span class='danger'>You feel the station's structure shaking all around you.</span>")
+						explosion_shake_message_cooldown = 1
+						spawn(50)
+							explosion_shake_message_cooldown = 0
 
 		var/close = trange(world.view+round(devastation_range,1), epicenter)
 		//To all distanced mobs play a different sound
 		for(var/mob/M in mob_list) if(M.z == epicenter.z) if(!(M in close))
 			//Check if the mob can hear
 			if(M.ear_deaf <= 0 || !M.ear_deaf) if(!istype(M.loc,/turf/space))
-				to_chat(M, 'sound/effects/explosionfar.ogg')
+				M << 'sound/effects/explosionfar.ogg'
 		if(adminlog)
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")
@@ -134,7 +144,7 @@
 
 			T.ex_act(dist)
 
-		var/took = (world.timeofday-start)/10
+		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
 		if(Debug2)
 			world.log << "## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds."

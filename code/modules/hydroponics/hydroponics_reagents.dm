@@ -18,7 +18,7 @@
 	waterlevel += amount
 	// Water dilutes toxin level.
 	if(amount > 0)
-		toxins -= round(amount/4)
+		toxins -= amount*4
 
 //Process reagents being input into the tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents()
@@ -246,7 +246,7 @@
 
 /datum/reagent/cryoxadone/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.toxins += -3
+	T.toxins -= 3
 	if(T.seed && !T.dead)
 		T.health += 3
 

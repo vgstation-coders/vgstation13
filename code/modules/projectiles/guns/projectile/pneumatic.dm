@@ -4,11 +4,11 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "pneumatic"
 	item_state = "pneumatic"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	max_w_class = 3
+	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 20
 	origin_tech = "materials=3;engineering=3"
 
@@ -53,7 +53,10 @@
 
 /obj/item/weapon/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
 	if(!tank && istype(W,/obj/item/weapon/tank))
-		user.drop_item(W, src.tank_container)
+		if(!user.drop_item(W, src.tank_container))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			return
+
 		tank = W
 		user.visible_message("[user] jams [W] into [src]'s valve and twists it closed.","You jam [W] into [src]'s valve and twist it closed.")
 		icon_state = "pneumatic-tank"

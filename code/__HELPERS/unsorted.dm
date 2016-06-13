@@ -4,6 +4,9 @@
  * A large number of misc global procs.
  */
 
+/proc/SAFE_CRASH(var/msg)
+	CRASH(msg)
+
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end) return 0
 	var/dy
@@ -233,18 +236,21 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 					search_pda = FALSE
 
-		// fixes renames not being reflected in objective text
-		var/length
-		var/position
-
-		for (var/datum/mind/mind in ticker.minds)
-			if (mind)
-				for (var/datum/objective/objective in mind.objectives)
+		for (var/datum/mind/themind in ticker.minds)
+			if (themind)
+				var/found = 0
+				for (var/datum/objective/objective in themind.objectives)
 					if (objective && objective.target == mind)
-						length = length(oldname)
-						position = findtextEx(objective.explanation_text, oldname)
-						objective.explanation_text = copytext(objective.explanation_text, 1, position) + newname + copytext(objective.explanation_text, position + length)
-
+						found = 1
+						objective.explanation_text = replacetext(objective.explanation_text, oldname, newname)
+						themind.memory = replacetext(themind.memory, oldname, newname)
+				if(themind.current && found)
+					var/obj_count = 1
+					to_chat(themind.current, "<span class='danger'>Objectives Updated</span>")
+					to_chat(themind.current, "<span class='notice'>Your current objectives:</span>")
+					for(var/datum/objective/objective in themind.objectives)
+						to_chat(themind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
+						obj_count++
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
@@ -280,7 +286,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 				var/mob/living/silicon/ai/A = src
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
-//				to_chat(world, sound('sound/AI/newAI.ogg'))
+//				world << sound('sound/AI/newAI.ogg')
 				// Set eyeobj name
 				if(A.eyeobj)
 					A.eyeobj.name = "[newname] (AI Eye)"
@@ -432,6 +438,33 @@ Turf and target are seperate in case you want to teleport some distance from a t
 //		mob_list.Add(M)
 	return moblist
 
+// Finds ALL mobs on turfs in line of sight. Similar to "in dview", but catches mobs that are not on a turf (e.g. inside a locker or such).
+/proc/get_all_mobs_in_dview(var/turf/T, var/range = world.view, var/list/ignore_types = list())
+	. = list()
+	var/list/can_see = dview(range, T)
+	for(var/mob/M in can_see)
+		if(is_type_in_list(M, ignore_types))
+			continue
+		. += M
+	for(var/mob/M in mob_list) //Got the ones in vision, now let's go for the ones not on a turf.
+		if(M.z == 0) //Mobs not on a turf will have XYZ = 0,0,0. They also won't show up in dview() so we're not checking anything twice.
+			if(is_type_in_list(M, ignore_types))
+				continue
+			if(get_turf(M) in can_see) //Checking the mob's turf now, since those are it's "true" coordinates (plus dview() did pick up on turfs, so we can check using that).
+				. += M
+
+// Finds ALL mobs in range, including those within something's contents (e.g. inside a locker or such)
+/proc/get_all_mobs_in_range(var/turf/T, var/range = world.view, var/list/ignore_types = list())
+	. = list()
+	for(var/mob/M in mob_list)
+		if(is_type_in_list(M, ignore_types))
+			continue
+		var/turf/mob_turf = get_turf(M)
+		if(!mob_turf || mob_turf.z != T.z) //because get_dist doesn't account for z levels
+			continue
+		if(get_dist(T, mob_turf) <= range) //here we are checking the distance on the mob's turf and not the mob itself, since mobs in a locker or such will have XYZ = 0,0,0
+			. += M
+
 //E = MC^2
 /proc/convert2energy(var/M)
 	var/E = M*(SPEED_OF_LIGHT_SQ)
@@ -490,14 +523,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 /proc/key_name_admin(var/whom, var/include_name = 1)
 	return key_name(whom, 1, include_name)
 
-// Returns the atom sitting on the turf.
-// For example, using this on a disk, which is in a bag, on a mob, will return the mob because it's on the turf.
-/proc/get_atom_on_turf(var/atom/movable/M)
-	var/atom/loc = M
-	while(loc && loc.loc && !istype(loc.loc, /turf/))
-		loc = loc.loc
-	return loc
-
 
 // Registers the on-close verb for a browse window (client/verb/.windowclose)
 // this will be called when the close-button of a window is pressed.
@@ -553,8 +578,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // returns the turf located at the map edge in the specified direction relative to A
 // used for mass driver
 /proc/get_edge_target_turf(var/atom/A, var/direction)
-
-
 	var/turf/target = locate(A.x, A.y, A.z)
 	if(!A || !target)
 		return 0
@@ -578,8 +601,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // note range is non-pythagorean
 // used for disposal system
 /proc/get_ranged_target_turf(var/atom/A, var/direction, var/range)
-
-
 	var/x = A.x
 	var/y = A.y
 	if(direction & NORTH)
@@ -696,7 +717,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(user && user.client) user.client.images -= progbar
 					if(progbar) progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || ( user.stat ) || ( user.stunned || user.weakened || user.paralysis || user.lying ) )
+		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -716,12 +737,14 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/delayfraction = round(delay/numticks)
 	var/Location = user.loc
 	var/holding = user.get_active_hand()
+	var/target_location = target.loc
 	var/image/progbar
 	//var/image/barbar
 	if(user && user.client && user.client.prefs.progress_bars && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.pixel_y = 32
+			progbar.appearance_flags = RESET_COLOR
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -730,13 +753,14 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+				progbar.appearance_flags = RESET_COLOR
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
 		sleep(delayfraction)
 		//if(user.client && progbar.icon_state != oldstate)
 			//user.client.images.Remove(progbar)
-		if(!user || user.stat || user.weakened || user.stunned || !(user.loc == Location))
+		if(!user || user.isStunned() || !(user.loc == Location) || !(target.loc == target_location))
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -796,9 +820,12 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		areatype = areatemp.type
 
 	var/list/turfs = new/list()
-	for(var/area/N in areas)
+	/*for(var/area/N in areas)
 		if(istype(N, areatype))
-			for(var/turf/T in N) turfs += T
+			for(var/turf/T in N) turfs += T*/
+	var/area/N = locate(areatype) in areas
+	if(N)
+		turfs += N.area_turfs
 	return turfs
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
@@ -968,7 +995,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 //					var/area/AR = X.loc
 
-//					if(AR.lighting_use_dynamic)
+//					if(AR.dynamic_lighting)
 //						X.opacity = !X.opacity
 //						X.sd_SetOpacity(!X.opacity)			//TODO: rewrite this code so it's not messed by lighting ~Carn
 
@@ -1056,34 +1083,61 @@ proc/get_mob_with_client_list()
 		else
 			return zone
 
+/*
+	get_turf(): Returns the turf that contains the atom.
+	Example: A fork inside a box inside a locker will return the turf the locker is standing on.
+	The weird for loop with an empty statement is apparently the fastest way possible to do this.
+*/
 /proc/get_turf(const/atom/O)
-	if (isnull(O) || isarea(O) || !istype(O))
+	if(!istype(O) || isarea(O))
 		return
 	var/atom/A
 	for(A=O, A && !isturf(A), A=A.loc);  // semicolon is for the empty statement
 	return A
 
-/proc/get(atom/loc, type)
-	while(loc)
-		if(istype(loc, type))
-			return loc
-		loc = loc.loc //<wwjnc> WE ARE THE KNIGHTS WHO SAY LOC
+/*
+	get_holder_at_turf_level(): Similar to get_turf(), will return the "highest up" holder of this atom, excluding the turf.
+	Example: A fork inside a box inside a locker will return the locker. Essentially, get_just_before_turf().
+*/
+/proc/get_holder_at_turf_level(const/atom/movable/O)
+	if(!istype(O)) //atom/movable does not include areas
+		return
+	var/atom/A
+	for(A=O, A && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
+	return A
+
+/*
+	get_holder_of_type(): Returns the FIRST holder of type specified. NOT the "highest up".
+	Example: Call find_holder_of_type(A, /mob) to find the first mob holder of A.
+*/
+/proc/get_holder_of_type(const/atom/movable/O, type)
+	ASSERT(istype(O))
+	var/atom/A = O
+	while(A && !isturf(A))
+		if(istype(A, type))
+			return A
+		A = A.loc
 	return null
 
-/proc/find_holder(atom/O) //aka get_just_before_turf
-	while(O)
-		if(isturf(O.loc))
-			return O
+/*
+	is_holder_of(): Returns 1 if A is a holder of B, meaning, A is B.loc or B.loc.loc or B.loc.loc.loc etc.
+	This is essentially the same as calling (locate(B) in A), but a little clearer as to what you're doing, and locate() has been known to bug out or be extremely slow in the past.
+*/
+/proc/is_holder_of(const/atom/movable/A, const/atom/movable/B)
+	ASSERT(istype(A) && istype(B))
+	var/atom/O = B
+	while(O && !isturf(O))
+		if(O == A)
+			return 1
+		O = O.loc
+	return 0
+
+/proc/is_in_airtight_object(var/atom/O) //Shitty version of get_holder
+	while(O && !isturf(O))
+		if(O.is_airtight())
+			return 1
 		O = O.loc
 	return null
-
-/proc/find_holder_of_type(var/atom/reference,var/typepath) //Returns the first object holder of the type you specified
-	var/atom/location = reference.loc //ie /mob to find the first mob holding it
-	while(!istype(location,/turf) && !istype(location,null))
-		if(istype(location,typepath))
-			return location
-		location = location.loc
-	return 0
 
 //Quick type checks for some tools
 var/global/list/common_tools = list(
@@ -1331,6 +1385,23 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			return 1
 	return 0
 
+//Checks if there are any atoms in the turf that aren't system-only (currently only lighting overlays count)
+//Returns 1 is there's something, 0 if it finds nothing
+/turf/proc/has_contents()
+	if(!contents.len)
+		return 0
+	for(var/atom/A in contents)
+		if(!istype(A, /atom/movable/lighting_overlay))
+			return 0
+	return 1
+
+//This helper uses the method shown above to clear up the tile's contents, if any, ignoring the lighting overlays (technically all systems contents)
+//Includes an exception list if you don't want to delete some stuff
+/turf/proc/clear_contents(var/list/ignore = list())
+	for(var/atom/turf_contents in contents)
+		if(!istype(turf_contents, /atom/movable/lighting_overlay) && !is_type_in_list(turf_contents, ignore) && !(flags & INVULNERABLE))
+			qdel(turf_contents)
+
 /proc/multinum_display(var/number,var/digits)//multinum_display(42,4) = "0042"; multinum_display(-137,6) = "-000137"; multinum_display(4572,3) = "999"
 	var/result = ""
 	if((digits < 1))
@@ -1469,6 +1540,48 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			colour += temp_col
 	return colour
 
-// Use this to send to a client's chat, no exceptions (except this proc itself).
-/proc/to_chat(var/thing, var/output)
-	thing << output
+//We check if a specific game mode is currently undergoing.
+//First by checking if it is the current main mode,
+//Secondly by checking if it is part of a Mixed game mode.
+//If it exists, we return the game mode's datum. If it doesn't exist, we return null
+
+/*
+Game Mode config tags:
+"extended"
+"traitor"
+"double_agents"
+"autotraitor"
+"blob"
+"changeling"
+"traitorchan"
+"cult"
+"heist"
+"malfunction"
+"meteor"
+"mixed"
+"nuclear"
+"revolution"
+"sandbox"
+"vampire"
+"wizard
+"raginmages""
+*/
+
+/proc/find_active_mode(var/mode_ctag)
+	var/found_mode = null
+	if(ticker && ticker.mode)
+		if(ticker.mode.config_tag == mode_ctag)
+			found_mode = ticker.mode
+		else if(ticker.mode.name == "mixed")
+			var/datum/game_mode/mixed/mixed_mode = ticker.mode
+			for(var/datum/game_mode/GM in mixed_mode.modes)
+				if(GM.config_tag == mode_ctag)
+					found_mode = GM
+					break
+	return found_mode
+
+/proc/clients_in_moblist(var/list/mob/mobs)
+	. = list()
+	for(var/mob/M in mobs)
+		if(M.client)
+			. += M.client

@@ -86,19 +86,19 @@
 	switch(emagged)
 		if(0)
 			emagged = 0.5
-			src.visible_message("\icon[src] <b>[src]</b> beeps: \"DB error \[Code 0x00F1\]\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"DB error \[Code 0x00F1\]\"")
 			sleep(10)
-			src.visible_message("\icon[src] <b>[src]</b> beeps: \"Attempting auto-repair\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"Attempting auto-repair\"")
 			sleep(15)
-			src.visible_message("\icon[src] <b>[src]</b> beeps: \"User DB corrupted \[Code 0x00FA\]. Truncating data structure...\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"User DB corrupted \[Code 0x00FA\]. Truncating data structure...\"")
 			sleep(30)
-			src.visible_message("\icon[src] <b>[src]</b> beeps: \"User DB truncated. Please contact your Nanotrasen system operator for future assistance.\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"User DB truncated. Please contact your Nanotrasen system operator for future assistance.\"")
 			req_access = null
 			emagged = 1
 		if(0.5)
-			src.visible_message("\icon[src] <b>[src]</b> beeps: \"DB not responding \[Code 0x0003\]...\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"DB not responding \[Code 0x0003\]...\"")
 		if(1)
-			src.visible_message("\icon[src] <b>[src]</b> beeps: \"No records in User DB\"")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"No records in User DB\"")
 	return
 
 /*
@@ -216,10 +216,12 @@
 	var/output = ""
 	for(var/M in part.materials)
 		if(copytext(M,1,2) == "$")
-			var/datum/material/material=materials.getMaterial(M)
-			output += "[output ? " | " : null][get_resource_cost_w_coeff(part,M)] [material.processed_name]"
+			if(!(research_flags & IGNORE_MATS))
+				var/datum/material/material=materials.getMaterial(M)
+				output += "[output ? " | " : null][get_resource_cost_w_coeff(part,M)] [material.processed_name]"
 		else
-			output += "[output ? " | " : null][get_resource_cost_w_coeff(part,M)] [chemical_reagents_list[M]]"
+			if(!(research_flags & IGNORE_CHEMS))
+				output += "[output ? " | " : null][get_resource_cost_w_coeff(part,M)] [chemical_reagents_list[M]]"
 	return output
 
 /obj/machinery/r_n_d/fabricator/proc/remove_materials(var/datum/design/part)
@@ -298,7 +300,7 @@
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
 		being_built.loc = get_turf(output)
-		src.visible_message("\icon [src] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
+		src.visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
 		src.being_built = null
 	src.updateUsrDialog()
 	src.busy = 0
@@ -313,7 +315,7 @@
 				break
 			var/datum/design/D = set_parts[i]
 			add_to_queue(D)
-	src.visible_message("\icon[src] <b>[src]</b> beeps: \"[set_name] parts were added to the queue\".")
+	src.visible_message("[bicon(src)] <b>[src]</b> beeps: \"[set_name] parts were added to the queue\".")
 	return
 
 /obj/machinery/r_n_d/fabricator/proc/add_to_queue(var/datum/design/part)
@@ -322,7 +324,7 @@
 	if(!part)
 		return
 	if(part)
-		//src.visible_message("\icon[src] <b>[src]</b> beeps: [part.name] was added to the queue\".")
+		//src.visible_message("[bicon(src)] <b>[src]</b> beeps: [part.name] was added to the queue\".")
 		//queue[++queue.len] = part
 		if(is_contraband(part) && !src.hacked)
 			src.visible_message("<font color='blue'>The [src.name] buzzes, \"Safety procedures prevent that item from being queued.\"</font>")
@@ -364,7 +366,7 @@
 		else
 			if(!isnull(src.queue[1]))
 				part = src.queue[1]
-	src.visible_message("\icon[src] <b>[src]</b> beeps, \"Queue processing finished successfully\".")
+	src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue processing finished successfully\".")
 	return 1
 */
 
@@ -417,12 +419,12 @@
 	var/found = 0
 	var/obj/machinery/computer/rdconsole/console
 	if(busy)
-		src.visible_message("\icon[src] <b>[src]</b> beeps, \"Please wait for completion of current operation.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Please wait for completion of current operation.\"")
 		return
 	if(linked_console)
 		console = linked_console
 	else
-		src.visible_message("\icon[src] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
 	if(console)
 		for(var/datum/tech/T in console.files.known_tech)
 			if(T)
@@ -441,7 +443,7 @@
 		if(i || tech_output)
 			new_data=1
 	if(new_data)
-		src.visible_message("\icon[src] <b>[src]</b> beeps, \"Succesfully synchronized with R&D server. New data processed.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Succesfully synchronized with R&D server. New data processed.\"")
 	if(!silent && !found)
 		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()
@@ -539,7 +541,7 @@
 	if(href_list["eject"])
 		var/num = input("Enter amount to eject", "Amount", "5") as num
 		if(num)
-			amount = Clamp(round(text2num(num), 5), 0, 50)
+			amount = Clamp(round(text2num(num), 1), 0, 50)
 		remove_material(href_list["eject"], amount)
 		return 1
 
@@ -552,7 +554,7 @@
 	if(href_list["add_to_queue"])
 		var/datum/design/part = getTopicDesign(href_list["add_to_queue"])
 		if(queue.len > FAB_MAX_QUEUE)
-			src.visible_message("\icon[src] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
 			return
 
 		add_to_queue(part)
@@ -561,7 +563,7 @@
 	if(href_list["queue_part_set"])
 		var/set_name = href_list["queue_part_set"]
 		if(queue.len > FAB_MAX_QUEUE)
-			src.visible_message("\icon[src] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
+			src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Queue is full, please clear or finish.\".")
 			return
 		add_part_set_to_queue(set_name)
 		return 1
@@ -601,7 +603,7 @@
 
 	var/turf/exit = get_output()
 	if(exit.density)
-		src.visible_message("\icon[src] <b>[src]</b> beeps, \"Error! Part outlet is obstructed\".")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Error! Part outlet is obstructed\".")
 		return
 
 	if(stat & BROKEN)
@@ -688,4 +690,3 @@
 			mats.loc = src.loc
 		return total_amount
 	return 0
-

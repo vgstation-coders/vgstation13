@@ -12,7 +12,7 @@
 	icon_state = "treadmill"
 	density = 1
 	flags = ON_BORDER
-	machine_flags = SCREWTOGGLE | WRENCHMOVE
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | EMAGGABLE
 	anchored = 1
 	use_power = 0
 	idle_power_usage = 0
@@ -51,32 +51,48 @@
 /obj/machinery/power/treadmill/proc/powerwalk(atom/movable/AM as mob)
 	if(!ismob(AM)) return //Can't walk on a treadmill if you aren't animated
 	if(get_turf(AM) != loc) return //Can't bump from the outside
-	var/mob/runner = AM
-	if(!istype(runner,/mob/living/simple_animal)&&runner.bodytemperature <= 360)
-		runner.bodytemperature += 2 //Same heating pattern as being fat
-	if(runner.nutrition && runner.stat != DEAD)
-		runner.nutrition -= HUNGER_FACTOR*2 //Running on a treadmill makes you hungry fast
-	flick("treadmill-running", src)
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-	var/calc = DEFAULT_BUMP_ENERGY * power_efficiency * runner.treadmill_speed
-	if(runner.reagents) //Sanity
-		for(var/datum/reagent/R in runner.reagents.reagent_list)
-			calc *= R.sport
-	if(M_HULK in runner.mutations) calc *= 5
-	count_power += calc
+	var/mob/living/runner = AM
+	var/cached_temp = runner.bodytemperature
+	if(runner.burn_calories(HUNGER_FACTOR*2))
+		flick("treadmill-running", src)
+		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		var/calc = DEFAULT_BUMP_ENERGY * power_efficiency * runner.treadmill_speed
+		if(runner.reagents) //Sanity
+			for(var/datum/reagent/R in runner.reagents.reagent_list)
+				calc *= R.sport
+		if(M_HULK in runner.mutations) calc *= 5
+		count_power += calc
+		if(emagged && ishuman(runner))
+			runner.bodytemperature += 1
+			if(runner.bodytemperature > T0C + 100)
+				switch(rand(1,100))
+					if(1 to 5)
+						runner.emote("collapse")
+					if(5 to 10)
+						to_chat(runner,"<span class='warning'>You really should take a rest!</span>")
+					if(10 to 20)
+						to_chat(runner,"<span class='warning'>Your legs really hurt!</span>")
+						runner.apply_damage(5, BRUTE, "l_leg")
+						runner.apply_damage(5, BRUTE, "r_leg")
+				runner.bodytemperature = max(T0C + 100,cached_temp)
+	else to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
 
-/obj/machinery/power/treadmill/CheckExit(var/atom/movable/O, var/turf/target)
-	if(istype(O) && O.checkpass(PASSGLASS))
-		return 1
-	if(get_dir(O.loc, target) == dir)
-		powerwalk(O)
-		return 0
-	return 1
-
-/obj/machinery/power/treadmill/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir)
+	if(flags & ON_BORDER)
+		if(target) //Are we doing a manual check to see
+			if(get_dir(loc, target) == dir)
+				return !density
+		else if(mover.dir == dir) //Or are we using move code
+			powerwalk(mover)
+			return !density
+	return 1
+
+/obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return 1
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		if(air_group) return 1
 		return 0
 	else
@@ -86,3 +102,9 @@
 	..()
 	if(anchored) connect_to_network()
 	else disconnect_from_network()
+
+/obj/machinery/power/treadmill/emag()
+	..()
+	emagged = 1
+	name = "\improper DREADMILL"
+	desc = "FEEL THE BURN"

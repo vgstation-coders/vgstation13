@@ -116,10 +116,20 @@
 	flags = RESTRICTED
 	syllables = list("hs","zt","kr","st","sh")
 
+/datum/language/common
+	name = "Galactic Common"
+	desc = "The language no one would ever use is now the language every race uses."
+	key = "1"
+	flags = RESTRICTED
+	syllables = list("sa","lu","to","n","bo","na","ve","spe","ro","no","non","ki","el","vi","far","tas",
+	"ne","da","dan","ko","kon","ka","kaj","kin","de","ami","ko","kio","vin","nen","ne","nio","mi","gi","gis","per",
+	"po","vas","va","he","min","mi","cu","dig","di","gi","gis","nu","ven","as","kie","re","ven","dau")
+
 /datum/language/human
 	name = "Sol Common"
 	desc = "A bastardized hybrid of informal English and elements of Mandarin Chinese; the common language of the Sol system."
-	key = "1"
+	key = "7"
+	colour = "solcom"
 	flags = RESTRICTED
 
 /datum/language/human/monkey
@@ -154,14 +164,7 @@
 	speech_verb = "growls"
 	colour = "gutter"
 	key = "3"
-	syllables = list("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
-					 "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
-					 "magna", "aliqua", "ut", "enim", "ad", "minim", "veniam", "quis", "nostrud",
-					 "exercitation", "ullamco", "laboris", "nisi", "ut", "aliquip", "ex", "ea", "commodo",
-					 "consequat", "duis", "aute", "irure", "dolor", "in", "reprehenderit", "in",
-					 "voluptate", "velit", "esse", "cillum", "dolore", "eu", "fugiat", "nulla",
-					 "pariatur", "excepteur", "sint", "occaecat", "cupidatat", "non", "proident", "sunt",
-					 "in", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id", "est", "laborum")
+	syllables = list("gra","ba","ba","breh","bra","rah","dur","ra","ro","gro","go","ber","bar","geh","heh","gra")
 
 /datum/language/grey
 	name = "Grey"
@@ -196,6 +199,19 @@
 	flags = RESTRICTED
 	space_chance = 95
 	syllables = list("CLICK", "CLACK")
+
+/datum/language/golem
+	name = "Golem"
+	desc = "A slow, guttural language produced by the grinding of a golem's joints against one another."
+	speech_verb = "grinds"
+	ask_verb = "groans"
+	exclaim_verb = "cracks"
+	whisper_verb = "grumbles"
+	colour = "brown"
+	native = 1
+	key = "p"
+	flags = RESTRICTED
+	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
 	message="CLICK"
@@ -237,6 +253,15 @@
 		"gal'h'rfikk", "harfrandid", "mud'gib", "fuu", "ma'jin", "dedo", "ol'btoh", "n'ath", "reth", "sh'yro", "eth", \
 		"d'rekkathnor", "khari'd", "gual'te", "nikka", "nikt'o", "barada", "kla'atu", "barhah", "hra" ,"zar'garis")
 
+/datum/language/mouse
+	name = "Mouse"
+	desc = "Literally just squeaks"
+	speech_verb = "squeaks"
+	colour = "say_quote"
+	key = "9"
+	space_chance = 80
+	syllables = list("squeak")
+	flags = RESTRICTED
 
 // Language handling.
 /mob/proc/add_language(var/language)
@@ -258,7 +283,10 @@
 /mob/living/remove_language(rem_language)
 	var/datum/language/L = all_languages[rem_language]
 	if(default_language == L)
-		default_language = null
+		if(all_languages.len)
+			default_language = all_languages[1]
+		else
+			default_language = null
 	return ..()
 
 // Can we speak this language, as opposed to just understanding it?
