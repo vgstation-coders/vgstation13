@@ -437,14 +437,13 @@
 	var/list/vi = view(world.view,get_holder_at_turf_level(mob))
 
 	if(src in parallax_on_clients)	//Updating parallax for clients that have parallax turned on.
-		for(var/turf/T in vi)
-			if(istype(T,/turf/space))
-				if(!parallax_initialized || updating_parallax)
-					break
-				else
-					updating_parallax = 1
-					mob.hud_used.update_parallax()
-					break
+		for(var/turf/space/T in vi)
+			if(!parallax_initialized || updating_parallax)
+				break
+			else
+				updating_parallax = 1
+				mob.hud_used.update_parallax()
+				break
 
 	for(var/obj/structure/window/W in vi)
 		if(W.one_way)
@@ -475,6 +474,7 @@
 	if(onewaylist.len)
 		var/list/List = v - view(world.view,get_holder_at_turf_level(mob))
 		for(var/turf/T in List)
+			T.viewblock = image('icons/turf/overlays.dmi',T,"black_box",10)
 			src << T.viewblock
 			newimages += T.viewblock
 			ObscuredTurfs += T
