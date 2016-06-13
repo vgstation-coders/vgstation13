@@ -257,13 +257,10 @@
 
 	//Just the standard check to see if it's actually a number
 	if(sql_id)
-		testing("sql_ckey ([sql_ckey]) have sql_id (not new player)")
 		if(istext(sql_id))
 			sql_id = text2num(sql_id)
 		if(!isnum(sql_id))
 			return
-	else
-		testing("sql_ckey ([sql_ckey]) have no sql_id (new player)")
 
 	var/admin_rank = "Player"
 
@@ -273,8 +270,10 @@
 	var/sql_admin_rank = sanitizeSQL(admin_rank)
 
 	if(sql_id)
+		testing("sql_ckey ([sql_ckey]) have sql_id (not new player)")
 		Query4(age, sql_address, sql_computerid, sql_admin_rank, sql_id, Joined)
 	else
+		testing("sql_ckey ([sql_ckey]) have no sql_id (new player)")
 		Query5(sql_ckey, sql_address, sql_computerid, sql_admin_rank, Joined)
 
 	if(!isnum(age))
