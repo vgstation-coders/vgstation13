@@ -4061,7 +4061,6 @@
 				counter = 0
 			counter++
 
-<<<<<<< 1a4d699ddeeb2b2d33c10761ce0b4bd3b1588279
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
 	name = "Sunday roast"
 	desc = "Everyday is Sunday when you orbit a sun."
