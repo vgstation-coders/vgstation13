@@ -4064,7 +4064,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/croissant
 	name = "croissant"
-	desc = "True french quisine."
+	desc = "True french cuisine."
 	icon_state = "croissant"
 
 	New()
