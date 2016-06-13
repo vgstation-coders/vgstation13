@@ -136,7 +136,8 @@
 /obj/item/weapon/kitchen/utensil/knife
 	name = "knife"
 	desc = "Can cut through any food."
-	icon_state = "knife"
+	icon_state = "knifesmall"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 10.0
 	throwforce = 10.0
 	sharpness = 1.2
@@ -168,8 +169,7 @@
 /obj/item/weapon/kitchen/utensil/knife/nazi
 	name = "nazi knife"
 	desc = "There's a svastika at the base of the blade."
-	icon_state = "nazi"
-	item_state = "knife"
+	icon_state = "knifenazi"
 	sharpness = 1.5
 	force = 10.0
 	throwforce = 30

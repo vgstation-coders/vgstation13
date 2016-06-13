@@ -41,6 +41,7 @@
 
 	var/ammo = 8
 	var/reloads = 1
+	ranged_cooldown_cap = 1
 
 /mob/living/simple_animal/hostile/humanoid/nazi/Life()
 	..()
@@ -49,11 +50,11 @@
 		if(ranged)
 			overlays += icon('icons/mob/in-hand/right/items_righthand.dmi',"gun")
 			if(melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/left/items_lefthand.dmi',"knife")
+				overlays += icon('icons/mob/in-hand/left/swords_axes.dmi',"knifenazi")
 		else
 			overlays += icon('icons/mob/belt.dmi',"gun")
 			if (melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/right/items_righthand.dmi',"knife")
+				overlays += icon('icons/mob/in-hand/right/swords_axes.dmi',"knifenazi")
 
 /mob/living/simple_animal/hostile/humanoid/nazi/Die()
 	droploot()
@@ -61,22 +62,26 @@
 
 /mob/living/simple_animal/hostile/humanoid/nazi/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(..())
-		if(type == /mob/living/simple_animal/hostile/humanoid/nazi)
-			ammo--
-			new /obj/item/ammo_casing/c9mm(loc,1)// empty casing, for some reason using casingtype wasn't working
-			if(ammo <= 0)
-				if(reloads > 0)
-					reloads--
-					new /obj/item/ammo_storage/magazine/mc9mm/empty(loc)
-					ammo = 8
-				else
-					melee_damage_lower = 15
-					melee_damage_upper = 15
-					attack_sound = 'sound/weapons/bladeslice.ogg'
-					attacktext = "stabs"
-					retreat_distance = 0
-					minimum_distance = 0
-					ranged = 0
+		afterShoot()
+		return 1
+	return 0
+
+/mob/living/simple_animal/hostile/humanoid/nazi/proc/afterShoot()
+	ammo--
+	new /obj/item/ammo_casing/c9mm(loc,1)// empty casing, for some reason using casingtype wasn't working
+	if(ammo <= 0)
+		if(reloads > 0)
+			reloads--
+			new /obj/item/ammo_storage/magazine/mc9mm/empty(loc)
+			ammo = 8
+		else
+			melee_damage_lower = 15
+			melee_damage_upper = 15
+			attack_sound = 'sound/weapons/bladeslice.ogg'
+			attacktext = "stabs"
+			retreat_distance = 0
+			minimum_distance = 0
+			ranged = 0
 
 /mob/living/simple_animal/hostile/humanoid/nazi/proc/droploot()
 	var/obj/item/weapon/gun/projectile/luger/dropgun = new(loc)
@@ -128,7 +133,7 @@
 	max_n2 = 0
 
 	ammo = 13
-
+	ranged_cooldown_cap = 1
 
 /mob/living/simple_animal/hostile/humanoid/nazi/soldier/Life()
 	..()
@@ -137,33 +142,32 @@
 		if(ranged)
 			overlays += icon('icons/mob/in-hand/right/guninhands_right.dmi',"PlasMP100")
 			if(melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/left/items_lefthand.dmi',"knife")
+				overlays += icon('icons/mob/in-hand/left/swords_axes.dmi',"knifenazi")
 		else
 			overlays += icon('icons/mob/in-hand/left/guninhands_left.dmi',"PlasMP0")
 			if (melee_damage_upper > 10)
-				overlays += icon('icons/mob/in-hand/right/items_righthand.dmi',"knife")
+				overlays += icon('icons/mob/in-hand/right/swords_axes.dmi',"knifenazi")
 
-/mob/living/simple_animal/hostile/humanoid/nazi/soldier/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
-	if(..())
-		ammo--
-		if(ammo <= 0)
-			melee_damage_lower = 15
-			melee_damage_upper = 15
-			attack_sound = 'sound/weapons/bladeslice.ogg'
-			attacktext = "stabs"
-			retreat_distance = 0
-			minimum_distance = 0
-			ranged = 0
-			spawn(200)
-				if(health > 0)
-					ammo = 13
-					melee_damage_lower = 5
-					melee_damage_upper = 5
-					retreat_distance = 4
-					minimum_distance = 2
-					attacktext = "punches"
-					attack_sound = "punch"
-					ranged = 1
+/mob/living/simple_animal/hostile/humanoid/nazi/soldier/afterShoot()
+	ammo--
+	if(ammo <= 0)
+		melee_damage_lower = 15
+		melee_damage_upper = 15
+		attack_sound = 'sound/weapons/bladeslice.ogg'
+		attacktext = "stabs"
+		retreat_distance = 0
+		minimum_distance = 0
+		ranged = 0
+		spawn(200)
+			if(health > 0)
+				ammo = 13
+				melee_damage_lower = 5
+				melee_damage_upper = 5
+				retreat_distance = 4
+				minimum_distance = 2
+				attacktext = "punches"
+				attack_sound = "punch"
+				ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/nazi/soldier/droploot()
 	var/obj/item/weapon/gun/energy/plasma/MP40k/dropgun = new(loc)
@@ -182,30 +186,30 @@
 	icon_living = "naziofficer"
 	icon_dead = "naziofficer"
 	ammo = 6
+	ranged_cooldown_cap = 2
 
-/mob/living/simple_animal/hostile/humanoid/nazi/mateba/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
-	if(..())
-		if(type == /mob/living/simple_animal/hostile/humanoid/nazi)
-			ammo--
-			new /obj/item/ammo_casing/a357(loc,1)// empty casing, for some reason using casingtype wasn't working
-			if(ammo <= 0)
-				if(reloads > 0)
-					spawn(10)
-						playsound(user, 'sound/weapons/revolver_spin.ogg', 100, 1)
-					reloads--
-					new /obj/item/ammo_storage/speedloader/a357/empty(loc)
-					ammo = 6
-				else
-					melee_damage_lower = 20
-					melee_damage_upper = 20
-					attack_sound = 'sound/weapons/bladeslice.ogg'
-					attacktext = "stabs"
-					retreat_distance = 0
-					minimum_distance = 0
-					ranged = 0
-					spawn(10)
-						if(health > 0)
-							say("Come over here. I promise I will heal you!")
+/mob/living/simple_animal/hostile/humanoid/nazi/mateba/afterShoot()
+	if(type == /mob/living/simple_animal/hostile/humanoid/nazi)
+		ammo--
+		new /obj/item/ammo_casing/a357(loc,1)
+		if(ammo <= 0)
+			if(reloads > 0)
+				spawn(10)
+					playsound(src, 'sound/weapons/revolver_spin.ogg', 100, 1)
+				reloads--
+				new /obj/item/ammo_storage/speedloader/a357/empty(loc)
+				ammo = 6
+			else
+				melee_damage_lower = 20
+				melee_damage_upper = 20
+				attack_sound = 'sound/weapons/bladeslice.ogg'
+				attacktext = "stabs"
+				retreat_distance = 0
+				minimum_distance = 0
+				ranged = 0
+				spawn(10)
+					if(health > 0)
+						say("Come over here. I promise I will heal you!")
 
 /mob/living/simple_animal/hostile/humanoid/nazi/mateba/droploot()
 	var/obj/item/weapon/gun/projectile/mateba/M = new(loc)
@@ -256,6 +260,7 @@
 
 	ammo = 6
 	reloads = 2
+	ranged_cooldown_cap = 2
 
 	var/datum/effect/effect/system/trail/ion_trail
 
@@ -268,14 +273,13 @@
 /mob/living/simple_animal/hostile/humanoid/nazi/mateba/spacetrooper/Process_Spacemove(var/check_drift = 0)
 	return 1
 
-/mob/living/simple_animal/hostile/humanoid/nazi/mateba/spacetrooper/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
-	..()
+/mob/living/simple_animal/hostile/humanoid/nazi/mateba/spacetrooper/afterShoot()
 	ammo--
 	new /obj/item/ammo_casing/a357(loc,1)
 	if(ammo <= 0)
 		if(reloads > 0)
 			spawn(10)
-				playsound(user, 'sound/weapons/revolver_spin.ogg', 100, 1)
+				playsound(src, 'sound/weapons/revolver_spin.ogg', 100, 1)
 			reloads--
 			new /obj/item/ammo_storage/speedloader/a357/empty(loc)
 			ammo = 6
@@ -299,6 +303,9 @@
 
 	corpse = /obj/effect/landmark/corpse/nazi/medic
 
+	health = 120
+	maxHealth = 120
+
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
@@ -317,6 +324,9 @@
 
 	ranged = 0
 
+	ammo = 0
+	reloads = 0
+
 	var/mob/living/simple_animal/currently_healing = null
 
 
@@ -325,7 +335,7 @@
 	overlays.len = 0
 	if(stance != HOSTILE_STANCE_IDLE)
 		if(!LocateHeal())//if there is no ally nearby, we fight!
-			overlays += icon('icons/mob/in-hand/left/items_lefthand.dmi',"knife")
+			overlays += icon('icons/mob/in-hand/left/swords_axes.dmi',"knifenazi")
 			melee_damage_lower = 15
 			melee_damage_upper = 15
 			attack_sound = 'sound/weapons/bladeslice.ogg'
@@ -342,7 +352,7 @@
 	else
 		LocateHeal()
 
-/mob/living/simple_animal/hostile/humanoid/nazi/medic/proc/LocateHeal()
+/mob/living/simple_animal/hostile/humanoid/nazi/medic/proc/LocateHeal(var/only_heal = 0)
 	var/list/nearbyTargets = list()
 
 	for(var/mob/living/simple_animal/hostile/humanoid/nazi/N in view(3,src))
@@ -352,19 +362,45 @@
 	for(var/mob/living/simple_animal/hostile/mechahitler/H in view(3,src))
 		nearbyTargets |= H
 
-	if(currently_healing && (currently_healing in nearbyTargets) && (get_dist(src,currently_healing) <= 3))
-		if(currently_healing.health > 0)
-			currently_healing.health = min(currently_healing.maxHealth,currently_healing.health+10)
-			make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
-			spawn(2)
+	if(currently_healing && (currently_healing in nearbyTargets))
+		var/dist_to_heal = get_dist(src,currently_healing)
+		if((dist_to_heal <= 3) && (currently_healing.health > 0) && (currently_healing.health < currently_healing.maxHealth))
+			//check for obstacles
+			var/turf/T = get_turf(src)
+			var/turf/U = get_turf(currently_healing)
+			var/obj/item/projectile/beam/bison/heal/hC = getFromPool(/obj/item/projectile/beam/bison/heal,T)
+			hC.current = currently_healing
+			hC.original = currently_healing
+			hC.target = U
+			hC.current = T
+			hC.firer = src
+			hC.starting = T
+			hC.yo = U.y - T.y
+			hC.xo = U.x - T.x
+
+			var/healCanReach = hC.process()
+
+			if(healCanReach)
+				currently_healing.health = min(currently_healing.maxHealth,currently_healing.health+10)
 				make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
-			spawn(4)
-				make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
-			spawn(6)
-				make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
-			spawn(8)
-				make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
+				spawn(2)
+					make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
+				spawn(4)
+					make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
+				spawn(6)
+					make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
+				spawn(8)
+					make_tracker_effects(get_turf(src), currently_healing, 1, "heal", 3, /obj/effect/tracker/heal)
+				if(dist_to_heal > 2)
+					step_to(src,currently_healing)
+				dir = get_dir_cardinal(src,currently_healing)
+			else
+				currently_healing = null
+			returnToPool(hC)
 			return 1
+
+	if(only_heal)
+		return
 
 	currently_healing = null
 
@@ -382,9 +418,12 @@
 				break
 
 	if(currently_healing)
-		LocateHeal()//immediately start healing
+		LocateHeal(1)//immediately start healing
 
 	return nearbyTargets.len
+
+/mob/living/simple_animal/hostile/humanoid/nazi/medic/droploot()
+	return
 
 ///////////////////////////////////////////////////////////////////HOLYSHIT/////////////
 
@@ -423,6 +462,7 @@
 	projectiletype = /obj/item/projectile/bullet/gatling
 	projectilesound = 'sound/weapons/gatling_fire.ogg'
 	casingtype = null
+	ranged_cooldown_cap = 1
 
 	environment_smash = 3
 

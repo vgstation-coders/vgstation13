@@ -21,7 +21,7 @@
 /obj/item/medigunpack/examine(mob/user)
 	..()
 	if(medigun)
-		to_chat(user,"<span class=\"info\">Charge = [medigun.ubercharge]%</span>")
+		to_chat(user,"<span class='info'>Charge = [medigun.ubercharge]%</span>")
 
 /obj/item/medigunpack/New()
 	..()
@@ -67,7 +67,7 @@
 
 /obj/item/medigunpack/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(W == medigun)
-		user.drop_item(W,get_turf(src))
+		user.drop_item(W,src)
 		W.forceMove(W)
 		update_icon()
 		return 1
@@ -148,18 +148,32 @@
 	if(!healtarget || (wielder != loc) || (get_dist(src,healtarget) > 3))
 		processing_objects.Remove(src)
 		return
-	var/obj/item/I = new(get_turf(src))
-	for(var/i=1;i<=5;i++)
-		if(healtarget in loc.contents)
-			break
-		else
-			step_towards(I,healtarget)
-			var/turf/T = I.loc
-			if(T.density)
-				healtarget = null
-				return
 
-	heal(healtarget)
+	//check for obstacles
+	var/turf/T = get_turf(wielder)
+	var/turf/U = get_turf(healtarget)
+	var/beamtype = /obj/item/projectile/beam/bison/heal
+	if(emagged)
+		beamtype = /obj/item/projectile/beam/bison/heal/hurt
+	var/obj/item/projectile/beam/bison/heal/hC = getFromPool(beamtype,T)
+	hC.current = healtarget
+	hC.original = healtarget
+	hC.target = U
+	hC.current = T
+	hC.firer = wielder
+	hC.starting = T
+	hC.yo = U.y - T.y
+	hC.xo = U.x - T.x
+
+	var/healCanReach = hC.process()
+
+	if(healCanReach)
+		heal(healtarget)
+	else
+		healtarget = null
+
+	returnToPool(hC)
+
 	return
 
 /obj/item/medigun/throw_at(atom/end)

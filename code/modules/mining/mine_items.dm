@@ -168,8 +168,11 @@ proc/move_mining_shuttle()
 
 //Explicit
 /obj/item/device/flashlight/lantern/on
-
 	on = 1
+
+/obj/item/device/flashlight/lantern/on/New()
+	..()
+	initialize()
 
 /*****************************Pickaxe********************************/
 
