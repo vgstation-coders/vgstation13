@@ -165,7 +165,7 @@ macro "macro"
 		is-disabled = false
 	elem "F5"
 		name = "F5"
-		command = "Aghost"
+		command = "asay"
 		is-disabled = false
 	elem "F6"
 		name = "F6"
