@@ -1,14 +1,14 @@
 //HTML ENCODE/DECODE + RUS TO CP1251 TODO: OVERRIDE html_encode after fix
 /proc/rhtml_encode(var/msg)
-	msg = list2text(text2list(msg, "<"), "&lt;")
-	msg = list2text(text2list(msg, ">"), "&gt;")
-	msg = list2text(text2list(msg, "ÿ"), "&#255;")
+	msg = jointext(splittext(msg, "<"), "&lt;")
+	msg = jointext(splittext(msg, ">"), "&gt;")
+	msg = jointext(splittext(msg, "ÿ"), "&#255;")
 	return msg
 
 /proc/rhtml_decode(var/msg)
-	msg = list2text(text2list(msg, "&gt;"), ">")
-	msg = list2text(text2list(msg, "&lt;"), "<")
-	msg = list2text(text2list(msg, "&#255;"), "ÿ")
+	msg = jointext(splittext(msg, "&gt;"), ">")
+	msg = jointext(splittext(msg, "&lt;"), "<")
+	msg = jointext(splittext(msg, "&#255;"), "ÿ")
 	return msg
 
 
@@ -40,15 +40,15 @@
 
 
 //TEXT SANITIZATION + RUS TO CP1251
-/*
-sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#255;","<"="(",">"=")"))
+
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#255;","<"="(",">"=")"))
 	for(var/char in repl_chars)
 		var/index = findtext(t, char)
 		while(index)
 			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index+1)
 			index = findtext(t, char)
 	return t
-*/
+
 
 
 //RUS CONVERTERS
@@ -103,4 +103,4 @@ var/global/list/rkeys = list(
 /proc/intonation(text)
 	if (copytext(text,-1) == "!")
 		text = "<b>[text]</b>"
-return text
+	return text
