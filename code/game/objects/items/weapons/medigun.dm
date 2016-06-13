@@ -37,25 +37,26 @@
 /obj/item/medigunpack/MouseDrop(atom/over_object)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
-		if (!istype(over_object, /obj/screen/inventory))
-			return ..()
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		if(!H.incapacitated())
+			if (!istype(over_object, /obj/screen/inventory))
+				return ..()
+			playsound(get_turf(src), "rustle", 50, 1, -5)
 
-		if(medigun)
-			if(istype(medigun.loc,/mob))
-				var/mob/M = medigun.loc
-				M.u_equip(medigun)
-			medigun.forceMove(src)
-			update_icon()
+			if(medigun)
+				if(istype(medigun.loc,/mob))
+					var/mob/M = medigun.loc
+					M.u_equip(medigun)
+				medigun.forceMove(src)
+				update_icon()
 
-		if ((src == H.get_item_by_slot(slot_back)) && !H.incapacitated())
-			var/obj/screen/inventory/OI = over_object
+			if (src == H.get_item_by_slot(slot_back))
+				var/obj/screen/inventory/OI = over_object
 
-			if(OI.hand_index)
-				H.u_equip(src, 1)
-				H.put_in_hand(OI.hand_index, src)
-				H.update_inv_wear_suit()
-				add_fingerprint(H)
+				if(OI.hand_index)
+					H.u_equip(src, 1)
+					H.put_in_hand(OI.hand_index, src)
+					H.update_inv_wear_suit()
+					add_fingerprint(H)
 
 /obj/item/medigunpack/attack_hand(mob/user)
 	if (medigun && (src.loc == user))
