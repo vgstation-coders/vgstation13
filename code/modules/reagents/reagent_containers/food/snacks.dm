@@ -4061,7 +4061,6 @@
 				counter = 0
 			counter++
 
-
 /obj/item/weapon/reagent_containers/food/snacks/croissant
 	name = "croissant"
 	desc = "True french cuisine."
