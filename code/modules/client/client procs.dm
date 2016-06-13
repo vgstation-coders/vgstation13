@@ -242,7 +242,7 @@
 	var/sql_ckey = sanitizeSQL(ckey)
 	var/age
 
-	var/list/query1 = Query1()
+	var/list/query1 = Query1(sql_ckey = sql_ckey)
 	sql_id = query1[1]
 	player_age = query1[2]
 	age = query1[3]
@@ -257,10 +257,13 @@
 
 	//Just the standard check to see if it's actually a number
 	if(sql_id)
+		testing("sql_ckey ([sql_ckey]) have sql_id (not new player)")
 		if(istext(sql_id))
 			sql_id = text2num(sql_id)
 		if(!isnum(sql_id))
 			return
+	else
+		testing("sql_ckey ([sql_ckey]) have no sql_id (new player)")
 
 	var/admin_rank = "Player"
 
