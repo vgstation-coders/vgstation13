@@ -218,10 +218,11 @@
 		var/tracker_effect = "heal"
 		if(emagged)
 			tracker_effect += "red"
-		make_tracker_effects(get_turf(src), healtarget, 1, tracker_effect, 3, /obj/effect/tracker/heal)
-		spawn(2)
+		spawn()
 			make_tracker_effects(get_turf(src), healtarget, 1, tracker_effect, 3, /obj/effect/tracker/heal)
-		spawn(4)
+			sleep(2)
+			make_tracker_effects(get_turf(src), healtarget, 1, tracker_effect, 3, /obj/effect/tracker/heal)
+			sleep(2)
 			make_tracker_effects(get_turf(src), healtarget, 1, tracker_effect, 3, /obj/effect/tracker/heal)
 	else
 		playsound(user, empty_sound, 50, 1)
@@ -354,14 +355,15 @@
 	var/tracker_effect = "heal"
 	if(emagged)
 		tracker_effect += "red"
-	make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
-	spawn(2)
+	spawn()
 		make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
-	spawn(4)
+		sleep(2)
 		make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
-	spawn(6)
+		sleep(2)
 		make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
-	spawn(8)
+		sleep(2)
+		make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
+		sleep(2)
 		make_tracker_effects(get_turf(src), M, 1, tracker_effect, 3, /obj/effect/tracker/heal)
 	if(healing == MEDIUBER)
 		if((ubercharge == (MAX_UBERCHARGE-1)) && istype(loc,/mob))
