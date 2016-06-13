@@ -372,12 +372,11 @@
 		ubercharge = min(ubercharge+1,MAX_UBERCHARGE)
 
 /obj/item/medigun/dropped(mob/user)
-	spawn(1)//to prevent a few exploits
-		if(medigunpack)
-			forceMove(medigunpack)
-			medigunpack.update_icon()
-		else
-			qdel(src)
+	if(medigunpack)
+		forceMove(medigunpack)
+		medigunpack.update_icon()
+	else
+		qdel(src)
 
 /obj/item/medigun/proc/ghostbuster(var/atom/A)
 	var/turf/T = get_turf(A)
