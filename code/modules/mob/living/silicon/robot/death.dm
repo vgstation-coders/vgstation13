@@ -60,6 +60,5 @@
 		if(!suiciding)
 			score["deadsilicon"] += 1
 
-	sql_report_cyborg_death(src)
 
 	return ..(gibbed)

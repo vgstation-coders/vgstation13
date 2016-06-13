@@ -96,7 +96,7 @@
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
 	if(ticker && ticker.mode)
 //		world.log << "k"
-		sql_report_death(src)
+
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
 	return ..(gibbed)
