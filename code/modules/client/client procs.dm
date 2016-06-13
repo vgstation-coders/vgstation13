@@ -241,12 +241,13 @@
 	var/sql_id = 0
 	var/sql_ckey = sanitizeSQL(ckey)
 	var/age
-	testing("sql_ckey = [sql_ckey]")
 
-	var/list/query1 = Query1(sql_ckey = sql_ckey)
+	var/list/query1 = Query1()
 	sql_id = query1[1]
 	player_age = query1[2]
 	age = query1[3]
+
+	testing("sql_ckey = [sql_ckey], joined with sql_id = [sql_id]")
 
 	var/sql_address = sanitizeSQL(address)
 	Query2(sql_address)
@@ -260,14 +261,6 @@
 			sql_id = text2num(sql_id)
 		if(!isnum(sql_id))
 			return
-	//else
-		//var/url = pick("byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336")
-//		to_chat(src, link(url))
-
-		//var/Server/s = random_server_list[key]
-		//world.log << "Sending [src.key] to random server: [url]"
-//		to_chat(src, link(s.url))
-		//del(src)
 
 	var/admin_rank = "Player"
 
@@ -293,6 +286,7 @@
 	Query7(sql_ckey, sql_address, sql_computerid)
 
 /client/proc/Query1(sql_address, sql_computerid, sql_ckey)
+	testing("Player with sql_ckey = ([sql_ckey]) connected")
 	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
 	query.Execute()
 	var/sql_id
