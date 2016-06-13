@@ -100,6 +100,11 @@
 		icon_state += "red"
 		item_state = "medigunred"
 
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		H.update_inv_back()
+		H.update_inv_hands()
+
 /obj/item/uberdevice
 	name = "\improper Uber Device"
 	desc = "This small device has a gauge with Uber written on it."
@@ -225,7 +230,7 @@
 		playsound(user, empty_sound, 50, 1)
 
 /obj/item/medigun/attack_self(mob/user)
-	if((ubercharge >= MAX_UBERCHARGE) && healtarget)
+	if((ubercharge >= MAX_UBERCHARGE) && healtarget && !(healtarget.flags & INVULNERABLE))
 		ubercharge = 0
 		playsound(user, 'sound/weapons/medigun_ubercharge.ogg', 75, 1)
 
