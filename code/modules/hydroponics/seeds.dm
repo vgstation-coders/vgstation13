@@ -1551,7 +1551,7 @@
 	lifespan = 30
 	growth_stages = 3
 	maturation = 4
-	yield = 4
+	yield = 3
 	potency = 0
 
 /datum/seed/apple/wood
@@ -1606,5 +1606,6 @@
 	maturation = 4
 	growth_stages = 3
 	production = 6
+	yield = 4
 	water_consumption = 2
 	ideal_heat = 298

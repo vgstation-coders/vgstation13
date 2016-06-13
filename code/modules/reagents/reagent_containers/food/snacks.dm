@@ -3985,7 +3985,7 @@
 		..()
 		reagents.add_reagent("nutriment", 3)
 		reagents.add_reagent("cream", 2)
-		
+
 /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 	name = "IJzerkoekje"
 	desc = "Bevat geen ijzer."
@@ -4074,7 +4074,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/risenshiny
 	name = "rise 'n' shiny"
-	desc = "Exactly what a Vox merchant or thief needs to start their day. (What's the difference?)"
+	desc = "A biscuit: exactly what a Vox merchant or thief needs to start their day. (What's the difference?)"
 	icon_state = "voxbiscuit"
 	bitesize = 3
 	New()
@@ -4116,12 +4116,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple
 	name = "candied woodapple"
 	desc = "The sweet juices inside the woodapple quickferment under heat, producing this party favorite."
-	icon_state = "voxcandyapple"
+	icon_state = "candiedwoodapple"
 	bitesize = 2
 	New()
 		..()
 		reagents.add_reagent("sugar", 4)
-		reagents.add_reagent("wine", 4)
+		reagents.add_reagent("wine", 20)
 
 /obj/item/weapon/reagent_containers/food/snacks/voxstew
 	name = "Vox stew"
@@ -4147,7 +4147,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/flammkuchen
 	name = "flammkuchen"
-	desc = "Also called tarte flambee, literally 'flame cake'. Ancient French and German people once tried not fighting and the result was a pie is loaded with garlic, burned, and flat."
+	desc = "Also called tarte flambee, literally 'flame cake'. Ancient French and German people once tried not fighting and the result was a pie that is loaded with garlic, burned, and flat."
 	icon_state = "flammkuchen"
 	bitesize = 4
 	New()

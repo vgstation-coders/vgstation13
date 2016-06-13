@@ -284,7 +284,7 @@
 	desc = "Too small to set sail on."
 	volume = 10 //So nutrment isn't added
 
-/obj/item/weapon/reagent_containers/food/condiment/vinegar/New()
+/obj/item/weapon/reagent_containers/food/condiment/gravy/New()
 	..()
 	reagents.add_reagent("gravy", 10)
 

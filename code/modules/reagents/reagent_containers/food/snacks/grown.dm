@@ -771,6 +771,7 @@
 	desc = "A hard-shelled fruit with precious juice inside. Even the shell may find use, if properly sliced."
 	slice_path = /obj/item/stack/sheet/wood
 	slices_num = 1
+	icon_state = "woodapple"
 	filling_color = "857663"
 	plantname = "woodapple"
 
