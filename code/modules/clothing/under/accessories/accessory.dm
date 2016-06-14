@@ -40,7 +40,7 @@
 		return
 	has_suit.overlays -= inv_overlay
 	has_suit = null
-	src.loc = get_turf(user || src)
+	src.forceMove(get_turf(user || src))
 	if(user)
 		user.put_in_hands(src)
 		src.add_fingerprint(user)
@@ -55,9 +55,9 @@
 	return -1
 
 /obj/item/clothing/accessory/Destroy()
-	..()
 	on_removed(null)
 	inv_overlay = null
+	..()
 
 /obj/item/clothing/accessory/tie/blue
 	name = "blue tie"

@@ -42,10 +42,10 @@
 	hold.emp_act(severity)
 
 /obj/item/clothing/accessory/storage/Destroy()
-	..()
 	if(hold)
 		qdel(hold)
 		hold = null
+	..()
 
 /obj/item/weapon/storage/internal
 	name = "storage"
@@ -57,8 +57,8 @@
 	loc = master_item
 
 /obj/item/weapon/storage/internal/Destroy()
-	..()
 	master_item = null
+	..()
 
 /obj/item/clothing/accessory/storage/webbing
 	name = "webbing"
