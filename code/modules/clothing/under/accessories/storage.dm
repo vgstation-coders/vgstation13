@@ -82,6 +82,13 @@
 	_color = "vest_brown"
 	slots = 5
 
+/obj/item/clothing/accessory/storage/bandolier
+	name = "bandolier"
+	desc = "A bandolier designed to hold up to eight shotgun shells."
+	icon_state = "bandolier"
+	_color = "bandolier"
+	slots = 8
+	can_only_hold = list("/obj/item/ammo_casing/shotgun")
 
 /obj/item/clothing/accessory/storage/knifeharness
 	name = "decorated harness"
@@ -90,14 +97,6 @@
 	_color = "unathiharness2"
 	slots = 2
 	can_only_hold = list("/obj/item/weapon/hatchet", "/obj/item/weapon/kitchen/utensil/knife")
-
-/obj/item/clothing/accessory/storage/bandolier
-	name = "bandolier"
-	desc = "A bandolier designed to hold up to eight shotgun shells."
-	icon_state = "bandolier"
-	_color = "bandolier"
-	slots = 8
-	can_only_hold = list("/obj/item/ammo_casing/shotgun")
 
 /obj/item/clothing/accessory/storage/knifeharness/attackby(var/obj/item/O as obj, mob/user as mob)
 	..()
