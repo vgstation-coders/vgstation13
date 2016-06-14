@@ -507,7 +507,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 			return 1
 	return 0
 
-//This is a SAFE proc. Use this instead of equip_to_splot()!
+//This is a SAFE proc. Use this instead of equip_to_slot()!
 //set del_on_fail to have it delete W if it fails to equip
 //set disable_warning to disable the 'you are unable to equip that' warning.
 //unset redraw_mob to prevent the mob from being redrawn at the end.
@@ -577,7 +577,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 		equip_to_slot(W, slot, redraw_mob) //This proc should not ever fail.
 		return 1
 
-//This is an UNSAFE proc. It merely handles the actual job of equipping. All the checks on whether you can or can't eqip need to be done before! Use mob_can_equip() for that task.
+//This is an UNSAFE proc. It merely handles the actual job of equipping. All the checks on whether you can or can't equip need to be done before! Use mob_can_equip() for that task.
 //In most cases you will want to use equip_to_slot_if_possible()
 /mob/proc/equip_to_slot(obj/item/W as obj, slot)
 	return
@@ -634,6 +634,13 @@ var/list/slot_equipment_priority = list( \
 	if(!istype(W)) return 0
 
 	for(var/slot in slot_equipment_priority)
+		if(slot == slot_belt) //prioritize placing things in belt rather than swapping the belt slot
+			if(istype(src.get_item_by_slot(slot), /obj/item/weapon/storage/belt))
+				var/obj/item/weapon/storage/belt/B = src.get_item_by_slot(slot)
+				if(B.can_be_inserted(W, 1))
+					B.handle_item_insertion(W, 0)
+					return 1
+			
 		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 1)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
 
