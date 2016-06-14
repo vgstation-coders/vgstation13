@@ -55,18 +55,18 @@
 		user.visible_message("<B>[user] is [bragmessage]!</B>")
 		var/lifts = 0
 		while (lifts++ < 6)
-			if (user.loc != src.loc)
+			if (user.loc != loc)
 				break
 			sleep(3)
-			animate(user, pixel_y = -2, time = 3)
+			animate(user, pixel_y = pixel_y - 2, time = 3)
 			sleep(3)
-			animate(user, pixel_y = -4, time = 3)
+			animate(user, pixel_y = pixel_y - 4, time = 3)
 			sleep(3)
 			playsound(user, 'sound/effects/spring.ogg', 60, 1)
 
 		playsound(user, 'sound/machines/click.ogg', 60, 1)
 		in_use = 0
-		user.pixel_y = 0
+		animate(user, pixel_y = pixel_y, time = 3)
 		var/finishmessage = pick("You feel stronger!","You feel like you can take on the world!","You feel robust!","You feel indestructible!")
 		icon_state = "fitnesslifter"
 		to_chat(user, "<span class='notice'>[finishmessage]</span>")
@@ -97,7 +97,7 @@
 		var/reps = 0
 		user.pixel_y = 5
 		while (reps++ < 6)
-			if (user.loc != src.loc)
+			if (user.loc != loc)
 				break
 
 			for (var/innerReps = max(reps, 1), innerReps > 0, innerReps--)
@@ -107,11 +107,11 @@
 			playsound(user, 'sound/effects/spring.ogg', 60, 1)
 
 		sleep(3)
-		animate(user, pixel_y = 2, time = 3)
+		animate(user, pixel_y = pixel_y + 2, time = 3)
 		sleep(3)
 		playsound(user, 'sound/machines/click.ogg', 60, 1)
 		in_use = 0
-		animate(user, pixel_y = 0, time = 3)
+		animate(user, pixel_y = pixel_y, time = 3)
 		var/finishmessage = pick("You feel stronger!","You feel like you can take on the world!","You feel robust!","You feel indestructible!")
 		icon_state = "fitnessweight"
 		overlays -= W
