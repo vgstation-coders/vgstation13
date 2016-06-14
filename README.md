@@ -1,6 +1,6 @@
 # vgstation
 
-[Website](http://ss13.pomf.se) - [Code](https://github.com/d3athrow/vgstation13)
+[Website](http://ss13.moe) - [Code](https://github.com/d3athrow/vgstation13)
 
 [IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it
 
