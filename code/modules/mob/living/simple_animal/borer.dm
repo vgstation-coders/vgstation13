@@ -474,6 +474,10 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 	set category = "Alien"
 	set name = "Abandon Host"
 	set desc = "Slither out of your host."
+	
+	var/response = alert(src, "Are you -sure- you want to abandon your current host?\n(This will take a few seconds and cannot be halted!)","Are you sure you want to abandon host?","Yes","No")
+	if(response != "Yes")
+		return
 
 	var/in_head= istype(loc, /obj/item/weapon/organ/head)
 	if(!host && !in_head)
@@ -490,6 +494,7 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 
 	if(!src)
 		return
+	
 
 	to_chat(src, "<span class='info'>You begin disconnecting from [host]'s synapses and prodding at their internal ear canal.</span>")
 
