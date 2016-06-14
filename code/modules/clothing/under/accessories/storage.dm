@@ -19,7 +19,7 @@
 	hold.cant_hold = cant_hold
 
 /obj/item/clothing/accessory/storage/attack_hand(mob/user)
-	if(src.loc == user)
+	if(user.get_inactive_hand() == src)
 		hold.attack_hand(user)
 		return
 	return ..()
