@@ -1470,6 +1470,9 @@ var/proccalls = 1
 
 #define HIGHLANDER "highlander"
 
+//Organ modifiers
+#define OMODIFER_UBER 1
+
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2

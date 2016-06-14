@@ -20,6 +20,8 @@
 
 /area/vault/gym
 
+/area/vault/doktor_hideout
+
 /area/vault/oldarmory
 
 /area/vault/rust

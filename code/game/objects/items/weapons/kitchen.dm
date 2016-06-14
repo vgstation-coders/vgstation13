@@ -136,7 +136,8 @@
 /obj/item/weapon/kitchen/utensil/knife
 	name = "knife"
 	desc = "Can cut through any food."
-	icon_state = "knife"
+	icon_state = "knifesmall"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 10.0
 	throwforce = 10.0
 	sharpness = 1.2
@@ -164,6 +165,22 @@
 	throwforce = 1
 	sharpness = 0.8
 	melt_temperature = MELTPOINT_PLASTIC
+
+/obj/item/weapon/kitchen/utensil/knife/nazi
+	name = "nazi knife"
+	desc = "There's a svastika at the base of the blade."
+	icon_state = "knifenazi"
+	sharpness = 1.5
+	force = 10.0
+	throwforce = 30
+	throw_speed = 3
+	throw_range = 7
+	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 12000)
+	w_type = RECYK_METAL
+	melt_temperature = MELTPOINT_STEEL
+	origin_tech = "materials=1"
+	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /*
  * Kitchen knives

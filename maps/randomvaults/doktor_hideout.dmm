@@ -1,0 +1,48 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/unsimulated/floor/asteroid/cave,/area/vault/doktor_hideout)
+"c" = (/turf/unsimulated/mineral,/area/vault/doktor_hideout)
+"d" = (/turf/simulated/wall/mineral/wood,/area/vault/doktor_hideout)
+"e" = (/obj/machinery/holosign_switch{id_tag = "doktor"; pixel_y = -8},/turf/simulated/wall/mineral/wood,/area/vault/doktor_hideout)
+"f" = (/obj/structure/sign/greencross,/turf/simulated/wall/mineral/wood,/area/vault/doktor_hideout)
+"g" = (/obj/item/organ/heart,/obj/item/weapon/organ/head{dir = 2},/obj/item/weapon/scalpel,/obj/item/weapon/kitchen/utensil/fork{pixel_x = 7},/obj/structure/closet/secure_closet/freezer{icon_closed = "fridge"; icon_locked = "fridge1"; icon_off = "fridgeoff"; icon_opened = "fridgeopen"; icon_state = "fridge"; name = "refrigerator"},/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"h" = (/obj/item/stack/cable_coil,/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"i" = (/obj/structure/table/woodentable,/obj/item/medigunpack{pixel_y = 4},/obj/item/weapon/weldingtool{layer = 2.9; pixel_x = 8; pixel_y = 4},/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"j" = (/obj/structure/window/barricade{dir = 4},/obj/structure/table/woodentable,/obj/item/weapon/skull{layer = 3.1},/obj/item/weapon/hemostat{pixel_x = -4; pixel_y = 3},/turf/simulated/floor/wood/floor_tile{broken = 1; icon_state = "wood-broken"},/area/vault/doktor_hideout)
+"k" = (/obj/structure/window/reinforced/tinted{dir = 4},/obj/structure/window/reinforced/tinted{dir = 8},/obj/structure/window/reinforced/tinted{dir = 1},/obj/structure/grille/broken,/obj/structure/window/full/reinforced/tinted,/turf/unsimulated/floor/asteroid/plating,/area/vault/doktor_hideout)
+"l" = (/obj/structure/hanging_lantern{dir = 1; light_color = "#FAE1AF"},/turf/unsimulated/floor/asteroid/cave,/area/vault/doktor_hideout)
+"m" = (/obj/structure/table/woodentable,/obj/item/uberdevice{pixel_x = 8; pixel_y = 7},/obj/item/uberdevice,/obj/item/uberdevice{pixel_x = -5; pixel_y = 4},/turf/simulated/floor/wood/floor_tile{broken = 1; icon_state = "wood-broken"},/area/vault/doktor_hideout)
+"n" = (/obj/structure/bed/chair/wood/normal{dir = 8},/obj/item/weapon/kitchen/utensil/knife/nazi,/mob/living/simple_animal/hostile/humanoid/nazi/mateba/spacetrooper{name = "Herr Doktor"},/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"o" = (/mob/living/simple_animal/chicken{faction = "nazi"; max_co2 = 0; max_tox = 0; min_oxy = 0; minbodytemp = 0; name = "Archimedes"; real_name = "Archimedes"},/turf/simulated/floor/wood/floor_tile{broken = 1; icon_state = "wood-broken"},/area/vault/doktor_hideout)
+"p" = (/obj/structure/window/barricade{dir = 4},/obj/item/weapon/storage/firstaid/adv,/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"q" = (/obj/structure/window/reinforced/tinted,/obj/structure/window/reinforced/tinted{dir = 4},/obj/structure/window/reinforced/tinted{dir = 8},/obj/structure/grille,/obj/structure/window/full/reinforced/tinted,/turf/unsimulated/floor/asteroid/plating,/area/vault/doktor_hideout)
+"r" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/beans{pixel_x = -8; pixel_y = -4},/obj/item/weapon/circular_saw{pixel_x = 4; pixel_y = 8},/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"s" = (/turf/simulated/floor/wood/floor_tile{broken = 1; icon_state = "wood-broken"},/area/vault/doktor_hideout)
+"t" = (/obj/structure/window/barricade,/obj/item/weapon/crowbar/red,/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"u" = (/obj/structure/window/barricade,/obj/machinery/optable,/obj/effect/gibspawner/human,/turf/simulated/floor/wood/floor_tile,/area/vault/doktor_hideout)
+"v" = (/obj/structure/window/barricade/full,/obj/machinery/door/mineral/wood,/turf/simulated/floor/carpet,/area/vault/doktor_hideout)
+"w" = (/obj/structure/window/reinforced/tinted,/obj/structure/window/reinforced/tinted{dir = 8},/obj/structure/window/reinforced/tinted{dir = 1},/obj/structure/grille,/obj/structure/window/full/reinforced/tinted,/obj/machinery/holosign/surgery{icon_state = "sign_on"; id_tag = "doktor"; lit = 1},/turf/unsimulated/floor/asteroid/plating,/area/vault/doktor_hideout)
+"x" = (/obj/structure/window/reinforced/tinted{dir = 4},/obj/structure/window/reinforced/tinted{dir = 1},/obj/structure/grille/broken,/obj/structure/window/full/reinforced/tinted,/obj/item/weapon/shard{icon_state = "small"},/obj/item/stack/rods,/turf/unsimulated/floor/asteroid/plating,/area/vault/doktor_hideout)
+"y" = (/obj/machinery/portable_atmospherics/hydroponics/soil{layer = 2},/obj/item/weapon/pickaxe/shovel{level = 3.1},/obj/effect/decal/remains/human/noskull{layer = 2.5},/turf/unsimulated/floor/asteroid/cave,/area/vault/doktor_hideout)
+"z" = (/obj/machinery/portable_atmospherics/hydroponics/soil{layer = 2},/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid/cave,/area/vault/doktor_hideout)
+"A" = (/obj/item/weapon/caution/keepout,/turf/unsimulated/floor/asteroid/cave,/area/vault/doktor_hideout)
+"B" = (/obj/item/device/flashlight/lantern/on,/turf/unsimulated/floor/asteroid/cave,/area/vault/doktor_hideout)
+"C" = (/obj/structure/closet/coffin,/turf/unsimulated/floor/asteroid/cave,/area/vault/doktor_hideout)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+aaaabbbcccaaaaaa
+aaabcccccccaaaaa
+aaaccddefddcaaaa
+aaaccdghijklaaaa
+aaaccdmnopqbaaaa
+aaaccdrstudcaaaa
+aaaacddvwxdcaaaa
+aaaaablbbyzcaaaa
+aaaaaabAbBbCaaaa
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+"}

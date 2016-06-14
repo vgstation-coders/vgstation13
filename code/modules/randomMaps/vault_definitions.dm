@@ -47,6 +47,9 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/rust
 	file_path = "maps/randomvaults/rust.dmm"
 
+/datum/map_element/vault/doktor_hideout
+	file_path = "maps/randomvaults/doktor_hideout.dmm"
+
 /datum/map_element/vault/dance_revolution
 	file_path = "maps/randomvaults/dance_revolution.dmm"
 

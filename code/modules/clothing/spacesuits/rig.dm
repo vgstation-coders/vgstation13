@@ -8,6 +8,7 @@
 	allowed = list(/obj/item/device/flashlight)
 	light_power = 1.7
 	var/brightness_on = 4 //Luminosity when on. If modified, do NOT run update_brightness() directly
+	var/color_on = null //Luminosity when on. If modified, do NOT run update_brightness() directly
 	var/on = 0 //Remember to run update_brightness() when modified, otherwise disasters happen
 	var/no_light = 0 //Disables the helmet light when set to 1. Make sure to run check_light() if this is updated
 	_color = "engineering" //Determines used sprites: rig[on]-[_color]. Use update_icon() directly to update the sprite. NEEDS TO BE SET CORRECTLY FOR HELMETS
@@ -56,7 +57,7 @@
 
 
 	if(on)
-		set_light(brightness_on)
+		set_light(brightness_on,0,color_on)
 	else
 		set_light(0)
 	update_icon()
@@ -329,6 +330,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "nazi"
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	color_on = "#FF2222"
 
 /obj/item/clothing/suit/space/rig/nazi
 	name = "nazi hardsuit"

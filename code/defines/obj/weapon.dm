@@ -518,6 +518,12 @@
 	flags = FPRINT
 	attack_verb = list("warns", "cautions", "smashes")
 
+/obj/item/weapon/caution/keepout
+	icon = 'icons/obj/decals.dmi'
+	icon_state = "keepout"
+	desc = "Keep Out!"
+	name = "keep out sign"
+
 /obj/item/weapon/caution/proximity_sign
 	var/timing = 0
 	var/armed = 0
