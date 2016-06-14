@@ -880,7 +880,7 @@ var/global/list/damage_icon_parts = list()
 		var/obj/Overlays/O = obj_overlays[SUIT_LAYER]
 		O.overlays.len = 0
 		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[wear_suit.icon_state]")
-		if(((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) && !(wear_suit.icon_override) || (species.flags & IS_BULKY) && !(wear_suit.icon_override))
+		if((((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) || (species.flags & IS_BULKY)) && !(wear_suit.icon_override))
 			if(wear_suit.flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/suit_fat.dmi'
 			else
