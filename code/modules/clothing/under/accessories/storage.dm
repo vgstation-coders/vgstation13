@@ -45,7 +45,7 @@
 	if(hold)
 		qdel(hold)
 		hold = null
-	..()
+	return ..()
 
 /obj/item/weapon/storage/internal
 	name = "storage"
@@ -58,7 +58,7 @@
 
 /obj/item/weapon/storage/internal/Destroy()
 	master_item = null
-	..()
+	return ..()
 
 /obj/item/clothing/accessory/storage/webbing
 	name = "webbing"

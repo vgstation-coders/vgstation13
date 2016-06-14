@@ -30,7 +30,7 @@
 	if(user)
 		if(user.drop_item(src, has_suit))
 			to_chat(user, "<span class='notice'>You attach [src] to [has_suit].</span>")
-			src.add_fingerprint(user)
+			add_fingerprint(user)
 	else
 		loc = has_suit
 	has_suit.overlays += inv_overlay
@@ -40,10 +40,10 @@
 		return
 	has_suit.overlays -= inv_overlay
 	has_suit = null
-	src.forceMove(get_turf(user || src))
+	forceMove(get_turf(user || src))
 	if(user)
 		user.put_in_hands(src)
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 
 /obj/item/clothing/accessory/proc/on_accessory_interact(mob/user, delayed = 0)
 	if(!has_suit)
@@ -57,7 +57,7 @@
 /obj/item/clothing/accessory/Destroy()
 	on_removed(null)
 	inv_overlay = null
-	..()
+	return ..()
 
 /obj/item/clothing/accessory/tie/blue
 	name = "blue tie"
