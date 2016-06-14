@@ -5,6 +5,7 @@
 	_color = "webbing"
 	var/slots = 3
 	var/list/can_only_hold = list() //I would add the other storage item variables, but nothing would use them yet, so there's no point.
+	var/list/cant_hold = list("/obj/item/clothing/accessory/storage", "/obj/item/clothing/under") //NO RECURSION
 	var/obj/item/weapon/storage/internal/hold
 	accessory_exclusion = STORAGE
 
@@ -15,6 +16,7 @@
 	hold.master_item = src
 	hold.storage_slots = slots
 	hold.can_only_hold = can_only_hold
+	hold.cant_hold = cant_hold
 
 /obj/item/clothing/accessory/storage/attack_hand(mob/user)
 	if(src.loc == user)
