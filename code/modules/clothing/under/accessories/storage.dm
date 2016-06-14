@@ -11,7 +11,7 @@
 /obj/item/clothing/accessory/storage/New()
 	..()
 	hold = new (src)
-	hold.name = src.name //So that you don't just put things into "the storage"
+	hold.name = name //So that you don't just put things into "the storage"
 	hold.master_item = src
 	hold.storage_slots = slots
 	hold.can_only_hold = can_only_hold
@@ -87,7 +87,7 @@
 	icon_state = "unathiharness2"
 	_color = "unathiharness2"
 	slots = 2
-	can_only_hold = list("obj/item/weapon/hatchet", "obj/item/weapon/kitchen/utensil/knife")
+	can_only_hold = list("/obj/item/weapon/hatchet", "/obj/item/weapon/kitchen/utensil/knife")
 
 /obj/item/clothing/accessory/storage/bandolier
 	name = "bandolier"
