@@ -21,7 +21,7 @@
 
 /obj/item/clothing/accessory/New()
 	..()
-	inv_overlay = image("icon" = 'icons/obj/clothing/ties_overlay.dmi', "icon_state" = "[_color? "[_color]" : "[icon_state]"]")
+	inv_overlay = image("icon" = 'icons/obj/clothing/ties_overlay.dmi', "icon_state" = "[_color || icon_state]")
 
 /obj/item/clothing/accessory/proc/on_attached(obj/item/clothing/under/S, mob/user as mob)
 	if(!istype(S))
@@ -40,9 +40,10 @@
 		return
 	has_suit.overlays -= inv_overlay
 	has_suit = null
-	src.loc = get_turf(user)
-	user.put_in_hands(src)
-	src.add_fingerprint(user)
+	src.loc = get_turf(user || src)
+	if(user)
+		user.put_in_hands(src)
+		src.add_fingerprint(user)
 
 /obj/item/clothing/accessory/proc/on_accessory_interact(mob/user, delayed = 0)
 	if(!has_suit)
@@ -52,6 +53,11 @@
 		attack_hand(user)
 		return 1
 	return -1
+
+/obj/item/clothing/accessory/Destroy()
+	..()
+	on_removed(null)
+	inv_overlay = null
 
 /obj/item/clothing/accessory/tie/blue
 	name = "blue tie"
