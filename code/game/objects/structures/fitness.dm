@@ -9,7 +9,7 @@
 
 /obj/structure/punching_bag/attack_hand(mob/user as mob)
 	flick("[icon_state]2", src)
-	playsound(src.loc, pick(src.hit_sounds), 25, 1, -1)
+	playsound(loc, pick(hit_sounds), 25, 1, -1)
 
 /obj/structure/punching_bag/wizard
 	icon_state = "punchingbagwizard"
@@ -30,11 +30,11 @@
 
 /obj/structure/punching_bag/clown/attack_hand(mob/user as mob)
 	flick("[icon_state]2", src)
-	playsound(src.loc, pick(src.hit_sounds), 25, 1, -1)
-	playsound(src.loc, 'sound/items/bikehorn.ogg', 50, 1, -1)
+	playsound(loc, pick(hit_sounds), 25, 1, -1)
+	playsound(loc, 'sound/items/bikehorn.ogg', 50, 1, -1)
 
 /obj/structure/stacklifter
-	name = "Weight Machine"
+	name = "weight machine"
 	desc = "Just looking at this thing makes you feel tired."
 	icon = 'icons/obj/fitness.dmi'
 	icon_state = "fitnesslifter"
@@ -43,14 +43,14 @@
 
 /obj/structure/stacklifter/attack_hand(mob/user as mob)
 	if(in_use)
-		user << "Its already in use - wait a bit."
+		to_chat(user, "<span class='notice'>Its already in use - wait a bit.</span>")
 		return
 	else
 		in_use = 1
 		icon_state = "fitnesslifter2"
-		user.dir = SOUTH
+		user.change_dir(SOUTH)
 		user.Stun(4)
-		user.loc = src.loc
+		user.forceMove(loc)
 		var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
 		user.visible_message("<B>[user] is [bragmessage]!</B>")
 		var/lifts = 0
@@ -81,14 +81,14 @@
 
 /obj/structure/weightlifter/attack_hand(mob/user as mob)
 	if(in_use)
-		user << "Its already in use - wait a bit."
+		to_chat(user, "<span class='notice'>Its already in use - wait a bit.</span>")
 		return
 	else
 		in_use = 1
 		icon_state = "fitnessweight-c"
-		user.dir = SOUTH
+		user.change_dir(SOUTH)
 		user.Stun(4)
-		user.loc = src.loc
+		user.forceMove(loc)
 		var/image/W = image('icons/obj/fitness.dmi',"fitnessweight-w")
 		W.layer = MOB_LAYER + 0.1
 		overlays += W

@@ -1,12 +1,12 @@
 /obj/machinery/door/poddoor/glass
-	name = "Shutters"
+	name = "shutters"
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "pdoor_glass_closed"
 	var/sound_open = 'sound/machines/shutter_open.ogg'
 	var/sound_close = 'sound/machines/shutter_close.ogg'
 	opacity = 0
 
-/obj/machinery/door/poddoor/shutters/New()
+/obj/machinery/door/poddoor/glass/New()
 	..()
 	layer = 3.1
 
@@ -14,7 +14,7 @@
 	icon_state = "pdoor_glass_opened"
 	density = 0
 
-/obj/machinery/door/poddoor/shutters/attackby(obj/item/weapon/C as obj, mob/user as mob)
+/obj/machinery/door/poddoor/glass/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
 	if(!(iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
@@ -38,7 +38,7 @@
 		operating = 1
 	flick("pdoor_glass_open", src)
 	icon_state = "pdoor_glass_opened"
-	playsound(src.loc, sound_open, 100, 1)
+	playsound(loc, sound_open, 100, 1)
 	sleep(10)
 	density = 0
 	update_nearby_tiles()
@@ -57,10 +57,9 @@
 	operating = 1
 	flick("pdoor_glass_close", src)
 	icon_state = "pdoor_glass_closed"
-	playsound(src.loc, sound_close, 100, 1)
+	playsound(loc, sound_close, 100, 1)
 	density = 1
 	update_nearby_tiles()
 
 	sleep(10)
 	operating = 0
-	return
