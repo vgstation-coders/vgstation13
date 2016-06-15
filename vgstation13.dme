@@ -490,7 +490,6 @@
 #include "code\game\machinery\doors\checkForMultipleDoors.dm"
 #include "code\game\machinery\doors\door.dm"
 #include "code\game\machinery\doors\firedoor.dm"
-#include "code\game\machinery\doors\glasspoddoor.dm"
 #include "code\game\machinery\doors\mineral.dm"
 #include "code\game\machinery\doors\multi_tile.dm"
 #include "code\game\machinery\doors\poddoor.dm"
