@@ -4114,12 +4114,12 @@
 
 
 	else if (href_list["viewruntime"])
-		var/datum/ErrorViewer/error_viewer = locate(href_list["viewruntime"])
+		var/datum/error_viewer/error_viewer = locate(href_list["viewruntime"])
 		if (!istype(error_viewer))
 			to_chat(owner, "<span class='warning'>That runtime viewer no longer exists.</span>")
 			return
 
 		if (href_list["viewruntime_backto"])
-			error_viewer.showTo(owner, locate(href_list["viewruntime_backto"]), href_list["viewruntime_linear"])
+			error_viewer.show_to(owner, locate(href_list["viewruntime_backto"]), href_list["viewruntime_linear"])
 		else
-			error_viewer.showTo(owner, null, href_list["viewruntime_linear"])
+			error_viewer.show_to(owner, null, href_list["viewruntime_linear"])

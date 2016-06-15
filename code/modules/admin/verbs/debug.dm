@@ -1832,4 +1832,4 @@ client/proc/check_convertables()
 	if (!check_rights(R_DEBUG))
 		return
 
-	error_cache.showTo(src)
+	error_cache.show_to(src)
