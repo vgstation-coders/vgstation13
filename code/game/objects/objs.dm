@@ -15,7 +15,8 @@ var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "pla
 
 	var/damtype = "brute"
 	var/force = 0
-
+	var/wrenchable = 0 //can the object be secured using a wrench?
+	
 	//Should we alert about reagents that should be logged?
 	var/log_reagents = 1
 
@@ -298,6 +299,27 @@ a {
 
 		machine._using += src
 		machine.in_use = 1
+
+/obj/proc/wrenchAnchor(var/mob/user) //proc to wrench an object that can be secured
+	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
+		if(other.anchored == 1 && other.density == 1 && density && !anchored)
+			to_chat(user, "\The [other] is already anchored in this location.")
+			return -1 		
+	if(!anchored)
+		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
+			if(istype(src.loc, /turf/simulated/shuttle) || istype(src.loc, /turf/space)) //If on the shuttle or empty space
+				to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
+				return
+	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
+							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
+	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(do_after(user, src, 30))
+		anchored = !anchored
+		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
+								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+								"<span class='notice'>You hear a ratchet.</span>")
+		return 1
+	return -1
 
 /obj/item/proc/updateSelfDialog()
 	var/mob/M = src.loc
