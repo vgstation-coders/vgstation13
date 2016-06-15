@@ -22,7 +22,7 @@ var/list/poddoors = list()
 	var/openingicon = "pdoorc0"
 
 /obj/machinery/door/poddoor/preopen
-	icon_state = "pdoor0"
+	icon_state = openicon
 	density = 0
 	opacity = 0
 
