@@ -348,7 +348,7 @@
 
 		if(M.bodytemperature > BODYTEMP_IDEAL)
 			M.bodytemperature = max(BODYTEMP_IDEAL, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
-		else if(M.bodytemperature < (BODYTEMP_IDEAL+1))
+		else
 			M.bodytemperature = min(BODYTEMP_IDEAL, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 	M.UpdateDamageIcon()
