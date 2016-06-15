@@ -14,7 +14,7 @@
 
 	var/obj/spawned
 	to_spawn = pick(to_spawn)
-	for(i = 1, i <= amount, i++)
+	for(var/i = 1, i <= amount, i++)
 		for(spawned in to_spawn)
 			if(sub_chance)
 				new spawned(loc)

@@ -14,7 +14,7 @@
 
 /obj/map/nest/perform_spawn()
 
-	for(i = 1, i <= pop, i++)
+	for(var/i = 1, i <= pop, i++)
 		new mob_type(loc)
 
 	spawn()
