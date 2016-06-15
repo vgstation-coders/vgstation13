@@ -82,6 +82,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/supernatural = 0
 	var/purge = 0
 
+	//For those that we want to just pop back up a little while after they're killed
+	var/canRegenerate = 0 //If 1, it qualifies for regeneration
+	var/isRegenerating = 0 //To stop life calling the proc multiple times
+	var/minRegenTime = 0
+	var/maxRegenTime = 0
+
 	universal_speak = 1
 	universal_understand = 1
 
@@ -142,6 +148,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			stat = CONSCIOUS
 			density = 1
 			update_canmove()
+		if(canRegenerate && !isRegenerating)
+			src.delayedRegen()
 		return 0
 
 
@@ -162,6 +170,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(purge)
 		purge -= 1
+
+	isRegenerating = 0
 
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
@@ -292,6 +302,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /mob/living/simple_animal/blob_act()
+	..()
 	adjustBruteLoss(20)
 	return
 
@@ -324,7 +335,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		add_logs(M, src, "attacked", admin=0)
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage,M.melee_damage_type)
+		if(M.melee_damage_type == "BRAIN") //because brain damage is apparently not a proper damage type like all the others
+			adjustBrainLoss(damage)
+		else
+			adjustBruteLoss(damage,M.melee_damage_type)
 		updatehealth()
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
@@ -575,6 +589,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(health < 1 && stat != DEAD)
 		Die()
 
+/mob/living/simple_animal/adjustFireLoss(damage)
+	health = Clamp(health - damage, 0, maxHealth)
+	if(health < 1 && stat != DEAD)
+		Die()
+
 /mob/living/simple_animal/proc/SA_attackable(target)
 	return CanAttack(target)
 
@@ -664,7 +683,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(locked_to) //Handle atom locking
 		var/atom/movable/A = locked_to
 		A.unlock_atom(src)
-		A.lock_atom(new_animal)
+		A.lock_atom(new_animal, /datum/locking_category/simple_animal)
 
 	new_animal.inherit_mind(src)
 	new_animal.ckey = src.ckey
@@ -692,3 +711,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		if("pacid")
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
+
+/mob/living/simple_animal/proc/delayedRegen()
+	set waitfor = 0
+	isRegenerating = 1
+	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
+	src.resurrect()
+	src.revive()
+	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+
+/datum/locking_category/simple_animal

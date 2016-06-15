@@ -6,7 +6,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/ion.ogg'
 	origin_tech = "combat=2;magnets=4"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
@@ -31,7 +31,7 @@
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/declone"
 
-var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry")
+var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry","frankenstein")
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
 
 /obj/item/weapon/gun/energy/staff
@@ -44,7 +44,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	charge_cost = 200
 	projectile_type = "/obj/item/projectile/change"
 	origin_tech = null
@@ -120,7 +120,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	throw_speed = 1
 	throw_range = 4
 	throwforce = 10
-	w_class = 1
+	w_class = W_CLASS_TINY
 	charge_cost = 1000
 	var/lifekiller = 0
 	var/power_notice = 0
@@ -307,7 +307,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	desc = "For the love of god, make sure you're aiming this the right way!"
 	icon_state = "riotgun"
 	item_state = "c20r"
-	w_class = 4
+	w_class = W_CLASS_LARGE
 	projectile_type = "/obj/item/projectile/meteor"
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell/potato"
@@ -341,7 +341,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "pen"
 	item_state = "pen"
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 
 /obj/item/weapon/gun/energy/mindflayer
@@ -435,6 +435,12 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	update_icon()
 	return 1
 
+/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/restock()
+	if(power_supply.charge < power_supply.maxcharge)
+		power_supply.give(charge_cost)
+		update_icon()
+	else
+		charge_tick = 0
 
 /obj/item/weapon/gun/energy/radgun
 	name = "radgun"

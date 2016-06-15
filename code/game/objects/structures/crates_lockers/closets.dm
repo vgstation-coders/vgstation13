@@ -40,7 +40,7 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted)) return 1
 	return (!density)
 
@@ -371,8 +371,8 @@
 			temp_overlay.overlays += spooky_overlay
 
 			C.images += temp_overlay
-			to_chat(L, sound('sound/machines/click.ogg'))
-			to_chat(L, sound('sound/hallucinations/scary.ogg'))
+			L << sound('sound/machines/click.ogg')
+			L << sound('sound/hallucinations/scary.ogg')
 			L.Weaken(5)
 
 			sleep(50)

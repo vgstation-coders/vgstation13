@@ -22,7 +22,7 @@
 	w_type = RECYK_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "materials=1;biotech=1"
 
 	suicide_act(mob/user)
@@ -155,9 +155,9 @@ LOOK FOR SURGERY.DM*/
 	w_type = RECYK_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "materials=1;biotech=1"
-	attack_verb = list("attacked", "pinched")
+	attack_verb = list("attacks", "pinches")
 
 
 	suicide_act(mob/user)
@@ -298,9 +298,9 @@ LOOK FOR SURGERY.DM*/
 	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "materials=1;biotech=1"
-	attack_verb = list("burnt")
+	attack_verb = list("burns")
 
 
 	suicide_act(mob/user)
@@ -399,9 +399,9 @@ LOOK FOR SURGERY.DM*/
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 15.0
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	origin_tech = "materials=1;biotech=1"
-	attack_verb = list("drilled")
+	attack_verb = list("drills")
 
 
 
@@ -423,14 +423,14 @@ LOOK FOR SURGERY.DM*/
 	siemens_coefficient = 1
 	sharpness = 1.5
 	force = 10.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	w_type = RECYK_METAL
 	origin_tech = "materials=1;biotech=1"
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
 
@@ -723,14 +723,14 @@ LOOK FOR SURGERY.DM*/
 	siemens_coefficient = 1
 	sharpness = 1
 	force = 15.0
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throwforce = 9.0
 	throw_speed = 3
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "materials=1;biotech=1"
-	attack_verb = list("attacked", "slashed", "sawed", "cut")
+	attack_verb = list("attacks", "slashes", "saws", "cuts")
 
 
 	suicide_act(mob/user)
@@ -897,7 +897,7 @@ LOOK FOR SURGERY.DM*/
 	item_state = "bonegel"
 	force = 0
 	throwforce = 1.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")//Don't eat glue kids.
@@ -912,7 +912,7 @@ LOOK FOR SURGERY.DM*/
 	item_state = "fixovein"
 	force = 0
 	throwforce = 1.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "materials=1;biotech=3"
 	var/usage_amount = 10
 
@@ -923,10 +923,10 @@ LOOK FOR SURGERY.DM*/
 	item_state = "bonesetter"
 	force = 8.0
 	throwforce = 9.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 3
 	throw_range = 5
-	attack_verb = list("attacked", "hit", "bludgeoned")
+	attack_verb = list("attacks", "hits", "bludgeons")
 
 /*
  * Cyborg Hand

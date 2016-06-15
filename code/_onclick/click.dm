@@ -82,52 +82,52 @@
 		return
 
 	var/obj/item/W = get_active_hand()
+	var/item_attack_delay = 0
 
 	if(W == A)
 		/*next_move = world.time + 6
 		if(W.flags&USEDELAY)
 			next_move += 5*/
 		W.attack_self(src, params)
-		if(hand)
-			update_inv_l_hand(0)
-		else
-			update_inv_r_hand(0)
+		update_inv_hand(active_hand)
 
 		return
 
-	if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
+	if(!isturf(loc) && !is_holder_of(src, A)) // Can't touch anything from inside a locker/sleeper etc, unless it's inside our inventory.
 		return
 
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
 	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
 		if(W)
-
+			item_attack_delay = W.attack_delay
 			var/resolved = W.preattack(A, src, 1, params)
 			if(!resolved)
 				resolved = A.attackby(W,src, params)
 				if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
-					delayNextAttack(10)
+					delayNextAttack(item_attack_delay)
 				if(!resolved && A && W)
 					W.afterattack(A,src,1,params) // 1 indicates adjacency
 				else
-					delayNextAttack(10)
+					delayNextAttack(item_attack_delay)
 		else
 			if(ismob(A) || istype(W, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			INVOKE_EVENT(on_uattack,list("atom"=A))
+			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+				return
 			UnarmedAttack(A, 1, params)
 		return
 	else // non-adjacent click
 		if(W)
 			if(ismob(A))
-				delayNextAttack(10)
+				delayNextAttack(item_attack_delay)
 			if(!W.preattack(A, src, 0,  params))
 				W.afterattack(A,src,0,params) // 0: not Adjacent
 		else
 			if(ismob(A))
 				delayNextAttack(10)
+			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+				return
 			RangedAttack(A, params)
-			INVOKE_EVENT(on_uattack,list("atom"=A))
 	return
 
 // Default behavior: ignore double clicks, consider them normal clicks instead

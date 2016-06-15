@@ -28,7 +28,7 @@
 //
 //	assignments			:	assignment, [',' assignments]
 //	assignment			:	<variable name> '=' expression
-//	variable			:	<variable name> | <variable name> '.' variable
+//	variable			:	<variable name> | <variable name> '.' variable | '[' <hex number> ']' | '[' <hex number> ']' '.' variable
 //
 //	bool_expression		:	expression comparitor expression  [bool_operator bool_expression]
 //	expression			:	( unary_expression | '(' expression ')' | value ) [binary_operator expression]
@@ -211,13 +211,11 @@
 //call_query:	'CALL' call_function ['ON' select_list [('FROM' | 'IN') from_list] ['WHERE' bool_expression]]
 /datum/SDQL_parser/proc/call_query(i, list/node)
 	var/list/func = list()
-	var/list/arguments = list()
-	i = call_function(i + 1, func, arguments)
+	i = variable(i + 1, func) // Yes technically does anything variable() matches but I don't care, if admins fuck up this badly then they shouldn't be allowed near SDQL.
 
 	node += "call"
 	node["call"] = func
-	node["args"] = arguments
-
+	
 	if(tokenl(i) != "on")
 		return i
 
@@ -338,14 +336,37 @@
 	return i
 
 
-//variable:	<variable name> | <variable name> '.' variable
+//variable:	<variable name> | <variable name> '.' variable | '[' <hex number> ']' | '[' <hex number> ']' '.' variable
 /datum/SDQL_parser/proc/variable(i, list/node)
 	var/list/L = list(token(i))
 	node[++node.len] = L
 
+	if(token(i) == "{")
+		L += token(i + 1)
+		i += 2
+
+		if(token(i) != "}")
+			parse_error("Missing } at end of pointer.")
+
 	if(token(i + 1) == ".")
 		L += "."
 		i = variable(i + 2, L)
+
+	else if (token(i + 1) == "(") // OH BOY PROC
+		var/list/arguments = list()
+		i = call_function(i, null, arguments)
+		L += ":"
+		L[++L.len] = arguments
+
+	else if (token(i + 1) == "\[")
+		var/list/expression = list()
+		i = expression(i + 2, expression)
+		if (token(i) != "]")
+			parse_error("Missing ] at the end of list access.")
+
+		L += "\["
+		L[++L.len] = expression
+		i++
 
 	else
 		i++
@@ -427,7 +448,7 @@
 		expression_list[++expression_list.len] = temp_expression_list
 
 	else
-		
+
 		i++
 
 	node[++node.len] = expression_list
@@ -437,7 +458,11 @@
 //call_function:	<function name> ['(' [arguments] ')']
 /datum/SDQL_parser/proc/call_function(i, list/node, list/arguments)
 	if(length(tokenl(i)))
-		node += token(i++)
+		var/procname = ""
+		if(tokenl(i) == "global" && token(i + 1) == ".") // Global proc.
+			i += 2
+			procname = "global."
+		node += procname + token(i++)
 		if(token(i) != "(")
 			parse_error("Expected ( but found '[token(i)]'")
 
@@ -557,9 +582,12 @@
 
 //value:	variable | string | number | 'null'
 /datum/SDQL_parser/proc/value(i, list/node)
-
 	if(token(i) == "null")
 		node += "null"
+		i++
+
+	else if(lowertext(copytext(token(i), 1, 3)) == "0x" && isnum(hex2num(copytext(token(i), 3))))
+		node += hex2num(copytext(token(i), 3))
 		i++
 
 	else if(isnum(text2num(token(i))))

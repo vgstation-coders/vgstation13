@@ -83,7 +83,7 @@
 	origin_tech = "combat=2"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	force = 3
 	var/on = 0
 
@@ -100,9 +100,9 @@
 
 		icon_state = "telebaton_1"
 		item_state = "telebaton_1"
-		w_class = 4
+		w_class = W_CLASS_LARGE
 		force = 15//quite robust
-		attack_verb = list("smacked", "struck", "slapped")
+		attack_verb = list("smacks", "strikes", "slaps")
 	else
 		user.visible_message("<span class='notice'>[user] collapses their telescopic baton.</span>",\
 		"<span class='notice'>You collapse the baton.</span>",\
@@ -115,7 +115,7 @@
 		item_state = initial(item_state)
 		w_class = initial(w_class)
 		force = initial(force) //not so robust now
-		attack_verb = list("hit", "punched")
+		attack_verb = list("hits", "punches")
 	playsound(get_turf(src), 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
@@ -199,7 +199,7 @@
 		to_chat(user, "<span class='notice'>The axe is now energised.</span>")
 		src.force = 150
 		src.icon_state = "axe1"
-		src.w_class = 5
+		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
 	else
 		to_chat(user, "<span class='notice'>The axe can now be concealed.</span>")

@@ -223,7 +223,7 @@ Attach to transfer valve and open. BOOM.
 
 				//Spread the fire.
 				if(!(locate(/obj/fire) in enemy_tile))
-					if( prob( 50 + 50 * (firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)) ) && S.CanPass(null, enemy_tile, 0,0) && enemy_tile.CanPass(null, S, 0,0))
+					if( prob( 50 + 50 * (firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)) ) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
 						new/obj/fire(enemy_tile)
 
 	//seperate part of the present gas
@@ -446,8 +446,7 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	//Get heat transfer coefficients for clothing.
 
 	for(var/obj/item/clothing/C in src)
-		if(l_hand == C || r_hand == C)
-			continue
+		if(is_holding_item(C)) continue
 
 		if( C.max_heat_protection_temperature >= last_temperature )
 			if(!is_slot_hidden(C.body_parts_covered,FULL_HEAD))

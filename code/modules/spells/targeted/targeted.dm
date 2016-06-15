@@ -64,9 +64,10 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 				if(compatible_mobs && compatible_mobs.len && !is_type_in_list(M, compatible_mobs))
 					continue
 				if(mind_affecting)
-					var/mob/living/carbon/human/H = user
-					if(!H.can_mind_interact(M))
-						continue
+					if(ishuman(user))
+						var/mob/living/carbon/human/H = user
+						if(!H.can_mind_interact(M))
+							continue
 				possible_targets += M
 
 			if(possible_targets.len)
@@ -146,8 +147,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	target.Paralyse(amt_paralysis)
 	target.Stun(amt_stunned)
 	if(amt_weakened || amt_paralysis || amt_stunned)
-		if(target.locked_to)
-			target.locked_to.unlock_atom(target)
+		target.unlock_from()
 	target.eye_blind += amt_eye_blind
 	target.eye_blurry += amt_eye_blurry
 	target.dizziness += amt_dizziness

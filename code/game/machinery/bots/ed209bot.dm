@@ -3,6 +3,7 @@
 	desc = "A security robot.  He looks less than thrilled."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "ed2090"
+	icon_initial = "ed209"
 	layer = 5.0
 	density = 1
 	anchored = 0
@@ -89,7 +90,7 @@
 	..()
 	if(created_name)		name = created_name
 	if(created_lasercolor)	lasercolor = created_lasercolor
-	src.icon_state = "[lasercolor]ed209[src.on]"
+	src.icon_state = "[lasercolor][icon_initial][src.on]"
 	spawn(3)
 		src.botcard = new /obj/item/weapon/card/id(src)
 		var/datum/job/detective/J = new/datum/job/detective
@@ -108,7 +109,7 @@
 			if((lasercolor == "r") && (name == "ED-209 Security Robot"))
 				name = pick("RED RAMPAGE","RED ROVER","RED KILLDEATH MURDERBOT")
 
-/obj/machinery/bot/ed209/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/bot/ed209/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/machinery/bot/ed209))
 		return 1
 	else
@@ -116,7 +117,7 @@
 
 /obj/machinery/bot/ed209/turn_on()
 	. = ..()
-	src.icon_state = "[lasercolor]ed209[src.on]"
+	src.icon_state = "[lasercolor][icon_initial][src.on]"
 	src.mode = SECBOT_IDLE
 	src.updateUsrDialog()
 
@@ -127,7 +128,7 @@
 	src.anchored = 0
 	src.mode = SECBOT_IDLE
 	walk_to(src,0)
-	src.icon_state = "[lasercolor]ed209[src.on]"
+	src.icon_state = "[lasercolor][icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/ed209/attack_hand(mob/user as mob)
@@ -260,7 +261,7 @@ Auto Patrol: []"},
 		src.anchored = 0
 		src.emagged = 2
 		src.on = 1
-		src.icon_state = "[lasercolor]ed209[src.on]"
+		src.icon_state = "[lasercolor][icon_initial][src.on]"
 		src.projectile = /obj/item/projectile/beam
 		mode = SECBOT_IDLE
 		src.shot_delay = 6//Longer shot delay because JESUS CHRIST
@@ -324,9 +325,9 @@ Auto Patrol: []"},
 					return
 				if (get_dist(src, src.target) <= 1)		// if right next to perp
 					playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
-					src.icon_state = "[lasercolor]ed209-c"
+					src.icon_state = "[lasercolor][icon_initial]-c"
 					spawn(2)
-						src.icon_state = "[lasercolor]ed209[src.on]"
+						src.icon_state = "[lasercolor][icon_initial][src.on]"
 					var/mob/living/carbon/M = src.target
 					var/maxstuns = 4
 					if (istype(M, /mob/living/carbon/human))
@@ -727,12 +728,8 @@ Auto Patrol: []"},
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 
 		if(weaponscheck && !wpermit(perp))
-			if(istype(perp.l_hand, /obj/item/weapon/gun) || istype(perp.l_hand, /obj/item/weapon/melee))
-				if(!(perp.l_hand.type in safe_weapons))
-					threatcount += 4
-
-			if(istype(perp.r_hand, /obj/item/weapon/gun) || istype(perp.r_hand, /obj/item/weapon/melee))
-				if(!(perp.r_hand.type in safe_weapons))
+			for(var/obj/item/W in perp.held_items)
+				if(check_for_weapons(W))
 					threatcount += 4
 
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
@@ -759,7 +756,7 @@ Auto Patrol: []"},
 		threatcount = 0//They will not, however shoot at people who have guns, because it gets really fucking annoying
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
 			threatcount += 4
-		if((istype(perp.r_hand,/obj/item/weapon/gun/energy/laser/redtag)) || (istype(perp.l_hand,/obj/item/weapon/gun/energy/laser/redtag)))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
 			threatcount += 4
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag))
 			threatcount += 2
@@ -768,7 +765,7 @@ Auto Patrol: []"},
 		threatcount = 0
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
 			threatcount += 4
-		if((istype(perp.r_hand,/obj/item/weapon/gun/energy/laser/bluetag)) || (istype(perp.l_hand,/obj/item/weapon/gun/energy/laser/bluetag)))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
 			threatcount += 4
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag))
 			threatcount += 2
@@ -840,7 +837,7 @@ Auto Patrol: []"},
 			new /obj/item/robot_parts/r_leg(Tsec)
 	if (prob(25))//50% chance for a helmet OR vest
 		if (prob(50))
-			new /obj/item/clothing/head/helmet(Tsec)
+			new /obj/item/clothing/head/helmet/tactical/sec(Tsec)
 		else
 			if(!lasercolor)
 				new /obj/item/clothing/suit/armor/vest(Tsec)
@@ -998,7 +995,7 @@ Auto Patrol: []"},
 					name = "shielded frame assembly"
 					to_chat(user, "<span class='notice'>You welded the vest to [src].</span>")
 		if(4)
-			if( istype(W, /obj/item/clothing/head/helmet) )
+			if( istype(W, /obj/item/clothing/head/helmet/tactical/sec) )
 				if(user.drop_item(W))
 					qdel(W)
 					build_step++
@@ -1118,5 +1115,5 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/ed209/declare()
 	var/area/location = get_area(src)
-	declare_message = "<span class='info'>\icon[src] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
+	declare_message = "<span class='info'>[bicon(src)] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
 	..()

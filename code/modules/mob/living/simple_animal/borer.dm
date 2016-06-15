@@ -223,6 +223,9 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 
 		stat("Chemicals", chemicals)
 
+/mob/living/simple_animal/borer/start_pulling(var/atom/movable/AM)
+	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
+
 // VERBS!
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
 	set category = "Alien"
@@ -444,12 +447,17 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 		to_chat(src, "<span class='warning'>You don't have enough energy to synthesize this much!</span>")
 		return
 
+	var/datum/reagent/C = chemical_reagents_list[chemID] //we need to get the datum for this reagent to read the overdose threshold
+	if(units >= C.overdose - host.reagents.get_reagent_amount(chemID) && C.overdose > 0)
+		if(alert("Secreting that much [chemID] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
+			return
+		add_gamelogs(src, "intentionally overdosed \the [host] with '[chemID]'", admin = TRUE, tp_link = TRUE, span_class = "danger")
 
 	if(!host || controlling || !src || stat) //Sanity check.
 		return
 
 	to_chat(src, "<span class='info'>You squirt a measure of [chem.name] from your reservoirs into [host]'s bloodstream.</span>")
-	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "danger")
+	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
 	host.reagents.add_reagent(chem.name, units)
 	chemicals -= chem.cost*units
 
@@ -466,11 +474,12 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 	set category = "Alien"
 	set name = "Abandon Host"
 	set desc = "Slither out of your host."
-
+	
 	var/in_head= istype(loc, /obj/item/weapon/organ/head)
 	if(!host && !in_head)
 		to_chat(src, "<span class='warning'>You are not inside a host body.</span>")
 		return
+
 
 	if(stat)
 		to_chat(src, "<span class='warning'>You cannot leave your host in your current state.</span>")
@@ -480,9 +489,13 @@ var/global/borer_unlock_types = typesof(/datum/unlockable/borer) - /datum/unlock
 		to_chat(src, "<span class='warning'>You are busy evolving.</span>")
 		return
 
+	var/response = alert(src, "Are you -sure- you want to abandon your current host?\n(This will take a few seconds and cannot be halted!)","Are you sure you want to abandon host?","Yes","No")
+	if(response != "Yes")
+		return
+		
 	if(!src)
 		return
-
+	
 	to_chat(src, "<span class='info'>You begin disconnecting from [host]'s synapses and prodding at their internal ear canal.</span>")
 
 	spawn(200)

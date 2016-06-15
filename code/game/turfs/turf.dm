@@ -57,13 +57,14 @@
 
 	var/explosion_block = 0
 
-	var/dynamic_lighting = 1
-
 	//For shuttles - if 1, the turf's underlay will never be changed when moved
 	//See code/datums/shuttle.dm @ 544
 	var/preserve_underlay = 0
 
 	forceinvertredraw = 1
+
+	// This is the placed to store data for the holomap.
+	var/list/image/holomap_data
 
 /turf/examine(mob/user)
 	..()
@@ -82,10 +83,6 @@
 		spawn( 0 )
 			src.Entered(AM)
 			return
-
-	var/area/A = loc
-	if(!dynamic_lighting || !A.lighting_use_dynamic)
-		luminosity = 1
 
 /turf/proc/initialize()
 	return
@@ -117,75 +114,12 @@
 	..()
 	return 0
 
-/*
- * IF YOU HAVE BYOND VERSION BELOW 507.1248 OR ARE ABLE TO WALK THROUGH WINDOORS/BORDER WINDOWS COMMENT OUT
- * #define BORDER_USE_TURF_EXIT
- * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
- *
-#ifdef BORDER_USE_TURF_EXIT
-/turf/Exit(atom/movable/mover, atom/target)
+/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if(!mover)
 		return 1
-	// First, make sure it can leave its square
-	if(mover.loc == src)
-		// Nothing but border objects stop you from leaving a tile, only one loop is needed
-		for(var/obj/obstacle in src)
-			/*if(ismob(mover) && mover:client)
-				to_chat(world, "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/)
-			if(obstacle != mover && obstacle != target && !obstacle.CheckExit(mover, target))
-				/*if(ismob(mover) && mover:client)
-					to_chat(world, "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/)
-				mover.Bump(obstacle, 1)
-				return 0
-	return 1
-#if DM_VERSION < 507
-	#warn This compiler is too far out of date! You will experience issues with windows and windoors unles you update to atleast 507.1248 or comment out BORDER_USE_TURF_EXIT in global.dm!
-
-#endif
-*/
-/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
-	if (!mover)
-		return 1
-
-//#ifndef BORDER_USE_TURF_EXIT
-//#warn BORDER_USE_TURF_EXIT is not defined, using possibly buggy turf/Enter code.
-	// First, make sure it can leave its square
-	if(isturf(mover.loc))
-		// Nothing but border objects stop you from leaving a tile, only one loop is needed
-		for(var/obj/obstacle in mover.loc)
-			if(obstacle != mover && obstacle != forget && !obstacle.CheckExit(mover, src) )
-				mover.Bump(obstacle, 1)
-				return 0
-//#endif
-	var/list/large_dense = list()
-	//Next, check objects to block entry that are on the border
-	for(var/atom/movable/border_obstacle in src)
-		if(border_obstacle.flags&ON_BORDER)
-			/*if(ismob(mover) && mover:client)
-				to_chat(world, "<span class='danger'>ENTER</span>Target(border): checking CanPass of [border_obstacle]")*/
-			if(!border_obstacle.CanPass(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
-				/*if(ismob(mover) && mover:client)
-					to_chat(world, "<span class='danger'>ENTER</span>Target(border): We are bumping into [border_obstacle]")*/
-				mover.Bump(border_obstacle, 1)
-				return 0
-		else
-			large_dense += border_obstacle
-
-	//Then, check the turf itself
-	if (!src.CanPass(mover, src))
-		mover.Bump(src, 1)
-		return 0
-
-	//Finally, check objects/mobs to block entry that are not on the border
-	for(var/atom/movable/obstacle in large_dense)
-		/*if(ismob(mover) && mover:client)
-			to_chat(world, "<span class='danger'>ENTER</span>target(large_dense): [mover] checking CanPass of [obstacle]")*/
-		if(!obstacle.CanPass(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
-			/*if(ismob(mover) && mover:client)
-				to_chat(world, "<span class='danger'>ENTER</span>target(large_dense): checking: We are bumping into [obstacle]")*/
-			mover.Bump(obstacle, 1)
-			return 0
-	return 1 //Nothing found to block so return success!
+	. = ..()
+	if(.)
+		return !density //Nothing found to block so return success!
 
 /turf/Entered(atom/movable/A as mob|obj)
 	if(movement_disabled)
@@ -223,9 +157,6 @@
 		// if(ticker.mode.name == "nuclear emergency")	return
 		if(A.z > 6) return
 		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
-			if(istype(A, /obj/effect/meteor)||istype(A, /obj/effect/space_dust))
-				qdel(A)
-				return
 
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
@@ -411,11 +342,20 @@
 
 	var/datum/gas_mixture/env
 
+	if (!lighting_corners_initialised && global.lighting_corners_initialised)
+		for (var/i = 1 to 4)
+			if (corners[i]) // Already have a corner on this direction.
+				continue
+
+			corners[i] = new/datum/lighting_corner(src, LIGHTING_CORNER_DIAGONAL[i])
+
 	var/old_opacity = opacity
 	var/old_dynamic_lighting = dynamic_lighting
-	var/list/old_affecting_lights = affecting_lights
+	var/old_affecting_lights = affecting_lights
 	var/old_lighting_overlay = lighting_overlay
+	var/old_corners = corners
 
+	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
 	if(connections) connections.erase_all()
@@ -446,7 +386,7 @@
 		if(env)
 			W.air = env //Copy the old environment data over if both turfs were simulated
 
-		if (istype(W,/turf/simulated/floor))
+		if (istype(W,/turf/simulated/floor) && !W.can_exist_under_lattice)
 			W.RemoveLattice()
 
 		if(tell_universe)
@@ -477,15 +417,20 @@
 
 		. = W
 
+	lighting_corners_initialised = TRUE
+	recalc_atom_opacity()
 	lighting_overlay = old_lighting_overlay
 	affecting_lights = old_affecting_lights
+	corners = old_corners
 	if((old_opacity != opacity) || (dynamic_lighting != old_dynamic_lighting) || force_lighting_update)
 		reconsider_lights()
 	if(dynamic_lighting != old_dynamic_lighting)
 		if(dynamic_lighting)
-			lighting_build_overlays()
+			lighting_build_overlay()
 		else
-			lighting_clear_overlays()
+			lighting_clear_overlay()
+
+	holomap_data = old_holomap // Holomap persists through everything.
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!decals)
@@ -709,9 +654,6 @@
 /turf/proc/dismantle_wall()
 	return
 
-/turf/change_area(oldarea, newarea)
-	lighting_build_overlays()
-
 /////////////////////////////////////////////////////
 
 /turf/proc/spawn_powerup()
@@ -727,3 +669,21 @@
 			5;/obj/structure/powerup/full,
 			)
 		new powerup(src)
+
+// Holomap stuff!
+/turf/proc/add_holomap(var/atom/movable/AM)
+	var/image/I = new
+	I.appearance = AM.appearance
+	I.appearance_flags = RESET_COLOR | RESET_ALPHA | RESET_TRANSFORM
+	I.loc = src
+	I.dir = AM.dir
+	I.alpha = 128
+
+	if (!holomap_data)
+		holomap_data = list()
+	holomap_data += I
+
+// Calls the above, but only if the game has not yet started.
+/turf/proc/soft_add_holomap(var/atom/movable/AM)
+	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
+		add_holomap(AM)

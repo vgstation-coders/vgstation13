@@ -3,6 +3,7 @@
 //Added spess ghoasts/cameras to this so they don't add to the lag. - N3X.
 
 //Added a singuloCanEat proc to atoms. This list is now kinda obsolete.
+//Removed singuloCanEat proc from the repo.  This is now here ironically - Probe 4/30/16
 //var/global/list/uneatable = list(
 //	/obj/effect/overlay,
 //	/mob/dead,
@@ -39,7 +40,7 @@
 	var:last_movement_dir = 0 //Log the singularity's last movement to produce biased movement (singularity prefers constant movement due to inertia)
 	var/last_failed_movement = 0 //Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing.
 	var/last_warning
-
+	appearance_flags = 0
 	var/chained = 0 //Adminbus chain-grab
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
@@ -492,7 +493,7 @@
 		if(M.stat == CONSCIOUS)
 			if(istype(M,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
-				if(istype(H.glasses,/obj/item/clothing/glasses/meson) && current_size != 11)
+				if(istype(H.glasses,/obj/item/clothing/glasses/scanner/meson) && current_size != 11)
 					to_chat(H, "<span class='notice'>You stare directly into \the [src], good thing you had your protective eyewear on!</span>")
 					return
 				else

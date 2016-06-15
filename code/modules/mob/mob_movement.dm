@@ -1,4 +1,4 @@
-/mob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/mob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
@@ -45,6 +45,9 @@
 
 
 /client/Northwest()
+	if(mob.remove_spell_channeling()) //Interrupt to remove spell channeling on dropping
+		to_chat(usr, "<span class='notice'>You cease waiting to use your power")
+		return
 	if(iscarbon(usr))
 		var/mob/living/carbon/C = usr
 		if(!C.get_active_hand())
@@ -152,7 +155,7 @@
 
 
 
-/client/verb/attack_self()
+/client/verb/attack_self() //Called when pagedown or Z is pressed
 	set hidden = 1
 	if(mob)
 		mob.mode()
@@ -302,6 +305,8 @@
 
 		//We are now going to move
 		move_delay = max(move_delay,1)
+		if(mob.movement_speed_modifier)
+			move_delay *= (1/mob.movement_speed_modifier)
 		mob.delayNextMove(move_delay)
 		//Something with pulling things
 		if(Findgrab)
@@ -348,12 +353,10 @@
 /client/proc/Process_Grab()
 	if(locate(/obj/item/weapon/grab, locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
 		var/list/grabbing = list()
-		if(istype(mob.l_hand, /obj/item/weapon/grab))
-			var/obj/item/weapon/grab/G = mob.l_hand
+
+		for(var/obj/item/weapon/grab/G in mob.held_items)
 			grabbing += G.affecting
-		if(istype(mob.r_hand, /obj/item/weapon/grab))
-			var/obj/item/weapon/grab/G = mob.r_hand
-			grabbing += G.affecting
+
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
 			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))	del(G)
 			if(G.state == GRAB_AGGRESSIVE)
@@ -393,6 +396,11 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
+			if(isobserver(mob))
+				var/mob/dead/observer/observer = mob
+				mob.delayNextMove(observer.movespeed)
+			else
+				mob.delayNextMove(1)
 		if(INCORPOREAL_NINJA)
 			if(prob(50))
 				var/locx
@@ -431,6 +439,7 @@
 				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 				mob.forceEnter(get_step(mob, direct))
 			mob.dir = direct
+			mob.delayNextMove(1)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.flags & NOJAUNT))
@@ -444,7 +453,6 @@
 	for(var/obj/S in mob.loc)
 		if(istype(S,/obj/effect/step_trigger) || istype(S,/obj/effect/beam))
 			S.Crossed(mob)
-	mob.delayNextMove(1)
 
 	return 1
 
@@ -479,6 +487,8 @@
 	if(!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
 		dense_object++
 	if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
+		dense_object++
+	if(!dense_object && (locate(/obj/effect/blob) in oview(1, src)))
 		dense_object++
 
 	//Lastly attempt to locate any dense objects we could push off of

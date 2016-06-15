@@ -264,7 +264,7 @@
 
 	var/list/items = list()
 	for(var/obj/item/I in view(1,src))
-		if(I.loc != src && I.w_class <= 2)
+		if(I.loc != src && I.w_class <= W_CLASS_SMALL)
 			items.Add(I)
 
 	var/obj/selection = input("Select an item.", "Pickup") in items
@@ -285,4 +285,7 @@
 /mob/living/simple_animal/spiderbot/examine(mob/user)
 	..()
 	if(src.held_item)
-		to_chat(user, "It is carrying \a [src.held_item] \icon[src.held_item].")
+		to_chat(user, "It is carrying \a [src.held_item] [bicon(src.held_item)].")
+
+/mob/living/simple_animal/spiderbot/CheckSlip()
+	return -1

@@ -255,7 +255,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 //			chargecount = 0
 		updateicon()
 
-	else if (iswirecutter(W) || istype(W, /obj/item/device/multitool))
+	else if (iswiretool(W))
 		if (wiresexposed)
 			wires.Interact(user)
 		else
@@ -456,6 +456,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/Move(a, b, flag)
 	..()
+
+/mob/living/silicon/robot/mommi/CheckSlip()
+	return -1
 
 /*
 /mob/living/silicon/robot/mommi/proc/ActivateKeeper()

@@ -3,8 +3,8 @@
 	update_hud()
 	return
 
-/mob/living/carbon/Bump(var/atom/movable/AM, yes)
-	if(now_pushing || !yes)
+/mob/living/carbon/Bump(var/atom/movable/AM)
+	if(now_pushing)
 		return
 	..()
 	if(istype(AM, /mob/living/carbon) && prob(10))
@@ -75,22 +75,12 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-
-				if(prob(src.getBruteLoss() - 50))
-					for(var/atom/movable/A in stomach_contents)
-						A.loc = loc
-						stomach_contents.Remove(A)
-					src.gib()
+				src.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)
-	for(var/mob/M in src)
-		if(M in src.stomach_contents)
-			src.stomach_contents.Remove(M)
-		M.loc = src.loc
-		for(var/mob/N in viewers(src, null))
-			if(N.client)
-				N.show_message(text("<span class='danger'>[M] bursts out of [src]!</span>"), 2)
+	drop_stomach_contents()
+	src.visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
 
 /mob/living/carbon/proc/share_contact_diseases(var/mob/M)
@@ -104,9 +94,8 @@
 /mob/living/carbon/attack_hand(mob/M as mob)
 	if(!istype(M, /mob/living/carbon)) return
 	if (hasorgans(M))
-		var/datum/organ/external/temp = M:organs_by_name["r_hand"]
-		if (M.hand)
-			temp = M:organs_by_name["l_hand"]
+		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
+
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
@@ -125,12 +114,18 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
-		return 0
-
-	//src.burn_skin(shock_damage)
-	//src.adjustFireLoss(shock_damage) //burn_skin will do this for us
-	//src.updatehealth()
+	if(dna.mutantrace == "slime")
+		heal_overall_damage(damage/2, damage/2)
+		Jitter(10)
+		Stun(5)
+		Weaken(5)
+		//It would be cool if someone added an animation of some electrical shit going through the body
+	else
+		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
+			return 0
+		Jitter(20)
+		Stun(10)
+		Weaken(10)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
@@ -142,13 +137,7 @@
 	)
 
 	//if(src.stunned < shock_damage)	src.stunned = shock_damage
-
-	Jitter(20) //Shake that body, friend
-	Stun(10) // this should work for now, more is really silly and makes you lay there forever
-
 	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
-
-	Weaken(10)
 
 	var/datum/effect/effect/system/spark_spread/SparkSpread = new
 	SparkSpread.set_up(5, 1, loc)
@@ -156,34 +145,26 @@
 
 	return damage
 
-/mob/living/carbon/proc/swap_hand()
-	src.hand = !( src.hand )
-	if(hud_used.l_hand_hud_object && hud_used.r_hand_hud_object)
-		if(hand)	//This being 1 means the left hand is in use
-			hud_used.l_hand_hud_object.icon_state = "hand_active"
-			hud_used.r_hand_hud_object.icon_state = "hand_inactive"
+/mob/living/carbon/swap_hand()
+	if(++active_hand > held_items.len)
+		active_hand = 1
+
+	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if(active_hand == hand_hud_object.hand_index)
+			hand_hud_object.icon_state = "hand_active"
 		else
-			hud_used.l_hand_hud_object.icon_state = "hand_inactive"
-			hud_used.r_hand_hud_object.icon_state = "hand_active"
-	/*if (!( src.hand ))
-		src.hands.dir = NORTH
-	else
-		src.hands.dir = SOUTH*/
+			hand_hud_object.icon_state = "hand_inactive"
+
 	return
 
-/mob/living/carbon/proc/activate_hand(var/selhand) //0 or "r" or "right" for right hand; 1 or "l" or "left" for left hand.
+/mob/living/carbon/activate_hand(var/selhand)
+	active_hand = selhand
 
-
-	if(istext(selhand))
-		selhand = lowertext(selhand)
-
-		if(selhand == "right" || selhand == "r")
-			selhand = 0
-		if(selhand == "left" || selhand == "l")
-			selhand = 1
-
-	if(selhand != src.hand)
-		swap_hand()
+	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if(active_hand == hand_hud_object.hand_index)
+			hand_hud_object.icon_state = "hand_active"
+		else
+			hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
 	if (src.health >= config.health_threshold_crit)
@@ -207,16 +188,16 @@
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "bleeding"
+					status = "<span class='warning'>bleeding</span>"
 				if(brutedamage > 40)
-					status = "mangled"
+					status = "<span class='danger'>mangled</span>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
-					status += "peeling away"
+					status += "<span class='orangeb'>peeling away</span>"
 
 				else if(burndamage > 10)
-					status += "blistered"
+					status += "<span class='orangei'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
 				if(org.status & ORGAN_DESTROYED)
@@ -247,8 +228,8 @@
 			M.visible_message( \
 				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
 				"<span class='notice'>You shake [src] trying to wake [t_him] up!</span>", \
-				drugged_message = "<span class='notice'>[M] starts massaging [t_him]'s back.</span>", \
-				self_drugged_message = "<span class='notice'>You start massaging [t_him]'s back.</span>"
+				drugged_message = "<span class='notice'>[M] starts massaging [src]'s back.</span>", \
+				self_drugged_message = "<span class='notice'>You start massaging [src]'s back.</span>"
 				)
 		// BEGIN HUGCODE - N3X
 		else
@@ -263,10 +244,6 @@
 			reagents.add_reagent("paracetamol", 1)
 
 			share_contact_diseases(M)
-
-
-/mob/living/carbon/proc/eyecheck()
-	return 0
 
 // ++++ROCKDTBEN++++ MOB PROCS -- Ask me before touching.
 // Stop! ... Hammertime! ~Carn
@@ -298,19 +275,21 @@
 //Throwing stuff
 
 /mob/living/carbon/proc/toggle_throw_mode()
-	if (src.in_throw_mode)
+	if (in_throw_mode)
 		throw_mode_off()
 	else
 		throw_mode_on()
 
 /mob/living/carbon/proc/throw_mode_off()
-	src.in_throw_mode = 0
-	src.throw_icon.icon_state = "act_throw_off"
+	in_throw_mode = 0
+	if(throw_icon)
+		throw_icon.icon_state = "act_throw_off"
 
 /mob/living/carbon/proc/throw_mode_on()
 	if(gcDestroyed) return
-	src.in_throw_mode = 1
-	src.throw_icon.icon_state = "act_throw_on"
+	in_throw_mode = 1
+	if(throw_icon)
+		throw_icon.icon_state = "act_throw_on"
 
 /mob/proc/throw_item(var/atom/target,var/atom/movable/what=null)
 	return
@@ -421,9 +400,8 @@
 	var/success = 0
 	if(!W)	return 0
 	else if (W == handcuffed)
-		handcuffed = null
+		handcuffed.handcuffs_remove(src)
 		success = 1
-		update_inv_handcuffed()
 
 	else if (W == legcuffed)
 		legcuffed = null
@@ -473,10 +451,9 @@
 	if(handcuffed)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=handcuff'>Remove</A>"
 	else
-		dat += {"
-		<B>Left Hand:</B> <A href='?src=\ref[src];item=l_hand'>		[(l_hand && !( src.l_hand.abstract ))		? l_hand	: "<font color=grey>Empty</font>"]</A><BR>
-		<B>Right Hand:</B> <A href='?src=\ref[src];item=r_hand'>		[(r_hand && !( src.r_hand.abstract ))		? r_hand	: "<font color=grey>Empty</font>"]</A><BR>
-		"}
+		for(var/i = 1 to held_items.len) //Hands
+			var/obj/item/I = held_items[i]
+			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];item=hand;hand_index=[i]'>		[(I && !I.abstract) ? I : "<font color=grey>Empty</font>"]</A><BR>"
 
 	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=back'> [(back && !(src.back.abstract)) ? back : "<font color=grey>Empty</font>"]</A>"
 	if(has_breathable_mask && istype(back, /obj/item/weapon/tank))
@@ -593,7 +570,7 @@
 
 /mob/living/carbon/proc/isInCrit()
 	// Health is in deep shit and we're not already dead
-	return (health < config.health_threshold_crit) && stat != 2
+	return (health < config.health_threshold_crit) && (stat != DEAD)
 
 /mob/living/carbon/get_default_language()
 	if(default_language)
@@ -659,3 +636,24 @@
 			B.perform_infestation(C)
 		else
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
+
+/mob/living/carbon/proc/drop_stomach_contents(var/target)
+	if(!target)
+		target = get_turf(src)
+
+	var/mob/living/simple_animal/borer/B = src.has_brain_worms()
+	for(var/mob/M in src)//mobs, all of them
+		if(M == B)
+			continue
+		if(M in src.stomach_contents)
+			src.stomach_contents.Remove(M)
+		M.forceMove(target)
+
+	for(var/obj/O in src)//objects, only the ones in the stomach
+		if(O in src.stomach_contents)
+			src.stomach_contents.Remove(O)
+			O.forceMove(target)
+
+/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+	if(eyecheck() < intensity)
+		..()

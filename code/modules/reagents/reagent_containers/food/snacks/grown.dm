@@ -122,7 +122,7 @@
 						if(H.species && !(H.species.flags & NO_PAIN))
 							H.Weaken(3)
 					if(stinging_apply_reagents(M))
-						to_chat(H, "<span class='danger'>Your step on \the [src]'s stingers!</span>")
+						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
 	if(seed.juicy == 2)
 		if(M.Slip(3, 2))
@@ -745,6 +745,36 @@
 
 	to_chat(user, "<span class='notice'>You plant the glowshroom.</span>")
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
+	name = "chicken-of-the-stars"
+	desc = "A variant of the Earth-native Laetiporus sulphureus, adapted by Vox traders for space. Everything tastes like chicken."
+	icon_state = "chickenshroom"
+	filling_color = "F2E33A"
+	plantname = "chickenshroom"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/garlic
+	name = "garlic"
+	desc = "Warning: Garlic may send vampires straight to the Dead Zone."
+	icon_state = "garlic"
+	filling_color = "EDEDE1"
+	plantname = "garlic"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit
+	name = "breadfruit"
+	desc = "Starchy. Tastes about the same as biting into a sack of flour."
+	icon_state = "breadfruit"
+	filling_color = "EDEDE1"
+	plantname = "breadfruit"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/woodapple
+	name = "woodapple"
+	desc = "A hard-shelled fruit with precious juice inside. Even the shell may find use, if properly sliced."
+	slice_path = /obj/item/stack/sheet/wood
+	slices_num = 1
+	icon_state = "woodapple"
+	filling_color = "857663"
+	plantname = "woodapple"
+
 // *************************************
 // Complex Grown Object Defines -
 // Putting these at the bottom so they don't clutter the list up. -Cheridan
@@ -765,13 +795,68 @@
 	desc = "This is a plant containing various healing chemicals."
 	icon_state = "ambrosiavulgaris"
 	potency = 10
-	/*New() //NO SNOWFLAKE ALLOWED
-		..()
-		spawn(5)	//So potency can be set in the proc that creates these crops
-			reagents.add_reagent("nutriment", 1)
-			reagents.add_reagent("space_drugs", 1 + round(potency/8, 1))
-			reagents.add_reagent("kelotane", 1 + round(potency/8, 1))
-			reagents.add_reagent("bicaridine", 1 + round(potency/10, 1))
-			reagents.add_reagent("toxin", 1 + round(potency/10, 1))
-			reagents.add_reagent("spiritbreaker", 10)
-			bitesize = 1+round(reagents.total_volume/2, 1)*/
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
+	name = "no-fruit"
+	desc = "Any plant you want, at your fingertips."
+	icon_state = "nofruit"
+	potency = 15
+	filling_color = "#FFFCCC"
+	plantname = "nofruit"
+	var/list/available_fruits = list()
+	var/switching = 0
+	var/current_path = null
+	var/counter = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
+	..()
+	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()
+	set name = "Pick no-fruit leaf"
+	set category = "Object"
+	set src in range(1)
+
+	if(usr.isUnconscious())
+		to_chat(usr, "You can't do that while unconscious.")
+		return
+
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
+
+	randomize()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
+	if(switching)
+		if(!current_path)
+			return
+		switching = 0
+		var/N = rand(1,3)
+		switch(N)
+			if(1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/I = new current_path(get_turf(user))
+			user.put_in_hands(I)
+		else
+			new current_path(get_turf(src))
+		qdel(src)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/randomize()
+	switching = 1
+	spawn()
+		while(switching)
+			current_path = available_fruits[counter]
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
+			icon_state = initial(G.icon_state)
+			playsound(src, 'sound/misc/click.ogg', 50, 1)
+			sleep(1)
+			if(counter == available_fruits.len)
+				counter = 0
+			counter++

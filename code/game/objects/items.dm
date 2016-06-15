@@ -8,7 +8,10 @@
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
-	var/w_class = 3.0
+
+	var/w_class = W_CLASS_MEDIUM
+	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
+
 	flags = FPRINT
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.
 	var/obj/item/offhand/wielded = null
@@ -43,7 +46,7 @@
 	var/surgery_speed = 1 //When this item is used as a surgery tool, multiply the delay of the surgery step by this much.
 	var/nonplant_seed_type
 
-	var/list/attack_verb // used in attack() to say how something was attacked "[x] has been [z.attack_verb] by [y] with [z]"
+	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
 
 
 
@@ -90,7 +93,11 @@
 	return
 
 /obj/item/blob_act()
+	..()
 	qdel(src)
+
+/obj/item/proc/restock() //used for borg recharging
+	return
 
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
@@ -139,7 +146,7 @@
 	else
 		pronoun = "It is"
 	..(user, " [pronoun] a [size] item.")
-	if((cant_drop > 0) && ((src==user.l_hand) || (src==user.r_hand))) //Item can't be dropped, and is either in left or right hand!
+	if((cant_drop > 0) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		user << "<span class='danger'>It's stuck to your hands!</span>"
 
 
@@ -191,7 +198,7 @@
 	if(isalien(user)) // -- TLE
 		var/mob/living/carbon/alien/A = user
 
-		if(!A.has_fine_manipulation || w_class >= 4)
+		if(!A.has_fine_manipulation || w_class >= W_CLASS_LARGE)
 			if(src in A.contents) // To stop Aliens having items stuck in their pockets
 				A.drop_from_inventory(src)
 			to_chat(user, "Your claws aren't capable of such fine manipulation.")
@@ -262,10 +269,10 @@
 // slot uses the slot_X defines found in setup.dm
 // for items that can be placed in multiple slots
 // note this isn't called during the initial dressing of a player
-/obj/item/proc/equipped(var/mob/user, var/slot)
+/obj/item/proc/equipped(var/mob/user, var/slot, hand_index = 0)
 	if(cant_drop) //Item can't be dropped
-		if(slot in list(slot_r_hand, slot_l_hand)) //Item was equipped in a hand slot
-			user << "<span class='notice'>\The [src] sticks to your hand!</span>"
+		if(hand_index) //Item was equipped in a hand slot
+			to_chat(user, "<span class='notice'>\The [src] sticks to your hand!</span>")
 
 	return
 
@@ -303,18 +310,35 @@
 						to_chat(H, "<span class='warning'>You're too fat to wear the [name].</span>")
 					return 0
 
+			for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+				if(!OE.species) //Organ has same species as body
+					if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+						if(!disable_warning)
+							to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+						return 0
+				else //Organ's species is different from body
+					if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+						if(!disable_warning)
+							to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
+						return 0
+
 		switch(slot)
-			if(slot_l_hand)
-				if(H.l_hand || H.handcuffed)
-					return 0
-				return 1
-			if(slot_r_hand)
-				if(H.r_hand || H.handcuffed)
-					return 0
-				return 1
 			if(slot_wear_mask)
 				if( !(slot_flags & SLOT_MASK) )
 					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
+							return 0
+
 				if(H.wear_mask)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -339,6 +363,19 @@
 			if(slot_wear_suit)
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky exterior!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky exterior!</span>")
+							return 0
+
 				if(H.wear_suit)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -351,6 +388,19 @@
 			if(slot_gloves)
 				if( !(slot_flags & SLOT_GLOVES) )
 					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
+							return 0
+
 				if(H.gloves)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -363,6 +413,19 @@
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
 					return 0
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
+					if(!OE.species) //Organ has same species as body
+						if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL)) //Use the body's base species
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky feet!</span>")
+							return 0
+					else //Organ's species is different from body
+						if(OE.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+							if(!disable_warning)
+								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky feet!</span>")
+							return 0
+
 				if(H.shoes)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -439,7 +502,7 @@
 						return 2
 					else
 						return 0
-				if( w_class < 2	)
+				if( w_class < W_CLASS_SMALL	)
 					return 1
 				return 1
 			if(slot_r_ear)
@@ -455,7 +518,7 @@
 						return 2
 					else
 						return 0
-				if( w_class < 2 )
+				if( w_class < W_CLASS_SMALL )
 					return 1
 				return 1
 			*/
@@ -497,9 +560,9 @@
 				if(automatic)
 					if(H.l_store)
 						return 0
-					else if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+					else if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 						return 1
-				else if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+				else if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 					if(H.l_store)
 						return 2
 					else
@@ -514,9 +577,9 @@
 				if(automatic)
 					if(H.r_store)
 						return 0
-					else if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+					else if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 						return 1
-				else if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+				else if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 					if(H.r_store)
 						return 2
 					else
@@ -530,7 +593,7 @@
 					if(!disable_warning)
 						to_chat(usr, "You somehow have a suit with no defined allowed items for suit storage, stop that.")
 					return 0
-				if(src.w_class > 3 && !H.wear_suit.allowed.len)
+				if(src.w_class > W_CLASS_MEDIUM && !H.wear_suit.allowed.len)
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return 0
@@ -561,7 +624,7 @@
 			if(slot_in_backpack)
 				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = H.back
-					if(B.contents.len < B.storage_slots && w_class <= B.max_w_class)
+					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return 1
 				return 0
 		return 0 //Unsupported slot
@@ -571,14 +634,6 @@
 		//START MONKEY
 		var/mob/living/carbon/monkey/MO = M
 		switch(slot)
-			if(slot_l_hand)
-				if(MO.l_hand)
-					return 0
-				return 1
-			if(slot_r_hand)
-				if(MO.r_hand)
-					return 0
-				return 1
 			if(slot_wear_mask)
 				if(MO.wear_mask)
 					return 0
@@ -627,12 +682,11 @@
 
 	if(!can_pickup(user))
 		return 0
-	if(!user.hand && user.r_hand) //Right hand is not full
-		to_chat(user, "<span class='warning'>Your right hand is full.</span>")
+
+	if(user.get_active_hand())
+		to_chat(user, "<span class='warning'>Your [user.get_index_limb_name(user.active_hand)] is full.</span>")
 		return
-	if(user.hand && user.l_hand && !isMoMMI(user)) //Left hand is not full
-		to_chat(user, "<span class='warning'>Your left hand is full.</span>")
-		return
+
 	//All checks are done, time to pick it up!
 	if(isMoMMI(user))
 		// Otherwise, we get MoMMIs changing their own laws.
@@ -662,7 +716,7 @@
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = 0)
-	if(!ishuman(user))
+	if(!user.can_wield())
 		user.show_message("You can't wield \the [src] as it's too heavy.")
 		return
 
@@ -676,10 +730,17 @@
 		//(user.get_active_hand() in list(null, src)) is the part which checks whether the ACTIVE hand is either nothing, or the wielded item. Otherwise, abort!
 
 		//The second half is the same, except that the proc assumes that the wielded item is held in the INACTIVE hand. So the INACTIVE hand is checked for holding either nothing or wielded item.
-		if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
-			wielded.attach_to(src)
-			update_wield(user)
-			return 1
+		//if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
+
+		for(var/i = 1 to user.held_items.len)
+			if(user.held_items[i]) continue
+			if(user.active_hand == i) continue
+
+			if(user.put_in_hand(i, wielded))
+				wielded.attach_to(src)
+				update_wield(user)
+				return 1
+
 		unwield(user)
 		return
 
@@ -755,13 +816,13 @@
 
 		if(M != user)
 			for(var/mob/O in (viewers(M) - user - M))
-				O.show_message("<span class='danger'>[M] has been stabbed in the eye with [src] by [user].</span>", 1)
-			to_chat(M, "<span class='userdanger'>[user] stabs you in the eye with [src]!</span>")
-			to_chat(user, "<span class='attack'>You stab [M] in the eye with [src]!</span>")
+				O.show_message("<span class='danger'>[user] stabs [M] in the eye with \the [src].</span>", 1)
+			to_chat(M, "<span class='userdanger'>[user] stabs you in the eye with \the [src]!</span>")
+			to_chat(user, "<span class='attack'>You stab [M] in the eye with \the [src]!</span>")
 		else
 			user.visible_message( \
-				"<span class='attack'>[user] has stabbed themself with [src]!</span>", \
-				"<span class='userdanger'>You stab yourself in the eyes with [src]!</span>" \
+				"<span class='attack'>[user] stabs themself with \the [src]!</span>", \
+				"<span class='userdanger'>You stab yourself in the eyes with \the [src]!</span>" \
 			)
 
 		eyes.damage += rand(3,4)
@@ -857,6 +918,8 @@ var/global/list/image/blood_overlays = list()
 
 //handling the pulling of the item for singularity
 /obj/item/singularity_pull(S, current_size)
+	if(flags & INVULNERABLE)
+		return
 	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
 		if(current_size >= STAGE_FOUR)
 			//throw_at(S, 14, 3)
@@ -872,7 +935,7 @@ var/global/list/image/blood_overlays = list()
 	return 0
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
-	if(anchored || w_class > 3 + H.get_strength())
+	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
 			to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
@@ -900,5 +963,5 @@ var/global/list/image/blood_overlays = list()
 					break
 				sleep(5)
 
-	throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
+	throw_at(T, kick_power, 1)

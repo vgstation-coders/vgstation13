@@ -211,7 +211,7 @@
 				special_role_text = "antagonist"
 			if(Mind.total_TC)
 				if(Mind.spent_TC)
-					text += "<br><span class='sinister'>TC Remaining: [Mind.total_TC - Mind.spent_TC]/[Mind.total_TC] - The tools used by the Enthralled were: [list2text(Mind.uplink_items_bought, ", ")]</span>"
+					text += "<br><span class='sinister'>TC Remaining: [Mind.total_TC - Mind.spent_TC]/[Mind.total_TC] - The tools used by the Enthralled were: [jointext(Mind.uplink_items_bought, ", ")]</span>"
 				else
 					text += "<span class='sinister'>The Enthralled was a smooth operator this round (did not purchase any uplink items)</span>"
 			if(traitorwin)
@@ -266,7 +266,7 @@
 	var/dat
 	if (you_are)
 		dat = "<span class='danger'>You are a Vampire!</br></span>"
-	dat += {"To bite someone, target the head and use harm intent with an empty hand. Drink blood to gain new powers and use coffins to regenerate your body if injured.
+	dat += {"To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand). Drink blood to gain new powers and use coffins to regenerate your body if injured.
 You are weak to holy things and starlight. Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water."}
 	to_chat(vampire.current, dat)
 	to_chat(vampire.current, "<B>You must complete the following tasks:</B>")
@@ -385,7 +385,11 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			src.mind.vampire.draining = null
 			return 0
 		if(H.species.flags & NO_BLOOD)
-			to_chat(src, "<span class='warning'>Not a drop of blood here</span>")
+			to_chat(src, "<span class='warning'>Not a drop of blood here.</span>")
+			src.mind.vampire.draining = null
+			return 0
+		if(!H.mind)
+			to_chat(src, "<span class='warning'>This blood is lifeless and has no power.</span>")
 			src.mind.vampire.draining = null
 			return 0
 		bloodtotal = src.mind.vampire.bloodtotal
@@ -737,3 +741,30 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				I.status &= ~ORGAN_SPLINTED
 				I.status &= ~ORGAN_BLEEDING
 	mind.vampire.nullified = max(0, mind.vampire.nullified - 1)
+
+/datum/mind/proc/make_new_vampire(var/show_message = 1, var/generate_objectives = 1)
+	if(!isvampire(current))
+		ticker.mode.vampires += src
+		ticker.mode.grant_vampire_powers(current)
+		special_role = "Vampire"
+		if(show_message)
+			to_chat(current, "<B><font color='red'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</font></B>")
+			var/wikiroute = role_wiki[ROLE_VAMPIRE]
+			to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+		if(generate_objectives)
+			ticker.mode.forge_vampire_objectives(src)
+		return 1
+	return 0
+
+/datum/mind/proc/remove_vampire_status(var/show_message = 1)
+	if(isvampire(current))
+		ticker.mode.vampires -= src
+		special_role = null
+		current.remove_vampire_powers()
+		if(vampire)
+			qdel(vampire)
+			vampire = null
+		if(show_message)
+			to_chat(current, "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a vampire and are stuck in your current form!</B></FONT>")
+		return 1
+	return 0

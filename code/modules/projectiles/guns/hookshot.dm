@@ -10,7 +10,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 0
 	flags = FPRINT
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	fire_delay = 0
 	fire_sound = 'sound/weapons/hookshot_fire.ogg'
 	var/maxlength = 14
@@ -313,7 +313,7 @@
 	var/datum/chain/chain_datum = null
 	var/rewinding = 0
 
-/obj/effect/overlay/chain/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/effect/overlay/chain/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return 1
 
 /obj/effect/overlay/chain/update_icon()

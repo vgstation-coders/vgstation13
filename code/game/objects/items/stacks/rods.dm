@@ -5,14 +5,14 @@
 	icon_state = "rods"
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 9.0
 	throwforce = 15.0
 	throw_speed = 5
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 1875)
 	max_amount = 60
-	attack_verb = list("hit", "bludgeoned", "whacked")
+	attack_verb = list("hits", "bludgeons", "whacks")
 	w_type=RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 
@@ -62,11 +62,11 @@
 			return
 
 		if(WT.remove_fuel(0,user))
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
 			M.amount = 1
-			M.add_to_stacks(usr)
-			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the weldingtool.</span>", \
-			"<span class='warning'>You shape the [src] into metal with the weldingtool.</span>", \
+			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
+			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
 			var/obj/item/stack/rods/R = src
 			src = null
@@ -87,9 +87,7 @@
 		for(var/obj/structure/grille/G in user.loc)
 			if(G.broken)
 				G.health = initial(G.health)
-				G.density = 1
-				G.broken = 0
-				G.icon_state = "[initial(G.icon_state)]"
+				G.healthcheck()
 				use(1)
 			else
 				return 1

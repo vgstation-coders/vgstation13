@@ -142,15 +142,14 @@
 	charge_type = Sp_RECHARGE
 	charge_max = 600
 
-	spell_flags = 0
+	spell_flags = WAIT_FOR_CLICK
 	invocation_type = SpI_NONE
-	range = 1
+	range = 7
 	max_targets = 1
 	selection_type = "range"
 
 	override_base = "genetic"
 	hud_state = "gen_ice"
-
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/cryokinesis/cast(list/targets)
@@ -180,23 +179,7 @@
 
 			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target]!</span>")
 
-		new/obj/effects/self_deleting(target.loc, icon('icons/effects/genetics.dmi', "cryokinesis"))
-	return
-
-/obj/effects/self_deleting
-	density = 0
-	opacity = 0
-	anchored = 1
-	icon = null
-	desc = ""
-	//layer = 15
-
-	New(var/atom/location, var/icon/I, var/duration = 20, var/oname = "something")
-		src.name = oname
-		loc=location
-		src.icon = I
-		spawn(duration)
-			qdel(src)
+		anim(target = target, a_icon = 'icons/effects/genetics.dmi', flick_anim = "cryokinesis")
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -228,7 +211,7 @@
 	range = 1
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE
+	spell_flags = WAIT_FOR_CLICK
 
 	override_base = "genetic"
 	hud_state = "gen_eat"
@@ -247,7 +230,6 @@
 		/mob/living/carbon/slime,
 		/mob/living/carbon/alien/larva,
 		/mob/living/simple_animal/slime,
-		/mob/living/simple_animal/adultslime,
 		/mob/living/simple_animal/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
@@ -269,6 +251,13 @@
 			affecting.heal_damage(4, 0)
 		H.UpdateDamageIcon()
 		H.updatehealth()
+
+/spell/targeted/eat/is_valid_target(var/target)
+	if(!(spell_flags & INCLUDEUSER) && target == usr)
+		return 0
+	if(get_dist(usr, target) > range)
+		return 0
+	return is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/eat/choose_targets(mob/user = usr)
 	var/list/targets = list()
@@ -398,14 +387,14 @@
 			user.visible_message("<span class='danger'>[user] eats [the_item]'s [limb.display_name].</span>", \
 			"<span class='danger'>You eat [the_item]'s [limb.display_name].</span>")
 			playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
-			message_admins("[user] ate [the_item]'s [limb]: (<A href='?src=\ref[src];jumpto=\ref[user]'><b>Jump to</b></A>)")
+			message_admins("[user] ate [the_item]'s [limb]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 			log_game("[user] ate \the [the_item]'s [limb] at [user.x], [user.y], [user.z]")
 			limb.droplimb("override" = 1, "spawn_limb" = 0)
 			doHeal(user)
 	else
 		user.visible_message("<span class='warning'>[usr] eats \the [the_item].")
 		playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
-		message_admins("[user] ate \the [the_item]: (<A href='?src=\ref[src];jumpto=\ref[user]'><b>Jump to</b></A>)")
+		message_admins("[user] ate \the [the_item]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 		log_game("[user] ate \the [the_item] at [user.x], [user.y], [user.z]")
 		qdel(the_item)
 		doHeal(usr)

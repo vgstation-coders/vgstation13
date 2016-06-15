@@ -14,6 +14,7 @@
 	var/obj/master = null	//A reference to the object in the slot. Grabs or items, generally.
 	var/gun_click_time = -100 //I'm lazy.
 	var/globalscreen = 0 //This screen object is not unique to one screen, can be seen by many
+	appearance_flags = NO_CLIENT_COLOR
 
 /obj/screen/Destroy()
 	master = null
@@ -26,6 +27,11 @@
 	screen_loc = "CENTER-7,CENTER-7"
 	maptext_height = 480
 	maptext_width = 480
+
+/obj/screen/adminbus
+
+/obj/screen/specialblob
+	var/obj/effect/blob/linked_blob = null
 
 /obj/screen/schematics
 	var/datum/rcd_schematic/ourschematic
@@ -51,6 +57,7 @@
 
 /obj/screen/inventory
 	var/slot_id	//The indentifier for the slot. It has nothing to do with ID cards.
+	var/hand_index
 
 /obj/screen/close
 	name = "close"
@@ -245,7 +252,7 @@
 /obj/screen/clicker
 	icon = 'icons/mob/screen1.dmi'
 	icon_state = "blank"
-	layer = 0
+	plane = CLICKCATCHER_PLANE
 	mouse_opacity = 2
 	globalscreen = 1
 	screen_loc = ui_entire_screen
@@ -257,9 +264,9 @@
 	return 1
 
 /proc/screen_loc2turf(scr_loc, turf/origin)
-	var/list/screenxy = text2list(scr_loc, ",")
-	var/list/screenx = text2list(screenxy[1], ":")
-	var/list/screeny = text2list(screenxy[2], ":")
+	var/list/screenxy = splittext(scr_loc, ",")
+	var/list/screenx = splittext(screenxy[1], ":")
+	var/list/screeny = splittext(screenxy[2], ":")
 	var/X = screenx[1]
 	var/Y = screeny[1]
 	X = Clamp((origin.x + text2num(X) - (world.view + 1)), 1, world.maxx)
@@ -353,12 +360,16 @@
 							if(ishuman(C))
 								var/mob/living/carbon/human/H = C
 								breathes = H.species.breath_type
-								nicename = list ("suit", "back", "belt", "right hand", "left hand", "left pocket", "right pocket")
-								tankcheck = list (H.s_store, C.back, H.belt, C.r_hand, C.l_hand, H.l_store, H.r_store)
+								nicename = list ("suit", "back", "belt", "left pocket", "right pocket") //Hands are added below
+								tankcheck = list (H.s_store, C.back, H.belt, H.l_store, H.r_store)
 
 							else
-								nicename = list("Right Hand", "Left Hand", "Back")
-								tankcheck = list(C.r_hand, C.l_hand, C.back)
+								nicename = list("back")
+								tankcheck = list(C.back)
+
+							tankcheck = tankcheck + C.held_items
+							for(var/i = 1 to C.held_items.len)
+								nicename.Add(C.get_index_limb_name(i))
 
 							for(var/i=1, i<tankcheck.len+1, ++i)
 								if(istype(tankcheck[i], /obj/item/weapon/tank))
@@ -389,7 +400,7 @@
 												contents.Add(0)
 
 										// ACK ACK ACK Plasmen
-										if ("plasma")
+										if ("toxins")
 											if(t.air_contents.toxins)
 												contents.Add(t.air_contents.toxins)
 											else
@@ -665,8 +676,12 @@
 						M.wearglasses(null)
 					else if (istype(M.get_active_hand(), /obj/item/clothing/glasses))
 						M.wearglasses(M.get_active_hand())
+		else
+			return 0
+	return 1
 
-////////////ADMINBUS HUD ICONS////////////
+/obj/screen/adminbus/Click()
+	switch(name)
 		if("Delete Bus")
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
@@ -803,8 +818,51 @@
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
 				A.toggle_lights(usr,2)
-		else
-			return 0
+
+/obj/screen/specialblob/Click()
+	switch(name)
+		if("Spawn Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.expand_blob_power()
+		if("Spawn Strong Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_shield_power()
+		if("Spawn Resource Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_resource()
+		if("Spawn Factory Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_factory()
+		if("Spawn Node Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_node()
+		if("Spawn Blob Core")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_core()
+		if("Call Overminds")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.callblobs()
+		if("Rally Spores")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.rally_spores_power()
+		if("Psionic Message")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				var/message = input(overmind,"Send a message to the crew.","Psionic Message") as null|text
+				if(message)
+					overmind.telepathy(message)
+		if("Jump to Blob")
+			if(isovermind(usr) && linked_blob)
+				var/mob/camera/blob/overmind = usr
+				overmind.loc = linked_blob.loc
 	return 1
 
 /obj/screen/inventory/Click()
@@ -816,25 +874,18 @@
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
+
+	if(hand_index)
+		usr.activate_hand(hand_index)
+
 	switch(name)
-		if("r_hand")
-			if(iscarbon(usr))
-				var/mob/living/carbon/C = usr
-				C.activate_hand("r")
-				//usr.next_move = world.time+2
-		if("l_hand")
-			if(iscarbon(usr))
-				var/mob/living/carbon/C = usr
-				C.activate_hand("l")
-				//usr.next_move = world.time+2
 		if("swap")
 			usr:swap_hand()
 		if("hand")
 			usr:swap_hand()
 		else
 			if(usr.attack_ui(slot_id))
-				usr.update_inv_l_hand(0)
-				usr.update_inv_r_hand(0)
+				usr.update_inv_hands()
 				usr.delayNextAttack(6)
 	return 1
 

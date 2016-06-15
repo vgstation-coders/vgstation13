@@ -193,7 +193,7 @@
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 
-	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr) && (user.l_hand != target && user.r_hand != target))
+	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr) && !user.is_holding_item(target))
 		to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
 		return
 
@@ -301,6 +301,11 @@
 	src.add_blood(target)
 	src.add_fingerprint(usr)
 	src.update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/restock()
+	if(mode == 2) //SYRINGE_BROKEN
+		mode = 0 //SYRINGE_DRAW
+		update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/giant
 	name = "giant syringe"

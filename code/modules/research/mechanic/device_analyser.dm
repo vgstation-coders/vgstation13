@@ -14,7 +14,7 @@
 	var/loadone = 0 //whether or not it should load just one at a time. 0 is all at once, 1 is one at a time
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	item_state = "electronic"
 	starting_materials = null
 	w_type = RECYK_ELECTRONIC
@@ -49,11 +49,11 @@
 						user.visible_message("[user] scans \the [O].", "<span class='notice'>You successfully scan \the [O].</span>")
 						return 1
 					else
-						to_chat(user, "\icon [src] \The [src] flashes a message on-screen: \"Too many designs loaded.\"")
+						to_chat(user, "[bicon(src)] \The [src] flashes a message on-screen: \"Too many designs loaded.\"")
 				if(-1)
-					to_chat(user, "<span class='rose'>\icon [src] \The [src]'s safety features prevent you from scanning that object.</span>")
+					to_chat(user, "<span class='rose'>[bicon(src)] \The [src]'s safety features prevent you from scanning that object.</span>")
 				if(-2)
-					to_chat(user, "<span class='rose'>\icon [src] \The [src]'s access requirements prevent you from scanning that object.</span>")
+					to_chat(user, "<span class='rose'>[bicon(src)] \The [src]'s access requirements prevent you from scanning that object.</span>")
 				else //no origin_tech, no scans.
 					to_chat(user, "<span class='rose'>\The [src] can't seem to scan \the [O]!</span>")
 		else //no origin_tech, no scans.

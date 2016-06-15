@@ -44,7 +44,7 @@
 		return
 
 	if(!blinded)
-		flick("flash", flash)
+		flash_eyes(visual = 1)
 
 	var/b_loss = null
 	var/f_loss = null
@@ -72,8 +72,10 @@
 /mob/living/carbon/alien/larva/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if(stat == 2)
+	if(stat == DEAD)
 		return
+	..()
+	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 	var/shielded = 0
 
 	var/damage = null
@@ -304,3 +306,7 @@
 		return 1
 	return ..()
 */
+
+/mob/living/carbon/alien/larva/reset_layer()
+	if(stat == DEAD)
+		layer = MOB_LAYER //unhide

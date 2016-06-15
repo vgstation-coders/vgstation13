@@ -21,6 +21,7 @@
 	internal_damage_threshold = 25
 	force = 45
 	max_equip = 4
+	starts_with_tracking_beacon = FALSE
 
 /obj/mecha/combat/marauder/seraph
 	desc = "Heavy-duty, command-type exosuit. This is a custom model, utilized only by high-ranking military personnel."
@@ -165,7 +166,7 @@
 		src.occupant_message("<font color='[src.zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>")
 		if(zoom)
 			src.occupant.client.view = 12
-			to_chat(src.occupant, sound('sound/mecha/imag_enh.ogg',volume=50))
+			src.occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
 		else
 			src.occupant.client.view = world.view//world.view - default mob view size
 	return

@@ -4,7 +4,7 @@
 	view = "15x15"
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
-#define RECOMMENDED_VERSION 501
+#define RECOMMENDED_VERSION 510
 
 
 var/savefile/panicfile
@@ -56,7 +56,7 @@ var/savefile/panicfile
  * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
  */
 #ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < 507)
+	if(byond_version < 510)
 		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 507.1248 or comment BORDER_USE_TURF_EXIT in global.dm")
 #elif
 	if(byond_version < RECOMMENDED_VERSION)
@@ -263,9 +263,26 @@ var/savefile/panicfile
 	processScheduler.stop()
 	paperwork_stop()
 
-	spawn(0)
-		world << sound(pick('sound/AI/newroundsexy.ogg', 'sound/misc/apcdestroyed.ogg', 'sound/misc/bangindonk.ogg', 'sound/misc/slugmissioncomplete.ogg')) // random end sounds!! - LastyBatsy
+	spawn()
+		world << sound(pick(
+			'sound/AI/newroundsexy.ogg',
+			'sound/misc/RoundEndSounds/apcdestroyed.ogg',
+			'sound/misc/RoundEndSounds/bangindonk.ogg',
+			'sound/misc/RoundEndSounds/slugmissioncomplete.ogg',
+			'sound/misc/RoundEndSounds/bayojingle.ogg',
+			'sound/misc/RoundEndSounds/gameoveryeah.ogg',
+			'sound/misc/RoundEndSounds/rayman.ogg',
+			'sound/misc/RoundEndSounds/marioworld.ogg',
+			'sound/misc/RoundEndSounds/soniclevelcomplete.ogg',
+			'sound/misc/RoundEndSounds/calamitytrigger.ogg',
+			'sound/misc/RoundEndSounds/duckgame.ogg',
+			'sound/misc/RoundEndSounds/FTLvictory.ogg',
+			'sound/misc/RoundEndSounds/tfvictory.ogg',
+			'sound/misc/RoundEndSounds/megamanX.ogg',
+			'sound/misc/RoundEndSounds/castlevania.ogg',
+			)) // random end sounds!! - LastyBatsy
 
+	sleep(5)//should fix the issue of players not hearing the restart sound.
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -303,7 +320,7 @@ var/savefile/panicfile
 /world/proc/save_mode(var/the_mode)
 	var/F = file("data/mode.txt")
 	fdel(F)
-	to_chat(F, the_mode)
+	F << the_mode
 
 /world/proc/load_motd()
 	join_motd = file2text("config/motd.txt")
@@ -323,7 +340,7 @@ var/savefile/panicfile
 		if (!text)
 			diary << "Failed to load config/mods.txt\n"
 		else
-			var/list/lines = text2list(text, "\n")
+			var/list/lines = splittext(text, "\n")
 			for(var/line in lines)
 				if (!line)
 					continue
@@ -388,7 +405,7 @@ var/savefile/panicfile
 		features += "hosted by <b>[config.hostedby]</b>"
 
 	if (features)
-		s += ": [list2text(features, ", ")]"
+		s += ": [jointext(features, ", ")]"
 
 	/* does this help? I do not know */
 	if (src.status != s)

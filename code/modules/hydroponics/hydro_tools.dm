@@ -57,7 +57,7 @@
 		grown_seed = K.seed
 
 	if(!grown_seed)
-		to_chat(user, "<span class='warning'>\icon[src] [src] can tell you nothing about [target].</span>")
+		to_chat(user, "<span class='warning'>[bicon(src)] [src] can tell you nothing about [target].</span>")
 		return
 
 	form_title = "[grown_seed.seed_name] (#[grown_seed.uid])"
@@ -202,7 +202,7 @@
 		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."
 
 	if(dat)
-		dat = list2text(dat)
+		dat = jointext(dat,"")
 		last_data = dat
 		dat += "<br><br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
 		user << browse(dat,"window=plant_analyzer_\ref[src];size=400x500")
@@ -212,7 +212,7 @@
 	if(last_data)
 		user << browse(last_data,"window=plant_analyzer_\ref[src];size=400x500")
 	else
-		to_chat(user, "<span class='notice'>\icon[src] No plant scan data in memory.</span>")
+		to_chat(user, "<span class='notice'>[bicon(src)] No plant scan data in memory.</span>")
 	return 0
 
 /obj/item/device/analyzer/plant_analyzer/proc/print_report_verb()
@@ -235,10 +235,10 @@
 
 /obj/item/device/analyzer/plant_analyzer/proc/print_report(var/mob/living/user) //full credits to Zuhayr
 	if(!last_data)
-		to_chat(user, "<span class='warning'>\icon[src] There is no plant scan data to print.</span>")
+		to_chat(user, "<span class='warning'>[bicon(src)] There is no plant scan data to print.</span>")
 		return
 	if (world.time < last_print + 4 SECONDS)
-		to_chat(user, "<span class='warning'>\icon[src] \The [src] is not yet ready to print again.</span>")
+		to_chat(user, "<span class='warning'>[bicon(src)] \The [src] is not yet ready to print again.</span>")
 		return
 	last_print = world.time
 	var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(get_turf(src))
@@ -259,7 +259,7 @@
 	flags = FPRINT | NOBLUDGEON
 	slot_flags = SLOT_BELT
 	throwforce = 4
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 10
 	var/toxicity = 4
@@ -312,8 +312,8 @@
 	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0
-	w_class = 2.0
-	attack_verb = list("slashed", "sliced", "cut", "clawed")
+	w_class = W_CLASS_SMALL
+	attack_verb = list("slashes", "slices", "cuts", "claws")
 
 
 // *************************************
@@ -364,7 +364,7 @@
 	icon_state = "bottle16"
 	flags = FPRINT | OPENCONTAINER
 	possible_transfer_amounts = null
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 
 	var/fertilizer //Reagent contained, if any.
 
@@ -405,13 +405,13 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 12.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throwforce = 15.0
 	throw_speed = 4
 	throw_range = 4
 	sharpness = 1.2
 	origin_tech = "materials=2;combat=1"
-	attack_verb = list("chopped", "torn", "cut")
+	attack_verb = list("chops", "tears", "cuts")
 
 /obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -423,7 +423,7 @@
 	desc = "A length of leather-bound wood studded with razor-sharp teeth. How crude."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "unathiknife"
-	attack_verb = list("ripped", "torn", "cut")
+	attack_verb = list("rips", "tears", "cuts")
 
 /obj/item/weapon/scythe
 	icon_state = "scythe0"
@@ -434,11 +434,11 @@
 	throw_speed = 1
 	throw_range = 3
 	sharpness = 1.0
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	slot_flags = SLOT_BACK
 	origin_tech = "materials=2;combat=2"
-	attack_verb = list("chopped", "sliced", "cut", "reaped")
+	attack_verb = list("chops", "slices", "cuts", "reaps")
 
 /obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity) return
@@ -468,7 +468,7 @@
 	icon_state = "claypot-item"
 	item_state = "claypot"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 5.0
 	throwforce = 20.0
 	throw_speed = 1
@@ -515,14 +515,14 @@
 		if(do_after(user, src, 30))
 			anchored = !anchored
 			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
-									"<span class='notice'>\icon[src] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+									"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 									"<span class='notice'>You hear a ratchet.</span>")
 	else if(plant_name && istype(O,/obj/item/weapon/pickaxe/shovel))
-		to_chat(user, "<span class='notice'>\icon[src] You start removing the [plant_name] from \the [src].</span>")
+		to_chat(user, "<span class='notice'>[bicon(src)] You start removing the [plant_name] from \the [src].</span>")
 		if(do_after(user, src, 30))
 			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 			user.visible_message(	"<span class='notice'>[user] removes the [plant_name] from \the [src].</span>",
-									"<span class='notice'>\icon[src] You remove the [plant_name] from \the [src].</span>",
+									"<span class='notice'>[bicon(src)] You remove the [plant_name] from \the [src].</span>",
 									"<span class='notice'>You hear some digging.</span>")
 			var/obj/item/claypot/C = new(loc)
 			transfer_fingerprints(src, C)

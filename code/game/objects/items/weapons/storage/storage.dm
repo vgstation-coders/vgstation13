@@ -8,15 +8,15 @@
 /obj/item/weapon/storage
 	name = "storage"
 	icon = 'icons/obj/storage.dmi'
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 
 	// These two accept a string containing the type path and the following optional prefixes:
 	//  = - Strict type matching.  Will NOT check for subtypes.
-	var/list/can_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
-	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_hold isn't set)
-	var/list/ignore_w_class = new/list() //List of objects which will fit in this item, regardless of size. AKA can_hold_too.
+	var/list/can_only_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
+	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_only_hold isn't set)
+	var/list/fits_ignoring_w_class = new/list() //List of objects which will fit in this item, regardless of size. Doesn't restrict to ONLY items of these types, and doesn't ignore max_combined_w_class. (in effect only if can_only_hold isn't set)
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
-	var/max_w_class = 2 //Max size of objects that this object can store (in effect only if can_hold isn't set)
+	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect only if can_only_hold isn't set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 7 //The number of storage slots in this container.
 	var/obj/screen/storage/boxes = null
@@ -33,24 +33,26 @@
 /obj/item/weapon/storage/MouseDrop(obj/over_object as obj)
 	if (ishuman(usr) || ismonkey(usr)) //so monkeys can take off their backpacks -- Urist
 		var/mob/M = usr
-		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object))
+		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object) && Adjacent(M))
 			var/mob/living/L = usr
 			if(istype(L) && !(L.incapacitated() || L.lying))
 				empty_contents_to(over_object)
-		if(!( istype(over_object, /obj/screen) ))
+
+		if(!( istype(over_object, /obj/screen/inventory) ))
 			return ..()
+
 		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
 			return
+
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		if(!( M.restrained() ) && !( M.stat ))
-			switch(over_object.name)
-				if("r_hand")
-					M.u_equip(src,0)
-					M.put_in_r_hand(src)
-				if("l_hand")
-					M.u_equip(src,0)
-					M.put_in_l_hand(src)
-			src.add_fingerprint(usr)
+			var/obj/screen/inventory/OI = over_object
+
+			if(OI.hand_index)
+				M.u_equip(src, 0)
+				M.put_in_hand(OI.hand_index, src)
+				src.add_fingerprint(usr)
+
 			return
 		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
 			if (usr.s_active)
@@ -143,6 +145,7 @@
 
 	if(display_contents_with_number)
 		for(var/datum/numbered_display/ND in display_contents)
+			ND.sample_object.mouse_opacity = 2
 			ND.sample_object.screen_loc = "[cx]:16,[cy]:16"
 			ND.sample_object.maptext = "<font color='white'>[(ND.number > 1)? "[ND.number]" : ""]</font>"
 			ND.sample_object.layer = 20
@@ -152,6 +155,7 @@
 				cy--
 	else
 		for(var/obj/O in contents)
+			O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
 			O.screen_loc = "[cx]:16,[cy]:16"
 			O.maptext = ""
 			O.layer = 20
@@ -227,9 +231,9 @@
 		to_chat(usr, "<span class='notice'>Unwield \the [ref_name] first.</span>")
 		return
 
-	if(can_hold.len)
+	if(can_only_hold.len)
 		var/ok = 0
-		for(var/A in can_hold)
+		for(var/A in can_only_hold)
 			if(dd_hasprefix(A,"="))
 				// Force strict matching of type.
 				// No subtypes allowed.
@@ -262,10 +266,10 @@
 				to_chat(usr, "<span class='notice'>\The [src] cannot hold \the [W].</span>")
 			return 0
 
-	if (W.w_class > max_w_class)
+	if ((W.w_class > fits_max_w_class) && !can_only_hold.len) //fits_max_w_class doesn't matter if there's only a specific list of items you can put in
 		var/yeh = 0
-		if(ignore_w_class.len)
-			for(var/A in ignore_w_class)
+		if(fits_ignoring_w_class.len)
+			for(var/A in fits_ignoring_w_class)
 				if(dd_hasprefix(A,"="))
 					// Force strict matching of type.
 					// No subtypes allowed.
@@ -319,12 +323,13 @@
 					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
 				else if (M in range(1)) //If someone is standing close enough, they can tell what it is...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
-				else if (W && W.w_class >= 3.0) //Otherwise they can only see large or normal items from a distance...
+				else if (W && W.w_class >= W_CLASS_MEDIUM) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
 		src.orient2hud(usr)
 		if(usr.s_active)
 			usr.s_active.show_to(usr)
+	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
 	update_icon()
 	return 1
 
@@ -370,8 +375,10 @@
 			usr.s_active.show_to(usr)
 	if(W.maptext)
 		W.maptext = ""
+	W.layer = initial(W.layer)
 	W.on_exit_storage(src)
 	update_icon()
+	W.mouse_opacity = initial(W.mouse_opacity)
 	return 1
 
 //This proc is called when you want to place an item into the storage item.
@@ -417,7 +424,7 @@
 /obj/item/weapon/storage/MouseDrop(over_object, src_location, over_location)
 	..()
 	orient2hud(usr)
-	if (over_object == usr && (in_range(src, usr) || find_holder(src) == usr))
+	if (over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
 		if (usr.s_active)
 			usr.s_active.close(usr)
 		src.show_to(usr)

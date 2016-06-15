@@ -6,6 +6,7 @@
 	use_power = 0
 	machine_flags = 0
 	icon = 'icons/obj/doors/mineral.dmi'
+	icon_state = "metaldoor_closed"
 	prefix = "metal" //Corresponds to the mineral type
 
 	explosion_block = 1
@@ -30,9 +31,6 @@
 		var/mob/M = user
 		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
 			return
-		if(world.time - M.last_bumped <= 10) //It was 60 previously, damn thats slow
-			return
-		M.last_bumped = world.time
 		TryToSwitchState(user)
 	return
 
@@ -75,7 +73,7 @@
 	if(istype(W,/obj/item/weapon/pickaxe))
 		var/obj/item/weapon/pickaxe/digTool = W
 		to_chat(user, "You start digging \the [src].")
-		if(do_after(user,digTool.digspeed*hardness) && src)
+		if(do_after(user, src, digTool.digspeed*hardness) && src)
 			to_chat(user, "You finished digging.")
 			return Dismantle()
 	else if(istype(W, /obj/item/weapon/card))
@@ -123,20 +121,25 @@
 
 /obj/machinery/door/mineral/iron
 	prefix = "metal"
+	icon_state = "metaldoor_closed"
 
 /obj/machinery/door/mineral/silver
 	prefix = "silver"
+	icon_state = "silverdoor_closed"
 
 /obj/machinery/door/mineral/gold
 	prefix = "gold"
+	icon_state = "golddoor_closed"
 	hardness = 1
 
 /obj/machinery/door/mineral/uranium
 	prefix = "uranium"
+	icon_state = "uraniumdoor_closed"
 	luminosity = 2
 
 /obj/machinery/door/mineral/sandstone
 	prefix = "sandstone"
+	icon_state = "sandstonedoor_closed"
 	hardness = 0.5
 	explosion_block = 0
 
@@ -149,6 +152,7 @@
 
 /obj/machinery/door/mineral/transparent/plasma
 	prefix = "plasma"
+	icon_state = "plasmadoor_closed"
 	hardness = 4
 
 /obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -181,11 +185,13 @@
 
 /obj/machinery/door/mineral/transparent/diamond
 	prefix = "diamond"
+	icon_state = "diamonddoor_closed"
 	hardness = 10
 	explosion_block = 3
 
 /obj/machinery/door/mineral/wood
 	prefix = "wood"
+	icon_state = "wooddoor_closed"
 	hardness = 1
 	soundeffect = 'sound/effects/doorcreaky.ogg'
 
@@ -202,6 +208,7 @@
 
 /obj/machinery/door/mineral/resin
 	prefix = "resin"
+	icon_state = "resindoor_closed"
 	hardness = 1.5
 	var/close_delay = 100
 	soundeffect = 'sound/effects/attackblob.ogg'

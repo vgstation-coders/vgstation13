@@ -229,7 +229,7 @@
 	if(viewcontents)
 		..()
 	else
-		to_chat(user, "\icon[src] That's \a [src].")
+		to_chat(user, "[bicon(src)] That's \a [src].")
 		to_chat(user, desc)
 		to_chat(user, "<span class='info'>You can't quite make out its content!</span>")
 
@@ -284,7 +284,7 @@
 	name = "golden cup"
 	icon_state = "golden_cup"
 	item_state = "" //nope :(
-	w_class = 4
+	w_class = W_CLASS_LARGE
 	force = 14
 	throwforce = 10
 	amount_per_transfer_from_this = 20
@@ -617,6 +617,18 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans
 	vending_cat = "carbonated drinks"
+	flags = FPRINT //Starts sealed until you pull the tab! Lacks OPENCONTAINER for this purpose
+	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
+	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(mob/user as mob)
+	if(!is_open_container())
+		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+		flags |= OPENCONTAINER
+		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
+		playsound(user, pick(open_sounds), 50, 1)
+		return
+	return ..()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -789,6 +801,19 @@
 	amount_per_transfer_from_this = 10
 	volume = 100
 
+/obj/item/weapon/reagent_containers/food/drinks/thermos
+	name = "Thermos"
+	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
+	icon_state = "shaker"
+	origin_tech = "materials=1"
+	amount_per_transfer_from_this = 10
+	volume = 100
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos/full/New()
+	..()
+	var/new_reagent = pick("coffee", "hot_coco", "icecoffee", "tea", "icetea", "water", "ice", "iced_beer")
+	reagents.add_reagent(new_reagent, rand(50,100))
+
 /obj/item/weapon/reagent_containers/food/drinks/flask
 	name = "Captain's Flask"
 	desc = "A metal flask belonging to the captain."
@@ -845,9 +870,9 @@
 	throw_speed = 3
 	throw_range = 5
 	sharpness = 0.8 //same as glass shards
-	w_class = 1
+	w_class = W_CLASS_TINY
 	item_state = "beer"
-	attack_verb = list("stabbed", "slashed", "attacked")
+	attack_verb = list("stabs", "slashes", "attacks")
 	var/icon/broken_outline = icon('icons/obj/drinks.dmi', "broken")
 	starting_materials = list(MAT_GLASS = 500)
 	melt_temperature = MELTPOINT_GLASS

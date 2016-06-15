@@ -77,18 +77,22 @@
 				runner.bodytemperature = max(T0C + 100,cached_temp)
 	else to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
 
-/obj/machinery/power/treadmill/CheckExit(var/atom/movable/O, var/turf/target)
-	if(istype(O) && O.checkpass(PASSGLASS))
-		return 1
-	if(get_dir(O.loc, target) == dir)
-		powerwalk(O)
-		return 0
-	return 1
-
-/obj/machinery/power/treadmill/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir)
+	if(flags & ON_BORDER)
+		if(target) //Are we doing a manual check to see
+			if(get_dir(loc, target) == dir)
+				return !density
+		else if(mover.dir == dir) //Or are we using move code
+			powerwalk(mover)
+			return !density
+	return 1
+
+/obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return 1
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		if(air_group) return 1
 		return 0
 	else

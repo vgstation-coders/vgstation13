@@ -1,7 +1,7 @@
 /obj/item/clothing/suit/storage
-	var/list/can_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
-	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_hold isn't set)
-	var/max_w_class = 2 //Max size of objects that this object can store (in effect only if can_hold isn't set)
+	var/list/can_only_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
+	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_only_hold isn't set)
+	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect only if can_only_hold isn't set)
 	var/max_combined_w_class = 4 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 2 //The number of storage slots in this container.
 	var/obj/screen/storage/boxes = null
@@ -115,9 +115,9 @@
 		to_chat(user, "<span class='warning'>The [src] is full, make some space.</span>")
 		return //Storage item is full
 
-	if(can_hold.len)
+	if(can_only_hold.len)
 		var/ok = 0
-		for(var/A in can_hold)
+		for(var/A in can_only_hold)
 			if(istype(W, text2path(A) ))
 				ok = 1
 				break
@@ -130,7 +130,7 @@
 			to_chat(user, "<span class='warning'>The [src] cannot hold \the [W].</span>")
 			return
 
-	if (W.w_class > max_w_class)
+	if (W.w_class > fits_max_w_class && !can_only_hold.len) //fits_max_w_class doesn't matter if there's only a specific list of items you can put in
 		to_chat(user, "<span class='warning'>The [W] is too big for \the [src].</span>")
 		return
 
@@ -160,24 +160,18 @@
 /obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/M = usr
-		if (!( istype(over_object, /obj/screen) ))
+		if (!( istype(over_object, /obj/screen/inventory) ))
 			return ..()
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		if (M.wear_suit == src && !M.incapacitated())
-			if (over_object.name == "r_hand")
-				M.u_equip(src,0)
-				M.put_in_r_hand(src)
-			//	if (!( M.r_hand ))
-			//		M.u_equip(src)
-			//		M.r_hand = src
-			else if (over_object.name == "l_hand")
-				M.u_equip(src,0)
-				M.put_in_l_hand(src)
-				//	if (!( M.l_hand ))
-				//		M.u_equip(src)
-				//		M.l_hand = src
-			M.update_inv_wear_suit()
-			src.add_fingerprint(usr)
+			var/obj/screen/inventory/OI = over_object
+
+			if(OI.hand_index)
+				M.u_equip(src, 1)
+				M.put_in_hand(OI.hand_index, src)
+				M.update_inv_wear_suit()
+				src.add_fingerprint(usr)
+
 			return
 		if( (over_object == usr && in_range(src, usr) || usr.contents.Find(src)) && usr.s_active)
 			usr.s_active.close(usr)

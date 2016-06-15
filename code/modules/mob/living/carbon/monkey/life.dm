@@ -5,7 +5,7 @@
 	var/toxins_alert = 0
 	var/fire_alert = 0
 	var/pressure_alert = 0
-
+	base_insulation = 0.5
 	var/temperature_alert = 0
 
 
@@ -25,8 +25,8 @@
 		environment = loc.return_air()
 
 	if (stat != DEAD) //still breathing
-		//Is not a Diona Nymph - Snowflake Code
-		if(!istype(src,/mob/living/carbon/monkey/diona))
+		//Is not a Diona Nymph or Rock - Snowflake Code
+		if(!istype(src,/mob/living/carbon/monkey/diona) && !istype(src,/mob/living/carbon/monkey/rock))
 			//First, resolve location and get a breath
 			if(air_master.current_cycle%4==2)
 				//Only try to take a breath every 4 seconds, unless suffocating
@@ -91,8 +91,6 @@
 /mob/living/carbon/monkey/calculate_affecting_pressure(var/pressure)
 	..()
 	return pressure
-
-/mob/living/carbon/monkey
 
 /mob/living/carbon/monkey/proc/handle_disabilities()
 
@@ -428,7 +426,7 @@
 	if(uniform)
 		thermal_protection += uniform.return_thermal_protection()
 
-	var/max_protection = get_thermal_protection(get_thermal_protection_flags())
+	var/max_protection = max(get_thermal_protection(get_thermal_protection_flags()),base_insulation) // monkies have fur, silly!
 	return min(thermal_protection,max_protection)
 
 /mob/living/carbon/monkey/get_heat_protection_flags(temperature)
@@ -525,8 +523,8 @@
 	burn_calories(HUNGER_FACTOR,1)
 	if(reagents) reagents.metabolize(src,alien)
 
-	if (drowsyness)
-		drowsyness--
+	if (drowsyness > 0)
+		drowsyness = max(0, drowsyness - 1)
 		eye_blurry = max(2, eye_blurry)
 		if (prob(5))
 			sleeping += 1
@@ -716,22 +714,23 @@
 			else
 				bodytemp.icon_state = "temp-4"
 
-	client.screen.Remove(global_hud.blurry,global_hud.druggy,global_hud.vimpaired)
-
-	if(blind && stat != DEAD)
-		if(blinded)
-			blind.layer = 18
+	if(stat != DEAD)
+		if(src.eye_blind || blinded)
+			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 		else
-			blind.layer = 0
-
-			if(disabilities & NEARSIGHTED)
-				client.screen += global_hud.vimpaired
-
-			if(eye_blurry)
-				client.screen += global_hud.blurry
-
-			if(druggy)
-				client.screen += global_hud.druggy
+			clear_fullscreen("blind")
+		if (src.disabilities & NEARSIGHTED)
+			overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired, 2)
+		else
+			clear_fullscreen("impaired")
+		if (src.eye_blurry)
+			overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+		else
+			clear_fullscreen("blurry")
+		if (src.druggy)
+			overlay_fullscreen("high", /obj/screen/fullscreen/high)
+		else
+			clear_fullscreen("high")
 
 	if (stat != 2)
 		if (machine)

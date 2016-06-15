@@ -100,13 +100,7 @@ emp_act
 
 
 /mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	if(istype(l_hand, /obj/item/weapon)) //Check left hand
-		var/obj/item/weapon/I = l_hand
-		if(I.IsShield() && I.on_block(damage, attack_text))
-			return 1
-
-	if(istype(r_hand, /obj/item/weapon)) //Check right hand
-		var/obj/item/weapon/I = r_hand
+	for(var/obj/item/weapon/I in held_items)
 		if(I.IsShield() && I.on_block(damage, attack_text))
 			return 1
 
@@ -148,7 +142,7 @@ emp_act
 		target_zone = user.zone_sel.selecting
 	if(!target_zone && !src.stat)
 		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
-		return
+		return 0
 	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver) && src.stat == DEAD && user.a_intent == I_HURT)
 		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(src.loc))
 		newmeat.name = src.real_name + newmeat.name
@@ -192,22 +186,22 @@ emp_act
 		return 0
 
 	if(istype(I.attack_verb, /list) && I.attack_verb.len)
-		visible_message("<span class='danger'>[src] has been [pick(I.attack_verb)] in the [hit_area] with \the [I.name] by [user]!</span>", \
-			"<span class='userdanger'>You have been [pick(I.attack_verb)] in the [hit_area] with \the [I.name] by [user]!</span>")
+		visible_message("<span class='danger'>[user] [pick(I.attack_verb)] [src] in the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user] [pick(I.attack_verb)] you in the [hit_area] with \the [I.name]!</span>")
 	else
-		visible_message("<span class='danger'>[src] has been attacked in the [hit_area] with \the [I.name] by [user]!</span>", \
-			"<span class='userdanger'>You have been attacked in the [hit_area] with \the [I.name] by [user]!</span>")
+		visible_message("<span class='danger'>[user] attacks [src] in the [hit_area] with \the [I.name]!</span>", \
+			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
 
-	var/armor = run_armor_check(affecting, "melee", "Your armor has protected your [hit_area].", "Your armor has softened the hit to your [hit_area].")
+	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
 	if(armor >= 2)	return 1 //We still connected
 	if(!I.force)	return 1
 
 	//Knocking teeth out!
 	if(user.zone_sel.selecting == "mouth" && target_zone == "head") //You can't actually hit people in the mouth - this checks if the user IS targetting mouth, and if he didn't miss!
-		if((!armor) && (I.force >= 8 || I.w_class >= 2) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
+		if((!armor) && (I.force >= 8 || I.w_class <= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class = W_CLASS_SMALL. Sharp items can't knock out teeth. Armor prevents this completely!
 			var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
 			if(T && T.amount > 0) //If the guy has some teeth
-				var/chance = min(I.force * I.w_class, 40) //an item with w_class=3 and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
+				var/chance = min(I.force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
 				if(prob(chance))
 					knock_out_teeth(user)
 
@@ -311,7 +305,7 @@ emp_act
 		return
 
 	if(!blinded && !noblind)
-		flick("flash", flash)
+		flash_eyes(visual = 1)
 
 	var/shielded = 0
 	var/b_loss = null
@@ -408,9 +402,15 @@ emp_act
 /mob/living/carbon/human/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if(stat == 2)	return
-	show_message("<span class='warning'>The blob attacks you!</span>")
-	var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
-	var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-	apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
+	if(cloneloss < 120)
+		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
+		if(stat == DEAD)
+			..()
+			adjustCloneLoss(rand(5,25))
+		else
+			..()
+			show_message("<span class='warning'>The blob attacks you!</span>")
+			var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
+			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
+			apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
 	return

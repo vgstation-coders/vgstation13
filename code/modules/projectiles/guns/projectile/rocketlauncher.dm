@@ -5,7 +5,7 @@
 	icon_state = "rpg"
 	item_state = "rpg"
 	max_shells = 1
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 5000)
 	w_type = RECYK_METAL
 	force = 10
@@ -19,7 +19,7 @@
 	caliber = list("rpg" = 1)
 	origin_tech = "combat=4;materials=2;syndicate=2"
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg"
-	attack_verb = list("struck", "hit", "bashed")
+	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
 
 /obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
@@ -64,7 +64,7 @@
 	recoil = 1
 	flags = FPRINT
 	slot_flags = SLOT_BACK
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	fire_delay = 2
 	caliber = list("nikita" = 1)
 	origin_tech = null

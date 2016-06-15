@@ -75,6 +75,7 @@ client/verb/JoinResponseTeam()
 
 			ticker.mode.ert += new_commando.mind
 
+			message_admins("[new_commando]/[usr.key] has joined the Emergency Response Team.")
 			return
 
 	else
@@ -310,7 +311,7 @@ proc/trigger_armed_response_team(var/force = 0)
 
 	//Backpack
 	equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(src), slot_back)
-	equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(src), slot_in_backpack)
+	equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
 
 	var/obj/item/weapon/card/id/W = new(src)
@@ -324,6 +325,9 @@ proc/trigger_armed_response_team(var/force = 0)
 		W.access = get_centcom_access("Emergency Responders Leader")
 		W.icon_state = "ERT_leader"
 	equip_to_slot_or_del(W, slot_wear_id)
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)
+	L.imp_in = src
+	L.implanted = 1
 
 	return 1
 

@@ -5,9 +5,12 @@
 ////////////////////////////////
 // Definitions
 ////////////////////////////////
+/datum/stack_recipe/cable_cuffs/finish_building(var/mob/usr, var/obj/item/stack/cable_coil/S, var/obj/item/weapon/handcuffs/cable/C)
+	C._color = S._color
+	C.update_icon()
 
 var/global/list/datum/stack_recipe/cable_recipes = list ( \
-	new/datum/stack_recipe("cable cuffs", /obj/item/weapon/handcuffs/cable, 15, time = 3, one_per_turf = 0, on_floor = 0))
+	new/datum/stack_recipe/cable_cuffs("cable cuffs", /obj/item/weapon/handcuffs/cable, 15, time = 3, one_per_turf = 0, on_floor = 0))
 
 #define MAXCOIL 30
 
@@ -22,7 +25,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	_color = "red"
 	desc = "A coil of power cable."
 	throwforce = 10
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 5
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
@@ -31,7 +34,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	siemens_coefficient = 1.5 //Extra conducting
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"
-	attack_verb = list("whipped", "lashed", "disciplined", "flogged")
+	attack_verb = list("whips", "lashes", "disciplines", "flogs")
 
 /obj/item/stack/cable_coil/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -79,6 +82,10 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 		return ..()
 
 /obj/item/stack/cable_coil/use(var/amount)
+	. = ..()
+	update_icon()
+
+/obj/item/stack/cable_coil/add(var/amount)
 	. = ..()
 	update_icon()
 

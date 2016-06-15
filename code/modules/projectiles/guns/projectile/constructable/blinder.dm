@@ -4,7 +4,7 @@
 	desc = "A polaroid camera. The film chamber is filled with wire for some reason."
 	icon_state = "polaroid"
 	item_state = "polaroid"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -69,13 +69,7 @@
 /obj/item/device/blinder/proc/flash(var/turf/T , var/mob/living/M)
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
 
-	var/eye_safety = 0
-	if(iscarbon(M))
-		var/mob/living/carbon/C = M
-		eye_safety = C.eyecheck()
-
-	if(eye_safety < 1)
-		flick("e_flash", M.flash)
+	M.flash_eyes(visual = 1)
 
 	if(issilicon(M))
 		M.Weaken(rand(5, 10))

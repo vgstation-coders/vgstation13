@@ -127,14 +127,33 @@
 
 		if(!O.fingerprintslast)
 			return
+		var/throwByName = "an unknown inanimate object"
+		if(M)
+			throwByName = M.name
+			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
+		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed])</font>")
 
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [M.name] ([assailant.ckey]) (speed: [speed])</font>")
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
-		msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [M.name] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+		if(!src.isDead() && src.ckey) //Message admins if the hit mob is alive and has a ckey
+			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+
 		if(!iscarbon(M))
 			src.LAssailant = null
 		else
 			src.LAssailant = M
+
+/*
+	Ear and eye protection
+
+	Some mobs have built-in ear or eye protection, mobs that can wear equipment may account their eye/ear wear into this proc
+*/
+
+//earprot(): retuns 0 for no protection, 1 for full protection (no ears, earmuffs, etc)
+/mob/living/proc/earprot()
+	return 0
+
+//eyecheck(): retuns 0 for no protection, 1 for partial protection, 2 for full protection
+/mob/living/proc/eyecheck()
+	return 0
 
 
 //BITES
@@ -160,12 +179,12 @@
 	M.delayNextAttack(20) //Kicks are slow
 
 	if((M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
-		M.visible_message("<span class='notice'>\The [M] tripped while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you tripped and fell!</span>")
+		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
 		M.Weaken(rand(1,10))
 		return
 
 	var/stomping = 0
-	var/attack_verb = "kicked"
+	var/attack_verb = "kicks"
 
 	if(M.size > size && !flying) //On the ground, the kicker is bigger than/equal size of the victim = stomp
 		stomping = 1
@@ -174,14 +193,14 @@
 
 	if(stomping) //Stomps = more damage and armor bypassing
 		damage += rand(0,7)
-		attack_verb = "stomped on"
+		attack_verb = "stomps on"
 	else if(M.reagents && M.reagents.has_reagent("gyro"))
 		damage += rand(0,4)
-		attack_verb = "roundhouse kicked"
+		attack_verb = "roundhouse kicks"
 
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-		visible_message("<span class='danger'>\The [M] has attempted to kick \the [src]!</span>")
+		visible_message("<span class='danger'>\The [M] attempts to kick \the [src]!</span>")
 		return 0
 
 	//Handle shoes
@@ -194,7 +213,7 @@
 
 	playsound(loc, "punch", 30, 1, -1)
 
-	visible_message("<span class='danger'>\The [M] has [attack_verb] \the [src]!</span>", "<span class='userdanger'>\The [M] [attack_verb] you!</span>")
+	visible_message("<span class='danger'>\The [M] [attack_verb] \the [src]!</span>", "<span class='userdanger'>\The [M] [attack_verb] you!</span>")
 
 	if(M.size != size) //The bigger the kicker, the more damage
 		damage = max(damage + (rand(1,5) * (1 + M.size - size)), 0)

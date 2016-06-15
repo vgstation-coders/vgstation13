@@ -33,8 +33,8 @@
 		invisibility = 0
 		to_chat(src, "<span class='sinister'>Even as a non-corporal being, you can feel Nar-Sie's presence altering you. You are now visible to everyone.</span>")
 
-/mob/dead/singuloCanEat()
-	return 0
-
 /mob/dead/update_canmove()
+	return
+
+/mob/dead/blob_act()
 	return

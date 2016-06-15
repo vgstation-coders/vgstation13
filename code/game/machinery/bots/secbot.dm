@@ -3,6 +3,7 @@
 	desc = "A little security robot.  He looks less than thrilled."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "secbot0"
+	icon_initial = "secbot"
 	layer = 5.0
 	density = 0
 	anchored = 0
@@ -55,7 +56,7 @@
 	var/turf/nearest_beacon_loc	// the nearest beacon's location
 
 	//List of weapons that secbots will not arrest for, also copypasted in ed209.dm and metaldetector.dm
-	var/safe_weapons = list(
+	var/list/safe_weapons = list(
 		/obj/item/weapon/gun/energy/laser/bluetag,
 		/obj/item/weapon/gun/energy/laser/redtag,
 		/obj/item/weapon/gun/energy/laser/practice,
@@ -90,7 +91,7 @@
 
 /obj/machinery/bot/secbot/New()
 	..()
-	src.icon_state = "secbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	spawn(3)
 		src.botcard = new /obj/item/weapon/card/id(src)
 		var/datum/job/detective/J = new/datum/job/detective
@@ -102,7 +103,7 @@
 
 /obj/machinery/bot/secbot/turn_on()
 	..()
-	src.icon_state = "secbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/secbot/turn_off()
@@ -112,7 +113,7 @@
 	src.anchored = 0
 	src.mode = SECBOT_IDLE
 	walk_to(src,0)
-	src.icon_state = "secbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/secbot/attack_hand(mob/user as mob)
@@ -233,7 +234,7 @@ Auto Patrol: []"},
 		src.anchored = 0
 		src.emagged = 2
 		src.on = 1
-		src.icon_state = "secbot[src.on]"
+		src.icon_state = "[src.icon_initial][src.on]"
 		mode = SECBOT_IDLE
 
 /obj/machinery/bot/secbot/process()
@@ -269,9 +270,9 @@ Auto Patrol: []"},
 				if(get_dist(src, src.target) <= 1)		// if right next to perp
 					if(istype(src.target,/mob/living/carbon))
 						playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
-						src.icon_state = "secbot-c"
+						src.icon_state = "[src.icon_initial]-c"
 						spawn(2)
-							src.icon_state = "secbot[src.on]"
+							src.icon_state = "[icon_initial][src.on]"
 						var/mob/living/carbon/M = src.target
 						var/maxstuns = 4
 						if(istype(M, /mob/living/carbon/human))
@@ -306,9 +307,9 @@ Auto Patrol: []"},
 							next_harm_time = world.time + 15
 							playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
 							visible_message("<span class='danger'>[src] beats [src.target] with the stun baton!</span>")
-							src.icon_state = "secbot-c"
+							src.icon_state = "[src.icon_initial]-c"
 							spawn(2)
-								src.icon_state = "secbot[src.on]"
+								src.icon_state = "[src.icon_initial][src.on]"
 
 							var/mob/living/simple_animal/S = src.target
 							if(S && istype(S))
@@ -707,12 +708,8 @@ Auto Patrol: []"},
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 
 		if(weaponscheck && !wpermit(perp))
-			if(istype(perp.l_hand, /obj/item/weapon/gun) || istype(perp.l_hand, /obj/item/weapon/melee))
-				if(!(perp.l_hand.type in safe_weapons))
-					threatcount += 4
-
-			if(istype(perp.r_hand, /obj/item/weapon/gun) || istype(perp.r_hand, /obj/item/weapon/melee))
-				if(!(perp.r_hand.type in safe_weapons))
+			for(var/obj/item/I in perp.held_items)
+				if(check_for_weapons(I))
 					threatcount += 4
 
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
@@ -808,13 +805,10 @@ Auto Patrol: []"},
 
 //Secbot Construction
 
-/obj/item/clothing/head/helmet/attackby(var/obj/item/device/assembly/signaler/S, mob/user as mob)
+/obj/item/clothing/head/helmet/tactical/sec/attackby(var/obj/item/device/assembly/signaler/S, mob/user as mob)
 	..()
 	if(!issignaler(S))
 		..()
-		return
-
-	if(src.type != /obj/item/clothing/head/helmet) //Eh, but we don't want people making secbots out of space helmets.
 		return
 
 	if(S.secured)
@@ -872,7 +866,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/declare()
 	var/area/location = get_area(src)
-	declare_message = "<span class='info'>\icon[src] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
+	declare_message = "<span class='info'>[bicon(src)] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
 	..()
 
 /obj/machinery/bot/secbot/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in ed209bot.dm

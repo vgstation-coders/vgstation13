@@ -6,6 +6,7 @@
 	nodamage = 1
 	layer = 13
 	flag = "energy"
+	fire_sound = 'sound/weapons/ion.ogg'
 
 /obj/item/projectile/ion/Bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
@@ -31,6 +32,7 @@
 	layer = 13
 	flag = "energy"
 	var/temperature = 300
+	fire_sound = 'sound/weapons/pulse3.ogg'
 
 /obj/item/projectile/temp/OnFired()
 	..()
@@ -38,6 +40,8 @@
 	var/obj/item/weapon/gun/energy/temperature/T = shot_from
 	if(istype(T))
 		src.temperature = T.temperature
+	else
+		temperature = rand(100,600) //give it a random temp value if it's not fired from a temp gun
 
 	switch(temperature)
 		if(501 to INFINITY)
@@ -88,27 +92,6 @@
 			playsound(M.loc, 'sound/effects/bamf.ogg', 50, 0)
 	return 1
 
-//This shouldn't fucking exist, just spawn a meteor damnit
-/obj/item/projectile/meteor
-	name = "meteor"
-	icon = 'icons/obj/meteor.dmi'
-	icon_state = "smallf"
-	damage = 0
-	damage_type = BRUTE
-	nodamage = 1
-	flag = "bullet"
-
-/obj/item/projectile/meteor/Bump(atom/A as mob|obj|turf|area)
-	if(A == firer)
-		loc = A.loc
-		return
-
-	//Copied straight from small meteor code
-	spawn(0)
-		playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 10, 1)
-		explosion(src.loc, -1, 1, 3, 4, 0) //Tiny meteor doesn't cause too much damage
-		qdel(src)
-
 //Simple fireball
 /obj/item/projectile/simple_fireball
 	name = "fireball"
@@ -130,6 +113,7 @@
 	nodamage = 1
 	flag = "energy"
 	var/mutstrength = 10
+	fire_sound = 'sound/effects/stealthoff.ogg'
 
 /obj/item/projectile/energy/floramut/on_hit(var/atom/target, var/blocked = 0)
 	var/mob/living/M = target
@@ -176,6 +160,7 @@
 	damage_type = TOX
 	nodamage = 1
 	flag = "energy"
+	fire_sound = 'sound/effects/stealthoff.ogg'
 
 /obj/item/projectile/energy/florayield/on_hit(var/atom/target, var/blocked = 0)
 	var/mob/M = target
@@ -208,6 +193,7 @@
 	damage_type = BRUTE
 	flag = "energy"
 	var/range = 2
+	fire_sound = 'sound/weapons/Taser.ogg'
 
 obj/item/projectile/kinetic/New()
 	var/turf/proj_turf = get_turf(src)
@@ -334,3 +320,38 @@ obj/item/projectile/kinetic/New()
 	if(!(locate(/obj/effect/portal) in loc))
 		P.open_portal(setting,loc,A)
 	bullet_die()
+
+
+//Fire breath
+//Fairly simple projectile that doesn't use any atmos calculations. Intended to be used by simple mobs
+/obj/item/projectile/fire_breath
+	name = "fiery breath"
+	icon_state = null
+	damage = 0
+	penetration = -1
+	phase_type = PROJREACT_MOBS|PROJREACT_BLOB|PROJREACT_OBJS
+	bounce_sound = null
+	custom_impact = 1
+	penetration_message = 0
+	grillepasschance = 100
+
+	var/stepped_range = 0
+	var/max_range = 9
+
+	var/fire_damage = 10
+	var/pressure = ONE_ATMOSPHERE * 5
+	var/temperature = T0C + 200
+
+/obj/item/projectile/fire_breath/process_step()
+	..()
+
+	if(stepped_range <= max_range)
+		stepped_range++
+	else
+		bullet_die()
+		return
+
+	var/turf/T = get_turf(src)
+	if(!T) return
+
+	new /obj/effect/fire_blast(T, fire_damage, stepped_range, 1, pressure, temperature)

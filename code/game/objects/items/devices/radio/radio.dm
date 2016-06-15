@@ -27,7 +27,7 @@
 	slot_flags = SLOT_BELT
 	throw_speed = 2
 	throw_range = 9
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 75, MAT_GLASS = 25)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
@@ -73,6 +73,10 @@
 
 	for (var/channel_name in channels)
 		secure_radio_connections[channel_name] = add_radio(src, radiochannels[channel_name])
+
+/obj/item/device/radio/AltClick()
+	if(!usr.incapacitated() && is_holder_of(usr, src))
+		attack_self(usr)
 
 /obj/item/device/radio/attack_self(mob/user as mob)
 	user.set_machine(src)

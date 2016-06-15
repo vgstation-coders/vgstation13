@@ -4,10 +4,10 @@
 
 /area/CATEGORY/OR/DESCRIPTOR/NAME 	(you can make as many subdivisions as you want)
 	name = "NICE NAME" 				(not required but makes things really nice)
-	icon = "ICON FILENAME" 			(defaults to areas.dmi)
-	icon_state = "NAME OF ICON" 	(defaults to "unknown" (blank))
+	icon = "ICON FILENAME" 			(defaults to 'areas.dmi')
+	icon_state = "NAME OF ICON" 	(defaults to 'unknown' (blank))
 	requires_power = 0 				(defaults to 1)
-	music = "music/music.ogg"		(defaults to "music/music.ogg")
+	music = "music/music.ogg"		(defaults to 'music/music.ogg')
 
 NOTE: there are two lists of areas in the end of this file: centcom and station itself. Please maintain these lists valid. --rastaf0
 
@@ -120,7 +120,7 @@ proc/process_adminbus_teleport_locs()
 	power_light = 0
 	power_environ = 0
 	always_unpowered = 0
-	lighting_use_dynamic = 1
+	dynamic_lighting = 1
 
 /area/engineering/
 
@@ -148,7 +148,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle
 	requires_power = 0
-	lighting_use_dynamic = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
+	dynamic_lighting = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
 	//haha fuck you we dynamic lights now
 
 /area/shuttle/arrival
@@ -291,7 +291,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/thunderdome
 	name = "honk"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/shuttle/thunderdome/grnshuttle
 	name = "\improper Thunderdome GRN Shuttle"
@@ -318,6 +318,15 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "shuttlered2"
 // === Trying to remove these areas:
 
+/area/shuttle/trade
+	name = "\improper Vox Trade Ship"
+	icon_state = "yellow"
+
+/area/shuttle/trade/start
+	name = "\improper Vox Trade Ship"
+	icon_state = "yellow"
+	requires_power = 0
+
 /area/shuttle/research
 	name = "\improper Research Shuttle"
 	music = "music/escape.ogg"
@@ -327,6 +336,21 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/research/outpost
 	icon_state = "shuttle"
+
+/area/shuttle/voxresearch
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
+
+/area/shuttle/voxresearch/station
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
+
+/area/shuttle/voxresearch/outpost
+	name = "\improper Genetics Research"
+	icon_state = "yellow"
+	requires_power = 0
 
 /area/shuttle/vox/station
 	name = "\improper Vox Skipjack"
@@ -433,7 +457,7 @@ proc/process_adminbus_teleport_locs()
 	name = "start area"
 	icon_state = "start"
 	requires_power = 0
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 	has_gravity = 1
 
 // === end remove
@@ -449,7 +473,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Centcom"
 	icon_state = "centcom"
 	requires_power = 0
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/centcom/control
 	name = "\improper Centcom Control"
@@ -487,7 +511,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Syndicate Mothership"
 	icon_state = "syndie-ship"
 	requires_power = 0
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/syndicate_mothership/control
 	name = "\improper Syndicate Control Room"
@@ -527,7 +551,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Thunderdome"
 	icon_state = "thunder"
 	requires_power = 0
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/tdome/tdome1
 	name = "\improper Thunderdome (Team 1)"
@@ -552,7 +576,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Syndicate Shuttle"
 	icon_state = "yellow"
 	requires_power = 0
-	lighting_use_dynamic = 1
+	dynamic_lighting = 1
 
 /area/syndicate_station/start
 	icon_state = "yellow"
@@ -593,7 +617,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Wizard's Den"
 	icon_state = "yellow"
 	requires_power = 0
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/vox_station/southwest_solars
 	name = "\improper aft port solars"
@@ -619,6 +643,22 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper nearby mining asteroid"
 	icon_state = "north"
 	requires_power = 0
+
+/area/vox_station/research_lab
+	name = "\improper Research Facility"
+	icon_state = "voxresearch"
+
+/area/vox_station/plasman_lab
+	name = "\improper Plasma Genetic Research"
+	icon_state = "voxtoxins"
+
+/area/vox_station/voxtest_lab
+	name = "\improper Vox Genetic Research"
+	icon_state = "voxgenetics"
+
+/area/vox_station/tradepost
+	name = "\improper Traders Den"
+	icon_state = "tradeden"
 
 //PRISON
 /area/prison
@@ -982,7 +1022,7 @@ proc/process_adminbus_teleport_locs()
 /area/holodeck
 	name = "\improper Holodeck"
 	icon_state = "Holodeck"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
@@ -1115,7 +1155,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/solar
 	requires_power = 0
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/solar/fport
 	name = "\improper Fore Port Solar Array"
@@ -1823,22 +1863,22 @@ proc/process_adminbus_teleport_locs()
 /area/turret_protected/AIsatextFP
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/turret_protected/AIsatextFS
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/turret_protected/AIsatextAS
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/turret_protected/AIsatextAP
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 
 /area/turret_protected/NewAIMain
 	name = "\improper AI Main New"
@@ -1918,7 +1958,35 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Vox Hallways"
 	icon_state = "hallP"
 
+/area/vox_trading_post/kitchen
+	name = "\improper Vox Kitchen"
+	icon_state = "kitchen"
 
+/area/vox_trading_post/dorms
+	name = "\improper Vox Dormitory"
+	icon_state = "blue"
+
+/area/vox_trading_post/bar
+	name = "\improper Vox Bar"
+	icon_state = "bar"
+
+/area/vox_trading_post/medbay
+	name = "\improper Vox Medbay"
+	icon_state = "medbay"
+
+/area/vox_trading_post/solararray
+	name = "\improper Vox Solar Array"
+	icon_state = "panelsS"
+	requires_power = 0
+	dynamic_lighting = 0
+
+/area/vox_trading_post/solars
+	name = "\improper Vox Solar Maintenance"
+	icon_state = "SolarcontrolS"
+
+/area/vox_trading_post/docking
+	name = "\improper Vox Trade Docks"
+	icon_state = "hallS"
 
 // Telecommunications Satellite
 /area/tcommsat
@@ -2069,57 +2137,27 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/beach
 	name = "Beach"
 	icon_state = "null"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 	requires_power = 0
-	var/sound/mysound = null
 
-/area/awaymission/beach/New()
-	..()
-	var/sound/S = new/sound()
-	mysound = S
-	S.file = 'sound/ambience/shore.ogg'
-	S.repeat = 1
-	S.wait = 0
-	S.channel = 123
-	S.volume = 100
-	S.priority = 255
-	S.status = SOUND_UPDATE
-	process()
+/area/awaymission/leviathan
+	name = "Leviathan"
+		
+/area/awaymission/leviathan/research
+	name = "Leviathan"
+	icon_state = "anolab"
 
-/area/awaymission/beach/Entered(atom/movable/Obj,atom/OldLoc)
-	if(ismob(Obj))
-		if(Obj:client)
-			mysound.status = SOUND_UPDATE
-			Obj << mysound
-	return
+/area/awaymission/leviathan/research/gateway
+	name = "Leviathan"
+	icon_state = "teleporter"
 
-/area/awaymission/beach/Exited(atom/movable/Obj)
-	if(ismob(Obj))
-		if(Obj:client)
-			mysound.status = SOUND_PAUSED | SOUND_UPDATE
-			Obj << mysound
+/area/awaymission/leviathan/research/mining
+	name = "Leviathan"
+	icon_state = "mining_production"
 
-/area/awaymission/beach/proc/process()
-	//set background = 1
-
-	var/sound/S = null
-	var/sound_delay = 0
-	if(prob(25))
-		S = sound(file=pick('sound/ambience/seag1.ogg','sound/ambience/seag2.ogg','sound/ambience/seag3.ogg'), volume=100)
-		sound_delay = rand(0, 50)
-
-	for(var/mob/living/carbon/human/H in src)
-	/*	if(H.s_tone > -55)
-			H.s_tone--
-			H.update_body()*/
-		if(H.client)
-			mysound.status = SOUND_UPDATE
-			H << mysound
-			if(S)
-				spawn(sound_delay)
-					H << S
-
-	spawn(60) .()
+/area/awaymission/leviathan/mining
+	name = "Leviathan"
+	icon_state = "mining_production"
 
 /////////////////////////////////////////////////////////////////////
 /*
@@ -2193,7 +2231,7 @@ var/list/the_station_areas = list (
 /area/beach/
 	name = "The metaclub's private beach"
 	icon_state = "null"
-	lighting_use_dynamic = 0
+	dynamic_lighting = 0
 	requires_power = 0
 	var/sound/mysound = null
 

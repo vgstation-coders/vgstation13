@@ -6,10 +6,10 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	throwforce = 0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 7
 	throw_range = 15
-	attack_verb = list("banned")
+	attack_verb = list("bans")
 
 
 /obj/item/weapon/banhammer/suicide_act(mob/user)
@@ -25,8 +25,8 @@
 	slot_flags = SLOT_BELT
 	force = 2
 	throwforce = 1
-	w_class = 3
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
 /obj/item/weapon/sord/suicide_act(mob/user)
@@ -49,9 +49,9 @@
 	slot_flags = SLOT_BELT
 	force = 40
 	throwforce = 10
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
 /obj/item/weapon/claymore/IsShield()
@@ -80,9 +80,9 @@
 	slot_flags = SLOT_BELT | SLOT_BACK
 	force = 40
 	throwforce = 10
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
@@ -104,8 +104,8 @@
 	hitsound = "sound/weapons/bladeslice.ogg"
 	force = 20
 	throwforce = 15
-	w_class = 3
-	attack_verb = list("jabbed","stabbed","ripped")
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("jabs","stabs","rips")
 
 obj/item/weapon/wirerod
 	name = "wired rod"
@@ -116,10 +116,10 @@ obj/item/weapon/wirerod
 	siemens_coefficient = 1
 	force = 9
 	throwforce = 10
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1875)
 	w_type = RECYK_METAL
-	attack_verb = list("hit", "bludgeoned", "whacked", "bonked")
+	attack_verb = list("hits", "bludgeons", "whacks", "bonks")
 
 
 obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)

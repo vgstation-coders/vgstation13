@@ -1,6 +1,3 @@
-/mob/proc/CheckSlip()
-	return 0
-
 /mob/living/New()
 	. = ..()
 	generate_static_overlay()
@@ -178,10 +175,10 @@
 
 /mob/living/verb/succumb()
 	set hidden = 1
-	if ((src.health < 0 && src.health > -95.0))
+	if (src.health < 0 && stat != DEAD)
 		src.attack_log += "[src] has succumbed to death with [health] points of health!"
-		src.apply_damage(maxHealth + 5 + src.health, OXY) // This will ensure people die when using the command, but don't go into overkill. 15 oxy points over the limit for safety since brute and burn regenerates
-		src.health = 100 - src.getOxyLoss() - src.getToxLoss() - src.getFireLoss() - src.getBruteLoss()
+		src.apply_damage(maxHealth + src.health, OXY)
+		death(0)
 		to_chat(src, "<span class='info'>You have given up life and succumbed to death.</span>")
 
 
@@ -586,7 +583,8 @@ Thanks.
 
 /mob/living/Move(atom/newloc, direct)
 	if (locked_to && locked_to.loc != newloc)
-		if(locked_to.anchored || (locked_to.lockflags & CANT_BE_MOVED_BY_LOCKED_MOBS))
+		var/datum/locking_category/category = locked_to.locked_atoms[src]
+		if (locked_to.anchored || category.flags & CANT_BE_MOVED_BY_LOCKED_MOBS)
 			return 0
 		else
 			return locked_to.Move(newloc, direct)
@@ -657,7 +655,7 @@ Thanks.
 		stop_pulling()
 		. = ..()
 
-	if ((s_active && ( find_holder(s_active) != src ) ))
+	if ((s_active && !is_holder_of(src, s_active)))
 		s_active.close(src)
 
 	if(update_slimes)
@@ -964,8 +962,7 @@ Thanks.
 										   "<span class='notice'>You successfuly break your handcuffs.</span>")
 						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						qdel(CM.handcuffed)
-						CM.handcuffed = null
-						CM.update_inv_handcuffed()
+						CM.handcuffed.handcuffs_remove(CM)
 					else
 						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
 
@@ -986,8 +983,7 @@ Thanks.
 										   "<span class='notice'>You successfuly remove [HC].</span>",
 										   self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
 						CM.handcuffed.loc = usr.loc
-						CM.handcuffed = null
-						CM.update_inv_handcuffed()
+						CM.handcuffed.handcuffs_remove(CM)
 					else
 						CM.simple_message("<span class='warning'>Your uncuffing attempt was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
@@ -1122,9 +1118,9 @@ default behaviour is:
 			return 1
 		return 0
 
-/mob/living/Bump(atom/movable/AM as mob|obj, yes)
+/mob/living/Bump(atom/movable/AM as mob|obj)
 	spawn(0)
-		if ((!( yes ) || now_pushing) || !loc)
+		if (now_pushing || !loc)
 			return
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
@@ -1160,7 +1156,7 @@ default behaviour is:
 					continue
 				if(A.density)
 					if(A.flags&ON_BORDER)
-						dense = !A.CanPass(src, src.loc)
+						dense = !A.Cross(src, src.loc)
 					else
 						dense = 1
 				if(dense) break
@@ -1177,19 +1173,23 @@ default behaviour is:
 			if(!can_move_mob(tmob, 0, 0))
 				now_pushing = 0
 				return
-			if(istype(tmob, /mob/living/carbon/human) && (M_FAT in tmob.mutations))
-				if(prob(40) && !(M_FAT in src.mutations))
+			var/mob/living/carbon/human/H = null
+			if(ishuman(tmob))
+				H = tmob
+			if(H && ((M_FAT in H.mutations) || (H && H.species && H.species.flags & IS_BULKY)))
+				var/mob/living/carbon/human/U = null
+				if(ishuman(src))
+					U = src
+				if(prob(40) && !(U && ((M_FAT in U.mutations) || (U && U.species && U.species.flags & IS_BULKY))))
 					to_chat(src, "<span class='danger'>You fail to push [tmob]'s fat ass out of the way.</span>")
 					now_pushing = 0
 					return
-			if(tmob.r_hand && istype(tmob.r_hand, /obj/item/weapon/shield/riot))
+
+			for(var/obj/item/weapon/shield/riot/R in tmob.held_items)
 				if(prob(99))
 					now_pushing = 0
 					return
-			if(tmob.l_hand && istype(tmob.l_hand, /obj/item/weapon/shield/riot))
-				if(prob(99))
-					now_pushing = 0
-					return
+
 			if(!(tmob.status_flags & CANPUSH))
 				now_pushing = 0
 				return
@@ -1377,3 +1377,25 @@ default behaviour is:
 /mob/living/nuke_act() //Called when caught in a nuclear blast
 	health = 0
 	stat = DEAD
+
+/mob/proc/CheckSlip()
+	return 0
+
+
+
+/*
+	How this proc that I took from /tg/ works:
+	intensity determines the damage done to humans with eyes
+	visual determines whether the proc damages eyes (in the living/carbon/human proc). 1 for no damage
+	override_blindness_check = 1 means that it'll display a flash even if the mob is blind
+	affect_silicon = 0 means that the flash won't affect silicons at all.
+
+*/
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
+	if(override_blindness_check || !(disabilities & BLIND))
+		// flick("e_flash", flash)
+		overlay_fullscreen("flash", type)
+		// addtimer(src, "clear_fullscreen", 25, FALSE, "flash", 25)
+		spawn(25)
+			clear_fullscreen("flash", 25)
+		return 1

@@ -4,7 +4,7 @@
 	icon = 'icons/obj/items.dmi'
 	amount = 5
 	max_amount = 5
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 10
 	var/heal_brute = 0
@@ -59,6 +59,13 @@
 	desc = "Some sterile gauze to wrap around bloody stumps."
 	icon_state = "brutepack"
 	origin_tech = "biotech=1"
+
+/obj/item/stack/medical/bruise_pack/bandaid
+	name = "small bandage"
+	desc = "A small bandage to stop bleeding."
+	icon_state = "bandaid"
+	amount = 1
+	max_amount = 1
 
 /obj/item/stack/medical/bruise_pack/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(..())
@@ -244,9 +251,12 @@
 								"<span class='warning'>You start to apply \the [src] to [M]'s [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")
 		else
-			if((!user.hand && affecting.name == "r_arm") || (user.hand && affecting.name == "l_arm"))
+			var/datum/organ/external/OE = user.get_active_hand_organ()
+
+			if(affecting.grasp_id == OE.grasp_id)
 				to_chat(user, "<span class='warning'>You can't apply a splint to the arm you're using!</span>")
 				return
+
 			user.visible_message("<span class='warning'>[user] starts to apply \the [src] to their [limb].</span>", \
 								"<span class='warning'>You start to apply \the [src] to your [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")

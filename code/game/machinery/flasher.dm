@@ -88,24 +88,17 @@ var/list/obj/machinery/flasher/flashers = list()
 		if (get_dist(src, O) > src.range)
 			continue
 
-		if (istype(O, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = O
-			if(!H.eyecheck() <= 0)
-				continue
-
 		if (istype(O, /mob/living/carbon/alien))//So aliens don't get flashed (they have no external eyes)/N
 			continue
-
-		O.Weaken(strength)
-		if (istype(O, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = O
-			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
-			if (E && (E.damage > E.min_bruised_damage && prob(E.damage + 50)))
-				flick("e_flash", O:flash)
-				E.damage += rand(1, 5)
+		if(istype(O, /mob/living))
+			var/mob/living/L = O
+			L.flash_eyes(affect_silicon = 1)
+		if(istype(O, /mob/living/carbon))
+			var/mob/living/carbon/C = O
+			if(C.eyecheck() <= 0) // Identical to handheld flash safety check
+				C.Weaken(strength)
 		else
-			if(!O.blinded)
-				flick("flash", O:flash)
+			O.Weaken(strength)
 
 
 /obj/machinery/flasher/emp_act(severity)

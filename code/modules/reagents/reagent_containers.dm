@@ -6,7 +6,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 	desc = "..."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = null
-	w_class = 1
+	w_class = W_CLASS_TINY
 	var/amount_per_transfer_from_this = 5
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
@@ -15,12 +15,52 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 	set name = "Set transfer amount"
 	set category = "Object"
 	set src in range(0)
+	if(usr.incapacitated())
+		return
 	var/N = input("Amount per transfer from this:","[src]") as null|anything in possible_transfer_amounts
 	if (N)
 		amount_per_transfer_from_this = N
 
+/obj/item/weapon/reagent_containers/verb/empty_contents() //Just dump it out on the floor
+	set name = "Dump contents"
+	set category = "Object"
+	set src in usr
+
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='warning'>You can't do that while incapacitated.</span>")
+		return
+	if(!is_open_container(src))
+		to_chat(usr, "<span class='warning'>You can't, \the [src] is closed.</span>")
+		return
+	if(src.is_empty())
+		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
+		return
+	if(isturf(usr.loc))
+		if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
+			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		reagents.reaction(usr.loc)
+		spawn() src.reagents.clear_reagents()
+		usr.visible_message("<span class='warning'>[usr] splashes something onto the floor!</span>",
+						 "<span class='notice'>You empty \the [src] onto the floor.</span>")
+
+/obj/item/weapon/reagent_containers/proc/drain_into(mob/user, var/atom/where) //We're flushing our contents down the drain!
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='warning'>You can't do that while incapacitated.</span>")
+		return
+	if(!is_open_container(src))
+		to_chat(usr, "<span class='warning'>You can't, \the [src] is closed.</span>")
+		return
+	if(src.is_empty())
+		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
+		return
+	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+	reagents.reaction(where, TOUCH) //I don't think this will ever do anything but I guess maybe polyacid could melt a toilet
+	spawn() src.reagents.clear_reagents()
+	to_chat(user, "<span class='notice'>You flush \the [src] down \the [where].</span>")
+
+
 /obj/item/weapon/reagent_containers/AltClick()
-	if(loc == usr && possible_transfer_amounts)
+	if(is_holder_of(usr, src) && possible_transfer_amounts)
 		set_APTFT()
 		return
 	return ..()
@@ -29,7 +69,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 	..()
 	create_reagents(volume)
 
-	if (!possible_transfer_amounts)
+	if(!is_open_container(src))
+		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
+	if(!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
@@ -110,23 +152,26 @@ var/list/LOGGED_SPLASH_REAGENTS = list("fuel", "thermite")
 /**
  * Helper proc to handle reagent splashes. A negative `amount` will splash all the reagents.
  */
-/proc/splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user)
+/proc/splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
 	if (amount == 0 || reagents.is_empty())
-		to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
 	reagents.reaction(target, TOUCH)
 
 	if (amount > 0)
 		reagents.remove_any(amount)
-		if(user.Adjacent(target))
-			user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
-		                     "<span class='notice'>You splash some of the solution onto \the [target].</span>")
+		if(user)
+			if(user.Adjacent(target))
+				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
+			                     "<span class='notice'>You splash some of the solution onto \the [target].</span>")
 	else
 		reagents.clear_reagents()
-		if(user.Adjacent(target))
-			user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
-		                     "<span class='notice'>You splash the solution onto \the [target].</span>")
+		if(user)
+			if(user.Adjacent(target))
+				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
+			                     "<span class='notice'>You splash the solution onto \the [target].</span>")
 
 /**
  * Transfers reagents to other containers/from dispensers. Handles splashing as well.

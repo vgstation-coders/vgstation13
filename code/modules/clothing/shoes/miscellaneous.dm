@@ -10,7 +10,7 @@
 	origin_tech = "syndicate=3"
 	var/list/clothing_choices = list()
 	siemens_coefficient = 0.8
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
@@ -67,7 +67,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	siemens_coefficient = 0.6
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
@@ -78,7 +78,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
@@ -90,6 +90,11 @@
 	icon_state = "wizard"
 
 	wizard_garb = 1
+
+/obj/item/clothing/shoes/sandal/slippers
+	name = "magic slippers"
+	icon_state = "slippers"
+	desc = "For the wizard that puts comfort first. Who's going to laugh?"
 
 /obj/item/clothing/shoes/sandal/marisa
 	desc = "A pair of magic, black shoes."
@@ -107,7 +112,7 @@
 	permeability_coefficient = 0.05
 	flags = NOSLIP
 	slowdown = SHOES_SLOWDOWN+1
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/shoes/clown_shoes
@@ -120,6 +125,13 @@
 
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
+
+/obj/item/clothing/shoes/clown_shoes/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/mask/gas/clown_hat))
+		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
+		qdel(W)
+		qdel(src)
 
 /obj/item/clothing/shoes/clown_shoes/step_action()
 	if(ishuman(loc))
@@ -178,7 +190,7 @@
 		if(prob(25))
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
-				to_chat(H, sound('sound/items/AirHorn.ogg'))
+				H << sound('sound/items/AirHorn.ogg')
 				to_chat(H, "<font color='red' size='7'>HONK</font>")
 				H.sleeping = 0
 				H.stuttering += 20
@@ -232,7 +244,7 @@
 	item_state = "jackboots"
 	_color = "hosred"
 	siemens_coefficient = 0.7
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
 
@@ -274,7 +286,7 @@
 	name = "laceup shoes"
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/roman
 	name = "roman sandals"
@@ -287,7 +299,7 @@
 	desc = "Simon's Shoes"
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/kneesocks
 	name = "kneesocks"
@@ -306,7 +318,7 @@
 	desc = "Boots suitable for just about any occasion"
 	icon_state = "aviator_boots"
 	item_state = "aviator_boots"
-	species_restricted = list("exclude","Vox")
+	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/shoes/libertyshoes
 	name = "Liberty Shoes"

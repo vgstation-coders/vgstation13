@@ -62,7 +62,7 @@ var/list/mechtoys = list(
 	..()
 	to_chat(user, "It appears to be [anchored? "anchored to" : "unachored from"] the floor, [airtight? "and it seems to be airtight as well." : "but it does not seem to be airtight."]")
 
-/obj/structure/plasticflaps/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/plasticflaps/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return prob(60)
 
@@ -191,7 +191,7 @@ var/list/mechtoys = list(
 
 /datum/controller/supply_shuttle/proc/send()
 
-	var/obj/structure/docking_port/destination
+	var/obj/docking_port/destination
 
 	if(!at_station) //not at station
 		destination = cargo_shuttle.dock_station
@@ -473,9 +473,9 @@ var/list/mechtoys = list(
 			else
 				to_chat(usr, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
 				return
-			to_chat(usr, "\icon[src]<span class='notice'>Your request has been saved. The transaction will be performed to your bank account when it has been accepted by cargo staff.</span>")
+			to_chat(usr, "[bicon(src)]<span class='notice'>Your request has been saved. The transaction will be performed to your bank account when it has been accepted by cargo staff.</span>")
 			if(account && (account.money < P.cost))
-				to_chat(usr, "\icon[src]<span class='warning'>Your bank account doesn't have enough funds to order this pack. Your request will be on hold until you provide your bank account with the necessary funds.</span>")
+				to_chat(usr, "[bicon(src)]<span class='warning'>Your bank account doesn't have enough funds to order this pack. Your request will be on hold until you provide your bank account with the necessary funds.</span>")
 		else if(issilicon(usr))
 			idname = usr.real_name
 			account = station_account
@@ -490,7 +490,7 @@ var/list/mechtoys = list(
 			RANK: [idrank]<br>
 			REASON: [reason]<br>
 			SUPPLY CRATE TYPE: [P.name]<br>
-			ACCESS RESTRICTION: [replacetext(get_access_desc(P.access))]<br>
+			ACCESS RESTRICTION: [get_access_desc(P.access)]<br>
 			CONTENTS:<br>"}
 		reqform.info += P.manifest
 
@@ -671,11 +671,11 @@ var/list/mechtoys = list(
 				idrank = I.GetJobName()
 				account = get_card_account(I)
 			else
-				to_chat(usr, "\icon[src]<span class='warning'>Please wear an ID with an associated bank account.</span>")
+				to_chat(usr, "[bicon(src)]<span class='warning'>Please wear an ID with an associated bank account.</span>")
 				return
-			to_chat(usr, "\icon[src]<span class='notice'>Your request has been saved. The transaction will be performed to your bank account when it has been accepted by cargo staff.</span>")
+			to_chat(usr, "[bicon(src)]<span class='notice'>Your request has been saved. The transaction will be performed to your bank account when it has been accepted by cargo staff.</span>")
 			if(account && (account.money < P.cost))
-				to_chat(usr, "\icon[src]<span class='warning'>Your bank account doesn't have enough funds to order this pack. Your request will be on hold until you provide your bank account with the necessary funds.</span>")
+				to_chat(usr, "[bicon(src)]<span class='warning'>Your bank account doesn't have enough funds to order this pack. Your request will be on hold until you provide your bank account with the necessary funds.</span>")
 		else if(issilicon(usr))
 			idname = usr.real_name
 			account = station_account
@@ -688,7 +688,7 @@ var/list/mechtoys = list(
 			RANK: [idrank]<br>
 			REASON: [reason]<br>
 			SUPPLY CRATE TYPE: [P.name]<br>
-			ACCESS RESTRICTION: [replacetext(get_access_desc(P.access))]<br>
+			ACCESS RESTRICTION: [get_access_desc(P.access)]<br>
 			CONTENTS:<br>"}
 		reqform.info += P.manifest
 		reqform.info += {"<hr>

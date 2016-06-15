@@ -32,18 +32,22 @@ var/const/tk_maxrange = 15
 		return
 
 	var/obj/item/tk_grab/O = new(src)
-	user.put_in_active_hand(O)
-	O.host = user
-	O.focus_object(src)
+	if(user.put_in_hands(O))
+		O.host = user
+		O.focus_object(src)
+	else
+		to_chat(user, "<span class='warning'>You have to wave your hands around to use the Force.</span>")
 	return
 
 /obj/item/attack_tk(mob/user)
 	if(user.stat || !isturf(loc)) return
 	if((M_TK in user.mutations) && !user.get_active_hand()) // both should already be true to get here
 		var/obj/item/tk_grab/O = new(src)
-		user.put_in_active_hand(O)
-		O.host = user
-		O.focus_object(src)
+		if(user.put_in_hands(O))
+			O.host = user
+			O.focus_object(src)
+		else
+			to_chat(user, "<span class='warning'>You have to wave your hands around to use the Force.</span>")
 	else
 		warning("Strange attack_tk(): TK([M_TK in user.mutations]) empty hand([!user.get_active_hand()])")
 	return
@@ -61,13 +65,13 @@ var/const/tk_maxrange = 15
 	* Deletes itself if it is ever not in your hand, or if you should have no access to TK.
 */
 /obj/item/tk_grab
-	name = "Telekinetic Grab"
+	name = "The Force"
 	desc = "Magic"
 	icon = 'icons/obj/magic.dmi'//Needs sprites
 	icon_state = "2"
 	flags = NOBLUDGEON
 	//item_state = null
-	w_class = 10.0
+	w_class = W_CLASS_GIANT
 	layer = 20
 	abstract = 1
 
@@ -86,8 +90,8 @@ var/const/tk_maxrange = 15
 
 
 	//stops TK grabs being equipped anywhere but into hands
-	equipped(var/mob/user, var/slot)
-		if( (slot == slot_l_hand) || (slot== slot_r_hand) )	return
+	equipped(var/mob/user, var/slot, hand_index)
+		if(!hand_index)	return
 		qdel(src)
 		return
 
@@ -141,10 +145,15 @@ var/const/tk_maxrange = 15
 
 		if(!istype(target, /turf) && istype(focus,/obj/item) && target.Adjacent(focus))
 			var/obj/item/I = focus
+			var/isb = I.siemens_coefficient
+			var/ipb = I.permeability_coefficient
+			I.siemens_coefficient = 0
+			I.permeability_coefficient = 0.05
 			var/resolved = target.attackby(I, user, params)
 			if(!resolved && target && I)
 				I.afterattack(target,user,1,params) // for splashing with beakers
-
+			I.siemens_coefficient = isb
+			I.permeability_coefficient =ipb
 
 		else
 			apply_focus_overlay()

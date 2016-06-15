@@ -413,6 +413,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
+	var/pillamount = 10
 	//var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
 
@@ -581,7 +582,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			else
 				dat += "Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			//usr << browse(dat, "window=chem_master;size=575x400")
-			dat = list2text(dat)
+			dat = jointext(dat,"")
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
 			popup.set_content(dat)
 			popup.open()
@@ -649,7 +650,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
 			var/count = 1
-			if(href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", 10, max_pill_count) as num)
+			if(href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", 10, pillamount) as num)
 			count = min(max_pill_count, count)
 			if(!count)
 				return
@@ -725,7 +726,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					dat +="</tr>"
 
 			dat += "</table>"
-			dat = list2text(dat)
+			dat = jointext(dat,"")
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
 			popup.set_content(dat)
 			popup.open()
@@ -860,7 +861,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}
 		else
 			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 400, src)
 	popup.set_content(dat)
 	popup.open()
@@ -914,7 +915,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	density = 1
 	anchored = 1
 	icon = 'icons/obj/chemical.dmi'
-	icon_state = "mixer0"
+	icon_state = "mixer"
 	use_power = 1
 	idle_power_usage = 20
 	var/temphtml = ""
@@ -951,22 +952,22 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 
 /obj/machinery/computer/pandemic/set_broken()
-	icon_state = (src.beaker?"mixer1_b":"mixer0_b")
+	icon_state = "mixer_b"
 	stat |= BROKEN
 
 
 /obj/machinery/computer/pandemic/power_change()
 
 	if(stat & BROKEN)
-		icon_state = (src.beaker?"mixer1_b":"mixer0_b")
+		icon_state = "mixer_b"
 
 	else if(powered())
-		icon_state = (src.beaker?"mixer1":"mixer0")
+		icon_state = "mixer"
 		stat &= ~NOPOWER
 
 	else
 		spawn(rand(0, 15))
-			src.icon_state = (src.beaker?"mixer1_nopower":"mixer0_nopower")
+			icon_state = "mixer_nopower"
 			stat |= NOPOWER
 
 
@@ -1080,8 +1081,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			beaker.loc = beaker:holder
 	beaker = null
-	icon_state = "mixer0"
+	overlays -= "mixer_overlay"
 	src.updateUsrDialog()
+
 /obj/machinery/computer/pandemic/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -1203,7 +1205,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		to_chat(user, "You add the beaker to the machine!")
 
 		src.updateUsrDialog()
-		icon_state = "mixer1"
+		overlays += "mixer_overlay"
 
 	else
 		..()
@@ -1458,7 +1460,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			dat += "<A href='?src=\ref[src];action=detach'>Detach the beaker</a><BR>"
 	else
 		dat += "Please wait..."
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "reagentgrinder", "All-In-One Grinder", src)
 	popup.set_content(dat)
 	popup.open()
@@ -1701,7 +1703,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	icon_state = "chemg_wired"
 	item_state = "chemg_wired"
 	desc = "A refurbished grenade-casing jury rigged to split simple chemicals."
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	force = 2.0
 	var/list/beakers = new/list()
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/)
@@ -1949,16 +1951,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/stack/sheet/mineral/clown   = list("banana",20),
 		/obj/item/stack/sheet/mineral/silver  = list("silver",20),
 		/obj/item/stack/sheet/mineral/gold    = list("gold",20),
-		/obj/item/weapon/grown/nettle         = list("sacid",0),
-		/obj/item/weapon/grown/deathnettle    = list("pacid",0),
+		/obj/item/weapon/grown/nettle         = list("sacid",10),
+		/obj/item/weapon/grown/deathnettle    = list("pacid",10),
 		/obj/item/stack/sheet/charcoal        = list("charcoal",20),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list("soymilk",1),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list("ketchup",2),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/corn = list("cornoil",3),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat = list("flour",5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk = list("rice",5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries = list("cherryjelly",1),
-		/obj/item/seeds = list("blackpepper",5),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans   = list("soymilk",1),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato     = list("ketchup",2),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/corn       = list("cornoil",3),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat      = list("flour",5),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk  = list("rice",5),
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries   = list("cherryjelly",1),
+		/obj/item/seeds	                      = list("blackpepper",5),
 		/obj/item/device/flashlight/flare     = list("sulfur",10),
 		/obj/item/stack/cable_coil            = list("copper", 10),
 		/obj/item/weapon/cell                 = list("lithium", 10),

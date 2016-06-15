@@ -18,14 +18,14 @@
  */
 /obj/item/weapon/kitchen/utensil
 	force = 5.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
 	flags = FPRINT
 	siemens_coefficient = 1
 	origin_tech = "materials=1"
-	attack_verb = list("attacked", "stabbed", "poked")
+	attack_verb = list("attacks", "stabs", "pokes")
 
 /obj/item/weapon/kitchen/utensil/New()
 	. = ..()
@@ -40,7 +40,7 @@
 	name = "spoon"
 	desc = "SPOON!"
 	icon_state = "spoon"
-	attack_verb = list("attacked", "poked")
+	attack_verb = list("attacks", "pokes", "hits")
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/kitchen/utensil/spoon/plastic
@@ -177,7 +177,7 @@
 	siemens_coefficient = 1
 	sharpness = 1.5
 	force = 10.0
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
@@ -185,7 +185,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "materials=1"
-	attack_verb = list("slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -229,7 +229,7 @@
 	siemens_coefficient = 1
 	sharpness = 1.2
 	force = 15.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throwforce = 8.0
 	throw_speed = 3
 	throw_range = 6
@@ -237,7 +237,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = "materials=1"
-	attack_verb = list("cleaved", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	attack_verb = list("cleaves", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	name = "meat cleaver"
@@ -266,9 +266,9 @@
 	throwforce = 10.0
 	throw_speed = 2
 	throw_range = 7
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	autoignition_temperature=AUTOIGNITION_WOOD
-	attack_verb = list("bashed", "battered", "bludgeoned", "thrashed", "whacked") //I think the rollingpin attackby will end up ignoring this anyway.
+	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "whacks") //I think the rollingpin attackby will end up ignoring this anyway.
 
 /obj/item/weapon/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
 	if ((M_CLUMSY in user.mutations) && prob(50))
@@ -319,16 +319,16 @@
 	force = 5 //look at us, we don't even use this var in our attack because we're so snowflake!
 	throw_speed = 1
 	throw_range = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = list(MAT_IRON = 3000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	var/list/carrying = list() // List of things on the tray. - Doohl
-	var/max_carry = 10 // w_class = 1 -- takes up 1
-					   // w_class = 2 -- takes up 3
-					   // w_class = 3 -- takes up 5
+	var/max_carry = 10 // w_class = W_CLASS_TINY -- takes up 1
+					   // w_class = W_CLASS_SMALL -- takes up 3
+					   // w_class = W_CLASS_MEDIUM -- takes up 5
 
 /obj/item/weapon/tray/Destroy()
 	for(var/atom/thing in carrying)
@@ -470,11 +470,11 @@
 	var/val = 0 // value to return
 
 	for(var/obj/item/I in carrying)
-		if(I.w_class == 1.0)
+		if(I.w_class > W_CLASS_TINY)
 			val ++
-		else if(I.w_class == 2.0)
+		else if(I.w_class == W_CLASS_SMALL)
 			val += 3
-		else if(I.w_class == 3.0)
+		else if(I.w_class > W_CLASS_MEDIUM)
 			val += 5
 		else //Shouldn't happen
 			val += INFINITY
@@ -490,11 +490,11 @@
 	for(var/obj/item/I in loc)
 		if( I != src && !I.anchored && !is_type_in_list(I, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
 			var/add = 0
-			if(I.w_class == 1.0)
+			if(I.w_class > W_CLASS_TINY)
 				add = 1
-			else if(I.w_class == 2.0)
+			else if(I.w_class == W_CLASS_SMALL)
 				add = 3
-			else if(I.w_class == 3.0)
+			else if(I.w_class > W_CLASS_MEDIUM)
 				add = 5
 			else
 				continue

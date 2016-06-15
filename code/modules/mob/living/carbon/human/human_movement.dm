@@ -38,11 +38,9 @@
 	if(shoes)
 		tally += shoes.slowdown
 
-	if(istype(l_hand,/obj/item/offhand))
-		tally += r_hand.slowdown
-
-	if(istype(r_hand,/obj/item/offhand))
-		tally += l_hand.slowdown
+	for(var/obj/item/I in held_items)
+		if(I.flags & SLOWDOWN_WHEN_CARRIED)
+			tally += I.slowdown
 
 	for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
 		var/datum/organ/external/E = get_organ(organ_name)
@@ -109,10 +107,13 @@
 		prob_slip = 0
 
 	//Check hands and mod slip
-	if(!l_hand)	prob_slip -= 2
-	else if(l_hand.w_class <= 2)	prob_slip -= 1
-	if (!r_hand)	prob_slip -= 2
-	else if(r_hand.w_class <= 2)	prob_slip -= 1
+	for(var/i = 1 to held_items.len)
+		var/obj/item/I = held_items[i]
+
+		if(!I)
+			prob_slip -= 2
+		else if(I.w_class <= W_CLASS_SMALL)
+			prob_slip -= 1
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
@@ -132,6 +133,10 @@
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
+
+		if(wear_suit && istype(wear_suit, /obj/item/clothing/suit))
+			var/obj/item/clothing/suit/SU = wear_suit
+			SU.step_action()
 
 		for(var/obj/item/weapon/bomberman/dispenser in src)
 			if(dispenser.spam_bomb)

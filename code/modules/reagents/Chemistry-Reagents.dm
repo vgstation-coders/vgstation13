@@ -169,6 +169,23 @@
 		else
 			M.say(pick("Muh hardcores.", "Falling down is a feature.", "Gorrillionaires and Booty Borgs when?"))
 
+/datum/reagent/rogan
+	name = "Rogan"
+	id = "rogan"
+	description = "Smells older than your grandpa."
+	reagent_state = LIQUID
+	color = "#0000FF"
+	custom_metabolism = 0.01
+
+/datum/reagent/rogan/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+
+	if(prob(1))
+		if(prob(42))
+			to_chat(M, "<span class='notice'>[pick("Rogan?", "ROGAN.", "Food please.", "Wood please.", "Gold please.", "All hail, king of the losers!", "I'll beat you back to Age of Empires.", "Sure, blame it on your ISP.", "Start the game already!", "It is good to be the king.", "Long time, no siege.", "Nice town, I'll take it.", "Raiding party!", "Dadgum.", "Wololo.", "Attack an enemy now.", "Cease creating extra villagers.", "Create extra villagers.", "Build a navy.", "	Stop building a navy.", "Wait for my signal to attack.", "Build a wonder.", "Give me your extra resources.", "What age are you in?")]")
+		else
+			M.say("Rogan?")
+
 /datum/reagent/slimejelly
 	name = "Slime Jelly"
 	id = "slimejelly"
@@ -283,6 +300,14 @@
 			if(H.species && H.species.flags & NO_BLOOD)
 				return 0
 	return 1
+
+/datum/reagent/blood/reaction_obj(var/obj/O, var/volume)
+
+	if(..()) return 1
+
+	if(istype(O, /obj/item/clothing/mask/stone))
+		var/obj/item/clothing/mask/stone/S = O
+		S.spikes()
 
 //Data must contain virus type
 /datum/reagent/vaccine
@@ -534,7 +559,7 @@
 	description = "An extremely toxic chemical that will surely end in death."
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
-	custom_metabolism = 0.39
+	custom_metabolism = 0.01
 	data = 1 //Used as a tally
 
 /datum/reagent/chefspecial/on_mob_life(var/mob/living/M, var/alien)
@@ -691,7 +716,6 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.5
-	overdose = REAGENTS_OVERDOSE*2
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M, var/alien)
 
@@ -752,7 +776,7 @@
 				H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, his eyes clear up.</span>",
 				"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			else //Warn the Cultist that it is fucking him up
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming osbscure again.</span>")
+				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 		if(isvampire(H))
 			if(!(VAMP_MATURE in H.mind.vampire.powers))
@@ -1224,7 +1248,7 @@
 	id = "radium"
 	description = "Radium is an alkaline earth metal. It is extremely radioactive."
 	reagent_state = SOLID
-	color = "#C7C7C7" //rgb: 199,199,199
+	color = "#669966" //rgb: 102, 153, 102
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -1418,7 +1442,7 @@
 	id = "iron"
 	description = "Pure iron is a metal."
 	reagent_state = SOLID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#666666" //rgb: 102, 102, 102
 
 /datum/reagent/gold
 	name = "Gold"
@@ -1498,6 +1522,25 @@
 
 	M.adjustToxLoss(1)
 
+/datum/reagent/vomit
+	name = "Vomit"
+	id = "vomit"
+	description = "Stomach acid mixed with partially digested chunks of food."
+	reagent_state = LIQUID
+	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
+
+/datum/reagent/vomit/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+
+	M.adjustToxLoss(0.1)
+
+/datum/reagent/vomit/reaction_turf(turf/simulated/T, volume)
+	if(..()) return 1
+
+	if(volume >= 3)
+		if(!(locate(/obj/effect/decal/cleanable/vomit) in T))
+			getFromPool(/obj/effect/decal/cleanable/vomit, T)
+
 /datum/reagent/space_cleaner
 	name = "Space cleaner"
 	id = "cleaner"
@@ -1537,10 +1580,10 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
-		if(C.r_hand)
-			C.r_hand.clean_blood()
-		if(C.l_hand)
-			C.l_hand.clean_blood()
+
+		for(var/obj/item/I in C.held_items)
+			I.clean_blood()
+
 		if(C.wear_mask)
 			if(C.wear_mask.clean_blood())
 				C.update_inv_wear_mask(0)
@@ -2229,6 +2272,34 @@
 	overdose = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
 
+/datum/reagent/stabilizine
+	name = "Stabilizine"
+	id = "stabilizine"
+	description = "A stabilizing chemical produced by alien nests to keep their occupants barely alive."
+	reagent_state = LIQUID
+	color = "#833484" //rgb: 131, 52, 132
+	custom_metabolism = 0.1
+
+/datum/reagent/stabilizine/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..()) return 1
+
+	if(istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/external/temp in H.organs)
+			if(temp.status & ORGAN_BLEEDING)
+				temp.clamp()
+
+	if(M.losebreath >= 10)
+		M.losebreath = max(10, M.losebreath - 5)
+
+	M.adjustOxyLoss(-2 * REM)
+
+	if(M.bodytemperature > 310)
+		M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	else if(M.bodytemperature < 311)
+		M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /datum/reagent/nanites
@@ -2238,10 +2309,6 @@
 	reagent_state = LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
 
-/datum/reagent/nanites/autist
-	name = "Autist nanites"
-	id = "autistnanites"
-
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
 	if(..()) return 1
@@ -2249,7 +2316,11 @@
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.contract_disease(new /datum/disease/robotic_transformation(0), 1)
 
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/nanites/autist
+	name = "Autist nanites"
+	id = "autistnanites"
+
+/datum/reagent/nanites/autist/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
 	if(..()) return 1
 
@@ -2277,7 +2348,10 @@
 	reagent_state = LIQUID
 	color = "#3E3959" //rgb: 62, 57, 89
 
-/datum/reagent/mednanobots  //Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage. Causes you to gib and turn into a cyber monster if you inject over 5 units.
+
+//Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage.
+//Dangerous in amounts over 5 units, healing that occurs while over 5 units adds to a counter. That counter affects gib chance. Guaranteed gib over 20 units.
+/datum/reagent/mednanobots
 	name = "Medical Nanobots"
 	id = "mednanobots"
 	description = "Microscopic robots intended for use in humans. Configured for rapid healing upon infiltration into the body."
@@ -2285,6 +2359,7 @@
 	color = "#593948" //rgb: 89, 57, 72
 	custom_metabolism = 0.005
 	var/spawning_horror = 0
+	var/percent_machine = 0
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 
@@ -2324,6 +2399,11 @@
 						if(holder.has_reagent("mednanobots"))
 							H.adjustCloneLoss(-2)
 							holder.remove_reagent("mednanobots", 2/40)
+					if(percent_machine>5)
+						if(holder.has_reagent("mednanobots"))
+							percent_machine-=1
+							if(prob(20))
+								to_chat(H, pick("You feel more like yourself again."))
 					if(H.dizziness != 0)
 						H.dizziness = max(0, H.dizziness - 15)
 					if(H.confused != 0)
@@ -2333,7 +2413,73 @@
 						D.stage--
 						if(D.stage < 1)
 							D.cure()
-		if(5 to INFINITY)
+		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(H.species.name != "Dionae")
+					var/datum/organ/external/affecting = H.get_organ()
+					for(var/datum/wound/W in affecting.wounds)
+						spawn(1)
+							affecting.wounds -= W
+							H.visible_message("<span class='warning'>[H]'s wounds close up in the blink of an eye!</span>")
+					if(H.getOxyLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustOxyLoss(-4)
+							holder.remove_reagent("mednanobots", 4/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getBruteLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.heal_organ_damage(5, 0)
+							holder.remove_reagent("mednanobots", 5/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getFireLoss()>0 && prob(90))
+						if(holder.has_reagent("mednanobots"))
+							H.heal_organ_damage(0, 5)
+							holder.remove_reagent("mednanobots", 5/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getToxLoss()>0 && prob(50))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustToxLoss(-2)
+							holder.remove_reagent("mednanobots", 2/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.getCloneLoss()>0 && prob(60))
+						if(holder.has_reagent("mednanobots"))
+							H.adjustCloneLoss(-2)
+							holder.remove_reagent("mednanobots", 2/40)
+							percent_machine +=1/2
+							if(prob(20))
+								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+							else
+						else
+					if(H.dizziness != 0)
+						H.dizziness = max(0, H.dizziness - 15)
+					if(H.confused != 0)
+						H.confused = max(0, H.confused - 5)
+					for(var/datum/disease/D in M.viruses)
+						D.spread = "Remissive"
+						D.stage--
+						if(D.stage < 1)
+							D.cure()
+					if(prob(percent_machine))
+						holder.add_reagent("mednanobots", 20)
+						to_chat(H, pick("<b><span class='warning'>Your body lurches!</b></span>"))
+		if(20 to INFINITY)
 			if(ishuman(M))
 				spawning_horror = 1
 				var/mob/living/carbon/human/H = M
@@ -2342,11 +2488,15 @@
 					if(spawning_horror == 1)
 						to_chat(H, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
 						message_admins("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(H)])")
-						H.visible_message("<b><span class='warning'>[H]'s body rips aparts to reveal something underneath!</b></span>")
-						new /mob/living/simple_animal/hostile/monster/cyber_horror(H.loc)
-						spawning_horror = 0
-						H.gib()
-
+						var/typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
+						if(ispath(typepath))
+							new typepath(H.loc)
+							spawning_horror = 0
+							H.gib()
+						else
+							new /mob/living/simple_animal/hostile/monster/cyber_horror(H.loc)
+							spawning_horror = 0
+							H.gib()
 
 /datum/reagent/comnanobots
 	name = "Combat Nanobots"
@@ -2384,7 +2534,7 @@
 				to_chat(M, "You feel slightly energized, but nothing happens")
 			if(has_been_armstrong>0) //Added in case person metabolizes below 5 units to prevent infinite hulk
 				dehulk(M)
-		if(4.5 to 10)
+		if(4.5 to 15)
 			if(ishuman(M)) //Does nothing to non-humans.
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Dionae") //Dionae are broken as fuck
@@ -2400,7 +2550,7 @@
 							to_chat(H, "The nanobots supercharge your body!")
 					else if(H.hulk_time<world.time && has_been_armstrong) //TIME'S UP
 						dehulk(H)
-		if(10 to INFINITY)
+		if(15 to INFINITY)
 			to_chat(M, "<b><big>The nanobots tear your body apart!</b></big>")
 			M.gib()
 			message_admins("[key_name(M)] took too many nanobots and gibbed!([formatJumpTo(M)])")
@@ -4251,7 +4401,7 @@
 	description = "A gulp a day keeps the MediBot away. That's probably for the best."
 	reagent_state = LIQUID
 	nutriment_factor = FOOD_METABOLISM
-	color = "#664300" //rgb: 102, 67, 0
+	color = "#BA7DBA" //rgb: 73, 49, 73
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 
@@ -4818,10 +4968,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = "detcoffee"
 	description = "Bitter, black, and tasteless. It's the way I've always had my joe, and the way I was having it when one of the officers came running toward me. The chief medical officer got axed, and no one knew who did it. I reluctantly took one last drink before putting on my coat and heading out. I knew that by the time I was finished, my joe would have fallen to a dreadfully low temperature, but I had work to do."
 	causes_jitteriness = 0
+	var/activated = 0
 
 /datum/reagent/drink/coffee/detcoffee/on_mob_life(var/mob/living/M)
 	if(..()) return 1
-	M.update_colour()
+	if(!activated)
+		M.update_colour()
+		activated = 1
 
 /datum/reagent/drink/coffee/detcoffee/reagent_deleted()
 	if(..()) return 1
@@ -4859,3 +5012,61 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	sport = 5
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
+
+/datum/reagent/antidepressant/citalopram
+	name = "Citalopram"
+	id = "citalopram"
+	description = "Stabilizes the mind a little."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	custom_metabolism = 0.01
+	data = 0
+
+/datum/reagent/antidepressant/citalopram/on_mob_life(var/mob/living/M as mob)
+	if(..()) return 1
+	if(volume <= 0.1)
+		if(data != -1)
+			data = -1
+			to_chat(M, "<span class='warning'>Your mind feels a little less stable..</span>")
+	else
+		if(world.time > data + 3000)
+			data = world.time
+			to_chat(M, "<span class='notice'>Your mind feels stable.. a little stable.</span>")
+
+/datum/reagent/antidepressant/paroxetine
+	name = "Paroxetine"
+	id = "paroxetine"
+	description = "Stabilizes the mind greatly, but has a chance of adverse effects."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	custom_metabolism = 0.01
+	data = 0
+
+/datum/reagent/antidepressant/paroxetine/on_mob_life(var/mob/living/M as mob)
+	if(..()) return 1
+	if(volume <= 0.1)
+		if(data != -1)
+			data = -1
+			to_chat(M, "<span class='warning'>Your mind feels much less stable.</span>")
+	else
+		if(world.time > data + 3000)
+			data = world.time
+			if(prob(90))
+				to_chat(M, "<span class='notice'>Your mind feels much more stable.</span>")
+			else
+				to_chat(M, "<span class='warning'>Your mind breaks apart.</span>")
+				M.hallucination += 200
+
+/datum/reagent/gravy
+	name = "Gravy"
+	id = "gravy"
+	description = "Aww, come on Double D, I don't say 'gravy' all the time."
+	reagent_state = LIQUID
+	nutriment_factor = 10 * REAGENTS_METABOLISM
+	color = "#EDEDE1"
+
+/datum/reagent/gravy/on_mob_life(var/mob/living/M, var/alien)
+	if(..()) return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Vox") M.adjustToxLoss(-4 * REM) //chicken and gravy just go together

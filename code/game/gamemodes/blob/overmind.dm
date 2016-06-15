@@ -11,25 +11,36 @@
 	pass_flags = PASSBLOB
 	faction = "blob"
 
+	layer = 15
+
 	var/obj/effect/blob/core/blob_core = null // The blob overmind's core
 	var/blob_points = 0
 	var/max_blob_points = 100
 	var/maxjumprange = 20 //how far you can go in terms of non-blob tiles in a jump attempt
 
+	var/blob_warning = 0
+
+	var/list/special_blobs = list()
+
 /mob/camera/blob/New()
-	var/new_name = "[initial(name)] ([rand(1, 999)])"
-	name = new_name
-	real_name = new_name
+	blob_overminds += src
 	..()
 	spawn(10)
 		if(src.mind)
 			src.mind.special_role = "Blob"
+
+/mob/camera/blob/Destroy()
+	blob_overminds -= src
+	..()
 
 /mob/camera/blob/Login()
 	..()
 	//Mind updates
 	mind_initialize()	//updates the mind (or creates and initializes one if one doesn't exist)
 	mind.active = 1		//indicates that the mind is currently synced with a client
+
+	hud_used.blob_hud()
+	update_specialblobs()
 
 	to_chat(src, "<span class='blob'>You are the overmind!</span>")
 	to_chat(src, "You are the overmind and can control the blob! You can expand, which will attack people, and place special blob types.")
@@ -42,16 +53,100 @@
 	to_chat(src, "<b>Shortcuts:</b> CTRL Click = Expand Blob, Middle Mouse Click = Rally Spores, Alt Click = Create Shield, Double Click: Teleport to Blob")
 	update_health()
 
+/mob/camera/blob/Topic(href, href_list)
+	if(usr != src)
+		return
+	..()
+	if (href_list["blobjump"])//We only let blobs jump to where there are blobs.
+		var/turf/dest = locate(href_list["blobjump"])
+		if(dest)
+			var/turf/closest_turf = null
+			for(var/turf/T in spiral_block(dest,7))
+				var/obj/effect/blob/B = locate() in T
+				if(B)
+					closest_turf = T
+					break
+			if(closest_turf)
+				if(closest_turf != dest)
+					to_chat(src, "<span class='notice'>Jumping to closest blob from the target.</span>")
+				loc = closest_turf
+			else
+				to_chat(src, "<span class='warning'>Unable to make the jump. Looks like all the blobs in a large radius around the target have been destroyed.</span>")
+
+
 /mob/camera/blob/proc/update_health()
-	if(blob_core)
-		hud_used.blobhealthdisplay.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'> <font color='#e36600'>[blob_core.health]</font></div>"
+	if(blob_core && hud_used)
+		var/matrix/M = matrix()
+		M.Scale(1,blob_core.health/blob_core.maxhealth)
+		var/total_offset = 60 + (100*(blob_core.health/blob_core.maxhealth))
+		hud_used.mymob.gui_icons.blob_healthbar.transform = M
+		hud_used.mymob.gui_icons.blob_healthbar.screen_loc = "EAST:14,CENTER-[8-round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_coverRIGHT.maptext = "[blob_core.health]"
+
+		var/severity = 0
+		switch(round(blob_core.health))
+			if(167 to 199)
+				severity = 1
+			if(134 to 166)
+				severity = 2
+			if(100 to 133)
+				severity = 3
+			if(67 to 99)
+				severity = 4
+			if(34 to 66)
+				severity = 5
+			if(-INFINITY to 33)
+				severity = 6
+
+		if(severity >= 5)
+			hud_used.mymob.gui_icons.blob_healthbar.icon_state = "healthcrit"
+		else
+			hud_used.mymob.gui_icons.blob_healthbar.icon_state = "health"
+
+		if(severity > 0)
+			overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+		else
+			clear_fullscreen("damage")
 
 /mob/camera/blob/proc/add_points(var/points)
 	if(points != 0)
 		blob_points = Clamp(blob_points + points, 0, max_blob_points)
-	//sanity for manual spawned blob cameras
+
+	//Updating the HUD
 	if(hud_used)
-		hud_used.blobpwrdisplay.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'> <font color='#82ed00'>[src.blob_points]</font></div>"
+		var/matrix/M = matrix()
+		M.Scale(1,blob_points/max_blob_points)
+		var/total_offset = 60 + (100*(blob_points/max_blob_points))
+		hud_used.mymob.gui_icons.blob_powerbar.transform = M
+		hud_used.mymob.gui_icons.blob_powerbar.screen_loc = "WEST:0,CENTER-[8-round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_coverLEFT.maptext = "[blob_points]"
+		hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 4
+		if(blob_points >= 100)
+			hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 1
+
+		hud_used.mymob.gui_icons.blob_spawnblob.color = grayscale
+		hud_used.mymob.gui_icons.blob_spawnstrong.color = grayscale
+		hud_used.mymob.gui_icons.blob_spawnresource.color = grayscale
+		hud_used.mymob.gui_icons.blob_spawnfactory.color = grayscale
+		hud_used.mymob.gui_icons.blob_spawnnode.color = grayscale
+		hud_used.mymob.gui_icons.blob_spawncore.color = grayscale
+		hud_used.mymob.gui_icons.blob_rally.color = grayscale
+		hud_used.mymob.gui_icons.blob_taunt.color = grayscale
+
+		if(blob_points >= 5)
+			hud_used.mymob.gui_icons.blob_spawnblob.color = null
+			hud_used.mymob.gui_icons.blob_rally.color = null
+		if(blob_points >= 10)
+			hud_used.mymob.gui_icons.blob_spawnstrong.color = null
+		if(blob_points >= 15)
+			hud_used.mymob.gui_icons.blob_taunt.color = null
+		if(blob_points >= 40)
+			hud_used.mymob.gui_icons.blob_spawnresource.color = null
+		if(blob_points >= 60)
+			hud_used.mymob.gui_icons.blob_spawnfactory.color = null
+			hud_used.mymob.gui_icons.blob_spawnnode.color = null
+		if(blob_points >= 100)
+			hud_used.mymob.gui_icons.blob_spawncore.color = null
 
 /mob/camera/blob/say(var/message)
 	if (!message)
@@ -78,12 +173,14 @@
 	if (!message)
 		return
 
-	var/message_a = say_quote("\"[html_encode(message)]\"")
+	var/message_a = say_quote("\"[message]\"")
 	var/rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <span class='message'>[message_a]</span></span></i></font>"
 
 	for (var/mob/camera/blob/S in mob_list)
 		if(istype(S))
 			S.show_message(rendered, 2)
+
+	log_blobspeak("[key_name(usr)]: [rendered]")
 
 	for (var/mob/M in dead_mob_list)
 		if(!istype(M,/mob/new_player) && !istype(M,/mob/living/carbon/brain)) //No meta-evesdropping
@@ -93,8 +190,23 @@
 /mob/camera/blob/emote(var/act,var/m_type=1,var/message = null)
 	return
 
+/mob/camera/blob/ex_act()
+	return
+
+/mob/camera/blob/singularity_act()
+	return
+
+/mob/camera/blob/cultify()
+	return
+
+/mob/camera/blob/singularity_pull()
+	return
+
 /mob/camera/blob/blob_act()
 	return
+
+/mob/camera/blob/Process_Spacemove(var/check_drift = 0)
+	return 1
 
 /mob/camera/blob/Stat()
 	..()
@@ -131,3 +243,30 @@
 
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+
+/mob/camera/blob/proc/update_specialblobs()
+	if(client && gui_icons)
+		for(var/i=1;i<=24;i++)
+			client.screen -= gui_icons.specialblobs[i]
+			var/obj/screen/specialblob/S = gui_icons.specialblobs[i]
+			var/obj/effect/blob/B = null
+			if(i<=special_blobs.len)
+				B = special_blobs[i]
+			if(!B)
+				S.icon_state = ""
+				S.name = ""
+				S.linked_blob = null
+			else
+				switch(B.type)
+					if(/obj/effect/blob/core)
+						S.icon_state = "smallcore"
+					if(/obj/effect/blob/resource)
+						S.icon_state = "smallresource"
+					if(/obj/effect/blob/factory)
+						S.icon_state = "smallfactory"
+					if(/obj/effect/blob/node)
+						S.icon_state = "smallnode"
+				S.name = "Jump to Blob"
+				S.linked_blob = B
+				gui_icons.specialblobs[i] = S
+				client.screen += gui_icons.specialblobs[i]

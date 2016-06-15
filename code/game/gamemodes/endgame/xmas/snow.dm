@@ -42,7 +42,6 @@
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		snow_amount = SNOWCOVERING_LITTLE
 		icon_state = "snow_dug"
-		mouse_opacity = 0
 		new /obj/item/stack/sheet/snow(get_turf(src), 1)
 		new /obj/item/stack/sheet/snow(get_turf(src), 1)
 		new /obj/item/stack/sheet/snow(get_turf(src), 1)
@@ -366,7 +365,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		qdel(src)
 	return
 
-/obj/structure/window/barricade/snow/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
+/obj/structure/window/barricade/snow/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
 	if(air_group || (height==0))
 		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))

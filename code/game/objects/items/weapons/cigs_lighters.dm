@@ -27,9 +27,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "materials=1"
-	attack_verb = list("burnt", "singed")
+	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
 
 /obj/item/weapon/match/New()
@@ -151,9 +151,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
 	icon_state = "cig"
 	item_state = "cig"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	body_parts_covered = 0
-	attack_verb = list("burnt", "singed")
+	attack_verb = list("burns", "singes")
 	heat_production = 1000
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
@@ -329,12 +329,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_wear_mask(0)
-		M.update_inv_l_hand(0)
-		M.update_inv_r_hand(1)
+		M.update_inv_hands()
 
 /obj/item/clothing/mask/cigarette/process()
 	var/turf/location = get_turf(src)
-	var/mob/living/M = find_holder_of_type(src,/mob/living)
+	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	if(isliving(loc))
 		M.IgniteMob()
 	smoketime--
@@ -430,7 +429,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A manky old cigarette butt."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "cigbutt"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 1
 
 /obj/item/weapon/cigbutt/cigarbutt
@@ -458,7 +457,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "bluntlit"
 	type_butt = /obj/item/weapon/cigbutt/bluntbutt
 	item_state = "blunt"
-	attack_verb = list("burnt", "singed", "blunted")
+	attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
 	chem_volume = 50 //It's a fat blunt, a really fat blunt
 
@@ -502,7 +501,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A manky old blunt butt."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "bluntbutt"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 1
 
 /////////////////
@@ -529,6 +528,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			var/mob/M = loc
 			if(M.wear_mask == src)
 				M.update_inv_wear_mask(0)
+		flags |= (MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
 
 /obj/item/clothing/mask/cigarette/pipe/process()
 	var/turf/location = get_turf(src)
@@ -553,6 +553,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		user.visible_message("<span class='notice'>[user] puts out \the [src].</span>", \
 							"<span class='notice'>You put out \the [src].</span>")
 		lit = 0
+		flags &= ~(MASKINTERNALS | BLOCK_GAS_SMOKE_EFFECT)
 		update_brightness()
 		return
 	if(smoketime < initial(smoketime)) //Warrants a refill
@@ -587,7 +588,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lighter-g"
 	item_state = "lighter-g"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 4
 	flags = null
 	siemens_coefficient = 1
@@ -597,7 +598,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/fueltime
 	heat_production = 1500
 	slot_flags = SLOT_BELT
-	attack_verb = list("burnt", "singed")
+	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
 

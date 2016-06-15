@@ -84,15 +84,19 @@
 	using.layer = 19
 	src.adding += using
 
+	init_hand_icons(ui_style)
+
+	/*
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "r_hand"
 	inv_box.dir = WEST
 	inv_box.icon = ui_style
 	inv_box.icon_state = "hand_inactive"
-	if(mymob && !mymob.hand)	//This being 0 or null means the right hand is in use
+	if(mymob && mymob.active_hand == GRASP_RIGHT_HAND)
 		inv_box.icon_state = "hand_active"
 	inv_box.screen_loc = ui_rhand
-	inv_box.slot_id = slot_r_hand
+	inv_box.slot_id = null
+	inv_box.hand_index = GRASP_RIGHT_HAND
 	inv_box.layer = 19
 	src.r_hand_hud_object = inv_box
 	src.adding += inv_box
@@ -102,13 +106,15 @@
 	inv_box.dir = EAST
 	inv_box.icon = ui_style
 	inv_box.icon_state = "hand_inactive"
-	if(mymob && mymob.hand)	//This being 1 means the left hand is in use
+	if(mymob && mymob.active_hand == GRASP_LEFT_HAND)
 		inv_box.icon_state = "hand_active"
 	inv_box.screen_loc = ui_lhand
-	inv_box.slot_id = slot_l_hand
+	inv_box.slot_id = null
+	inv_box.hand_index = GRASP_LEFT_HAND
 	inv_box.layer = 19
 	src.l_hand_hud_object = inv_box
 	src.adding += inv_box
+	*/
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
@@ -246,21 +252,6 @@
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 
-	mymob.blind = getFromPool(/obj/screen)
-	mymob.blind.icon = 'icons/mob/screen1_full.dmi'
-	mymob.blind.icon_state = "blackimageoverlay"
-	mymob.blind.name = ""
-	mymob.blind.screen_loc = "1,1"
-	mymob.blind.layer = 0
-	mymob.blind.mouse_opacity = 1
-
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = ui_style
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = 17
-
 	mymob.zone_sel = getFromPool(/obj/screen/zone_sel)
 	mymob.zone_sel.icon = ui_style
 	mymob.zone_sel.overlays.len = 0
@@ -288,7 +279,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.m_hatbg, mymob.m_hat, mymob.m_suitclothesbg, mymob.m_suitclothes, mymob.m_glassesbg, mymob.m_glasses, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.blind, mymob.flash, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.m_hatbg, mymob.m_hat, mymob.m_suitclothesbg, mymob.m_suitclothes, mymob.m_glassesbg, mymob.m_glasses, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
 	mymob.client.screen += src.adding + src.other
 
 	return

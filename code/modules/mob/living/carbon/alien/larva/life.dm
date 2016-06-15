@@ -202,8 +202,8 @@
 		burn_calories(2*HUNGER_FACTOR / 3)
 		if(!stat)
 			burn_calories(HUNGER_FACTOR / 3)
-		if (drowsyness)
-			drowsyness--
+		if (drowsyness > 0)
+			drowsyness = max(0, drowsyness - 1)
 			eye_blurry = max(2, eye_blurry)
 			if (prob(5))
 				sleeping += 1
@@ -341,22 +341,16 @@
 		//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 		//blame the person who coded them. Temporary fix added.
 		if (client)
-			client.screen.Remove(global_hud.blurry,global_hud.druggy,global_hud.vimpaired)
+			clear_fullscreens()
 
-		if ((blind && stat != 2))
-			if ((blinded))
-				blind.layer = 18
-			else
-				blind.layer = 0
-
-				if (disabilities & NEARSIGHTED)
-					client.screen += global_hud.vimpaired
-
-				if (eye_blurry)
-					client.screen += global_hud.blurry
-
-				if (druggy)
-					client.screen += global_hud.druggy
+			if(src.eye_blind || src.blinded)
+				overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			if (src.disabilities & NEARSIGHTED)
+				overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
+			if (src.eye_blurry)
+				overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+			if (src.druggy)
+				overlay_fullscreen("high", /obj/screen/fullscreen/high)
 
 		if (stat != 2)
 			if (machine)
@@ -370,22 +364,3 @@
 
 	proc/handle_random_events()
 		return
-
-
-	proc/handle_stomach()
-		spawn(0)
-			for(var/mob/living/M in stomach_contents)
-				if(M.loc != src)
-					stomach_contents.Remove(M)
-					continue
-				if(istype(M, /mob/living/carbon) && stat != 2)
-					if(M.stat == 2)
-						M.death(1)
-						stomach_contents.Remove(M)
-						qdel(M)
-						M = null
-						continue
-					if(air_master.current_cycle%3==1)
-						if(!(M.status_flags & GODMODE))
-							M.adjustBruteLoss(5)
-						nutrition += 10

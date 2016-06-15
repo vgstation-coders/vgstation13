@@ -727,8 +727,8 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/vest(M), slot_wear_suit)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/thunderdome(M), slot_head)
 
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_l_hand)
+			M.put_in_hands(new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(M))
+			M.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(M))
 			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/smokebomb(M), slot_r_store)
 
 
@@ -742,7 +742,7 @@ Pressure: [env.return_pressure()]"}
 
 			M.equip_to_slot_or_del(new /obj/item/weapon/cloaking_device(M), slot_r_store)
 
-			M.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile(M), slot_r_hand)
+			M.put_in_hands(new /obj/item/weapon/gun/projectile(M))
 			M.equip_to_slot_or_del(new /obj/item/ammo_storage/box/a357(M), slot_l_store)
 
 		if ("tournament chef") //Steven Seagal FTW
@@ -751,8 +751,8 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/chefhat(M), slot_head)
 
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/rollingpin(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_l_hand)
+			M.put_in_hands(new /obj/item/weapon/kitchen/rollingpin(M))
+			M.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(M))
 			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_r_store)
 			M.equip_to_slot_or_del(new /obj/item/weapon/kitchen/utensil/knife/large(M), slot_s_store)
 
@@ -764,10 +764,10 @@ Pressure: [env.return_pressure()]"}
 				del(I)
 			M.equip_to_slot_or_del(backpack, slot_back)
 
-			M.equip_to_slot_or_del(new /obj/item/weapon/mop(M), slot_r_hand)
+			M.put_in_hands(new /obj/item/weapon/mop(M))
 			var/obj/item/weapon/reagent_containers/glass/bucket/bucket = new(M)
 			bucket.reagents.add_reagent("water", 70)
-			M.equip_to_slot_or_del(bucket, slot_l_hand)
+			M.put_in_hands(bucket)
 
 			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/chem_grenade/cleaner(M), slot_r_store)
 			M.equip_to_slot_or_del(new /obj/item/weapon/grenade/chem_grenade/cleaner(M), slot_l_store)
@@ -784,7 +784,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/bandana(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/eyepatch(M), slot_glasses)
-			M.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/pirate(M), slot_r_hand)
+			M.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(M))
 
 		if ("space pirate")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/pirate(M), slot_w_uniform)
@@ -793,7 +793,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/pirate(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/eyepatch(M), slot_glasses)
 
-			M.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/pirate(M), slot_r_hand)
+			M.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(M))
 
 		if ("soviet soldier")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/soviet(M), slot_w_uniform)
@@ -820,7 +820,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
 			var/obj/item/weapon/fire_axe = new(M)
-			M.equip_to_slot_or_del(fire_axe, slot_r_hand)
+			M.put_in_hands(fire_axe)
 
 		if("masked killer")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/overalls(M), slot_w_uniform)
@@ -835,7 +835,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/weapon/scalpel(M), slot_r_store)
 
 			var/obj/item/weapon/fire_axe = new(M)
-			M.equip_to_slot_or_del(fire_axe, slot_r_hand)
+			M.put_in_hands(fire_axe)
 
 			for(var/obj/item/carried_item in M.contents)
 				if(!istype(carried_item, /obj/item/weapon/implant))//If it's not an implant.
@@ -860,7 +860,7 @@ Pressure: [env.return_pressure()]"}
 			sec_briefcase.contents += new /obj/item/weapon/gun/projectile/mateba
 			sec_briefcase.contents += new /obj/item/ammo_storage/box/a357
 			sec_briefcase.contents += new /obj/item/weapon/plastique
-			M.equip_to_slot_or_del(sec_briefcase, slot_l_hand)
+			M.put_in_hands(sec_briefcase)
 
 			var/obj/item/device/pda/heads/pda = new(M)
 			pda.owner = M.real_name
@@ -1003,8 +1003,8 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/spellbook(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/staff(M), slot_l_hand)
+			M.put_in_hands(new /obj/item/weapon/spellbook(M))
+			M.put_in_hands(new /obj/item/weapon/staff(M))
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
 
@@ -1015,8 +1015,8 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/spellbook(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/staff(M), slot_l_hand)
+			M.put_in_hands(new /obj/item/weapon/spellbook(M))
+			M.put_in_hands(new /obj/item/weapon/staff(M))
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
 
@@ -1027,8 +1027,8 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/marisa(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/spellbook(M), slot_r_hand)
-			M.equip_to_slot_or_del(new /obj/item/weapon/staff(M), slot_l_hand)
+			M.put_in_hands(new /obj/item/weapon/spellbook(M))
+			M.put_in_hands(new /obj/item/weapon/staff(M))
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
 		if("soviet admiral")
@@ -1203,17 +1203,17 @@ Pressure: [env.return_pressure()]"}
 
 	switch(input("Which list?") in list("Players","Admins","Mobs","Living Mobs","Dead Mobs", "Clients"))
 		if("Players")
-			to_chat(usr, list2text(player_list,","))
+			to_chat(usr, jointext(player_list,","))
 		if("Admins")
-			to_chat(usr, list2text(admins,","))
+			to_chat(usr, jointext(admins,","))
 		if("Mobs")
-			to_chat(usr, list2text(mob_list,","))
+			to_chat(usr, jointext(mob_list,","))
 		if("Living Mobs")
-			to_chat(usr, list2text(living_mob_list,","))
+			to_chat(usr, jointext(living_mob_list,","))
 		if("Dead Mobs")
-			to_chat(usr, list2text(dead_mob_list,","))
+			to_chat(usr, jointext(dead_mob_list,","))
 		if("Clients")
-			to_chat(usr, list2text(clients,","))
+			to_chat(usr, jointext(clients,","))
 
 
 /client/proc/cmd_admin_toggle_block(var/mob/M,var/block)
@@ -1239,9 +1239,9 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F=file("data/logs/profiling/[date_string]_instances.csv")
 	fdel(F)
-	to_chat(F, "Types,Number of Instances")
+	F << "Types,Number of Instances"
 	for(var/key in type_instances)
-		to_chat(F, "[key],[type_instances[key]]")
+		F << "[key],[type_instances[key]]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 
@@ -1255,8 +1255,8 @@ Pressure: [env.return_pressure()]"}
 	fdel(F)
 	for(var/obj/effect/decal/cleanable/blood/tracks/T in blood_list)
 		if(!T.loc)
-			to_chat(F, "Found [T] in a null location but still in the blood list")
-			to_chat(F, "--------------------------------------")
+			F << "Found [T] in a null location but still in the blood list"
+			F << "--------------------------------------"
 			continue
 		var/dat
 		for(var/b in cardinal)
@@ -1266,7 +1266,7 @@ Pressure: [env.return_pressure()]"}
 				for(var/key in T.setdirs)
 					dat += (key)
 		dat += "--------------------------------------"
-		to_chat(F, dat)
+		F << dat
 
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 
@@ -1278,18 +1278,18 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/[date_string]_machine_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,nanoseconds")
+	F << "type,nanoseconds"
 	for(var/typepath in machine_profiling)
 		var/ns = machine_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 	var/FF = file("data/logs/profiling/[date_string]_object_profiling.csv")
 	fdel(FF)
-	to_chat(FF, "type,nanoseconds")
+	FF << "type,nanoseconds"
 	for(var/typepath in object_profiling)
 		var/ns = object_profiling[typepath]
-		to_chat(FF, "[typepath],[ns]")
+		FF << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [FF].</span>")
 
@@ -1304,7 +1304,7 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/[date_string]_machine_instances.csv")
 	fdel(F)
-	to_chat(F, "type,count")
+	F << "type,count"
 	var/list/machineinstances = list()
 	for(var/atom/typepath in machines)
 		if(!typepath.type in machineinstances)
@@ -1312,12 +1312,12 @@ Pressure: [env.return_pressure()]"}
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
 		var/count = machineinstances[T]
-		to_chat(F, "[T],[count]")
+		F << "[T],[count]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 	F =file("data/logs/profiling/[date_string]_power_machine_instances.csv")
 	fdel(F)
-	to_chat(F, "type,count")
+	F << "type,count"
 	machineinstances.len = 0
 	for(var/atom/typepath in power_machines)
 		if(!typepath.type in machineinstances)
@@ -1325,7 +1325,7 @@ Pressure: [env.return_pressure()]"}
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
 		var/count = machineinstances[T]
-		to_chat(F, "[T],[count]")
+		F << "[T],[count]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 #endif
@@ -1337,27 +1337,27 @@ Pressure: [env.return_pressure()]"}
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/[date_string]_del_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,deletes")
+	F << "type,deletes"
 	for(var/typepath in del_profiling)
 		var/ns = del_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 	F =file("data/logs/profiling/[date_string]_gdel_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,soft deletes")
+	F << "type,soft deletes"
 	for(var/typepath in gdel_profiling)
 		var/ns = gdel_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 
 	F =file("data/logs/profiling/[date_string]_ghdel_profiling.csv")
 	fdel(F)
-	to_chat(F, "type,hard deletes")
+	F << "type,hard deletes"
 	for(var/typepath in ghdel_profiling)
 		var/ns = ghdel_profiling[typepath]
-		to_chat(F, "[typepath],[ns]")
+		F << "[typepath],[ns]"
 
 	to_chat(usr, "<span class='notice'>Dumped to [F].</span>")
 
@@ -1516,9 +1516,13 @@ client/proc/create_bomberman_arena()
 		"15x15 (4 players)",
 		"39x23 (10 players)",
 		)
-	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes
+	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes | null
+
+	if(!arena_type)
+		return
+
 	var/turf/T = get_turf(src.mob)
-	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T,arena_type,src.mob)
+	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T, arena_type, src.mob)
 	arenas += A
 
 client/proc/control_bomberman_arena()

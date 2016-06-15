@@ -32,7 +32,7 @@
 	if(!user.Adjacent(target))
 		return
 
-	if(user.client && (target in user.client.screen) && !(user.l_hand == target || user.r_hand == target))
+	if(user.client && (target in user.client.screen) && !(user.is_holding_item(target)))
 		user.simple_message("<span class='notice'>You need to take that [target.name] off before cleaning it.</span>",
 			"<span class='notice'>You need to take that [target.name] off before destroying it.</span>")
 
@@ -88,10 +88,10 @@
 	icon_state = "bike_horn"
 	item_state = "bike_horn"
 	throwforce = 3
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 3
 	throw_range = 15
-	attack_verb = list("HONKED")
+	attack_verb = list("HONKS")
 	hitsound = 'sound/items/bikehorn.ogg'
 	var/honk_delay = 20
 	var/last_honk_time = 0
@@ -139,7 +139,7 @@
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "rubberducky"
 	item_state = "rubberducky"
-	attack_verb = list("quacked")
+	attack_verb = list("quacks")
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
 
@@ -152,7 +152,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "glue0"
 
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 	var/spent = 0
 

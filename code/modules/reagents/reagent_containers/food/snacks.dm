@@ -28,6 +28,14 @@
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
+/obj/item/weapon/reagent_containers/food/snacks/Destroy()
+	var/turf/T = get_turf(src)
+	if(contents.len)
+		for(var/atom/movable/A in src)
+			A.loc = T
+		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
+	..()
+
 //Proc for effects that trigger on eating that aren't directly tied to the reagents.
 /obj/item/weapon/reagent_containers/food/snacks/proc/On_Consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
@@ -201,8 +209,12 @@
 	if((slices_num <= 0 || !slices_num) || !slice_path || istype(W,/obj/item/weapon/reagent_containers/syringe)) //Let's also not slice with syringes.
 		return 0
 
-	if(W.w_class <= 2 && W.is_sharp() < 0.8 && !istype(W,/obj/item/device/analyzer/plant_analyzer)) //Make sure the item is valid to attempt slipping shit into it
+	if(W.w_class <= W_CLASS_SMALL && (W.w_class < w_class) && W.is_sharp() < 0.8 && !istype(W,/obj/item/device/analyzer/plant_analyzer)) //Make sure the item is valid to attempt slipping shit into it
 		if(!iscarbon(user))
+			return 0
+
+		if(contents.len > slices_num/2) //There's a rational limit to this madness people
+			to_chat(user, "<span class='warning'>\the [src] is already too full to fit \the [W].</span>")
 			return 0
 
 		if(user.drop_item(W, src))
@@ -239,12 +251,6 @@
 		reagents.trans_to(slice, reagents_per_slice)
 	qdel(src) //So long and thanks for all the fish
 	return 1
-
-/obj/item/weapon/reagent_containers/food/snacks/Destroy()
-	if(contents) //Did someone slip shit in the pizza again ?
-		for(var/atom/movable/surprise in contents) //Find it
-			surprise.loc = get_turf(src) //Recover it
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
 	if(isanimal(M))
@@ -653,18 +659,33 @@
 	icon_state = "donkpocket"
 	food_flags = FOOD_MEAT
 
-	New()
-		..()
-		reagents.add_reagent("nutriment", 4)
-
 	var/warm = 0
-	proc/cooltime() //Not working, derp?
-		if(warm)
-			spawn(4200)	//ew
-				warm = 0
-				reagents.del_reagent("tricordrazine")
-				name = initial(name)
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/New()
+	..()
+	reagents.add_reagent("nutriment", 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/process()
+	if(warm <= 0)
+		warm = 0
+		name = initial(name)
+		reagents.del_reagent("tricordrazine")
+		processing_objects.Remove(src)
 		return
+
+	warm--
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/Destroy()
+	processing_objects.Remove(src)
+
+	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/proc/warm_up()
+	warm = 80
+	reagents.add_reagent("tricordrazine", 5)
+	bitesize = 6
+	name = "warm [name]"
+	processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/brainburger
 	name = "brainburger"
@@ -1147,6 +1168,17 @@
 		reagents.add_reagent("nutriment", 6)
 		reagents.add_reagent("bustanut", 6)
 		reagents.add_reagent("sodiumchloride", 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/oldempirebar
+	name = "Old Empire Bar"
+	icon_state = "old_empire_bar"
+	desc = "You can see a villager from a long lost old empire on the wrap."
+	trash = /obj/item/trash/oldempirebar
+	New()
+		..()
+		reagents.add_reagent("nutriment", rand(2,6))
+		reagents.add_reagent("rogan", 6)
+		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie
 	name = "space twinkie"
@@ -3044,7 +3076,7 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 6)
-		reagents.add_reagent("spiritbreaker", 10) // Screaming
+		reagents.add_reagent("mindbreaker", 10) // Screaming
 		reagents.add_reagent("mercury",       10) // Idiot
 		bitesize = 2
 
@@ -3943,3 +3975,183 @@
 /obj/item/weapon/reagent_containers/food/snacks/eucharist/New()
 	..()
 	reagents.add_reagent("holywater", 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/eclair
+	name = "\improper eclair"
+	desc = "Plus doux que ses lèvres."
+	icon_state = "eclair"
+	bitesize = 5
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
+		reagents.add_reagent("cream", 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
+	name = "IJzerkoekje"
+	desc = "Bevat geen ijzer."
+	icon_state = "ijzerkoekje"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 5)
+		reagents.add_reagent("iron", 5)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
+	name = "no-fruit pie"
+	desc = "It doesn't really taste like anything."
+	icon_state = "nofruitpie"
+	trash = /obj/item/trash/pietin
+	var/list/available_snacks = list()
+	var/switching = 0
+	var/current_path = null
+	var/counter = 1
+	New()
+		..()
+		reagents.add_reagent("nothing", 20)
+		bitesize = 10
+		available_snacks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf()
+	set name = "Pick no-fruit pie leaf"
+	set category = "Object"
+	set src in range(1)
+
+	if(usr.isUnconscious())
+		to_chat(usr, "You can't do that while unconscious.")
+		return
+
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf
+
+	randomize()
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/attackby(obj/item/weapon/W, mob/user)
+	if(switching)
+		if(!current_path)
+			return
+		switching = 0
+		var/N = rand(1,3)
+		switch(N)
+			if(1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/I = new current_path(get_turf(user))
+			user.put_in_hands(I)
+		else
+			new current_path(get_turf(src))
+		qdel(src)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/randomize()
+	switching = 1
+	spawn()
+		while(switching)
+			current_path = available_snacks[counter]
+			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
+			icon_state = initial(S.icon_state)
+			playsound(src, 'sound/misc/click.ogg', 50, 1)
+			sleep(1)
+			if(counter == available_snacks.len)
+				counter = 0
+			counter++
+
+/obj/item/weapon/reagent_containers/food/snacks/sundayroast
+	name = "Sunday roast"
+	desc = "Everyday is Sunday when you orbit a sun."
+	icon_state = "voxroast"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent("nutriment", 20)
+		reagents.add_reagent("cornoil", 4)
+		reagents.add_reagent("gravy", 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/risenshiny
+	name = "rise 'n' shiny"
+	desc = "A biscuit: exactly what a Vox merchant or thief needs to start their day. (What's the difference?)"
+	icon_state = "voxbiscuit"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent("nutriment", 6)
+		reagents.add_reagent("gravy", 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/mushnslush
+	name = "mush 'n' slush"
+	desc = "Mushroom gravy poured thickly over more mushrooms. Rich in flavor and in pocket."
+	icon_state = "voxmush"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent("nutriment", 2)
+		reagents.add_reagent("gravy", 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/woodapplejam
+	name = "woodapple jam"
+	desc = "Tastes like white lightning made from pure sugar. Wham!"
+	icon_state = "voxjam"
+	bitesize = 2
+	New()
+		..()
+		eatverb = pick("slurp","sip","suck","inhale","drink")
+		reagents.add_reagent("hyperzine", 4)
+		reagents.add_reagent("nutriment", 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit
+	name = "breadfruit pie"
+	desc = "Tastes like chalk, but birds like it for some reason."
+	icon_state = "voxpie"
+	bitesize = 2
+	New()
+		..()
+		reagents.clear_reagents()
+		reagents.add_reagent("nutriment", 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple
+	name = "candied woodapple"
+	desc = "The sweet juices inside the woodapple quickferment under heat, producing this party favorite."
+	icon_state = "candiedwoodapple"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent("sugar", 4)
+		reagents.add_reagent("wine", 20)
+
+/obj/item/weapon/reagent_containers/food/snacks/voxstew
+	name = "Vox stew"
+	desc = "The culinary culmination of all Vox culture: throwing all their plants into the same pot."
+	icon_state = "voxstew"
+	bitesize = 4
+	New()
+		..()
+		eatverb = pick("slurp","sip","suck","inhale","drink")
+		reagents.add_reagent("nutriment", 15)
+		reagents.add_reagent("imidazoline", 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/garlicbread
+	name = "garlic bread"
+	desc = "Banned in Space Transylvania."
+	icon_state = "garlicbread"
+	bitesize = 3
+	New()
+		..()
+		reagents.clear_reagents()
+		reagents.add_reagent("nutriment", 4)
+		reagents.add_reagent("holywater", 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/flammkuchen
+	name = "flammkuchen"
+	desc = "Also called tarte flambee, literally 'flame cake'. Ancient French and German people once tried not fighting and the result was a pie that is loaded with garlic, burned, and flat."
+	icon_state = "flammkuchen"
+	bitesize = 4
+	New()
+		..()
+		reagents.clear_reagents()
+		reagents.add_reagent("nutriment", 30)
+		reagents.add_reagent("holywater", 10)

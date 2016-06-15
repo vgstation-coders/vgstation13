@@ -38,8 +38,8 @@ mob/living/carbon/proc/handle_hallucinations()
 				if(!halitem)
 					halitem = new
 					var/list/slots_free = list(ui_lhand,ui_rhand)
-					if(l_hand) slots_free -= ui_lhand
-					if(r_hand) slots_free -= ui_rhand
+					if(get_held_item_by_index(GRASP_LEFT_HAND)) slots_free -= ui_lhand
+					if(get_held_item_by_index(GRASP_RIGHT_HAND)) slots_free -= ui_rhand
 					if(istype(src,/mob/living/carbon/human))
 						var/mob/living/carbon/human/H = src
 						if(!H.belt) slots_free += ui_belt
@@ -236,7 +236,7 @@ mob/living/carbon/proc/handle_hallucinations()
 				to_chat(src, "<i>[pick(boo_phrases)]</i>")
 			if(81) //Fake flash
 				src << sound('sound/weapons/flash.ogg')
-				flick("e_flash", src.flash)
+				flash_eyes(visual = 1)
 
 				if(prob(20))
 					src.Weaken(10)
@@ -281,11 +281,14 @@ mob/living/carbon/proc/handle_hallucinations()
 				var/angle = rand(1,3)*90
 				var/duration = rand(10 SECONDS, 40 SECONDS)
 
-				client.dir = turn(client.dir, angle)
-				to_chat(src, "<span class='danger'>[pick("You feel lost.", "The walls suddenly start moving.", "Everything around you shifts and distorts.")]</span>")
+				var/client/C = client
+				if(C)
+					C.dir = turn(C.dir, angle)
+					to_chat(src, "<span class='danger'>[pick("You feel lost.", "The walls suddenly start moving.", "Everything around you shifts and distorts.")]</span>")
 
-				spawn(duration)
-					client.dir = turn(client.dir, -angle)
+					spawn(duration)
+						if(C)
+							C.dir = turn(C.dir, -angle)
 
 	handling_hal = 0
 
@@ -394,7 +397,7 @@ proc/check_panel(mob/M)
 	else if(src.dir == WEST)
 		del src.currentimage
 		src.currentimage = new /image(left,src)
-	to_chat(my_target, currentimage)
+	my_target << currentimage
 
 
 /obj/effect/fake_attacker/proc/attack_loop()
@@ -414,7 +417,7 @@ proc/check_panel(mob/M)
 		else
 			if(prob(15))
 				if(weapon_name)
-					to_chat(my_target, sound(pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')))
+					my_target << sound(pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg'))
 					my_target.show_message("<span class='danger'>[my_target] has been attacked with [weapon_name] by [src.name] </span>", 1)
 					my_target.halloss += 8
 					if(prob(20)) my_target.eye_blurry += 3
@@ -422,7 +425,7 @@ proc/check_panel(mob/M)
 						if(!locate(/obj/effect/overlay) in my_target.loc)
 							fake_blood(my_target)
 				else
-					to_chat(my_target, sound(pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')))
+					my_target << sound(pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg'))
 					my_target.show_message("<span class='danger'>[src.name] has punched [my_target]!</span>", 1)
 					my_target.halloss += 4
 					if(prob(33))
@@ -440,7 +443,7 @@ proc/check_panel(mob/M)
 	var/obj/effect/overlay/O = getFromPool(/obj/effect/overlay,target.loc)
 	O.name = "blood"
 	var/image/I = image('icons/effects/blood.dmi',O,"floor[rand(1,7)]",O.dir,1)
-	to_chat(target, I)
+	target << I
 	spawn(300)
 		returnToPool(O)
 
@@ -477,14 +480,12 @@ var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/ite
 
 	//var/obj/effect/fake_attacker/F = new/obj/effect/fake_attacker(outside_range(target))
 	var/obj/effect/fake_attacker/F = getFromPool(/obj/effect/fake_attacker,target.loc)
-	if(clone.l_hand)
-		if(!(locate(clone.l_hand) in non_fakeattack_weapons))
-			clone_weapon = clone.l_hand.name
-			F.weap = clone.l_hand
-	else if (clone.r_hand)
-		if(!(locate(clone.r_hand) in non_fakeattack_weapons))
-			clone_weapon = clone.r_hand.name
-			F.weap = clone.r_hand
+
+	for(var/obj/item/I in clone.held_items)
+		if(!non_fakeattack_weapons.Find(I.type))
+			clone_weapon = I.name
+			F.weap = I
+			break
 
 	F.name = clone.name
 	F.my_target = target

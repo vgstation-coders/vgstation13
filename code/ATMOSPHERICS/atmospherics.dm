@@ -41,7 +41,7 @@ Pipelines + Other Objects -> Pipe network
 	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
 
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
-
+	holomap = TRUE
 
 /obj/machinery/atmospherics/New()
 	..()
@@ -62,7 +62,10 @@ Pipelines + Other Objects -> Pipe network
 	centre_overlay = null
 	..()
 
-
+/obj/machinery/atmospherics/ex_act(severity)
+	for(var/atom/movable/A in src) //ventcrawling is serious business
+		A.ex_act(severity)
+	..()
 
 /obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list)
 	if(!can_be_coloured && color)
@@ -244,15 +247,8 @@ Pipelines + Other Objects -> Pipe network
 				user.visible_message("[user] vents \the [src].",
 									"You have vented \the [src].",
 									"You hear a ratchet.")
-				var/obj/machinery/atmospherics/pipe/P = src
-				var/datum/gas_mixture/transit = new
-				transit.add(int_air)
-				var/datum/pipeline/pipe_parent = P.parent
-				if(pipe_parent)
-					transit.divide(pipe_parent.members.len) //we get the total pressure over the number of pipes to find gas per pipe
-					env_air.add(transit) //put it in the air
-				qdel(transit) //remove the carrier
-				transit = null
+				var/datum/gas_mixture/internal_removed = int_air.remove(int_air.total_moles()*starting_volume/int_air.volume)
+				env_air.merge(internal_removed)
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")
 			return 1
@@ -304,4 +300,7 @@ Pipelines + Other Objects -> Pipe network
 		user.canmove = 1
 
 /obj/machinery/atmospherics/proc/can_crawl_through()
+	return 1
+
+/obj/machinery/atmospherics/is_airtight() //Technically, smoke would be able to pop up from a vent, but enabling ventcrawling mobs to do that still doesn't sound like a good idea
 	return 1

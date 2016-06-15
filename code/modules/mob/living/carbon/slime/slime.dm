@@ -126,8 +126,8 @@
 	return tally+config.slime_delay
 
 
-/mob/living/carbon/slime/Bump(atom/movable/AM as mob|obj, yes)
-	if ((!( yes ) || now_pushing))
+/mob/living/carbon/slime/Bump(atom/movable/AM as mob|obj)
+	if(now_pushing)
 		return
 	now_pushing = 1
 
@@ -264,8 +264,11 @@
 /mob/living/carbon/slime/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if (stat == 2)
+	if (stat == DEAD)
 		return
+	..()
+
+	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 	var/shielded = 0
 
 	var/damage = null
@@ -668,11 +671,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 				check_1 = 1
 				for(var/obj/border_obstacle in Step_1)
 					if(border_obstacle.flags & ON_BORDER)
-						if(!border_obstacle.CheckExit(D, A))
+						if(!border_obstacle.Uncross(D, A))
 							check_1 = 0
 				for(var/obj/border_obstacle in get_turf(A))
 					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
-						if(!border_obstacle.CanPass(D, D.loc, 1, 0))
+						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_1 = 0
 
 			D.loc = src.loc
@@ -681,11 +684,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 				for(var/obj/border_obstacle in Step_2)
 					if(border_obstacle.flags & ON_BORDER)
-						if(!border_obstacle.CheckExit(D, A))
+						if(!border_obstacle.Uncross(D, A))
 							check_2 = 0
 				for(var/obj/border_obstacle in get_turf(A))
 					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
-						if(!border_obstacle.CanPass(D, D.loc, 1, 0))
+						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_2 = 0
 			if(check_1 || check_2)
 				ok = 1
@@ -698,13 +701,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			//Now, check objects to block exit that are on the border
 			for(var/obj/border_obstacle in src.loc)
 				if(border_obstacle.flags & ON_BORDER)
-					if(!border_obstacle.CheckExit(D, A))
+					if(!border_obstacle.Uncross(D, A))
 						ok = 0
 
 			//Next, check objects to block entry that are on the border
 			for(var/obj/border_obstacle in get_turf(A))
 				if((border_obstacle.flags & ON_BORDER) && (A != border_obstacle))
-					if(!border_obstacle.CanPass(D, D.loc, 1, 0))
+					if(!border_obstacle.Cross(D, D.loc, 1, 0))
 						ok = 0
 
 	//del(D)
@@ -725,13 +728,14 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "grey slime extract"
 	flags = FPRINT
 	force = 1.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 1.0
 	throw_speed = 3
 	throw_range = 6
 	origin_tech = "biotech=4"
 	var/Uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
+	var/primarytype = /mob/living/carbon/slime
 
 	attackby(obj/item/O as obj, mob/user as mob)
 		if(istype(O, /obj/item/weapon/slimesteroid2))
@@ -744,8 +748,17 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
 			Uses = 3
 			enhanced = 1
-			qdel (O)
-			O = null
+			qdel(O)
+
+		//slime res
+		if(istype(O, /obj/item/weapon/slimeres))
+			if(Uses == 0)
+				to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
+				return ..()
+			to_chat(user, "You splash the Slime Resurrection Serum onto the extract causing it to quiver and come to life.")
+			new primarytype(get_turf(src))
+			Uses--
+			qdel(O)
 
 /obj/item/slime_extract/New()
 		..()
@@ -756,86 +769,107 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
+	primarytype = /mob/living/carbon/slime/gold
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
 	icon_state = "gold slime extract"
+	primarytype = /mob/living/carbon/slime/gold
 
 /obj/item/slime_extract/silver
 	name = "silver slime extract"
 	icon_state = "silver slime extract"
+	primarytype = /mob/living/carbon/slime/silver
 
 /obj/item/slime_extract/metal
 	name = "metal slime extract"
 	icon_state = "metal slime extract"
+	primarytype = /mob/living/carbon/slime/metal
 
 /obj/item/slime_extract/purple
 	name = "purple slime extract"
 	icon_state = "purple slime extract"
+	primarytype = /mob/living/carbon/slime/purple
 
 /obj/item/slime_extract/darkpurple
 	name = "dark purple slime extract"
 	icon_state = "dark purple slime extract"
+	primarytype = /mob/living/carbon/slime/darkpurple
 
 /obj/item/slime_extract/orange
 	name = "orange slime extract"
 	icon_state = "orange slime extract"
+	primarytype = /mob/living/carbon/slime/orange
 
 /obj/item/slime_extract/yellow
 	name = "yellow slime extract"
 	icon_state = "yellow slime extract"
+	primarytype = /mob/living/carbon/slime/yellow
 
 /obj/item/slime_extract/red
 	name = "red slime extract"
 	icon_state = "red slime extract"
+	primarytype = /mob/living/carbon/slime/red
 
 /obj/item/slime_extract/blue
 	name = "blue slime extract"
 	icon_state = "blue slime extract"
+	primarytype = /mob/living/carbon/slime/blue
 
 /obj/item/slime_extract/darkblue
 	name = "dark blue slime extract"
 	icon_state = "dark blue slime extract"
+	primarytype = /mob/living/carbon/slime/darkblue
 
 /obj/item/slime_extract/pink
 	name = "pink slime extract"
 	icon_state = "pink slime extract"
+	primarytype = /mob/living/carbon/slime/pink
 
 /obj/item/slime_extract/green
 	name = "green slime extract"
 	icon_state = "green slime extract"
+	primarytype = /mob/living/carbon/slime/green
 
 /obj/item/slime_extract/lightpink
 	name = "light pink slime extract"
 	icon_state = "light pink slime extract"
+	primarytype = /mob/living/carbon/slime/lightpink
 
 /obj/item/slime_extract/black
 	name = "black slime extract"
 	icon_state = "black slime extract"
+	primarytype = /mob/living/carbon/slime/black
 
 /obj/item/slime_extract/oil
 	name = "oil slime extract"
 	icon_state = "oil slime extract"
+	primarytype = /mob/living/carbon/slime/oil
 
 /obj/item/slime_extract/adamantine
 	name = "adamantine slime extract"
 	icon_state = "adamantine slime extract"
+	primarytype = /mob/living/carbon/slime/adamantine
 
 /obj/item/slime_extract/bluespace
 	name = "bluespace slime extract"
 	icon_state = "bluespace slime extract"
+	primarytype = /mob/living/carbon/slime/bluespace
 
 /obj/item/slime_extract/pyrite
 	name = "pyrite slime extract"
 	icon_state = "pyrite slime extract"
+	primarytype = /mob/living/carbon/slime/pyrite
 
 /obj/item/slime_extract/cerulean
 	name = "cerulean slime extract"
 	icon_state = "cerulean slime extract"
+	primarytype = /mob/living/carbon/slime/cerulean
 
 /obj/item/slime_extract/sepia
 	name = "sepia slime extract"
 	icon_state = "sepia slime extract"
+	primarytype = /mob/living/carbon/slime/sepia
 
 
 ////Pet Slime Creation///
@@ -891,7 +925,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(M.stat)
 			to_chat(user, "<span class='warning'>The slime is dead!</span>")
 			return..()
-		var/mob/living/simple_animal/adultslime/pet = new /mob/living/simple_animal/adultslime(M.loc)
+		var/mob/living/simple_animal/slime/adult/pet = new /mob/living/simple_animal/slime/adult(M.loc)
 		pet.icon_state = "[M.colour] adult slime"
 		pet.icon_living = "[M.colour] adult slime"
 		pet.icon_dead = "[M.colour] baby slime dead"
@@ -912,7 +946,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		pet.name = newname
 		pet.real_name = newname
 		qdel (src)
-
 
 /obj/item/weapon/slimesteroid
 	name = "slime steroid"
@@ -938,6 +971,33 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		M.cores = 3
 		qdel (src)
 
+
+/obj/item/weapon/slimenutrient
+	name = "slime nutrient"
+	desc = "A potent chemical mix that is a great nutrient for slimes."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle12"
+	var/Uses = 2
+
+/obj/item/weapon/slimenutrient/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+	if(!istype(M))//If target is not a slime.
+		to_chat(user, "<span class='warning'>The steroid only works on slimes!</span>")
+		return ..()
+	if(M.stat)
+		to_chat(user, "<span class='warning'>The slime is dead!</span>")
+		return..()
+	if(M.amount_grown == 10)
+		to_chat(user, "<span class='warning'>The slime has already fed enough!</span>")
+		return..()
+
+	to_chat(user, "You feed the slime the nutrient. It now appears ready to grow.")
+	M.amount_grown = 10
+
+	if (Uses > 0)
+		Uses -= 1
+	if (Uses == 0)
+		qdel (src)
+
 /obj/item/weapon/slimesteroid2
 	name = "extract enhancer"
 	desc = "A potent chemical mix that will give a slime extract three uses."
@@ -957,6 +1017,36 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			target.enahnced = 1
 			del (src)*/
 
+/obj/item/weapon/slimedupe
+	name = "slime duplicator"
+	desc = "A potent chemical mix that will force a child slime to split in two!"
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle15"
+
+/obj/item/weapon/slimedupe/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+	if(!istype(M, /mob/living/carbon/slime))//target is not a slime
+		to_chat(user, "<span class='warning'>The solution only works on slimes!</span>")
+		return ..()
+	if(istype(M, /mob/living/carbon/slime/adult))//don't allow adults because i'm lazy i don't wanna
+		to_chat(user, "<span class='warning'>Only baby slimes can be duplicated!</span>")
+		return ..()
+	if(M.stat)//dunno if this should be allowed but i think it's probably better this way
+		to_chat(user, "<span class='warning'>That slime is dead!</span>")
+		return ..()
+
+	to_chat(user, "You splash the cloning juice onto the slime.")
+
+	var/mob/living/carbon/slime/S = new M.primarytype // don't let's start
+	S.tame = M.tame
+	S.loc = get_turf(M)
+	qdel(src)
+
+/obj/item/weapon/slimeres
+	name = "slime resurrection serum"
+	desc = "A potent chemical mix that when used on a slime extact, will bring it to life!"
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle14"
+
 ////////Adamantine Golem stuff I dunno where else to put it
 
 /obj/item/clothing/under/golem
@@ -974,7 +1064,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "a golem's thick outer shell"
 	icon_state = "golem"
 	item_state = "golem"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS|HEAD
@@ -1058,18 +1148,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(!ghost)
 			to_chat(user, "The rune fizzles uselessly. There is no spirit nearby.")
 			return
-		var/mob/living/carbon/human/G = new /mob/living/carbon/human
-		G.dna.mutantrace = "adamantine"
-		G.real_name = text("Adamantine Golem ([rand(1, 1000)])")
-		G.equip_to_slot_or_del(new /obj/item/clothing/under/golem(G), slot_w_uniform)
-		G.equip_to_slot_or_del(new /obj/item/clothing/suit/golem(G), slot_wear_suit)
-		G.equip_to_slot_or_del(new /obj/item/clothing/shoes/golem(G), slot_shoes)
-		G.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/golem(G), slot_wear_mask)
-		G.equip_to_slot_or_del(new /obj/item/clothing/gloves/golem(G), slot_gloves)
-		//G.equip_to_slot_or_del(new /obj/item/clothing/head/space/golem(G), slot_head)
+		var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
+		G.real_name = G.species.makeName()
 		G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
 		G.key = ghost.key
-		to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as blunt trauma. You are unable to wear clothes, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
+		to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
 		qdel (src)
 		if(ticker.mode.name == "sandbox")
 			G.CanBuild()
@@ -1153,7 +1236,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "slime extract"
 	flags = 0
 	force = 1.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 1.0
 	throw_speed = 3
 	throw_range = 6

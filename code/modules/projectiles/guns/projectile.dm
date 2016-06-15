@@ -3,12 +3,12 @@
 #define MAGAZINE 2 //the gun takes a magazine into gun storage
 
 /obj/item/weapon/gun/projectile
-	desc = "A classic revolver. Uses 357 ammo"
+	desc = "A classic revolver. Uses 357 ammo."
 	name = "revolver"
 	icon_state = "revolver"
 	caliber = list("357" = 1)
 	origin_tech = "combat=2;materials=2"
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
 	recoil = 1
@@ -49,8 +49,7 @@
 		update_icon()
 
 		if(user)
-			user.update_inv_r_hand()
-			user.update_inv_l_hand()
+			user.update_inv_hands()
 		return 1
 	return 0
 
@@ -63,13 +62,13 @@
 		stored_magazine.update_icon()
 		stored_magazine = null
 		update_icon()
-		user.update_inv_r_hand()
-		user.update_inv_l_hand()
+		if(user)
+			user.update_inv_hands()
 		return 1
 	return 0
 
 /obj/item/weapon/gun/projectile/verb/force_removeMag()
-	set name = "Remove Magazine"
+	set name = "Remove Ammo / Magazine"
 	set category = "Object"
 	set src in range(0)
 	if(stored_magazine)
@@ -120,14 +119,14 @@
 
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
-		if(user.l_hand != src && user.r_hand != src)	//if we're not in his hands
+		if(!user.is_holding_item(src))	//if we're not in his hands
 			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 			return
 
 		if(user.drop_item(A, src)) //put the silencer into the gun
 			to_chat(user, "<span class='notice'>You screw [A] onto [src].</span>")
 			silenced = A	//dodgy?
-			w_class = 3
+			w_class = W_CLASS_MEDIUM
 			update_icon()
 			return 1
 
@@ -189,13 +188,13 @@
 			update_icon()
 			return
 		if(silenced)
-			if(user.l_hand != src && user.r_hand != src)
+			if(!user.is_holding_item(src))
 				..()
 				return
 			to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
 			user.put_in_hands(silenced)
 			silenced = 0
-			w_class = 2
+			w_class = W_CLASS_SMALL
 			update_icon()
 			return
 	else
@@ -204,7 +203,7 @@
 /obj/item/weapon/gun/projectile/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
 	..()
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
-		RemoveMag()
+		RemoveMag(user)
 		playsound(user, 'sound/weapons/smg_empty_alarm.ogg', 40, 1)
 	return
 
@@ -231,4 +230,3 @@
 			if(istype(AC))
 				bullets += 1
 	return bullets
-

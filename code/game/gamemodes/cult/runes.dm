@@ -327,7 +327,7 @@
 	name = "summoning"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "summoning"
-	mouse_opacity = 0
+	mouse_opacity = 1
 	density = 0
 	flags = 0
 	var/obj/effect/rune/summon_target = null
@@ -368,6 +368,7 @@
 
 /obj/effect/rune/proc/drain()
 	var/drain = 0
+	var/list/drain_turflist = list()
 	for(var/obj/effect/rune/R in rune_list)
 		if(R.word1==cultwords["travel"] && R.word2==cultwords["blood"] && R.word3==cultwords["self"])
 			for(var/mob/living/carbon/D in R.loc)
@@ -380,13 +381,22 @@
 						to_chat(D, "<span class='warning'>You feel weakened.</span>")
 						D.take_overall_damage(bdrain, 0)
 						drain += bdrain
+						drain_turflist += get_turf(R)
 	if(!drain)
 		return fizzle()
 	usr.say ("Yu[pick("'","`")]gular faras desdae. Havas mithum javara. Umathar uf'kal thenar!")
 	usr.visible_message("<span class='warning'>Blood flows from the rune into [usr]!</span>", \
 	"<span class='warning'>The blood starts flowing from the rune and into your frail mortal body. You feel... empowered.</span>", \
 	"<span class='warning'>You hear a liquid flowing.</span>")
+
 	var/mob/living/user = usr
+
+	spawn()
+		for(var/i = 0;i < 2;i++)
+			for(var/turf/T in drain_turflist)
+				make_tracker_effects(T, user, 1, "soul", 3, /obj/effect/tracker/drain)
+				sleep(1)
+
 	if(user.bhunger)
 		user.bhunger = max(user.bhunger-2*drain,0)
 	if(drain>=50)
@@ -1058,8 +1068,7 @@
 		cultist.unlock_from()
 		if (cultist.handcuffed)
 			cultist.handcuffed.loc = cultist.loc
-			cultist.handcuffed = null
-			cultist.update_inv_handcuffed()
+			cultist.handcuffed.handcuffs_remove(cultist)
 		if (cultist.legcuffed)
 			cultist.legcuffed.loc = cultist.loc
 			cultist.legcuffed = null
@@ -1272,7 +1281,7 @@
 		if(!nullblock)
 			if(iscarbon(L))
 				var/mob/living/carbon/C = L
-				flick("e_flash", C.flash)
+				C.flash_eyes(visual = 1)
 				if(C.stuttering < 1 && (!(M_HULK in C.mutations)))
 					C.stuttering = 1
 				C.Weaken(1)

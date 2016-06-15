@@ -48,6 +48,8 @@
 	src.go_out()
 	..()
 
+/obj/machinery/recharge_station/is_airtight()
+	return occupant
 
 /obj/machinery/recharge_station/ex_act(severity)
 	switch(severity)
@@ -124,39 +126,48 @@
 	attack_hand(user)
 
 /obj/machinery/recharge_station/attack_hand(var/mob/user)
-	if(user == occupant)
-		if(upgrading)
-			to_chat(user, "<span class='notice'>You interrupt the upgrade process.</span>")
+	if(upgrade_holder.len && !upgrading)
+		var/obj/removed = input(user, "Choose an item to remove.",upgrade_holder[1]) as null|anything in upgrade_holder
+		if(!removed || upgrading)
+			return
+		user.put_in_hands(removed)
+		if(removed.loc == src)
+			removed.loc = get_turf(src)
+		upgrade_holder -= removed
+
+/obj/machinery/recharge_station/verb/apply_cell_upgrade()
+	set category = "Object"
+	set name = "Apply Cell Upgrade"
+	set src in range(0)
+
+	var/mob/user = usr
+	if(user != occupant)
+		to_chat(user, "<span class='warning'>You must be inside \the [src] to do this.</span>")
+		return
+	if(upgrading)
+		to_chat(user, "<span class='notice'>You interrupt the upgrade process.</span>")
+		upgrading = 0
+		upgrade_finished = -1
+		return
+	else if(upgrade_holder.len)
+		upgrading = input(user, "Choose an item to swap out.","Upgradeables") as null|anything in upgrade_holder
+		if(!upgrading)
 			upgrading = 0
-			upgrade_finished = -1
-			return 0
-		else if(upgrade_holder.len)
-			upgrading = input(user, "Choose an item to swap out.","Upgradeables") as null|anything in upgrade_holder
-			if(!upgrading)
-				upgrading = 0
-				return
-			if(alert(user, "You have chosen [upgrading], is this correct?", , "Yes", "No") == "Yes")
-				upgrade_finished = world.timeofday + (600/manipulator_coeff)
-				to_chat(user, "The upgrade should complete in approximately [60/manipulator_coeff] seconds, you will be unable to exit \the [src] during this unless you cancel the process.")
-				spawn() do_after(user,src,600/manipulator_coeff,needhand = FALSE)
-				return
-			else
-				upgrading = 0
-				to_chat(user, "You decide not to apply the upgrade")
-				return
-	else if(Adjacent(user))
-		if(upgrade_holder.len)
-			var/obj/removed = input(user, "Choose an item to remove.",upgrade_holder[1]) as null|anything in upgrade_holder
-			if(!removed)
-				return
-			user.put_in_hands(removed)
-			if(removed.loc == src)
-				removed.loc = get_turf(src)
-			upgrade_holder -= removed
+			return
+		if(alert(user, "You have chosen [upgrading], is this correct?", , "Yes", "No") == "Yes")
+			upgrade_finished = world.timeofday + (600/manipulator_coeff)
+			to_chat(user, "The upgrade should complete in approximately [60/manipulator_coeff] seconds, you will be unable to exit \the [src] during this unless you cancel the process.")
+			spawn() do_after(user,src,600/manipulator_coeff,needhand = FALSE)
+			return
+		else
+			upgrading = 0
+			to_chat(user, "You decide not to apply the upgrade")
+			return
+	else
+		to_chat(user, "<span class='warning'>There are no cell upgrades available at this time.</span>")
 
 /obj/machinery/recharge_station/allow_drop()
 	return 0
-
 
 /obj/machinery/recharge_station/relaymove(mob/user as mob)
 	if(user.stat)
@@ -172,8 +183,6 @@
 		occupant.emp_act(severity)
 		go_out()
 	..(severity)
-
-
 
 /obj/machinery/recharge_station/proc/build_icon()
 	if(stat & (NOPOWER|BROKEN) || !anchored)
@@ -246,86 +255,11 @@
 			if(R.module && R.module.modules)
 				var/list/um = R.contents|R.module.modules
 				// ^ makes single list of active (R.contents) and inactive modules (R.module.modules)
-				for(var/obj/O in um)
-					// Stacks
-					if(istype(O,/obj/item/stack))
-						var/obj/item/stack/S=O
-						if(!istype(S,/obj/item/stack/cable_coil) && !istype(S,/obj/item/stack/medical))
-							continue //Only recharge cable coils and medical stacks
-
-						if(S.amount < S.max_amount)
-							S.amount += 2
-						if(S.amount > S.max_amount)
-							S.amount = S.max_amount
-					// Security
-					if(istype(O,/obj/item/device/flash))
-						var/obj/item/device/flash/F=O
-						if(F.broken)
-							F.broken = 0
-							F.times_used = 0
-							F.icon_state = "flash"
-					if(istype(O,/obj/item/weapon/gun/energy/taser/cyborg))
-						var/obj/item/weapon/gun/energy/taser/cyborg/C=O
-						if(C.power_supply.charge < C.power_supply.maxcharge)
-							C.power_supply.give(C.charge_cost)
-							C.update_icon()
-						else
-							C.charge_tick = 0
-					if(istype(O,/obj/item/weapon/melee/baton))
-						var/obj/item/weapon/melee/baton/B = O
-						if(B.bcell)
-							B.bcell.charge = B.bcell.maxcharge
-					//Combat
-					if(istype(O,/obj/item/weapon/gun/energy/laser/cyborg))
-						var/obj/item/weapon/gun/energy/laser/cyborg/C=O
-						if(C.power_supply.charge < C.power_supply.maxcharge)
-							C.power_supply.give(C.charge_cost)
-							C.update_icon()
-						else
-							C.charge_tick = 0
-					if(istype(O,/obj/item/weapon/gun/energy/lasercannon/cyborg))
-						var/obj/item/weapon/gun/energy/lasercannon/cyborg/C=O
-						if(C.power_supply.charge < C.power_supply.maxcharge)
-							C.power_supply.give(C.charge_cost)
-							C.update_icon()
-					//Mining
-					if(istype(O,/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg))
-						var/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/C=O
-						if(C.power_supply.charge < C.power_supply.maxcharge)
-							C.power_supply.give(C.charge_cost)
-							C.update_icon()
-						else
-							O:charge_tick = 0
-					//Service
-					if(istype(O,/obj/item/weapon/reagent_containers/food/condiment/enzyme))
-						if(O.reagents.get_reagent_amount("enzyme") < 50)
-							O.reagents.add_reagent("enzyme", 2)
-					//Medical & Standard
-					if(istype(O,/obj/item/weapon/reagent_containers/glass/bottle/robot))
-						var/obj/item/weapon/reagent_containers/glass/bottle/robot/B = O
-						if(B.reagent && (B.reagents.get_reagent_amount(B.reagent) < B.volume))
-							B.reagents.add_reagent(B.reagent, 2)
-					if(istype(O,/obj/item/weapon/melee/defibrillator))
-						var/obj/item/weapon/melee/defibrillator/D = O
-						D.charges = initial(D.charges)
-					//Janitor
-					if(istype(O, /obj/item/device/lightreplacer/borg))
-						var/obj/item/device/lightreplacer/borg/LR = O
-						LR.Charge(R)
+				for(var/obj/item/I in um)
+					I.restock()
 				if(R)
 					if(R.module)
 						R.module.respawn_consumable(R)
-
-				//Emagged items for janitor and medical borg
-				if(R.module.emag)
-					if(istype(R.module.emag, /obj/item/weapon/reagent_containers/spray))
-						var/obj/item/weapon/reagent_containers/spray/S = R.module.emag
-						if(S.name == "Polyacid spray")
-							S.reagents.add_reagent("pacid", 2)
-						else if(S.name == "Lube spray")
-							S.reagents.add_reagent("lube", 2)
-
-
 
 /obj/machinery/recharge_station/verb/move_eject()
 	set category = "Object"
@@ -367,10 +301,10 @@
 	for(var/obj/O in upgrade_holder)
 		if(istype(O, /obj/item/weapon/cell))
 			if(!R.cell)
-				to_chat(usr, "<big><span class='notice'>Power Cell replacement available.</span></big>")
+				to_chat(usr, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 			else
 				if(O:maxcharge > R.cell.maxcharge)
-					to_chat(usr, "<span class='notice'>Power Cell upgrade available.</span></big>")
+					to_chat(usr, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 
 /obj/machinery/recharge_station/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(occupant)
@@ -383,8 +317,6 @@
 		to_chat(user, "<span class='notice'>You can't do that while this charger is occupied.</span>")
 		return -1
 	return ..()
-
-
 
 /obj/machinery/recharge_station/Bumped(atom/AM as mob|obj)
 	if(!issilicon(AM) || isAI(AM))

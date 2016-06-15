@@ -2,8 +2,9 @@ obj/structure
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
 
-obj/structure/blob_act()
-	if(prob(50))
+obj/structure/blob_act(var/destroy = 0)
+	..()
+	if(destroy || (prob(50)))
 		qdel(src)
 
 obj/structure/ex_act(severity)

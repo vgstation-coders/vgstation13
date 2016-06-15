@@ -1,4 +1,5 @@
 /turf/space/transit
+	plane = PLANE_BASE
 	var/pushdirection // push things that get caught in the transit tile this direction
 
 /turf/space/transit/New()
@@ -12,9 +13,19 @@
 			dira="ns"
 			i=1+(abs((x^2)-y)%15) // Vary widely across X, but just decrement across Y
 
+		if(NORTH) // South to north  I HAVE NO IDEA HOW THIS WORKS I'M SORRY.  -Probe
+			dira="ns"
+			i=1+(abs((x^2)-y)%15) // Vary widely across X, but just decrement across Y
+
 		if(WEST) // East to west
 			dira="ew"
 			i=1+(((y^2)+x)%15) // Vary widely across Y, but just increment across X
+
+		if(EAST) // West to east
+			dira="ew"
+			i=1+(((y^2)-x)%15) // Vary widely across Y, but just increment across X
+
+
 		/*
 		if(NORTH) // South to north (SPRITES DO NOT EXIST!)
 			dira="sn"
@@ -51,7 +62,19 @@
 	pushdirection = SOUTH  // south because the space tile is scrolling south
 	icon_state="debug-north"
 
+/turf/space/transit/south // moving to the south
+
+	pushdirection = NORTH
+	icon_state="debug-south"
+
 /turf/space/transit/east // moving to the east
 
 	pushdirection = WEST
 	icon_state="debug-east"
+
+/turf/space/transit/west // moving to the west
+
+	pushdirection = EAST
+	icon_state="debug-west"
+
+

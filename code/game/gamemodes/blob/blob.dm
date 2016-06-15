@@ -4,6 +4,8 @@
 var/list/blobs = list()
 var/list/blob_cores = list()
 var/list/blob_nodes = list()
+var/list/blob_resources = list()
+var/list/blob_overminds = list()
 
 
 /datum/game_mode/blob
@@ -12,7 +14,7 @@ var/list/blob_nodes = list()
 
 	required_players = 15
 	required_players_secret = 25
-	restricted_jobs = list("Cyborg", "AI", "Mobile MMI")
+	restricted_jobs = list("Cyborg", "AI", "Mobile MMI", "Trader")
 
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
@@ -91,12 +93,16 @@ You must kill it all while minimizing the damage to the station."})
 
 		if(iscarbon(blob.current))
 			var/mob/living/carbon/C = blob.current
+
+			for(var/obj/item/W in C)
+				C.drop_from_inventory(W)
+
 			if(directory[ckey(blob.key)])
 				blob_client = directory[ckey(blob.key)]
 				location = get_turf(C)
 				if(location.z != 1 || istype(location, /turf/space))
 					location = null
-				C.gib()
+				qdel(C)
 
 
 		if(blob_client && location)

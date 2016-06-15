@@ -6,7 +6,7 @@
 	flags = FPRINT | PROXMOVE
 	siemens_coefficient = 1
 	throwforce = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 10
 
@@ -229,7 +229,7 @@
 /obj/item/device/assembly_holder/process_activation(var/obj/D, var/normal = 1, var/special = 1)
 	if(!D)	return 0
 	if(!secured)
-		visible_message("\icon[src] *beep* *beep*", "*beep* *beep*")
+		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	if((normal) && (a_right) && (a_left))
 		if(istype(src.loc, /obj/machinery/igniter))
 			src.loc:toggle_state()

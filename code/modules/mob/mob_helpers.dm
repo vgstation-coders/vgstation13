@@ -20,6 +20,9 @@
 	if(M_NOIR in mutations)
 		return NOIRMATRIX
 
+/mob/proc/can_wield()
+	return 0
+
 /mob/dead/observer/get_screen_colour()
 	return default_colour_matrix
 
@@ -37,7 +40,7 @@
 	else if(has_reagent_in_blood("detcoffee"))
 		return NOIRMATRIX
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
-	if(eyes.colourmatrix.len && !(eyes.robotic))
+	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
 		return eyes.colourmatrix
 	else return default_colour_matrix
 
@@ -114,9 +117,6 @@
 
 proc/hasorgans(A)
 	return ishuman(A)
-
-/proc/hsl2rgb(h, s, l)
-	return
 
 
 /proc/check_zone(zone)
@@ -230,7 +230,6 @@ proc/hasorgans(A)
 	return t
 
 proc/slur(phrase)
-	phrase = html_decode(phrase)
 	var/leng=length(phrase)
 	var/counter=length(phrase)
 	var/newphrase=""
@@ -253,7 +252,7 @@ proc/slur(phrase)
 	return newphrase
 
 /proc/stutter(n)
-	var/te = html_decode(n)
+	var/te = n
 	var/t = ""//placed before the message. Not really sure what it's for.
 	n = length(n)//length of the entire word
 	var/p = null
@@ -273,7 +272,7 @@ proc/slur(phrase)
 						n_letter = text("[n_letter]-[n_letter]")
 		t = text("[t][n_letter]")//since the above is ran through for each letter, the text just adds up back to the original word.
 		p++//for each letter p is increased to find where the next letter will be.
-	return copytext(sanitize(t),1,MAX_MESSAGE_LEN)
+	return copytext(t,1,MAX_MESSAGE_LEN)
 
 
 proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
@@ -340,10 +339,12 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 
 /mob/proc/abiotic(var/full_body = 0)
-	if(full_body && ((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )) || (src.back || src.wear_mask)))
+	for(var/obj/item/I in held_items)
+		if(I.abstract) continue
+
 		return 1
 
-	if((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )))
+	if(full_body && (src.back || src.wear_mask))
 		return 1
 
 	return 0
@@ -441,9 +442,12 @@ proc/is_blind(A)
 /proc/broadcast_medical_hud_message(var/message, var/broadcast_source)
 	broadcast_hud_message(message, broadcast_source, med_hud_users, /obj/item/clothing/glasses/hud/health)
 
-/proc/broadcast_hud_message(var/message, var/broadcast_source, var/list/targets, var/icon)
+/proc/broadcast_hud_message(var/message, var/broadcast_source, var/list/targets, var/obj/ic)
+	var/biconthing = initial(ic.icon)
+	var/biconthingstate = initial(ic.icon_state)
+	var/icon/I = new(biconthing, biconthingstate)
 	var/turf/sourceturf = get_turf(broadcast_source)
 	for(var/mob/M in targets)
 		var/turf/targetturf = get_turf(M)
 		if((targetturf.z == sourceturf.z))
-			M.show_message("<span class='info'>\icon[icon] [message]</span>", 1)
+			M.show_message("<span class='info'>[bicon(I)] [message]</span>", 1)

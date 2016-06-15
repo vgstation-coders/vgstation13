@@ -9,13 +9,13 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "paper"
 	throwforce = 0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
 	throw_range = 1
 	throw_speed = 1
 	layer = 3.9
 	pressure_resistance = 1
-	attack_verb = list("slapped")
+	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 
@@ -392,7 +392,7 @@ var/global/list/paper_folding_results = list ( \
 	if(user.stat || user.restrained())
 		to_chat(user, "<span class='notice'>You can't do that while restrained.</span>")
 		return 0
-	if(user.l_hand != src && user.r_hand != src)
+	if(!user.is_holding_item(src))
 		to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 		return 0
 	return 1
@@ -418,7 +418,11 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/djstation
 	name = "paper - 'DJ Listening Outpost'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br><ol><li>Equip yourself with a multi-tool</li><li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li><li>Turn all the machines on, it has already been configured for you to listen on.</li></ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. Here is a list of frequencies for you to listen on.<br><ul><li>145.7 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Mining Channel</li><li>134.7 - Cargo Channel</li>"
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br><ol><li>Equip yourself with a multi-tool</li><li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li><li>Turn all the machines on, it has already been configured for you to listen on.</li></ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+
+/obj/item/weapon/paper/intercoms
+	name = "paper - 'Ace Reporter Intercom manual'"
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br> Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
 
 /obj/item/weapon/paper/flag
 	icon_state = "flag_neutral"
@@ -448,3 +452,23 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/crumpled/bloody
 	icon_state = "scrap_bloodied"
+
+/obj/item/weapon/paper/voxresearch/voxresearchclosure
+	name = "paper- 'Shutting Down'"
+	info = "The recent attack has left us in a more unstable position than we initially assumed.  Both major contracts have been canceled and we are mothballing the facility.  Evacuate and take the fax machine with you.  It costs more to replace it than it does you."
+
+/obj/item/weapon/paper/voxresearch/voxresearch1
+	name = "paper- 'Two new contracts'"
+	info = "The research station in this quadrant has outsourced initial research into plasma reanimation studies.  Focus on performing the experiments they've contracted us to do.  Do not ask questions."
+
+/obj/item/weapon/paper/voxresearch/voxresearch2
+	name = "paper- 'Two new contracts'"
+	info = "REDACTED has tasked us to investigate the sentience of REDACTED.  Observe the subjects and evaluate their genetic markers and anatomical structure.  And for christs sake stop using Mr. Muggles DNA on test subjects.  You are not paid to and it is not recommended.  You're facing review."
+
+/obj/item/weapon/paper/voxresearch/voxtradeden
+	name = "paper- 'Good spot'"
+	info = "We set up here.  No one will look for us here and we can sell wares to eggheads at NT."
+
+/obj/item/weapon/paper/voxresearch/voxresearchescape
+	name = "paper- 'Recent Attack'"
+	info = "We still do not know who were responsible for the recent attack and escape of several test subjects.  The initial investigation points to the Syndicate but we cannot say for sure at this time.  This has violated our contract with REDACTED and REDACTED.  We may have to close the facility. "

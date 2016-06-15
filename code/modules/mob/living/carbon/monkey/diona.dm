@@ -14,9 +14,10 @@
 	holder_type = /obj/item/weapon/holder/diona
 	var/list/donors = list()
 	var/ready_evolve = 0
-	canWearHats = 0
+	canWearHats = 1
 	canWearClothes = 0
 	canWearGlasses = 0
+	languagetoadd = "Rootspeak"
 
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
@@ -33,8 +34,6 @@
 	dna.mutantrace = "plant"
 	greaterform = "Diona"
 	alien = 1
-	add_language("Rootspeak")
-	default_language = all_languages["Rootspeak"]
 
 //Verbs after this point.
 
@@ -111,14 +110,14 @@
 
 	if(istype(loc,/obj/item/weapon/holder/diona))
 		var/obj/item/weapon/holder/diona/L = loc
-		src.loc = L.loc
-		qdel(L)
+		src.forceMove(get_turf(L))
 		L = null
+		qdel(L)
 
 	for(var/datum/language/L in languages)
 		adult.add_language(L.name)
-	adult.regenerate_icons()
 
+	adult.regenerate_icons()
 	adult.name = src.name
 	adult.real_name = src.real_name
 	src.mind.transfer_to(adult)

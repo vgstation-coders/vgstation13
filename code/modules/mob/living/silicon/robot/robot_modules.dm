@@ -2,7 +2,7 @@
 	name = "robot module"
 	icon = 'icons/obj/module.dmi'
 	//icon_state = "std_module"
-	w_class = 100.0
+	w_class = W_CLASS_GIANT
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -52,6 +52,11 @@
 //		src.jetpack.name = "Placeholder Upgrade Item"
 	return
 
+obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
+	for(var/obj/item/I in modules)
+		I.mouse_opacity = 2
+	if(emag)
+		emag.mouse_opacity = 2
 
 /obj/item/weapon/robot_module/proc/respawn_consumable(var/mob/living/silicon/robot/R)
 	return
@@ -90,7 +95,7 @@
 	O.amount = 15
 	src.modules += O
 
-	return
+	fix_modules()
 
 /obj/item/weapon/robot_module/standard/respawn_consumable(var/mob/living/silicon/robot/R)
 	// Recharge baton battery
@@ -159,7 +164,7 @@
 	S.amount = 10
 	src.modules += S
 
-	return
+	fix_modules()
 
 /obj/item/weapon/robot_module/medical/respawn_consumable(var/mob/living/silicon/robot/R)
 	var/list/what = list (
@@ -202,6 +207,7 @@
 	src.modules += new /obj/item/device/rcd/tile_painter(src)
 	src.modules += new /obj/item/device/material_synth/robot(src)
 	src.modules += new /obj/item/device/silicate_sprayer(src)
+	src.modules += new /obj/item/device/holomap(src)
 	sensor_augs = list("Mesons", "Disable")
 
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
@@ -209,7 +215,7 @@
 	W.max_amount = 50
 	src.modules += W
 
-	return
+	fix_modules()
 
 
 /obj/item/weapon/robot_module/engineering/respawn_consumable(var/mob/living/silicon/robot/R)
@@ -261,7 +267,7 @@
 	src.modules += new /obj/item/weapon/crowbar(src)
 	src.emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Disable")
-	return
+	fix_modules()
 
 /obj/item/weapon/robot_module/security/respawn_consumable(var/mob/living/silicon/robot/R)
 	// Recharge baton battery
@@ -287,7 +293,7 @@
 
 	src.emag.reagents.add_reagent("lube", 250)
 	src.emag.name = "Lube spray"
-	return
+	fix_modules()
 
 
 
@@ -351,7 +357,7 @@
 	R.my_atom = src.emag
 	R.add_reagent("beer2", 50)
 	src.emag.name = "Mickey Finn's Special Brew"
-	return
+	fix_modules()
 
 
 
@@ -370,7 +376,7 @@
 	src.modules += new /obj/item/weapon/crowbar(src)
 	sensor_augs = list("Mesons", "Disable")
 //		src.modules += new /obj/item/weapon/pickaxe/shovel(src) Uneeded due to buffed drill
-	return
+	fix_modules()
 
 
 /obj/item/weapon/robot_module/syndicate
@@ -383,7 +389,7 @@
 	src.modules += new /obj/item/weapon/card/emag(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
-	return
+	fix_modules()
 
 /obj/item/weapon/robot_module/combat
 	name = "combat robot module"
@@ -398,7 +404,7 @@
 	src.emag = new /obj/item/weapon/gun/energy/lasercannon/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
 
-	return
+	fix_modules()
 
 /obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
 	for(var/language in languages)

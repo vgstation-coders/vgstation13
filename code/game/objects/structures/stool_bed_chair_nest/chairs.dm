@@ -2,11 +2,12 @@
 	name = "chair"
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
-	lockflags = 0
 
 	sheet_amt = 1
 
 	var/overrideghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
+
+	lock_type = /datum/locking_category/chair
 
 /obj/structure/bed/chair/New()
 	..()
@@ -95,6 +96,7 @@
 	// TODO:  Special ash subtype that looks like charred chair legs
 
 	sheet_type = /obj/item/stack/sheet/wood
+	sheet_amt = 3
 
 /obj/structure/bed/chair/wood/normal
 	icon_state = "wooden_chair"
@@ -128,6 +130,8 @@
 	name = "comfy chair"
 	desc = "It looks comfy."
 	icon_state = "comfychair_black"
+
+	sheet_amt = 2
 
 	var/image/armrest
 
@@ -200,3 +204,5 @@
 /obj/structure/bed/chair/office/dark
 	icon_state = "officechair_dark"
 
+// Subtype only for seperation purposes.
+/datum/locking_category/chair

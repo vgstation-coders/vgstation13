@@ -33,6 +33,8 @@ var/list/camera_names=list()
 
 	var/hear_voice = 0
 
+	var/vision_flags = SEE_SELF | SEE_PIXELS //Only applies when viewing the camera through a console. REMOVE SEE_PIXELS IF IT IS DEEMED TOO BUGGY TO WORK AND LUMMOX REFUSES TO FIX IT
+
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
 	var/deactivated = !status
@@ -54,6 +56,12 @@ var/list/camera_names=list()
 	if(hear_voice && !isHearing())
 		hear_voice = 0
 		removeHear()
+
+/obj/machinery/camera/proc/update_upgrades()//Called when an upgrade is added or removed.
+	if(isXRay())
+		vision_flags |= SEE_TURFS | SEE_MOBS | SEE_OBJS
+	else
+		vision_flags &= ~(SEE_TURFS | SEE_MOBS | SEE_OBJS)
 
 /obj/machinery/camera/New()
 	wires = new(src)
@@ -176,7 +184,7 @@ var/list/camera_names=list()
 		//if(toggle_panel(user)) // No delay because no one likes screwdrivers trying to be hip and have a duration cooldown
 		togglePanelOpen(W, user, icon_state, icon_state)
 
-	else if((iswirecutter(W) || istype(W, /obj/item/device/multitool)) && panel_open)
+	else if(panel_open && iswiretool(W))
 		wires.Interact(user)
 
 	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
@@ -207,6 +215,7 @@ var/list/camera_names=list()
 			if(!user.drop_item(W, src)) return
 			assembly.upgrades += W
 		to_chat(user, "You attach the [W] into the camera's inner circuits.")
+		update_upgrades()
 		update_icon()
 		update_hear()
 		cameranet.updateVisibility(src, 0)
@@ -227,6 +236,7 @@ var/list/camera_names=list()
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				U.loc = get_turf(src)
 				assembly.upgrades -= U
+				update_upgrades()
 				update_icon()
 				update_hear()
 				cameranet.updateVisibility(src, 0)
@@ -416,10 +426,10 @@ var/list/camera_names=list()
 			if(S.current == src)
 				if(istype(S, /obj/machinery/computer/security/telescreen))
 					for(var/mob/M in viewers(world.view,S))
-						to_chat(M, "<span style='color:grey'>\icon[S][tv_message(M, speech, rendered_speech)]</span>")
+						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
 				else
 					for(var/mob/M in viewers(1,S))
-						to_chat(M, "<span style='color:grey'>\icon[S][tv_message(M, speech, rendered_speech)]</span>")
+						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech, rendered_speech)]</span>")
 
 /obj/machinery/camera/arena
 	name = "arena camera"

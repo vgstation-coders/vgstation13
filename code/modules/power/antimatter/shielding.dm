@@ -73,7 +73,7 @@ proc/cardinalrange(var/center)
 	return
 
 
-/obj/machinery/am_shielding/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/am_shielding/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))	return 1
 	return 0
 
@@ -222,7 +222,7 @@ proc/cardinalrange(var/center)
 	icon = 'icons/obj/machines/antimatter.dmi'
 	icon_state = "box"
 	item_state = "electronic"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
 	throwforce = 5
