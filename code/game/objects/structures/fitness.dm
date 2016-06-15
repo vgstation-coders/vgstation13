@@ -29,8 +29,7 @@
 	icon_state = "bopbag"
 
 /obj/structure/punching_bag/clown/attack_hand(mob/user as mob)
-	flick("[icon_state]2", src)
-	playsound(loc, pick(hit_sounds), 25, 1, -1)
+	..()
 	playsound(loc, 'sound/items/bikehorn.ogg', 50, 1, -1)
 
 /obj/structure/stacklifter
