@@ -60,7 +60,7 @@ var/list/poddoors = list()
 	src.add_fingerprint(user)
 	if (!( iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
-	if ((src.density && (stat & NOPOWER) && !( src.operating )))
+	if ((density && (stat & NOPOWER) && !( operating )))
 		spawn( 0 )
 			src.operating = 1
 			flick(openingicon, src)
