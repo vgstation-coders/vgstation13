@@ -18,9 +18,8 @@
 	var/possible_transfer_amounts = list(10,25,50,100)
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (iswrench(W) && wrenchable)
+	if(iswrench(W) && wrenchable)
 		return wrenchAnchor(user)
-	return
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
@@ -224,10 +223,11 @@
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "water_cooler"
 	possible_transfer_amounts = null
-	anchored = 1
+	anchored = 0
 	wrenchable = 1
 	var/addedliquid = 500
 	var/paper_cups = 10
+
 
 /obj/structure/reagent_dispensers/water_cooler/New()
 	. = ..()
@@ -336,26 +336,3 @@
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 		
-/obj/structure/reagent_dispensers/proc/wrenchAnchor(var/mob/user) //proc to wrench a wrenchable dispenser into place
-	for(var/obj/structure/reagent_dispensers/other in loc) //ensure multiple reagent dispensers aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored)
-			to_chat(user, "\The [other] is already anchored in this location.")
-			return -1 
-			
-	if(!anchored)
-		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) || istype(src.loc, /turf/space)) //If on the shuttle or empty space
-				to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
-				return
-
-	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
-							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-	if(do_after(user, src, 30))
-		anchored = !anchored
-		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
-								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
-								"<span class='notice'>You hear a ratchet.</span>")
-		return 1
-	return -1
-	
