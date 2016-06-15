@@ -53,8 +53,7 @@
 		user.forceMove(loc)
 		var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
 		user.visible_message("<B>[user] is [bragmessage]!</B>")
-		var/lifts = 0
-		while (lifts++ < 6)
+		for(var/lifts = 1 to 6)
 			if (user.loc != loc)
 				break
 			sleep(3)
@@ -94,9 +93,8 @@
 		overlays += W
 		var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
 		user.visible_message("<B>[user] is [bragmessage]!</B>")
-		var/reps = 0
 		user.pixel_y = 5
-		while (reps++ < 6)
+		for(var/reps = 1 to 6)
 			if (user.loc != loc)
 				break
 
