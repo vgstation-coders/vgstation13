@@ -1,5 +1,4 @@
 ﻿using System;
-using SharpTalk;
 using System.Net;
 using System.IO;
 using System.Text;
@@ -9,6 +8,7 @@ using System.Configuration;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using System.Speech.Synthesis;
 
 namespace DecTalk
 {
@@ -89,7 +89,7 @@ namespace DecTalk
             wavStream.Seek(0, SeekOrigin.Begin);
             try
             {
-                RawSourceWaveStream rawReader = new RawSourceWaveStream(wavStream, new WaveFormat(11025, 1));
+                RawSourceWaveStream rawReader = new RawSourceWaveStream(wavStream, new WaveFormat(22000, 1));
                 var writer = new LameMP3FileWriter(outStream, rawReader.WaveFormat, bitRate);
 
                 await rawReader.CopyToAsync(writer);
@@ -105,21 +105,41 @@ namespace DecTalk
             if (!String.IsNullOrEmpty(context.Request.QueryString["tts"]))
             {
                 string msg = Convert.ToString(context.Request.QueryString["tts"]);
-                Console.WriteLine("Incoming DecTalk: " + msg);
+                string tts_voice = Convert.ToString(context.Request.QueryString["voice"]);
+                Console.WriteLine("Incoming DecTalk: " + msg + "/ Voice: " + tts_voice);
 
                 Stream voiceStream = new MemoryStream();
 
-                FonixTalkEngine tts = new FonixTalkEngine(LanguageCode.EnglishUS);
+
+                SpeechSynthesizer _tts = new SpeechSynthesizer();
+                List<string> voiceList = new List<string>();
+                string usableVoice = "";
+                foreach (InstalledVoice voice in _tts.GetInstalledVoices())
+                {
+                    //Console.WriteLine("Name : " + voice.VoiceInfo.Name + "/ ID : " + voice.VoiceInfo.Id);
+                    if (voice.VoiceInfo.Name == tts_voice) {
+                        usableVoice = voice.VoiceInfo.Name;
+                        break;
+                    }
+                    else {
+                        usableVoice = voice.VoiceInfo.Name;
+                    }
+                }
                 try
                 {
-                    tts.SpeakToStream(voiceStream, msg);
+                    //_tts.SetOutputToDefaultAudioDevice();
+                    //_tts.SetOutputToWaveFile("test.wav");
+                    //_tts.SelectVoice("Microsoft Haruka Desktop");
+                    _tts.SelectVoice(usableVoice);
+                    _tts.SetOutputToWaveStream(voiceStream); //This writes to a waveStream at 22,000hz so we create the waveFormat later
+                    //_tts.Rate = 2;
+                    //_tts.Volume = 100;
+                    _tts.Speak(msg);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Exception : " + e.Message);
                 }
-
-
 
                 //We've written, so we have to go back to the top
                 voiceStream.Seek(0, SeekOrigin.Begin);
