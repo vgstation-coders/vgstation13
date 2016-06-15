@@ -146,7 +146,7 @@ var/global/list/all_graffitis = list(
 				if(!alignment) return
 
 				if(user.client)
-					var/image/I = image(icon = null)
+					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
 					I.maptext = {"<span style="color:[colour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">[preference]</span>"}
 					I.loc = get_turf(target)
 					animate(I, alpha = 100, 10, -1)
@@ -157,6 +157,7 @@ var/global/list/all_graffitis = list(
 
 					user.client.images.Remove(I)
 					animate(I) //Cancel the animation so that the image gets garbage collected
+					I.loc = null
 					I = null
 
 					if(continue_drawing != "Yes")
