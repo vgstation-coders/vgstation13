@@ -43,7 +43,7 @@
 
 /obj/structure/stacklifter/attack_hand(mob/user as mob)
 	if(in_use)
-		to_chat(user, "<span class='notice'>Its already in use - wait a bit.</span>")
+		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
 		return
 	else
 		in_use = 1
@@ -80,7 +80,7 @@
 
 /obj/structure/weightlifter/attack_hand(mob/user as mob)
 	if(in_use)
-		to_chat(user, "<span class='notice'>Its already in use - wait a bit.</span>")
+		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
 		return
 	else
 		in_use = 1
