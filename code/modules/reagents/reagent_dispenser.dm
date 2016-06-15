@@ -11,8 +11,6 @@
 	density = 1
 	anchored = 0
 	var/wrenchable = 0
-	var/active = 0 
-	var/requiresAnchor = 0 //0 if dispenser needs to be secured to be active
 	flags = FPRINT
 	pressure_resistance = 2*ONE_ATMOSPHERE
 
@@ -355,8 +353,6 @@
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 	if(do_after(user, src, 30))
 		anchored = !anchored
-		if(requiresAnchor) 
-			active = !active
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 								"<span class='notice'>You hear a ratchet.</span>")
