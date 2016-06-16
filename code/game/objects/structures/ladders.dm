@@ -30,8 +30,10 @@ var/list/ladders = list()
 /obj/structure/ladder/proc/update_links()
 
 	for(var/obj/structure/ladder/L in ladders)
-		if(L == src) continue
-		if(!isturf(L.loc)) continue //Only link to existing ladders
+		if(L == src)
+			continue
+		if(!isturf(L.loc))
+			continue //Only link to existing ladders
 
 		if(L.id == id)
 			if(L.height == (height - 1))
