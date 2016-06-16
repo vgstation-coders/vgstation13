@@ -1191,4 +1191,4 @@ What are the archived variables for?
 		naughty_stuff += "<b><font color='red'>CO<sub>2</sub></font></b>"
 	if(locate(/datum/gas/sleeping_agent) in trace_gases)
 		naughty_stuff += "<b><font color='red'>N<sub>2</sub>O</font>"
-	return english_list(naughty_stuff)
+	return english_list(naughty_stuff, nothing_text = "")

@@ -457,7 +457,7 @@
 	else
 		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
 	if(slot_glasses in obscured)
 		dat += "<BR><font color=grey><B>Eyes:</B> Obscured by [head]</font>"
 	else

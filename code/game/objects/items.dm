@@ -243,7 +243,7 @@
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	if(slot in list(slot_l_store, slot_r_store)) //is in pockets
-		return on_found(wearer, stripper)
+		on_found(wearer, stripper)
 
 ///called when an item is stripped off by another person, called AFTER it is on the ground
 /obj/item/proc/stripped(mob/wearer as mob, mob/stripper as mob, slot)
@@ -642,6 +642,8 @@
 		var/mob/living/carbon/monkey/MO = M
 		switch(slot)
 			if(slot_head)
+				if(!MO.canWearHats)
+					return CANNOT_EQUIP
 				if(MO.hat)
 					return CANNOT_EQUIP
 				if( !(slot_flags & SLOT_HEAD) )
@@ -654,12 +656,16 @@
 					return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_glasses)
+				if(!MO.canWearGlasses)
+					return CANNOT_EQUIP
 				if(MO.glasses)
 					return CANNOT_EQUIP
 				if( !(slot_flags & SLOT_EYES) )
 					return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_w_uniform)
+				if(!MO.canWearClothes)
+					return CANNOT_EQUIP
 				if(MO.uniform)
 					return CANNOT_EQUIP
 				if( !(slot_flags & SLOT_ICLOTHING) )

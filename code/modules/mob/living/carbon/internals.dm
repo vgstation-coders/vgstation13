@@ -62,7 +62,7 @@
 				to_chat(user, "<span class='notice'>\The [user] has enabled [src]'s internals.</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has enabled [src.name]'s ([src.ckey]) internals (Gas contents: [gas_contents]).</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='red'>Internals enabled by [user.name] ([user.ckey]) (Gas contents: [gas_contents]).</font>")
-			log_attack("[user.name] ([user.ckey]) has disabled [src.name]'s ([src.ckey]) internals (Gas contents: [gas_contents]).")
+			log_attack("[user.name] ([user.ckey]) has enabled [src.name]'s ([src.ckey]) internals (Gas contents: [gas_contents]).")
 		else
 			to_chat(src, "<span class='notice'>You are now running on internals from \the [T].</span>")
 		return 1

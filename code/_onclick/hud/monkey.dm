@@ -1,6 +1,5 @@
 /datum/hud/proc/monkey_hud(var/ui_style='icons/mob/screen1_old.dmi')
-
-
+	var/mob/living/carbon/monkey/MO = mymob //sorry
 	src.adding = list()
 	src.other = list()
 
@@ -142,33 +141,36 @@
 	using.layer = 19
 	src.adding += using
 
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "i_clothing"
-	inv_box.dir = SOUTH
-	inv_box.icon = ui_style
-	inv_box.slot_id = slot_w_uniform
-	inv_box.icon_state = "center"
-	inv_box.screen_loc = ui_monkey_uniform
-	inv_box.layer = 19
-	src.other += inv_box
+	if(MO.canWearClothes)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "i_clothing"
+		inv_box.dir = SOUTH
+		inv_box.icon = ui_style
+		inv_box.slot_id = slot_w_uniform
+		inv_box.icon_state = "center"
+		inv_box.screen_loc = ui_monkey_uniform
+		inv_box.layer = 19
+		src.adding += inv_box
 
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "head"
-	inv_box.icon = ui_style
-	inv_box.icon_state = "hair"
-	inv_box.screen_loc = ui_monkey_hat
-	inv_box.slot_id = slot_head
-	inv_box.layer = 19
-	src.other += inv_box
+	if(MO.canWearHats)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "head"
+		inv_box.icon = ui_style
+		inv_box.icon_state = "hair"
+		inv_box.screen_loc = ui_monkey_hat
+		inv_box.slot_id = slot_head
+		inv_box.layer = 19
+		src.adding += inv_box
 
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "eyes"
-	inv_box.icon = ui_style
-	inv_box.icon_state = "glasses"
-	inv_box.screen_loc = ui_monkey_glasses
-	inv_box.slot_id = slot_glasses
-	inv_box.layer = 19
-	src.other += inv_box
+	if(MO.canWearGlasses)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "eyes"
+		inv_box.icon = ui_style
+		inv_box.icon_state = "glasses"
+		inv_box.screen_loc = ui_monkey_glasses
+		inv_box.slot_id = slot_glasses
+		inv_box.layer = 19
+		src.adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "mask"

@@ -44,7 +44,7 @@
 	else
 		M.LAssailant = user
 
-	log_attack("<span style='color: red'>[user.name] ([user.ckey]) Attempted to handcuff [M.name] ([M.ckey])</span>")
+	log_attack("[user.name] ([user.ckey]) Attempted to handcuff [M.name] ([M.ckey])")
 
 	handcuffs_apply(M, user)
 

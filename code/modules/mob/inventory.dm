@@ -158,15 +158,12 @@
 	if(!is_valid_hand_index(index) || !is_valid_hand_index(active_hand))
 		return 0
 
-	if(held_items[index])
-		return 0
-
 	if(!put_in_hand_check(W, index))
 		return 0
 
 	if(W.prepickup(src))
 		return 0
-	
+
 	W.forceMove(src)
 	held_items[index] = W
 	W.layer = 20
@@ -189,11 +186,14 @@
 /mob/proc/put_in_r_hand(var/obj/item/W)
 	return put_in_hand(GRASP_RIGHT_HAND, W)
 
-/mob/proc/put_in_hand_check(var/obj/item/W)
+/mob/proc/put_in_hand_check(var/obj/item/W, index)
 	if(lying) //&& !(W.flags & ABSTRACT))
 		return 0
 
 	if(!isitem(W))
+		return 0
+
+	if(held_items[index])
 		return 0
 
 	if(W.flags & MUSTTWOHAND)
@@ -512,3 +512,8 @@
 			return "ankles"
 		else
 			return ""
+
+//Returns 1 if the item is part of the mob's built-in modules, and thus shouldn't be dropped or recycled or whatever.
+//Currently only used for silicons, but I guess you could use this for robot arms with built-in tools or something
+/mob/proc/is_in_modules(var/obj/item/W)
+	return 0

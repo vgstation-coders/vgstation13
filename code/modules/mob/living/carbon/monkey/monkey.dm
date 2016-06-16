@@ -182,7 +182,7 @@
 
 	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> <A href='?src=\ref[src];internals=1'>Toggle internals</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
 
 	if(canWearGlasses)
 		dat +=	"<br><b>Glasses:</b> <A href='?src=\ref[src];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"

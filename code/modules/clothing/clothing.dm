@@ -74,15 +74,16 @@
 	if(slot == slot_w_uniform) //this will cause us to drop our belt, ID, and pockets!
 		for(var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
 			var/obj/item/I = wearer.get_item_by_slot(slotID)
-			if(I.on_found(stripper))
-				return 1
+			if(I)
+				I.on_found(stripper)
 
 /obj/item/clothing/stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	..()
 	if(slot == slot_w_uniform) //this will cause us to drop our belt, ID, and pockets!
 		for(var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
 			var/obj/item/I = wearer.get_item_by_slot(slotID)
-			I.stripped(stripper)
+			if(I)
+				I.stripped(stripper)
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
