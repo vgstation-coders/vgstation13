@@ -311,6 +311,9 @@
 		qdel (L)
 		L = null
 
+/turf/proc/add_dust()
+	return
+
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	if(loc)
@@ -318,6 +321,7 @@
 		A.area_turfs -= src
 	if (!N || !allow)
 		return
+
 
 #ifdef ENABLE_TRI_LEVEL
 // Fuck this, for now - N3X
@@ -359,6 +363,10 @@
 //	to_chat(world, "Replacing [src.type] with [N]")
 
 	if(connections) connections.erase_all()
+
+	if(N == /turf/space)
+		for(var/obj/effect/decal/cleanable/C in src)
+			qdel(C)//enough with footprints floating in space
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.

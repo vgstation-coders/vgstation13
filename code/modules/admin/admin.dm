@@ -748,6 +748,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
 			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
 			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
+			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Big Rod</A><BR>
+			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Hyper Rod (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
 			<A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
 			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>

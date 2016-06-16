@@ -1,0 +1,5 @@
+author: Deity Link
+delete-after: true
+changes:
+  - tweak: Immovable rods now break the floor tiles on their path and damage those around them. Mobs and objects on those adjacent tiles aren't affected.
+  - soundadd: Immovable rods get a new sound, which you'll hear at a high/lower volume depending on how far it is from you.
