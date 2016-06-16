@@ -1,6 +1,6 @@
 /obj/item/cybernetics
 	//This thing doesn't actually exist, just something for inheritance
-	var/required_type //If the upgrade is only for a specific organ, if not then keep it empty
+	var/required_type //If the upgrade is only for a specific organ ("internal_organ" for internal, "external_organ" for external), if not then keep it empty
 
 /obj/item/cybernetics/afterattack(var/obj/item/O, mob/user, proximity_flag)
 	if (!proximity_flag)
@@ -8,11 +8,12 @@
 
 	if(istype(O, /obj/item/organ))
 		var/obj/item/organ/I = O
+		var/datum/organ/organ = I.organ_type
 		if(I.robotic != 2)
 			to_chat(usr, "\the [O] isn't robotic.")
 			return
 		to_chat(user, "DEBUG - Succesfull application of [src] to [I].")
-		apply(I)
+		apply(I, organ, user)
 	else if (istype(O, /obj/item/robot_parts))
 		var/obj/item/robot_parts/E = O
 		//Narrowing it down to the actual limbs
@@ -31,6 +32,7 @@
 		return
 		//Remember to delete this little chunk, right now it's just used for debug
 
-/obj/item/cybernetics/proc/apply(var/obj/item/O, mob/user)
+/obj/item/cybernetics/proc/apply(var/obj/item/organ/O, var/datum/organ/organ, mob/user)
 	to_chat(user, "Succesfully applied \the [src].")
 	//Nothing to see here
+
