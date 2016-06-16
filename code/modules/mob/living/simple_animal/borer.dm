@@ -15,8 +15,8 @@ var/global/borer_unlock_types_arm = typesof(/datum/unlockable/borer/arm) - /datu
 var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datum/unlockable/borer - /datum/unlockable/borer/leg - /datum/unlockable/borer/leg/chem_unlock - /datum/unlockable/borer/leg/verb_unlock
 
 /mob/living/simple_animal/borer
-	name = "cortical borer"
-	real_name = "cortical borer"
+	name = "borer"
+	real_name = "borer"
 	desc = "A small, quivering sluglike creature."
 	speak_emote = list("chirrups")
 	emote_hear = list("chirrups")
@@ -969,14 +969,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	src.mind = candidate.mob.mind
 	src.ckey = candidate.ckey
 	if(src.mind)
-		src.mind.assigned_role = "Cortical Borer"
+		src.mind.assigned_role = "Borer"
 
 		// Assign objectives
 		//forge_objectives()
 
 		// tl;dr
-		to_chat(src, "<span class='danger'>You are a Cortical Borer!</span>")
-		to_chat(src, "<span class='info'>You are a small slug-like symbiote that attaches to your host's brain.  Your only goals are to survive and procreate. However, there are those who would like to destroy you, and hosts don't take kindly to jerks.  Being as helpful to your host as possible is the best option for survival.</span>")
+		to_chat(src, "<span class='danger'>You are a Borer!</span>")
+		to_chat(src, "<span class='info'>You are a small slug-like symbiote that attaches to your host's body.  Your only goals are to survive and procreate. However, there are those who would like to destroy you, and hosts don't take kindly to jerks.  Being as helpful to your host as possible is the best option for survival.</span>")
 		to_chat(src, "<span class='info'>Borers can speak with other borers over the Cortical Link.  To do so, release control and use <code>say \";message\"</code>.  To communicate with your host only, speak normally.</span>")
 		to_chat(src, "<span class='info'><b>New:</b> To get new abilities for you and your host, use <em>Evolve</em> to unlock things.  Borers are now symbiotic biological pAIs.</span>")
 		if(config.borer_takeover_immediately)
