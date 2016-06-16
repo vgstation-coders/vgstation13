@@ -10,7 +10,6 @@
 	icon_state = "watertank"
 	density = 1
 	anchored = 0
-	var/wrenchable = 0
 	flags = FPRINT
 	pressure_resistance = 2*ONE_ATMOSPHERE
 
@@ -18,9 +17,9 @@
 	var/possible_transfer_amounts = list(10,25,50,100)
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W) && wrenchable)
+	if(iswrench(W) && wrenchable())
 		return wrenchAnchor(user)
-
+		
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It contains:</span>")
@@ -224,7 +223,6 @@
 	icon_state = "water_cooler"
 	possible_transfer_amounts = null
 	anchored = 0
-	wrenchable = 1
 	var/addedliquid = 500
 	var/paper_cups = 10
 
@@ -233,6 +231,9 @@
 	. = ..()
 	reagents.add_reagent("water", addedliquid)
 	desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
+	
+/obj/structure/reagent_dispensers/water_cooler/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/water_cooler/attack_hand(mob/user as mob)
 	if(paper_cups > 0)
@@ -260,11 +261,13 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "beertankTEMP"
 	amount_per_transfer_from_this = 10
-	wrenchable = 1
 
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
 	reagents.add_reagent("beer", 1000)
+	
+/obj/structure/reagent_dispensers/beerkeg/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/bloodkeg
 	name = "old keg"
@@ -272,11 +275,13 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "bloodkeg"
 	amount_per_transfer_from_this = 10
-	wrenchable = 1
 
 /obj/structure/reagent_dispensers/bloodkeg/New()
 	. = ..()
 	reagents.add_reagent("blood", 1000)
+	
+/obj/structure/reagent_dispensers/bloodkeg/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/bloodkeg/cultify()
 	return

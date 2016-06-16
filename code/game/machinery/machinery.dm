@@ -557,7 +557,7 @@ Class Procs:
 			emag(user)
 			return
 
-	if(iswrench(O) && machine_flags & WRENCHMOVE) //make sure this is BEFORE the fixed2work check
+	if(iswrench(O) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
 			if(state == 2 && src.machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")
@@ -565,10 +565,10 @@ Class Procs:
 			else
 				if(wrenchAnchor(user) && machine_flags && FIXED2WORK) //wrenches/unwrenches into place if possible, the updates the power
 					power_change() //updates us to turn on or off as necessary
+					return 1
 		else
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
-		return
 		
 	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
 		return togglePanelOpen(O, user)
@@ -648,7 +648,13 @@ Class Procs:
 
 /obj/machinery/proc/check_rebuild()
 	return
-
+	
+/obj/machinery/wrenchable()
+	return (machine_flags & WRENCHMOVE)
+	
+/obj/machinery/can_wrench_shuttle()
+	return (machine_flags & SHUTTLEWRENCH)
+	
 /obj/machinery/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
 	var/shouldplaysound = 0
 	if(component_parts)
@@ -681,6 +687,7 @@ Class Procs:
 			W.play_rped_sound()
 		return 1
 	return 0
+	
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
 	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it

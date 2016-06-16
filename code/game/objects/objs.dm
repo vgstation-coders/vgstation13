@@ -15,7 +15,6 @@ var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "pla
 
 	var/damtype = "brute"
 	var/force = 0
-	var/wrenchable = 0 //can the object be secured using a wrench?
 	
 	//Should we alert about reagents that should be logged?
 	var/log_reagents = 1
@@ -65,7 +64,13 @@ var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "pla
 
 /obj/proc/cultify()
 	qdel(src)
-
+	
+/obj/proc/wrenchable()
+	return 0
+	
+/obj/proc/can_wrench_shuttle()
+	return 0
+	
 /obj/proc/is_sharp()
 	return sharpness
 
@@ -304,12 +309,12 @@ a {
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
 		if(other.anchored == 1 && other.density == 1 && density && !anchored)
 			to_chat(user, "\The [other] is already anchored in this location.")
-			return -1 		
+			return -1
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) || istype(src.loc, /turf/space)) //If on the shuttle or empty space
+			if((istype(src.loc, /turf/simulated/shuttle) || istype(src.loc, /turf/space)) && !can_wrench_shuttle()) //If on the shuttle or empty space and not wrenchable to a shuttle
 				to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
-				return
+				return -1
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
