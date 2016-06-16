@@ -94,8 +94,9 @@
 				src.updateUsrDialog()
 				return 1
 
-/obj/machinery/computer/cloning/emag()
+/obj/machinery/computer/cloning/emag(mob/user)
 	emagged = 1
+	user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
 
 /obj/machinery/computer/cloning/attack_paw(mob/user as mob)
 	return attack_hand(user)
