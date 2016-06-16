@@ -145,10 +145,6 @@
 	name = "clotting_agent"
 	cost = 10
 
-/datum/borer_chem/arm/unlockable/creatine
-	name = "creatine"
-	cost = 2
-
 /datum/borer_chem/arm/unlockable/cafe_latte
 	name = "cafe_latte"
 	cost = 1

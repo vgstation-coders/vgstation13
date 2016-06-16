@@ -198,14 +198,6 @@
 	borer.unlocked_chems_arm[C.name]=C
 	to_chat(borer, "<span class='info'>You learned how to secrete [C.name]!</span>")
 
-/datum/unlockable/borer/arm/chem_unlock/creatine
-	id = "creatine"
-	name = "Creatine Secretion"
-	desc = "Learn how to synthesize creatine. Reckless use may endanger your host."
-	cost = 100
-	time = 60 SECONDS
-	chem_type = /datum/borer_chem/arm/unlockable/creatine
-
 /datum/unlockable/borer/arm/chem_unlock/cafe_latte
 	id = "cafe_latte"
 	name = "Latte Secretion"

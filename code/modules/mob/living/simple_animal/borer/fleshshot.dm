@@ -182,12 +182,12 @@
 									if(L == parent_borer.host)
 										var/mob/living/carbon/human/H = L
 										if(parent_borer.hostlimb == "r_arm")
-											if(!H.r_hand)
+											if(!H.get_held_item_by_index(GRASP_RIGHT_HAND))
 												H.put_in_r_hand(C2)
 											else
 												C2.CtrlClick(H)
 										else
-											if(!H.l_hand)
+											if(!H.get_held_item_by_index(GRASP_LEFT_HAND))
 												H.put_in_l_hand(C2)
 											else
 												C2.CtrlClick(H)
@@ -245,11 +245,11 @@
 		if(istype(parent_borer.host, /mob/living/carbon/human))
 			var/mob/living/carbon/human/L = parent_borer.host
 			if(parent_borer.hostlimb == "r_arm")
-				if(L.r_hand)
-					I = L.r_hand
+				if(L.get_held_item_by_index(GRASP_RIGHT_HAND))
+					I = L.get_held_item_by_index(GRASP_RIGHT_HAND)
 			else
-				if(L.l_hand)
-					I = L.l_hand
+				if(L.get_held_item_by_index(GRASP_LEFT_HAND))
+					I = L.get_held_item_by_index(GRASP_LEFT_HAND)
 	if(I)
 		item_overlay = image('icons/obj/projectiles_experimental.dmi', src, "nothing")
 		item_overlay.appearance = I.appearance
@@ -346,13 +346,13 @@
 				if(istype(parent_borer.host, /mob/living/carbon/human))
 					var/mob/living/carbon/human/L = parent_borer.host
 					if(parent_borer.hostlimb == "r_arm")
-						if(L.r_hand)
-							A.attackby(L.r_hand, L, 1, parent_borer)
+						if(L.get_held_item_by_index(GRASP_RIGHT_HAND))
+							A.attackby(L.get_held_item_by_index(GRASP_RIGHT_HAND), L, 1, parent_borer)
 							bullet_die()
 							return
 					else
-						if(L.l_hand)
-							A.attackby(L.l_hand, L, 1, parent_borer)
+						if(L.get_held_item_by_index(GRASP_LEFT_HAND))
+							A.attackby(L.get_held_item_by_index(GRASP_LEFT_HAND), L, 1, parent_borer)
 							bullet_die()
 							return
 		if(isturf(A))					//if we hit a wall or an anchored atom, we pull ourselves to it

@@ -71,18 +71,20 @@
 	else
 		var/obj/item/weapon/melee/bone_sword/S = new(get_turf(host), src)
 		if(hostlimb == "r_arm")
-			if(host.r_hand)
-				if(istype(host.r_hand, /obj/item/weapon/melee/bone_sword))
+			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
+				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_sword))
 					to_chat(src, "<span class='warning'>Your host already has a bone sword on this arm.</span>")
+					qdel(S)
 					return
-				host.drop_item(host.r_hand, force_drop = 1)
+				host.drop_item(host.get_held_item_by_index(GRASP_RIGHT_HAND), force_drop = 1)
 			host.put_in_r_hand(S)
 		else
-			if(host.l_hand)
-				if(istype(host.l_hand, /obj/item/weapon/melee/bone_sword))
+			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
+				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_sword))
 					to_chat(src, "<span class='warning'>Your host already has a bone sword on this arm.</span>")
+					qdel(S)
 					return
-				host.drop_item(host.l_hand, force_drop = 1)
+				host.drop_item(host.get_held_item_by_index(GRASP_LEFT_HAND), force_drop = 1)
 			host.put_in_l_hand(S)
 		to_chat(src, "You begin to focus your efforts on sustaining a blade of bone for your host.")
 		channeling = 1
@@ -133,18 +135,20 @@
 	else
 		var/obj/item/weapon/melee/bone_hammer/S = new(get_turf(host), src)
 		if(hostlimb == "r_arm")
-			if(host.r_hand)
-				if(istype(host.r_hand, /obj/item/weapon/melee/bone_hammer))
+			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
+				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_hammer))
 					to_chat(src, "<span class='warning'>Your host already has a bone hammer on this arm.</span>")
+					qdel(S)
 					return
-				host.drop_item(host.r_hand, force_drop = 1)
+				host.drop_item(host.get_held_item_by_index(GRASP_RIGHT_HAND), force_drop = 1)
 			host.put_in_r_hand(S)
 		else
-			if(host.l_hand)
-				if(istype(host.l_hand, /obj/item/weapon/melee/bone_hammer))
+			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
+				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_hammer))
 					to_chat(src, "<span class='warning'>Your host already has a bone hammer on this arm.</span>")
+					qdel(S)
 					return
-				host.drop_item(host.l_hand, force_drop = 1)
+				host.drop_item(host.get_held_item_by_index(GRASP_LEFT_HAND), force_drop = 1)
 			host.put_in_l_hand(S)
 		to_chat(src, "You begin to focus your efforts on sustaining a mass of bone for your host.")
 		channeling = 1
@@ -196,18 +200,20 @@
 	else
 		var/obj/item/weapon/shield/riot/bone/S = new(get_turf(host), src)
 		if(hostlimb == "r_arm")
-			if(host.r_hand)
-				if(istype(host.r_hand, /obj/item/weapon/shield/riot/bone))
+			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
+				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/shield/riot/bone))
 					to_chat(src, "<span class='warning'>Your host already has a bone shield on this arm.</span>")
+					qdel(S)
 					return
-				host.drop_item(host.r_hand, force_drop = 1)
+				host.drop_item(host.get_held_item_by_index(GRASP_RIGHT_HAND), force_drop = 1)
 			host.put_in_r_hand(S)
 		else
-			if(host.l_hand)
-				if(istype(host.l_hand, /obj/item/weapon/shield/riot/bone))
+			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
+				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/shield/riot/bone))
 					to_chat(src, "<span class='warning'>Your host already has a bone shield on this arm.</span>")
+					qdel(S)
 					return
-				host.drop_item(host.l_hand, force_drop = 1)
+				host.drop_item(host.get_held_item_by_index(GRASP_LEFT_HAND), force_drop = 1)
 			host.put_in_l_hand(S)
 		to_chat(src, "You begin to focus your efforts on sustaining a shield of bone for your host.")
 		channeling = 1

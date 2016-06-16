@@ -58,11 +58,10 @@
 			var/list/borers_in_host = H.get_brain_worms()
 			if(borers_in_host && borers_in_host.len) //to allow a host to drop an item at-range mid-extension
 				for(var/mob/living/simple_animal/borer/B in borers_in_host)
-					if((B.hostlimb == "r_arm" && H.get_active_hand() == H.r_hand) || (B.hostlimb == "l_arm" && H.get_active_hand() == H.l_hand))
-						if(H.get_active_hand() == H.r_hand)
-							var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
-							F.to_be_dropped = H.get_active_hand()
-							F.item_overlay = null
+					if((B.hostlimb == "r_arm" && H.get_active_hand() == H.get_held_item_by_index(GRASP_RIGHT_HAND)) || (B.hostlimb == "l_arm" && H.get_active_hand() == H.get_held_item_by_index(GRASP_LEFT_HAND)))
+						var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+						F.to_be_dropped = H.get_active_hand()
+						F.item_overlay = null
 		drop_item()
 	else if(isMoMMI(usr))
 		var/mob/living/silicon/robot/mommi/M = usr
@@ -83,11 +82,11 @@
 				if(B.hostlimb == "r_arm")
 					if(B.extend_o_arm)
 						var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
-						if(H.r_hand)
-							F.to_be_dropped = H.r_hand
+						if(H.get_held_item_by_index(GRASP_RIGHT_HAND))
+							F.to_be_dropped = H.get_held_item_by_index(GRASP_RIGHT_HAND)
 							F.item_overlay = null
 						F.attack_self(H)
-						H.drop_item(H.r_hand)
+						H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND))
 						return
 					else
 						to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] right hand.</span>")
@@ -95,11 +94,11 @@
 				else if(B.hostlimb == "l_arm")
 					if(B.extend_o_arm)
 						var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
-						if(H.l_hand)
-							F.to_be_dropped = H.l_hand
+						if(H.get_held_item_by_index(GRASP_LEFT_HAND))
+							F.to_be_dropped = H.get_held_item_by_index(GRASP_LEFT_HAND)
 							F.item_overlay = null
 						F.attack_self(H)
-						H.drop_item(H.l_hand)
+						H.drop_item(H.get_held_item_by_index(GRASP_LEFT_HAND))
 						return
 					else
 						to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] left hand.</span>")

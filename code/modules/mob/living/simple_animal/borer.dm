@@ -507,7 +507,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/response = alert(src, "Are you -sure- you want to abandon your current host?\n(This will take a few seconds and cannot be halted!)","Are you sure you want to abandon host?","Yes","No")
 	if(response != "Yes")
 		return
-		
+
 	if(!src)
 		return
 
@@ -712,33 +712,44 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/area = src.zone_sel.selecting
 	var/region = "head"
 
-	switch(area)
-		if("head")
-			region = "head"
-		if("mouth")
-			region = "head"
-		if("eyes")
-			region = "head"
-		if("chest")
-			region = "chest"
-		if("groin")
-			region = "chest"
-		if("r_arm")
-			region = "r_arm"
-		if("r_hand")
-			region = "r_arm"
-		if("l_arm")
-			region = "l_arm"
-		if("l_hand")
-			region = "l_arm"
-		if("r_leg")
-			region = "r_leg"
-		if("r_foot")
-			region = "r_leg"
-		if("l_leg")
-			region = "l_leg"
-		if("l_foot")
-			region = "l_leg"
+	if(istype(M, /mob/living/carbon/human))
+		switch(area)
+			if("head")
+				region = "head"
+			if("mouth")
+				region = "head"
+			if("eyes")
+				region = "head"
+			if("chest")
+				region = "chest"
+			if("groin")
+				region = "chest"
+			if("r_arm")
+				region = "r_arm"
+			if("r_hand")
+				region = "r_arm"
+			if("l_arm")
+				region = "l_arm"
+			if("l_hand")
+				region = "l_arm"
+			if("r_leg")
+				region = "r_leg"
+			if("r_foot")
+				region = "r_leg"
+			if("l_leg")
+				region = "l_leg"
+			if("l_foot")
+				region = "l_leg"
+
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/O = H.get_organ(region)
+		if(!O.is_organic())
+			to_chat(src, "You cannot infest this host's inorganic [limb_to_name(region)]!")
+			return
+
+		if(!O.is_existing())
+			to_chat(src, "This host does not have a [limb_to_name(region)]!")
+			return
 
 	if(M.has_brain_worms(region))
 		to_chat(src, "This host's [limb_to_name(region)] is already infested!")
@@ -1088,11 +1099,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 					extend_o_arm.forceMove(host)
 				if(host.Adjacent(A))
 					if(hostlimb == "r_arm")
-						if(host.r_hand)
+						if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
 							if(attack_cooldown)
 								return
 							else
-								A.attackby(host.r_hand, host, 1, src)
+								A.attackby(host.get_held_item_by_index(GRASP_RIGHT_HAND), host, 1, src)
 								attack_cooldown = 1
 								spawn(10)
 									attack_cooldown = 0
@@ -1101,11 +1112,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 							host.put_in_r_hand(A)
 							return
 					else
-						if(host.l_hand)
+						if(host.get_held_item_by_index(GRASP_LEFT_HAND))
 							if(attack_cooldown)
 								return
 							else
-								A.attackby(host.l_hand, host, 1, src)
+								A.attackby(host.get_held_item_by_index(GRASP_LEFT_HAND), host, 1, src)
 								attack_cooldown = 1
 								spawn(10)
 									attack_cooldown = 0
@@ -1116,9 +1127,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(get_turf(A) == get_turf(host) && !istype(A, /obj/item))
 					return
 				if(hostlimb == "r_arm")
-					if(host.r_hand && istype(host.r_hand, /obj/item/weapon/gun/hookshot)) //I don't want to deal with the hookshot interacting with hookshots
+					if(host.get_held_item_by_index(GRASP_RIGHT_HAND) && istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/gun/hookshot)) //I don't want to deal with the fleshshot interacting with hookshots
 						return
 				else if(hostlimb == "l_arm")
-					if(host.l_hand && istype(host.l_hand, /obj/item/weapon/gun/hookshot))
+					if(host.get_held_item_by_index(GRASP_LEFT_HAND) && istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/gun/hookshot))
 						return
 				extend_o_arm.afterattack(A, host)
