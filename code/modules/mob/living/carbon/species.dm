@@ -7,7 +7,19 @@
 var/global/list/language_keys[0]
 var/global/list/all_languages[0]
 var/global/list/all_species = list()
-var/global/list/whitelisted_species = list("Human")
+var/global/list/whitelisted_species = list(
+    "Human",
+    "Unathi",
+    "Skellington",
+    "Skeletal Vox",
+    "Tajaran",
+    "Grey",
+    "Muton",
+    "Skrell",
+    "Vox",
+    "Diona",
+    "Golem"
+    )
 
 /proc/buildSpeciesLists()
 	var/datum/language/L
