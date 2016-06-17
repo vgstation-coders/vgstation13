@@ -44,12 +44,25 @@ turf/unsimulated/wall/splashscreen
 	canSmoothWith = null
 
 	New()
-		var/path = "icons/splashworks/"
-		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
-				filenames -= filename
-		icon = file("[path][pick(filenames)]")
+		var/list/paths = list(
+			'icons/splashworks/tile1.dmi',
+			'icons/splashworks/title2.gif',
+			'icons/splashworks/title3.dmi',
+			'icons/splashworks/title4.gif',
+			'icons/splashworks/title5.gif',
+			'icons/splashworks/title6.gif',
+			'icons/splashworks/title7.gif',
+			'icons/splashworks/title8.gif',
+			'icons/splashworks/title9.gif',
+			'icons/splashworks/title10.gif',
+			'icons/splashworks/title11.gif',
+			'icons/splashworks/title12.gif',
+			'icons/splashworks/title13.jpg',
+			'icons/splashworks/title14.gif',
+			'icons/splashworks/title15.gif',
+			'icons/splashworks/title16.gif'
+			)
+		icon = pick(paths)
 
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"
