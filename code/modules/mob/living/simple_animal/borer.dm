@@ -1118,8 +1118,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 									attack_cooldown = 0
 								return
 						else if(istype(A, /obj/item))
-							host.put_in_r_hand(A)
-							return
+							var/obj/item/I = A
+							if(!I.anchored)
+								host.put_in_r_hand(A)
+								return
 					else
 						if(host.get_held_item_by_index(GRASP_LEFT_HAND))
 							if(attack_cooldown)
@@ -1131,8 +1133,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 									attack_cooldown = 0
 								return
 						else if(istype(A, /obj/item))
-							host.put_in_l_hand(A)
-							return
+							var/obj/item/I = A
+							if(!I.anchored)
+								host.put_in_l_hand(A)
+								return
 				if(get_turf(A) == get_turf(host) && !istype(A, /obj/item))
 					return
 				if(hostlimb == "r_arm")
