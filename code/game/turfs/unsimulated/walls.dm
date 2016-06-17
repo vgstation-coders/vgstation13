@@ -36,7 +36,7 @@
 		bullet_marks = 0
 		icon = initial(icon)
 
-turf/unsimulated/wall/splashscreen
+/turf/unsimulated/wall/splashscreen
 	name = "Space Station 13"
 	icon = null
 	icon_state = null
