@@ -465,9 +465,18 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!host || controlling || !src || stat) //Sanity check.
 		return
 
+	if(chem.name == "blood")
+		if(istype(host, /mob/living/carbon/human) && !(host.species.flags & NO_BLOOD))
+			host.vessel.add_reagent(chem.name, units)
+		else
+			to_chat(src, "<span class='notice'>Your host seems to be a species that doesn't use blood.<span>")
+			return
+	else
+		host.reagents.add_reagent(chem.name, units)
+
 	to_chat(src, "<span class='info'>You squirt a measure of [chem.name] from your reservoirs into [host]'s bloodstream.</span>")
 	add_gamelogs(src, "secreted [units]U of '[chemID]' into \the [host]", admin = TRUE, tp_link = TRUE, span_class = "message")
-	host.reagents.add_reagent(chem.name, units)
+
 	chemicals -= chem.cost*units
 
 // We've been moved to someone's head.
