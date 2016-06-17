@@ -128,7 +128,7 @@
 /obj/structure/popout_cake/kick_act(mob/user)
 	.=..()
 
-	slices -= rand(1,3) //Deal some damage
+	slices_amount -= rand(1,3) //Deal some damage
 	check_slices()
 
 /obj/structure/popout_cake/bite_act(mob/user)
@@ -138,6 +138,6 @@
 	check_slices()
 
 /obj/structure/popout_cake/bullet_act(var/obj/item/projectile/Proj)
-	slices -= round(Proj.damage / 2)
+	slices_amount -= Clamp(round(Proj.damage / 3), 1, 4)
 
 	check_slices()
