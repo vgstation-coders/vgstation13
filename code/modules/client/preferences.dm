@@ -1093,8 +1093,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if(!whitelisted)
 							alert(user, "You cannot change your species as you need to be whitelisted. If you wish to be whitelisted contact an admin in-game, on the forums, or on IRC.")
 					else //Not using the whitelist? Aliens for everyone!
-						//new_species = whitelisted_species
-						new_species += S
+						new_species = whitelisted_species
+						//new_species += S
 
 					species = input("Please select a species", "Character Generation", null) in new_species
 
