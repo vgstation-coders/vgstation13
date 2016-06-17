@@ -1103,6 +1103,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(!extend_o_arm)
 					extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 					extend_o_arm.forceMove(host)
+				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/offhand) || istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/offhand)) //If the host is two-handing something.
+					to_chat(src, "<span class='warning'>You cannot swing this item while your host holds it with both hands!</span>")
+					return
 				if(host.Adjacent(A))
 					if(hostlimb == "r_arm")
 						if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
