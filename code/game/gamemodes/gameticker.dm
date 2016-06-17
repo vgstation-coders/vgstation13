@@ -46,21 +46,24 @@ var/global/datum/controller/gameticker/ticker
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
-	login_music = pick(\
-		'sound/music/space.ogg',\
-		'sound/music/traitor.ogg',\
-		'sound/music/space_oddity.ogg',\
-		'sound/music/title1.ogg',\
-		'sound/music/title2.ogg',\
-		'sound/music/clown.ogg',\
-		'sound/music/robocop.ogg',\
-		'sound/music/gaytony.ogg',\
-		'sound/music/rocketman.ogg',\
-		'sound/music/2525.ogg',\
-		'sound/music/moonbaseoddity.ogg',\
-		'sound/music/whatisthissong.ogg',\
-		'sound/music/space_asshole.ogg',\
-		'sound/music/starman.ogg',)
+	var/oursong = file(pick(
+		"sound/music/space.ogg",
+		"sound/music/traitor.ogg",
+		"sound/music/space_oddity.ogg",
+		"sound/music/title1.ogg",
+		"sound/music/title2.ogg",
+		"sound/music/clown.ogg",
+		"sound/music/robocop.ogg",
+		"sound/music/gaytony.ogg",
+		"sound/music/rocketman.ogg",
+		"sound/music/2525.ogg",
+		"sound/music/moonbaseoddity.ogg",
+		"sound/music/whatisthissong.ogg",
+		"sound/music/space_asshole.ogg",
+		"sound/music/starman.ogg",
+		))
+	login_music = fcopy_rsc(oursong)
+	// Wait for MC to get its shit together
 	while(!master_controller.initialized)
 		sleep(1) // Don't thrash the poor CPU
 		continue
