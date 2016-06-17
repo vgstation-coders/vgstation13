@@ -4155,3 +4155,13 @@
 		reagents.clear_reagents()
 		reagents.add_reagent("nutriment", 30)
 		reagents.add_reagent("holywater", 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/welcomepie
+	name = "friendship pie"
+	desc = "Offered as a gesture of Vox goodwill." //"Goodwill"
+	icon_state = "welcomepie"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent("sacid",6)
+		reagents.add_reagent("nutriment",2)

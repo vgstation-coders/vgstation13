@@ -9,7 +9,6 @@
 	active_power_usage = 500
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 	flags = OPENCONTAINER | NOREACT
-	pass_flags = PASSTABLE
 	var/list/egg_storage = list()
 	var/limit = 1
 	var/speed_bonus = 0
@@ -107,3 +106,8 @@
 	E.forceMove(get_turf(src))
 	src.updateUsrDialog()
 	visible_message("<span class='info'>An egg was ejected from \the [src].</span>")
+
+/obj/machinery/box_incubator
+	name = "box flesh cloner
+	desc = "The spasmodically squirming, braying, and snorting half-corpses were heaped each upon the other until at last I was rid of them. Snout and hoof, gristle and bone - a mountainous, twitching mass of misshapen carcasses fusing themselves together in the darkness."
+	//Code

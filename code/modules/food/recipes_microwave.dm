@@ -1642,6 +1642,15 @@
 		)
 	result = /obj/item/claypot
 
+/datum/recipe/bruisepack
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
+	result = /obj/item/stack/medical/bruise_pack
+
+/datum/recipe/ointment
+	reagents = list("water" = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
+	result = /obj/item/stack/medical/ointment
+
 /datum/recipe/cinnamonroll
 	reagents = list("milk" = 5, "sugar" = 10, "flour" = 5, "cinnamon" = 5)
 	items = list(
@@ -1746,6 +1755,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/flammkuchen
+
+/datum/recipe/welcomepie
+	reagents = list("flour" = 10)
+	items = (
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/welcomepie
 
 // Currently Disabled //////////////////////////////////////////
 

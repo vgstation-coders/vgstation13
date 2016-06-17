@@ -775,6 +775,20 @@
 	filling_color = "857663"
 	plantname = "woodapple"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
+	name = "slipping pitcher"
+	desc = "A fragile, but slippery exotic plant from tropical climates. Powerful digestive acid contained within dissolves prey."
+	icon_state = "pitcher"
+	filling_color = "7E8507"
+	plantname = "pitcher"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/aloe
+	name = "aloe vera"
+	desc = "A thorny, broad-leaf plant believed to be useful for first aid."
+	icon_state = "aloe"
+	filling_color = "77BA9F"
+	plantname = "aloe"
+
 // *************************************
 // Complex Grown Object Defines -
 // Putting these at the bottom so they don't clutter the list up. -Cheridan
