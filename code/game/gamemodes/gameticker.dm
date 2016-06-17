@@ -60,7 +60,7 @@ var/global/datum/controller/gameticker/ticker
 		'sound/music/moonbaseoddity.ogg',\
 		'sound/music/whatisthissong.ogg',\
 		'sound/music/space_asshole.ogg',\
-		'sound/music/starman.ogg')
+		'sound/music/starman.ogg',)
 	while(!master_controller.initialized)
 		sleep(1) // Don't thrash the poor CPU
 		continue
