@@ -1,6 +1,6 @@
 #define CLONEPODRANGE 7
 /obj/machinery/computer/cloning
-	name = "Cloning console"
+	name = "cloning console"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "cloning"
 	circuit = "/obj/item/weapon/circuitboard/cloning"
@@ -95,8 +95,9 @@
 				return 1
 
 /obj/machinery/computer/cloning/emag(mob/user)
-	emagged = 1
-	user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
+	if(!emagged)
+		emagged = 1
+		user.visible_message("<span class='warning'>[user] slides something into \the [src]'s card-reader.</span>","<span class='warning'>You disable \the [src]'s safety overrides.</span>")
 
 /obj/machinery/computer/cloning/attack_paw(mob/user as mob)
 	return attack_hand(user)
