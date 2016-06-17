@@ -35,6 +35,7 @@ var/list/poddoors = list()
 	opacity = 0
 
 /obj/machinery/door/poddoor/glass/preopen
+	icon_state = "gpdoor0"
 	density = 0
 
 /obj/machinery/door/poddoor/New()
