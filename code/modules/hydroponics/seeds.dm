@@ -398,6 +398,14 @@
 	seed_type = "garlic"
 	vending_cat = "Vox hydroponics"
 
+/obj/item/seeds/pitcher
+	name = "tissue culture of slipping pitchers"
+	seeds_type = "pitcher"
+	vending_cat = "Vox hydroponics"
+
+/obj/item/seeds/aloe
+	name = "packet of aloe vera seeds"
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -1610,3 +1618,42 @@
 	yield = 4
 	water_consumption = 2
 	ideal_heat = 298
+
+/datum/seed/pitcher
+	name = "pitcher" //based on the slippery Nepenthes genus of pitcher plants
+	seed_name = "pitcher"
+	display_name = "slipping pitcher"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher)
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	plant_icon = "pitcher"
+	chems = list("sacid" = list(1,25))
+
+	potency = 10
+	lifespan = 50
+	yield = 3
+	growth_stages = 3
+	maturation = 1
+	water_consumption = 6
+	ideal_heat = 310
+	pest_tolerance = 10
+	endurance = 25 //Fragile...
+	carnivorous = 1 //Eats pests!
+	juicy = 2 //And here's where the slipperiness comes in
+
+/datum/seed/aloe
+	name = "aloe"
+	seed_name = "aloe"
+	display_name = "aloe vera"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	plant_icon = "aloe"
+	chems = list("tricordrazine" = (1,10)) //Not as good as poppy's bicaridine for speedy heals, but general purpose.
+
+	lifespan = 30
+	maturation = 6
+	production = 6
+	yield = 4
+	potency = 20
+	growth_stages = 3
+	ideal_heat = 310
+	thorny = 1

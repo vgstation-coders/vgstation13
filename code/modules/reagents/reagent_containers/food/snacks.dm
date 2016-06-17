@@ -2118,9 +2118,9 @@
 		bitesize = 3
 */
 /obj/item/weapon/reagent_containers/food/snacks/mint
-	name = MINT
-	desc = "It is only wafer thin."
-	icon_state = MINT
+	name = "mint"
+	desc = "it is only wafer thin."
+	icon_state = "mint"
 	New()
 		..()
 		reagents.add_reagent(MINTTOXIN, 1)
@@ -4173,7 +4173,6 @@
 	bitesize = 3
 	New()
 		..()
-		reagents.clear_reagents()
 		reagents.add_reagent(NUTRIMENT, 4)
 		reagents.add_reagent(HOLYWATER, 2)
 
@@ -4184,7 +4183,6 @@
 	bitesize = 4
 	New()
 		..()
-		reagents.clear_reagents()
 		reagents.add_reagent(NUTRIMENT, 30)
 		reagents.add_reagent(HOLYWATER, 10)
 
@@ -4197,3 +4195,14 @@
 /obj/item/weapon/reagent_containers/food/snacks/frog_leg/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/welcomepie
+	name = "friendship pie"
+	desc = "Offered as a gesture of Vox goodwill." //"Goodwill"
+	icon_state = "welcomepie"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent("sacid",6)
+		reagents.add_reagent("nutriment",2)

@@ -775,6 +775,20 @@
 	filling_color = "857663"
 	plantname = "woodapple"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
+	name = "slipping pitcher"
+	desc = "A fragile, but slippery exotic plant from tropical climates. Powerful digestive acid contained within dissolves prey."
+	icon_state = "pitcher"
+	filling_color = "7E8507"
+	plantname = "pitcher"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/aloe
+	name = "aloe vera"
+	desc = "A thorny, broad-leaf plant believed to be useful for first aid."
+	icon_state = "aloe"
+	filling_color = "77BA9F"
+	plantname = "aloe"
+
 // *************************************
 // Complex Grown Object Defines -
 // Putting these at the bottom so they don't clutter the list up. -Cheridan
@@ -831,14 +845,13 @@
 			return
 		switching = 0
 		var/N = rand(1,3)
-		if(get_turf(user))
-			switch(N)
-				if(1)
-					playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
-				if(2)
-					playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
-				if(3)
-					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
+		switch(N)
+			if(1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
@@ -856,8 +869,7 @@
 			current_path = available_fruits[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
 			icon_state = initial(G.icon_state)
-			if(get_turf(src))
-				playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
+			playsound(src, 'sound/misc/click.ogg', 50, 1)
 			sleep(1)
 			if(counter == available_fruits.len)
 				counter = 0
