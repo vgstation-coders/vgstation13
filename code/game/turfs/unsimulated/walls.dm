@@ -45,7 +45,7 @@
 
 	New()
 		var/list/paths = list(
-			'icons/splashworks/tile1.dmi',
+			'icons/splashworks/title1.dmi',
 			'icons/splashworks/title2.gif',
 			'icons/splashworks/title3.dmi',
 			'icons/splashworks/title4.gif',
