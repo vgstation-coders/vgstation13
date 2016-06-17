@@ -798,6 +798,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "That is not an appropriate target.")
 		return
 
+	if(M.has_brain_worms(region))
+		to_chat(src, "This host's [limb_to_name(region)] is already infested!")
+		return
+
 	if(M in view(1, src))
 		to_chat(src, "[region == "head" ? "You wiggle into [M]'s ear." : "You burrow under [M]'s skin."]")
 		src.perform_infestation(M, region)
