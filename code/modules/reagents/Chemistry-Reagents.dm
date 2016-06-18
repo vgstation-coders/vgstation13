@@ -4799,8 +4799,9 @@
 	description = "Concentrated legal discussions"
 	reagent_state = LIQUID
 	color = "#00FF21" //rgb: 0, 255, 33
+	custom_metabolism = 1
 
-/datum/reagent/hamserum/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/hamserum/on_mob_life(var/mob/living/M)
 
 	if(..()) return 1
 
