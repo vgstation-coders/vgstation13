@@ -539,7 +539,7 @@
 	lifespan = 25
 	maturation = 8
 	production = 6
-	yield = 2
+	yield = 4
 	potency = 10
 	water_consumption = 6
 	nutrient_consumption = 0.25
@@ -557,7 +557,7 @@
 	packet_icon = "seed-bloodtomato"
 	plant_icon = "bloodtomato"
 	chems = list("nutriment" = list(1,10), "blood" = list(10,2))
-	yield = 1
+	yield = 2
 	splat_type = /obj/effect/decal/cleanable/blood/splatter
 
 /datum/seed/tomato/killer
@@ -583,6 +583,8 @@
 	plant_icon = "bluetomato"
 	chems = list("nutriment" = list(1,20), "lube" = list(1,5))
 	splat_type = /obj/effect/decal/cleanable/blood/oil
+
+	yield = 2
 
 /datum/seed/tomato/blue/teleport
 	name = "bluespacetomato"
