@@ -4,3 +4,4 @@ delete-after: True
 
 changes: 
 - rscadd: "Added a new hostile monster - legionnaire frogs. Their ability to leap on top of their foes makes up for their slower speed. The hostile infestation event can bring up to 8 of them to the station."
+- rscadd: Added a new puzzle to the Tomb of Rafid 
