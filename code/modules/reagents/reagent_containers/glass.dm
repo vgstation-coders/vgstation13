@@ -71,7 +71,7 @@
 	..()
 	toggle_open()
 
-/obj/item/weapon/reagent_containers/glass/verb/toggle_open() //set amount_per_transfer_from_this
+/obj/item/weapon/reagent_containers/glass/verb/toggle_open()
 	set name = "Toggle seal"
 	set category = "Object"
 	set src in range(0)
