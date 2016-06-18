@@ -900,7 +900,7 @@ var/list/slot_equipment_priority = list( \
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
-	if (!( P.anchored ))
+	if (!P.anchored)
 		P.add_fingerprint(src)
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
@@ -913,6 +913,7 @@ var/list/slot_equipment_priority = list( \
 
 		src.pulling = P
 		P.pulledby = src
+		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
 			if(!iscarbon(src))
@@ -921,15 +922,20 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = usr
 
 /mob/verb/stop_pulling()
-
-
 	set name = "Stop Pulling"
 	set category = "IC"
 
 	if(pulling)
 		pulling.pulledby = null
 		pulling = null
+		update_pull_icon()
 
+//I don't want to update the whole HUD each time!
+/mob/proc/update_pull_icon()
+	if(pulling)
+		pullin.icon_state = "pull1"
+	else
+		pullin.icon_state = "pull0"
 
 
 /mob/verb/mode()
