@@ -276,7 +276,6 @@
 
 /obj/structure/button/water_puzzle/Destroy()
 	last_pressed.Remove(src)
-
 	..()
 
 /obj/structure/button/water_puzzle/activate(force = 0)
@@ -301,7 +300,7 @@
 /obj/item/weapon/paper/tomb_notes
 	name = "paper- 'My Notes'"
 	info = {"<i>You can't go through this room without a partner, so I can't advance any further. I hope these notes will help you.<BR>
-	The water is powered by magic, there is no better explanation for its behaviour. I can't touch it or jump into it. Across the water there are metal platforms that you can walk on. There are also 6 buttons on the wall.<BR>
+	The water is powered by magic, there is no better explanation for its behaviour. I can't touch it or jump into it. In the water there are metal platforms that you can walk on. There are also 6 buttons on the wall.<BR>
 	There are also 7 groups of platforms, one for each button, plus to one rogue group. Pressing a button raises its group of platforms above the water. Only two platform groups can be raised at once; pressing a third button will cause one group to lower. I think the one which was raised the earlier is lowered, but maybe not.<BR>
 	There are <s>5 6</s> 7 rogue platforms, they are lowered and raised whenever a button is pressed. Any button. You may want to find them immediately, because they look exactly like normal platforms<BR>
 	To get to the other side, one man must control the buttons while the other one must hop from platform to platform. Coordination is required - I don't know what would happen if a platform is lowered from beneath your feet, and frankly I'd rather not.</i>"}
@@ -322,6 +321,6 @@
 		else
 			teleport_destination = src
 
-	if(isobj(AM) || isliving(AM))
-		to_chat(AM, "<span class='danger'>You fall into the deep water!</span>")
+	if(istype(AM, /obj/item) || istype(AM, /obj/machinery) || istype(AM, /obj/structure) || isliving(AM))
+		AM.visible_message("<span class='danger'>\The [AM] falls into \the [src]!</span>")
 		AM.forceMove(teleport_destination)

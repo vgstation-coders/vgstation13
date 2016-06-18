@@ -30,6 +30,9 @@
 	visible_message("<span class='info'>[user] presses \the [src].</span>")
 	activate()
 
+/obj/structure/button/attack_tk(mob/user)
+	return attack_hand(user)
+
 /obj/structure/button/proc/activate()
 	if(global_search)
 		for(var/obj/effect/hidden_door/hidden_door in hidden_doors)
@@ -63,7 +66,6 @@ var/list/hidden_doors = list()
 	var/opened = 0
 
 	var/fade_animation = 0
-	var/animation_happening = 0
 
 /obj/effect/hidden_door/New()
 	..()
@@ -88,34 +90,22 @@ var/list/hidden_doors = list()
 	door_typepath = T.type
 
 /obj/effect/hidden_door/proc/toggle()
-	if(animation_happening)
-		return
 
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/stonedoor_openclose.ogg', 100, 1)
 
 	if(opened)
-		spawn()
-			if(fade_animation)
-				var/turf/new_turf = door_typepath
+		T.ChangeTurf(door_typepath)
 
-				T.appearance = initial(new_turf.appearance)
-				T.alpha = 10
-				animate(T, alpha = 255, 20)
-
-				animation_happening = 1
-				sleep(20)
-				animation_happening = 0
-
-			T.ChangeTurf(door_typepath)
-
-			for(var/V in door_appearance)
-				T.vars[V] = door_appearance[V]
+		for(var/V in door_appearance)
+			T.vars[V] = door_appearance[V]
 
 		opened = 0
 	else
 		steal_appearance()
-
 		T.ChangeTurf(floor_typepath)
+
+		if(fade_animation)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1)
 
 		opened = 1
