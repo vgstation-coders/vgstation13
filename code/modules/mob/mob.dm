@@ -932,10 +932,11 @@ var/list/slot_equipment_priority = list( \
 
 //I don't want to update the whole HUD each time!
 /mob/proc/update_pull_icon()
-	if(pulling)
-		pullin.icon_state = "pull1"
-	else
-		pullin.icon_state = "pull0"
+	if(pullin) //Yes, the pulling icon in HUDs is referenced by a mob-level variable called "pullin". It's awful I know
+		if(pulling)
+			pullin.icon_state = "pull1"
+		else
+			pullin.icon_state = "pull0"
 
 
 /mob/verb/mode()
