@@ -125,6 +125,7 @@
 
 	compatible_mobs = list(/mob/living/carbon/human)
 	mind_affecting = 1
+	name_cast = 1
 
 /spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
 	if(!targets || !targets.len || !user || !istype(user))
@@ -135,6 +136,9 @@
 		return
 
 	for(var/mob/living/carbon/human/target in targets)
+		if(tinfoil_check(target))
+			to_chat(user, "<span class='warning'>You are unable to target this person.</span>")
+			return
 		if(M_REMOTE_TALK in target.mutations)
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
 		else
