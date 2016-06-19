@@ -9,6 +9,11 @@
 	silenced = 1
 	fire_volume = 250
 	maxlength = 10
+	clumsy_check = 0
+	advanced_tool_user_check = 0
+	nymph_check = 0
+	hulk_check = 0
+	golem_check = 0
 	var/mob/living/simple_animal/borer/parent_borer = null
 	var/image/item_overlay = null
 	var/obj/item/to_be_dropped = null //to allow items to be dropped at range
