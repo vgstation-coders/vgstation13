@@ -870,7 +870,7 @@
 	description = "A compound that can be used to repair and reinforce glass."
 	reagent_state = LIQUID
 	color = "#C7FFFF" //rgb: 199, 255, 255
-	overdose = REAGENTS_OVERDOSE
+	overdose = 0
 
 /datum/reagent/oxygen
 	name = "Oxygen"
