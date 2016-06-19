@@ -1228,9 +1228,9 @@ SEE_PIXELS	256
 #define PULSE_THREADY	6	//occurs during hypovolemic shock
 //feel free to add shit to lists below
 var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE)	//increase heart rate
-var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, "space_drugs", STOXIN)					//decrease heart rate
-var/list/heartstopper = list("potassium_phorochloride", "zombie_powder") //this stops the heart
-var/list/cheartstopper = list("potassium_chloride") //this stops the heart when overdose is met -- c = conditional
+var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN)					//decrease heart rate
+var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
+var/list/cheartstopper = list(/*"potassium_chloride"*/) //this stops the heart when overdose is met -- c = conditional
 
 //proc/get_pulse methods
 #define GETPULSE_HAND	0	//less accurate (hand)
@@ -1463,7 +1463,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_HREFS    "hrefs"
 #define I_NOTES    "notes"
 #define I_NTSL     "ntsl"
-#define I_SINGULO  SINGULO
+#define I_SINGULO  "singulo"
 #define I_ATMOS    "atmos"
 
 // delayNext() flags.

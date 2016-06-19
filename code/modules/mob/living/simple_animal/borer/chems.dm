@@ -55,7 +55,7 @@
 	name = INACUSIATE
 
 /datum/borer_chem/chest/lipozine
-	name = "Lipozine" // SIC
+	name = LIPOZINE
 
 /datum/borer_chem/chest/ethylredoxrazine
 	name = ETHYLREDOXRAZINE
