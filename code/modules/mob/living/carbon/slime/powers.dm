@@ -53,7 +53,8 @@
 		icon_state = "[colour] adult slime eat"
 	else
 		icon_state = "[colour] baby slime eat"
-
+	Victim.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed on by \the [src] [ckey ? ", played by [ckey]" : ""]!</font>")
+	attack_log += text("\[[time_stamp()]\] <font color='red'>Started to feed on [Victim] ([Victim.ckey])!</font>")
 	while(Victim && M.health > -70 && stat != 2)
 		// M.canmove = 0
 		canmove = 0
@@ -183,9 +184,11 @@
 				src.mind.transfer_to(new_slime)
 			else
 				new_slime.key = src.key
+			attack_log += text("\[[time_stamp()]\] <font color='black'>Evolved to an adult slime at x=[x],y=[y],z=[z]!</font>")
 			new_slime.languages = languages.Copy()
 			new_slime.name = src.name
 			new_slime.real_name = src.real_name
+			new_slime.attack_log = attack_log
 			transferImplantsTo(new_slime)
 			transferBorers(new_slime)
 
@@ -232,7 +235,9 @@
 			new_slime.a_intent = I_HURT
 			new_slime.languages = languages.Copy()
 			new_slime.name = src.name
+			attack_log += text("\[[time_stamp()]\] <font color='black'>Reproduced to make more slimes at x=[x],y=[y],z=[z]!</font>")
 			new_slime.real_name = src.real_name
+			new_slime.attack_log = attack_log
 			if(src.mind)
 				src.mind.transfer_to(new_slime)
 			else
