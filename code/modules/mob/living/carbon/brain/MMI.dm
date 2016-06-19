@@ -27,7 +27,6 @@
 
 obj/item/device/mmi/Destroy()
 	if(brainmob)
-		brainmob.ghostize(0)
 		qdel(brainmob)
 		brainmob = null
 	..()

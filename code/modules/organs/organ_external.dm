@@ -1354,7 +1354,6 @@ obj/item/weapon/organ/head
 
 obj/item/weapon/organ/head/Destroy()
 	if(brainmob)
-		brainmob.ghostize(0)
 		qdel(brainmob)
 		brainmob = null
 	..()
