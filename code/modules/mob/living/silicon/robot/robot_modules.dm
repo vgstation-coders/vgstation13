@@ -15,6 +15,7 @@
 	var/list/sensor_augs
 	var/languages
 	var/list/added_languages
+	var/upgraded = 0
 
 /obj/item/weapon/robot_module/proc/recharge_consumable()
 	return

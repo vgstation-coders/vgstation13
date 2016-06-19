@@ -50,17 +50,19 @@
 		to_chat(usr, "There's no mounting point for the module!")
 		return 0
 	else
-/*		R.module.modules += new/obj/item/weapon/circular_saw
-		R.module.modules += new/obj/item/weapon/scalpel
-		R.module.modules += new/obj/item/weapon/bonesetter
-		R.module.modules += new/obj/item/weapon/bonegel // Requested by Hoshi-chan
-		R.module.modules += new/obj/item/weapon/FixOVein
-		R.module.modules += new/obj/item/weapon/surgicaldrill
-		R.module.modules += new/obj/item/weapon/cautery
-		R.module.modules += new/obj/item/weapon/hemostat
-		R.module.modules += new/obj/item/weapon/retractor*/
-		R.module.modules += new /obj/item/weapon/melee/defibrillator(R.module)
-		R.module.modules += new /obj/item/weapon/reagent_containers/borghypo/upgraded(R.module)
+		if(!R.module.upgraded)
+/*			R.module.modules += new/obj/item/weapon/circular_saw
+			R.module.modules += new/obj/item/weapon/scalpel
+			R.module.modules += new/obj/item/weapon/bonesetter
+			R.module.modules += new/obj/item/weapon/bonegel // Requested by Hoshi-chan
+			R.module.modules += new/obj/item/weapon/FixOVein
+			R.module.modules += new/obj/item/weapon/surgicaldrill
+			R.module.modules += new/obj/item/weapon/cautery
+			R.module.modules += new/obj/item/weapon/hemostat
+			R.module.modules += new/obj/item/weapon/retractor*/
+			R.module.modules += new /obj/item/weapon/melee/defibrillator(R.module)
+			R.module.modules += new /obj/item/weapon/reagent_containers/borghypo/upgraded(R.module)
+			R.module.upgraded = 1
 
 		return 1
 
