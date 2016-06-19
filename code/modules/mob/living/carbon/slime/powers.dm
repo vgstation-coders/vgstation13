@@ -53,8 +53,7 @@
 		icon_state = "[colour] adult slime eat"
 	else
 		icon_state = "[colour] baby slime eat"
-	Victim.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed on by \the [src] [ckey ? ", played by [ckey]" : ""]!</font>")
-	attack_log += text("\[[time_stamp()]\] <font color='red'>Started to feed on [Victim] ([Victim.ckey])!</font>")
+	add_logs(src, Victim, "fed on", 0)
 	while(Victim && M.health > -70 && stat != 2)
 		// M.canmove = 0
 		canmove = 0
