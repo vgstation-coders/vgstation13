@@ -1171,16 +1171,24 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(get_turf(A) == get_turf(host) && !istype(A, /obj/item))
 					return
 				if(hostlimb == "r_arm")
-					if(host.get_held_item_by_index(GRASP_RIGHT_HAND) && istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/gun/hookshot)) //I don't want to deal with the fleshshot interacting with hookshots
-						return
+					if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
+						if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/gun/hookshot)) //I don't want to deal with the fleshshot interacting with hookshots
+							return
+						if(chemicals < 10)
+							to_chat(src, "<span class='warning'>You don't have enough chemicals stored to swing an item with this arm!</span>")
+							return
+						else
+							chemicals -= 10		//It costs 20 chems to fire the fleshshot while holding an item.
 				else if(hostlimb == "l_arm")
-					if(host.get_held_item_by_index(GRASP_LEFT_HAND) && istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/gun/hookshot))
-						return
-				if(chemicals >= 10)
-					chemicals -= 10
-					extend_o_arm.afterattack(A, host)
-				else
-					to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
+					if(host.get_held_item_by_index(GRASP_LEFT_HAND))
+						if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/gun/hookshot))
+							return
+						if(chemicals < 10)
+							to_chat(src, "<span class='warning'>You don't have enough chemicals stored to swing an item with this arm!</span>")
+							return
+						else
+							chemicals -= 10
+				extend_o_arm.afterattack(A, host)
 
 /mob/living/simple_animal/borer/proc/reset_attack_cooldown()
 	spawn(10)
