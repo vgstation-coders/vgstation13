@@ -914,7 +914,7 @@
 	name = "Slime Silver"
 	id = "m_silver"
 	result = null
-	required_reagents = list("tungsten" = 5)
+	required_reagents = list(TUNGSTEN = 5)
 	result_amount = 1
 	required_container = /obj/item/slime_extract/metal
 	required_other = 1

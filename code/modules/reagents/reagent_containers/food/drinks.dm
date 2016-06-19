@@ -431,7 +431,7 @@
 			desc = "Warning: The Groans Energy Blend(tm), may be toxic to those without constant exposure to chemical waste. Drink responsibly."
 			icon_state += "_energy"
 			reagents.add_reagent(SUGAR, 10)
-			reagents.add_reagent("chemical_waste", 10)
+			reagents.add_reagent(CHEMICAL_WASTE, 10)
 		if(5)
 			name = "Groans Soda: Double Dan"
 			desc = "Just when you thought you've had enough Dan, The 'Double Dan' strikes back with this wonderful mixture of too many flavors. Bring a barf bag, Drink responsibly."
@@ -490,7 +490,7 @@
 		if(4)
 			name = "Grifeo: Rich"
 			reagents.add_reagent(TEQUILA, 10)
-			reagents.add_reagent("chemical_waste", 10)
+			reagents.add_reagent(CHEMICAL_WASTE, 10)
 		if(5)
 			name = "Grifeo: Pure"
 			reagents.add_reagent(DISCOUNT, 20)
@@ -727,7 +727,7 @@
 	icon_state = "dr_gibb"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb/New()
 	..()
-	reagents.add_reagent("dr_gibb", 30)
+	reagents.add_reagent(DR_GIBB, 30)
 	src.pixel_x = rand(-10.0, 10)
 	src.pixel_y = rand(-10.0, 10)
 

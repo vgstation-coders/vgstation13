@@ -440,7 +440,14 @@ var/global/disable_vents     = 0
 #define BAHAMA_MAMA		"bahama_mama"
 #define RED_MEAD		"red_mead"
 #define ICED_BEER		"iced_beer"
-#define CHARCOAL "charcoal"
+#define CHARCOAL		"charcoal"
+
+#define TUNGSTEN 			"tungsten"
+#define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
+#define GROUND_ROCK 			"ground_rock"
+#define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
+#define ANALYSIS_SAMPLE 			"analysis_sample"
+#define CHEMICAL_WASTE 			"chemical_waste"
 
 
 // How many units of reagent are consumed per tick, by default.

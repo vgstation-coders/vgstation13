@@ -21,7 +21,7 @@
 	var/useramount = 30 // Last used amount
 	var/list/dispensable_reagents = list(HYDROGEN,LITHIUM,CARBON,NITROGEN,OXYGEN,FLUORINE,
 	SODIUM,ALUMINUM,SILICON,PHOSPHORUS,SULFUR,CHLORINE,POTASSIUM,IRON,
-	COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,"tungsten")
+	COPPER,MERCURY,RADIUM,WATER,ETHANOL,SUGAR,SACID,TUNGSTEN)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -1255,7 +1255,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 
 		//archaeology!
-		/obj/item/weapon/rocksliver = list("ground_rock" = 30),
+		/obj/item/weapon/rocksliver = list(GROUND_ROCK = 30),
 
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/weapon/reagent_containers/pill = list(),
@@ -1965,7 +1965,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/stack/cable_coil            = list(COPPER, 10),
 		/obj/item/weapon/cell                 = list(LITHIUM, 10),
 		/obj/item/clothing/head/butt          = list(MERCURY, 10),
-		/obj/item/weapon/rocksliver           = list("ground_rock",30),
+		/obj/item/weapon/rocksliver           = list(GROUND_ROCK,30),
 
 		//Recipes must include both variables!
 		/obj/item/weapon/reagent_containers/food = list("generic",0)
