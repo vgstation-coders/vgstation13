@@ -118,14 +118,13 @@
 	range = -2 //the world
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE
+	spell_flags = SELECTABLE|NAME_CAST
 
 	override_base = "genetic"
 	hud_state = "gen_project"
 
 	compatible_mobs = list(/mob/living/carbon/human)
 	mind_affecting = 1
-	name_cast = 1
 
 /spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
 	if(!targets || !targets.len || !user || !istype(user))
