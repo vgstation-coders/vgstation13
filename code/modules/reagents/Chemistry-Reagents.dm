@@ -2861,6 +2861,16 @@
 	reagent_state = SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
 
+/datum/reagent/sodiumchloride/on_mob_life(var/mob/living/M)
+
+	if(..()) return 1
+
+	var/list/borers = M.get_brain_worms()
+	if(borers)
+		for(var/mob/living/simple_animal/borer/B in borers)
+			B.health -= 1
+			to_chat(B, "<span class='warning'>Something in your host's bloodstream burns you!</span>")
+
 /datum/reagent/creatine
 	name = "Creatine"
 	id = CREATINE

@@ -134,6 +134,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	..()
 	if(host)
 		if(!stat && !host.stat)
+			if(health < 20)
+				health += 0.5
 			if(chemicals < 250 && !channeling)
 				chemicals++
 			if(controlling)
@@ -1129,6 +1131,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/offhand) || istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/offhand)) //If the host is two-handing something.
 					to_chat(src, "<span class='warning'>You cannot swing this item while your host holds it with both hands!</span>")
 					return
+				if(host.stunned)
+					to_chat(src, "<span class='warning'>Your host's muscles are tightened. You can't extend your arm!</span>")
+					return
+				var/datum/reagents/R = host.reagents
+					if(R)
+						if(R.has_reagent("silicate"))
+							to_chat(src, "<span class='warning'>Something in your host's bloodstream tightening their muscles. You can't extend your arm!</span>")
+							return
 				if(host.Adjacent(A))
 					if(hostlimb == "r_arm")
 						if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
@@ -1166,7 +1176,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				else if(hostlimb == "l_arm")
 					if(host.get_held_item_by_index(GRASP_LEFT_HAND) && istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/gun/hookshot))
 						return
-				extend_o_arm.afterattack(A, host)
+				if(chemicals >= 10)
+					chemicals -= 10
+					extend_o_arm.afterattack(A, host)
+				else
+					to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 
 /mob/living/simple_animal/borer/proc/reset_attack_cooldown()
 	spawn(10)
