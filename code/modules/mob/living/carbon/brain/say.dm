@@ -1,7 +1,10 @@
 /mob/living/carbon/brain/say(var/message)
 
 	if(!(container && (istype(container, /obj/item/device/mmi) || istype(container, /obj/item/device/mmi/posibrain))))
-		return //No MMI, can't speak, bucko./N
+		if(istype(container,/obj/item/weapon/organ/head))
+			return say_dead(message) // he's dead. Let him speak to the dead.
+		else
+			return
 	else
 		if(prob(emp_damage*4))
 			if(prob(10))
