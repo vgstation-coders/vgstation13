@@ -69,6 +69,13 @@
 
 /obj/item/weapon/reagent_containers/glass/attack_self()
 	..()
+	toggle_open()
+
+/obj/item/weapon/reagent_containers/glass/verb/toggle_open()
+	set name = "Toggle seal"
+	set category = "Object"
+	set src in range(0)
+
 	if(is_open_container())
 		to_chat(usr, "<span class = 'notice'>You put the lid on \the [src].")
 		flags ^= OPENCONTAINER

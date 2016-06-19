@@ -54,6 +54,44 @@
 	..()
 	update_icon()
 
+/obj/item/weapon/reagent_containers/glass/bottle/attack_self(mob/user as mob)
+	if(!is_open_container())
+		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
+
+		return 0
+
+	else if(!src.reagents.total_volume || !src)
+		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
+		return 0
+
+	else
+		imbibe(user)
+		return 0
+
+/obj/item/weapon/reagent_containers/glass/bottle/proc/imbibe(mob/user) //Drink the liquid within
+
+
+	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
+	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
+
+	if(isrobot(user))
+		reagents.remove_any(amount_per_transfer_from_this)
+		return 1
+	if(reagents.total_volume)
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.species.chem_flags & NO_DRINK)
+				reagents.reaction(get_turf(H), TOUCH)
+				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
+				return 0
+
+		reagents.reaction(user, INGEST)
+		spawn(5)
+			reagents.trans_to(user, amount_per_transfer_from_this)
+
+	return 1
+
+
 /obj/item/weapon/reagent_containers/glass/bottle/attack_hand()
 	..()
 	update_icon()
@@ -294,7 +332,7 @@
 		var/datum/disease/F = new /datum/disease/fake_gbs(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent("blood", 20, data)
-		
+
 /obj/item/weapon/reagent_containers/glass/bottle/chickenpox
 	name = "Chickenpox culture bottle"
 	desc = "A small bottle. Contains activated chickenpox in a vox-blood medium."
@@ -305,7 +343,7 @@
 		var/datum/disease/F = new /datum/disease2/effect/chickenpox(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent("blood", 20, data)
-		
+
 /*
 /obj/item/weapon/reagent_containers/glass/bottle/rhumba_beat
 	name = "Rhumba Beat culture bottle"
