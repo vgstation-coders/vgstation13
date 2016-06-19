@@ -1135,10 +1135,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 					to_chat(src, "<span class='warning'>Your host's muscles are tightened. You can't extend your arm!</span>")
 					return
 				var/datum/reagents/R = host.reagents
-					if(R)
-						if(R.has_reagent("silicate"))
-							to_chat(src, "<span class='warning'>Something in your host's bloodstream tightening their muscles. You can't extend your arm!</span>")
-							return
+				if(R)
+					if(R.has_reagent("silicate"))
+						to_chat(src, "<span class='warning'>Something in your host's bloodstream is tightening their muscles. You can't extend your arm!</span>")
+						return
 				if(host.Adjacent(A))
 					if(hostlimb == "r_arm")
 						if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
