@@ -93,7 +93,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 /mob/living/simple_animal/borer/New(var/loc)
 	..(loc)
-	truename = "[pick("Primary","Secondary","Tertiary","Quaternary")] [rand(1000,9999)]"
+	truename = "[pick("Primary","Secondary","Tertiary","Quaternary")] [capitalize(pick(borer_names))]"
 	host_brain = new/mob/living/captive_brain(src)
 
 	if(name == initial(name)) // Easier reporting of griff.
