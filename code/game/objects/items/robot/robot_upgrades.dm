@@ -128,6 +128,7 @@
 	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
 	icon_state = "cyborg_upgrade2"
 	multi_upgrades = 1
+	add_to_mommis = 1
 
 /obj/item/borg/upgrade/vtec/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 
