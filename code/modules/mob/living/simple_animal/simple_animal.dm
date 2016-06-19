@@ -482,8 +482,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(M.Victim) return // can't attack while eating!
 
 	visible_message("<span class='danger'>[M.name] glomps [src]!</span>")
-	attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been glomped on by \the [M] [M.ckey ? ", played by [M.ckey]" : ""]!</font>")
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has glomped on \the [src] [ckey ? ", played by [ckey]" : ""]!</font>")
+	add_logs(M, src, "glomped on", 0)
 
 	var/damage = rand(1, 3)
 

@@ -128,8 +128,7 @@
 
 	if(health > -100)
 		visible_message("<span class='danger'>\The [M] glomps [src]!</span>")
-		attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been glomped on by \the [M] [M.ckey ? ", played by [M.ckey]" : ""]!</font>")
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has glomped on \the [src] [ckey ? ", played by [ckey]" : ""]!</font>")
+		add_logs(M, src, "glomped on", 0)
 
 		var/damage = rand(1, 3)
 
