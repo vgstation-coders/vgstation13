@@ -1178,7 +1178,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 							to_chat(src, "<span class='warning'>You don't have enough chemicals stored to swing an item with this arm!</span>")
 							return
 						else
-							chemicals -= 10		//It costs 20 chems to fire the fleshshot while holding an item.
+							chemicals -= 10		//It costs 10 chems to fire the fleshshot while holding an item.
 				else if(hostlimb == "l_arm")
 					if(host.get_held_item_by_index(GRASP_LEFT_HAND))
 						if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/gun/hookshot))
