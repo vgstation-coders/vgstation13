@@ -346,6 +346,6 @@
 		else
 			teleport_destination = src
 
-	if(istype(AM, /obj/item) || istype(AM, /obj/machinery) || istype(AM, /obj/structure) || isliving(AM))
+	if(istype(AM, /obj/item) || istype(AM, /obj/machinery) || istype(AM, /obj/structure) || istype(AM, /obj/mecha) || istype(AM, /obj/spacepod) || isliving(AM))
 		AM.visible_message("<span class='danger'>\The [AM] falls into \the [src]!</span>")
 		AM.forceMove(teleport_destination)
