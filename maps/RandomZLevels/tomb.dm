@@ -48,6 +48,18 @@
 		var/turf/T = get_turf(DL)
 		T.ChangeTurf(/turf/unsimulated/floor)
 
+/obj/effect/trap/frog_trap //When triggered, spawns 4 frogs around you
+	name = "frog trap"
+
+/obj/effect/trap/frog_trap/activate(atom/movable/AM)
+	to_chat(AM, "<span class='userdanger'>An ambush! Curse them!</span>")
+
+	for(var/dir in cardinal)
+		var/turf/T = get_step(AM, dir)
+		new /mob/living/simple_animal/hostile/frog(T)
+
+		sleep(rand(2,8))
+
 /obj/item/weapon/skull/rigged/Crossed(atom/movable/L)
 	..()
 
@@ -269,32 +281,45 @@
 //SPECIAL BUTTONS
 //Only two can be activated at once
 //Activating a third button when two are activated toggles the first one off
-/obj/structure/button/water_puzzle
-	var/global/list/last_pressed = list()
+/obj/structure/button/door_switch
+	var/global/list/last_pressed = list() //List of areas associated with lists that contain buttons, e.g. [AWAY MISSION AREA] = list(BUTTON A, BUTTON B)
 
 	global_search = 0 //Only current area
+	var/maximum_activated_at_once = 2
 
-/obj/structure/button/water_puzzle/Destroy()
-	last_pressed.Remove(src)
+/obj/structure/button/door_switch/Destroy()
+	var/list/L = last_pressed[get_area(src)]
+	if(L)
+		L.Remove(src)
+
 	..()
 
-/obj/structure/button/water_puzzle/activate(force = 0)
-	if(state == 1) //Activated
+/obj/structure/button/door_switch/activate(force = 0)
+	//Get my area's list of button presses. If no such list exists, create one
+	var/list/L = last_pressed[get_area(src)]
+	if(!L)
+		L = list()
+		last_pressed[get_area(src)] = L
+
+	//This button can't be deactivated by pushing it. Deactivate it by calling this proc with the force argument set to 1
+	if(state == 1)
 		if(!force)
 			return
 
 		return ..()
 
-	else if(last_pressed.len == 2) //Not activated - turning the button on
-		var/obj/structure/button/water_puzzle/button_to_toggle_off = last_pressed[1]
+	//Attempting to activate the button - check how many buttons in this area have already been activated. Deactivate the oldest pressed button
+	else if(L.len == maximum_activated_at_once)
+		var/obj/structure/button/door_switch/button_to_toggle_off = L[1]
+
 		if(button_to_toggle_off.state == 1)
-			button_to_toggle_off.activate(1) //Force the first activated button to turn off
-			last_pressed.Remove(button_to_toggle_off)
+			button_to_toggle_off.activate(1)
+			L.Remove(button_to_toggle_off)
 
 	..()
-	last_pressed.Add(src)
+	L.Add(src)
 
-/obj/structure/button/water_puzzle/is_valid_door(obj/effect/hidden_door/D)
+/obj/structure/button/door_switch/is_valid_door(obj/effect/hidden_door/D)
 	return (..() || (D.icon_state == "wildcard")) //Activate wildcard doors too
 
 /obj/item/weapon/paper/tomb_notes
