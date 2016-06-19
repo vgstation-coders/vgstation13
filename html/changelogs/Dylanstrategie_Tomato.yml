@@ -1,0 +1,4 @@
+author: Dylanstrategie
+delete-after: True
+changes:
+- tweak: Tomatoes now output twice as many crops as a baseline (2 -> 4). All special types output half of that (2)
