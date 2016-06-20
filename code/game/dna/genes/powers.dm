@@ -36,7 +36,7 @@
 	invocation_type = SpI_NONE
 	range = -2
 	max_targets = 1
-	spell_flags = SELECTABLE | INCLUDEUSER
+	spell_flags = SELECTABLE | INCLUDEUSER | TALKED_BEFORE
 
 	override_base = "genetic"
 	hud_state = "gen_rmind"
@@ -118,7 +118,7 @@
 	range = -2 //the world
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = SELECTABLE|NAME_CAST
+	spell_flags = SELECTABLE|TALKED_BEFORE
 
 	override_base = "genetic"
 	hud_state = "gen_project"
@@ -127,14 +127,20 @@
 	mind_affecting = 1
 
 /spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
-	if(!targets || !targets.len || !user || !istype(user))
+	if(!user || !istype(user))
 		return
 
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
+
 	if(!say)
 		return
 
-	for(var/mob/living/carbon/human/target in targets)
+	if(!targets || !targets.len)
+		if(believed_name)
+			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
+		return
+
+	for(var/mob/living/carbon/target in targets)
 		if(tinfoil_check(target))
 			to_chat(user, "<span class='warning'>You are unable to target this person.</span>")
 			return
@@ -142,7 +148,7 @@
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
 		else
 			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
-		user.show_message("<span class='notice'>You project your mind into [target.real_name]: [say]</span>")
+		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
 		for(var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
 

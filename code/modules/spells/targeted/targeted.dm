@@ -30,6 +30,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	var/mind_affecting = 0 //Determines if it can be blocked by PSY_RESIST or tinfoil hat
 
 	var/list/compatible_mobs = list()
+	var/believed_name
 
 
 /spell/targeted/choose_targets(mob/user = usr)
@@ -72,17 +73,14 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 
 			if(possible_targets.len)
 				if(spell_flags & SELECTABLE) //if we are allowed to choose. see setup.dm for details
-					if(spell_flags & NAME_CAST)
-						var/target_name = input(user, "What is the name of the person you wish to target?.", "Targeting")
-						var/matchfound = 0
-						for(var/mob/target in possible_targets)
-							if(target.real_name == target_name)
-								targets += target
-								matchfound = 1
-								break
-						if(!matchfound)
-							to_chat(user, "<span class='warning'>You are unable to target this person.</span>")
+					if(spell_flags & TALKED_BEFORE)
+						if(!user || !user.mind || !user.mind.heard_before_names.len)
 							return
+						var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") in user.mind.heard_before_names
+						var/mob/temp_target = user.mind.heard_before[target_name]
+						believed_name = target_name
+						if(temp_target)
+							targets += temp_target
 					else
 						var/mob/temp_target = input(user, "Choose the target for the spell.", "Targeting") as null|mob in possible_targets
 						if(temp_target)
@@ -141,7 +139,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 
 	return targets
 
-/spell/targeted/cast(var/list/targets, mob/user)
+/spell/targeted/cast(var/list/targets, mob/user,var/believed_name)
 	for(var/mob/living/target in targets)
 		if(range >= 0)
 			if(!(target in view_or_range(range, holder, selection_type))) //filter at time of casting
