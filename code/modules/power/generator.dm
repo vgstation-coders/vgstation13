@@ -258,7 +258,7 @@
 	if(!operable())
 		return
 
-	overlays += "teg_mid"
+	overlays += image(icon = icon, icon_state = "teg_mid")
 
 	if(lastgenlev != 0)
 		overlays += "teg-op[lastgenlev]"

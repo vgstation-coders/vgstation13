@@ -173,7 +173,7 @@
 		radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 		base_icon = icon_state
 		icon_state = "droid-combat"
-		overlays -= "eyes"
+		overlays -= image(icon = icon, icon_state = "eyes")
 		base_icon = icon_state
 		updateicon()
 
@@ -1500,7 +1500,7 @@
 		return
 
 
-	overlays -= "eyes"
+	overlays -= image(icon = icon, icon_state = "eyes")
 	base_icon = icon_state
 	updateicon()
 

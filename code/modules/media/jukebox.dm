@@ -767,7 +767,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/adminbus/update_icon()
 	if(playing)
-		overlays += "beats"
+		overlays += image(icon = icon, icon_state = "beats")
 	else
 		overlays = 0
 	return
