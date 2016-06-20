@@ -47,7 +47,14 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 				targets += target
 
 	else if(max_targets == 1) //single target can be picked
-		if((range == 0 || range == -1) && spell_flags & INCLUDEUSER)
+		if(spell_flags & TALKED_BEFORE)
+			if(!user || !user.mind || !user.mind.heard_before.len)
+				return
+			var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") in user.mind.heard_before
+			var/mob/temp_target = user.mind.heard_before[target_name]
+			believed_name = target_name
+			targets += temp_target
+		else if((range == 0 || range == -1) && spell_flags & INCLUDEUSER)
 			targets += user
 		else
 			var/list/possible_targets = list()
@@ -73,18 +80,9 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 
 			if(possible_targets.len)
 				if(spell_flags & SELECTABLE) //if we are allowed to choose. see setup.dm for details
-					if(spell_flags & TALKED_BEFORE)
-						if(!user || !user.mind || !user.mind.heard_before_names.len)
-							return
-						var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") in user.mind.heard_before_names
-						var/mob/temp_target = user.mind.heard_before[target_name]
-						believed_name = target_name
-						if(temp_target)
-							targets += temp_target
-					else
-						var/mob/temp_target = input(user, "Choose the target for the spell.", "Targeting") as null|mob in possible_targets
-						if(temp_target)
-							targets += temp_target
+					var/mob/temp_target = input(user, "Choose the target for the spell.", "Targeting") as null|mob in possible_targets
+					if(temp_target)
+						targets += temp_target
 				else
 					targets += pick(possible_targets)
 			//Adds a safety check post-input to make sure those targets are actually in range.
@@ -139,7 +137,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 
 	return targets
 
-/spell/targeted/cast(var/list/targets, mob/user,var/believed_name)
+/spell/targeted/cast(var/list/targets, mob/user)
 	for(var/mob/living/target in targets)
 		if(range >= 0)
 			if(!(target in view_or_range(range, holder, selection_type))) //filter at time of casting

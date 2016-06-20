@@ -3,3 +3,4 @@ changes:
 - bugfix: Changed behaviour of grey telepathy to not be awful and highly exploitable. 
 - tweak: You now have to hear someone speak locally - in other words, you have to see their speech bubble, before you can telepathically communicate with them.
 - tweak: The name chosen to represent them in the menu is the one you heard them speak as.
+- tweak: You can no longer discover if someone is dead by trying to send them a message.

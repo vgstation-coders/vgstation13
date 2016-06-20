@@ -1765,14 +1765,13 @@ mob/proc/on_foot()
 /mob/proc/heard(var/mob/living/M)
 	return
 
-/mob/living/carbon/heard(var/mob/living/M)
-	if(M == src)
+/mob/living/carbon/heard(var/mob/living/carbon/human/M)
+	if(M == src || !istype(M))
 		return
 	if(!ear_deaf && !stat)
 		if(!(mind.heard_before[M.name]))
 			mind.heard_before[M.name] = M
-			mind.heard_before_names += M.name
-			M.heard_by += mind
+			M.heard_by |= mind
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

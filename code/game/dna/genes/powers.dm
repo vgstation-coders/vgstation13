@@ -135,15 +135,13 @@
 	if(!say)
 		return
 
-	if(!targets || !targets.len)
-		if(believed_name)
-			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
-		return
+	for(var/T in targets)
+		var/mob/living/carbon/human/target = T
 
-	for(var/mob/living/carbon/target in targets)
-		if(tinfoil_check(target))
-			to_chat(user, "<span class='warning'>You are unable to target this person.</span>")
+		if(!T || !istype(target) || tinfoil_check(target))
+			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
 			return
+
 		if(M_REMOTE_TALK in target.mutations)
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
 		else
