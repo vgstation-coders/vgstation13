@@ -15,6 +15,10 @@
 /mob/living/silicon/robot/get_equipped_items()
 	return get_all_slots()
 
+//May need work
+/mob/living/silicon/robot/is_in_modules(var/obj/item/W)
+	return (W in module.modules)
+
 /mob/living/silicon/robot/proc/uneq_module(const/obj/item/module)
 	if(!istype(module))
 		return 0
@@ -74,18 +78,21 @@
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_1 = O
 		O.layer = 20
+		O.plane = PLANE_HUD
 		O.screen_loc = inv1.screen_loc
 		O.forceMove(src)
 	else if(!module_state_2)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_2 = O
 		O.layer = 20
+		O.plane = PLANE_HUD
 		O.screen_loc = inv2.screen_loc
 		O.forceMove(src)
 	else if(!module_state_3)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_3 = O
 		O.layer = 20
+		O.plane = PLANE_HUD
 		O.screen_loc = inv3.screen_loc
 		O.forceMove(src)
 	else

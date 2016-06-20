@@ -7,6 +7,7 @@
 	w_class = W_CLASS_SMALL
 	amount = 24
 	max_amount = 24
+	restock_amount = 2
 	//If it's null, it can't wrap that type.
 	var/smallpath = /obj/item/delivery //We use this for items
 	var/bigpath = /obj/item/delivery/large //We use this for structures (crates, closets, recharge packs, etc.)
@@ -133,10 +134,10 @@
 /obj/item/delivery/attack_self(mob/user as mob)
 	if(wrapped)
 		if(ishuman(user))
+			qdel(src)
 			user.put_in_hands(wrapped)
 		else
 			wrapped.forceMove(get_turf(src))
-	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/destTagger))

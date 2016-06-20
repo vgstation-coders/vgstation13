@@ -187,9 +187,7 @@
 		if(pressure)
 			pressure.icon_state = "pressure[pressure_alert]"
 
-		if(pullin)
-			if(pulling)								pullin.icon_state = "pull1"
-			else									pullin.icon_state = "pull0"
+		update_pull_icon()
 //			if(rest) //Not used with new UI
 //				if(resting || lying || sleeping)		rest.icon_state = "rest1"
 //				else									rest.icon_state = "rest0"
@@ -204,9 +202,9 @@
 			else									fire.icon_state = "fire0"
 
 		if(bodytemp)
-			if(has_reagent_in_blood("capsaicin"))
+			if(has_reagent_in_blood(CAPSAICIN))
 				bodytemp.icon_state = "temp4"
-			else if(has_reagent_in_blood("frostoil"))
+			else if(has_reagent_in_blood(FROSTOIL))
 				bodytemp.icon_state = "temp-4"
 			else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)
 				switch(bodytemperature) //310.055 optimal body temp

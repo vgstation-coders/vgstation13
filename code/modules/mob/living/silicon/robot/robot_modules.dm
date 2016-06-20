@@ -110,11 +110,11 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for (var/T in what)
 		if (!(locate(T) in src.modules))
 			src.modules -= null
-			var/O = new T(src)
+			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
-				O:max_amount = 15
+				O.max_amount = 15
 			src.modules += O
-			O:amount = 1
+			O.amount = 1
 	return
 
 
@@ -146,7 +146,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.emag = new /obj/item/weapon/reagent_containers/spray(src)
 	sensor_augs = list("Medical", "Disable")
 
-	src.emag.reagents.add_reagent("pacid", 250)
+	src.emag.reagents.add_reagent(PACID, 250)
 	src.emag.name = "Polyacid spray"
 
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
@@ -175,11 +175,11 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for (var/T in what)
 		if (!(locate(T) in src.modules))
 			src.modules -= null
-			var/O = new T(src)
+			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
-				O:max_amount = 15
+				O.max_amount = 15
 			src.modules += O
-			O:amount = 1
+			O.amount = 1
 	return
 
 
@@ -225,11 +225,11 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for (var/T in what)
 		if (!(locate(T) in src.modules))
 			src.modules -= null
-			var/O = new T(src)
+			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/cable_coil))
-				O:max_amount = 50
+				O.max_amount = 50
 			src.modules += O
-			O:amount = 1
+			O.amount = 1
 	return
 
 /obj/item/weapon/robot_module/engineering/recharge_consumable(var/mob/living/silicon/robot/R)
@@ -244,14 +244,14 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 		respawn_consumable(R)
 		var/list/um = R.contents|R.module.modules
 		// ^ makes sinle list of active (R.contents) and inactive modules (R.module.modules)
-		for(var/obj/O in um)
+		for(var/obj/item/stack/O in um)
 			// Engineering
 			if(istype(O,/obj/item/stack/cable_coil))
-				if(O:amount < 50)
-					O:amount += 1
+				if(O.amount < 50)
+					O.amount += 1
 					R.cell.use(50) 		//Take power from the borg...
-				if(O:amount > 50)
-					O:amount = 50
+				if(O.amount > 50)
+					O.amount = 50
 
 
 /obj/item/weapon/robot_module/security
@@ -291,7 +291,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.modules += new /obj/item/weapon/crowbar(src)
 	src.emag = new /obj/item/weapon/reagent_containers/spray(src)
 
-	src.emag.reagents.add_reagent("lube", 250)
+	src.emag.reagents.add_reagent(LUBE, 250)
 	src.emag.name = "Lube spray"
 	fix_modules()
 
@@ -348,22 +348,19 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 	src.modules += new /obj/item/weapon/crowbar(src)
 
-
-
 	src.emag = new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
 
 	var/datum/reagents/R = new/datum/reagents(50)
 	src.emag.reagents = R
 	R.my_atom = src.emag
-	R.add_reagent("beer2", 50)
+	R.add_reagent(BEER2, 50)
 	src.emag.name = "Mickey Finn's Special Brew"
 	fix_modules()
 
 
 
 /obj/item/weapon/robot_module/miner
-	name = "miner robot module"
-
+	name = "supply robot module"
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
@@ -376,8 +373,30 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.modules += new /obj/item/weapon/crowbar(src)
 	sensor_augs = list("Mesons", "Disable")
 //		src.modules += new /obj/item/weapon/pickaxe/shovel(src) Uneeded due to buffed drill
+
+	var/obj/item/device/destTagger/tag = new /obj/item/device/destTagger(src)
+	tag.mode = 1 //For editing the tag list
+	src.modules += tag
+
+	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
+	W.amount = 24
+	W.max_amount = 24
+	src.modules += W
+
 	fix_modules()
 
+/obj/item/weapon/robot_module/miner/respawn_consumable(var/mob/living/silicon/robot/R)
+	var/list/what = list (
+		/obj/item/stack/package_wrap
+	)
+	for (var/T in what)
+		if (!(locate(T) in src.modules))
+			src.modules -= null
+			var/obj/item/stack/O = new T(src)
+			if(istype(O,/obj/item/stack/package_wrap))
+				O.max_amount = 24
+			src.modules += O
+			O.amount = 1
 
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate robot module"

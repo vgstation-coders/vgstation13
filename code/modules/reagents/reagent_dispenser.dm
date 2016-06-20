@@ -84,7 +84,7 @@
 
 /obj/structure/reagent_dispensers/watertank/New()
 	. = ..()
-	reagents.add_reagent("water", 1000)
+	reagents.add_reagent(WATER, 1000)
 
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
@@ -121,7 +121,7 @@
 	if (istype(W,/obj/item/weapon/wrench))
 		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
 			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
-		modded = !modded
+		modded = modded ? 0 : 1
 	if (istype(W,/obj/item/device/assembly_holder))
 		if (rig)
 			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
@@ -200,7 +200,7 @@
 
 /obj/structure/reagent_dispensers/fueltank/New()
 	. = ..()
-	reagents.add_reagent("fuel", 1000)
+	reagents.add_reagent(FUEL, 1000)
 
 /obj/structure/reagent_dispensers/peppertank
 	name = "Pepper Spray Refiller"
@@ -213,7 +213,7 @@
 
 /obj/structure/reagent_dispensers/peppertank/New()
 	. = ..()
-	reagents.add_reagent("condensedcapsaicin", 1000)
+	reagents.add_reagent(CONDENSEDCAPSAICIN, 1000)
 
 /obj/structure/reagent_dispensers/water_cooler
 	name = "Water-Cooler"
@@ -229,7 +229,7 @@
 
 /obj/structure/reagent_dispensers/water_cooler/New()
 	. = ..()
-	reagents.add_reagent("water", addedliquid)
+	reagents.add_reagent(WATER, addedliquid)
 	desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
 	
 /obj/structure/reagent_dispensers/water_cooler/wrenchable()
@@ -264,10 +264,7 @@
 
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
-	reagents.add_reagent("beer", 1000)
-	
-/obj/structure/reagent_dispensers/beerkeg/wrenchable()
-	return 1
+	reagents.add_reagent(BEER, 1000)
 
 /obj/structure/reagent_dispensers/bloodkeg
 	name = "old keg"
@@ -278,10 +275,7 @@
 
 /obj/structure/reagent_dispensers/bloodkeg/New()
 	. = ..()
-	reagents.add_reagent("blood", 1000)
-	
-/obj/structure/reagent_dispensers/bloodkeg/wrenchable()
-	return 1
+	reagents.add_reagent(BLOOD, 1000)
 
 /obj/structure/reagent_dispensers/bloodkeg/cultify()
 	return
@@ -300,7 +294,7 @@
 
 /obj/structure/reagent_dispensers/virusfood/New()
 	. = ..()
-	reagents.add_reagent("virusfood", 1000)
+	reagents.add_reagent(VIRUSFOOD, 1000)
 
 /obj/structure/reagent_dispensers/corn_oil_tank
 	name = "oil vat"
@@ -311,7 +305,7 @@
 
 /obj/structure/reagent_dispensers/corn_oil_tank/New()
 	. = ..()
-	reagents.add_reagent("cornoil", 1000)
+	reagents.add_reagent(CORNOIL, 1000)
 
 /obj/structure/reagent_dispensers/silicate
 	name = "\improper Silicate Tank"
@@ -322,7 +316,7 @@
 
 /obj/structure/reagent_dispensers/silicate/New()
 	. = ..()
-	reagents.add_reagent("silicate", 1000)
+	reagents.add_reagent(SILICATE, 1000)
 
 /obj/structure/reagent_dispensers/silicate/attackby(var/obj/item/W, var/mob/user)
 	. = ..()

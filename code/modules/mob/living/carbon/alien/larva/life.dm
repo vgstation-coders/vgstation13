@@ -71,7 +71,7 @@
 	proc/breathe()
 
 
-		if(reagents.has_reagent("lexorin"))
+		if(reagents.has_reagent(LEXORIN))
 			return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 			return
@@ -191,12 +191,12 @@
 		if(M_FAT in mutations)
 			if(nutrition < 100)
 				if(prob(round((50 - nutrition) / 100)))
-					to_chat(src, "<span class='notice'>You feel fit again !</span>")
+					to_chat(src, "<span class='notice'>You feel fit again!</span>")
 					mutations.Add(M_FAT)
 		else
 			if(nutrition > 500)
 				if(prob(5 + round((nutrition - max_grown) / 2)))
-					to_chat(src, "<span class='danger'>You suddenly feel blubbery !</span>")
+					to_chat(src, "<span class='danger'>You suddenly feel blubbery!</span>")
 					mutations.Add(M_FAT)
 
 		burn_calories(2*HUNGER_FACTOR / 3)
@@ -240,7 +240,7 @@
 				//if( health <= 20 && prob(1) )
 				//	spawn(0)
 				//		emote("gasp")
-				if(!reagents.has_reagent("inaprovaline"))
+				if(!reagents.has_reagent(INAPROVALINE))
 					adjustOxyLoss(1)
 				Paralyse(3)
 
@@ -332,7 +332,7 @@
 			else
 				healths.icon_state = "health6"
 
-		if(pullin)	pullin.icon_state = "pull[pulling ? 1 : 0]"
+		update_pull_icon()
 
 
 		if (toxin)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"

@@ -241,7 +241,7 @@
 				"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
 				"<span class='notice'>You hug [src].</span>", \
 				)
-			reagents.add_reagent("paracetamol", 1)
+			reagents.add_reagent(PARACETAMOL, 1)
 
 			share_contact_diseases(M)
 
@@ -396,56 +396,8 @@
 		return 1
 	return
 
-/mob/living/carbon/u_equip(obj/item/W as obj, dropped = 1)
-	var/success = 0
-	if(!W)	return 0
-	else if (W == handcuffed)
-		handcuffed.handcuffs_remove(src)
-		success = 1
-
-	else if (W == legcuffed)
-		legcuffed = null
-		success = 1
-		update_inv_legcuffed()
-	else
-		..()
-	if(success)
-		if (W)
-			if (client)
-				client.screen -= W
-			if(dropped)
-				W.loc = loc
-				W.dropped(src)
-			if(W)
-				W.layer = initial(W.layer)
-
-	return
-/*
 /mob/living/carbon/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)
-	var/dat = {"
-	<B><HR><FONT size=3>[name]</FONT></B>
-	<BR><HR>
-	<BR><B>Head(Mask):</B> <A href='?src=\ref[src];item=mask'>[(wear_mask ? wear_mask : "Nothing")]</A>
-	<BR><B>Left Hand:</B> <A href='?src=\ref[src];item=l_hand'>[(l_hand ? l_hand  : "Nothing")]</A>
-	<BR><B>Right Hand:</B> <A href='?src=\ref[src];item=r_hand'>[(r_hand ? r_hand : "Nothing")]</A>
-	<BR><B>Back:</B> <A href='?src=\ref[src];item=back'>[(back ? back : "Nothing")]</A> [((istype(wear_mask, /obj/item/clothing/mask) && istype(back, /obj/item/weapon/tank) && !( internal )) ? text(" <A href='?src=\ref[];item=internal'>Set Internal</A>", src) : "")]
-	<BR>[(handcuffed ? text("<A href='?src=\ref[src];item=handcuff'>Handcuffed</A>") : text("<A href='?src=\ref[src];item=handcuff'>Not Handcuffed</A>"))]
-	<BR>[(internal ? text("<A href='?src=\ref[src];item=internal'>Remove Internal</A>") : "")]
-	<BR><A href='?src=\ref[src];item=pockets'>Empty Pockets</A>
-	<BR><A href='?src=\ref[user];refresh=1'>Refresh</A>
-	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
-	<BR>"}
-	user << browse(dat, text("window=mob\ref[src];size=325x500"))
-	onclose(user, "mob\ref[src]")
-	return
-*/
-
-
-/mob/living/carbon/show_inv(mob/living/carbon/user as mob)
-	user.set_machine(src)
-	var/has_breathable_mask = istype(wear_mask, /obj/item/clothing/mask)
-	var/TAB = "&nbsp;&nbsp;&nbsp;&nbsp;"
 	var/dat = ""
 
 	if(handcuffed)
@@ -453,16 +405,15 @@
 	else
 		for(var/i = 1 to held_items.len) //Hands
 			var/obj/item/I = held_items[i]
-			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];item=hand;hand_index=[i]'>		[(I && !I.abstract) ? I : "<font color=grey>Empty</font>"]</A><BR>"
+			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=back'> [(back && !(src.back.abstract)) ? back : "<font color=grey>Empty</font>"]</A>"
-	if(has_breathable_mask && istype(back, /obj/item/weapon/tank))
-		dat += "<BR>[TAB]&#8627;<A href='?src=\ref[src];item=internal'>[internal ? "Disable Internals" : "Set Internals"]</A>"
+	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
 
 	dat += "<BR>"
 
-
-	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=mask'>		[(wear_mask && !(src.wear_mask.abstract))	? wear_mask	: "<font color=grey>Empty</font>"]</A>"
+	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+	if(has_breathing_mask())
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
 
 	dat += {"
 	<BR>
@@ -473,9 +424,27 @@
 	popup.set_content(dat)
 	popup.open()
 
+/mob/living/carbon/Topic(href, href_list)
+	..()
+	if (href_list["mach_close"])
+		var/t1 = text("window=[]", href_list["mach_close"])
+		unset_machine()
+		src << browse(null, t1)
 
+	if(href_list["hands"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
 
+	else if(href_list["item"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
 
+	else if(href_list["internals"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+			return
+		set_internals(usr)
 
 //generates realistic-ish pulse output based on preset levels
 /mob/living/carbon/proc/get_pulse(var/method)	//method 0 is for hands, 1 is for machines, more accurate
@@ -556,13 +525,26 @@
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
 
-//Check for brain worms in head.
-/mob/proc/has_brain_worms()
+//Check for brain worms in given limb.
+/mob/proc/has_brain_worms(var/host_region = "head")
 	for(var/I in contents)
 		if(istype(I,/mob/living/simple_animal/borer))
-			return I
+			var/mob/living/simple_animal/borer/B = I
+			if(B.hostlimb == host_region)
+				return B
 
 	return 0
+
+/mob/proc/get_brain_worms()
+	var/list/borers_in_mob = list()
+	for(var/I in contents)
+		if(istype(I,/mob/living/simple_animal/borer))
+			var/mob/living/simple_animal/borer/B = I
+			borers_in_mob.Add(B)
+	if(borers_in_mob.len)
+		return borers_in_mob
+	else
+		return 0
 
 /mob/living/carbon/is_muzzled()
 	return(istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
@@ -586,7 +568,7 @@
 	return 0
 
 /mob/living/carbon/CheckSlip()
-	return !locked_to && !lying
+	return !locked_to && !lying && !unslippable
 
 /mob/living/carbon/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
 	if(!slip_on_walking && m_intent == "walk")
