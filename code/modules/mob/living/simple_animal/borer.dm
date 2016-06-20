@@ -1137,7 +1137,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 					return
 				var/datum/reagents/R = host.reagents
 				if(R)
-					if(R.has_reagent("silicate"))
+					if(R.has_reagent(SILICATE))
 						to_chat(src, "<span class='warning'>Something in your host's bloodstream is tightening their muscles. You can't extend your arm!</span>")
 						return
 				if(host.Adjacent(A))
