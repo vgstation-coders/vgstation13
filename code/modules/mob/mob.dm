@@ -320,33 +320,33 @@ var/global/obj/screen/fuckstat/FUCK = new
 // blind_drugged_message (optional) is shown to blind hallucinating people
 
 /mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message)
-	var/list/L //Go through mobs in this list and show them the message. Unless the mob is picked up (and is in a "holder" item), this equals to viewers(src).
+	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
+		if(istype(hearer.attached, /mob))
+			var/mob/M = hearer.attached
+			if(M.see_invisible < invisibility)
+				continue
+			var/hallucination = M.hallucinating()
+			var/msg = message
+			var/msg2 = blind_message
 
-	if(istype(loc, /obj/item/weapon/holder))
-		L = viewers(get_turf(src))
-	else
-		L = viewers(src)
+			if(hallucination && drugged_message)
+				if(drugged_message)
+					msg = drugged_message
+				if(blind_drugged_message)
+					msg2 = blind_drugged_message
 
-	for(var/mob/M in L)
-		if(M.see_invisible < invisibility)
-			continue
-		var/hallucination = M.hallucinating()
-		var/msg = message
-		var/msg2 = blind_message
+			if(M==src)
+				if(self_message)
+					msg = self_message
+				if(hallucination && self_drugged_message)
+					msg = self_drugged_message
 
-		if(hallucination && drugged_message)
-			if(drugged_message)
-				msg = drugged_message
-			if(blind_drugged_message)
-				msg2 = blind_drugged_message
+			M.show_message( msg, 1, msg2, 2)
 
-		if(M==src)
-			if(self_message)
-				msg = self_message
-			if(hallucination && self_drugged_message)
-				msg = self_drugged_message
-
-		M.show_message( msg, 1, msg2, 2)
+		else if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+			var/obj/machinery/hologram/holopad/holo = hearer.attached
+			if(holo.master)
+				holo.master.show_message( message, 1, blind_message, 2)
 
 // Show a message to all mobs in sight of this atom
 // Use for objects performing visible actions
@@ -357,6 +357,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	for(var/mob/virtualhearer/hearer in viewers(src))
 		if(istype(hearer.attached, /mob))
 			var/mob/M = hearer.attached
+			if(M.see_invisible < invisibility)
+				continue
 			var/hallucination = M.hallucinating()
 			var/msg = message
 			var/msg2 = blind_message
@@ -367,6 +369,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 				if(blind_drugged_message)
 					msg2 = blind_drugged_message
 			M.show_message( msg, 1, msg2, 2)
+
 		else if(istype(hearer.attached, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/holo = hearer.attached
 			if(holo.master)
@@ -903,7 +906,7 @@ var/list/slot_equipment_priority = list( \
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
-	if (!P.anchored)
+	if (!( P.anchored ))
 		P.add_fingerprint(src)
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
@@ -916,7 +919,6 @@ var/list/slot_equipment_priority = list( \
 
 		src.pulling = P
 		P.pulledby = src
-		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
 			if(!iscarbon(src))
@@ -925,21 +927,15 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = usr
 
 /mob/verb/stop_pulling()
+
+
 	set name = "Stop Pulling"
 	set category = "IC"
 
 	if(pulling)
 		pulling.pulledby = null
 		pulling = null
-		update_pull_icon()
 
-//I don't want to update the whole HUD each time!
-/mob/proc/update_pull_icon()
-	if(pullin) //Yes, the pulling icon in HUDs is referenced by a mob-level variable called "pullin". It's awful I know
-		if(pulling)
-			pullin.icon_state = "pull1"
-		else
-			pullin.icon_state = "pull0"
 
 
 /mob/verb/mode()
