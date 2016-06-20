@@ -93,7 +93,7 @@
 				return
 			var/ratio = power_supply.charge / power_supply.maxcharge
 			ratio = round(ratio, 0.25) * 100
-			overlays += "nucgun-[ratio]"
+			overlays += image(icon = icon, icon_state = "nucgun-[ratio]")
 
 
 		update_reactor()

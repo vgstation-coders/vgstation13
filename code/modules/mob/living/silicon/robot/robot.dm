@@ -1164,22 +1164,22 @@
 	if(opened)
 		if(custom_sprite)//Custom borgs also have custom panels, heh
 			if(wiresexposed)
-				overlays += "[src.ckey]-openpanel +w"
+				overlays += image(icon = icon, icon_state = "[src.ckey]-openpanel +w")
 			else if(cell)
-				overlays += "[src.ckey]-openpanel +c"
+				overlays += image(icon = icon, icon_state = "[src.ckey]-openpanel +c")
 			else
-				overlays += "[src.ckey]-openpanel -c"
+				overlays += image(icon = icon, icon_state = "[src.ckey]-openpanel -c")
 		else
 			if(wiresexposed)
-				overlays += "ov-openpanel +w"
+				overlays += image(icon = icon, icon_state = "ov-openpanel +w")
 			else if(cell)
-				overlays += "ov-openpanel +c"
+				overlays += image(icon = icon, icon_state = "ov-openpanel +c")
 			else
-				overlays += "ov-openpanel -c"
+				overlays += image(icon = icon, icon_state = "ov-openpanel -c")
 
 	// WHY THE FUCK DOES IT HAVE A SHIELD, ARE YOU STUPID
 	if(module_active && istype(module_active,/obj/item/borg/combat/shield))
-		overlays += "[icon_state]-shield"
+		overlays += image(icon = icon, icon_state = "[icon_state]-shield")
 
 	if(base_icon)
 		// no no no no

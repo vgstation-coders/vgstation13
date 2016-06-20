@@ -261,7 +261,7 @@
 	overlays += image(icon = icon, icon_state = "teg_mid")
 
 	if(lastgenlev != 0)
-		overlays += "teg-op[lastgenlev]"
+		overlays += image(icon = icon, icon_state = "teg-op[lastgenlev]")
 
 // We actually tick power gen on the pipenet process to make sure we're synced with pipenet updates.
 /obj/machinery/power/generator/proc/pipenet_process(var/list/event_args, var/datum/controller/process/pipenet/owner)

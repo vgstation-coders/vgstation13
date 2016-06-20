@@ -231,7 +231,7 @@
 
 	if(!(stat & (NOPOWER | BROKEN)))
 
-		overlays += "o-[i]"
+		overlays += image(icon = icon, icon_state = "o-[i]")
 
 		overlays += image(icon = icon, icon_state = "p")
 
