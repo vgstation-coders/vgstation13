@@ -757,11 +757,7 @@ var/global/mulebot_count = 0
 	H.apply_damage(0.5*damage, BRUTE, "l_arm")
 	H.apply_damage(0.5*damage, BRUTE, "r_arm")
 	bloodiness += 4
-	if(istype(H,/mob/living/carbon/human)
-		var/mob/living/carbon/human/mob
-		currentBloodColor = mob.species.blood_color
-	else
-		currentBloodColor = bloodcolor
+	currentBloodColor=bloodcolor // For if species get different blood colors.
 
 // player on mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
