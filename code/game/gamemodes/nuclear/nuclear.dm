@@ -232,6 +232,11 @@
 /datum/game_mode/proc/equip_syndicate(mob/living/carbon/human/synd_mob)
 	var/radio_freq = SYND_FREQ
 
+	synd_mob.mutations.Add(M_PSY_RESIST) //Boy I sure hope this works!
+	synd_mob.update_mutantrace(0)
+	synd_mob.update_mutations(0)
+//  synd_mob.default_block_names=list("PSYRESISTBLOCK") //Prevent project mind from detecting them too early
+
 	if(synd_mob.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
 		to_chat(synd_mob, "<span class='notice'>Your intensive physical training to become a Nuclear Operative has paid off and made you fit again!</span>")
 		synd_mob.overeatduration = 0 //Fat-B-Gone
