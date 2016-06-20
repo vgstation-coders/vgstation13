@@ -95,7 +95,7 @@
 
 	browse_to(user, html)
 
-/datum/error_viewer/error_cache/proc/log_error(var/exception/e, var/list/desclines)
+/datum/error_viewer/error_cache/proc/log_error(var/exception/e, var/list/desclines, var/skip_count)
 	if (!istype(e))
 		return // Abnormal exception, don't even bother
 
@@ -105,17 +105,19 @@
 		error_source = new(e)
 		error_sources[erroruid] = error_source
 
-	var/datum/error_viewer/error_entry/error_entry = new(e, desclines)
+	var/datum/error_viewer/error_entry/error_entry = new(e, desclines, skip_count)
 	error_entry.error_source = error_source
 	errors += error_entry
 	error_source.errors += error_entry
+	if (skip_count)
+		return // Skip notifying admins about skipped errors.
 
 	// Show the error to admins with debug messages turned on, but only if one
 	//  from the same source hasn't been shown too recently
 	if (error_source.next_message_at <= world.time)
 		var/const/viewtext = "\[view]" // Nesting these in other brackets went poorly
 		log_debug("Runtime in <b>[e.file]</b>, line <b>[e.line]</b>: <b>[html_encode(e.name)]</b> [error_entry.make_link(viewtext)]")
-		error_source.next_message_at = world.time + ERROR_MSG_DELAY
+		error_source.next_message_at = world.time + config.error_msg_delay
 
 /datum/error_viewer/error_source
 	var/list/errors = list()
@@ -144,10 +146,16 @@
 	var/desc = ""
 	var/usr_ref
 	var/turf/usr_loc
+	var/is_skip_count
 
-/datum/error_viewer/error_entry/New(var/exception/e, var/list/desclines)
+/datum/error_viewer/error_entry/New(var/exception/e, var/list/desclines, var/skip_count)
 	if (!istype(e))
 		name = "<b>\[[time_stamp()]]</b> Uncaught exception: <b>[html_encode(e.name)]</b>"
+		return
+
+	if(skip_count)
+		name = "\[[time_stamp()]] Skipped [skip_count] runtimes in [e.file],[e.line]."
+		is_skip_count = TRUE
 		return
 
 	name = "<b>\[[time_stamp()]]</b> Runtime in <b>[e.file]</b>, line <b>[e.line]</b>: <b>[html_encode(e.name)]</b>"
@@ -176,3 +184,6 @@
 			html += " <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[usr_loc.x];Y=[usr_loc.y];Z=[usr_loc.z]'>JMP</a>"
 
 	browse_to(user, html)
+
+/datum/error_viewer/error_entry/make_link(var/linktext, var/datum/error_viewer/back_to, var/linear)
+	return is_skip_count ? name : ..()

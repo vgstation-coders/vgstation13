@@ -31,38 +31,36 @@
 	// Handle cooldowns and silencing spammy errors
 	var/silencing = 0
 	// Each occurrence of a unique error adds to its "cooldown" time...
-	cooldown = max(0, cooldown - (world.time - last_seen)) + ERROR_COOLDOWN
+	cooldown = max(0, cooldown - (world.time - last_seen)) + config.error_cooldown
 	// ... which is used to silence an error if it occurs too often, too fast
-	if (cooldown > ERROR_MAX_COOLDOWN)
+	if (cooldown > config.error_cooldown * config.error_limit)
 		cooldown = -1
 		silencing = 1
 		spawn (0)
 			usr = null
-			sleep(ERROR_SILENCE_TIME)
+			sleep(config.error_silence_time)
 			var/skipcount = abs(global.error_cooldown[erroruid]) - 1
 			global.error_cooldown[erroruid] = 0
 			if (skipcount > 0)
 				world.log << "\[[time_stamp()]] Skipped [skipcount] runtimes in [e.file],[e.line]."
+				error_cache.log_error(e, skip_count = skipcount)
 
 	global.error_last_seen[erroruid] = world.time
 	global.error_cooldown[erroruid] = cooldown
 
 	// The detailed error info needs some tweaking to make it look nice
 	var/list/usrinfo = null
-	if (istype(usr)) // First, try to make better usr info lines
-		usrinfo = list("  usr: [usr] ([usr.ckey]) ([usr.type])")
-		var/turf/t = get_turf(usr)
-		if (istype(t))
-			usrinfo += "  usr.loc: [usr.loc] ([t.x],[t.y],[t.z]) ([usr.loc.type])"
-
-		else if (usr.loc)
-			usrinfo += "  usr.loc: [usr.loc] (0,0,0) ([usr.loc.type])"
-
+	var/locinfo
+	if (istype(usr))
+		usrinfo = list("  usr: [datum_info_line(usr)]")
+		locinfo = atom_loc_line(usr)
+		if (locinfo)
+			usrinfo += "  usr.loc: [locinfo]"
 	// The proceeding mess will almost definitely break if error messages are ever changed
 	// I apologize in advance
 	var/list/splitlines = splittext(e.desc, "\n")
 	var/list/desclines = list()
-	if (splitlines.len > 2) // If there aren't at least three lines, there's no info
+	if (splitlines.len > ERROR_USEFUL_LEN) // If there aren't at least three lines, there's no info
 		for (var/line in splitlines)
 			if (length(line) < 3 || findtext(line, "source file:") || findtext(line, "usr.loc:"))
 				continue
@@ -83,7 +81,7 @@
 		desclines.Add(usrinfo)
 
 	if (silencing)
-		desclines += "  (This error will now be silenced for [ERROR_SILENCE_TIME / 600] minutes)"
+		desclines += "  (This error will now be silenced for [config.error_silence_time / 600] minutes)"
 
 	// Now to actually output the error info...
 	world.log << "\[[time_stamp()]] Runtime in [e.file],[e.line]: [e]"
