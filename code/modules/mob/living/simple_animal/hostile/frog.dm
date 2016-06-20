@@ -170,6 +170,9 @@
 	name = "hopper centurion"
 	desc = "A legionary that has proven to be a mighty fighter. They often carry spears that they use for both melee and ranged combat."
 
+	health = 50
+	maxHealth = 50
+
 	ranged_cooldown_cap = 4 //Shorter leap / spear throw cooldown
 
 /mob/living/simple_animal/hostile/frog/centurion/New()
@@ -181,6 +184,9 @@
 /mob/living/simple_animal/hostile/frog/javelineer
 	name = "hopper javelineer"
 	desc = "A legionary with great marksmanship, it carries a bag of spears that it uses to harass its enemies from distance."
+
+	health = 35
+	maxHealth = 35
 
 	retreat_distance = 3
 	minimum_distance = 3

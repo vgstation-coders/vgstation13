@@ -265,10 +265,6 @@
 	water.plane = PLANE_MOB
 	overlays += water
 
-/turf/simulated/floor/beach/water/deep
-	name = "deep water"
-	density = 1
-
 /turf/simulated/floor/grass
 	name = "Grass patch"
 	icon_state = "grass1"

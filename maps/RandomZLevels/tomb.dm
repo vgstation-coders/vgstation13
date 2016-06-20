@@ -30,7 +30,8 @@
 
 /obj/effect/narration/tomb/intro
 	msg = {"<span class='info'>You appear on the surface of an unknown to you planet. This appears to be a desert; trees are few and scarce and there's no water in sight. The sun is setting.
-	The first thing that catches your eye is the massive pyramid in front of you. Behind it you see an expedition camp of some sort.</span>"}
+	The first thing that catches your eye is the massive pyramid in front of you. Behind it you see an expedition camp of some sort.
+	To the left, you see a massive cliff with what looks like an entrance in it.</span>"}
 
 /obj/effect/trap/cage_trap //When triggered, spawns a cage and unleashes monsters
 	name = "cage trap"
@@ -59,6 +60,25 @@
 		new /mob/living/simple_animal/hostile/frog(T)
 
 		sleep(rand(2,8))
+
+/obj/effect/trap/door_trap
+	name = "door trap"
+	var/activate_id = ""
+	var/global_search = 0
+	var/only_open = 1
+
+/obj/effect/trap/door_trap/proc/is_valid_door(obj/effect/hidden_door/D)
+	return (D.icon_state == activate_id && (D.z == z) && !(only_open && D.opened))
+
+/obj/effect/trap/door_trap/activate()
+	if(global_search)
+		for(var/obj/effect/hidden_door/hidden_door in hidden_doors)
+			if(is_valid_door(hidden_door))
+				hidden_door.toggle()
+	else
+		for(var/obj/effect/hidden_door/hidden_door in get_area(src))
+			if(is_valid_door(hidden_door))
+				hidden_door.toggle()
 
 /obj/item/weapon/skull/rigged/Crossed(atom/movable/L)
 	..()
@@ -333,10 +353,10 @@
 /obj/effect/landmark/water_puzzle
 	name = "water puzzle sewers"
 
-/turf/simulated/floor/beach/water/deep/teleport
+/turf/unsimulated/beach/water/deep/teleport
 	var/turf/teleport_destination
 
-/turf/simulated/floor/beach/water/deep/teleport/Entered(atom/movable/AM)
+/turf/unsimulated/beach/water/deep/teleport/Entered(atom/movable/AM)
 	..()
 
 	if(!teleport_destination)
