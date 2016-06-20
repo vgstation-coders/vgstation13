@@ -400,11 +400,13 @@
 
 /obj/item/seeds/pitcher
 	name = "tissue culture of slipping pitchers"
-	seeds_type = "pitcher"
+	seed_type = "pitcher"
 	vending_cat = "Vox hydroponics"
 
 /obj/item/seeds/aloe
 	name = "packet of aloe vera seeds"
+	seed_type = "aloe"
+	vending_cat = "Vox hydroponics"
 
 // Chili plants/variants.
 /datum/seed/chili
@@ -1622,17 +1624,18 @@
 /datum/seed/pitcher
 	name = "pitcher" //based on the slippery Nepenthes genus of pitcher plants
 	seed_name = "pitcher"
-	display_name = "slipping pitcher"
+	display_name = "pitcher" //because these are juicy 2, they automatically get renamed "slippery pitcher"
+	packet_icon = "seed-pitcher"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "pitcher"
-	chems = list("sacid" = list(1,25))
+	chems = list(SACID = list(1,25))
 
 	potency = 10
 	lifespan = 50
 	yield = 3
 	growth_stages = 3
-	maturation = 1
+	maturation = 12
 	water_consumption = 6
 	ideal_heat = 310
 	pest_tolerance = 10
@@ -1644,10 +1647,11 @@
 	name = "aloe"
 	seed_name = "aloe"
 	display_name = "aloe vera"
+	packet_icon = "seed-aloe"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "aloe"
-	chems = list("tricordrazine" = (1,10)) //Not as good as poppy's bicaridine for speedy heals, but general purpose.
+	chems = list(DERMALINE = list(1,10)) //Not as good as poppy's bicaridine for speedy heals, but general purpose.
 
 	lifespan = 30
 	maturation = 6

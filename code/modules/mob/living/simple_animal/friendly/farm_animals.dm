@@ -260,7 +260,7 @@
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
-#define box_growth_bar 500
+#define BOX_GROWTH_BAR 500
 /mob/living/simple_animal/hostile/retaliate/box
 	name = "box"
 	desc = "A distant descendent of the common domesticated Earth pig, corrupted by generations of splicing and genetic decay."
@@ -283,7 +283,7 @@
 	size = SIZE_SMALL
 	var/fat = 0
 
-/mob/living/simple_animal/hostile/retaliate/box/updatefat()
+/mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
 	if(size<SIZE_BIG)
 		size++
 		fat = 0
@@ -299,16 +299,22 @@
 			to_chat(src, "<span class='info'>It's huge - a prize winning porker!</span>")
 
 /mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
-	if(isvox(A)) return 0 //Won't attack Vox
+	if(ishuman(A))
+		var/mob/living/carbon/human/H = A
+		if(isvox(H)) return 0 //Won't attack Vox
 	else ..()
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
 	. = ..()
-	if(size<SIZE_BIG) fat =+ rand(2)
-	if(fat>box_growth_bar) updatefat()
+	if(size<SIZE_BIG) fat += rand(2)
+	if(fat>BOX_GROWTH_BAR) updatefat()
+
+/mob/living/simple_animal/hostile/retaliate/box/death()
+	..()
+	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/chickenshroom)) //Pigs like mushrooms
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
 		if(!stat && size < SIZE_BIG)
 			if(!user.drop_item(O))
 				user << "<span class='notice'>You can't let go of \the [O]!</span>"
