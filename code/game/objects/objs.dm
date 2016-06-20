@@ -1,4 +1,4 @@
-var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "plasma", "pacid" =  "polytrinic acid", "sacid" =  "sulphuric acid", "amutationtoxin" = "slime mutation toxin")
+var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, PACID =  "polytrinic acid", SACID =  "sulphuric acid", AMUTATIONTOXIN = "slime mutation toxin")
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
@@ -26,6 +26,7 @@ var/global/list/reagents_to_log = list("fuel"  =  "welder fuel", "plasma"=  "pla
 
 	var/holomap = FALSE // Whether we should be on the holomap.
 	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
+	plane = PLANE_OBJ
 
 /obj/New()
 	..()

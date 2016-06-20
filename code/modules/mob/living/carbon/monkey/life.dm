@@ -132,8 +132,8 @@
 		to_chat(src, "<span class='warning'>You suddenly feel very weak.</span>")
 		Weaken(3)
 		emote("collapse")
-		if(reagents.has_reagent("creatine"))
-			var/datum/reagent/creatine/C = reagents.get_reagent("creatine")
+		if(reagents.has_reagent(CREATINE))
+			var/datum/reagent/creatine/C = reagents.get_reagent(CREATINE)
 			C.dehulk(src)
 
 	if (radiation)
@@ -231,7 +231,7 @@
 		return
 
 	if(reagents)
-		if(reagents.has_reagent("lexorin")) return
+		if(reagents.has_reagent(LEXORIN)) return
 
 	if(!loc) return //probably ought to make a proper fix for this, but :effort: --NeoFite
 
@@ -376,7 +376,7 @@
 					ratio = 0
 		if(ratio)
 			if(reagents)
-				reagents.add_reagent("plasma", Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
+				reagents.add_reagent(PLASMA, Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
 			toxins_alert = max(toxins_alert, 1)
 	else
 		toxins_alert = 0
@@ -560,7 +560,7 @@
 			if( health <= 20 && prob(1) )
 				spawn(0)
 					emote("gasp")
-			if(!reagents.has_reagent("inaprovaline"))
+			if(!reagents.has_reagent(INAPROVALINE))
 				adjustOxyLoss(1)
 			Paralyse(3)
 		if(halloss > 100)
@@ -632,21 +632,6 @@
 
 
 /mob/living/carbon/monkey/proc/handle_regular_hud_updates()
-
-
-	if(!canWearHats && m_hatbg)
-		if(m_hatbg.icon_state != "blank")
-			m_hatbg.icon_state = "blank"
-
-	if(!canWearClothes && m_suitclothesbg)
-		if(m_suitclothesbg.icon_state != "blank")
-			m_suitclothesbg.icon_state = "blank"
-
-	if(!canWearGlasses && m_glassesbg)
-		if(m_glassesbg.icon_state != "blank")
-			m_glassesbg.icon_state = "blank"
-
-
 	if (stat == 2 || (M_XRAY in mutations))
 		sight |= SEE_TURFS
 		sight |= SEE_MOBS
@@ -684,7 +669,7 @@
 	if(pressure)
 		pressure.icon_state = "pressure[pressure_alert]"
 
-	if(pullin)	pullin.icon_state = "pull[pulling ? 1 : 0]"
+	update_pull_icon()
 
 
 	if (toxin)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"

@@ -37,6 +37,7 @@
 	max_n2 = 0
 
 	layer = TURF_LAYER + 0.01
+	plane = PLANE_TURF
 
 	treadmill_speed = 0
 	turns_per_move = 2 //2 life ticks / move
@@ -116,7 +117,7 @@
 				//And yeah, roaches can lay eggs on their own eggs. This is kinda intended
 
 				if(F && F.reagents)
-					F.reagents.add_reagent("toxin", rand(0.2,0.6)) //Add some toxin to the food
+					F.reagents.add_reagent(TOXIN, rand(0.2,0.6)) //Add some toxin to the food
 					lay_eggs()
 
 		return //Don't do anything after that
@@ -164,6 +165,7 @@
 
 	if(!flying)
 		layer = initial(layer) //Since cucarachas can hide under trash (which modifies their layer), this is kinda necessary
+		plane = initial(plane)
 
 /mob/living/simple_animal/cockroach/adjustBruteLoss() //When receiving damage
 	..()
@@ -216,6 +218,7 @@
 	response_harm   = initial(response_harm)
 
 	layer = initial(layer)
+	plane = initial(plane)
 
 	if(anim) animate(src, pixel_y = pixel_y - 8, 5, 1, ELASTIC_EASING)
 
@@ -262,7 +265,7 @@
 	.=..()
 
 	switch(id)
-		if("toxin")
+		if(TOXIN)
 			Die(gore = 0)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)

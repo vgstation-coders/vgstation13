@@ -76,7 +76,7 @@
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)	return
 	if(!loc)			return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
-	if(reagents && reagents.has_reagent("bustanut"))
+	if(reagents && reagents.has_reagent(BUSTANUT))
 		if(!(M_HARDCORE in mutations))
 			mutations.Add(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like you're the best around.  Nothing's going to get you down.</span>")
@@ -253,14 +253,14 @@
 
 /mob/living/proc/adjustBruteLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	bruteloss = min(max(bruteloss + amount, 0),(maxHealth*2))
+	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getOxyLoss()
 	return oxyloss
 
 /mob/living/proc/adjustOxyLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	oxyloss = min(max(oxyloss + amount, 0),(maxHealth*2))
+	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setOxyLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
@@ -271,7 +271,7 @@
 
 /mob/living/proc/adjustToxLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	toxloss = min(max(toxloss + amount, 0),(maxHealth*2))
+	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
@@ -282,14 +282,14 @@
 
 /mob/living/proc/adjustFireLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	fireloss = min(max(fireloss + amount, 0),(maxHealth*2))
+	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getCloneLoss()
 	return cloneloss
 
 /mob/living/proc/adjustCloneLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	cloneloss = min(max(cloneloss + amount, 0),(maxHealth*2))
+	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setCloneLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
@@ -300,7 +300,7 @@
 
 /mob/living/proc/adjustBrainLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	brainloss = min(max(brainloss + amount, 0),(maxHealth*2))
+	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setBrainLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
@@ -311,7 +311,7 @@
 
 /mob/living/proc/adjustHalLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	halloss = min(max(halloss + amount, 0),(maxHealth*2))
+	halloss = min(max(halloss + (amount * hal_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setHalLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
@@ -461,7 +461,7 @@ Thanks.
 
 /mob/living/proc/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
-	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg')
+	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_EFFECTS)
 
 	// shut down various types of badness
 	toxloss = 0
@@ -504,7 +504,7 @@ Thanks.
 		var/mob/living/carbon/human/H = src
 		H.timeofdeath = 0
 		H.vessel.reagent_list = list()
-		H.vessel.add_reagent("blood",560)
+		H.vessel.add_reagent(BLOOD,560)
 		H.shock_stage = 0
 		spawn(1)
 			H.fixblood()
@@ -961,8 +961,10 @@ Thanks.
 						CM.visible_message("<span class='danger'>[CM] manages to break the handcuffs!</span>",
 										   "<span class='notice'>You successfuly break your handcuffs.</span>")
 						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-						qdel(CM.handcuffed)
-						CM.handcuffed.handcuffs_remove(CM)
+						var/obj/item/weapon/handcuffs/cuffs = CM.handcuffed
+						CM.drop_from_inventory(cuffs)
+						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
+							qdel(cuffs)
 					else
 						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
 
@@ -982,8 +984,7 @@ Thanks.
 						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
 										   "<span class='notice'>You successfuly remove [HC].</span>",
 										   self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
-						CM.handcuffed.loc = usr.loc
-						CM.handcuffed.handcuffs_remove(CM)
+						CM.drop_from_inventory(HC)
 					else
 						CM.simple_message("<span class='warning'>Your uncuffing attempt was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")

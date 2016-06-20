@@ -94,11 +94,13 @@
 		if (W)
 			if(client)
 				client.screen -= W
+			W.forceMove(loc)
+			W.unequipped()
 			if(dropped)
-				W.forceMove(loc)
 				W.dropped(src)
 			if(W)
 				W.layer = initial(W.layer)
+				W.plane = initial(W.plane)
 
 	return
 
@@ -114,4 +116,5 @@
 
 	W.layer = 20
 	W.equipped(src, slot)
-	W.loc = src
+	W.forceMove(src)
+	if(client) client.screen |= W

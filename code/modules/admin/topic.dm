@@ -1473,6 +1473,7 @@
 			if(I)
 				I.loc = M.loc
 				I.layer = initial(I.layer)
+				I.plane = initial(I.plane)
 				//I.dropped(M)
 				I.loc = pack
 
@@ -1607,6 +1608,7 @@
 			if(I)
 				I.loc = M.loc
 				I.layer = initial(I.layer)
+				I.plane = initial(I.plane)
 				//I.dropped(M)
 
 		if(istype(M, /mob/living/carbon/human))
@@ -2868,7 +2870,7 @@
 					var/turf/U = pick(turflist)
 					var/obj/structure/closet/crate/secure/weapon/experimental/E = new(U)
 					to_chat(C, "<span class='danger'>A crate appears next to you. You think you can read \"[E.chosen_set]\" scribbled on it</span>")
-					U.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg')
+					U.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
 				message_admins("[key_name_admin(usr)] distributed experimental guns to the entire crew")
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2925,19 +2927,35 @@
 			if("hellonearth")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","NS")
-				var/choice = input("You sure you want to end the round and summon narsie at your location? Misuse of this could result in removal of flags or halarity.") in list("PRAISE SATAN", "Cancel")
+				var/choice = input("You sure you want to end the round and summon narsie at your location? Misuse of this could result in removal of flags or hilarity.") in list("PRAISE SATAN", "Cancel")
 				if(choice == "PRAISE SATAN")
 					new /obj/machinery/singularity/narsie/large(get_turf(usr))
 					message_admins("[key_name_admin(usr)] has summoned narsie and brought about a new realm of suffering.")
 			if("supermattercascade")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SC")
-				var/choice = input("You sure you want to destroy the universe and create a large explosion at your location? Misuse of this could result in removal of flags or halarity.") in list("NO TIME TO EXPLAIN", "Cancel")
+				var/choice = input("You sure you want to destroy the universe and create a large explosion at your location? Misuse of this could result in removal of flags or hilarity.") in list("NO TIME TO EXPLAIN", "Cancel")
 				if(choice == "NO TIME TO EXPLAIN")
 					explosion(get_turf(usr), 8, 16, 24, 32, 1)
 					new /turf/unsimulated/wall/supermatter(get_turf(usr))
 					SetUniversalState(/datum/universal_state/supermatter_cascade)
 					message_admins("[key_name_admin(usr)] has managed to destroy the universe with a supermatter cascade. Good job, [key_name_admin(usr)]")
+			if("meteorstorm")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","MS")
+				var/choice = input("Are you sure you want to summon an unending hail of meteors and force station evacuation? This will only work properly if the shuttle is not in use. Misuse of this could result in removal of flags or hilarity.") in list("BRING ME MY FRIDGE", "Cancel")
+				if(choice == "BRING ME MY FRIDGE")
+					//We go through a boring amount of variable prompts first
+					var/extra_delay = input("Input an extra delay before warning and announcement, in tenths of seconds. Default is 100", 100) as num|null
+					var/supply_delay = input("Input an extra delay before supply, in tenths of seconds; Default is 100", 100) as num|null
+					var/shuttle_delay = input("Input a shuttle delay multiplier, times ten minutes. Default is 3", 3) as num|null
+					var/meteor_delay = input("Input the delay before meteors start striking, in tenths of seconds. Keep null to generate between 7.5 to 10 minutes. Default is null", 0) as num|null
+					var/meteor_size_l = input("Input a lower interval on the amount of meteors per wave. Default is 150", 150) as num|null
+					var/meteor_size_h = input("Input an upper interval on the amount of meteors per wave. Default is 200", 200) as num|null
+					var/choice_second = input("Are you still sure you want to summon a meteor storm? Misuse of this could result in removal of flags or hilarity.") in list("WORKED FOR INDIANA JONES", "Cancel")
+					if(choice_second == "WORKED FOR INDIANA JONES")
+						meteor_universal_state(1, extra_delay, supply_delay, shuttle_delay, meteor_delay, meteor_size_l, meteor_size_h)
+						message_admins("[key_name_admin(usr)] has summoned an unending meteor storm upon the station. Go ahead and ask him for the details, don't forget to scream at him.")
 			if("mobswarm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MS")
@@ -2969,7 +2987,7 @@
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg')
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = PLANE_MOB)
 				D.name = "Admin"
 				D.real_name = "Admin"
 				var/newname = ""

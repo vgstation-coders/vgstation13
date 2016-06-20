@@ -61,7 +61,9 @@
 			"<span class='notice'>You hear squelching...</span>")
 	lock_atom(M, /datum/locking_category/bed/nest)
 	src.add_fingerprint(user)
-	overlays += image(icon,"nest-covering",MOB_LAYER)
+	var/image/nest_covering = image(icon,"nest-covering",MOB_LAYER)
+	nest_covering.plane = PLANE_MOB
+	overlays += nest_covering
 	stabilize()
 
 /obj/structure/bed/nest/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -93,8 +95,8 @@
 
 	var/mob/M = locked_atoms[1]
 
-	if(iscarbon(M) && (M.stat != DEAD) && (M.reagents.get_reagent_amount("stabilizine") < 1))
-		M.reagents.add_reagent("stabilizine", 2)
+	if(iscarbon(M) && (M.stat != DEAD) && (M.reagents.get_reagent_amount(STABILIZINE) < 1))
+		M.reagents.add_reagent(STABILIZINE, 2)
 	else
 		return
 

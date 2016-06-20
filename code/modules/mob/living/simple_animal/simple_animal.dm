@@ -107,7 +107,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
-	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg')
+	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_EFFECTS)
 	src.health = src.maxHealth
 	return 1
 /mob/living/simple_animal/New()
@@ -168,6 +168,25 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(paralysis)
 		AdjustParalysis(-1)
 
+	//Eyes
+	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
+		blinded = 1
+	else if(eye_blind)			//blindness, heals slowly over time
+		eye_blind = max(eye_blind-1,0)
+		blinded = 1
+	else if(eye_blurry)	//blurry eyes heal slowly
+		eye_blurry = max(eye_blurry-1, 0)
+
+	//Ears
+	if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
+		ear_deaf = max(ear_deaf, 1)
+	else if(ear_deaf)			//deafness, heals slowly over time
+		ear_deaf = max(ear_deaf-1, 0)
+	else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
+		ear_damage = max(ear_damage-0.05, 0)
+
+	confused = max(0, confused - 1)
+
 	if(purge)
 		purge -= 1
 
@@ -178,7 +197,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
-				if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
+				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
@@ -463,6 +482,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(M.Victim) return // can't attack while eating!
 
 	visible_message("<span class='danger'>[M.name] glomps [src]!</span>")
+	add_logs(M, src, "glomped on", 0)
 
 	var/damage = rand(1, 3)
 
@@ -705,10 +725,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(isDead()) return
 
 	switch(id)
-		if("sacid")
+		if(SACID)
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
-		if("pacid")
+		if(PACID)
 			if(!supernatural)
 				adjustBruteLoss(volume * 0.5)
 
