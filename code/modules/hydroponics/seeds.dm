@@ -1624,7 +1624,7 @@
 /datum/seed/pitcher
 	name = "pitcher" //based on the slippery Nepenthes genus of pitcher plants
 	seed_name = "pitcher"
-	display_name = "pitcher" //because these are juicy 2, they automatically get renamed "slippery pitcher"
+	display_name = "pitcher plant" //because these are juicy 2, they automatically get renamed "slippery pitcher"
 	packet_icon = "seed-pitcher"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
@@ -1636,6 +1636,7 @@
 	yield = 3
 	growth_stages = 3
 	maturation = 12
+	production = 4
 	water_consumption = 6
 	ideal_heat = 310
 	pest_tolerance = 10

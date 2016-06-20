@@ -260,7 +260,7 @@
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
-#define BOX_GROWTH_BAR 500
+#define BOX_GROWTH_BAR 200
 /mob/living/simple_animal/hostile/retaliate/box
 	name = "box"
 	desc = "A distant descendent of the common domesticated Earth pig, corrupted by generations of splicing and genetic decay."
@@ -292,11 +292,11 @@
 	..()
 	switch(size)
 		if(SIZE_SMALL)
-			to_chat(src, "<span class='info'>It's a box baby.</span>")
+			to_chat(user, "<span class='info'>It's a box baby.</span>")
 		if(SIZE_NORMAL)
-			to_chat(src, "<span class='info'>It's a respectable size.</span>")
+			to_chat(user, "<span class='info'>It's a respectable size.</span>")
 		if(SIZE_BIG)
-			to_chat(src, "<span class='info'>It's huge - a prize winning porker!</span>")
+			to_chat(user, "<span class='info'>It's huge - a prize winning porker!</span>")
 
 /mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
 	if(ishuman(A))
