@@ -86,9 +86,9 @@ var/list/department_radio_keys = list(
 	  ":е" = "Syndicate",	"#е" = "Syndicate",		".е" = "Syndicate",
 	  ":г" = "Supply",		"#г" = "Supply",		".г" = "Supply",
 	  ":в" = "Service",     "#в" = "Service",       ".в" = "Service",
-	  ":п" = "changeling",	"#п" = "changeling",	".п" = "changeling"
-	   ":ч" = "cultchat",	"#ч" = "cultchat",	".ч" = "cultchat",
-	  ":н" = "ancientchat",	"#н" = "ancientchat", 	".н" = "ancientchat",
+	  ":п" = "changeling",	"#п" = "changeling",	".п" = "changeling",
+	  ":ч" = "cultchat",	"#ч" = "cultchat",	".ч" = "cultchat",
+	  ":н" = "ancientchat",	"#н" = "ancientchat", 	".н" = "ancientchat"
 )
 
 /mob/living/proc/get_default_language()
