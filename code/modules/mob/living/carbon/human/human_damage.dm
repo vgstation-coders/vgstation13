@@ -65,9 +65,6 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustBruteLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
-/*	if(species && species.brute_mod)
-		amount = amount*species.brute_mod */ // this is already applied in organ.take_damage
-
 	amount = amount * brute_damage_modifier
 
 	if (organ_name in organs_by_name)
@@ -82,9 +79,6 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
-/*	if(species && species.burn_mod)
-		amount = amount*species.burn_mod */ // this is already applied in take_damage()
-
 	amount = amount * burn_damage_modifier
 
 	if (organ_name in organs_by_name)
@@ -302,8 +296,6 @@ This function restores all organs.
 				UpdateDamageIcon(1)
 		if(BURN)
 			damageoverlaytemp = 20
-			/*if(species && species.burn_mod)
-				damage = damage*species.burn_mod */ // this is already applied in organ.take_damage()
 			damage = damage * burn_damage_modifier
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
