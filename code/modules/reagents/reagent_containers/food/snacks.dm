@@ -2119,7 +2119,7 @@
 */
 /obj/item/weapon/reagent_containers/food/snacks/mint
 	name = "mint"
-	desc = "it is only wafer thin."
+	desc = "It is only wafer thin."
 	icon_state = "mint"
 	New()
 		..()
@@ -4272,3 +4272,12 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment",2)
+
+/obj/item/weapon/reagent_containers/food/snacks/vanishingstew
+	name = "vapor stew"
+	desc = "Most stews vanish, but this one does so before you eat it."
+	icon_state = "vanishingstew"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent("nutriment",3)

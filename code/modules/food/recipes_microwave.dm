@@ -1818,3 +1818,11 @@
 	reagents = list(SUGAR = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mint
+
+/datum/recipe/vanishingstew
+	reagents = list(VAPORSALT = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vanishingstew

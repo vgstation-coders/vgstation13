@@ -408,6 +408,11 @@
 	seed_type = "aloe"
 	vending_cat = "Vox hydroponics"
 
+/obj/item/seeds/vaporsac
+	name = "packet of vapor sac spores"
+	seed_type = "vaporsac"
+	vending_cat = "Vox hydroponics"
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -1565,7 +1570,7 @@
 	yield = 3
 	potency = 0
 
-/datum/seed/apple/wood
+/datum/seed/woodapple
 	name = "woodapple"
 	seed_name = "woodapple"
 	display_name = "woodapple tree"
@@ -1636,7 +1641,7 @@
 	yield = 3
 	growth_stages = 3
 	maturation = 12
-	production = 4
+	production = 1
 	water_consumption = 6
 	ideal_heat = 310
 	pest_tolerance = 10
@@ -1662,3 +1667,20 @@
 	growth_stages = 3
 	ideal_heat = 310
 	thorny = 1
+
+/datum/seed/vaporsac
+	name = "vaporsac"
+	seed_name = "vaporsac"
+	display_name = "vapor sac"
+	packet_icon = "seed-vaporsac"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac)
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	plant_icon = "vaporsac"
+	chems = list(VAPORSALT = list(1,1))
+
+	lifespan = 50
+	maturation = 6
+	production = 1
+	yield = 1
+	potency = 30
+	growth_stages = 3

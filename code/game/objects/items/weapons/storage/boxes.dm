@@ -214,6 +214,16 @@
 	for(var/i=0,i<5,i++)
 		new /obj/item/weapon/grenade/empgrenade(src)
 
+/obj/item/weapon/storage/box/wind
+	name = "wind grenades"
+	desc = "A box containing 3 wind grenades"
+	icon_state = "flashbang"
+
+/obj/item/weapon/storage/box/wind/New()
+	..()
+	for(var/i = 0, i < 3, i++)
+		new /obj/item/weapon/grenade/chem_grenade/wind(src)
+
 /obj/item/weapon/storage/box/foam
 	name = "metal foam grenades"
 	desc = "A box containing 7 metal foam grenades"
