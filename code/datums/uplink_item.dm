@@ -428,6 +428,12 @@ var/list/uplink_items = list()
 	item = /obj/item/device/chameleon
 	cost = 3
 
+/datum/uplink_item/stealthy_tools/moneybriefcase
+ 	name = "Operation Funding"
+ 	desc = "A briefcase containing seventy thousand credits, to be used at your own discretion."
+ 	item = /obj/item/weapon/storage/briefcase/moneybriefcase
+ 	cost = 1
+
 
 // DEVICE AND TOOLS
 
@@ -502,7 +508,7 @@ var/list/uplink_items = list()
 	cost = 2
 
 /datum/uplink_item/device_tools/powersink
-	name = "Power sink"
+	name = "Power Sink"
 	desc = "When screwed to wiring attached to an electric grid, then activated, this large device places excessive load on the grid, causing a stationwide blackout. The sink cannot be carried because of its excessive size. Ordering this sends you a small beacon that will teleport the power sink to your location on activation."
 	item = /obj/item/device/powersink
 	cost = 5
