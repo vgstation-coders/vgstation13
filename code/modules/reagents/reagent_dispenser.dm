@@ -265,6 +265,9 @@
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
 	reagents.add_reagent(BEER, 1000)
+	
+/obj/structure/reagent_dispensers/beerkeg/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/bloodkeg
 	name = "old keg"
@@ -276,6 +279,9 @@
 /obj/structure/reagent_dispensers/bloodkeg/New()
 	. = ..()
 	reagents.add_reagent(BLOOD, 1000)
+	
+/obj/structure/reagent_dispensers/bloodkeg/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/bloodkeg/cultify()
 	return
