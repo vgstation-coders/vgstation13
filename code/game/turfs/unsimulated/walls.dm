@@ -36,7 +36,7 @@
 		bullet_marks = 0
 		icon = initial(icon)
 
-turf/unsimulated/wall/splashscreen
+/turf/unsimulated/wall/splashscreen
 	name = "Space Station 13"
 	icon = null
 	icon_state = null
@@ -45,7 +45,7 @@ turf/unsimulated/wall/splashscreen
 
 	New()
 		var/list/paths = list(
-			'icons/splashworks/tile1.dmi',
+			'icons/splashworks/title1.dmi',
 			'icons/splashworks/title2.gif',
 			'icons/splashworks/title3.dmi',
 			'icons/splashworks/title4.gif',
