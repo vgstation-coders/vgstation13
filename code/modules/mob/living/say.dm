@@ -111,6 +111,10 @@ var/list/department_radio_keys = list(
 
 // /vg/edit: Added forced_by for handling braindamage messages and meme stuff
 /mob/living/say(var/message, bubble_type)
+	message = ruscapitalize(message)
+	message = pointization(message)
+	message = MadmanDebilyshka(message)
+
 	say_testing(src, "/mob/living/say(\"[message]\", [bubble_type]")
 	if(timestopped) return //under the effects of time magick
 	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
