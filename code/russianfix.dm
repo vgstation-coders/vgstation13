@@ -1,14 +1,14 @@
 //HTML ENCODE/DECODE + RUS TO CP1251 TODO: OVERRIDE html_encode after fix
 /proc/rhtml_encode(var/msg)
-	msg = jointext(splittext(msg, "<"), "&lt;")
-	msg = jointext(splittext(msg, ">"), "&gt;")
-	msg = jointext(splittext(msg, "ÿ"), "&#255;")
+	msg = replacetext(msg, "<", "&lt;")
+	msg = replacetext(msg, ">", "&gt;")
+	msg = replacetext(msg, "ÿ", "&#255;")
 	return msg
 
 /proc/rhtml_decode(var/msg)
-	msg = jointext(splittext(msg, "&gt;"), ">")
-	msg = jointext(splittext(msg, "&lt;"), "<")
-	msg = jointext(splittext(msg, "&#255;"), "ÿ")
+	msg = replacetext(msg, "&gt;", ">")
+	msg = replacetext(msg, "&lt;", "<")
+	msg = replacetext(msg, "&#255;", "ÿ")
 	return msg
 
 
@@ -41,7 +41,7 @@
 
 //TEXT SANITIZATION + RUS TO CP1251
 
-/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#255;","<"="(",">"=")"))
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#255;","<"="&lt;",">"="&gt;"))
 	for(var/char in repl_chars)
 		var/index = findtext(t, char)
 		while(index)
