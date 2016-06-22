@@ -415,12 +415,14 @@
 //gets name from ID or PDA itself, ID inside PDA doesn't matter
 //Useful when player is being seen by other mobs
 /mob/living/carbon/human/proc/get_id_name(var/if_no_id = "Unknown")
-	var/obj/item/device/pda/pda = wear_id
-	var/obj/item/weapon/card/id/id = wear_id
-	if(istype(pda))		. = pda.owner
-	else if(istype(id))	. = id.registered_name
-	if(!.) 				. = if_no_id	//to prevent null-names making the mob unclickable
-	return
+	if(istype(wear_id, /obj/item/device/pda))
+		var/obj/item/device/pda/pda = wear_id
+		. = pda.owner
+	else if(wear_id)
+		var/obj/item/weapon/card/id/id = wear_id.GetID()
+		. = id.registered_name
+	if(!.)
+		return if_no_id
 
 //Removed the horrible safety parameter. It was only being used by ninja code anyways.
 //Now checks siemens_coefficient of the affected area by default
