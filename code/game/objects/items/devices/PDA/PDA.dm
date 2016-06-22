@@ -1659,12 +1659,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if(scanmode == SCANMODE_REAGENT)
 					scanmode = SCANMODE_NONE
 				else if((!isnull(cartridge)) && (cartridge.access_reagent_scanner))
-					scanmode == SCANMODE_REAGENT
+					scanmode = SCANMODE_REAGENT
 			if("Halogen Counter")
 				if(scanmode == SCANMODE_HALOGEN)
 					scanmode = SCANMODE_NONE
 				else if((!isnull(cartridge)) && (cartridge.access_engine))
-					scanmode == SCANMODE_HALOGEN
+					scanmode = SCANMODE_HALOGEN
 			if("Honk")
 				if ( !(last_honk && world.time < last_honk + 20) )
 					playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
@@ -1673,7 +1673,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if(scanmode == SCANMODE_ATMOS)
 					scanmode = SCANMODE_NONE
 				else if((!isnull(cartridge)) && (cartridge.access_atmos))
-					scanmode == SCANMODE_ATMOS
+					scanmode = SCANMODE_ATMOS
 			if("Device Analyser")
 				if(scanmode == SCANMODE_DEVICE)
 					scanmode = SCANMODE_NONE
@@ -1681,7 +1681,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if(!dev_analys)
 						dev_analys = new(src) //let's create that device analyser
 						dev_analys.max_designs = 5
-					scanmode == SCANMODE_DEVICE
+					scanmode = SCANMODE_DEVICE
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
