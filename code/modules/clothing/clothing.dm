@@ -77,9 +77,8 @@
 	return prioritized
 
 /obj/item/clothing/proc/check_accessory_overlap(var/obj/item/clothing/accessory/accessory)
-	if(!accessory) return
-
-	if(!accessories.len) return //nothing can stop us!
+	if(!accessory)
+		return
 
 	for(var/obj/item/clothing/accessory/A in accessories)
 		if(A.accessory_exclusion & accessory.accessory_exclusion)
