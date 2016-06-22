@@ -91,14 +91,12 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	// Event handles
 	var/eh_emote
 
-	var/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
+	var/static/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
 	var/name_prefix_index = 1
 
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
-	name_prefix_index = egg_prefix_index
-	if(name_prefix_index > 10)
-		name_prefix_index = 10
+	name_prefix_index = min(egg_prefix_index, 10)
 	truename = "[name_prefixes[name_prefix_index]] [capitalize(pick(borer_names))]"
 	host_brain = new/mob/living/captive_brain(src)
 
