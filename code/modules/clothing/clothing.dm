@@ -37,7 +37,7 @@
 			update_verbs()
 		if(ishuman(loc))
 			var/mob/living/carbon/human/H = loc
-			H.update_inv_by_item(src)
+			H.update_inv_by_slot(slot_flags)
 		return 1
 	for(var/obj/item/clothing/accessory/accessory in priority_accessories())
 		if(accessory.attackby(I, user))
@@ -91,7 +91,7 @@
 	accessories.Remove(accessory)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		H.update_inv_by_item(src)
+		H.update_inv_by_slot(slot_flags)
 	update_verbs()
 
 /obj/item/clothing/verb/removeaccessory()
