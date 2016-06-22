@@ -108,6 +108,8 @@
 	var/health_threshold_softcrit = 0
 	var/health_threshold_crit = 0
 	var/health_threshold_dead = -100
+	var/health_threshold_skeleton = -450
+	//var/health_threshold_dust = -900
 
 	var/organ_health_multiplier = 1
 	var/organ_regeneration_multiplier = 1
@@ -225,10 +227,10 @@
 			switch (name)
 				if ("resource_urls")
 					config.resource_urls = splittext(value, " ")
-					
-				if("tts_server")	
+
+				if("tts_server")
 					config.tts_server = value
-					
+
 				if ("admin_legacy_system")
 					config.admin_legacy_system = 1
 
@@ -561,6 +563,10 @@
 					config.health_threshold_softcrit = value
 				if("health_threshold_dead")
 					config.health_threshold_dead = value
+				if("health_threshold_skeleton")
+					config.health_threshold_skeleton = value
+				/*if("health_threshold_dust")
+					config.health_threshold_dust = value*/
 				if("revival_pod_plants")
 					config.revival_pod_plants = value
 				if("revival_cloning")

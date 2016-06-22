@@ -195,6 +195,8 @@
 	var/brain_damage_modifier = 1
 	var/hal_damage_modifier = 1
 
+	var/died_on_plasmafire = 0 // Used to transform human into plasmaman
+
 	var/movement_speed_modifier = 1 //To allow on-the-fly editing of a human mob's base move speed
 	var/has_penalized_speed = 0 //does nothing, merely for checking
 	var/list/heard_by = list()

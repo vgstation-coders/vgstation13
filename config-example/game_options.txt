@@ -6,6 +6,9 @@ HEALTH_THRESHOLD_CRIT 0
 ## level of health at which a mob becomes dead
 HEALTH_THRESHOLD_DEAD -100
 
+## level of health at which a mob becomes a skeleton (byond husk)
+HEALTH_THRESHOLD_SKELETON -400
+
 ## Determines whether bones can be broken through excessive damage to the organ
 ## 0 means bones can't break, 1 means they can
 BONES_CAN_BREAK 1
