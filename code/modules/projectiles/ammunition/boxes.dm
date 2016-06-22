@@ -49,9 +49,6 @@
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	max_ammo = 30
 
-/obj/item/ammo_storage/box/c12mm/assault
-	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
-
 /obj/item/ammo_storage/box/c45
 	name = "ammo box (.45)"
 	icon_state = "9mm"

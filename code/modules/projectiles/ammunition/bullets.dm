@@ -65,9 +65,6 @@
 	projectile_type = "/obj/item/projectile/bullet/midbullet"
 	w_type = RECYK_METAL
 
-/obj/item/ammo_casing/a12mm/assault
-	projectile_type = "/obj/item/projectile/bullet/midbullet2"
-
 /obj/item/ammo_casing/a12mm/bounce
 	desc = "A rubber-titanium 12mm bullet casing."
 	projectile_type = "/obj/item/projectile/bullet/midbullet/bouncebullet"

@@ -8,7 +8,7 @@
 	reliability_base = 76
 	category = "Weapons"
 	build_path = /obj/item/device/modkit/aeg_parts
-
+	
 
 /datum/design/stunrevolver
 	name = "Stun Revolver"
@@ -100,9 +100,9 @@
 	id = "xcomar"
 	req_tech = list("combat" = 4, "materials" = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10000, MAT_GLASS = 10000, MAT_SILVER = 5000)
+	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/projectile/automatic/xcom/lockbox
+	build_path = /obj/item/weapon/gun/projectile/automatic/xcom
 	locked = 1
 	req_lock_access = list(access_armory)
 
@@ -112,9 +112,9 @@
 	id = "ammo_12mm"
 	req_tech = list("combat" = 3, "materials" = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 4250, MAT_SILVER = 250)
+	materials = list(MAT_IRON = 2000, MAT_GLASS = 200)
 	category = "Weapons"
-	build_path = /obj/item/ammo_storage/box/c12mm/assault
+	build_path = /obj/item/ammo_storage/box/c12mm
 
 /datum/design/magazine_12mm
 	name = "Magazine (12mm)"
@@ -122,7 +122,7 @@
 	id = "magazine_12mm"
 	req_tech = list("combat" = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 400)
+	materials = list(MAT_IRON = 300)
 	category = "Weapons"
 	build_path = /obj/item/ammo_storage/magazine/a12mm/empty
 
@@ -212,9 +212,9 @@
 	id = "smg"
 	req_tech = list("combat" = 4, "materials" = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
+	materials = list(MAT_IRON = 8000, MAT_SILVER = 2000, MAT_DIAMOND = 1000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/projectile/automatic/lockbox
+	build_path = /obj/item/weapon/gun/projectile/automatic
 	locked = 1
 	req_lock_access = list(access_armory)
 
