@@ -2,9 +2,12 @@ author: Kurfurst
 delete-after: True
 
 changes: 
-- rscadd: Added two new Vox plants to fill missing botanical niches, Slipping Pitchers and Aloe Vera
-- rscadd: Added three new relevant recipes for plants.
-- rscadd: Added Box (plural Boxen), freakish boar-like livestock for Vox to farm.
-- rscadd: Added a Box Flesh Cloner, with which to clone fresh Box babies. Surely re-cloning the same meat again and again over untold generations won't cause the rise of some antediluvian horror.
-- rscadd: Added Box meat, as well as three new pork-based recipes. Look at that bacon sizzle!
+- rscadd: Added three new Vox plants to fill missing botanical niches, Slippery Pitcher Plants, Aloe Vera, and Vapor Sacs.
+- rscadd: Added Box (plural Boxen), freakish boarlike livestock for Vox to farm.
+- rscadd: Added a Box Flesh Cloner and the Box meat it runs on, with which to clone fresh Box babies. Surely recloning the same meat again and again over untold generations won't cause the rise of some antediluvian horror.
+- rscadd: Added seven new Vox food recipes, bacon, pork tenderloin, sweet and sour pork, hobo burger, welcome pie, zhu long cao fan, poached aloe, mint, vapor stew.
+- rscadd: Added two cooking recipes for nonfoods, bruise packs and ointment.
+- rscadd: Added one new recipe for everyone sick of hearing about Vox content, reclaimed nutrition cube.
+- rscadd: Added a new reagent, Vapor Salts. Mix with oxygen, nitrogen, or plasma to turn reagents to gas.
+- rscadd: Added wind grenades (50u vapor salts, 40u nitrogen, 10u oxygen) and box of wind grenades. Currently unobtainable other than adminbus.
 - tweak: Special thanks to all the spriters who contributed to the Vox hydroponics project, most prominently Inorien.

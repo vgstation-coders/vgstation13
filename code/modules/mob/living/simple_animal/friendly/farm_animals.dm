@@ -281,6 +281,11 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 12 //Those tusk will maul you!
 	size = SIZE_SMALL
+	min_oxy = 0
+	max_oxy = 1
+	min_n2 = 5
+	max_n2 = 0
+	treadmill_speed = 1.5
 	var/fat = 0
 
 /mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
