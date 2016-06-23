@@ -134,7 +134,7 @@
  * Knives
  */
 /obj/item/weapon/kitchen/utensil/knife
-	name = "knife"
+	name = "small knife"
 	desc = "Can cut through any food."
 	icon_state = "knife"
 	force = 10.0
