@@ -296,7 +296,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/box/update_icon()
 	icon_state = "box_[size]"
-	icon_living = "box_[size"
+	icon_living = "box_[size]"
 	icon_dead = "box_[size]_dead"
 
 /mob/living/simple_animal/hostile/retaliate/box/examine(mob/user)
