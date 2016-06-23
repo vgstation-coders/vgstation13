@@ -187,7 +187,7 @@
 				if (!muzzled)
 					if (auto == 1)
 						if(world.time-lastScream >= 30)//prevent cough spam
-							message = "<B>[src]</B> coughes!"
+							message = "<B>[src]</B> coughs!"
 							//Cough sounds from freesound.org and an anon in ss13g
 							var/coughSound = "malecough"
 							if (src.gender == FEMALE) //Females have their own coughes
