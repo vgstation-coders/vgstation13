@@ -185,8 +185,19 @@
 				m_type = VISIBLE
 			else
 				if (!muzzled)
-					message = "<B>[src]</B> coughs!"
-					m_type = HEARABLE
+					if (auto == 1)
+						if(world.time-lastScream >= 30)//prevent cough spam
+							message = "<B>[src]</B> coughes!"
+							//Cough sounds from freesound.org and an anon in ss13g
+							var/coughSound = "malecough"
+							if (src.gender == FEMALE) //Females have their own coughes
+								coughSound = "femalecough"
+
+							playsound(get_turf(src), coughSound, 20, 0)
+							m_type = HEARABLE
+							lastScream = world.time
+						message = "<B>[src]</B> coughs!"
+						m_type = HEARABLE
 				else
 					message = "<B>[src]</B> makes a strong noise."
 					m_type = HEARABLE
