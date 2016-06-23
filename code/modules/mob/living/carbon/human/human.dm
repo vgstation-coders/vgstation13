@@ -415,12 +415,8 @@
 //gets name from ID or PDA itself, ID inside PDA doesn't matter
 //Useful when player is being seen by other mobs
 /mob/living/carbon/human/proc/get_id_name(var/if_no_id = "Unknown")
-	if(istype(wear_id, /obj/item/device/pda))
-		var/obj/item/device/pda/pda = wear_id
-		. = pda.owner
-	else if(wear_id)
-		var/obj/item/weapon/card/id/id = wear_id.GetID()
-		. = id.registered_name
+	if(wear_id)
+		. = wear_id.get_owner_name_from_ID()
 	if(!.)
 		return if_no_id
 
