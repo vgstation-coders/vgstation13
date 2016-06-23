@@ -211,10 +211,10 @@
 		circ2.linked_generator = null
 		circ2 = null
 
-	if(!src.loc || !anchored)
+	if(!loc || !anchored)
 		return
 
-	if(src.dir & (EAST|WEST))
+	if(dir & (EAST|WEST))
 		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
 		if(circ1 && !circ1.anchored)
 			circ1 = null
@@ -228,7 +228,7 @@
 				circ1 = null
 				circ2 = null
 
-	else if(src.dir & (NORTH|SOUTH))
+	else if(dir & (NORTH|SOUTH))
 		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,NORTH)
 		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,SOUTH)
 
@@ -365,7 +365,7 @@
 
 //Needs to be overriden because else it will use the shitty set_machine().
 /obj/machinery/power/generator/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
-	return hclient.client.mob.html_mob_check(src.type)
+	return hclient.client.mob.html_mob_check(type)
 
 /obj/machinery/power/generator/power_change()
 	..()
@@ -379,7 +379,7 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 
 /obj/machinery/power/generator/verb/rotate_anticlock()
 	set category = "Object"
@@ -389,4 +389,4 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)

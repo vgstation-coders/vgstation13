@@ -28,8 +28,8 @@
 		set_wavelength(lambda)
 		..(newloc)
 		spawn(0)
-			src.propagate()
-		src.verbs -= /atom/movable/verb/pull
+			propagate()
+		verbs -= /atom/movable/verb/pull
 
 
 
@@ -39,7 +39,7 @@
 			if(T.Enter(src))
 				next = new(T, dir, wavelength, width, 0)
 				next.prev = src
-				next.master = src.master
+				next.master = master
 			else
 				spawn(5)
 					propagate()
@@ -82,7 +82,7 @@
 				return 0
 
 	//Then, check the turf itself
-	if (!src.CanPass(mover, src))
+	if (!CanPass(mover, src))
 		mover.Bump(src, 1)
 		return 0
 

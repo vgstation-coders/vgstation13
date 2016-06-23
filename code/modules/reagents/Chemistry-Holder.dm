@@ -61,12 +61,12 @@ var/const/INGEST = 2
 		if(current_list_element > reagent_list.len) current_list_element = 1
 		var/datum/reagent/current_reagent = reagent_list[current_list_element]
 
-		src.remove_reagent(current_reagent.id, 1)
+		remove_reagent(current_reagent.id, 1)
 
 		current_list_element++
 		total_transfered++
 
-		//src.update_total() // This is called from fucking remove_agent() -- N3X
+		//update_total() // This is called from fucking remove_agent() -- N3X
 
 	handle_reactions()
 	return total_transfered
@@ -99,14 +99,14 @@ var/const/INGEST = 2
 		R = target
 	else
 		var/atom/movable/AM = target
-		if (!AM.reagents || src.is_empty())
+		if (!AM.reagents || is_empty())
 			return
 		else
 			R = AM.reagents
-	amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
-	var/part = amount / src.total_volume
+	amount = min(min(amount, total_volume), R.maximum_volume-R.total_volume)
+	var/part = amount / total_volume
 	var/trans_data = null
-	for (var/datum/reagent/current_reagent in src.reagent_list)
+	for (var/datum/reagent/current_reagent in reagent_list)
 		if (!current_reagent)
 			continue
 		if (current_reagent.id == BLOOD && iscarbon(target))
@@ -118,22 +118,22 @@ var/const/INGEST = 2
 			trans_data = current_reagent.data
 
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
-		src.remove_reagent(current_reagent.id, current_reagent_transfer)
+		remove_reagent(current_reagent.id, current_reagent_transfer)
 
 	// Called from add/remove_agent. -- N3X
-	//src.update_total()
+	//update_total()
 	//R.update_total()
 	R.handle_reactions()
-	src.handle_reactions()
+	handle_reactions()
 	return amount
 /datum/reagents/proc/trans_to_holder(var/datum/reagents/target, var/amount=1, var/multiplier=1, var/preserve_data=1)//if preserve_data=0, the reagents data will be lost. Usefull if you use data for some strange stuff and don't want it to be transferred.
-	if (!target || src.is_empty())
+	if (!target || is_empty())
 		return
 	var/datum/reagents/R = target
-	amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
-	var/part = amount / src.total_volume
+	amount = min(min(amount, total_volume), R.maximum_volume-R.total_volume)
+	var/part = amount / total_volume
 	var/trans_data = null
-	for (var/datum/reagent/current_reagent in src.reagent_list)
+	for (var/datum/reagent/current_reagent in reagent_list)
 		if (!current_reagent)
 			continue
 		var/current_reagent_transfer = current_reagent.volume * part
@@ -141,25 +141,25 @@ var/const/INGEST = 2
 			trans_data = current_reagent.data
 
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
-		src.remove_reagent(current_reagent.id, current_reagent_transfer)
+		remove_reagent(current_reagent.id, current_reagent_transfer)
 
 	// Called from add/remove_agent. -- N3X
-	//src.update_total()
+	//update_total()
 	//R.update_total()
 	R.handle_reactions()
-	src.handle_reactions()
+	handle_reactions()
 	return amount
 /*
 trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var/preserve_data=1)//if preserve_data=0, the reagents data will be lost. Usefull if you use data for some strange stuff and don't want it to be transferred.
 	if (!target )
 		return
-	if (!target.aerosols || src.total_volume<=0)
+	if (!target.aerosols || total_volume<=0)
 		return
 	var/datum/reagents/R = target.aerosols
-	amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
-	var/part = amount / src.total_volume
+	amount = min(min(amount, total_volume), R.maximum_volume-R.total_volume)
+	var/part = amount / total_volume
 	var/trans_data = null
-	for (var/datum/reagent/current_reagent in src.reagent_list)
+	for (var/datum/reagent/current_reagent in reagent_list)
 		if (!current_reagent)
 			continue
 		var/current_reagent_transfer = current_reagent.volume * part
@@ -167,61 +167,61 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			trans_data = current_reagent.data
 
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
-		src.remove_reagent(current_reagent.id, current_reagent_transfer)
+		remove_reagent(current_reagent.id, current_reagent_transfer)
 
-	src.update_total()
+	update_total()
 	R.update_total()
 	R.handle_reactions()
-	src.handle_reactions()
+	handle_reactions()
 	return amount
 */
 
 /datum/reagents/proc/copy_to(var/obj/target, var/amount=1, var/multiplier=1, var/preserve_data=1)
 	if(!target)
 		return
-	if(!target.reagents || src.is_empty())
+	if(!target.reagents || is_empty())
 		return
 	var/datum/reagents/R = target.reagents
-	amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
-	var/part = amount / src.total_volume
+	amount = min(min(amount, total_volume), R.maximum_volume-R.total_volume)
+	var/part = amount / total_volume
 	var/trans_data = null
-	for (var/datum/reagent/current_reagent in src.reagent_list)
+	for (var/datum/reagent/current_reagent in reagent_list)
 		var/current_reagent_transfer = current_reagent.volume * part
 		if(preserve_data)
 			trans_data = current_reagent.data
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
 
 	// Called from add/remove_agent. -- N3X
-	//src.update_total()
+	//update_total()
 	//R.update_total()
 	R.handle_reactions()
-	src.handle_reactions()
+	handle_reactions()
 	return amount
 
 /datum/reagents/proc/trans_id_to(var/obj/target, var/reagent, var/amount=1, var/preserve_data=1)//Not sure why this proc didn't exist before. It does now! /N
 	if (!target)
 		return
-	if (!target.reagents || src.is_empty() || !src.get_reagent_amount(reagent))
+	if (!target.reagents || is_empty() || !get_reagent_amount(reagent))
 		return
 
 	var/datum/reagents/R = target.reagents
-	if(src.get_reagent_amount(reagent)<amount)
-		amount = src.get_reagent_amount(reagent)
+	if(get_reagent_amount(reagent)<amount)
+		amount = get_reagent_amount(reagent)
 	amount = min(amount, R.maximum_volume-R.total_volume)
 	var/trans_data = null
-	for (var/datum/reagent/current_reagent in src.reagent_list)
+	for (var/datum/reagent/current_reagent in reagent_list)
 		if(current_reagent.id == reagent)
 			if(preserve_data)
 				trans_data = current_reagent.data
 			R.add_reagent(current_reagent.id, amount, trans_data)
-			src.remove_reagent(current_reagent.id, amount, 1)
+			remove_reagent(current_reagent.id, amount, 1)
 			break
 
 	// Called from add/remove_agent. -- N3X
-	//src.update_total()
+	//update_total()
 	//R.update_total()
 	R.handle_reactions()
-	//src.handle_reactions() Don't need to handle reactions on the source since you're (presumably isolating and) transferring a specific reagent.
+	//handle_reactions() Don't need to handle reactions on the source since you're (presumably isolating and) transferring a specific reagent.
 	return amount
 
 /*
@@ -244,13 +244,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(preserve_data)
 			trans_data = current_reagent.data
 		R.add_reagent(current_reagent.id, (1 * multiplier), trans_data)
-		src.remove_reagent(current_reagent.id, 1)
+		remove_reagent(current_reagent.id, 1)
 
 		current_list_element++
 		total_transfered++
 
 	// Called from add/remove_agent. -- N3X
-	//src.update_total()
+	//update_total()
 	//R.update_total()
 	R.handle_reactions()
 	handle_reactions()
@@ -647,7 +647,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	var/list/bad_reagents = list()
 	for (var/reagent_id in reagents_to_log)
-		if (src.has_reagent(reagent_id))
+		if (has_reagent(reagent_id))
 			bad_reagents += reagents_to_log[reagent_id]
 
 	return bad_reagents

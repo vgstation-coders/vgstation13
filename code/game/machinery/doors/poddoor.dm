@@ -58,56 +58,56 @@ var/list/poddoors = list()
 		return 0
 
 /obj/machinery/door/poddoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if (!( iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
 	if ((density && (stat & NOPOWER) && !( operating )))
 		spawn( 0 )
-			src.operating = 1
+			operating = 1
 			flick(openingicon, src)
-			src.icon_state = openicon
-			src.set_opacity(0)
+			icon_state = openicon
+			set_opacity(0)
 			sleep(15)
-			src.density = 0
-			src.operating = 0
+			density = 0
+			operating = 0
 			return
 	return
 
 /obj/machinery/door/poddoor/open()
-	if (src.operating == 1) //doors can still open when emag-disabled
+	if (operating == 1) //doors can still open when emag-disabled
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
-		src.operating = 1
+	if(!operating) //in case of emag
+		operating = 1
 	flick(openingicon, src)
-	src.icon_state = openicon
-	src.set_opacity(0)
+	icon_state = openicon
+	set_opacity(0)
 	sleep(10)
 	layer = initial(layer)
-	src.density = 0
+	density = 0
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
-		src.operating = 0
+		operating = 0
 	if(autoclose)
 		spawn(150)
 			autoclose()
 	return 1
 
 /obj/machinery/door/poddoor/close()
-	if (src.operating)
+	if (operating)
 		return
-	src.operating = 1
+	operating = 1
 	layer = 3.3
 	flick(closingicon, src)
-	src.icon_state = closedicon
-	src.density = 1
-	src.set_opacity(initial(opacity))
+	icon_state = closedicon
+	density = 1
+	set_opacity(initial(opacity))
 	update_nearby_tiles()
 
 	sleep(10)
-	src.operating = 0
+	operating = 0
 	return
 
 /obj/machinery/door/poddoor/ex_act(severity)//Wouldn't it make sense for "Blast Doors" to actually handle explosions better than other doors?
@@ -135,65 +135,65 @@ var/list/poddoors = list()
 
 /*
 /obj/machinery/door/poddoor/two_tile_hor/open()
-	if (src.operating == 1) //doors can still open when emag-disabled
+	if (operating == 1) //doors can still open when emag-disabled
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
-		src.operating = 1
+	if(!operating) //in case of emag
+		operating = 1
 	flick("pdoorc0", src)
-	src.icon_state = "pdoor0"
-	src.SetOpacity(0)
+	icon_state = "pdoor0"
+	SetOpacity(0)
 	f1.SetOpacity(0)
 	f2.SetOpacity(0)
 
 	sleep(10)
-	src.density = 0
+	density = 0
 	f1.density = 0
 	f2.density = 0
 
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
-		src.operating = 0
+		operating = 0
 	if(autoclose)
 		spawn(150)
 			autoclose()
 	return 1
 
 /obj/machinery/door/poddoor/two_tile_hor/close()
-	if (src.operating)
+	if (operating)
 		return
-	src.operating = 1
+	operating = 1
 	flick("pdoorc1", src)
-	src.icon_state = "pdoor1"
+	icon_state = "pdoor1"
 
-	src.density = 1
+	density = 1
 	f1.density = 1
 	f2.density = 1
 
 	sleep(10)
-	src.SetOpacity(initial(opacity))
+	SetOpacity(initial(opacity))
 	f1.SetOpacity(initial(opacity))
 	f2.SetOpacity(initial(opacity))
 
 	update_nearby_tiles()
 
-	src.operating = 0
+	operating = 0
 	return
 
 /obj/machinery/door/poddoor/four_tile_hor/open()
-	if (src.operating == 1) //doors can still open when emag-disabled
+	if (operating == 1) //doors can still open when emag-disabled
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
-		src.operating = 1
+	if(!operating) //in case of emag
+		operating = 1
 	flick("pdoorc0", src)
-	src.icon_state = "pdoor0"
+	icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
-	src.sd_SetOpacity(0)
+	density = 0
+	sd_SetOpacity(0)
 
 	f1.density = 0
 	f1.sd_SetOpacity(0)
@@ -207,19 +207,19 @@ var/list/poddoors = list()
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
-		src.operating = 0
+		operating = 0
 	if(autoclose)
 		spawn(150)
 			autoclose()
 	return 1
 
 /obj/machinery/door/poddoor/four_tile_hor/close()
-	if (src.operating)
+	if (operating)
 		return
-	src.operating = 1
+	operating = 1
 	flick("pdoorc1", src)
-	src.icon_state = "pdoor1"
-	src.density = 1
+	icon_state = "pdoor1"
+	density = 1
 
 	f1.density = 1
 	f1.sd_SetOpacity(1)
@@ -230,26 +230,26 @@ var/list/poddoors = list()
 	f4.density = 1
 	f4.sd_SetOpacity(1)
 
-	if (src.visible)
-		src.sd_SetOpacity(1)
+	if (visible)
+		sd_SetOpacity(1)
 	update_nearby_tiles()
 
 	sleep(10)
-	src.operating = 0
+	operating = 0
 	return
 
 /obj/machinery/door/poddoor/two_tile_ver/open()
-	if (src.operating == 1) //doors can still open when emag-disabled
+	if (operating == 1) //doors can still open when emag-disabled
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
-		src.operating = 1
+	if(!operating) //in case of emag
+		operating = 1
 	flick("pdoorc0", src)
-	src.icon_state = "pdoor0"
+	icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
-	src.sd_SetOpacity(0)
+	density = 0
+	sd_SetOpacity(0)
 
 	f1.density = 0
 	f1.sd_SetOpacity(0)
@@ -259,45 +259,45 @@ var/list/poddoors = list()
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
-		src.operating = 0
+		operating = 0
 	if(autoclose)
 		spawn(150)
 			autoclose()
 	return 1
 
 /obj/machinery/door/poddoor/two_tile_ver/close()
-	if (src.operating)
+	if (operating)
 		return
-	src.operating = 1
+	operating = 1
 	flick("pdoorc1", src)
-	src.icon_state = "pdoor1"
-	src.density = 1
+	icon_state = "pdoor1"
+	density = 1
 
 	f1.density = 1
 	f1.sd_SetOpacity(1)
 	f2.density = 1
 	f2.sd_SetOpacity(1)
 
-	if (src.visible)
-		src.sd_SetOpacity(1)
+	if (visible)
+		sd_SetOpacity(1)
 	update_nearby_tiles()
 
 	sleep(10)
-	src.operating = 0
+	operating = 0
 	return
 
 /obj/machinery/door/poddoor/four_tile_ver/open()
-	if (src.operating == 1) //doors can still open when emag-disabled
+	if (operating == 1) //doors can still open when emag-disabled
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
-		src.operating = 1
+	if(!operating) //in case of emag
+		operating = 1
 	flick("pdoorc0", src)
-	src.icon_state = "pdoor0"
+	icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
-	src.sd_SetOpacity(0)
+	density = 0
+	sd_SetOpacity(0)
 
 	f1.density = 0
 	f1.sd_SetOpacity(0)
@@ -311,19 +311,19 @@ var/list/poddoors = list()
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
-		src.operating = 0
+		operating = 0
 	if(autoclose)
 		spawn(150)
 			autoclose()
 	return 1
 
 /obj/machinery/door/poddoor/four_tile_ver/close()
-	if (src.operating)
+	if (operating)
 		return
-	src.operating = 1
+	operating = 1
 	flick("pdoorc1", src)
-	src.icon_state = "pdoor1"
-	src.density = 1
+	icon_state = "pdoor1"
+	density = 1
 
 	f1.density = 1
 	f1.sd_SetOpacity(1)
@@ -334,12 +334,12 @@ var/list/poddoors = list()
 	f4.density = 1
 	f4.sd_SetOpacity(1)
 
-	if (src.visible)
-		src.sd_SetOpacity(1)
+	if (visible)
+		sd_SetOpacity(1)
 	update_nearby_tiles()
 
 	sleep(10)
-	src.operating = 0
+	operating = 0
 	return
 
 
@@ -352,7 +352,7 @@ var/list/poddoors = list()
 
 	New()
 		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+		f1 = new/obj/machinery/door/poddoor/filler_object (loc)
 		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(src,EAST))
 		f1.density = density
 		f2.density = density
@@ -371,7 +371,7 @@ var/list/poddoors = list()
 
 	New()
 		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+		f1 = new/obj/machinery/door/poddoor/filler_object (loc)
 		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(src,NORTH))
 		f1.density = density
 		f2.density = density
@@ -392,7 +392,7 @@ var/list/poddoors = list()
 
 	New()
 		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+		f1 = new/obj/machinery/door/poddoor/filler_object (loc)
 		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(f1,EAST))
 		f3 = new/obj/machinery/door/poddoor/filler_object (get_step(f2,EAST))
 		f4 = new/obj/machinery/door/poddoor/filler_object (get_step(f3,EAST))
@@ -421,7 +421,7 @@ var/list/poddoors = list()
 
 	New()
 		..()
-		f1 = new/obj/machinery/door/poddoor/filler_object (src.loc)
+		f1 = new/obj/machinery/door/poddoor/filler_object (loc)
 		f2 = new/obj/machinery/door/poddoor/filler_object (get_step(f1,NORTH))
 		f3 = new/obj/machinery/door/poddoor/filler_object (get_step(f2,NORTH))
 		f4 = new/obj/machinery/door/poddoor/filler_object (get_step(f3,NORTH))

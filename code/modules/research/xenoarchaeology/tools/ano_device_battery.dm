@@ -48,7 +48,7 @@
 
 /obj/item/weapon/anodevice/attack_self(var/mob/user as mob)
 	if(in_range(src, user))
-		return src.interact(user)
+		return interact(user)
 
 /obj/item/weapon/anodevice/interact(var/mob/user)
 
@@ -98,7 +98,7 @@
 		cooldown -= 1
 		if(cooldown <= 0)
 			cooldown = 0
-			src.visible_message("<span class='notice'>[bicon(src)] [src] chimes.</span>", "<span class='notice'>[bicon(src)] You hear something chime.</span>")
+			visible_message("<span class='notice'>[bicon(src)] [src] chimes.</span>", "<span class='notice'>[bicon(src)] You hear something chime.</span>")
 	else if(activated)
 		if(inserted_battery && inserted_battery.battery_effect)
 			//make sure the effect is active
@@ -114,8 +114,8 @@
 			//process the effect
 			inserted_battery.battery_effect.process()
 			//if someone is holding the device, do the effect on them
-			if(inserted_battery.battery_effect.effect == EFFECT_TOUCH && ismob(src.loc))
-				inserted_battery.battery_effect.DoEffectTouch(src.loc)
+			if(inserted_battery.battery_effect.effect == EFFECT_TOUCH && ismob(loc))
+				inserted_battery.battery_effect.DoEffectTouch(loc)
 
 			//handle charge
 			inserted_battery.stored_charge -= 1
@@ -134,7 +134,7 @@
 	if(activated)
 		activated = 0
 		timing = 0
-		src.visible_message("<span class='notice'>[bicon(src)] [src] buzzes.</span>", "[bicon(src)]<span class='notice'>You hear something buzz.</span>")
+		visible_message("<span class='notice'>[bicon(src)] [src] buzzes.</span>", "[bicon(src)]<span class='notice'>You hear something buzz.</span>")
 
 		cooldown = archived_time / 2
 
@@ -189,7 +189,7 @@
 		usr << browse(null, "window=anodevice")
 		usr.unset_machine(src)
 		return
-	src.interact(usr)
+	interact(usr)
 	..()
 	updateDialog()
 

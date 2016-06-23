@@ -104,7 +104,7 @@
 				var/mob/living/carbon/human/H = M
 				if(H.species.chem_flags & NO_EAT)
 					user.drop_from_inventory(src)
-					src.forceMove(get_turf(H))
+					forceMove(get_turf(H))
 					playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
 					H.visible_message("<span class='warning'>As [M] attempts to eat \the [src] it falls through and onto the ground as if untouched.</span>", "<span class='notice'>As you attempt to eat \the [src] it falls through your body and onto the ground as if untouched.</span>")
 					return 0
@@ -143,7 +143,7 @@
 					var/mob/living/carbon/human/H = M
 					if(H.species.chem_flags & NO_EAT)
 						user.drop_from_inventory(src)
-						src.forceMove(get_turf(H))
+						forceMove(get_turf(H))
 						H.visible_message("<span class='warning'>As [user] attempts to feed [M] \the [src] it falls through and onto the ground as if untouched.</span>", "<span class='notice'>As [user] attempts to feed you \the [src] it falls through your body and onto the ground as if untouched.</span>")
 						return 0
 
@@ -227,7 +227,7 @@
 	if(W.is_sharp() < 0.8) //At this point we are slicing food, so if our item isn't sharp enough, just abort
 		return 0
 
-	if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/tray) in src.loc))
+	if(!isturf(loc) || !(locate(/obj/structure/table) in loc) && !(locate(/obj/item/weapon/tray) in loc))
 		to_chat(user, "<span class='notice'>You cannot slice \the [src] here! You need a table or at least a tray.</span>")
 		return 1
 
@@ -241,7 +241,7 @@
 		slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
 	var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
 	for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-		var/obj/slice = new slice_path(src.loc)
+		var/obj/slice = new slice_path(loc)
 		if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
@@ -258,7 +258,7 @@
 			M.delayNextAttack(10)
 			if(bitecount >= 4) //This really, really shouldn't be hardcoded like this, but sure I guess
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
+				playsound(loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 				var/mob/living/simple_animal/corgi/C = M
 				if(C.health <= C.maxHealth + 5)
 					C.health += 5
@@ -267,7 +267,7 @@
 				qdel(src)
 			else
 				M.visible_message("[M] takes a bite of \the [src].", "<span class='notice'>You take a bite of \the [src].</span>")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10, 50), 1)
+				playsound(loc,'sound/items/eatfood.ogg', rand(10, 50), 1)
 				bitecount++
 		else if(ismouse(M)) //Mouse eating shit
 			M.delayNextAttack(10)
@@ -432,10 +432,10 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
 		reagents.add_reagent(SPRINKLES, 1)
-		src.bitesize = 3
+		bitesize = 3
 		if(prob(30))
-			src.icon_state = "donut2"
-			src.name = "frosted donut"
+			icon_state = "donut2"
+			name = "frosted donut"
 			reagents.add_reagent(SPRINKLES, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
@@ -556,7 +556,7 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, rand(3,5))
 		reagents.add_reagent(TOXIN,	rand(1,3))
-		src.bitesize = 3
+		bitesize = 3
 
 
 /obj/item/weapon/reagent_containers/food/snacks/tofu
@@ -566,7 +566,7 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 3
+		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/tofurkey
 	name = "Tofurkey"
@@ -607,7 +607,7 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
 		reagents.add_reagent(PSILOCYBIN, 3)
-		src.bitesize = 6
+		bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/tomatomeat
 	name = "tomato slice"
@@ -616,7 +616,7 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 6
+		bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg
 	name = "spider leg"
@@ -889,8 +889,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
 	..()
 	if(isturf(hit_atom))
-		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
-		if(trash) new trash(src.loc)
+		new/obj/effect/decal/cleanable/pie_smudge(loc)
+		if(trash) new trash(loc)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
@@ -1549,7 +1549,7 @@
 		reagents.add_reagent(WATER, 10)
 		bitesize = 5
 		if(prob(25))
-			src.desc = "A wish come true!"
+			desc = "A wish come true!"
 			reagents.add_reagent(NUTRIMENT, 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/hotchili
@@ -2846,8 +2846,8 @@
 	if( open && pizza )
 		user.put_in_hands( pizza )
 
-		to_chat(user, "<span class='notice'>You take the [src.pizza] out of the [src].</span>")
-		src.pizza = null
+		to_chat(user, "<span class='notice'>You take the [pizza] out of the [src].</span>")
+		pizza = null
 		update_icon()
 		return
 
@@ -2882,7 +2882,7 @@
 	if( istype(I, /obj/item/pizzabox/) )
 		var/obj/item/pizzabox/box = I
 
-		if( !box.open && !src.open )
+		if( !box.open && !open )
 			// Make a list of all boxes to be added
 			var/list/boxestoadd = list()
 			boxestoadd += box
@@ -2893,7 +2893,7 @@
 				if(user.drop_item(I, src))
 
 					box.boxes = list() // Clear the box boxes so we don't have boxes inside boxes. - Xzibit
-					src.boxes.Add( boxestoadd )
+					boxes.Add( boxestoadd )
 
 					box.update_icon()
 					update_icon()
@@ -2908,11 +2908,11 @@
 		return
 
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)) // Long ass fucking object name
-		if(src.pizza) to_chat(user, "<span class='warning'>[src] already has a pizza in it.</span>")
-		else if(src.open)
+		if(pizza) to_chat(user, "<span class='warning'>[src] already has a pizza in it.</span>")
+		else if(open)
 			if(user.drop_item(I, src))
-				src.pizza = I
-				src.update_icon()
+				pizza = I
+				update_icon()
 				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
 		else to_chat(user, "<span class='warning'>Open [src] first.</span>")
 
@@ -2920,7 +2920,7 @@
 
 	if( istype(I, /obj/item/weapon/pen/) )
 
-		if( src.open )
+		if( open )
 			return
 
 		var/t = input("Enter what you want to add to the tag:", "Write", null, null) as text
@@ -3910,7 +3910,7 @@
 	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/proc/jump()
-	if(!istype(src.loc,/turf)) return
+	if(!istype(loc,/turf)) return
 	jump_cd=1
 	spawn(50)
 		jump_cd=0
@@ -3921,7 +3921,7 @@
 		escape_paths |= T
 
 	var/turf/T = pick(escape_paths)
-	src.throw_at(T, 10, 2)
+	throw_at(T, 10, 2)
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/pickup(mob/living/user as mob)
@@ -4071,7 +4071,7 @@
 			if(3)
 				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/I = new current_path(get_turf(user))
 			user.put_in_hands(I)

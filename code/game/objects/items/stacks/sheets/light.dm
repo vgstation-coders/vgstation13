@@ -26,7 +26,7 @@
 	if(istype(O,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/M = O
 		M.use(1)
-		src.use(1)
+		use(1)
 
 		drop_stack(/obj/item/stack/tile/light, get_turf(user), 1, user)
 

@@ -26,7 +26,7 @@
 	overlays += I
 
 /turf/space/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /turf/space/canBuildCatwalk()
 	if(locate(/obj/structure/catwalk) in contents)
@@ -35,18 +35,18 @@
 
 
 /turf/space/canBuildLattice(var/material)
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
-	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
 	else if(!(locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/sheet/wood)))
 		return 1
 	return BUILD_FAILURE
 
 /turf/space/canBuildPlating(var/material)
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
-	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
 	else if((locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/tile/wood)))
 		return 1
@@ -66,9 +66,9 @@
 	var/target_z
 	var/list/y_arr
 
-	if(src.x <= 1)
+	if(x <= 1)
 
-		var/list/cur_pos = src.get_global_map_pos()
+		var/list/cur_pos = get_global_map_pos()
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
@@ -77,7 +77,7 @@
 		target_z = y_arr[cur_y]
 /*
 		//debug
-		to_chat(world, "Src.z = [src.z] in global map X = [cur_x], Y = [cur_y]")
+		to_chat(world, "z = [z] in global map X = [cur_x], Y = [cur_y]")
 		to_chat(world, "Target Z = [target_z]")
 		to_chat(world, "Next X = [next_x]")
 		//debug
@@ -88,13 +88,13 @@
 			spawn (0)
 				if ((A && A.loc))
 					A.loc.Entered(A)
-	else if (src.x >= world.maxx)
+	else if (x >= world.maxx)
 		if(istype(A, /obj/item/projectile/meteor))
 			qdel(A)
 			A = null
 			return
 
-		var/list/cur_pos = src.get_global_map_pos()
+		var/list/cur_pos = get_global_map_pos()
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
@@ -103,7 +103,7 @@
 		target_z = y_arr[cur_y]
 /*
 		//debug
-		to_chat(world, "Src.z = [src.z] in global map X = [cur_x], Y = [cur_y]")
+		to_chat(world, "z = [z] in global map X = [cur_x], Y = [cur_y]")
 		to_chat(world, "Target Z = [target_z]")
 		to_chat(world, "Next X = [next_x]")
 		//debug
@@ -114,12 +114,12 @@
 			spawn (0)
 				if ((A && A.loc))
 					A.loc.Entered(A)
-	else if (src.y <= 1)
+	else if (y <= 1)
 		if(istype(A, /obj/item/projectile/meteor))
 			qdel(A)
 			A = null
 			return
-		var/list/cur_pos = src.get_global_map_pos()
+		var/list/cur_pos = get_global_map_pos()
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
@@ -128,7 +128,7 @@
 		target_z = y_arr[next_y]
 /*
 		//debug
-		to_chat(world, "Src.z = [src.z] in global map X = [cur_x], Y = [cur_y]")
+		to_chat(world, "z = [z] in global map X = [cur_x], Y = [cur_y]")
 		to_chat(world, "Next Y = [next_y]")
 		to_chat(world, "Target Z = [target_z]")
 		//debug
@@ -140,12 +140,12 @@
 				if ((A && A.loc))
 					A.loc.Entered(A)
 
-	else if (src.y >= world.maxy)
+	else if (y >= world.maxy)
 		if(istype(A, /obj/item/projectile/meteor)||istype(A, /obj/effect/space_dust))
 			qdel(A)
 			A = null
 			return
-		var/list/cur_pos = src.get_global_map_pos()
+		var/list/cur_pos = get_global_map_pos()
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
@@ -154,7 +154,7 @@
 		target_z = y_arr[next_y]
 /*
 		//debug
-		to_chat(world, "Src.z = [src.z] in global map X = [cur_x], Y = [cur_y]")
+		to_chat(world, "z = [z] in global map X = [cur_x], Y = [cur_y]")
 		to_chat(world, "Next Y = [next_y]")
 		to_chat(world, "Target Z = [target_z]")
 		//debug

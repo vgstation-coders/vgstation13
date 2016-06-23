@@ -22,14 +22,14 @@ var/list/obj/effect/bump_teleporter/BUMP_TELEPORTERS = list()
 
 /obj/effect/bump_teleporter/Bumped(atom/user)
 	if(!ismob(user))
-		//user.loc = src.loc	//Stop at teleporter location
+		//user.loc = loc	//Stop at teleporter location
 		return
 
 	if(!id_target)
-		//user.loc = src.loc	//Stop at teleporter location, there is nowhere to teleport to.
+		//user.loc = loc	//Stop at teleporter location, there is nowhere to teleport to.
 		return
 
 	for(var/obj/effect/bump_teleporter/BT in BUMP_TELEPORTERS)
-		if(BT.id == src.id_target)
+		if(BT.id == id_target)
 			usr.loc = BT.loc	//Teleport to location with correct id.
 			return

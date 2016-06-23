@@ -25,7 +25,7 @@
 							if(3 to INFINITY)
 								visible_message(src, "<span class='warning'>\The [src] vomits.</span>", "<span class='warning'>You vomit up what little remains of \the [M].</span>")
 								vomit()
-								new /obj/effect/decal/remains/human(src.loc)
+								new /obj/effect/decal/remains/human(loc)
 								M.ghostize(1)
 								drop_stomach_contents()
 								qdel(M)
@@ -40,7 +40,7 @@
 
 	if(!hardcore_mode_on) return //If hardcore mode isn't on, return
 	if(!eligible_for_hardcore_mode(src)) return //If our mob isn't affected by hardcore mode (like it isn't player controlled), return
-	if(src.isDead()) return //Don't affect dead dudes
+	if(isDead()) return //Don't affect dead dudes
 
 	if(nutrition < 100) //Nutrition is below 100 = starvation
 

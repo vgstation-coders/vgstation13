@@ -112,7 +112,7 @@ var/global/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/setup()
 	//Create and announce mode
 	if(master_mode=="secret")
-		src.hide_mode = 1
+		hide_mode = 1
 	var/list/datum/game_mode/runnable_modes
 	if((master_mode=="random") || (master_mode=="secret"))
 		runnable_modes = config.get_runnable_modes()
@@ -123,16 +123,16 @@ var/global/datum/controller/gameticker/ticker
 		if(secret_force_mode != "secret")
 			var/datum/game_mode/M = config.pick_mode(secret_force_mode)
 			if(M.can_start())
-				src.mode = config.pick_mode(secret_force_mode)
+				mode = config.pick_mode(secret_force_mode)
 		job_master.ResetOccupations()
-		if(!src.mode)
-			src.mode = pickweight(runnable_modes)
-		if(src.mode)
-			var/mtype = src.mode.type
-			src.mode = new mtype
+		if(!mode)
+			mode = pickweight(runnable_modes)
+		if(mode)
+			var/mtype = mode.type
+			mode = new mtype
 	else
-		src.mode = config.pick_mode(master_mode)
-	if (!src.mode.can_start())
+		mode = config.pick_mode(master_mode)
+	if (!mode.can_start())
 		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby.")
 		del(mode)
 		current_state = GAME_STATE_PREGAME
@@ -141,7 +141,7 @@ var/global/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
-	var/can_continue = src.mode.pre_setup()//Setup special modes
+	var/can_continue = mode.pre_setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
 		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
@@ -159,7 +159,7 @@ var/global/datum/controller/gameticker/ticker
 		to_chat(world, "<B>The current game mode is - Secret!</B>")
 		to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 	else
-		src.mode.announce()
+		mode.announce()
 
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them

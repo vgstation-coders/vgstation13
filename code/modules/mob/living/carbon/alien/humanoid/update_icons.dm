@@ -163,7 +163,7 @@
 	if(on_fire)
 		overlays_lying[X_FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Lying", "layer"= -X_FIRE_LAYER)
 		overlays_standing[X_FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing", "layer"= -X_FIRE_LAYER)
-		if(src.lying)
+		if(lying)
 			overlays += overlays_lying[X_FIRE_LAYER]
 		else
 			overlays += overlays_standing[X_FIRE_LAYER]

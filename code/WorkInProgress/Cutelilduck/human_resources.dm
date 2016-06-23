@@ -46,7 +46,7 @@
 		target_name = str
 		name = "[target_name]'s demotion microchip"
 		desc = desc + " Stamped by:"
-		to_chat(user, "<span class='notice'>The demotion microchip for [src.target_name] is now ready to be stamped.</span>")
+		to_chat(user, "<span class='notice'>The demotion microchip for [target_name] is now ready to be stamped.</span>")
 
 /obj/item/demote_chip/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/stamp))

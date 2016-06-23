@@ -13,42 +13,42 @@
 
 
 /obj/item/weapon/implanter/update()
-	if (src.imp)
-		src.icon_state = "implanter1"
+	if (imp)
+		icon_state = "implanter1"
 	else
-		src.icon_state = "implanter0"
+		icon_state = "implanter0"
 	return
 
 
 /obj/item/weapon/implanter/attack(mob/M as mob, mob/user as mob)
 	if (!istype(M, /mob/living/carbon))
 		return
-	if (user && src.imp)
+	if (user && imp)
 		for (var/mob/O in viewers(M, null))
 			O.show_message("<span class='warning'>[user] is attempting to implant [M].</span>", 1)
 
 		var/turf/T1 = get_turf(M)
 		if (T1 && ((M == user) || do_after(user,M, 50)))
-			if(user && M && (get_turf(M) == T1) && src && src.imp)
+			if(user && M && (get_turf(M) == T1) && src && imp)
 				for (var/mob/O in viewers(M, null))
 					O.show_message("<span class='warning'>[M] has been implanted by [user].</span>", 1)
 
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'> Implanted with [src.name] ([src.imp.name])  by [user.name] ([user.ckey])</font>")
-				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] ([src.imp.name]) to implant [M.name] ([M.ckey])</font>")
-				msg_admin_attack("[user.name] ([user.ckey]) implanted [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'> Implanted with [name] ([imp.name])  by [user.name] ([user.ckey])</font>")
+				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] ([imp.name]) to implant [M.name] ([M.ckey])</font>")
+				msg_admin_attack("[user.name] ([user.ckey]) implanted [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 				user.show_message("<span class='warning'>You implanted the implant into [M].</span>")
-				if(src.imp.implanted(M, user))
-					src.imp.loc = M
-					src.imp.imp_in = M
-					src.imp.implanted = 1
+				if(imp.implanted(M, user))
+					imp.loc = M
+					imp.imp_in = M
+					imp.implanted = 1
 					if (ishuman(M))
 						var/mob/living/carbon/human/H = M
 						var/datum/organ/external/affected = H.get_organ(user.zone_sel.selecting)
-						affected.implants += src.imp
+						affected.implants += imp
 						imp.part = affected
 				M:implanting = 0
-				src.imp = null
+				imp = null
 				update()
 	return
 
@@ -58,7 +58,7 @@
 	desc = "Greytide Stationwide."
 
 /obj/item/weapon/implanter/traitor/New()
-	src.imp = new /obj/item/weapon/implant/traitor(src)
+	imp = new /obj/item/weapon/implant/traitor(src)
 	..()
 	update()
 	return
@@ -67,7 +67,7 @@
 	name = "implanter-loyalty"
 
 /obj/item/weapon/implanter/loyalty/New()
-	src.imp = new /obj/item/weapon/implant/loyalty( src )
+	imp = new /obj/item/weapon/implant/loyalty( src )
 	..()
 	update()
 	return
@@ -78,7 +78,7 @@
 	name = "implanter (E)"
 
 /obj/item/weapon/implanter/explosive/New()
-	src.imp = new /obj/item/weapon/implant/explosive( src )
+	imp = new /obj/item/weapon/implant/explosive( src )
 	..()
 	update()
 	return
@@ -87,7 +87,7 @@
 	name = "implanter-adrenalin"
 
 /obj/item/weapon/implanter/adrenalin/New()
-	src.imp = new /obj/item/weapon/implant/adrenalin(src)
+	imp = new /obj/item/weapon/implant/adrenalin(src)
 	..()
 	update()
 	return

@@ -89,7 +89,7 @@
 /obj/item/weapon/gun/projectile/nagant/obrez/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)	return //we're placing gun on a table or in backpack
 	if(current_shell && current_shell.BB)
-		//explosion(src.loc,-1,1,2)
+		//explosion(loc,-1,1,2)
 		var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 		sparks.set_up(3, 0, get_turf(user)) //no idea what the 0 is
 		sparks.start()

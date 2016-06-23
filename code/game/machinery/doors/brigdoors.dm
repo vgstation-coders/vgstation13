@@ -26,20 +26,20 @@
 	New()
 		..()
 
-		pixel_x = ((src.dir & 3)? (0) : (src.dir == 4 ? 32 : -32))
-		pixel_y = ((src.dir & 3)? (src.dir ==1 ? 32 : -32) : (0))
+		pixel_x = ((dir & 3)? (0) : (dir == 4 ? 32 : -32))
+		pixel_y = ((dir & 3)? (dir ==1 ? 32 : -32) : (0))
 
 		spawn(20)
 			for(var/obj/machinery/door/window/brigdoor/M in all_doors)
-				if (M.id_tag == src.id_tag)
+				if (M.id_tag == id_tag)
 					targets += M
 
 			for(var/obj/machinery/flasher/F in flashers)
-				if(F.id_tag == src.id_tag)
+				if(F.id_tag == id_tag)
 					targets += F
 
 			for(var/obj/structure/closet/secure_closet/brig/C in world)
-				if(C.id_tag == src.id_tag)
+				if(C.id_tag == id_tag)
 					targets += C
 
 			if(targets.len==0)
@@ -54,12 +54,12 @@
 // update the door_timer window and the icon
 	process()
 		if(stat & (NOPOWER|BROKEN))	return
-		if(src.timing)
-			if(world.time > src.releasetime)
-				src.timer_end() // open doors, reset timer, clear status screen
-				src.timing = 0
-			src.updateUsrDialog()
-			src.update_icon()
+		if(timing)
+			if(world.time > releasetime)
+				timer_end() // open doors, reset timer, clear status screen
+				timing = 0
+			updateUsrDialog()
+			update_icon()
 		else
 			timer_end()
 		return
@@ -120,8 +120,8 @@
 
 //Allows AIs to use door_timer, see human attack_hand function below
 	attack_ai(var/mob/user as mob)
-		src.add_hiddenprint(user)
-		return src.attack_hand(user)
+		add_hiddenprint(user)
+		return attack_hand(user)
 
 
 //Allows humans to use door_timer
@@ -137,8 +137,8 @@
 		var/dat = "<HTML><BODY><TT>"
 
 		dat += {"<HR>Timer System:</hr>
-			<b>Door [src.id_tag] controls</b><br/>"}
-		if (src.timing)
+			<b>Door [id_tag] controls</b><br/>"}
+		if (timing)
 			dat += "<a href='?src=\ref[src];timing=0'>Stop Timer and open door</a><br/>"
 		else
 			dat += "<a href='?src=\ref[src];timing=1'>Activate Timer and close door</a><br/>"
@@ -169,12 +169,12 @@
 	Topic(href, href_list)
 		if(..())
 			return
-		if(!src.allowed(usr))
+		if(!allowed(usr))
 			return
 
 		usr.set_machine(src)
 		if(href_list["timing"])
-			src.timing = text2num(href_list["timing"])
+			timing = text2num(href_list["timing"])
 		else
 			if(href_list["tp"])  //adjust timer, close door if not already closed
 				var/tp = text2num(href_list["tp"])
@@ -182,18 +182,18 @@
 				timeleft += tp
 				timeleft = min(max(round(timeleft), 0), 3600)
 				timeset(timeleft)
-				//src.timing = 1
-				//src.closedoor()
+				//timing = 1
+				//closedoor()
 			if(href_list["fc"])
 				for(var/obj/machinery/flasher/F in targets)
 					F.flash()
-		src.add_fingerprint(usr)
-		src.updateUsrDialog()
-		src.update_icon()
-		if(src.timing)
-			src.timer_start()
+		add_fingerprint(usr)
+		updateUsrDialog()
+		update_icon()
+		if(timing)
+			timer_start()
 		else
-			src.timer_end()
+			timer_end()
 		return
 
 
@@ -208,7 +208,7 @@
 		if(stat & (BROKEN))
 			set_picture("ai_bsod")
 			return
-		if(src.timing)
+		if(timing)
 			var/disp1 = uppertext(id_tag)
 			var/timeleft = timeleft()
 			var/disp2 = "[add_zero(num2text((timeleft / 60) % 60),2)]~[add_zero(num2text(timeleft % 60), 2)]"

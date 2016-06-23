@@ -20,7 +20,7 @@
 
 /obj/machinery/power/terminal/New()
 	..()
-	var/turf/T = src.loc
+	var/turf/T = loc
 	if(level==1) hide(T.intact)
 	return
 
@@ -79,4 +79,4 @@
 	terminal.master = src
 
 /obj/machinery/power/proc/can_attach_terminal(mob/user)
-	return user.loc != src.loc && (get_dir(user, src) in cardinal) && !terminal
+	return user.loc != loc && (get_dir(user, src) in cardinal) && !terminal

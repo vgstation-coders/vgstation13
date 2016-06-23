@@ -3,11 +3,11 @@
 #define FINDJOBTASK_DEFAULT_NEW 1 // Make a new task of this type if one can't be found.
 
 /datum/mind/proc/findJobTask(var/typepath,var/options=0)
-	var/datum/job_objective/task = locate(typepath) in src.job_objectives
+	var/datum/job_objective/task = locate(typepath) in job_objectives
 	if(!istype(task,typepath))
 		if(options & FINDJOBTASK_DEFAULT_NEW)
 			task = new typepath()
-			src.job_objectives += task
+			job_objectives += task
 	return task
 
 /datum/job_objective

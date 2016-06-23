@@ -19,7 +19,7 @@
 		) //Associated with icon states
 
 /obj/structure/kitchenspike/attack_paw(mob/user as mob)
-	return src.attack_hand(usr)
+	return attack_hand(usr)
 
 /obj/structure/kitchenspike/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -52,14 +52,14 @@
 				to_chat(user, "<span class='warning'>Subject may not have abiotic items on.</span>")
 				return
 			else
-				src.occupant = our_mob
+				occupant = our_mob
 
 				if(allowed_mobs[T])
-					src.icon_state = allowed_mobs[T]
+					icon_state = allowed_mobs[T]
 				else
-					src.icon_state = "spikebloody"
+					icon_state = "spikebloody"
 
-				src.meat_remaining = 1 + our_mob.size - our_mob.meat_taken
+				meat_remaining = 1 + our_mob.size - our_mob.meat_taken
 
 				user.visible_message("<span class='warning'>[user] has forced [our_mob] onto the spike, killing it instantly!</span>")
 
@@ -79,18 +79,18 @@
 	if(..())
 		return
 
-	if(src.occupant)
-		if(src.meat_remaining > 0)
-			src.meat_remaining--
-			src.occupant.drop_meat(get_turf(src))
+	if(occupant)
+		if(meat_remaining > 0)
+			meat_remaining--
+			occupant.drop_meat(get_turf(src))
 
-			if(src.meat_remaining)
-				to_chat(user, "You remove some meat from \the [src.occupant].")
+			if(meat_remaining)
+				to_chat(user, "You remove some meat from \the [occupant].")
 			else
 				to_chat(user, "You remove the last piece of meat from \the [src]!")
-				src.clean()
+				clean()
 	else
-		src.clean()
+		clean()
 
 /obj/structure/kitchenspike/proc/clean()
 	icon_state = initial(icon_state)

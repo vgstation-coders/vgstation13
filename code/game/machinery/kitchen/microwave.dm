@@ -83,8 +83,8 @@
 *   Item Adding
 ********************/
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(src.broken > 0)
-		if(src.broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
+	if(broken > 0)
+		if(broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -94,8 +94,8 @@
 					"<span class='notice'>[user] fixes part of the microwave.</span>", \
 					"<span class='notice'>You have fixed part of the microwave.</span>" \
 				)
-				src.broken = 1 // Fix it a bit
-		else if(src.broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
+				broken = 1 // Fix it a bit
+		else if(broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -105,14 +105,14 @@
 					"<span class='notice'>[user] fixes the microwave.</span>", \
 					"<span class='notice'>You have fixed the microwave.</span>" \
 				)
-				src.icon_state = "mw"
-				src.broken = 0 // Fix it!
-				src.dirty = 0 // just to be sure
-				src.flags = OPENCONTAINER
+				icon_state = "mw"
+				broken = 0 // Fix it!
+				dirty = 0 // just to be sure
+				flags = OPENCONTAINER
 		else
 			to_chat(user, "<span class='warning'>It's broken!</span>")
 			return 1
-	else if(src.dirty==100) // The microwave is all dirty so can't be used!
+	else if(dirty==100) // The microwave is all dirty so can't be used!
 		var/obj/item/weapon/reagent_containers/R = O
 		if(istype(R)) // If they're trying to clean it then let them
 			if(R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))
@@ -126,10 +126,10 @@
 						"<span class='notice'>[user]  has cleaned  the microwave.</span>", \
 						"<span class='notice'>You have cleaned the microwave.</span>" \
 					)
-					src.dirty = 0 // It's clean!
-					src.broken = 0 // just to be sure
-					src.icon_state = "mw"
-					src.flags = OPENCONTAINER
+					dirty = 0 // It's clean!
+					broken = 0 // just to be sure
+					icon_state = "mw"
+					flags = OPENCONTAINER
 					return 1
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
@@ -151,7 +151,7 @@
 
 		if(!O.contents.len)
 			to_chat(user, "You empty \the [O] into the Microwave.")
-			src.updateUsrDialog()
+			updateUsrDialog()
 			return 0
 			if (!is_type_in_list(O.contents))
 				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
@@ -159,7 +159,7 @@
 
 		if(user.drop_item(O, src))
 			holdingitems += O
-			src.updateUsrDialog()
+			updateUsrDialog()
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
 		if (istype(O,/obj/item/stack) && O:amount>1)
@@ -189,10 +189,10 @@
 	else
 		to_chat(user, "<span class='warning'>You have no idea what you can cook with this [O].</span>")
 		return 1
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/microwave/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/microwave/attack_ai(mob/user as mob)
 	if(istype(user,/mob/living/silicon/robot))
@@ -214,11 +214,11 @@
 
 /obj/machinery/microwave/interact(mob/user as mob) // The microwave Menu
 	var/dat = ""
-	if(src.broken > 0)
+	if(broken > 0)
 		dat = {"<TT>Bzzzzttttt</TT>"}
-	else if(src.operating)
+	else if(operating)
 		dat = {"<TT>Microwaving in progress!<BR>Please wait...!</TT>"}
-	else if(src.dirty==100)
+	else if(dirty==100)
 		dat = {"<TT>This microwave is dirty!<BR>Please clean it before use!</TT>"}
 	else
 		var/list/items_counts = new
@@ -311,7 +311,7 @@
 			wzhzhzh(4)
 			muck_finish()
 			cooked = fail()
-			cooked.loc = src.loc
+			cooked.loc = loc
 			return
 		else if (has_extra_item())
 			if (!wzhzhzh(4))
@@ -319,7 +319,7 @@
 				return
 			broke()
 			cooked = fail()
-			cooked.loc = src.loc
+			cooked.loc = loc
 			return
 		else
 			if (!wzhzhzh(10))
@@ -327,7 +327,7 @@
 				return
 			stop()
 			cooked = fail()
-			cooked.loc = src.loc
+			cooked.loc = loc
 			return
 	else
 		var/halftime = round(recipe.time/10/2)
@@ -337,12 +337,12 @@
 		if (!wzhzhzh(halftime))
 			abort()
 			cooked = fail()
-			cooked.loc = src.loc
+			cooked.loc = loc
 			return
 		cooked = recipe.make_food(src)
 		stop()
 		if(cooked)
-			cooked.loc = src.loc
+			cooked.loc = loc
 		return
 
 /obj/machinery/microwave/proc/wzhzhzh(var/seconds as num)
@@ -363,54 +363,54 @@
 	return 0
 
 /obj/machinery/microwave/proc/start()
-	src.visible_message("<span class='notice'>The microwave turns on.</span>", "<span class='notice'>You hear a microwave.</span>")
-	src.operating = 1
-	src.icon_state = "mw1"
-	src.updateUsrDialog()
+	visible_message("<span class='notice'>The microwave turns on.</span>", "<span class='notice'>You hear a microwave.</span>")
+	operating = 1
+	icon_state = "mw1"
+	updateUsrDialog()
 
 /obj/machinery/microwave/proc/abort()
-	src.operating = 0 // Turn it off again aferwards
-	src.icon_state = "mw"
-	src.updateUsrDialog()
+	operating = 0 // Turn it off again aferwards
+	icon_state = "mw"
+	updateUsrDialog()
 
 /obj/machinery/microwave/proc/stop()
 	playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
-	src.operating = 0 // Turn it off again aferwards
-	src.icon_state = "mw"
-	src.updateUsrDialog()
+	operating = 0 // Turn it off again aferwards
+	icon_state = "mw"
+	updateUsrDialog()
 
 /obj/machinery/microwave/proc/dispose()
 	for (var/obj/O in contents)
-		O.loc = src.loc
-	if (src.reagents.total_volume)
-		src.dirty++
-	src.reagents.clear_reagents()
+		O.loc = loc
+	if (reagents.total_volume)
+		dirty++
+	reagents.clear_reagents()
 	to_chat(usr, "<span class='notice'>You dispose of the microwave contents.</span>")
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/microwave/proc/muck_start()
 	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
-	src.icon_state = "mwbloody1" // Make it look dirty!!
+	icon_state = "mwbloody1" // Make it look dirty!!
 
 /obj/machinery/microwave/proc/muck_finish()
 	playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
-	src.visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
-	src.dirty = 100 // Make it dirty so it can't be used util cleaned
-	src.flags = 0 //So you can't add condiments
-	src.icon_state = "mwbloody" // Make it look dirty too
-	src.operating = 0 // Turn it off again aferwards
-	src.updateUsrDialog()
+	visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
+	dirty = 100 // Make it dirty so it can't be used util cleaned
+	flags = 0 //So you can't add condiments
+	icon_state = "mwbloody" // Make it look dirty too
+	operating = 0 // Turn it off again aferwards
+	updateUsrDialog()
 
 /obj/machinery/microwave/proc/broke()
 	var/datum/effect/effect/system/spark_spread/s = new
 	s.set_up(2, 1, src)
 	s.start()
-	src.icon_state = "mwb" // Make it look all busted up and shit
-	src.visible_message("<span class='warning'>The microwave breaks!</span>") //Let them know they're stupid
-	src.broken = 2 // Make it broken so it can't be used util fixed
-	src.flags = 0 //So you can't add condiments
-	src.operating = 0 // Turn it off again aferwards
-	src.updateUsrDialog()
+	icon_state = "mwb" // Make it look all busted up and shit
+	visible_message("<span class='warning'>The microwave breaks!</span>") //Let them know they're stupid
+	broken = 2 // Make it broken so it can't be used util fixed
+	flags = 0 //So you can't add condiments
+	operating = 0 // Turn it off again aferwards
+	updateUsrDialog()
 
 /obj/machinery/microwave/proc/fail()
 	var/obj/item/weapon/reagent_containers/food/snacks/badrecipe/ffuu = new(src)
@@ -423,7 +423,7 @@
 				amount+=O.reagents.get_reagent_amount(id)
 		qdel(O)
 		O = null
-	src.reagents.clear_reagents()
+	reagents.clear_reagents()
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
 	return ffuu
@@ -439,8 +439,8 @@
 		return
 
 	usr.set_machine(src)
-	if(src.operating)
-		src.updateUsrDialog()
+	if(operating)
+		updateUsrDialog()
 		return
 
 	switch(href_list["action"])

@@ -40,7 +40,7 @@
 		operating = 1
 	flick("shutterc0", src)
 	icon_state = "shutter0"
-	playsound(src.loc, sound_open, 100, 1)
+	playsound(loc, sound_open, 100, 1)
 	sleep(10)
 	density = 0
 	set_opacity(0)
@@ -60,7 +60,7 @@
 	operating = 1
 	flick("shutterc1", src)
 	icon_state = "shutter1"
-	playsound(src.loc, sound_close, 100, 1)
+	playsound(loc, sound_close, 100, 1)
 	density = 1
 	if(visible)
 		set_opacity(1)

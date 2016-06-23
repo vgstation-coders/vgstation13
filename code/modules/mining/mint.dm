@@ -21,18 +21,18 @@
 	..()
 	spawn( 5 )
 		for (var/dir in cardinal)
-			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input) break
+			input = locate(/obj/machinery/mineral/input, get_step(src, dir))
+			if(input) break
 		for (var/dir in cardinal)
-			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output) break
+			output = locate(/obj/machinery/mineral/output, get_step(src, dir))
+			if(output) break
 
 		return
 	return
 
 
 /obj/machinery/mineral/mint/process()
-	if ( src.input)
+	if ( input)
 		var/obj/item/stack/sheet/O
 		O = locate(/obj/item/stack/sheet, input.loc)
 		if(O)
@@ -153,7 +153,7 @@ a.notsmelting {
 	if(..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(processing==1)
 		to_chat(usr, "<span class='notice'>The machine is processing.</span>")
 		return
@@ -163,7 +163,7 @@ a.notsmelting {
 		coinsToProduce = Clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
 	if(href_list["makeCoins"])
 		var/temp_coins = coinsToProduce
-		if (src.output)
+		if (output)
 			processing = 1
 			icon_state = "coinpress1"
 			//var/obj/item/weapon/storage/bag/money/M
@@ -187,10 +187,10 @@ a.notsmelting {
 				materials.removeAmount(chosen, 1)
 				coinsToProduce--
 				newCoins++
-				src.updateUsrDialog()
+				updateUsrDialog()
 				sleep(5)
 			icon_state = "coinpress0"
 			processing = 0
 			coinsToProduce = temp_coins
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return

@@ -252,7 +252,7 @@ var/global/list/loopModeNames=list(
 		to_chat(usr, "<span class='warning'>You don't see anything to mess with.</span>")
 		return
 	if(stat & BROKEN && playlist!=null)
-		user.visible_message("<span class='danger'>[user.name] smacks the side of \the [src.name].</span>","<span class='warning'>You hammer the side of \the [src.name].</span>")
+		user.visible_message("<span class='danger'>[user.name] smacks the side of \the [name].</span>","<span class='warning'>You hammer the side of \the [name].</span>")
 		stat &= ~BROKEN
 		playlist=null
 		playing=emagged
@@ -430,7 +430,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/emag(mob/user)
 	if(!emagged)
-		user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
+		user.visible_message("<span class='warning'>[user.name] slides something into the [name]'s card-reader.</span>","<span class='warning'>You short out the [name].</span>")
 		wires.CutWireIndex(JUKE_CONFIG)
 		short()
 	return

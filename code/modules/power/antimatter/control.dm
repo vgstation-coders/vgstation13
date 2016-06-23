@@ -164,20 +164,20 @@
 	if(iswrench(W))
 		if(!anchored)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
-			user.visible_message("[user.name] secures the [src.name] to the floor.", \
+			user.visible_message("[user.name] secures the [name] to the floor.", \
 				"You secure the anchor bolts to the floor.", \
 				"You hear a ratchet")
-			src.anchored = 1
+			anchored = 1
 			connect_to_network()
 		else if(!linked_shielding.len > 0)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
-			user.visible_message("[user.name] unsecures the [src.name].", \
+			user.visible_message("[user.name] unsecures the [name].", \
 				"You remove the anchor bolts.", \
 				"You hear a ratchet")
-			src.anchored = 0
+			anchored = 0
 			disconnect_from_network()
 		else
-			to_chat(user, "<span class='warning'>Once bolted and linked to a shielding unit it the [src.name] is unable to be moved!</span>")
+			to_chat(user, "<span class='warning'>Once bolted and linked to a shielding unit it the [name] is unable to be moved!</span>")
 		return
 
 	if(istype(W, /obj/item/weapon/am_containment))
@@ -191,7 +191,7 @@
 		W.loc = src
 		user.update_icons()
 		message_admins("AME loaded with fuel by [user.real_name] ([user.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-		user.visible_message("[user.name] loads an [W.name] into the [src.name].", \
+		user.visible_message("[user.name] loads an [W.name] into the [name].", \
 				"You load an [W.name].", \
 				"You hear a thunk.")
 		return
@@ -236,10 +236,10 @@
 	active = !active
 	if(active)
 		use_power = 2
-		visible_message("The [src.name] starts up.")
+		visible_message("The [name] starts up.")
 	else
 		use_power = 1
-		visible_message("The [src.name] shuts down.")
+		visible_message("The [name] shuts down.")
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
 		AMS.update_icon()
 	update_icon()
@@ -365,7 +365,7 @@
 	if(href_list["ejectjar"])
 		if(fueljar)
 			message_admins("AME fuel jar ejected by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-			fueljar.loc = src.loc
+			fueljar.loc = loc
 			fueljar = null
 			//fueljar.control_unit = null currently it does not care where it is
 			//update_icon() when we have the icon for it

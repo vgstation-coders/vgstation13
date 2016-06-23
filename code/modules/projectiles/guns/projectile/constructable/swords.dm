@@ -16,7 +16,7 @@
 	var/obj/item/weapon/reagent_containers/hypospray/hypo = null
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is falling on the [name]! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
 
 /obj/item/weapon/sword/attack_self(mob/user as mob)
@@ -37,12 +37,12 @@
 /obj/item/weapon/sword/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/metal_blade))
 		to_chat(user, "You attach \the [W] to \the [src].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/sword/executioner/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/sword/executioner(get_turf(src.loc))
+			new /obj/item/weapon/sword/executioner(get_turf(loc))
 		qdel(src)
 		qdel(W)
 	if(W.type == /obj/item/weapon/reagent_containers/hypospray || W.type == /obj/item/weapon/reagent_containers/hypospray/creatine)
@@ -53,7 +53,7 @@
 		update_icon()
 	if(hypo && istype(W, /obj/item/weapon/aluminum_cylinder))
 		to_chat(user, "You affix \the [W] to the bottom of \the [src]'s [hypo.name].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/sword/venom/I = new (get_turf(user))
 			hypo.reagents.clear_reagents()
@@ -62,7 +62,7 @@
 			hypo = null
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/sword/venom(get_turf(src.loc))
+			new /obj/item/weapon/sword/venom(get_turf(loc))
 		qdel(src)
 		qdel(W)
 
@@ -173,7 +173,7 @@
 			H.reagents.clear_reagents()
 			I.hypo = H
 		I.update_icon()
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			user.put_in_hands(I)
 		new /obj/item/weapon/aluminum_cylinder(get_turf(src))

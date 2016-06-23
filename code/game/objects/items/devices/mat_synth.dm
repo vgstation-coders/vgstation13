@@ -152,7 +152,7 @@
 		to_chat(user, "<span class='notice'>You successfully scan \the [target] into \the [src]'s material banks.</span>")
 		return 1
 	else if(istype(target, /obj/item/stack/sheet)) //We can't scan it, but, only display an error when trying to scan a sheet. Currently only happens with MoMMI matsynths.
-		to_chat(user, "<span class='warning'>Your [src.name] does not contain this functionality to scan this type of material.</span>")
+		to_chat(user, "<span class='warning'>Your [name] does not contain this functionality to scan this type of material.</span>")
 	return ..()
 
 /obj/item/device/material_synth/examine(mob/user)
@@ -188,7 +188,7 @@
 				return 1
 			else
 				to_chat(user, "<span class='danger'>The lack of matter in \the [src] shorts out the device!</span>")
-				explosion(src.loc, 0, 0, 1, 2) //traitors - fuck them, am I right?
+				explosion(loc, 0, 0, 1, 2) //traitors - fuck them, am I right?
 				qdel(src)
 		else
 			to_chat(user, "<span class='warning'>You don't think you can do that again.</span>")

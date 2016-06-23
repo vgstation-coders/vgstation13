@@ -71,9 +71,9 @@ var/global/list/wizard_cards_normal = list(
 		icon_state = "wizcard_down"
 		name = "card"
 	else
-		src.icon_state = initial(icon_state)
-		src.name = initial(src.name)
-		src.overlays += char_image
+		icon_state = initial(icon_state)
+		name = initial(name)
+		overlays += char_image
 
 /obj/item/toy/singlecard/wizard/attack_self(mob/user, params)
 	return card_use.action(null, user, params)
@@ -236,7 +236,7 @@ var/global/list/wizard_cards_normal = list(
 		to_chat(user, "The borer is not yet ready.")
 		return
 
-	new /obj/item/toy/singlecard/wizard/borer/small(get_turf(src.loc))
+	new /obj/item/toy/singlecard/wizard/borer/small(get_turf(loc))
 	to_chat(user, "You create a borer token card!")
 
 /obj/item/toy/singlecard/wizard/borer/small/special_effect()
@@ -270,13 +270,13 @@ var/global/list/wizard_cards_normal = list(
 
 /obj/item/toy/cards/wizard/update_icon()
 	if(cards.len > 15)
-		src.icon_state = "wizdeck_full"
+		icon_state = "wizdeck_full"
 	else if(cards.len > 8)
-		src.icon_state = "wizdeck_half"
+		icon_state = "wizdeck_half"
 	else if(cards.len > 1)
-		src.icon_state = "wizdeck_low"
+		icon_state = "wizdeck_low"
 	else
-		src.icon_state = "wizdeck_empty"
+		icon_state = "wizdeck_empty"
 
 /obj/item/toy/cards/wizard/full/generate_cards()
 	for(var/card in wizard_cards_normal)

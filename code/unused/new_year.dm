@@ -62,29 +62,29 @@
 	if (user.get_active_hand() == src)
 		if ((M_CLUMSY in usr.mutations) && prob(50))
 			to_chat(user, "<span class='warning'>Huh? How does this thing work?!</span>")
-			src.state = 1
-			src.icon_state = "flashbang1"
-			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			state = 1
+			icon_state = "flashbang1"
+			playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 			spawn( 5 )
 				prime()
 				return
-		else if (!( src.state ))
+		else if (!( state ))
 			to_chat(user, "<span class='warning'>You prime the [src]! [det_time/10] seconds!</span>")
-			src.state = 1
-			src.icon_state = "flashbang1"
-			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
-			spawn( src.det_time )
+			state = 1
+			icon_state = "flashbang1"
+			playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			spawn( det_time )
 				prime()
 				return
 		user.dir = get_dir(user, target)
 		user.drop_item()
 		var/t = (isturf(target) ? target : target.loc)
 		walk_towards(src, t, 3)
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 	return
 
 /obj/item/weapon/firbang/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/item/weapon/firbang/attack_hand()
 	walk(src, null, null)
@@ -92,11 +92,11 @@
 	return
 
 /obj/item/weapon/firbang/proc/prime()
-	playsound(src.loc, 'sound/effects/bang.ogg', 25, 1)
+	playsound(loc, 'sound/effects/bang.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)
 		var/datum/effect/effect/system/harmless_smoke_spread/smoke = new
-		smoke.set_up(3, 0, src.loc)
+		smoke.set_up(3, 0, loc)
 		smoke.attach(src)
 		smoke.start()
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -107,7 +107,7 @@
 	return
 
 /obj/item/weapon/firbang/attack_self(mob/user as mob)
-	if (!src.state)
+	if (!state)
 		if (M_CLUMSY in user.mutations)
 			to_chat(user, "<span class='warning'>Huh? How does this thing work?!</span>")
 			spawn( 5 )
@@ -115,10 +115,10 @@
 				return
 		else
 			to_chat(user, "<span class='warning'>You prime the [src]! [det_time/10] seconds!</span>")
-			src.state = 1
-			src.icon_state = "flashbang1"
+			state = 1
+			icon_state = "flashbang1"
 			add_fingerprint(user)
-			spawn( src.det_time )
+			spawn( det_time )
 				prime()
 				return
 	return

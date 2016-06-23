@@ -8,43 +8,43 @@
 // And this.
 /mob/living/silicon/robot/mommi/statelaws() // -- TLE
 	var/prefix=";"
-	if(src.keeper)
+	if(keeper)
 		prefix=":b" // Binary channel.
-	src.say(prefix+"Current Active Laws:")
-	//src.laws_sanity_check()
-	//src.laws.show_laws(world)
+	say(prefix+"Current Active Laws:")
+	//laws_sanity_check()
+	//laws.show_laws(world)
 	var/number = 1
 	sleep(10)
-	if (src.laws.zeroth)
-		if (src.lawcheck[1] == "Yes") //This line and the similar lines below make sure you don't state a law unless you want to. --NeoFite
-			src.say("[prefix]0. [src.laws.zeroth]")
+	if (laws.zeroth)
+		if (lawcheck[1] == "Yes") //This line and the similar lines below make sure you don't state a law unless you want to. --NeoFite
+			say("[prefix]0. [laws.zeroth]")
 			sleep(10)
 
-	for (var/index = 1, index <= src.laws.ion.len, index++)
-		var/law = src.laws.ion[index]
+	for (var/index = 1, index <= laws.ion.len, index++)
+		var/law = laws.ion[index]
 		var/num = ionnum()
 		if (length(law) > 0)
-			if (src.ioncheck[index] == "Yes")
-				src.say("[prefix][num]. [law]")
+			if (ioncheck[index] == "Yes")
+				say("[prefix][num]. [law]")
 				sleep(10)
 
-	for (var/index = 1, index <= src.laws.inherent.len, index++)
-		var/law = src.laws.inherent[index]
+	for (var/index = 1, index <= laws.inherent.len, index++)
+		var/law = laws.inherent[index]
 
 		if (length(law) > 0)
-			if (src.lawcheck[index+1] == "Yes")
-				src.say("[prefix][number]. [law]")
+			if (lawcheck[index+1] == "Yes")
+				say("[prefix][number]. [law]")
 				sleep(10)
 			number++
 
 
-	for (var/index = 1, index <= src.laws.supplied.len, index++)
-		var/law = src.laws.supplied[index]
+	for (var/index = 1, index <= laws.supplied.len, index++)
+		var/law = laws.supplied[index]
 
 		if (length(law) > 0)
-			if(src.lawcheck.len >= number+1)
-				if (src.lawcheck[number+1] == "Yes")
-					src.say("[prefix][number]. [law]")
+			if(lawcheck.len >= number+1)
+				if (lawcheck[number+1] == "Yes")
+					say("[prefix][number]. [law]")
 					sleep(10)
 				number++
 

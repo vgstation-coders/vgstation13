@@ -165,7 +165,7 @@
 
 	else if(isliving(A))
 		visible_message("<span class='warning'>\the [src] sticks itself on \the [A].</span>")
-		src.loc = A
+		loc = A
 		self_overlay = new(icon,src,icon_state,10,dir)
 		self_overlay.pixel_x = pixel_x
 		self_overlay.pixel_y = pixel_y
@@ -182,7 +182,7 @@
 		stuck_to.overlays -= self_overlay
 		icon_state = self_overlay.icon_state
 		if(fall_to_floor)
-			src.loc = get_turf(src)
+			loc = get_turf(src)
 	stuck_to = null
 	anchored = 0
 	alpha = 255

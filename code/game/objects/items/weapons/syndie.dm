@@ -27,8 +27,8 @@
 	var/K = rand(1,2000)
 	K = md5(num2text(K)+name)
 	K = copytext(K,1,7)
-	src.desc += "\n You see [K] engraved on \the [src]."
-	var/obj/item/weapon/syndie/c4detonator/detonator = new(src.loc)
+	desc += "\n You see [K] engraved on \the [src]."
+	var/obj/item/weapon/syndie/c4detonator/detonator = new(loc)
 	detonator.desc += "\n You see [K] engraved on the lighter."
 	detonator.bomb = src
 
@@ -61,9 +61,9 @@
 	var/pr_open = 0  /*Is the "What do you want to do?" prompt open?*/
 
 /obj/item/weapon/syndie/c4detonator/attack_self(mob/user as mob)
-	switch(src.icon_state)
+	switch(icon_state)
 		if("c-4detonator_0")
-			src.icon_state = "c-4detonator_1"
+			icon_state = "c-4detonator_1"
 			to_chat(user, "You flick open the lighter.")
 
 		if("c-4detonator_1")
@@ -73,12 +73,12 @@
 					if("Press the button.")
 						to_chat(user, "<span class='warning'>You press the button.</span>")
 						flick("c-4detonator_click", src)
-						if(src.bomb)
-							src.bomb.detonate()
-							log_admin("[user.real_name]([user.ckey]) has triggered [src.bomb] with [src].")
-							message_admins("<span class='warning'>[user.real_name]([user.ckey]) has triggered [src.bomb] with [src].</span>")
+						if(bomb)
+							bomb.detonate()
+							log_admin("[user.real_name]([user.ckey]) has triggered [bomb] with [src].")
+							message_admins("<span class='warning'>[user.real_name]([user.ckey]) has triggered [bomb] with [src].</span>")
 
 					if("Close the lighter.")
-						src.icon_state = "c-4detonator_0"
+						icon_state = "c-4detonator_0"
 						to_chat(user, "You close the lighter.")
 				pr_open = 0

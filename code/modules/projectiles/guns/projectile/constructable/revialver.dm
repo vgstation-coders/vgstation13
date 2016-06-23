@@ -125,7 +125,7 @@
 	else if (A.loc == user)
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	else if (locate (/obj/structure/table, loc))
 		return
 
 	var/obj/item/weapon/cylinder/C = cylinder

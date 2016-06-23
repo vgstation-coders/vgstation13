@@ -18,15 +18,15 @@
 /obj/machinery/computer/diseasesplicer/attackby(var/obj/I as obj, var/mob/user as mob)
 /*
 	if(istype(I, /obj/item/weapon/screwdriver))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
-			if (src.stat & BROKEN)
+			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				new /obj/item/weapon/shard( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
+				new /obj/item/weapon/shard( loc )
 				var/obj/item/weapon/circuitboard/diseasesplicer/M = new /obj/item/weapon/circuitboard/diseasesplicer( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -34,10 +34,10 @@
 				del(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 				var/obj/item/weapon/circuitboard/diseasesplicer/M = new /obj/item/weapon/circuitboard/diseasesplicer( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"
@@ -56,16 +56,16 @@
 
 
 	//else
-	src.attack_hand(user)
+	attack_hand(user)
 	return
 
 /obj/machinery/computer/diseasesplicer/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/diseasesplicer/attack_paw(var/mob/user as mob)
 
-	return src.attack_hand(user)
+	return attack_hand(user)
 	return
 
 /obj/machinery/computer/diseasesplicer/attack_hand(var/mob/user as mob)
@@ -123,28 +123,28 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 	use_power(500)
-	src.updateDialog()
+	updateDialog()
 
 	if(scanning)
 		scanning -= 1
 		if(!scanning)
-			state("The [src.name] beeps")
+			state("The [name] beeps")
 			icon_state = "crew"
 	if(splicing)
 		splicing -= 1
 		if(!splicing)
-			state("The [src.name] pings")
+			state("The [name] pings")
 			icon_state = "crew"
 	if(burning)
 		burning -= 1
 		if(!burning)
-			var/obj/item/weapon/diseasedisk/d = new /obj/item/weapon/diseasedisk(src.loc)
+			var/obj/item/weapon/diseasedisk/d = new /obj/item/weapon/diseasedisk(loc)
 			if(analysed)
 				d.name = "[memorybank.effect.name] GNA disk (Stage: [5-memorybank.effect.stage])"
 			else
 				d.name = "Unknown GNA disk (Stage: [5-memorybank.effect.stage])"
 			d.effect = memorybank
-			state("The [src.name] zings")
+			state("The [name] zings")
 			icon_state = "crew"
 
 
@@ -153,7 +153,7 @@
 /obj/machinery/computer/diseasesplicer/Topic(href, href_list)
 	if(..())
 		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon)))
 		usr.machine = src
 
 		if (href_list["grab"])
@@ -165,7 +165,7 @@
 			icon_state = "crew"
 
 		else if(href_list["eject"])
-			dish.loc = src.loc
+			dish.loc = loc
 			dish = null
 
 		else if(href_list["splice"])
@@ -180,8 +180,8 @@
 			burning = 20
 			icon_state = "crew"
 
-		src.add_fingerprint(usr)
-	src.updateUsrDialog()
+		add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/diseasesplicer/proc/state(var/msg)

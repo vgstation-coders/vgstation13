@@ -293,7 +293,7 @@
 /mob/proc/can_speak_lang(datum/language/speaking)
 
 
-	return (universal_speak || speaking in src.languages)
+	return (universal_speak || speaking in languages)
 
 //TBD
 /mob/verb/check_languages()

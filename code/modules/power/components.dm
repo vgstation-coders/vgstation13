@@ -20,7 +20,7 @@
 	var/turf/turf = null // Updated in addToTurf()/removeFromTurf()
 
 /datum/power_connection/New(var/obj/parent)
-	src.parent = parent
+	parent = parent
 	power_machines |= src
 
 	// Used for updating turf power_connection lists when moved.

@@ -43,11 +43,11 @@
 			user.take_organ_damage(2*force)
 		return
 /*this is already called in ..()
-	src.add_fingerprint(user)
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
+	add_fingerprint(user)
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [M.name] ([M.ckey])</font>")
 
-	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
 */
 	if (user.a_intent == I_HURT)
 		if(!..()) return
@@ -62,14 +62,14 @@
 		playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
 		M.Stun(5)
 		M.Weaken(5)
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
-		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [M.name] ([M.ckey])</font>")
+		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
 		if(!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 
 		for(var/mob/O in viewers(M))
 			if (O.client)	O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
@@ -158,10 +158,10 @@
 		else
 			playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
 			target.Weaken(2)
-			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [target.name] ([target.ckey])</font>")
-			log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [target.name] ([target.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
-			src.add_fingerprint(user)
+			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [target.name] ([target.ckey])</font>")
+			log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [target.name] ([target.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
+			add_fingerprint(user)
 
 			target.visible_message("<span class='danger'>[target] has been stunned with \the [src] by [user]!</span>",\
 				drugged_message="<span class='notice'>[user] smacks [target] with the fishing rod!</span>")
@@ -195,20 +195,20 @@
 	..()
 
 /obj/item/weapon/melee/energy/axe/attack_self(mob/user as mob)
-	src.active = !( src.active )
-	if (src.active)
+	active = !( active )
+	if (active)
 		to_chat(user, "<span class='notice'>The axe is now energised.</span>")
-		src.force = 150
-		src.icon_state = "axe1"
-		src.w_class = W_CLASS_HUGE
-		src.sharpness = 1.5
+		force = 150
+		icon_state = "axe1"
+		w_class = W_CLASS_HUGE
+		sharpness = 1.5
 	else
 		to_chat(user, "<span class='notice'>The axe can now be concealed.</span>")
-		src.force = initial(src.force)
-		src.icon_state = initial(src.icon_state)
-		src.w_class = initial(src.w_class)
-		src.sharpness = initial(src.sharpness)
-	src.add_fingerprint(user)
+		force = initial(force)
+		icon_state = initial(icon_state)
+		w_class = initial(w_class)
+		sharpness = initial(sharpness)
+	add_fingerprint(user)
 	return
 
 /obj/item/weapon/melee/bone_sword
@@ -230,7 +230,7 @@
 	var/mob/living/simple_animal/borer/parent_borer = null
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [name]! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
 
 /obj/item/weapon/melee/bone_sword/New(turf/T, var/p_borer = null)

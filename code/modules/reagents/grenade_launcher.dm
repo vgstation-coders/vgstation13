@@ -29,17 +29,17 @@
 		if(grenades.len < max_grenades)
 			if(user.drop_item(I, src))
 				grenades += I
-				to_chat(user, "<span class='notice'>You load the [I.name] into the [src.name].</span>")
+				to_chat(user, "<span class='notice'>You load the [I.name] into the [name].</span>")
 				to_chat(user, "<span class='notice'>[grenades.len] / [max_grenades] grenades loaded.</span>")
 		else
-			to_chat(user, "<span class='warning'>The [src.name] cannot hold more grenades.</span>")
+			to_chat(user, "<span class='warning'>The [name] cannot hold more grenades.</span>")
 
 /obj/item/weapon/gun/grenadelauncher/afterattack(obj/target, mob/user , flag)
 
 	if (istype(target, /obj/item/weapon/storage/backpack ))
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	else if (locate (/obj/structure/table, loc))
 		return
 
 	else if(target == user)
@@ -48,7 +48,7 @@
 	if(grenades.len)
 		spawn(0) fire_grenade(target,user)
 	else
-		to_chat(usr, "<span class='warning'>The [src.name] is empty.</span>")
+		to_chat(usr, "<span class='warning'>The [name] is empty.</span>")
 
 /obj/item/weapon/gun/grenadelauncher/proc/fire_grenade(atom/target, mob/user)
 	for(var/mob/O in viewers(world.view, user))
@@ -58,8 +58,8 @@
 	grenades -= F
 	F.loc = user.loc
 	F.throw_at(target, 30, 2)
-	message_admins("[key_name_admin(user)] fired [F.name] from [src.name].")
-	log_game("[key_name_admin(user)] launched [F.name] from [src.name].")
+	message_admins("[key_name_admin(user)] fired [F.name] from [name].")
+	log_game("[key_name_admin(user)] launched [F.name] from [name].")
 	F.active = 1
 	F.icon_state = initial(icon_state) + "_active"
 	playsound(user.loc, 'sound/weapons/grenadelauncher.ogg', 50, 1, -3)

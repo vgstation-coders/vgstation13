@@ -32,11 +32,11 @@
 	*/
 
 /obj/effect/mine_generator/New()
-	last_loc = src.loc
+	last_loc = loc
 	var/i
 	for(i = 0; i < 50; i++)
 		gererateTargetLoc()
-		//target_loc = locate(last_loc.x + rand(5), last_loc.y + rand(5), src.z)
+		//target_loc = locate(last_loc.x + rand(5), last_loc.y + rand(5), z)
 		fillWithAsteroids()
 	del(src)
 	return
@@ -94,13 +94,13 @@
 			randYParam = 3
 	target_loc = last_loc
 	if (randXParam > 0)
-		target_loc = locate(target_loc.x+rand(randXParam),target_loc.y,src.z)
+		target_loc = locate(target_loc.x+rand(randXParam),target_loc.y,z)
 	if (randYParam > 0)
-		target_loc = locate(target_loc.x,target_loc.y+rand(randYParam),src.z)
+		target_loc = locate(target_loc.x,target_loc.y+rand(randYParam),z)
 	if (randXParam < 0)
-		target_loc = locate(target_loc.x-rand(-randXParam),target_loc.y,src.z)
+		target_loc = locate(target_loc.x-rand(-randXParam),target_loc.y,z)
 	if (randYParam < 0)
-		target_loc = locate(target_loc.x,target_loc.y-rand(-randXParam),src.z)
+		target_loc = locate(target_loc.x,target_loc.y-rand(-randXParam),z)
 	if (mineDirection == 1 || mineDirection == 5 || mineDirection == 9 || mineDirection == 13) //if N,S,E,W, turn quickly
 		if(prob(50))
 			mineDirection += 2

@@ -20,9 +20,9 @@ var/const/Represents a special statement in the code triggered by a keyword.
 	var/inline
 
 /datum/n_Keyword/New(inline = 0)
-	src.inline = inline
+	inline = inline
 	return ..()
-	
+
 /*
 	Proc: Parse
 	Called when the parser finds a keyword in the code.

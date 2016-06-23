@@ -18,13 +18,13 @@
 
 /obj/item/projectile/spell_projectile/process_step()
 	..()
-	if(!isnull(src.loc))
+	if(!isnull(loc))
 		if(carried)
 			var/list/targets = choose_prox_targets(user = carried.holder, spell_holder = src)
 			if(targets.len)
-				src.prox_cast(targets)
-		if(proj_trail && src && src.loc) //pretty trails
-			var/obj/effect/overlay/trail = getFromPool(/obj/effect/overlay, src.loc)
+				prox_cast(targets)
+		if(proj_trail && src && loc) //pretty trails
+			var/obj/effect/overlay/trail = getFromPool(/obj/effect/overlay, loc)
 			trail.icon = proj_trail_icon
 			trail.icon_state = proj_trail_icon_state
 			trail.density = 0
@@ -62,5 +62,5 @@
 
 /obj/item/projectile/spell_projectile/seeking/process_step()
 	..()
-	if(original && !isnull(src.loc))
+	if(original && !isnull(loc))
 		current = original //update the target

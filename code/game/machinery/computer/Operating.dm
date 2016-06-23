@@ -19,7 +19,7 @@
 	return
 
 /obj/machinery/computer/operating/proc/updatemodules()
-	src.optable = findoptable()
+	optable = findoptable()
 
 /obj/machinery/computer/operating/proc/findoptable()
 	var/obj/machinery/optable/optablef = null
@@ -38,11 +38,11 @@
 	return optablef
 
 /obj/machinery/computer/operating/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/med_data/attack_paw(user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/operating/attack_hand(mob/user as mob)
 	if(..())
@@ -55,25 +55,25 @@
 	updatemodules()
 
 	var/dat = {"<HEAD><TITLE>Operating Computer</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>"}
-	if(!isnull(src.optable) && (src.optable.check_victim()))
-		src.victim = src.optable.victim
+	if(!isnull(optable) && (optable.check_victim()))
+		victim = optable.victim
 		dat += {"
 <B>Patient Information:</B><BR>
 <BR>
-<B>Name:</B> [src.victim.real_name]<BR>
-<B>Age:</B> [src.victim.age]<BR>
-<B>Blood Type:</B> [src.victim.dna.b_type]<BR>
+<B>Name:</B> [victim.real_name]<BR>
+<B>Age:</B> [victim.age]<BR>
+<B>Blood Type:</B> [victim.dna.b_type]<BR>
 <BR>
-<B>Health:</B> [src.victim.health]<BR>
-<B>Brute Damage:</B> [src.victim.getBruteLoss()]<BR>
-<B>Toxins Damage:</B> [src.victim.getToxLoss()]<BR>
-<B>Fire Damage:</B> [src.victim.getFireLoss()]<BR>
-<B>Suffocation Damage:</B> [src.victim.getOxyLoss()]<BR>
-<B>Patient Status:</B> [src.victim.stat ? "Non-Responsive" : "Stable"]<BR>
+<B>Health:</B> [victim.health]<BR>
+<B>Brute Damage:</B> [victim.getBruteLoss()]<BR>
+<B>Toxins Damage:</B> [victim.getToxLoss()]<BR>
+<B>Fire Damage:</B> [victim.getFireLoss()]<BR>
+<B>Suffocation Damage:</B> [victim.getOxyLoss()]<BR>
+<B>Patient Status:</B> [victim.stat ? "Non-Responsive" : "Stable"]<BR>
 <BR>
 <A HREF='?src=\ref[user];mach_close=op'>Close</A>"}
 	else
-		src.victim = null
+		victim = null
 		dat += {"
 <B>Patient Information:</B><BR>
 <BR>
@@ -93,15 +93,15 @@
 
 /obj/machinery/computer/operating/process()
 	if(..())
-		src.updateDialog()
+		updateDialog()
 	update_icon()
 
 /obj/machinery/computer/operating/update_icon()
 	..()
 	if(!(stat & (BROKEN | NOPOWER)))
 		updatemodules()
-		if(!isnull(src.optable) && (src.optable.check_victim()))
-			src.victim = src.optable.victim
+		if(!isnull(optable) && (optable.check_victim()))
+			victim = optable.victim
 			if(victim.stat == DEAD)
 				icon_state = "operating-dead"
 			else

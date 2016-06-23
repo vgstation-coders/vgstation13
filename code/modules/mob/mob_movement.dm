@@ -505,7 +505,7 @@
 
 	/*
 	if(istype(src,/mob/living/carbon))
-		if(src.l_hand && src.r_hand)
+		if(l_hand && r_hand)
 			return 0
 	*/
 
@@ -515,7 +515,7 @@
 			continue
 
 		var/mob/living/carbon/human/H = src
-		if(istype(turf,/turf/simulated/floor) && (src.areaMaster && src.areaMaster.has_gravity == 0) && !(istype(H) && istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP)))
+		if(istype(turf,/turf/simulated/floor) && (areaMaster && areaMaster.has_gravity == 0) && !(istype(H) && istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP)))
 			continue
 
 		dense_object++
@@ -546,8 +546,8 @@
 	//Check to see if we slipped
 	if(!ignore_slip && prob(Process_Spaceslipping(5)))
 		to_chat(src, "<span class='notice'><B>You slipped!</B></span>")
-		src.inertia_dir = src.last_move
-		step(src, src.inertia_dir)
+		inertia_dir = last_move
+		step(src, inertia_dir)
 		return 0
 	//If not then we can reset inertia and move
 	inertia_dir = 0
@@ -569,7 +569,7 @@
 		return
 	if(pulling.anchored)
 		return
-	if(src.locked_to == pulling)
+	if(locked_to == pulling)
 		return
 	if(!pulling.Adjacent(src))
 		return

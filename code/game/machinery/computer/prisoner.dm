@@ -16,8 +16,8 @@
 	light_color = LIGHT_COLOR_RED
 
 	attack_ai(var/mob/user as mob)
-		src.add_hiddenprint(user)
-		return src.attack_hand(user)
+		add_hiddenprint(user)
+		return attack_hand(user)
 
 
 	attack_paw(var/mob/user as mob)
@@ -36,7 +36,7 @@
 			var/turf/Tr = null
 			for(var/obj/item/weapon/implant/chem/C in world)
 				Tr = get_turf(C)
-				if((Tr) && (Tr.z != src.z))	continue//Out of range
+				if((Tr) && (Tr.z != z))	continue//Out of range
 				if(!C.implanted) continue
 
 				dat += {"[C.imp_in.name] | Remaining Units: [C.reagents.total_volume] | Inject:
@@ -47,7 +47,7 @@
 			dat += "<HR>Tracking Implants<BR>"
 			for(var/obj/item/weapon/implant/tracking/T in world)
 				Tr = get_turf(T)
-				if((Tr) && (Tr.z != src.z))	continue//Out of range
+				if((Tr) && (Tr.z != z))	continue//Out of range
 				if(!T.implanted) continue
 				var/loc_display = "Unknown"
 				var/mob/living/carbon/M = T.imp_in
@@ -70,7 +70,7 @@
 
 	process()
 		if(!..())
-			src.updateDialog()
+			updateDialog()
 		return
 
 
@@ -93,7 +93,7 @@
 				if(I)	I.activate(10)
 
 			else if(href_list["lock"])
-				if(src.allowed(usr))
+				if(allowed(usr))
 					screen = !screen
 				else
 					to_chat(usr, "Unauthorized Access.")
@@ -106,6 +106,6 @@
 					var/mob/living/carbon/R = I.imp_in
 					to_chat(R, "<span class='good'>You hear a voice in your head saying: '[warning]'</span>")
 
-			src.add_fingerprint(usr)
-		src.updateUsrDialog()
+			add_fingerprint(usr)
+		updateUsrDialog()
 		return

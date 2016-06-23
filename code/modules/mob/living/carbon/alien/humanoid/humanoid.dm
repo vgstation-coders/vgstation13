@@ -342,11 +342,11 @@ In all, this is a lot like the monkey code. /N
 	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
 	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
 	if(pickpocket)
-		dat += "<BR><B>Left pouch:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
-		dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
+		dat += "<BR><B>Left pouch:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
+		dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
 	else
-		dat += "<BR><B>Right pouch:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
-		dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
+		dat += "<BR><B>Right pouch:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
+		dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
 	dat += "<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A><BR>"
 
 	user << browse(dat, text("window=mob\ref[src];size=340x480"))

@@ -242,7 +242,7 @@
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R.emagged)
-			src.Emag()
+			Emag()
 			to_chat(usr, "You shortcircuit the [src].")
 			return
 	*/
@@ -443,7 +443,7 @@
 //This used to actually check if it wasn't empty, but that's handled in ReplaceLight() now.
 
 /obj/item/device/lightreplacer/proc/CanUse(var/mob/living/user)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	//Not sure what else to check for. Maybe if clumsy?
 	return 1
 

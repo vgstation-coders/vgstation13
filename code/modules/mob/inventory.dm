@@ -286,7 +286,7 @@
 		return 0
 
 	if(!Target)
-		Target = src.loc
+		Target = loc
 
 	remove_from_mob(to_drop) //clean out any refs
 
@@ -354,9 +354,9 @@
 
 //Attemps to remove an object on a mob.  Will not move it to another area or such, just removes from the mob.
 /mob/proc/remove_from_mob(var/obj/O)
-	src.u_equip(O,1)
-	if (src.client)
-		src.client.screen -= O
+	u_equip(O,1)
+	if (client)
+		client.screen -= O
 	if(!O) return
 	O.layer = initial(O.layer)
 	O.plane = initial(O.plane)
@@ -395,68 +395,68 @@
 	var/equipped = 0
 	switch(slot)
 		if(slot_back)
-			if(!src.back)
-				src.back = W
+			if(!back)
+				back = W
 				equipped = 1
 		if(slot_wear_mask)
-			if(!src.wear_mask)
-				src.wear_mask = W
+			if(!wear_mask)
+				wear_mask = W
 				equipped = 1
 		if(slot_handcuffed)
-			if(!src.handcuffed)
-				src.handcuffed = W
+			if(!handcuffed)
+				handcuffed = W
 				equipped = 1
 		if(slot_belt)
-			if(!src.belt && src.w_uniform)
-				src.belt = W
+			if(!belt && w_uniform)
+				belt = W
 				equipped = 1
 		if(slot_wear_id)
-			if(!src.wear_id && src.w_uniform)
-				src.wear_id = W
+			if(!wear_id && w_uniform)
+				wear_id = W
 				equipped = 1
 		if(slot_ears)
-			if(!src.ears)
-				src.ears = W
+			if(!ears)
+				ears = W
 				equipped = 1
 		if(slot_glasses)
-			if(!src.glasses)
-				src.glasses = W
+			if(!glasses)
+				glasses = W
 				equipped = 1
 		if(slot_gloves)
-			if(!src.gloves)
-				src.gloves = W
+			if(!gloves)
+				gloves = W
 				equipped = 1
 		if(slot_head)
-			if(!src.head)
-				src.head = W
+			if(!head)
+				head = W
 				equipped = 1
 		if(slot_shoes)
-			if(!src.shoes)
-				src.shoes = W
+			if(!shoes)
+				shoes = W
 				equipped = 1
 		if(slot_wear_suit)
-			if(!src.wear_suit)
-				src.wear_suit = W
+			if(!wear_suit)
+				wear_suit = W
 				equipped = 1
 		if(slot_w_uniform)
-			if(!src.w_uniform)
-				src.w_uniform = W
+			if(!w_uniform)
+				w_uniform = W
 				equipped = 1
 		if(slot_l_store)
-			if(!src.l_store && src.w_uniform)
-				src.l_store = W
+			if(!l_store && w_uniform)
+				l_store = W
 				equipped = 1
 		if(slot_r_store)
-			if(!src.r_store && src.w_uniform)
-				src.r_store = W
+			if(!r_store && w_uniform)
+				r_store = W
 				equipped = 1
 		if(slot_s_store)
-			if(!src.s_store && src.wear_suit)
-				src.s_store = W
+			if(!s_store && wear_suit)
+				s_store = W
 				equipped = 1
 		if(slot_in_backpack)
-			if (src.back && istype(src.back, /obj/item/weapon/storage/backpack))
-				var/obj/item/weapon/storage/backpack/B = src.back
+			if (back && istype(back, /obj/item/weapon/storage/backpack))
+				var/obj/item/weapon/storage/backpack/B = back
 				if(B.contents.len < B.storage_slots && W.w_class <= B.fits_max_w_class)
 					W.loc = B
 					equipped = 1
@@ -464,7 +464,7 @@
 	if(equipped)
 		W.layer = 20
 		W.plane = PLANE_HUD
-		if(src.back && W.loc != src.back)
+		if(back && W.loc != back)
 			W.loc = src
 	else
 		switch(act_on_fail)
@@ -476,7 +476,7 @@
 	return equipped
 
 /mob/proc/get_id_card()
-	for(var/obj/item/I in src.get_all_slots())
+	for(var/obj/item/I in get_all_slots())
 		. = I.GetID()
 		if(.)
 			break

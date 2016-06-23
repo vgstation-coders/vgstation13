@@ -72,7 +72,7 @@
 	add_fingerprint(user)
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
-	if(!ismob(M) || !Adjacent(user) || (M.loc != src.loc) || user.restrained() || user.lying || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
+	if(!ismob(M) || !Adjacent(user) || (M.loc != loc) || user.restrained() || user.lying || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
 		return
 
 	if(isanimal(M))
@@ -153,7 +153,7 @@
 		if(locked_atoms.len)
 			return 0
 
-		visible_message("[usr] collapses \the [src.name]")
+		visible_message("[usr] collapses \the [name]")
 
 		new/obj/item/roller(get_turf(src))
 

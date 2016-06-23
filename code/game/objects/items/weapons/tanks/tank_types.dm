@@ -75,10 +75,10 @@
 	if (istype(W, /obj/item/weapon/gun/projectile/flamethrower))
 		var/obj/item/weapon/gun/projectile/flamethrower/F = W
 		if ((!F.status)||(F.ptank))	return
-		src.master = F
+		master = F
 		F.ptank = src
 		user.before_take_item(src)
-		src.loc = F
+		loc = F
 	return
 
 /obj/item/weapon/tank/plasma/plasmaman

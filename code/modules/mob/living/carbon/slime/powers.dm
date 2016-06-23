@@ -28,7 +28,7 @@
 								to_chat(src, "<i>The [met.name] is already feeding on this subject...</i>")
 								return
 						to_chat(src, "<span class='notice'><i>I have latched onto the subject and begun feeding...</i></span>")
-						to_chat(M, "<span class='danger'>The [src.name] has latched onto your head!</span>")
+						to_chat(M, "<span class='danger'>The [name] has latched onto your head!</span>")
 						Feedon(M)
 
 					else
@@ -44,7 +44,7 @@
 
 /mob/living/carbon/slime/proc/Feedon(var/mob/living/carbon/M)
 	Victim = M
-	src.loc = M.loc
+	loc = M.loc
 	canmove = 0
 	anchored = 1
 	var/lastnut = nutrition
@@ -179,14 +179,14 @@
 			new_slime.nutrition = nutrition
 			new_slime.powerlevel = max(0, powerlevel-1)
 			new_slime.a_intent = I_HURT
-			if(src.mind)
-				src.mind.transfer_to(new_slime)
+			if(mind)
+				mind.transfer_to(new_slime)
 			else
-				new_slime.key = src.key
+				new_slime.key = key
 			attack_log += text("\[[time_stamp()]\] <font color='black'>Evolved to an adult slime at x=[x],y=[y],z=[z]!</font>")
 			new_slime.languages = languages.Copy()
-			new_slime.name = src.name
-			new_slime.real_name = src.real_name
+			new_slime.name = name
+			new_slime.real_name = real_name
 			new_slime.attack_log = attack_log
 			transferImplantsTo(new_slime)
 			transferBorers(new_slime)
@@ -233,14 +233,14 @@
 			var/mob/living/carbon/slime/new_slime = pick(babies)
 			new_slime.a_intent = I_HURT
 			new_slime.languages = languages.Copy()
-			new_slime.name = src.name
+			new_slime.name = name
 			attack_log += text("\[[time_stamp()]\] <font color='black'>Reproduced to make more slimes at x=[x],y=[y],z=[z]!</font>")
-			new_slime.real_name = src.real_name
+			new_slime.real_name = real_name
 			new_slime.attack_log = attack_log
-			if(src.mind)
-				src.mind.transfer_to(new_slime)
+			if(mind)
+				mind.transfer_to(new_slime)
 			else
-				new_slime.key = src.key
+				new_slime.key = key
 			transferImplantsTo(new_slime)
 			transferBorers(new_slime)
 

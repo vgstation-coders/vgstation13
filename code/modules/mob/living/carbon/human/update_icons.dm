@@ -184,10 +184,10 @@ var/global/list/damage_icon_parts = list()
 	var/hulk_color_mod = rgb(48,224,40)
 	var/necrosis_color_mod = rgb(10,50,0)
 
-	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
-	var/fat = (M_FAT in src.mutations) && (species && species.flags & CAN_BE_FAT)
-	var/hulk = (M_HULK in src.mutations) && species.name == "Horror" // Part of the species.
-	var/skeleton = (SKELETON in src.mutations)
+	var/husk = (M_HUSK in mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through mutations repeatedly? -Pete
+	var/fat = (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
+	var/hulk = (M_HULK in mutations) && species.name == "Horror" // Part of the species.
+	var/skeleton = (SKELETON in mutations)
 
 	var/g = "m"
 	if(gender == FEMALE)	g = "f"
@@ -303,7 +303,7 @@ var/global/list/damage_icon_parts = list()
 
 	if(f_style && !check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
-		if((facial_hair_style) && (src.species.name in facial_hair_style.species_allowed))
+		if((facial_hair_style) && (species.name in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
 			if(facial_hair_style.do_colouration)
 				facial_s.Blend(rgb(r_facial, g_facial, b_facial), ICON_ADD)
@@ -313,7 +313,7 @@ var/global/list/damage_icon_parts = list()
 
 	if(h_style && !check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
-		if((hair_style) && (src.species.name in hair_style.species_allowed))
+		if((hair_style) && (species.name in hair_style.species_allowed))
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
 			if(hair_style.do_colouration)
 				hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
@@ -410,7 +410,7 @@ var/global/list/damage_icon_parts = list()
 //	var/g = "m"
 //	if (gender == FEMALE)	g = "f"
 //BS12 EDIT
-	var/skeleton = (SKELETON in src.mutations)
+	var/skeleton = (SKELETON in mutations)
 	if(skeleton)
 		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
 	else
@@ -1024,10 +1024,10 @@ var/global/list/damage_icon_parts = list()
 		O.icon_state = "legcuff1"
 		obj_to_plane_overlay(O,LEGCUFF_LAYER)
 		//overlays_standing[LEGCUFF_LAYER]	= image("icon" = 'icons/mob/mob.dmi', "icon_state" = "legcuff1")
-		if(src.m_intent != "walk")
-			src.m_intent = "walk"
-			if(src.hud_used && src.hud_used.move_intent)
-				src.hud_used.move_intent.icon_state = "walking"
+		if(m_intent != "walk")
+			m_intent = "walk"
+			if(hud_used && hud_used.move_intent)
+				hud_used.move_intent.icon_state = "walking"
 
 	//elsek
 		//overlays_standing[LEGCUFF_LAYER]	= null

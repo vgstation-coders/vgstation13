@@ -90,7 +90,7 @@
 		H.unholster(usr)
 
 /obj/item/clothing/accessory/holster/attack_hand(mob/user as mob)
-	if(holstered && src.loc == user)
+	if(holstered && loc == user)
 		return unholster(user)
 	..(user)
 

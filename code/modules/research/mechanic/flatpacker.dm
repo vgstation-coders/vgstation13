@@ -49,19 +49,19 @@
 
 	if(!remove_materials(part))
 		stopped = 1
-		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
+		visible_message("<font color='blue'>The [name] beeps, \"Not enough materials to complete item.\"</font>")
 		return
 
-	src.being_built = new part.build_path(src)
+	being_built = new part.build_path(src)
 
-	src.busy = 1
-	src.overlays += image(icon = icon, icon_state = "[base_state]_ani")
-	src.use_power = 2
-	src.updateUsrDialog()
+	busy = 1
+	overlays += image(icon = icon, icon_state = "[base_state]_ani")
+	use_power = 2
+	updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
-	src.use_power = 1
-	src.overlays -= image(icon = icon, icon_state = "[base_state]_ani")
+	use_power = 1
+	overlays -= image(icon = icon, icon_state = "[base_state]_ani")
 	if(being_built)
 		var/obj/structure/closet/crate/flatpack/FP = new
 		being_built.loc = FP
@@ -70,11 +70,11 @@
 		FP.update_icon()
 		var/turf/output = get_output()
 		FP.loc = get_turf(output)
-		src.visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
-		src.being_built = null
+		visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
+		being_built = null
 
-	src.updateUsrDialog()
-	src.busy = 0
+	updateUsrDialog()
+	busy = 0
 	return 1
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/attackby(var/obj/item/O as obj, var/mob/user as mob)

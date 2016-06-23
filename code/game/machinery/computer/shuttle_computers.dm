@@ -57,7 +57,7 @@
 		return
 
 	user.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	var/shuttle_name = "Unknown shuttle"
 	var/dat
 
@@ -131,7 +131,7 @@
 		return
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["move"])
 		if(!shuttle) return
 		if(!allowed(usr))
@@ -151,7 +151,7 @@
 		shuttle.travel_to(selected_port, src, usr)
 
 		selected_port = null
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["link_to_port"])
 		if(!shuttle) return
 		if(!shuttle.linked_area) return
@@ -173,7 +173,7 @@
 		if(S)
 			S.link_to_shuttle(shuttle)
 			to_chat(usr, "Successfully linked [capitalize(shuttle.name)] to the port.")
-			return src.updateUsrDialog()
+			return updateUsrDialog()
 		to_chat(usr, "No docking ports found.")
 
 	if(href_list["select"])
@@ -185,7 +185,7 @@
 			return
 
 		selected_port = A
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["link_to_shuttle"])
 		if(!allowed(usr))
 			to_chat(usr, "<font color='red'>Access denied.</font>")
@@ -220,7 +220,7 @@
 			else
 				link_to(L[choice])
 			to_chat(usr, "Successfully linked [src] to [capitalize(S.name)]!")
-			src.updateUsrDialog()
+			updateUsrDialog()
 
 
 	if(href_list["admin_link_to_shuttle"])
@@ -268,7 +268,7 @@
 		else
 			shuttle.lockdown = 0
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["admin_toggle_select_all"])
 		if(!isAdminGhost(usr))
 			to_chat(usr, "You must be an admin for this")
@@ -281,7 +281,7 @@
 			allow_selecting_all = 1
 			to_chat(usr, "Now selecting from all existing docking ports.")
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["admin_reset"])
 		if(!isAdminGhost(usr))
 			to_chat(usr, "You must be an admin for this")
@@ -301,7 +301,7 @@
 			allow_silicons = 1
 			to_chat(usr, "Silicons may now use [src] again.")
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")
@@ -314,12 +314,12 @@
 	shuttle = S
 	if(add_to_list)
 		shuttle.control_consoles |= src
-	src.req_access = shuttle.req_access
-	src.updateUsrDialog()
+	req_access = shuttle.req_access
+	updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/emag(mob/user as mob)
 	..()
-	src.req_access = list()
+	req_access = list()
 	to_chat(usr, "You disable the console's access requirement.")
 
 #undef MAX_SHUTTLE_NAME_LEN

@@ -136,17 +136,17 @@ var/global/mulebot_count = 0
 
 		open = !open
 		if(open)
-			src.visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
+			visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			on = 0
 			icon_state="[icon_initial]-hatch"
 		else
-			src.visible_message("[user] closes the maintenance hatch of [src]", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
+			visible_message("[user] closes the maintenance hatch of [src]", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
 			icon_state = "[icon_initial]0"
 
 		updateDialog()
 	else if (iswrench(I))
-		if (src.health < maxhealth)
-			src.health = min(maxhealth, src.health+25)
+		if (health < maxhealth)
+			health = min(maxhealth, health+25)
 			user.visible_message(
 				"<span class='warning'>[user] repairs [src]!</span>",
 				"<span class='notice'>You repair [src]!</span>"
@@ -179,13 +179,13 @@ var/global/mulebot_count = 0
 	if(prob(50) && !isnull(load))
 		unload(0)
 	if(prob(25))
-		src.visible_message("<span class='warning'>Something shorts out inside [src]!</span>")
+		visible_message("<span class='warning'>Something shorts out inside [src]!</span>")
 		wires.RandomCut()
 	..()
 
 
 /obj/machinery/bot/mulebot/attack_ai(var/mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	user.set_machine(src)
 	interact(user, 1)
 
@@ -272,7 +272,7 @@ var/global/mulebot_count = 0
 		return
 	if (usr.stat)
 		return
-	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
+	if ((in_range(src, usr) && istype(loc, /turf)) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 
 		switch(href_list["op"])
@@ -280,7 +280,7 @@ var/global/mulebot_count = 0
 				toggle_lock(usr)
 
 			if("power")
-				if (src.on)
+				if (on)
 					turn_off()
 				else if (cell && !open)
 					if (!turn_on())
@@ -372,7 +372,7 @@ var/global/mulebot_count = 0
 				usr << browse(null,"window=mulebot")
 
 		updateDialog()
-		//src.updateUsrDialog()
+		//updateUsrDialog()
 	else
 		usr << browse(null, "window=mulebot")
 		usr.unset_machine()
@@ -385,7 +385,7 @@ var/global/mulebot_count = 0
 	return !open && cell && cell.charge > 0 && wires.HasPower()
 
 /obj/machinery/bot/mulebot/proc/toggle_lock(var/mob/user)
-	if(src.allowed(user))
+	if(allowed(user))
 		locked = !locked
 		updateDialog()
 		return 1
@@ -413,7 +413,7 @@ var/global/mulebot_count = 0
 // called to load a crate
 /obj/machinery/bot/mulebot/proc/load(var/atom/movable/C)
 	if(wires.LoadCheck() && !is_type_in_list(C,can_load))
-		src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
+		visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return		// if not emagged, only allow crates to be loaded
 
@@ -426,7 +426,7 @@ var/global/mulebot_count = 0
 
 	if(get_dist(C, src) > 1 || load || !on)
 		return
-	for(var/obj/structure/plasticflaps/P in src.loc)//Takes flaps into account
+	for(var/obj/structure/plasticflaps/P in loc)//Takes flaps into account
 		if(!Cross(C,P))
 			return
 	mode = 1
@@ -436,9 +436,9 @@ var/global/mulebot_count = 0
 	if(istype(crate))
 		crate.close()
 
-	C.loc = src.loc
+	C.loc = loc
 	sleep(2)
-	if(C.loc != src.loc) //To prevent you from going onto more thano ne bot.
+	if(C.loc != loc) //To prevent you from going onto more thano ne bot.
 		return
 	C.loc = src
 	load = C
@@ -467,7 +467,7 @@ var/global/mulebot_count = 0
 	mode = 1
 	overlays.len = 0
 
-	load.loc = src.loc
+	load.loc = loc
 	load.pixel_y -= 9
 	load.layer = initial(load.layer)
 	if(ismob(load))
@@ -478,12 +478,12 @@ var/global/mulebot_count = 0
 
 
 	if(dirn)
-		var/turf/T = src.loc
+		var/turf/T = loc
 		T = get_step(T,dirn)
 		if(Cross(load,T))//Can't get off onto anything that wouldn't let you pass normally
 			step(load, dirn)
 		else
-			load.loc = src.loc//Drops you right there, so you shouldn't be able to get yourself stuck
+			load.loc = loc//Drops you right there, so you shouldn't be able to get yourself stuck
 
 	load = null
 
@@ -494,7 +494,7 @@ var/global/mulebot_count = 0
 	for(var/atom/movable/AM in src)
 		if(AM == cell || AM == botcard) continue
 
-		AM.loc = src.loc
+		AM.loc = loc
 		AM.layer = initial(AM.layer)
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))
@@ -601,25 +601,25 @@ var/global/mulebot_count = 0
 						blockcount++
 						mode = 4
 						if(blockcount == 3)
-							src.visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
+							visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
 							playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)
 
 						if(blockcount > 5)	// attempt 5 times before recomputing
 							// find new path excluding blocked turf
-							src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
+							visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
 							playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 
 							spawn(2)
 								calc_path(next)
 								if(path.len > 0)
-									src.visible_message("[src] makes a delighted ping!", "You hear a ping.")
+									visible_message("[src] makes a delighted ping!", "You hear a ping.")
 									playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
 								mode = 4
 							mode =6
 							return
 						return
 				else
-					src.visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
+					visible_message("[src] makes an annoyed buzzing sound.", "You hear an electronic buzzing sound.")
 					playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)
 //					to_chat(world, "Bad turf.")
 					mode = 5
@@ -639,11 +639,11 @@ var/global/mulebot_count = 0
 				if(path.len > 0)
 					blockcount = 0
 					mode = 4
-					src.visible_message("[src] makes a delighted ping!", "You hear a ping.")
+					visible_message("[src] makes a delighted ping!", "You hear a ping.")
 					playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
 
 				else
-					src.visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
+					visible_message("[src] makes a sighing buzz.", "You hear an electronic buzzing sound.")
 					playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 
 					mode = 7
@@ -657,9 +657,9 @@ var/global/mulebot_count = 0
 // calculates a path to the current destination
 // given an optional turf to avoid
 /obj/machinery/bot/mulebot/proc/calc_path(var/turf/avoid = null)
-	src.path = AStar(src.loc, src.target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 250, id=botcard, exclude=avoid)
-	if(!src.path)
-		src.path = list()
+	path = AStar(loc, target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 250, id=botcard, exclude=avoid)
+	if(!path)
+		path = list()
 
 
 // sets the current destination
@@ -690,7 +690,7 @@ var/global/mulebot_count = 0
 // called when bot reaches current target
 /obj/machinery/bot/mulebot/proc/at_target()
 	if(!reached_target)
-		src.visible_message("[src] makes a chiming sound!", "You hear a chime.")
+		visible_message("[src] makes a chiming sound!", "You hear a chime.")
 		playsound(get_turf(src), 'sound/machines/chime.ogg', 50, 0)
 		reached_target = 1
 
@@ -732,9 +732,9 @@ var/global/mulebot_count = 0
 		var/mob/M = obs
 		if(ismob(M))
 			if(istype(M,/mob/living/silicon/robot))
-				src.visible_message("<span class='warning'>[src] bumps into [M]!</span>")
+				visible_message("<span class='warning'>[src] bumps into [M]!</span>")
 			else
-				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
+				visible_message("<span class='warning'>[src] knocks over [M]!</span>")
 				M.stop_pulling()
 				M.Stun(8)
 				M.Weaken(5)
@@ -746,8 +746,8 @@ var/global/mulebot_count = 0
 
 // called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/mulebot/proc/RunOverCreature() called tick#: [world.time]")
-	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
+	//writepanic("[__FILE__].[__LINE__] ([type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/mulebot/proc/RunOverCreature() called tick#: [world.time]")
+	visible_message("<span class='warning'>[src] drives over [H]!</span>")
 	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,15)
 	H.apply_damage(2*damage, BRUTE, "head")
@@ -899,7 +899,7 @@ var/global/mulebot_count = 0
 
 
 /obj/machinery/bot/mulebot/explode()
-	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
 	new /obj/item/device/assembly/prox_sensor(Tsec)
@@ -915,7 +915,7 @@ var/global/mulebot_count = 0
 	s.set_up(3, 1, src)
 	s.start()
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, loc)
 	O.New(O.loc)
 	unload(0)
 	qdel(src)

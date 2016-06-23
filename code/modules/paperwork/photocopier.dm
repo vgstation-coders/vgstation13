@@ -39,7 +39,7 @@
 	RefreshParts()
 
 /obj/machinery/photocopier/attack_ai(mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/photocopier/attack_paw(mob/user)
@@ -49,7 +49,7 @@
 	user.set_machine(src)
 
 	var/dat = "Photocopier<BR><BR>"
-	if(copy || photocopy || (ass && (ass.loc == src.loc)))
+	if(copy || photocopy || (ass && (ass.loc == loc)))
 		dat += "<a href='byond://?src=\ref[src];remove=1'>Remove Paper</a><BR>"
 		if(toner)
 			dat += "<a href='byond://?src=\ref[src];copy=1'>Copy</a><BR>"
@@ -182,7 +182,7 @@
 				copy.loc = usr.loc
 				usr.put_in_hands(copy)
 			else
-				copy.loc = src.loc
+				copy.loc = loc
 			to_chat(usr, "<span class='notice'>You take [copy] out of [src].</span>")
 			copy = null
 			updateUsrDialog()
@@ -191,7 +191,7 @@
 				photocopy.loc = usr.loc
 				usr.put_in_hands(photocopy)
 			else
-				photocopy.loc = src.loc
+				photocopy.loc = loc
 			to_chat(usr, "<span class='notice'>You take [photocopy] out of [src].</span>")
 			photocopy = null
 			updateUsrDialog()
@@ -307,10 +307,10 @@
 			GM.forceMove(get_turf(src))
 			ass = GM
 			if(photocopy)
-				photocopy.loc = src.loc
+				photocopy.loc = loc
 				photocopy = null
 			else if(copy)
-				copy.loc = src.loc
+				copy.loc = loc
 				copy = null
 			updateUsrDialog()
 	else if(isscrewdriver(O))
@@ -318,12 +318,12 @@
 			to_chat(user, "[src] needs to be unanchored.")
 			return
 		if(!opened)
-			src.opened = 1
-			//src.icon_state = "photocopier_t"
+			opened = 1
+			//icon_state = "photocopier_t"
 			to_chat(user, "You open the maintenance hatch of [src].")
 		else
-			src.opened = 0
-			//src.icon_state = "photocopier"
+			opened = 0
+			//icon_state = "photocopier"
 			to_chat(user, "You close the maintenance hatch of [src].")
 		return 1
 	if(opened)
@@ -331,13 +331,13 @@
 			to_chat(user, "You begin to remove the circuits from the [src].")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 			if(do_after(user, src, 50))
-				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(loc)
 				M.state = 1
 				M.set_build_state(2)
 				for(var/obj/I in component_parts)
 					if(I.reliability != 100 && crit_fail)
 						I.crit_fail = 1
-					I.loc = src.loc
+					I.loc = loc
 				qdel(src)
 				return 1
 	return
@@ -376,7 +376,7 @@
 	check_ass() //Just to make sure that you can re-drag somebody onto it after they moved off.
 	if (!istype(target) || target.locked_to || !Adjacent(user) || !user.Adjacent(target) || user.stat || istype(user, /mob/living/silicon/ai) || target == ass || copier_blocked(user))
 		return
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if(target == user && !(user.incapacitated()))
 		visible_message("<span class='warning'>[usr] jumps onto the photocopier!</span>")
 	else if(target != user && !user.incapacitated())
@@ -386,11 +386,11 @@
 	target.forceMove(get_turf(src))
 	ass = target
 	if(photocopy)
-		photocopy.loc = src.loc
+		photocopy.loc = loc
 		visible_message("<span class='notice'>[photocopy] is shoved out of the way by [ass]!</span>")
 		photocopy = null
 	else if(copy)
-		copy.loc = src.loc
+		copy.loc = loc
 		visible_message("<span class='notice'>[copy] is shoved out of the way by [ass]!</span>")
 		copy = null
 	updateUsrDialog()
@@ -398,7 +398,7 @@
 /obj/machinery/photocopier/proc/check_ass() //I'm not sure wether I made this proc because it's good form or because of the name.
 	if(!ass)
 		return 0
-	if(ass.loc != src.loc)
+	if(ass.loc != loc)
 		ass = null
 		updateUsrDialog()
 		return 0
@@ -435,7 +435,7 @@
 			continue
 		if(AM.density)
 			if(AM.flags&ON_BORDER)
-				if(!AM.Cross(user, src.loc))
+				if(!AM.Cross(user, loc))
 					return 1
 			else
 				return 1

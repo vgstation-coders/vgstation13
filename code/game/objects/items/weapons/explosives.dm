@@ -77,10 +77,10 @@
 		var/glue_act = 0 //If 1, the C4 is superglued to the guy's hands - produce a funny message
 
 		if(user.drop_item(src))
-			src.target = target
+			target = target
 		else //User can't drop this normally -> stick it to him (but drop it anyways, to prevent unintended features)
 			to_chat(user, "<span class='danger'>\The [src] are glued to your hands!</span>") //Honk
-			src.target = user
+			target = user
 			target = user
 			glue_act = 1
 			user.drop_item(src, force_drop = 1)

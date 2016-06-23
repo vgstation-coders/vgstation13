@@ -105,7 +105,7 @@
 
 
 	if(!energy)
-		src.icon_state = pick("Med1", "Med2", "Med3")
+		icon_state = pick("Med1", "Med2", "Med3")
 		energy = 1
 
 		//Low-lying creepers do not block vision or grow thickly.
@@ -113,10 +113,10 @@
 			energy = 2
 			return
 
-		src.opacity = 1
+		opacity = 1
 		layer = 5
 	else if(!limited_growth)
-		src.icon_state = pick("Hvy1", "Hvy2", "Hvy3")
+		icon_state = pick("Hvy1", "Hvy2", "Hvy3")
 		energy = 2
 
 /obj/effect/plantsegment/proc/entangle_mob()
@@ -128,8 +128,8 @@
 	if(prob(seed ? seed.potency : 25))
 		var/list/atom/movable/locked = get_locked(/datum/locking_category/plantsegment)
 		if(!locked.len)
-			var/mob/living/carbon/V //= locate() in src.loc
-			for(var/mob/living/carbon/C in src.loc)
+			var/mob/living/carbon/V //= locate() in loc
+			for(var/mob/living/carbon/C in loc)
 				if(C.stat != DEAD)
 					V = C
 					break
@@ -319,11 +319,11 @@
 
 /obj/effect/plant_controller/New()
 	..()
-	if(!istype(src.loc,/turf/simulated/floor))
+	if(!istype(loc,/turf/simulated/floor))
 		qdel(src)
 
 	spawn(0)
-		spawn_piece(src.loc)
+		spawn_piece(loc)
 		loc = null
 
 	processing_objects.Add(src)
@@ -334,7 +334,7 @@
 
 /obj/effect/plant_controller/proc/spawn_piece(var/turf/location)
 	var/obj/effect/plantsegment/SV = new(location)
-	SV.limited_growth = src.limited_growth
+	SV.limited_growth = limited_growth
 	growth_queue += SV
 	vines += SV
 	SV.master = src

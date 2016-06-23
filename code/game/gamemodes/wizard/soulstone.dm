@@ -29,7 +29,7 @@
 /*attack(mob/living/simple_animal/shade/M as mob, mob/user as mob)//APPARENTLY THEY NEED THEIR OWN SPECIAL SNOWFLAKE CODE IN THE LIVING ANIMAL DEFINES
 	if(!istype(M, /mob/living/simple_animal/shade))//If target is not a shade
 		return ..()
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to capture the soul of [M.name] ([M.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to capture the soul of [M.name] ([M.ckey])</font>")
 
 	transfer_soul("SHADE", M, user)
 	return*/
@@ -71,10 +71,10 @@
 		if ("Summon")
 			for(var/mob/living/simple_animal/shade/A in src)
 				eject_shade(U)
-				src.icon_state = "soulstone"
-				src.item_state = "shard-soulstone"
+				icon_state = "soulstone"
+				item_state = "shard-soulstone"
 				U.update_inv_hands()
-				src.name = "Soul Stone Shard"
+				name = "Soul Stone Shard"
 
 	attack_self(U)
 
@@ -322,7 +322,7 @@
 	var/deleteafter = 0
 	switch(choice)
 		if("VICTIM")
-			if(src.contents.len)
+			if(contents.len)
 				to_chat(U, "<span class='warning'>The soul stone is full! Use or free an existing soul to make room.</span>")
 				return
 

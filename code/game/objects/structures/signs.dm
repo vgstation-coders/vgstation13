@@ -38,7 +38,7 @@
 /obj/structure/sign/attackby(obj/item/tool as obj, mob/user as mob)	//deconstruction
 	if(isscrewdriver(tool) && !istype(src, /obj/structure/sign/double))
 		to_chat(user, "You unfasten the sign with your [tool].")
-		var/obj/item/sign/S = new(src.loc)
+		var/obj/item/sign/S = new(loc)
 		S.name = name
 		S.desc = desc
 		S.icon_state = icon_state
@@ -59,7 +59,7 @@
 /obj/item/sign/attackby(obj/item/tool as obj, mob/user as mob)	//construction
 	if(isscrewdriver(tool) && isturf(user.loc))
 		var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
-		if(direction == "Cancel" || src.loc == null) return // We can get qdel'd if someone spams screwdrivers on signs before responding to the prompt.
+		if(direction == "Cancel" || loc == null) return // We can get qdel'd if someone spams screwdrivers on signs before responding to the prompt.
 		var/obj/structure/sign/S = new(user.loc)
 		switch(direction)
 			if("North")

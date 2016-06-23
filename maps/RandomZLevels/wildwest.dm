@@ -124,14 +124,14 @@
 	if(triggered) return
 
 	if(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey))
-		for(var/mob/O in viewers(world.view, src.loc))
+		for(var/mob/O in viewers(world.view, loc))
 			to_chat(O, "<font color='red'>[M] triggered the [bicon(src)] [src]</font>")
 		triggered = 1
 		call(src,triggerproc)(M)
 
 /obj/effect/meatgrinder/proc/triggerrad1(mob)
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	for(var/mob/O in viewers(world.view, src.loc))
+	for(var/mob/O in viewers(world.view, loc))
 		s.set_up(3, 1, src)
 		s.start()
 		explosion(mob, 1, 0, 0, 0)

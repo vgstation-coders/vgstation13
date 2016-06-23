@@ -78,14 +78,14 @@
 	if(isscrewdriver(I))
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
-			if(src.stat & BROKEN)
+			if(stat & BROKEN)
 				visible_message("<span class='notice'>[user] clears the broken monitor off of [src].</span>", \
 				"You clear the broken monitor off of [src]")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe(loc)
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control(A)
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -94,17 +94,17 @@
 			else
 				visible_message("[user] begins to unscrew \the [src]'s monitor.",
 				"You begin to unscrew the monitor...")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe(loc)
 				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control(A)
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"
 				A.anchored = 1
 				qdel(src)
 	else
-		src.attack_hand(user)
+		attack_hand(user)
 
 // called by solar tracker when sun position changes (somehow, that's not supposed to be in process)
 /obj/machinery/power/solar/control/proc/tracker_update(angle)
@@ -120,7 +120,7 @@
 	if(stat & (BROKEN | NOPOWER))
 		return
 
-	if (!src.Adjacent(user))
+	if (!Adjacent(user))
 		if (!issilicon(user)&&!isobserver(user))
 			user.unset_machine()
 			user << browse(null, "window=solcon")

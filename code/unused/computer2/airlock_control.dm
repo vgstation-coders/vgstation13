@@ -15,14 +15,14 @@
 		dat += "<br><TT>Frequency: "
 		dat += "<a href='?src=\ref[src];adj_freq=-10'>--</a> "
 		dat += "<a href='?src=\ref[src];adj_freq=-2'>-</a> "
-		dat += "[format_frequency(src.master.frequency)] "
+		dat += "[format_frequency(master.frequency)] "
 		dat += "<a href='?src=\ref[src];adj_freq=2'>+</a> "
 		dat += "<a href='?src=\ref[src];adj_freq=10'>++</a>"
 		dat += "</TT><br>"
 		*/
 
 
-		dat += "<br>ID:<a href='byond://?src=\ref[src];set_tag=1'>[src.id_tag]</a><br>"
+		dat += "<br>ID:<a href='byond://?src=\ref[src];set_tag=1'>[id_tag]</a><br>"
 
 		dat += "<a href='byond://?src=\ref[src];send_command=cycle'>Cycle</a>"
 
@@ -36,18 +36,18 @@
 			return
 
 		if(href_list["set_tag"])
-			var/t = input(usr, "Please enter new tag", src.id_tag, null) as text
+			var/t = input(usr, "Please enter new tag", id_tag, null) as text
 			t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 			if (!t)
 				return
-			if (!in_range(src.master, usr))
+			if (!in_range(master, usr))
 				return
 
-			src.id_tag = t
+			id_tag = t
 
 //		if(href_list["adj_freq"])
-//			var/new_frequency = (src.master.frequency + text2num(href_list["adj_freq"]))
-//			src.master.set_frequency(new_frequency)
+//			var/new_frequency = (master.frequency + text2num(href_list["adj_freq"]))
+//			master.set_frequency(new_frequency)
 
 		if(href_list["send_command"])
 			var/datum/signal/signal = new
@@ -55,6 +55,6 @@
 			signal.data["command"] = href_list["send_command"]
 			peripheral_command("send signal", signal)
 
-		src.master.add_fingerprint(usr)
-		src.master.updateUsrDialog()
+		master.add_fingerprint(usr)
+		master.updateUsrDialog()
 		return

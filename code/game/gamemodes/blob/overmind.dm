@@ -26,8 +26,8 @@
 	blob_overminds += src
 	..()
 	spawn(10)
-		if(src.mind)
-			src.mind.special_role = "Blob"
+		if(mind)
+			mind.special_role = "Blob"
 
 /mob/camera/blob/Destroy()
 	blob_overminds -= src
@@ -152,11 +152,11 @@
 	if (!message)
 		return
 
-	if (src.client)
+	if (client)
 		if(client.prefs.muted & MUTE_IC)
 			to_chat(src, "You cannot send IC messages (muted).")
 			return
-		if (src.client.handle_spam_prevention(message,MUTE_IC))
+		if (client.handle_spam_prevention(message,MUTE_IC))
 			return
 
 	if (stat)
@@ -224,13 +224,13 @@
 	if(B)
 		forceEnter(B.loc)
 	else
-		B = locate() in range("3x3", src.loc)
+		B = locate() in range("3x3", loc)
 
 	if(!B) //PANIC, WE'RE NOWHERE NEAR ANYTHING
 		var/newrange = 3 //slowly grows outwards, looking for the nearest blob tile. Should not take very long to find it.
 		while (1)
 			newrange++
-			B = locate() in range("[newrange]x[newrange]", src.loc)
+			B = locate() in range("[newrange]x[newrange]", loc)
 			if(B)
 				forceEnter(B.loc)
 				break

@@ -191,7 +191,7 @@
 		var/answer = recharge_port.start_charge(mecha)
 		if(answer)
 			recharge_port.set_voltage(voltage)
-			src.icon_state = initial(src.icon_state)+"_on"
+			icon_state = initial(icon_state)+"_on"
 	return
 
 /obj/machinery/computer/mech_bay_power_console/proc/mecha_out()
@@ -224,12 +224,12 @@
 /obj/machinery/computer/mech_bay_power_console/attack_hand(mob/user as mob)
 	if(..())
 		return
-	if(!src.stat && (get_dist(src, user) <= 1 ||  istype(user, /mob/living/silicon)))
+	if(!stat && (get_dist(src, user) <= 1 ||  istype(user, /mob/living/silicon)))
 		return interact(user)
 
 /obj/machinery/computer/mech_bay_power_console/interact(mob/user as mob)
 	user.set_machine(src)
-	var/output = "<html><head><title>[src.name]</title></head><body>"
+	var/output = "<html><head><title>[name]</title></head><body>"
 	if(!recharge_floor)
 		output += "<span class='rose'>Mech Bay Recharge Station not initialized.</span><br>"
 	else

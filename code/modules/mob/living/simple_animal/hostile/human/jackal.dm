@@ -104,7 +104,7 @@
 	overlays.Add(image(icon = icon, icon_state = "pyromaniac_eyes", layer = LIGHTING_LAYER + 1))
 
 /mob/living/simple_animal/hostile/humanoid/jackal/firebreather/pyromaniac/Shoot()
-	var/old_target = src.target
+	var/old_target = target
 
 	target = get_step(target, pick(alldirs))
 

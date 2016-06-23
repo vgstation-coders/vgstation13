@@ -84,7 +84,7 @@
 		to_chat(usr, "<span class='warning'>You don't see anything to mess with.</span>")
 		return
 	if(stat & BROKEN && playlist!=null)
-		user.visible_message("<span class='danger'>[user.name] smacks the side of \the [src.name].</span>","<span class='warning'>You hammer the side of \the [src.name].</span>")
+		user.visible_message("<span class='danger'>[user.name] smacks the side of \the [name].</span>","<span class='warning'>You hammer the side of \the [name].</span>")
 		stat &= ~BROKEN
 		playlist=null
 		playing=emagged
@@ -201,17 +201,17 @@
 			loop_mode = JUKEMODE_SHUFFLE
 			emagged = 1
 			playing = 1
-			user.visible_message("<span class='warning'>[user.name] slides something into the [src.name]'s card-reader.</span>","<span class='warning'>You short out the [src.name].</span>")
+			user.visible_message("<span class='warning'>[user.name] slides something into the [name]'s card-reader.</span>","<span class='warning'>You short out the [name].</span>")
 			update_icon()
 			update_music()
 			return 1
 	else if(istype(W,/obj/item/weapon/wrench))
 		var/un = !anchored ? "" : "un"
-		user.visible_message("<span class='notice'>[user.name] begins [un]locking \the [src.name]'s casters.</span>","<span class='notice'>You begin [un]locking \the [src.name]'s casters.</span>")
+		user.visible_message("<span class='notice'>[user.name] begins [un]locking \the [name]'s casters.</span>","<span class='notice'>You begin [un]locking \the [name]'s casters.</span>")
 		if(do_after(user, src,30))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = !anchored
-			user.visible_message("<span class='notice'>[user.name] [un]locks \the [src.name]'s casters.</span>","<span class='warning'>You [un]lock \the [src.name]'s casters.</span>")
+			user.visible_message("<span class='notice'>[user.name] [un]locks \the [name]'s casters.</span>","<span class='warning'>You [un]lock \the [name]'s casters.</span>")
 			playing = emagged
 			update_music()
 			update_icon()

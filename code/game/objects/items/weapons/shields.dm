@@ -21,7 +21,7 @@
 	var/cooldown = 0 //shield bash cooldown. based on world.time
 
 /obj/item/weapon/shield/riot/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his face into the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his face into the [name]! It looks like \he's  trying to commit suicide!</span>")
 	return (BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
@@ -99,7 +99,7 @@
 	var/active = 0
 
 /obj/item/weapon/shield/energy/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] to their head and activating it! It looks like \he's  trying to commit suicide!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is putting the [name] to their head and activating it! It looks like \he's  trying to commit suicide!</span>")
 	return (BRUTELOSS)
 
 /obj/item/weapon/shield/energy/IsShield()
@@ -147,14 +147,14 @@
 
 
 /obj/item/weapon/cloaking_device/attack_self(mob/user as mob)
-	src.active = !( src.active )
-	if (src.active)
+	active = !( active )
+	if (active)
 		to_chat(user, "<span class='notice'>The cloaking device is now active.</span>")
-		src.icon_state = "shield1"
+		icon_state = "shield1"
 	else
 		to_chat(user, "<span class='notice'>The cloaking device is now inactive.</span>")
-		src.icon_state = "shield0"
-	src.add_fingerprint(user)
+		icon_state = "shield0"
+	add_fingerprint(user)
 	return
 
 /obj/item/weapon/cloaking_device/emp_act(severity)

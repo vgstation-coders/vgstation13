@@ -318,7 +318,7 @@
 
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
-		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+		visible_message("<span class='warning'>\the [M.name] is hit by \the [name] in the [parse_zone(def_zone)]!</span>")
 		M.bullet_act(src, def_zone)
 		admin_warn(M)
 		BEE.loc = M.loc
@@ -429,7 +429,7 @@
 
 /obj/item/projectile/bullet/vial/OnDeath()
 	if(!hit_mob)
-		src.visible_message("<span class='warning'>The vial shatters!</span>")
+		visible_message("<span class='warning'>The vial shatters!</span>")
 	playsound(get_turf(src), "shatter", 20, 1)
 
 /obj/item/projectile/bullet/blastwave
@@ -552,7 +552,7 @@
 			if(n2o_concentration && n2o_concentration > 0.5)
 				gas_type = "N2O"
 
-			new /obj/effect/gas_puff(get_turf(src.loc), gas_dispersal, gas_type)
+			new /obj/effect/gas_puff(get_turf(loc), gas_dispersal, gas_type)
 
 /obj/item/projectile/bullet/fire_plume/proc/calculate_burn_strength(var/turf/T = null)
 	if(!gas_jet)
@@ -602,7 +602,7 @@
 	var/initial_burn_damage = burn_strength/100
 	burn_damage = ((((-(10 * (0.9**((initial_burn_damage/10) * 5))) + 10) * 0.4) * 20)/5) //Exponential decay function 20*(y=(-(10*(0.9^(x/10)))+10)*0.4)
 	//assuming the target stays in the fire for its duration, the total burn damage will be roughly 5 * burn_damage
-	new /obj/effect/fire_blast(get_turf(src.loc), burn_damage, stepped_range, 1, jet_pressure, burn_strength)
+	new /obj/effect/fire_blast(get_turf(loc), burn_damage, stepped_range, 1, jet_pressure, burn_strength)
 
 /obj/item/projectile/bullet/fire_plume/process_step()
 	..()
@@ -667,8 +667,8 @@
 		create_reagents(50)
 
 /obj/item/projectile/bullet/liquid_blob/OnFired()
-	src.icon += mix_color_from_reagents(reagents.reagent_list)
-	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+	icon += mix_color_from_reagents(reagents.reagent_list)
+	alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
 /obj/item/projectile/bullet/liquid_blob/Bump(atom/A as mob|obj|turf|area)
@@ -715,7 +715,7 @@
 		for(var/turf/T in orange(original,1))
 			possible_turfs += T
 		for(var/I = 1; I <=8; I++)
-			var/obj/item/projectile/bullet/buckshot/B = new (src.loc, 1)
+			var/obj/item/projectile/bullet/buckshot/B = new (loc, 1)
 			var/turf/targloc = pick(possible_turfs)
 			B.original = targloc
 			var/turf/curloc = get_turf(src)

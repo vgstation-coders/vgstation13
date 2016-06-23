@@ -16,14 +16,14 @@
 
 /obj/machinery/meter/New(newloc, new_target)
 	..(newloc)
-	src.target = new_target
+	target = new_target
 	if(target)
 		setAttachLayer(target.piping_layer)
 	return 1
 
 /obj/machinery/meter/initialize()
 	if (!target)
-		for(var/obj/machinery/atmospherics/pipe/pipe in src.loc)
+		for(var/obj/machinery/atmospherics/pipe/pipe in loc)
 			if(pipe.piping_layer == target_layer)
 				target = pipe
 				break
@@ -32,14 +32,14 @@
 
 /obj/machinery/meter/proc/setAttachLayer(var/new_layer)
 	target_layer = new_layer
-	src.pixel_x = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
-	src.pixel_y = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
+	pixel_x = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
+	pixel_y = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
 
 /obj/machinery/meter/process()
 	if(!target)
 		icon_state = "meterX"
 		// Pop the meter off when the pipe we're attached to croaks.
-		new /obj/item/pipe_meter(src.loc)
+		new /obj/item/pipe_meter(loc)
 		spawn(0) qdel(src)
 		return PROCESS_KILL
 
@@ -53,7 +53,7 @@
 	if(!environment)
 		icon_state = "meterX"
 		// Pop the meter off when the environment we're attached to croaks.
-		new /obj/item/pipe_meter(src.loc)
+		new /obj/item/pipe_meter(loc)
 		spawn(0) qdel(src)
 		return PROCESS_KILL
 
@@ -104,7 +104,7 @@
 
 /obj/machinery/meter/proc/status()
 	var/t = ""
-	if (src.target)
+	if (target)
 		var/datum/gas_mixture/environment = target.return_air()
 		if(environment)
 			t += "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [round(environment.temperature,0.01)]K ([round(environment.temperature-T0C,0.01)]&deg;C)"
@@ -158,20 +158,20 @@
 			"[user] unfastens \the [src].</span>", \
 			"<span class='notice'>You have unfastened \the [src].</span>", \
 			"You hear ratchet.")
-		new /obj/item/pipe_meter(src.loc)
+		new /obj/item/pipe_meter(loc)
 		qdel(src)
 
 // TURF METER - REPORTS A TILE'S AIR CONTENTS
 
 /obj/machinery/meter/turf/New()
 	..()
-	src.target = loc
+	target = loc
 	return 1
 
 
 /obj/machinery/meter/turf/initialize()
 	if (!target)
-		src.target = loc
+		target = loc
 
 /obj/machinery/meter/turf/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	return

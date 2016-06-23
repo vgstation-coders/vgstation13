@@ -93,7 +93,7 @@
 	if(seed.thorny) traits += "<span class='alert'>It's covered in sharp thorns.</span> "
 	if(seed.ligneous) traits += "It's a tough and hard vine that can't be easily cut. "
 	if(seed.hematophage) traits += "It's roots are blood red... "
-	if(src.harvest) traits += "It has some [seed.seed_name]s ready to grab."
+	if(harvest) traits += "It has some [seed.seed_name]s ready to grab."
 	if(traits) to_chat(user, traits)
 
 /obj/effect/plantsegment/update_icon()
@@ -122,16 +122,16 @@
 	switch(arbitrary_measurement_of_how_lush_I_am_right_now)
 		if(1)
 			icon_state = "Light[rand(1,3)]"
-			src.opacity = 0
+			opacity = 0
 		if(2)
 			icon_state = "Med[rand(1,3)]"
-			src.opacity = 0
+			opacity = 0
 		if(3)
 			icon_state = "Hvy[rand(1,3)]"
-			if(!limited_growth) src.opacity = 1
+			if(!limited_growth) opacity = 1
 		if(4)
 			icon_state = "Hvst[rand(1,3)]"
-			if(!limited_growth) src.opacity = 1
+			if(!limited_growth) opacity = 1
 
 	// Apply colour and light from seed datum.
 	if(seed.biolum && seed.biolum_colour && is_mature())

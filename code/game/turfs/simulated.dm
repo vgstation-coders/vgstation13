@@ -54,7 +54,7 @@
 					H.track_blood = max(round(H.track_blood - 1, 1),0)
 
 			if (bloodDNA)
-				src.AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor) // Coming
+				AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor) // Coming
 				var/turf/simulated/from = get_step(H,reverse_direction(H.dir))
 				if(istype(from) && from)
 					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor) // Going
@@ -78,7 +78,7 @@
 		if(isslime(M)) //Slimes just don't slip, end of story
 			return ..()
 
-		switch(src.wet)
+		switch(wet)
 			if(1) //Water
 				if (M.Slip(5, 3))
 					step(M, M.dir)

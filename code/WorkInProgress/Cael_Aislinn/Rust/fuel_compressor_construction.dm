@@ -12,7 +12,7 @@
 
 /obj/item/mounted/frame/rust_fuel_compressor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (iswrench(W))
-		new /obj/item/stack/sheet/plasteel( get_turf(src.loc), 12 )
+		new /obj/item/stack/sheet/plasteel( get_turf(loc), 12 )
 		del(src)
 		return
 	..()
@@ -42,7 +42,7 @@
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/W, mob/user)
 
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
-		return src.attack_hand(user)
+		return attack_hand(user)
 	if (iscrowbar(W))
 		if(opened)
 			if(has_electronics & 1)
@@ -51,7 +51,7 @@
 
 				if(do_after(user, src, 50))
 					user.visible_message(\
-						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
+						"<span class='warning'>[user.name] has removed the circuitboard from [name]!</span>",\
 						"<span class='notice'>You remove the circuitboard board.</span>")
 					has_electronics = 0
 					new /obj/item/weapon/module/rust_fuel_compressor(loc)
@@ -73,7 +73,7 @@
 		if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else
-			if(src.allowed(usr))
+			if(allowed(usr))
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] the compressor interface.")
 				update_icon()

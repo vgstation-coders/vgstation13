@@ -55,7 +55,7 @@
 		</style>
 	"}
 
-	src.interface = new/datum/html_interface/nanotrasen(src, src.name, 800, 700, head)
+	interface = new/datum/html_interface/nanotrasen(src, name, 800, 700, head)
 	html_machines += src
 
 	init_ui()
@@ -100,7 +100,7 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/merch/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/computer/merch/proc/get_display_name(var/datum/storeitem/storeitem)
@@ -126,7 +126,7 @@
 	if(..())
 		return
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 
 	switch(href_list["choice"])
 		if ("buy")
@@ -136,7 +136,7 @@
 			else
 				to_chat(usr, "[bicon(src)]<span class='notice'>Transaction complete! Enjoy your product.</span>")
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/merch/update_icon()

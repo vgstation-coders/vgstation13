@@ -73,11 +73,11 @@
 		lastgenlev = genlev
 		updateicon()
 
-	src.updateDialog()
+	updateDialog()
 
 
 /obj/machinery/power/generator/type2/attack_ai(mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	if(stat & (BROKEN|NOPOWER)) return
 	interact(user)
 

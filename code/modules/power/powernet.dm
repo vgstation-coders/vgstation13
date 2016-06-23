@@ -167,7 +167,7 @@ var/global/powernets_broke = 0
 	if(!powernet)
 		var/datum/powernet/NewPN = getFromPool(/datum/powernet)
 		NewPN.add_cable(src)
-		propagate_network(src, src.powernet)
+		propagate_network(src, powernet)
 		NewPN.load = oldload
 		NewPN.avail = oldavail
 		NewPN.newavail = oldnewavail //Ha

@@ -284,18 +284,18 @@
 mob/living/carbon/human/proc
 	RevConvert(mob/M as mob in oview(src))
 		set name = "Rev-Convert"
-		if(((src.mind in ticker.mode:head_revolutionaries) || (src.mind in ticker.mode:revolutionaries)))
+		if(((mind in ticker.mode:head_revolutionaries) || (mind in ticker.mode:revolutionaries)))
 			if((M.mind in ticker.mode:head_revolutionaries) || (M.mind in ticker.mode:revolutionaries))
 				to_chat(src, "<span class='danger'>[M] is already be a revolutionary!</span>")
-			else if(src.mind in ticker.mode:get_unconvertables())
+			else if(mind in ticker.mode:get_unconvertables())
 				to_chat(src, "<span class='danger'>[M] cannot be a revolutionary!</span>")
 			else
 				if(world.time < M.mind.rev_cooldown)
 					to_chat(src, "<span class='warning'>Wait five seconds before reconversion attempt.</span>")
 					return
 				to_chat(src, "<span class='warning'>Attempting to convert [M]...</span>")
-				log_admin("[src]([src.ckey]) attempted to convert [M].")
-				message_admins("<span class='warning'>[src]([src.ckey]) attempted to convert [M].</span>")
+				log_admin("[src]([ckey]) attempted to convert [M].")
+				message_admins("<span class='warning'>[src]([ckey]) attempted to convert [M].</span>")
 				var/choice = alert(M,"Asked by [src]: Do you want to join the revolution?","Align Thyself with the Revolution!","No!","Yes!")
 				if(choice == "Yes!")
 					ticker.mode:add_revolutionary(M.mind)

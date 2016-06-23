@@ -42,9 +42,9 @@
 /obj/item/weapon/planning_frame/attackby(var/obj/item/W,var/mob/user)
 	if(istype(W, /obj/item/weapon/aiModule))
 		var/obj/item/weapon/aiModule/module=W
-		if(!module.validate(src.laws,src,user))
+		if(!module.validate(laws,src,user))
 			return
-		if(!module.upload(src.laws,src,user))
+		if(!module.upload(laws,src,user))
 			return
 		//user.drop_item(null, )
 		//module.loc=src
@@ -70,10 +70,10 @@
 		to_chat(user, "<b><u>Assuming that default laws are unchanged</u>, the laws currently inserted would read as:</b>")
 	else
 		to_chat(user, "<b>The laws currently inserted would read as:</b>")
-	if(src.modules.len == 0)
+	if(modules.len == 0)
 		to_chat(user, "<i>No modules have been inserted!</i>")
 		return
-	src.laws.show_laws(user)
+	laws.show_laws(user)
 
 /obj/item/weapon/planning_frame/verb/dry_run()
 	set name = "Dry Run"
@@ -83,15 +83,15 @@
 		var/notes="<span class='notice'>Looks OK!</span>"
 		if(i>1 && istype(modules[i],/obj/item/weapon/aiModule/purge))
 			notes="<span class='danger'>This should be the first module!</span>"
-		if(!module.validate(src.laws,src,usr))
+		if(!module.validate(laws,src,usr))
 			notes="<span class='danger'>A red light is blinking!</span>"
 		if(module.modflags & DANGEROUS_MODULE)
 			notes="<span class='danger'>Your heart skips a beat!</span>"
 		to_chat(usr, " [i-1]. [module.name] - [notes]")
 
 /obj/item/weapon/planning_frame/proc/laws_sanity_check()
-	if (!src.laws)
-		src.laws = new base_law_type
+	if (!laws)
+		laws = new base_law_type
 
 /obj/item/weapon/planning_frame/proc/set_zeroth_law(var/law, var/law_borg)
 	laws_sanity_check()
@@ -99,24 +99,24 @@
 
 /obj/item/weapon/planning_frame/proc/add_inherent_law(var/law)
 	laws_sanity_check()
-	src.laws.add_inherent_law(law)
+	laws.add_inherent_law(law)
 
 /obj/item/weapon/planning_frame/proc/clear_inherent_laws()
 	laws_sanity_check()
-	src.laws.clear_inherent_laws()
+	laws.clear_inherent_laws()
 
 /obj/item/weapon/planning_frame/proc/add_ion_law(var/law)
 	laws_sanity_check()
-	src.laws.add_ion_law(law)
+	laws.add_ion_law(law)
 
 /obj/item/weapon/planning_frame/proc/clear_ion_laws()
 	laws_sanity_check()
-	src.laws.clear_ion_laws()
+	laws.clear_ion_laws()
 
 /obj/item/weapon/planning_frame/proc/add_supplied_law(var/number, var/law)
 	laws_sanity_check()
-	src.laws.add_supplied_law(number, law)
+	laws.add_supplied_law(number, law)
 
 /obj/item/weapon/planning_frame/proc/clear_supplied_laws()
 	laws_sanity_check()
-	src.laws.clear_supplied_laws()
+	laws.clear_supplied_laws()

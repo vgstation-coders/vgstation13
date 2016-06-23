@@ -58,7 +58,7 @@
 					shottas--
 					gun_state = "projectile"
 
-				var/image/gun = image(icon(src.icon, gun_state))
+				var/image/gun = image(icon(icon, gun_state))
 
 				gun.pixel_x = (i-2)*2
 				overlays += gun

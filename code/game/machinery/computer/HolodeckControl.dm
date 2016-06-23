@@ -154,8 +154,8 @@
 				log_game("[key_name(usr)] restored the holodeck's safeties")
 				visible_message("<span class='notice'>Holodeck safeties have been restored. Simulation programs are now safe to use again.</span>")
 
-		src.add_fingerprint(usr)
-	src.updateUsrDialog()
+		add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/HolodeckControl/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
@@ -170,7 +170,7 @@
 	visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
 	visible_message("<span class='warning'>Warning: Power surge detected. Automatic shutoff and derezing protocols have been corrupted. Please contact Nanotrasen maintenance and cease all operation immediately.</span>")
 	log_game("[key_name(usr)] emagged the Holodeck Control Computer")
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/computer/HolodeckControl/New()
 	..()
@@ -384,7 +384,7 @@
 		if(G.state<GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
-		G.affecting.loc = src.loc
+		G.affecting.loc = loc
 		G.affecting.Weaken(5)
 		visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on the table.</span>")
 		qdel(W)
@@ -518,13 +518,13 @@
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
 
-		G.affecting.forceMove(src.loc)
+		G.affecting.forceMove(loc)
 		G.affecting.Weaken(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
 		return
 	else if (istype(W, /obj/item) && get_dist(src,user)<2)
-		if(user.drop_item(W, src.loc))
+		if(user.drop_item(W, loc))
 			visible_message("<span class='notice'>[user] dunks [W] into the [src]!</span>")
 			return
 
@@ -534,7 +534,7 @@
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
 		if(prob(50))
-			I.forceMove(src.loc)
+			I.forceMove(loc)
 			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
 		else
 			visible_message("<span class='warning'>\The [I] bounces off of \the [src]'s rim!</span>")
@@ -577,7 +577,7 @@
 		to_chat(user, "This device is not powered.")
 		return
 
-	currentarea = get_area(src.loc)
+	currentarea = get_area(loc)
 	if(!currentarea)
 		qdel(src)
 

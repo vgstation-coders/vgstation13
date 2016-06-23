@@ -191,7 +191,7 @@
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if (!ui)
-		ui = new(user, src, ui_key, "identification_computer.tmpl", src.name, 800, 700)
+		ui = new(user, src, ui_key, "identification_computer.tmpl", name, 800, 700)
 		ui.set_initial_data(data)
 		ui.open()
 
@@ -228,7 +228,7 @@
 						usr.put_in_hands(scan)
 					scan = null
 				else
-					scan.loc = src.loc
+					scan.loc = loc
 					scan = null
 			else
 				var/obj/item/I = usr.get_active_hand()
@@ -288,7 +288,7 @@
 					if(temp_name)
 						modify.registered_name = temp_name
 					else
-						src.visible_message("<span class='notice'>[src] buzzes rudely.</span>")
+						visible_message("<span class='notice'>[src] buzzes rudely.</span>")
 					modify.update_virtual_wallet()
 			nanomanager.update_uis(src)
 

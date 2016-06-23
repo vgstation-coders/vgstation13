@@ -66,10 +66,10 @@
 /mob/living/simple_animal/cockroach/Die(var/gore = 1)
 	if(gore)
 
-		var/obj/effect/decal/remains = new /obj/effect/decal/cleanable/cockroach_remains(src.loc)
-		remains.dir = src.dir
-		remains.pixel_x = src.pixel_x
-		remains.pixel_y = src.pixel_y
+		var/obj/effect/decal/remains = new /obj/effect/decal/cleanable/cockroach_remains(loc)
+		remains.dir = dir
+		remains.pixel_x = pixel_x
+		remains.pixel_y = pixel_y
 
 		if(flying)
 			animate(remains, pixel_y = pixel_y - 8, 5, 1) //Fall down gracefully
@@ -87,7 +87,7 @@
 /mob/living/simple_animal/cockroach/Crossed(mob/living/O)
 	if(!istype(O)) return
 
-	if(src.size > O.size - 2) return //Human sized dudes can stomp default-sized cockroaches just fine. For bigger roaches you need bigger dudes
+	if(size > O.size - 2) return //Human sized dudes can stomp default-sized cockroaches just fine. For bigger roaches you need bigger dudes
 	if(flying) return
 	if(O.a_intent == I_HELP) return //Must be on harm intent to stomp
 	if(O.isUnconscious()) return
@@ -223,17 +223,17 @@
 	if(anim) animate(src, pixel_y = pixel_y - 8, 5, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/lay_eggs()
-	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
+	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
 		last_laid_eggs = world.time
 		return
 
 	var/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/E = new(get_turf(src))
 
-	E.layer = src.layer //If we're hiding, the eggs are hidden too
-	E.pixel_x = src.pixel_x
-	E.pixel_y = src.pixel_y
+	E.layer = layer //If we're hiding, the eggs are hidden too
+	E.pixel_x = pixel_x
+	E.pixel_y = pixel_y
 
-	if((animal_count[src.type] < ANIMAL_CHILD_CAP))
+	if((animal_count[type] < ANIMAL_CHILD_CAP))
 		last_laid_eggs = world.time //If the eggs can hatch, cooldown is 30 seconds
 		E.fertilize()
 

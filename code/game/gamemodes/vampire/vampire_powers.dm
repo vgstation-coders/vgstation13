@@ -5,12 +5,12 @@
 /mob/proc/vampire_power(required_blood=0, max_stat=0)
 
 
-	if(!src.mind)		return 0
+	if(!mind)		return 0
 	if(!ishuman(src))
 		to_chat(src, "<span class='warning'>You are in too weak of a form to do this!</span>")
 		return 0
 
-	var/datum/vampire/vampire = src.mind.vampire
+	var/datum/vampire/vampire = mind.vampire
 
 	if(!vampire)
 		world.log << "[src] has vampire verbs but isn't a vampire."
@@ -18,7 +18,7 @@
 
 	var/fullpower = (VAMP_MATURE in vampire.powers)
 
-	if(src.stat > max_stat)
+	if(stat > max_stat)
 		to_chat(src, "<span class='warning'>You are incapacitated.</span>")
 		return 0
 
@@ -53,9 +53,9 @@
 	return 1
 
 /mob/proc/vampire_can_reach(mob/M as mob, active_range = 1)
-	if(M.loc == src.loc) return 1 //target and source are in the same thing
-	if(!isturf(src.loc) || !isturf(M.loc)) return 0 //One is inside, the other is outside something.
-	if(Adjacent(M))//if(AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, active_range)) //If a path exists, good!
+	if(M.loc == loc) return 1 //target and source are in the same thing
+	if(!isturf(loc) || !isturf(M.loc)) return 0 //One is inside, the other is outside something.
+	if(Adjacent(M))//if(AStar(loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, active_range)) //If a path exists, good!
 		return 1
 	return 0
 
@@ -119,7 +119,7 @@
 		M.current.update_canmove()
 		M.current.make_vampire()
 	M.current.regenerate_icons()
-	src.verbs -= /client/proc/vampire_returntolife
+	verbs -= /client/proc/vampire_returntolife
 
 /client/proc/vampire_undeath()
 	set category = "Vampire"
@@ -143,7 +143,7 @@
 		sleep(rand(300,450))
 		if(src)
 			to_chat(src, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")
-			src.verbs += /client/proc/vampire_returntolife
+			verbs += /client/proc/vampire_returntolife
 		return 1
 
 /client/proc/vampire_hypnotise()
@@ -197,8 +197,8 @@
 	if(!C.vampire_affected(M))
 		to_chat(M.current, "<span class='warning'>They seem to be unaffected.</span>")
 		return
-	log_admin("[ckey(src.key)] has death-touched [ckey(C.key)]. The latter will die in moments.")
-	message_admins("[ckey(src.key)] has death-touched [ckey(C.key)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</A>). The latter will die in moments.")
+	log_admin("[ckey(key)] has death-touched [ckey(C.key)]. The latter will die in moments.")
+	message_admins("[ckey(key)] has death-touched [ckey(C.key)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</A>). The latter will die in moments.")
 	var/datum/disease2/disease/shutdown = new /datum/disease2/disease("Created by vamp [key_name(M)].")
 	var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder
 	var/datum/disease2/effect/organs/vampire/O = new /datum/disease2/effect/organs/vampire
@@ -388,7 +388,7 @@
 				enthrall_safe = 1
 				break
 	if(!C)
-		world.log << "something bad happened on enthralling a mob src is [src] [src.key] \ref[src]"
+		world.log << "something bad happened on enthralling a mob src is [src] [key] \ref[src]"
 		return 0
 	if(!C.mind)
 		to_chat(src, "<span class='warning'>[C.name]'s mind is not there for you to enthrall.</span>")
@@ -407,25 +407,25 @@
 	if(!istype(H))
 		to_chat(src, "<b><span class='warning'>SOMETHING WENT WRONG, YELL AT POMF OR NEXIS</b>")
 		return 0
-	var/ref = "\ref[src.mind]"
+	var/ref = "\ref[mind]"
 	if(!(ref in ticker.mode.thralls))
 		ticker.mode.thralls[ref] = list(H.mind)
 	else
 		ticker.mode.thralls[ref] += H.mind
 	var/datum/objective/protect/new_objective = new /datum/objective/protect
 	new_objective.owner = H.mind
-	new_objective.target = src.mind
-	new_objective.explanation_text = "You have been Enthralled by [src.name], the vampire. Follow their every command."
+	new_objective.target = mind
+	new_objective.explanation_text = "You have been Enthralled by [name], the vampire. Follow their every command."
 	H.mind.objectives += new_objective
 	ticker.mode.enthralled.Add(H.mind)
-	ticker.mode.enthralled[H.mind] = src.mind
+	ticker.mode.enthralled[H.mind] = mind
 	H.mind.special_role = "VampThrall"
-	to_chat(H, "<span class='sinister'>You have been Enthralled by [src.name]. Follow their every command.</span>")
+	to_chat(H, "<span class='sinister'>You have been Enthralled by [name]. Follow their every command.</span>")
 	to_chat(src, "<span class='warning'>You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i></span>")
 	ticker.mode.update_vampire_icons_added(H.mind)
-	ticker.mode.update_vampire_icons_added(src.mind)
-	log_admin("[ckey(src.key)] has mind-slaved [ckey(H.key)].")
-	message_admins("[ckey(src.key)] has mind-slaved [ckey(H.key)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</A>).")
+	ticker.mode.update_vampire_icons_added(mind)
+	log_admin("[ckey(key)] has mind-slaved [ckey(H.key)].")
+	message_admins("[ckey(key)] has mind-slaved [ckey(H.key)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</A>).")
 
 /client/proc/vampire_bats()
 	set category = "Vampire"

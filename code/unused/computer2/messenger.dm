@@ -21,7 +21,7 @@
 		dat += " | <a href='byond://?src=\ref[src];func_msg=clear'>Clear</a>"
 		dat += " | <a href='byond://?src=\ref[src];func_msg=print'>Print</a>"
 
-		dat += " | Name:<a href='byond://?src=\ref[src];set_name=1'>[src.screen_name]</a><hr>"
+		dat += " | Name:<a href='byond://?src=\ref[src];set_name=1'>[screen_name]</a><hr>"
 
 		dat += messages
 
@@ -34,29 +34,29 @@
 			return
 
 		if(href_list["send_msg"])
-			var/t = input(usr, "Please enter messenger", src.id_tag, null) as text
+			var/t = input(usr, "Please enter messenger", id_tag, null) as text
 			t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 			if (!t)
 				return
-			if (!in_range(src.master, usr))
+			if (!in_range(master, usr))
 				return
 
 			var/datum/signal/signal = new
 			signal.data["type"] = "message"
 			signal.data["data"] = t
-			signal.data["sender"] = src.screen_name
-			src.messages += "<i><b>&rarr; You:</b></i><br>[t]<br>"
+			signal.data["sender"] = screen_name
+			messages += "<i><b>&rarr; You:</b></i><br>[t]<br>"
 
 			peripheral_command("send signal", signal)
 
 		if(href_list["func_msg"])
 			switch(href_list["func_msg"])
 				if("clear")
-					src.messages = null
+					messages = null
 
 				if("print")
 					var/datum/signal/signal = new
-					signal.data["data"] = src.messages
+					signal.data["data"] = messages
 					signal.data["title"] = "Chatlog"
 					peripheral_command("print", signal)
 
@@ -65,17 +65,17 @@
 
 
 		if(href_list["set_name"])
-			var/t = input(usr, "Please enter screen name", src.id_tag, null) as text
+			var/t = input(usr, "Please enter screen name", id_tag, null) as text
 			t = copytext(sanitize(t), 1, 20)
 			if (!t)
 				return
-			if (!in_range(src.master, usr))
+			if (!in_range(master, usr))
 				return
 
-			src.screen_name = t
+			screen_name = t
 
-		src.master.add_fingerprint(usr)
-		src.master.updateUsrDialog()
+		master.add_fingerprint(usr)
+		master.updateUsrDialog()
 		return
 
 	receive_command(obj/source, command, datum/signal/signal)
@@ -89,9 +89,9 @@
 					if(!sender)
 						sender = "Unknown"
 
-					src.messages += "<i><b>&larr; From [sender]:</b></i><br>[signal.data["data"]]<br>"
-					if(src.master.active_program == src)
-						playsound(src.master.loc, 'sound/machines/twobeep.ogg', 50, 1)
-						src.master.updateUsrDialog()
+					messages += "<i><b>&larr; From [sender]:</b></i><br>[signal.data["data"]]<br>"
+					if(master.active_program == src)
+						playsound(master.loc, 'sound/machines/twobeep.ogg', 50, 1)
+						master.updateUsrDialog()
 
 		return

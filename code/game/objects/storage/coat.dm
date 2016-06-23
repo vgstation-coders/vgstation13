@@ -14,7 +14,7 @@
 
 	var/list/L = list(  )
 
-	L += src.contents
+	L += contents
 
 	for(var/obj/item/weapon/storage/S in src)
 		L += S.return_inv()
@@ -25,12 +25,12 @@
 	return L
 
 /obj/item/clothing/suit/storage/proc/show_to(mob/user as mob)
-	user.client.screen -= src.boxes
-	user.client.screen -= src.closer
-	user.client.screen -= src.contents
-	user.client.screen += src.boxes
-	user.client.screen += src.closer
-	user.client.screen += src.contents
+	user.client.screen -= boxes
+	user.client.screen -= closer
+	user.client.screen -= contents
+	user.client.screen += boxes
+	user.client.screen += closer
+	user.client.screen += contents
 	user.s_active = src
 	return
 
@@ -39,15 +39,15 @@
 
 	if(!user.client)
 		return
-	user.client.screen -= src.boxes
-	user.client.screen -= src.closer
-	user.client.screen -= src.contents
+	user.client.screen -= boxes
+	user.client.screen -= closer
+	user.client.screen -= contents
 	return
 
 /obj/item/clothing/suit/storage/proc/close(mob/user as mob)
 
 
-	src.hide_from(user)
+	hide_from(user)
 	user.s_active = null
 	return
 
@@ -56,8 +56,8 @@
 /obj/item/clothing/suit/storage/proc/orient_objs(tx, ty, mx, my)
 	var/cx = tx
 	var/cy = ty
-	src.boxes.screen_loc = text("[tx]:,[ty] to [mx],[my]")
-	for(var/obj/O in src.contents)
+	boxes.screen_loc = text("[tx]:,[ty] to [mx],[my]")
+	for(var/obj/O in contents)
 		O.screen_loc = text("[cx],[cy]")
 		O.layer = 20
 		O.plane = PLANE_HUD
@@ -65,15 +65,15 @@
 		if (cx > mx)
 			cx = tx
 			cy--
-	src.closer.screen_loc = text("[mx+1],[my]")
+	closer.screen_loc = text("[mx+1],[my]")
 	return
 
 //This proc draws out the inventory and places the items on it. It uses the standard position.
 /obj/item/clothing/suit/storage/proc/standard_orient_objs(var/rows,var/cols)
 	var/cx = 4
 	var/cy = 2+rows
-	src.boxes.screen_loc = text("4:16,2:16 to [4+cols]:16,[2+rows]:16")
-	for(var/obj/O in src.contents)
+	boxes.screen_loc = text("4:16,2:16 to [4+cols]:16,[2+rows]:16")
+	for(var/obj/O in contents)
 		O.screen_loc = text("[cx]:16,[cy]:16")
 		O.layer = 20
 		O.plane = PLANE_HUD
@@ -81,7 +81,7 @@
 		if (cx > (4+cols))
 			cx = 4
 			cy--
-	src.closer.screen_loc = text("[4+cols+1]:16,2:16")
+	closer.screen_loc = text("[4+cols+1]:16,2:16")
 	return
 
 //This proc determins the size of the inventory to be displayed. Please touch it only if you know what you're doing.
@@ -91,12 +91,12 @@
 	var/col_count = min(7,storage_slots) -1
 	if (contents.len > 7)
 		row_num = round((contents.len-1) / 7) // 7 is the maximum allowed width.
-	src.standard_orient_objs(row_num,col_count)
+	standard_orient_objs(row_num,col_count)
 	return
 
 //This proc is called when you want to place an item into the storage item.
 /obj/item/clothing/suit/storage/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/evidencebag) && src.loc != user)
+	if(istype(W,/obj/item/weapon/evidencebag) && loc != user)
 		return
 
 	..()
@@ -110,7 +110,7 @@
 			to_chat(user, "<span class='notice'>You're a robot. No.</span>")
 			return //Robots can't interact with storage items.
 
-	if(src.loc == W)
+	if(loc == W)
 		return //Means the item is already in the storage item
 
 	if(contents.len >= storage_slots)
@@ -144,7 +144,7 @@
 		to_chat(user, "<span class='warning'>The [src] is full, make some space.</span>")
 		return
 
-	if(W.w_class >= src.w_class && (istype(W, /obj/item/weapon/storage)))
+	if(W.w_class >= w_class && (istype(W, /obj/item/weapon/storage)))
 		if(!istype(src, /obj/item/weapon/storage/backpack/holding))	//bohs should be able to hold backpacks again. The override for putting a boh in a boh is in backpack.dm.
 			to_chat(user, "<span class='warning'>The [src] cannot hold \the [W] as it's a storage item of the same size.</span>")
 			return //To prevent the stacking of the same sized items.
@@ -154,7 +154,7 @@
 	W.loc = src
 	if ((user.client && user.s_active != src))
 		user.client.screen -= W
-	src.orient2hud(user)
+	orient2hud(user)
 	//W.dropped(user)
 	add_fingerprint(user)
 	show_to(user)
@@ -172,31 +172,31 @@
 				M.u_equip(src, 1)
 				M.put_in_hand(OI.hand_index, src)
 				M.update_inv_wear_suit()
-				src.add_fingerprint(usr)
+				add_fingerprint(usr)
 
 			return
 		if( (over_object == usr && in_range(src, usr) || usr.contents.Find(src)) && usr.s_active)
 			usr.s_active.close(usr)
-		src.show_to(usr)
+		show_to(usr)
 	return
 
 /obj/item/clothing/suit/storage/attack_paw(mob/user as mob)
 	//playsound(get_turf(src), "rustle", 50, 1, -5) // what
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/item/clothing/suit/storage/attack_hand(mob/user as mob)
 	playsound(get_turf(src), "rustle", 50, 1, -5)
-	src.orient2hud(user)
-	if (src.loc == user)
+	orient2hud(user)
+	if (loc == user)
 		if (user.s_active)
 			user.s_active.close(user)
-		src.show_to(user)
+		show_to(user)
 	else
 		..()
 		for(var/mob/M in range(1))
 			if (M.s_active == src)
-				src.close(M)
-	src.add_fingerprint(user)
+				close(M)
+	add_fingerprint(user)
 	return
 
 /obj/item/clothing/suit/storage/New()
@@ -214,7 +214,7 @@
 	orient2hud()
 
 /obj/item/clothing/suit/emp_act(severity)
-	if(!istype(src.loc, /mob/living))
+	if(!istype(loc, /mob/living))
 		for(var/obj/O in contents)
 			O.emp_act(severity)
 	..()

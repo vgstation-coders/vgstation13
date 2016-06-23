@@ -32,15 +32,15 @@
 					affected_mob.adjustToxLoss(2)
 					affected_mob.updatehealth()
 		if(4)
-			if(!src.transformed)
+			if(!transformed)
 				if ((!strain_data["name"]) || (!strain_data["UI"]) || (!strain_data["SE"]))
 					del(affected_mob.virus)
 					return
 
 				//Save original dna for when the disease is cured.
-				src.original_dna["name"] = affected_mob.real_name
-				src.original_dna["UI"] = affected_mob.dna.UI.Copy()
-				src.original_dna["SE"] = affected_mob.dna.SE.Copy()
+				original_dna["name"] = affected_mob.real_name
+				original_dna["UI"] = affected_mob.dna.UI.Copy()
+				original_dna["SE"] = affected_mob.dna.SE.Copy()
 
 				to_chat(affected_mob, "<span class='warning'>You don't feel like yourself..</span>")
 				var/list/newUI=strain_data["UI"]
@@ -51,8 +51,8 @@
 				affected_mob.real_name = strain_data["name"]
 				domutcheck(affected_mob)
 
-				src.transformed = 1
-				src.carrier = 1 //Just chill out at stage 4
+				transformed = 1
+				carrier = 1 //Just chill out at stage 4
 
 	return
 

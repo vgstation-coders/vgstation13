@@ -52,7 +52,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 // Replace machine frame with mirror frame.
 /obj/machinery/mirror/dropFrame()
-	var/obj/structure/mirror_frame/MF = new (src.loc)
+	var/obj/structure/mirror_frame/MF = new (loc)
 	MF.anchored=anchored
 
 /obj/machinery/mirror/verb/rotate_cw()
@@ -60,10 +60,10 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
+	if (anchored)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)
 	kill_all_beams()
 	update_beams()
 	return 1
@@ -73,10 +73,10 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
+	if (anchored)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 	kill_all_beams()
 	update_beams()
 	return 1

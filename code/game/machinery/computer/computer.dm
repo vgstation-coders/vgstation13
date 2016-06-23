@@ -101,15 +101,15 @@
 	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
-		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+		var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 		if(!CC) CC = new circuit( A )
 		else
 			CC.loc = A
 		A.circuit = CC
 		A.anchored = 1
 		for (var/obj/C in src)
-			C.loc = src.loc
-		if (src.stat & BROKEN)
+			C.loc = loc
+		if (stat & BROKEN)
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
 			getFromPool(/obj/item/weapon/shard, loc)
 			A.state = 3
@@ -130,5 +130,5 @@
 	if(..(I,user))
 		return
 	else
-		src.attack_hand(user)
+		attack_hand(user)
 	return

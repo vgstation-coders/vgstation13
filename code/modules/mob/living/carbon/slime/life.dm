@@ -13,7 +13,7 @@
 	if(timestopped) return 0 //under effects of time magick
 
 
-	if (src.monkeyizing)
+	if (monkeyizing)
 		return
 
 	..()
@@ -28,7 +28,7 @@
 
 
 	var/datum/gas_mixture/environment // Added to prevent null location errors-- TLE
-	if(src.loc)
+	if(loc)
 		environment = loc.return_air()
 
 
@@ -36,7 +36,7 @@
 	//blinded get reset each cycle and then get activated later in the
 	//code. Very ugly. I dont care. Moving this stuff here so its easy
 	//to find it.
-	src.blinded = null
+	blinded = null
 
 	// Basically just deletes any screen objects :<
 	regular_hud_updates()
@@ -240,7 +240,7 @@
 	if(reagents) reagents.metabolize(src)
 
 
-	src.updatehealth()
+	updatehealth()
 
 	return //TODO: DEFERRED
 
@@ -260,13 +260,13 @@
 		death()
 		return
 
-	else if(src.health < config.health_threshold_crit)
-		// if(src.health <= 20 && prob(1)) spawn(0) emote("gasp")
+	else if(health < config.health_threshold_crit)
+		// if(health <= 20 && prob(1)) spawn(0) emote("gasp")
 
-		//if(!src.rejuv) src.oxyloss++
-		if(!src.reagents.has_reagent(INAPROVALINE)) src.adjustOxyLoss(10)
+		//if(!rejuv) oxyloss++
+		if(!reagents.has_reagent(INAPROVALINE)) adjustOxyLoss(10)
 
-		if(src.stat != DEAD)	src.stat = UNCONSCIOUS
+		if(stat != DEAD)	stat = UNCONSCIOUS
 
 	if(prob(30))	//I think this is meant to allow slimes to starve to death -Deity Link
 		adjustOxyLoss(-1)
@@ -276,52 +276,52 @@
 		adjustBruteLoss(-1)
 
 
-	if (src.stat == DEAD)
+	if (stat == DEAD)
 
-		src.lying = 1
-		src.blinded = 1
+		lying = 1
+		blinded = 1
 
 	else
-		if (src.incapacitated() || (status_flags && FAKEDEATH)) //Stunned etc.
-			if (src.stunned > 0)
+		if (incapacitated() || (status_flags && FAKEDEATH)) //Stunned etc.
+			if (stunned > 0)
 				AdjustStunned(-1)
-				src.stat = 0
-			if (src.weakened > 0)
+				stat = 0
+			if (weakened > 0)
 				AdjustWeakened(-1)
-				src.lying = 0
-				src.stat = 0
-			if (src.paralysis > 0)
+				lying = 0
+				stat = 0
+			if (paralysis > 0)
 				AdjustParalysis(-1)
-				src.blinded = 0
-				src.lying = 0
-				src.stat = 0
+				blinded = 0
+				lying = 0
+				stat = 0
 
 		else
-			src.lying = 0
-			src.stat = 0
+			lying = 0
+			stat = 0
 
-	if (src.stuttering) src.stuttering = 0
+	if (stuttering) stuttering = 0
 
-	if (src.eye_blind)
-		src.eye_blind = 0
-		src.blinded = 1
+	if (eye_blind)
+		eye_blind = 0
+		blinded = 1
 
-	if (src.ear_deaf > 0) src.ear_deaf = 0
-	if (src.ear_damage < 25)
-		src.ear_damage = 0
+	if (ear_deaf > 0) ear_deaf = 0
+	if (ear_damage < 25)
+		ear_damage = 0
 
-	src.density = !( src.lying )
+	density = !( lying )
 
-	if (src.sdisabilities & BLIND)
-		src.blinded = 1
-	if (src.sdisabilities & DEAF)
-		src.ear_deaf = 1
+	if (sdisabilities & BLIND)
+		blinded = 1
+	if (sdisabilities & DEAF)
+		ear_deaf = 1
 
-	if (src.eye_blurry > 0)
-		src.eye_blurry = 0
+	if (eye_blurry > 0)
+		eye_blurry = 0
 
-	if (src.druggy > 0)
-		src.druggy = 0
+	if (druggy > 0)
+		druggy = 0
 
 	return 1
 
@@ -369,7 +369,7 @@
 
 		else
 			if(!client)
-				var/mob/living/carbon/slime/adult/A = new adulttype(src.loc)
+				var/mob/living/carbon/slime/adult/A = new adulttype(loc)
 				A.nutrition = nutrition
 //				A.nutrition += 100
 				A.powerlevel = max(0, powerlevel-1)

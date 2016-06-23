@@ -10,9 +10,9 @@
 
 	living_mob_list -= src
 	dead_mob_list -= src
-	if(src.module && istype(src.module))
-		var/obj/item/found = locate(tool_state) in src.module.modules
-		if(!found && tool_state != src.module.emag)
+	if(module && istype(module))
+		var/obj/item/found = locate(tool_state) in module.modules
+		if(!found && tool_state != module.emag)
 			var/obj/item/TS = tool_state
 			drop_item(TS)
 	qdel(src)

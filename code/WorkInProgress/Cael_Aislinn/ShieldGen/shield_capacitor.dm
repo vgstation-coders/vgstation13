@@ -32,15 +32,15 @@
 /obj/machinery/shield_capacitor/New()
 	spawn(10)
 		for(var/obj/machinery/shield_gen/possible_gen in range(1, src))
-			if(get_dir(src, possible_gen) == src.dir)
+			if(get_dir(src, possible_gen) == dir)
 				possible_gen.owned_capacitor = src
 				break
 	..()
 
 /obj/machinery/shield_capacitor/emag(mob/user)
 	if(prob(75))
-		src.locked = !src.locked
-		to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
+		locked = !locked
+		to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
 		updateDialog()
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, src)
@@ -52,10 +52,10 @@
 /obj/machinery/shield_capacitor/wrenchAnchor(mob/user)
 	if(..())
 		for(var/obj/machinery/shield_gen/gen in range(1, src))
-			if(!src.anchored && gen.owned_capacitor == src)
+			if(!anchored && gen.owned_capacitor == src)
 				gen.owned_capacitor = null
 				break
-			else if(src.anchored && !gen.owned_capacitor)
+			else if(anchored && !gen.owned_capacitor)
 				gen.owned_capacitor = src
 				break
 			gen.updateDialog()
@@ -69,18 +69,18 @@
 	else if(istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = W
 		if(access_captain in C.access || access_security in C.access || access_engine in C.access)
-			src.locked = !src.locked
-			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
+			locked = !locked
+			to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
 			updateDialog()
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 
 /obj/machinery/shield_capacitor/attack_paw(user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/shield_capacitor/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/shield_capacitor/attack_hand(mob/user)
 	if(stat & (NOPOWER|BROKEN))
@@ -157,14 +157,14 @@
 		icon_state = "broke"
 	else
 		if( powered() )
-			if (src.active)
+			if (active)
 				icon_state = "capacitor"
 			else
 				icon_state = "capacitor"
 			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
-				src.icon_state = "capacitor"
+				icon_state = "capacitor"
 				stat |= NOPOWER
 
 /obj/machinery/shield_capacitor/verb/rotate()
@@ -172,8 +172,8 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
+	if (anchored)
 		to_chat(usr, "It is fastened to the floor!")
 		return
-	src.dir = turn(src.dir, 270)
+	dir = turn(dir, 270)
 	return

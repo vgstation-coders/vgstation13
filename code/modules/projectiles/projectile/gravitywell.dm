@@ -47,7 +47,7 @@
 	return
 
 /obj/item/projectile/gravitywell/singularity_act(var/current_size,var/obj/machinery/singularity/S)
-	src.loc = S.loc
+	loc = S.loc
 	spawnGravityWell()
 	return
 
@@ -97,7 +97,7 @@
 			size++
 			if(GG)
 				GG.LevelUp()
-				src.transform *= (size*2+1)/((size-1)*2+1)
+				transform *= (size*2+1)/((size-1)*2+1)
 
 	var/outter_size = round(size+1)
 	for(var/atom/A in range(src,outter_size))

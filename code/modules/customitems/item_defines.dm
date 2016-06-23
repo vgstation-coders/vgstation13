@@ -105,7 +105,7 @@ hi
 /obj/item/fluff/victor_kaminsky_1/attack_self(mob/user as mob)
 	for(var/mob/O in viewers(user, null))
 		O.show_message("[user] shows you: [bicon(src)] [name].", 1)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 /obj/item/weapon/clipboard/fluff/smallnote //lexusjjss: Lexus Langg, Zachary Tomlinson
 	name = "small notebook"
@@ -313,7 +313,7 @@ hi
 		if (M != user && user.ckey == "nerezza") //Woah now, you better be careful partner
 			to_chat(user, "<span class='notice'>You don't want to contaminate the autoinjector.</span>")
 			return
-		src.reagents.reaction(M, INGEST)
+		reagents.reaction(M, INGEST)
 		if(M.reagents)
 			var/trans = reagents.trans_to(M, amount_per_transfer_from_this)
 			to_chat(user, "<span class='notice'>[trans] units injected. [reagents.total_volume] units remaining in \the [src].</span>")
@@ -601,15 +601,15 @@ hi
 	if(usr.incapacitated())
 		return 0
 
-	if(src.icon_state == "jane_sid_suit_down")
-		src.color = "jane_sid_suit"
+	if(icon_state == "jane_sid_suit_down")
+		color = "jane_sid_suit"
 		to_chat(usr, "You zip up the [src].")
 	else
-		src.color = "jane_sid_suit_down"
+		color = "jane_sid_suit_down"
 		to_chat(usr, "You unzip and roll down the [src].")
 
-	src.icon_state = "[color]"
-	src.item_state = "[color]"
+	icon_state = "[color]"
+	item_state = "[color]"
 	usr.update_inv_w_uniform()
 
 ////// Wyatt's Ex-Commander Jumpsuit - RawrTaicho

@@ -9,7 +9,7 @@
         user.before_take_item(src)
         user.put_in_hands(W)
         to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
-        W.underlays += image(src.icon, icon_state = src.icon_state)
+        W.underlays += image(icon, icon_state = icon_state)
         qdel(I)
         I = null
         qdel(src)
@@ -84,7 +84,7 @@
 
 /obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
 	update_mob()
-	explosion(get_turf(src.loc),-1,0,2)
+	explosion(get_turf(loc),-1,0,2)
 
 	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
 		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc

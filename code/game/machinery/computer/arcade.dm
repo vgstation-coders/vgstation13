@@ -60,8 +60,8 @@
 	name_part1 = pick("the Automatic ", "Farmer ", "Lord ", "Professor ", "the Cuban ", "the Evil ", "the Dread King ", "the Space ", "Lord ", "the Great ", "Duke ", "General ")
 	name_part2 = pick("Melonoid", "Murdertron", "Sorcerer", "Ruin", "Jeff", "Ectoplasm", "Crushulon", "Uhangoid", "Vhakoid", "Peteoid", "slime", "Griefer", "ERPer", "Lizard Man", "Unicorn")
 
-	src.enemy_name = replacetext((name_part1 + name_part2), "the ", "")
-	src.name = (name_action + name_part1 + name_part2)
+	enemy_name = replacetext((name_part1 + name_part2), "the ", "")
+	name = (name_action + name_part1 + name_part2)
 
 
 /obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)
@@ -96,11 +96,11 @@
 
 
 /obj/machinery/computer/arcade/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/arcade/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/arcade/attack_hand(mob/user as mob)
 	if(..())
@@ -108,10 +108,10 @@
 	user.set_machine(src)
 	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
 
-	dat += {"<center><h4>[src.enemy_name]</h4></center>
-		<br><center><h3>[src.temp]</h3></center>
-		<br><center>Health: [src.player_hp] | Magic: [src.player_mp] | Enemy Health: [src.enemy_hp]</center>"}
-	if (src.gameover)
+	dat += {"<center><h4>[enemy_name]</h4></center>
+		<br><center><h3>[temp]</h3></center>
+		<br><center>Health: [player_hp] | Magic: [player_mp] | Enemy Health: [enemy_hp]</center>"}
+	if (gameover)
 		dat += "<center><b><a href='byond://?src=\ref[src];newgame=1'>New Game</a>"
 	else
 
@@ -129,45 +129,45 @@
 	if(..())
 		return
 
-	if (!src.blocked && !src.gameover)
+	if (!blocked && !gameover)
 		if (href_list["attack"])
-			src.blocked = 1
+			blocked = 1
 			var/attackamt = rand(2,6)
-			src.temp = "You attack for [attackamt] damage!"
-			src.updateUsrDialog()
+			temp = "You attack for [attackamt] damage!"
+			updateUsrDialog()
 			if(turtle > 0)
 				turtle--
 
 			sleep(10)
-			src.enemy_hp -= attackamt
-			src.arcade_action()
+			enemy_hp -= attackamt
+			arcade_action()
 
 		else if (href_list["heal"])
-			src.blocked = 1
+			blocked = 1
 			var/pointamt = rand(1,3)
 			var/healamt = rand(6,8)
-			src.temp = "You use [pointamt] magic to heal for [healamt] damage!"
-			src.updateUsrDialog()
+			temp = "You use [pointamt] magic to heal for [healamt] damage!"
+			updateUsrDialog()
 			turtle++
 
 			sleep(10)
-			src.player_mp -= pointamt
-			src.player_hp += healamt
-			src.blocked = 1
-			src.updateUsrDialog()
-			src.arcade_action()
+			player_mp -= pointamt
+			player_hp += healamt
+			blocked = 1
+			updateUsrDialog()
+			arcade_action()
 
 		else if (href_list["charge"])
-			src.blocked = 1
+			blocked = 1
 			var/chargeamt = rand(4,7)
-			src.temp = "You regain [chargeamt] points"
-			src.player_mp += chargeamt
+			temp = "You regain [chargeamt] points"
+			player_mp += chargeamt
 			if(turtle > 0)
 				turtle--
 
-			src.updateUsrDialog()
+			updateUsrDialog()
 			sleep(10)
-			src.arcade_action()
+			arcade_action()
 
 	if (href_list["close"])
 		usr.unset_machine()
@@ -186,86 +186,86 @@
 		turtle = 0
 
 		if(emagged)
-			src.New()
+			New()
 			emagged = 0
 
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/arcade/proc/arcade_action()
-	if ((src.enemy_mp <= 0) || (src.enemy_hp <= 0))
+	if ((enemy_mp <= 0) || (enemy_hp <= 0))
 		if(!gameover)
-			src.gameover = 1
-			src.temp = "[src.enemy_name] has fallen! Rejoice!"
+			gameover = 1
+			temp = "[enemy_name] has fallen! Rejoice!"
 
 			if(emagged)
 				feedback_inc("arcade_win_emagged")
-				new /obj/item/clothing/head/collectable/petehat(src.loc)
-				new /obj/item/device/maracas/cubanpete(src.loc)
-				new /obj/item/device/maracas/cubanpete(src.loc)
+				new /obj/item/clothing/head/collectable/petehat(loc)
+				new /obj/item/device/maracas/cubanpete(loc)
+				new /obj/item/device/maracas/cubanpete(loc)
 				message_admins("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
 				log_game("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
-				src.New()
+				New()
 				emagged = 0
 
 			else if(!contents.len)
 				feedback_inc("arcade_win_normal")
 				var/prizeselect = pickweight(prizes)
-				new prizeselect(src.loc)
+				new prizeselect(loc)
 
 				if(istype(prizeselect, /obj/item/toy/gun)) //Ammo comes with the gun
-					new /obj/item/toy/ammo/gun(src.loc)
+					new /obj/item/toy/ammo/gun(loc)
 
 				else if(istype(prizeselect, /obj/item/clothing/suit/syndicatefake)) //Helmet is part of the suit
-					new	/obj/item/clothing/head/syndicatefake(src.loc)
+					new	/obj/item/clothing/head/syndicatefake(loc)
 
 			else //admins can varedit arcades to have special prizes via contents, but it removes the prize rather than spawn a new one
 				feedback_inc("arcade_win_normal")
 				var/atom/movable/prize = pick(contents)
-				prize.forceMove(src.loc)
+				prize.forceMove(loc)
 
 	else if (emagged && (turtle >= 4))
 		var/boomamt = rand(5,10)
-		src.temp = "[src.enemy_name] throws a bomb, exploding you for [boomamt] damage!"
-		src.player_hp -= boomamt
+		temp = "[enemy_name] throws a bomb, exploding you for [boomamt] damage!"
+		player_hp -= boomamt
 
-	else if ((src.enemy_mp <= 5) && (prob(70)))
+	else if ((enemy_mp <= 5) && (prob(70)))
 		var/stealamt = rand(2,3)
-		src.temp = "[src.enemy_name] steals [stealamt] of your power!"
-		src.player_mp -= stealamt
-		src.updateUsrDialog()
+		temp = "[enemy_name] steals [stealamt] of your power!"
+		player_mp -= stealamt
+		updateUsrDialog()
 
-		if (src.player_mp <= 0)
-			src.gameover = 1
+		if (player_mp <= 0)
+			gameover = 1
 			sleep(10)
-			src.temp = "You have been drained! GAME OVER"
+			temp = "You have been drained! GAME OVER"
 			if(emagged)
 				feedback_inc("arcade_loss_mana_emagged")
 				usr.gib()
 			else
 				feedback_inc("arcade_loss_mana_normal")
 
-	else if ((src.enemy_hp <= 10) && (src.enemy_mp > 4))
-		src.temp = "[src.enemy_name] heals for 4 health!"
-		src.enemy_hp += 4
-		src.enemy_mp -= 4
+	else if ((enemy_hp <= 10) && (enemy_mp > 4))
+		temp = "[enemy_name] heals for 4 health!"
+		enemy_hp += 4
+		enemy_mp -= 4
 
 	else
 		var/attackamt = rand(3,6)
-		src.temp = "[src.enemy_name] attacks for [attackamt] damage!"
-		src.player_hp -= attackamt
+		temp = "[enemy_name] attacks for [attackamt] damage!"
+		player_hp -= attackamt
 
-	if ((src.player_mp <= 0) || (src.player_hp <= 0))
-		src.gameover = 1
-		src.temp = "You have been crushed! GAME OVER"
+	if ((player_mp <= 0) || (player_hp <= 0))
+		gameover = 1
+		temp = "You have been crushed! GAME OVER"
 		if(emagged)
 			feedback_inc("arcade_loss_hp_emagged")
 			usr.gib()
 		else
 			feedback_inc("arcade_loss_hp_normal")
 
-	src.blocked = 0
+	blocked = 0
 	return
 
 /obj/machinery/computer/arcade/emag(mob/user as mob)
@@ -285,7 +285,7 @@
 	enemy_name = "Cuban Pete"
 	name = "Outbomb Cuban Pete"
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/computer/arcade/emp_act(severity)
 	if(stat & (NOPOWER|BROKEN))
@@ -300,7 +300,7 @@
 			num_of_prizes = rand(0,2)
 	for(num_of_prizes; num_of_prizes > 0; num_of_prizes--)
 		empprize = pickweight(prizes)
-		new empprize(src.loc)
+		new empprize(loc)
 
 	..(severity)
 
@@ -337,14 +337,14 @@
 		if(stat & (NOPOWER|BROKEN))
 			return cheater
 		else if(user in cheaters)
-			to_chat(usr, "<span class='danger'>[src.enemy_name] throws a bomb at you for trying to cheat him again.</span>")
-			explosion(get_turf(src.loc),-1,0,2)//IED sized explosion
+			to_chat(usr, "<span class='danger'>[enemy_name] throws a bomb at you for trying to cheat him again.</span>")
+			explosion(get_turf(loc),-1,0,2)//IED sized explosion
 			user.gib()
 			cheaters = null
 			qdel(src)
 			cheater = 1
 		else
-			to_chat(usr, "<span class='danger'>[src.enemy_name] isn't one to tolerate cheaters. Don't try that again.</span>")
+			to_chat(usr, "<span class='danger'>[enemy_name] isn't one to tolerate cheaters. Don't try that again.</span>")
 			cheaters += user
 			cheater = 1
 	return cheater

@@ -33,14 +33,14 @@
 	if(held_container)
 		underlays = null
 		to_chat(user, "<span class='notice'>You remove the [held_container] from the [src].</span>")
-		held_container.loc = src.loc
+		held_container.loc = loc
 		held_container.attack_hand(user)
 		held_container = null
 	else
 		to_chat(user, "<span class='warning'>There is nothing on the [src].</span>")
 
 /obj/machinery/bunsen_burner/proc/try_heating()
-	src.visible_message("<span class='notice'>[bicon(src)] [src] hisses.</span>")
+	visible_message("<span class='notice'>[bicon(src)] [src] hisses.</span>")
 	if(held_container && heating)
 		heated = 1
 		held_container.reagents.handle_reactions()

@@ -64,13 +64,13 @@
 	spawn(rand(100,200))
 		if(!src) return
 
-		src.death(0)
+		death(0)
 
 		sleep(30)
 
 		if(..())
-			src.gib(meat=0)
-			src.visible_message("<span class='danger'>[src]'s body explodes in a shower of gore as its offspring burst out!</span>")
+			gib(meat=0)
+			visible_message("<span class='danger'>[src]'s body explodes in a shower of gore as its offspring burst out!</span>")
 
 /mob/living/simple_animal/hostile/carp/Process_Spacemove(var/check_drift = 0)
 	return 1	//No drifting in space for space carp!	//original comments do not steal

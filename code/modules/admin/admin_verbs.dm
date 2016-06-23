@@ -551,7 +551,7 @@ var/list/admin_verbs_mod = list(
 	var/warn_reason = input("Reason for warning?", "Admin abuuuuuuuse") as null|text
 	if(!warn_reason)
 		return
-	notes_add(warned_ckey,warn_reason,src.mob)
+	notes_add(warned_ckey,warn_reason,mob)
 	if(++D.warns >= MAX_WARNS)					//uh ohhhh...you'reee iiiiin trouuuubble O:)
 		var/bantime = AUTOBANTIME//= (++D.warnbans * AUTOBANTIME)
 		D.warns = 0
@@ -714,8 +714,8 @@ var/list/admin_verbs_mod = list(
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
 	set category = "Special Verbs"
-	if(src.mob)
-		togglebuildmode(src.mob)
+	if(mob)
+		togglebuildmode(mob)
 	feedback_add_details("admin_verb","TBMS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/object_talk(var/obj/O in world) // -- TLE
@@ -783,7 +783,7 @@ var/list/admin_verbs_mod = list(
 	set name = "Check AI Laws"
 	set category = "Admin"
 	if(holder)
-		src.holder.output_ai_laws()
+		holder.output_ai_laws()
 
 
 //---- bs12 verbs ----
@@ -1223,7 +1223,7 @@ var/list/admin_verbs_mod = list(
 	set category = "Special Verbs"
 	set desc = "Sends a message as voice to all players"
 	set popup_menu = 0
-	
+
 	if(!check_rights(R_DEBUG)) return 0
 
 	var/msg
@@ -1239,12 +1239,12 @@ var/list/admin_verbs_mod = list(
 		log_admin("[key_name(src)] has used the dectalk verb with message: [audio["message"]]")
 
 		for (var/client/C in clients)
-			var/trigger = src.key
+			var/trigger = key
 			chatOutput.ehjax_send(C, "browseroutput", list("dectalk" = audio["audio"], "decTalkTrigger" = trigger))
 		return 1
 	else if (audio && audio["cooldown"])
 		alert(src, "There is a [nextDecTalkDelay] second global cooldown between uses of this verb. Please wait [((world.timeofday + nextDecTalkDelay * 10) - world.timeofday)/10] seconds.")
-		src.cmd_dectalk(msg)
+		cmd_dectalk(msg)
 		return 0
 	else
 		alert(src, "An external server error has occurred. Please report this.")

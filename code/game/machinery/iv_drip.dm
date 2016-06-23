@@ -10,7 +10,7 @@
 /obj/machinery/iv_drip/var/obj/item/weapon/reagent_containers/beaker = null
 
 /obj/machinery/iv_drip/update_icon()
-	if(src.attached)
+	if(attached)
 		icon_state = "hooked"
 	else
 		icon_state = ""
@@ -43,9 +43,9 @@
 	if(isanimal(usr))
 		return
 	if(attached)
-		visible_message("[src.attached] is detached from \the [src]")
-		src.attached = null
-		src.update_icon()
+		visible_message("[attached] is detached from \the [src]")
+		attached = null
+		update_icon()
 		return
 
 	if(in_range(src, usr) && ishuman(over_object) && get_dist(over_object, src) <= 1)
@@ -54,8 +54,8 @@
 			H.visible_message("<span class='warning'>[usr] struggles to place the IV into [H] but fails.</span>","<span class='notice'>[usr] tries to place the IV into your arm but is unable to.</span>")
 			return
 		visible_message("[usr] attaches \the [src] to \the [over_object].")
-		src.attached = over_object
-		src.update_icon()
+		attached = over_object
+		update_icon()
 
 /obj/machinery/iv_drip/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isobserver(user)) return
@@ -65,20 +65,20 @@
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
-		if(src.beaker)
-			src.beaker.loc = get_turf(src)
-			src.beaker = null
+		if(beaker)
+			beaker.loc = get_turf(src)
+			beaker = null
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
 	if (istype(W, /obj/item/weapon/reagent_containers))
-		if(!isnull(src.beaker))
+		if(!isnull(beaker))
 			to_chat(user, "There is already a reagent container loaded!")
 			return
 
 		if(user.drop_item(W, src))
-			src.beaker = W
+			beaker = W
 			to_chat(user, "You attach \the [W] to \the [src].")
-			src.update_icon()
+			update_icon()
 			return
 	else
 		return ..()
@@ -87,23 +87,23 @@
 /obj/machinery/iv_drip/process()
 	//set background = 1
 
-	if(src.attached)
-		if(!(get_dist(src, src.attached) <= 1 && isturf(src.attached.loc)))
-			visible_message("The needle is ripped out of [src.attached], doesn't that hurt?")
-			src.attached:apply_damage(3, BRUTE, pick("r_arm", "l_arm"))
-			src.attached = null
-			src.update_icon()
+	if(attached)
+		if(!(get_dist(src, attached) <= 1 && isturf(attached.loc)))
+			visible_message("The needle is ripped out of [attached], doesn't that hurt?")
+			attached:apply_damage(3, BRUTE, pick("r_arm", "l_arm"))
+			attached = null
+			update_icon()
 			return
 
-	if(src.attached && src.beaker)
+	if(attached && beaker)
 		// Give blood
 		if(mode)
-			if(src.beaker.volume > 0)
+			if(beaker.volume > 0)
 				var/transfer_amount = REAGENTS_METABOLISM
 				if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent(BLOOD))
 					// speed up transfer if the container has ONLY blood
 					transfer_amount = 4
-				src.beaker.reagents.trans_to(src.attached, transfer_amount)
+				beaker.reagents.trans_to(attached, transfer_amount)
 				update_icon()
 
 		// Take blood
@@ -140,12 +140,12 @@
 	if(isobserver(usr) || user.incapacitated())
 		return
 	if(attached)
-		visible_message("[src.attached] is detached from \the [src].")
-		src.attached = null
-		src.update_icon()
-	else if(src.beaker)
-		src.beaker.loc = get_turf(src)
-		src.beaker = null
+		visible_message("[attached] is detached from \the [src].")
+		attached = null
+		update_icon()
+	else if(beaker)
+		beaker.loc = get_turf(src)
+		beaker = null
 		update_icon()
 	else
 		return ..()

@@ -349,7 +349,7 @@
 //Process reagents being input into the tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents()
 
-	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents() called tick#: [world.time]")
+	//writepanic("[__FILE__].[__LINE__] ([type])([usr ? usr.ckey : ""])  \\/obj/machinery/portable_atmospherics/hydroponics/proc/process_reagents() called tick#: [world.time]")
 
 	//if(!reagents) return
 

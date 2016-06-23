@@ -47,7 +47,7 @@
 	message = "Unexpected return statement outside of a function."
 
 /datum/scriptError/BadReturn/New(datum/token/t)
-	src.token = t
+	token = t
 
 /datum/scriptError/EndOfFile
 	message = "Unexpected end of file."
@@ -114,10 +114,10 @@
 
 /datum/runtimeError/TypeMismatch/unary/New(op, a)
 	message = "Type mismatch: [op]'[a]'"
-	
+
 /datum/runtimeError/TypeMismatch/New(op, a, b)
 	message = "Type mismatch: '[a]' [op] '[b]'"
-	
+
 /datum/runtimeError/UnexpectedReturn
 	name = "UnexpectedReturnError"
 	message = "Unexpected return statement."

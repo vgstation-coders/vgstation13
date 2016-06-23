@@ -343,7 +343,7 @@
 	if(loc == null)
 		return
 
-	new /obj/effect/gibspawner/human(src.loc)
+	new /obj/effect/gibspawner/human(loc)
 	qdel(src)
 
 
@@ -359,7 +359,7 @@
 		return
 
 	if(ismob(A))
-		src.loc = A.loc
+		loc = A.loc
 		A.blob_act()
 		return
 

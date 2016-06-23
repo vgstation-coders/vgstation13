@@ -43,7 +43,7 @@
 						//scan radios in the world to try and find one
 						var/cur_dist = 999
 						for(var/obj/item/beacon/R in beacons)
-							if(R.z == src.z && R.frequency == src.frequency)
+							if(R.z == z && R.frequency == frequency)
 								var/check_dist = get_dist(src,R)
 								if(check_dist < cur_dist)
 									cur_dist = check_dist
@@ -59,7 +59,7 @@
 			icon_state = "pinoff"
 
 /obj/item/device/beacon_locator/attack_self(var/mob/user as mob)
-	return src.interact(user)
+	return interact(user)
 
 /obj/item/device/beacon_locator/interact(var/mob/user as mob)
 	var/dat = "<b>Radio frequency tracker</b><br>"

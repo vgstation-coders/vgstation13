@@ -169,7 +169,7 @@ var/global/list/crate_mimic_disguises = list(\
 		//Drop all loot!
 		for(var/atom/movable/AM in src)
 			AM.forceMove(C)
-	
+
 	..()
 
 /mob/living/simple_animal/hostile/mimic/crate/initialize()
@@ -418,7 +418,7 @@ var/global/list/item_mimic_disguises = list(
 				s_size = "huge"
 
 	var/pronoun
-	if (src.gender == PLURAL)
+	if (gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
@@ -558,8 +558,8 @@ var/global/list/protected_objects = list(
 
 		O.loc = src
 
-		src.appearance = O.appearance
-		src.icon_living = src.icon_state
+		appearance = O.appearance
+		icon_living = icon_state
 		var/icon/redimage = icon(icon,icon_state)
 		redimage.MapColors(rgb(255,0,0), rgb(255,0,0), rgb(255,0,0))
 		var/icon/redimage_south = redimage
@@ -602,10 +602,10 @@ var/global/list/protected_objects = list(
 
 		for(var/atom/movable/AM in O.get_locked(/datum/locking_category/mimic)) //What could go wrong
 			O.unlock_atom(AM)
-			src.lock_atom(AM, /datum/locking_category/mimic)
+			lock_atom(AM, /datum/locking_category/mimic)
 
 		if(creator)
-			src.creator = creator
+			creator = creator
 			faction = "\ref[creator]" // very unique
 		if(destroy_original)
 			qdel(O)

@@ -24,48 +24,48 @@ var/global/list/updateQueueTestCount = list()
 			testReallySlowItemInQueue()
 			sleep(1)
 			to_chat(world, "<b>Finished!</b>")
-		
+
 		beginTiming()
 			start = world.time
-			
+
 		endTiming(text)
 			var/time = (world.time - start) / world.tick_lag
 			to_chat(world, {"<b><font color="blue">Performance - [text] - <font color="green">[time]</font> ticks</font></b>"})
-		
+
 		getCount()
 			return updateQueueTestCount[updateQueueTestCount.len]
-		
+
 		incrementTestCount()
 			updateQueueTestCount.len++
 			updateQueueTestCount[updateQueueTestCount.len] = 0
-		
+
 		assertCountEquals(count, text)
 			assertThat(getCount() == count, text)
-		
+
 		assertCountLessThan(count, text)
 			assertThat(getCount() < count, text)
-		
+
 		assertCountGreaterThan(count, text)
 			assertThat(getCount() > count, text)
-		
+
 		assertThat(condition, text)
 			if (condition)
 				to_chat(world, {"<font color="green"><b>PASS</b></font>: [text]"})
 			else
 				to_chat(world, {"<b><font color="red">FAIL</font>: [text]</b>"})
-			
+
 		testUpdateQueuePerformance()
 			incrementTestCount()
 			var/list/objs = new
 			for(var/i=1,i<=100000,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
-			
+
 			var/datum/updateQueue/uq = new(objs)
-			
+
 			beginTiming()
 			uq.Run()
 			endTiming("updating 100000 simple objects")
-			
+
 			assertCountEquals(100000, "test that update queue updates all objects expected")
 			del(objs)
 			del(uq)
@@ -99,15 +99,15 @@ var/global/list/updateQueueTestCount = list()
 			assertCountEquals(100, "test that inplace update queue updates the right number of objects")
 			del(objs)
 			del(uq)
-					
+
 		testInplaceUpdateQueuePerformance()
 			incrementTestCount()
 			var/list/objs = new
 			for(var/i=1,i<=100000,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
-			
+
 			var/datum/updateQueue/uq = new(objs)
-			
+
 			beginTiming()
 			uq.Run()
 			endTiming("updating 100000 simple objects in place")
@@ -122,7 +122,7 @@ var/global/list/updateQueueTestCount = list()
 			objs.Add(new /datum/uqTestDatum/crasher(updateQueueTestCount.len))
 			for(var/i=1,i<=10,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
-			
+
 			var/datum/updateQueue/uq = new(objs)
 			uq.Run()
 			assertCountEquals(20, "test that update queue handles crashed update procs OK")
@@ -148,15 +148,15 @@ var/global/list/updateQueueTestCount = list()
 			assertCountEquals(30, "test that update queue slows down execution if too many objects are slow to update")
 			del(objs)
 			del(uq)
-			
-		testVariableWorkerTimeout()			
+
+		testVariableWorkerTimeout()
 			incrementTestCount()
 			var/list/objs = new
 			for(var/i=1,i<=20,i++)
 				objs.Add(new /datum/uqTestDatum/slow(updateQueueTestCount.len))
 			var/datum/updateQueue/uq = new(objs, workerTimeout=6)
 			uq.Run()
-			assertCountEquals(20, "test that variable worker timeout works properly")			
+			assertCountEquals(20, "test that variable worker timeout works properly")
 			del(objs)
 			del(uq)
 
@@ -180,7 +180,7 @@ datum/uqTestDatum
 	var/testNum
 	New(testNum)
 		..()
-		src.testNum = testNum
+		testNum = testNum
 	proc/update()
 		updateQueueTestCount[testNum]++
 	proc/lag(cycles)
@@ -195,7 +195,7 @@ datum/uqTestDatum/slow
 		var/start = world.timeofday
 		while(world.timeofday - start < 5) // lag 4 deciseconds
 		..()
-		
+
 datum/uqTestDatum/reallySlow
 	update()
 		set background = 1

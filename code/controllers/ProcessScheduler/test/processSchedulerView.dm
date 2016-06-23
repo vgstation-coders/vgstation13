@@ -5,7 +5,7 @@
 
 	var/const/head = "<link href='./common.css' rel='stylesheet' type='text/css'>"
 
-	src.interface = new/datum/html_interface(src, "Process Scheduler Detail", 800, 600, head)
+	interface = new/datum/html_interface(src, "Process Scheduler Detail", 800, 600, head)
 
 	html_machines += src
 
@@ -20,18 +20,18 @@
 		if ("kill")
 			var/toKill = href_list["name"]
 			processScheduler.killProcess(toKill)
-			src.refreshTable()
+			refreshTable()
 		if ("enable")
 			var/toEnable = href_list["name"]
 			processScheduler.enableProcess(toEnable)
-			src.refreshTable()
+			refreshTable()
 		if ("disable")
 			var/toDisable = href_list["name"]
 			processScheduler.disableProcess(toDisable)
-			src.refreshTable()
+			refreshTable()
 		if ("refresh")
-			src.refreshTable()
-			//src.interface.updateContent()
+			refreshTable()
+			//interface.updateContent()
 
 /datum/processSchedulerView/proc/getProcessTable()
 	var/text = "<table><thead><tr><td>Name</td><td colspan=2>Avg(s)</td><td colspan=2>Last(s)</td><td colspan=2>Highest(s)</td><td colspan=2>Tickcount</td><td colspan=2>Tickrate</td><td>State</td><td>Action</td></tr></thead><tbody>"
@@ -60,8 +60,8 @@
 
 
 /datum/processSchedulerView/proc/refreshTable()
-	var/text = src.getProcessTable()
-	src.interface.updateContent("processTable", text)
+	var/text = getProcessTable()
+	interface.updateContent("processTable", text)
 
 
 
@@ -81,11 +81,11 @@
 	text += "<div class='statusDisplay'>"
 
 	text += "<div id=\"processTable\">"
-	text += src.getProcessTable()
+	text += getProcessTable()
 	text += "</div></div></body></html>"
 
-	src.interface.updateLayout("<div id=\"content\"></div>")
-	src.interface.updateContent("content", text)
+	interface.updateLayout("<div id=\"content\"></div>")
+	interface.updateContent("content", text)
 
 
 /client/proc/getSchedulerContext()

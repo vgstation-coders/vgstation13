@@ -105,11 +105,11 @@
 atom/movable/Move() //Hackish
 	. = ..()
 
-	var/turf/controllerlocation = locate(1, 1, src.z)
+	var/turf/controllerlocation = locate(1, 1, z)
 	for(var/obj/effect/landmark/zcontroller/controller in controllerlocation)
 		if(controller.up || controller.down)
 			var/list/temp = list()
-			temp += locate(src.x, src.y, src.z)
+			temp += locate(x, y, z)
 			controller.add(temp,3,1)
 
 /obj/effect/landmark/zcontroller/proc/calc(var/list/L)

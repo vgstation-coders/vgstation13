@@ -166,10 +166,10 @@
 	if(..())
 		return
 	usr.machine = src
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["ship"])
 		buildShuttle(href_list["ship"])
 	if(href_list["scrap"])
 		scrapShuttle(href_list["ship"])
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return

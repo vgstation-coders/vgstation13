@@ -28,10 +28,10 @@
 
 		if(open)
 			to_chat(usr, "You button up the labcoat.")
-			src.body_parts_covered |= IGNORE_INV
+			body_parts_covered |= IGNORE_INV
 		else
 			to_chat(usr, "You unbutton the labcoat.")
-			src.body_parts_covered ^= IGNORE_INV
+			body_parts_covered ^= IGNORE_INV
 		open=!open
 		update_icon()
 		usr.update_inv_wear_suit()	//so our overlays update

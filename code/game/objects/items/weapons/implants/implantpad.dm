@@ -17,21 +17,21 @@
 
 
 	update()
-		if (src.case)
-			src.icon_state = "implantpad-1"
+		if (case)
+			icon_state = "implantpad-1"
 		else
-			src.icon_state = "implantpad-0"
+			icon_state = "implantpad-0"
 		return
 
 
 	attack_hand(mob/user as mob)
-		if ((src.case && user.is_holding_item(src)))
+		if ((case && user.is_holding_item(src)))
 			user.put_in_active_hand(case)
 
-			src.case.add_fingerprint(user)
-			src.case = null
+			case.add_fingerprint(user)
+			case = null
 
-			src.add_fingerprint(user)
+			add_fingerprint(user)
 			update()
 		else
 			return ..()
@@ -41,23 +41,23 @@
 	attackby(obj/item/weapon/implantcase/C as obj, mob/user as mob)
 		..()
 		if(istype(C, /obj/item/weapon/implantcase))
-			if(!( src.case ))
+			if(!( case ))
 				if(user.drop_item(C, src))
-					src.case = C
+					case = C
 		else
 			return
-		src.update()
+		update()
 		return
 
 
 	attack_self(mob/user as mob)
 		user.set_machine(src)
 		var/dat = "<B>Implant Mini-Computer:</B><HR>"
-		if (src.case)
-			if(src.case.imp)
-				if(istype(src.case.imp, /obj/item/weapon/implant))
-					dat += src.case.imp.get_data()
-					if(istype(src.case.imp, /obj/item/weapon/implant/tracking))
+		if (case)
+			if(case.imp)
+				if(istype(case.imp, /obj/item/weapon/implant))
+					dat += case.imp.get_data()
+					if(istype(case.imp, /obj/item/weapon/implant/tracking))
 						dat += {"ID (1-100):
 						<A href='byond://?src=\ref[src];tracking_id=-10'>-</A>
 						<A href='byond://?src=\ref[src];tracking_id=-1'>-</A> [case.imp:id]
@@ -76,21 +76,21 @@
 		..()
 		if (usr.stat)
 			return
-		if ((usr.contents.Find(src)) || ((in_range(src, usr) && istype(src.loc, /turf))))
+		if ((usr.contents.Find(src)) || ((in_range(src, usr) && istype(loc, /turf))))
 			usr.set_machine(src)
 			if (href_list["tracking_id"])
-				var/obj/item/weapon/implant/tracking/T = src.case.imp
+				var/obj/item/weapon/implant/tracking/T = case.imp
 				T.id += text2num(href_list["tracking_id"])
 				T.id = min(100, T.id)
 				T.id = max(1, T.id)
 
-			if (istype(src.loc, /mob))
-				attack_self(src.loc)
+			if (istype(loc, /mob))
+				attack_self(loc)
 			else
 				for(var/mob/M in viewers(1, src))
 					if (M.client)
-						src.attack_self(M)
-			src.add_fingerprint(usr)
+						attack_self(M)
+			add_fingerprint(usr)
 		else
 			usr << browse(null, "window=implantpad")
 			return

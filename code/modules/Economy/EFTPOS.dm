@@ -26,7 +26,7 @@
 	linked_account = station_account
 
 /obj/item/device/eftpos/proc/print_reference()
-	var/obj/item/weapon/paper/R = new(src.loc)
+	var/obj/item/weapon/paper/R = new(loc)
 	R.name = "Reference: [eftpos_name]"
 
 	R.info = {"<b>[eftpos_name] reference</b><br><br>
@@ -52,7 +52,7 @@
 
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((DB.z == src.z) || (DB.z == STATION_Z))
+		if((DB.z == z) || (DB.z == STATION_Z))
 			if(!(DB.stat & NOPOWER) && DB.activated )//If the database if damaged or not powered, people won't be able to use the EFTPOS anymore
 				linked_db = DB
 				break
@@ -173,7 +173,7 @@
 					access_code = 0
 					to_chat(usr, "[bicon(src)]<span class='info'>Access code reset to 0.</span>")
 
-	src.attack_self(usr)
+	attack_self(usr)
 
 /obj/item/device/eftpos/proc/scan_card(var/obj/item/weapon/card/I)
 	if (istype(I, /obj/item/weapon/card/id))
@@ -186,7 +186,7 @@
 				if(D)
 					if(transaction_amount <= D.money)
 						playsound(src, 'sound/machines/chime.ogg', 50, 1)
-						src.visible_message("[bicon(src)] The [src] chimes.")
+						visible_message("[bicon(src)] The [src] chimes.")
 						transaction_paid = 1
 
 						//transfer the money

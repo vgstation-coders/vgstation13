@@ -87,7 +87,7 @@
 			if("supply")
 				supply()
 		user.take_organ_damage(5, 0)
-		if(src && src.imbue!="supply" && src.imbue!="runestun")
+		if(src && imbue!="supply" && imbue!="runestun")
 			if(delete)
 				qdel(src)
 		return
@@ -112,11 +112,11 @@
 		attack_self(M)
 
 /obj/item/weapon/paper/talisman/proc/supply(var/key)
-	if (!src.uses)
+	if (!uses)
 		qdel(src)
 		return
 
-	var/dat = {"<B>There are [src.uses] bloody runes on the parchment.</B>
+	var/dat = {"<B>There are [uses] bloody runes on the parchment.</B>
 <BR>Please choose the chant to be imbued into the fabric of reality.<BR>
 <HR>
 <A href='?src=\ref[src];rune=newtome'>N'ath reth sh'yro eth d'raggathnor!</A> - Allows you to summon a new arcane tome.<BR>
@@ -164,7 +164,7 @@
 				new /obj/item/device/soulstone(get_turf(usr))
 			if("construct")
 				new /obj/structure/constructshell/cult(get_turf(usr))
-		src.uses--
+		uses--
 		supply()
 	return
 

@@ -23,15 +23,15 @@ var/prison_shuttle_timeleft = 0
 
 	attackby(I as obj, user as mob)
 		if(!..())
-			src.attack_hand(user)
+			attack_hand(user)
 
 	attack_ai(var/mob/user as mob)
-		src.add_hiddenprint(user)
-		return src.attack_hand(user)
+		add_hiddenprint(user)
+		return attack_hand(user)
 
 
 	attack_paw(var/mob/user as mob)
-		return src.attack_hand(user)
+		return attack_hand(user)
 
 	emag(mob/user as mob)
 		emagged = 1
@@ -39,7 +39,7 @@ var/prison_shuttle_timeleft = 0
 		return
 
 	attack_hand(var/mob/user as mob)
-		if(!src.allowed(user) && (!emagged))
+		if(!allowed(user) && (!emagged))
 			to_chat(user, "<span class='warning'>Access Denied.</span>")
 			return
 		if(prison_break)
@@ -50,8 +50,8 @@ var/prison_shuttle_timeleft = 0
 		user.set_machine(src)
 		post_signal("prison")
 		var/dat
-		if (src.temp)
-			dat = src.temp
+		if (temp)
+			dat = temp
 		else
 			dat += {"<BR><B>Prison Shuttle</B><HR>
 			\nLocation: [prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison ? "Moving to station ([prison_shuttle_timeleft] Secs.)":prison_shuttle_at_station ? "Station":"Dock"]<BR>
@@ -77,8 +77,8 @@ var/prison_shuttle_timeleft = 0
 			if(!prison_shuttle_at_station|| prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
 			post_signal("prison")
 			to_chat(usr, "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>")
-			src.temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
-			src.updateUsrDialog()
+			temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
+			updateUsrDialog()
 			prison_shuttle_moving_to_prison = 1
 			prison_shuttle_time = world.timeofday + PRISON_MOVETIME
 			spawn(0)
@@ -91,18 +91,18 @@ var/prison_shuttle_timeleft = 0
 			if(prison_shuttle_at_station || prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
 			post_signal("prison")
 			to_chat(usr, "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>")
-			src.temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
-			src.updateUsrDialog()
+			temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
+			updateUsrDialog()
 			prison_shuttle_moving_to_station = 1
 			prison_shuttle_time = world.timeofday + PRISON_MOVETIME
 			spawn(0)
 				prison_process()
 
 		else if (href_list["mainmenu"])
-			src.temp = null
+			temp = null
 
-		src.add_fingerprint(usr)
-		src.updateUsrDialog()
+		add_fingerprint(usr)
+		updateUsrDialog()
 		return
 
 

@@ -27,7 +27,7 @@
 
 /obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
 	if(..()) return
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	interact(user)
 
 /obj/machinery/artifact_analyser/interact(mob/user)
@@ -74,8 +74,8 @@
 		else
 			results = get_scan_info(scanned_object)
 
-		src.visible_message("<b>[name]</b> states, \"Scanning complete.\"")
-		var/obj/item/weapon/paper/P = new(src.loc)
+		visible_message("<b>[name]</b> states, \"Scanning complete.\"")
+		var/obj/item/weapon/paper/P = new(loc)
 		P.name = "[src] report #[++report_num]"
 		P.info = "<b>[src] analysis report #[report_num]</b><br>"
 		P.info += "<br>"
@@ -109,18 +109,18 @@
 						A.being_used = 1
 
 				if(artifact_in_use)
-					src.visible_message("<b>[name]</b> states, \"Cannot harvest. Too much interference.\"")
+					visible_message("<b>[name]</b> states, \"Cannot harvest. Too much interference.\"")
 				else
 					scanned_object = O
 					scan_in_progress = 1
 					scan_completion_time = world.time + scan_duration
-					src.visible_message("<b>[name]</b> states, \"Scanning begun.\"")
+					visible_message("<b>[name]</b> states, \"Scanning begun.\"")
 				break
 			if(!scanned_object)
-				src.visible_message("<b>[name]</b> states, \"Unable to isolate scan target.\"")
+				visible_message("<b>[name]</b> states, \"Unable to isolate scan target.\"")
 	if(href_list["halt_scan"])
 		scan_in_progress = 0
-		src.visible_message("<b>[name]</b> states, \"Scanning halted.\"")
+		visible_message("<b>[name]</b> states, \"Scanning halted.\"")
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object
 			A.anchored = 0

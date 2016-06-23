@@ -42,10 +42,10 @@
 		var/matrix/M = matrix()
 		M.Turn(90)
 		M.Translate(1,-6)
-		src.transform = M
+		transform = M
 	else
 		var/matrix/M = matrix()
-		src.transform = M
+		transform = M
 
 
 ////////

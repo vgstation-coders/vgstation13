@@ -349,10 +349,10 @@
 			user.drop_item(O, force_drop = 1)
 			qdel(O)
 
-			var/obj/machinery/apiary/A = new(src.loc)
-			A.icon = src.icon
-			A.icon_state = src.icon_state
-			A.hydrotray_type = src.type
+			var/obj/machinery/apiary/A = new(loc)
+			A.icon = icon
+			A.icon_state = icon_state
+			A.hydrotray_type = type
 			A.component_parts = component_parts.Copy()
 			A.contents = contents.Copy()
 			contents.len = 0
@@ -400,24 +400,24 @@
 	view_contents(user)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/view_contents(mob/user)
-	if(src.seed && !src.dead)
-		to_chat(user, "<span class='info'>[src.seed.display_name]</span> is growing here.")
-		if(src.health <= (src.seed.endurance / 2))
+	if(seed && !dead)
+		to_chat(user, "<span class='info'>[seed.display_name]</span> is growing here.")
+		if(health <= (seed.endurance / 2))
 			to_chat(user, "The plant looks <span class='alert'>[age > seed.lifespan ? "old and wilting" : "unhealthy"].</span>")
-	else if(src.seed && src.dead)
+	else if(seed && dead)
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
 		to_chat(user, "[src] has nothing planted.")
 	if (Adjacent(user) || isobserver(user) || issilicon(user))
-		to_chat(user, "Water: [round(src.waterlevel,0.1)]/100")
-		if(seed && seed.hematophage) to_chat(user, "<span class='danger'>Blood:</span> [round(src.nutrilevel,0.1)]/10") //so edgy!!
-		else to_chat(user, "Nutrient: [round(src.nutrilevel,0.1)]/10")
-		if(src.weedlevel >= 5)
+		to_chat(user, "Water: [round(waterlevel,0.1)]/100")
+		if(seed && seed.hematophage) to_chat(user, "<span class='danger'>Blood:</span> [round(nutrilevel,0.1)]/10") //so edgy!!
+		else to_chat(user, "Nutrient: [round(nutrilevel,0.1)]/10")
+		if(weedlevel >= 5)
 			to_chat(user, "[src] is <span class='alert'>filled with weeds!</span>")
-		if(src.pestlevel >= 5)
+		if(pestlevel >= 5)
 			to_chat(user, "[src] is <span class='alert'>filled with tiny worms!</span>")
 		if(draw_warnings)
-			if(src.toxins >= 40)
+			if(toxins >= 40)
 				to_chat(user, "The tray's <span class='alert'>toxicity level alert</span> is flashing red.")
 			if(improper_light)
 				to_chat(user, "The tray's <span class='alert'>improper light level alert</span> is blinking.")

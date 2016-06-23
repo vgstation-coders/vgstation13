@@ -64,7 +64,7 @@
 	prefs.toggles ^= CHAT_DEAD
 	prefs.save_preferences_sqlite(src, ckey)
 
-	if(src.holder)
+	if(holder)
 		to_chat(src, "You will [(prefs.toggles & CHAT_DEAD) ? "now" : "no longer"] see deadchat.")
 	else
 		to_chat(src, "As a ghost, you will [(prefs.toggles & CHAT_DEAD) ? "now" : "no longer"] see deadchat.")

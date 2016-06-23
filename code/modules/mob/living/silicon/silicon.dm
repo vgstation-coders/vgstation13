@@ -38,7 +38,7 @@
 
 /mob/living/silicon/proc/write_laws()
 	if(laws)
-		var/text = src.laws.write_laws()
+		var/text = laws.write_laws()
 		return text
 
 /mob/living/silicon/proc/queueAlarm(var/message, var/type, var/incoming = 1)
@@ -129,10 +129,10 @@
 
 	switch(severity)
 		if(1)
-			src.take_organ_damage(20)
+			take_organ_damage(20)
 			Stun(rand(5,10))
 		if(2)
-			src.take_organ_damage(10)
+			take_organ_damage(10)
 			Stun(rand(1,5))
 	flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 	to_chat(src, "<span class='danger'>*BZZZT*</span>")
@@ -259,7 +259,7 @@
 	return 0
 
 /mob/living/silicon/can_speak_lang(datum/language/speaking)
-	return universal_speak || (speaking in src.speech_synthesizer_langs)	//need speech synthesizer support to vocalize a language
+	return universal_speak || (speaking in speech_synthesizer_langs)	//need speech synthesizer support to vocalize a language
 
 /mob/living/silicon/add_language(var/language, var/can_speak=1)
 	if (..(language) && can_speak)
@@ -302,7 +302,7 @@
 /mob/living/silicon/html_mob_check(var/typepath)
 	for(var/atom/movable/AM in html_machines)
 		if(typepath == AM.type)
-			if(max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
+			if(max(abs(AM.x-x),abs(AM.y-y)) <= client.view)
 				return 1
 	return 0
 

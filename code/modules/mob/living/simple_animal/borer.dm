@@ -248,11 +248,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if (stat)
 		return
 
-	if (src.client)
+	if (client)
 		if(client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class='warning'>You cannot speak in IC (muted).</span>")
 			return
-		if (src.client.handle_spam_prevention(message,MUTE_IC))
+		if (client.handle_spam_prevention(message,MUTE_IC))
 			return
 
 	if (copytext(message, 1, 2) == "*")
@@ -379,7 +379,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	host_brain.ckey = host.ckey
 	host_brain.name = host.real_name
-	host.ckey = src.ckey
+	host.ckey = ckey
 	controlling = 1
 
 	/* Broken
@@ -548,7 +548,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 		if((!host && !severed) || !src) return
 
-		if(src.stat)
+		if(stat)
 			to_chat(src, "<span class='warning'>You cannot abandon [host] in your current state.</span>")
 			return
 
@@ -585,7 +585,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			var/datum/organ/external/implanted = H.get_organ(hostlimb)
 			implanted.implants -= src
 
-	src.forceMove(get_turf(src))
+	forceMove(get_turf(src))
 	controlling = 0
 
 	reset_view(null)
@@ -609,7 +609,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		host.on_emote.Remove(eh_emote)
 
 	if(host_brain && host_brain.ckey)
-		src.ckey = host.ckey
+		ckey = host.ckey
 		host.ckey = host_brain.ckey
 		host_brain.ckey = null
 		host_brain.name = "host brain"
@@ -733,16 +733,16 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	var/list/choices = list()
 	for(var/mob/living/carbon/C in view(1,src))
-		if(C.stat != 2 && src.Adjacent(C))
+		if(C.stat != 2 && Adjacent(C))
 			choices += C
 
 	var/mob/living/carbon/M = input(src,"Who do you wish to infest?") in null|choices
 
 	if(!M || !src) return
 
-	if(!(src.Adjacent(M))) return
+	if(!(Adjacent(M))) return
 
-	var/area = src.zone_sel.selecting
+	var/area = zone_sel.selecting
 	var/region = "head"
 
 	if(istype(M, /mob/living/carbon/human))
@@ -818,7 +818,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	if(!M || !src) return
 
-	if(src.stat)
+	if(stat)
 		to_chat(src, "You cannot infest a target in your current state.")
 		return
 
@@ -832,7 +832,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	if(M in view(1, src))
 		to_chat(src, "[region == "head" ? "You wiggle into [M]'s ear." : "You burrow under [M]'s skin."]")
-		src.perform_infestation(M, region)
+		perform_infestation(M, region)
 
 		return
 	else
@@ -848,8 +848,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	update_verbs(limb_to_mode(hostlimb)) // Must be called before being removed from turf. (BYOND verb transfer bug)
 
-	src.host = M
-	src.forceMove(M)
+	host = M
+	forceMove(M)
 
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
@@ -876,7 +876,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 // So we can hear our host doing things.
 // NOTE:  We handle both visible and audible emotes because we're a brainslug that can see the impulses and shit.
 /mob/living/simple_animal/borer/proc/host_emote(var/list/args)
-	src.show_message(args["message"], args["m_type"])
+	show_message(args["message"], args["m_type"])
 	host_brain.show_message(args["message"], args["m_type"])
 
 /mob/living/simple_animal/borer/proc/ventcrawl()
@@ -987,7 +987,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		candidates += G
 
 	if(!candidates.len)
-		//message_admins("Unable to find a mind for [src.name]")
+		//message_admins("Unable to find a mind for [name]")
 		return 0
 
 	shuffle(candidates)
@@ -1003,10 +1003,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!candidate)
 		return
 
-	src.mind = candidate.mob.mind
-	src.ckey = candidate.ckey
-	if(src.mind)
-		src.mind.assigned_role = "Borer"
+	mind = candidate.mob.mind
+	ckey = candidate.ckey
+	if(mind)
+		mind.assigned_role = "Borer"
 
 		// Assign objectives
 		//forge_objectives()
@@ -1070,13 +1070,13 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 
 /mob/living/simple_animal/borer/attack_ghost(var/mob/dead/observer/O)
-	if(!(src.key))
+	if(!(key))
 		if(O.can_reenter_corpse)
 			var/response = alert(O,"Do you want to take it over?","This borer has no soul","Yes","No")
 			if(response == "Yes")
-				if(!(src.key))
-					src.transfer_personality(O.client)
-				else if(src.key)
+				if(!(key))
+					transfer_personality(O.client)
+				else if(key)
 					to_chat(src, "<span class='notice'>Somebody jumped your claim on this borer and is already controlling it. Try another </span>")
 		else if(!(O.can_reenter_corpse))
 			to_chat(O,"<span class='notice'>While the borer may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")

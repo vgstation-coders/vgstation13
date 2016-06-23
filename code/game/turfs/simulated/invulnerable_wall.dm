@@ -46,7 +46,7 @@
 		getFromPool(/obj/item/stack/rods, src, 2)
 		getFromPool(/obj/item/stack/sheet/plasteel, src)
 
-	for(var/obj/O in src.contents) //Eject contents!
+	for(var/obj/O in contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)

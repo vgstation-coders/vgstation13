@@ -30,7 +30,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 /datum/wires/New(var/atom/holder)
 	..()
-	src.holder = holder
+	holder = holder
 	if(!istype(holder, holder_type))
 		CRASH("Our holder is null/the wrong type!")
 		return
@@ -43,10 +43,10 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		// We don't have any wires to copy yet, generate some and then copy it.
 		if(!same_wires[holder_type])
 			GenerateWires()
-			same_wires[holder_type] = src.wires.Copy()
+			same_wires[holder_type] = wires.Copy()
 		else
 			var/list/wires = same_wires[holder_type]
-			src.wires = wires // Reference the wires list.
+			wires = wires // Reference the wires list.
 
 /datum/wires/Destroy()
 	if(holder)
@@ -67,7 +67,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		// Pick and remove an index
 		var/index = pick_n_take(indexes_to_pick)
 
-		src.wires[colour] = index
+		wires[colour] = index
 		//wires = shuffle(wires)
 
 /datum/wires/proc/Interact(var/mob/living/user)

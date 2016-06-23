@@ -79,8 +79,8 @@
 	for(var/mob/living/carbon/human/H in view(7, src))
 		if(H.stat)
 			continue
-		var/x_diff = H.x - src.x
-		var/y_diff = H.y - src.y
+		var/x_diff = H.x - x
+		var/y_diff = H.y - y
 		if(y_diff != 0) //If we are not on the same vertical plane (up/down), mob is either above or below src
 			if(y_diff < 0 && H.dir == NORTH) //Mob is below src and looking up
 				observed = 1

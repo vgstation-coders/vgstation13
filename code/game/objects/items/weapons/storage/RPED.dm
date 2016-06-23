@@ -25,7 +25,7 @@
 		if(A.contents.len <= 0)
 			to_chat(user, "<span class='notify'>\the [A] is empty!</span>")
 			return 1
-		if(src.contents.len >= storage_slots)
+		if(contents.len >= storage_slots)
 			to_chat(user, "<span class='notify'>\the [src] is full!</span>")
 			return 1
 		A.mass_remove(src)

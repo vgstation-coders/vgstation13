@@ -50,7 +50,7 @@ var/list/nest_locations = list()
 		if(locate(/obj/effect/alien/weeds) in T)
 			weed += 4
 	else if(!stat && !client)
-		if(!(locate(/obj/effect/alien/weeds) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
+		if(!(locate(/obj/effect/alien/weeds) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(loc) && !istype(T, /turf/space))
 			weed = 0
 			visible_message("<span class='alien'>[src] has planted some alien weeds!</span>")
 			new /obj/effect/alien/weeds/node(T)
@@ -144,7 +144,7 @@ var/list/nest_locations = list()
 	var/smallest_distance = 555
 	var/best_nest
 	for(var/obj/structure/bed/nest/N in nest_locations)
-		if((N.z == src.z) && (N.locked_atoms.len == 0))
+		if((N.z == z) && (N.locked_atoms.len == 0))
 			var/dist = get_dist(src,N)
 			if(dist < smallest_distance)
 				smallest_distance = dist
@@ -217,7 +217,7 @@ var/list/nest_locations = list()
 
 /mob/living/simple_animal/hostile/alien/proc/DragPrey(var/obj/structure/bed/nest/dest)
 	if(dragging && (pulling == dragging))
-		if(dest.loc == src.loc)
+		if(dest.loc == loc)
 			dragging.forceMove(dest.loc)
 			stop_pulling()
 			dest.buckle_mob(dragging,src)
@@ -300,7 +300,7 @@ var/list/nest_locations = list()
 		if(locate(/obj/effect/alien/weeds) in T)
 			nest += 4
 	else if(!stat && !client)
-		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
+		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(loc) && !istype(T, /turf/space))
 			var/nearby_nests = 0
 			for(var/obj/structure/bed/nest/N in range(5,src))
 				nearby_nests++
@@ -314,7 +314,7 @@ var/list/nest_locations = list()
 		if(locate(/obj/effect/alien/weeds) in T)
 			egg += 4
 	else if(!stat && !client)
-		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
+		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(loc) && !istype(T, /turf/space))
 			var/nearby_eggs = 0
 			for(var/obj/effect/alien/egg/E in range(3,src))
 				nearby_eggs++

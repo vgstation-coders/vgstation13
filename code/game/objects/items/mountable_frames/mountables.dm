@@ -4,7 +4,7 @@
 
 /obj/item/mounted/afterattack(var/atom/A, mob/user, proximity_flag)
 	var/found_type = 0
-	for(var/turf_type in src.buildon_types)
+	for(var/turf_type in buildon_types)
 		if(istype(A, turf_type))
 			found_type = 1
 			break

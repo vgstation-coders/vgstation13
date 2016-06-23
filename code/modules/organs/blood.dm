@@ -196,15 +196,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	B.data["donor"] = src
 	if (!B.data["virus2"])
 		B.data["virus2"] = list()
-	B.data["virus2"] |= virus_copylist(src.virus2)
-	B.data["antibodies"] = src.antibodies
-	B.data["blood_DNA"] = copytext(src.dna.unique_enzymes,1,0)
-	if(src.resistances && src.resistances.len)
+	B.data["virus2"] |= virus_copylist(virus2)
+	B.data["antibodies"] = antibodies
+	B.data["blood_DNA"] = copytext(dna.unique_enzymes,1,0)
+	if(resistances && resistances.len)
 		if(B.data["resistances"])
-			B.data["resistances"] |= src.resistances.Copy()
+			B.data["resistances"] |= resistances.Copy()
 		else
-			B.data["resistances"] = src.resistances.Copy()
-	B.data["blood_type"] = copytext(src.dna.b_type,1,0)
+			B.data["resistances"] = resistances.Copy()
+	B.data["blood_type"] = copytext(dna.b_type,1,0)
 
 	// Putting this here due to return shenanigans.
 	if(istype(src,/mob/living/carbon/human))
@@ -213,7 +213,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		B.color = B.data["blood_colour"]
 
 	var/list/temp_chem = list()
-	for(var/datum/reagent/R in src.reagents.reagent_list)
+	for(var/datum/reagent/R in reagents.reagent_list)
 		temp_chem += R.id
 		temp_chem[R.id] = R.volume
 	B.data["trace_chem"] = list2params(temp_chem)
@@ -236,13 +236,13 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
 	if (!injected)
 		return
-	src.virus2 |= virus_copylist(injected.data["virus2"])
+	virus2 |= virus_copylist(injected.data["virus2"])
 	if (injected.data["antibodies"] && prob(5))
 		antibodies |= injected.data["antibodies"]
 	var/list/chems = list()
 	chems = params2list(injected.data["trace_chem"])
 	for(var/C in chems)
-		src.reagents.add_reagent(C, (text2num(chems[C]) / 560) * amount)//adds trace chemicals to owner's blood
+		reagents.add_reagent(C, (text2num(chems[C]) / 560) * amount)//adds trace chemicals to owner's blood
 	reagents.update_total()
 
 	container.reagents.remove_reagent(BLOOD, amount)

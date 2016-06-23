@@ -39,9 +39,9 @@
 	if(..())
 		return
 	usr.machine = src
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["purify"])
-		if (src.output)
+		if (output)
 			processing = 1;
 			var/obj/item/weapon/ore/O
 			processed = 0;
@@ -72,7 +72,7 @@
 				processed++
 				sleep(5);
 			processing = 0;
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 
@@ -80,10 +80,10 @@
 	..()
 	spawn( 5 )
 		for (var/dir in cardinal)
-			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input) break
+			input = locate(/obj/machinery/mineral/input, get_step(src, dir))
+			if(input) break
 		for (var/dir in cardinal)
-			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output) break
+			output = locate(/obj/machinery/mineral/output, get_step(src, dir))
+			if(output) break
 		return
 	return

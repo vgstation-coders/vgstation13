@@ -77,10 +77,10 @@
 /datum/design/mechanic_design/proc/Gen_Tech_Mats(var/modifier = 1)
 	if(modifier < 0) //fuck off
 		return
-	var/techtotal = src.TechTotal() / 2
+	var/techtotal = TechTotal() / 2
 	materials[MAT_IRON] += techtotal * round(rand(300, 1500), 100) * modifier
 	materials[MAT_GLASS] += techtotal * round(rand(150, 300), 50) * modifier
-	if(src.build_type == GENFAB)
+	if(build_type == GENFAB)
 		if(prob(techtotal * 15)) //let's add an extra cost of some medium-rare material - sure a lot of items
 			materials[pick(MAT_PLASMA, MAT_URANIUM, MAT_GOLD, MAT_SILVER)] += techtotal * round(rand(50, 250), 10) * modifier
 		if(prob(techtotal * 8))//and another cost, because we can - can proc for some items

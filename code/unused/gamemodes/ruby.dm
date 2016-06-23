@@ -96,16 +96,16 @@
 
 
 /mob/proc/make_abomination()
-	src.see_in_dark = 20
-	src.verbs += /client/proc/planar_shift
-	src.verbs += /client/proc/vile_ressurection
-	src.verbs += /client/proc/defile_corpse
-	src.verbs += /client/proc/summon_weapon
-	src.verbs += /client/proc/sacrifice_self
-	src.verbs += /client/proc/hunt
-	src.verbs += /client/proc/howl
+	see_in_dark = 20
+	verbs += /client/proc/planar_shift
+	verbs += /client/proc/vile_ressurection
+	verbs += /client/proc/defile_corpse
+	verbs += /client/proc/summon_weapon
+	verbs += /client/proc/sacrifice_self
+	verbs += /client/proc/hunt
+	verbs += /client/proc/howl
 	var/datum/game_mode/ruby/rmode = ticker.mode
-	rmode.abomination = src.mind
+	rmode.abomination = mind
 	return
 
 
@@ -126,14 +126,14 @@
 		usr.sight &= ~SEE_OBJS
 		usr.density = 1
 		usr.incorporeal_move = INCORPOREAL_DEACTIVATE
-		src.verbs -= /client/proc/planar_shift
-		spawn(300) src.verbs += /client/proc/planar_shift
+		verbs -= /client/proc/planar_shift
+		spawn(300) verbs += /client/proc/planar_shift
 	*/
 
 /client/proc/vile_ressurection()
 	set name = "Vile Ressurection"
 	set category = "Abomination"
-	if(src.mob.stat != 2 || !src.mob)
+	if(mob.stat != 2 || !mob)
 		return
 	if(ticker.mode:respawns > 0)
 		// spawn a new body
@@ -164,8 +164,8 @@
 				w.loc = usr.loc
 			else
 				w.loc = usr.loc
-		src.verbs -= /client/proc/summon_weapon
-		spawn(300) src.verbs += /client/proc/summon_weapon
+		verbs -= /client/proc/summon_weapon
+		spawn(300) verbs += /client/proc/summon_weapon
 		return
 
 /client/proc/sacrifice_self()
@@ -254,8 +254,8 @@
 	usr.visible_message(text("<span class='danger'>[usr]'s form warbles and distorts before settling back into its grotesque shape once more.</span>"))
 	// Play a random spooky sound - maybe cause some visual, non-mechanical effects to appear at random for a few seconds.
 
-	src.verbs -= /client/proc/howl
-	spawn(rand(300,1800)) src.verbs += /client/proc/howl
+	verbs -= /client/proc/howl
+	spawn(rand(300,1800)) verbs += /client/proc/howl
 
 /obj/item/weapon/rubyweapon
 	desc = ""

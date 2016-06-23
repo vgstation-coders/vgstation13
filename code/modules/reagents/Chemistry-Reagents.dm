@@ -104,9 +104,9 @@
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
 		if(L)
-			L.metabolize_reagent(src.id, custom_metabolism)
+			L.metabolize_reagent(id, custom_metabolism)
 			return
-	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
+	holder.remove_reagent(id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
 
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
@@ -128,7 +128,7 @@
 	if(!istype(T)) //Still can't find it, abort
 		return
 
-	holder.remove_reagent(src.id, custom_plant_metabolism)
+	holder.remove_reagent(id, custom_plant_metabolism)
 
 /datum/reagent/proc/on_move(var/mob/M)
 	return
@@ -1330,7 +1330,7 @@
 
 //When inside a person, instantly decomposes into the ingredients for smoke
 /datum/reagent/paismoke/on_mob_life(var/mob/living/M)
-	M.reagents.del_reagent(src.id)
+	M.reagents.del_reagent(id)
 	M.reagents.add_reagent("potassium", 5)
 	M.reagents.add_reagent("sugar", 5)
 	M.reagents.add_reagent("phosphorus", 5)
@@ -2936,7 +2936,7 @@
 		to_chat(H, "<span class='warning'>You feel like your muscles are ripping apart!</span>")
 		has_ripped_and_torn = 1
 		if(!override_remove)
-			holder.remove_reagent(src.id) //Clean them out
+			holder.remove_reagent(id) //Clean them out
 		H.adjustBruteLoss(damage) //Crit
 
 		if(gib)
@@ -3315,14 +3315,14 @@
 			if(1 to 20)
 				if(prob(5))
 					H << "<span class='warning'>You don't feel very good.</span>"
-					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
+					holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
 			if(20 to 35)
 				if(prob(10))
 					H << "<span class='warning'>You really don't feel very good.</span>"
 				if(prob(5))
 					H.adjustToxLoss(0.1)
 					H.visible_message("[H] groans.")
-					holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
+					holder.remove_reagent(id, 0.3 * FOOD_METABOLISM)
 			if(35 to INFINITY)
 				if(prob(10))
 					H << "<span class='warning'>Your stomach grumbles unsettlingly.</span>"
@@ -3332,7 +3332,7 @@
 					if(istype(L))
 						L.take_damage(0.1, 1)
 					H.adjustToxLoss(0.13)
-					holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
+					holder.remove_reagent(id, 0.5 * FOOD_METABOLISM)
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"

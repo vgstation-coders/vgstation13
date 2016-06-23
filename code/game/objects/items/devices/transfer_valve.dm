@@ -99,7 +99,7 @@
 	..()
 	if ( usr.stat || usr.restrained() )
 		return
-	if (src.loc == usr)
+	if (loc == usr)
 		if(tank_one && href_list["tankone"])
 			split_gases()
 			valve_open = 0
@@ -123,8 +123,8 @@
 			if(href_list["device"])
 				attached_device.attack_self(usr)
 
-		src.attack_self(usr)
-		src.add_fingerprint(usr)
+		attack_self(usr)
+		add_fingerprint(usr)
 		return
 	return
 
@@ -191,12 +191,12 @@
 		if(attacher)
 			log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[attacher]'>?</A>)"
 
-		var/mob/mob = get_mob_by_key(src.fingerprintslast)
+		var/mob/mob = get_mob_by_key(fingerprintslast)
 		var/last_touch_info = ""
 		if(mob)
 			last_touch_info = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[mob]'>?</A>)"
 
-		log_str += " Last touched by: [src.fingerprintslast][last_touch_info]"
+		log_str += " Last touched by: [fingerprintslast][last_touch_info]"
 		bombers += log_str
 		message_admins(log_str, 0, 1)
 		log_game(log_str)
@@ -204,7 +204,7 @@
 	else if(valve_open==1 && (tank_one && tank_two))
 		split_gases()
 		valve_open = 0
-		src.update_icon()
+		update_icon()
 
 /**
  * Handles child tanks exploding.
@@ -224,8 +224,8 @@
 	// New behavior: Ensure deletion of valve assembly, send damage info up the chain.
 	if(range > 4) // Extreme damage is range/4, so any extreme damage will trip this.
 		// Send explosion up chain of custody.
-		if(src.loc && istype(src.loc,/obj))
-			src.loc.ex_act(1,src)
+		if(loc && istype(loc,/obj))
+			loc.ex_act(1,src)
 
 		// Delete ourselves.
 		qdel(src)

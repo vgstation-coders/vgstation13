@@ -33,8 +33,8 @@
 	if (!( istype(T, /turf/space) ))
 		to_chat(user, "<span class='warning'>You cannot build on or repair this turf!</span>")
 		return
-	src.build(T)
-	src.add_fingerprint(user)
+	build(T)
+	add_fingerprint(user)
 	use(1)
 	return
 */

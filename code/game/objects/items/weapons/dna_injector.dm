@@ -30,7 +30,7 @@
 		buf.types = datatype
 		buf.dna.ResetSE()
 		//testing("[name]: DNA2 SE blocks prior to SetValue: [english_list(buf.dna.SE)]")
-		SetValue(src.value)
+		SetValue(value)
 		//testing("[name]: DNA2 SE blocks after SetValue: [english_list(buf.dna.SE)]")
 
 /obj/item/weapon/dnainjector/attack_paw(mob/user as mob)
@@ -89,7 +89,7 @@
 						M.name = buf.dna.real_name
 					uses--
 				else
-					M.dna.SetUIValue(block,src.GetValue())
+					M.dna.SetUIValue(block,GetValue())
 					M.UpdateAppearance()
 					uses--
 			if(buf.types & DNA2_BUF_SE)
@@ -97,7 +97,7 @@
 					M.dna.SE = buf.dna.SE.Copy()
 					M.dna.UpdateSE()
 				else
-					M.dna.SetSEValue(block,src.GetValue())
+					M.dna.SetSEValue(block,GetValue())
 				domutcheck(M, null, nofail)
 				uses--
 				//if(prob(5))

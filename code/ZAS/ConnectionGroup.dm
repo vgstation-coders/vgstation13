@@ -138,8 +138,8 @@ Class Procs:
 
 /connection_edge/zone/New(zone/A, zone/B)
 
-	src.A = A
-	src.B = B
+	A = A
+	B = B
 	A.edges.Add(src)
 	B.edges.Add(src)
 	//id = edge_id(A,B)
@@ -208,8 +208,8 @@ Class Procs:
 /connection_edge/unsimulated/var/datum/gas_mixture/air
 
 /connection_edge/unsimulated/New(zone/A, turf/B)
-	src.A = A
-	src.B = B
+	A = A
+	B = B
 	A.edges.Add(src)
 	air = B.return_air()
 	//id = 52*A.id

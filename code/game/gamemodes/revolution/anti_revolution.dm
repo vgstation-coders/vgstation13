@@ -212,11 +212,11 @@
 	if(!istype(ticker.mode, /datum/game_mode/anti_revolution))
 		return
 
-	ticker.mode:heads -= src.mind
-	src.mind.objectives = list()
-	ticker.mode.modePlayer -= src.mind
-	src.mind.special_role = null
+	ticker.mode:heads -= mind
+	mind.objectives = list()
+	ticker.mode.modePlayer -= mind
+	mind.special_role = null
 
-	src.verbs -= /mob/proc/ResignFromHeadPosition
+	verbs -= /mob/proc/ResignFromHeadPosition
 
 	to_chat(src, "<span class='warning'>You resigned from your position, now you have the consequences.</span>")

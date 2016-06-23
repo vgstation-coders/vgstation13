@@ -20,7 +20,7 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 	if(world.time < next_pain_time && !force)
 		return
 	if(amount > 50 && prob(amount / 5))
-		src.drop_item()
+		drop_item()
 	var/msg
 	if(burning)
 		switch(amount)
@@ -102,7 +102,7 @@ mob/living/carbon/human/proc/handle_pain()
 	for(var/datum/organ/internal/I in internal_organs)
 		if(I.damage > 2) if(prob(2))
 			var/datum/organ/external/parent = get_organ(I.parent_organ)
-			src.custom_pain("You feel a sharp pain in your [parent.display_name]", 1)
+			custom_pain("You feel a sharp pain in your [parent.display_name]", 1)
 
 	var/toxDamageMessage = null
 	var/toxMessageProb = 1
@@ -124,4 +124,4 @@ mob/living/carbon/human/proc/handle_pain()
 			toxDamageMessage = "Your body aches all over, it's driving you mad."
 
 	if(toxDamageMessage && prob(toxMessageProb))
-		src.custom_pain(toxDamageMessage, getToxLoss() >= 15)
+		custom_pain(toxDamageMessage, getToxLoss() >= 15)

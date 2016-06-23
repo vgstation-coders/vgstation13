@@ -17,8 +17,8 @@
 
 /obj/item/device/maracas/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	pixel_x = rand(-5.0, 5)
+	pixel_y = rand(-5.0, 5)
 
 /obj/item/device/maracas/pickup(mob/user)
 	user.callOnFace |= "\ref[src]"

@@ -52,12 +52,12 @@
 	..()
 	if(istype(W, /obj/item/weapon/handcuffs/cable) && !istype(src, /obj/item/weapon/wrench/socket))
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/wrench_wired/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/wrench_wired(get_turf(src.loc))
+			new /obj/item/weapon/wrench_wired(get_turf(loc))
 		qdel(src)
 		qdel(W)
 
@@ -92,8 +92,8 @@
 	attack_verb = list("stabs")
 
 /obj/item/weapon/screwdriver/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</span>"))
+	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is stabbing the [name] into \his heart! It looks like \he's trying to commit suicide.</span>"))
 	return(BRUTELOSS)
 
 /obj/item/weapon/screwdriver/New()
@@ -123,7 +123,7 @@
 			item_state = "screwdriver_yellow"
 
 	if (prob(75))
-		src.pixel_y = rand(0, 16)
+		pixel_y = rand(0, 16)
 
 /obj/item/weapon/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))	return ..()
@@ -231,7 +231,7 @@
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
-	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	user.visible_message("<span class='danger'>[user] is burning \his face off with the [name]! It looks like \he's  trying to commit suicide!</span>")
 	return (FIRELOSS|OXYLOSS)
 
 /obj/item/weapon/weldingtool/New()
@@ -242,7 +242,7 @@
 
 /obj/item/weapon/weldingtool/examine(mob/user)
 	..()
-	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel!")
+	to_chat(user, "It contains [get_fuel()]/[max_fuel] units of fuel!")
 
 /obj/item/weapon/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/screwdriver))
@@ -254,27 +254,27 @@
 			to_chat(user, "<span class='notice'>You resecure the welder.</span>")
 		else
 			to_chat(user, "<span class='notice'>The welder can now be attached and modified.</span>")
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		return
 
 	if((!status) && (istype(W,/obj/item/stack/rods)))
 		var/obj/item/stack/rods/R = W
 		R.use(1)
 		var/obj/item/weapon/gun/projectile/flamethrower/F = new/obj/item/weapon/gun/projectile/flamethrower(user.loc)
-		src.loc = F
+		loc = F
 		F.weldtool = src
 		if (user.client)
 			user.client.screen -= src
 
 		user.u_equip(src,0)
 
-		src.master = F
-		src.layer = initial(src.layer)
+		master = F
+		layer = initial(layer)
 		user.u_equip(src,0)
 		if (user.client)
 			user.client.screen -= src
-		src.loc = F
-		src.add_fingerprint(user)
+		loc = F
+		add_fingerprint(user)
 		return
 
 	..()
@@ -285,21 +285,21 @@
 	switch(welding)
 		//If off
 		if(0)
-			if(src.icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				src.force = 3
-				src.damtype = "brute"
-				src.icon_state = "welder"
-				src.hitsound = "sound/weapons/toolhit.ogg"
-				src.welding = 0
+			if(icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
+				force = 3
+				damtype = "brute"
+				icon_state = "welder"
+				hitsound = "sound/weapons/toolhit.ogg"
+				welding = 0
 			processing_objects.Remove(src)
 			return
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
-			if(src.icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				src.force = 15
-				src.damtype = "fire"
-				src.icon_state = "welder1"
-				src.hitsound = "sound/weapons/welderattack.ogg"
+			if(icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
+				force = 15
+				damtype = "fire"
+				icon_state = "welder1"
+				hitsound = "sound/weapons/welderattack.ogg"
 			if(prob(5))
 				remove_fuel(1)
 
@@ -312,7 +312,7 @@
 
 	//I'm not sure what this does. I assume it has to do with starting fires...
 	//...but it doesnt check to see if the welder is on or not.
-	var/turf/location = src.loc
+	var/turf/location = loc
 	if(istype(location, /mob/))
 		var/mob/M = location
 		if(M.is_holding_item(src))
@@ -323,19 +323,19 @@
 
 /obj/item/weapon/weldingtool/afterattack(obj/O as obj, mob/user as mob, proximity)
 	if(!proximity) return
-	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
+	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !welding)
 		O.reagents.trans_to(src, max_fuel)
 		to_chat(user, "<span class='notice'>Welder refueled</span>")
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return
-	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && src.welding)
+	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
 		log_game("[key_name(user)] triggered a fueltank explosion.")
 		to_chat(user, "<span class='warning'>That was stupid of you.</span>")
 		var/obj/structure/reagent_dispensers/fueltank/tank = O
 		tank.explode()
 		return
-	if (src.welding)
+	if (welding)
 		remove_fuel(1)
 		var/turf/location = get_turf(user)
 		if (istype(location, /turf))
@@ -372,7 +372,7 @@
 
 //Returns whether or not the welding tool is currently on.
 /obj/item/weapon/weldingtool/proc/isOn()
-	return src.welding
+	return welding
 
 
 /obj/item/weapon/weldingtool/is_hot()
@@ -393,21 +393,21 @@
 	if(temp_welding > 0)
 		if (remove_fuel(1))
 			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
-			src.force = 15
-			src.damtype = "fire"
-			src.icon_state = "welder1"
+			force = 15
+			damtype = "fire"
+			icon_state = "welder1"
 			processing_objects.Add(src)
 		else
 			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
-			src.welding = 0
+			welding = 0
 			return
 	//Otherwise
 	else
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
-		src.force = 3
-		src.damtype = "brute"
-		src.icon_state = "welder"
-		src.welding = 0
+		force = 3
+		damtype = "brute"
+		icon_state = "welder"
+		welding = 0
 
 //Turns off the welder if there is no more fuel (does this really need to be its own proc?)
 /obj/item/weapon/weldingtool/proc/check_fuel()
@@ -420,27 +420,27 @@
 //Toggles the welder off and on
 /obj/item/weapon/weldingtool/proc/toggle(var/message = 0)
 	if(!status)	return
-	src.welding = !( src.welding )
-	if (src.welding)
+	welding = !( welding )
+	if (welding)
 		if (remove_fuel(1))
 			to_chat(usr, "<span class='notice'>You switch the [src] on.</span>")
-			src.force = 15
-			src.damtype = "fire"
-			src.icon_state = "welder1"
+			force = 15
+			damtype = "fire"
+			icon_state = "welder1"
 			processing_objects.Add(src)
 		else
 			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
-			src.welding = 0
+			welding = 0
 			return
 	else
 		if(!message)
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
 			to_chat(usr, "<span class='notice'>\The [src] shuts off!</span>")
-		src.force = 3
-		src.damtype = "brute"
-		src.icon_state = "welder"
-		src.welding = 0
+		force = 3
+		damtype = "brute"
+		icon_state = "welder"
+		welding = 0
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob
@@ -556,7 +556,7 @@
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [name]! It looks like \he's  trying to commit suicide!</span>")
 		return (BRUTELOSS)
 
 /obj/item/weapon/crowbar/red
@@ -566,7 +566,7 @@
 	item_state = "crowbar_red"
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [name]! It looks like \he's done waiting for half life three!</span>")
 		return (BRUTELOSS)
 
 
@@ -662,7 +662,7 @@
 
 /obj/item/weapon/solder/examine(mob/user)
 	..()
-	to_chat(user, "It contains [reagents.get_reagent_amount(SACID)]/[src.max_fuel] units of fuel!")
+	to_chat(user, "It contains [reagents.get_reagent_amount(SACID)]/[max_fuel] units of fuel!")
 
 /obj/item/weapon/solder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/reagent_containers/glass/))

@@ -78,12 +78,12 @@ for reference:
 /obj/machinery/deployable/barrier/New()
 	..()
 
-	src.icon_state = "barrier[src.locked]"
+	icon_state = "barrier[locked]"
 
 /obj/machinery/deployable/barrier/emag(mob/user)
-	if (src.emagged == 0)
-		src.emagged = 1
-		src.req_access = 0
+	if (emagged == 0)
+		emagged = 1
+		req_access = 0
 		to_chat(user, "You break the ID authentication lock on the [src].")
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(2, 1, src)
@@ -93,14 +93,14 @@ for reference:
 
 /obj/machinery/deployable/barrier/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id/))
-		if (src.allowed(user))
-			src.locked = !src.locked
-			src.anchored = !src.anchored
-			src.icon_state = "barrier[src.locked]"
-			if (src.locked == 1.0)
+		if (allowed(user))
+			locked = !locked
+			anchored = !anchored
+			icon_state = "barrier[locked]"
+			if (locked == 1.0)
 				to_chat(user, "Barrier lock toggled on.")
 				return
-			else if (src.locked == 0.0)
+			else if (locked == 0.0)
 				to_chat(user, "Barrier lock toggled off.")
 				return
 		return
@@ -109,22 +109,22 @@ for reference:
 		user.delayNextAttack(10)
 		switch(W.damtype)
 			if("fire")
-				src.health -= W.force * 1
+				health -= W.force * 1
 			if("brute")
-				src.health -= W.force * 0.75
-		if (src.health <= 0)
-			src.explode()
+				health -= W.force * 0.75
+		if (health <= 0)
+			explode()
 		..()
 
 /obj/machinery/deployable/barrier/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			src.explode()
+			explode()
 			return
 		if(2.0)
-			src.health -= 25
-			if (src.health <= 0)
-				src.explode()
+			health -= 25
+			if (health <= 0)
+				explode()
 			return
 
 /obj/machinery/deployable/barrier/emp_act(severity)
@@ -133,12 +133,12 @@ for reference:
 	if(prob(50/severity))
 		locked = !locked
 		anchored = !anchored
-		icon_state = "barrier[src.locked]"
+		icon_state = "barrier[locked]"
 
 /obj/machinery/deployable/barrier/blob_act()
-	src.health -= 25
-	if (src.health <= 0)
-		src.explode()
+	health -= 25
+	if (health <= 0)
+		explode()
 	return
 
 /obj/machinery/deployable/barrier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
@@ -156,6 +156,6 @@ for reference:
 	s.set_up(3, 1, src)
 	s.start()
 
-	explosion(src.loc,-1,-1,0)
+	explosion(loc,-1,-1,0)
 	if(src)
 		qdel(src)

@@ -13,11 +13,11 @@
 		..()
 		for(var/U in typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
 			var/obj/item/clothing/under/V = new U
-			src.clothing_choices += V
+			clothing_choices += V
 
 		for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
 			var/obj/item/clothing/under/V = new U
-			src.clothing_choices += V
+			clothing_choices += V
 		return
 
 
@@ -27,10 +27,10 @@
 			to_chat(user, "<span class='warning'>Nothing happens.</span>")
 			return
 		if(istype(U, /obj/item/clothing/under))
-			if(src.clothing_choices.Find(U))
+			if(clothing_choices.Find(U))
 				to_chat(user, "<span class='warning'>Pattern is already recognised by the suit.</span>")
 				return
-			src.clothing_choices += U
+			clothing_choices += U
 			to_chat(user, "<span class='warning'>Pattern absorbed by the suit.</span>")
 
 
@@ -79,4 +79,4 @@
 	//to prevent an infinite loop
 	for(var/U in typesof(/obj/item/clothing/under)-blocked)
 		var/obj/item/clothing/under/V = new U
-		src.clothing_choices += V
+		clothing_choices += V

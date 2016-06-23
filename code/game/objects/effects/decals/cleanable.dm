@@ -17,8 +17,8 @@
 	var/on_wall = 0 //Wall on which this decal is placed on
 
 /obj/effect/decal/cleanable/New()
-	if(random_icon_states && length(src.random_icon_states) > 0)
-		src.icon_state = pick(src.random_icon_states)
+	if(random_icon_states && length(random_icon_states) > 0)
+		icon_state = pick(random_icon_states)
 	..()
 
 
@@ -43,7 +43,7 @@
 	..()
 
 /obj/effect/decal/cleanable/proc/dry()
-	name = "dried [src.name]"
+	name = "dried [name]"
 	desc = "It's dry and crusty. Someone is not doing their job."
 	color = adjust_brightness(color, -50)
 	amount = 0
@@ -91,8 +91,8 @@
 					cult_round.bloody_floors += T
 					cult_round.bloody_floors[T] = T
 					cult_round.blood_check()
-		if(src.loc && isturf(src.loc))
-			for(var/obj/effect/decal/cleanable/C in src.loc)
+		if(loc && isturf(loc))
+			for(var/obj/effect/decal/cleanable/C in loc)
 				if(C.type in absorbs_types && C != src)
 					// Transfer DNA, if possible.
 					if (transfers_dna && C.blood_DNA)

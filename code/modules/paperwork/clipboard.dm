@@ -28,7 +28,7 @@
 			if(OI.hand_index)
 				M.u_equip(src, 0)
 				M.put_in_hand(OI.hand_index, src)
-				src.add_fingerprint(usr)
+				add_fingerprint(usr)
 			return
 
 /obj/item/weapon/clipboard/update_icon()

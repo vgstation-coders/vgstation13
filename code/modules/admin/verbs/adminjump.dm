@@ -2,7 +2,7 @@
 	set name = "Jump to Area"
 	set desc = "Area to jump to"
 	set category = "Admin"
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
@@ -31,7 +31,7 @@
 /client/proc/jumptoturf(var/turf/T in world)
 	set name = "Jump to Turf"
 	set category = "Admin"
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 	if(config.allow_admin_jump)
@@ -47,15 +47,15 @@
 	set category = "Admin"
 	set name = "Jump to Mob"
 
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
 	if(config.allow_admin_jump)
 		log_admin("[key_name(usr)] jumped to [key_name(M)]")
 		message_admins("[key_name_admin(usr)] jumped to [key_name_admin(M)]", 1)
-		if(src.mob)
-			var/mob/A = src.mob
+		if(mob)
+			var/mob/A = mob
 			var/turf/T = get_turf(M)
 			if(T && isturf(T))
 				feedback_add_details("admin_verb","JM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -74,8 +74,8 @@
 		return
 
 	if (config.allow_admin_jump)
-		if(src.mob)
-			var/mob/A = src.mob
+		if(mob)
+			var/mob/A = mob
 			A.x = tx
 			A.y = ty
 			A.z = tz
@@ -89,7 +89,7 @@
 	set category = "Admin"
 	set name = "Jump to Key"
 
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
@@ -143,7 +143,7 @@
 	set category = "Admin"
 	set name = "Get Mob"
 	set desc = "Mob to teleport"
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 	if(config.allow_admin_jump)
@@ -159,7 +159,7 @@
 	set name = "Get Key"
 	set desc = "Key to teleport"
 
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
@@ -185,7 +185,7 @@
 /client/proc/sendmob(var/mob/M in sortmobs())
 	set category = "Admin"
 	set name = "Send Mob"
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 	var/area/A = input(usr, "Pick an area.", "Pick an area") in sortedAreas

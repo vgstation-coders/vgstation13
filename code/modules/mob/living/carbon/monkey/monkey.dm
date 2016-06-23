@@ -182,7 +182,7 @@
 
 	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
 
 	if(canWearGlasses)
 		dat +=	"<br><b>Glasses:</b> <A href='?src=\ref[src];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"
@@ -226,9 +226,9 @@
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				if(istype(M, /mob/living/carbon/monkey))
 					var/mob/living/carbon/monkey/Mo = M
-					src.visible_message("<span class='danger'>[Mo.name] [Mo.attack_text] [name]!</span>")
+					visible_message("<span class='danger'>[Mo.name] [Mo.attack_text] [name]!</span>")
 				else
-					src.visible_message("<span class='danger'>[M.name] bites [name]!</span>")
+					visible_message("<span class='danger'>[M.name] bites [name]!</span>")
 				var/damage = rand(1, 5)
 				adjustBruteLoss(damage)
 				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()

@@ -89,7 +89,7 @@ var/list/solars_list = list()
 				return 1
 	else
 		if(iscrowbar(W))
-			new /obj/item/weapon/tracker_electronics(src.loc)
+			new /obj/item/weapon/tracker_electronics(loc)
 			tracker = 0
 			user.visible_message("<span class='notice'>[user] takes the electronics out of [src].</span>", \
 			"<span class='notice'>You take the electronics out of [src].</span>")

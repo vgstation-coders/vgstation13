@@ -86,7 +86,7 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_paw(mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/G)
 	if(blessed)

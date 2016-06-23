@@ -25,7 +25,7 @@
 		return
 	if(istype(W, /obj/item/weapon/gun_barrel))
 		to_chat(user, "You place \the [W] on \the [src].")
-		var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/I = new (get_turf(src.loc))
+		var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/I = new (get_turf(loc))
 		I.dir = dir
 		qdel(src)
 		qdel(W)
@@ -248,12 +248,12 @@
 	if(isliving(A))
 		var/mob/living/L = A
 		if(isrobot(L))
-			src.visible_message("<span class='warning'>[src] slams into [L]!</span>")
+			visible_message("<span class='warning'>[src] slams into [L]!</span>")
 			L.Stun(2)
 			L.Weaken(2)
 			L.adjustBruteLoss(rand(4,6))
 		else
-			src.visible_message("<span class='warning'>[src] knocks over [L]!</span>")
+			visible_message("<span class='warning'>[src] knocks over [L]!</span>")
 			L.stop_pulling()
 			L.Stun(8)
 			L.Weaken(5)
@@ -262,7 +262,7 @@
 	..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/proc/crush(var/mob/living/H,var/bloodcolor) //Basically identical to the MULE, see mulebot.dm
-	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
+	visible_message("<span class='warning'>[src] drives over [H]!</span>")
 	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,10) //We're not as heavy as a MULE. Where it does 30-90 damage, we do 15-30 damage
 	H.apply_damage(damage, BRUTE, "chest")

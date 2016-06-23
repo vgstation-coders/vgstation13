@@ -4,15 +4,15 @@
 	if (!message)
 		return
 
-	if (src.client)
-		if(src.client.prefs.muted & MUTE_DEADCHAT)
+	if (client)
+		if(client.prefs.muted & MUTE_DEADCHAT)
 			to_chat(src, "<span class='warning'>You cannot talk in deadchat (muted).</span>")
 			return
 
-		if (src.client.handle_spam_prevention(message,MUTE_DEADCHAT))
+		if (client.handle_spam_prevention(message,MUTE_DEADCHAT))
 			return
 
-	. = src.say_dead(message)
+	. = say_dead(message)
 
 /mob/dead/observer/say_quote(var/text)
 	var/ending = copytext(text, length(text))

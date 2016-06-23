@@ -17,7 +17,7 @@
 	return
 
 /turf/unsimulated/floor/attack_paw(user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /turf/unsimulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))

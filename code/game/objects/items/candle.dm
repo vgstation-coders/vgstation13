@@ -27,8 +27,8 @@
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
 
 /obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>")
-	if(!src.lit)
-		src.lit = 1
+	if(!lit)
+		lit = 1
 		visible_message(flavor_text)
 		set_light(CANDLE_LUM)
 		processing_objects.Add(src)
@@ -38,9 +38,9 @@
 		return
 	wax--
 	if(!wax)
-		new/obj/item/trash/candle(src.loc)
-		if(istype(src.loc, /mob))
-			src.dropped()
+		new/obj/item/trash/candle(loc)
+		if(istype(loc, /mob))
+			dropped()
 		qdel(src)
 		return
 	update_icon()

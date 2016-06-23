@@ -58,7 +58,7 @@
 
 /obj/structure/closet/secure_closet/personal/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/card/id))
-		if(src.broken)
+		if(broken)
 			to_chat(user, "<span flags='rose'>It appears to be broken.</span>")
 			return
 		var/obj/item/weapon/card/id/I = W
@@ -68,17 +68,17 @@
 		..() //get the other stuff to do it
 
 /obj/structure/closet/secure_closet/personal/togglelock(mob/user as mob, var/given_name = "")
-	if(src.allowed(user) || !src.registered_name || (src.registered_name == given_name)) //they can open all lockers, or nobody owns this, or they own this locker
-		src.locked = !src.locked
+	if(allowed(user) || !registered_name || (registered_name == given_name)) //they can open all lockers, or nobody owns this, or they own this locker
+		locked = !locked
 		for(var/mob/O in viewers(user, 3))
 			if((O.client && !( O.blinded )))
 				to_chat(O, "<span class='notice'>The locker has been [locked ? null : "un"]locked by [user].</span>")
-		if(src.locked)
-			src.icon_state = src.icon_locked
+		if(locked)
+			icon_state = icon_locked
 		else
-			src.icon_state = src.icon_closed
-		if(!src.registered_name && given_name)
-			src.registered_name = given_name
-			src.desc = "Owned by [given_name]."
+			icon_state = icon_closed
+		if(!registered_name && given_name)
+			registered_name = given_name
+			desc = "Owned by [given_name]."
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")

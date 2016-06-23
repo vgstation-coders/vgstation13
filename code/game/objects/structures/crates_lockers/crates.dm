@@ -65,7 +65,7 @@
 	..()
 
 	if(prob(33))
-		var/mob/living/simple_animal/hostile/mimic/crate/chest/C = new(src.loc)
+		var/mob/living/simple_animal/hostile/mimic/crate/chest/C = new(loc)
 		forceMove(C)
 
 /*these aren't needed anymore
@@ -214,7 +214,7 @@
 /obj/structure/closet/crate/secure/large/close()
 	//we can hold up to one large item
 	var/found = 0
-	for(var/obj/structure/S in src.loc)
+	for(var/obj/structure/S in loc)
 		if(S == src)
 			continue
 		if(!S.anchored)
@@ -222,7 +222,7 @@
 			S.loc = src
 			break
 	if(!found)
-		for(var/obj/machinery/M in src.loc)
+		for(var/obj/machinery/M in loc)
 			if(!M.anchored)
 				M.loc = src
 				break
@@ -260,7 +260,7 @@
 /obj/structure/closet/crate/large/close()
 	//we can hold up to one large item
 	var/found = 0
-	for(var/obj/structure/S in src.loc)
+	for(var/obj/structure/S in loc)
 		if(S == src)
 			continue
 		if(!S.anchored)
@@ -268,7 +268,7 @@
 			S.loc = src
 			break
 	if(!found)
-		for(var/obj/machinery/M in src.loc)
+		for(var/obj/machinery/M in loc)
 			if(!M.anchored)
 				M.loc = src
 				break
@@ -367,31 +367,31 @@
 	return (!density)
 
 /obj/structure/closet/crate/open()
-	if(src.opened)
+	if(opened)
 		return 0
-	if(!src.can_open())
+	if(!can_open())
 		return 0
 	playsound(get_turf(src), sound_effect_open, 15, 1, -3)
 
 	dump_contents()
 
 	icon_state = icon_opened
-	src.opened = 1
-	src.density = 0
+	opened = 1
+	density = 0
 	return 1
 
 /obj/structure/closet/crate/close()
-	if(!src.opened)
+	if(!opened)
 		return 0
-	if(!src.can_close())
+	if(!can_close())
 		return 0
 	playsound(get_turf(src), sound_effect_close, 15, 1, -3)
 
 	take_contents()
 
 	icon_state = icon_closed
-	src.opened = 0
-	src.density = 1
+	opened = 0
+	density = 1
 	return 1
 
 /obj/structure/closet/crate/insert(var/atom/movable/AM, var/include_mobs = 0)
@@ -440,7 +440,7 @@
 	if(locked && !broken)
 		if (allowed(user))
 			to_chat(user, "<span class='notice'>You unlock [src].</span>")
-			src.locked = 0
+			locked = 0
 			overlays.len = 0
 			overlays += greenlight
 			return
@@ -451,9 +451,9 @@
 		..()
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card) && src.allowed(user) && !locked && !opened && !broken)
+	if(istype(W, /obj/item/weapon/card) && allowed(user) && !locked && !opened && !broken)
 		to_chat(user, "<span class='notice'>You lock \the [src].</span>")
-		src.locked = 1
+		locked = 1
 		overlays.len = 0
 		overlays += redlight
 		return
@@ -463,8 +463,8 @@
 		overlays += sparks
 		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
 		playsound(get_turf(src), "sparks", 60, 1)
-		src.locked = 0
-		src.broken = 1
+		locked = 0
+		broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
 		return
 	return ..()
@@ -490,7 +490,7 @@
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))
 		if(rigged)
-			if(user.drop_item(W, src.loc))
+			if(user.drop_item(W, loc))
 				to_chat(user, "<span class='notice'>You attach [W] to [src].</span>")
 			return
 	else if(iswirecutter(W))
@@ -507,7 +507,7 @@
 		O.emp_act(severity)
 	if(!broken && !opened  && prob(50/severity))
 		if(!locked)
-			src.locked = 1
+			locked = 1
 			overlays.len = 0
 			overlays += redlight
 		else
@@ -516,25 +516,25 @@
 			overlays += sparks
 			spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
 			playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
-			src.locked = 0
+			locked = 0
 	if(!opened && prob(20/severity))
 		if(!locked)
 			open()
 		else
-			src.req_access = list()
-			src.req_access += pick(get_all_accesses())
+			req_access = list()
+			req_access += pick(get_all_accesses())
 	..()
 
 
 /obj/structure/closet/crate/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			for(var/obj/O in src.contents)
+			for(var/obj/O in contents)
 				qdel(O)
 			qdel(src)
 			return
 		if(2.0)
-			for(var/obj/O in src.contents)
+			for(var/obj/O in contents)
 				if(prob(50))
 					qdel(O)
 			qdel(src)

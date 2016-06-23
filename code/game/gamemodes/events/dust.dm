@@ -81,9 +81,9 @@ The "dust" will damage the hull of the station causin minor hull breaches.
 				endy = rand(TRANSITIONEDGE,world.maxy-TRANSITIONEDGE)
 				endx = world.maxx-TRANSITIONEDGE
 		var/goal = locate(endx, endy, 1)
-		src.x = startx
-		src.y = starty
-		src.z = 1
+		x = startx
+		y = starty
+		z = 1
 		spawn(0)
 			walk_towards(src, goal, 1)
 		return

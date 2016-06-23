@@ -518,7 +518,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	smoketime = 100
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
-	if(!src.lit)
+	if(!lit)
 		lit = 1
 		damtype = BURN
 		update_brightness()

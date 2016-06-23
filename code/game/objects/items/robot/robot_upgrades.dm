@@ -38,11 +38,11 @@
 		to_chat(user, "<span class='warning'>\The [src] only functions on Nanotrasen Cyborgs.</span>")
 		return FAILED_TO_ADD
 
-	if(!multi_upgrades && (src.type in R.module.upgrades))
+	if(!multi_upgrades && (type in R.module.upgrades))
 		to_chat(user, "<span class='warning'>There is already \a [src] in [R].</span>")
 		return FAILED_TO_ADD
 
-	R.module.upgrades += src.type
+	R.module.upgrades += type
 
 	if(modules_to_add.len)
 		for(var/module_to_add in modules_to_add)

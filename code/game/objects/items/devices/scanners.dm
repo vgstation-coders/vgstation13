@@ -110,7 +110,7 @@ REAGENT SCANNER
 			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"It's dead, Jim.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows black.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [src] glows [pick("red", "green", "blue", "pink")]! You wonder what that would mean.</span>")
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 /obj/item/device/healthanalyzer/attack_self(mob/living/user as mob)
 	. = ..()
@@ -311,7 +311,7 @@ Subject's pulse: ??? BPM"})
 
 	to_chat(user, output_gas_scan(environment, location, 1))
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	return
 
 //If human_standard is enabled, the message will be formatted to show which values are dangerous
@@ -394,12 +394,12 @@ Subject's pulse: ??? BPM"})
 		if(M_NOCLONE in C.mutations)
 			return
 
-		var/datum/reagent/B = C.take_blood(src, src.reagents.maximum_volume)
+		var/datum/reagent/B = C.take_blood(src, reagents.maximum_volume)
 		if(B)
-			src.reagents.reagent_list |= B
-			src.reagents.update_total()
-			src.on_reagent_change()
-			src.reagents.handle_reactions()
+			reagents.reagent_list |= B
+			reagents.update_total()
+			on_reagent_change()
+			reagents.handle_reactions()
 			update_icon()
 			user.visible_message("<span class='warning'>[user] takes a blood sample from [C].</span>", \
 			"<span class='notice'>You take a blood sample from [C]</span>")

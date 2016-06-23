@@ -470,7 +470,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	if(!used_skillpoints) used_skillpoints= 0
 	if(isnull(disabilities)) disabilities = 0
 	if(!player_alt_titles) player_alt_titles = new()
-	if(!organ_data) src.organ_data = list()
+	if(!organ_data) organ_data = list()
 
 	if(user)
 		to_chat(user, "Sucessfully loaded [real_name].")
@@ -576,7 +576,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	if(!used_skillpoints) used_skillpoints= 0
 	if(isnull(disabilities)) disabilities = 0
 	if(!player_alt_titles) player_alt_titles = new()
-	if(!organ_data) src.organ_data = list()
+	if(!organ_data) organ_data = list()
 	//if(!skin_style) skin_style = "Default"
 
 

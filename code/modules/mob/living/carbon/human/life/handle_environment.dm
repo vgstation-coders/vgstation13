@@ -58,7 +58,7 @@
 	else
 		if(!(M_RESIST_COLD in mutations))
 			adjustBruteLoss(LOW_PRESSURE_DAMAGE)
-			if(istype(src.loc, /turf/space))
+			if(istype(loc, /turf/space))
 				adjustBruteLoss(LOW_PRESSURE_DAMAGE) //Space doubles damage (for some reason space vacuum is not station vacuum, nice snowflake)
 			pressure_alert = -2
 		else

@@ -18,8 +18,8 @@ The client is optional and may be a /mob, /client or /html_interface_client obje
 	. = ..()
 
 	// Add appropriate CSS and set the default layout.
-	src.head = src.head + "<link rel=\"stylesheet\" type=\"text/css\" href=\"nanotrasen.css\" />"
-	src.updateLayout("")
+	head = head + "<link rel=\"stylesheet\" type=\"text/css\" href=\"nanotrasen.css\" />"
+	updateLayout("")
 
 /datum/html_interface/nanotrasen/updateLayout(nlayout)
 	// Wrap the layout in our custom HTML
@@ -27,7 +27,7 @@ The client is optional and may be a /mob, /client or /html_interface_client obje
 
 /datum/html_interface/specificRenderTitle(datum/html_interface_client/hclient, ignore_cache = FALSE)
 	// Update the title in our custom header (in addition to default functionality)
-	winset(hclient.client, "browser_\ref[src].uiTitle", list2params(list("text" = "[src.title]")))
+	winset(hclient.client, "browser_\ref[src].uiTitle", list2params(list("text" = "[title]")))
 
 /datum/html_interface/nanotrasen/registerResources()
 	..()
@@ -106,7 +106,7 @@ The client is optional and may be a /mob, /client or /html_interface_client obje
 		"anchor1"        = "0,0",
 		"anchor2"        = "100,0",
 		"is-disabled"    = "true",
-		"text"           = "[src.title]",
+		"text"           = "[title]",
 		"align"          = "left",
 		"font-family"    = "verdana,Geneva,sans-serif",
 		"font-size"      = "12", // ~ 16px
@@ -156,12 +156,12 @@ The client is optional and may be a /mob, /client or /html_interface_client obje
 /datum/html_interface/nanotrasen/enableFor(datum/html_interface_client/hclient)
 	. = ..()
 
-	src.setEyeColor("green", hclient)
+	setEyeColor("green", hclient)
 
 /datum/html_interface/nanotrasen/disableFor(datum/html_interface_client/hclient)
 	hclient.active = FALSE
 
-	src.setEyeColor("red", hclient)
+	setEyeColor("red", hclient)
 
 /datum/html_interface/nanotrasen/proc/setEyeColor(color, datum/html_interface_client/hclient)
 	hclient = getClient(hclient)

@@ -332,7 +332,7 @@ var/global/list/all_money_accounts = list()
 					creating_new_account = 0
 			if("insert_card")
 				if(held_card)
-					held_card.loc = src.loc
+					held_card.loc = loc
 					if(ishuman(usr) && !usr.get_active_hand())
 						usr.put_in_hands(held_card)
 					held_card = null
@@ -360,7 +360,7 @@ var/global/list/all_money_accounts = list()
 				detailed_account_view = null
 				creating_new_account = 0
 
-	src.attack_hand(usr)
+	attack_hand(usr)
 
 /obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount)
 	if(!activated)

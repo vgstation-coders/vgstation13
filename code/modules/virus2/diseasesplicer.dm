@@ -32,11 +32,11 @@
 	attack_hand(user)
 
 /obj/machinery/computer/diseasesplicer/attack_ai(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/diseasesplicer/attack_paw(var/mob/user as mob)
 
-	return src.attack_hand(user)
+	return attack_hand(user)
 	return
 
 /obj/machinery/computer/diseasesplicer/attack_hand(var/mob/user as mob)
@@ -108,7 +108,7 @@
 	if(burning)
 		burning -= 1
 		if(!burning)
-			var/obj/item/weapon/diseasedisk/d = new /obj/item/weapon/diseasedisk(src.loc)
+			var/obj/item/weapon/diseasedisk/d = new /obj/item/weapon/diseasedisk(loc)
 			if(analysed)
 				d.name = "[memorybank.effect.name] GNA disk (Stage: [5-memorybank.effect.stage])"
 			else
@@ -116,7 +116,7 @@
 			d.effect = memorybank
 			alert_noise("ping")
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/diseasesplicer/Topic(href, href_list)
@@ -139,7 +139,7 @@
 			dish.virus2.addToDB()
 			spliced = 0
 
-		dish.forceMove(src.loc)
+		dish.forceMove(loc)
 		dish = null
 
 	else if(href_list["splice"])
@@ -156,6 +156,6 @@
 	else if(href_list["disk"])
 		burning = 10
 
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	add_fingerprint(usr)
+	updateUsrDialog()
 	return

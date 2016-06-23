@@ -97,8 +97,8 @@
 			to_chat(user, "<span class='warning'>This isn't the right machine for that kind of blueprint!</span>")
 			return 0
 		else if(RB.stored_design)
-			if(src.AddBlueprint(RB, user))
-				if(src.AddMechanicDesign(RB.stored_design, user))
+			if(AddBlueprint(RB, user))
+				if(AddMechanicDesign(RB.stored_design, user))
 					overlays += image(icon = icon, icon_state = "[base_state]-bp")
 					to_chat(user, "<span class='notice'>You successfully load \the [RB.name] into \the [src].</span>")
 					if(RB.delete_on_use)	qdel(RB) //we delete if the thing is set to delete. Always set to 1 right now
@@ -165,7 +165,7 @@
 		return
 
 	var/datum/design/BPdesign = blueprint.stored_design
-	for(var/list in src.part_sets)
+	for(var/list in part_sets)
 		for(var/datum/design/MD in part_sets[list])
 			if(MD == BPdesign) //because they're the same design, they make exactly the same thing
 				to_chat(user, "You can't add that design, as it's already loaded into the machine!")
@@ -176,7 +176,7 @@
 	if(istype(design))
 		if(!design.materials.len)
 			return 0
-		if(add_part_to_set(src.one_part_set_only ? "Generic" : design.category, design))
+		if(add_part_to_set(one_part_set_only ? "Generic" : design.category, design))
 			return 1
 		else
 			return 0

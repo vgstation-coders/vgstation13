@@ -111,7 +111,7 @@ For the main html chat area
 		to_chat(owner, message)
 
 	messageQueue = null
-	src.sendClientData()
+	sendClientData()
 
 	pingLoop()
 
@@ -145,10 +145,10 @@ For the main html chat area
 	if(cookie != "none")
 		var/list/connData = json2list(cookie)
 		if (connData && islist(connData) && connData.len > 0 && connData["connData"])
-			src.connectionHistory = connData["connData"] //lol fuck
+			connectionHistory = connData["connData"] //lol fuck
 			var/list/found = new()
-			for (var/i = src.connectionHistory.len; i >= 1; i--)
-				var/list/row = src.connectionHistory[i]
+			for (var/i = connectionHistory.len; i >= 1; i--)
+				var/list/row = connectionHistory[i]
 				if (!row || row.len < 3 || (!row["ckey"] && !row["compid"] && !row["ip"])) //Passed malformed history object
 					return
 				if (world.IsBanned(row["ckey"], row["compid"], row["ip"]))
@@ -158,8 +158,8 @@ For the main html chat area
 			//Uh oh this fucker has a history of playing on a banned account!!
 			if (found.len > 0)
 				//TODO: add a new evasion ban for the CURRENT client details, using the matched row details
-				message_admins("[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")
-				log_admin("[key_name(src.owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")
+				message_admins("[key_name(owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")
+				log_admin("[key_name(owner)] has a cookie from a banned account! (Matched: [found["ckey"]], [found["ip"]], [found["compid"]])")
 
 	cookieSent = 1
 
@@ -169,7 +169,7 @@ For the main html chat area
 
 //Called by js client on js error
 /datum/chatOutput/proc/debug(error)
-	world.log <<"\[[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")]\] Client: [(src.owner.key ? src.owner.key : src.owner)] triggered JS error: [error]"
+	world.log <<"\[[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")]\] Client: [(owner.key ? owner.key : owner)] triggered JS error: [error]"
 
 /client/verb/debug_chat()
 	set hidden = 1

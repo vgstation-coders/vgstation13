@@ -50,8 +50,8 @@
 	qdel(src)
 
 /obj/machinery/bot/proc/healthcheck()
-	if (src.health <= 0)
-		src.explode()
+	if (health <= 0)
+		explode()
 
 /obj/machinery/bot/proc/Emag(mob/user as mob)
 	if(locked)
@@ -64,8 +64,8 @@
 
 /obj/machinery/bot/examine(mob/user)
 	..()
-	if (src.health < maxhealth)
-		if (src.health > maxhealth/3)
+	if (health < maxhealth)
+		if (health > maxhealth/3)
 			to_chat(user, "<span class='warning'>[src]'s parts look loose.</span>")
 		else
 			to_chat(user, "<span class='danger'>[src]'s parts look very loose!</span>")
@@ -73,12 +73,12 @@
 /obj/machinery/bot/attack_alien(var/mob/living/carbon/alien/user as mob)
 	if(flags & INVULNERABLE)
 		return
-	src.health -= rand(15,30)*brute_dam_coeff
-	src.visible_message("<span class='danger'>[user] has slashed [src]!</span>")
+	health -= rand(15,30)*brute_dam_coeff
+	visible_message("<span class='danger'>[user] has slashed [src]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
 	if(prob(10))
-		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+		//new /obj/effect/decal/cleanable/blood/oil(loc)
+		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, loc)
 		O.New(O.loc)
 	healthcheck()
 
@@ -87,12 +87,12 @@
 	if(flags & INVULNERABLE)
 		return
 	if(M.melee_damage_upper == 0)	return
-	src.health -= M.melee_damage_upper
-	src.visible_message("<span class='danger'>[M] has [M.attacktext] [src]!</span>")
+	health -= M.melee_damage_upper
+	visible_message("<span class='danger'>[M] has [M.attacktext] [src]!</span>")
 	add_logs(M, src, "attacked", admin=0)
 	if(prob(10))
-		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+		//new /obj/effect/decal/cleanable/blood/oil(loc)
+		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, loc)
 		O.New(O.loc)
 	healthcheck()
 
@@ -115,7 +115,7 @@
 		return
 	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
 		open = !open
-		to_chat(user, "<span class='notice'>Maintenance panel is now [src.open ? "opened" : "closed"].</span>")
+		to_chat(user, "<span class='notice'>Maintenance panel is now [open ? "opened" : "closed"].</span>")
 	else if(istype(W, /obj/item/weapon/weldingtool))
 		if(health < maxhealth)
 			if(open)
@@ -131,9 +131,9 @@
 		if(hasvar(W,"force") && hasvar(W,"damtype"))
 			switch(W.damtype)
 				if("fire")
-					src.health -= W.force * fire_dam_coeff
+					health -= W.force * fire_dam_coeff
 				if("brute")
-					src.health -= W.force * brute_dam_coeff
+					health -= W.force * brute_dam_coeff
 			..()
 			healthcheck()
 		else
@@ -158,7 +158,7 @@
 /obj/machinery/bot/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	src.health -= rand(20,40)*fire_dam_coeff
+	health -= rand(20,40)*fire_dam_coeff
 	healthcheck()
 	return
 
@@ -167,17 +167,17 @@
 		return
 	switch(severity)
 		if(1.0)
-			src.explode()
+			explode()
 			return
 		if(2.0)
-			src.health -= rand(5,10)*fire_dam_coeff
-			src.health -= rand(10,20)*brute_dam_coeff
+			health -= rand(5,10)*fire_dam_coeff
+			health -= rand(10,20)*brute_dam_coeff
 			healthcheck()
 			return
 		if(3.0)
 			if (prob(50))
-				src.health -= rand(1,5)*fire_dam_coeff
-				src.health -= rand(1,5)*brute_dam_coeff
+				health -= rand(1,5)*fire_dam_coeff
+				health -= rand(1,5)*brute_dam_coeff
 				healthcheck()
 				return
 	return
@@ -187,7 +187,7 @@
 		return
 	var/was_on = on
 	stat |= EMPED
-	var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( src.loc )
+	var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( loc )
 	pulse2.icon = 'icons/effects/effects.dmi'
 	pulse2.icon_state = "empdisable"
 	pulse2.name = "emp sparks"
@@ -205,12 +205,12 @@
 
 
 /obj/machinery/bot/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	src.attack_hand(user)
+	add_hiddenprint(user)
+	attack_hand(user)
 
 
 /obj/machinery/bot/cultify()
-	if(src.flags & INVULNERABLE)
+	if(flags & INVULNERABLE)
 		return
 	else
 		qdel(src)

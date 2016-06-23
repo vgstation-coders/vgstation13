@@ -41,7 +41,7 @@
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.species.chem_flags & NO_EAT)
-			src.forceMove(get_turf(H))
+			forceMove(get_turf(H))
 			H.visible_message("<span class='warning'>\The [src] falls through and onto the ground.</span>", "<span class='notice'>You hear \the [src] plinking around for a second before it hits the ground below you.</span>")
 			return 0
 	injest(M)
@@ -63,7 +63,7 @@
 	// Show messages
 	if (tx_amount > 0)
 		user.visible_message("<span class='warning'>[user] puts something into \the [target], filling it.</span>")
-		if (src.is_empty())
+		if (is_empty())
 			to_chat(user, "<span class='notice'>You [target_was_empty ? "crush" : "dissolve"] the pill into \the [target].</span>")
 			qdel(src)
 		else
@@ -75,7 +75,7 @@
 /obj/item/weapon/reagent_containers/pill/proc/injest(mob/M as mob)
 	if(!reagents) return
 	if(!M) return
-	if (!src.is_empty())
+	if (!is_empty())
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M, reagents.total_volume)
 	qdel(src)

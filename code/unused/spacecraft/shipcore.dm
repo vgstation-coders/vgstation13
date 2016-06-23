@@ -18,14 +18,14 @@
 		turfs = list()
 		components = list()
 
-		src.anchored = 1
+		anchored = 1
 
-		var/obj/ship_builder/L = new(locate(src.x, src.y, src.z))
+		var/obj/ship_builder/L = new(locate(x, y, z))
 		L.dir = WEST
 		L.distance = width/2
 		L.core = src
 
-		var/obj/ship_builder/R = new(locate(src.x+1, src.y, src.z))
+		var/obj/ship_builder/R = new(locate(x+1, y, z))
 		R.dir = EAST
 		R.distance = (width/2)-1
 		R.core = src
@@ -37,22 +37,22 @@
 
 		var/h
 		for(h=1, h<height/2, h++)
-			var/obj/ship_builder/A = new(locate(src.x+1, src.y+h, src.z))
+			var/obj/ship_builder/A = new(locate(x+1, y+h, z))
 			A.dir = EAST
 			A.distance = (width/2)-1
 			A.core = src
 
-			var/obj/ship_builder/B = new(locate(src.x, src.y+h, src.z))
+			var/obj/ship_builder/B = new(locate(x, y+h, z))
 			B.dir = WEST
 			B.distance = width/2
 			B.core = src
 
-			var/obj/ship_builder/C = new(locate(src.x+1, src.y-h, src.z))
+			var/obj/ship_builder/C = new(locate(x+1, y-h, z))
 			C.dir = EAST
 			C.distance = (width/2)-1
 			C.core = src
 
-			var/obj/ship_builder/D = new(locate(src.x, src.y-h, src.z))
+			var/obj/ship_builder/D = new(locate(x, y-h, z))
 			D.dir = WEST
 			D.distance = width/2
 			D.core = src
@@ -64,36 +64,36 @@
 			spawn() C.scan()
 			spawn() D.scan()
 
-		while(src.builders.len)
+		while(builders.len)
 			sleep(50)
-		del(src.builders)
+		del(builders)
 		for(var/turf/T in turfs)
 			for(var/obj/O in T.contents)
 				if(istype(O, /obj/machinery/ship_component))
 					O:core = src
-					src.components.Add(O)
-		src.build_status = "built"
-//		to_chat(world, "Ship initialization complete. [src.turfs.len] tiles added.")
+					components.Add(O)
+		build_status = "built"
+//		to_chat(world, "Ship initialization complete. [turfs.len] tiles added.")
 
 	proc/receive_turf(var/turf/T)
 		turfs.Add(T)
 
 
 	proc/MoveShip(var/turf/Center) // Center - The new position of the ship's core
-		src.anchored = 0
-		var/turf/lowerleft = locate(Center.x - (src.width/2), Center.y - (src.height/2), Center.z)
-		var/turf/upperright = locate(Center.x + (src.width/2), Center.y + (src.height/2), Center.z)
+		anchored = 0
+		var/turf/lowerleft = locate(Center.x - (width/2), Center.y - (height/2), Center.z)
+		var/turf/upperright = locate(Center.x + (width/2), Center.y + (height/2), Center.z)
 
-		var/xsav = src.loc.x
-		var/ysav = src.loc.y
-		var/zsav = src.loc.z
+		var/xsav = loc.x
+		var/ysav = loc.y
+		var/zsav = loc.z
 
 		for(var/turf/T in block(lowerleft, upperright))
 			if(!istype(T, /turf/space))
 				return 0 // One of the tiles in the range we're moving to isn't a space tile - something's in the way!
 
 		// Alright, the way is clear, we can actually begin transferring everything over now.
-		for(var/turf/T in src.turfs)
+		for(var/turf/T in turfs)
 
 			for(var/obj/O in T)
 				if(istype(O, /obj/effect/ship_landing_beacon)) // Leave beacons where they are, we don't want to take them with us.
@@ -123,8 +123,8 @@
 			if(Newloc)
 				Newloc.assume_air(T.return_air())
 				T.remove_air(T.return_air())
-		src.build_status = "rebuilding"
-		src.group_self()
+		build_status = "rebuilding"
+		group_self()
 
 	proc/draw_power(var/n as num)
 		for(var/obj/machinery/ship_component/engine/E in components)
@@ -142,14 +142,14 @@ obj/machinery/shipcore/attack_hand(user as mob)
 /*
 		dat += "Autolathe Wires:<BR>"
 		var/wire
-		for(wire in src.wires)
-			dat += text("[wire] Wire: <A href='?src=\ref[src];wire=[wire];act=wire'>[src.wires[wire] ? "Mend" : "Cut"]</A> <A href='?src=\ref[src];wire=[wire];act=pulse'>Pulse</A><BR>")
+		for(wire in wires)
+			dat += text("[wire] Wire: <A href='?src=\ref[src];wire=[wire];act=wire'>[wires[wire] ? "Mend" : "Cut"]</A> <A href='?src=\ref[src];wire=[wire];act=pulse'>Pulse</A><BR>")
 
-		dat += text("The red light is [src.disabled ? "off" : "on"].<BR>")
-		dat += text("The green light is [src.shocked ? "off" : "on"].<BR>")
-		dat += text("The blue light is [src.hacked ? "off" : "on"].<BR>")
+		dat += text("The red light is [disabled ? "off" : "on"].<BR>")
+		dat += text("The green light is [shocked ? "off" : "on"].<BR>")
+		dat += text("The blue light is [hacked ? "off" : "on"].<BR>")
 */
-		switch(src.build_status)
+		switch(build_status)
 			if("unbuilt")
 				dat += "<h3>Core Status: <font color =#FF3300>Undeployed</font></h3><BR>"
 				dat += "<A href='?src=\ref[src];groupself=1'>Build Ship</A><BR>"
@@ -169,9 +169,9 @@ obj/machinery/shipcore/Topic(href, href_list)
 	if(..())
 		return
 	usr.machine = src
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["groupself"])
-		src.group_self()
+		group_self()
 	if (href_list["move"])
 		var/list/beacons = list()
 		for(var/obj/effect/ship_landing_beacon/b in world)
@@ -182,12 +182,12 @@ obj/machinery/shipcore/Topic(href, href_list)
 			return
 		var/obj/choice = input("Choose a beacon to land at.", "Beacon Selection") in beacons
 		if(choice)
-			src.MoveShip(choice.loc)
+			MoveShip(choice.loc)
 
 	for(var/mob/M in viewers(1, src))
 		if ((M.client && M.machine == src))
-			src.attack_hand(M)
-	src.updateUsrDialog()
+			attack_hand(M)
+	updateUsrDialog()
 	return
 
 
@@ -226,19 +226,19 @@ obj/machinery/ship_component/thruster
 			if(lastused + cooldown <= world.time)
 				for(var/turf/T in range(1,src))
 					if(istype(T, /turf/space))
-						src.ready = 1
+						ready = 1
 						break
 			else
-				src.ready = 0
-			return src.ready
+				ready = 0
+			return ready
 
 		fire()
-			src.check_ready()
+			check_ready()
 			if(!ready)
 				return 0
-			if(src.draw_power())
-				src.ready = 0
-				src.lastused = world.time
+			if(draw_power())
+				ready = 0
+				lastused = world.time
 				return 1
 			else
 				return 0
@@ -269,10 +269,10 @@ obj/machinery/ship_component/control_panel
 		var/dat
 		if(..())
 			return
-		if(!src.core)
+		if(!core)
 			dat += "<b>No linked core found. Deploy ship core first.</b>"
 		else
-			dat += "Ship Status: [src.core.build_status]<br><br>"
+			dat += "Ship Status: [core.build_status]<br><br>"
 			dat += "<h3>Installed Components:</h3><br><br>"
 			dat += "<table>"
 			for(var/obj/machinery/ship_component/C in core.components)
@@ -289,7 +289,7 @@ obj/machinery/ship_component/control_panel
 		if(..())
 			return
 		usr.machine = src
-		src.add_fingerprint(usr)
+		add_fingerprint(usr)
 
 
 
@@ -312,11 +312,11 @@ obj/machinery/ship_component/control_panel
 			cleanup_self()
 		var/i
 		for(i=0, i<distance, i++)
-			if(istype(src.loc, /turf/space))
+			if(istype(loc, /turf/space))
 				break
 			else
-				core.receive_turf(src.loc)
-				src.loc = get_step(src, src.dir)
+				core.receive_turf(loc)
+				loc = get_step(src, dir)
 			sleep(0)
 		cleanup_self()
 	proc/cleanup_self()
@@ -339,10 +339,10 @@ obj/machinery/ship_component/control_panel
 		deploy()
 			if(active)
 				return
-			src.active = 1
-			src.anchored = 1
+			active = 1
+			anchored = 1
 		deactivate()
 			if(!active)
 				return
-			src.active = 0
-			src.anchored = 0
+			active = 0
+			anchored = 0

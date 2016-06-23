@@ -150,7 +150,7 @@
 /obj/item/weapon/gun/lawgiver/proc/RemoveMag(var/mob/user)
 	if(magazine)
 		var/obj/item/ammo_storage/magazine/lawgiver/L = magazine
-		L.loc = get_turf(src.loc)
+		L.loc = get_turf(loc)
 		if(user)
 			user.put_in_hands(L)
 			to_chat(user, "<span class='notice'>You pull the magazine out of \the [src].</span>")
@@ -285,11 +285,11 @@
 		if(user.a_intent == I_HURT)
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
 			damage_multiplier = 1.3
-			src.Fire(M,user,0,0,1)
+			Fire(M,user,0,0,1)
 			damage_multiplier = 1
 			return
 		else if(target && M in target)
-			src.Fire(M,user,0,0,1)
+			Fire(M,user,0,0,1)
 			return
 		else
 			return ..()
@@ -406,7 +406,7 @@
 
 /obj/item/weapon/gun/lawgiver/proc/check_mag_type(obj/item/I, mob/user)
 	if(istype(I, /obj/item/ammo_storage/magazine/lawgiver/demolition))
-		to_chat(user, "<span class='warning'>You can't load a demolition-model magazine into this [src.name]!</span>")
+		to_chat(user, "<span class='warning'>You can't load a demolition-model magazine into this [name]!</span>")
 		return 0
 	return 1
 
@@ -541,7 +541,7 @@
 
 /obj/item/weapon/gun/lawgiver/demolition/check_mag_type(obj/item/I, mob/user)
 	if(!istype(I, /obj/item/ammo_storage/magazine/lawgiver/demolition))
-		to_chat(user, "<span class='warning'>This demolition-model [src.name] can't take a standard lawgiver magazine!</span>")
+		to_chat(user, "<span class='warning'>This demolition-model [name] can't take a standard lawgiver magazine!</span>")
 		return 0
 	return 1
 

@@ -9,7 +9,7 @@
 	density = 0
 	anchored = 1
 	wall_mounted = 1
-	pick_up_stuff = 0 // #367 - Picks up stuff at src.loc, rather than the offset location.
+	pick_up_stuff = 0 // #367 - Picks up stuff at loc, rather than the offset location.
 	icon_closed = "wall-locker"
 	icon_opened = "wall-lockeropen"
 
@@ -34,7 +34,7 @@
 	if(amount)
 		to_chat(usr, "<spawn class='notice'>You take out some items from \the [src].")
 		for(var/path in spawnitems)
-			new path(src.loc)
+			new path(loc)
 		amount--
 	return
 
@@ -83,7 +83,7 @@
 		return
 	if(defib)
 		to_chat(usr, "<span class='notice'>You take out an emergency defibrillator from \the [src].</san>")
-		//new /obj/item/weapon/melee/defibrillator(src.loc)
+		//new /obj/item/weapon/melee/defibrillator(loc)
 		usr.put_in_hands(defib)
 		defib = null
 		update_icon()

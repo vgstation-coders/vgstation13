@@ -45,12 +45,12 @@
 /datum/organ/internal/New(mob/living/carbon/human/H)
 	..()
 	if(H)
-		var/datum/organ/external/E = H.organs_by_name[src.parent_organ]
+		var/datum/organ/external/E = H.organs_by_name[parent_organ]
 		if(E.internal_organs == null)
 			E.internal_organs = list()
 		E.internal_organs |= src
 		H.internal_organs |= src
-		src.owner = H
+		owner = H
 
 /datum/organ/internal/proc/Life()
 	// Now organs support Life() processes.
@@ -139,10 +139,10 @@
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
 	if(!owner) return
-	if(src.robotic == 2)
-		src.damage += (amount * 0.8)
+	if(robotic == 2)
+		damage += (amount * 0.8)
 	else
-		src.damage += amount
+		damage += amount
 
 	var/datum/organ/external/parent = owner.get_organ(parent_organ)
 	if (!silent)

@@ -27,10 +27,10 @@
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	if(issolder(W))
-		src.use(1)
+		use(1)
 		new /obj/item/weapon/circuitboard/blank(user.loc)
 		to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
-		playsound(src.loc, 'sound/items/Welder.ogg', 35, 1)
+		playsound(loc, 'sound/items/Welder.ogg', 35, 1)
 	if(istype(W, /obj/item/stack/rods) && !reinforced)
 		var/obj/item/stack/rods/V  = W
 		var/obj/item/stack/sheet/glass/RG = new rglass()
@@ -55,13 +55,13 @@
 	if(!user.IsAdvancedToolUser())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
-	var/title = "[src.name] Sheets"
-	title += " ([src.amount] sheet\s left)"
+	var/title = "[name] Sheets"
+	title += " ([amount] sheet\s left)"
 	if(windoor) //TODO: Find way to merge this if-else clause and lower duplication
 		switch(input(title, "Would you like full tile glass a one direction glass pane or a windoor?") in list("One Direction", "Full Window", "Windoor", "Cancel"))
 			if("One Direction")
 				if(!src)	return 1
-				if(src.loc != user)	return 1
+				if(loc != user)	return 1
 				var/list/directions = new/list(cardinal)
 				var/i = 0
 				for (var/obj/structure/window/win in user.loc)
@@ -88,11 +88,11 @@
 				W.dir = dir_to_set
 				W.ini_dir = W.dir
 				W.anchored = 0
-				src.use(1)
+				use(1)
 			if("Full Window")
 				if(!src)	return 1
-				if(src.loc != user)	return 1
-				if(src.amount < 2)
+				if(loc != user)	return 1
+				if(amount < 2)
 					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
 					return 1
 				if(locate(/obj/structure/window/full) in user.loc)
@@ -103,9 +103,9 @@
 				W.dir = SOUTHWEST
 				W.ini_dir = SOUTHWEST
 				W.anchored = 0
-				src.use(2)
+				use(2)
 			if("Windoor")
-				if(!src || src.loc != user)
+				if(!src || loc != user)
 					return 1
 				if(isturf(user.loc) && locate(/obj/structure/windoor_assembly/, user.loc))
 					to_chat(user, "<span class='warning'>There is already a windoor assembly in that location.</span>")
@@ -113,7 +113,7 @@
 				if(isturf(user.loc) && locate(/obj/machinery/door/window/, user.loc))
 					to_chat(user, "<span class='warning'>There is already a windoor in that location.</span>")
 					return 1
-				if(src.amount < 5)
+				if(amount < 5)
 					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
 					return 1
 				var/obj/structure/windoor_assembly/WD = new windoor(user.loc, 0 )
@@ -121,7 +121,7 @@
 				WD.anchored = 0
 				WD.dir = user.dir
 				WD.ini_dir = WD.dir
-				src.use(5)
+				use(5)
 				switch(user.dir)
 					if(SOUTH)
 						WD.dir = SOUTH
@@ -141,7 +141,7 @@
 		switch(alert(title, "Would you like full tile glass or one direction?", "One Direction", "Full Window", "Cancel", null))
 			if("One Direction")
 				if(!src)	return 1
-				if(src.loc != user)	return 1
+				if(loc != user)	return 1
 				var/list/directions = new/list(cardinal)
 				var/i = 0
 				for (var/obj/structure/window/win in user.loc)
@@ -168,11 +168,11 @@
 				W.dir = dir_to_set
 				W.ini_dir = W.dir
 				W.anchored = 0
-				src.use(1)
+				use(1)
 			if("Full Window")
 				if(!src)	return 1
-				if(src.loc != user)	return 1
-				if(src.amount < 2)
+				if(loc != user)	return 1
+				if(amount < 2)
 					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
 					return 1
 				if(locate(/obj/structure/window/full) in user.loc)
@@ -183,7 +183,7 @@
 				W.dir = SOUTHWEST
 				W.ini_dir = SOUTHWEST
 				W.anchored = 0
-				src.use(2)
+				use(2)
 	return 0
 
 
@@ -210,7 +210,7 @@
 			to_chat(user, "<B>There is not enough wire in this coil. You need at least two lengths.</B>")
 			return
 		CC.use(2)
-		src.use(1)
+		use(1)
 
 		to_chat(user, "<span class='notice'>You attach some wires to the [name].</span>")//the dreaded dubblespan
 

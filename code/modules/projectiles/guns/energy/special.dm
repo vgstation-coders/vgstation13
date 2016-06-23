@@ -131,8 +131,8 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/staff/destruction_wand/process()
 	..()
 	if(power_supply.charge == power_supply.maxcharge && !lifekiller && !power_notice)
-		if(istype(src.loc, /mob/living/carbon))
-			var/mob/living/carbon/C = src.loc
+		if(istype(loc, /mob/living/carbon))
+			var/mob/living/carbon/C = loc
 			to_chat(C, "<span class='notice'>[src] pulses, full of energy.</span>")
 			power_notice = 1
 	else if(power_supply.charge < power_supply.maxcharge)
@@ -159,7 +159,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		mouthshoot = 0
 		return
 	else
-		src.Fire(target,user,0,0,0)
+		Fire(target,user,0,0,0)
 
 /obj/item/weapon/gun/energy/staff/destruction_wand/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(power_supply.charge == charge_cost || lifekiller)
@@ -246,24 +246,24 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	. = ..()
 	if(istype(in_chamber, /obj/item/projectile/energy/floramut))
 		var/obj/item/projectile/energy/floramut/P = in_chamber
-		P.mutstrength = src.mutstrength
+		P.mutstrength = mutstrength
 
 /obj/item/weapon/gun/energy/floragun/attack_self(mob/living/user as mob)
 	switch(mode)
 		if(0)
 			mode = 1
 			charge_cost = 100
-			to_chat(user, "<span class='warning'>The [src.name] is now set to improve harvests.</span>")
+			to_chat(user, "<span class='warning'>The [name] is now set to improve harvests.</span>")
 			projectile_type = "/obj/item/projectile/energy/florayield"
 			modifystate = "florayield"
 		if(1)
 			mode = 0
 			charge_cost = mutstrength * 10
-			to_chat(user, "<span class='warning'>The [src.name] is now set to induce mutations.</span>")
+			to_chat(user, "<span class='warning'>The [name] is now set to induce mutations.</span>")
 			projectile_type = "/obj/item/projectile/energy/floramut"
 			modifystate = "floramut"
 		if(2)
-			to_chat(user, "<span class='warning'>The [src.name] appears to be locked into one mode.</span>")
+			to_chat(user, "<span class='warning'>The [name] appears to be locked into one mode.</span>")
 			return
 	update_icon()
 	return
@@ -287,7 +287,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 			mutstrength = 25
 			charge_cost = mutstrength * 10
 			projectile_type = "/obj/item/projectile/energy/floramut/emag"
-			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
+			to_chat(user, "<span class='warning'>You short out the safety limit of the [name]!</span>")
 			desc += " It seems to have it's safety features de-activated."
 			playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, 1)
 			modifystate = "floraemag"
@@ -363,11 +363,11 @@ obj/item/weapon/gun/energy/staff/focus
 obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	if(projectile_type == "/obj/item/projectile/forcebolt")
 		charge_cost = 250
-		to_chat(user, "<span class='warning'>The [src.name] will now strike a small area.</span>")
+		to_chat(user, "<span class='warning'>The [name] will now strike a small area.</span>")
 		projectile_type = "/obj/item/projectile/forcebolt/strong"
 	else
 		charge_cost = 100
-		to_chat(user, "<span class='warning'>The [src.name] will now strike only a single person.</span>")
+		to_chat(user, "<span class='warning'>The [name] will now strike only a single person.</span>")
 		projectile_type = "/obj/item/projectile/forcebolt"
 
 /obj/item/weapon/gun/energy/kinetic_accelerator
@@ -392,7 +392,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	if(overheat || recent_reload)
 		return
 	power_supply.give(500)
-	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
+	playsound(loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	recent_reload = 1
 	update_icon()
 	return
@@ -426,8 +426,8 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	charge_tick = 0
 
 	if(!power_supply) return 0 //sanity
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
+	if(isrobot(loc))
+		var/mob/living/silicon/robot/R = loc
 		if(R && R.cell)
 			R.cell.use(charge_cost) 		//Take power from the borg...
 			power_supply.give(charge_cost)	//... to recharge the shot

@@ -18,7 +18,7 @@
 	var/mob/foundmob = "" //Used in throwing proc.
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is putting the live [name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
 		return (FIRELOSS)
 
 /obj/item/weapon/melee/baton/New()
@@ -81,7 +81,7 @@
 	else if(isscrewdriver(W))
 		if(bcell)
 			bcell.updateicon()
-			bcell.loc = get_turf(src.loc)
+			bcell.loc = get_turf(loc)
 			bcell = null
 			to_chat(user, "<span class='notice'>You remove the cell from the [src].</span>")
 			status = 0
@@ -161,7 +161,7 @@
 
 		L.visible_message("<span class='danger'>[L] has been stunned with [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with [src] by [user]!</span>",\
-			self_drugged_message="<span class='userdanger'>[user]'s [src.name] sucks the life right out of you!</span>")
+			self_drugged_message="<span class='userdanger'>[user]'s [name] sucks the life right out of you!</span>")
 		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 
 		if(isrobot(loc))
@@ -213,7 +213,7 @@
 
 				foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
 				L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
-				log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
+				log_attack("<font color='red'>Flying [name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
 				if(!iscarbon(foundmob))
 					L.LAssailant = null
 				else

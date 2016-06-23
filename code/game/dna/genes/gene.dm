@@ -49,7 +49,7 @@
 	return 1
 
 /datum/dna/gene/proc/deactivate(var/mob/M, var/connected, var/flags)
-	M.active_genes.Remove(src.type)
+	M.active_genes.Remove(type)
 	return 1
 
 // This section inspired by goone's bioEffects.

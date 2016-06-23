@@ -132,7 +132,7 @@
 //Screw having to set a machine.
 /obj/machinery/atmospherics/binary/msgs/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
 	if(hclient.client.mob)
-		return hclient.client.mob.html_mob_check(src.type)
+		return hclient.client.mob.html_mob_check(type)
 
 /obj/machinery/atmospherics/binary/msgs/updateUsrDialog()
 	if(!interface.isUsed())
@@ -275,7 +275,7 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 
 
 /obj/machinery/atmospherics/binary/msgs/verb/rotate_anticlockwise()
@@ -286,7 +286,7 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)
 
 #undef MSGS_ON
 #undef MSGS_INPUT

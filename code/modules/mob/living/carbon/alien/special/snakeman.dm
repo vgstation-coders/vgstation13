@@ -30,7 +30,7 @@
 		return
 
 	if(M.client)
-		M.client.mob = new/mob/living/carbon/alien/humanoid/special/snakeman(new/obj/effect/snake_egg(src.loc))
+		M.client.mob = new/mob/living/carbon/alien/humanoid/special/snakeman(new/obj/effect/snake_egg(loc))
 		visible_message("[src] injects [M] with an egg.")
 		visible_message("The egg absorbs [M]")
 		M.mutations |= M_NOCLONE
@@ -53,7 +53,7 @@
 
 		spawn(300)
 			for(var/mob/M in src)
-				M.loc = src.loc
+				M.loc = loc
 				icon_state = "egg_hatched"
 				density = 0
 		return

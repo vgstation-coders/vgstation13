@@ -66,7 +66,7 @@
 		to_chat(user, "<span class='warning'>[src] is empty.</span>")
 
 /obj/item/weapon/gun/syringe/proc/fire_syringe(atom/target, mob/user)
-	if (locate (/obj/structure/table, src.loc))
+	if (locate (/obj/structure/table, loc))
 		return
 	else
 		var/turf/trg = get_turf(target)

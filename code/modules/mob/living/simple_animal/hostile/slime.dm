@@ -44,11 +44,11 @@
 
 /mob/living/simple_animal/hostile/slime/adult/Die()
 	for(var/i=0;i<2;i++)
-		var/mob/living/simple_animal/hostile/slime/rabid = new /mob/living/simple_animal/hostile/slime (src.loc)
-		rabid.icon_state = "[src.colour] baby slime eat"
-		rabid.icon_living = "[src.colour] baby slime eat"
-		rabid.icon_dead = "[src.colour] baby slime dead"
-		rabid.colour = "[src.colour]"
+		var/mob/living/simple_animal/hostile/slime/rabid = new /mob/living/simple_animal/hostile/slime (loc)
+		rabid.icon_state = "[colour] baby slime eat"
+		rabid.icon_living = "[colour] baby slime eat"
+		rabid.icon_dead = "[colour] baby slime dead"
+		rabid.colour = "[colour]"
 		for(var/mob/M in friends)
 			rabid.friends += M
 	qdel(src)

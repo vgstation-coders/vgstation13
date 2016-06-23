@@ -260,7 +260,7 @@
 	if(I)
 		item_overlay = image('icons/obj/projectiles_experimental.dmi', src, "nothing")
 		item_overlay.appearance = I.appearance
-		item_overlay.layer = src.layer
+		item_overlay.layer = layer
 
 		overlays += item_overlay
 		if(shot_from)
@@ -269,10 +269,10 @@
 
 /obj/item/projectile/hookshot/flesh/process_step()
 	var/sleeptime = 1
-	if(src.loc)
+	if(loc)
 		if(kill_count < 1)
 			var/obj/item/weapon/gun/hookshot/flesh/hookshot = shot_from
-			if(src.z != firer.z)
+			if(z != firer.z)
 				hookshot.cancel_chain()
 				bullet_die()
 

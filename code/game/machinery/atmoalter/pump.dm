@@ -15,7 +15,7 @@
 	volume = 1000
 
 /obj/machinery/portable_atmospherics/pump/update_icon()
-	src.overlays = 0
+	overlays = 0
 
 	if(on)
 		icon_state = "psiphon:1"
@@ -86,21 +86,21 @@
 					removed = loc.remove_air(transfer_moles)
 
 				air_contents.merge(removed)
-		//src.update_icon()
+		//update_icon()
 		nanomanager.update_uis(src)
 
-	//src.updateDialog()
+	//updateDialog()
 	return
 
 /obj/machinery/portable_atmospherics/pump/return_air()
 	return air_contents
 
 /obj/machinery/portable_atmospherics/pump/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/portable_atmospherics/pump/attack_paw(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/portable_atmospherics/pump/attack_hand(var/mob/user as mob)
 	ui_interact(user)
@@ -154,7 +154,7 @@
 		target_pressure = Clamp(target_pressure+diff, pressuremin, pressuremax)
 		update_icon()
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	return 1
 
 /obj/machinery/portable_atmospherics/pump/AltClick()

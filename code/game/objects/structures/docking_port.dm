@@ -65,10 +65,10 @@ var/global/list/all_docking_ports = list()
 	undock()
 
 	D.docked_with = src
-	src.docked_with = D
+	docked_with = D
 
 /obj/docking_port/proc/get_docking_turf()
-	return get_step(get_turf(src),src.dir)
+	return get_step(get_turf(src),dir)
 
 //SHUTTLE PORTS
 
@@ -90,8 +90,8 @@ var/global/list/all_docking_ports = list()
 	if(linked_shuttle)
 		unlink_from_shuttle(linked_shuttle)
 
-	src.linked_shuttle = S
-	src.areaname = S.name
+	linked_shuttle = S
+	areaname = S.name
 	S.linked_port = src
 
 /obj/docking_port/shuttle/unlink_from_shuttle(var/datum/shuttle/S)
@@ -104,7 +104,7 @@ var/global/list/all_docking_ports = list()
 	if(S.linked_port == src)
 		S.linked_port = null
 
-	src.areaname = "unassigned docking port"
+	areaname = "unassigned docking port"
 
 /obj/docking_port/shuttle/can_shuttle_move(datum/shuttle/S)
 	if(S.linked_port == src)
@@ -124,8 +124,8 @@ var/global/list/all_docking_ports = list()
 	.=..()
 
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
-	if(src.z in (1 to map.zLevels.len))
-		base_turf_type = get_base_turf(src.z)
+	if(z in (1 to map.zLevels.len))
+		base_turf_type = get_base_turf(z)
 
 	var/datum/zLevel/L = get_z_level(src)
 	if(istype(L,/datum/zLevel/centcomm)) //If the docking port is at z-level 2 (the one with the transit areas)

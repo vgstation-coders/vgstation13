@@ -84,7 +84,7 @@
 		A.area_turfs += src
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
-			src.Entered(AM)
+			Entered(AM)
 			return
 
 /turf/proc/initialize()
@@ -107,7 +107,7 @@
 
 /turf/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
-		src.ex_act(2)
+		ex_act(2)
 	..()
 	return 0
 
@@ -152,7 +152,7 @@
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return
-	if (!(src.can_border_transition))
+	if (!(can_border_transition))
 		return
 	if(ticker && ticker.mode)
 
@@ -184,12 +184,12 @@
 					was_pulling = MOB.pulling //Store the object to transition later
 
 
-			var/move_to_z = src.z
+			var/move_to_z = z
 
 			// Prevent MoMMIs from leaving the derelict.
 			for(var/mob/living/silicon/robot/mommi in contents_brought)
 				if(mommi.locked_to_z != 0)
-					if(src.z == mommi.locked_to_z)
+					if(z == mommi.locked_to_z)
 						locked_to_current_z = 1
 					else
 						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
@@ -198,7 +198,7 @@
 			var/safety = 1
 
 			if(!locked_to_current_z)
-				while(move_to_z == src.z)
+				while(move_to_z == z)
 					var/move_to_z_str = pickweight(accessable_z_levels)
 					move_to_z = text2num(move_to_z_str)
 					safety++
@@ -210,7 +210,7 @@
 
 			A.z = move_to_z
 
-			if(src.x <= TRANSITIONEDGE)
+			if(x <= TRANSITIONEDGE)
 				A.x = world.maxx - TRANSITIONEDGE - 2
 				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
@@ -218,7 +218,7 @@
 				A.x = TRANSITIONEDGE + 1
 				A.y = rand(TRANSITIONEDGE + 2, world.maxy - TRANSITIONEDGE - 2)
 
-			else if (src.y <= TRANSITIONEDGE)
+			else if (y <= TRANSITIONEDGE)
 				A.y = world.maxy - TRANSITIONEDGE -2
 				A.x = rand(TRANSITIONEDGE + 2, world.maxx - TRANSITIONEDGE - 2)
 
@@ -257,7 +257,7 @@
 
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
 	if(!(A.last_move))	return
-	if(istype(A, /obj/spacepod) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
+	if(istype(A, /obj/spacepod) && x > 2 && x < (world.maxx - 1) && y > 2 && y < (world.maxy-1))
 		var/obj/spacepod/SP = A
 		if(SP.Process_Spacemove(1))
 			SP.inertia_dir = 0
@@ -267,7 +267,7 @@
 				if(SP.inertia_dir)
 					SP.Move(get_step(SP, SP.inertia_dir), SP.inertia_dir)
 					return
-	if(istype(A, /obj/structure/bed/chair/vehicle/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
+	if(istype(A, /obj/structure/bed/chair/vehicle/) && x > 2 && x < (world.maxx - 1) && y > 2 && y < (world.maxy-1))
 		var/obj/structure/bed/chair/vehicle/JC = A //A bomb!
 		if(JC.Process_Spacemove(1))
 			JC.inertia_dir = 0
@@ -279,7 +279,7 @@
 					return
 				JC.inertia_dir = JC.last_move
 				step(JC, JC.inertia_dir)
-	if((istype(A, /mob/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1)))
+	if((istype(A, /mob/) && x > 2 && x < (world.maxx - 1) && y > 2 && y < (world.maxy-1)))
 		var/mob/M = A
 		if(M.Process_Spacemove(1))
 			M.inertia_dir  = 0
@@ -299,7 +299,7 @@
 /turf/proc/levelupdate()
 	for(var/obj/O in src)
 		if(O.level == 1)
-			O.hide(src.intact)
+			O.hide(intact)
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
@@ -326,12 +326,12 @@
 // Fuck this, for now - N3X
 ///// Z-Level Stuff ///// This makes sure that turfs are not changed to space when one side is part of a zone
 	if(N == /turf/space)
-		var/turf/controller = locate(1, 1, src.z)
+		var/turf/controller = locate(1, 1, z)
 		for(var/obj/effect/landmark/zcontroller/c in controller)
 			if(c.down)
-				var/turf/below = locate(src.x, src.y, c.down_target)
+				var/turf/below = locate(x, y, c.down_target)
 				if((air_master.has_valid_zone(below) || air_master.has_valid_zone(src)) && !istype(below, /turf/space)) // dont make open space into space, its pointless and makes people drop out of the station
-					var/turf/W = src.ChangeTurf(/turf/simulated/floor/open)
+					var/turf/W = ChangeTurf(/turf/simulated/floor/open)
 					var/list/temp = list()
 					temp += W
 					c.add(temp,3,1) // report the new open space to the zcontroller
@@ -359,7 +359,7 @@
 	var/old_corners = corners
 
 	var/old_holomap = holomap_data
-//	to_chat(world, "Replacing [src.type] with [N]")
+//	to_chat(world, "Replacing [type] with [N]")
 
 	if(connections) connections.erase_all()
 
@@ -504,7 +504,7 @@
 */
 
 /turf/proc/ReplaceWithLattice()
-	src.ChangeTurf(get_base_turf(src.z))
+	ChangeTurf(get_base_turf(z))
 	if(istype(src, /turf/space))
 		new /obj/structure/lattice(src)
 
@@ -617,21 +617,21 @@
 //  for bots and anything else that only moves in cardinal dirs.
 /turf/proc/Distance_cardinal(turf/T)
 	if(!src || !T) return 0
-	return abs(src.x - T.x) + abs(src.y - T.y)
+	return abs(x - T.x) + abs(y - T.y)
 
 ////////////////////////////////////////////////////
 
 
 /turf/proc/cultify()
-	if(istype(src, get_base_turf(src.z))) //Don't cultify the base turf, ever
+	if(istype(src, get_base_turf(z))) //Don't cultify the base turf, ever
 		return
-	ChangeTurf(get_base_turf(src.z))
+	ChangeTurf(get_base_turf(z))
 
 /turf/projectile_check()
 	return PROJREACT_WALLS
 
 /turf/singularity_act()
-	if(istype(src, get_base_turf(src.z))) //Don't singulo the base turf, ever
+	if(istype(src, get_base_turf(z))) //Don't singulo the base turf, ever
 		return
 	if(intact)
 		for(var/obj/O in contents)
@@ -639,7 +639,7 @@
 				continue
 			if(O.invisibility == 101)
 				O.singularity_act()
-	ChangeTurf(get_base_turf(src.z))
+	ChangeTurf(get_base_turf(z))
 	return(2)
 
 //Return a lattice to allow catwalk building

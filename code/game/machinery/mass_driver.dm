@@ -34,7 +34,7 @@ var/list/mass_drivers = list()
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			var/obj/machinery/mass_driver_frame/F = new(get_turf(src))
-			F.dir = src.dir
+			F.dir = dir
 			F.anchored = 1
 			F.build = 4
 			F.update_icon()
@@ -207,7 +207,7 @@ var/list/mass_drivers = list()
 				to_chat(user, "You finalize the Mass Driver...")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				var/obj/machinery/mass_driver/M = new(get_turf(src))
-				M.dir = src.dir
+				M.dir = dir
 				qdel(src)
 				return 1
 	..()
@@ -223,5 +223,5 @@ var/list/mass_drivers = list()
 	if (usr.isUnconscious() || usr.restrained())
 		return
 
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)
 	return

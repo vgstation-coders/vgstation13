@@ -86,12 +86,12 @@
 /obj/machinery/portable_atmospherics/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 
 	var/obj/icon = src
-	if ((istype(W, /obj/item/weapon/tank) && !( src.destroyed )))
-		if (src.holding)
+	if ((istype(W, /obj/item/weapon/tank) && !( destroyed )))
+		if (holding)
 			return 0
 		var/obj/item/weapon/tank/T = W
 		if(user.drop_item(T, src))
-			src.holding = T
+			holding = T
 			update_icon()
 			return 1
 
@@ -108,9 +108,9 @@
 			if(possible_port)
 				if(connect(possible_port))
 					to_chat(user, "<span class='notice'>You connect [name] to the port.</span>")
-					var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
-					if(src.air_contents.toxins > 0 || (istype(S)))
-						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
+					var/datum/gas/sleeping_agent/S = locate() in air_contents.trace_gases
+					if(air_contents.toxins > 0 || (istype(S)))
+						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					update_icon()
 					pixel_x = possible_port.pixel_x
 					pixel_y = possible_port.pixel_y
@@ -128,7 +128,7 @@
 	else if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)
 		user.visible_message("<span class='attack'>[user] has used [W] on [bicon(icon)] [src]</span>", "<span class='attack'>You use \the [W] on [bicon(icon)] [src]</span>")
 		var/obj/item/device/analyzer/analyzer = W
-		user.show_message(analyzer.output_gas_scan(src.air_contents, src, 0), 1)
-		src.add_fingerprint(user)
+		user.show_message(analyzer.output_gas_scan(air_contents, src, 0), 1)
+		add_fingerprint(user)
 		return
 	return

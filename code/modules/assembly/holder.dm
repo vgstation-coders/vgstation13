@@ -72,7 +72,7 @@
 /*		if(O:Attach_Holder())
 		special_assembly = O
 		update_icon()
-		src.name = "[a_left.name] [a_right.name] [special_assembly.name] assembly"
+		name = "[a_left.name] [a_right.name] [special_assembly.name] assembly"
 */
 	return
 
@@ -84,7 +84,7 @@
 		for(var/O in a_left.attached_overlays)
 			overlays += image(icon = icon, icon_state = "[O]_l")
 	if(a_right)
-		src.overlays += image(icon = icon, icon_state = "[a_right.icon_state]_right")
+		overlays += image(icon = icon, icon_state = "[a_right.icon_state]_right")
 		for(var/O in a_right.attached_overlays)
 			overlays += image(icon = icon, icon_state = "[O]_r")
 	if(master)
@@ -93,9 +93,9 @@
 /*		if(special_assembly)
 		special_assembly.update_icon()
 		if(special_assembly:small_icon_state)
-			src.overlays += special_assembly:small_icon_state
+			overlays += special_assembly:small_icon_state
 			for(var/O in special_assembly:small_icon_state_overlays)
-				src.overlays += O
+				overlays += O
 */
 
 /obj/item/device/assembly_holder/examine(mob/user)
@@ -181,9 +181,9 @@
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
 			if (do_after(user, src, 40))
-				var/obj/machinery/igniter/igniter=new(src.loc)
+				var/obj/machinery/igniter/igniter=new(loc)
 				igniter.assembly=src
-				src.loc=igniter
+				loc=igniter
 				to_chat(user, "<span class='notice'>You attach the assembly to the floor with a few spot welds.</span>")
 		else:
 			to_chat(user, "<span class='warning'>You need more welder fuel to do that.</span>")
@@ -195,8 +195,8 @@
 
 
 /obj/item/device/assembly_holder/attack_self(mob/user as mob)
-	src.add_fingerprint(user)
-	if(src.secured)
+	add_fingerprint(user)
+	if(secured)
 		if(!a_left || !a_right)
 			to_chat(user, "<span class='warning'>Assembly part missing!</span>")
 			return
@@ -231,8 +231,8 @@
 	if(!secured)
 		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	if((normal) && (a_right) && (a_left))
-		if(istype(src.loc, /obj/machinery/igniter))
-			src.loc:toggle_state()
+		if(istype(loc, /obj/machinery/igniter))
+			loc:toggle_state()
 		else:
 			if(a_right != D)
 				a_right.pulsed(0)

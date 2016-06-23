@@ -22,7 +22,7 @@
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
 	//Let people pick the little buggers up.
-	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
+	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
 
 	..()
@@ -53,9 +53,9 @@
 
 	if(!src || !target || target.nutrilevel == 10) return //Sanity check.
 
-	src.nutrition -= ((10-target.nutrilevel)*5)
+	nutrition -= ((10-target.nutrilevel)*5)
 	target.nutrilevel = 10
-	src.visible_message("<span class='warning'>[src] secretes a trickle of green liquid from its tail, refilling [target]'s nutrient tray.</span>","<span class='warning'>You secrete a trickle of green liquid from your tail, refilling [target]'s nutrient tray.</span>")
+	visible_message("<span class='warning'>[src] secretes a trickle of green liquid from its tail, refilling [target]'s nutrient tray.</span>","<span class='warning'>You secrete a trickle of green liquid from your tail, refilling [target]'s nutrient tray.</span>")
 
 /mob/living/carbon/monkey/diona/verb/eat_weeds()
 
@@ -73,9 +73,9 @@
 
 	if(!src || !target || target.weedlevel == 0) return //Sanity check.
 
-	src.reagents.add_reagent(NUTRIMENT, target.weedlevel)
+	reagents.add_reagent(NUTRIMENT, target.weedlevel)
 	target.weedlevel = 0
-	src.visible_message("<span class='warning'>[src] begins rooting through [target], ripping out weeds and eating them noisily.</span>","<span class='warning'>You begin rooting through [target], ripping out weeds and eating them noisily.</span>")
+	visible_message("<span class='warning'>[src] begins rooting through [target], ripping out weeds and eating them noisily.</span>","<span class='warning'>You begin rooting through [target], ripping out weeds and eating them noisily.</span>")
 
 /mob/living/carbon/monkey/diona/verb/evolve()
 
@@ -100,9 +100,9 @@
 		to_chat(src, "You have not yet consumed enough to grow...")
 		return
 
-	src.visible_message("<span class='warning'>[src] begins to shift and quiver, and erupts in a shower of shed bark and twigs!</span>","<span class='warning'>You begin to shift and quiver, then erupt in a shower of shed bark and twigs, attaining your adult form!</span>")
+	visible_message("<span class='warning'>[src] begins to shift and quiver, and erupts in a shower of shed bark and twigs!</span>","<span class='warning'>You begin to shift and quiver, then erupt in a shower of shed bark and twigs, attaining your adult form!</span>")
 
-	var/mob/living/carbon/human/adult = new(get_turf(src.loc))
+	var/mob/living/carbon/human/adult = new(get_turf(loc))
 	adult.set_species("Diona")
 
 	transferImplantsTo(adult)
@@ -110,7 +110,7 @@
 
 	if(istype(loc,/obj/item/weapon/holder/diona))
 		var/obj/item/weapon/holder/diona/L = loc
-		src.forceMove(get_turf(L))
+		forceMove(get_turf(L))
 		L = null
 		qdel(L)
 
@@ -118,10 +118,10 @@
 		adult.add_language(L.name)
 
 	adult.regenerate_icons()
-	adult.name = src.name
-	adult.real_name = src.real_name
-	src.mind.transfer_to(adult)
-	src.drop_all()
+	adult.name = name
+	adult.real_name = real_name
+	mind.transfer_to(adult)
+	drop_all()
 	qdel(src)
 
 /mob/living/carbon/monkey/diona/say_understands(var/mob/other,var/datum/language/speaking = null)
@@ -150,7 +150,7 @@
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")
 		return
 
-	src.visible_message("<span class='warning'>[src] flicks out a feeler and neatly steals a sample of [M]'s blood.</span>","<span class='warning'>You flick out a feeler and neatly steal a sample of [M]'s blood.</span>")
+	visible_message("<span class='warning'>[src] flicks out a feeler and neatly steals a sample of [M]'s blood.</span>","<span class='warning'>You flick out a feeler and neatly steal a sample of [M]'s blood.</span>")
 	donors += M.real_name
 	spawn(25)
 		update_progression()

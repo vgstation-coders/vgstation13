@@ -81,8 +81,8 @@
 		return
 	if(open && cistern && state == RODSADDED && istype(I,/obj/item/weapon/paper)) //State = 1 if rods are added
 		to_chat(user, "<span class='notice'>You create a filter with the paper and insert it.</span>")
-		var/obj/structure/centrifuge/C = new /obj/structure/centrifuge(src.loc)
-		C.dir = src.dir
+		var/obj/structure/centrifuge/C = new /obj/structure/centrifuge(loc)
+		C.dir = dir
 		qdel(I)
 		qdel(src)
 		return
@@ -250,11 +250,11 @@
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			if(do_after(user, src, 50))
 				if(anchored == 1)
-					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
+					visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
 								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
 					anchored = 0
 				else
-					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
+					visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
 								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
 					anchored = 1
 	else

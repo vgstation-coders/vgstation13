@@ -95,7 +95,7 @@ Thus, the two variables affect pump operation are set in New():
 				[round(transfer_rate,1)]l/s | <a href='?src=\ref[src];set_transfer_rate=1'>Change</a>
 				"}
 
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
+	user << browse("<HEAD><TITLE>[name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
 
 
@@ -133,8 +133,8 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/attack_hand(user as mob)
 	if(..())
 		return
-	src.add_fingerprint(usr)
-	if(!src.allowed(user))
+	add_fingerprint(usr)
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 	usr.set_machine(src)
@@ -147,12 +147,12 @@ Thus, the two variables affect pump operation are set in New():
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
 	if(href_list["set_transfer_rate"])
-		var/new_transfer_rate = input(usr,"Enter new output volume (0-200l/s)","Flow control",src.transfer_rate) as num
-		src.transfer_rate = max(0, min(200, new_transfer_rate))
+		var/new_transfer_rate = input(usr,"Enter new output volume (0-200l/s)","Flow control",transfer_rate) as num
+		transfer_rate = max(0, min(200, new_transfer_rate))
 		investigation_log(I_ATMOS,"was set to [transfer_rate] L/s by [key_name(usr)]")
 	usr.set_machine(src)
-	src.update_icon()
-	src.updateUsrDialog()
+	update_icon()
+	updateUsrDialog()
 	return
 
 /obj/machinery/atmospherics/binary/volume_pump/power_change()

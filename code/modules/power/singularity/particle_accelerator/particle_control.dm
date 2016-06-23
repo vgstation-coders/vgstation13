@@ -104,9 +104,9 @@
 		return
 	if(href_list["togglep"])
 		if(!wires.IsIndexCut(PARTICLE_TOGGLE_WIRE))
-			src.toggle_power()
+			toggle_power()
 	else if(href_list["scan"])
-		src.part_scan()
+		part_scan()
 	else if(href_list["strengthup"])
 		if(!wires.IsIndexCut(PARTICLE_STRENGTH_WIRE))
 			add_strength()
@@ -115,8 +115,8 @@
 		if(!wires.IsIndexCut(PARTICLE_STRENGTH_WIRE))
 			remove_strength()
 
-	src.updateDialog()
-	src.update_icon()
+	updateDialog()
+	update_icon()
 	return
 
 
@@ -152,7 +152,7 @@
 		use_power = 0
 	else if(!stat && construction_state <= 3)
 		use_power = 1
-	src.update_icon()
+	update_icon()
 	for(var/obj/structure/particle_accelerator/part in connected_parts)
 		part.strength = null
 		part.powered = 0
@@ -162,28 +162,28 @@
 
 
 /obj/machinery/particle_accelerator/control_box/process()
-	if(src.active)
+	if(active)
 		//a part is missing!
 		if( length(connected_parts) < 6 )
 			investigation_log(I_SINGULO,"lost a connected part; It <font color='red'>powered down</font>.")
-			src.toggle_power()
+			toggle_power()
 			return
 		//emit some particles
 		for(var/obj/structure/particle_accelerator/particle_emitter/PE in connected_parts)
 			if(PE)
-				PE.emit_particle(src.strength)
+				PE.emit_particle(strength)
 	return
 
 
 /obj/machinery/particle_accelerator/control_box/proc/part_scan()
 	for(var/obj/structure/particle_accelerator/fuel_chamber/F in orange(1,src))
-		src.dir = F.dir
+		dir = F.dir
 	connected_parts = list()
 	var/tally = 0
 	var/ldir = turn(dir,-90)
 	var/rdir = turn(dir,90)
 	var/odir = turn(dir,180)
-	var/turf/T = src.loc
+	var/turf/T = loc
 	T = get_step(T,rdir)
 	if(check_part(T,/obj/structure/particle_accelerator/fuel_chamber))
 		tally++
@@ -219,25 +219,25 @@
 	if(istype(PA, type))
 		if(PA.connect_master(src))
 			if(PA.report_ready(src))
-				src.connected_parts.Add(PA)
+				connected_parts.Add(PA)
 				return 1
 	return 0
 
 
 /obj/machinery/particle_accelerator/control_box/proc/toggle_power()
-	src.active = !src.active
+	active = !active
 	investigation_log(I_SINGULO,"turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr ? usr.key : "outside forces"]")
 	if (active)
 		message_admins("PA Control Computer turned ON by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 		log_game("PA Control Computer turned ON by [usr.ckey]([usr]) in ([x],[y],[z])")
-	if(src.active)
-		src.use_power = 2
+	if(active)
+		use_power = 2
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
-			part.strength = src.strength
+			part.strength = strength
 			part.powered = 1
 			part.update_icon()
 	else
-		src.use_power = 1
+		use_power = 1
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
 			part.strength = null
 			part.powered = 0
@@ -268,13 +268,13 @@
 		else
 			dat += "Off <BR>"
 		dat += "<A href='?src=\ref[src];togglep=1'>Toggle Power</A><BR><BR>"
-		dat += "Particle Strength: [src.strength] "
+		dat += "Particle Strength: [strength] "
 		dat += "<A href='?src=\ref[src];strengthdown=1'>--</A>|<A href='?src=\ref[src];strengthup=1'>++</A><BR><BR>"
 
 	//user << browse(dat, "window=pacontrol;size=420x500")
 	//onclose(user, "pacontrol")
 	var/datum/browser/popup = new(user, "pacontrol", name, 420, 500)
 	popup.set_content(dat)
-	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
+	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
 	popup.open()
 	return

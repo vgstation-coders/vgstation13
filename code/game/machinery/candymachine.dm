@@ -19,17 +19,17 @@
 		if(emagged == 1)
 			if(user.drop_item(O, src))
 				user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "You put a coin into [src] and turn the knob.</span>")
-				src.visible_message("<span class='notice'>[src] rattles ominously!</span>")
+				visible_message("<span class='notice'>[src] rattles ominously!</span>")
 				sleep(rand(10,15))
-				src.visible_message("<span class='notice'>[src] dispenses a strange sweet!</span>")
-				new /obj/item/weapon/reagent_containers/food/snacks/sweet/strange(src.loc)
+				visible_message("<span class='notice'>[src] dispenses a strange sweet!</span>")
+				new /obj/item/weapon/reagent_containers/food/snacks/sweet/strange(loc)
 		else
 			if(user.drop_item(O, src))
 				user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
-				src.visible_message("<span class='notice'>[src] clicks softly.</span>")
+				visible_message("<span class='notice'>[src] clicks softly.</span>")
 				sleep(rand(10,15))
-				src.visible_message("<span class='notice'>[src] dispenses a sweet!</span>")
-				new /obj/item/weapon/reagent_containers/food/snacks/sweet(src.loc)
+				visible_message("<span class='notice'>[src] dispenses a sweet!</span>")
+				new /obj/item/weapon/reagent_containers/food/snacks/sweet(loc)
 
 		if(istype(O, /obj/item/weapon/coin/))
 			var/obj/item/weapon/coin/real_coin = O
@@ -50,6 +50,6 @@
 
 /obj/machinery/sweet/emag(mob/user)
 	if(emagged == 0)
-		user.simple_message("<span class='warning'>You inexplicably short out the [src.name].</span>")
+		user.simple_message("<span class='warning'>You inexplicably short out the [name].</span>")
 		emagged = 1
 	return

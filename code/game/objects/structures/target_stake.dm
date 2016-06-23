@@ -25,7 +25,7 @@
 			return // get rid of that pinned target first!
 
 		if(istype(W, /obj/item/target))
-			if(user.drop_item(W, src.loc))
+			if(user.drop_item(W, loc))
 				density = 0
 				W.density = 1
 				W.layer = 3.1

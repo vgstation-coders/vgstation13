@@ -43,8 +43,8 @@ obj/machinery/atmospherics/trinary/New()
 			initialize_directions = EAST|WEST|NORTH
 
 obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-	if(!(pipe.dir in list(NORTH, SOUTH, EAST, WEST)) && src.mirror) //because the dir isn't in the right set, we want to make the mirror kind
-		var/obj/machinery/atmospherics/trinary/mirrored_pipe = new mirror(src.loc)
+	if(!(pipe.dir in list(NORTH, SOUTH, EAST, WEST)) && mirror) //because the dir isn't in the right set, we want to make the mirror kind
+		var/obj/machinery/atmospherics/trinary/mirrored_pipe = new mirror(loc)
 		pipe.dir = turn(pipe.dir, -45)
 		qdel(src)
 		mirrored_pipe.setPipingLayer(pipe.piping_layer)

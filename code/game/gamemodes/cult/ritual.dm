@@ -134,10 +134,10 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		return
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
 		return fizzle()
-//		if(!src.visibility)
-//			src.visibility=1
+//		if(!visibility)
+//			visibility=1
 	if(word1 == cultwords["travel"] && word2 == cultwords["self"])
-		return teleport(src.word3)
+		return teleport(word3)
 	if(word1 == cultwords["see"] && word2 == cultwords["blood"] && word3 == cultwords["hell"])
 		return tomesummon()
 	if(word1 == cultwords["hell"] && word2 == cultwords["destroy"] && word3 == cultwords["other"])
@@ -147,7 +147,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	if(word1 == cultwords["hell"] && word2 == cultwords["join"] && word3 == cultwords["self"])
 		return tearreality()
 	if(word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["technology"])
-		return emp(src.loc,3)
+		return emp(loc,3)
 	if(word1 == cultwords["travel"] && word2 == cultwords["blood"] && word3 == cultwords["self"])
 		return drain()
 	if(word1 == cultwords["see"] && word2 == cultwords["hell"] && word3 == cultwords["join"])
@@ -181,7 +181,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	if(word1 == cultwords["self"] && word2 == cultwords["other"] && word3 == cultwords["technology"])
 		return communicate()
 	if(word1 == cultwords["travel"] && word2 == cultwords["other"])
-		return itemport(src.word3)
+		return itemport(word3)
 	if(word1 == cultwords["join"] && word2 == cultwords["hide"] && word3 == cultwords["technology"])
 		return runestun()
 	else
@@ -312,7 +312,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 
 
 /obj/item/weapon/tome/Topic(href,href_list[])
-	if (src.loc == usr)
+	if (loc == usr)
 		var/number = text2num(href_list["number"])
 		if (usr.stat || usr.restrained())
 			return
@@ -518,7 +518,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	w_class = W_CLASS_SMALL
 	var/cultistsonly = 1
 	attack_self(mob/user as mob)
-		if(src.cultistsonly && !iscultist(usr))
+		if(cultistsonly && !iscultist(usr))
 			return
 		if(!cultwords["travel"])
 			runerandom()

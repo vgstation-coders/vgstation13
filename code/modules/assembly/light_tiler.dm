@@ -178,11 +178,11 @@
 			connected_floors.Remove(T)
 			continue
 
-		light_tile.on = src.set_state
+		light_tile.on = set_state
 
-		light_tile.color_r = src.color_r
-		light_tile.color_g = src.color_g
-		light_tile.color_b = src.color_b
+		light_tile.color_r = color_r
+		light_tile.color_g = color_g
+		light_tile.color_b = color_b
 
 		T.update_icon()
 

@@ -9,7 +9,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/egg/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
-	src.bitesize = 3
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/process()
 	if(is_in_valid_nest(src)) //_macros.dm
@@ -21,10 +21,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom)
 	..()
-	new/obj/effect/decal/cleanable/egg_smudge(src.loc)
-	src.reagents.reaction(hit_atom, TOUCH)
-	src.visible_message("<span class='warning'>\The [src.name] has been squashed.</span>","<span class='warning'>You hear a smack.</span>")
-	playsound(src.loc, 'sound/items/egg_squash.ogg', 50, 1)
+	new/obj/effect/decal/cleanable/egg_smudge(loc)
+	reagents.reaction(hit_atom, TOUCH)
+	visible_message("<span class='warning'>\The [name] has been squashed.</span>","<span class='warning'>You hear a smack.</span>")
+	playsound(loc, 'sound/items/egg_squash.ogg', 50, 1)
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/blue

@@ -14,7 +14,7 @@ var/global/cockroach_egg_amount = 0
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(TOXIN, 0.2)
-	src.bitesize = 1.1
+	bitesize = 1.1
 
 	icon_state = "roach_eggs[rand(1,3)]"
 

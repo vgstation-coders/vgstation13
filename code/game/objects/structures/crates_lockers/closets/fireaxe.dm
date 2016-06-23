@@ -52,7 +52,7 @@
 	if(fireaxe)
 		hasaxe = 1
 
-	if(isrobot(usr) || src.locked)
+	if(isrobot(usr) || locked)
 		if(istype(O, /obj/item/device/multitool))
 			visible_message("<span class='notice'>[user] starts fiddling with \the [src]'s locking module</span>", \
 			"<span class='notice'>You start disabling \the [src]'s locking module</span>")
@@ -87,7 +87,7 @@
 						playsound(user, 'sound/effects/Glasshit.ogg', 100, 1)
 				update_icon()
 		return
-	if(istype(O, /obj/item/weapon/fireaxe) && src.localopened)
+	if(istype(O, /obj/item/weapon/fireaxe) && localopened)
 		if(!fireaxe)
 			var/obj/item/weapon/fireaxe/F = O
 			if(F.wielded)
@@ -129,10 +129,10 @@
 					spawn(10)
 						update_icon()
 	else
-		if(iswrench(O) && src.localopened && !src.fireaxe)
+		if(iswrench(O) && localopened && !fireaxe)
 			to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-			new /obj/item/stack/sheet/plasteel (src.loc,2)
+			new /obj/item/stack/sheet/plasteel (loc,2)
 			qdel(src)
 		if(smashed)
 			return
@@ -179,7 +179,7 @@
 						update_icon()
 
 	else
-		localopened = !localopened //I'm pretty sure we don't need an if(src.smashed) in here. In case I'm wrong and it fucks up teh cabinet, **MARKER**. -Agouri
+		localopened = !localopened //I'm pretty sure we don't need an if(smashed) in here. In case I'm wrong and it fucks up teh cabinet, **MARKER**. -Agouri
 		if(localopened)
 			icon_state = "fireaxe[hasaxe][localopened][hitstaken][smashed]opening"
 			spawn(10)

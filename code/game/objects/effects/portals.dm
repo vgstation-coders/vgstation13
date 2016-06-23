@@ -15,7 +15,7 @@
 
 /obj/effect/portal/attack_hand(var/mob/user)
 	spawn()
-		src.teleport(user)
+		teleport(user)
 
 /obj/effect/portal/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if(O == creator)
@@ -23,11 +23,11 @@
 		qdel(src)
 	else
 		spawn()
-			src.teleport(user)
+			teleport(user)
 /*
 /obj/effect/portal/Bumped(mob/M as mob|obj)
 	spawn()
-		src.teleport(M)
+		teleport(M)
 */
 /obj/effect/portal/Crossed(AM as mob|obj,var/no_tp=0)
 	if(no_tp)
@@ -36,7 +36,7 @@
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
 	spawn()
-		src.teleport(AM)
+		teleport(AM)
 
 /obj/effect/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/effect/beam))

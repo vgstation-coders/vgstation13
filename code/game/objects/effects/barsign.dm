@@ -5,4 +5,4 @@
 
 	New()
 		var/list/valid_states = list("pinkflamingo", "magmasea", "limbo", "rustyaxe", "armokbar", "brokendrum", "meadbay", "thedamnwall", "thecavern", "cindikate", "theorchard", "thesaucyclown", "theclownshead", "whiskeyimplant", "carpecarp", "robustroadhouse", "greytide", "theredshirt")
-		src.icon_state = "[pick(valid_states)]"
+		icon_state = "[pick(valid_states)]"

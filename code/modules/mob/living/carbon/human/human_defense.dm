@@ -146,23 +146,23 @@ emp_act
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
 	if(user == src) // Attacking yourself can't miss
 		target_zone = user.zone_sel.selecting
-	if(!target_zone && !src.stat)
+	if(!target_zone && !stat)
 		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
 		return 0
-	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver) && src.stat == DEAD && user.a_intent == I_HURT)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(src.loc))
-		newmeat.name = src.real_name + newmeat.name
-		newmeat.subjectname = src.real_name
-		newmeat.subjectjob = src.job
-		newmeat.reagents.add_reagent (NUTRIMENT, (src.nutrition / 15) / 3)
-		src.reagents.trans_to (newmeat, round ((src.reagents.total_volume) / 3, 1))
-		src.loc.add_blood(src)
-		--src.meatleft
-		to_chat(user, "<span class='warning'>You hack off a chunk of meat from [src.name]</span>")
-		if(!src.meatleft)
-			src.attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>[user]/[user.ckey]</b>"
-			user.attack_log += "\[[time_stamp()]\] Chopped up <b>[src]/[src.ckey]</b> into meat</b>"
-			msg_admin_attack("[user.name] ([user.ckey]) chopped up [src] ([src.ckey]) into meat (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver) && stat == DEAD && user.a_intent == I_HURT)
+		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(loc))
+		newmeat.name = real_name + newmeat.name
+		newmeat.subjectname = real_name
+		newmeat.subjectjob = job
+		newmeat.reagents.add_reagent (NUTRIMENT, (nutrition / 15) / 3)
+		reagents.trans_to (newmeat, round ((reagents.total_volume) / 3, 1))
+		loc.add_blood(src)
+		--meatleft
+		to_chat(user, "<span class='warning'>You hack off a chunk of meat from [name]</span>")
+		if(!meatleft)
+			attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>[user]/[user.ckey]</b>"
+			user.attack_log += "\[[time_stamp()]\] Chopped up <b>[src]/[ckey]</b> into meat</b>"
+			msg_admin_attack("[user.name] ([user.ckey]) chopped up [src] ([ckey]) into meat (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			if(!iscarbon(user))
 				LAssailant = null
 			else
@@ -218,7 +218,7 @@ emp_act
 		knock_teeth = 1
 	if(knock_teeth) //You can't actually hit people in the mouth - this checks if the user IS targetting mouth, and if he didn't miss!
 		if((!armor) && (I.force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
-			var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
+			var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in butchering_drops
 			if(T && T.amount > 0) //If the guy has some teeth
 				var/chance = min(I.force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
 				if(prob(chance))
@@ -272,7 +272,7 @@ emp_act
 
 /mob/living/carbon/human/proc/knock_out_teeth(mob/user)
 	var/mob/living/L = user
-	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
+	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in butchering_drops
 	if(!istype(T) || T.amount == 0) return
 
 	var/amount = rand(1,3)
@@ -282,18 +282,18 @@ emp_act
 
 	var/obj/item/stack/teeth/teeth = T.spawn_result(get_turf(src), src, amount)
 
-	var/turf/throw_to = get_step(get_turf(src), src.dir) //Throw them in the direction we're facing!
+	var/turf/throw_to = get_step(get_turf(src), dir) //Throw them in the direction we're facing!
 	teeth.throw_at(throw_to, 2, 2)
 
 	if(user)
-		src.visible_message(\
+		visible_message(\
 			"<span class='danger'>[user] knocks [(amount < 3) ? "some" : "a bunch"] of [src]'s teeth out!</span>",\
 			"<span class='danger'>[user] knocks [(amount < 3) ? "some" : "a bunch"] of your teeth out!</span>",\
 
 			drugged_message = "<span class='info'>[user] starts brushing [src]'s teeth.</span>",\
 			self_drugged_message = "<span class='info'>[user] has removed some of your wisdom teeth.</span>")
 	else
-		src.visible_message(\
+		visible_message(\
 			"<span class='danger'>[(amount < 3) ? "Some" : "A bunch"] of [src]'s teeth fall out!</span>",\
 			"<span class='danger'>[(amount < 3) ? "Some" : "A bunch"] of your teeth fall out!</span>",\
 

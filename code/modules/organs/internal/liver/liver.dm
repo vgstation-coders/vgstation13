@@ -25,14 +25,14 @@
 			spawn owner.vomit()
 
 	if(owner.life_tick % process_accuracy == 0)
-		if(src.damage < 0)
-			src.damage = 0
+		if(damage < 0)
+			damage = 0
 
 		//High toxins levels are dangerous
 		if(owner.getToxLoss() >= 60 && !owner.reagents.has_reagent(ANTI_TOXIN))
 			//Healthy liver suffers on its own
-			if (src.damage < min_broken_damage)
-				src.damage += 0.2 * process_accuracy
+			if (damage < min_broken_damage)
+				damage += 0.2 * process_accuracy
 			//Damaged one shares the fun
 			else
 				var/datum/organ/internal/O = pick(owner.internal_organs)
@@ -40,11 +40,11 @@
 					O.damage += 0.2  * process_accuracy
 
 		//Detox can heal small amounts of damage
-		if (src.damage && src.damage < src.min_bruised_damage && owner.reagents.has_reagent(ANTI_TOXIN))
-			src.damage -= 0.2 * process_accuracy
+		if (damage && damage < min_bruised_damage && owner.reagents.has_reagent(ANTI_TOXIN))
+			damage -= 0.2 * process_accuracy
 
 		// Damaged liver means some chemicals are very dangerous
-		if(src.damage >= src.min_bruised_damage)
+		if(damage >= min_bruised_damage)
 			for(var/datum/reagent/R in owner.reagents.reagent_list)
 				// Ethanol and all drinks are bad
 				if(istype(R, /datum/reagent/ethanol))

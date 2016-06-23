@@ -33,13 +33,13 @@
 	frequency.post_signal(src, signal, filter = s_filter)
 
 /obj/item/radio/integrated/proc/print_to_host(var/text)
-	if (isnull(src.hostpda))
+	if (isnull(hostpda))
 		return
-	src.hostpda.cart = text
+	hostpda.cart = text
 
-	for (var/mob/M in viewers(1, src.hostpda.loc))
-		if (M.client && M.machine == src.hostpda)
-			src.hostpda.cartridge.unlock()
+	for (var/mob/M in viewers(1, hostpda.loc))
+		if (M.client && M.machine == hostpda)
+			hostpda.cartridge.unlock()
 
 	return
 
@@ -67,7 +67,7 @@
 // create/populate list as they are recvd
 
 /obj/item/radio/integrated/beepsky/receive_signal(datum/signal/signal)
-//		var/obj/item/device/pda/P = src.loc
+//		var/obj/item/device/pda/P = loc
 
 	/*
 	to_chat(world, "recvd:[P] : [signal.source]")
@@ -89,7 +89,7 @@
 
 /obj/item/radio/integrated/beepsky/Topic(href, href_list)
 	..()
-	var/obj/item/device/pda/PDA = src.hostpda
+	var/obj/item/device/pda/PDA = hostpda
 
 	switch(href_list["op"])
 
@@ -144,7 +144,7 @@
 // create/populate lists as they are recvd
 
 /obj/item/radio/integrated/mule/receive_signal(datum/signal/signal)
-//		var/obj/item/device/pda/P = src.loc
+//		var/obj/item/device/pda/P = loc
 
 	/*
 	to_chat(world, "recvd:[P] : [signal.source]")
@@ -173,7 +173,7 @@
 
 /obj/item/radio/integrated/mule/Topic(href, href_list)
 	..()
-	var/obj/item/device/pda/PDA = src.hostpda
+	var/obj/item/device/pda/PDA = hostpda
 	var/cmd = "command"
 	if(active) cmd = "command [active.suffix]"
 
@@ -239,8 +239,8 @@
 		initialize()
 
 /obj/item/radio/integrated/signal/initialize()
-	if (src.frequency < 1441 || src.frequency > 1489)
-		src.frequency = sanitize_frequency(src.frequency)
+	if (frequency < 1441 || frequency > 1489)
+		frequency = sanitize_frequency(frequency)
 
 	set_frequency(frequency)
 

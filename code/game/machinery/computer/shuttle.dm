@@ -28,35 +28,35 @@
 				to_chat(user, "The access level of [W:registered_name]\'s card is not high enough. ")
 				return 0
 
-			var/choice = alert(user, text("Would you like to (un)authorize a shortened launch time? [] authorization\s are still needed. Use abort to cancel all authorizations.", src.auth_need - src.authorized.len), "Shuttle Launch", "Authorize", "Repeal", "Abort")
+			var/choice = alert(user, text("Would you like to (un)authorize a shortened launch time? [] authorization\s are still needed. Use abort to cancel all authorizations.", auth_need - authorized.len), "Shuttle Launch", "Authorize", "Repeal", "Abort")
 			if(emergency_shuttle.location != 1 && user.get_active_hand() != W)
 				return 0
 			switch(choice)
 				if("Authorize")
-					src.authorized -= W:registered_name
-					src.authorized += W:registered_name
-					if (src.auth_need - src.authorized.len > 0)
+					authorized -= W:registered_name
+					authorized += W:registered_name
+					if (auth_need - authorized.len > 0)
 						message_admins("[key_name_admin(user)] has authorized early shuttle launch")
 						log_game("[user.ckey] has authorized early shuttle launch")
-						to_chat(world, text("<span class='notice'><B>Alert: [] authorizations needed until shuttle is launched early</B></span>", src.auth_need - src.authorized.len))
+						to_chat(world, text("<span class='notice'><B>Alert: [] authorizations needed until shuttle is launched early</B></span>", auth_need - authorized.len))
 					else
 						message_admins("[key_name_admin(user)] has launched the shuttle")
 						log_game("[user.ckey] has launched the shuttle early")
 						to_chat(world, "<span class='notice'><B>Alert: Shuttle launch time shortened to 10 seconds!</B></span>")
 						emergency_shuttle.online = 1
 						emergency_shuttle.settimeleft(10)
-						//src.authorized = null
-						del(src.authorized)
-						src.authorized = list(  )
+						//authorized = null
+						del(authorized)
+						authorized = list(  )
 
 				if("Repeal")
-					src.authorized -= W:registered_name
-					to_chat(world, text("<span class='notice'><B>Alert: [] authorizations needed until shuttle is launched early</B></span>", src.auth_need - src.authorized.len))
+					authorized -= W:registered_name
+					to_chat(world, text("<span class='notice'><B>Alert: [] authorizations needed until shuttle is launched early</B></span>", auth_need - authorized.len))
 
 				if("Abort")
 					to_chat(world, "<span class='notice'><B>All authorizations to shortening time for shuttle launch have been revoked!</B></span>")
-					src.authorized.len = 0
-					src.authorized = list(  )
+					authorized.len = 0
+					authorized = list(  )
 		return
 
 /obj/machinery/computer/shuttle/emag(mob/user as mob)

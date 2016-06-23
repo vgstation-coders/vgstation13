@@ -11,10 +11,10 @@
 
 /obj/item/projectile/hookshot/process_step()
 	var/sleeptime = 1
-	if(src.loc)
+	if(loc)
 		if(kill_count < 1)
 			var/obj/item/weapon/gun/hookshot/hookshot = shot_from
-			if(src.z != firer.z)
+			if(z != firer.z)
 				hookshot.cancel_chain()
 				bullet_die()
 

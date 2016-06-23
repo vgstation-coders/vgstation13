@@ -50,7 +50,7 @@
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Die()
 	visible_message("<span class='alert'>[src] dies!</span>")
-	new /obj/effect/decal/cleanable/spiderling_remains(src.loc)
+	new /obj/effect/decal/cleanable/spiderling_remains(loc)
 	..()
 	qdel(src)
 
@@ -73,7 +73,7 @@
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Life()
 	if(timestopped) return 0 //under effects of time magick
 	if(travelling_in_vent)
-		if(istype(src.loc, /turf))
+		if(istype(loc, /turf))
 			travelling_in_vent = 0
 			entry_vent = null
 	else if(entry_vent)
@@ -87,7 +87,7 @@
 					return
 				var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
 				/*if(prob(50))
-					src.visible_message("<B>[src] scrambles into the ventillation ducts!</B>")*/
+					visible_message("<B>[src] scrambles into the ventillation ducts!</B>")*/
 				LoseAggro()
 				spawn(rand(20,60))
 					loc = exit_vent
@@ -100,7 +100,7 @@
 							return
 
 						if(prob(50))
-							src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
+							visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
 						sleep(travel_time)
 
 						if(!exit_vent || exit_vent.welded)
@@ -120,7 +120,7 @@
 		amount_grown += rand(0,2)
 		if(amount_grown >= 100)
 			var/spawn_type = pick(spider_types)
-			new spawn_type(src.loc)
+			new spawn_type(loc)
 			qdel(src)
 			return
 
@@ -130,7 +130,7 @@
 	if(isliving(target) && (ishuman(target)||isrobot(target)) && !isMoMMI(target))
 		target = new_target
 		Aggro()
-		visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
+		visible_message("<span class='danger'>The [name] tries to flee from [target.name]!</span>")
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/AttackingTarget()
 	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump))

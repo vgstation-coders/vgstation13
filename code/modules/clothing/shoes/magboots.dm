@@ -31,7 +31,7 @@
 			user.attack_log += "\[[time_stamp()]\] Magboot-stomped <b>[user] ([user.ckey])</b>"
 			victim.attack_log += "\[[time_stamp()]\] Was magboot-stomped by <b>[src] ([victim.ckey])</b>"
 
-			victim.visible_message("<span class='danger'>\The [user] crushes \the [victim] with the activated [src.name]!", "<span class='userdanger'>\The [user] crushes you with \his [src.name]!</span>")
+			victim.visible_message("<span class='danger'>\The [user] crushes \the [victim] with the activated [name]!", "<span class='userdanger'>\The [user] crushes you with \his [name]!</span>")
 			victim.adjustBruteLoss(stomp_attack_power)
 			playsound(get_turf(victim), 'sound/effects/gib3.ogg', 100, 1)
 		else
@@ -46,29 +46,29 @@
 	set src in usr
 	if(usr.isUnconscious())
 		return
-	if(src.magpulse)
-		src.flags &= ~NOSLIP
-		src.slowdown = SHOES_SLOWDOWN
-		src.magpulse = 0
+	if(magpulse)
+		flags &= ~NOSLIP
+		slowdown = SHOES_SLOWDOWN
+		magpulse = 0
 		icon_state = "[base_state]0"
 		to_chat(usr, "You disable the mag-pulse traction system.")
 	else
-		src.flags |= NOSLIP
-		src.slowdown = mag_slow
-		src.magpulse = 1
+		flags |= NOSLIP
+		slowdown = mag_slow
+		magpulse = 1
 		icon_state = "[base_state]1"
 		to_chat(usr, "You enable the mag-pulse traction system.")
 	usr.update_inv_shoes()	//so our mob-overlays update
 
 /obj/item/clothing/shoes/magboots/attack_self()
-	src.toggle()
+	toggle()
 	..()
 	return
 
 /obj/item/clothing/shoes/magboots/examine(mob/user)
 	..()
 	var/state = "disabled"
-	if(src.flags&NOSLIP)
+	if(flags&NOSLIP)
 		state = "enabled"
 	to_chat(user, "<span class='info'>Its mag-pulse traction system appears to be [state].</span>")
 

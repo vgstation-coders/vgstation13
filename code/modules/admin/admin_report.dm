@@ -69,7 +69,7 @@ proc/load_reports()
 
 // check if there are any unhandled reports
 client/proc/unhandled_reports()
-	if(!src.holder) return 0
+	if(!holder) return 0
 	var/list/reports = load_reports()
 
 	for(var/datum/admin_report/N in reports)
@@ -84,7 +84,7 @@ client/proc/is_reported()
 	var/list/reports = load_reports()
 
 	for(var/datum/admin_report/N in reports) if(!N.done)
-		if(N.offender_key == src.key)
+		if(N.offender_key == key)
 			return 1
 
 	return 0
@@ -93,7 +93,7 @@ client/proc/is_reported()
 client/proc/display_admin_reports()
 	set category = "Admin"
 	set name = "Display Admin Reports"
-	if(!src.holder) return
+	if(!holder) return
 
 	var/list/reports = load_reports()
 
@@ -108,7 +108,7 @@ client/proc/display_admin_reports()
 			output += "<small>Occured at [time2text(N.date,"MM/DD hh:mm:ss")]</small><br>"
 			output += "<small>authored by <i>[N.author]</i></small><br>"
 			output += " <a href='?src=\ref[report_topic_handler];client=\ref[src];action=remove;ID=[N.ID]'>Flag as Handled</a>"
-			if(src.key == N.author)
+			if(key == N.author)
 				output += " <a href='?src=\ref[report_topic_handler];client=\ref[src];action=edit;ID=[N.ID]'>Edit</a>"
 			output += "<br>"
 			output += "<br>"
@@ -120,14 +120,14 @@ client/proc/display_admin_reports()
 
 client/proc/Report(mob/M as mob in mob_list)
 	set category = "Admin"
-	if(!src.holder)
+	if(!holder)
 		return
 
 	var/CID = "Unknown"
 	if(M.client)
 		CID = M.client.computer_id
 
-	var/body = input(src.mob, "Describe in detail what you're reporting [M] for", "Report") as null|text
+	var/body = input(mob, "Describe in detail what you're reporting [M] for", "Report") as null|text
 	if(!body) return
 
 
@@ -137,7 +137,7 @@ client/proc/Report(mob/M as mob in mob_list)
 		display_admin_reports()
 
 client/proc/mark_report_done(ID as num)
-	if(!src.holder || src.holder.level < 0)
+	if(!holder || holder.level < 0)
 		return
 
 	var/savefile/Reports = new("data/reports.sav")
@@ -157,7 +157,7 @@ client/proc/mark_report_done(ID as num)
 
 
 client/proc/edit_report(ID as num)
-	if(!src.holder || src.holder.level < 0)
+	if(!holder || holder.level < 0)
 		to_chat(src, "<b>You tried to modify the news, but you're not an admin!")
 		return
 
@@ -172,7 +172,7 @@ client/proc/edit_report(ID as num)
 			found = N
 	to_chat(if(!found) src, "<b>* An error occured, sorry.</b>")
 
-	var/body = input(src.mob, "Enter a body for the news", "Body") as null|message
+	var/body = input(mob, "Enter a body for the news", "Body") as null|message
 	if(!body) return
 
 	found.body = body

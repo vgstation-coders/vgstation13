@@ -222,12 +222,12 @@
 			to_chat(user, "You don't have enough cable to alter \the [src].")
 			return
 		to_chat(user, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/device/blinder/Q = new (get_turf(user))
 			user.put_in_hands(Q)
 		else
-			new /obj/item/device/blinder(get_turf(src.loc))
+			new /obj/item/device/blinder(get_turf(loc))
 		C.use(5)
 		qdel(src)
 
@@ -535,14 +535,14 @@
 	var/list/nametemp = list()
 	var/find
 	var/datum/picture/selection
-	if(src.aipictures.len == 0)
+	if(aipictures.len == 0)
 		to_chat(usr, "<font color=red><B>No images saved</B></font>")
 		return
-	for(var/datum/picture/t in src.aipictures)
+	for(var/datum/picture/t in aipictures)
 		nametemp += t.fields["name"]
 	find = input("Select image (listed in order taken)") in nametemp
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
-	for(var/datum/picture/q in src.aipictures)
+	for(var/datum/picture/q in aipictures)
 		if(q.fields["name"] == find)
 			selection = q
 			break  	// just in case some AI decides to take 10 thousand pictures in a round
@@ -578,9 +578,9 @@
 		camera_mode_on()
 
 /obj/item/device/camera/ai_camera/proc/camera_mode_off()
-	src.in_camera_mode = 0
+	in_camera_mode = 0
 	to_chat(usr, "<B>Camera Mode deactivated</B>")
 
 /obj/item/device/camera/ai_camera/proc/camera_mode_on()
-	src.in_camera_mode = 1
+	in_camera_mode = 1
 	to_chat(usr, "<B>Camera Mode activated</B>")

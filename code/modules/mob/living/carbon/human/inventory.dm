@@ -120,7 +120,7 @@
 	return istype(ears,typepath)
 
 /mob/living/carbon/human/put_in_hand_check(obj/item/I, this_hand)
-	if(!src.can_use_hand(this_hand))
+	if(!can_use_hand(this_hand))
 		return 0
 
 	return ..()
@@ -373,39 +373,39 @@
 	if(!istype(W)) return
 	if(!has_organ_for_slot(slot)) return
 
-	if(src.is_holding_item(W))
-		src.u_equip(W)
+	if(is_holding_item(W))
+		u_equip(W)
 
 	switch(slot)
 		if(slot_back)
-			src.back = W
+			back = W
 			update_inv_back(redraw_mob)
 		if(slot_wear_mask)
-			src.wear_mask = W
+			wear_mask = W
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
-			src.handcuffed = W
+			handcuffed = W
 			update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
-			src.legcuffed = W
+			legcuffed = W
 			update_inv_legcuffed(redraw_mob)
 		if(slot_belt)
-			src.belt = W
+			belt = W
 			update_inv_belt(redraw_mob)
 		if(slot_wear_id)
-			src.wear_id = W
+			wear_id = W
 			update_inv_wear_id(redraw_mob)
 		if(slot_ears)
 			ears = W
 			update_inv_ears(redraw_mob)
 		if(slot_glasses)
-			src.glasses = W
+			glasses = W
 			update_inv_glasses(redraw_mob)
 		if(slot_gloves)
-			src.gloves = W
+			gloves = W
 			update_inv_gloves(redraw_mob)
 		if(slot_head)
-			src.head = W
+			head = W
 			//if((head.flags & BLOCKHAIR) || (head.flags & BLOCKHEADHAIR)) //Makes people bald when switching to one with no Blocking flags
 			//	update_hair(redraw_mob)	//rebuild hair
 			update_hair(redraw_mob)
@@ -413,27 +413,27 @@
 				W.update_icon(src)
 			update_inv_head(redraw_mob)
 		if(slot_shoes)
-			src.shoes = W
+			shoes = W
 			update_inv_shoes(redraw_mob)
 		if(slot_wear_suit)
-			src.wear_suit = W
+			wear_suit = W
 			update_inv_wear_suit(redraw_mob)
 		if(slot_w_uniform)
-			src.w_uniform = W
+			w_uniform = W
 			update_inv_w_uniform(redraw_mob)
 		if(slot_l_store)
-			src.l_store = W
+			l_store = W
 			update_inv_pockets(redraw_mob)
 		if(slot_r_store)
-			src.r_store = W
+			r_store = W
 			update_inv_pockets(redraw_mob)
 		if(slot_s_store)
-			src.s_store = W
+			s_store = W
 			update_inv_s_store(redraw_mob)
 		if(slot_in_backpack)
-			if(src.get_active_hand() == W)
-				src.u_equip(W,0)
-			W.loc = src.back
+			if(get_active_hand() == W)
+				u_equip(W,0)
+			W.loc = back
 			return
 		else
 			to_chat(src, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. Report this to a coder!</span>")

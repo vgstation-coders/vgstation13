@@ -138,15 +138,15 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	return 1
 
 /obj/item/device/assembly/Destroy()
-	if(istype(src.loc, /obj/item/device/assembly_holder) || istype(holder))
-		var/obj/item/device/assembly_holder/A = src.loc
+	if(istype(loc, /obj/item/device/assembly_holder) || istype(holder))
+		var/obj/item/device/assembly_holder/A = loc
 		if(A.a_left == src)
 			A.a_left = null
 		else if(A.a_right == src)
 			A.a_right = null
-		src.holder = null
-	else if(istype(src.loc, /obj/item/device/assembly_frame))
-		var/obj/item/device/assembly_frame/AF = src.loc
+		holder = null
+	else if(istype(loc, /obj/item/device/assembly_frame))
+		var/obj/item/device/assembly_frame/AF = loc
 
 		AF.eject_assembly(src)
 

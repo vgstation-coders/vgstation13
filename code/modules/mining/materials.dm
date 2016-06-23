@@ -60,7 +60,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 
 /datum/materials/proc/removeFrom(var/datum/materials/mats)
-	src.addFrom(mats,zero_after=1)
+	addFrom(mats,zero_after=1)
 
 /datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
 	if(mats == null)

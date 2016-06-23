@@ -30,8 +30,8 @@
 	. = ..()
 	if(.)
 		return .
-	else if(src.colourmatrix.len)
-		return src.colourmatrix
+	else if(colourmatrix.len)
+		return colourmatrix
 
 /mob/living/carbon/human/get_screen_colour()
 	. = ..()
@@ -66,7 +66,7 @@
 				client.updating_colour = 0
 				difference = difflist(client.color,get_screen_colour())
 				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
-					src.update_colour(forceupdate = 1)
+					update_colour(forceupdate = 1)
 			else
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
 
@@ -344,7 +344,7 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 		return 1
 
-	if(full_body && (src.back || src.wear_mask))
+	if(full_body && (back || wear_mask))
 		return 1
 
 	return 0

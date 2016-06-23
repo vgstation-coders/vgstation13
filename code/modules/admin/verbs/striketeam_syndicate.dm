@@ -7,7 +7,7 @@ var/global/sent_syndicate_strike_team = 0
 	set name = "Spawn Syndicate Strike Team"
 	set desc = "Spawns a squad of commandos in the Syndicate Mothership if you want to run an admin event."
 
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 	if(!ticker)
@@ -180,6 +180,6 @@ var/global/sent_syndicate_strike_team = 0
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(src) //no loyalty implant because you're already syndicate scum
 	E.imp_in = src
 	E.implanted = 1
-	src.update_icons()
+	update_icons()
 
 	return 1

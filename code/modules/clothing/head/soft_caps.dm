@@ -10,8 +10,8 @@
 
 	proc/flip(var/mob/user as mob)
 		if(!user.incapacitated())
-			src.flipped = !src.flipped
-			if(src.flipped)
+			flipped = !flipped
+			if(flipped)
 				icon_state = "[_color]soft_flipped"
 				to_chat(user, "You flip the hat backwards.")
 			else
@@ -29,8 +29,8 @@
 		flip(usr)
 
 	dropped()
-		src.icon_state = "[_color]soft" //because of this line and 15 and 18, the icon_state will end up blank if you were to try allowing heads to dye caps with their stamps
-		src.flipped=0
+		icon_state = "[_color]soft" //because of this line and 15 and 18, the icon_state will end up blank if you were to try allowing heads to dye caps with their stamps
+		flipped=0
 		..()
 
 /obj/item/clothing/head/soft/red

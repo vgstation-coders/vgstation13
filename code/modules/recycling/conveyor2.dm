@@ -178,7 +178,7 @@
 		var/items_moved = 0
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
-				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
+				if(A.loc == loc) // prevents the object from being affected if it's not currently here.
 					step(A,movedir)
 					items_moved++
 			if(items_moved >= max_moved)
@@ -201,7 +201,7 @@
 	. = ..()
 	if(.)
 		return .
-	user.drop_item(W, src.loc)
+	user.drop_item(W, loc)
 	return 0
 
 /obj/machinery/conveyor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
@@ -212,14 +212,14 @@
 	return {"
 	<ul>
 		<li><b>Direction:</b>
-			<a href="?src=\ref[src];setdir=[NORTH]" title="North">[src.in_reverse ? "&darr;" : "&uarr;"]</a>
-			<a href="?src=\ref[src];setdir=[EAST]" title="East">[src.in_reverse ? "&larr;" : "&rarr;"]</a>
-			<a href="?src=\ref[src];setdir=[SOUTH]" title="South">[src.in_reverse ? "&uarr;" : "&darr;"]</a>
-			<a href="?src=\ref[src];setdir=[WEST]" title="West">[src.in_reverse ? "&rarr;" : "&larr;"]</a>
-			<a href="?src=\ref[src];setdir=[NORTHEAST]" title="Northeast">[src.in_reverse ? "&#8601;" : "&#8599;"]</a>
-			<a href="?src=\ref[src];setdir=[NORTHWEST]" title="Northwest">[src.in_reverse ? "&#8598;" : "&#8600;"]</a>
-			<a href="?src=\ref[src];setdir=[SOUTHEAST]" title="Southeast">[src.in_reverse ? "&#8600;" : "&#8598;"]</a>
-			<a href="?src=\ref[src];setdir=[SOUTHWEST]" title="Southwest">[src.in_reverse ? "&#8599;" : "&#8601;"]</a>
+			<a href="?src=\ref[src];setdir=[NORTH]" title="North">[in_reverse ? "&darr;" : "&uarr;"]</a>
+			<a href="?src=\ref[src];setdir=[EAST]" title="East">[in_reverse ? "&larr;" : "&rarr;"]</a>
+			<a href="?src=\ref[src];setdir=[SOUTH]" title="South">[in_reverse ? "&uarr;" : "&darr;"]</a>
+			<a href="?src=\ref[src];setdir=[WEST]" title="West">[in_reverse ? "&rarr;" : "&larr;"]</a>
+			<a href="?src=\ref[src];setdir=[NORTHEAST]" title="Northeast">[in_reverse ? "&#8601;" : "&#8599;"]</a>
+			<a href="?src=\ref[src];setdir=[NORTHWEST]" title="Northwest">[in_reverse ? "&#8598;" : "&#8600;"]</a>
+			<a href="?src=\ref[src];setdir=[SOUTHEAST]" title="Southeast">[in_reverse ? "&#8600;" : "&#8598;"]</a>
+			<a href="?src=\ref[src];setdir=[SOUTHWEST]" title="Southwest">[in_reverse ? "&#8599;" : "&#8601;"]</a>
 			<a href="?src=\ref[src];reverse" title="Reverse Direction">&#8644;</a>
 		</li>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=1367">Reset</a>)</li>
@@ -299,7 +299,7 @@
 /*
 /obj/machinery/conveyor/verb/destroy()
 	set src in view()
-	src.broken()
+	broken()
 */
 
 /obj/machinery/conveyor/power_change()
@@ -307,7 +307,7 @@
 	update()
 
 /obj/machinery/conveyor/dropFrame()
-	new /obj/machinery/conveyor_assembly(src.loc, src.dir)
+	new /obj/machinery/conveyor_assembly(loc, dir)
 
 // the conveyor control switch
 //

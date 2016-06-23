@@ -93,7 +93,7 @@
 	else
 		var/obj/item/projectile/P = in_chamber
 		if(Fire(A,user,params, "struggle" = struggle)) //Otherwise, fire normally.
-			user.visible_message("<span class='danger'>[user] fires \a [P.name] from \his [src.name]!</span>","<span class='danger'>You fire \a [P.name] from your [src.name]!</span>")
+			user.visible_message("<span class='danger'>[user] fires \a [P.name] from \his [name]!</span>","<span class='danger'>You fire \a [P.name] from your [name]!</span>")
 			if(!infinite)
 				shots_left -= 1
 		else

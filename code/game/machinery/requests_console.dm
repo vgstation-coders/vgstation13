@@ -418,7 +418,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	if(iswrench(O) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-		new /obj/item/stack/sheet/metal (src.loc,2)
+		new /obj/item/stack/sheet/metal (loc,2)
 		qdel(src)
 		return
 	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))

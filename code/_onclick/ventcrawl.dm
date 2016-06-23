@@ -4,7 +4,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	return 0
 
 /mob/living/proc/ventcrawl_carry()
-	for(var/atom/A in src.contents)
+	for(var/atom/A in contents)
 		if(!(isInTypes(A, canEnterVentWith)))
 			to_chat(src, "<SPAN CLASS='warning'>You can't be carrying items or have items equipped when vent crawling!</SPAN>")
 			return 0
@@ -15,8 +15,8 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	var/canEnterVentWith = "/obj/item/weapon/implant=0&/obj/item/clothing/mask/facehugger=0&/obj/item/device/radio/borg=0&/obj/machinery/camera=0&/mob/living/simple_animal/borer=0"
 
 /mob/living/AltClickOn(var/atom/A)
-	if(is_type_in_list(A,ventcrawl_machinery) && src.can_ventcrawl())
-		src.handle_ventcrawl(A)
+	if(is_type_in_list(A,ventcrawl_machinery) && can_ventcrawl())
+		handle_ventcrawl(A)
 		return 1
 	return ..()
 

@@ -8,7 +8,7 @@
 		return
 	..()
 	if(istype(AM, /mob/living/carbon) && prob(10))
-		src.spread_disease_to(AM, "Contact")
+		spread_disease_to(AM, "Contact")
 
 
 /mob/living/carbon/Move(NewLoc,Dir=0,step_x=0,step_y=0)
@@ -29,8 +29,8 @@
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		visible_message("<span class='warning'><B>[M]</B> [M.attacktext] \the [src] !</span>")
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
 		if(M.zone_sel && M.zone_sel.selecting)
@@ -53,7 +53,7 @@
 			src << browse(null, "window=pda")
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
-	if(user in src.stomach_contents)
+	if(user in stomach_contents)
 		if(prob(40))
 			for(var/mob/M in hearers(4, src))
 				if(M.client)
@@ -70,17 +70,17 @@
 							H.UpdateDamageIcon()
 					H.updatehealth()
 				else
-					src.take_organ_damage(d)
+					take_organ_damage(d)
 				for(var/mob/M in viewers(user, null))
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-				src.delayNextMove(10) //no just holding the key for an instant gib
+				delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)
 	drop_stomach_contents()
-	src.visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
+	visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
 
 /mob/living/carbon/proc/share_contact_diseases(var/mob/M)
@@ -136,8 +136,8 @@
 		"<span class='warning'>You hear a policeman whistling!</span>"
 	)
 
-	//if(src.stunned < shock_damage)	src.stunned = shock_damage
-	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
+	//if(stunned < shock_damage)	stunned = shock_damage
+	//if(weakened < 20*siemens_coeff)	weakened = 20*siemens_coeff
 
 	var/datum/effect/effect/system/spark_spread/SparkSpread = new
 	SparkSpread.set_up(5, 1, loc)
@@ -167,11 +167,11 @@
 			hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
-	if (src.health >= config.health_threshold_crit)
+	if (health >= config.health_threshold_crit)
 		if(src == M && istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src
-			src.visible_message( \
-				text("<span class='notice'>[src] examines [].</span>",src.gender==MALE?"himself":"herself"), \
+			visible_message( \
+				text("<span class='notice'>[src] examines [].</span>",gender==MALE?"himself":"herself"), \
 				"<span class='notice'>You check yourself for injuries.</span>" \
 				)
 
@@ -206,21 +206,21 @@
 					status = "weirdly shapen."
 				if(status == "")
 					status = "OK"
-				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
+				show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
 			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
 			var/t_him = "it"
-			if (src.gender == MALE)
+			if (gender == MALE)
 				t_him = "him"
-			else if (src.gender == FEMALE)
+			else if (gender == FEMALE)
 				t_him = "her"
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			src.sleeping = max(0,src.sleeping-5)
-			if(src.sleeping == 0)
-				src.resting = 0
+			sleeping = max(0,sleeping-5)
+			if(sleeping == 0)
+				resting = 0
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
 			AdjustWeakened(-3)
@@ -295,7 +295,7 @@
 	return
 
 /mob/living/carbon/throw_item(var/atom/target,var/atom/movable/what=null)
-	src.throw_mode_off()
+	throw_mode_off()
 	if(usr.stat || !target)
 		return
 
@@ -305,7 +305,7 @@
 
 	if(target.type == /obj/screen) return
 
-	var/atom/movable/item = src.get_active_hand()
+	var/atom/movable/item = get_active_hand()
 	if(what)
 		item=what
 
@@ -314,7 +314,7 @@
 	if (istype(item, /obj/item/offhand))
 		var/obj/item/offhand/offhand = item
 		if(offhand.wielding)
-			src.throw_item(target, offhand.wielding)
+			throw_item(target, offhand.wielding)
 			return
 
 	else if (istype(item, /obj/item/weapon/grab))
@@ -349,10 +349,10 @@
 	//actually throw it!
 	if (item)
 		item.forceMove(get_turf(src))
-		src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
+		visible_message("<span class='warning'>[src] has thrown [item].</span>", \
 			drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
 
-		if((istype(src.loc, /turf/space)) || (src.areaMaster && (src.areaMaster.has_gravity == 0)))
+		if((istype(loc, /turf/space)) || (areaMaster && (areaMaster.has_gravity == 0)))
 			var/mob/space_obj=src
 			// If we're being held, make the guy holding us move.
 			if(istype(loc,/obj/item/weapon/holder))
@@ -365,8 +365,8 @@
 
 
 /*
-		if(istype(src.loc, /turf/space) || (src.flags & NOGRAV)) //they're in space, move em one space in the opposite direction
-			src.inertia_dir = get_dir(target, src)
+		if(istype(loc, /turf/space) || (flags & NOGRAV)) //they're in space, move em one space in the opposite direction
+			inertia_dir = get_dir(target, src)
 			step(src, inertia_dir)
 */
 
@@ -413,7 +413,7 @@
 
 	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
 
 	dat += {"
 	<BR>
@@ -449,7 +449,7 @@
 //generates realistic-ish pulse output based on preset levels
 /mob/living/carbon/proc/get_pulse(var/method)	//method 0 is for hands, 1 is for machines, more accurate
 	var/temp = 0								//see setup.dm:694
-	switch(src.pulse)
+	switch(pulse)
 		if(PULSE_NONE)
 			return "0"
 		if(PULSE_2SLOW)
@@ -547,7 +547,7 @@
 		return 0
 
 /mob/living/carbon/is_muzzled()
-	return(istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
+	return(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 
 
 /mob/living/carbon/proc/isInCrit()
@@ -623,17 +623,17 @@
 	if(!target)
 		target = get_turf(src)
 
-	var/mob/living/simple_animal/borer/B = src.has_brain_worms()
+	var/mob/living/simple_animal/borer/B = has_brain_worms()
 	for(var/mob/M in src)//mobs, all of them
 		if(M == B)
 			continue
-		if(M in src.stomach_contents)
-			src.stomach_contents.Remove(M)
+		if(M in stomach_contents)
+			stomach_contents.Remove(M)
 		M.forceMove(target)
 
 	for(var/obj/O in src)//objects, only the ones in the stomach
-		if(O in src.stomach_contents)
-			src.stomach_contents.Remove(O)
+		if(O in stomach_contents)
+			stomach_contents.Remove(O)
 			O.forceMove(target)
 
 /mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)

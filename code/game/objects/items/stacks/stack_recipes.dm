@@ -13,15 +13,15 @@
 	var/on_floor = 0
 	var/start_unanchored = 0
 	New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0)
-		src.title = title
-		src.result_type = result_type
-		src.req_amount = req_amount
-		src.res_amount = res_amount
-		src.max_res_amount = max_res_amount
-		src.time = time
-		src.one_per_turf = one_per_turf
-		src.on_floor = on_floor
-		src.start_unanchored = start_unanchored
+		title = title
+		result_type = result_type
+		req_amount = req_amount
+		res_amount = res_amount
+		max_res_amount = max_res_amount
+		time = time
+		one_per_turf = one_per_turf
+		on_floor = on_floor
+		start_unanchored = start_unanchored
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -41,9 +41,9 @@
 	var/list/recipes = null
 	var/req_amount = 1
 	New(title, recipes, req_amount = 1)
-		src.title = title
-		src.recipes = recipes
-		src.req_amount = req_amount
+		title = title
+		recipes = recipes
+		req_amount = req_amount
 
 /* =====================================================================
 							METAL RECIPES

@@ -38,15 +38,15 @@
 	set src in usr
 	if(!usr) return //PANIC
 	if(!usr.incapacitated())
-		if(src.up)
-			src.up = !src.up
-			src.body_parts_covered |= FACE
+		if(up)
+			up = !up
+			body_parts_covered |= FACE
 			eyeprot = 3
 			icon_state = initial(icon_state)
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
-			src.up = !src.up
-			src.body_parts_covered = HEAD
+			up = !up
+			body_parts_covered = HEAD
 			icon_state = "[initial(icon_state)]up"
 			eyeprot = 0
 			to_chat(usr, "You push the [src] up out of your face.")
@@ -76,7 +76,7 @@
 		processing_objects.Remove(src)
 		return
 
-	var/turf/location = src.loc
+	var/turf/location = loc
 	if(istype(location, /mob/))
 		var/mob/living/carbon/human/M = location
 		if(istype(M))
@@ -90,17 +90,17 @@
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
 	if(status > 1)	return
-	src.onfire = !( src.onfire )
-	if (src.onfire)
-		src.force = 3
-		src.damtype = "fire"
-		src.icon_state = "cake1"
+	onfire = !( onfire )
+	if (onfire)
+		force = 3
+		damtype = "fire"
+		icon_state = "cake1"
 		processing_objects.Add(src)
 		set_light(2)
 	else
-		src.force = null
-		src.damtype = "brute"
-		src.icon_state = "cake0"
+		force = null
+		damtype = "brute"
+		icon_state = "cake0"
 		set_light(0)
 	return
 
@@ -116,14 +116,14 @@
 	body_parts_covered = EARS|HEAD
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
-	if(src.icon_state == "ushankadown")
-		src.icon_state = "ushankaup"
-		src.item_state = "ushankaup"
+	if(icon_state == "ushankadown")
+		icon_state = "ushankaup"
+		item_state = "ushankaup"
 		body_parts_covered = HEAD
 		to_chat(user, "You raise the ear flaps on the ushanka.")
 	else
-		src.icon_state = "ushankadown"
-		src.item_state = "ushankadown"
+		icon_state = "ushankadown"
+		item_state = "ushankadown"
 		to_chat(user, "You lower the ear flaps on the ushanka.")
 		body_parts_covered = EARS|HEAD
 

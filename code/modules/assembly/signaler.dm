@@ -34,7 +34,7 @@
 		var/obj/item/stack/rods/R = W
 		if(R.amount >= 1)
 			R.use(1)
-			new /obj/machinery/conveyor_switch(get_turf(src.loc))
+			new /obj/machinery/conveyor_switch(get_turf(loc))
 			user.u_equip(src,0)
 			qdel(src)
 
@@ -42,9 +42,9 @@
 		var/obj/item/stack/sheet/metal/R = W
 		if(R.amount >= 1)
 			R.use(1)
-			var/obj/item/mounted/frame/driver_button/signaler_button/I = new (get_turf(src.loc))
-			I.code = src.code
-			I.frequency = src.frequency
+			var/obj/item/mounted/frame/driver_button/signaler_button/I = new (get_turf(loc))
+			I.code = code
+			I.frequency = frequency
 			user.u_equip(src,0)
 			qdel(src)
 
@@ -64,10 +64,10 @@
 
 /obj/item/device/assembly/signaler/interact(mob/user as mob, flag1)
 	var/t1 = "-------"
-//		if ((src.b_stat && !( flag1 )))
-//			t1 = text("-------<BR>\nGreen Wire: []<BR>\nRed Wire:   []<BR>\nBlue Wire:  []<BR>\n", (src.wires & 4 ? text("<A href='?src=\ref[];wires=4'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=4'>Mend Wire</A>", src)), (src.wires & 2 ? text("<A href='?src=\ref[];wires=2'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=2'>Mend Wire</A>", src)), (src.wires & 1 ? text("<A href='?src=\ref[];wires=1'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=1'>Mend Wire</A>", src)))
+//		if ((b_stat && !( flag1 )))
+//			t1 = text("-------<BR>\nGreen Wire: []<BR>\nRed Wire:   []<BR>\nBlue Wire:  []<BR>\n", (wires & 4 ? text("<A href='?src=\ref[];wires=4'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=4'>Mend Wire</A>", src)), (wires & 2 ? text("<A href='?src=\ref[];wires=2'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=2'>Mend Wire</A>", src)), (wires & 1 ? text("<A href='?src=\ref[];wires=1'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=1'>Mend Wire</A>", src)))
 //		else
-//			t1 = "-------"	Speaker: [src.listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
+//			t1 = "-------"	Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
 	var/dat = {"
 		<TT>
 
@@ -76,14 +76,14 @@
 		Frequency:
 		<A href='byond://?src=\ref[src];freq=-10'>-</A>
 		<A href='byond://?src=\ref[src];freq=-2'>-</A>
-		[format_frequency(src.frequency)]
+		[format_frequency(frequency)]
 		<A href='byond://?src=\ref[src];freq=2'>+</A>
 		<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 
 		Code:
 		<A href='byond://?src=\ref[src];code=-5'>-</A>
 		<A href='byond://?src=\ref[src];code=-1'>-</A>
-		[src.code]
+		[code]
 		<A href='byond://?src=\ref[src];code=1'>+</A>
 		<A href='byond://?src=\ref[src];code=5'>+</A><BR>
 		[t1]
@@ -109,10 +109,10 @@
 		set_frequency(new_frequency)
 
 	if(href_list["code"])
-		src.code += text2num(href_list["code"])
-		src.code = round(src.code)
-		src.code = min(100, src.code)
-		src.code = max(1, src.code)
+		code += text2num(href_list["code"])
+		code = round(code)
+		code = min(100, code)
+		code = max(1, code)
 
 	if(href_list["send"])
 		spawn( 0 )
@@ -146,14 +146,14 @@
 	for(var/obj/item/device/assembly/signaler/S in world)
 		if(!S)	continue
 		if(S == src)	continue
-		if((S.frequency == src.frequency) && (S.code == src.code))
+		if((S.frequency == frequency) && (S.code == code))
 			spawn(0)
 				if(S)	S.pulse(0)
 	return 0*/
 
 
 /obj/item/device/assembly/signaler/pulse(var/radio = 0)
-	if(src.connected && src.wires)
+	if(connected && wires)
 		connected.Pulse(src)
 	else
 		return ..(radio)
@@ -162,11 +162,11 @@
 /obj/item/device/assembly/signaler/receive_signal(datum/signal/signal)
 	if(!signal)	return 0
 	if(signal.encryption != code)	return 0
-	if(!(src.wires & WIRE_RADIO_RECEIVE))	return 0
+	if(!(wires & WIRE_RADIO_RECEIVE))	return 0
 	pulse(1)
 
 	if(!holder)
-		for(var/mob/O in hearers(1, src.loc))
+		for(var/mob/O in hearers(1, loc))
 			O.show_message("[bicon(src)] *beep* *beep*", 1, "*beep* *beep*", 2)
 	return
 
@@ -193,7 +193,7 @@
 		if(A.timestopped) return
 	if(!deadman)
 		processing_objects.Remove(src)
-	var/mob/M = src.loc
+	var/mob/M = loc
 
 	if(!M || !ismob(M))
 		if(prob(5))
@@ -263,8 +263,8 @@
 		if(do_after(user, src,10))
 			to_chat(user, "<span class='notice'>You pry the button off of the wall.</span>")
 			var/obj/item/mounted/frame/driver_button/signaler_button/I = new (get_turf(user))
-			I.code = src.code
-			I.frequency = src.frequency
+			I.code = code
+			I.frequency = frequency
 			qdel(src)
 		return
 	if(istype(W, /obj/item/device/multitool))

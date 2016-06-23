@@ -10,7 +10,7 @@
 	attack_hand(mob/user as mob)
 		switch(alert("Travel back to ss13?",,"Yes","No"))
 			if("Yes")
-				if(user.z != src.z)	return
+				if(user.z != z)	return
 				user.loc.loc.Exited(user)
 				user.loc = pick(latejoin)
 			if("No")
@@ -332,7 +332,7 @@ var/global/list/PDA_Manifest = list()
 
 /obj/item/weapon/beach_ball/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
 	if(user.drop_item(src))
-		src.throw_at(target, throw_range, throw_speed)
+		throw_at(target, throw_range, throw_speed)
 
 /obj/effect/stop
 	var/victim = null
@@ -361,7 +361,7 @@ var/global/list/PDA_Manifest = list()
 	sleeptime = ourtime
 	owner = mind
 	ourspell = F
-	src.theworld = theworld
+	theworld = theworld
 
 /obj/effect/stop/sleeping/Crossed(atom/movable/A)
 	if(sleeptime > world.time)

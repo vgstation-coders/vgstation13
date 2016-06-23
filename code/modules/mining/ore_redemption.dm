@@ -25,11 +25,11 @@
 
 /obj/machinery/mineral/ore_redemption/initialize()
 	for (var/dir in cardinal)
-		src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-		if(src.input) break
+		input = locate(/obj/machinery/mineral/input, get_step(src, dir))
+		if(input) break
 	for (var/dir in cardinal)
-		src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-		if(src.output) break
+		output = locate(/obj/machinery/mineral/output, get_step(src, dir))
+		if(output) break
 
 /obj/machinery/mineral/ore_redemption/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W,/obj/item/weapon/card/id))

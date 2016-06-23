@@ -119,7 +119,7 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror/Die()
 	..()
 	visible_message("<b>[src]</b> blows apart!")
-	new /obj/effect/gibspawner/robot(src.loc)
+	new /obj/effect/gibspawner/robot(loc)
 	qdel(src)
 	return
 

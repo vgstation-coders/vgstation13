@@ -52,7 +52,7 @@
 			H.eye_blurry = max(H.eye_blurry, rand(3,8))
 			H.eye_blind = max(H.eye_blind, rand(1,3))
 			H.drop_hands(get_turf(H))
-		log_attack("<font color='red'>[hit_atom] ([H ? H.ckey : "what"]) was pocketsanded by ([src.fingerprintslast])</font>")
+		log_attack("<font color='red'>[hit_atom] ([H ? H.ckey : "what"]) was pocketsanded by ([fingerprintslast])</font>")
 
 /obj/item/weapon/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
@@ -174,11 +174,11 @@
 	icon_state = "erebite"
 	material="erebite"
 /obj/item/weapon/ore/erebite/ex_act()
-	explosion(src.loc,-1,0,2)
+	explosion(loc,-1,0,2)
 	qdel(src)
 
 /obj/item/weapon/ore/erebite/bullet_act(var/obj/item/projectile/P)
-	explosion(src.loc,-1,0,2)
+	explosion(loc,-1,0,2)
 	qdel(src)
 
 /obj/item/weapon/ore/cerenkite
@@ -284,11 +284,11 @@
 			if(primed)
 				switch(quality)
 					if(1)
-						explosion(src.loc,-1,1,3,adminlog = notify_admins)
+						explosion(loc,-1,1,3,adminlog = notify_admins)
 					if(2)
-						explosion(src.loc,1,2,5,adminlog = notify_admins)
+						explosion(loc,1,2,5,adminlog = notify_admins)
 					if(3)
-						explosion(src.loc,2,4,9,adminlog = notify_admins)
+						explosion(loc,2,4,9,adminlog = notify_admins)
 				qdel(src)
 
 /obj/item/weapon/ore/New()

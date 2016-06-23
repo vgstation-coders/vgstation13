@@ -67,7 +67,7 @@ var/shuttle_call/shuttle_calls[0]
 		if(usr.machine == src) usr.unset_machine()
 		return 1
 
-	if (!(src.z in list(STATION_Z,CENTCOMM_Z)))
+	if (!(z in list(STATION_Z,CENTCOMM_Z)))
 		to_chat(usr, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
@@ -88,7 +88,7 @@ var/shuttle_call/shuttle_calls[0]
 			if (istype(I,/obj/item/weapon/card/emag))
 				emag(usr)
 			if (I && istype(I))
-				if(src.check_access(I))
+				if(check_access(I))
 					authenticated = 1
 				if(20 in I.access)
 					authenticated = 2
@@ -133,7 +133,7 @@ var/shuttle_call/shuttle_calls[0]
 				to_chat(usr, "You need to swipe your ID.")
 
 		if("announce")
-			if(src.authenticated==2 && !issilicon(usr))
+			if(authenticated==2 && !issilicon(usr))
 				if(message_cooldown)	return
 				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
 				if(!input || !(usr in view(1,src)))
@@ -170,7 +170,7 @@ var/shuttle_call/shuttle_calls[0]
 				return
 
 			if(!universe.OnShuttleCall(usr))
-				to_chat(usr, "<span class='notice'>\The [src.name] cannot establish a bluespace connection.</span>")
+				to_chat(usr, "<span class='notice'>\The [name] cannot establish a bluespace connection.</span>")
 				return
 
 			if(sent_strike_team)
@@ -187,7 +187,7 @@ var/shuttle_call/shuttle_calls[0]
 				to_chat(usr, "<span class='notice'>The station must be in an emergency to request a Response Team.</span>")
 				return
 			if(authenticated != 2 || issilicon(usr))
-				to_chat(usr, "<span class='warning'>\The [src.name]'s screen flashes, \"Access Denied\".</span>")
+				to_chat(usr, "<span class='warning'>\The [name]'s screen flashes, \"Access Denied\".</span>")
 				return
 			if(send_emergency_team)
 				to_chat(usr, "<span class='notice'>Central Command has already dispatched a Response Team to [station_name()]</span>")
@@ -201,7 +201,7 @@ var/shuttle_call/shuttle_calls[0]
 			return
 
 		if("callshuttle")
-			if(src.authenticated)
+			if(authenticated)
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 					return
@@ -219,7 +219,7 @@ var/shuttle_call/shuttle_calls[0]
 				to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 				return
 			if(issilicon(usr)) return
-			if(src.authenticated)
+			if(authenticated)
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
 					recall_shuttle(usr)
@@ -227,21 +227,21 @@ var/shuttle_call/shuttle_calls[0]
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
 		if("messagelist")
-			src.currmsg = 0
+			currmsg = 0
 			if(href_list["msgid"])
 				setCurrentMessage(usr, text2num(href_list["msgid"]))
 			setMenuState(usr,COMM_SCREEN_MESSAGES)
 		if("delmessage")
 			if(href_list["msgid"])
-				src.currmsg = text2num(href_list["msgid"])
+				currmsg = text2num(href_list["msgid"])
 			var/response = alert("Are you sure you wish to delete this message?", "Confirm", "Yes", "No")
 			if(response == "Yes")
-				if(src.currmsg)
+				if(currmsg)
 					var/id = getCurrentMessage()
-					var/title = src.messagetitle[id]
-					var/text  = src.messagetext[id]
-					src.messagetitle.Remove(title)
-					src.messagetext.Remove(text)
+					var/title = messagetitle[id]
+					var/text  = messagetext[id]
+					messagetitle.Remove(title)
+					messagetext.Remove(text)
 					if(currmsg==id) currmsg=0
 					if(aicurrmsg==id) aicurrmsg=0
 			setMenuState(usr,COMM_SCREEN_MESSAGES)
@@ -271,7 +271,7 @@ var/shuttle_call/shuttle_calls[0]
 
 		// OMG CENTCOMM LETTERHEAD
 		if("MessageCentcomm")
-			if(src.authenticated==2)
+			if(authenticated==2)
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 					return
@@ -293,7 +293,7 @@ var/shuttle_call/shuttle_calls[0]
 
 		// OMG SYNDICATE ...LETTERHEAD
 		if("MessageSyndicate")
-			if((src.authenticated==2) && (src.emagged))
+			if((authenticated==2) && (emagged))
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to \[ABNORMAL ROUTING CORDINATES\] .</span>")
 					return
@@ -314,25 +314,25 @@ var/shuttle_call/shuttle_calls[0]
 
 		if("RestoreBackup")
 			to_chat(usr, "Backup routing data restored!")
-			src.emagged = 0
+			emagged = 0
 			setMenuState(usr,COMM_SCREEN_MAIN)
 			update_icon()
 
 	return 1
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/communications/attack_paw(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 
 /obj/machinery/computer/communications/attack_hand(var/mob/user as mob)
 	if(..(user))
 		return
 
-	if (!(src.z in list(STATION_Z, CENTCOMM_Z)))
+	if (!(z in list(STATION_Z, CENTCOMM_Z)))
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
@@ -378,7 +378,7 @@ var/shuttle_call/shuttle_calls[0]
 	data["ert_sent"] = send_emergency_team
 
 	var/msg_data[0]
-	for(var/i=1;i<=src.messagetext.len;i++)
+	for(var/i=1;i<=messagetext.len;i++)
 		var/cur_msg[0]
 		cur_msg["title"]=messagetitle[i]
 		cur_msg["body"]=messagetext[i]
@@ -574,7 +574,7 @@ var/shuttle_call/shuttle_calls[0]
 		if("message")
 			status_signal.data["msg1"] = data1
 			status_signal.data["msg2"] = data2
-			log_admin("STATUS: [src.fingerprintslast] set status screen message with [src]: [data1] [data2]")
+			log_admin("STATUS: [fingerprintslast] set status screen message with [src]: [data1] [data2]")
 			//message_admins("STATUS: [user] set status screen with [PDA]. Message: [data1] [data2]")
 		if("alert")
 			status_signal.data["picture_state"] = data1

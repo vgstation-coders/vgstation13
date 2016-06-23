@@ -1,8 +1,8 @@
 /datum/hud/proc/robot_hud()
 
 
-	src.adding = list()
-	src.other = list()
+	adding = list()
+	other = list()
 
 	var/obj/screen/using
 
@@ -15,7 +15,7 @@
 	using.icon_state = "radio"
 	using.screen_loc = ui_movi
 	using.layer = 20
-	src.adding += using
+	adding += using
 
 //Module select
 
@@ -26,7 +26,7 @@
 	using.icon_state = "sight"
 	using.screen_loc = ui_borg_sight
 	using.layer = 20
-	src.adding += using
+	adding += using
 	mymob:sensor = using
 
 	using = getFromPool(/obj/screen)
@@ -36,7 +36,7 @@
 	using.icon_state = "inv1"
 	using.screen_loc = ui_inv1
 	using.layer = 20
-	src.adding += using
+	adding += using
 	mymob:inv1 = using
 
 	using = getFromPool(/obj/screen)
@@ -46,7 +46,7 @@
 	using.icon_state = "inv2"
 	using.screen_loc = ui_inv2
 	using.layer = 20
-	src.adding += using
+	adding += using
 	mymob:inv2 = using
 
 	using = getFromPool(/obj/screen)
@@ -56,7 +56,7 @@
 	using.icon_state = "inv3"
 	using.screen_loc = ui_inv3
 	using.layer = 20
-	src.adding += using
+	adding += using
 	mymob:inv3 = using
 
 	using = getFromPool(/obj/screen)
@@ -64,7 +64,7 @@
 	using.icon = 'icons/mob/screen1.dmi'
 	using.icon_state = "block"
 	using.layer = 19
-	src.adding += using
+	adding += using
 	mymob:robot_modules_background = using
 
 //End of module select
@@ -77,7 +77,7 @@
 	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
 	using.layer = 20
-	src.adding += using
+	adding += using
 	action_intent = using
 
 //Cell
@@ -108,7 +108,7 @@
 	using.icon_state = "panel"
 	using.screen_loc = ui_borg_panel
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 //Store
 	mymob.throw_icon = getFromPool(/obj/screen)
@@ -157,20 +157,20 @@
 			mymob.item_use_icon = getFromPool(/obj/screen/gun/item)
 			if (mymob.client.target_can_click)
 				mymob.item_use_icon.dir = 1
-			src.adding += mymob.item_use_icon
+			adding += mymob.item_use_icon
 			mymob.gun_move_icon = getFromPool(/obj/screen/gun/move)
 			if (mymob.client.target_can_move)
 				mymob.gun_move_icon.dir = 1
 				mymob.gun_run_icon = getFromPool(/obj/screen/gun/run)
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
-				src.adding += mymob.gun_run_icon
-			src.adding += mymob.gun_move_icon
+				adding += mymob.gun_run_icon
+			adding += mymob.gun_move_icon
 
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.gun_setting_icon) //, mymob.rest, mymob.sleep, mymob.mach )
-	mymob.client.screen += src.adding + src.other
+	mymob.client.screen += adding + other
 
 	return
 

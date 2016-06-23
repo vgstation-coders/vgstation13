@@ -40,10 +40,10 @@
 	var/cult = 0
 
 /obj/structure/sign/double/barsign/attack_ai(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user as mob)
-	if (!src.allowed(user))
+	if (!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 

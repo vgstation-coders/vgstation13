@@ -51,58 +51,58 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	//create the gimmicky things to handle field collisions
 	var/obj/effect/rust_particle_catcher/catcher
 
-	catcher = new (locate(src.x,src.y,src.z))
+	catcher = new (locate(x,y,z))
 	catcher.parent = src
 	catcher.SetSize(1)
 	particle_catchers.Add(catcher)
 
-	catcher = new (locate(src.x-1,src.y,src.z))
+	catcher = new (locate(x-1,y,z))
 	catcher.parent = src
 	catcher.SetSize(3)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x+1,src.y,src.z))
+	catcher = new (locate(x+1,y,z))
 	catcher.parent = src
 	catcher.SetSize(3)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x,src.y+1,src.z))
+	catcher = new (locate(x,y+1,z))
 	catcher.parent = src
 	catcher.SetSize(3)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x,src.y-1,src.z))
+	catcher = new (locate(x,y-1,z))
 	catcher.parent = src
 	catcher.SetSize(3)
 	particle_catchers.Add(catcher)
 
-	catcher = new (locate(src.x-2,src.y,src.z))
+	catcher = new (locate(x-2,y,z))
 	catcher.parent = src
 	catcher.SetSize(5)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x+2,src.y,src.z))
+	catcher = new (locate(x+2,y,z))
 	catcher.parent = src
 	catcher.SetSize(5)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x,src.y+2,src.z))
+	catcher = new (locate(x,y+2,z))
 	catcher.parent = src
 	catcher.SetSize(5)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x,src.y-2,src.z))
+	catcher = new (locate(x,y-2,z))
 	catcher.parent = src
 	catcher.SetSize(5)
 	particle_catchers.Add(catcher)
 
-	catcher = new (locate(src.x-3,src.y,src.z))
+	catcher = new (locate(x-3,y,z))
 	catcher.parent = src
 	catcher.SetSize(7)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x+3,src.y,src.z))
+	catcher = new (locate(x+3,y,z))
 	catcher.parent = src
 	catcher.SetSize(7)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x,src.y+3,src.z))
+	catcher = new (locate(x,y+3,z))
 	catcher.parent = src
 	catcher.SetSize(7)
 	particle_catchers.Add(catcher)
-	catcher = new (locate(src.x,src.y-3,src.z))
+	catcher = new (locate(x,y-3,z))
 	catcher.parent = src
 	catcher.SetSize(7)
 	particle_catchers.Add(catcher)
@@ -232,8 +232,8 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 
 /obj/effect/rust_em_field/proc/AddEnergy(var/a_energy, var/a_mega_energy, var/a_frequency)
 	var/energy_loss_ratio = 0
-	if(a_frequency != src.frequency)
-		energy_loss_ratio = 1 / abs(a_frequency - src.frequency)
+	if(a_frequency != frequency)
+		energy_loss_ratio = 1 / abs(a_frequency - frequency)
 	energy += a_energy - a_energy * energy_loss_ratio
 	mega_energy += a_mega_energy - a_mega_energy * energy_loss_ratio
 

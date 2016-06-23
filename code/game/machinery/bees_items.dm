@@ -70,7 +70,7 @@
 	while(caught_bees > 0)
 		//release a few super massive swarms
 		while(caught_bees > 5)
-			var/mob/living/simple_animal/bee/B = new(src.loc)
+			var/mob/living/simple_animal/bee/B = new(loc)
 			B.feral = 5
 			B.target = M
 			B.strength = 6
@@ -78,7 +78,7 @@
 			caught_bees -= 6
 
 		//what's left over
-		var/mob/living/simple_animal/bee/B = new(src.loc)
+		var/mob/living/simple_animal/bee/B = new(loc)
 		B.strength = caught_bees
 		B.icon_state = "bees[B.strength]"
 		B.feral = 5
@@ -130,7 +130,7 @@
 		if(!holder)
 			return
 		H.nutrition += nutriment_factor
-		holder.remove_reagent(src.id, 0.4)
+		holder.remove_reagent(id, 0.4)
 		if(H.getBruteLoss() && prob(60))
 			H.heal_organ_damage(2, 0)
 		if(H.getFireLoss() && prob(50))

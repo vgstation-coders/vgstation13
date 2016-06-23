@@ -24,14 +24,14 @@
 /obj/item/stack/New(var/loc, var/amount=null)
 	..()
 	if (amount)
-		src.amount=amount
+		amount=amount
 	update_materials()
 	return
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
 		usr << browse(null, "window=stack")
-	src.loc = null
+	loc = null
 	..()
 
 /obj/item/stack/examine(mob/user)
@@ -39,7 +39,7 @@
 	var/be = "are"
 	if(amount == 1) be = "is"
 
-	to_chat(user, "<span class='info'>There [be] [src.amount] [CORRECT_STACK_NAME(src)][amount == 1 ? " in" : "s in"] the stack.</span>")
+	to_chat(user, "<span class='info'>There [be] [amount] [CORRECT_STACK_NAME(src)][amount == 1 ? " in" : "s in"] the stack.</span>")
 
 /obj/item/stack/attack_self(mob/user as mob)
 	list_recipes(user)
@@ -55,7 +55,7 @@
 	if (recipes_sublist && recipe_list[recipes_sublist] && istype(recipe_list[recipes_sublist], /datum/stack_recipe_list))
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
-	var/t1 = text("<HTML><HEAD><title>Constructions from []</title></HEAD><body><TT>Amount Left: []<br>", src, src.amount)
+	var/t1 = text("<HTML><HEAD><title>Constructions from []</title></HEAD><body><TT>Amount Left: []<br>", src, amount)
 	for(var/i=1;i<=recipe_list.len,i++)
 		var/E = recipe_list[i]
 		if (isnull(E))
@@ -69,14 +69,14 @@
 			var/datum/stack_recipe_list/srl = E
 
 			var/stack_name = (irregular_plural && srl.req_amount > 1) ? irregular_plural : "[singular_name]\s"
-			if (src.amount >= srl.req_amount)
+			if (amount >= srl.req_amount)
 				t1 += "<a href='?src=\ref[src];sublist=[i]'>[srl.title] ([srl.req_amount] [stack_name])</a>"
 			else
 				t1 += "[srl.title] ([srl.req_amount] [stack_name]\s)<br>"
 
 		if (istype(E, /datum/stack_recipe))
 			var/datum/stack_recipe/R = E
-			var/max_multiplier = round(src.amount / R.req_amount)
+			var/max_multiplier = round(amount / R.req_amount)
 			var/title as text
 			var/can_build = 1
 			can_build = can_build && (max_multiplier>0)
@@ -90,7 +90,7 @@
 				title+= "[R.res_amount]x [R.title]\s"
 			else
 				title+= "[R.title]"
-			//title+= " ([R.req_amount] [src.singular_name]\s)"
+			//title+= " ([R.req_amount] [singular_name]\s)"
 			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)]"
 
 			if (can_build)
@@ -122,7 +122,7 @@
 		list_recipes(usr, text2num(href_list["sublist"]))
 
 	if (href_list["make"])
-		if (src.amount < 1) returnToPool(src) //Never should happen
+		if (amount < 1) returnToPool(src) //Never should happen
 		var/list/recipes_list = recipes
 		if (href_list["sublist"])
 			var/datum/stack_recipe_list/srl = recipes_list[text2num(href_list["sublist"])]
@@ -130,7 +130,7 @@
 		var/datum/stack_recipe/R = recipes_list[text2num(href_list["make"])]
 		var/multiplier = text2num(href_list["multiplier"])
 		if (!multiplier) multiplier = 1
-		if (src.amount < R.req_amount*multiplier)
+		if (amount < R.req_amount*multiplier)
 			if (R.req_amount*multiplier>1)
 				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.req_amount*multiplier] [R.title]\s!</span>")
 			else
@@ -142,7 +142,7 @@
 			to_chat(usr, "<span class='notice'>Building [R.title] ...</span>")
 			if (!do_after(usr, get_turf(src), R.time))
 				return
-		if (src.amount < R.req_amount*multiplier)
+		if (amount < R.req_amount*multiplier)
 			return
 
 		var/atom/O
@@ -164,8 +164,8 @@
 		//	new_item.amount = R.res_amount*multiplier
 		//	//new_item.add_to_stacks(usr)
 
-		src.use(R.req_amount*multiplier)
-		if (src.amount<=0)
+		use(R.req_amount*multiplier)
+		if (amount<=0)
 			var/oldsrc = src
 			//src = null //dont kill proc after del()
 			usr.before_take_item(oldsrc)
@@ -179,20 +179,20 @@
 				qdel(I)
 	if (src && usr.machine==src) //do not reopen closed window
 		spawn( 0 )
-			src.interact(usr)
+			interact(usr)
 			return
 	return
 
 /obj/item/stack/proc/use(var/amount)
-	ASSERT(isnum(src.amount))
+	ASSERT(isnum(amount))
 
-	if(src.amount>=amount)
-		src.amount-=amount
+	if(amount>=amount)
+		amount-=amount
 		update_materials()
 	else
 		return 0
 	. = 1
-	if (src.amount<=0) //If the stack is empty after removing the required amount of items!
+	if (amount<=0) //If the stack is empty after removing the required amount of items!
 		if(usr)
 			if(istype(usr,/mob/living/silicon/robot))
 				var/mob/living/silicon/robot/R=usr
@@ -215,7 +215,7 @@
 		spawn returnToPool(src)
 
 /obj/item/stack/proc/add(var/amount)
-	src.amount += amount
+	amount += amount
 	update_materials()
 
 /obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
@@ -240,20 +240,20 @@
 		gender = PLURAL
 
 /obj/item/stack/proc/can_stack_with(obj/item/other_stack)
-	if(ispath(other_stack)) return (src.type == other_stack)
+	if(ispath(other_stack)) return (type == other_stack)
 
-	return (src.type == other_stack.type)
+	return (type == other_stack.type)
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
-		var/obj/item/stack/F = new src.type( user, amount=1)
+		var/obj/item/stack/F = new type( user, amount=1)
 		F.copy_evidences(src)
 		user.put_in_hands(F)
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		F.add_fingerprint(user)
 		use(1)
 		if (src && usr.machine==src)
-			spawn(0) src.interact(usr)
+			spawn(0) interact(usr)
 	else
 		..()
 	return
@@ -278,7 +278,7 @@
 			spawn(0) interact(user)
 		S.use(to_transfer)
 		if (src && user.machine==src)
-			spawn(0) src.interact(user)
+			spawn(0) interact(user)
 		update_icon()
 		S.update_icon()
 		return 1
@@ -286,20 +286,20 @@
 
 //Ported from -tg-station/#10973, credit to MrPerson
 /obj/item/stack/Crossed(obj/o)
-	if(src != o && istype(o, src.type) && !o.throwing)
+	if(src != o && istype(o, type) && !o.throwing)
 		merge(o)
 	return ..()
 
 /obj/item/stack/hitby(atom/movable/AM) //Doesn't seem to ever be called since stacks are not dense but whatever
-	if(src != AM && istype(AM, src.type))
+	if(src != AM && istype(AM, type))
 		merge(AM)
 	return ..()
 
 /obj/item/stack/proc/copy_evidences(obj/item/stack/from as obj)
-	src.blood_DNA = from.blood_DNA
-	src.fingerprints  = from.fingerprints
-	src.fingerprintshidden  = from.fingerprintshidden
-	src.fingerprintslast  = from.fingerprintslast
+	blood_DNA = from.blood_DNA
+	fingerprints  = from.fingerprints
+	fingerprintshidden  = from.fingerprintshidden
+	fingerprintslast  = from.fingerprintslast
 	//TODO bloody overlay
 
 /*

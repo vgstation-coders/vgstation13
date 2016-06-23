@@ -124,9 +124,9 @@
 	switch(severity)
 		if(1.0)
 			if(prob(80))
-				src.ReplaceWithLattice()
+				ReplaceWithLattice()
 			else if(prob(50))
-				src.ChangeTurf(get_base_turf(src.z))
+				ChangeTurf(get_base_turf(z))
 			else
 				var/turf/simulated/floor/F = src
 				F.make_plating()
@@ -158,7 +158,7 @@
 
 /turf/simulated/floor/engine/n20/New()
 	..()
-	if(src.air)
+	if(air)
 		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
 		var/datum/gas/sleeping_agent/trace_gas = new
 		air.trace_gases += trace_gas

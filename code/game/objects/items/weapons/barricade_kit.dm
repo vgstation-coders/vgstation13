@@ -33,7 +33,7 @@
 		if("Directional")
 			if(!src)
 				return 1
-			if(src.loc != user)
+			if(loc != user)
 				return 1
 			//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinal direction, etc.
 			for(var/obj/structure/window/barricade/BC in user.loc)
@@ -53,7 +53,7 @@
 		if("Full Tile")
 			if(!src)
 				return 1
-			if(src.loc != user)
+			if(loc != user)
 				return 1
 			if(kit_uses < 3)
 				to_chat(user, "<span class='warning'>This barricade doesn't have enough planks and nails left for that.</span>")

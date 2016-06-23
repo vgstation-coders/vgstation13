@@ -76,7 +76,7 @@
 
 /obj/item/robot_parts/robot_suit/New()
 	..()
-	src.updateicon()
+	updateicon()
 
 /obj/item/robot_parts/robot_suit/Destroy()
 	..()
@@ -94,24 +94,24 @@
 	head = null
 
 /obj/item/robot_parts/robot_suit/proc/updateicon()
-	src.overlays.len = 0
-	if(src.l_arm)
-		src.overlays += image(icon = icon, icon_state = "l_arm+o")
-	if(src.r_arm)
-		src.overlays += image(icon = icon, icon_state = "r_arm+o")
-	if(src.chest)
-		src.overlays += image(icon = icon, icon_state = "chest+o")
-	if(src.l_leg)
-		src.overlays += image(icon = icon, icon_state = "l_leg+o")
-	if(src.r_leg)
-		src.overlays += image(icon = icon, icon_state = "r_leg+o")
-	if(src.head)
-		src.overlays += image(icon = icon, icon_state = "head+o")
+	overlays.len = 0
+	if(l_arm)
+		overlays += image(icon = icon, icon_state = "l_arm+o")
+	if(r_arm)
+		overlays += image(icon = icon, icon_state = "r_arm+o")
+	if(chest)
+		overlays += image(icon = icon, icon_state = "chest+o")
+	if(l_leg)
+		overlays += image(icon = icon, icon_state = "l_leg+o")
+	if(r_leg)
+		overlays += image(icon = icon, icon_state = "r_leg+o")
+	if(head)
+		overlays += image(icon = icon, icon_state = "head+o")
 
 /obj/item/robot_parts/robot_suit/proc/check_completion()
-	if(src.l_arm && src.r_arm)
-		if(src.l_leg && src.r_leg)
-			if(src.chest && src.head)
+	if(l_arm && r_arm)
+		if(l_leg && r_leg)
+			if(chest && head)
 				feedback_inc("cyborg_frames_built",1)
 				return 1
 	return 0
@@ -128,46 +128,46 @@
 			user.put_in_inactive_hand(B)
 		qdel(src)
 	if(istype(W, /obj/item/robot_parts/l_leg))
-		if(src.l_leg)	return
+		if(l_leg)	return
 		if(user.drop_item(W, src))
-			src.l_leg = W
-			src.updateicon()
+			l_leg = W
+			updateicon()
 
 	if(istype(W, /obj/item/robot_parts/r_leg))
-		if(src.r_leg)	return
+		if(r_leg)	return
 		if(user.drop_item(W, src))
-			src.r_leg = W
-			src.updateicon()
+			r_leg = W
+			updateicon()
 
 	if(istype(W, /obj/item/robot_parts/l_arm))
-		if(src.l_arm)	return
+		if(l_arm)	return
 		if(user.drop_item(W, src))
-			src.l_arm = W
-			src.updateicon()
+			l_arm = W
+			updateicon()
 
 	if(istype(W, /obj/item/robot_parts/r_arm))
-		if(src.r_arm)	return
+		if(r_arm)	return
 		if(user.drop_item(W, src))
-			src.r_arm = W
-			src.updateicon()
+			r_arm = W
+			updateicon()
 
 	if(istype(W, /obj/item/robot_parts/chest))
-		if(src.chest)	return
+		if(chest)	return
 		if(W:wires && W:cell)
 			if(user.drop_item(W, src))
-				src.chest = W
-				src.updateicon()
+				chest = W
+				updateicon()
 		else if(!W:wires)
 			to_chat(user, "<span class='notice'>You need to attach wires to it first!</span>")
 		else
 			to_chat(user, "<span class='notice'>You need to attach a cell to it first!</span>")
 
 	if(istype(W, /obj/item/robot_parts/head))
-		if(src.head)	return
+		if(head)	return
 		if(W:flash2 && W:flash1)
 			if(user.drop_item(W, src))
-				src.head = W
-				src.updateicon()
+				head = W
+				updateicon()
 		else
 			to_chat(user, "<span class='notice'>You need to attach a flash to it first!</span>")
 
@@ -241,50 +241,50 @@
 			to_chat(user, "<span class='notice'>The MMI must go in after everything else!</span>")
 
 	if (istype(W, /obj/item/weapon/pen))
-		var/t = stripped_input(user, "Enter new robot name", src.name, src.created_name, MAX_NAME_LEN)
+		var/t = stripped_input(user, "Enter new robot name", name, created_name, MAX_NAME_LEN)
 		if (!t)
 			return
-		if (!in_range(src, usr) && src.loc != usr)
+		if (!in_range(src, usr) && loc != usr)
 			return
 
-		src.created_name = t
+		created_name = t
 
 	return
 
 /obj/item/robot_parts/chest/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/weapon/cell))
-		if(src.cell)
+		if(cell)
 			to_chat(user, "<span class='notice'>You have already inserted a cell!</span>")
 			return
 		else
 			if(user.drop_item(W, src))
-				src.cell = W
+				cell = W
 				to_chat(user, "<span class='notice'>You insert the cell!</span>")
 	if(istype(W, /obj/item/stack/cable_coil))
-		if(src.wires)
+		if(wires)
 			to_chat(user, "<span class='notice'>You have already inserted wire!</span>")
 			return
 		else
 			var/obj/item/stack/cable_coil/coil = W
 			coil.use(1)
-			src.wires = 1.0
+			wires = 1.0
 			to_chat(user, "<span class='notice'>You insert the wire!</span>")
 	return
 
 /obj/item/robot_parts/head/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/device/flash))
-		if(src.flash1 && src.flash2)
+		if(flash1 && flash2)
 			to_chat(user, "<span class='notice'>You have already inserted the eyes!</span>")
 			return
-		else if(src.flash1)
+		else if(flash1)
 			if(user.drop_item(W, src))
-				src.flash2 = W
+				flash2 = W
 				to_chat(user, "<span class='notice'>You insert the flash into the eye socket!</span>")
 		else
 			if(user.drop_item(W, src))
-				src.flash1 = W
+				flash1 = W
 				to_chat(user, "<span class='notice'>You insert the flash into the eye socket!</span>")
 	else if(istype(W, /obj/item/weapon/stock_parts/manipulator))
 		if(user.drop_item(W))

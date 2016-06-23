@@ -193,13 +193,13 @@
 	if(!usr.canmove || usr.isUnconscious() || usr.restrained())
 		return 0
 
-	if(src.icon_state == "suitjacket_blue_open")
-		src.icon_state = "suitjacket_blue"
-		src.item_state = "suitjacket_blue"
+	if(icon_state == "suitjacket_blue_open")
+		icon_state = "suitjacket_blue"
+		item_state = "suitjacket_blue"
 		to_chat(usr, "You button up the suit jacket.")
-	else if(src.icon_state == "suitjacket_blue")
-		src.icon_state = "suitjacket_blue_open"
-		src.item_state = "suitjacket_blue_open"
+	else if(icon_state == "suitjacket_blue")
+		icon_state = "suitjacket_blue_open"
+		item_state = "suitjacket_blue_open"
 		to_chat(usr, "You unbutton the suit jacket.")
 	else
 		to_chat(usr, "You button-up some imaginary buttons on your [src].")
@@ -472,7 +472,7 @@
 		to_chat(user,"<span class='notice'>You add \the [W] to \the [src].</span>")
 		qdel(W)
 		qdel(src)
-		var/obj/advanced = new /obj/item/clothing/suit/spaceblanket/advanced (src.loc)
+		var/obj/advanced = new /obj/item/clothing/suit/spaceblanket/advanced (loc)
 		user.put_in_hands(advanced)
 
 /obj/item/clothing/suit/spaceblanket/advanced

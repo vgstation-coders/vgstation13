@@ -28,8 +28,8 @@
 /obj/item/seeds/proc/update_appearance()
 	if(!seed) return
 	icon_state = seed.packet_icon
-	src.name = "packet of [seed.seed_name] [seed.seed_noun]"
-	src.desc = "It has a picture of [seed.display_name] on the front."
+	name = "packet of [seed.seed_name] [seed.seed_noun]"
+	desc = "It has a picture of [seed.display_name] on the front."
 
 /obj/item/seeds/examine(mob/user)
 	..()
@@ -45,7 +45,7 @@
 
 /obj/item/seeds/cutting/update_appearance()
 	..()
-	src.name = "packet of [seed.seed_name] cuttings"
+	name = "packet of [seed.seed_name] cuttings"
 
 /obj/item/seeds/random
 	seed_type = null

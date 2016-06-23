@@ -53,7 +53,7 @@
 
 	if(shock_stage >= 50) tally += 3
 
-	if(M_FAT in src.mutations)
+	if(M_FAT in mutations)
 		tally += 1.5
 
 	var/skate_bonus = 0
@@ -119,7 +119,7 @@
 	return(prob_slip)
 
 /mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	var/old_z = src.z
+	var/old_z = z
 
 	. = ..(NewLoc, Dir, step_x, step_y)
 
@@ -127,8 +127,8 @@
 		return 0*/
 
 	if(.)
-		if (old_z != src.z) crewmonitor.queueUpdate(old_z)
-		crewmonitor.queueUpdate(src.z)
+		if (old_z != z) crewmonitor.queueUpdate(old_z)
+		crewmonitor.queueUpdate(z)
 
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes

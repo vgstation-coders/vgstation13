@@ -21,7 +21,7 @@
 
 /datum/artifact_effect/hurt/DoEffectAura()
 	if(holder)
-		for (var/mob/living/carbon/C in range(src.effectrange,holder))
+		for (var/mob/living/carbon/C in range(effectrange,holder))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
 				if(prob(10))

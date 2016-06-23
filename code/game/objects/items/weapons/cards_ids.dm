@@ -35,10 +35,10 @@
 	set src in usr
 
 	if (t)
-		src.name = text("Data Disk- '[]'", t)
+		name = text("Data Disk- '[]'", t)
 	else
-		src.name = "Data Disk"
-	src.add_fingerprint(usr)
+		name = "Data Disk"
+	add_fingerprint(usr)
 	return
 
 /obj/item/weapon/card/data/clown
@@ -201,15 +201,15 @@
 	..()
 
 	if(Adjacent(user))
-		user.show_message(text("The current assignment on the card is [src.assignment]."),1)
+		user.show_message(text("The current assignment on the card is [assignment]."),1)
 		user.show_message("The blood type on the card is [blood_type].",1)
 		user.show_message("The DNA hash on the card is [dna_hash].",1)
 		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
 
 /obj/item/weapon/card/id/attack_self(mob/user as mob)
-	user.visible_message("[user] shows you: [bicon(src)] [src.name]: assignment: [src.assignment]",\
-		"You flash your ID card: [bicon(src)] [src.name]: assignment: [src.assignment]")
-	src.add_fingerprint(user)
+	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
+	add_fingerprint(user)
 	return
 
 /obj/item/weapon/card/id/GetAccess()
@@ -236,7 +236,7 @@
 		next_account_number += rand(1,25)
 
 /obj/item/weapon/card/id/proc/UpdateName()
-	name = "[src.registered_name]'s ID Card ([src.assignment])"
+	name = "[registered_name]'s ID Card ([assignment])"
 
 /obj/item/weapon/card/id/proc/SetOwnerInfo(var/mob/living/carbon/human/H)
 	if(!H || !H.dna) return
@@ -255,8 +255,8 @@
 	return amt
 
 /obj/item/weapon/card/id/proc/GetJobName()
-	var/jobName = src.assignment //what the card's job is called
-	var/alt_jobName = src.rank   //what the card's job ACTUALLY IS: determines access, etc.
+	var/jobName = assignment //what the card's job is called
+	var/alt_jobName = rank   //what the card's job ACTUALLY IS: determines access, etc.
 
 	if(jobName in get_all_job_icons()) //Check if the job name has a hud icon
 		return jobName
@@ -281,10 +281,10 @@
 	..()
 	if(istype(W,/obj/item/weapon/id_wallet))
 		to_chat(user, "You slip [src] into [W].")
-		src.name = "[src.registered_name]'s [W.name] ([src.assignment])"
-		src.desc = W.desc
-		src.icon = W.icon
-		src.icon_state = W.icon_state
+		name = "[registered_name]'s [W.name] ([assignment])"
+		desc = W.desc
+		icon = W.icon
+		icon_state = W.icon_state
 		del(W)
 		return
 */
@@ -314,21 +314,21 @@
 		access |= I.access
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
-	if(!src.registered_name)
+	if(!registered_name)
 		//Stop giving the players unsanitized unputs! You are giving ways for players to intentionally crash clients! -Nodrak
 		var t = reject_bad_name(input(user, "What name would you like to put on this card?", "Agent card name", ishuman(user) ? user.real_name : user.name))
 		if(!t) //Same as mob/new_player/prefrences.dm
 			alert("Invalid name.")
 			return
-		src.registered_name = t
+		registered_name = t
 
 		var u = sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: This will not grant any access levels other than Maintenance.", "Agent card job assignment", "Agent", MAX_MESSAGE_LEN))
 		if(!u)
 			alert("Invalid assignment.")
-			src.registered_name = ""
+			registered_name = ""
 			return
-		src.assignment = u
-		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
+		assignment = u
+		name = "[registered_name]'s ID Card ([assignment])"
 		to_chat(user, "<span class='notice'>You successfully forge the ID card.</span>")
 		registered_user = user
 	else if(!registered_user || registered_user == user)
@@ -344,7 +344,7 @@
 						var/new_name = reject_bad_name(input(user,"What name would you like to put on this card?","Agent card name", ishuman(user) ? user.real_name : user.name))
 						if(!Adjacent(user)) return
 
-						src.registered_name = new_name
+						registered_name = new_name
 						UpdateName()
 						to_chat(user, "Name changed to [new_name].")
 
@@ -379,13 +379,13 @@
 							return
 						if(!choice)
 							return
-						src.icon_state = choice
+						icon_state = choice
 						to_chat(usr, "Appearance changed to [choice].")
 
 					if("Occupation")
 						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Agent card occupation", "Assistant", MAX_MESSAGE_LEN))
 						if(!Adjacent(user)) return
-						src.assignment = new_job
+						assignment = new_job
 						to_chat(user, "Occupation changed to [new_job].")
 						UpdateName()
 
@@ -405,7 +405,7 @@
 
 						var/new_blood_type = sanitize(input(user,"What blood type would you like to be written on this card?","Agent card blood type",default) as text)
 						if(!Adjacent(user)) return
-						src.blood_type = new_blood_type
+						blood_type = new_blood_type
 						to_chat(user, "Blood type changed to [new_blood_type].")
 
 					if("DNA hash")
@@ -418,7 +418,7 @@
 
 						var/new_dna_hash = sanitize(input(user,"What DNA hash would you like to be written on this card?","Agent card DNA hash",default) as text)
 						if(!Adjacent(user)) return
-						src.dna_hash = new_dna_hash
+						dna_hash = new_dna_hash
 						to_chat(user, "DNA hash changed to [new_dna_hash].")
 
 					if("Fingerprint hash")
@@ -431,7 +431,7 @@
 
 						var/new_fingerprint_hash = sanitize(input(user,"What fingerprint hash would you like to be written on this card?","Agent card fingerprint hash",default) as text)
 						if(!Adjacent(user)) return
-						src.fingerprint_hash = new_fingerprint_hash
+						fingerprint_hash = new_fingerprint_hash
 						to_chat(user, "Fingerprint hash changed to [new_fingerprint_hash].")
 
 					if("Reset card")

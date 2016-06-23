@@ -32,7 +32,7 @@
 	else if(iswirecutter(W))
 		if(cell)
 			cell.updateicon()
-			cell.loc = get_turf(src.loc)
+			cell.loc = get_turf(loc)
 			cell = null
 			to_chat(user, "<span class='notice'>You cut the cell away from [src].</span>")
 			update_icon()
@@ -56,6 +56,6 @@
 		item_state = "stungloves"
 	else
 		item_state = initial(item_state)
-	if(ishuman(src.loc))
-		var/mob/living/carbon/human/H = src.loc
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
 		H.update_inv_gloves()

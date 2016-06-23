@@ -1,7 +1,7 @@
 /client/proc/atmosscan()
 	set category = "Mapping"
 	set name = "Check Plumbing"
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 	feedback_add_details("admin_verb","CP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -29,7 +29,7 @@
 /client/proc/powerdebug()
 	set category = "Mapping"
 	set name = "Check Power"
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 	feedback_add_details("admin_verb","CPOW") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

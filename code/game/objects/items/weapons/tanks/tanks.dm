@@ -24,9 +24,9 @@
 /obj/item/weapon/tank/New()
 	..()
 
-	src.air_contents = new /datum/gas_mixture()
-	src.air_contents.volume = volume //liters
-	src.air_contents.temperature = T20C
+	air_contents = new /datum/gas_mixture()
+	air_contents.volume = volume //liters
+	air_contents.temperature = T20C
 
 	processing_objects.Add(src)
 	return
@@ -47,13 +47,13 @@
 /obj/item/weapon/tank/examine(mob/user)
 	..()
 	var/obj/icon = src
-	if (istype(src.loc, /obj/item/assembly))
-		icon = src.loc
+	if (istype(loc, /obj/item/assembly))
+		icon = loc
 	if (!in_range(src, user))
 		if (icon == src) to_chat(user, "<span class='notice'>It's \a [bicon(icon)][src]! If you want any more information you'll need to get closer.</span>")
 		return
 
-	var/celsius_temperature = src.air_contents.temperature-T0C
+	var/celsius_temperature = air_contents.temperature-T0C
 	var/descriptive
 
 	if (celsius_temperature < 20)
@@ -72,16 +72,16 @@
 	to_chat(user, "<span class='info'>\The [bicon(icon)][src] feels [descriptive]</span>")
 
 	if(air_contents.volume * 10 < volume)
-		to_chat(user, "<span class='danger'>The meter on the [src.name] indicates you are almost out of gas!</span>")
+		to_chat(user, "<span class='danger'>The meter on the [name] indicates you are almost out of gas!</span>")
 		playsound(user, 'sound/effects/alert.ogg', 50, 1)
 
 /obj/item/weapon/tank/blob_act()
 	if(prob(50))
-		var/turf/location = src.loc
+		var/turf/location = loc
 		if (!( istype(location, /turf) ))
 			qdel(src)
 
-		if(src.air_contents)
+		if(air_contents)
 			location.assume_air(air_contents)
 
 		qdel(src)
@@ -90,18 +90,18 @@
 	..()
 	var/obj/icon = src
 
-	if (istype(src.loc, /obj/item/assembly))
-		icon = src.loc
+	if (istype(loc, /obj/item/assembly))
+		icon = loc
 
 	if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)
 		user.visible_message("<span class='attack'>[user] has used [W] on [bicon(icon)] [src]</span>", "<span class='attack'>You use \the [W] on [bicon(icon)] [src]</span>")
 		var/obj/item/device/analyzer/analyzer = W
-		user.show_message(analyzer.output_gas_scan(src.air_contents, src, 0), 1)
-		src.add_fingerprint(user)
+		user.show_message(analyzer.output_gas_scan(air_contents, src, 0), 1)
+		add_fingerprint(user)
 	else if (istype(W,/obj/item/latexballon))
 		var/obj/item/latexballon/LB = W
 		LB.blow(src)
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 	else if (istype(W, /obj/item/clothing/gloves/latex))
 		if(air_contents.return_pressure())
 			to_chat(user, "You inflate \the [W] using \the [src].")
@@ -120,7 +120,7 @@
 		bomb_assemble(W,user)
 
 /obj/item/weapon/tank/attack_self(mob/user as mob)
-	if (!(src.air_contents))
+	if (!(air_contents))
 		return
 
 	ui_interact(user)
@@ -167,18 +167,18 @@
 		return 1
 	if (usr.stat|| usr.restrained())
 		return 0
-	if (src.loc != usr)
+	if (loc != usr)
 		return 0
 
 	if (href_list["dist_p"])
 		if (href_list["dist_p"] == "reset")
-			src.distribute_pressure = TANK_DEFAULT_RELEASE_PRESSURE
+			distribute_pressure = TANK_DEFAULT_RELEASE_PRESSURE
 		else if (href_list["dist_p"] == "max")
-			src.distribute_pressure = TANK_MAX_RELEASE_PRESSURE
+			distribute_pressure = TANK_MAX_RELEASE_PRESSURE
 		else
 			var/cp = text2num(href_list["dist_p"])
-			src.distribute_pressure += cp
-		src.distribute_pressure = min(max(round(src.distribute_pressure), 0), TANK_MAX_RELEASE_PRESSURE)
+			distribute_pressure += cp
+		distribute_pressure = min(max(round(distribute_pressure), 0), TANK_MAX_RELEASE_PRESSURE)
 	if (href_list["stat"])
 		if(istype(loc,/mob/living/carbon))
 			var/mob/living/carbon/location = loc
@@ -197,7 +197,7 @@
 				else
 					to_chat(usr, "<span class='notice'>You need something to connect to \the [src].</span>")
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	return 1
 
 
@@ -243,9 +243,9 @@
 
 	var/pressure = air_contents.return_pressure()
 	if(pressure > TANK_FRAGMENT_PRESSURE)
-		if(!istype(src.loc,/obj/item/device/transfer_valve))
-			message_admins("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
-			log_game("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
+		if(!istype(loc,/obj/item/device/transfer_valve))
+			message_admins("Explosive tank rupture! last key to touch the tank was [fingerprintslast].")
+			log_game("Explosive tank rupture! last key to touch the tank was [fingerprintslast].")
 //		to_chat(world, "<span class='warning'>[x],[y] tank is exploding: [pressure] kPa</span>")
 		//Give the gas a chance to build up more pressure through reacting
 		air_contents.react()
@@ -267,8 +267,8 @@
 				if(bhangmeter)
 					bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
 
-		if(istype(src.loc,/obj/item/device/transfer_valve))
-			var/obj/item/device/transfer_valve/TV = src.loc
+		if(istype(loc,/obj/item/device/transfer_valve))
+			var/obj/item/device/transfer_valve/TV = loc
 			TV.child_ruptured(src, range)
 
 		qdel(src)

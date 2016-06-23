@@ -75,7 +75,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)
 	return 1
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/verb/rotate_ccw()
@@ -83,7 +83,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 	return 1
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/attackby(obj/item/W as obj, mob/user as mob)
@@ -206,7 +206,7 @@
 	user.visible_message("<span class='danger'>[user] fires \the [object] from \the [src]!</span>","<span class='danger'>You fire \the [object] from \the [src]!</span>")
 	log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[object.name]) at coordinates ([x],[y],[z])" )
 
-	object.forceMove(src.loc)
+	object.forceMove(loc)
 	object.throw_at(target,distance,speed)
 	var/N = rand(1,3)
 	switch(N)

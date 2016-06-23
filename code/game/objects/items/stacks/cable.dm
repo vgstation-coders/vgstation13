@@ -38,14 +38,14 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	attack_verb = list("whips", "lashes", "disciplines", "flogs")
 
 /obj/item/stack/cable_coil/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [name]! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
 
 /obj/item/stack/cable_coil/New(loc, length = MAXCOIL, var/param_color = null, amount = length)
 	..()
 
 	recipes = cable_recipes
-	src.amount = amount
+	amount = amount
 	if(param_color)
 		_color = param_color
 
@@ -276,7 +276,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /obj/item/stack/cable_coil/cut/New(loc, length = MAXCOIL, var/param_color = null, amount)
 	..(loc)
 	if(!amount)
-		src.amount = rand(1, 2)
+		amount = rand(1, 2)
 	pixel_x = rand(-2, 2)
 	pixel_y = rand(-2, 2)
 	update_icon()

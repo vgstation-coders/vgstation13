@@ -239,7 +239,7 @@ var/global/ZAS_Settings/zas_settings = new
 	for(var/S in typesof(/datum/ZAS_Setting) - /datum/ZAS_Setting)
 		var/id= "[S]"// dfrompath("[S]")
 		//testing("Creating zas_settings\[[id]\] = new [S]")
-		src.settings[id]=new S
+		settings[id]=new S
 
 
 	if(fexists("config/ZAS.txt") == 0)
@@ -249,8 +249,8 @@ var/global/ZAS_Settings/zas_settings = new
 /ZAS_Settings/proc/Save()
 	var/F = file("config/ZAS.txt")
 	fdel(F)
-	for(var/id in src.settings)
-		var/datum/ZAS_Setting/setting = src.settings[id]
+	for(var/id in settings)
+		var/datum/ZAS_Setting/setting = settings[id]
 		F << "# [setting.name]"
 		F << "#   [setting.desc]"
 		F << "[id] [setting.value]"
@@ -279,7 +279,7 @@ var/global/ZAS_Settings/zas_settings = new
 		if (!name)
 			continue
 
-		src.SetFromConfig(name,value)
+		SetFromConfig(name,value)
 
 // INTERNAL USE ONLY
 /ZAS_Settings/proc/idfrompath(const/path)
@@ -287,7 +287,7 @@ var/global/ZAS_Settings/zas_settings = new
 
 // INTERNAL USE ONLY
 /ZAS_Settings/proc/ChangeSetting(var/user,var/id)
-	var/datum/ZAS_Setting/setting = src.settings["[id]"]
+	var/datum/ZAS_Setting/setting = settings["[id]"]
 	var/displayedValue=""
 	switch(setting.valtype)
 		if(ZAS_TYPE_NUMERIC)
@@ -326,12 +326,12 @@ var/global/ZAS_Settings/zas_settings = new
 * @param value The value that the setting should be set to.
 */
 /ZAS_Settings/proc/Set(var/id, var/value)
-	var/datum/ZAS_Setting/setting = src.settings["[id]"]
+	var/datum/ZAS_Setting/setting = settings["[id]"]
 	setting.value=value
 
 // INTERNAL USE ONLY
 /ZAS_Settings/proc/SetFromConfig(var/id, var/value)
-	var/datum/ZAS_Setting/setting = src.settings["[id]"]
+	var/datum/ZAS_Setting/setting = settings["[id]"]
 	switch(setting.valtype)
 		if(ZAS_TYPE_NUMERIC)
 			setting.value = text2num(value)
@@ -363,7 +363,7 @@ var/global/ZAS_Settings/zas_settings = new
 /ZAS_Settings/proc/Get(var/id)
 	if(ispath(id))
 		id="[id]"
-	var/datum/ZAS_Setting/setting = src.settings[id]
+	var/datum/ZAS_Setting/setting = settings[id]
 	if(!setting || !istype(setting))
 		world.log << "ZAS_SETTING DEBUG: [id] | [id]"
 	return setting.value
@@ -388,8 +388,8 @@ a { color: white; }
 		<p><a href="?src=\ref[src];save=1">Save Settings</a> | <a href="?src=\ref[src];load=1">Load Settings</a></p>
 		<p>Please note that changing these settings can and probably will result in death, destruction and mayhem. <b>Change at your own risk.</b></p>
 	<dl>"}
-	for(var/id in src.settings)
-		var/datum/ZAS_Setting/s = src.settings[id]
+	for(var/id in settings)
+		var/datum/ZAS_Setting/s = settings[id]
 
 		dat += {"<dt><b>[s.name]</b> = <i>[s.value]</i> <A href='?src=\ref[src];changevar=[id]'>\[Change\]</A></dt>
 			<dd>[s.desc]</i></dd>"}

@@ -92,7 +92,7 @@
 
 /obj/machinery/rail_switch/New()
 	spawn(10)
-		src.track = locate(/obj/machinery/rail_track, get_step(src, NORTH))
+		track = locate(/obj/machinery/rail_track, get_step(src, NORTH))
 		if(track)
 			id = track.id
 	return
@@ -100,7 +100,7 @@
 /obj/machinery/rail_switch/attack_hand(user as mob)
 	to_chat(user, "You switch the rail track's direction")
 	for (var/obj/machinery/rail_track/T in machines)
-		if (T.id == src.id)
+		if (T.id == id)
 			var/obj/machinery/rail_car/C = locate(/obj/machinery/rail_car, T.loc)
 			if (C)
 				switch (T.dir)
@@ -201,7 +201,7 @@ for (var/client/C)
 		return
 	//mode = 1
 
-	C.loc = src.loc
+	C.loc = loc
 	sleep(2)
 	C.loc = src
 	load = C
@@ -226,7 +226,7 @@ for (var/client/C)
 
 	overlays.len = 0
 
-	load.loc = src.loc
+	load.loc = loc
 	load.pixel_y -= 9
 	load.layer = initial(load.layer)
 	if(ismob(load))
@@ -246,7 +246,7 @@ for (var/client/C)
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		AM.loc = src.loc
+		AM.loc = loc
 		AM.layer = initial(AM.layer)
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))
@@ -277,13 +277,13 @@ for (var/client/C)
 			if (moving == 1)
 				switch (direction)
 					if ("S")
-						for (var/obj/machinery/rail_track/R in locate(src.x,src.y-1,src.z))
+						for (var/obj/machinery/rail_track/R in locate(x,y-1,z))
 							if (R.dir == 10)
 								direction = "W"
 							if (R.dir == 9)
 								direction = "E"
 							if (R.dir == 2 || R.dir == 1 || R.dir == 10 || R.dir == 9)
-								for (var/mob/living/M in locate(src.x,src.y-1,src.z))
+								for (var/mob/living/M in locate(x,y-1,z))
 									step(M,get_dir(src,R))
 								step(src,get_dir(src,R))
 								break
@@ -291,13 +291,13 @@ for (var/client/C)
 								moving = 0
 								speed = 0
 					if ("N")
-						for (var/obj/machinery/rail_track/R in locate(src.x,src.y+1,src.z))
+						for (var/obj/machinery/rail_track/R in locate(x,y+1,z))
 							if (R.dir == 5)
 								direction = "E"
 							if (R.dir == 6)
 								direction = "W"
 							if (R.dir == 5 || R.dir == 1 || R.dir == 6 || R.dir == 2)
-								for (var/mob/living/M in locate(src.x,src.y+1,src.z))
+								for (var/mob/living/M in locate(x,y+1,z))
 									step(M,get_dir(src,R))
 								step(src,get_dir(src,R))
 								break
@@ -305,13 +305,13 @@ for (var/client/C)
 								moving = 0
 								speed = 0
 					if ("E")
-						for (var/obj/machinery/rail_track/R in locate(src.x+1,src.y,src.z))
+						for (var/obj/machinery/rail_track/R in locate(x+1,y,z))
 							if (R.dir == 6)
 								direction = "S"
 							if (R.dir == 10)
 								direction = "N"
 							if (R.dir == 4 || R.dir == 8 || R.dir == 10 || R.dir == 6)
-								for (var/mob/living/M in locate(src.x+1,src.y,src.z))
+								for (var/mob/living/M in locate(x+1,y,z))
 									step(M,get_dir(src,R))
 								step(src,get_dir(src,R))
 								break
@@ -319,13 +319,13 @@ for (var/client/C)
 								moving = 0
 								speed = 0
 					if ("W")
-						for (var/obj/machinery/rail_track/R in locate(src.x-1,src.y,src.z))
+						for (var/obj/machinery/rail_track/R in locate(x-1,y,z))
 							if (R.dir == 9)
 								direction = "N"
 							if (R.dir == 5)
 								direction = "S"
 							if (R.dir == 8 || R.dir == 9 || R.dir == 5 || R.dir == 4)
-								for (var/mob/living/M in locate(src.x-1,src.y,src.z))
+								for (var/mob/living/M in locate(x-1,y,z))
 									step(M,get_dir(src,R))
 								step(src,get_dir(src,R))
 								break

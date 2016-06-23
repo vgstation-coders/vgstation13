@@ -625,7 +625,7 @@ obj/structure/bomberflame/Destroy()
 			for(var/mob/living/L_other in player_list)
 				var/obj/item/weapon/bomberman/target = locate() in L_other
 				if(target)
-					var/mob/living/L_self = src.loc
+					var/mob/living/L_self = loc
 					var/turf/T_self = get_turf(L_self)
 					var/turf/T_other = get_turf(L_other)
 					L_self.loc = T_other

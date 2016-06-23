@@ -45,7 +45,7 @@
 	if (istype(O, /obj/item/weapon/seedbag))
 		var/obj/item/weapon/seedbag/S = O
 		if (S.mode == 1)
-			for (var/obj/item/seeds/G in locate(src.x,src.y,src.z))
+			for (var/obj/item/seeds/G in locate(x,y,z))
 				if (S.contents.len < S.capacity)
 					S.contents += G;
 					if(S.item_quants[G.name])
@@ -114,14 +114,14 @@
 		for(var/obj/O in contents )
 			O.loc = get_turf(src)
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/item/weapon/seedbag/updateUsrDialog()
 	var/list/nearby = range(1, src)
 	for(var/mob/M in nearby)
 		if ((M.client && M.machine == src))
-			src.attack_self(M)
+			attack_self(M)
 */
 /*
  * Sunflower & NovaFlower
@@ -197,10 +197,10 @@
 	if(!..()) return
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are stunned by the powerful acid of the Deathnettle!</span>")
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Had the [src.name] used on them by [user.name] ([user.ckey])</font>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] on [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Had the [name] used on them by [user.name] ([user.ckey])</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] on [M.name] ([M.ckey])</font>")
 
-		log_attack("<font color='red'> [user.name] ([user.ckey]) used the [src.name] on [M.name] ([M.ckey])</font>")
+		log_attack("<font color='red'> [user.name] ([user.ckey]) used the [name] on [M.name] ([M.ckey])</font>")
 		if(!iscarbon(user))
 			M.LAssailant = null
 		else

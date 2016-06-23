@@ -11,7 +11,7 @@
 	New()
 		spawn(1)
 			for(var/obj/machinery/zero_point_emitter/las in machines)
-				if(las.id == src.id)
+				if(las.id == id)
 					lasers += las
 
 	process()
@@ -49,7 +49,7 @@
 	user.machine = src
 	var/t = "<TT><B>Laser status monitor</B><HR>"
 
-	var/obj/machinery/engine/laser/laser = src.laser[1]
+	var/obj/machinery/engine/laser/laser = laser[1]
 
 	if(!laser)
 		t += "<span class='warning'>No laser found</span>"
@@ -84,11 +84,11 @@
 			new_power = min(new_power,0.01)		//highest possible value
 			laser.energy = new_power
 			//
-			src.updateDialog()
+			updateDialog()
 	else if( href_list["online"] )
 		var/obj/machinery/zero_point_emitter/laser = href_list["online"]
 		laser.active = !laser.active
-		src.updateDialog()
+		updateDialog()
 	else if( href_list["freq"] )
 		var/amt = text2num(href_list["freq"])
 		for(var/obj/machinery/zero_point_emitter/laser in lasers)
@@ -97,14 +97,14 @@
 			new_freq = min(new_freq,20000)	//highest possible value
 			laser.frequency = new_freq
 			//
-			src.updateDialog()
+			updateDialog()
 
 /*
 /obj/machinery/computer/lasercon/process()
 	if(!(stat & (NOPOWER|BROKEN)) )
 		use_power(250)
 
-	//src.updateDialog()
+	//updateDialog()
 */
 
 /*
@@ -118,6 +118,6 @@
 			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
-				src.icon_state = "c_unpowered"
+				icon_state = "c_unpowered"
 				stat |= NOPOWER
 */

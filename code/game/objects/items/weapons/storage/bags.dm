@@ -87,7 +87,7 @@
 	return ..()
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
-	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
+	user.visible_message("<span class='danger'>[user] puts the [name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
 
 // -----------------------------
@@ -272,7 +272,7 @@
 		var/col_count = min(7,storage_slots) -1
 		if (adjusted_contents > 7)
 			row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
-		src.standard_orient_objs(row_num, col_count, numbered_contents)
+		standard_orient_objs(row_num, col_count, numbered_contents)
 		return
 
 

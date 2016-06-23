@@ -109,8 +109,8 @@ var/global/list/disease2_list = list()
 	//Moving to the next stage
 	if(clicks > stage*100 && prob(10))
 		if(stage == max_stage)
-			src.cure(mob)
-			mob.antibodies |= src.antigen
+			cure(mob)
+			mob.antibodies |= antigen
 			log += "<br />[timestamp()] STAGEMAX ([stage])"
 		else
 			stage++
@@ -122,7 +122,7 @@ var/global/list/disease2_list = list()
 		e.runeffect(mob,stage)
 
 	//Short airborne spread
-	if(src.spreadtype == "Airborne")
+	if(spreadtype == "Airborne")
 		for(var/mob/living/carbon/M in oview(1,mob))
 			if(airborne_can_reach(get_turf(mob), get_turf(M)))
 				infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")

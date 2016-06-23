@@ -40,7 +40,7 @@
 		else
 			clear_fullscreen("oxy")
 		//Fire and Brute damage overlay (BSSR)
-		var/hurtdamage = src.getBruteLoss() + src.getFireLoss() + damageoverlaytemp
+		var/hurtdamage = getBruteLoss() + getFireLoss() + damageoverlaytemp
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
 		if(hurtdamage)
 			var/severity = 0
@@ -66,7 +66,7 @@
 	else
 		sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
 
-		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+		var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
 		if(E)
 			see_in_dark = E.see_in_dark //species.darksight
 		else

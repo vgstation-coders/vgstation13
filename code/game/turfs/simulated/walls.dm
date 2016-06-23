@@ -31,8 +31,8 @@
 		to_chat(user, "It is covered in wallrot and looks weakened")
 	if(thermite)
 		to_chat(user, "<span class='danger'>It's doused in thermite!</span>")
-	if(src.engraving)
-		to_chat(user, src.engraving)
+	if(engraving)
+		to_chat(user, engraving)
 
 /turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
 	if(mineral == "metal")
@@ -49,7 +49,7 @@
 	else
 		new girder_type(src)
 
-	for(var/obj/O in src.contents) //Eject contents!
+	for(var/obj/O in contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
@@ -61,7 +61,7 @@
 		severity = 1.0
 	switch(severity)
 		if(1.0)
-			src.ChangeTurf(get_base_turf(src.z)) //You get NOTHING, you LOSE
+			ChangeTurf(get_base_turf(z)) //You get NOTHING, you LOSE
 			return
 		if(2.0)
 			if(prob(50))
@@ -101,7 +101,7 @@
 
 /turf/simulated/wall/attack_paw(mob/user as mob)
 
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /turf/simulated/wall/attack_hand(mob/user as mob)
 	user.delayNextAttack(8)
@@ -118,12 +118,12 @@
 			return
 
 	if(rotting)
-		return src.attack_rotting(user) //Stop there, we aren't slamming our hands on a dirty rotten wall
+		return attack_rotting(user) //Stop there, we aren't slamming our hands on a dirty rotten wall
 
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	return ..()
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
@@ -177,15 +177,15 @@
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
 			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with \the [W].</span>", \
 			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
-			src.dismantle_wall(1)
+			dismantle_wall(1)
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(loc)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 			return
 
-	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
+	//THERMITE related stuff. Calls thermitemelt() which handles melting simulated walls and the relevant effects
 	if(thermite && can_thermite)
 		if(W.is_hot()) //HEY CAN THIS SET THE THERMITE ON FIRE ?
 			user.visible_message("<span class='warning'>[user] applies \the [W] to the thermite coating \the [src] and waits</span>", \
@@ -218,7 +218,7 @@
 				user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
 				"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
-				var/pdiff = performWallPressureCheck(src.loc)
+				var/pdiff = performWallPressureCheck(loc)
 				if(pdiff)
 					investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 					message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -242,7 +242,7 @@
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			dismantle_wall()
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(loc)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -292,9 +292,9 @@
 		cultwall = 1
 
 	if(cultwall)
-		src.ChangeTurf(/turf/simulated/floor/engine/cult)
+		ChangeTurf(/turf/simulated/floor/engine/cult)
 	else
-		src.ChangeTurf(/turf/simulated/floor/plating)
+		ChangeTurf(/turf/simulated/floor/plating)
 
 	var/turf/simulated/floor/F = src
 	if(!F)
@@ -305,7 +305,7 @@
 	F.burn_tile()
 	F.icon_state = "[cultwall ? "cultwall_thermite" : "wall_thermite"]"
 
-	var/pdiff = performWallPressureCheck(src.loc)
+	var/pdiff = performWallPressureCheck(loc)
 	if(pdiff)
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been thermited through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has been thermited by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -322,7 +322,7 @@
 	if(mineral == "diamond")
 		return
 
-	src.ChangeTurf(/turf/simulated/floor/plating)
+	ChangeTurf(/turf/simulated/floor/plating)
 
 	var/turf/simulated/floor/F = src
 	if(!F)

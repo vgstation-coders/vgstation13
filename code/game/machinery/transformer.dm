@@ -46,13 +46,13 @@
 		var/move_dir = get_dir(loc, AM.loc)
 		var/mob/living/carbon/human/H = AM
 		if((transform_standing || H.lying) && move_dir == EAST)// || move_dir == WEST)
-			AM.loc = src.loc
+			AM.loc = loc
 			do_transform(AM)
 	//Shit bugs out if theres too many items on the enter side conveyer
 	else if(istype(AM, /obj/item))
 		var/move_dir = get_dir(loc, AM.loc)
 		if(move_dir == EAST)
-			AM.loc = src.loc
+			AM.loc = loc
 
 /obj/machinery/transformer/proc/do_transform(var/mob/living/carbon/human/H)
 	if(stat & (BROKEN|NOPOWER))
@@ -65,7 +65,7 @@
 		return
 
 	if(jobban_isbanned(H, "Cyborg"))
-		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
+		visible_message("<span class='danger'>\The [name] throws an exception. Lifeform not compatible with factory.</span>")
 		return
 
 	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
@@ -142,7 +142,7 @@
 		</ul>
 	"}
 
-	var/datum/browser/popup = new(user, "transformer", src.name, 400, 300)
+	var/datum/browser/popup = new(user, "transformer", name, 400, 300)
 	popup.set_content(data)
 	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
 	popup.open()

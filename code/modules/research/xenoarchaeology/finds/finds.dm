@@ -49,13 +49,13 @@
 
 /*/obj/item/weapon/strangerock/ex_act(var/severity)
 	if(severity && prob(30))
-		src.visible_message("The [src] crumbles away, leaving some dust and gravel behind.")*/
+		visible_message("The [src] crumbles away, leaving some dust and gravel behind.")*/
 
 /obj/item/weapon/strangerock/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/weldingtool/))
 		var/obj/item/weapon/weldingtool/w = W
 		if(w.isOn())
-			if(w.get_fuel() >= 4 && !src.method)
+			if(w.get_fuel() >= 4 && !method)
 				if(inside)
 					inside.loc = get_turf(src)
 					inside = null
@@ -79,7 +79,7 @@
 
 	..()
 	if(prob(33))
-		src.visible_message("<span class='warning'>[src] crumbles away, leaving some dust and gravel behind.</span>")
+		visible_message("<span class='warning'>[src] crumbles away, leaving some dust and gravel behind.</span>")
 		qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@
 	switch(find_type)
 		if(1)
 			item_type = "bowl"
-			new_item = new /obj/item/weapon/reagent_containers/glass(src.loc)
+			new_item = new /obj/item/weapon/reagent_containers/glass(loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "bowl"
 			apply_image_decorations = 1
@@ -129,7 +129,7 @@
 				additional_desc = "There appear to be [pick("dark","faintly glowing","pungent","bright")] [pick("red","purple","green","blue")] stains inside."
 		if(2)
 			item_type = "urn"
-			new_item = new /obj/item/weapon/reagent_containers/glass(src.loc)
+			new_item = new /obj/item/weapon/reagent_containers/glass(loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "urn"
 			apply_image_decorations = 1
@@ -138,11 +138,11 @@
 		if(3)
 			item_type = "[pick("fork","spoon","knife")]"
 			if(prob(25))
-				new_item = new /obj/item/weapon/kitchen/utensil/fork(src.loc)
+				new_item = new /obj/item/weapon/kitchen/utensil/fork(loc)
 			else if(prob(50))
-				new_item = new /obj/item/weapon/kitchen/utensil/knife(src.loc)
+				new_item = new /obj/item/weapon/kitchen/utensil/knife(loc)
 			else
-				new_item = new /obj/item/weapon/kitchen/utensil/spoon(src.loc)
+				new_item = new /obj/item/weapon/kitchen/utensil/spoon(loc)
 			additional_desc = "[pick("It's like no [item_type] you've ever seen before",\
 			"It's a mystery how anyone is supposed to eat with this",\
 			"You wonder what the creator's mouth was shaped like")]."
@@ -163,7 +163,7 @@
 				"You wonder what kind of music was made with it")]."
 		if(6)
 			item_type = "[pick("bladed knife","serrated blade","sharp cutting implement")]"
-			new_item = new /obj/item/weapon/kitchen/utensil/knife/large(src.loc)
+			new_item = new /obj/item/weapon/kitchen/utensil/knife/large(loc)
 			additional_desc = "[pick("It doesn't look safe.",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
@@ -172,7 +172,7 @@
 			var/chance = 10
 			for(var/type in typesof(/obj/item/weapon/coin))
 				if(prob(chance))
-					new_item = new type(src.loc)
+					new_item = new type(loc)
 					break
 				chance += 10
 
@@ -182,24 +182,24 @@
 			apply_image_decorations = 1
 		if(8)
 			item_type = "handcuffs"
-			new_item = new /obj/item/weapon/handcuffs(src.loc)
+			new_item = new /obj/item/weapon/handcuffs(loc)
 			additional_desc = "[pick("They appear to be for securing two things together","Looks kinky","Doesn't seem like a children's toy")]."
 		if(9)
 			item_type = "[pick("wicked","evil","byzantine","dangerous")] looking [pick("device","contraption","thing","trap")]"
 			apply_prefix = 0
-			new_item = new /obj/item/weapon/legcuffs/beartrap(src.loc)
+			new_item = new /obj/item/weapon/legcuffs/beartrap(loc)
 			additional_desc = "[pick("It looks like it could take a limb off",\
 			"Could be some kind of animal trap",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along part of it")]."
 		if(10)
 			item_type = "[pick("cylinder","tank","chamber")]"
-			new_item = new /obj/item/weapon/lighter(src.loc)
+			new_item = new /obj/item/weapon/lighter(loc)
 			additional_desc = "There is a tiny device attached."
 			if(prob(30))
 				apply_image_decorations = 1
 		if(11)
 			item_type = "box"
-			new_item = new /obj/item/weapon/storage/box(src.loc)
+			new_item = new /obj/item/weapon/storage/box(loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "box"
 			if(prob(30))
@@ -207,21 +207,21 @@
 		if(12)
 			item_type = "[pick("cylinder","tank","chamber")]"
 			if(prob(25))
-				new_item = new /obj/item/weapon/tank/air(src.loc)
+				new_item = new /obj/item/weapon/tank/air(loc)
 			else if(prob(50))
-				new_item = new /obj/item/weapon/tank/anesthetic(src.loc)
+				new_item = new /obj/item/weapon/tank/anesthetic(loc)
 			else
-				new_item = new /obj/item/weapon/tank/plasma(src.loc)
+				new_item = new /obj/item/weapon/tank/plasma(loc)
 			icon_state = pick("oxygen","oxygen_fr","oxygen_f","plasma","anesthetic")
 			additional_desc = "It [pick("gloops","sloshes")] slightly when you shake it."
 		if(13)
 			item_type = "tool"
 			if(prob(25))
-				new_item = new /obj/item/weapon/wrench(src.loc)
+				new_item = new /obj/item/weapon/wrench(loc)
 			else if(prob(25))
-				new_item = new /obj/item/weapon/crowbar(src.loc)
+				new_item = new /obj/item/weapon/crowbar(loc)
 			else
-				new_item = new /obj/item/weapon/screwdriver(src.loc)
+				new_item = new /obj/item/weapon/screwdriver(loc)
 			additional_desc = "[pick("It doesn't look safe.",\
 			"You wonder what it was used for",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains on it")]."
@@ -247,9 +247,9 @@
 			new_item:amount = rand(5,45)
 		if(15)
 			if(prob(75))
-				new_item = new /obj/item/weapon/pen(src.loc)
+				new_item = new /obj/item/weapon/pen(loc)
 			else
-				new_item = new /obj/item/weapon/pen/sleepypen(src.loc)
+				new_item = new /obj/item/weapon/pen/sleepypen(loc)
 			if(prob(30))
 				apply_image_decorations = 1
 		if(16)
@@ -274,11 +274,11 @@
 		if(17)
 			//cultblade
 			apply_prefix = 0
-			new_item = new /obj/item/weapon/melee/cultblade(src.loc)
+			new_item = new /obj/item/weapon/melee/cultblade(loc)
 			apply_material_decorations = 0
 			apply_image_decorations = 0
 		if(18)
-			new_item = new /obj/item/beacon(src.loc)
+			new_item = new /obj/item/beacon(loc)
 			talkative = 0
 			new_item.icon_state = "unknown[rand(1,4)]"
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
@@ -289,7 +289,7 @@
 
 			var/new_type = pick(possible_spawns)
 
-			new_item = new new_type(src.loc)
+			new_item = new new_type(loc)
 			apply_prefix = 0
 
 			if(istype(new_item, /obj/item/weapon/claymore)) new_item.force = 10
@@ -304,11 +304,11 @@
 			/obj/item/clothing/head/helmet/space/cult)
 
 			var/new_type = pick(possible_spawns)
-			new_item = new new_type(src.loc)
+			new_item = new new_type(loc)
 		if(21)
 			//soulstone
 			apply_prefix = 0
-			new_item = new /obj/item/device/soulstone(src.loc)
+			new_item = new /obj/item/device/soulstone(loc)
 			item_type = new_item.name
 			apply_material_decorations = 0
 		if(22)
@@ -322,19 +322,19 @@
 			apply_material_decorations = 0
 		if(23)
 			apply_prefix = 0
-			new_item = new /obj/item/stack/rods(src.loc)
+			new_item = new /obj/item/stack/rods(loc)
 			apply_image_decorations = 0
 			apply_material_decorations = 0
 		if(24)
 			var/list/possible_spawns = existing_typesof(/obj/item/weapon/stock_parts)
 
 			var/new_type = pick(possible_spawns)
-			new_item = new new_type(src.loc)
+			new_item = new new_type(loc)
 			item_type = new_item.name
 			apply_material_decorations = 0
 		if(25)
 			apply_prefix = 0
-			new_item = new /obj/item/weapon/katana(src.loc)
+			new_item = new /obj/item/weapon/katana(loc)
 			new_item.force = 10
 			item_type = new_item.name
 		if(26)
@@ -345,7 +345,7 @@
 			/obj/item/weapon/gun/energy/xray,\
 			/obj/item/weapon/gun/energy/laser/captain)
 			if(spawn_type)
-				var/obj/item/weapon/gun/energy/new_gun = new spawn_type(src.loc)
+				var/obj/item/weapon/gun/energy/new_gun = new spawn_type(loc)
 				new_item = new_gun
 				new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 				new_item.icon_state = "egun[rand(1,6)]"
@@ -367,7 +367,7 @@
 			item_type = "gun"
 		if(27)
 			//revolver
-			var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile(src.loc)
+			var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile(loc)
 			new_item = new_gun
 			new_item.icon_state = "gun[rand(1,4)]"
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
@@ -408,13 +408,13 @@
 				apply_image_decorations = 0
 		if(29)
 			//fossil bone/skull
-			//new_item = new /obj/item/weapon/fossil/base(src.loc)
+			//new_item = new /obj/item/weapon/fossil/base(loc)
 
 			//the replacement item propogation isn't working, and it's messy code anyway so just do it here
 			var/list/candidates = list("/obj/item/weapon/fossil/bone"=9,"/obj/item/weapon/fossil/skull"=3,
 			"/obj/item/weapon/fossil/skull/horned"=2)
 			var/spawn_type = pickweight(candidates)
-			new_item = new spawn_type(src.loc)
+			new_item = new spawn_type(loc)
 
 			apply_prefix = 0
 			additional_desc = "A fossilised part of an alien, long dead."
@@ -422,7 +422,7 @@
 			apply_material_decorations = 0
 		if(30)
 			//fossil shell
-			new_item = new /obj/item/weapon/fossil/shell(src.loc)
+			new_item = new /obj/item/weapon/fossil/shell(loc)
 			apply_prefix = 0
 			additional_desc = "A fossilised, pre-Stygian alien crustacean."
 			apply_image_decorations = 0
@@ -431,7 +431,7 @@
 				apply_image_decorations = 1
 		if(31)
 			//fossil plant
-			new_item = new /obj/item/weapon/fossil/plant(src.loc)
+			new_item = new /obj/item/weapon/fossil/plant(loc)
 			item_type = new_item.name
 			additional_desc = "A fossilised shred of alien plant matter."
 			apply_image_decorations = 0
@@ -490,14 +490,14 @@
 			possible_spawns += /obj/item/clothing/mask/happy
 			//possible_spawns += /obj/item/clothing/mask/stone WHEN I CODE IT
 			var/new_type = pick(possible_spawns)
-			new_item = new new_type(src.loc)
+			new_item = new new_type(loc)
 		if(36)
 			//dice
 			apply_material_decorations = 0
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/weapon/dice/d20/cursed
 			var/new_type = pick(possible_spawns)
-			new_item = new new_type(src.loc)
+			new_item = new new_type(loc)
 		if(37)
 			//space suit
 			apply_material_decorations = 0
@@ -505,19 +505,19 @@
 			possible_spawns += /obj/item/clothing/suit/space/ancient
 			possible_spawns += /obj/item/clothing/head/helmet/space/ancient
 			var/new_type = pick(possible_spawns)
-			new_item = new new_type(src.loc)
+			new_item = new new_type(loc)
 		if(38)
 			//lance
 			apply_material_decorations = 1
 			apply_image_decorations = 1
-			new_item = new /obj/item/weapon/melee/lance(src.loc)
+			new_item = new /obj/item/weapon/melee/lance(loc)
 		if(39)
 			//roulette revolver
 			apply_material_decorations = 0
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/weapon/gun/projectile/roulette_revolver
 			var/new_type = pick(possible_spawns)
-			new_item = new new_type(src.loc)
+			new_item = new new_type(loc)
 
 	var/decorations = ""
 	if(apply_material_decorations)
@@ -574,7 +574,7 @@
 	//icon and icon_state should have already been set
 	if(new_item)
 		new_item.name = name
-		new_item.desc = src.desc
+		new_item.desc = desc
 
 		if(talkative && istype(new_item,/obj/item/weapon))
 			new_item.listening_to_players = 1

@@ -43,7 +43,7 @@
 		if(!stat)
 			Aggro()
 		if(T.throwforce <= 15 && speed < 10)
-			visible_message("<span class='notice'>The [T.name] [src.throw_message] [src.name]!</span>")
+			visible_message("<span class='notice'>The [T.name] [throw_message] [name]!</span>")
 			return
 	..()
 
@@ -95,7 +95,7 @@
 			var/mob/living/L = target
 			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
 			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
-			visible_message("<span class='danger'>The [src.name]'s stare chills [L.name] to the bone!</span>")
+			visible_message("<span class='danger'>The [name]'s stare chills [L.name] to the bone!</span>")
 	return
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
@@ -113,7 +113,7 @@
 /mob/living/simple_animal/hostile/asteroid/basilisk/Die()
 	var/counter
 	for(counter=0, counter<2, counter++)
-		var/obj/item/weapon/ore/diamond/D = new /obj/item/weapon/ore/diamond(src.loc)
+		var/obj/item/weapon/ore/diamond/D = new /obj/item/weapon/ore/diamond(loc)
 		D.layer = 4.1
 	..()
 
@@ -153,13 +153,13 @@
 	target = new_target
 	if(target != null)
 		if(istype(target, /obj/item/weapon/ore))
-			visible_message("<span class='notice'>The [src.name] looks at [target.name] with hungry eyes.</span>")
+			visible_message("<span class='notice'>The [name] looks at [target.name] with hungry eyes.</span>")
 			stance = HOSTILE_STANCE_ATTACK
 			return
 		if(isliving(target))
 			Aggro()
 			stance = HOSTILE_STANCE_ATTACK
-			visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
+			visible_message("<span class='danger'>The [name] tries to flee from [target.name]!</span>")
 			retreat_distance = 10
 			minimum_distance = 10
 			Burrow()
@@ -188,7 +188,7 @@
 		alerted = 1
 		spawn(chase_time)
 		if(alerted)
-			visible_message("<span class='danger'>The [src.name] buries into the ground, vanishing from sight!</span>")
+			visible_message("<span class='danger'>The [name] buries into the ground, vanishing from sight!</span>")
 			qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Reward()
@@ -198,13 +198,13 @@
 	var/counter
 	for(var/R in ore_types_eaten)
 		for(counter=0, counter < ore_eaten, counter++)
-			new R(src.loc)
+			new R(loc)
 	ore_types_eaten.len = 0
 	ore_eaten = 0
 
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/bullet_act(var/obj/item/projectile/P)
-	visible_message("<span class='danger'>The [P.name] was repelled by [src.name]'s girth!</span>")
+	visible_message("<span class='danger'>The [P.name] was repelled by [name]'s girth!</span>")
 	return
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/Die()
@@ -243,7 +243,7 @@
 	pass_flags = PASSTABLE
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = getFromPool(/mob/living/simple_animal/hostile/asteroid/hivelordbrood,src.loc)
+	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = getFromPool(/mob/living/simple_animal/hostile/asteroid/hivelordbrood,loc)
 	A.GiveTarget(target)
 	A.friends = friends
 	A.faction = faction
@@ -254,7 +254,7 @@
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/Die()
 	mouse_opacity = 1
-	new /obj/item/asteroid/hivelord_core(src.loc)
+	new /obj/item/asteroid/hivelord_core(loc)
 	..()
 
 /obj/item/asteroid/hivelord_core
@@ -377,7 +377,7 @@
 	size = SIZE_BIG
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire()
-	visible_message("<span class='warning'>The [src.name] digs its tentacles under [target.name]!</span>")
+	visible_message("<span class='warning'>The [name] digs its tentacles under [target.name]!</span>")
 	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
 	var/tturf = get_turf(target)
 	new /obj/effect/goliath_tentacle/original(tturf)
@@ -415,9 +415,9 @@
 	..()
 
 /obj/effect/goliath_tentacle/proc/Trip()
-	for(var/mob/living/M in src.loc)
+	for(var/mob/living/M in loc)
 		M.Weaken(5)
-		visible_message("<span class='warning'>The [src.name] knocks [M.name] down!</span>")
+		visible_message("<span class='warning'>The [name] knocks [M.name] down!</span>")
 
 	qdel(src)
 

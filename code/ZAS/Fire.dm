@@ -35,7 +35,7 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/ashify()
 	if(!on_fire)
 		return
-	new ashtype(src.loc)
+	new ashtype(loc)
 	qdel(src)
 
 /atom/proc/extinguish()
@@ -106,8 +106,8 @@ Attach to transfer valve and open. BOOM.
 // ignite_temp: 0 = Don't check, just get fuel.
 /turf/simulated/proc/getAmtFuel(var/ignite_temp=0)
 	var/fuel_found=0
-	if(!ignite_temp || src.autoignition_temperature<ignite_temp)
-		fuel_found += src.getFireFuel()
+	if(!ignite_temp || autoignition_temperature<ignite_temp)
+		fuel_found += getFireFuel()
 	for(var/atom/A in src)
 		if(!A) continue
 		if(ignite_temp && A.autoignition_temperature>ignite_temp) continue

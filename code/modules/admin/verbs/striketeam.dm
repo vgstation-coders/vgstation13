@@ -164,7 +164,7 @@ var/global/sent_strike_team = 0
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(src)
 	E.imp_in = src
 	E.implanted = 1
-	src.update_icons()
+	update_icons()
 
 
 

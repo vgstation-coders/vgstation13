@@ -84,7 +84,7 @@ var/list/blob_looks
 		if((blobs.len >= blobmode.blobnukeposs) && prob(3) && !blobmode.nuclear)
 			blobmode.stage(2)
 			blobmode.nuclear = 1
-	src.dir = pick(cardinal)
+	dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
 	if(blob_looks[looks] == 64)
@@ -93,7 +93,7 @@ var/list/blob_looks
 			spawn(10)
 				spawning = 0//for sprites
 				icon_state = initial(icon_state)
-				src.update_icon(1)
+				update_icon(1)
 		else
 			spawning = 0
 			update_icon()
@@ -209,15 +209,15 @@ var/list/blob_looks
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(10)
 	playsound(get_turf(src), 'sound/effects/attackblob.ogg', 50, 1)
-	src.visible_message("<span class='warning'><B>The [src.name] has been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
+	visible_message("<span class='warning'><B>The [name] has been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
 	var/damage = 0
 	switch(W.damtype)
 		if("fire")
-			damage = (W.force / max(src.fire_resist,1))
+			damage = (W.force / max(fire_resist,1))
 			if(istype(W, /obj/item/weapon/weldingtool) || istype(W, /obj/item/weapon/pickaxe/plasmacutter))
 				playsound(get_turf(src), 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
-			damage = (W.force / max(src.brute_resist,1))
+			damage = (W.force / max(brute_resist,1))
 
 	health -= damage
 	update_health()
@@ -324,7 +324,7 @@ var/list/blob_looks = list(
 			expand(T)//No blob here so try and expand
 			return
 		spawn(2)
-			B.Pulse((pulse+1),get_dir(src.loc,T))
+			B.Pulse((pulse+1),get_dir(loc,T))
 		return
 	return
 
@@ -346,7 +346,7 @@ var/list/blob_looks = list(
 			else	T = null
 
 	if(!T)	return 0
-	var/obj/effect/blob/normal/B = new(src.loc, newlook = looks)
+	var/obj/effect/blob/normal/B = new(loc, newlook = looks)
 	B.density = 1
 
 	if(blob_looks[looks] == 64)
@@ -379,9 +379,9 @@ var/list/blob_looks = list(
 	if(!ispath(type))
 		error("[type] is an invalid type for the blob.")
 	if("[type]" == "/obj/effect/blob/core")
-		new type(src.loc, 200, null, 1, M, newlook = looks)
+		new type(loc, 200, null, 1, M, newlook = looks)
 	else
-		new type(src.loc, newlook = looks)
+		new type(loc, newlook = looks)
 	spawning = 1//so we don't show red severed connections
 	manual_remove = 1
 	Delete()

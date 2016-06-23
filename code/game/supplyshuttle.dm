@@ -53,7 +53,7 @@ var/list/mechtoys = list(
 	else if (iswelder(I) && anchored == 0)
 		var/obj/item/weapon/weldingtool/WT = I
 		if(WT.remove_fuel(0, user))
-			new /obj/item/stack/sheet/mineral/plastic (src.loc,10)
+			new /obj/item/stack/sheet/mineral/plastic (loc,10)
 			qdel(src)
 			return
 	return ..()
@@ -383,14 +383,14 @@ var/list/mechtoys = list(
 
 
 /obj/machinery/computer/ordercomp/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/computer/ordercomp/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
 
 /obj/machinery/computer/supplycomp/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/computer/supplycomp/attack_paw(var/mob/user as mob)
@@ -722,8 +722,8 @@ var/list/mechtoys = list(
 					supply_shuttle.requestlist.Cut(i,i+1)
 					var/cargo_share = round((P.cost/100)*20)
 					var/centcom_share = P.cost-cargo_share
-					A.charge(centcom_share,null,"Supply Order #[SO.ordernum] ([P.name])",src.name,dest_name = "CentComm")
-					A.charge(cargo_share,cargo_acct,"Order Tax",src.name)
+					A.charge(centcom_share,null,"Supply Order #[SO.ordernum] ([P.name])",name,dest_name = "CentComm")
+					A.charge(cargo_share,cargo_acct,"Order Tax",name)
 					supply_shuttle.shoppinglist += O
 					temp = {"Thanks for your order.<BR>
 						<BR><A href='?src=\ref[src];viewrequests=1'>Back</A> <A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"}

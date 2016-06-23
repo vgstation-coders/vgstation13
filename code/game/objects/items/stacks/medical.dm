@@ -46,7 +46,7 @@
 
 	else
 
-		M.heal_organ_damage((src.heal_brute/2), (src.heal_burn/2))
+		M.heal_organ_damage((heal_brute/2), (heal_burn/2))
 		user.visible_message( \
 			"<span class='notice'>[user] applies \the [src] to [M].</span>", \
 			"<span class='notice'>You apply \the [src] to [M].</span>" \

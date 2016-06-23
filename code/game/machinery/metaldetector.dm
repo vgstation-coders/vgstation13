@@ -40,7 +40,7 @@
 	if(!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
 		return -1
 
-	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest
+	if(!allowed(perp)) //cops can do no wrong, unless set to arrest
 
 		if(!wpermit(perp))
 			for(var/obj/item/I in perp.held_items)
@@ -117,10 +117,10 @@
 
 	/*if (iswirecutter(W))
 		add_fingerprint(user)
-		src.disable = !src.disable
-		if (src.disable)
+		disable = !disable
+		if (disable)
 			user.visible_message("<span class='warning'>[user] has disconnected the detector array!</span>", "<span class='warning'>You disconnect the detector array!</span>")
-		if (!src.disable)
+		if (!disable)
 			user.visible_message("<span class='warning'>[user] has connected the detector array!</span>", "<span class='warning'>You connect the detector array!</span>")
 	*/
 
@@ -139,19 +139,19 @@
 		else
 			return
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return 1
 
 
 
 /obj/machinery/detector/attack_hand(mob/user as mob)
 
-	if(src.allowed(user))
+	if(allowed(user))
 
 
 		user.set_machine(src)
 
-		if(!src.anchored)
+		if(!anchored)
 			return
 
 		var/dat = {"
@@ -170,14 +170,14 @@
 
 	else:
 
-		src.visible_message("<span class = 'warning'>ACCESS DENIED!</span>")
+		visible_message("<span class = 'warning'>ACCESS DENIED!</span>")
 
 
 /obj/machinery/detector/proc/flash()
 	if (!(powered()))
 		return
 
-	if ((src.disable) || (src.last_read && world.time < src.last_read + 20))
+	if ((disable) || (last_read && world.time < last_read + 20))
 		return
 
 
@@ -185,9 +185,9 @@
 	var/sndstr = ""
 	for (var/mob/O in viewers(src, null))
 		if(isobserver(O)) continue
-		if (get_dist(src, O) > src.range)
+		if (get_dist(src, O) > range)
 			continue
-		var/list/ourretlist = src.assess_perp(O)
+		var/list/ourretlist = assess_perp(O)
 		if(!istype(ourretlist) || !ourretlist.len)
 			return
 		var/dudesthreat = ourretlist[1]
@@ -203,9 +203,9 @@
 
 
 
-			src.last_read = world.time
+			last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'warning'>Threat Detected! Subject: [dudesname]</span>")////
+			visible_message("<span class = 'warning'>Threat Detected! Subject: [dudesname]</span>")////
 
 
 		else if(dudesthreat <= 3 && dudesthreat != 0 && senset)
@@ -215,9 +215,9 @@
 				maxthreat = 1
 
 
-			src.last_read = world.time
+			last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'warning'>Additional screening required! Subject: [dudesname]</span>")
+			visible_message("<span class = 'warning'>Additional screening required! Subject: [dudesname]</span>")
 
 
 		else
@@ -227,9 +227,9 @@
 
 
 
-			src.last_read = world.time
+			last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'notice'> Subject: [dudesname] clear.</span>")
+			visible_message("<span class = 'notice'> Subject: [dudesname] clear.</span>")
 
 
 	flick("[base_state]_flash", src)
@@ -252,18 +252,18 @@
 	..(severity)
 
 /obj/machinery/detector/HasProximity(atom/movable/AM as mob|obj)
-	if ((src.disable) || (src.last_read && world.time < src.last_read + 30))
+	if ((disable) || (last_read && world.time < last_read + 30))
 		return
 
 	if(istype(AM, /mob/living/carbon))
 
-		if ((src.anchored))
-			src.flash()
+		if ((anchored))
+			flash()
 
 /obj/machinery/detector/wrenchAnchor(mob/user)
 	if(..() == 1)
 		overlays.len = 0
 		if(anchored)
-			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
+			overlays += image(icon = icon, icon_state = "[base_state]-s")
 
 

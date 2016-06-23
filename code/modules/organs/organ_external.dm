@@ -173,7 +173,7 @@
 					target.take_damage(brute, burn, sharp, edge, used_weapon, forbidden_limbs + src)
 
 	//Sync the organ's damage with its wounds
-	src.update_damages()
+	update_damages()
 	owner.updatehealth()
 
 	var/result = update_icon()
@@ -202,7 +202,7 @@
 		perma_injury = 0
 
 	//Sync the organ's damage with its wounds
-	src.update_damages()
+	update_damages()
 	owner.updatehealth()
 
 	var/result = update_icon()
@@ -333,7 +333,7 @@
 
 	//Bone fracurtes
 	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)))
-		src.fracture()
+		fracture()
 	if(!is_broken())
 		perma_injury = 0
 
@@ -538,7 +538,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			W.disinfected = 1
 
 	//Sync the organ's damage with its wounds
-	src.update_damages()
+	update_damages()
 	if(update_icon())
 		owner.UpdateDamageIcon()
 
@@ -626,10 +626,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 		status |= ORGAN_DESTROYED
 	if(status & ORGAN_DESTROYED)
 
-		src.status &= ~ORGAN_BROKEN
-		src.status &= ~ORGAN_BLEEDING
-		src.status &= ~ORGAN_SPLINTED
-		src.status &= ~ORGAN_DEAD
+		status &= ~ORGAN_BROKEN
+		status &= ~ORGAN_BLEEDING
+		status &= ~ORGAN_SPLINTED
+		status &= ~ORGAN_DEAD
 
 		for(var/implant in implants)
 			qdel(implant)
@@ -642,10 +642,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(spawn_limb)
 			organ = generate_dropped_organ(organ_item)
 			if(species) //Transfer species to the generated organ
-				organ.species = src.species
+				organ.species = species
 				organ.update_icon()
 
-		src.species = null
+		species = null
 
 		if(body_part == LOWER_TORSO)
 			to_chat(owner, "<span class='danger'>You are now sterile.</span>")
@@ -718,7 +718,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/proc/bandage()
 	var/rval = 0
-	src.status &= ~ORGAN_BLEEDING
+	status &= ~ORGAN_BLEEDING
 	for(var/datum/wound/W in wounds)
 		if(W.internal)
 			continue
@@ -738,7 +738,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/proc/clamp()
 	var/rval = 0
-	src.status &= ~ORGAN_BLEEDING
+	status &= ~ORGAN_BLEEDING
 	for(var/datum/wound/W in wounds)
 		if(W.internal)
 			continue
@@ -777,31 +777,31 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return
 
 /datum/organ/external/proc/robotize()
-	src.status &= ~ORGAN_BROKEN
-	src.status &= ~ORGAN_BLEEDING
-	src.status &= ~ORGAN_SPLINTED
-	src.status &= ~ORGAN_CUT_AWAY
-	src.status &= ~ORGAN_ATTACHABLE
-	src.status &= ~ORGAN_DESTROYED
-	src.status &= ~ORGAN_PEG
-	src.status |= ORGAN_ROBOT
-	src.species = null
-	src.destspawn = 0
+	status &= ~ORGAN_BROKEN
+	status &= ~ORGAN_BLEEDING
+	status &= ~ORGAN_SPLINTED
+	status &= ~ORGAN_CUT_AWAY
+	status &= ~ORGAN_ATTACHABLE
+	status &= ~ORGAN_DESTROYED
+	status &= ~ORGAN_PEG
+	status |= ORGAN_ROBOT
+	species = null
+	destspawn = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
 			T.robotize()
 
 /datum/organ/external/proc/peggify()
-	src.status &= ~ORGAN_BROKEN
-	src.status &= ~ORGAN_BLEEDING
-	src.status &= ~ORGAN_CUT_AWAY
-	src.status &= ~ORGAN_SPLINTED
-	src.status &= ~ORGAN_ATTACHABLE
-	src.status &= ~ORGAN_DESTROYED
-	src.status &= ~ORGAN_ROBOT
-	src.status |= ORGAN_PEG
-	src.species = null
-	src.wounds.len = 0
+	status &= ~ORGAN_BROKEN
+	status &= ~ORGAN_BLEEDING
+	status &= ~ORGAN_CUT_AWAY
+	status &= ~ORGAN_SPLINTED
+	status &= ~ORGAN_ATTACHABLE
+	status &= ~ORGAN_DESTROYED
+	status &= ~ORGAN_ROBOT
+	status |= ORGAN_PEG
+	species = null
+	wounds.len = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
 			if(body_part == ARM_LEFT || body_part == ARM_RIGHT)
@@ -818,22 +818,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 				T.wounds.len = 0
 
 /datum/organ/external/proc/fleshify()
-	src.status &= ~ORGAN_BROKEN
-	src.status &= ~ORGAN_BLEEDING
-	src.status &= ~ORGAN_SPLINTED
-	src.status &= ~ORGAN_CUT_AWAY
-	src.status &= ~ORGAN_ATTACHABLE
-	src.status &= ~ORGAN_DESTROYED
-	src.status &= ~ORGAN_PEG
-	src.status &= ~ORGAN_ROBOT
-	src.destspawn = 0
+	status &= ~ORGAN_BROKEN
+	status &= ~ORGAN_BLEEDING
+	status &= ~ORGAN_SPLINTED
+	status &= ~ORGAN_CUT_AWAY
+	status &= ~ORGAN_ATTACHABLE
+	status &= ~ORGAN_DESTROYED
+	status &= ~ORGAN_PEG
+	status &= ~ORGAN_ROBOT
+	destspawn = 0
 
 /datum/organ/external/proc/mutate()
-	src.status |= ORGAN_MUTATED
+	status |= ORGAN_MUTATED
 	owner.update_body()
 
 /datum/organ/external/proc/unmutate()
-	src.status &= ~ORGAN_MUTATED
+	status &= ~ORGAN_MUTATED
 	owner.update_body()
 
 /datum/organ/external/proc/get_damage()	//returns total damage
@@ -1213,22 +1213,22 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 			blood_DNA = list()
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
-	src.species = H.species
+	species = H.species
 
 	//Forming icon for the limb
 	//Setting base icon for this mob's race
 	update_icon(H)
 
 	for(var/datum/butchering_product/B in H.butchering_drops) //Go through all butchering products (like teeth) in the parent
-		if(B.stored_in_organ == src.part) //If they're stored in our organ,
+		if(B.stored_in_organ == part) //If they're stored in our organ,
 
 			var/datum/butchering_product/new_bp = new B.type() //Create a new butchering_product datum to go into the head!
 			new_bp.amount = B.amount
 			B.amount = 0 //Transfer the found product's amount to the new datum
 
-			src.butchering_drops += new_bp
+			butchering_drops += new_bp
 
-			//The reason why B isn't just transferred from H.butchering_drops to src.butchering_drops is:
+			//The reason why B isn't just transferred from H.butchering_drops to butchering_drops is:
 			//on examine(), each butchering drop's "desc_modifier()" is added to the description. This adds stuff like "he HAS NO TEETH AT ALL!!!" to the resulting description.
 
 /obj/item/weapon/organ/examine(mob/user)
@@ -1251,8 +1251,8 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	var/icon/base
 	if(H)
 		if(H.species)
-			if(!src.species)
-				src.species = H.species //Also store the mob's species for later use
+			if(!species)
+				species = H.species //Also store the mob's species for later use
 
 			if(H.species.icobase)
 				base = icon(H.species.icobase)
@@ -1272,7 +1272,7 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 
 		icon = base
 		dir = SOUTH
-		src.transform = turn(src.transform, rand(70, 130))
+		transform = turn(transform, rand(70, 130))
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS DEFINES
@@ -1370,7 +1370,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 	origin_body = H
 
 	if(istype(H))
-		src.icon_state = H.gender == MALE? "head_m" : "head_f"
+		icon_state = H.gender == MALE? "head_m" : "head_f"
 	..()
 	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()

@@ -17,12 +17,12 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 	use_power(500)
-	src.updateDialog()
+	updateDialog()
 
 	if(cloning)
 		cloning -= 1
 		if(!cloning)
-			new /mob/living/carbon/monkey(src.loc)
+			new /mob/living/carbon/monkey(loc)
 			icon_state = "pod_0"
 
 

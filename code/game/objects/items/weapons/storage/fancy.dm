@@ -34,18 +34,18 @@
 	allow_quick_empty = 1
 
 /obj/item/weapon/storage/fancy/update_icon(var/itemremoved = 0)
-	var/total_contents = src.contents.len - itemremoved
-	src.icon_state = "[src.icon_type]box[total_contents]"
+	var/total_contents = contents.len - itemremoved
+	icon_state = "[icon_type]box[total_contents]"
 	return
 
 /obj/item/weapon/storage/fancy/examine(mob/user)
 	..()
 	if(contents.len <= 0)
-		to_chat(user, "<span class='info'>There are no [src.icon_type][plural_type] left in the box.</span>")
+		to_chat(user, "<span class='info'>There are no [icon_type][plural_type] left in the box.</span>")
 	else if(contents.len == 1)
-		to_chat(user, "<span class='info'>There is one [src.icon_type] left in the box.</span>")
+		to_chat(user, "<span class='info'>There is one [icon_type] left in the box.</span>")
 	else
-		to_chat(user, "<span class='info'>There are [src.contents.len] [src.icon_type][plural_type] in the box.</span>")
+		to_chat(user, "<span class='info'>There are [contents.len] [icon_type][plural_type] in the box.</span>")
 
 
 /*
@@ -363,9 +363,9 @@
 	update_icon()
 
 /obj/item/weapon/storage/lockbox/vials/update_icon(var/itemremoved = 0)
-	var/total_contents = src.contents.len - itemremoved
-	src.icon_state = "vialbox[total_contents]"
-	src.overlays.len = 0
+	var/total_contents = contents.len - itemremoved
+	icon_state = "vialbox[total_contents]"
+	overlays.len = 0
 	if (!broken)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
@@ -440,9 +440,9 @@
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location)
 	..()
 	if(!contents.len)
-		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
-		if(istype(src.loc,/mob/living/carbon))
-			var/mob/living/carbon/C = src.loc
+		new/obj/item/trash/chicken_bucket(get_turf(loc))
+		if(istype(loc,/mob/living/carbon))
+			var/mob/living/carbon/C = loc
 			C.u_equip(src, 0)
 		qdel(src)
 

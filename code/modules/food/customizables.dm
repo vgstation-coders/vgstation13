@@ -104,20 +104,20 @@
 	. = ..()
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
-	src.reagents.add_reagent(NUTRIMENT,3)
-	src.updateName()
+	reagents.add_reagent(NUTRIMENT,3)
+	updateName()
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/attackby(obj/item/I, mob/user, params)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if((src.contents.len >= src.ingMax) || (src.contents.len >= ingredientLimit))
+		if((contents.len >= ingMax) || (contents.len >= ingredientLimit))
 			to_chat(user, "<span class='warning'>That's already looking pretty stuffed.</span>")
 			return
 
 		var/obj/item/weapon/reagent_containers/food/snacks/S = I
 		if(istype(S,/obj/item/weapon/reagent_containers/food/snacks/customizable))
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/SC = S
-			if(src.fullyCustom && SC.fullyCustom)
+			if(fullyCustom && SC.fullyCustom)
 				to_chat(user, "<span class='warning'>You slap yourself on the back of the head for thinking that stacking plates is an interesting dish.</span>")
 				return
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
@@ -128,40 +128,40 @@
 			return
 
 		S.reagents.trans_to(src,S.reagents.total_volume)
-		src.ingredients += S
+		ingredients += S
 
-		if(src.addTop) src.overlays -= src.topping //thank you Comic
-		if(!src.fullyCustom && !src.stackIngredients && src.overlays.len)
-			src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
+		if(addTop) overlays -= topping //thank you Comic
+		if(!fullyCustom && !stackIngredients && overlays.len)
+			overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
 			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-			src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
-			src.overlays += src.filling
+			filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
+			overlays += filling
 		else
-			src.overlays += generateFilling(S, params)
-		if(src.addTop) src.drawTopping()
+			overlays += generateFilling(S, params)
+		if(addTop) drawTopping()
 
-		src.updateName()
-		to_chat(user, "<span class='notice'>You add the [I.name] to the [src.name].</span>")
+		updateName()
+		to_chat(user, "<span class='notice'>You add the [I.name] to the [name].</span>")
 	else . = ..()
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S, params)
 	var/image/I
-	if(src.fullyCustom)
+	if(fullyCustom)
 		var/icon/C = getFlatIcon(S, S.dir, 0)
 		I = image(C)
 		I.pixel_y = 12-empty_Y_space(C)
 	else
-		I = src.filling
+		I = filling
 		if(istype(S) && S.filling_color != "#FFFFFF")
 			I.color = S.filling_color
 		else
 			I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-		if(src.stackIngredients)
-			I.pixel_y = src.ingredients.len*2
+		if(stackIngredients)
+			I.pixel_y = ingredients.len*2
 		else
-			src.overlays.len = 0
-	if(src.fullyCustom || src.stackIngredients)
+			overlays.len = 0
+	if(fullyCustom || stackIngredients)
 		var/clicked_x = text2num(params2list(params)["icon-x"])
 		if (isnull(clicked_x))   I.pixel_x = 0
 		else if (clicked_x < 9)  I.pixel_x = -2 //this looks pretty shitty
@@ -174,18 +174,18 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()
 	var/i = 1
 	var/new_name
-	for(var/obj/item/S in src.ingredients)
+	for(var/obj/item/S in ingredients)
 		if(i == 1) new_name += "[S.name]"
-		else if(i == src.ingredients.len) new_name += " and [S.name]"
+		else if(i == ingredients.len) new_name += " and [S.name]"
 		else new_name += ", [S.name]"
 		i++
-	new_name = "[new_name] [initial(src.name)]"
-	if(length(new_name) >= 150) src.name = "something yummy"
-	else src.name = new_name
+	new_name = "[new_name] [initial(name)]"
+	if(length(new_name) >= 150) name = "something yummy"
+	else name = new_name
 	return new_name
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/Destroy()
-	for(. in src.ingredients) qdel(.)
+	for(. in ingredients) qdel(.)
 	return ..()
 
 // Sandwiches //////////////////////////////////////////////////
@@ -202,14 +202,14 @@
 		I.reagents.trans_to(src,I.reagents.total_volume)
 		qdel(I)
 		addTop = 1
-		src.drawTopping()
+		drawTopping()
 	else
 		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/drawTopping()
-	var/image/I = src.topping
-	I.pixel_y = (src.ingredients.len+1)*2
-	src.overlays += I
+	var/image/I = topping
+	I.pixel_y = (ingredients.len+1)*2
+	overlays += I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger
 	name = "burger"
@@ -369,7 +369,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/New()
 	. = ..()
-	src.reagents.add_reagent(src.initReagent,50)
+	reagents.add_reagent(initReagent,50)
 	var/icon/opaquefilling = new(icon,"[initial(icon_state)]_filling")
 	opaquefilling.ChangeOpacity(0.8)
 	filling = image(opaquefilling)
@@ -382,21 +382,21 @@
 			name = "[n_name]"
 		return
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(src.ingredients.len < src.ingMax)
+		if(ingredients.len < ingMax)
 			var/obj/item/weapon/reagent_containers/food/snacks/S = I
 
 			if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 				to_chat(user, "<span class='warning'>[pick("Sorry, no recursive food.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 				return
 			if(user.drop_item(I, src))
-				to_chat(user, "<span class='notice'>You add the [S.name] to the [src.name].</span>")
+				to_chat(user, "<span class='notice'>You add the [S.name] to the [name].</span>")
 				S.reagents.trans_to(src,S.reagents.total_volume)
-				src.ingredients += S
-				src.updateName()
-				src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
+				ingredients += S
+				updateName()
+				overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
 				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-				src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
-				src.overlays += src.filling
+				filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
+				overlays += filling
 		else to_chat(user, "<span class='warning'>That won't fit.</span>")
 	else . = ..()
 	return
@@ -404,18 +404,18 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/updateName() //copypaste of food's updateName()
 	var/i = 1
 	var/new_name
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in src.ingredients)
+	for(var/obj/item/weapon/reagent_containers/food/snacks/S in ingredients)
 		if(i == 1) new_name += "[S.name]"
-		else if(i == src.ingredients.len) new_name += " and [S.name]"
+		else if(i == ingredients.len) new_name += " and [S.name]"
 		else new_name += ", [S.name]"
 		i++
-	new_name = "[new_name] [initial(src.name)]"
-	if(length(new_name) >= 150) src.name = "something yummy"
-	else src.name = new_name
+	new_name = "[new_name] [initial(name)]"
+	if(length(new_name) >= 150) name = "something yummy"
+	else name = new_name
 	return new_name
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S)
-	src.overlays.len = 0
+	overlays.len = 0
 	var/image/I = filling
 	if(S.filling_color != "#FFFFFF")
 		I.color = S.filling_color
@@ -424,7 +424,7 @@
 	return I
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/Destroy()
-	for(. in src.ingredients) qdel(.)
+	for(. in ingredients) qdel(.)
 	return ..()
 
 // Drink Subtypes //////////////////////////////////////////////

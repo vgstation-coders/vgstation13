@@ -90,26 +90,26 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/New()
 	. = ..()
 
-	if(!("[src.type]" in alert_overlays_global))
-		alert_overlays_global += list("[src.type]" = list("alert_hot" = list(),
+	if(!("[type]" in alert_overlays_global))
+		alert_overlays_global += list("[type]" = list("alert_hot" = list(),
 														"alert_cold" = list())
 									)
 
-		var/list/type_states = alert_overlays_global["[src.type]"]
+		var/list/type_states = alert_overlays_global["[type]"]
 
 		for(var/alert_state in type_states)
 			var/list/starting = list()
 			for(var/cdir in cardinal)
-				starting["[cdir]"] = icon(src.icon, alert_state, dir = cdir)
+				starting["[cdir]"] = icon(icon, alert_state, dir = cdir)
 			type_states[alert_state] = starting
-		alert_overlays_global["[src.type]"] = type_states
+		alert_overlays_global["[type]"] = type_states
 		alert_overlays_local = type_states
 	else
-		alert_overlays_local = alert_overlays_global["[src.type]"]
+		alert_overlays_local = alert_overlays_global["[type]"]
 
 	for(var/obj/machinery/door/firedoor/F in loc)
 		if(F != src)
-			if(F.flags & ON_BORDER && src.flags & ON_BORDER && F.dir != src.dir) //two border doors on the same tile don't collide
+			if(F.flags & ON_BORDER && flags & ON_BORDER && F.dir != dir) //two border doors on the same tile don't collide
 				continue
 			spawn(1)
 				qdel(src)
@@ -203,7 +203,7 @@ var/global/list/alert_overlays_global = list()
 		var/area/A = get_area_master(src)
 		ASSERT(istype(A)) // This worries me.
 		var/alarmed = A.doors_down || A.fire
-		var/old_density = src.density
+		var/old_density = density
 		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
 			open()
 		else if(!old_density)
@@ -380,7 +380,7 @@ var/global/list/alert_overlays_global = list()
 
 						var/list/state_list = alert_overlays_local["alert_[ALERT_STATES[i]]"]
 						if(flags & ON_BORDER)
-							overlays += turn(state_list["[turn(cdir, dir2angle(src.dir))]"], dir2angle(src.dir))
+							overlays += turn(state_list["[turn(cdir, dir2angle(dir))]"], dir2angle(dir))
 						else
 							overlays += state_list["[cdir]"]
 	else
@@ -397,7 +397,7 @@ var/global/list/alert_overlays_global = list()
 		var/changed = 0
 		lockdown=0
 		// Pressure alerts
-		pdiff = getOPressureDifferential(src.loc)
+		pdiff = getOPressureDifferential(loc)
 		if(pdiff >= FIREDOOR_MAX_PRESSURE_DIFF)
 			lockdown = 1
 			if(!pdiff_alert)
@@ -408,7 +408,7 @@ var/global/list/alert_overlays_global = list()
 				pdiff_alert = 0
 				changed = 1 // update_icon()
 
-		tile_info = getCardinalAirInfo(src,src.loc,list("temperature","pressure"))
+		tile_info = getCardinalAirInfo(src,loc,list("temperature","pressure"))
 		var/old_alerts = dir_alerts
 		for(var/index = 1; index <= 4; index++)
 			var/list/tileinfo=tile_info[index]

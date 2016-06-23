@@ -29,7 +29,7 @@
 
 	for(var/mob/M in hearers(1, src))
 		if(M == firer) continue
-		if(M.loc != src.loc)
+		if(M.loc != loc)
 			throwdir = get_dir(src,target)
 			if(prob(75))
 				if(istype(M, /mob/living/carbon/))

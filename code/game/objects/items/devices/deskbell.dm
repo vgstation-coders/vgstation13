@@ -29,7 +29,7 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(iswrench(W) && isturf(src.loc))
+	if(iswrench(W) && isturf(loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -97,7 +97,7 @@
 				to_chat(user, "You must undo the securing bolts before you can pick it up.")
 				return
 			if( !user.get_active_hand() )		//if active hand is empty
-				src.loc = user
+				loc = user
 				user.put_in_hands(src)
 				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You grab [src] from the floor!</span>")
 
@@ -177,7 +177,7 @@
 			if(frequency == ringerdatum.frequency)
 				var/turf/T = get_turf(ring_pda)
 				playsound(T, 'sound/machines/notify.ogg', 50, 1)
-				T.visible_message("[bicon(ring_pda)] *[src.name]*")
+				T.visible_message("[bicon(ring_pda)] *[name]*")
 
 
 		if(!radio_connection) return	//the desk bell also works like a simple send-only signaler.
@@ -266,10 +266,10 @@
 
 /obj/item/device/deskbell_assembly/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/pen))
-		var/t = copytext(stripped_input(user, "Enter new desk bell name", src.name, final_name),1,MAX_NAME_LEN)
+		var/t = copytext(stripped_input(user, "Enter new desk bell name", name, final_name),1,MAX_NAME_LEN)
 		if (!t)
 			return
-		if (!in_range(src, user) && src.loc != user)
+		if (!in_range(src, user) && loc != user)
 			return
 		final_name = t
 	else
@@ -278,7 +278,7 @@
 				if(iswrench(W))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
+					//new /obj/item/stack/sheet/metal( get_turf(loc), 2)
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 					M.amount = 2
 					qdel(src)

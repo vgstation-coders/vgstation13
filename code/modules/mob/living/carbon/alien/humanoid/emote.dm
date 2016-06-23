@@ -8,17 +8,17 @@
 
 	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
-	var/muzzled = istype(src.wear_mask, /obj/item/clothing/mask/muzzle)
+	var/muzzled = istype(wear_mask, /obj/item/clothing/mask/muzzle)
 
 	switch(act)
 		if("me")
 			if(silent)
 				return
-			if(src.client)
+			if(client)
 				if(client.prefs.muted & MUTE_IC)
 					to_chat(src, "<span class='warning>You cannot send IC messages (muted).</span>")
 					return
-				if(src.client.handle_spam_prevention(message,MUTE_IC))
+				if(client.handle_spam_prevention(message,MUTE_IC))
 					return
 			if(stat)
 				return
@@ -29,7 +29,7 @@
 		if("custom")
 			return custom_emote(m_type, message)
 		if("sign")
-			if(!src.restrained())
+			if(!restrained())
 				message = text("<B>\The [src]</B> signs[(text2num(param) ? text(" the number []", text2num(param)) : null)].")
 				m_type = VISIBLE
 		if("burp")
@@ -40,7 +40,7 @@
 			message = "<B>\The [src]</B> lets out a waning guttural screech, green blood bubbling from its maw..."
 			m_type = HEARABLE
 		if("scratch")
-			if(!src.restrained())
+			if(!restrained())
 				message = "<B>\The [src]</B> scratches."
 				m_type = VISIBLE
 		if("whimper")
@@ -93,11 +93,11 @@
 			message = "<B>\The [src]</B> twitches violently."
 			m_type = VISIBLE
 		if("dance")
-			if(!src.restrained())
+			if(!restrained())
 				message = "<B>\The [src]</B> dances around happily."
 				m_type = VISIBLE
 		if("roll")
-			if(!src.restrained())
+			if(!restrained())
 				message = "<B>\The [src]</B> rolls."
 				m_type = VISIBLE
 		if("shake")
@@ -118,7 +118,7 @@
 			to_chat(src, "burp, deathgasp, choke, collapse, dance, drool, gasp, shiver, gnarl, jump, moan, nod, roar, roll, scratch,\nscretch, shake, sign-#, sit, sulk, sway, tail, twitch, whimper")
 		else
 //			to_chat(custom_emote(VISIBLE, act) src, text("Invalid Emote: [act]"))
-	if ((message && src.stat == 0))
+	if ((message && stat == 0))
 		log_emote("[name]/[key] (@[x],[y],[z]): [message]")
 		if (act == "roar")
 			playsound(get_turf(src), 'sound/voice/hiss5.ogg', 40, 1, 1)

@@ -36,7 +36,7 @@
 		stage = 2
 	if(istype(W,/obj/item/clothing/head/hardhat/red) && stage == 2)
 		to_chat(user,"<span class='notice'>You finish the ghetto helmet.</span>")
-		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/rig/ghettorig (src.loc)
+		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/rig/ghettorig (loc)
 		qdel(src)
 		qdel(W)
 		user.put_in_hands(ghetto)
@@ -100,14 +100,14 @@
 
 /obj/item/clothing/mask/gas/voice/attackby(obj/item/I, mob/user)
 	..()
-	if(!istype(I, /obj/item/clothing/mask) || istype(I, src.type))
+	if(!istype(I, /obj/item/clothing/mask) || istype(I, type))
 		return 0
 	else
 		var/obj/item/clothing/mask/M = I
-		if(src.clothing_choices.Find(M))
+		if(clothing_choices.Find(M))
 			to_chat(user, "<span class='warning'>[M.name]'s pattern is already stored.</span>")
 			return
-		src.clothing_choices += M
+		clothing_choices += M
 		to_chat(user, "<span class='notice'>[M.name]'s pattern absorbed by \the [src].</span>")
 		return 1
 	return 0
@@ -193,7 +193,7 @@
 	var/muted = 0
 
 /obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
-	if(src.muted)
+	if(muted)
 		speech.message=""
 
 /obj/item/clothing/mask/gas/monkeymask

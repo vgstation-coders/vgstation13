@@ -10,7 +10,7 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 3
+		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
@@ -82,7 +82,7 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 6
+		bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
 	name = "spider meat"
@@ -112,7 +112,7 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 12)
 		reagents.add_reagent(HYPERZINE, 5)
-		src.bitesize = 3
+		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach
 	name = "cockroach meat"
@@ -148,4 +148,4 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	if(!atom_to_copy)
 		atom_to_copy = pick(valid_random_food_types)
 
-	src.appearance = initial(atom_to_copy.appearance) //This works!
+	appearance = initial(atom_to_copy.appearance) //This works!

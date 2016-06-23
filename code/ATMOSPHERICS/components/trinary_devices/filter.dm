@@ -137,7 +137,7 @@ obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
 	if(..())
 		return
 
-	if(!src.allowed(user))
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
@@ -170,19 +170,19 @@ obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
 			<A href='?src=\ref[src];filterset=4'>Nitrous Oxide</A><BR>
 			<A href='?src=\ref[src];filterset=-1'>Nothing</A><BR>
 			<HR><B>Desirable output pressure:</B>
-			[src.target_pressure]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
+			[target_pressure]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
 			"}
 /*
-		user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD>[dat]","window=atmo_filter")
+		user << browse("<HEAD><TITLE>[name] control</TITLE></HEAD>[dat]","window=atmo_filter")
 		onclose(user, "atmo_filter")
 		return
 
-	if (src.temp)
-		dat = text("<TT>[]</TT><BR><BR><A href='?src=\ref[];temp=1'>Clear Screen</A>", src.temp, src)
+	if (temp)
+		dat = text("<TT>[]</TT><BR><BR><A href='?src=\ref[];temp=1'>Clear Screen</A>", temp, src)
 	//else
-	//	src.on != src.on
+	//	on != on
 */
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_filter")
+	user << browse("<HEAD><TITLE>[name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_filter")
 	onclose(user, "atmo_filter")
 	return
 
@@ -190,22 +190,22 @@ obj/machinery/atmospherics/trinary/filter/Topic(href, href_list) // -- TLE
 	if(..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["filterset"])
-		src.filter_type = text2num(href_list["filterset"])
+		filter_type = text2num(href_list["filterset"])
 	if (href_list["temp"])
-		src.temp = null
+		temp = null
 	if(href_list["set_press"])
-		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",src.target_pressure) as num
-		src.target_pressure = max(0, min(4500, new_pressure))
+		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",target_pressure) as num
+		target_pressure = max(0, min(4500, new_pressure))
 	if(href_list["power"])
 		on=!on
-	src.update_icon()
-	src.updateUsrDialog()
+	update_icon()
+	updateUsrDialog()
 /*
 	for(var/mob/M in viewers(1, src))
 		if ((M.client && M.machine == src))
-			src.attack_hand(M)
+			attack_hand(M)
 */
 	return
 

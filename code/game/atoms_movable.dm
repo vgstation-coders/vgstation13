@@ -197,8 +197,8 @@
 
 	last_move = Dir
 	last_moved = world.time
-	src.move_speed = world.timeofday - src.l_move_time
-	src.l_move_time = world.timeofday
+	move_speed = world.timeofday - l_move_time
+	l_move_time = world.timeofday
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=newLoc))
 	return .
@@ -294,9 +294,9 @@
 	return
 
 /atom/movable/Bump(atom/Obstacle)
-	if(src.throwing)
-		src.throw_impact(Obstacle)
-		src.throwing = 0
+	if(throwing)
+		throw_impact(Obstacle)
+		throwing = 0
 
 	if (Obstacle)
 		Obstacle.Bumped(src)
@@ -365,23 +365,23 @@
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
-	if(src.throwing)
+	if(throwing)
 		for(var/atom/A in get_turf(src))
 			if(A == src) continue
 
 			if(isliving(A))
 				var/mob/living/L = A
 				if(L.lying) continue
-				src.throw_impact(L, speed, user)
+				throw_impact(L, speed, user)
 
-				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
-					src.throwing = 0
+				if(throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
+					throwing = 0
 					. = 0
 
 			else if(isobj(A))
 				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(A, speed, user)
-					src.throwing = 0
+					throw_impact(A, speed, user)
+					throwing = 0
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
@@ -400,25 +400,25 @@
 	if(usr)
 		user = usr
 		if(M_HULK in usr.mutations)
-			src.throwing = 2 // really strong throw!
+			throwing = 2 // really strong throw!
 
-	var/dist_x = abs(target.x - src.x)
-	var/dist_y = abs(target.y - src.y)
+	var/dist_x = abs(target.x - x)
+	var/dist_y = abs(target.y - y)
 
 	var/dx
-	if (target.x > src.x)
+	if (target.x > x)
 		dx = EAST
 	else
 		dx = WEST
 
 	var/dy
-	if (target.y > src.y)
+	if (target.y > y)
 		dy = NORTH
 	else
 		dy = SOUTH
 	var/dist_travelled = 0
 	var/dist_since_sleep = 0
-	var/area/a = get_area(src.loc)
+	var/area/a = get_area(loc)
 
 	. = 1
 
@@ -427,7 +427,7 @@
 
 
 		var/tS = 0
-		while(src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+		while(src && target &&((((x < target.x && dx == EAST) || (x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(loc, /turf/space)) && throwing && istype(loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 			if(tS && dist_travelled)
 				timestopped = loc.timestopped
@@ -443,7 +443,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				Move(step)
 				. = hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
@@ -457,7 +457,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				Move(step)
 				. = hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
@@ -465,10 +465,10 @@
 				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
-			a = get_area(src.loc)
+			a = get_area(loc)
 	else
 		var/error = dist_y/2 - dist_x
-		while(src && target &&((((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+		while(src && target &&((((y < target.y && dy == NORTH) || (y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(loc, /turf/space)) && throwing && istype(loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
 			if(timestopped)
 				sleep(1)
@@ -479,7 +479,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				Move(step)
 				. = hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
@@ -493,7 +493,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				Move(step)
 				. = hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
@@ -502,12 +502,12 @@
 					dist_since_sleep = 0
 					sleep(1)
 
-			a = get_area(src.loc)
+			a = get_area(loc)
 
 	//done throwing, either because it hit something or it finished moving
-	src.throwing = 0
+	throwing = 0
 	if(isobj(src))
-		src.throw_impact(get_turf(src), speed, user)
+		throw_impact(get_turf(src), speed, user)
 
 /atom/movable/change_area(oldarea, newarea)
 	areaMaster = newarea
@@ -526,18 +526,18 @@
 	return
 
 /atom/movable/overlay/attackby(a, b, c)
-	if (src.master)
-		return src.master.attackby(a, b, c)
+	if (master)
+		return master.attackby(a, b, c)
 	return
 
 /atom/movable/overlay/attack_paw(a, b, c)
-	if (src.master)
-		return src.master.attack_paw(a, b, c)
+	if (master)
+		return master.attack_paw(a, b, c)
 	return
 
 /atom/movable/overlay/attack_hand(a, b, c)
-	if (src.master)
-		return src.master.attack_hand(a, b, c)
+	if (master)
+		return master.attack_hand(a, b, c)
 	return
 
 /atom/movable/proc/attempt_to_follow(var/atom/movable/A,var/turf/T)
@@ -548,7 +548,7 @@
 	else
 		var/turf/U = get_turf(A)
 		if(!U) return null
-		return src.forceMove(U)
+		return forceMove(U)
 
 /////////////////////////////
 // SINGULOTH PULL REFACTOR

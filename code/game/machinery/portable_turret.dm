@@ -244,7 +244,7 @@
 
 
 /obj/machinery/porta_turret/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/porta_turret/attack_hand(mob/user as mob)
@@ -254,15 +254,15 @@
 	var/dat
 
 	// The browse() text, similar to ED-209s and beepskies.
-	if(!(src.lasercolor))//Lasertag turrets have less options
+	if(!(lasercolor))//Lasertag turrets have less options
 		dat += text({"
 <TT><B>Automatic Portable Turret Installation</B></TT><BR><BR>
 Status: []<BR>
-Behaviour controls are [src.locked ? "locked" : "unlocked"]"},
+Behaviour controls are [locked ? "locked" : "unlocked"]"},
 
-"<A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A>" )
+"<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>" )
 
-		if(!src.locked)
+		if(!locked)
 			dat += text({"<BR>
 Check for Weapon Authorization: []<BR>
 Check Security Records: []<BR>
@@ -270,23 +270,23 @@ Neutralize Identified Criminals: []<BR>
 Neutralize All Non-Security and Non-Command Personnel: []<BR>
 Neutralize All Unidentified Life Signs: []<BR>"},
 
-"<A href='?src=\ref[src];operation=authweapon'>[src.auth_weapons ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=checkrecords'>[src.check_records ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=shootcrooks'>[src.criminals ? "Yes" : "No"]</A>",
+"<A href='?src=\ref[src];operation=authweapon'>[auth_weapons ? "Yes" : "No"]</A>",
+"<A href='?src=\ref[src];operation=checkrecords'>[check_records ? "Yes" : "No"]</A>",
+"<A href='?src=\ref[src];operation=shootcrooks'>[criminals ? "Yes" : "No"]</A>",
 "<A href='?src=\ref[src];operation=shootall'>[stun_all ? "Yes" : "No"]</A>",
 "<A href='?src=\ref[src];operation=checkxenos'>[check_anomalies ? "Yes" : "No"]</A>" )
 	else
 		if(istype(user,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = user
-			if(((src.lasercolor) == "b") && (istype(H.wear_suit, /obj/item/clothing/suit/redtag)))
+			if(((lasercolor) == "b") && (istype(H.wear_suit, /obj/item/clothing/suit/redtag)))
 				return
-			if(((src.lasercolor) == "r") && (istype(H.wear_suit, /obj/item/clothing/suit/bluetag)))
+			if(((lasercolor) == "r") && (istype(H.wear_suit, /obj/item/clothing/suit/bluetag)))
 				return
 		dat += text({"
 <TT><B>Automatic Portable Turret Installation</B></TT><BR><BR>
 Status: []<BR>"},
 
-"<A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A>" )
+"<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>" )
 
 
 	user << browse("<HEAD><TITLE>Automatic Portable Turret Installation</TITLE></HEAD>[dat]", "window=autosec")
@@ -297,8 +297,8 @@ Status: []<BR>"},
 	if (..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
-	if ((href_list["power"]) && (src.allowed(usr)))
+	add_fingerprint(usr)
+	if ((href_list["power"]) && (allowed(usr)))
 		if(anchored) // you can't turn a turret on/off if it's not anchored/secured
 			on = !on // toggle on/off
 		else
@@ -311,11 +311,11 @@ Status: []<BR>"},
 		// toggles customizable behavioural protocols
 
 		if ("authweapon")
-			src.auth_weapons = !src.auth_weapons
+			auth_weapons = !auth_weapons
 		if ("checkrecords")
-			src.check_records = !src.check_records
+			check_records = !check_records
 		if ("shootcrooks")
-			src.criminals = !src.criminals
+			criminals = !criminals
 		if("shootall")
 			stun_all = !stun_all
 	updateUsrDialog()
@@ -342,7 +342,7 @@ Status: []<BR>"},
 			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
-				src.icon_state = "[lasercolor]grey_target_prism"
+				icon_state = "[lasercolor]grey_target_prism"
 				stat |= NOPOWER
 
 /obj/machinery/porta_turret/emag(mob/user)
@@ -352,7 +352,7 @@ Status: []<BR>"},
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='warning'>[src] hums oddly...</span>", 1)
 		emagged = 1
-		src.on = 0 // turns off the turret temporarily
+		on = 0 // turns off the turret temporarily
 		sleep(60) // 6 seconds for the traitor to gtfo of the area before the turret decides to ruin his shit
 		on = 1 // turns it back on. The cover popUp() popDown() are automatically called in process(), no need to define it here
 /obj/machinery/porta_turret/attackby(obj/item/W as obj, mob/user as mob)
@@ -366,7 +366,7 @@ Status: []<BR>"},
 			if(prob(70))
 				to_chat(user, "You remove the turret and salvage some components.")
 				if(installation)
-					var/obj/item/weapon/gun/energy/Gun = new installation(src.loc)
+					var/obj/item/weapon/gun/energy/Gun = new installation(loc)
 					Gun.power_supply.charge=gun_charge
 					Gun.update_icon()
 					lasercolor = null
@@ -390,7 +390,7 @@ Status: []<BR>"},
 			invisibility = INVISIBILITY_LEVEL_TWO
 			icon_state = "[lasercolor]grey_target_prism"
 			to_chat(user, "You secure the exterior bolts on the turret.")
-			cover=new/obj/machinery/porta_turret_cover(src.loc) // create a new turret. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
+			cover=new/obj/machinery/porta_turret_cover(loc) // create a new turret. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
 			cover.Parent_Turret = src // make the cover's parent src
 		else
 			anchored = 0
@@ -402,7 +402,7 @@ Status: []<BR>"},
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		// Behavior lock/unlock mangement
 		if (allowed(user))
-			locked = !src.locked
+			locked = !locked
 			to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
@@ -410,9 +410,9 @@ Status: []<BR>"},
 	else
 		user.delayNextAttack(10)
 		// if the turret was attacked with the intention of harming it:
-		src.health -= W.force * 0.5
-		if (src.health <= 0)
-			src.die()
+		health -= W.force * 0.5
+		if (health <= 0)
+			die()
 		if ((W.force * 0.5) > 1) // if the force of impact dealt at least 1 damage, the turret gets pissed off
 			if(!attacked && !emagged)
 				attacked = 1
@@ -430,25 +430,25 @@ Status: []<BR>"},
 				sleep(60)
 				attacked = 0
 
-	src.health -= Proj.damage
+	health -= Proj.damage
 	..()
-	if(prob(45) && Proj.damage > 0) src.spark_system.start()
-	if (src.health <= 0)
-		src.die() // the death process :(
-	if((src.lasercolor == "b") && (src.disabled == 0))
+	if(prob(45) && Proj.damage > 0) spark_system.start()
+	if (health <= 0)
+		die() // the death process :(
+	if((lasercolor == "b") && (disabled == 0))
 		if(istype(Proj, /obj/item/projectile/beam/lastertag/red))
-			src.disabled = 1
+			disabled = 1
 			qdel (Proj)
 			Proj = null
 			sleep(100)
-			src.disabled = 0
-	if((src.lasercolor == "r") && (src.disabled == 0))
+			disabled = 0
+	if((lasercolor == "r") && (disabled == 0))
 		if(istype(Proj, /obj/item/projectile/beam/lastertag/blue))
-			src.disabled = 1
+			disabled = 1
 			qdel (Proj)
 			Proj = null
 			sleep(100)
-			src.disabled = 0
+			disabled = 0
 	return
 
 /obj/machinery/porta_turret/emp_act(severity)
@@ -471,16 +471,16 @@ Status: []<BR>"},
 	if(severity >= 3) // turret dies if an explosion touches it!
 		qdel(src)
 	else
-		src.die()
+		die()
 
 /obj/machinery/porta_turret/proc/die() // called when the turret dies, ie, health <= 0
-	src.health = 0
-	src.density = 0
-	src.stat |= BROKEN // enables the BROKEN bit
-	src.icon_state = "[lasercolor]destroyed_target_prism"
+	health = 0
+	density = 0
+	stat |= BROKEN // enables the BROKEN bit
+	icon_state = "[lasercolor]destroyed_target_prism"
 	invisibility=0
-	src.spark_system.start() // creates some sparks because they look cool
-	src.density=1
+	spark_system.start() // creates some sparks because they look cool
+	density=1
 	qdel(cover) // deletes the cover - no need on keeping it there!
 
 
@@ -490,13 +490,13 @@ Status: []<BR>"},
 
 	//set background = 1
 
-	if(src.cover==null && anchored) // if it has no cover and is anchored
+	if(cover==null && anchored) // if it has no cover and is anchored
 		if (stat & BROKEN) // if the turret is borked
 			qdel(cover) // delete its cover, assuming it has one. Workaround for a pesky little bug
 		else
 
-			src.cover = new /obj/machinery/porta_turret_cover(src.loc) // if the turret has no cover and is anchored, give it a cover
-			src.cover.Parent_Turret = src // assign the cover its Parent_Turret, which would be this (src)
+			cover = new /obj/machinery/porta_turret_cover(loc) // if the turret has no cover and is anchored, give it a cover
+			cover.Parent_Turret = src // assign the cover its Parent_Turret, which would be this (src)
 
 	if(stat & (NOPOWER|BROKEN))
 		// if the turret has no power or is broken, make the turret pop down if it hasn't already
@@ -511,7 +511,7 @@ Status: []<BR>"},
 	var/list/targets = list()		   // list of primary targets
 	var/list/secondarytargets = list() // targets that are least important
 
-	if(src.check_anomalies) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
+	if(check_anomalies) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
 		for(var/mob/living/simple_animal/C in view(7,src))
 			if(C.stat)
 				continue
@@ -525,7 +525,7 @@ Status: []<BR>"},
 	for (var/mob/living/carbon/C in view(7,src)) // loops through all living carbon-based lifeforms in view(12)
 		if(C.flags & INVULNERABLE)
 			continue
-		if(istype(C, /mob/living/carbon/alien) && src.check_anomalies) // git those fukken xenos
+		if(istype(C, /mob/living/carbon/alien) && check_anomalies) // git those fukken xenos
 			if(!C.stat) // if it's dead/dying, there's no need to keep shooting at it.
 				targets += C
 
@@ -552,7 +552,7 @@ Status: []<BR>"},
 						continue
 
 				if (istype(C, /mob/living/carbon/human)) // if the target is a human, analyze threat level
-					if(src.assess_perp(C)<4)
+					if(assess_perp(C)<4)
 						continue // if threat level < 4, keep going
 
 				else if (istype(C, /mob/living/carbon/monkey))
@@ -633,17 +633,17 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/proc/assess_perp(mob/living/carbon/human/perp as mob)
 	var/threatcount = 0 // the integer returned
 
-	if(src.emagged) return 10 // if emagged, always return 10.
+	if(emagged) return 10 // if emagged, always return 10.
 
-	if((stun_all && !src.allowed(perp)) || attacked && !src.allowed(perp))
+	if((stun_all && !allowed(perp)) || attacked && !allowed(perp))
 		// if the turret has been attacked or is angry, target all non-sec people
-		if(!src.allowed(perp))
+		if(!allowed(perp))
 			return 10
 
 	if(auth_weapons) // check for weapon authorization
 		if((isnull(perp.wear_id)) || (istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate)))
 
-			if((src.allowed(perp)) && !(src.lasercolor)) // if the perp has security access, return 0
+			if((allowed(perp)) && !(lasercolor)) // if the perp has security access, return 0
 				return 0
 
 			for(var/obj/item/G in perp.held_items)
@@ -658,7 +658,7 @@ Status: []<BR>"},
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee/baton))
 				threatcount += 2
 
-	if((src.lasercolor) == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
+	if((lasercolor) == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//But does not target anyone else
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
 			threatcount += 4
@@ -667,7 +667,7 @@ Status: []<BR>"},
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag))
 			threatcount += 2
 
-	if((src.lasercolor) == "r")
+	if((lasercolor) == "r")
 		threatcount = 0
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
 			threatcount += 4
@@ -676,7 +676,7 @@ Status: []<BR>"},
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag))
 			threatcount += 2
 
-	if (src.check_records) // if the turret can check the records, check if they are set to *Arrest* on records
+	if (check_records) // if the turret can check the records, check if they are set to *Arrest* on records
 		for (var/datum/data/record/E in data_core.general)
 
 			var/perpname = perp.name
@@ -846,7 +846,7 @@ Status: []<BR>"},
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 100, 1)
 				var/obj/item/weapon/gun/energy/E = W // typecasts the item to an energy gun
 				installation = W.type // installation becomes W.type
-				gun_charge = E.power_supply.charge // the gun's charge is stored in src.gun_charge
+				gun_charge = E.power_supply.charge // the gun's charge is stored in gun_charge
 				to_chat(user, "<span class='notice'>You add \the [W] to the turret.</span>")
 				build_step = 4
 				qdel(W) // delete the gun :(
@@ -909,8 +909,8 @@ Status: []<BR>"},
 					// The final step: create a full turret
 					var/obj/machinery/porta_turret/Turret = new/obj/machinery/porta_turret(locate(x,y,z))
 					Turret.name = finish_name
-					Turret.installation = src.installation
-					Turret.gun_charge = src.gun_charge
+					Turret.installation = installation
+					Turret.gun_charge = gun_charge
 					Turret.update_gun()
 					qdel(src)
 
@@ -924,14 +924,14 @@ Status: []<BR>"},
 				return
 
 	if (istype(W, /obj/item/weapon/pen)) // you can rename turrets like bots!
-		var/t = input(user, "Enter new turret name", src.name, src.finish_name) as text
+		var/t = input(user, "Enter new turret name", name, finish_name) as text
 		t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 		if (!t)
 			return
-		if (!in_range(src, usr) && src.loc != usr)
+		if (!in_range(src, usr) && loc != usr)
 			return
 
-		src.finish_name = t
+		finish_name = t
 		return
 	..()
 
@@ -943,7 +943,7 @@ Status: []<BR>"},
 			if(!installation) return
 			build_step = 3
 
-			var/obj/item/weapon/gun/energy/Gun = new installation(src.loc)
+			var/obj/item/weapon/gun/energy/Gun = new installation(loc)
 			Gun.power_supply.charge=gun_charge
 			Gun.update_icon()
 			installation = null
@@ -983,7 +983,7 @@ Status: []<BR>"},
 	. = ..()
 	if (.)
 		return
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	var/dat
 	if(!(Parent_Turret.lasercolor))
 		dat += text({"
@@ -1067,7 +1067,7 @@ Status: []<BR>"},
 		return
 	usr.set_machine(src)
 	Parent_Turret.add_fingerprint(usr)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if ((href_list["power"]) && (Parent_Turret.allowed(usr)))
 		if(Parent_Turret.anchored)
 			if (Parent_Turret.on)
@@ -1151,5 +1151,5 @@ Status: []<BR>"},
 	emagged = 1
 
 	New()
-		installation = new/obj/item/weapon/gun/energy/laser(src.loc)
+		installation = new/obj/item/weapon/gun/energy/laser(loc)
 		..()

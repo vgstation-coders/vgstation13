@@ -36,10 +36,10 @@
 				if(user && M && (user.locked_to == src))
 					unlock_atom(M)
 					overlays.len = 0
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 
 /obj/structure/bed/nest/buckle_mob(mob/M as mob, mob/user as mob)
-	if (locked_atoms.len || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
+	if (locked_atoms.len || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
 		return
 
 	if(ishuman(M) && M.client && !M.lying)
@@ -60,7 +60,7 @@
 			"<span class='warning'>[user.name] drenches you in a foul-smelling resin, trapping you in \the [src]!</span>",\
 			"<span class='notice'>You hear squelching...</span>")
 	lock_atom(M, /datum/locking_category/bed/nest)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	var/image/nest_covering = image(icon,"nest-covering",MOB_LAYER)
 	nest_covering.plane = PLANE_MOB
 	overlays += nest_covering

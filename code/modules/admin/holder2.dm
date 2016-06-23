@@ -71,13 +71,13 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 
 // Making this a bit less of a roaring asspain. - N3X
 /mob/proc/check_rights(rights_required)
-	if(src && src.client)
+	if(src && client)
 		if(rights_required)
-			if(src.client.holder)
-				if(rights_required & src.client.holder.rights)
+			if(client.holder)
+				if(rights_required & client.holder.rights)
 					return 1
 		else
-			if(src.client.holder)
+			if(client.holder)
 				return 1
 	return 0
 

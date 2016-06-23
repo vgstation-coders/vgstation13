@@ -54,11 +54,11 @@
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
 
 /obj/item/proc/return_thermal_protection()
-	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
+	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
 /obj/item/Destroy()
-	if(istype(src.loc, /mob))
-		var/mob/H = src.loc
+	if(istype(loc, /mob))
+		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	if(hasvar(src, "holder"))
 		src:holder = null
@@ -117,18 +117,18 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!istype(src.loc, /turf) || usr.isUnconscious() || usr.restrained())
+	if(!istype(loc, /turf) || usr.isUnconscious() || usr.restrained())
 		return
 
-	var/turf/T = src.loc
+	var/turf/T = loc
 
-	src.loc = null
+	loc = null
 
-	src.loc = T
+	loc = T
 
 /obj/item/examine(mob/user)
 	var/size
-	switch(src.w_class)
+	switch(w_class)
 		if(1.0)
 			size = "tiny"
 		if(2.0)
@@ -141,7 +141,7 @@
 			size = "huge"
 	//if ((M_CLUMSY in usr.mutations) && prob(50)) t = "funny-looking"
 	var/pronoun
-	if (src.gender == PLURAL)
+	if (gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
@@ -153,13 +153,13 @@
 /obj/item/attack_ai(mob/user as mob)
 	..()
 	if(isMoMMI(user))
-		var/in_range = in_range(src, user) || src.loc == user
+		var/in_range = in_range(src, user) || loc == user
 		if(in_range)
 			if(src == user:tool_state)
 				return 0
 			attack_hand(user)
 	else if(isrobot(user))
-		if(!istype(src.loc, /obj/item/weapon/robot_module)) return
+		if(!istype(loc, /obj/item/weapon/robot_module)) return
 		var/mob/living/silicon/robot/R = user
 		R.activate_module(src)
 		R.hud_used.update_robot_modules_display()
@@ -167,23 +167,23 @@
 /obj/item/attack_hand(mob/user as mob)
 	if (!user) return
 
-	if (istype(src.loc, /obj/item/weapon/storage))
+	if (istype(loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
-		var/obj/item/weapon/storage/S = src.loc
+		var/obj/item/weapon/storage/S = loc
 		S.remove_from_storage(src, user)
 
-	src.throwing = 0
-	if (src.loc == user)
+	throwing = 0
+	if (loc == user)
 		if(src == user.get_inactive_hand())
-			if(src.flags & TWOHANDABLE)
-				return src.wield(user)
+			if(flags & TWOHANDABLE)
+				return wield(user)
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(!src.canremove)
+		if(!canremove)
 			return
 		else
 			user.u_equip(src,0)
 	else
-		if(isliving(src.loc))
+		if(isliving(loc))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
@@ -204,20 +204,20 @@
 			to_chat(user, "Your claws aren't capable of such fine manipulation.")
 			return
 
-	if (istype(src.loc, /obj/item/weapon/storage))
-		for(var/mob/M in range(1, src.loc))
-			if (M.s_active == src.loc)
+	if (istype(loc, /obj/item/weapon/storage))
+		for(var/mob/M in range(1, loc))
+			if (M.s_active == loc)
 				if (M.client)
 					M.client.screen -= src
-	src.throwing = 0
-	if (src.loc == user)
+	throwing = 0
+	if (loc == user)
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(istype(src, /obj/item/clothing) && !src:canremove)
 			return
 		else
 			user.u_equip(src,0)
 	else
-		if(istype(src.loc, /mob/living))
+		if(istype(loc, /mob/living))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 
@@ -601,7 +601,7 @@
 					if(!disable_warning)
 						to_chat(usr, "You somehow have a suit with no defined allowed items for suit storage, stop that.")
 					return CANNOT_EQUIP
-				if(src.w_class > W_CLASS_MEDIUM && !H.wear_suit.allowed.len)
+				if(w_class > W_CLASS_MEDIUM && !H.wear_suit.allowed.len)
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return CANNOT_EQUIP
@@ -735,10 +735,10 @@
 		return 0
 	if((!istype(user, /mob/living/carbon) && !isMoMMI(user)) || istype(user, /mob/living/carbon/brain)) //Is not a carbon being, MoMMI, or is a brain
 		to_chat(user, "You can't pick things up!")
-	if(src.anchored) //Object isn't anchored
+	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return 0
-	if(!istype(src.loc, /turf)) //Object is not on a turf
+	if(!istype(loc, /turf)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return 0
 	return 1
@@ -766,13 +766,13 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/h_user = user
 		if(h_user.can_use_hand())
-			src.attack_hand(h_user)
+			attack_hand(h_user)
 		else
-			src.attack_stump(h_user)
+			attack_stump(h_user)
 	if(istype(user, /mob/living/carbon/alien))
-		src.attack_alien(user)
+		attack_alien(user)
 	if(istype(user, /mob/living/carbon/monkey))
-		src.attack_paw(user)
+		attack_paw(user)
 	return
 
 //This proc is executed when someone clicks the on-screen UI button. To make the UI button show, set the 'action_button_name'.
@@ -859,16 +859,16 @@
 		to_chat(user, "<span class='warning'>You cannot locate any eyes on [M]!</span>")
 		return
 
-	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
-	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
+	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
+	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
+	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
 	if(!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	//if((M_CLUMSY in user.mutations) && prob(50))
 	//	M = user
 		/*
@@ -1012,7 +1012,7 @@ var/global/list/image/blood_overlays = list()
 		return
 
 	var/kick_dir = get_dir(H, src)
-	if(H.loc == src.loc) kick_dir = H.dir
+	if(H.loc == loc) kick_dir = H.dir
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 

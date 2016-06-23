@@ -84,7 +84,7 @@
 
 /mob/living/carbon/human/proc/can_use_hand(var/this_hand = active_hand)
 	if(hasorgans(src))
-		var/datum/organ/external/temp = src.find_organ_by_grasp_index(this_hand)
+		var/datum/organ/external/temp = find_organ_by_grasp_index(this_hand)
 		if(temp && !temp.is_usable())
 			return
 		else if (!temp)

@@ -76,7 +76,7 @@
 	add_iterators()
 	removeVerb(/obj/mecha/verb/disconnect_from_port)
 	removeVerb(/atom/movable/verb/pull)
-	log_message("[src.name]'s functions initialised. Work protocols active - Entering IDLE mode.")
+	log_message("[name]'s functions initialised. Work protocols active - Entering IDLE mode.")
 	loc.Entered(src)
 	return
 
@@ -149,9 +149,9 @@
 	process(var/obj/vehicle/V as obj, direction)
 		if(direction)
 			if(!step(V, direction)||V.check_for_support())
-				src.stop()
+				stop()
 		else
-			src.stop()
+			stop()
 		return
 
 

@@ -17,7 +17,7 @@
 	var/nano = 0
 
 /obj/item/weapon/p_folded/Destroy()
-	if (unfolded) qdel(src.unfolded)
+	if (unfolded) qdel(unfolded)
 	return ..()
 
 /obj/item/weapon/p_folded/attack_self(mob/user as mob)
@@ -27,15 +27,15 @@
 
 /obj/item/weapon/p_folded/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/weapon/pen))
-		var/N = copytext(sanitize(input(user, "What would you like to name [src.name]?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
+		var/N = copytext(sanitize(input(user, "What would you like to name [name]?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
 		if(N && Adjacent(user) && !user.stat)
-			src.name = N
+			name = N
 	else if(istype(I, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = I
-		src.color = C.colour //doesn't work with paper hats but I haven't found a way to fix it, who will even notice anyways
-		src.unfolded.color = C.colour
+		color = C.colour //doesn't work with paper hats but I haven't found a way to fix it, who will even notice anyways
+		unfolded.color = C.colour
 	else if(I.is_hot())
-		src.ashify_item(user)
+		ashify_item(user)
 		return
 	return ..()
 
@@ -103,7 +103,7 @@
 			if (H.check_body_part_coverage(EYES))
 				to_chat(H, "<span class='warning'>\The [src] flies right into your eyes! Luckily your eyewear protects you.</span>")
 			else
-				if (src.nano)
+				if (nano)
 					to_chat(H, "<span class='warning'>OW! Something sharp stabs your [pick("right","left")] eye!</span>")
 					H.eye_blurry = max(H.eye_blurry, rand(10,15))
 					H.eye_blind = max(H.eye_blind, 2)
@@ -113,13 +113,13 @@
 				else
 					to_chat(H, "<span class='warning'>\The [src] flies right into your [pick("right","left")] eye!</span>")
 					H.eye_blurry = max(H.eye_blurry, rand(3,6))
-					H.eye_blind = max(H.eye_blind, src.nano)
+					H.eye_blind = max(H.eye_blind, nano)
 //at last, my block at a rest, bereft of all mortal doubts, I have been enlightened, touched by the sage wisdom, my undying gratitude goes to Comic in this emotional moment
 /obj/item/weapon/p_folded/plane/throw_at(var/atom/A, throw_range, throw_speed)
-	if (A.x > src.x)
-		src.icon_state = "plane_east"
+	if (A.x > x)
+		icon_state = "plane_east"
 	else
-		src.icon_state = "plane_west"
+		icon_state = "plane_west"
 	return ..()
 
 /obj/item/weapon/p_folded/ball

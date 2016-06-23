@@ -32,26 +32,26 @@
 
 
 /obj/machinery/vehicle/process()
-	if (src.speed)
-		if (src.speed <= 10)
-			var/t1 = 10 - src.speed
+	if (speed)
+		if (speed <= 10)
+			var/t1 = 10 - speed
 			while(t1 > 0)
-				step(src, src.dir)
+				step(src, dir)
 				sleep(1)
 				t1--
 		else
-			var/t1 = round(src.speed / 5)
+			var/t1 = round(speed / 5)
 			while(t1 > 0)
-				step(src, src.dir)
+				step(src, dir)
 				t1--
 	return
 
 /obj/machinery/vehicle/meteorhit(var/obj/O as obj)
 	for (var/obj/item/I in src)
-		I.loc = src.loc
+		I.loc = loc
 
 	for (var/mob/M in src)
-		M.loc = src.loc
+		M.loc = loc
 		if (M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
@@ -61,28 +61,28 @@
 	switch (severity)
 		if (1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.loc = loc
 				ex_act(severity)
 			//SN src = null
 			del(src)
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.loc = loc
 					ex_act(severity)
 				//SN src = null
 				del(src)
 
 /obj/machinery/vehicle/blob_act()
 	for(var/atom/movable/A as mob|obj in src)
-		A.loc = src.loc
+		A.loc = loc
 	del(src)
 
 /obj/machinery/vehicle/Bump(var/atom/A)
 //	to_chat(world, "[src] bumped into [A]")
 	spawn (0)
 		..()
-		src.speed = 0
+		speed = 0
 		return
 	return
 
@@ -92,15 +92,15 @@
 
 	if ((user in src))
 		if (direction & 1)
-			src.speed = max(src.speed - 1, 1)
+			speed = max(speed - 1, 1)
 		else if (direction & 2)
-			src.speed = min(src.maximum_speed, src.speed + 1)
-		else if (src.can_rotate && direction & 4)
-			src.dir = turn(src.dir, -90.0)
-		else if (src.can_rotate && direction & 8)
-			src.dir = turn(src.dir, 90)
-		else if (direction & 16 && src.can_maximize_speed)
-			src.speed = src.maximum_speed
+			speed = min(maximum_speed, speed + 1)
+		else if (can_rotate && direction & 4)
+			dir = turn(dir, -90.0)
+		else if (can_rotate && direction & 8)
+			dir = turn(dir, 90)
+		else if (direction & 16 && can_maximize_speed)
+			speed = maximum_speed
 
 /obj/machinery/vehicle/verb/eject()
 	set src = usr.loc
@@ -109,11 +109,11 @@
 		return
 
 	var/mob/M = usr
-	M.loc = src.loc
+	M.loc = loc
 	if (M.client)
 		M.client.eye = M.client.mob
 		M.client.perspective = MOB_PERSPECTIVE
-	step(M, turn(src.dir, 180))
+	step(M, turn(dir, 180))
 	return
 
 /obj/machinery/vehicle/verb/board()
@@ -122,7 +122,7 @@
 	if (usr.stat)
 		return
 
-	if (src.one_person_only && locate(/mob, src))
+	if (one_person_only && locate(/mob, src))
 		to_chat(usr, "There is no room! You can only fit one person.")
 		return
 
@@ -140,7 +140,7 @@
 		return
 
 	if (istype(A, /atom/movable))
-		A.loc = src.loc
+		A.loc = loc
 		for(var/mob/O in view(src, null))
 			if ((O.client && !(O.blinded)))
 				to_chat(O, text("<span class='notice'><B> [] unloads [] from []!</B></span>", usr, A, src))
@@ -161,7 +161,7 @@
 		var/mob/living/carbon/human/H = usr
 
 		if ((H.pulling && !(H.pulling.anchored)))
-			if (src.one_person_only && !(istype(H.pulling, /obj/item/weapon)))
+			if (one_person_only && !(istype(H.pulling, /obj/item/weapon)))
 				to_chat(usr, "You may only place items in.")
 			else
 				H.pulling.loc = src
@@ -193,40 +193,40 @@
 		internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
 		pr_inertial_movement = new /datum/global_iterator/space_ship_inertial_movement(list(src),0)
 		pr_speed_increment = new /datum/global_iterator/space_ship_speed_increment(list(src),0)
-		src.spark_system.set_up(2, 0, src)
-		src.spark_system.attach(src)
+		spark_system.set_up(2, 0, src)
+		spark_system.attach(src)
 		return
 
 	proc/inspace()
-		if(istype(src.loc, /turf/space))
+		if(istype(loc, /turf/space))
 			return 1
 		return 0
 
 	remove_air(amount)
-		if(src.internal_tank)
-			return src.internal_tank.air_contents.remove(amount)
+		if(internal_tank)
+			return internal_tank.air_contents.remove(amount)
 		else
 			var/turf/T = get_turf(src)
 			return T.remove_air(amount)
 
 	return_air()
-		if(src.internal_tank)
-			return src.internal_tank.return_air()
+		if(internal_tank)
+			return internal_tank.return_air()
 		return
 
 	proc/return_pressure()
-		if(src.internal_tank)
-			return src.internal_tank.return_pressure()
+		if(internal_tank)
+			return internal_tank.return_pressure()
 		return 0
 
 	proc/return_temperature()
-		if(src.internal_tank)
-			return src.internal_tank.return_temperature()
+		if(internal_tank)
+			return internal_tank.return_temperature()
 		return 0
 
 	Bump(var/atom/movable/A)
 		if(istype(A))
-			step(A, src.dir)
+			step(A, dir)
 		else
 			if(pr_inertial_movement.cur_delay<2)
 				take_damage(25)
@@ -236,12 +236,12 @@
 
 	proc/take_damage(value)
 		if(isnum(value))
-			src.health -= value
-			if(src.health>0)
-				src.spark_system.start()
+			health -= value
+			if(health>0)
+				spark_system.start()
 //				to_chat(world, "[src] health is [health]")
 			else
-				src.ex_act(1)
+				ex_act(1)
 		return
 
 	process()
@@ -265,14 +265,14 @@
 		else if (direction & SOUTH)
 			pr_inertial_movement.desired_delay = between(pr_inertial_movement.min_delay, pr_inertial_movement.desired_delay+1, pr_inertial_movement.max_delay)
 			speed_change = 1
-		else if (src.can_rotate && direction & 4)
-			src.dir = turn(src.dir, -90.0)
-		else if (src.can_rotate && direction & 8)
-			src.dir = turn(src.dir, 90)
+		else if (can_rotate && direction & 4)
+			dir = turn(dir, -90.0)
+		else if (can_rotate && direction & 8)
+			dir = turn(dir, 90)
 		if(speed_change)
 //			to_chat(user, "Desired speed: [get_desired_speed()]%")
-			src.pr_speed_increment.start()
-			src.pr_inertial_movement.start()
+			pr_speed_increment.start()
+			pr_inertial_movement.start()
 	return
 
 //should try two directional iterator datums, one for vertical, one for horizontal movement.
@@ -290,26 +290,26 @@
 		cur_delay = max_delay
 
 	stop()
-		src.cur_delay = max_delay
-		src.desired_delay = max_delay
+		cur_delay = max_delay
+		desired_delay = max_delay
 		return ..()
 
 	process(var/obj/machinery/vehicle/space_ship/SS as obj)
 		if(cur_delay >= max_delay)
-			return src.stop()
+			return stop()
 		if(world.time - last_move < cur_delay)
 			return
 		last_move = world.time
 /*
-		if(src.delay>=SS.max_delay)
-			return src.stop()
+		if(delay>=SS.max_delay)
+			return stop()
 */
 		if(!step(SS, SS.dir) || !SS.inspace())
-			src.stop()
+			stop()
 		return
 
 	proc/set_desired_delay(var/num as num)
-		src.desired_delay = num
+		desired_delay = num
 		return
 
 /datum/global_iterator/space_ship_speed_increment
@@ -324,5 +324,5 @@
 				to_chat(M, "Current speed: [SS.get_current_speed()]")
 */
 		else
-			src.stop()
+			stop()
 		return

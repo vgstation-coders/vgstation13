@@ -32,14 +32,14 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(!is_open_container(src))
 		to_chat(usr, "<span class='warning'>You can't, \the [src] is closed.</span>")
 		return
-	if(src.is_empty())
+	if(is_empty())
 		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
 		return
 	if(isturf(usr.loc))
 		if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 		reagents.reaction(usr.loc)
-		spawn() src.reagents.clear_reagents()
+		spawn() reagents.clear_reagents()
 		usr.visible_message("<span class='warning'>[usr] splashes something onto the floor!</span>",
 						 "<span class='notice'>You empty \the [src] onto the floor.</span>")
 
@@ -50,12 +50,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(!is_open_container(src))
 		to_chat(usr, "<span class='warning'>You can't, \the [src] is closed.</span>")
 		return
-	if(src.is_empty())
+	if(is_empty())
 		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
 		return
 	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 	reagents.reaction(where, TOUCH) //I don't think this will ever do anything but I guess maybe polyacid could melt a toilet
-	spawn() src.reagents.clear_reagents()
+	spawn() reagents.clear_reagents()
 	to_chat(user, "<span class='notice'>You flush \the [src] down \the [where].</span>")
 
 
@@ -70,9 +70,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	create_reagents(volume)
 
 	if(!is_open_container(src))
-		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
+		verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
 	if(!possible_transfer_amounts)
-		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
+		verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
@@ -196,7 +196,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if (can_receive && istype(target, /obj/structure/reagent_dispensers))
 		var/tx_amount = transfer_sub(target, src, target:amount_per_transfer_from_this, user)
 		if (tx_amount > 0)
-			to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+			to_chat(user, "<span class='notice'>You fill \the [src][is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
 
 		return tx_amount
 	// Transfer to container
@@ -223,7 +223,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(splashable_units != 0)
 			var/to_splash = reagents.total_volume
 			if(ismob(target))
-				if (src.is_empty() || !target.reagents)
+				if (is_empty() || !target.reagents)
 					return -1
 
 				var/mob/living/M = target
@@ -237,7 +237,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				return (to_splash)
 			// Non-mob splashing
 			else
-				if(!src.is_empty())
+				if(!is_empty())
 					for (var/reagent_id in LOGGED_SPLASH_REAGENTS)
 						if (reagents.has_reagent(reagent_id))
 							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, span_class = "danger")

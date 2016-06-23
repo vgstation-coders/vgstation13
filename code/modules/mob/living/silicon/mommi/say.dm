@@ -12,7 +12,7 @@
 	. = ..()
 	if(.)
 		return .
-	if(src.keeper)
+	if(keeper)
 		speech.message = trim(speech.message)
 		if (!speech.message)
 			return

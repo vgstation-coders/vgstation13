@@ -97,7 +97,7 @@
 			linked_area = starting_area
 		else
 			linked_area = starting_area
-			warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
+			warning("Unable to find area [starting_area] in world - [type] ([name]) won't be able to function properly.")
 
 	if(istype(linked_area) && linked_area.contents.len) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src
@@ -108,9 +108,9 @@
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
 /datum/shuttle/proc/initialize()
 	. = INIT_SUCCESS
-	src.docking_ports = list()
-	src.docking_ports_aboard = list()
-	src.transit_port = null
+	docking_ports = list()
+	docking_ports_aboard = list()
+	transit_port = null
 
 	if(!linked_area || !istype(linked_area))
 		//No linked area - the shuttle doesn't exist (very bad)
@@ -140,14 +140,14 @@
 		if(check_turf)
 			for(var/obj/docking_port/P in check_turf.contents)
 				shuttle_docking_port.dock(P)
-				src.current_port = shuttle_docking_port.docked_with
+				current_port = shuttle_docking_port.docked_with
 				break
 
-		if(!src.current_port)
+		if(!current_port)
 			//This isn't really a problem, but if the shuttle moves somewhere it won't be able to return to its starting location
 			. = INIT_NO_START
 
-		src.dir = turn(linked_port.dir, 180)
+		dir = turn(linked_port.dir, 180)
 	else
 		//No docking port - the shuttle can't be moved (bad but fixable with admin intervention)
 		. = INIT_NO_PORT
@@ -345,7 +345,7 @@
 
 	//******Handle rotation*********
 	var/rotate = 0
-	if(src.can_rotate)
+	if(can_rotate)
 
 		if(linked_port.dir != turn(D.dir,180))
 
@@ -413,7 +413,7 @@
 			if(!M.locked_to)
 				shake_camera(M, 10, 1) // unbuckled, HOLY SHIT SHAKE THE ROOM
 
-				if(!src.stable)
+				if(!stable)
 					if(istype(M, /mob/living/carbon))
 						M.Weaken(3)
 			else
@@ -455,7 +455,7 @@
 
 /datum/shuttle/proc/move(var/mob/user) //a very simple proc which selects a random area and sends the shuttle there
 	var/list/possible_locations = list()
-	for(var/obj/docking_port/destination/S in src.docking_ports)
+	for(var/obj/docking_port/destination/S in docking_ports)
 		if(S == current_port) continue
 		if(S.docked_with) continue
 
@@ -529,15 +529,15 @@
 		var/area/A = get_area( locate(new_coords.x_pos, new_coords.y_pos, new_center.z) )
 
 		if(!A)
-			message_admins("<span class='notice'>WARNING: Unable to find an area at [new_coords.x_pos];[new_coords.y_pos];[new_center.z]. [src.name] ([src.type]) will not be moved.")
+			message_admins("<span class='notice'>WARNING: Unable to find an area at [new_coords.x_pos];[new_coords.y_pos];[new_center.z]. [name] ([type]) will not be moved.")
 			return
 		if(!destroy_everything && !(A.type in list(/area, /area/station/custom)) && !istype(A, /area/random_vault) && !istype(A, /area/vault)) //Breaking blueprint areas and space is fine, breaking the station is not. Breaking randomly generated vaults is fine, in case they spawn in a bad spot!
-			message_admins("<span class='notice'>WARNING: [src.name] ([src.type]) attempted to destroy [A] ([A.type]).</span> If you want [src.name] to be able to move freely and destroy areas, change its \"destroy_everything\" variable to 1.")
+			message_admins("<span class='notice'>WARNING: [name] ([type]) attempted to destroy [A] ([A.type]).</span> If you want [name] to be able to move freely and destroy areas, change its \"destroy_everything\" variable to 1.")
 			return
 		//If any of the new turfs are in the moved shuttle's current area, EMERGENCY ABORT (this leads to the shuttle destroying itself & potentially gibbing everybody inside)
 		if("[new_coords.x_pos];[new_coords.y_pos];[new_center.z]" in our_own_turfs)
-			warning("Shuttle ([src.name]; [src.type]) has attempted to move to a location which overlaps with its current position. Offending turf: [new_coords.x_pos];[new_coords.y_pos];[new_center.z]")
-			message_admins("WARNING: A shuttle ([src.name]; [src.type]) has attempted to move to a location which overlaps with its current position. The shuttle will not be moved.")
+			warning("Shuttle ([name]; [type]) has attempted to move to a location which overlaps with its current position. Offending turf: [new_coords.x_pos];[new_coords.y_pos];[new_center.z]")
+			message_admins("WARNING: A shuttle ([name]; [type]) has attempted to move to a location which overlaps with its current position. The shuttle will not be moved.")
 			return
 
 
@@ -552,7 +552,7 @@
 		var/add_underlay = 0
 
 		if(!old_turf)
-			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get original turf at [old_C.x_pos];[old_C.y_pos];[our_center.z]")
+			message_admins("ERROR when moving [name] ([type]) - failed to get original turf at [old_C.x_pos];[old_C.y_pos];[our_center.z]")
 			continue
 		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/shuttle/wall)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
 			if(old_turf.icon_state in transparent_icons)
@@ -563,13 +563,13 @@
 						add_underlay = 0
 
 		if(!new_turf)
-			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
+			message_admins("ERROR when moving [name] ([type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
 			continue
 
 		var/turf/displace_to = locate(C.x_pos,throwy,new_center.z)
 		for(var/atom/movable/AM as mob|obj in new_turf.contents)
-			if(AM.anchored || src.collision_type == COLLISION_DESTROY)
-				src.collide(AM)
+			if(AM.anchored || collision_type == COLLISION_DESTROY)
+				collide(AM)
 			else
 				AM.forceMove(displace_to)
 

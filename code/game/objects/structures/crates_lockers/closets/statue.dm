@@ -65,10 +65,10 @@
 /obj/structure/closet/statue/dump_contents()
 
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.loc = loc
 
 	for(var/mob/living/M in src)
-		M.loc = src.loc
+		M.loc = loc
 		M.sdisabilities &= ~MUTE
 		M.take_overall_damage((M.health - health - 100),0) //any new damage the statue incurred is transfered to the mob
 		if(M.client)

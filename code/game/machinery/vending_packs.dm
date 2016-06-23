@@ -179,7 +179,7 @@
 
 /obj/item/emptyvendomatpack/attack_self()
 	to_chat(usr, "<span class='notice'>You fold [src] flat.</span>")
-	new src.foldable(get_turf(src),foldable_amount)
+	new foldable(get_turf(src),foldable_amount)
 	qdel(src)
 
 

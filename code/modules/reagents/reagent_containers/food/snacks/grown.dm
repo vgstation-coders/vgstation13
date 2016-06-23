@@ -16,8 +16,8 @@
 		if(!isnull(newpotency))
 			potency = newpotency
 		..()
-		src.pixel_x = rand(-5.0, 5)
-		src.pixel_y = rand(-5.0, 5)
+		pixel_x = rand(-5.0, 5)
+		pixel_y = rand(-5.0, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
@@ -79,14 +79,14 @@
 		if(do_fruit_teleport(hit_atom, usr, potency))
 			visible_message("<span class='danger'>The [src] splatters, causing a distortion in space-time!</span>")
 		else if(splat_decal(get_turf(hit_atom)))
-			visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
+			visible_message("<span class='notice'>The [name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
 
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
 		splat_reagent_reaction(get_turf(hit_atom))
-		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
+		visible_message("<span class='notice'>The [name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
 
@@ -176,17 +176,17 @@
 		if(filling_color != "#FFFFFF")
 			S.color = filling_color
 		else
-			S.color = AverageColor(getFlatIcon(src, src.dir, 0), 1, 1)
+			S.color = AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 		S.name = "[seed.seed_name] smudge"
 	if(seed.biolum && seed.biolum_colour)
 		S.set_light(1, l_color = seed.biolum_colour)
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_reagent_reaction(turf/T)
-	if(src.reagents.total_volume > 0)
-		src.reagents.reaction(T)
+	if(reagents.total_volume > 0)
+		reagents.reaction(T)
 		for(var/atom/A in T)
-			src.reagents.reaction(A)
+			reagents.reaction(A)
 		return 1
 	return 0
 
@@ -330,7 +330,7 @@
 				qdel(W)
 			to_chat(user, "<span class='notice'>You add some cable to \the [src] and slide it inside the battery encasing.</span>")
 			var/obj/item/weapon/cell/potato/pocell = new /obj/item/weapon/cell/potato(user.loc)
-			pocell.maxcharge = src.potency * 10
+			pocell.maxcharge = potency * 10
 			pocell.charge = pocell.maxcharge
 			qdel(src)
 			return
@@ -435,9 +435,9 @@
 	if(istype(O, /obj/item/weapon/paper))
 		qdel(O)
 		to_chat(user, "<span class='notice'>You roll a blunt out of \the [src].</span>")
-		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src.loc)
-		B.name = "[src.name] blunt"
-		B.filling = "[src.name]"
+		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(loc)
+		B.name = "[name] blunt"
+		B.filling = "[name]"
 		reagents.trans_to(B, (reagents.total_volume))
 		user.put_in_hands(B)
 		user.drop_from_inventory(src)
@@ -457,7 +457,7 @@
 	if(istype(O, /obj/item/weapon/paper))
 		qdel(O)
 		to_chat(user, "<span class='notice'>You roll a godly blunt.</span>")
-		var/obj/item/clothing/mask/cigarette/blunt/deus/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/deus/rolled(src.loc)
+		var/obj/item/clothing/mask/cigarette/blunt/deus/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/deus/rolled(loc)
 		reagents.trans_to(B, (reagents.total_volume))
 		B.light_color = filling_color
 		user.put_in_hands(B)
@@ -840,7 +840,7 @@
 				if(3)
 					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/I = new current_path(get_turf(user))
 			user.put_in_hands(I)

@@ -25,7 +25,7 @@
 	)
 
 	RefreshParts()
-	src.initialize(); //Agouri
+	initialize(); //Agouri
 
 /obj/machinery/r_n_d/server/Destroy()
 	griefProtection()
@@ -175,7 +175,7 @@
 
 	add_fingerprint(usr)
 	usr.set_machine(src)
-	if(!src.allowed(usr) && !emagged)
+	if(!allowed(usr) && !emagged)
 		to_chat(usr, "<span class='warning'>You do not have the required access level</span>")
 		return
 
@@ -311,13 +311,13 @@
 	if(isscrewdriver(D))
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
-			if (src.stat & BROKEN)
+			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -325,10 +325,10 @@
 				qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"
@@ -338,7 +338,7 @@
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
 		to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 

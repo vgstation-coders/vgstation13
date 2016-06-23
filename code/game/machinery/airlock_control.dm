@@ -84,7 +84,7 @@ obj/machinery/door/airlock/Bumped(atom/AM)
 	..(AM)
 	if(istype(AM, /obj/mecha))
 		var/obj/mecha/mecha = AM
-		if(density && radio_connection && mecha.occupant && (src.allowed(mecha.occupant) || src.check_access_list(mecha.operation_req_access)))
+		if(density && radio_connection && mecha.occupant && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 			var/datum/signal/signal = getFromPool(/datum/signal)
 			signal.transmission_method = 1 //radio signal
 			signal.data["tag"] = id_tag
@@ -208,7 +208,7 @@ obj/machinery/airlock_sensor/airlock_exterior
 	if (building)
 		dir = ndir
 
-		//src.tdir = dir		// to fix Vars bug
+		//tdir = dir		// to fix Vars bug
 		//dir = SOUTH
 
 		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 : -24)
@@ -216,7 +216,7 @@ obj/machinery/airlock_sensor/airlock_exterior
 
 		//build=0
 		//stat |= MAINT
-		//src.update_icon()
+		//update_icon()
 
 obj/machinery/airlock_sensor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return {"
@@ -288,7 +288,7 @@ obj/machinery/access_button
 	if (building)
 		dir = ndir
 
-		//src.tdir = dir		// to fix Vars bug
+		//tdir = dir		// to fix Vars bug
 		//dir = SOUTH
 
 		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 : -24)
@@ -296,7 +296,7 @@ obj/machinery/access_button
 
 		//build=0
 		//stat |= MAINT
-		//src.update_icon()
+		//update_icon()
 
 
 obj/machinery/access_button/update_icon()

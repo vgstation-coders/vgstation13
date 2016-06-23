@@ -17,9 +17,9 @@
 
 	// ------- DIR CHANGING WHEN CLICKING ------
 	if( iscarbon(usr) && !usr.buckled )
-		if( src.x && src.y && usr.x && usr.y )
-			var/dx = src.x - usr.x
-			var/dy = src.y - usr.y
+		if( x && y && usr.x && usr.y )
+			var/dx = x - usr.x
+			var/dy = y - usr.y
 
 			if(dy || dx)
 				if(abs(dx) < abs(dy))
@@ -119,7 +119,7 @@
 		return
 
 	// ------- CLICKING STUFF IN CONTAINERS -------
-	if ((!( src in usr.contents ) && (((!( isturf(src) ) && (!( isturf(src.loc) ) && (src.loc && !( isturf(src.loc.loc) )))) || !( isturf(usr.loc) )) && (src.loc != usr.loc && (!( istype(src, /obj/screen) ) && !( usr.contents.Find(src.loc) ))))))
+	if ((!( src in usr.contents ) && (((!( isturf(src) ) && (!( isturf(loc) ) && (loc && !( isturf(loc.loc) )))) || !( isturf(usr.loc) )) && (loc != usr.loc && (!( istype(src, /obj/screen) ) && !( usr.contents.Find(loc) ))))))
 		if (istype(usr, /mob/living/silicon/ai))
 			var/mob/living/silicon/ai/ai = usr
 			if (ai.control_disabled || ai.malfhacking)
@@ -136,7 +136,7 @@
 	else if(istype(usr, /mob/living/silicon/robot) && !W)
 		t5 = 1
 	else
-		t5 = in_range(src, usr) || src.loc == usr
+		t5 = in_range(src, usr) || loc == usr
 
 //	to_chat(world, "according to dblclick(), t5 is [t5]")
 
@@ -154,7 +154,7 @@
 
 		// ------- DELAY CHECK PASSED -------
 
-		if ((src.loc && (get_dist(src, usr) < 2 || src.loc == usr.loc)))
+		if ((loc && (get_dist(src, usr) < 2 || loc == usr.loc)))
 
 			// ------- CLICKED OBJECT EXISTS IN GAME WORLD, DISTANCE FROM PERSON TO OBJECT IS 1 SQUARE OR THEY'RE ON THE SAME SQUARE -------
 
@@ -270,7 +270,7 @@
 				// ------- YOU HAVE AN ITEM IN YOUR HAND - HANDLE ATTACKBY AND AFTERATTACK -------
 				var/ignoreAA = 0 //Ignore afterattack(). Surgery uses this.
 				if (t5)
-					ignoreAA = src.attackby(W, usr)
+					ignoreAA = attackby(W, usr)
 				if (W && !ignoreAA)
 					W.afterattack(src, usr, (t5 ? 1 : 0), params)
 
@@ -278,35 +278,35 @@
 				// ------- YOU DO NOT HAVE AN ITEM IN YOUR HAND -------
 				if (istype(usr, /mob/living/carbon/human))
 					// ------- YOU ARE HUMAN -------
-					src.attack_hand(usr, usr.hand)
+					attack_hand(usr, usr.hand)
 				else
 					// ------- YOU ARE NOT HUMAN. WHAT ARE YOU - DETERMINED HERE AND proper ATTACK_MOBTYPE CALLED -------
 					if (istype(usr, /mob/living/carbon/monkey))
-						src.attack_paw(usr, usr.hand)
+						attack_paw(usr, usr.hand)
 					else if (istype(usr, /mob/living/carbon/alien/humanoid))
 						if(usr.m_intent == "walk" && istype(usr, /mob/living/carbon/alien/humanoid/hunter))
 							usr.m_intent = "run"
 							usr.hud_used.move_intent.icon_state = "running"
 							usr.update_icons()
-						src.attack_alien(usr, usr.hand)
+						attack_alien(usr, usr.hand)
 					else if (istype(usr, /mob/living/carbon/alien/larva))
-						src.attack_larva(usr)
+						attack_larva(usr)
 					else if (istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/living/silicon/robot))
-						src.attack_ai(usr, usr.hand)
+						attack_ai(usr, usr.hand)
 					else if(istype(usr, /mob/living/carbon/slime))
-						src.attack_slime(usr)
+						attack_slime(usr)
 					else if(istype(usr, /mob/living/simple_animal))
-						src.attack_animal(usr)
+						attack_animal(usr)
 		else
 			// ------- YOU ARE RESTRAINED. DETERMINE WHAT YOU ARE AND ATTACK WITH THE proper HAND_X PROC -------
 			if (istype(usr, /mob/living/carbon/human))
-				src.hand_h(usr, usr.hand)
+				hand_h(usr, usr.hand)
 			else if (istype(usr, /mob/living/carbon/monkey))
-				src.hand_p(usr, usr.hand)
+				hand_p(usr, usr.hand)
 			else if (istype(usr, /mob/living/carbon/alien/humanoid))
-				src.hand_al(usr, usr.hand)
+				hand_al(usr, usr.hand)
 			else if (istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/living/silicon/robot))
-				src.hand_a(usr, usr.hand)
+				hand_a(usr, usr.hand)
 
 	else
 		// ------- ITEM INACESSIBLE OR CLICKING ON SCREEN -------
@@ -326,25 +326,25 @@
 				// ------- YOU ARE NOT RESTRAINED -------
 				if ((W && !( istype(src, /obj/screen) )))
 					// ------- IT SHOULD NEVER GET TO HERE, DUE TO THE ISTYPE(SRC, /OBJ/SCREEN) FROM PREVIOUS IF-S - I TESTED IT WITH A DEBUG OUTPUT AND I COULDN'T GET THIST TO SHOW UP. -------
-					src.attackby(W, usr)
+					attackby(W, usr)
 					if (W)
 						W.afterattack(src, usr,, params)
 				else
 					// ------- YOU ARE NOT RESTRAINED, AND ARE CLICKING A HUD OBJECT -------
 					if (istype(usr, /mob/living/carbon/human))
-						src.attack_hand(usr, usr.hand)
+						attack_hand(usr, usr.hand)
 					else if (istype(usr, /mob/living/carbon/monkey))
-						src.attack_paw(usr, usr.hand)
+						attack_paw(usr, usr.hand)
 					else if (istype(usr, /mob/living/carbon/alien/humanoid))
-						src.attack_alien(usr, usr.hand)
+						attack_alien(usr, usr.hand)
 			else
 				// ------- YOU ARE RESTRAINED CLICKING ON A HUD OBJECT -------
 				if (istype(usr, /mob/living/carbon/human))
-					src.hand_h(usr, usr.hand)
+					hand_h(usr, usr.hand)
 				else if (istype(usr, /mob/living/carbon/monkey))
-					src.hand_p(usr, usr.hand)
+					hand_p(usr, usr.hand)
 				else if (istype(usr, /mob/living/carbon/alien/humanoid))
-					src.hand_al(usr, usr.hand)
+					hand_al(usr, usr.hand)
 		else
 			// ------- YOU ARE CLICKING ON AN OBJECT THAT'S INACCESSIBLE TO YOU AND IS NOT YOUR HUD -------
 			if((M_LASER in usr:mutations) && usr:a_intent == "harm" && world.time >= usr.next_move)

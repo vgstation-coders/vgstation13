@@ -65,7 +65,7 @@
 			else		adminhelp(msg)	//admin we are replying to has vanished, adminhelp instead
 			return
 
-	if (src.handle_spam_prevention(msg,MUTE_ADMINHELP))
+	if (handle_spam_prevention(msg,MUTE_ADMINHELP))
 		return
 
 	//clean the message if it's not sent by a high-rank admin
@@ -119,7 +119,7 @@
 			winset(C, null, "rpanewindow.left=window1")
 	else
 		to_chat(C, recieve_message)
-	if(src.prefs.special_popup)
+	if(prefs.special_popup)
 		src << output("\[[time_stamp()]] <font color='blue'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</font>", "window1.msay_output")
 	else
 		to_chat(src, "<font color='blue'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</font>")

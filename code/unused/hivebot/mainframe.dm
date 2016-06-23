@@ -3,22 +3,22 @@
 
 /mob/living/silicon/hive_mainframe/Life()
 	if(timestopped) return 0 //under effects of time magick
-	if (src.stat == 2)
+	if (stat == 2)
 		return
 	else
-		src.updatehealth()
+		updatehealth()
 
-		if (src.health <= 0)
+		if (health <= 0)
 			death()
 			return
 
-	if(src.force_mind)
-		if(!src.mind)
-			if(src.client)
-				src.mind = new
-				src.mind.key = src.key
-				src.mind.current = src
-		src.force_mind = 0
+	if(force_mind)
+		if(!mind)
+			if(client)
+				mind = new
+				mind.key = key
+				mind.current = src
+		force_mind = 0
 
 /mob/living/silicon/hive_mainframe/Stat()
 	..()
@@ -30,32 +30,32 @@
 				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 /mob/living/silicon/hive_mainframe/updatehealth()
-	if (src.nodamage == 0)
-		src.health = 100 - src.getFireLoss() - src.getBruteLoss()
+	if (nodamage == 0)
+		health = 100 - getFireLoss() - getBruteLoss()
 	else
-		src.health = 100
-		src.stat = 0
+		health = 100
+		stat = 0
 
 /mob/living/silicon/hive_mainframe/death(gibbed)
-	src.stat = 2
-	src.canmove = 0
-	if(src.blind)
-		src.blind.layer = 0
-	src.sight |= SEE_TURFS
-	src.sight |= SEE_MOBS
-	src.sight |= SEE_OBJS
-	src.see_in_dark = 8
-	src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	src.lying = 1
-	src.icon_state = "hive_main-crash"
+	stat = 2
+	canmove = 0
+	if(blind)
+		blind.layer = 0
+	sight |= SEE_TURFS
+	sight |= SEE_MOBS
+	sight |= SEE_OBJS
+	see_in_dark = 8
+	see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	lying = 1
+	icon_state = "hive_main-crash"
 
 	var/tod = time2text(world.realtime,"hh:mm:ss") //weasellos time of death patch
 	mind.store_memory("Time of death: [tod]", 0)
 
-	if (src.key)
+	if (key)
 		spawn(50)
-			if(src.key && src.stat == 2)
-				src.verbs += /client/proc/ghost
+			if(key && stat == 2)
+				verbs += /client/proc/ghost
 	return ..(gibbed)
 
 /mob/living/silicon/hive_mainframe/say_quote(var/text)
@@ -95,7 +95,7 @@
 	var/list/bodies = new/list()
 
 	for(var/mob/living/silicon/hivebot/H in mob_list)
-		if(H.z == src.z)
+		if(H.z == z)
 			if(H.shell)
 				if(!H.stat)
 					bodies += H
@@ -105,13 +105,13 @@
 	if (!target_shell)
 		return
 
-	else if(src.mind)
+	else if(mind)
 		spawn(30)
 			target_shell:mainframe = src
 			target_shell:dependent = 1
-			target_shell:real_name = src.name
+			target_shell:real_name = name
 			target_shell:name = target_shell:real_name
-		src.mind.transfer_to(target_shell)
+		mind.transfer_to(target_shell)
 		return
 
 
@@ -127,24 +127,24 @@
 /mob/living/silicon/hive_mainframe/Login()
 	..()
 	update_clothing()
-	for(var/S in src.client.screen)
+	for(var/S in client.screen)
 		del(S)
-	src.flash = new /obj/screen( null )
-	src.flash.icon_state = "blank"
-	src.flash.name = "flash"
-	src.flash.screen_loc = "1,1 to 15,15"
-	src.flash.layer = 17
-	src.blind = new /obj/screen( null )
-	src.blind.icon_state = "black"
-	src.blind.name = " "
-	src.blind.screen_loc = "1,1 to 15,15"
-	src.blind.layer = 0
-	src.client.screen += list( src.blind, src.flash )
-	if(!isturf(src.loc))
-		src.client.eye = src.loc
-		src.client.perspective = EYE_PERSPECTIVE
-	if (src.stat == 2)
-		src.verbs += /client/proc/ghost
+	flash = new /obj/screen( null )
+	flash.icon_state = "blank"
+	flash.name = "flash"
+	flash.screen_loc = "1,1 to 15,15"
+	flash.layer = 17
+	blind = new /obj/screen( null )
+	blind.icon_state = "black"
+	blind.name = " "
+	blind.screen_loc = "1,1 to 15,15"
+	blind.layer = 0
+	client.screen += list( blind, flash )
+	if(!isturf(loc))
+		client.eye = loc
+		client.perspective = EYE_PERSPECTIVE
+	if (stat == 2)
+		verbs += /client/proc/ghost
 	return
 
 
@@ -160,5 +160,5 @@
 		if (length(newname) >= 26)
 			newname = copytext(newname, 1, 26)
 		newname = replacetext(newname, ">", "'")
-		src.real_name = newname
-		src.name = newname
+		real_name = newname
+		name = newname

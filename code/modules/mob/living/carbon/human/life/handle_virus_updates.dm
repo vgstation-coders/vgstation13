@@ -10,7 +10,7 @@
 			var/datum/disease2/disease/V = virus2[ID]
 			V.cure(src)
 
-	src.findAirborneVirii()
+	findAirborneVirii()
 
 	for(var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
@@ -23,7 +23,7 @@
 			continue
 
 		//Check if we're immune
-		if(V.antigen & src.antibodies)
+		if(V.antigen & antibodies)
 			V.dead = 1
 
 	return

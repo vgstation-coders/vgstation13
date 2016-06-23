@@ -51,7 +51,7 @@
 		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
 		for(var/mob/M in mob_list)
 			if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
-				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
+				to_chat(M, "<span class='sinister'><b>[name]:</b> [html_encode(speech.message)]</span>")
 		return 1
 
 /mob/living/simple_animal/construct/gib()
@@ -75,13 +75,13 @@
 	add_language(LANGUAGE_CULT)
 	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
-		src.add_spell(new spell, "const_spell_ready")
+		add_spell(new spell, "const_spell_ready")
 	updateicon()
 
 /mob/living/simple_animal/construct/Die()
 	..()
 	for(var/i=0;i<3;i++)
-		new /obj/item/weapon/ectoplasm (src.loc)
+		new /obj/item/weapon/ectoplasm (loc)
 	for(var/mob/M in viewers(src, null))
 		if((M.client && !( M.blinded )))
 			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
@@ -91,9 +91,9 @@
 
 /mob/living/simple_animal/construct/examine(mob/user)
 	var/msg = "<span cass='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
-	if (src.health < src.maxHealth)
+	if (health < maxHealth)
 		msg += "<span class='warning'>"
-		if (src.health >= src.maxHealth/2)
+		if (health >= maxHealth/2)
 			msg += "It looks slightly dented.\n"
 		else
 			msg += "<B>It looks severely dented!</B>\n"
@@ -105,14 +105,14 @@
 
 /mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M as mob)
 	if(istype(M, /mob/living/simple_animal/construct/builder))
-		if(src.health >= src.maxHealth)
+		if(health >= maxHealth)
 			to_chat(M, "<span class='notice'>[src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 	else
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
 		if(M.melee_damage_upper <= 0)
 			M.emote("[M.friendly] \the <EM>[src]</EM>")
 		else

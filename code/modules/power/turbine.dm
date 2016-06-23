@@ -140,7 +140,7 @@
 
 	for(var/mob/M in viewers(1, src))
 		if ((M.client && M.machine == src))
-			src.interact(M)
+			interact(M)
 	AutoUpdateAI(src)
 
 /obj/machinery/power/turbine/interact(mob/user)
@@ -176,7 +176,7 @@
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if (( usr.machine==src && ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+	if (( usr.machine==src && ((get_dist(src, usr) <= 1) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
 
 
 		if( href_list["close"] )
@@ -190,7 +190,7 @@
 		spawn(0)
 			for(var/mob/M in viewers(1, src))
 				if ((M.client && M.machine == src))
-					src.interact(M)
+					interact(M)
 
 	else
 		usr << browse(null, "window=turbine")
@@ -222,14 +222,14 @@
 	if(isscrewdriver(I))
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
-			if (src.stat & BROKEN)
+			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/turbine_control/M = new /obj/item/weapon/circuitboard/turbine_control( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
-				M.id_tag = src.id_tag
+					C.loc = loc
+				M.id_tag = id_tag
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -237,31 +237,31 @@
 				qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 				var/obj/item/weapon/circuitboard/turbine_control/M = new /obj/item/weapon/circuitboard/turbine_control( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
-				M.id_tag = src.id_tag
+					C.loc = loc
+				M.id_tag = id_tag
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"
 				A.anchored = 1
 				qdel(src)
 	else
-		src.attack_hand(user)
+		attack_hand(user)
 	return
 
 /obj/machinery/computer/turbine_computer/attack_hand(var/mob/user as mob)
 	user.machine = src
 	var/dat
-	if(src.compressor)
+	if(compressor)
 		dat += {"<BR><B>Gas turbine remote control system</B><HR>
-		\nTurbine status: [ src.compressor.starter ? "<A href='?src=\ref[src];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=\ref[src];str=1'>On</A>"]
+		\nTurbine status: [ compressor.starter ? "<A href='?src=\ref[src];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=\ref[src];str=1'>On</A>"]
 		\n<BR>
-		\nTurbine speed: [src.compressor.rpm]rpm<BR>
-		\nPower currently being generated: [src.compressor.turbine.lastgen]W<BR>
-		\nInternal gas temperature: [src.compressor.gas_contained.temperature]K<BR>
-		\nVent doors: [ src.door_status ? "<A href='?src=\ref[src];doors=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=\ref[src];doors=1'>Open</A>"]
+		\nTurbine speed: [compressor.rpm]rpm<BR>
+		\nPower currently being generated: [compressor.turbine.lastgen]W<BR>
+		\nInternal gas temperature: [compressor.gas_contained.temperature]K<BR>
+		\nVent doors: [ door_status ? "<A href='?src=\ref[src];doors=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=\ref[src];doors=1'>Open</A>"]
 		\n</PRE><HR><A href='?src=\ref[src];view=1'>View</A>
 		\n</PRE><HR><A href='?src=\ref[src];close=1'>Close</A>
 		\n<BR>
@@ -278,15 +278,15 @@
 /obj/machinery/computer/turbine_computer/Topic(href, href_list)
 	if(..())
 		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon)))
 		usr.machine = src
 
 		if( href_list["view"] )
-			usr.client.eye = src.compressor
+			usr.client.eye = compressor
 		else if( href_list["str"] )
-			src.compressor.starter = !src.compressor.starter
+			compressor.starter = !compressor.starter
 		else if (href_list["doors"])
-			for(var/obj/machinery/door/poddoor/D in src.doors)
+			for(var/obj/machinery/door/poddoor/D in doors)
 				if (door_status == 0)
 					spawn( 0 )
 						D.open()
@@ -300,10 +300,10 @@
 			usr.machine = null
 			return
 
-		src.add_fingerprint(usr)
-	src.updateUsrDialog()
+		add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/turbine_computer/process()
-	src.updateDialog()
+	updateDialog()
 	return

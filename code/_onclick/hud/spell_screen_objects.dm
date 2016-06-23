@@ -185,7 +185,7 @@
 		if(spell.charge_counter < spell.charge_max)
 			icon_state = "[spell_base]_spell_base"
 			if(spell.charge_counter > 0)
-				var/icon/partial_charge = icon(src.icon, "[spell_base]_spell_ready")
+				var/icon/partial_charge = icon(icon, "[spell_base]_spell_ready")
 				partial_charge.Crop(1, 1, partial_charge.Width(), round(partial_charge.Height() * spell.charge_counter / spell.charge_max))
 				overlays += partial_charge
 				if(last_charged_icon)
@@ -219,7 +219,7 @@
 
 //Helper proc, does not remove channeling
 /obj/screen/spell/proc/add_channeling()
-	var/image/channel = image(icon = icon, loc = src, icon_state = "channeled", layer = src.layer + 1)
+	var/image/channel = image(icon = icon, loc = src, icon_state = "channeled", layer = layer + 1)
 	channeling_image = channel
 	spellmaster.spell_holder.client.images += channeling_image
 

@@ -16,12 +16,12 @@
 	if(M)
 		M.loc = src
 
-		src.stored_mob = M
+		stored_mob = M
 
 /obj/item/weapon/holder/Destroy()
 	//Hopefully this will stop the icon from remaining on human mobs.
 	if(istype(loc,/mob/living))
-		var/mob/living/A = src.loc
+		var/mob/living/A = loc
 		A.drop_item(src, force_drop = 1)
 		A.update_icons()
 
@@ -43,7 +43,7 @@
 	returnToPool(src) //This calls Destroy(), and frees the mob
 
 /obj/item/weapon/holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	for(var/mob/M in src.contents)
+	for(var/mob/M in contents)
 		M.attackby(W,user)
 
 /obj/item/weapon/holder/update_wield(mob/user)

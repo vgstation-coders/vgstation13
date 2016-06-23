@@ -64,7 +64,7 @@
 				return
 			var/list/candidates = get_candidates(ROLE_WIZARD)
 			if(candidates.len)
-				src.used = 1
+				used = 1
 				var/client/C = pick(candidates)
 				spawn_antag(C, get_turf(H.loc), href_list["school"])
 			else
@@ -157,7 +157,7 @@
 	if(borg_candicates.len > 0)
 		used = 1
 		var/client/C = pick(borg_candicates)
-		spawn_antag(C, get_turf(src.loc), "syndieborg")
+		spawn_antag(C, get_turf(loc), "syndieborg")
 	else
 		to_chat(user, "<span class='notice'>Unable to connect to Syndicate Command. Please wait and try again later or use the teleporter on your uplink to get your points refunded.</span>")
 

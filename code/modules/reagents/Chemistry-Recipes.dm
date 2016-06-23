@@ -16,7 +16,7 @@
 	var/requires_heating = 0
 
 ///vg/: Send admin alerts with standardized code.
-/datum/chemical_reaction/proc/send_admin_alert(var/datum/reagents/holder, var/reaction_name = src.name)
+/datum/chemical_reaction/proc/send_admin_alert(var/datum/reagents/holder, var/reaction_name = name)
 	var/message_prefix = "\A [reaction_name] reaction has occured"
 	var/message = "[message_prefix]"
 	var/atom/A = holder.my_atom

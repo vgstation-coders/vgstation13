@@ -175,8 +175,8 @@
 		if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP))
 			can_grab = 0
 	if(can_grab)
-		src.visible_message("<span class='danger'>Tendrils lash out from \the [src] and drag \the [victim] in!</span>")
-		victim.forceMove(src.loc)
+		visible_message("<span class='danger'>Tendrils lash out from \the [src] and drag \the [victim] in!</span>")
+		victim.forceMove(loc)
 		lock_atom(victim, /datum/locking_category/plantsegment)
 
 /datum/locking_category/plantsegment

@@ -13,7 +13,7 @@
 	accessible_values = list("Message" = "message;text")
 
 /obj/item/device/assembly/speaker/activate()
-	src.say(message)
+	say(message)
 
 /obj/item/device/assembly/speaker/attack_self(mob/user as mob)
 	var/new_msg = sanitize(input(user,"Enter new message for the [src]","NanoSpeaker Settings",message))
@@ -24,7 +24,7 @@
 	var/datum/language/language
 	if(user.stat == DEAD) //ENGAGE SPOOKS!
 		language = all_languages["Spooky"]
-	src.say("New message: [message]", language)
+	say("New message: [message]", language)
 
 /obj/item/device/assembly/speaker/attackby(obj/item/W as obj, mob/user as mob)
 	..()

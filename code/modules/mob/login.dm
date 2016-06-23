@@ -72,7 +72,7 @@
 
 		if(M_FARSIGHT in mutations)
 			client.view = max(client.view, world.view+1)
-	CallHook("Login", list("client" = src.client, "mob" = src))
+	CallHook("Login", list("client" = client, "mob" = src))
 
 	if(spell_masters)
 		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)

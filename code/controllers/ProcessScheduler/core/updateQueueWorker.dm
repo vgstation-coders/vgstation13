@@ -14,10 +14,10 @@ datum/updateQueueWorker/New(var/list/objects, var/procName, var/list/arguments, 
 	init(objects, procName, arguments, cpuThreshold)
 
 datum/updateQueueWorker/proc/init(var/list/objects, var/procName, var/list/arguments, var/cpuThreshold = 90)
-	src.objects = objects
-	src.procName = procName
-	src.arguments = arguments
-	src.cpuThreshold = cpuThreshold
+	objects = objects
+	procName = procName
+	arguments = arguments
+	cpuThreshold = cpuThreshold
 
 	killed = 0
 	finished = 0

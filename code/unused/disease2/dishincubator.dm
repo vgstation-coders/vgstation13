@@ -35,34 +35,34 @@
 	attackby(var/obj/B as obj, var/mob/user as mob)
 		if(istype(B, /obj/item/weapon/reagent_containers/glass) || istype(B,/obj/item/weapon/reagent_containers/syringe))
 
-			if(src.beaker)
+			if(beaker)
 				if(istype(beaker,/obj/item/weapon/reagent_containers/syringe))
 					to_chat(user, "A syringe is already loaded into the machine.")
 				else
 					to_chat(user, "A beaker is already loaded into the machine.")
 				return
 
-			src.beaker =  B
+			beaker =  B
 			user.drop_item()
 			B.loc = src
 			if(istype(B,/obj/item/weapon/reagent_containers/syringe))
 				to_chat(user, "You add the syringe to the machine!")
-				src.updateUsrDialog()
+				updateUsrDialog()
 			else
 				to_chat(user, "You add the beaker to the machine!")
-				src.updateUsrDialog()
+				updateUsrDialog()
 		else
 			if(istype(B,/obj/item/weapon/virusdish))
-				if(src.dish)
+				if(dish)
 					to_chat(user, "A dish is already loaded into the machine.")
 					return
 
-				src.dish =  B
+				dish =  B
 				user.drop_item()
 				B.loc = src
 				if(istype(B,/obj/item/weapon/virusdish))
 					to_chat(user, "You add the dish to the machine!")
-					src.updateUsrDialog()
+					updateUsrDialog()
 
 	Topic(href, href_list)
 		if(stat & BROKEN) return
@@ -80,11 +80,11 @@
 				icon_state = "incubator"
 		if (href_list["ejectchem"])
 			if(beaker)
-				beaker.loc = src.loc
+				beaker.loc = loc
 				beaker = null
 		if (href_list["ejectdish"])
 			if(dish)
-				dish.loc = src.loc
+				dish.loc = loc
 				dish = null
 		if (href_list["rad"])
 			radiation += 10
@@ -94,8 +94,8 @@
 			foodsupply = 0
 
 
-		src.add_fingerprint(usr)
-		src.updateUsrDialog()
+		add_fingerprint(usr)
+		updateUsrDialog()
 
 	attack_hand(mob/user as mob)
 		if(stat & BROKEN)
@@ -144,14 +144,14 @@
 				foodsupply -= 1
 				dish.growth += 1
 				if(dish.growth == 100)
-					state("The [src.name] pings")
+					state("The [name] pings")
 			if(radiation)
 				if(radiation > 50 & prob(5))
 					dish.virus2.majormutate()
 					if(dish.info)
 						dish.info = "OUTDATED : [dish.info]"
 						dish.analysed = 0
-					state("The [src.name] beeps")
+					state("The [name] beeps")
 
 				else if(prob(5))
 					dish.virus2.minormutate()

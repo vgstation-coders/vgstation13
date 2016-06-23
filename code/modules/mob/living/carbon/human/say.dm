@@ -4,7 +4,7 @@
 /mob/living/carbon/human/say_quote(text)
 	if(!text)
 		return "says, \"...\"";	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
-	if (src.stuttering)
+	if (stuttering)
 		return "stammers, [text]";
 	if(isliving(src))
 		var/mob/living/L = src
@@ -28,7 +28,7 @@
 
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))
 		speech.message = "[uppertext(replacetext(speech.message, ".", "!"))]!!" //because I don't know how to code properly in getting vars from other files -Bro
-	if (src.slurring || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
+	if (slurring || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
 		speech.message = slur(speech.message)
 
 	// Should be handled via a virus-specific proc.
@@ -179,7 +179,7 @@
 
 	//This is already covered by mob/say_understands()
 	//if (istype(other, /mob/living/simple_animal))
-	//	if((other.universal_speak && !speaking) || src.universal_speak || src.universal_understand)
+	//	if((other.universal_speak && !speaking) || universal_speak || universal_understand)
 	//		return 1
 	//	return 0
 	return ..()

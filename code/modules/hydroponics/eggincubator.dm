@@ -55,13 +55,13 @@
 			user.visible_message( \
 				"<span class='notice'>\The [user] has added \the [O] to \the [src].</span>", \
 				"<span class='notice'>You add \the [O] to \the [src].</span>")
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/egg_incubator/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/egg_incubator/attack_ai(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/egg_incubator/attack_hand(mob/user as mob)
 	if(..()) return 1
@@ -100,10 +100,10 @@
 			eject(E)
 			E.hatch()
 			playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/egg_incubator/proc/eject(var/obj/E)
 	if(E.loc != src) return //You can't eject it if it's not here.
 	E.forceMove(get_turf(src))
-	src.updateUsrDialog()
+	updateUsrDialog()
 	visible_message("<span class='info'>An egg was ejected from \the [src].</span>")

@@ -89,7 +89,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	d1 = text2num(copytext(icon_state, 1, dash))
 	d2 = text2num(copytext(icon_state, dash + 1))
 
-	var/turf/T = src.loc	// hide if turf is not intact
+	var/turf/T = loc	// hide if turf is not intact
 	var/obj/structure/catwalk/Catwalk = (locate(/obj/structure/catwalk) in get_turf(T))
 	if(!istype(T))
 		if(!Catwalk)
@@ -168,7 +168,7 @@ By design, d1 is the smallest direction and d2 is the highest
 //   - Cable coil : merge cables
 //   - Multitool : get the power currently passing through the cable
 /obj/structure/cable/attackby(obj/item/W, mob/user)
-	var/turf/T = src.loc
+	var/turf/T = loc
 
 	if(T.intact)
 		return
@@ -177,7 +177,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		if(shock(user, 50))
 			return
 
-		if(src.d1)	// 0-X cables are 1 unit, X-X cables are 2 units long
+		if(d1)	// 0-X cables are 1 unit, X-X cables are 2 units long
 			getFromPool(/obj/item/stack/cable_coil, T, 2, light_color)
 		else
 			getFromPool(/obj/item/stack/cable_coil, T, 1, light_color)
@@ -221,10 +221,10 @@ By design, d1 is the smallest direction and d2 is the highest
 
 		shock(user, 5, 0.2)
 	else
-		if(src.d1 && W.is_conductor()) // d1 determines if this is a cable end
+		if(d1 && W.is_conductor()) // d1 determines if this is a cable end
 			shock(user, 50, 0.7)
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 /obj/structure/cable/bite_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span></span>")
@@ -252,12 +252,12 @@ By design, d1 is the smallest direction and d2 is the highest
 			returnToPool(src)
 		if(2.0)
 			if(prob(50))
-				getFromPool(/obj/item/stack/cable_coil,  src.loc, src.d1 ? 2 : 1, light_color)
+				getFromPool(/obj/item/stack/cable_coil,  loc, d1 ? 2 : 1, light_color)
 				returnToPool(src)
 
 		if(3.0)
 			if(prob(25))
-				getFromPool(/obj/item/stack/cable_coil, src.loc, src.d1 ? 2 : 1, light_color)
+				getFromPool(/obj/item/stack/cable_coil, loc, d1 ? 2 : 1, light_color)
 				returnToPool(src)
 	return
 

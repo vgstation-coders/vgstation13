@@ -63,7 +63,7 @@
 				user.visible_message(\
 					"<span class='warning'>[user.name] has added cables to the SMES!</span>",\
 					"You added cables the SMES.")
-				src.stat = 0
+				stat = 0
 				return 1
 		else if(iswirecutter(W) && terminal)
 			var/turf/T = get_turf(terminal)

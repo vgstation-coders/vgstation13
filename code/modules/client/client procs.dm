@@ -82,22 +82,22 @@
 		if ("openLink")
 			src << link(href_list["link"])
 
-	..()	//redirect to hsrc.Topic()
+	..()	//redirect to hTopic()
 	//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type)
-	if(config.automute_on && !holder && src.last_message == message)
-		src.last_message_count++
-		if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
+	if(config.automute_on && !holder && last_message == message)
+		last_message_count++
+		if(last_message_count >= SPAM_TRIGGER_AUTOMUTE)
 			to_chat(src, "<span class='warning'>You have exceeded the spam filter limit for identical messages. An auto-mute was applied.</span>")
-			cmd_admin_mute(src.mob, mute_type, 1)
+			cmd_admin_mute(mob, mute_type, 1)
 			return 1
-		if(src.last_message_count >= SPAM_TRIGGER_WARNING)
+		if(last_message_count >= SPAM_TRIGGER_WARNING)
 			to_chat(src, "<span class='warning'>You are nearing the spam filter limit for identical messages.</span>")
 			return 0
 	else
 		last_message = message
-		src.last_message_count = 0
+		last_message_count = 0
 		return 0
 
 //This stops files larger than UPLOAD_LIMIT being sent from client to server via input(), client.Import() etc.
@@ -154,8 +154,8 @@
 
 	// Change the way they should download resources.
 	if(config.resource_urls)
-		src.preload_rsc = pick(config.resource_urls)
-	else src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
+		preload_rsc = pick(config.resource_urls)
+	else preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
 	to_chat(src, "<span class='warning'>If the title screen is black, resources are still downloading. Please be patient until the title screen appears.</span>")
 
@@ -229,7 +229,7 @@
 
 	if(!dbcon.IsConnected())
 		return
-	var/list/http[] = world.Export("http://www.byond.com/members/[src.key]?format=text")  // Retrieve information from BYOND
+	var/list/http[] = world.Export("http://www.byond.com/members/[key]?format=text")  // Retrieve information from BYOND
 	var/Joined = 2550-01-01
 	if(http && http.len && ("CONTENT" in http))
 		var/String = file2text(http["CONTENT"])  //  Convert the HTML file to text
@@ -265,7 +265,7 @@
 //		to_chat(src, link(url))
 
 		//var/Server/s = random_server_list[key]
-		//world.log << "Sending [src.key] to random server: [url]"
+		//world.log << "Sending [key] to random server: [url]"
 //		to_chat(src, link(s.url))
 		//del(src)
 

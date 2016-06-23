@@ -69,14 +69,14 @@
 	options - An object used for configuration.
 */
 /datum/n_Parser/nS_Parser/New(tokens[], var/datum/n_scriptOptions/options)
-	src.tokens = tokens
-	src.options = options
+	tokens = tokens
+	options = options
 	curBlock = global_block
 	return ..()
 
 /datum/n_Parser/nS_Parser/Parse()
 	ASSERT(tokens)
-	for(,src.index <= src.tokens.len, src.index++)
+	for(,index <= tokens.len, index++)
 		curToken = tokens[index]
 		switch(curToken.type)
 			if(/datum/token/keyword)

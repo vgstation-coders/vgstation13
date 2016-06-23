@@ -28,9 +28,9 @@
 		if(user != src)
 			if(!user.isGoodPickpocket())
 				visible_message("<span class='warning'>\The [user] shuts off \the [src]'s internals!</span>")
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has disabled [src.name]'s ([src.ckey]) internals.</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='red'>Internals disabled by [user.name] ([user.ckey]).</font>")
-			log_attack("[user.name] ([user.ckey]) has disabled [src.name]'s ([src.ckey]) internals.")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has disabled [name]'s ([ckey]) internals.</font>")
+			attack_log += text("\[[time_stamp()]\] <font color='red'>Internals disabled by [user.name] ([user.ckey]).</font>")
+			log_attack("[user.name] ([user.ckey]) has disabled [name]'s ([ckey]) internals.")
 		else
 			to_chat(user, "<span class='notice'>No longer running on internals.</span>")
 		return 1
@@ -60,9 +60,9 @@
 			var/gas_contents = T.air_contents.english_contents_list()
 			if(!user.isGoodPickpocket())
 				to_chat(user, "<span class='notice'>\The [user] has enabled [src]'s internals.</span>")
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has enabled [src.name]'s ([src.ckey]) internals (Gas contents: [gas_contents]).</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='red'>Internals enabled by [user.name] ([user.ckey]) (Gas contents: [gas_contents]).</font>")
-			log_attack("[user.name] ([user.ckey]) has enabled [src.name]'s ([src.ckey]) internals (Gas contents: [gas_contents]).")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has enabled [name]'s ([ckey]) internals (Gas contents: [gas_contents]).</font>")
+			attack_log += text("\[[time_stamp()]\] <font color='red'>Internals enabled by [user.name] ([user.ckey]) (Gas contents: [gas_contents]).</font>")
+			log_attack("[user.name] ([user.ckey]) has enabled [name]'s ([ckey]) internals (Gas contents: [gas_contents]).")
 		else
 			to_chat(src, "<span class='notice'>You are now running on internals from \the [T].</span>")
 		return 1

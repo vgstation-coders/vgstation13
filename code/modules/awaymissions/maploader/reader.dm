@@ -338,7 +338,7 @@ var/global/dmm_suite/preloader/_preloader = null
 
 //atom creation method that preloads variables at creation
 /atom/New()
-	if(_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+	if(_preloader && (type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
 		_preloader.load(src)
 
 	. = ..()

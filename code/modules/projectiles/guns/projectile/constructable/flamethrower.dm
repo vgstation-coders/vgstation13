@@ -85,7 +85,7 @@
 	else if (target.loc == user)
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	else if (locate (/obj/structure/table, loc))
 		return
 
 	if(!lit)
@@ -128,9 +128,9 @@
 	B.gas_jet = tank_gas.remove_ratio(throw_percent/100)
 
 	if(Fire(target,user))
-		user.visible_message("<span class='danger'>[user] shoots a jet of gas from \his [src.name]!</span>","<span class='danger'>You shoot a jet of gas from your [src.name]!</span>")
+		user.visible_message("<span class='danger'>[user] shoots a jet of gas from \his [name]!</span>","<span class='danger'>You shoot a jet of gas from your [name]!</span>")
 		playsound(user, 'sound/weapons/flamethrower.ogg', 50, 1)
-		src.updateUsrDialog()
+		updateUsrDialog()
 		flamethrower_window(user)
 
 /obj/item/weapon/gun/projectile/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
@@ -172,7 +172,7 @@
 		if(user.drop_item(W, src))
 			ptank = W
 			update_icon()
-			src.updateUsrDialog()
+			updateUsrDialog()
 			flamethrower_window(user)
 			return
 

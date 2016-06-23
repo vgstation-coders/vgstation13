@@ -37,12 +37,12 @@
 
 	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
 
-	if(!IsGuestKey(src.key))
+	if(!IsGuestKey(key))
 		establish_db_connection()
 
 		if(dbcon.IsConnected())
 			var/isadmin = 0
-			if(src.client && src.client.holder)
+			if(client && client.holder)
 				isadmin = 1
 			var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
 			query.Execute()
@@ -206,7 +206,7 @@
 		if(istext(pollid))
 			pollid = text2num(pollid)
 		if(isnum(pollid))
-			src.poll_player(pollid)
+			poll_player(pollid)
 		return
 
 	if(href_list["votepollid"] && href_list["votetype"])
@@ -255,7 +255,7 @@
 	if(!job)	return 0
 	if((job.current_positions >= job.total_positions) && job.total_positions != -1)	return 0
 	if(jobban_isbanned(src,rank))	return 0
-	if(!job.player_old_enough(src.client))	return 0
+	if(!job.player_old_enough(client))	return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")

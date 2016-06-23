@@ -94,7 +94,7 @@
 			page_num = Clamp(text2num(href_list["page"]), 0, num_pages)
 
 	if(href_list["search"])
-		num_results = src.get_num_results()
+		num_results = get_num_results()
 		num_pages = Ceiling(num_results/LIBRARY_BOOKS_PER_PAGE)
 		page_num = 0
 
@@ -103,7 +103,7 @@
 	if(href_list["back"])
 		screenstate = 0
 
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	add_fingerprint(usr)
+	updateUsrDialog()
 	return
 

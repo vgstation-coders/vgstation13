@@ -20,7 +20,7 @@
 	if (building)
 		dir = ndir
 
-		//src.tdir = dir		// to fix Vars bug
+		//tdir = dir		// to fix Vars bug
 		//dir = SOUTH
 
 		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 : -24)
@@ -28,7 +28,7 @@
 
 		build=0
 		stat |= MAINT
-		src.update_icon()
+		update_icon()
 
 /obj/machinery/embedded_controller/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	. = ..()
@@ -132,12 +132,12 @@
 		program.process()
 
 	update_icon()
-	src.updateDialog()
+	updateDialog()
 
 
 /obj/machinery/embedded_controller/attack_ai(mob/user as mob)
 	if(build<2) return 1
-	src.ui_interact(user)
+	ui_interact(user)
 
 /obj/machinery/embedded_controller/attack_paw(mob/user as mob)
 	attack_hand(user)
@@ -148,7 +148,7 @@
 		to_chat(user, "You do not have the dexterity to use this.")
 		return
 	if(build<2) return 1
-	src.ui_interact(user)
+	ui_interact(user)
 
 /obj/machinery/embedded_controller/ui_interact()
 	return
@@ -224,7 +224,7 @@
 			if(!(href_list["set_tag"] in vars))
 				to_chat(usr, "<span class='warning'>Something went wrong: Unable to find [href_list["set_tag"]] in vars!</span>")
 				return 1
-			var/current_tag = src.vars[href_list["set_tag"]]
+			var/current_tag = vars[href_list["set_tag"]]
 			var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src, current_tag) as null|text),1,MAX_MESSAGE_LEN)
 			if(newid)
 				vars[href_list["set_tag"]] = newid

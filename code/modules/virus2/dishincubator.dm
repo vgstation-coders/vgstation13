@@ -52,7 +52,7 @@
 	..()
 	if(istype(B, /obj/item/weapon/reagent_containers/glass) || istype(B,/obj/item/weapon/reagent_containers/syringe))
 
-		if(src.beaker)
+		if(beaker)
 			if(istype(beaker,/obj/item/weapon/reagent_containers/syringe))
 				to_chat(user, "A syringe is already loaded into the machine.")
 			else
@@ -60,26 +60,26 @@
 			return
 
 		if(user.drop_item(B, src))
-			src.beaker =  B
+			beaker =  B
 
 			if(istype(B,/obj/item/weapon/reagent_containers/syringe))
 				to_chat(user, "You add the syringe to the machine!")
-				src.updateUsrDialog()
+				updateUsrDialog()
 			else
 				to_chat(user, "You add the beaker to the machine!")
-				src.updateUsrDialog()
+				updateUsrDialog()
 	else
 		if(istype(B,/obj/item/weapon/virusdish))
-			if(src.dish)
+			if(dish)
 				to_chat(user, "A dish is already loaded into the machine.")
 				return
 
 			if(user.drop_item(B, src))
-				src.dish =  B
+				dish =  B
 
 				if(istype(B,/obj/item/weapon/virusdish))
 					to_chat(user, "You add the dish to the machine!")
-					src.updateUsrDialog()
+					updateUsrDialog()
 
 /obj/machinery/disease2/incubator/Topic(href, href_list)
 	if(..()) return 1
@@ -88,7 +88,7 @@
 
 	if (href_list["ejectchem"])
 		if(beaker)
-			beaker.forceMove(src.loc)
+			beaker.forceMove(loc)
 			beaker = null
 	if(!dish)
 		return
@@ -102,7 +102,7 @@
 			icon_state = "incubator"
 	if (href_list["ejectdish"])
 		if(dish)
-			dish.loc = src.loc
+			dish.loc = loc
 			dish = null
 	if (href_list["rad"])
 		radiation += 10
@@ -127,8 +127,8 @@
 				B.data["virus2"] = virus
 
 				say("Injection complete.")
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	add_fingerprint(usr)
+	updateUsrDialog()
 
 /obj/machinery/disease2/incubator/attack_hand(mob/user as mob)
 	if(stat & BROKEN)
@@ -209,4 +209,4 @@
 		if(!beaker.reagents.remove_reagent(TOXIN,1))
 			toxins += 1
 
-	src.updateUsrDialog()
+	updateUsrDialog()

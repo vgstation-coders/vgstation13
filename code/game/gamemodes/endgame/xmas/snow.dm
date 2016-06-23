@@ -156,19 +156,19 @@
 	env = TS.return_air()
 
 /obj/structure/snow/cosmic/proc/spread()
-	while(src && !src.gcDestroyed)
+	while(src && !gcDestroyed)
 		if(snow_tiles >= COSMICFREEZE_END)	return
 		update_env_air()
 		if(!env)    return
 		else if(env.temperature > MELTPOINT_SNOW)//above 30?C, the snow melts away)
-			src.snowMelt()
+			snowMelt()
 			return
 		else if(env.temperature < SNOWSPREAD_MAXTEMP)
 			for(var/i in cardinal)
 				var/turf/T = get_step(src,i)
 				var/datum/gas_mixture/env2 = T.return_air()
 				if(env2.temperature >= MELTPOINT_SNOW)	continue
-				if(src.canSpreadTo(T))
+				if(canSpreadTo(T))
 					new/obj/structure/snow/cosmic(T)
 
 		sleep(TICK_JIGGLE(spread_delay))
@@ -216,7 +216,7 @@
 	return 1
 
 /obj/structure/snow/cosmic/proc/chill()
-	while(src && !src.gcDestroyed)
+	while(src && !gcDestroyed)
 		if(snow_tiles >= COSMICFREEZE_END)	return
 		if(env.temperature > COSMICSNOW_MINIMALTEMP)//the snow will slowly lower the temperature until -40?C.
 			env.temperature -= (0.01 * snow_amount)
@@ -246,7 +246,7 @@
 	pixel_x = rand(-13,13)
 	pixel_y = rand(-13,13)
 
-	spawn_loc = src.loc
+	spawn_loc = loc
 
 	spawn(SNOWBALL_TIMELIMIT)
 		remove_snowball()
@@ -254,7 +254,7 @@
 	return ..()
 
 /obj/item/stack/sheet/snow/proc/remove_snowball()
-	if(src && (src.loc == spawn_loc) && istype(src.loc,/turf))
+	if(src && (loc == spawn_loc) && istype(loc,/turf))
 		qdel(src)
 
 /obj/item/stack/sheet/snow/melt()
@@ -265,7 +265,7 @@
 	qdel(src)
 
 /obj/item/stack/sheet/snow/throw_at(atom/target, range, speed)
-	playsound(src.loc, 'sound/weapons/punchmiss.ogg', 50, 1)
+	playsound(loc, 'sound/weapons/punchmiss.ogg', 50, 1)
 	..()
 
 /obj/item/stack/sheet/snow/throw_impact(atom/hit_atom)
@@ -316,10 +316,10 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/window/barricade/snow/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/stack/sheet/snow))
-		if (src.health < src.maxhealth)
+		if (health < maxhealth)
 			visible_message("<span class='warning'>[user] begins to repair the [src]!</span>")
 			if(do_after(user, src, 20))
-				src.health = src.maxhealth
+				health = maxhealth
 				W:use(1)
 				visible_message("<span class='warning'>[user] repairs the [src]</span>")
 				return
@@ -329,11 +329,11 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	else
 		switch(W.damtype)
 			if("fire")
-				src.health -= W.force * 1
+				health -= W.force * 1
 			if("brute")
-				src.health -= W.force * 0.75
+				health -= W.force * 0.75
 			else
-		if (src.health <= 0)
+		if (health <= 0)
 			visible_message("<span class='danger'>\the [src] is smashed apart!</span>")
 			new /obj/item/stack/sheet/snow(get_turf(src), 1)
 			new /obj/item/stack/sheet/snow(get_turf(src), 1)
@@ -349,8 +349,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 			qdel(src)
 			return
 		if(2.0)
-			src.health -= 25
-			if (src.health <= 0)
+			health -= 25
+			if (health <= 0)
 				visible_message("<span class='danger'>\the [src] is blown apart!</span>")
 				new /obj/item/stack/sheet/snow(get_turf(src), 1)
 				new /obj/item/stack/sheet/snow(get_turf(src), 1)
@@ -359,8 +359,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 			return
 
 /obj/structure/window/barricade/snow/blob_act()
-	src.health -= 25
-	if (src.health <= 0)
+	health -= 25
+	if (health <= 0)
 		visible_message("<span class='danger'>The blob eats through \the [src]!</span>")
 		qdel(src)
 	return
@@ -410,7 +410,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/sappling/proc/growing()
 	/* Performance.
-	while(src && !src.gcDestroyed)
+	while(src && !gcDestroyed)
 
 		if(growth > growthlevel)
 			new/obj/structure/snow_flora/tree(get_turf(src))
@@ -445,7 +445,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/sappling/pine/growing()
 	/* Performance
-	while(src && !src.gcDestroyed)
+	while(src && !gcDestroyed)
 
 		if(growth > growthlevel)
 			if(prob(20))
@@ -492,7 +492,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/tree/proc/idle()
 	/* Performance
-	while(src && !src.gcDestroyed)
+	while(src && !gcDestroyed)
 
 		if(!(locate(/obj/structure/snow) in get_turf(src)))
 			axe_hits++
@@ -557,7 +557,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/tree/pine/idle()
 	/* Performance
-	while(src && !src.gcDestroyed)
+	while(src && !gcDestroyed)
 		if(!(locate(/obj/structure/snow) in get_turf(src)))
 			axe_hits++
 			if(axe_hits >= 5)

@@ -57,13 +57,13 @@
 	set name = "Toggle leg actuators overload"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if(usr!=occupant)
 		return
 	if(overload)
 		overload = 0
 		step_in = initial(step_in)
 		step_energy_drain = initial(step_energy_drain)
-		src.occupant_message("<font color='blue'>You disable leg actuators overload.</font>")
+		occupant_message("<font color='blue'>You disable leg actuators overload.</font>")
 		if(!istype(src,/obj/mecha/combat/gygax/dark))
 			flick("gygax-gofast-aoff",src)
 			reset_icon()
@@ -71,11 +71,11 @@
 		overload = 1
 		step_in = min(1, round(step_in/2))
 		step_energy_drain = step_energy_drain*overload_coeff
-		src.occupant_message("<font color='red'>You enable leg actuators overload.</font>")
+		occupant_message("<font color='red'>You enable leg actuators overload.</font>")
 		if(!istype(src,/obj/mecha/combat/gygax/dark))
 			flick("gygax-gofast-aon",src)
 			icon_state = "gygax-gofast"
-	src.log_message("Toggled leg actuators overload.")
+	log_message("Toggled leg actuators overload.")
 	return
 
 /obj/mecha/combat/gygax/dyndomove(direction)
@@ -86,7 +86,7 @@
 			overload = 0
 			step_in = initial(step_in)
 			step_energy_drain = initial(step_energy_drain)
-			src.occupant_message("<font color='red'>Leg actuators damage threshold exceded. Disabling overload.</font>")
+			occupant_message("<font color='red'>Leg actuators damage threshold exceded. Disabling overload.</font>")
 	return
 
 
@@ -109,5 +109,5 @@
 /obj/mecha/combat/gygax/Topic(href, href_list)
 	..()
 	if (href_list["toggle_leg_overload"])
-		src.overload()
+		overload()
 	return

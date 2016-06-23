@@ -172,7 +172,7 @@ var/global/list/spider_types = typesof(/mob/living/simple_animal/hostile/giant_s
 		var/mob/living/L = target
 		if(L.reagents)
 			if(prob(poison_per_bite))
-				src.visible_message("<span class='warning'>\the [src] injects a powerful toxin!</span>")
+				visible_message("<span class='warning'>\the [src] injects a powerful toxin!</span>")
 				L.reagents.add_reagent(poison_type, poison_per_bite)
 
 /mob/living/simple_animal/hostile/giant_spider/Life()

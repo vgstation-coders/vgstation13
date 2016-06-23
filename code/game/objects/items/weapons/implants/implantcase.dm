@@ -14,51 +14,51 @@
 
 
 	update()
-		if (src.imp)
-			src.icon_state = text("implantcase-[]", src.imp._color)
+		if (imp)
+			icon_state = text("implantcase-[]", imp._color)
 		else
-			src.icon_state = "implantcase-0"
+			icon_state = "implantcase-0"
 		return
 
 
 	attackby(obj/item/weapon/I as obj, mob/user as mob)
 		..()
 		if (istype(I, /obj/item/weapon/pen))
-			var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
+			var/t = input(user, "What would you like the label to be?", text("[]", name), null)  as text
 			if (user.get_active_hand() != I)
 				return
 			if (!Adjacent(user) || user.stat)
 				return
 			t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 			if(t)
-				src.name = text("Glass Case- '[]'", t)
+				name = text("Glass Case- '[]'", t)
 			else
-				src.name = "Glass Case"
+				name = "Glass Case"
 		else if(istype(I, /obj/item/weapon/reagent_containers/syringe))
-			if(!src.imp)	return
-			if(!src.imp.allow_reagents)	return
-			if(src.imp.reagents.total_volume >= src.imp.reagents.maximum_volume)
+			if(!imp)	return
+			if(!imp.allow_reagents)	return
+			if(imp.reagents.total_volume >= imp.reagents.maximum_volume)
 				to_chat(user, "<span class='warning'>[src] is full.</span>")
 			else
 				spawn(5)
-					I.reagents.trans_to(src.imp, 5)
+					I.reagents.trans_to(imp, 5)
 					to_chat(user, "<span class='notice'>You inject 5 units of the solution. The syringe now contains [I.reagents.total_volume] units.</span>")
 		else if (istype(I, /obj/item/weapon/implanter))
 			if (I:imp)
-				if ((src.imp || I:imp.implanted))
+				if ((imp || I:imp.implanted))
 					return
 				I:imp.loc = src
-				src.imp = I:imp
+				imp = I:imp
 				I:imp = null
-				src.update()
+				update()
 				I:update()
 			else
-				if (src.imp)
+				if (imp)
 					if (I:imp)
 						return
-					src.imp.loc = I
-					I:imp = src.imp
-					src.imp = null
+					imp.loc = I
+					I:imp = imp
+					imp = null
 					update()
 				I:update()
 		return
@@ -73,7 +73,7 @@
 
 
 	New()
-		src.imp = new /obj/item/weapon/implant/tracking( src )
+		imp = new /obj/item/weapon/implant/tracking( src )
 		..()
 		return
 
@@ -87,7 +87,7 @@
 
 
 	New()
-		src.imp = new /obj/item/weapon/implant/explosive( src )
+		imp = new /obj/item/weapon/implant/explosive( src )
 		..()
 		return
 
@@ -100,7 +100,7 @@
 	icon_state = "implantcase-b"
 /obj/item/weapon/implantcase/chem/New()
 
-	src.imp = new /obj/item/weapon/implant/chem( src )
+	imp = new /obj/item/weapon/implant/chem( src )
 	..()
 	return
 
@@ -113,7 +113,7 @@
 
 
 	New()
-		src.imp = new /obj/item/weapon/implant/loyalty( src )
+		imp = new /obj/item/weapon/implant/loyalty( src )
 		..()
 		return
 
@@ -125,6 +125,6 @@
 	icon_state = "implantcase-b"
 
 	New()
-		src.imp = new /obj/item/weapon/implant/death_alarm( src )
+		imp = new /obj/item/weapon/implant/death_alarm( src )
 		..()
 		return

@@ -34,7 +34,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 				attempts--
 				if (attempts == 0)
 					to_chat(user, "<span class='danger'>The crate's anti-tamper system activates!</span>")
-					var/turf/T = get_turf(src.loc)
+					var/turf/T = get_turf(loc)
 					explosion(T, 0, 0, 0, 1)
 					for(var/item in contents)
 						qdel(item)
@@ -56,7 +56,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 			if (attempts == 1)
 				to_chat(user, "<span class='warning'>* Anti-Tamper Bomb will activate on next failed access attempt.</span>")
 			else
-				to_chat(user, "<span class='notice'>* Anti-Tamper Bomb will activate after [src.attempts] failed access attempts.</span>")
+				to_chat(user, "<span class='notice'>* Anti-Tamper Bomb will activate after [attempts] failed access attempts.</span>")
 			if (lastattempt == null)
 				to_chat(user, "<span class='notice'> has been made to open the crate thus far.</span>")
 				return

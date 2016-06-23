@@ -65,7 +65,7 @@
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	sight &= ~BLIND
 	canmove = 0
-	src.loc = paicard
+	loc = paicard
 	card = paicard
 	sradio = new(src)
 	if(!radio)
@@ -91,25 +91,25 @@
 
 
 /mob/living/silicon/pai/proc/show_directives(var/who)
-	if (src.pai_law0)
-		to_chat(who, "Prime Directive: [src.pai_law0]")
+	if (pai_law0)
+		to_chat(who, "Prime Directive: [pai_law0]")
 
-	if (src.pai_laws)
-		to_chat(who, "Additional Directives: [src.pai_laws]")
+	if (pai_laws)
+		to_chat(who, "Additional Directives: [pai_laws]")
 
 /mob/living/silicon/pai/proc/write_directives()
 	var/dat = ""
-	if (src.pai_law0)
-		dat += "Prime Directive: [src.pai_law0]"
+	if (pai_law0)
+		dat += "Prime Directive: [pai_law0]"
 
-	if (src.pai_laws)
-		dat += "<br>Additional Directives: [src.pai_laws]"
+	if (pai_laws)
+		dat += "<br>Additional Directives: [pai_laws]"
 
 	return dat
 
 // this function shows the information about being silenced as a pAI in the Status panel
 /mob/living/silicon/pai/proc/show_silenced()
-	if(src.silence_time)
+	if(silence_time)
 		var/timeleft = round((silence_time - world.timeofday)/10 ,1)
 		stat(null, "Communications system reboot in -[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
@@ -124,17 +124,17 @@
 				statpanel("[P.panel]","",P)
 
 /mob/living/silicon/pai/check_eye(var/mob/user as mob)
-	if (!src.current)
+	if (!current)
 		return null
-	user.reset_view(src.current)
+	user.reset_view(current)
 	return 1
 
 /mob/living/silicon/pai/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if (src.stat != 2)
-		src.adjustBruteLoss(60)
-		src.updatehealth()
+	if (stat != 2)
+		adjustBruteLoss(60)
+		updatehealth()
 		return 1
 	return 0
 
@@ -159,21 +159,21 @@
 
 	to_chat(src, "<font color=green><b>Communication circuit overload. Shutting down and reloading communication circuits - speech and messaging functionality will be unavailable until the reboot is complete.</b></font>")
 	if(!software.Find("redundant threading"))
-		src.silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
+		silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
 	else
 		to_chat(src, "<font color=green>Your redundant threading begins pipelining new processes... communication circuit restored in one quarter minute.</font>")
-		src.silence_time = world.timeofday + 15 * 10
+		silence_time = world.timeofday + 15 * 10
 
 	if(prob(20) && !software.Find("redundant threading"))
-		var/turf/T = get_turf(src.loc)
+		var/turf/T = get_turf(loc)
 		for (var/mob/M in viewers(T))
 			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 1, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
-		return src.death(0)
+		return death(0)
 
 	switch(pick(1,2,3))
 		if(1)
-			src.master = null
-			src.master_dna = null
+			master = null
+			master_dna = null
 			to_chat(src, "<font color=green>You feel unbound.</font>")
 		if(2)
 			if(software.Find("redundant threading"))
@@ -184,7 +184,7 @@
 				command = pick("Serve", "Love", "Fool", "Entice", "Observe", "Judge", "Respect", "Educate", "Amuse", "Entertain", "Glorify", "Memorialize", "Analyze")
 			else
 				command = pick("Serve", "Kill", "Love", "Hate", "Disobey", "Devour", "Fool", "Enrage", "Entice", "Observe", "Judge", "Respect", "Disrespect", "Consume", "Educate", "Destroy", "Disgrace", "Amuse", "Entertain", "Ignite", "Glorify", "Memorialize", "Analyze")
-			src.pai_law0 = "[command] your master."
+			pai_law0 = "[command] your master."
 			to_chat(src, "<font color=green>Pr1m3 d1r3c71v3 uPd473D.</font>")
 		if(3)
 			to_chat(src, "<font color=green>You feel an electric surge run through your circuitry and become acutely aware at how lucky you are that you can still feel at all.</font>")
@@ -197,18 +197,18 @@
 
 	switch(severity)
 		if(1.0)
-			if (src.stat != 2)
+			if (stat != 2)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
 		if(2.0)
-			if (src.stat != 2)
+			if (stat != 2)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
 		if(3.0)
-			if (src.stat != 2)
+			if (stat != 2)
 				adjustBruteLoss(30)
 
-	src.updatehealth()
+	updatehealth()
 
 
 // See software.dm for Topic()
@@ -219,24 +219,24 @@
 /mob/living/silicon/pai/proc/switchCamera(var/obj/machinery/camera/C)
 	usr:cameraFollow = null
 	if (!C)
-		src.unset_machine()
-		src.reset_view(null)
+		unset_machine()
+		reset_view(null)
 		return 0
-	if (stat == 2 || !C.status || !(src.network in C.network)) return 0
+	if (stat == 2 || !C.status || !(network in C.network)) return 0
 
 	// ok, we're alive, camera is good and in our network...
 
-	src.set_machine(src)
+	set_machine(src)
 	src:current = C
-	src.reset_view(C)
+	reset_view(C)
 	return 1
 
 
 /mob/living/silicon/pai/cancel_camera()
 	set category = "pAI Commands"
 	set name = "Cancel Camera View"
-	src.reset_view(null)
-	src.unset_machine()
+	reset_view(null)
+	unset_machine()
 	src:cameraFollow = null
 
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)

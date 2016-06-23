@@ -47,7 +47,7 @@
 	if(!stat)
 		if(size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
 			var/mob/living/L = loc.loc
-			if(!istype(L) || (L.faction != src.faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
+			if(!istype(L) || (L.faction != faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
 				returnToPool(loc)
 			else
 				return 0
@@ -134,7 +134,7 @@
 		if(isMoMMI(L))
 			return 0
 		//WE DON'T OUR OWN FACTION UNLESS SPECIFIED OTHERWISE
-		if((L.faction == src.faction && !attack_same) || (L.faction != src.faction && attack_same == 2) || (L.faction != attack_faction && attack_faction))
+		if((L.faction == faction && !attack_same) || (L.faction != faction && attack_same == 2) || (L.faction != attack_faction && attack_faction))
 			return 0
 		//IF OUR FACTION IS A REFERENCE TO A SPECIFIC MOB THEN WE DON'T ATTACK HIM (examples include viscerator grenades, staff of animation mimics, asteroid monsters)
 		if((faction == "\ref[L]") && !attack_same)
@@ -273,7 +273,7 @@
 
 	var/mob/living/simple_animal/hostile/H = from
 	if(istype(H))
-		src.friends |= H.friends
+		friends |= H.friends
 
 /mob/living/simple_animal/hostile/proc/OpenFire(var/atom/ttarget)
 	var/target_turf = get_turf(ttarget)
@@ -289,7 +289,7 @@
 	return
 
 /mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf)
-	if(Shoot(target_turf, src.loc, src))
+	if(Shoot(target_turf, loc, src))
 		ranged_cooldown = ranged_cooldown_cap
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
@@ -360,8 +360,8 @@
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
 	if(locked_to)
 		locked_to.attack_animal(src)
-	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
-		var/atom/A = src.loc
+	if(!isturf(loc) && loc != null)//Did someone put us in something?
+		var/atom/A = loc
 		A.attack_animal(src)//Bang on it till we get out
 	return
 

@@ -5,48 +5,48 @@
 	..()
 	spawn(5)	//wait for world
 		for(var/obj/machinery/inlet/filter/F in machines)
-			if(F.control == src.control)
-				F.f_mask = src.f_mask
+			if(F.control == control)
+				F.f_mask = f_mask
 		desc = "A remote control for a filter: [control]"
 
 /obj/machinery/filter_control/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/filter_control/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/filter_control/attackby(obj/item/weapon/W, mob/user as mob)
 	if(istype(W, /obj/item/weapon/detective_scanner))
 		return ..()
 	if(istype(W, /obj/item/weapon/screwdriver))
-		src.add_fingerprint(user)
-		user.show_message(text("<span class='warning'>Now [] the panel...</span>", (src.locked) ? "unscrewing" : "reattaching"), 1)
+		add_fingerprint(user)
+		user.show_message(text("<span class='warning'>Now [] the panel...</span>", (locked) ? "unscrewing" : "reattaching"), 1)
 		sleep(30)
-		src.locked =! src.locked
-		src.updateicon()
+		locked =! locked
+		updateicon()
 		return
-	if(istype(W, /obj/item/weapon/wirecutters) && !src.locked)
+	if(istype(W, /obj/item/weapon/wirecutters) && !locked)
 		stat ^= BROKEN
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		for(var/mob/O in viewers(user, null))
 			O.show_message(text("<span class='warning'>[] has []activated []!</span>", user, (stat&BROKEN) ? "de" : "re", src), 1)
-		src.updateicon()
+		updateicon()
 		return
 	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
 		emagged++
 		for(var/mob/O in viewers(user, null))
 			O.show_message(text("<span class='warning'>[] has shorted out the []'s access system with an electromagnetic card!</span>", user, src), 1)
-		src.updateicon()
-		return src.attack_hand(user)
-	return src.attack_hand(user)
+		updateicon()
+		return attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/filter_control/process()
 	if(!(stat & NOPOWER))
 		use_power(5,ENVIRON)
 		AutoUpdateAI(src)
-		src.updateUsrDialog()
-	src.updateicon()
+		updateUsrDialog()
+	updateicon()
 
 /obj/machinery/filter_control/attack_hand(mob/user as mob)
 	if(stat & NOPOWER)
@@ -55,7 +55,7 @@
 		return
 	if(user.stat || user.lying)
 		return
-	if ((get_dist(src, user) > 1 || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon/ai))
+	if ((get_dist(src, user) > 1 || !istype(loc, /turf)) && !istype(user, /mob/living/silicon/ai))
 		return 0
 
 	var/list/gases = list("O2", "N2", "Plasma", "CO2", "N2O")
@@ -66,9 +66,9 @@
 	var/IBadConnection = 0
 
 	for(var/obj/machinery/inlet/filter/F in machines)
-		if((F.control == src.control) && !(F.stat && (NOPOWER|BROKEN)))
+		if((F.control == control) && !(F.stat && (NOPOWER|BROKEN)))
 			IGoodConnection++
-		else if(F.control == src.control)
+		else if(F.control == control)
 			IBadConnection++
 	var/ITotalConnections = IGoodConnection+IBadConnection
 
@@ -78,7 +78,7 @@
 		dat += "<font color=red>No Connections Detected!</font><BR>\n Control ID: [control]<BR>\n"
 	if(!stat & BROKEN)
 		for (var/i = 1; i <= gases.len; i++)
-			dat += "[gases[i]]: <A HREF='?src=\ref[src];tg=[1 << (i - 1)]'>[(src.f_mask & 1 << (i - 1)) ? "Siphoning" : "Passing"]</A><BR>\n"
+			dat += "[gases[i]]: <A HREF='?src=\ref[src];tg=[1 << (i - 1)]'>[(f_mask & 1 << (i - 1)) ? "Siphoning" : "Passing"]</A><BR>\n"
 	else
 		dat += "<big><font color='red'>Warning! Severe Internal Memory Corruption!</big><BR>\n<BR>\nConsult a qualified station technician immediately!</font><BR>\n"
 		dat += "<BR>\n<small>Error codes: 0x0000001E 0x0000007B</small><BR>\n"
@@ -95,18 +95,18 @@
 		return 1
 	else
 		usr.machine = src
-		if (src.allowed(usr) || src.emagged && !(stat & BROKEN))
+		if (allowed(usr) || emagged && !(stat & BROKEN))
 			if (href_list["tg"])	//someone modified the html so I added a check here
 				// toggle gas
-				src.f_mask ^= text2num(href_list["tg"])
+				f_mask ^= text2num(href_list["tg"])
 				for(var/obj/machinery/inlet/filter/FI in machines)
-					if(FI.control == src.control)
+					if(FI.control == control)
 						FI.f_mask ^= text2num(href_list["tg"])
 		else
-			usr.see("<span class='warning'>Access Denied ([src.name] operation restricted to authorized atmospheric technicians.)</span>")
+			usr.see("<span class='warning'>Access Denied ([name] operation restricted to authorized atmospheric technicians.)</span>")
 		AutoUpdateAI(src)
-		src.updateUsrDialog()
-		src.add_fingerprint(usr)
+		updateUsrDialog()
+		add_fingerprint(usr)
 	else
 		usr << browse(null, "window=filter_control")
 		usr.machine = null
@@ -118,10 +118,10 @@
 		icon_state = "filter_control-nopower"
 		return
 	icon_state = "filter_control"
-	if(src.locked && (stat & BROKEN))
+	if(locked && (stat & BROKEN))
 		overlays += image('icons/obj/stationobjs.dmi', "filter_control00")
 		return
-	else if(!src.locked)
+	else if(!locked)
 		icon_state = "filter_control-unlocked"
 		if(stat & BROKEN)
 			overlays += image('icons/obj/stationobjs.dmi', "filter_control-wirecut")
@@ -130,27 +130,27 @@
 
 	var/GoodConnection = 0
 	for(var/obj/machinery/inlet/filter/F in machines)
-		if((F.control == src.control) && !(F.stat && (NOPOWER|BROKEN)))
+		if((F.control == control) && !(F.stat && (NOPOWER|BROKEN)))
 			GoodConnection++
 			break
 
-	if(GoodConnection && src.f_mask)
+	if(GoodConnection && f_mask)
 		overlays += image('icons/obj/stationobjs.dmi', "filter_control1")
 	else if(GoodConnection)
 		overlays += image('icons/obj/stationobjs.dmi', "filter_control10")
-	else if(src.f_mask)
+	else if(f_mask)
 		overlays += image('icons/obj/stationobjs.dmi', "filter_control0")
 	else
 		overlays += image('icons/obj/stationobjs.dmi', "filter_control00")
 
-	if (src.f_mask & (GAS_N2O|GAS_PL))
-		src.overlays += image('icons/obj/stationobjs.dmi', "filter_control-tox")
-	if (src.f_mask & GAS_O2)
-		src.overlays += image('icons/obj/stationobjs.dmi', "filter_control-o2")
-	if (src.f_mask & GAS_N2)
-		src.overlays += image('icons/obj/stationobjs.dmi', "filter_control-n2")
-	if (src.f_mask & GAS_CO2)
-		src.overlays += image('icons/obj/stationobjs.dmi', "filter_control-co2")
+	if (f_mask & (GAS_N2O|GAS_PL))
+		overlays += image('icons/obj/stationobjs.dmi', "filter_control-tox")
+	if (f_mask & GAS_O2)
+		overlays += image('icons/obj/stationobjs.dmi', "filter_control-o2")
+	if (f_mask & GAS_N2)
+		overlays += image('icons/obj/stationobjs.dmi', "filter_control-n2")
+	if (f_mask & GAS_CO2)
+		overlays += image('icons/obj/stationobjs.dmi', "filter_control-co2")
 	return
 
 /obj/machinery/filter_control/power_change()
@@ -159,5 +159,5 @@
 	else
 		stat |= NOPOWER
 	spawn(rand(1,15))
-		src.updateicon()
+		updateicon()
 	return

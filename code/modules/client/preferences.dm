@@ -476,13 +476,13 @@ var/const/MAX_SAVE_SLOTS = 8
 			prefLowerLevel = 1
 
 		if(job.species_whitelist.len)
-			if(!job.species_whitelist.Find(src.species))
+			if(!job.species_whitelist.Find(species))
 				prefLevelLabel = "Unavailable"
 				prefLevelColor = "gray"
 				prefUpperLevel = 0
 				prefLowerLevel = 0
 		else if(job.species_blacklist.len)
-			if(job.species_blacklist.Find(src.species))
+			if(job.species_blacklist.Find(species))
 				prefLevelLabel = "Unavailable"
 				prefLevelColor = "gray"
 				prefUpperLevel = 0
@@ -663,12 +663,12 @@ var/const/MAX_SAVE_SLOTS = 8
 		SetChoices(user)
 		return 1
 
-	if(job.species_blacklist.Find(src.species)) //Check if our species is in the blacklist
-		to_chat(user, "<span class='notice'>Your species ("+src.species+") can't have this job!</span>")
+	if(job.species_blacklist.Find(species)) //Check if our species is in the blacklist
+		to_chat(user, "<span class='notice'>Your species ("+species+") can't have this job!</span>")
 		return
 
 	if(job.species_whitelist.len) //Whitelist isn't empty - check if our species is in the whitelist
-		if(!job.species_whitelist.Find(src.species))
+		if(!job.species_whitelist.Find(species))
 			var/allowed_species = ""
 			for(var/S in job.species_whitelist)
 				allowed_species += "[S]"
@@ -676,7 +676,7 @@ var/const/MAX_SAVE_SLOTS = 8
 				if(job.species_whitelist.Find(S) != job.species_whitelist.len)
 					allowed_species += ", "
 
-			to_chat(user, "<span class='notice'>Only the following species can have this job: [allowed_species]. Your species is ([src.species]).</span>")
+			to_chat(user, "<span class='notice'>Only the following species can have this job: [allowed_species]. Your species is ([species]).</span>")
 			return
 
 	if(inc == null)

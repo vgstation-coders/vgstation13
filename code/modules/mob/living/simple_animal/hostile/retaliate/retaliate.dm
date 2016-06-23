@@ -30,7 +30,7 @@
 
 	var/mob/living/simple_animal/hostile/retaliate/R = from
 	if(istype(R))
-		src.friends = R.friends.Copy()
+		friends = R.friends.Copy()
 
 /mob/living/simple_animal/hostile/retaliate/proc/Retaliate()
 	if(stat) //can't attack if we're dead - no point in targeting

@@ -11,17 +11,17 @@
 	light_color = LIGHT_COLOR_PINK
 
 /obj/machinery/computer/mecha/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/mecha/attack_paw(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/mecha/attack_hand(var/mob/user as mob)
 	if(..())
 		return
 	user.set_machine(src)
-	var/dat = "<html><head><title>[src.name]</title><style>h3 {margin: 0px; padding: 0px;}</style></head><body>"
+	var/dat = "<html><head><title>[name]</title><style>h3 {margin: 0px; padding: 0px;}</style></head><body>"
 	if(screen == 0)
 		dat += "<h3>Tracking beacons data</h3>"
 		for(var/obj/item/mecha_parts/mecha_tracking/TR in world)
@@ -81,7 +81,7 @@
 		screen = 1
 	if(href_list["return"])
 		screen = 0
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 
@@ -97,7 +97,7 @@
 /obj/item/mecha_parts/mecha_tracking/proc/get_mecha_info()
 	if(!in_mecha())
 		return 0
-	var/obj/mecha/M = src.loc
+	var/obj/mecha/M = loc
 	var/cell_charge = M.get_charge()
 	var/answer = {"<b>Name:</b> [M.name]<br>
 						<b>Integrity:</b> [M.health/initial(M.health)*100]%<br>
@@ -121,8 +121,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_tracking/proc/in_mecha()
-	if(istype(src.loc, /obj/mecha))
-		return src.loc
+	if(istype(loc, /obj/mecha))
+		return loc
 	return 0
 
 /obj/item/mecha_parts/mecha_tracking/proc/shock()
@@ -153,9 +153,9 @@
 		M.state = 1
 
 /obj/item/mecha_parts/mecha_tracking/proc/get_mecha_log()
-	if(!src.in_mecha())
+	if(!in_mecha())
 		return 0
-	var/obj/mecha/M = src.loc
+	var/obj/mecha/M = loc
 	return M.get_log_html()
 
 /obj/item/weapon/storage/box/mechabeacons

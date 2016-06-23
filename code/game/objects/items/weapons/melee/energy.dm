@@ -4,8 +4,8 @@
 	heat_production = 3500
 
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
-						"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
+	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [name]! It looks like \he's trying to commit seppuku.</span>", \
+						"<span class='danger'>[user] is falling on the [name]! It looks like \he's trying to commit suicide.</span>"))
 	return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/melee/energy/is_hot()
@@ -34,7 +34,7 @@
 
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] swings the [name] towards /his head! It looks like \he's trying to commit suicide.</span>")
 		return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/melee/energy/sword

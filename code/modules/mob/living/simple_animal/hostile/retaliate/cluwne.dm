@@ -95,7 +95,7 @@
 
 
 		if(!ckey && !stop_automated_movement)
-			if(isturf(src.loc) && !resting && !locked_to && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+			if(isturf(loc) && !resting && !locked_to && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 				turns_since_move++
 				if(turns_since_move >= turns_per_move)
 					if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
@@ -105,7 +105,7 @@
 		if(!stat)
 			switch(stance)
 				if(CLOWN_STANCE_IDLE)
-					if (src.hostile == 0) return
+					if (hostile == 0) return
 					for(var/atom/A in view(7,src))
 						if(iscluwne(A))
 							continue
@@ -218,8 +218,8 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		health -= damage
 /*
@@ -232,8 +232,8 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		health -= damage
 */
@@ -243,7 +243,7 @@
 		var/mob/living/L = target
 		if(prob(10))
 			L.Weaken(5)
-			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
+			L.visible_message("<span class='danger'>\The [name] slips \the [L.name]!</span>")
 			return
 	return ..()
 
@@ -340,6 +340,6 @@
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin/Die()
 	..()
-	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
-	new /obj/item/clothing/shoes/clown_shoes(src.loc)
+	new /obj/item/clothing/mask/gas/clown_hat(loc)
+	new /obj/item/clothing/shoes/clown_shoes(loc)
 	qdel(src)

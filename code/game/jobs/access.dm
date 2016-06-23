@@ -117,18 +117,18 @@
 
 /obj/proc/set_up_access()
 	//These generations have been moved out of /obj/New() because they were slowing down the creation of objects that never even used the access system.
-	if(!src.req_access)
-		src.req_access = list()
-		if(src.req_access_txt)
+	if(!req_access)
+		req_access = list()
+		if(req_access_txt)
 			var/list/req_access_str = splittext(req_access_txt,";")
 			for(var/x in req_access_str)
 				var/n = text2num(x)
 				if(n)
 					req_access += n
 
-	if(!src.req_one_access)
-		src.req_one_access = list()
-		if(src.req_one_access_txt)
+	if(!req_one_access)
+		req_one_access = list()
+		if(req_one_access_txt)
 			var/list/req_one_access_str = splittext(req_one_access_txt,";")
 			for(var/x in req_one_access_str)
 				var/n = text2num(x)
@@ -145,16 +145,16 @@
 
 /obj/proc/check_access_list(var/list/L)
 	set_up_access()
-	if(!src.req_access  && !src.req_one_access)	return 1
-	if(!istype(src.req_access, /list))	return 1
-	if(!src.req_access.len && (!src.req_one_access || !src.req_one_access.len))	return 1
+	if(!req_access  && !req_one_access)	return 1
+	if(!istype(req_access, /list))	return 1
+	if(!req_access.len && (!req_one_access || !req_one_access.len))	return 1
 	if(!L)	return 0
 	if(!istype(L, /list))	return 0
-	for(var/req in src.req_access)
+	for(var/req in req_access)
 		if(!(req in L)) //doesn't have this access
 			return 0
-	if(src.req_one_access && src.req_one_access.len)
-		for(var/req in src.req_one_access)
+	if(req_one_access && req_one_access.len)
+		for(var/req in req_one_access)
 			if(req in L) //has an access from the single access list
 				return 1
 		return 0

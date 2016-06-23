@@ -97,7 +97,7 @@ var/global/list/narsie_list = list()
 			if(M.flags & INVULNERABLE)
 				continue
 			if(!iscultist(M))
-				to_chat(M, "<span class='danger'>You feel your sanity crumble away in an instant as you gaze upon [src.name]...</span>")
+				to_chat(M, "<span class='danger'>You feel your sanity crumble away in an instant as you gaze upon [name]...</span>")
 				M.apply_effect(3, STUN)
 
 
@@ -145,16 +145,16 @@ var/global/list/narsie_list = list()
 	if(target && prob(60))
 		movement_dir = get_dir(src,target)
 	spawn(0)
-//		old_x = src.x
-//		old_y = src.y
+//		old_x = x
+//		old_y = y
 		step(src, movement_dir)
 		narsiefloor(get_turf(loc))
 		for(var/mob/M in player_list)
 			if(M.client)
 				M.see_narsie(src,movement_dir)
 	spawn(10)
-//		old_x = src.x
-//		old_y = src.y
+//		old_x = x
+//		old_y = y
 		step(src, movement_dir)
 		narsiefloor(get_turf(loc))
 		for(var/mob/M in player_list)
@@ -216,7 +216,7 @@ var/global/list/narsie_list = list()
 
 //OLD BEHAVIOUR
 	else if(narsie_behaviour == "Nar-Singulo")
-		
+
 		if (istype(A, /mob/living/))
 			var/mob/living/C2 = A
 
@@ -246,7 +246,7 @@ var/global/list/narsie_list = list()
 					continue
 
 				if (dist > consume_range && canPull(AM2))
-					
+
 					if (101 == AM2.invisibility)
 						continue
 
@@ -259,7 +259,7 @@ var/global/list/narsie_list = list()
 
 
 /obj/machinery/singularity/narsie/consume(const/atom/A) //This one is for the small ones.
-	
+
 	if (istype(A, /mob/living/))
 		var/mob/living/C2 = A
 
@@ -311,7 +311,7 @@ var/global/list/narsie_list = list()
 		if(cult_nh_mind.current.stat)
 			continue
 		var/turf/pos = get_turf(cult_nh_mind.current)
-		if(pos.z != src.z)
+		if(pos.z != z)
 			continue
 		cultists += cult_nh_mind.current
 	if(cultists.len)
@@ -322,7 +322,7 @@ var/global/list/narsie_list = list()
 		if(food.stat)
 			continue
 		var/turf/pos = get_turf(food)
-		if(pos.z != src.z)
+		if(pos.z != z)
 			continue
 		cultists += food
 	if(cultists.len)
@@ -333,7 +333,7 @@ var/global/list/narsie_list = list()
 		if(!ghost.client)
 			continue
 		var/turf/pos = get_turf(ghost)
-		if(pos.z != src.z)
+		if(pos.z != z)
 			continue
 		cultists += ghost
 	if(cultists.len)
@@ -437,7 +437,7 @@ var/global/mr_clean_targets = list(
 		if(M.stat == CONSCIOUS)
 			if(M.flags & INVULNERABLE)
 				continue
-			to_chat(M, "<span class='warning'>You take a moment to admire [src.name] hard at work...</span>")
+			to_chat(M, "<span class='warning'>You take a moment to admire [name] hard at work...</span>")
 			M.apply_effect(3, STUN)
 
 /obj/machinery/singularity/narsie/large/clean/update_icon()
@@ -494,7 +494,7 @@ var/global/mr_clean_targets = list(
 /obj/machinery/singularity/narsie/large/clean/proc/pickuptrash()
 	var/list/targets = list()
 	for(var/obj/effect/E in world)
-		if(is_type_in_list(E, mr_clean_targets) && E.z == src.z)
+		if(is_type_in_list(E, mr_clean_targets) && E.z == z)
 			targets += E
 	if(targets.len)
 		acquire(pick(targets))

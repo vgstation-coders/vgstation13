@@ -134,9 +134,9 @@
 /obj/machinery/computer/general_air_control/process()
 	..()
 	if(!sensors)
-		warning("[src.type] at [x],[y],[z] has null sensors.  Please fix.")
+		warning("[type] at [x],[y],[z] has null sensors.  Please fix.")
 		sensors = list()
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/computer/general_air_control/receive_signal(datum/signal/signal)
 	if(!signal || signal.encryption) return
@@ -542,12 +542,12 @@ font-weight:bold;
 		output_info = null
 		signal.data = list ("tag" = output_tag, "set_internal_pressure" = "[pressure_setting]")
 	/*else
-		testing("Bad Topic() to large_tank_control \"[src.name]\": [href]")
+		testing("Bad Topic() to large_tank_control \"[name]\": [href]")
 		return */// NOPE. // disabling because it spams when multitool menus are used
 
 	signal.data["sigtype"]="command"
 	radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/computer/general_air_control/fuel_injection
 	icon = 'icons/obj/computer.dmi'

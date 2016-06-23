@@ -61,29 +61,29 @@
 		desc_list += V
 		damage_list += stages[V]
 
-	src.damage = damage
+	damage = damage
 
 	// initialize with the first stage
 	next_stage()
 
 	// this will ensure the size of the wound matches the damage
-	src.heal_damage(0)
+	heal_damage(0)
 
 	// make the max_bleeding_stage count from the end of the list rather than the start
 	// this is more robust to changes to the list
-	max_bleeding_stage = src.desc_list.len - max_bleeding_stage
+	max_bleeding_stage = desc_list.len - max_bleeding_stage
 
 	bleed_timer += damage / BLOODLOSS_SPEED_MULTIPLIER
 
 // returns 1 if there's a next stage, 0 otherwise
 /datum/wound/proc/next_stage()
-	if(current_stage + 1 > src.desc_list.len)
+	if(current_stage + 1 > desc_list.len)
 		return 0
 
 	current_stage++
 
-	src.min_damage = damage_list[current_stage]
-	src.desc = desc_list[current_stage]
+	min_damage = damage_list[current_stage]
+	desc = desc_list[current_stage]
 	return 1
 
 // returns 1 if the wound has started healing
@@ -145,36 +145,36 @@
 	return 0
 
 /datum/wound/proc/heal_damage(amount, heals_internal = 0)
-	if(src.internal && !heals_internal)
+	if(internal && !heals_internal)
 		// heal nothing
 		return amount
 
-	var/healed_damage = min(src.damage, amount)
+	var/healed_damage = min(damage, amount)
 	amount -= healed_damage
-	src.damage -= healed_damage
+	damage -= healed_damage
 
-	while(src.damage / src.amount < damage_list[current_stage] && current_stage < src.desc_list.len)
+	while(damage / amount < damage_list[current_stage] && current_stage < desc_list.len)
 		current_stage++
 	desc = desc_list[current_stage]
-	src.min_damage = damage_list[current_stage]
+	min_damage = damage_list[current_stage]
 
 	// return amount of healing still leftover, can be used for other wounds
 	return amount
 
 // opens the wound again
 /datum/wound/proc/open_wound(damage)
-	src.damage += damage
+	damage += damage
 	bleed_timer += damage / BLOODLOSS_SPEED_MULTIPLIER
 
-	while(src.current_stage > 1 && src.damage_list[current_stage-1] <= src.damage)
-		src.current_stage--
+	while(current_stage > 1 && damage_list[current_stage-1] <= damage)
+		current_stage--
 
-	src.desc = desc_list[current_stage]
-	src.min_damage = damage_list[current_stage]
+	desc = desc_list[current_stage]
+	min_damage = damage_list[current_stage]
 
 /datum/wound/proc/bleeding()
 	// internal wounds don't bleed in the sense of this function
-	return ((damage > 30 || bleed_timer > 0) && !(bandaged||clamped) && (damage_type == BRUISE && damage >= 20 || damage_type == CUT && damage >= 5) && current_stage <= max_bleeding_stage && !src.internal)
+	return ((damage > 30 || bleed_timer > 0) && !(bandaged||clamped) && (damage_type == BRUISE && damage >= 20 || damage_type == CUT && damage >= 5) && current_stage <= max_bleeding_stage && !internal)
 
 /** CUTS **/
 /datum/wound/cut/small

@@ -19,7 +19,7 @@
 		if(virusing)
 			to_chat(user, "<b>The pathogen materializer is still recharging..")
 			return
-		var/obj/item/weapon/reagent_containers/glass/beaker/product = new(src.loc)
+		var/obj/item/weapon/reagent_containers/glass/beaker/product = new(loc)
 
 		var/list/data = list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=null,"resistances"=null,"trace_chem"=null,"virus2"=list(),"antibodies"=0)
 		data["virus2"] |= I:virus2
@@ -30,15 +30,15 @@
 
 		alert_noise("buzz")
 		return
-	src.attack_hand(user)
+	attack_hand(user)
 	return
 
 /obj/machinery/computer/curer/attack_ai(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/curer/attack_paw(var/mob/user as mob)
 
-	return src.attack_hand(user)
+	return attack_hand(user)
 	return
 
 /obj/machinery/computer/curer/attack_hand(var/mob/user as mob)
@@ -92,16 +92,16 @@
 	if (href_list["antibody"])
 		curing = 10
 	else if(href_list["eject"])
-		container.loc = src.loc
+		container.loc = loc
 		container = null
 
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 
 /obj/machinery/computer/curer/proc/createcure(var/obj/item/weapon/reagent_containers/container)
-	var/obj/item/weapon/reagent_containers/glass/beaker/product = new(src.loc)
+	var/obj/item/weapon/reagent_containers/glass/beaker/product = new(loc)
 
 	var/datum/reagent/blood/B = locate() in container.reagents.reagent_list
 

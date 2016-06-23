@@ -320,7 +320,7 @@
 
 //To batch-remove wizard spells. Linked to mind.dm.
 /mob/proc/spellremove(var/mob/M as mob)
-	for(var/spell/spell_to_remove in src.spell_list)
+	for(var/spell/spell_to_remove in spell_list)
 		remove_spell(spell_to_remove)
 
 // Does this clothing slot count as wizard garb? (Combines a few checks)
@@ -335,13 +335,13 @@ Made a proc so this is not repeated 14 (or more) times.*/
 
 // Humans can wear clothes.
 /mob/living/carbon/human/wearing_wiz_garb()
-	if(!is_wiz_garb(src.wear_suit))
+	if(!is_wiz_garb(wear_suit))
 		to_chat(src, "<span class='warning'>I don't feel strong enough without my robe.</span>")
 		return 0
-	if(!is_wiz_garb(src.shoes))
+	if(!is_wiz_garb(shoes))
 		to_chat(src, "<span class='warning'>I don't feel strong enough without my sandals.</span>")
 		return 0
-	if(!is_wiz_garb(src.head))
+	if(!is_wiz_garb(head))
 		to_chat(src, "<span class='warning'>I don't feel strong enough without my hat.</span>")
 		return 0
 	return 1
@@ -349,13 +349,13 @@ Made a proc so this is not repeated 14 (or more) times.*/
 // So can monkeys (FIXME)
 /*
 /mob/living/carbon/monkey/wearing_wiz_garb()
-	if(!is_wiz_garb(src.wear_suit))
+	if(!is_wiz_garb(wear_suit))
 		to_chat(src, "<span class='warning'>I don't feel strong enough without my robe.</span>")
 		return 0
-	if(!is_wiz_garb(src.shoes))
+	if(!is_wiz_garb(shoes))
 		to_chat(src, "<span class='warning'>I don't feel strong enough without my sandals.</span>")
 		return 0
-	if(!is_wiz_garb(src.head))
+	if(!is_wiz_garb(head))
 		to_chat(src, "<span class='warning'>I don't feel strong enough without my hat.</span>")
 		return 0
 	return 1

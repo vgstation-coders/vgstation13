@@ -241,7 +241,7 @@ datum
 
 		New(var/text,var/joba)
 			if(text)
-				src.explanation_text = text
+				explanation_text = text
 			job=joba
 			weight = get_weight(job)
 			points = get_points(job)

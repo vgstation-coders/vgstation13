@@ -19,10 +19,10 @@
 
 	if(istype(W, /obj/item/stack/teeth))
 		var/obj/item/stack/teeth/T = W
-		if(T.animal_type != src.animal_type) //If the teeth came from a different animal, fuck off
+		if(T.animal_type != animal_type) //If the teeth came from a different animal, fuck off
 			return
 
-		src.teeth_amount += T.amount
+		teeth_amount += T.amount
 		update_name()
 		to_chat(user, "<span class='info'>You add [T.amount] [T] to \the [src].</span>")
 		T.use(T.amount)

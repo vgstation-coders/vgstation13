@@ -5,7 +5,7 @@
 	icon = null
 	invisibility = 101
 
-	for(var/datum/organ/external/E in src.organs)
+	for(var/datum/organ/external/E in organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
 		//Only make the limb drop if it's not too damaged
@@ -102,7 +102,7 @@
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
-	if(SKELETON in src.mutations)
+	if(SKELETON in mutations)
 		return
 
 	if(f_style)

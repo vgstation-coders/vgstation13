@@ -69,13 +69,13 @@ var/list/camera_names=list()
 	assembly = new(src)
 	assembly.state = 4
 
-	if(!src.network || src.network.len < 1)
+	if(!network || network.len < 1)
 		if(loc)
-			error("[src.name] in [get_area(src)] (x:[src.x] y:[src.y] z:[src.z] has errored. [src.network?"Empty network list":"Null network list"]")
+			error("[name] in [get_area(src)] (x:[x] y:[y] z:[z] has errored. [network?"Empty network list":"Null network list"]")
 		else
-			error("[src.name] in [get_area(src)]has errored. [src.network?"Empty network list":"Null network list"]")
-		ASSERT(src.network)
-		ASSERT(src.network.len > 0)
+			error("[name] in [get_area(src)]has errored. [network?"Empty network list":"Null network list"]")
+		ASSERT(network)
+		ASSERT(network.len > 0)
 
 	if(!c_tag)
 		name_camera()
@@ -145,7 +145,7 @@ var/list/camera_names=list()
 		..()
 
 /obj/machinery/camera/ex_act(severity)
-	if(src.invuln)
+	if(invuln)
 		return
 	else
 		..(severity)
@@ -156,7 +156,7 @@ var/list/camera_names=list()
 	return
 
 /obj/machinery/camera/proc/setViewRange(var/num = 7)
-	src.view_range = num
+	view_range = num
 	cameranet.updateVisibility(src, 0)
 
 /obj/machinery/camera/shock(var/mob/living/user)
@@ -191,7 +191,7 @@ var/list/camera_names=list()
 		if(weld(W, user))
 			if(assembly)
 				assembly.state = 1
-				assembly.loc = src.loc
+				assembly.loc = loc
 				assembly = null
 
 			qdel(src)
@@ -285,9 +285,9 @@ var/list/camera_names=list()
 
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
 	if(choice==1)
-		status = !( src.status )
+		status = !( status )
 		update_icon()
-		if (!(src.status))
+		if (!(status))
 			if(user)
 				visible_message("<span class='warning'>[user] has deactivated [src]!</span>")
 				add_hiddenprint(user)

@@ -47,7 +47,7 @@
 
 	if(istype(O, /obj/item/device/mmi) || istype(O, /obj/item/device/mmi/posibrain))
 		var/obj/item/device/mmi/B = O
-		if(src.mmi) //There's already a brain in it.
+		if(mmi) //There's already a brain in it.
 			to_chat(user, "<span class='warning'>There's already a brain in [src]!</span>")
 			return
 		if(!B.brainmob)
@@ -70,9 +70,9 @@
 
 		to_chat(user, "<span class='notice'>You install [O] in [src]!</span>")
 
-		src.mmi = O
-		src.transfer_personality(O)
-		src.update_icon()
+		mmi = O
+		transfer_personality(O)
+		update_icon()
 		return 1
 
 	if (istype(O, /obj/item/weapon/weldingtool))
@@ -108,7 +108,7 @@
 			eject_brain()
 
 			if(held_item)
-				held_item.loc = src.loc
+				held_item.loc = loc
 				held_item = null
 
 			return 1
@@ -124,7 +124,7 @@
 			to_chat(user, "<span class='notice'>You short out the security protocols and overload [src]'s cell, priming it to explode in a short time.</span>")
 			spawn(100)	to_chat(src, "<span class='warning'>Your cell seems to be outputting a lot of power...</span>")
 			spawn(200)	to_chat(src, "<span class='warning'>Internal heat sensors are spiking! Something is badly wrong with your cell!</span>")
-			spawn(300)	src.explode()
+			spawn(300)	explode()
 
 	else
 		return ..()
@@ -132,10 +132,10 @@
 /mob/living/simple_animal/spiderbot/proc/transfer_personality(var/obj/item/device/mmi/M as obj)
 
 
-		src.mind = M.brainmob.mind
-		src.mind.key = M.brainmob.key
-		src.ckey = M.brainmob.ckey
-		src.name = "Spider-bot ([M.brainmob.name])"
+		mind = M.brainmob.mind
+		mind.key = M.brainmob.key
+		ckey = M.brainmob.ckey
+		name = "Spider-bot ([M.brainmob.name])"
 
 /mob/living/simple_animal/spiderbot/proc/explode() //When emagged.
 	for(var/mob/M in viewers(src, null))
@@ -165,7 +165,7 @@
 			mmi.loc = T
 		if(mind)	mind.transfer_to(mmi.brainmob)
 		mmi = null
-		src.name = "Spider-bot"
+		name = "Spider-bot"
 		update_icon()
 
 /mob/living/simple_animal/spiderbot/Destroy()
@@ -189,10 +189,10 @@
 	if(camera)
 		camera.status = 0
 	if(held_item && !isnull(held_item))
-		held_item.loc = src.loc
+		held_item.loc = loc
 		held_item = null
 
-	robogibs(src.loc, viruses)
+	robogibs(loc, viruses)
 	qdel(src)
 
 //copy paste from alien/larva, if that func is updated please update this one also
@@ -236,14 +236,14 @@
 	if(istype(held_item, /obj/item/weapon/grenade))
 		visible_message("<span class='warning'>[src] launches \the [held_item]!</span>", "<span class='warning'>You launch \the [held_item]!</span>", "You hear a skittering noise and a thump!")
 		var/obj/item/weapon/grenade/G = held_item
-		G.loc = src.loc
+		G.loc = loc
 		G.prime()
 		held_item = null
 		return 1
 
 	visible_message("<span class='notice'>[src] drops \the [held_item]!</span>", "<span class='notice'>You drop \the [held_item]!</span>", "You hear a skittering noise and a soft thump.")
 
-	held_item.loc = src.loc
+	held_item.loc = loc
 	held_item = null
 	return 1
 
@@ -286,8 +286,8 @@
 
 /mob/living/simple_animal/spiderbot/examine(mob/user)
 	..()
-	if(src.held_item)
-		to_chat(user, "It is carrying \a [src.held_item] [bicon(src.held_item)].")
+	if(held_item)
+		to_chat(user, "It is carrying \a [held_item] [bicon(held_item)].")
 
 /mob/living/simple_animal/spiderbot/CheckSlip()
 	return -1

@@ -106,7 +106,7 @@
 		icon_state = "secborg"
 		modtype = "Security"
 	else
-		src.laws = getLawset(src)
+		laws = getLawset(src)
 		connected_ai = select_active_ai_with_fewest_borgs()
 		if(connected_ai)
 			connected_ai.connected_robots += src
@@ -356,7 +356,7 @@
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
-		module_sprites["Custom"] = "[src.ckey]-[modtype]"
+		module_sprites["Custom"] = "[ckey]-[modtype]"
 
 	hands.icon_state = lowertext(modtype)
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
@@ -411,7 +411,7 @@
 			if(Entry.len < 2)
 				continue;
 
-			if(Entry[1] == src.ckey && Entry[2] == src.real_name) //They're in the list? Custom sprite time, var and icon change required
+			if(Entry[1] == ckey && Entry[2] == real_name) //They're in the list? Custom sprite time, var and icon change required
 				custom_sprite = 1
 				icon = 'icons/mob/custom-synthetic.dmi'
 	*/
@@ -475,7 +475,7 @@
 	if(!is_component_functioning("diagnosis unit"))
 		return null
 
-	var/dat = "<HEAD><TITLE>[src.name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
+	var/dat = "<HEAD><TITLE>[name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
 	for (var/V in components)
 		var/datum/robot_component/C = components[V]
 		dat += "<b>[C.name]</b><br><table><tr><td>Power consumption</td><td>[C.energy_consumption]</td></tr><tr><td>Brute Damage:</td><td>[C.brute_damage]</td></tr><tr><td>Electronics Damage:</td><td>[C.electronics_damage]</td></tr><tr><td>Powered:</td><td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td></tr><tr><td>Toggled:</td><td>[ C.toggled ? "Yes" : "No"]</td></table><br>"
@@ -819,7 +819,7 @@
 					C.updateicon()
 					new/obj/item/robot_parts/chest(loc)
 					// This doesn't work.  Don't use it.
-					//src.Destroy()
+					//Destroy()
 					// del() because it's infrequent and mobs act weird in qdel.
 					qdel(src)
 			else
@@ -837,7 +837,7 @@
 				var/datum/robot_component/C = components[remove]
 				var/obj/item/I = C.wrapped
 				to_chat(user, "You remove \the [I].")
-				I.loc = src.loc
+				I.loc = loc
 
 				if(C.installed == 1)
 					C.uninstall()
@@ -1075,8 +1075,8 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='danger'>[M] [M.attacktext] [src]!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 		updatehealth()
@@ -1094,9 +1094,9 @@
 			user.put_in_active_hand(cell)
 			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
 			"<span class='notice'>You remove [src]'s [cell.name].</span>")
-			src.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
-			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [src.name] ([src.ckey])</font>"
-			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([src.ckey])</font>")
+			attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
+			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [name] ([ckey])</font>"
+			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([ckey])</font>")
 			cell = null
 			cell_component.wrapped = null
 			cell_component.installed = 0
@@ -1153,11 +1153,11 @@
 	if(opened)
 		if(custom_sprite)//Custom borgs also have custom panels, heh
 			if(wiresexposed)
-				overlays += image(icon = icon, icon_state = "[src.ckey]-openpanel +w")
+				overlays += image(icon = icon, icon_state = "[ckey]-openpanel +w")
 			else if(cell)
-				overlays += image(icon = icon, icon_state = "[src.ckey]-openpanel +c")
+				overlays += image(icon = icon, icon_state = "[ckey]-openpanel +c")
 			else
-				overlays += image(icon = icon, icon_state = "[src.ckey]-openpanel -c")
+				overlays += image(icon = icon, icon_state = "[ckey]-openpanel -c")
 		else
 			if(wiresexposed)
 				overlays += image(icon = icon, icon_state = "ov-openpanel +w")
@@ -1318,7 +1318,7 @@
 				sensor_mode = MED_HUD
 				to_chat(src, "<span class='notice'>Life signs monitor overlay enabled.</span>"/*)
 			if ("Light Amplification")
-				src.sensor_mode = NIGHT
+				sensor_mode = NIGHT
 				to_chat(src, "<span class='notice'>Light amplification mode enabled.</span>"*/)
 			if ("Mesons")
 				sensor_mode = MESON_VISION
@@ -1387,24 +1387,24 @@
 	return
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
-	if (src.connected_ai)
-		src.connected_ai = null
+	if (connected_ai)
+		connected_ai = null
 	lawupdate = 0
 	lockcharge = 0
 	canmove = 1
 	scrambledcodes = 1
 	//Disconnect it's camera so it's not so easily tracked.
-	if(src.camera)
-		//del(src.camera)
-		//src.camera = null
+	if(camera)
+		//del(camera)
+		//camera = null
 		// I'm trying to get the Cyborg to not be listed in the camera list
 		// Instead of being listed as "deactivated". The downside is that I'm going
 		// to have to check if every camera is null or not before doing anything, to prevent runtime errors.
 		// I could change the network to null but I don't know what would happen, and it seems too hacky for me.
 
 		// bay's solution
-		src.camera.network = list()
-		cameranet.removeCamera(src.camera)
+		camera.network = list()
+		cameranet.removeCamera(camera)
 
 
 /mob/living/silicon/robot/proc/ResetSecurityCodes()
@@ -1417,7 +1417,7 @@
 	if(R)
 		R.UnlinkSelf()
 		to_chat(R, "Buffers flushed and reset. Camera system shutdown.  All systems operational.")
-		src.verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
+		verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
 
 /mob/living/silicon/robot/mode()
 	set name = "Activate Held Object"
@@ -1441,7 +1441,7 @@
 	emagged = new_state
 	if(new_state)
 		if(module)
-			src.module.on_emag()
+			module.on_emag()
 	else
 		if(module)
 			uneq_module(module.emag)
@@ -1529,7 +1529,7 @@
 	return 0
 
 /mob/living/silicon/robot/proc/help_shake_act(mob/user)
-	user.visible_message("<span class='notice'>[user.name] pats [src.name] on the head.</span>")
+	user.visible_message("<span class='notice'>[user.name] pats [name] on the head.</span>")
 
 /mob/living/silicon/robot/CheckSlip()
 	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)

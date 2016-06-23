@@ -7,9 +7,9 @@
 	usr.set_machine(src)
 	if(!mapping)	return
 
-	log_game("[usr]([usr.key]) used station map L[z] in [src.loc.loc]")
+	log_game("[usr]([usr.key]) used station map L[z] in [loc.loc]")
 
-	src.drawmap(usr)
+	drawmap(usr)
 
 /obj/machinery/computer/security/proc/drawmap(var/mob/user as mob)
 
@@ -318,7 +318,7 @@
 
 	user.client.screen += user.mapobjs
 
-	src.close(user)
+	close(user)
 
 /*			if(seccomp == src)
 				drawmap(user)
@@ -355,9 +355,9 @@ proc/getb(col)
 
 
 /mob/proc/clearmap()
-	src.client.screen -= src.mapobjs
+	client.screen -= mapobjs
 	for(var/obj/screen/O in mapobjs)
 		returnToPool(O)
 
 	mapobjs = null
-	src.unset_machine()
+	unset_machine()

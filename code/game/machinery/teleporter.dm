@@ -6,7 +6,7 @@
 	var/obj/item/locked = null
 	var/id = null
 	var/one_time_use = 0 //Used for one-time-use teleport cards (such as clown planet coordinates.)
-						 //Setting this to 1 will set src.locked to null after a player enters the portal and will not allow hand-teles to open portals to that location.
+						 //Setting this to 1 will set locked to null after a player enters the portal and will not allow hand-teles to open portals to that location.
 	ghost_write=0
 
 	light_color = LIGHT_COLOR_BLUE
@@ -21,7 +21,7 @@
 	else if(istype(I, /obj/item/weapon/card/data/))
 		var/obj/item/weapon/card/data/C = I
 		if(stat & (NOPOWER|BROKEN) & (C.function != "teleporter"))
-			src.attack_hand()
+			attack_hand()
 
 		var/obj/L = null
 
@@ -58,10 +58,10 @@
 			else
 			*/
 			say("Locked in")
-			src.locked = L
+			locked = L
 			one_time_use = 1
 
-			src.add_fingerprint(usr)
+			add_fingerprint(usr)
 	return
 
 /obj/machinery/computer/teleporter/examine(var/mob/user)
@@ -71,10 +71,10 @@
 		to_chat(user, "The destination is set to \"[locked_area.name]\"")
 
 /obj/machinery/computer/teleporter/attack_paw(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/teleport/station/attack_ai(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/computer/teleporter/attack_hand(var/mob/user)
 	. = ..()
@@ -187,7 +187,7 @@
 	if(stat & (NOPOWER|BROKEN) || !istype(usr,/mob/living))
 		return
 	if (t)
-		src.id = t
+		id = t
 	return
 
 /obj/machinery/teleport
@@ -247,7 +247,7 @@
 /*
 /obj/machinery/teleport/hub/Bumped(M as mob|obj)
 	spawn()
-		if (src.engaged)
+		if (engaged)
 			teleport(M)
 			use_power(5000)
 	return
@@ -258,15 +258,15 @@
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
 	if(istype(AM,/obj/effect/beam))
-		src.Bump(AM)
+		Bump(AM)
 		return
 	spawn()
-		if (src.engaged)
+		if (engaged)
 			teleport(AM)
 			use_power(5000)
 
 /obj/machinery/teleport/hub/proc/teleport(atom/movable/M as mob|obj)
-	var/atom/l = src.loc
+	var/atom/l = loc
 	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, locate(l.x - 2, l.y, l.z))
 	if (!com)
 		return
@@ -434,25 +434,25 @@ obj/machinery/teleport/station/New()
 	if (..())
 		return 1
 	else
-		src.attack_hand()
+		attack_hand()
 
 /obj/machinery/teleport/station/attack_paw(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/teleport/station/attack_ai(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/teleport/station/attack_hand(var/mob/user)
 	if(engaged)
-		src.disengage()
+		disengage()
 	else
-		src.engage()
+		engage()
 
 /obj/machinery/teleport/station/proc/engage()
 	if(stat & (BROKEN|NOPOWER))
 		return
 
-	var/atom/l = src.loc
+	var/atom/l = loc
 	var/atom/com = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (com)
 		var/obj/machinery/teleport/hub/H = com
@@ -461,15 +461,15 @@ obj/machinery/teleport/station/New()
 		use_power(5000)
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='notice'>Teleporter engaged!</span>", 2)
-	src.add_fingerprint(usr)
-	src.engaged = 1
+	add_fingerprint(usr)
+	engaged = 1
 	return
 
 /obj/machinery/teleport/station/proc/disengage()
 	if(stat & (BROKEN|NOPOWER))
 		return
 
-	var/atom/l = src.loc
+	var/atom/l = loc
 	var/atom/com = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (com)
 		var/obj/machinery/teleport/hub/H = com
@@ -477,8 +477,8 @@ obj/machinery/teleport/station/New()
 		H.icon_state = "tele0"
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='notice'>Teleporter disengaged!</span>", 2)
-	src.add_fingerprint(usr)
-	src.engaged = 0
+	add_fingerprint(usr)
+	engaged = 0
 	return
 
 /obj/machinery/teleport/station/verb/testfire()
@@ -489,7 +489,7 @@ obj/machinery/teleport/station/New()
 	if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
 		return
 
-	var/atom/l = src.loc
+	var/atom/l = loc
 	var/obj/machinery/teleport/hub/com = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (com && !active)
 		active = 1
@@ -501,7 +501,7 @@ obj/machinery/teleport/station/New()
 		spawn(30)
 			active=0
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	return
 
 /obj/machinery/teleport/station/power_change()
@@ -516,11 +516,11 @@ obj/machinery/teleport/station/New()
 
 
 /obj/effect/laser/Bump()
-	src.range--
+	range--
 	return
 
 /obj/effect/laser/Move()
-	src.range--
+	range--
 	return
 
 /atom/proc/laserhit(L as obj)

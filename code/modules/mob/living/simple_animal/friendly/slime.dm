@@ -46,16 +46,16 @@
 
 
 /mob/living/simple_animal/slime/adult/Die()
-	var/mob/living/simple_animal/slime/S1 = new /mob/living/simple_animal/slime (src.loc)
-	S1.icon_state = "[src.colour] baby slime"
-	S1.icon_living = "[src.colour] baby slime"
-	S1.icon_dead = "[src.colour] baby slime dead"
-	S1.colour = "[src.colour]"
-	var/mob/living/simple_animal/slime/S2 = new /mob/living/simple_animal/slime (src.loc)
-	S2.icon_state = "[src.colour] baby slime"
-	S2.icon_living = "[src.colour] baby slime"
-	S2.icon_dead = "[src.colour] baby slime dead"
-	S2.colour = "[src.colour]"
+	var/mob/living/simple_animal/slime/S1 = new /mob/living/simple_animal/slime (loc)
+	S1.icon_state = "[colour] baby slime"
+	S1.icon_living = "[colour] baby slime"
+	S1.icon_dead = "[colour] baby slime dead"
+	S1.colour = "[colour]"
+	var/mob/living/simple_animal/slime/S2 = new /mob/living/simple_animal/slime (loc)
+	S2.icon_state = "[colour] baby slime"
+	S2.icon_living = "[colour] baby slime"
+	S2.icon_dead = "[colour] baby slime dead"
+	S2.colour = "[colour]"
 	qdel(src)
 
 
