@@ -830,6 +830,10 @@
 	if(popper)
 		popper.visible_message("<span class='warning'>[popper] pops the \the [src]!</span>","<span class='warning'>You pop \the [src]!</span>")
 	for(var/mob/living/carbon/C in view(1))
+		if(ishuman(C))
+			var/mob/living/carbon/human/H = C
+			if(H.shoes && H.CheckSlip() < 1)
+				continue
 		C.Weaken(5)
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
@@ -872,11 +876,11 @@
 		if(get_turf(user))
 			switch(N)
 				if(1)
-					playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+					playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
 				if(2)
-					playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+					playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
 				if(3)
-					playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
@@ -895,7 +899,7 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
 			icon_state = initial(G.icon_state)
 			if(get_turf(src))
-				playsound(src, 'sound/misc/click.ogg', 50, 1)
+				playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
 			sleep(1)
 			if(counter == available_fruits.len)
 				counter = 0

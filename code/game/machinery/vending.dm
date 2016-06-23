@@ -1587,14 +1587,16 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/garlic = 3,
 		/obj/item/seeds/aloe = 3,
 		/obj/item/seeds/pitcher = 3,
-		/obj/item/seeds/vaporsac = 3
+		/obj/item/seeds/vaporsac = 3,
+		/obj/item/seeds/dionanode = 3
 		)
 	contraband = list(
 		/obj/item/seeds/eggyseed = 2,
 		/obj/item/seeds/nofruitseed = 2,
+		/obj/item/seeds/glowshroom = 2
 		)
 	premium = list(
-		/obj/item/seeds/glowshroom = 2,
+		/obj/item/weapon/storage/box/boxen = 1
 		)
 
 	allowed_inputs = list(

@@ -4204,8 +4204,8 @@
 	bitesize = 4
 	New()
 		..()
-		reagents.add_reagent("sacid",6)
-		reagents.add_reagent("nutriment",2)
+		reagents.add_reagent(SACID,6)
+		reagents.add_reagent(NUTRIMENT,2)
 
 /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan
 	name = "zhu lóng cao fàn"
@@ -4214,8 +4214,8 @@
 	bitesize = 3
 	New()
 		..()
-		reagents.add_reagent("nutriment",6)
-		reagents.add_reagent("iron",6)
+		reagents.add_reagent(NUTRIMENT,6)
+		reagents.add_reagent(IRON,6)
 
 /obj/item/weapon/reagent_containers/food/snacks/bacon
 	name = "bacon strip"
@@ -4224,7 +4224,7 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent("nutriment",6)
+		reagents.add_reagent(NUTRIMENT,6)
 
 /obj/item/weapon/reagent_containers/food/snacks/porktenderloin
 	name = "pork tenderloin"
@@ -4233,7 +4233,7 @@
 	bitesize = 4
 	New()
 		..()
-		reagents.add_reagent("nutriment",10) //Competitive with chicken buckets
+		reagents.add_reagent(NUTRIMENT,10) //Competitive with chicken buckets
 
 /obj/item/weapon/reagent_containers/food/snacks/hoboburger
 	name = "hoboburger"
@@ -4242,7 +4242,7 @@
 	bitesize = 4
 	New()
 		..()
-		reagents.add_reagent("nutriment",14) //Competitive with big bite burger
+		reagents.add_reagent(NUTRIMENT,14) //Competitive with big bite burger
 
 /obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork
 	name = "sweet and sour pork"
@@ -4252,8 +4252,8 @@
 	New()
 		..()
 		//3 nutriment inherited from the meat
-		reagents.add_reagent("lithium",2) //Random movement for a short period
-		reagents.add_reagent("synaptizine",1) //Stay on your feet, loads of toxins
+		reagents.add_reagent(LITHIUM,2) //Random movement for a short period
+		reagents.add_reagent(SYNAPTIZINE,1) //Stay on your feet, loads of toxins
 
 /obj/item/weapon/reagent_containers/food/snacks/reclaimed
 	name = "reclaimed nutrition cube"
@@ -4262,7 +4262,7 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent("nutriment",3)
+		reagents.add_reagent(NUTRIMENT,3)
 
 /obj/item/weapon/reagent_containers/food/snacks/poachedaloe
 	name = "poached aloe"
@@ -4271,7 +4271,7 @@
 	bitesize = 1
 	New()
 		..()
-		reagents.add_reagent("nutriment",2)
+		reagents.add_reagent(NUTRIMENT,2)
 
 /obj/item/weapon/reagent_containers/food/snacks/vanishingstew
 	name = "vapor stew"
@@ -4280,4 +4280,4 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent("nutriment",3)
+		reagents.add_reagent(NUTRIMENT,3)

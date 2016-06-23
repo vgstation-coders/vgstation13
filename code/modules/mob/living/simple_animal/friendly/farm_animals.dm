@@ -264,9 +264,9 @@
 /mob/living/simple_animal/hostile/retaliate/box
 	name = "box"
 	desc = "A distant descendent of the common domesticated Earth pig, corrupted by generations of splicing and genetic decay."
-	icon_state = "box"
-	icon_living = "box"
-	icon_dead = "box_dead"
+	icon_state = "box_2"
+	icon_living = "box_2"
+	icon_dead = "box_2_dead"
 	speak = list("SQUEEEEE!","Oink...","Oink, oink", "Oink, oink, oink", "Oink!", "Oiiink.")
 	emote_hear = list("squeals hauntingly")
 	emote_see = list("roots about","squeals hauntingly")
@@ -292,6 +292,12 @@
 	if(size<SIZE_BIG)
 		size++
 		fat = 0
+	update_icon()
+
+/mob/living/simple_animal/hostile/retaliate/box/update_icon()
+	icon_state = "box_[size]"
+	icon_living = "box_[size"
+	icon_dead = "box_[size]_dead"
 
 /mob/living/simple_animal/hostile/retaliate/box/examine(mob/user)
 	..()
@@ -311,8 +317,10 @@
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
 	. = ..()
-	if(size<SIZE_BIG) fat += rand(2)
-	if(fat>BOX_GROWTH_BAR) updatefat()
+	if(size<SIZE_BIG)
+		fat += rand(2)
+	if(fat>BOX_GROWTH_BAR)
+		updatefat()
 
 /mob/living/simple_animal/hostile/retaliate/box/death()
 	..()
@@ -327,5 +335,5 @@
 
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name].</span>","<span class='notice'>You feed [O] to [name].</span>")
 			qdel(O)
-			fat += rand(30,50)
+			fat += rand(15,25)
 	else ..()
