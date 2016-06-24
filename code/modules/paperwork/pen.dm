@@ -128,7 +128,6 @@ var/paperwork_library
 					break
 				count++
 				var/datum/speech_filter_action/SFA = expressions[key]
-				to_chat(world, "BBcode run on <br>[t], name is [SFA.expr.name], flags are [SFA.expr.flags]")
 				if(SFA && !SFA.broken)
 					t = SFA.Run(t,user,paper)
 				if(count%100 == 0)
