@@ -117,7 +117,7 @@
 	var/num_loaded = 0
 	if(istype(A, /obj/item/ammo_casing)) //loading rounds one by one
 		var/obj/item/ammo_casing/AC = A
-		if(src.getAmmo() >= max_shells)
+		if(getAmmo() >= max_shells)
 			to_chat(user, "<span class='warning'>It's already full of ammo.</span>")
 			return
 		if(caliber[AC.caliber])
@@ -130,7 +130,7 @@
 	if(istype(A, /obj/item/ammo_storage)) //loading rounds from a box, still one by one
 		var/obj/item/ammo_storage/AM = A
 		for(var/obj/item/ammo_casing/AC in AM.stored_ammo)
-			if(src.getAmmo() >= max_shells)
+			if(getAmmo() >= max_shells)
 				to_chat(user, "<span class='warning'>It's already full of ammo.</span>")
 				return
 			if(caliber[AC.caliber] && getAmmo() < max_shells)
@@ -224,7 +224,7 @@
 			AC.forceMove(get_turf(src))
 			loaded -= AC
 			loaded += null
-	src.loc.visible_message("<span class='warning'>[src] empties onto the ground!</span>")
+	loc.visible_message("<span class='warning'>[src] empties onto the ground!</span>")
 
 
 /obj/item/weapon/gun/projectile/russian/empty/New()

@@ -2,7 +2,7 @@
 	set category = "Debug"
 
 	var/power = input(src, "power?", "power?") as num
-	var/turf/T = get_turf(src.mob)
+	var/turf/T = get_turf(mob)
 	explosion_rec(T, power)
 
 /obj
@@ -134,8 +134,8 @@ proc/explosion_rec(turf/epicenter, power)
 		return //The turf already sustained and spread a power greated than what we are dealing with. No point spreading again.
 	ET.max_power = power
 
-	var/spread_power = power - src.explosion_resistance //This is the amount of power that will be spread to the tile in the direction of the blast
-	var/side_spread_power = power - 2 * src.explosion_resistance //This is the amount of power that will be spread to the side tiles
+	var/spread_power = power - explosion_resistance //This is the amount of power that will be spread to the tile in the direction of the blast
+	var/side_spread_power = power - 2 * explosion_resistance //This is the amount of power that will be spread to the side tiles
 	for(var/obj/O in src)
 		if(O.explosion_resistance)
 			spread_power -= O.explosion_resistance

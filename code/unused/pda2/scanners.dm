@@ -6,18 +6,18 @@
 
 /datum/computer/file/pda_program/scan
 	return_text()
-		return src.return_text_header()
+		return return_text_header()
 
 	proc/scan_atom(atom/A as mob|obj|turf|area)
 
 
-		if( !A || (!src.holder) || (!src.master))
+		if( !A || (!holder) || (!master))
 			return 1
 
 		if((!istype(holder)) || (!istype(master)))
 			return 1
 
-		if(!(holder in src.master.contents))
+		if(!(holder in master.contents))
 			if(master.scan_program == src)
 				master.scan_program = null
 			return 1

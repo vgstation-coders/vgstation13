@@ -106,8 +106,8 @@ obj/item/weapon/gun/energy/laser/retro
 /*/obj/item/weapon/gun/energy/laser/cyborg/load_into_chamber()
 	if(in_chamber)
 		return 1
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
+	if(isrobot(loc))
+		var/mob/living/silicon/robot/R = loc
 		if(R && R.cell)
 			R.cell.use(100)
 			in_chamber = new/obj/item/projectile/beam(src)
@@ -132,8 +132,8 @@ obj/item/weapon/gun/energy/laser/retro
 	charge_tick = 0
 
 	if(!power_supply) return 0 //sanity
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
+	if(isrobot(loc))
+		var/mob/living/silicon/robot/R = loc
 		if(R && R.cell)
 			R.cell.use(charge_cost) 		//Take power from the borg...
 			power_supply.give(charge_cost)	//... to recharge the shot
@@ -174,8 +174,8 @@ obj/item/weapon/gun/energy/laser/retro
 /obj/item/weapon/gun/energy/lasercannon/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
+	if(isrobot(loc))
+		var/mob/living/silicon/robot/R = loc
 		if(R && R.cell)
 			R.cell.use(250)
 			in_chamber = new/obj/item/projectile/beam/heavylaser(src)

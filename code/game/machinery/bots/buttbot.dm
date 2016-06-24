@@ -36,7 +36,7 @@ Here it is: Buttbot.
 
 
 /obj/machinery/bot/buttbot/proc/speak(var/message)
-	if((!src.on) || (!message))
+	if((!on) || (!message))
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
@@ -66,8 +66,8 @@ Here it is: Buttbot.
 
 
 /obj/machinery/bot/buttbot/explode()
-	src.on = 0
-	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	on = 0
+	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1) //A fitting end
 	var/turf/Tsec = get_turf(src)
 	new /obj/item/clothing/head/butt(Tsec)
@@ -79,7 +79,7 @@ Here it is: Buttbot.
 	s.set_up(3, 1, src)
 	s.start()
 
-	new /obj/effect/decal/cleanable/blood/oil(src.loc)
+	new /obj/effect/decal/cleanable/blood/oil(loc)
 	qdel(src)
 
 
@@ -89,17 +89,17 @@ Here it is: Buttbot.
 		qdel(W)
 		var/turf/T = get_turf(user.loc)
 		var/obj/machinery/bot/buttbot/A = new /obj/machinery/bot/buttbot(T)
-		A.name = src.created_name
+		A.name = created_name
 		to_chat(user, "<span class='notice'>You roughly shove the robot arm into the ass! Butt Butt!</span>")//I don't even.
 
 		user.drop_from_inventory(src)
 		qdel(src)
 	else if (istype(W, /obj/item/weapon/pen))
-		var/t = stripped_input(user, "Enter new robot name", src.name, src.created_name)
+		var/t = stripped_input(user, "Enter new robot name", name, created_name)
 
 		if (!t)
 			return
-		if (!in_range(src, usr) && src.loc != usr)
+		if (!in_range(src, usr) && loc != usr)
 			return
 
-		src.created_name = t
+		created_name = t

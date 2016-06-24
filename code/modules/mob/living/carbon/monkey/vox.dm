@@ -17,7 +17,7 @@
 /mob/living/carbon/monkey/vox/attack_hand(mob/living/carbon/human/M as mob)
 
 
-	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
+	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
 
 	..()

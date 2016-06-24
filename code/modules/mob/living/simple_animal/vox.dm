@@ -29,7 +29,7 @@
 	stat = DEAD
 	visible_message("<span class='danger'><B>[src] shudders violently and explodes!</B>","<span class='warning'>You feel your body rupture!</span></span>")
 	explosion(get_turf(loc), -1, -1, 3, 5)
-	src.gib()
+	gib()
 	return
 
 /mob/living/simple_animal/vox/armalis/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -69,7 +69,7 @@
 			to_chat(O, "<span class='warning'>[src] launches a razor-sharp quill at [target]!</span>")
 
 	var/obj/item/weapon/arrow/quill/Q = new(loc)
-	Q.fingerprintslast = src.ckey
+	Q.fingerprintslast = ckey
 	Q.throw_at(target,10,30)
 	quills--
 

@@ -86,23 +86,23 @@
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/orange/attack_self(mob/user as mob)
-	if (src.chained)
-		src.chained = null
-		src.slowdown = SHOES_SLOWDOWN
+	if (chained)
+		chained = null
+		slowdown = SHOES_SLOWDOWN
 		new chaintype( user.loc )
-		src.icon_state = "orange"
+		icon_state = "orange"
 	return
 
 /obj/item/clothing/shoes/orange/attackby(var/obj/O, loc)
 	..()
-	if ((istype(O, /obj/item/weapon/handcuffs) && !( src.chained )))
+	if ((istype(O, /obj/item/weapon/handcuffs) && !( chained )))
 		var/obj/item/weapon/handcuffs/H=O
 		//H = null
-		if (src.icon_state != "orange") return
-		src.chained = 1
-		src.chaintype = H.type
-		src.slowdown = 15
-		src.icon_state = "orange1"
+		if (icon_state != "orange") return
+		chained = 1
+		chaintype = H.type
+		slowdown = 15
+		icon_state = "orange1"
 		qdel(H)
 		H = null
 	return

@@ -7,36 +7,36 @@
 		size = 0.0
 		var/gen = 0
 		Del()
-			for(var/datum/computer/F in src.contents)
+			for(var/datum/computer/F in contents)
 				del(F)
 			..()
 		proc
 			add_file(datum/computer/R)
 				if(!holder || holder.read_only || !R)
 					return 0
-				if(istype(R,/datum/computer/folder) && (src.gen>=10))
+				if(istype(R,/datum/computer/folder) && (gen>=10))
 					return 0
 				if((holder.file_used + R.size) <= holder.file_amount)
-					src.contents.Add(R)
+					contents.Add(R)
 					R.holder = holder
 					R.holding_folder = src
-					src.holder.file_used -= src.size
-					src.size += R.size
-					src.holder.file_used += src.size
+					holder.file_used -= size
+					size += R.size
+					holder.file_used += size
 					if(istype(R,/datum/computer/folder))
-						R:gen = (src.gen+1)
+						R:gen = (gen+1)
 					return 1
 				return 0
 
 			remove_file(datum/computer/R)
 				if(holder && !holder.read_only || !R)
-//					to_chat(world, "Removing file [R]. File_used: [src.holder.file_used]")
-					src.contents.Remove(R)
-					src.holder.file_used -= src.size
-					src.size -= R.size
-					src.holder.file_used += src.size
-					src.holder.file_used = max(src.holder.file_used, 0)
-//					to_chat(world, "Removed file [R]. File_used: [src.holder.file_used]")
+//					to_chat(world, "Removing file [R]. File_used: [holder.file_used]")
+					contents.Remove(R)
+					holder.file_used -= size
+					size -= R.size
+					holder.file_used += size
+					holder.file_used = max(holder.file_used, 0)
+//					to_chat(world, "Removed file [R]. File_used: [holder.file_used]")
 					return 1
 				return 0
 	file
@@ -47,12 +47,12 @@
 				if(!newfolder || (!istype(newfolder)) || (!newfolder.holder) || (newfolder.holder.read_only))
 					return 0
 
-				if((newfolder.holder.file_used + src.size) <= newfolder.holder.file_amount)
-					var/datum/computer/file/newfile = new src.type
+				if((newfolder.holder.file_used + size) <= newfolder.holder.file_amount)
+					var/datum/computer/file/newfile = new type
 
-					for(var/V in src.vars)
-						if (issaved(src.vars[V]) && V != "holder")
-							newfile.vars[V] = src.vars[V]
+					for(var/V in vars)
+						if (issaved(vars[V]) && V != "holder")
+							newfile.vars[V] = vars[V]
 
 					if(!newfolder.add_file(newfile))
 						del(newfile)
@@ -80,10 +80,10 @@
 
 	New(obj/holding as obj)
 		if(holding)
-			src.holder = holding
+			holder = holding
 
-			if(istype(src.holder.loc,/obj/machinery/computer2))
-				src.master = src.holder.loc
+			if(istype(holder.loc,/obj/machinery/computer2))
+				master = holder.loc
 
 	Del()
 		if(master)
@@ -92,7 +92,7 @@
 
 	proc
 		return_text()
-			if((!src.holder) || (!src.master))
+			if((!holder) || (!master))
 				return 1
 
 			if((!istype(holder)) || (!istype(master)))
@@ -101,41 +101,41 @@
 			if(master.stat & (NOPOWER|BROKEN))
 				return 1
 
-			if(!(holder in src.master.contents))
+			if(!(holder in master.contents))
 //				to_chat(world, "Holder [holder] not in [master] of prg:[src]")
 				if(master.active_program == src)
 					master.active_program = null
 				return 1
 
-			if(!src.holder.root)
-				src.holder.root = new /datum/computer/folder
-				src.holder.root.holder = src
-				src.holder.root.name = "root"
+			if(!holder.root)
+				holder.root = new /datum/computer/folder
+				holder.root.holder = src
+				holder.root.name = "root"
 
 			return 0
 
 		process()
-			if((!src.holder) || (!src.master))
+			if((!holder) || (!master))
 				return 1
 
 			if((!istype(holder)) || (!istype(master)))
 				return 1
 
-			if(!(holder in src.master.contents))
+			if(!(holder in master.contents))
 				if(master.active_program == src)
 					master.active_program = null
 				master.processing_programs.Remove(src)
 				return 1
 
-			if(!src.holder.root)
-				src.holder.root = new /datum/computer/folder
-				src.holder.root.holder = src
-				src.holder.root.name = "root"
+			if(!holder.root)
+				holder.root = new /datum/computer/folder
+				holder.root.holder = src
+				holder.root.name = "root"
 
 			return 0
 
 		receive_command(obj/source, command, datum/signal/signal)
-			if((!src.holder) || (!src.master) || (!source) || (source != src.master))
+			if((!holder) || (!master) || (!source) || (source != master))
 				return 1
 
 			if((!istype(holder)) || (!istype(master)))
@@ -144,7 +144,7 @@
 			if(master.stat & (NOPOWER|BROKEN))
 				return 1
 
-			if(!(holder in src.master.contents))
+			if(!(holder in master.contents))
 				if(master.active_program == src)
 					master.active_program = null
 				return 1
@@ -159,7 +159,7 @@
 
 		transfer_holder(obj/item/weapon/disk/data/newholder,datum/computer/folder/newfolder)
 
-			if((newholder.file_used + src.size) > newholder.file_amount)
+			if((newholder.file_used + size) > newholder.file_amount)
 				return 0
 
 			if(!newholder.root)
@@ -170,25 +170,25 @@
 			if(!newfolder)
 				newfolder = newholder.root
 
-			if((src.holder && src.holder.read_only) || newholder.read_only)
+			if((holder && holder.read_only) || newholder.read_only)
 				return 0
 
-			if((src.holder) && (src.holder.root))
-				src.holder.root.remove_file(src)
+			if((holder) && (holder.root))
+				holder.root.remove_file(src)
 
 			newfolder.add_file(src)
 
 			if(istype(newholder.loc,/obj/machinery/computer2))
-				src.master = newholder.loc
+				master = newholder.loc
 
-//			to_chat(world, "Setting [src.holder] to [newholder]")
-			src.holder = newholder
+//			to_chat(world, "Setting [holder] to [newholder]")
+			holder = newholder
 			return 1
 
 		//Check access per program.
 		allowed(mob/M)
 			//check if it doesn't require any access at all
-			if(src.check_access(null))
+			if(check_access(null))
 				return 1
 			if(istype(M, /mob/living/silicon))
 				//AI can do whatever he wants
@@ -196,33 +196,33 @@
 			else if(istype(M, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
 				//if they are holding or wearing a card that has access, that works
-				if(src.check_access(H.equipped()) || src.check_access(H.wear_id))
+				if(check_access(H.equipped()) || check_access(H.wear_id))
 					return 1
 			else if(istype(M, /mob/living/carbon/monkey))
 				var/mob/living/carbon/monkey/george = M
 				//they can only hold things :(
-				if(george.equipped() && istype(george.equipped(), /obj/item/weapon/card/id) && src.check_access(george.equipped()))
+				if(george.equipped() && istype(george.equipped(), /obj/item/weapon/card/id) && check_access(george.equipped()))
 					return 1
 			return 0
 
 		check_access(obj/item/weapon/card/id/I)
-			if(!src.req_access) //no requirements
+			if(!req_access) //no requirements
 				return 1
-			if(!istype(src.req_access, /list)) //something's very wrong
+			if(!istype(req_access, /list)) //something's very wrong
 				return 1
 
-			var/list/L = src.req_access
+			var/list/L = req_access
 			if(!L.len) //no requirements
 				return 1
 			if(!I || !istype(I, /obj/item/weapon/card/id) || !I.access) //not ID or no access
 				return 0
-			for(var/req in src.req_access)
+			for(var/req in req_access)
 				if(!(req in I.access)) //doesn't have this access
 					return 0
 			return 1
 
 	Topic(href, href_list)
-		if((!src.holder) || (!src.master))
+		if((!holder) || (!master))
 			return 1
 
 		if((!istype(holder)) || (!istype(master)))
@@ -231,18 +231,18 @@
 		if(master.stat & (NOPOWER|BROKEN))
 			return 1
 
-		if(src.master.active_program != src)
+		if(master.active_program != src)
 			return 1
 
-		if ((!usr.contents.Find(src.master) && (!in_range(src.master, usr) || !istype(src.master.loc, /turf))) && (!istype(usr, /mob/living/silicon)))
+		if ((!usr.contents.Find(master) && (!in_range(master, usr) || !istype(master.loc, /turf))) && (!istype(usr, /mob/living/silicon)))
 			return 1
 
-		if(!(holder in src.master.contents))
+		if(!(holder in master.contents))
 			if(master.active_program == src)
 				master.active_program = null
 			return 1
 
-		usr.machine = src.master
+		usr.machine = master
 
 		if (href_list["close"])
 			usr.machine = null
@@ -250,14 +250,14 @@
 			return 0
 
 		if (href_list["quit"])
-//			src.master.processing_programs.Remove(src)
-			if(src.master.host_program && src.master.host_program.holder && (src.master.host_program.holder in src.master.contents))
-				src.master.run_program(src.master.host_program)
-				src.master.updateUsrDialog()
+//			master.processing_programs.Remove(src)
+			if(master.host_program && master.host_program.holder && (master.host_program.holder in master.contents))
+				master.run_program(master.host_program)
+				master.updateUsrDialog()
 				return 1
 			else
-				src.master.active_program = null
-			src.master.updateUsrDialog()
+				master.active_program = null
+			master.updateUsrDialog()
 			return 1
 
 		return 0

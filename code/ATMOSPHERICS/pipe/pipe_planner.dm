@@ -17,7 +17,7 @@
 	planner = new(src)
 
 /obj/item/pipe_planner/attackby(var/obj/item/I, mob/user, params)
-	if(get_turf(src) == src.loc)
+	if(get_turf(src) == loc)
 		return planner.action(I, user, params)
 	return ..()
 

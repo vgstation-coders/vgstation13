@@ -16,7 +16,7 @@
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/paicard/test/New()
-	src.looking_for_personality = 1
+	looking_for_personality = 1
 	paiController.findPAI(src, usr)
 #endif
 
@@ -87,7 +87,7 @@
 			pai.master_dna = dna.unique_enzymes
 			to_chat(pai, "<font color = red><h3>You have been bound to a new master.</h3></font>")
 	if(href_list["request"])
-		src.looking_for_personality = 1
+		looking_for_personality = 1
 		paiController.findPAI(src, usr)
 	if(href_list["wipe"])
 		var/confirm = input("Are you CERTAIN you wish to delete the current personality? This action cannot be undone.", "Personality Wipe") in list("Yes", "No")
@@ -117,18 +117,18 @@
 //		WIRE_TRANSMIT = 4
 
 /obj/item/device/paicard/proc/setPersonality(mob/living/silicon/pai/personality)
-	src.pai = personality
-	src.overlays += image(icon=icon, icon_state = "pai-happy")
+	pai = personality
+	overlays += image(icon=icon, icon_state = "pai-happy")
 
 /obj/item/device/paicard/proc/removePersonality()
-	src.pai = null
-	src.overlays.len = 0
-	src.overlays += image(icon=icon, icon_state = "pai-off")
+	pai = null
+	overlays.len = 0
+	overlays += image(icon=icon, icon_state = "pai-off")
 
 /obj/item/device/paicard/proc/setEmotion(var/emotion)
 	if(pai)
 		var/face = "pai-happy"
-		src.overlays.len = 0
+		overlays.len = 0
 		pai.overlays.len = 0
 		switch(emotion)
 			if(1) face = "pai-happy"
@@ -149,11 +149,11 @@
 			if(16) face = "pai-nose"
 			if(17) face = "pai-kawaii"
 			if(18) face = "pai-cry"
-		src.overlays += image(icon=icon, icon_state = "[face]")
+		overlays += image(icon=icon, icon_state = "[face]")
 		pai.overlays += image(icon=icon, icon_state = "[face]")//we also update the mob's overlay so it appears properly on the scoreboard.
 
 /obj/item/device/paicard/proc/alertUpdate()
-	var/turf/T = get_turf(src.loc)
+	var/turf/T = get_turf(loc)
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)
 		playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)

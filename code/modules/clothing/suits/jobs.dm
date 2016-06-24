@@ -166,10 +166,10 @@
 
 		switch(icon_state)
 			if("ia_jacket_open")
-				src.icon_state = "ia_jacket"
+				icon_state = "ia_jacket"
 				to_chat(usr, "You button up the jacket.")
 			if("ia_jacket")
-				src.icon_state = "ia_jacket_open"
+				icon_state = "ia_jacket_open"
 				to_chat(usr, "You unbutton the jacket.")
 			else
 				to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
@@ -196,10 +196,10 @@
 
 		switch(icon_state)
 			if("fr_jacket_open")
-				src.icon_state = "fr_jacket"
+				icon_state = "fr_jacket"
 				to_chat(usr, "You button up the jacket.")
 			if("fr_jacket")
-				src.icon_state = "fr_jacket_open"
+				icon_state = "fr_jacket_open"
 				to_chat(usr, "You unbutton the jacket.")
 		usr.update_inv_wear_suit()	//so our overlays update
 

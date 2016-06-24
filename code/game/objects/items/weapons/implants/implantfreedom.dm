@@ -9,16 +9,16 @@
 
 
 	New()
-		src.activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
-		src.uses = rand(1, 5)
+		activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
+		uses = rand(1, 5)
 		..()
 		return
 
 
 	trigger(emote, mob/living/carbon/source as mob)
-		if (src.uses < 1)	return 0
-		if (emote == src.activation_emote)
-			src.uses--
+		if (uses < 1)	return 0
+		if (emote == activation_emote)
+			uses--
 			to_chat(source, "You feel a faint click.")
 			if (source.handcuffed)
 				source.drop_from_inventory(source.handcuffed)
@@ -28,8 +28,8 @@
 
 
 	implanted(mob/living/carbon/source)
-		source.mind.store_memory("Freedom implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.", 0, 0)
-		to_chat(source, "The implanted freedom implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
+		source.mind.store_memory("Freedom implant can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.", 0, 0)
+		to_chat(source, "The implanted freedom implant can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.")
 		return 1
 
 

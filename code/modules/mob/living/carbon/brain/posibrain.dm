@@ -29,8 +29,8 @@
 /obj/item/device/mmi/posibrain/proc/search_for_candidates()
 	icon_state = "posibrain-searching"
 	ghost_volunteers.len = 0
-	src.searching = 1
-	src.request_player()
+	searching = 1
+	request_player()
 	spawn(600)
 		if(ghost_volunteers.len)
 			var/mob/dead/observer/O = pick(ghost_volunteers)
@@ -65,19 +65,19 @@
 /obj/item/device/mmi/posibrain/proc/transfer_personality(var/mob/candidate)
 
 
-	src.searching = 0
-	//src.brainmob.mind = candidate.mind Causes issues with traitor overlays and traitor specific chat.
-	//src.brainmob.key = candidate.key
-	src.brainmob.ckey = candidate.ckey
-	src.brainmob.stat = 0
-	src.name = "positronic brain ([src.brainmob.name])"
+	searching = 0
+	//brainmob.mind = candidate.mind Causes issues with traitor overlays and traitor specific chat.
+	//brainmob.key = candidate.key
+	brainmob.ckey = candidate.ckey
+	brainmob.stat = 0
+	name = "positronic brain ([brainmob.name])"
 
-	to_chat(src.brainmob, "<b>You are \a [src], brought into existence on [station_name()].</b>")
-	to_chat(src.brainmob, "<b>As a synthetic intelligence, you answer to all crewmembers, as well as the AI.</b>")
-	to_chat(src.brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm.</b>")
-	src.brainmob.mind.assigned_role = "Positronic Brain"
+	to_chat(brainmob, "<b>You are \a [src], brought into existence on [station_name()].</b>")
+	to_chat(brainmob, "<b>As a synthetic intelligence, you answer to all crewmembers, as well as the AI.</b>")
+	to_chat(brainmob, "<b>Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm.</b>")
+	brainmob.mind.assigned_role = "Positronic Brain"
 
-	var/turf/T = get_turf(src.loc)
+	var/turf/T = get_turf(loc)
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>\The [src] chimes quietly.</span>")
 	icon_state = "posibrain-occupied"
@@ -85,12 +85,12 @@
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
 
-	if(src.brainmob && src.brainmob.key) return
+	if(brainmob && brainmob.key) return
 
-	src.searching = 0
+	searching = 0
 	icon_state = "posibrain"
 
-	var/turf/T = get_turf(src.loc)
+	var/turf/T = get_turf(loc)
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>The [src] buzzes quietly, and the golden lights fade away. Perhaps you could try again?</span>")
 
@@ -120,41 +120,41 @@
 /obj/item/device/mmi/posibrain/examine(mob/user)
 //	to_chat(user, "<span class='info'>*---------</span>*")
 	..()
-	if(src.brainmob)
-		if(src.brainmob.stat == DEAD)
+	if(brainmob)
+		if(brainmob.stat == DEAD)
 			to_chat(user, "<span class='deadsay'>It appears to be completely inactive.</span>")//suicided
 
-		else if(!src.brainmob.client)
+		else if(!brainmob.client)
 			to_chat(user, "<span class='notice'>It appears to be in stand-by mode.</span>")//closed game window
 
-		else if(!src.brainmob.key)
+		else if(!brainmob.key)
 			to_chat(user, "<span class='warning'>It doesn't seem to be responsive.</span>")//ghosted
 
 //	to_chat(user, "<span class='info'>*---------*</span>")
 
 /obj/item/device/mmi/posibrain/emp_act(severity)
-	if(!src.brainmob)
+	if(!brainmob)
 		return
 	else
 		switch(severity)
 			if(1)
-				src.brainmob.emp_damage += rand(20,30)
+				brainmob.emp_damage += rand(20,30)
 			if(2)
-				src.brainmob.emp_damage += rand(10,20)
+				brainmob.emp_damage += rand(10,20)
 			if(3)
-				src.brainmob.emp_damage += rand(0,10)
+				brainmob.emp_damage += rand(0,10)
 	..()
 
 /obj/item/device/mmi/posibrain/New()
 
-	src.brainmob = new(src)
-	src.brainmob.name = "[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[rand(100, 999)]"
-	src.brainmob.real_name = src.brainmob.name
-	src.brainmob.loc = src
-	src.brainmob.container = src
-	src.brainmob.stat = 0
-	src.brainmob.silent = 0
-	dead_mob_list -= src.brainmob
+	brainmob = new(src)
+	brainmob.name = "[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[rand(100, 999)]"
+	brainmob.real_name = brainmob.name
+	brainmob.loc = src
+	brainmob.container = src
+	brainmob.stat = 0
+	brainmob.silent = 0
+	dead_mob_list -= brainmob
 
 	..()
 
@@ -167,7 +167,7 @@
 	if(searching)
 		volunteer(O)
 	else
-		var/turf/T = get_turf(src.loc)
+		var/turf/T = get_turf(loc)
 		for (var/mob/M in viewers(T))
 			M.show_message("<span class='notice'>\The [src] pings softly.</span>")
 

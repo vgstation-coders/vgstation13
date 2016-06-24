@@ -51,7 +51,7 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/Destroy()
 	for(var/mob/living/M in src) //ventcrawling is serious business
 		M.remove_ventcrawl()
-		M.forceMove(src.loc)
+		M.forceMove(loc)
 	if(pipe_image)
 		for(var/mob/living/M in player_list)
 			if(M.client)
@@ -128,14 +128,14 @@ Pipelines + Other Objects -> Pipe network
 	layer = initial(layer) + ((piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE)
 
 // Find a connecting /obj/machinery/atmospherics in specified direction.
-/obj/machinery/atmospherics/proc/findConnecting(var/direction, var/given_layer = src.piping_layer)
+/obj/machinery/atmospherics/proc/findConnecting(var/direction, var/given_layer = piping_layer)
 	for(var/obj/machinery/atmospherics/target in get_step(src,direction))
 		if(target.initialize_directions & get_dir(target,src))
 			if(isConnectable(target, direction, given_layer) && target.isConnectable(src, turn(direction, 180), given_layer))
 				return target
 
 // Ditto, but for heat-exchanging pipes.
-/obj/machinery/atmospherics/proc/findConnectingHE(var/direction, var/given_layer = src.piping_layer)
+/obj/machinery/atmospherics/proc/findConnectingHE(var/direction, var/given_layer = piping_layer)
 	for(var/obj/machinery/atmospherics/pipe/simple/heat_exchanging/target in get_step(src,direction))
 		if(target.initialize_directions_he & get_dir(target,src))
 			if(isConnectable(target, direction, given_layer) && target.isConnectable(src, turn(direction, 180), given_layer))
@@ -164,7 +164,7 @@ Pipelines + Other Objects -> Pipe network
 				if(PIPE_TYPE_HE)
 					found = findConnectingHE(direction)
 				else
-					error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([node_id]): [node_type]")
+					error("UNKNOWN RESPONSE FROM [type]/getNodeType([node_id]): [node_type]")
 					return
 			if(!found) continue
 			var/node_var="node[node_id]"
@@ -217,21 +217,21 @@ Pipelines + Other Objects -> Pipe network
 	return FALSE
 
 /obj/machinery/atmospherics/cultify()
-	if(src.invisibility != INVISIBILITY_MAXIMUM)
-		src.invisibility = INVISIBILITY_MAXIMUM
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
 
 
 /obj/machinery/atmospherics/attackby(var/obj/item/W, mob/user)
 	if(istype(W, /obj/item/pipe)) //lets you autodrop
 		var/obj/item/pipe/pipe = W
 		if(user.drop_item(pipe))
-			pipe.setPipingLayer(src.piping_layer) //align it with us
+			pipe.setPipingLayer(piping_layer) //align it with us
 			return 1
 	if (!iswrench(W))
 		return ..()
-	if(src.machine_flags & WRENCHMOVE)
+	if(machine_flags & WRENCHMOVE)
 		return ..()
-	var/turf/T = src.loc
+	var/turf/T = loc
 	if (level==1 && isturf(T) && T.intact)
 		to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 		return 1
@@ -269,7 +269,7 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/Entered(atom/movable/Obj)
 	if(istype(Obj, /mob/living))
 		var/mob/living/L = Obj
-		L.ventcrawl_layer = src.piping_layer
+		L.ventcrawl_layer = piping_layer
 
 /obj/machinery/atmospherics/relaymove(mob/living/user, direction)
 	if(!(direction & initialize_directions)) //can't go in a way we aren't connecting to
@@ -291,9 +291,9 @@ Pipelines + Other Objects -> Pipe network
 				user.last_played_vent = world.time
 				playsound(src, 'sound/machines/ventcrawl.ogg', 50, 1, -3)
 	else
-		if((direction & initialize_directions) || is_type_in_list(src, ventcrawl_machinery) && src.can_crawl_through()) //if we move in a way the pipe can connect, but doesn't - or we're in a vent
+		if((direction & initialize_directions) || is_type_in_list(src, ventcrawl_machinery) && can_crawl_through()) //if we move in a way the pipe can connect, but doesn't - or we're in a vent
 			user.remove_ventcrawl()
-			user.forceMove(src.loc)
+			user.forceMove(loc)
 			user.visible_message("You hear something squeezing through the pipes.", "You climb out the ventilation system.")
 	user.canmove = 0
 	spawn(1)

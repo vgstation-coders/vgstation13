@@ -183,9 +183,9 @@
 
 /obj/machinery/media/receiver/boombox/wallmount/proc/relay_area_configuration()
 	for(var/obj/machinery/media/receiver/boombox/wallmount/W in areaMaster)
-		W.on = src.on
-		W.media_frequency=src.media_frequency
-		W.volume = src.volume
+		W.on = on
+		W.media_frequency=media_frequency
+		W.volume = volume
 		W.update_icon()
 
 /obj/machinery/media/receiver/boombox/wallmount/shuttle

@@ -23,7 +23,7 @@
 
 /datum/artifact_effect/teleport/DoEffectAura()
 	if(holder)
-		for (var/mob/living/M in range(src.effectrange,holder))
+		for (var/mob/living/M in range(effectrange,holder))
 			var/weakness = GetAnomalySusceptibility(M)
 			if(prob(100 * weakness))
 				var/list/randomturfs = new/list()
@@ -43,7 +43,7 @@
 
 /datum/artifact_effect/teleport/DoEffectPulse()
 	if(holder)
-		for (var/mob/living/M in range(src.effectrange, holder))
+		for (var/mob/living/M in range(effectrange, holder))
 			var/weakness = GetAnomalySusceptibility(M)
 			if(prob(100 * weakness))
 				var/list/randomturfs = new/list()

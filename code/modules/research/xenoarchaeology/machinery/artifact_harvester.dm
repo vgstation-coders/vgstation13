@@ -26,7 +26,7 @@
 		if(!inserted_battery)
 			if(user.drop_item(I, src))
 				to_chat(user, "<span class='notice'>You insert [I] into [src].</span>")
-				src.inserted_battery = I
+				inserted_battery = I
 				updateDialog()
 		else
 			to_chat(user, "<span class='warning'>There is already a battery in [src].</span>")
@@ -34,7 +34,7 @@
 		return..()
 
 /obj/machinery/artifact_harvester/attack_hand(var/mob/user as mob)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	interact(user)
 
 /obj/machinery/artifact_harvester/interact(var/mob/user as mob)
@@ -85,7 +85,7 @@
 			harvesting = 0
 			cur_artifact.anchored = 0
 			cur_artifact.being_used = 0
-			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
+			visible_message("<b>[name]</b> states, \"Battery is full.\"")
 			icon_state = "incubator"
 
 	else if(harvesting < 0)
@@ -111,7 +111,7 @@
 			cur_artifact.anchored = 0
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
 				inserted_battery.battery_effect.ToggleActivate()
-			src.visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
+			visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
 			icon_state = "incubator"
 
 /obj/machinery/artifact_harvester/Topic(href, href_list)
@@ -140,11 +140,11 @@
 			break
 		if(!analysed)
 			var/message = "<b>[src]</b> states, \"Cannot harvest, unable to analyse.\""
-			src.visible_message(message)
+			visible_message(message)
 			return
 		if(analysed.being_used)
 			var/message = "<b>[src]</b> states, \"Cannot harvest. Too much interference.\""
-			src.visible_message(message)
+			visible_message(message)
 		else if(articount == 1 && !mundane)
 			cur_artifact = analysed
 			//there should already be a battery inserted, but this is just in case
@@ -170,7 +170,7 @@
 					cur_artifact.being_used = 1
 					icon_state = "incubator_on"
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
-					src.visible_message(message)
+					visible_message(message)
 
 					//duplicate the artifact's effect datum
 					if(!inserted_battery.battery_effect)
@@ -186,16 +186,16 @@
 						inserted_battery.stored_charge = 0
 				else
 					var/message = "<b>[src]</b> states, \"Cannot harvest. Incompatible energy signatures detected.\""
-					src.visible_message(message)
+					visible_message(message)
 			else if(cur_artifact)
 				var/message = "<b>[src]</b> states, \"Cannot harvest. No battery inserted.\""
-				src.visible_message(message)
+				visible_message(message)
 		else if(articount > 1 || mundane)
 			var/message = "<b>[src]</b> states, \"Cannot harvest. Error isolating energy signature.\""
-			src.visible_message(message)
+			visible_message(message)
 		else if(!articount)
 			var/message = "<b>[src]</b> states, \"Cannot harvest. No noteworthy energy signature isolated.\""
-			src.visible_message(message)
+			visible_message(message)
 
 	if (href_list["stopharvest"])
 		if(harvesting)
@@ -204,12 +204,12 @@
 			harvesting = 0
 			cur_artifact.anchored = 0
 			cur_artifact.being_used = 0
-			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
+			visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
 			icon_state = "incubator"
 
 	if (href_list["ejectbattery"])
-		src.inserted_battery.loc = src.loc
-		src.inserted_battery = null
+		inserted_battery.loc = loc
+		inserted_battery = null
 		cur_artifact.anchored = 0
 
 	if (href_list["drainbattery"])
@@ -223,13 +223,13 @@
 					cur_artifact.anchored = 0
 					icon_state = "incubator_on"
 					var/message = "<b>[src]</b> states, \"Warning, battery charge dump commencing.\""
-					src.visible_message(message)
+					visible_message(message)
 			else
 				var/message = "<b>[src]</b> states, \"Cannot dump energy. Battery is drained of charge already.\""
-				src.visible_message(message)
+				visible_message(message)
 		else
 			var/message = "<b>[src]</b> states, \"Cannot dump energy. No battery inserted.\""
-			src.visible_message(message)
+			visible_message(message)
 
 	if(href_list["close"])
 		usr << browse(null, "window=artharvester")

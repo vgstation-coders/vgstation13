@@ -53,7 +53,7 @@
 	if(!emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
+		user.visible_message("[user.name] emags the [name].","<span class='warning'>You short out the lock.</span>")
 		return 1
 	return -1
 /obj/machinery/power/rust_fuel_injector/attackby(obj/item/W, mob/user)
@@ -64,9 +64,9 @@
 		if(emagged)
 			to_chat(user, "<span class='warning'>The lock seems to be broken</span>")
 			return
-		if(src.allowed(user))
-			src.locked = !src.locked
-			to_chat(user, "The controls are now [src.locked ? "locked." : "unlocked."]")
+		if(allowed(user))
+			locked = !locked
+			to_chat(user, "The controls are now [locked ? "locked." : "unlocked."]")
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
@@ -140,7 +140,7 @@
 
 	if( href_list["emergency_fuel_assembly"] )
 		if(cur_assembly)
-			cur_assembly.loc = src.loc
+			cur_assembly.loc = loc
 			cur_assembly = null
 			//irradiate!
 		else
@@ -240,10 +240,10 @@
 
 		break
 	if(success)
-		src.visible_message("<span class='notice'>[bicon(src)] a green light flashes on [src].</span>")
+		visible_message("<span class='notice'>[bicon(src)] a green light flashes on [src].</span>")
 		updateDialog()
 	else
-		src.visible_message("<span class='warning'>[bicon(src)] a red light flashes on [src].</span>")
+		visible_message("<span class='warning'>[bicon(src)] a red light flashes on [src].</span>")
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_clock()
 	set category = "Object"
@@ -253,7 +253,7 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_anticlock()
 	set category = "Object"
@@ -263,4 +263,4 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)

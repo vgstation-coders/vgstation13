@@ -61,7 +61,7 @@ mob
 			var/icon/I = getFlatIcon(src)
 
 			// Give it a name for the browser cache
-			var/iconName = "[ckey(src.name)]_flattened.dmi"
+			var/iconName = "[ckey(name)]_flattened.dmi"
 			// Send the icon to src's browser cache
 			src<<browse_rsc(I, iconName)
 			// Display the icon in their browser
@@ -74,7 +74,7 @@ mob
 			var/icon/I = getFlatIcon(src, SOUTH)
 
 			// Give it a name for the browser cache
-			var/iconName = "[ckey(src.name)]_flattened.dmi"
+			var/iconName = "[ckey(name)]_flattened.dmi"
 			// Send the icon to src's browser cache
 			src<<browse_rsc(I, iconName)
 			// Display the icon in their browser

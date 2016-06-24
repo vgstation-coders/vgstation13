@@ -75,7 +75,7 @@
 
 /obj/item/weapon/melee/defibrillator/attackby(obj/item/weapon/W,mob/user)
 	if(istype(W,/obj/item/weapon/card/emag))
-		emagged = !src.emagged
+		emagged = !emagged
 		if(emagged)
 			to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
 			overlays += image(icon = icon, icon_state = "defib_emag")
@@ -113,9 +113,9 @@
 	target.emote("scream",,, 1) //If we're going this route, it kinda hurts
 	target.updatehealth()
 	spawn() //Logging
-		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
-		target.attack_log += "\[[time_stamp()]\]<font color='orange'> Shocked by [user.name] ([user.ckey]) with an emagged [src.name]</font>"
-		log_attack("<font color='red'>[user.name] ([user.ckey]) shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>" )
+		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [name]</font>"
+		target.attack_log += "\[[time_stamp()]\]<font color='orange'> Shocked by [user.name] ([user.ckey]) with an emagged [name]</font>"
+		log_attack("<font color='red'>[user.name] ([user.ckey]) shocked [target.name] ([target.ckey]) with an emagged [name]</font>" )
 		if(!iscarbon(user))
 			target.LAssailant = null
 		else

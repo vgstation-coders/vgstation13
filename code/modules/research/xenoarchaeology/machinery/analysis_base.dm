@@ -37,7 +37,7 @@
 	..()
 
 	//for analysis debugging
-	/*var/obj/item/weapon/reagent_containers/glass/solution_tray/S = new(src.loc)
+	/*var/obj/item/weapon/reagent_containers/glass/solution_tray/S = new(loc)
 	var/turf/unsimulated/mineral/diamond/D
 	for(var/turf/unsimulated/mineral/diamond/M in world)
 		D = M
@@ -59,16 +59,16 @@
 		if(scan_process++ > target_scan_ticks)
 			FinishScan()
 		else if(temperature > 400)
-			src.visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>", 2)
+			visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>", 2)
 			scan_process = 0
 		else if(temperature > 350 && prob(10))
-			src.visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>", 2)
+			visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>", 2)
 			if(temperature > 400)
 				scan_process = 0
 
 		//show we're busy
 		if(prob(5))
-			src.visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>", 2)
+			visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>", 2)
 
 		use_power = 2
 
@@ -99,7 +99,7 @@
 			removed.temperature = max(TCMB, removed.temperature + heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", 2)
+				visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", 2)
 
 		else
 			//heat up to match the air
@@ -107,7 +107,7 @@
 			removed.temperature = max(TCMB, removed.temperature - heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", 2)
+				visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", 2)
 
 		env.merge(removed)
 
@@ -118,7 +118,7 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 	user.machine = src
-	var/dat = "<B>[src.name]</B><BR>"
+	var/dat = "<B>[name]</B><BR>"
 
 	dat += {"Module heat level: [temperature] kelvin<br>
 		Safeties set at 350k, shielding failure at 400k. Failure to maintain safe heat levels may result in equipment damage.<br>
@@ -172,14 +172,14 @@ obj/machinery/anomaly/proc/FinishScan()
 
 	//determine the results and print a report
 	if(held_container)
-		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", 2)
-		var/obj/item/weapon/paper/P = new(src.loc)
+		visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", 2)
+		var/obj/item/weapon/paper/P = new(loc)
 		P.name = "[src] report #[++report_num]"
 		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults()
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamped")
 	else
-		src.visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", 2)
+		visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", 2)
 
 obj/machinery/anomaly/Topic(href, href_list)
 	if(..()) return
@@ -188,10 +188,10 @@ obj/machinery/anomaly/Topic(href, href_list)
 		usr << browse(null, "window=anomaly")
 		usr.machine = null
 	if(href_list["eject_beaker"])
-		held_container.loc = src.loc
+		held_container.loc = loc
 		held_container = null
 	if(href_list["eject_fuel"])
-		fuel_container.loc = src.loc
+		fuel_container.loc = loc
 		fuel_container = null
 	if(href_list["begin"])
 		if(temperature >= 350)

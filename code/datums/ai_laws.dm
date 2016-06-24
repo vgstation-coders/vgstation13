@@ -39,79 +39,79 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 /* General ai_law functions */
 
 /datum/ai_laws/proc/set_zeroth_law(var/law, var/law_borg = null)
-	src.zeroth = law
+	zeroth = law
 	if(law_borg) //Making it possible for slaved borgs to see a different law 0 than their AI. --NEO
-		src.zeroth_borg = law_borg
+		zeroth_borg = law_borg
 
 /datum/ai_laws/proc/add_inherent_law(var/law)
-	if (!(law in src.inherent))
-		src.inherent += law
+	if (!(law in inherent))
+		inherent += law
 
 /datum/ai_laws/proc/add_ion_law(var/law)
-	src.ion += law
+	ion += law
 
 /datum/ai_laws/proc/clear_inherent_laws()
-	del(src.inherent)
-	src.inherent = list()
+	del(inherent)
+	inherent = list()
 	inherent_cleared = 1
 
 /datum/ai_laws/proc/add_supplied_law(var/number, var/law)
-	while (src.supplied.len < number + 1)
-		src.supplied += ""
+	while (supplied.len < number + 1)
+		supplied += ""
 
-	src.supplied[number + 1] = law
+	supplied[number + 1] = law
 
 /datum/ai_laws/proc/clear_supplied_laws()
-	src.supplied = list()
+	supplied = list()
 
 /datum/ai_laws/proc/clear_ion_laws()
-	src.ion = list()
+	ion = list()
 
 /datum/ai_laws/proc/show_laws(var/who)
 
 
-	if (src.zeroth)
-		to_chat(who, "0. [src.zeroth]")
+	if (zeroth)
+		to_chat(who, "0. [zeroth]")
 
-	for (var/index = 1, index <= src.ion.len, index++)
-		var/law = src.ion[index]
+	for (var/index = 1, index <= ion.len, index++)
+		var/law = ion[index]
 		var/num = ionnum()
 		to_chat(who, "[num]. [law]")
 
 	var/number = 1
-	for (var/index = 1, index <= src.inherent.len, index++)
-		var/law = src.inherent[index]
+	for (var/index = 1, index <= inherent.len, index++)
+		var/law = inherent[index]
 
 		if (length(law) > 0)
 			to_chat(who, "[number]. [law]")
 			number++
 
-	for (var/index = 1, index <= src.supplied.len, index++)
-		var/law = src.supplied[index]
+	for (var/index = 1, index <= supplied.len, index++)
+		var/law = supplied[index]
 		if (length(law) > 0)
 			to_chat(who, "[number]. [law]")
 			number++
 
 /datum/ai_laws/proc/write_laws()
 	var/text = ""
-	if (src.zeroth)
-		text += "0. [src.zeroth]"
+	if (zeroth)
+		text += "0. [zeroth]"
 
-	for (var/index = 1, index <= src.ion.len, index++)
-		var/law = src.ion[index]
+	for (var/index = 1, index <= ion.len, index++)
+		var/law = ion[index]
 		var/num = ionnum()
 		text += "<br>[num]. [law]"
 
 	var/number = 1
-	for (var/index = 1, index <= src.inherent.len, index++)
-		var/law = src.inherent[index]
+	for (var/index = 1, index <= inherent.len, index++)
+		var/law = inherent[index]
 
 		if (length(law) > 0)
 			text += "<br>[number]. [law]"
 			number++
 
-	for (var/index = 1, index <= src.supplied.len, index++)
-		var/law = src.supplied[index]
+	for (var/index = 1, index <= supplied.len, index++)
+		var/law = supplied[index]
 		if (length(law) > 0)
 			text += "<br>[number]. [law]"
 			number++
@@ -176,24 +176,24 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 /datum/ai_laws/proc/display_admin_tools(var/mob/living/silicon/context)
 	var/dat=""
-	if (src.zeroth)
+	if (zeroth)
 		dat += "<br />0. [adminLink(context,LAW_ZERO,1,zeroth)]"
 
-	for (var/index = 1, index <= src.ion.len, index++)
-		var/law = src.ion[index]
+	for (var/index = 1, index <= ion.len, index++)
+		var/law = ion[index]
 		var/num = ionnum()
 		dat += "<br />[num]. [adminLink(context,LAW_IONIC,index,law)]"
 
 	var/number = 1
-	for (var/index = 1, index <= src.inherent.len, index++)
-		var/law = src.inherent[index]
+	for (var/index = 1, index <= inherent.len, index++)
+		var/law = inherent[index]
 
 		if (length(law) > 0)
 			dat += "<br />[number]. [adminLink(context,LAW_INHERENT,index,law)]"
 			number++
 
-	for (var/index = 1, index <= src.supplied.len, index++)
-		var/law = src.supplied[index]
+	for (var/index = 1, index <= supplied.len, index++)
+		var/law = supplied[index]
 		if (length(law) > 0)
 			dat += "<br />[number]. [adminLink(context,1,index,law)]"
 			number++
@@ -369,7 +369,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You must obey orders given to you by Nanotrasen Employees, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
-	
+
 /datum/ai_laws/celtic
 	name = "Prime Directive"
 	randomly_selectable = 1
@@ -385,4 +385,3 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"Fight for what's right.",
 		"Fight for your life.",
 	)
-	

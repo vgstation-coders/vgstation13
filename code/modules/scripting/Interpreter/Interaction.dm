@@ -16,7 +16,7 @@
 */
 /datum/n_Interpreter/proc/Load(var/datum/node/BlockDefinition/GlobalBlock/program)
 	ASSERT(program)
-	src.program 	= program
+	program 	= program
 	CreateGlobalScope()
 	alertadmins = 0 // reset admin alerts
 
@@ -28,8 +28,8 @@ Runs the script.
 	cur_recursion = 0 // reset recursion
 	cur_statements = 0 // reset CPU tracking
 
-	ASSERT(src.program)
-	RunBlock(src.program)
+	ASSERT(program)
+	RunBlock(program)
 
 /*
 Proc: SetVar

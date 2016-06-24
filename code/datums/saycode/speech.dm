@@ -29,7 +29,7 @@
 /datum/speech/proc/update_speaker(var/atom/movable/new_speaker, var/atom/movable/radio=null)
 	speaker = new_speaker
 	job = speaker.get_job(src)
-	src.radio = radio
+	radio = radio
 	name = new_speaker.GetVoice()
 	as_name = new_speaker.get_alt_name()
 

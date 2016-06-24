@@ -2,10 +2,10 @@
 	set category = "Special Verbs"
 	set name = "Dsay" //Gave this shit a shorter name so you only have to time out "dsay" rather than "dead say" to use it --NeoFite
 	set hidden = 1
-	if(!src.holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	if(!src.mob)
+	if(!mob)
 		return
 	if(prefs.muted & MUTE_DEADCHAT)
 		to_chat(src, "<span class='warning'>You cannot send DSAY messages (muted).</span>")
@@ -15,7 +15,7 @@
 		to_chat(src, "<span class='warning'>You have deadchat muted.</span>")
 		return
 
-	if (src.handle_spam_prevention(msg,MUTE_DEADCHAT))
+	if (handle_spam_prevention(msg,MUTE_DEADCHAT))
 		return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
@@ -24,7 +24,7 @@
 	if (!msg)
 		return
 
-	var/rendered = "<span class='game deadsay'><span class='prefix'>DEAD:</span> <span class='name'>ADMIN([src.holder.fakekey ? pick("BADMIN", "hornigranny", "TLF", "scaredforshadows", "KSI", "Silnazi", "HerpEs", "BJ69", "SpoofedEdd", "Uhangay", "Wario90900", "Regarity", "MissPhareon", "LastFish", "unMportant", "Deurpyn", "Fatbeaver") : src.key])</span> says, <span class='message'>\"[msg]\"</span></span>"
+	var/rendered = "<span class='game deadsay'><span class='prefix'>DEAD:</span> <span class='name'>ADMIN([holder.fakekey ? pick("BADMIN", "hornigranny", "TLF", "scaredforshadows", "KSI", "Silnazi", "HerpEs", "BJ69", "SpoofedEdd", "Uhangay", "Wario90900", "Regarity", "MissPhareon", "LastFish", "unMportant", "Deurpyn", "Fatbeaver") : key])</span> says, <span class='message'>\"[msg]\"</span></span>"
 
 	for (var/mob/M in player_list)
 		if (istype(M, /mob/new_player) || !M.client)

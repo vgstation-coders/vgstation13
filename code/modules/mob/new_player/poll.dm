@@ -6,7 +6,7 @@
 	establish_db_connection()
 	if(dbcon.IsConnected())
 		var/isadmin = 0
-		if(src.client && src.client.holder)
+		if(client && client.holder)
 			isadmin = 1
 
 		var/DBQuery/select_query = dbcon.NewQuery("SELECT id, question FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] Now() BETWEEN starttime AND endtime")

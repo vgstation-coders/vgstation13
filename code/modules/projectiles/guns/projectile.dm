@@ -55,7 +55,7 @@
 
 /obj/item/weapon/gun/projectile/proc/RemoveMag(var/mob/user)
 	if(stored_magazine)
-		stored_magazine.loc = get_turf(src.loc)
+		stored_magazine.loc = get_turf(loc)
 		if(user)
 			user.put_in_hands(stored_magazine)
 			to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
@@ -118,7 +118,7 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
+	if(istype(A, /obj/item/gun_part/silencer) && gun_flags &SILENCECOMP)
 		if(!user.is_holding_item(src))	//if we're not in his hands
 			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 			return

@@ -3,20 +3,20 @@
 	set background = 1
 	if(timestopped) return 0 //under effects of time magick
 
-	if (src.monkeyizing)
+	if (monkeyizing)
 		return
 
-	if (src.stat != 2)
+	if (stat != 2)
 		use_power()
 
-	src.blinded = null
+	blinded = null
 
 	clamp_values()
 
 	handle_regular_status_updates()
 
 	if(client)
-		src.shell = 0
+		shell = 0
 		handle_regular_hud_updates()
 		update_items()
 		if(dependent)
@@ -38,29 +38,29 @@
 
 		use_power()
 
-			if (src.energy)
-				if(src.energy <= 0)
+			if (energy)
+				if(energy <= 0)
 					death()
 
-				else if (src.energy <= 10)
-					src.module_active = null
-					src.module_state_1 = null
-					src.module_state_2 = null
-					src.module_state_3 = null
-					src.energy -=1
+				else if (energy <= 10)
+					module_active = null
+					module_state_1 = null
+					module_state_2 = null
+					module_state_3 = null
+					energy -=1
 				else
-					if(src.module_state_1)
-						src.energy -=1
-					if(src.module_state_2)
-						src.energy -=1
-					if(src.module_state_3)
-						src.energy -=1
-					src.energy -=1
-					src.blinded = 0
-					src.stat = 0
+					if(module_state_1)
+						energy -=1
+					if(module_state_2)
+						energy -=1
+					if(module_state_3)
+						energy -=1
+					energy -=1
+					blinded = 0
+					stat = 0
 			else
-				src.blinded = 1
-				src.stat = 1
+				blinded = 1
+				stat = 1
 
 		update_canmove()
 			if(incapacitated()) canmove = 0
@@ -69,139 +69,139 @@
 
 		handle_regular_status_updates()
 
-			health = src.health_max - (getFireLoss() + getBruteLoss())
+			health = health_max - (getFireLoss() + getBruteLoss())
 
 			if(health <= 0)
 				death()
 
-			if (src.stat != 2) //Alive.
+			if (stat != 2) //Alive.
 
-				if (src.incapacitated()) //Stunned etc.
-					if (src.stunned > 0)
-						src.stunned--
-						src.stat = 0
-					if (src.weakened > 0)
-						src.weakened--
-						src.lying = 0
-						src.stat = 0
-					if (src.paralysis > 0)
-						src.paralysis--
-						src.blinded = 0
-						src.lying = 0
-						src.stat = 1
+				if (incapacitated()) //Stunned etc.
+					if (stunned > 0)
+						stunned--
+						stat = 0
+					if (weakened > 0)
+						weakened--
+						lying = 0
+						stat = 0
+					if (paralysis > 0)
+						paralysis--
+						blinded = 0
+						lying = 0
+						stat = 1
 
 				else	//Not stunned.
-					src.lying = 0
-					src.stat = 0
+					lying = 0
+					stat = 0
 
 			else //Dead.
-				src.blinded = 1
-				src.stat = 2
+				blinded = 1
+				stat = 2
 
-			src.density = !( src.lying )
+			density = !( lying )
 
-			if ((src.sdisabilities & 1))
-				src.blinded = 1
-			if ((src.sdisabilities & 4))
-				src.ear_deaf = 1
+			if ((sdisabilities & 1))
+				blinded = 1
+			if ((sdisabilities & 4))
+				ear_deaf = 1
 
-			if (src.eye_blurry > 0)
-				src.eye_blurry--
-				src.eye_blurry = max(0, src.eye_blurry)
+			if (eye_blurry > 0)
+				eye_blurry--
+				eye_blurry = max(0, eye_blurry)
 
-			if (src.druggy > 0)
-				src.druggy--
-				src.druggy = max(0, src.druggy)
+			if (druggy > 0)
+				druggy--
+				druggy = max(0, druggy)
 
 			return 1
 
 		handle_regular_hud_updates()
 
-			if (src.stat == 2 || M_XRAY in src.mutations)
-				src.sight |= SEE_TURFS
-				src.sight |= SEE_MOBS
-				src.sight |= SEE_OBJS
-				src.see_in_dark = 8
-				src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-			else if (src.stat != 2)
-				src.sight &= ~SEE_MOBS
-				src.sight &= ~SEE_TURFS
-				src.sight &= ~SEE_OBJS
-				src.see_in_dark = 8
-				src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+			if (stat == 2 || M_XRAY in mutations)
+				sight |= SEE_TURFS
+				sight |= SEE_MOBS
+				sight |= SEE_OBJS
+				see_in_dark = 8
+				see_invisible = SEE_INVISIBLE_LEVEL_TWO
+			else if (stat != 2)
+				sight &= ~SEE_MOBS
+				sight &= ~SEE_TURFS
+				sight &= ~SEE_OBJS
+				see_in_dark = 8
+				see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
-			if (src.healths)
-				if (src.stat != 2)
+			if (healths)
+				if (stat != 2)
 					switch(health)
 						if(health_max to INFINITY)
-							src.healths.icon_state = "health0"
-						if(src.health_max*0.80 to src.health_max)
-							src.healths.icon_state = "health1"
-						if(src.health_max*0.60 to src.health_max*0.80)
-							src.healths.icon_state = "health2"
-						if(src.health_max*0.40 to src.health_max*0.60)
-							src.healths.icon_state = "health3"
-						if(src.health_max*0.20 to src.health_max*0.40)
-							src.healths.icon_state = "health4"
+							healths.icon_state = "health0"
+						if(health_max*0.80 to health_max)
+							healths.icon_state = "health1"
+						if(health_max*0.60 to health_max*0.80)
+							healths.icon_state = "health2"
+						if(health_max*0.40 to health_max*0.60)
+							healths.icon_state = "health3"
+						if(health_max*0.20 to health_max*0.40)
+							healths.icon_state = "health4"
 						if(0 to health_max*0.20)
-							src.healths.icon_state = "health5"
+							healths.icon_state = "health5"
 						else
-							src.healths.icon_state = "health6"
+							healths.icon_state = "health6"
 				else
-					src.healths.icon_state = "health7"
+					healths.icon_state = "health7"
 
-			if (src.cells)
-				switch(src.energy)
-					if(src.energy_max*0.75 to INFINITY)
-						src.cells.icon_state = "charge4"
-					if(0.5*src.energy_max to 0.75*src.energy_max)
-						src.cells.icon_state = "charge3"
-					if(0.25*src.energy_max to 0.5*src.energy_max)
-						src.cells.icon_state = "charge2"
-					if(0 to 0.25*src.energy_max)
-						src.cells.icon_state = "charge1"
+			if (cells)
+				switch(energy)
+					if(energy_max*0.75 to INFINITY)
+						cells.icon_state = "charge4"
+					if(0.5*energy_max to 0.75*energy_max)
+						cells.icon_state = "charge3"
+					if(0.25*energy_max to 0.5*energy_max)
+						cells.icon_state = "charge2"
+					if(0 to 0.25*energy_max)
+						cells.icon_state = "charge1"
 					else
-						src.cells.icon_state = "charge0"
+						cells.icon_state = "charge0"
 
-			switch(src.bodytemperature) //310.055 optimal body temp
+			switch(bodytemperature) //310.055 optimal body temp
 
 				if(335 to INFINITY)
-					src.bodytemp.icon_state = "temp2"
+					bodytemp.icon_state = "temp2"
 				if(320 to 335)
-					src.bodytemp.icon_state = "temp1"
+					bodytemp.icon_state = "temp1"
 				if(300 to 320)
-					src.bodytemp.icon_state = "temp0"
+					bodytemp.icon_state = "temp0"
 				if(260 to 300)
-					src.bodytemp.icon_state = "temp-1"
+					bodytemp.icon_state = "temp-1"
 				else
-					src.bodytemp.icon_state = "temp-2"
+					bodytemp.icon_state = "temp-2"
 
 
 			update_pull_icon()
 
-			src.client.screen -= src.hud_used.blurry
-			src.client.screen -= src.hud_used.druggy
-			src.client.screen -= src.hud_used.vimpaired
+			client.screen -= hud_used.blurry
+			client.screen -= hud_used.druggy
+			client.screen -= hud_used.vimpaired
 
-			if ((src.blind && src.stat != 2))
-				if ((src.blinded))
-					src.blind.layer = 18
+			if ((blind && stat != 2))
+				if ((blinded))
+					blind.layer = 18
 				else
-					src.blind.layer = 0
+					blind.layer = 0
 
-					if (src.disabilities & 1)
-						src.client.screen += src.hud_used.vimpaired
+					if (disabilities & 1)
+						client.screen += hud_used.vimpaired
 
-					if (src.eye_blurry)
-						src.client.screen += src.hud_used.blurry
+					if (eye_blurry)
+						client.screen += hud_used.blurry
 
-					if (src.druggy)
-						src.client.screen += src.hud_used.druggy
+					if (druggy)
+						client.screen += hud_used.druggy
 
-			if (src.stat != 2)
-				if (src.machine)
-					if (!( src.machine.check_eye(src) ))
-						src.reset_view(null)
+			if (stat != 2)
+				if (machine)
+					if (!( machine.check_eye(src) ))
+						reset_view(null)
 				else
 					if(!client.adminobs)
 						reset_view(null)
@@ -210,15 +210,15 @@
 
 
 		update_items()
-			if (src.client)
-				src.client.screen -= src.contents
-				src.client.screen += src.contents
-			if(src.module_state_1)
-				src.module_state_1:screen_loc = ui_inv1
-			if(src.module_state_2)
-				src.module_state_2:screen_loc = ui_inv2
-			if(src.module_state_3)
-				src.module_state_3:screen_loc = ui_inv3
+			if (client)
+				client.screen -= contents
+				client.screen += contents
+			if(module_state_1)
+				module_state_1:screen_loc = ui_inv1
+			if(module_state_2)
+				module_state_2:screen_loc = ui_inv2
+			if(module_state_3)
+				module_state_3:screen_loc = ui_inv3
 
 		mainframe_check()
 			if(mainframe)

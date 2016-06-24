@@ -192,9 +192,9 @@
 		if (M.config_tag)
 			if (!(M.config_tag in modes)) // Ensure each mode is added only once.
 				diary << "Adding game mode [M.name] ([M.config_tag]) to configuration."
-				src.modes += M.config_tag
-				src.mode_names[M.config_tag] = M.name
-				src.probabilities[M.config_tag] = M.probability
+				modes += M.config_tag
+				mode_names[M.config_tag] = M.name
+				probabilities[M.config_tag] = M.probability
 
 				if (M.votable)
 					votable_modes += M.config_tag
@@ -231,10 +231,10 @@
 			switch (name)
 				if ("resource_urls")
 					config.resource_urls = splittext(value, " ")
-					
-				if("tts_server")	
+
+				if("tts_server")
 					config.tts_server = value
-					
+
 				if ("admin_legacy_system")
 					config.admin_legacy_system = 1
 

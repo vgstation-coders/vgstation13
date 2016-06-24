@@ -230,9 +230,9 @@ var/list/impact_master = list()
 		else
 			if(!custom_impact)
 				if(silenced)
-					to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
+					to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [name]!</span>")
 				else
-					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+					visible_message("<span class='warning'>[A.name] is hit by the [name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
 				if(!iscarbon(firer))
@@ -297,7 +297,7 @@ var/list/impact_master = list()
 		impact.pixel_x = PixelX
 		impact.pixel_y = PixelY
 
-		var/turf/T = src.loc
+		var/turf/T = loc
 		if(T) //Trying to fix a runtime that happens when a flare hits a window, T somehow becomes null.
 			T.overlays += impact
 
@@ -328,7 +328,7 @@ var/list/impact_master = list()
 			return 1
 		if(penetration_message)
 			A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
-		src.forceMove(get_step(src.loc,dir))
+		forceMove(get_step(loc,dir))
 		if(linear_movement)
 			update_pixel()
 			pixel_x = PixelX
@@ -398,13 +398,13 @@ var/list/impact_master = list()
 			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
 			I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
+		icon = bullet_master["[icon_state]_angle[target_angle]"]
 
 	return 1
 
 /obj/item/projectile/proc/process_step()
 	var/sleeptime = 1
-	if(src.loc)
+	if(loc)
 		if(dist_x > dist_y)
 			sleeptime = bresenham_step(dist_x,dist_y,dx,dy)
 		else
@@ -447,7 +447,7 @@ var/list/impact_master = list()
 		var/atom/step = get_step(src, dB)
 		if(!step)
 			bullet_die()
-		src.Move(step)
+		Move(step)
 		error += distA
 		bump_original_check()
 		return 0//so that bullets going in diagonals don't move twice slower
@@ -455,7 +455,7 @@ var/list/impact_master = list()
 		var/atom/step = get_step(src, dA)
 		if(!step)
 			bullet_die()
-		src.Move(step)
+		Move(step)
 		error -= distB
 		dir = dA
 		if(error < 0)
@@ -465,10 +465,10 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/update_pixel()
 	if(src && starting && target)
-		var/AX = (override_starting_X - src.x)*32
-		var/AY = (override_starting_Y - src.y)*32
-		var/BX = (override_target_X - src.x)*32
-		var/BY = (override_target_Y - src.y)*32
+		var/AX = (override_starting_X - x)*32
+		var/AY = (override_starting_Y - y)*32
+		var/BX = (override_target_X - x)*32
+		var/BY = (override_target_Y - y)*32
 		var/XXcheck = ((BX-AX)*(BX-AX))+((BY-AY)*(BY-AY))
 		if(!XXcheck)
 			return
@@ -513,7 +513,7 @@ var/list/impact_master = list()
 		while((loc.timestopped || timestopped) && !first)
 			sleep(3)
 		first = 0
-		src.process_step()
+		process_step()
 		if(tS)
 			timestopped = loc.timestopped
 			tS = 0
@@ -618,7 +618,7 @@ var/list/impact_master = list()
 			var/icon/I = new(initial(icon),"[icon_state]_pixel")
 			I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
+		icon = bullet_master["[icon_state]_angle[target_angle]"]
 
 /obj/item/projectile/test //Used to see if you can hit them.
 	invisibility = 101 //Nope!  Can't see me!

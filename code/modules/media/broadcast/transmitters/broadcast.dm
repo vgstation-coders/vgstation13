@@ -109,7 +109,7 @@
 			to_chat(user, "<span class='notice'>You repair the blown fuses on [src].</span>")
 
 /obj/machinery/media/transmitter/broadcast/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	attack_hand(user)
 
 /obj/machinery/media/transmitter/broadcast/attack_hand(var/mob/user as mob)

@@ -14,8 +14,8 @@
 
 /obj/machinery/computer/station_alert/New()
 	..()
-	if(src.z != map.zMainStation)
-		var/area/A = src.areaMaster
+	if(z != map.zMainStation)
+		var/area/A = areaMaster
 		if(!A)
 			A = get_area(src)
 		if(!A)
@@ -41,7 +41,7 @@
 		A.send_poweralert(src)
 
 /obj/machinery/computer/station_alert/attack_ai(mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	add_fingerprint(user)
 	if(stat & (BROKEN|NOPOWER))
 		return
@@ -62,9 +62,9 @@
 
 	var/dat = {"<HEAD><TITLE>Current [general_area_name] Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n
 	<A HREF='?src=\ref[user];mach_close=alerts'>Close</A><br><br>"}
-	for (var/cat in src.alarms)
+	for (var/cat in alarms)
 		dat += text("<B>[]</B><BR>\n", cat)
-		var/list/L = src.alarms[cat]
+		var/list/L = alarms[cat]
 		if (L.len)
 			for (var/alarm in L)
 				var/list/alm = L[alarm]
@@ -93,7 +93,7 @@
 /obj/machinery/computer/station_alert/proc/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(stat & (BROKEN))
 		return
-	var/list/L = src.alarms[class]
+	var/list/L = alarms[class]
 	for (var/I in L)
 		if (I == A.name)
 			var/list/alarm = L[I]
@@ -116,7 +116,7 @@
 /obj/machinery/computer/station_alert/proc/cancelAlarm(var/class, area/A as area, obj/origin)
 	if(stat & (BROKEN))
 		return
-	var/list/L = src.alarms[class]
+	var/list/L = alarms[class]
 	var/cleared = 0
 	for (var/I in L)
 		if (I == A.name)
@@ -138,8 +138,8 @@
 		icon_state = "atmosb"
 		return
 	var/active_alarms = 0
-	for (var/cat in src.alarms)
-		var/list/L = src.alarms[cat]
+	for (var/cat in alarms)
+		var/list/L = alarms[cat]
 		if(L.len) active_alarms = 1
 	if(active_alarms)
 		icon_state = "alert:2"

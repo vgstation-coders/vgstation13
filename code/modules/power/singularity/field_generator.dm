@@ -76,7 +76,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 			update_icon()
 		Varedit_start = 0
 
-	if(src.active == 2)
+	if(active == 2)
 		calc_power()
 		update_icon()
 	return
@@ -88,17 +88,17 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 
 	if(state == 2)
 		if(get_dist(src, user) <= 1)//Need to actually touch the thing to turn it on
-			if(src.active >= 1)
-				to_chat(user, "You are unable to turn off the [src.name] once it is online.")
+			if(active >= 1)
+				to_chat(user, "You are unable to turn off the [name] once it is online.")
 				return 1
 			else
-				user.visible_message("[user.name] turns on the [src.name]", \
-					"You turn on the [src.name].", \
+				user.visible_message("[user.name] turns on the [name]", \
+					"You turn on the [name].", \
 					"You hear heavy droning")
 				turn_on()
 				investigation_log(I_SINGULO,"<font color='green'>activated</font> by [user.key].")
 
-				src.add_fingerprint(user)
+				add_fingerprint(user)
 	else
 		to_chat(user, "The [src] needs to be firmly secured to the floor first.")
 		return 0
@@ -137,7 +137,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 
 
 /obj/machinery/field_generator/Destroy()
-	src.cleanup()
+	cleanup()
 	field_gen_list -= src
 	..()
 
@@ -146,7 +146,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 /obj/machinery/field_generator/proc/turn_off()
 	active = 0
 	spawn(1)
-		src.cleanup()
+		cleanup()
 	update_icon()
 
 /obj/machinery/field_generator/proc/turn_on()
@@ -167,8 +167,8 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 		return 1
 
 	update_icon()
-	if(src.power > field_generator_max_power)
-		src.power = field_generator_max_power
+	if(power > field_generator_max_power)
+		power = field_generator_max_power
 
 	var/power_draw = 2
 	for (var/obj/machinery/containment_field/F in fields)
@@ -179,10 +179,10 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 		return 1
 	else
 		for(var/mob/M in viewers(src))
-			M.show_message("<span class='warning'>The [src.name] shuts down!</span>")
+			M.show_message("<span class='warning'>The [name] shuts down!</span>")
 		turn_off()
 		investigation_log(I_SINGULO,"ran out of power and <font color='red'>deactivated</font>")
-		src.power = 0
+		power = 0
 		return 0
 
 //This could likely be better, it tends to start loopin if you have a complex generator loop setup.  Still works well enough to run the engine fields will likely recode the field gens and fields sometime -Mport
@@ -193,12 +193,12 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 		return 0
 	else
 		failsafe++
-	if(src.power >= draw)//We have enough power
-		src.power -= draw
+	if(power >= draw)//We have enough power
+		power -= draw
 		return 1
 	else//Need more power
-		draw -= src.power
-		src.power = 0
+		draw -= power
+		power = 0
 		for(var/obj/machinery/field_generator/FG in connected_gens)
 			if(isnull(FG))
 				continue
@@ -217,7 +217,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 
 
 /obj/machinery/field_generator/proc/start_fields()
-	if(!src.state == 2 || !anchored)
+	if(!state == 2 || !anchored)
 		turn_off()
 		return
 	spawn(1)
@@ -228,11 +228,11 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 		setup_field(4)
 	spawn(4)
 		setup_field(8)
-	src.active = 2
+	active = 2
 
 
 /obj/machinery/field_generator/proc/setup_field(var/NSEW)
-	var/turf/T = src.loc
+	var/turf/T = loc
 	var/obj/machinery/field_generator/G
 	var/steps = 0
 	if(!NSEW)//Make sure its ran right
@@ -256,7 +256,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 			break
 	if(isnull(G))
 		return
-	T = src.loc
+	T = loc
 	for(var/dist = 0, dist < steps, dist += 1) // creates each field tile
 		var/field_dir = get_dir(T,get_step(G.loc, NSEW))
 		T = get_step(T, NSEW)

@@ -14,7 +14,7 @@
 			to_chat(src, "Available emotes: aflap, bow, clap, custom, flap, twitch, twitch_s, salute, nod, deathgasp, me, glare, stare, shrug, beep, ping, buzz, look")
 			return
 		if ("salute")
-			//if (!src.locked_to)
+			//if (!locked_to)
 			var/M = null
 			if (param)
 				for (var/mob/A in view(null, null))
@@ -30,7 +30,7 @@
 				message = "<B>[src]</b> salutes."
 			m_type = VISIBLE
 		if ("bow")
-			if (!src.locked_to)
+			if (!locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -62,16 +62,16 @@
 			m_type = VISIBLE
 
 		if ("clap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> clangs \his utility claws together in a crude simulation of applause."
 				m_type = HEARABLE
 		if ("flap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> flaps \his utility arms as through they were wings."
 				m_type = HEARABLE
 
 		if ("aflap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> flaps his utility arms ANGRILY!"
 				m_type = HEARABLE
 
@@ -90,11 +90,11 @@
 			message = "<B>[src]</B> [input]"
 
 		if ("me")
-			if (src.client)
+			if (client)
 				if(client.prefs.muted & MUTE_IC)
 					to_chat(src, "You cannot send IC messages (muted).")
 					return
-				if (src.client.handle_spam_prevention(message,MUTE_IC))
+				if (client.handle_spam_prevention(message,MUTE_IC))
 					return
 			if (stat)
 				return
@@ -236,7 +236,7 @@
 
 		else
 //			to_chat(custom_emote(VISIBLE, act) src, text("Invalid Emote: [], use *help", act))
-	if ((message && src.stat == 0))
+	if ((message && stat == 0))
 		if (m_type & 1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)

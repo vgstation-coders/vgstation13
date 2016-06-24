@@ -63,15 +63,15 @@
 /mob/living/silicon/robot/var/updating = 0
 
 /mob/living/silicon/robot/Move()
-	var/oldLoc = src.loc
+	var/oldLoc = loc
 	. = ..()
 	if(.)
-		if(src.camera)
+		if(camera)
 			if(!updating)
 				updating = 1
 				spawn(BORG_CAMERA_BUFFER)
-					if(oldLoc != src.loc)
-						cameranet.updatePortableCamera(src.camera)
+					if(oldLoc != loc)
+						cameranet.updatePortableCamera(camera)
 					updating = 0
 
 // CAMERA
@@ -80,10 +80,10 @@
 
 /obj/machinery/camera/deactivate(user as mob, var/choice = 1)
 	..(user, choice)
-	if(src.can_use())
+	if(can_use())
 		cameranet.addCamera(src)
 	else
-		src.set_light(0)
+		set_light(0)
 		cameranet.removeCamera(src)
 
 /obj/machinery/camera/New()

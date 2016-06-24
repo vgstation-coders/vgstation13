@@ -42,7 +42,7 @@
 
 
 /obj/machinery/computer/gravity_control_computer/proc/updatemodules()
-	src.gravity_generator = findgenerator()
+	gravity_generator = findgenerator()
 
 
 
@@ -140,5 +140,5 @@
 				gravity_generator:on = 1
 				A.gravitychange(1,A)
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return

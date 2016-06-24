@@ -60,7 +60,7 @@
 				L.Add(D)
 
 	attack_ai(mob/user)
-		src.add_hiddenprint(user)
+		add_hiddenprint(user)
 		attack_hand(user)
 
 	attack_hand(mob/user)
@@ -151,4 +151,4 @@
 					spawn(0)
 						D.close()
 
-		src.updateDialog()
+		updateDialog()

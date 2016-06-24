@@ -320,14 +320,14 @@
 
 /obj/machinery/singularity/proc/consume(const/atom/A)
 	var/gain = A.singularity_act(current_size,src)
-	src.energy += gain
+	energy += gain
 	/*if(istype(A, /obj/))
 		if(isbot(A))
 			var/obj/machinery/bot/B = A
 			if(B.flags & INVULNERABLE)
 				return
 			else
-				src.energy += 20000//Instantly sends it to max size
+				energy += 20000//Instantly sends it to max size
 				SetUniversalState(/datum/universal_state/supermatter_cascade) //AND NOW YOU'RE FUCKED
 			expand(11, 1)
 			var/prints=""
@@ -398,7 +398,7 @@
 	else
 		steps = step
 	var/list/turfs = list()
-	var/turf/T = src.loc
+	var/turf/T = loc
 	for(var/i = 1 to steps)
 		T = get_step(T, direction)
 	if(!isturf(T))
@@ -471,11 +471,11 @@
 	var/toxdamage = 4
 	var/radiation = 15
 	var/radiationmin = 3
-	if(src.energy > 200)
-		toxdamage = round(((src.energy-150)/50)*4,1)
-		radiation = round(((src.energy-150)/50)*5,1)
+	if(energy > 200)
+		toxdamage = round(((energy-150)/50)*4,1)
+		radiation = round(((energy-150)/50)*5,1)
 		radiationmin = round((radiation/5),1)
-	for(var/mob/living/M in view(toxrange, src.loc))
+	for(var/mob/living/M in view(toxrange, loc))
 		if(M.flags & INVULNERABLE)
 			continue
 		M.apply_effect(rand(radiationmin,radiation), IRRADIATE)
@@ -509,7 +509,7 @@
 		empulse(src, 12, 16)
 
 /obj/machinery/singularity/proc/smwave()
-	for(var/mob/living/M in view(10, src.loc))
+	for(var/mob/living/M in view(10, loc))
 		if(prob(67))
 			M.apply_effect(rand(energy), IRRADIATE)
 			to_chat(M, "<span class='warning'>You hear an uneartly ringing, then what sounds like a shrilling kettle as you are washed with a wave of heat.</span>")
@@ -555,7 +555,7 @@
 	if(other_size >= current_size)
 		var/gain = (energy/2)
 		var/dist = max((current_size - 2), 1)
-		explosion(src.loc,(dist),(dist*2),(dist*4))
+		explosion(loc,(dist),(dist*2),(dist*4))
 		qdel(src)
 		return(gain)
 	return

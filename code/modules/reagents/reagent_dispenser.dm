@@ -19,7 +19,7 @@
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswrench(W) && wrenchable())
 		return wrenchAnchor(user)
-		
+
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It contains:</span>")
@@ -48,12 +48,12 @@
 			return
 		if(2.0)
 			if (prob(50))
-				new /obj/effect/effect/water(src.loc)
+				new /obj/effect/effect/water(loc)
 				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
-				new /obj/effect/effect/water(src.loc)
+				new /obj/effect/effect/water(loc)
 				qdel(src)
 				return
 		else
@@ -61,7 +61,7 @@
 
 /obj/structure/reagent_dispensers/blob_act()
 	if(prob(50))
-		new /obj/effect/effect/water(src.loc)
+		new /obj/effect/effect/water(loc)
 		qdel(src)
 
 /obj/structure/reagent_dispensers/New()
@@ -169,7 +169,7 @@
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
 				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
 			else
-				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
+				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)") //BS12 EDIT ALG
 			explode()
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
@@ -190,11 +190,11 @@
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
 	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4)
+		explosion(loc,1,2,4)
 	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3)
+		explosion(loc,0,1,3)
 	else
-		explosion(src.loc,-1,1,2)
+		explosion(loc,-1,1,2)
 	if(src)
 		qdel(src)
 
@@ -231,7 +231,7 @@
 	. = ..()
 	reagents.add_reagent(WATER, addedliquid)
 	desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
-	
+
 /obj/structure/reagent_dispensers/water_cooler/wrenchable()
 	return 1
 
@@ -249,7 +249,7 @@
 	if (iswelder(I))
 		var/obj/item/weapon/weldingtool/WT = I
 		if(WT.remove_fuel(0, user))
-			new /obj/item/stack/sheet/mineral/plastic (src.loc,4)
+			new /obj/item/stack/sheet/mineral/plastic (loc,4)
 			qdel(src)
 			return
 	else
@@ -265,7 +265,7 @@
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
 	reagents.add_reagent(BEER, 1000)
-	
+
 /obj/structure/reagent_dispensers/beerkeg/wrenchable()
 	return 1
 
@@ -279,7 +279,7 @@
 /obj/structure/reagent_dispensers/bloodkeg/New()
 	. = ..()
 	reagents.add_reagent(BLOOD, 1000)
-	
+
 /obj/structure/reagent_dispensers/bloodkeg/wrenchable()
 	return 1
 
@@ -287,7 +287,7 @@
 	return
 
 /obj/structure/reagent_dispensers/beerkeg/blob_act()
-	explosion(src.loc,0,3,5,7,10)
+	explosion(loc,0,3,5,7,10)
 	qdel(src)
 
 /obj/structure/reagent_dispensers/virusfood
@@ -340,4 +340,4 @@
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
-		
+

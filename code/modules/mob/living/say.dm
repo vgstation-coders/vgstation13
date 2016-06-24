@@ -212,7 +212,7 @@ var/list/department_radio_keys = list(
 		rendered_message = speech.message
 	if(!client)
 		return
-	say_testing(src, "[src] ([src.type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")
+	say_testing(src, "[src] ([type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")
 	var/deaf_message
 	var/deaf_type
 	var/type = 2
@@ -316,7 +316,7 @@ var/list/department_radio_keys = list(
 			if(construct_chat_check(1)) /*sending check for humins*/
 				var/turf/T = get_turf(src)
 				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
-				var/themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
+				var/themessage = text("<span class='sinister'><b>[]:</b> []</span>",name,html_encode(speech.message))
 				for(var/mob/M in player_list)
 					if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
@@ -329,7 +329,7 @@ var/list/department_radio_keys = list(
 				var/obj/item/commstone/commstone = stone[1]
 				if(commstone.commdevice)
 					var/list/stones = commstone.commdevice.get_active_stones()
-					var/themessage = text("<span class='ancient'>Ancient communication, <b>[]:</b> []</span>",src.name,html_encode(speech.message))
+					var/themessage = text("<span class='ancient'>Ancient communication, <b>[]:</b> []</span>",name,html_encode(speech.message))
 					var/turf/T = get_turf(src)
 					log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Ancient chat: [html_encode(speech.message)]")
 					for(var/thestone in stones)

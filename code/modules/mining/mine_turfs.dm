@@ -74,7 +74,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			if(prob(spreadChance))
 				if(istype(get_step(src, trydir), /turf/unsimulated/mineral/random))
 					var/turf/unsimulated/mineral/T = get_step(src, trydir)
-					var/turf/unsimulated/mineral/M = new src.type(T)
+					var/turf/unsimulated/mineral/M = new type(T)
 					//keep any digsite data as constant as possible
 					if(T.finds.len && !M.finds.len)
 						M.finds = T.finds
@@ -131,20 +131,20 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				artifact_find = new()
 				artifact_spawning_turfs.Add(src)
 
-		if(!src.geological_data)
-			src.geological_data = new/datum/geosample(src)
-		src.geological_data.UpdateTurf(src)
+		if(!geological_data)
+			geological_data = new/datum/geosample(src)
+		geological_data.UpdateTurf(src)
 
 		//for excavated turfs placeable in the map editor
 		/*if(excavation_level > 0)
 			if(excavation_level < 25)
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv1_[rand(1,3)]")
+				overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv1_[rand(1,3)]")
 			else if(excavation_level < 50)
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv2_[rand(1,3)]")
+				overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv2_[rand(1,3)]")
 			else if(excavation_level < 75)
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv3_[rand(1,3)]")
+				overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv3_[rand(1,3)]")
 			else
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv4_[rand(1,3)]")
+				overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv4_[rand(1,3)]")
 			desc = "It appears to be partially excavated."*/
 
 	return
@@ -581,19 +581,19 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return
 
 /turf/unsimulated/floor/asteroid/proc/updateMineralOverlays()
-	src.overlays.len = 0
+	overlays.len = 0
 	spawn(1)
 		for(var/dir in cardinal)
 			if(istype(get_step(src,dir), /turf/unsimulated/mineral))
 				switch(dir)
 					if(NORTH)
-						src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
+						overlays += image('icons/turf/walls.dmi', "rock_side_n")
 					if(SOUTH)
-						src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
+						overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
 					if(EAST)
-						src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
+						overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
 					if(WEST)
-						src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
+						overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
 
 /turf/unsimulated/floor/asteroid/proc/fullUpdateMineralOverlays()
 	var/turf/unsimulated/floor/asteroid/A
@@ -621,7 +621,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(istype(get_step(src, SOUTH), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, SOUTH)
 		A.updateMineralOverlays()
-	src.updateMineralOverlays()
+	updateMineralOverlays()
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
@@ -868,7 +868,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/bump_reject = 0
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if((istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) && src.stage == 1)
+		if((istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) && stage == 1)
 			to_chat(H, "<span class='warning'>You don't think that's a good idea...</span>")
 			bump_reject = 1
 
@@ -894,8 +894,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		user.visible_message("<span class='notice'>You use [I] to locate where to cut off the chain reaction and attempt to stop it...</span>")
 		defuse()
 	if(istype(I, /obj/item/weapon/pickaxe))
-		src.activated_ckey = "[user.ckey]"
-		src.activated_name = "[user.name]"
+		activated_ckey = "[user.ckey]"
+		activated_name = "[user.name]"
 	..()
 
 /turf/unsimulated/mineral/gibtonite/proc/explosive_reaction()
@@ -907,7 +907,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		visible_message("<span class='warning'>There was gibtonite inside! It's going to explode!</span>")
 		var/turf/bombturf = get_turf(src)
 		var/area/A = get_area(bombturf)
-		var/log_str = "[src.activated_ckey]<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A> [src.activated_name] has triggered a gibtonite deposit reaction <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
+		var/log_str = "[activated_ckey]<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A> [activated_name] has triggered a gibtonite deposit reaction <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
 		log_game(log_str)
 		countdown()
 
@@ -930,7 +930,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		stage = 2
 		if(det_time < 0)
 			det_time = 0
-		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
+		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [det_time] reactions left till the explosion!</span>")
 
 /turf/unsimulated/mineral/gibtonite/GetDrilled()
 	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
@@ -972,9 +972,9 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	// If length (arg2) isn't defined, get a random length; otherwise assign our length to the length arg.
 	if(!length)
-		src.length = rand(25, 50)
+		length = rand(25, 50)
 	else
-		src.length = length
+		length = length
 
 	// Get our directiosn
 	var/forward_cave_dir = pick(alldirs - exclude_dir)
@@ -1015,10 +1015,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(istype(tunnel))
 			// Small chance to have forks in our tunnel; otherwise dig our tunnel.
 			if(i > 3 && prob(20))
-				new src.type(tunnel, rand(10, 15), 0, dir)
+				new type(tunnel, rand(10, 15), 0, dir)
 			else
 				SpawnFloor(tunnel)
-		else //if(!istype(tunnel, src.parent)) // We hit space/normal/wall, stop our tunnel.
+		else //if(!istype(tunnel, parent)) // We hit space/normal/wall, stop our tunnel.
 			break
 
 		// Chance to change our direction left or right.
@@ -1058,18 +1058,18 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/asteroid/canBuildLattice()
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
-	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
 	else if(!(locate(/obj/structure/lattice) in contents))
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/asteroid/canBuildPlating()
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
-	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
 	else if(!dug)
 		return BUILD_IGNORE

@@ -14,7 +14,7 @@
 	attack_verb = list("flogs", "whips", "lashes", "disciplines")
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [name]! It looks like \he's trying to commit suicide.</span>")
 		return (OXYLOSS)
 
 /obj/item/weapon/melee/morningstar

@@ -146,9 +146,9 @@
 /datum/rcd_schematic/con_airlock/get_HTML(var/obj/machinery/door/airlock/D)
 	. = "<p>"
 	. += {"
-		
+
 		<form action="?src=\ref[master.interface]" method="get">
-			<input type="hidden" name="src" value="\ref[master.interface]"/> 
+			<input type="hidden" name="src" value="\ref[master.interface]"/>
 			[istype(D) ? "<input type=\"hidden\" name = \"target\" value=\"\ref[D]\"/>" : ""]
 			<input type="text" name="new_name" value="[istype(D) ? D.name : selected_name]"/>
 			<input type="submit" name="act" value="Save Name"/>
@@ -177,7 +177,7 @@
 
 
 		<form action="?src=\ref[master.interface]" method="get" id="accessList" style="display:inline-block;font-size:100%">
-			<input type="hidden" name="src" value="\ref[master.interface]"/> 
+			<input type="hidden" name="src" value="\ref[master.interface]"/>
 			[istype(D) ? "<input type=\"hidden\" name = \"target\" value=\"\ref[D]\"/>" : ""]
 			<input type="submit" value="Save Access Settings"/><br/><br/>
 
@@ -295,7 +295,7 @@
 				return
 		var/list/new_access = new
 		//Along with oneAccess, the hrefs for access levels get called, as such we process them here before we return 1
-		
+
 		var/list/access_levels = get_all_accesses()
 
 		for(var/href_key in href_list - list("oneAccess", "src"))	//This should loop through all the access levels that are on.
@@ -315,7 +315,7 @@
 			else
 				D.req_access = new_access.Copy()
 				D.req_one_access.Cut()
-		
+
 		master.update_options_menu(list2params(list(D)))
 		return 1
 
@@ -373,7 +373,7 @@
 
 /datum/selection_schematic/New(var/master)
 	..()
-	src.master = master
+	master = master
 	ourobj = getFromPool(/obj/screen/schematics, null, src)
 
 /datum/selection_schematic/Destroy()

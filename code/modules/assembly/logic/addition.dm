@@ -26,7 +26,7 @@
 		pulse_counter = 0
 		pulse()
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 #define add_counter_href(amount) "<a href='?src=\ref[src];add_counter=[amount]'>"
 #define sub_counter_href(amount) "<a href='?src=\ref[src];sub_counter=[amount]'>"

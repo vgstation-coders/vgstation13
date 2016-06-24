@@ -291,7 +291,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			to_chat(SA, "<span class='warning'>The nullrod's power interferes with your own!</span>")
 			return 0
 
-	if(!src.check_charge(skipcharge, user)) //sees if we can cast based on charges alone
+	if(!check_charge(skipcharge, user)) //sees if we can cast based on charges alone
 		return 0
 
 	if(!(spell_flags & GHOSTCAST) && holder == user)
@@ -329,7 +329,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		switch(charge_type)
 			if(Sp_RECHARGE)
 				charge_counter = 0 //doesn't start recharging until the targets selecting ends
-				src.process()
+				process()
 				return 1
 			if(Sp_CHARGES)
 				charge_counter-- //returns the charge if the targets selecting fails

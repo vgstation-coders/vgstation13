@@ -12,7 +12,7 @@
 /mob/living/carbon/human/var/list/datum/medical_effect/side_effects = list()
 /mob/proc/add_side_effect(name, strength = 0)
 /mob/living/carbon/human/add_side_effect(name, strength = 0)
-	for(var/datum/medical_effect/M in src.side_effects) if(M.name == name)
+	for(var/datum/medical_effect/M in side_effects) if(M.name == name)
 		M.strength = max(M.strength, 10)
 		return
 
@@ -25,17 +25,17 @@
 			side_effects += M
 
 /mob/living/carbon/human/proc/handle_medical_side_effects()
-	if(src.reagents.has_reagent(CRYOXADONE) || src.reagents.get_reagent_amount(BICARIDINE) >= 15 || src.reagents.get_reagent_amount(TRICORDRAZINE) >= 15)
-		src.add_side_effect("Headache")
+	if(reagents.has_reagent(CRYOXADONE) || reagents.get_reagent_amount(BICARIDINE) >= 15 || reagents.get_reagent_amount(TRICORDRAZINE) >= 15)
+		add_side_effect("Headache")
 
-	if(src.reagents.get_reagent_amount(KELOTANE) >= 30 || src.reagents.get_reagent_amount(DERMALINE) >= 15)
-		src.add_side_effect("Bad Stomach")
+	if(reagents.get_reagent_amount(KELOTANE) >= 30 || reagents.get_reagent_amount(DERMALINE) >= 15)
+		add_side_effect("Bad Stomach")
 
-	if(src.reagents.get_reagent_amount(TRAMADOL) >= 16 || src.reagents.get_reagent_amount(ANTI_TOXIN) >= 30)
-		src.add_side_effect("Cramps")
+	if(reagents.get_reagent_amount(TRAMADOL) >= 16 || reagents.get_reagent_amount(ANTI_TOXIN) >= 30)
+		add_side_effect("Cramps")
 
-	if(src.reagents.get_reagent_amount(SPACE_DRUGS) >= 10)
-		src.add_side_effect("Itch")
+	if(reagents.get_reagent_amount(SPACE_DRUGS) >= 10)
+		add_side_effect("Itch")
 
 	// One full cycle(in terms of strength) every 10 minutes
 	var/strength_percent = sin(life_tick / 2)

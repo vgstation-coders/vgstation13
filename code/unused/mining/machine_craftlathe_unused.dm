@@ -105,7 +105,7 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 	if(..())
 		return
 	usr.machine = src
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["remove"])
 		var/n = text2num(href_list["remove"])
 		if(!n || n < 1 || n > 9)
@@ -123,26 +123,26 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 		if(selected)
 			current_recipe[n] = selected.id
 	if(href_list["make"])
-		var/datum/craftlathe_item/MAKE = check_craftlathe_recipe(src.current_recipe)
+		var/datum/craftlathe_item/MAKE = check_craftlathe_recipe(current_recipe)
 		if(MAKE)
 			for (var/datum/craftlathe_item/CI2 in craft_contents)
 				if(CI2.id == MAKE.id)
 					CI2.amount += CI2.amount_attackby
-					src.updateUsrDialog()
+					updateUsrDialog()
 					return
 			craft_contents += new/datum/craftlathe_item(MAKE.id,MAKE.name,MAKE.amount,MAKE.amount_attackby,MAKE.recipe,MAKE.item_type)
-	var/datum/craftlathe_item/CI = check_craftlathe_recipe(src.current_recipe)
+	var/datum/craftlathe_item/CI = check_craftlathe_recipe(current_recipe)
 	if(CI)
 		make = CI
 	else
 		make = null
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 
 
 /obj/machinery/autolathe2/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	usr.machine = src
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	for (var/datum/craftlathe_item/CI in CRAFT_ITEMS)
 		if(W.type == CI.item_type)
 			for (var/datum/craftlathe_item/CI2 in craft_contents)
@@ -153,7 +153,7 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 			craft_contents += new/datum/craftlathe_item(CI.id,CI.name,CI.amount,CI.amount_attackby,CI.recipe,CI.item_type)
 			rmv_item(W)
 			return
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/machinery/autolathe2/proc/rmv_item(obj/item/W as obj)

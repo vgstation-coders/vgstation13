@@ -40,9 +40,9 @@
 	if(target in user) return
 	if(!proximity_flag) return
 
-	user.attack_log += "\[[time_stamp()]\] <font color='blue'>Has used [src.name] on \ref[target]</font>"
+	user.attack_log += "\[[time_stamp()]\] <font color='blue'>Has used [name] on \ref[target]</font>"
 	target.add_fingerprint(user)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 	if(istype(target, /obj/item) && smallpath)
 		if (amount >= 1)
@@ -84,13 +84,13 @@
 				H.client.eye = present
 			H.visible_message("<span class='warning'>[user] finishes wrapping [H]!</span>")
 			H.forceMove(present)
-			H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wrapped with [src.name]  by [user.name] ([user.ckey])</font>")
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to wrap [H.name] ([H.ckey])</font>")
+			H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wrapped with [name]  by [user.name] ([user.ckey])</font>")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to wrap [H.name] ([H.ckey])</font>")
 			if(!iscarbon(user))
 				H.LAssailant = null
 			else
 				H.LAssailant = user
-			log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to wrap [H.name] ([H.ckey])</font>")
+			log_attack("<font color='red'>[user.name] ([user.ckey]) used the [name] to wrap [H.name] ([H.ckey])</font>")
 			use(2)
 			return 1
 	else
@@ -129,7 +129,7 @@
 /obj/item/delivery/Destroy()
 	..()
 	if(wrapped)
-		wrapped.forceMove(get_turf(src.loc))
+		wrapped.forceMove(get_turf(loc))
 
 /obj/item/delivery/attack_self(mob/user as mob)
 	if(wrapped)
@@ -143,14 +143,14 @@
 	if(istype(W, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/O = W
 
-		if(src.sortTag != O.currTag)
+		if(sortTag != O.currTag)
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
 			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
 			overlays = 0
 			overlays += image(icon = icon, icon_state = "deliverytag")
-			src.desc = "A small wrapped package. It has a label reading [tag]"
+			desc = "A small wrapped package. It has a label reading [tag]"
 
 	else if(istype(W, /obj/item/weapon/pen))
 		var/str = copytext(sanitize(input(user,"Label text?","Set label","")),1,MAX_NAME_LEN)
@@ -160,7 +160,7 @@
 			return
 		for(var/mob/M in viewers())
 			to_chat(M, "<span class='notice'>[user] labels [src] as [str].</span>")
-		src.name = "[src.name] ([str])" //also needs updating
+		name = "[name] ([str])" //also needs updating
 
 /obj/item/delivery/large
 	desc = "A big wrapped package."
@@ -180,7 +180,7 @@
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
 	if(wrapped)
-		wrapped.forceMove(get_turf(src.loc))
+		wrapped.forceMove(get_turf(loc))
 	qdel(src)
 
 /obj/item/delivery/large/attack_robot(mob/user)

@@ -55,14 +55,14 @@
 		to_chat(M, "<span class='danger'>BANG</span>")
 		playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
 
-	if((get_dist(M, T) <= 2 || src.loc == M.loc || src.loc == M))
+	if((get_dist(M, T) <= 2 || loc == M.loc || loc == M))
 		if(ear_safety > 0)
 			M.Stun(2)
 			M.Weaken(2)
 		else
 			M.Stun(10)
 			M.Weaken(10)
-			if ((prob(14) || (M == src.loc && prob(70))))
+			if ((prob(14) || (M == loc && prob(70))))
 				M.ear_damage += rand(1, 10)
 			else
 				M.ear_damage += rand(0, 5)
@@ -127,12 +127,12 @@
 
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
-			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)//Launches flashbangs
+			new /obj/item/weapon/grenade/flashbang/cluster(loc)//Launches flashbangs
 			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
 
 	for(,again > 0, again--)
 		spawn(0)
-			new /obj/item/weapon/grenade/flashbang/clusterbang/segment(src.loc)//Creates a 'segment' that launches a few more flashbangs
+			new /obj/item/weapon/grenade/flashbang/clusterbang/segment(loc)//Creates a 'segment' that launches a few more flashbangs
 			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
@@ -149,7 +149,7 @@
 	active = 1
 	banglet = 1
 	var/stepdist = rand(1,4)//How far to step
-	var/temploc = src.loc//Saves the current location to know where to step away from
+	var/temploc = loc//Saves the current location to know where to step away from
 	walk_away(src,temploc,stepdist)//I must go, my people need me
 	var/dettime = rand(15,60)
 	spawn(dettime)
@@ -164,7 +164,7 @@
 
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
-			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)
+			new /obj/item/weapon/grenade/flashbang/cluster(loc)
 			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
@@ -176,7 +176,7 @@
 		active = 1
 		banglet = 1
 		var/stepdist = rand(1,3)
-		var/temploc = src.loc
+		var/temploc = loc
 		walk_away(src,temploc,stepdist)
 		var/dettime = rand(15,60)
 		spawn(dettime)

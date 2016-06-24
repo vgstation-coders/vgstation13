@@ -19,7 +19,7 @@
 	return
 
 /obj/machinery/suspension_gen/New()
-	src.cell = new/obj/item/weapon/cell/high(src)
+	cell = new/obj/item/weapon/cell/high(src)
 	..()
 
 /obj/machinery/suspension_gen/process()
@@ -290,7 +290,7 @@
 
 	suspension_field = new(T)
 	suspension_field.field_type = field_type
-	src.visible_message("<span class='notice'>[bicon(src)] [src] activates with a low hum.</span>")
+	visible_message("<span class='notice'>[bicon(src)] [src] activates with a low hum.</span>")
 	icon_state = "suspension3"
 
 	for(var/obj/item/I in T)
@@ -300,7 +300,7 @@
 	if(collected)
 		suspension_field.icon_state = "energynet"
 		suspension_field.overlays += image(icon = suspension_field.icon, icon_state = "shield2")
-		src.visible_message("<span class='notice'>[bicon(suspension_field)] [suspension_field] gently absconds [collected > 1 ? "something" : "several things"].</span>")
+		visible_message("<span class='notice'>[bicon(suspension_field)] [suspension_field] gently absconds [collected > 1 ? "something" : "several things"].</span>")
 	else
 		if(istype(T,/turf/unsimulated/mineral) || istype(T,/turf/simulated/wall))
 			suspension_field.icon_state = "shieldsparkles"
@@ -315,7 +315,7 @@
 		to_chat(M, "<span class='info'>You no longer feel like floating.</span>")
 		M.weakened = min(M.weakened, 3)
 
-	src.visible_message("<span class='notice'>[bicon(src)] [src] deactivates with a gentle shudder.</span>")
+	visible_message("<span class='notice'>[bicon(src)] [src] deactivates with a gentle shudder.</span>")
 	qdel(suspension_field)
 	suspension_field = null
 	icon_state = "suspension2"
@@ -344,5 +344,5 @@
 
 /obj/effect/suspension_field/Destroy()
 	for(var/obj/I in src)
-		I.loc = src.loc
+		I.loc = loc
 	..()

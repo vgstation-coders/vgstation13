@@ -15,10 +15,10 @@
 		switch(ticker.mode.name)
 			if("sandbox")
 				CanBuild()
-		if((mind in ticker.mode.revolutionaries) || (src.mind in ticker.mode:head_revolutionaries))
-			ticker.mode.update_rev_icons_added(src.mind)
+		if((mind in ticker.mode.revolutionaries) || (mind in ticker.mode:head_revolutionaries))
+			ticker.mode.update_rev_icons_added(mind)
 		if(mind in ticker.mode:cult)
-			ticker.mode.update_cult_icons_added(src.mind)
+			ticker.mode.update_cult_icons_added(mind)
 		if(mind in ticker.mode:syndicates)
 			ticker.mode.update_all_synd_icons()
 		if(mind in ticker.mode.wizards)
@@ -37,16 +37,16 @@
 	/* clones
 	switch(ticker.mode.name)
 		if("revolution")
-			if(src.occupant.mind in ticker.mode:revolutionaries)
+			if(occupant.mind in ticker.mode:revolutionaries)
 				ticker.mode:update_all_rev_icons() //So the icon actually appears
-			if(src.occupant.mind in ticker.mode:head_revolutionaries)
+			if(occupant.mind in ticker.mode:head_revolutionaries)
 				ticker.mode:update_all_rev_icons()
 		if("nuclear emergency")
-			if (src.occupant.mind in ticker.mode:syndicates)
+			if (occupant.mind in ticker.mode:syndicates)
 				ticker.mode:update_all_synd_icons()
 		if("cult")
-			if (src.occupant.mind in ticker.mode:cult)
-				ticker.mode:add_cultist(src.occupant.mind)
+			if (occupant.mind in ticker.mode:cult)
+				ticker.mode:add_cultist(occupant.mind)
 				ticker.mode:update_all_cult_icons() //So the icon actually appears
 	*/
 

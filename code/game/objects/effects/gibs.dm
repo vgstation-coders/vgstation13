@@ -22,8 +22,8 @@
 /obj/effect/gibspawner/New(location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
 	..()
 
-	if(fleshcolor) src.fleshcolor = fleshcolor
-	if(bloodcolor) src.bloodcolor = bloodcolor
+	if(fleshcolor) fleshcolor = fleshcolor
+	if(bloodcolor) bloodcolor = bloodcolor
 
 	if(istype(loc,/turf)) //basically if a badmin spawns it
 		Gib(loc,viruses,MobDNA)

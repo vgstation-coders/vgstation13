@@ -26,7 +26,7 @@
 			name = "alien princess ([rand(1, 999)])"	//if this is too cutesy feel free to change it/remove it.
 			break
 
-	real_name = src.name
+	real_name = name
 	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid,/mob/living/carbon/alien/humanoid/proc/neurotoxin,/mob/living/carbon/alien/humanoid/proc/resin)
 	..()
 	add_language(LANGUAGE_XENO)
@@ -40,23 +40,23 @@
 
 		..() //-Yvarov
 
-		if(src.healths)
-			if(src.stat != 2)
+		if(healths)
+			if(stat != 2)
 				switch(health)
 					if(300 to INFINITY)
-						src.healths.icon_state = "health0"
+						healths.icon_state = "health0"
 					if(200 to 300)
-						src.healths.icon_state = "health1"
+						healths.icon_state = "health1"
 					if(125 to 200)
-						src.healths.icon_state = "health2"
+						healths.icon_state = "health2"
 					if(75 to 125)
-						src.healths.icon_state = "health3"
+						healths.icon_state = "health3"
 					if(0 to 75)
-						src.healths.icon_state = "health4"
+						healths.icon_state = "health4"
 					else
-						src.healths.icon_state = "health5"
+						healths.icon_state = "health5"
 			else
-				src.healths.icon_state = "health6"
+				healths.icon_state = "health6"
 
 
 //Queen verbs

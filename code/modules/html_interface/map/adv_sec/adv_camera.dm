@@ -12,7 +12,7 @@
 	build_path = /obj/machinery/computer/security/advanced
 
 /obj/machinery/computer/security/advanced/attack_hand(var/mob/user as mob)
-	if (src.z > 6)
+	if (z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 	if(stat & (NOPOWER|BROKEN))	return
@@ -62,11 +62,11 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		to_chat(mob, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
-	if (src.interfaces)
+	if (interfaces)
 		var/datum/html_interface/hi
 
-		if (!src.interfaces["[z]"])
-			src.interfaces["[z]"] = new/datum/html_interface/nanotrasen(src, "Security Cameras", 900, 800, \
+		if (!interfaces["[z]"])
+			interfaces["[z]"] = new/datum/html_interface/nanotrasen(src, "Security Cameras", 900, 800, \
 			"[MAPHEADER] </script><script type=\"text/javascript\">\
 			var mapname = \"[map.nameShort]\"; \
 			var z = [z]; \
@@ -75,7 +75,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			var maxy = [world.maxy];</script>\
 			<script type=\"text/javascript\" src=\"advcamera.js\"></script>")
 
-			hi = src.interfaces["[z]"]
+			hi = interfaces["[z]"]
 
 			hi.updateContent("content", \
 			"<div id='switches'><a href=\"javascript:switchTo(0);\">Switch to mini map</a> \
@@ -85,13 +85,13 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			<div id=\"uiMapContainer\"><div id=\"uiMap\" unselectable=\"on\"></div></div>\
 			<div id=\"textbased\"></div>")
 
-			src.update(z, TRUE)
+			update(z, TRUE)
 		else
-			hi = src.interfaces["[z]"]
+			hi = interfaces["[z]"]
 
-		hi = src.interfaces["[z]"]
+		hi = interfaces["[z]"]
 		hi.show(mob, currui)
-		src.updateFor(mob, hi, z)
+		updateFor(mob, hi, z)
 
 /datum/interactive_map/camera/updateFor(hclient_or_mob, datum/html_interface/hi, z, single)
 	//copy pasted code but given so many cameras i dont want to iterate over the entire worlds worth of cams, so we save our data based on zlevel
@@ -104,10 +104,10 @@ var/global/datum/interactive_map/camera/adv_camera = new
 #define toRemove 2
 #define toChange 4
 /datum/interactive_map/camera/update(z, ignore_unused = FALSE, var/obj/machinery/camera/single, adding = 0)
-	if (src.interfaces["[z]"])
+	if (interfaces["[z]"])
 		var/zz = text2num(z)
 		if(!zz) zz = z
-		var/datum/html_interface/hi = src.interfaces["[zz]"]
+		var/datum/html_interface/hi = interfaces["[zz]"]
 		var/ID
 		var/status
 		var/name
@@ -166,9 +166,9 @@ var/global/datum/interactive_map/camera/adv_camera = new
 				see_y = pos.y - WORLD_Y_OFFSET[z]
 				results[++results.len]=list(ID, status, name,area,pos_x,pos_y,pos_z,see_x,see_y,adding)
 
-			//src.data = results
+			//data = results
 			zlevel_data["[z]"] = results
-			src.updateFor(null, hi, z, single) // updates for everyone
+			updateFor(null, hi, z, single) // updates for everyone
 #undef toAdd
 #undef toRemove
 #undef toChange
@@ -176,8 +176,8 @@ var/global/datum/interactive_map/camera/adv_camera = new
 /*	zlevel limit removed on /vg/
 	var/z = ""
 
-	for (z in src.interfaces)
-		if (src.interfaces[z] == hi) break
+	for (z in interfaces)
+		if (interfaces[z] == hi) break
 */
 	. = ..()
 
@@ -187,9 +187,9 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	return (. && los)
 
 /datum/interactive_map/camera/Topic(href, href_list[], datum/html_interface_client/hclient)
-	//world.log << "[src.type] topic call"
+	//world.log << "[type] topic call"
 	if(..())
-		//world.log << "[src.type] topic call handled by parent"
+		//world.log << "[type] topic call handled by parent"
 		return // Our parent handled it the topic call
 	if (istype(hclient))
 		if (hclient && hclient.client && hclient.client.mob && isliving(hclient.client.mob))
@@ -209,7 +209,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	C << browse_rsc('advcamera.js')
 
 /obj/machinery/computer/security/advanced/Topic(href, href_list)
-	//world.log << "[src.type] topic call"
+	//world.log << "[type] topic call"
 	if(..())
 		return 0
 

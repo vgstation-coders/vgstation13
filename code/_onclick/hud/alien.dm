@@ -1,8 +1,8 @@
 /datum/hud/proc/alien_hud()
 
 
-	src.adding = list(  )
-	src.other = list(  )
+	adding = list(  )
+	other = list(  )
 
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
@@ -14,7 +14,7 @@
 	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
 	using.layer = 20
-	src.adding += using
+	adding += using
 	action_intent = using
 
 //intent small hud objects
@@ -28,7 +28,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	help_intent = using
 
 	ico = new('icons/mob/screen1_alien.dmi', "black")
@@ -39,7 +39,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	disarm_intent = using
 
 	ico = new('icons/mob/screen1_alien.dmi', "black")
@@ -50,7 +50,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	grab_intent = using
 
 	ico = new('icons/mob/screen1_alien.dmi', "black")
@@ -61,7 +61,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	hurt_intent = using
 
 //end intent small hud objects
@@ -73,7 +73,7 @@
 	using.icon_state = (mymob.m_intent == "run" ? "running" : "walking")
 	using.screen_loc = ui_movi
 	using.layer = 20
-	src.adding += using
+	adding += using
 	move_intent = using
 
 	using = getFromPool(/obj/screen)
@@ -82,7 +82,7 @@
 	using.icon_state = "act_drop"
 	using.screen_loc = ui_drop_throw
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 //equippable shit
 	//suit
@@ -94,7 +94,7 @@
 	inv_box.screen_loc = ui_alien_oclothing
 	inv_box.slot_id = slot_wear_suit
 	inv_box.layer = 19
-	src.adding += inv_box
+	adding += inv_box
 
 	init_hand_icons('icons/mob/screen1_alien.dmi')
 
@@ -105,7 +105,7 @@
 	using.icon_state = "hand1"
 	using.screen_loc = ui_swaphand1
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
@@ -114,7 +114,7 @@
 	using.icon_state = "hand2"
 	using.screen_loc = ui_swaphand2
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 	//pocket 1
 	inv_box = getFromPool(/obj/screen/inventory)
@@ -124,7 +124,7 @@
 	inv_box.screen_loc = ui_storage1
 	inv_box.slot_id = slot_l_store
 	inv_box.layer = 19
-	src.adding += inv_box
+	adding += inv_box
 
 	//pocket 2
 	inv_box = getFromPool(/obj/screen/inventory)
@@ -134,7 +134,7 @@
 	inv_box.screen_loc = ui_storage2
 	inv_box.slot_id = slot_r_store
 	inv_box.layer = 19
-	src.adding += inv_box
+	adding += inv_box
 
 	//head
 	inv_box = getFromPool(/obj/screen/inventory)
@@ -144,7 +144,7 @@
 	inv_box.screen_loc = ui_alien_head
 	inv_box.slot_id = slot_head
 	inv_box.layer = 19
-	src.adding += inv_box
+	adding += inv_box
 //end of equippable shit
 
 /*
@@ -154,7 +154,7 @@
 	using.icon_state = "act_resist"
 	using.screen_loc = ui_resist
 	using.layer = 19
-	src.adding += using
+	adding += using
 */
 
 	mymob.throw_icon = getFromPool(/obj/screen)
@@ -203,7 +203,7 @@
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.toxin, mymob.fire, mymob.healths, mymob.pullin, vampire_blood_display) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
-	mymob.client.screen += src.adding + src.other
+	mymob.client.screen += adding + other
 
 /datum/hud/proc/plasma_hud()
 	// Displaying plasma levels

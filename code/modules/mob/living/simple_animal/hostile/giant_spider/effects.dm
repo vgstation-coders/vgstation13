@@ -98,8 +98,8 @@
 	if(amount_grown >= 100)
 		var/num = rand(4,6)
 		for(var/i=0, i<num, i++)
-			//new /obj/effect/spider/spiderling(src.loc)
-			new /mob/living/simple_animal/hostile/giant_spider/spiderling(src.loc)
+			//new /obj/effect/spider/spiderling(loc)
+			new /mob/living/simple_animal/hostile/giant_spider/spiderling(loc)
 		qdel(src)
 /*s
 /obj/effect/spider/spiderling
@@ -123,13 +123,13 @@
 
 /obj/effect/spider/spiderling/Bump(atom/user)
 	if(istype(user, /obj/structure/table))
-		src.loc = user.loc
+		loc = user.loc
 	else
 		..()
 
 /obj/effect/spider/spiderling/proc/die()
 	visible_message("<span class='alert'>[src] dies!</span>")
-	new /obj/effect/decal/cleanable/spiderling_remains(src.loc)
+	new /obj/effect/decal/cleanable/spiderling_remains(loc)
 	del(src)
 
 /obj/effect/spider/spiderling/healthcheck()
@@ -153,9 +153,9 @@
 		icon_state = pick("cocoon1","cocoon2","cocoon3")
 
 /obj/effect/spider/cocoon/Destroy()
-	src.visible_message("<span class='warning'>\the [src] splits open.</span>")
+	visible_message("<span class='warning'>\the [src] splits open.</span>")
 	for(var/atom/movable/A in contents)
-		A.loc = src.loc
+		A.loc = loc
 	..()
 
 #undef SPIDERWEB_BRUTE_DIVISOR

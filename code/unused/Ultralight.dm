@@ -80,7 +80,7 @@ atom
 			luminosity = ul_Luminosity()
 
 			for(var/turf/Affected in view(ul_Luminosity(), src))
-				var/Falloff = src.ul_FalloffAmount(Affected)
+				var/Falloff = ul_FalloffAmount(Affected)
 
 				var/DeltaRed = LuminosityRed - Falloff
 				var/DeltaGreen = LuminosityGreen - Falloff
@@ -144,8 +144,8 @@ atom
 
 		ul_FalloffAmount(var/atom/ref)
 			if (ul_FalloffStyle == UL_I_FALLOFF_ROUND)
-				var/x = (ref.x - src.x)
-				var/y = (ref.y - src.y)
+				var/x = (ref.x - x)
+				var/y = (ref.y - y)
 				if ((x*x + y*y) > ul_FastRoot.len)
 					for(var/i = ul_FastRoot.len, i <= x*x+y*y, i++)
 						ul_FastRoot += round(sqrt(x*x+y*y))
@@ -312,7 +312,7 @@ area
 	proc
 		ul_Light(var/Red = LightLevelRed, var/Green = LightLevelGreen, var/Blue = LightLevelBlue)
 
-			if(!src || !src.ul_Lighting)
+			if(!src || !ul_Lighting)
 				return
 
 			overlays -= ul_Overlay

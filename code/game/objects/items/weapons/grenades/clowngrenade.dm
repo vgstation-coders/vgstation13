@@ -17,7 +17,7 @@
 	..()
 	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 25, -3)
 	/*
-	for(var/turf/simulated/floor/T in view(affected_area, src.loc))
+	for(var/turf/simulated/floor/T in view(affected_area, loc))
 		if(prob(75))
 			banana(T)
 	*/
@@ -26,7 +26,7 @@
 	for(var/direction in alldirs)
 		for(i = 0; i < 2; i++)
 			number++
-			var/obj/item/weapon/bananapeel/traitorpeel/peel = new /obj/item/weapon/bananapeel/traitorpeel(get_turf(src.loc))
+			var/obj/item/weapon/bananapeel/traitorpeel/peel = new /obj/item/weapon/bananapeel/traitorpeel(get_turf(loc))
 		/*	var/direction = pick(alldirs)
 			var/spaces = pick(1;150, 2)
 			var/a = 0
@@ -38,7 +38,7 @@
 					step(peel,direction)
 			else
 				step(peel,direction)
-	new /obj/item/weapon/bananapeel/traitorpeel(get_turf(src.loc))
+	new /obj/item/weapon/bananapeel/traitorpeel(get_turf(loc))
 	qdel(src)
 	return
 /*

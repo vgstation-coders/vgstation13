@@ -122,7 +122,7 @@
 	am_connector=1
 	var/obj/effect/beam/OB = master
 	if(!OB) OB = src
-	src._re_emit = 0
+	_re_emit = 0
 	qdel(src)
 	OB.connect_to(AM)
 	//BEAM_DEL(src)
@@ -207,7 +207,7 @@
 	am_connector=1
 	var/obj/effect/beam/OB = master
 	if(!OB) OB = src
-	src._re_emit = 0
+	_re_emit = 0
 	qdel(src)
 	OB.connect_to(AM)
 
@@ -238,14 +238,14 @@
 	if(!loc)
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] no loc")
-		src._re_emit = 0
+		_re_emit = 0
 		qdel(src)
 		return
 
 	if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] end of world")
-		src._re_emit = 0
+		_re_emit = 0
 		qdel(src)
 		return
 
@@ -267,7 +267,7 @@
 		if(bumped)
 			beam_testing("\ref[src] Bumped")
 			//BEAM_DEL(src)
-			src._re_emit = 0
+			_re_emit = 0
 			qdel(src)
 			return
 
@@ -276,7 +276,7 @@
 		if(_range-- < 1)
 			beam_testing("\ref[src] ran out")
 			//BEAM_DEL(src)
-			src._re_emit = 0
+			_re_emit = 0
 			qdel(src)
 			return
 
@@ -289,8 +289,8 @@
 /obj/effect/beam/proc/spawn_child()
 	if(steps >= BEAM_MAX_STEPS)
 		return null // NOPE
-	var/obj/effect/beam/B = new type(src.loc)
-	B.steps = src.steps+1
+	var/obj/effect/beam/B = new type(loc)
+	B.steps = steps+1
 	B.dir=dir
 	B.master = get_master()
 	if(B.master != B)

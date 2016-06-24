@@ -54,14 +54,14 @@
 	var/detected = 0 //bitflags
 
 /obj/item/device/multitool/ai_detect/New()
-	spawn() src.ticker()
+	spawn() ticker()
 
 /obj/item/device/multitool/ai_detect/proc/ticker()
 	var/mob/M
 	var/range
 	var/turf/our_turf
 	var/turf/T
-	while(src && !src.gcDestroyed)
+	while(src && !gcDestroyed)
 		detected = 0
 		our_turf = get_turf(src)
 		range = range(8,our_turf)
@@ -72,25 +72,25 @@
 			if(chunk && chunk.seenby.len)
 				for(M in chunk.seenby)
 					if(get_dist(src,M) < 8)
-						src.detected |= DETECT_AI
+						detected |= DETECT_AI
 						break
 
 		for(T in range) //Search for pAIs
-			if(src.findItem(/mob/living/silicon/pai,T))
-				src.detected |= DETECT_PAI
+			if(findItem(/mob/living/silicon/pai,T))
+				detected |= DETECT_PAI
 				break
 
 		for(T in range) //Search for recorders
-			if(src.findItem(/obj/item/device/taperecorder,T))
-				src.detected |= DETECT_RECORDER
+			if(findItem(/obj/item/device/taperecorder,T))
+				detected |= DETECT_RECORDER
 				break
 
 		for(T in range) //Search for analyzers
-			if(src.findComponent(/obj/item/device/assembly/voice,T))
-				src.detected |= DETECT_ANALYZER
+			if(findComponent(/obj/item/device/assembly/voice,T))
+				detected |= DETECT_ANALYZER
 				break
 
-		src.update_icon()
+		update_icon()
 		sleep(DETECT_TICKER_PERIOD)
 	return
 
@@ -111,21 +111,21 @@
 	return 0
 
 obj/item/device/multitool/ai_detect/update_icon()
-	if(src.detected)
-		if(src.detected & DETECT_AI)
-			src.icon_state = "[initial(src.icon_state)]_red"
-		else if(src.detected & DETECT_PAI)
-			src.icon_state = "[initial(src.icon_state)]_orange"
-		else if(src.detected & DETECT_RECORDER)
-			src.icon_state = "[initial(src.icon_state)]_yellow"
-		else if(src.detected & DETECT_ANALYZER)
-			src.icon_state = "[initial(src.icon_state)]_blue"
-	else src.icon_state = initial(src.icon_state)
+	if(detected)
+		if(detected & DETECT_AI)
+			icon_state = "[initial(icon_state)]_red"
+		else if(detected & DETECT_PAI)
+			icon_state = "[initial(icon_state)]_orange"
+		else if(detected & DETECT_RECORDER)
+			icon_state = "[initial(icon_state)]_yellow"
+		else if(detected & DETECT_ANALYZER)
+			icon_state = "[initial(icon_state)]_blue"
+	else icon_state = initial(icon_state)
 	return
 
 obj/item/device/multitool/ai_detect/examine(mob/user)
 	..()
-	if(src.detected)
+	if(detected)
 		user << "<span class='info'>The screen displays:</span>"
 		if(DETECT_AI) 		to_chat(user, "<span class='info'>AI detected</span>")
 		if(DETECT_PAI)  	to_chat(user, "<span class='info'>pAI detected></span>")

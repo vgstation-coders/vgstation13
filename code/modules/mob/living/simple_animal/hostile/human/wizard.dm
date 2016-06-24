@@ -31,7 +31,7 @@
 	speak = list("Your souls shall suffer!", "No mortals shall be spared.", "My magic will tear you apart!", "Prepare to face the almighty [name]!")
 
 /mob/living/simple_animal/hostile/humanoid/wizard/Die()
-	src.say("SCYAR NILA [pick("AI UPLOAD", "SECURE ARMORY", "BAR", "PRIMARY TOOL STORAGE", "INCINERATOR", "CHAPEL", "FORE STARBOARD MAINTENANCE", "WIZARD FEDERATION")]")
+	say("SCYAR NILA [pick("AI UPLOAD", "SECURE ARMORY", "BAR", "PRIMARY TOOL STORAGE", "INCINERATOR", "CHAPEL", "FORE STARBOARD MAINTENANCE", "WIZARD FEDERATION")]")
 	var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(src))
 	S.time_to_live = 20 //2 seconds instead of full 10
 
@@ -39,5 +39,5 @@
 	return qdel(src)
 
 /mob/living/simple_animal/hostile/humanoid/wizard/OpenFire()
-	src.say("ONI[pick(" ","`")]SOMA")
+	say("ONI[pick(" ","`")]SOMA")
 	..()

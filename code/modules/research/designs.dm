@@ -128,16 +128,16 @@ proc/getScanDesign(var/obj/O)
 //sum of the required tech of a design
 /datum/design/proc/TechTotal()
 	var/total = 0
-	for(var/tech in src.req_tech)
-		total += src.req_tech[tech]
+	for(var/tech in req_tech)
+		total += req_tech[tech]
 	return total
 
 //sum of the required materials of a design
 //do not confuse this with Total_Materials. That gets the machine's materials, this gets design materials
 /datum/design/proc/MatTotal()
 	var/total = 0
-	for(var/matID in src.materials)
-		total += src.materials[matID]
+	for(var/matID in materials)
+		total += materials[matID]
 	//log_admin("[total] for [part.name]")
 	return total
 
@@ -158,5 +158,5 @@ proc/getScanDesign(var/obj/O)
 
 /obj/item/weapon/disk/design_disk/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	pixel_x = rand(-5.0, 5)
+	pixel_y = rand(-5.0, 5)

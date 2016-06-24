@@ -79,9 +79,9 @@
 		T.amount = amount
 		amount = 0
 	else //Drop a random amount
-		var/actual_amount = min(src.amount, drop_amount)
+		var/actual_amount = min(amount, drop_amount)
 		T.amount = actual_amount
-		src.amount -= actual_amount
+		amount -= actual_amount
 
 	return T
 

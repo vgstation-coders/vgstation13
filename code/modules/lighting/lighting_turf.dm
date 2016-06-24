@@ -62,7 +62,7 @@
 // Can't think of a good name, this proc will recalculate the has_opaque_atom variable.
 /turf/proc/recalc_atom_opacity()
 	has_opaque_atom = FALSE
-	for (var/atom/A in src.contents + src) // Loop through every movable atom on our tile PLUS ourselves (we matter too...)
+	for (var/atom/A in contents + src) // Loop through every movable atom on our tile PLUS ourselves (we matter too...)
 		if (A.opacity)
 			has_opaque_atom = TRUE
 

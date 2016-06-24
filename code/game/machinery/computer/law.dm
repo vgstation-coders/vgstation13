@@ -113,19 +113,19 @@
 		if(istype(user,/mob/dead))
 			to_chat(usr, "<span class='rose'>Your ghostly hand goes right through!</span>")
 			return
-		if(src.stat & NOPOWER)
+		if(stat & NOPOWER)
 			to_chat(usr, "The upload computer has no power!")
 			return
-		if(src.stat & BROKEN)
+		if(stat & BROKEN)
 			to_chat(usr, "The upload computer is broken!")
 			return
 
-		src.current = select_active_ai(user)
+		current = select_active_ai(user)
 
-		if (!src.current)
+		if (!current)
 			to_chat(usr, "No active AIs detected.")
 		else
-			to_chat(usr, "[src.current.name] selected for law changes.")
+			to_chat(usr, "[current.name] selected for law changes.")
 		return
 
 
@@ -178,10 +178,10 @@
 
 	attackby(var/obj/item/weapon/W as obj, mob/user as mob)
 		if(istype(W, /obj/item/weapon/aiModule))
-			if(isMoMMI(src.current))
-				var/mob/living/silicon/robot/mommi/mommi = src.current
+			if(isMoMMI(current))
+				var/mob/living/silicon/robot/mommi/mommi = current
 				if(mommi.keeper)
-					to_chat(user, "<span class='warning'>[src.current] is operating in KEEPER mode and cannot be accessed via control signals.</span>")
+					to_chat(user, "<span class='warning'>[current] is operating in KEEPER mode and cannot be accessed via control signals.</span>")
 					return ..()
 			install_module(W,user)
 		else if(istype(W, /obj/item/weapon/planning_frame))
@@ -229,17 +229,17 @@
 		if(istype(user,/mob/dead))
 			to_chat(usr, "<span class='rose'>Your ghostly hand goes right through!</span>")
 			return
-		if(src.stat & NOPOWER)
+		if(stat & NOPOWER)
 			to_chat(usr, "The upload computer has no power!")
 			return
-		if(src.stat & BROKEN)
+		if(stat & BROKEN)
 			to_chat(usr, "The upload computer is broken!")
 			return
 
-		src.current = freeborg()
+		current = freeborg()
 
-		if (!src.current)
+		if (!current)
 			to_chat(usr, "No free cyborgs detected.")
 		else
-			to_chat(usr, "[src.current.name] selected for law changes.")
+			to_chat(usr, "[current.name] selected for law changes.")
 		return

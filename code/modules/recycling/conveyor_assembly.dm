@@ -30,10 +30,10 @@
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
+			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, loc)
 			M.amount = 5
 			if(circuit)
-				circuit.forceMove(src.loc)
+				circuit.forceMove(loc)
 				circuit = null
 			qdel(src)
 			return
@@ -50,7 +50,7 @@
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			if(do_after(user, src, 30))
 				to_chat(user, "<span class='notice'>You put together \the [src].</span>")
-				var/obj/machinery/conveyor/CB = new(src.loc, src.dir)
+				var/obj/machinery/conveyor/CB = new(loc, dir)
 				//Transplanting the circuitboard, I'm not sure if this is the way it's meant to be done but the constructable frame code for this part is indecipherable
 				for(var/obj/O in CB.component_parts)
 					returnToPool(O)

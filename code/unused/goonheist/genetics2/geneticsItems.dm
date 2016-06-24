@@ -12,33 +12,33 @@
 	attack(mob/M as mob, mob/user as mob)
 		if(!M || !user)
 			return
-		if(src.uses < 1)
+		if(uses < 1)
 			// just shank them with it i guess?
 			..()
 			return
 
 		if(M == user)
 			user.visible_message("<span class='danger'>[user.name] injects \himself with [src]!</span>")
-			src.injected(user,user)
+			injected(user,user)
 		else
 			user.visible_message("<span class='danger'>[user.name] is trying to inject [M.name] with [src]!</span>")
 			if (do_mob(user,M,30))
 				user.visible_message("<span class='danger'>[user.name] injects [M.name] with [src].</span>")
-				src.injected(user,M)
+				injected(user,M)
 			else
 				to_chat(user, "<span class='warning'>You failed to inject [M.name].</span>")
 
-		if(src.uses < 1)
-			src.icon_state = "b0"
-			src.desc = "A [src.name] that has been used up. It should be recycled or disposed of."
-			src.name = "expended " + src.name
+		if(uses < 1)
+			icon_state = "b0"
+			desc = "A [name] that has been used up. It should be recycled or disposed of."
+			name = "expended " + name
 
 	proc/injected(var/mob/living/carbon/user,var/mob/living/carbon/target)
 		if(!istype(user,/mob/living/carbon/) || !istype(target,/mob/living/carbon/))
 			return 1
 		if(!istype(target.bioHolder,/datum/bioHolder/))
 			return 1
-		combat_log.Add("<b>[round(((world.time / 10) / 60))]M:</b> [user.real_name] ([user.client ? "[user.client]" : "No Client"]) injects [target:real_name] ([target:client ? "[target:client]" : "No Client"]) with [src.name]")
+		combat_log.Add("<b>[round(((world.time / 10) / 60))]M:</b> [user.real_name] ([user.client ? "[user.client]" : "No Client"]) injects [target:real_name] ([target:client ? "[target:client]" : "No Client"]) with [name]")
 		return 0
 
 	dna_scrambler
@@ -85,7 +85,7 @@
 			ID.s_tone = rand(34,-185)
 
 			ID.UpdateMob()
-			src.uses--
+			uses--
 
 	dna_injector
 		name = "dna injector"
@@ -97,10 +97,10 @@
 			if (..())
 				return
 
-			if (src.remover)
-				for(var/X in src.genes)
+			if (remover)
+				for(var/X in genes)
 					target.bioHolder.RemoveEffect(X)
 			else
-				for(var/X in src.genes)
+				for(var/X in genes)
 					target.bioHolder.AddEffect(X)
-			src.uses--
+			uses--

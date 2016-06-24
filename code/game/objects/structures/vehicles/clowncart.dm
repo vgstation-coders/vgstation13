@@ -101,7 +101,7 @@
 		else
 			spawn(5)
 				activated = 1
-				src.visible_message("<span class='notice'>[nick] honks back happily.</span>")
+				visible_message("<span class='notice'>[nick] honks back happily.</span>")
 				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
 		honk = world.timeofday
 	else if(istype(W, /obj/item/weapon/reagent_containers))
@@ -297,7 +297,7 @@
 	density = 0
 	visible_message("<span class='warning'>[nick] explodes in a puff of pure potassium!</span>")
 	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 75, 1)
-	explosion(src.loc, -1, 0, 3, 7, 10)
+	explosion(loc, -1, 0, 3, 7, 10)
 	for(var/a = 0, a < round(reagents.total_volume*0.25), a++) //Spawn banana peels in place of the cart
 		new /obj/item/weapon/bananapeel(get_turf(src)) // WHAT STUPID ASSHOLE MADE THESE TATORPEELS
 	qdel(src)

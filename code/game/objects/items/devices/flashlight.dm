@@ -176,13 +176,13 @@
 	if(!fuel || !on)
 		turn_off()
 		if(!fuel)
-			src.icon_state = "[initial(icon_state)]-empty"
+			icon_state = "[initial(icon_state)]-empty"
 		processing_objects -= src
 
 /obj/item/device/flashlight/flare/proc/turn_off()
 	on = 0
-	src.force = initial(src.force)
-	src.damtype = initial(src.damtype)
+	force = initial(force)
+	damtype = initial(damtype)
 	if(ismob(loc))
 		var/mob/U = loc
 		update_brightness(U)
@@ -208,8 +208,8 @@
 
 			return 0
 	on = 1
-	src.force = on_damage
-	src.damtype = "fire"
+	force = on_damage
+	damtype = "fire"
 	processing_objects += src
 	if(user)
 		update_brightness(user)

@@ -3,11 +3,11 @@
 	//set background = 1
 	if(timestopped) return 0 //under effects of time magick
 
-	if (src.monkeyizing)
+	if (monkeyizing)
 		return
 
 
-	src.blinded = null
+	blinded = null
 
 	//Status updates, death etc.
 	clamp_values()
@@ -16,7 +16,7 @@
 	if(client)
 		handle_regular_hud_updates()
 		update_items()
-	if (src.stat != DEAD) //still using power
+	if (stat != DEAD) //still using power
 		use_power()
 		process_killswitch()
 		process_locks()
@@ -42,7 +42,7 @@
 	if(cell)
 		if(cell.charge <= 0)
 			uneq_all()
-		else if (src.cell.charge <= MOMMI_LOW_POWER)
+		else if (cell.charge <= MOMMI_LOW_POWER)
 			uneq_all()
 			cell.use(1)
 		else
@@ -55,76 +55,76 @@
 			stat = 0
 	else
 		uneq_all()
-		src.stat = 1
+		stat = 1
 
 
 /mob/living/silicon/robot/mommi/handle_regular_status_updates()
 
-	if(src.camera && !scrambledcodes)
-		if(src.stat == 2 || wires.IsCameraCut())
-			src.camera.status = 0
+	if(camera && !scrambledcodes)
+		if(stat == 2 || wires.IsCameraCut())
+			camera.status = 0
 		else
-			src.camera.status = 1
+			camera.status = 1
 
 	health = maxHealth - (getOxyLoss() + getFireLoss() + getBruteLoss())
 
 	if(getOxyLoss() > 50) Paralyse(3)
 
-	if(src.sleeping)
+	if(sleeping)
 		Paralyse(3)
-		src.sleeping--
+		sleeping--
 
-	if(src.resting)
+	if(resting)
 		Weaken(5)
 
-	if(health <= 0 && src.stat != 2) //die only once
+	if(health <= 0 && stat != 2) //die only once
 		gib()
 
-	if (src.stat != 2) //Alive.
-		if (src.paralysis || src.stunned || src.weakened) //Stunned etc.
-			src.stat = 1
-			if (src.stunned > 0)
+	if (stat != 2) //Alive.
+		if (paralysis || stunned || weakened) //Stunned etc.
+			stat = 1
+			if (stunned > 0)
 				AdjustStunned(-1)
-			if (src.weakened > 0)
+			if (weakened > 0)
 				AdjustWeakened(-1)
-			if (src.paralysis > 0)
+			if (paralysis > 0)
 				AdjustParalysis(-1)
-				src.blinded = 1
+				blinded = 1
 			else
-				src.blinded = 0
+				blinded = 0
 
 		else	//Not stunned.
-			src.stat = 0
+			stat = 0
 
 	else //Dead.
-		src.blinded = 1
-		src.stat = 2
+		blinded = 1
+		stat = 2
 
-	if (src.stuttering) src.stuttering--
+	if (stuttering) stuttering--
 
-	if (src.eye_blind)
-		src.eye_blind--
-		src.blinded = 1
+	if (eye_blind)
+		eye_blind--
+		blinded = 1
 
-	if (src.ear_deaf > 0) src.ear_deaf--
-	if (src.ear_damage < 25)
-		src.ear_damage -= 0.05
-		src.ear_damage = max(src.ear_damage, 0)
+	if (ear_deaf > 0) ear_deaf--
+	if (ear_damage < 25)
+		ear_damage -= 0.05
+		ear_damage = max(ear_damage, 0)
 
-	src.density = !( src.lying )
+	density = !( lying )
 
-	if ((src.sdisabilities & BLIND))
-		src.blinded = 1
-	if ((src.sdisabilities & DEAF))
-		src.ear_deaf = 1
+	if ((sdisabilities & BLIND))
+		blinded = 1
+	if ((sdisabilities & DEAF))
+		ear_deaf = 1
 
-	if (src.eye_blurry > 0)
-		src.eye_blurry--
-		src.eye_blurry = max(0, src.eye_blurry)
+	if (eye_blurry > 0)
+		eye_blurry--
+		eye_blurry = max(0, eye_blurry)
 
-	if (src.druggy > 0)
-		src.druggy--
-		src.druggy = max(0, src.druggy)
+	if (druggy > 0)
+		druggy--
+		druggy = max(0, druggy)
 
 	return 1
 /
@@ -137,101 +137,101 @@
 		if(MED_HUD)
 			process_med_hud(src)
 
-	if (src.healths)
-		if (src.stat != DEAD)
+	if (healths)
+		if (stat != DEAD)
 			switch(health)
 				if(60 to INFINITY)
-					src.healths.icon_state = "health0"
+					healths.icon_state = "health0"
 				if(40 to 60)
-					src.healths.icon_state = "health1"
+					healths.icon_state = "health1"
 				if(30 to 40)
-					src.healths.icon_state = "health2"
+					healths.icon_state = "health2"
 				if(10 to 20)
-					src.healths.icon_state = "health3"
+					healths.icon_state = "health3"
 				if(0 to 10)
-					src.healths.icon_state = "health4"
+					healths.icon_state = "health4"
 				if(config.health_threshold_dead to 0)
-					src.healths.icon_state = "health5"
+					healths.icon_state = "health5"
 				else
-					src.healths.icon_state = "health6"
+					healths.icon_state = "health6"
 		else
-			src.healths.icon_state = "health7"
+			healths.icon_state = "health7"
 
-	if (src.syndicate && src.client)
+	if (syndicate && client)
 		if(ticker.mode.name == "traitor")
 			for(var/datum/mind/tra in ticker.mode.traitors)
 				if(tra.current)
 					var/I = image('icons/mob/mob.dmi', loc = tra.current, icon_state = "traitor")
-					src.client.images += I
-		if(src.connected_ai)
-			src.connected_ai.connected_robots -= src
-			src.connected_ai = null
-		if(src.mind)
-			if(!src.mind.special_role)
-				src.mind.special_role = "traitor"
-				ticker.mode.traitors += src.mind
+					client.images += I
+		if(connected_ai)
+			connected_ai.connected_robots -= src
+			connected_ai = null
+		if(mind)
+			if(!mind.special_role)
+				mind.special_role = "traitor"
+				ticker.mode.traitors += mind
 
 	if(!can_see_static()) //what lets us avoid the overlay
 		if(static_overlays && static_overlays.len)
 			remove_static_overlays()
 
-	if (src.cells)
-		if (src.cell)
-			var/cellcharge = src.cell.charge/src.cell.maxcharge
+	if (cells)
+		if (cell)
+			var/cellcharge = cell.charge/cell.maxcharge
 			switch(cellcharge)
 				if(0.75 to INFINITY)
-					src.cells.icon_state = "charge4"
+					cells.icon_state = "charge4"
 				if(0.5 to 0.75)
-					src.cells.icon_state = "charge3"
+					cells.icon_state = "charge3"
 				if(0.25 to 0.5)
-					src.cells.icon_state = "charge2"
+					cells.icon_state = "charge2"
 				if(0 to 0.25)
-					src.cells.icon_state = "charge1"
+					cells.icon_state = "charge1"
 				else
-					src.cells.icon_state = "charge0"
+					cells.icon_state = "charge0"
 		else
-			src.cells.icon_state = "charge-empty"
+			cells.icon_state = "charge-empty"
 
 	if(bodytemp)
-		switch(src.bodytemperature) //310.055 optimal body temp
+		switch(bodytemperature) //310.055 optimal body temp
 			if(335 to INFINITY)
-				src.bodytemp.icon_state = "temp2"
+				bodytemp.icon_state = "temp2"
 			if(320 to 335)
-				src.bodytemp.icon_state = "temp1"
+				bodytemp.icon_state = "temp1"
 			if(300 to 320)
-				src.bodytemp.icon_state = "temp0"
+				bodytemp.icon_state = "temp0"
 			if(260 to 300)
-				src.bodytemp.icon_state = "temp-1"
+				bodytemp.icon_state = "temp-1"
 			else
-				src.bodytemp.icon_state = "temp-2"
+				bodytemp.icon_state = "temp-2"
 
 
 	update_pull_icon()
 //Oxygen and fire does nothing yet!!
-//	if (src.oxygen) src.oxygen.icon_state = "oxy[src.oxygen_alert ? 1 : 0]"
-//	if (src.fire) src.fire.icon_state = "fire[src.fire_alert ? 1 : 0]"
+//	if (oxygen) oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
+//	if (fire) fire.icon_state = "fire[fire_alert ? 1 : 0]"
 
-	if(src.eye_blind || blinded)
+	if(eye_blind || blinded)
 		overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 	else
 		clear_fullscreen("blind")
-	if (src.disabilities & NEARSIGHTED)
+	if (disabilities & NEARSIGHTED)
 		overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
 	else
 		clear_fullscreen("impaired")
-	if (src.eye_blurry)
+	if (eye_blurry)
 		overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
 	else
 		clear_fullscreen("blurry")
-	if (src.druggy)
+	if (druggy)
 		overlay_fullscreen("high", /obj/screen/fullscreen/high)
 	else
 		clear_fullscreen("high")
 
-	if (src.stat != 2)
-		if (src.machine)
-			if (!( src.machine.check_eye(src) ))
-				src.reset_view(null)
+	if (stat != 2)
+		if (machine)
+			if (!( machine.check_eye(src) ))
+				reset_view(null)
 		else
 			if(!client.adminobs && !isTeleViewing(client.eye))
 				reset_view(null)
@@ -241,19 +241,19 @@
 
 // MoMMIs only have one hand.
 /mob/living/silicon/robot/mommi/update_items()
-	if (src.client)
-		src.client.screen -= src.contents
-		for(var/obj/I in src.contents)
+	if (client)
+		client.screen -= contents
+		for(var/obj/I in contents)
 			//if(I && !(istype(I,/obj/item/weapon/cell) || istype(I,/obj/item/device/radio)  || istype(I,/obj/machinery/camera) || istype(I,/obj/item/device/mmi)))
 			if(I)
 				// Make sure we're not showing any of our internal components, as that would be lewd.
 				// This way of doing it ensures that shit we pick up will be visible, wheras shit inside of us isn't.
-				if(I!=src.cell && I!=src.radio && I!=src.camera && I!=src.mmi)
-					src.client.screen += I
-	if(src.tool_state)
-		src.tool_state:screen_loc = ui_inv2
-	if(src.head_state)
-		src.head_state:screen_loc = ui_monkey_mask
+				if(I!=cell && I!=radio && I!=camera && I!=mmi)
+					client.screen += I
+	if(tool_state)
+		tool_state:screen_loc = ui_inv2
+	if(head_state)
+		head_state:screen_loc = ui_monkey_mask
 
 /mob/living/silicon/robot/mommi/update_canmove()
 	canmove = !(paralysis || stunned || weakened || locked_to || lockcharge || anchored)

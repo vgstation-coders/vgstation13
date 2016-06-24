@@ -62,15 +62,15 @@ var/list/beam_master = list()
 	var/reference = "\ref[src]" //So we do not have to recalculate it a ton
 
 	target = get_turf(original)
-	dist_x = abs(target.x - src.x)
-	dist_y = abs(target.y - src.y)
+	dist_x = abs(target.x - x)
+	dist_y = abs(target.y - y)
 
-	if (target.x > src.x)
+	if (target.x > x)
 		dx = EAST
 	else
 		dx = WEST
 
-	if (target.y > src.y)
+	if (target.y > y)
 		dy = NORTH
 	else
 		dy = SOUTH
@@ -93,7 +93,7 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
 	var/first = 1
 	var/tS = 0
-	while(src && src.loc)// only stop when we've hit something, or hit the end of the map
+	while(src && loc)// only stop when we've hit something, or hit the end of the map
 		if(first && timestopped)
 			tS = 1
 			timestopped = 0
@@ -101,14 +101,14 @@ var/list/beam_master = list()
 			var/atom/step = get_step(src, dB)
 			if(!step)
 				bullet_die()
-			src.Move(step)
+			Move(step)
 			error += distA
 			target_dir = null
 		else
 			var/atom/step = get_step(src, dA)
 			if(!step)
 				bullet_die()
-			src.Move(step)
+			Move(step)
 			error -= distB
 			target_dir = dA
 			if(error < 0)
@@ -138,8 +138,8 @@ var/list/beam_master = list()
 				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = I //And cache it!
 
 			//Finally add the overlay
-			if(src.loc && target_dir)
-				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
+			if(loc && target_dir)
+				loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
 
 				//Add the turf to a list in the beam master so they can be cleaned up easily.
 				if(reference in beam_master)
@@ -160,8 +160,8 @@ var/list/beam_master = list()
 				beam_master["[icon_state][target_dir]"] = I //And cache it!
 
 			//Finally add the overlay
-			if(src.loc && target_dir)
-				src.loc.overlays += beam_master["[icon_state][target_dir]"]
+			if(loc && target_dir)
+				loc.overlays += beam_master["[icon_state][target_dir]"]
 
 				//Add the turf to a list in the beam master so they can be cleaned up easily.
 				if(reference in beam_master)
@@ -193,7 +193,7 @@ var/list/beam_master = list()
 	var/reference = "\ref[src]" // So we do not have to recalculate it a ton.
 
 	spawn(0)
-		var/target_dir = dir ? dir : src.dir// TODO: remove dir arg. Or don't because the way this was set up without it broke spacepods.
+		var/target_dir = dir ? dir : dir// TODO: remove dir arg. Or don't because the way this was set up without it broke spacepods.
 		var/first = 1
 		var/tS = 0
 		while(loc) // Move until we hit something.
@@ -485,10 +485,10 @@ var/list/beam_master = list()
 //				to_chat(world, "breaking")
 				break
 			else
-				last = get_turf(src.loc)
+				last = get_turf(loc)
 				step_towards(src, current) //Move~
-				if(src.loc != current)
-					tang = adjustAngle(get_angle(src.loc,current))
+				if(loc != current)
+					tang = adjustAngle(get_angle(loc,current))
 				icon_state = "[tang]"
 		if(ouroverlays.len)
 			sleep(10)
@@ -502,7 +502,7 @@ var/list/beam_master = list()
 /*cleanup(reference) //Waits .3 seconds then removes the overlay.
 //	to_chat(world, "setting invisibility")
 	sleep(50)
-	src.invisibility = 101
+	invisibility = 101
 	return*/
 
 /obj/item/projectile/beam/lightning/on_hit(atom/target, blocked = 0)
@@ -658,15 +658,15 @@ var/list/beam_master = list()
 	//calculating the turfs that we go through
 	var/lastposition = loc
 	target = get_turf(original)
-	dist_x = abs(target.x - src.x)
-	dist_y = abs(target.y - src.y)
+	dist_x = abs(target.x - x)
+	dist_y = abs(target.y - y)
 
-	if (target.x > src.x)
+	if (target.x > x)
 		dx = EAST
 	else
 		dx = WEST
 
-	if (target.y > src.y)
+	if (target.y > y)
 		dy = NORTH
 	else
 		dy = SOUTH
@@ -674,19 +674,19 @@ var/list/beam_master = list()
 	if(dist_x > dist_y)
 		error = dist_x/2 - dist_y
 
-		spawn while(src && src.loc)
+		spawn while(src && loc)
 			// only stop when we've hit something, or hit the end of the map
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					break
-				src.Move(step)
+				Move(step)
 				error += dist_x
 			else
 				var/atom/step = get_step(src, dx)
 				if(!step)
 					break
-				src.Move(step)
+				Move(step)
 				error -= dist_y
 
 			if(isnull(loc))
@@ -710,19 +710,19 @@ var/list/beam_master = list()
 
 	else
 		error = dist_y/2 - dist_x
-		spawn while(src && src.loc)
+		spawn while(src && loc)
 			// only stop when we've hit something, or hit the end of the map
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step)
 					break
-				src.Move(step)
+				Move(step)
 				error += dist_y
 			else
 				var/atom/step = get_step(src, dy)
 				if(!step)
 					break
-				src.Move(step)
+				Move(step)
 				error -= dist_x
 
 			if(isnull(loc))
@@ -852,7 +852,7 @@ var/list/beam_master = list()
 		A.bullet_act(src, def_zone)
 		loc = A.loc
 		permutated.Add(A)
-		visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+		visible_message("<span class='warning'>[A.name] is hit by the [name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 		if(istype(firer, /mob))
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"

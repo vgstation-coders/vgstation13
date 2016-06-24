@@ -10,13 +10,13 @@
 /obj/item/weapon/aluminum_cylinder/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, src))
-		to_chat(user, "You press the two [src.name]s together.")
-		if(src.loc == user)
+		to_chat(user, "You press the two [name]s together.")
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/cylinder_assembly/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/cylinder_assembly(get_turf(src.loc))
+			new /obj/item/weapon/cylinder_assembly(get_turf(loc))
 		qdel(src)
 		qdel(W)
 
@@ -35,12 +35,12 @@
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
 			if(do_after(user, src, 30))
 				to_chat(user, "You weld \the [src] together.")
-				if(src.loc == user)
+				if(loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun_barrel/I = new (get_turf(user))
 					user.put_in_hands(I)
 				else
-					new /obj/item/weapon/gun_barrel(get_turf(src.loc))
+					new /obj/item/weapon/gun_barrel(get_turf(loc))
 				qdel(src)
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -70,34 +70,34 @@
 	..()
 	if(istype(W, /obj/item/weapon/fuel_reservoir))
 		to_chat(user, "You loosely affix \the [W] to \the [src].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "stock_reservoir_assembly")
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/gun_assembly(get_turf(src.loc), "stock_reservoir_assembly")
+			new /obj/item/weapon/gun_assembly(get_turf(loc), "stock_reservoir_assembly")
 		qdel(src)
 		qdel(W)
 	if(istype(W, /obj/item/pipe))
 		var/obj/item/pipe/P = W
 		if(P.pipe_type == 1) //bent pipes only
 			to_chat(user, "You loosely affix \the [W] to \the [src].")
-			if(src.loc == user)
+			if(loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "stock_pipe_assembly")
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/gun_assembly(get_turf(src.loc), "stock_pipe_assembly")
+				new /obj/item/weapon/gun_assembly(get_turf(loc), "stock_pipe_assembly")
 			qdel(src)
 			qdel(W)
 	if(istype(W, /obj/item/weapon/stock_parts/subspace/ansible))
 		to_chat(user, "You loosely affix \the [W] to \the [src].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "stock_ansible_assembly")
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/gun_assembly(get_turf(src.loc), "stock_ansible_assembly")
+			new /obj/item/weapon/gun_assembly(get_turf(loc), "stock_ansible_assembly")
 		qdel(src)
 		qdel(W)
 
@@ -118,12 +118,12 @@
 /obj/item/weapon/metal_blade/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, src))
 		to_chat(user, "You attach \the [W] to \the [src].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/large_metal_blade/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/large_metal_blade(get_turf(src.loc))
+			new /obj/item/weapon/large_metal_blade(get_turf(loc))
 		qdel(src)
 		qdel(W)
 
@@ -152,12 +152,12 @@
 				to_chat(user, "You don't have enough cable to make a grip for \the [src].")
 				return
 			to_chat(user, "You wrap cable around the base of \the [src], creating a grip.")
-			if(src.loc == user)
+			if(loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/sword/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/sword(get_turf(src.loc))
+				new /obj/item/weapon/sword(get_turf(loc))
 			C.use(5)
 			qdel(src)
 	if(istype(W, /obj/item/weapon/weldingtool))
@@ -380,8 +380,8 @@
 		if("stock_reservoir_assembly")
 			to_chat(user, "You detach the fuel reservoir from \the [src].")
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/metal_gun_stock/I = new (get_turf(src.loc))
-			var/obj/item/weapon/fuel_reservoir/Q = new (get_turf(src.loc))
+			var/obj/item/weapon/metal_gun_stock/I = new (get_turf(loc))
+			var/obj/item/weapon/fuel_reservoir/Q = new (get_turf(loc))
 			user.put_in_hands(I)
 			user.put_in_hands(Q)
 			qdel(src)
@@ -393,7 +393,7 @@
 			update_assembly()
 		if("blunderbuss_assembly")
 			to_chat(user, "You detach the igniter from \the [src].")
-			var/obj/item/device/assembly/igniter/I = new (get_turf(src.loc))
+			var/obj/item/device/assembly/igniter/I = new (get_turf(loc))
 			user.put_in_hands(I)
 			state = "stock_reservoir_barrel"
 			update_assembly()
@@ -457,12 +457,12 @@
 			if(isscrewdriver(W))
 				to_chat(user, "You tighten the igniter to \the [src].")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				if(src.loc == user)
+				if(loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/blunderbuss/I = new (get_turf(user))
 					user.put_in_hands(I)
 				else
-					new /obj/item/weapon/blunderbuss(get_turf(src.loc))
+					new /obj/item/weapon/blunderbuss(get_turf(loc))
 				qdel(src)
 //BLUNDERBUSS END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -514,12 +514,12 @@
 			if(isscrewdriver(W))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				if(src.loc == user)
+				if(loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/railgun/I = new (get_turf(user))
 					user.put_in_hands(I)
 				else
-					new /obj/item/weapon/gun/projectile/railgun(get_turf(src.loc))
+					new /obj/item/weapon/gun/projectile/railgun(get_turf(loc))
 				qdel(src)
 //RAILGUN END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -539,12 +539,12 @@
 				return
 			if(istype(W, /obj/item/device/label_roll))
 				to_chat(user, "You wrap \the [W] around the middle of the metal rod on \the [src].")
-				if(src.loc == user)
+				if(loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/revialver/I = new (get_turf(user))
 					user.put_in_hands(I)
 				else
-					new /obj/item/weapon/gun/projectile/revialver(get_turf(src.loc))
+					new /obj/item/weapon/gun/projectile/revialver(get_turf(loc))
 				qdel(W)
 				qdel(src)
 //REVIALVER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -558,12 +558,12 @@
 					playsound(user, 'sound/items/Welder.ogg', 50, 1)
 					if(do_after(user, src, 30))
 						to_chat(user, "You weld the bent pipe to \the [src].")
-						if(src.loc == user)
+						if(loc == user)
 							user.drop_item(src, force_drop = 1)
 							var/obj/item/weapon/gun/projectile/blastcannon/I = new (get_turf(user))
 							user.put_in_hands(I)
 						else
-							new /obj/item/weapon/gun/projectile/blastcannon(get_turf(src.loc))
+							new /obj/item/weapon/gun/projectile/blastcannon(get_turf(loc))
 						qdel(src)
 				else
 					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -611,12 +611,12 @@
 		if("subspacetunneler_assembly")
 			if(istype(W, /obj/item/weapon/stock_parts/subspace/crystal))
 				to_chat(user, "You place \the [W] into the prongs of the subspace ansible on \the [src].")
-				if(src.loc == user)
+				if(loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/subspacetunneler/I = new (get_turf(user))
 					user.put_in_hands(I)
 				else
-					new /obj/item/weapon/subspacetunneler(get_turf(src.loc))
+					new /obj/item/weapon/subspacetunneler(get_turf(loc))
 				qdel(W)
 				qdel(src)
 //SUBSPACE TUNNELER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -663,13 +663,13 @@
 /obj/item/weapon/wrench_wired/attack_self(mob/user as mob)
 	if(metal_assembly)
 		to_chat(user, "You remove the metal blade from \the [src].")
-		new /obj/item/weapon/wrench_wired(get_turf(src.loc))
-		new /obj/item/weapon/metal_blade(get_turf(src.loc))
+		new /obj/item/weapon/wrench_wired(get_turf(loc))
+		new /obj/item/weapon/metal_blade(get_turf(loc))
 		qdel(src)
 	else
 		to_chat(user, "You unwrap the cable cuffs from around \the [src].")
-		new /obj/item/weapon/wrench(get_turf(src.loc))
-		new /obj/item/weapon/handcuffs/cable(get_turf(src.loc))
+		new /obj/item/weapon/wrench(get_turf(loc))
+		new /obj/item/weapon/handcuffs/cable(get_turf(loc))
 		qdel(src)
 
 /obj/item/weapon/wrench_wired/attackby(obj/item/weapon/W, mob/user)
@@ -682,24 +682,24 @@
 				playsound(user, 'sound/items/Welder.ogg', 50, 1)
 				if(do_after(user, src, 30))
 					to_chat(user, "You weld the blade to \the [src].")
-					if(src.loc == user)
+					if(loc == user)
 						user.drop_item(src, force_drop = 1)
 						var/obj/item/weapon/hatchet/tomahawk/metal/I = new (get_turf(user))
 						user.put_in_hands(I)
 					else
-						new /obj/item/weapon/hatchet/tomahawk/metal(get_turf(src.loc))
+						new /obj/item/weapon/hatchet/tomahawk/metal(get_turf(loc))
 					qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 				return
 	else if(istype(W, /obj/item/weapon/shard))
 		to_chat(user, "You fasten \the [W] to \the [src].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/hatchet/tomahawk/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/hatchet/tomahawk(get_turf(src.loc))
+			new /obj/item/weapon/hatchet/tomahawk(get_turf(loc))
 		qdel(src)
 		qdel(W)
 	if(istype(W, /obj/item/weapon/metal_blade))
@@ -736,7 +736,7 @@
 	to_chat(usr, "You remove the barrel from \the [src].")
 	var/obj/item/weapon/gun_barrel/I = new (get_turf(usr))
 	usr.put_in_hands(I)
-	var/obj/structure/bed/chair/vehicle/wheelchair/Q = new (get_turf(src.loc))
+	var/obj/structure/bed/chair/vehicle/wheelchair/Q = new (get_turf(loc))
 	Q.dir = dir
 	qdel(src)
 
@@ -744,7 +744,7 @@
 	if(cannon_assembly)
 		if(istype(W, /obj/item/device/assembly/igniter))
 			to_chat(user, "You attach \the [W] to \the [src].")
-			var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/I = new (get_turf(src.loc))
+			var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/I = new (get_turf(loc))
 			I.dir = dir
 			qdel(src)
 			qdel(W)
@@ -794,38 +794,38 @@
 		attempt_connect(user)
 	else
 		disconnect_capacitor()
-		to_chat(user, "<span class='notice'>You halt \the [src.name]'s charging process.</span>")
+		to_chat(user, "<span class='notice'>You halt \the [name]'s charging process.</span>")
 
 /obj/machinery/power/secured_capacitor/examine(mob/user)
 	..()
 	if(charge)
-		to_chat(user, "<span class='notice'>\The [src.name] is charged to [charge]W.</span>")
+		to_chat(user, "<span class='notice'>\The [name] is charged to [charge]W.</span>")
 		if(charge == maxcharge)
-			to_chat(user, "<span class='info'>\The [src.name] has maximum charge!</span>")
+			to_chat(user, "<span class='info'>\The [name] has maximum charge!</span>")
 		else if(power_states.len >= 10)
-			to_chat(user, "<span class='info'>\The [src.name] is full.</span>")
+			to_chat(user, "<span class='info'>\The [name] is full.</span>")
 	else
-		to_chat(user, "<span class='notice'>\The [src.name] is uncharged.</span>")
+		to_chat(user, "<span class='notice'>\The [name] is uncharged.</span>")
 
 /obj/machinery/power/secured_capacitor/attackby(obj/item/weapon/W, mob/user)
 	if(iswrench(W))
 		if(charging)
-			to_chat(user, "<span class='warning'>\The [src.name] needs to be turned off first.</span>")
+			to_chat(user, "<span class='warning'>\The [name] needs to be turned off first.</span>")
 			return
-		to_chat(user, "You unsecure \the [src.name] from the floor.")
+		to_chat(user, "You unsecure \the [name] from the floor.")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		power_machines.Remove(src)
 		switch(name)
 			if("capacitor")
-				var/obj/item/weapon/stock_parts/capacitor/I = new (get_turf(src.loc))
+				var/obj/item/weapon/stock_parts/capacitor/I = new (get_turf(loc))
 				I.stored_charge = charge
 				I.maximum_charge = maxcharge
 			if("advanced capacitor")
-				var/obj/item/weapon/stock_parts/capacitor/adv/I = new (get_turf(src.loc))
+				var/obj/item/weapon/stock_parts/capacitor/adv/I = new (get_turf(loc))
 				I.stored_charge = charge
 				I.maximum_charge = maxcharge
 			if("super capacitor")
-				var/obj/item/weapon/stock_parts/capacitor/adv/super/I = new (get_turf(src.loc))
+				var/obj/item/weapon/stock_parts/capacitor/adv/super/I = new (get_turf(loc))
 				I.stored_charge = charge
 				I.maximum_charge = maxcharge
 		qdel(src)
@@ -841,25 +841,25 @@
 
 	charge = 0
 	power_states.len = 0
-	to_chat(usr, "<span class='notice'>You discharge \the [src.name]'s stored energy.</span>")
+	to_chat(usr, "<span class='notice'>You discharge \the [name]'s stored energy.</span>")
 
 /obj/machinery/power/secured_capacitor/proc/attempt_connect(mob/user)
 	if(connect_to_network())
 		if(fully_charged)
-			to_chat(user, "<span class='notice'>\The [src.name] is full.</span>")
+			to_chat(user, "<span class='notice'>\The [name] is full.</span>")
 			disconnect_capacitor()
 			return
 		if(avail() > 0)
 			power_machines.Add(src)
 			charging = 1
-			src.visible_message("<span class='notice'>\The [src.name] hums quietly.</span>")
+			visible_message("<span class='notice'>\The [name] hums quietly.</span>")
 			return 1
 		else
-			src.visible_message("<span class='warning'>\The [src.name] buzzes. There doesn't seem to be any power in the wire.</span>","<span class='warning'>You hear a buzz.</span>")
+			visible_message("<span class='warning'>\The [name] buzzes. There doesn't seem to be any power in the wire.</span>","<span class='warning'>You hear a buzz.</span>")
 			disconnect_capacitor()
 			return 0
 	else
-		src.visible_message("<span class='warning'>\The [src.name] buzzes. It won't charge if it's not secured to a wire knot.</span>","<span class='warning'>You hear a buzz.</span>")
+		visible_message("<span class='warning'>\The [name] buzzes. It won't charge if it's not secured to a wire knot.</span>","<span class='warning'>You hear a buzz.</span>")
 		disconnect_capacitor()
 		return 0
 

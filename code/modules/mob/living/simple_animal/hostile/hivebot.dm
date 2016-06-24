@@ -66,7 +66,7 @@
 /mob/living/simple_animal/hostile/hivebot/Die()
 	..()
 	visible_message("<b>[src]</b> blows apart!")
-	new /obj/effect/gibspawner/robot(src.loc)
+	new /obj/effect/gibspawner/robot(loc)
 	qdel(src)
 	return
 
@@ -91,7 +91,7 @@
 /mob/living/simple_animal/hostile/hivebot/tele/New()
 	..()
 	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
-	smoke.set_up(5, 0, src.loc)
+	smoke.set_up(5, 0, loc)
 	smoke.start()
 	visible_message("<span class='danger'>The [src] warps in!</span>")
 	playsound(get_turf(src), 'sound/effects/EMPulse.ogg', 25, 1)

@@ -41,60 +41,60 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.loc = loc
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.loc = loc
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.loc = loc
 					ex_act(severity)
 				qdel(src)
 				return
 	return
 
 /obj/structure/morgue/alter_health()
-	return src.loc
+	return loc
 
 /obj/structure/morgue/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/structure/morgue/attack_hand(mob/user as mob)
-	if (src.connected)
-		for(var/atom/movable/A as mob|obj in src.connected.loc)
+	if (connected)
+		for(var/atom/movable/A as mob|obj in connected.loc)
 			if(istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 				continue
 			if (!( A.anchored ))
 				A.loc = src
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		//src.connected = null
-		qdel(src.connected)
-		src.connected = null
+		//connected = null
+		qdel(connected)
+		connected = null
 	else
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		src.connected = new /obj/structure/m_tray( src.loc )
-		step(src.connected, src.dir)
-		src.connected.layer = OBJ_LAYER
-		var/turf/T = get_step(src, src.dir)
-		if (T.contents.Find(src.connected))
-			src.connected.connected = src
-			src.icon_state = "morgue0"
+		connected = new /obj/structure/m_tray( loc )
+		step(connected, dir)
+		connected.layer = OBJ_LAYER
+		var/turf/T = get_step(src, dir)
+		if (T.contents.Find(connected))
+			connected.connected = src
+			icon_state = "morgue0"
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.connected.loc
-			src.connected.icon_state = "morguet"
-			src.connected.dir = src.dir
+				A.loc = connected.loc
+			connected.icon_state = "morguet"
+			connected.dir = dir
 		else
-			qdel(src.connected)
-			src.connected = null
-	src.add_fingerprint(user)
+			qdel(connected)
+			connected = null
+	add_fingerprint(user)
 	update()
 	return
 
@@ -102,8 +102,8 @@
 	if(iscrowbar(P)&&!contents.len)
 		if(do_after(user, src,50))
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-			new /obj/structure/closet/body_bag(src.loc)
-			new /obj/item/stack/sheet/metal(src.loc,5)
+			new /obj/structure/closet/body_bag(loc)
+			new /obj/item/stack/sheet/metal(loc,5)
 			qdel(src)
 	if(iswrench(P))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
@@ -112,36 +112,36 @@
 		else
 			dir=4
 	if (istype(P, /obj/item/weapon/pen))
-		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
+		var/t = input(user, "What would you like the label to be?", text("[]", name), null)  as text
 		if (user.get_active_hand() != P)
 			return
 		if (!Adjacent(user) || user.stat)
 			return
 		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 		if (t)
-			src.name = text("Morgue- '[]'", t)
+			name = text("Morgue- '[]'", t)
 		else
-			src.name = "Morgue"
-	src.add_fingerprint(user)
+			name = "Morgue"
+	add_fingerprint(user)
 	return
 
 /obj/structure/morgue/relaymove(mob/user as mob)
 	if (user.stat)
 		return
-	src.connected = new /obj/structure/m_tray( src.loc )
-	step(src.connected, EAST)
-	src.connected.layer = OBJ_LAYER
+	connected = new /obj/structure/m_tray( loc )
+	step(connected, EAST)
+	connected.layer = OBJ_LAYER
 	var/turf/T = get_step(src, EAST)
-	if (T.contents.Find(src.connected))
-		src.connected.connected = src
-		src.icon_state = "morgue0"
+	if (T.contents.Find(connected))
+		connected.connected = src
+		icon_state = "morgue0"
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.connected.loc
+			A.loc = connected.loc
 			//Foreach goto(106)
-		src.connected.icon_state = "morguet"
+		connected.icon_state = "morguet"
 	else
-		//src.connected = null
-		qdel(src.connected)
+		//connected = null
+		qdel(connected)
 	return
 
 /obj/structure/morgue/on_log()
@@ -167,18 +167,18 @@
 		return ..()
 
 /obj/structure/m_tray/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/structure/m_tray/attack_hand(mob/user as mob)
-	if (src.connected)
-		for(var/atom/movable/A as mob|obj in src.loc)
+	if (connected)
+		for(var/atom/movable/A as mob|obj in loc)
 			if(istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 				continue
 			if (!( A.anchored ))
-				A.loc = src.connected
+				A.loc = connected
 			//Foreach goto(26)
-		src.connected.connected = null
-		src.connected.update()
+		connected.connected = null
+		connected.update()
 		add_fingerprint(user)
 		//SN src = null
 		qdel(src)
@@ -190,7 +190,7 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
-	O.loc = src.loc
+	O.loc = loc
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
@@ -228,31 +228,31 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.loc = loc
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.loc = loc
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.loc = loc
 					ex_act(severity)
 				qdel(src)
 				return
 	return
 
 /obj/structure/crematorium/alter_health()
-	return src.loc
+	return loc
 
 /obj/structure/crematorium/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/structure/crematorium/attack_hand(mob/user as mob)
 //	if (cremating) AWW MAN! THIS WOULD BE SO MUCH MORE FUN ... TO WATCH
@@ -264,63 +264,63 @@
 	if (cremating)
 		to_chat(usr, "<span class='warning'>It's locked.</span>")
 		return
-	if ((src.connected) && (src.locked == 0))
-		for(var/atom/movable/A as mob|obj in src.connected.loc)
+	if ((connected) && (locked == 0))
+		for(var/atom/movable/A as mob|obj in connected.loc)
 			if (!( A.anchored ))
 				A.loc = src
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		qdel(src.connected)
-		src.connected = null
-	else if (src.locked == 0)
+		qdel(connected)
+		connected = null
+	else if (locked == 0)
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		src.connected = new /obj/structure/c_tray( src.loc )
-		step(src.connected, SOUTH)
-		src.connected.layer = OBJ_LAYER
+		connected = new /obj/structure/c_tray( loc )
+		step(connected, SOUTH)
+		connected.layer = OBJ_LAYER
 		var/turf/T = get_step(src, SOUTH)
-		if (T.contents.Find(src.connected))
-			src.connected.connected = src
-			src.icon_state = "crema0"
+		if (T.contents.Find(connected))
+			connected.connected = src
+			icon_state = "crema0"
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.connected.loc
-			src.connected.icon_state = "cremat"
+				A.loc = connected.loc
+			connected.icon_state = "cremat"
 		else
-			qdel(src.connected)
-			src.connected = null
-	src.add_fingerprint(user)
+			qdel(connected)
+			connected = null
+	add_fingerprint(user)
 	update()
 
 /obj/structure/crematorium/attackby(P as obj, mob/user as mob)
 	if (istype(P, /obj/item/weapon/pen))
-		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
+		var/t = input(user, "What would you like the label to be?", text("[]", name), null)  as text
 		if (user.get_active_hand() != P)
 			return
 		if (!Adjacent(user) || user.stat)
 			return
 		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 		if (t)
-			src.name = text("Crematorium- '[]'", t)
+			name = text("Crematorium- '[]'", t)
 		else
-			src.name = "Crematorium"
-	src.add_fingerprint(user)
+			name = "Crematorium"
+	add_fingerprint(user)
 	return
 
 /obj/structure/crematorium/relaymove(mob/user as mob)
 	if (user.stat || locked)
 		return
-	src.connected = new /obj/structure/c_tray( src.loc )
-	step(src.connected, SOUTH)
-	src.connected.layer = OBJ_LAYER
+	connected = new /obj/structure/c_tray( loc )
+	step(connected, SOUTH)
+	connected.layer = OBJ_LAYER
 	var/turf/T = get_step(src, SOUTH)
-	if (T.contents.Find(src.connected))
-		src.connected.connected = src
-		src.icon_state = "crema0"
+	if (T.contents.Find(connected))
+		connected.connected = src
+		icon_state = "crema0"
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.connected.loc
+			A.loc = connected.loc
 			//Foreach goto(106)
-		src.connected.icon_state = "cremat"
+		connected.icon_state = "cremat"
 	else
-		qdel(src.connected)
-		src.connected = null
+		qdel(connected)
+		connected = null
 	return
 
 /obj/structure/crematorium/proc/cremate(mob/user)
@@ -401,16 +401,16 @@
 		return ..()
 
 /obj/structure/c_tray/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/structure/c_tray/attack_hand(mob/user as mob)
-	if (src.connected)
-		for(var/atom/movable/A as mob|obj in src.loc)
+	if (connected)
+		for(var/atom/movable/A as mob|obj in loc)
 			if (!( A.anchored ))
-				A.loc = src.connected
+				A.loc = connected
 			//Foreach goto(26)
-		src.connected.connected = null
-		src.connected.update()
+		connected.connected = null
+		connected.update()
 		add_fingerprint(user)
 		//SN src = null
 		qdel(src)
@@ -422,7 +422,7 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
-	O.loc = src.loc
+	O.loc = loc
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))

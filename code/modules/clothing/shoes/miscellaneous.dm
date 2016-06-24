@@ -20,14 +20,14 @@
 
 /obj/item/clothing/shoes/syndigaloshes/attackby(obj/item/I, mob/user)
 	..()
-	if(!istype(I, /obj/item/clothing/shoes) || istype(I, src.type))
+	if(!istype(I, /obj/item/clothing/shoes) || istype(I, type))
 		return 0
 	else
 		var/obj/item/clothing/shoes/S = I
-		if(src.clothing_choices.Find(S))
+		if(clothing_choices.Find(S))
 			to_chat(user, "<span class='warning'>[S.name]'s pattern is already stored.</span>")
 			return
-		src.clothing_choices += S
+		clothing_choices += S
 		to_chat(user, "<span class='notice'>[S.name]'s pattern absorbed by \the [src].</span>")
 		return 1
 	return 0
@@ -219,7 +219,7 @@
 	set category = "Object"
 	set name = "Change Sound"
 
-	return src.attack_self(usr)
+	return attack_self(usr)
 
 /obj/item/clothing/shoes/clown_shoes/advanced/step_action()
 	if(ishuman(loc))

@@ -15,14 +15,14 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(prefs.muted & MUTE_ADMINHELP)
 		to_chat(src, "<font color='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</font>")
 		return
-	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
+	if(handle_spam_prevention(msg,MUTE_ADMINHELP))
 		return
 
-	/**src.verbs -= /client/verb/adminhelp
+	/**verbs -= /client/verb/adminhelp
 
 	spawn(1200)
-		src.verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps
-		src.verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps//Go to hell
+		verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps
+		verbs += /client/verb/adminhelp	// 2 minute cool-down for adminhelps//Go to hell
 	**/
 
 	//clean the input msg
@@ -103,7 +103,7 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 				to_chat(X, msg)
 
 	//show it to the person adminhelping too
-	if(src.prefs.special_popup)
+	if(prefs.special_popup)
 		src << output("\[[time_stamp()]] <span class='info'>PM to - <b>Admins</b>: [original_msg]</span>", "window1.msay_output")
 	else
 		to_chat(src, "<font color='blue'>PM to-<b>Admins</b>: [original_msg]</font>")

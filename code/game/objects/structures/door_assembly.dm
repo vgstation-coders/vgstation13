@@ -148,9 +148,9 @@
 	if(busy) return
 
 	if(istype(W, /obj/item/weapon/pen))
-		var/t = copytext(stripped_input(user, "Enter the name for the door.", src.name, src.created_name),1,MAX_NAME_LEN)
+		var/t = copytext(stripped_input(user, "Enter the name for the door.", name, created_name),1,MAX_NAME_LEN)
 		if(!t)	return
-		if(!in_range(src, usr) && src.loc != usr)	return
+		if(!in_range(src, usr) && loc != usr)	return
 		created_name = t
 		return
 
@@ -172,7 +172,7 @@
 					to_chat(user, "<span class='notice'>You welded the [glass] plating off!</span>")
 
 					var/M = text2path("/obj/item/stack/sheet/mineral/[glass]")
-					new M(src.loc, 2)
+					new M(loc, 2)
 
 					glass = 0
 			else if (glass == 1)
@@ -184,7 +184,7 @@
 						return
 
 					to_chat(user, "<span class='notice'>You welded the glass panel out!</span>")
-					new /obj/item/stack/sheet/glass/rglass(src.loc)
+					new /obj/item/stack/sheet/glass/rglass(loc)
 					glass = 0
 			else if (!anchored)
 				user.visible_message("[user] dissassembles the airlock assembly.", "You start to dissassemble the airlock assembly.")
@@ -226,7 +226,7 @@
 		if(do_after(user, src, 40))
 			if(!src) return
 			coil.use(1)
-			src.state = 1
+			state = 1
 			to_chat(user, "<span class='notice'>You wire the Airlock!</span>")
 		busy = 0
 
@@ -238,8 +238,8 @@
 		if(do_after(user, src, 40))
 			if(!src) return
 			to_chat(user, "<span class='notice'>You cut the airlock wires.!</span>")
-			new/obj/item/stack/cable_coil(src.loc, 1)
-			src.state = 0
+			new/obj/item/stack/cable_coil(loc, 1)
+			state = 0
 		busy = 0
 
 	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && state == 1 && W:icon_state != "door_electronics_smoked")
@@ -253,11 +253,11 @@
 			var/obj/item/weapon/circuitboard/airlock/electronic = W
 			electronic.installed = 1
 			to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
-			src.state = 2
-			src.name = "Near finished Airlock Assembly"
-			src.electronics = W
+			state = 2
+			name = "Near finished Airlock Assembly"
+			electronics = W
 		else
-			W.loc = src.loc
+			W.loc = loc
 		busy = 0
 
 	else if(iscrowbar(W) && state == 2 )
@@ -268,16 +268,16 @@
 		if(do_after(user, src, 40))
 			if(!src) return
 			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
-			src.state = 1
-			src.name = "Wired Airlock Assembly"
+			state = 1
+			name = "Wired Airlock Assembly"
 			var/obj/item/weapon/circuitboard/airlock/ae
 			if (!electronics)
-				ae = new/obj/item/weapon/circuitboard/airlock( src.loc )
+				ae = new/obj/item/weapon/circuitboard/airlock( loc )
 			else
 				ae = electronics
 				electronics.installed = 0
 				electronics = null
-				ae.loc = src.loc
+				ae.loc = loc
 		busy = 0
 
 	else if(istype(W, /obj/item/stack/sheet) && !glass)
@@ -318,23 +318,23 @@
 				path = text2path("/obj/machinery/door/airlock[glass_type]")
 			else
 				path = text2path("/obj/machinery/door/airlock[airlock_type]")
-			var/obj/machinery/door/airlock/door = new path(src.loc)
+			var/obj/machinery/door/airlock/door = new path(loc)
 			door.assembly_type = type
-			door.electronics = src.electronics
-			door.fingerprints += src.fingerprints
-			door.fingerprintshidden += src.fingerprintshidden
+			door.electronics = electronics
+			door.fingerprints += fingerprints
+			door.fingerprintshidden += fingerprintshidden
 			door.fingerprintslast = user.ckey
-			if(src.electronics.one_access)
+			if(electronics.one_access)
 				door.req_access = null
-				door.req_one_access = src.electronics.conf_access
+				door.req_one_access = electronics.conf_access
 			else
-				door.req_access = src.electronics.conf_access
+				door.req_access = electronics.conf_access
 			if(created_name)
 				door.name = created_name
 			else
 				door.name = "[istext(glass) ? "[glass] airlock" : base_name]"
-			src.electronics.loc = door
-			src.electronics.installed = 1
+			electronics.loc = door
+			electronics.installed = 1
 			qdel(src)
 		busy = 0
 	else

@@ -40,7 +40,7 @@
 	Class: node
 */
 /datum/node/proc/ToString()
-	return "[src.type]"
+	return "[type]"
 /*
 	Class: identifier
 */
@@ -49,7 +49,7 @@
 
 /datum/node/identifier/New(id)
 	. = ..()
-	src.id_name = id
+	id_name = id
 
 /datum/node/identifier/ToString()
 	return id_name
@@ -70,8 +70,8 @@
 
 /datum/node/expression/operator/New()
 	.=..()
-	if(!src.name)
-		src.name = "[src.type]"
+	if(!name)
+		name = "[type]"
 
 /datum/node/expression/operator/ToString()
 	return "operator: [name]"
@@ -93,10 +93,10 @@
 
 /datum/node/expression/value/literal/New(value)
 	. = ..()
-	src.value = value
+	value = value
 
 /datum/node/expression/value/literal/ToString()
-	return src.value
+	return value
 
 /*
 	Class: variable
@@ -113,7 +113,7 @@
 		id = new(id)
 
 /datum/node/expression/value/variable/ToString()
-	return src.id.ToString()
+	return id.ToString()
 
 /*
 	Class: reference
@@ -123,7 +123,7 @@
 
 /datum/node/expression/value/reference/New(value)
 	. = ..()
-	src.value = value
+	value = value
 
 /datum/node/expression/value/reference/ToString()
-	return "ref: [src.value] ([src.value.type])"
+	return "ref: [value] ([value.type])"

@@ -121,23 +121,23 @@
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
-	if(src.fingerprintshidden)
-		prints = ", all touchers : [list2params(src.fingerprintshidden)]"
+	if(fingerprintshidden)
+		prints = ", all touchers : [list2params(fingerprintshidden)]"
 	if(current_size == STAGE_FIVE)
 		S.expand(STAGE_SUPER, 1)
-		log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
-		message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+		log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [fingerprintslast].")
+		message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [fingerprintslast].")
 	qdel(src)
 	return 15000
 
 /obj/machinery/power/supermatter/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
-	if(src.fingerprintshidden)
-		prints = ", all touchers : " + src.fingerprintshidden
+	if(fingerprintshidden)
+		prints = ", all touchers : " + fingerprintshidden
 	SetUniversalState(/datum/universal_state/supermatter_cascade)
 	S.expand(STAGE_SUPER, 1)
-	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [fingerprintslast].")
 	qdel(src)
 	return 20000
 
@@ -207,7 +207,7 @@
 
 		if(damage > explosion_point)
 			for(var/mob/living/mob in living_mob_list)
-				if(mob.z != src.z)//only make it effect mobs on the current Z level.
+				if(mob.z != z)//only make it effect mobs on the current Z level.
 					continue
 				if(istype(mob, /mob/living/carbon/human))
 					//Hilariously enough, running into a closet should make you get hit the hardest.

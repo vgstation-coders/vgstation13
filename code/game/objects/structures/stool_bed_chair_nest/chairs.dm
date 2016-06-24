@@ -18,7 +18,7 @@
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
 		if(user.drop_item(W))
-			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
+			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(loc)
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			E.dir = dir
 			E.part = SK

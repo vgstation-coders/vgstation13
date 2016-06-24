@@ -68,7 +68,7 @@
 	else
 		for(var/mob/M in viewers(1, src))
 			if (M.client && M.machine == src)
-				src.updateUsrDialog()
+				updateUsrDialog()
 
 /obj/machinery/power/port_gen/pacman2/proc/overheat()
 	explosion(get_turf(src), 2, 5, 2, -1)
@@ -93,7 +93,7 @@
 	else if(!active)
 		if(istype(O, /obj/item/weapon/wrench))
 			anchored = !anchored
-			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 			if(anchored)
 				to_chat(user, "<span class='notice'>You secure the generator to the floor.</span>")
 			else
@@ -101,17 +101,17 @@
 			makepowernets()
 		else if(istype(O, /obj/item/weapon/screwdriver))
 			open = !open
-			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 			if(open)
 				to_chat(user, "<span class='notice'>You open the access panel.</span>")
 			else
 				to_chat(user, "<span class='notice'>You close the access panel.</span>")
 		else if(istype(O, /obj/item/weapon/crowbar) && !open)
-			var/obj/machinery/constructable_frame/machine_frame/new_frame = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+			var/obj/machinery/constructable_frame/machine_frame/new_frame = new /obj/machinery/constructable_frame/machine_frame(loc)
 			for(var/obj/item/I in component_parts)
 				if(I.reliability < 100)
 					I.crit_fail = 1
-				I.loc = src.loc
+				I.loc = loc
 			new_frame.state = 1
 			new_frame.set_build_state(2)
 			qdel(src)
@@ -124,7 +124,7 @@
 	interact(user)
 
 /obj/machinery/power/port_gen/pacman2/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	interact(user)
 
 /obj/machinery/power/port_gen/pacman2/attack_paw(mob/user as mob)
@@ -157,26 +157,26 @@
 	if(..())
 		return
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["action"])
 		if(href_list["action"] == "enable")
 			if(!active && HasFuel() && !crit_fail)
 				active = 1
 				icon_state = "portgen1"
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if(href_list["action"] == "disable")
 			if (active)
 				active = 0
 				icon_state = "portgen0"
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if(href_list["action"] == "lower_power")
 			if (power_output > 1)
 				power_output--
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if (href_list["action"] == "higher_power")
 			if (power_output < 4 || emagged)
 				power_output++
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if (href_list["action"] == "close")
 			usr << browse(null, "window=port_gen")
 			usr.machine = null

@@ -86,7 +86,7 @@
 
 							usr.visible_message("<span class='notice'>[usr] inserts a power cell into \the [src].</span>", "<span class='notice'>You insert the power cell into \the [src].</span>")
 
-		src.updateDialog()
+		updateDialog()
 	return
 
 /obj/machinery/space_heater/air_conditioner/proc/chill()

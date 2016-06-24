@@ -39,7 +39,7 @@
 
 	var/obj/item/weapon/gun/energy/temperature/T = shot_from
 	if(istype(T))
-		src.temperature = T.temperature
+		temperature = T.temperature
 	else
 		temperature = rand(100,600) //give it a random temp value if it's not fired from a temp gun
 
@@ -210,7 +210,7 @@ obj/item/projectile/kinetic/New()
 /obj/item/projectile/kinetic/Range()
 	range--
 	if(range <= 0)
-		new /obj/item/effect/kinetic_blast(src.loc)
+		new /obj/item/effect/kinetic_blast(loc)
 		qdel(src)
 */
 

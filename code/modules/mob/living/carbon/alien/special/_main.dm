@@ -19,9 +19,9 @@
 			name = "[name] ([rand(1, 1000)])"
 			real_name = name
 
-			src.stand_icon = new /icon('xcomalien.dmi', xcom_state)
-			src.lying_icon = new /icon('xcomalien.dmi', xcom_state)
-			src.icon = src.stand_icon
+			stand_icon = new /icon('xcomalien.dmi', xcom_state)
+			lying_icon = new /icon('xcomalien.dmi', xcom_state)
+			icon = stand_icon
 
 			remove_special_verbs()
 
@@ -35,20 +35,20 @@
 
 	Stat()
 		if(statpanel("Status"))
-			if(src.client && src.client.holder)
+			if(client && client.holder)
 				stat(null, "([x], [y], [z])")
 
-			stat(null, "Intent: [src.a_intent]")
-			stat(null, "Move Mode: [src.m_intent]")
+			stat(null, "Intent: [a_intent]")
+			stat(null, "Move Mode: [m_intent]")
 
-			if (src.internal)
-				if (!src.internal.air_contents)
-					qdel(src.internal)
-					src.internal = null
+			if (internal)
+				if (!internal.air_contents)
+					qdel(internal)
+					internal = null
 				else
-					stat("Internal Atmosphere Info", src.internal.name)
-					stat("Tank Pressure", src.internal.air_contents.return_pressure())
-					stat("Distribution Pressure", src.internal.distribute_pressure)
+					stat("Internal Atmosphere Info", internal.name)
+					stat("Tank Pressure", internal.air_contents.return_pressure())
+					stat("Distribution Pressure", internal.distribute_pressure)
 		return
 
 	alien_talk()

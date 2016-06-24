@@ -111,9 +111,9 @@
 
 		else if (istype(I, /obj/item/weapon/card/id)||istype(I, /obj/item/device/pda))
 			if(panel_open)
-				if (src.allowed(user))
-					src.locked = !src.locked
-					to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
+				if (allowed(user))
+					locked = !locked
+					to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
 				else
 					to_chat(user, "<span class='warning'>Access denied.</span>")
 				updateDialog()
@@ -122,7 +122,7 @@
 		return
 
 	attack_ai(var/mob/user)
-		src.add_hiddenprint(user)
+		add_hiddenprint(user)
 		interact(user, 1)
 
 	attack_paw()

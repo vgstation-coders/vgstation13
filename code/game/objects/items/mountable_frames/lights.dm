@@ -23,9 +23,9 @@
 		else
 			newlight = new /obj/machinery/light_construct/small(constrloc)
 	newlight.dir = constrdir
-	newlight.fingerprints = src.fingerprints
-	newlight.fingerprintshidden = src.fingerprintshidden
-	newlight.fingerprintslast = src.fingerprintslast
+	newlight.fingerprints = fingerprints
+	newlight.fingerprintshidden = fingerprintshidden
+	newlight.fingerprintslast = fingerprintslast
 
 	user.visible_message("[user] attaches \the [src] to \the [on_wall].", \
 		"You attach \the [src] to \the [on_wall].")

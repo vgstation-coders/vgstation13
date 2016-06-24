@@ -138,9 +138,9 @@
 	if (!can_use_verbs(usr))
 		return
 
-	src.reagents.clear_reagents()
+	reagents.clear_reagents()
 	to_chat(usr, "<span class='notice'>You flush the contents of \the [src].</span>")
-	src.update_icon()
+	update_icon()
 
 obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 	set name = "Set fill amount"
@@ -158,23 +158,23 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 	if (istype(A, /obj/structure/reagent_dispensers) && adjacency_flag)
 		var/tx_amount = transfer_sub(A, src, fill_amount, user)
 		if (tx_amount > 0)
-			to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [A].</span>")
+			to_chat(user, "<span class='notice'>You fill \the [src][is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [A].</span>")
 			return
 
 /obj/item/weapon/reagent_containers/chempack/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
-		if(src.safety && auxiliary)
+		if(safety && auxiliary)
 			if (stage)
 				to_chat(user, "<span class='warning'>You need to secure the maintenance panel before you can insert a beaker!</span>")
 				return
 			if(user.type == /mob/living/silicon/robot) //Can't have silicons putting their beakers inside this.
 				return
-			if(src.beaker)
+			if(beaker)
 				to_chat(user, "There is already a beaker loaded into \the [src].")
 				return
 			else
 				if(user.drop_item(W, src))
-					src.beaker = W
+					beaker = W
 					to_chat(user, "You add the beaker to \the [src]'s auxiliary chamber!")
 					if(user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))
 						var/obj/item/clothing/mask/chemmask/C = user.wear_mask
@@ -187,7 +187,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 		if (stage)
 			to_chat(user, "<span class='warning'>You need to secure the maintenance panel before you can access the auxiliary chamber bolts!</span>")
 			return
-		if (!auxiliary && !src.beaker)
+		if (!auxiliary && !beaker)
 			auxiliary = 1
 			to_chat(user, "You loosen the bolts of \the [src]'s auxiliary chamber.")
 			return
@@ -195,7 +195,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 			auxiliary = 1
 			to_chat(user, "You loosen the bolts of \the [src]'s auxiliary chamber. The beaker can now be removed.")
 			return
-		else if (auxiliary && src.beaker)
+		else if (auxiliary && beaker)
 			auxiliary = 0
 			to_chat(user, "You tighten the bolts of \the [src]'s auxiliary chamber, securing the beaker in place.")
 			return
@@ -210,7 +210,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				to_chat(user, "<span class='warning'>You can't perform maintenance on \the [src] while you're wearing it!</span>")
 				return
 			else
-				if (iscrowbar(W) && src.beaker && auxiliary)
+				if (iscrowbar(W) && beaker && auxiliary)
 					var/obj/item/weapon/reagent_containers/glass/B = beaker
 					if ((user.get_inactive_hand() == src) || (user.back == src))
 						B.loc = user.loc
@@ -222,10 +222,10 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 						var/obj/item/clothing/mask/chemmask/C = user.wear_mask
 						C.update_verbs()
 					return
-				else if (iscrowbar(W) && src.beaker && !auxiliary)
+				else if (iscrowbar(W) && beaker && !auxiliary)
 					to_chat(user, "<span class='warning'>The beaker is held tight by the bolts of the auxiliary chamber!</span>")
 					return
-				if (isscrewdriver(W) && src.beaker)
+				if (isscrewdriver(W) && beaker)
 					to_chat(user, "<span class='warning'>You can't reach the maintenance panel with the beaker in the way!</span>")
 					return
 				else if (isscrewdriver(W))

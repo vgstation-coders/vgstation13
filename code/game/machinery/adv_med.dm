@@ -30,7 +30,7 @@
 	RefreshParts()
 	spawn( 5 )
 		var/turf/t
-		world.log << "DEBUG: Beginning body scanner console checking/auto-generation for scanner [src] at [src.loc.x],[src.loc.y],[src.loc.z]..."
+		world.log << "DEBUG: Beginning body scanner console checking/auto-generation for scanner [src] at [loc.x],[loc.y],[loc.z]..."
 		if(orient == "RIGHT")
 			update_icon()
 			t = get_step(get_turf(src), WEST)
@@ -44,19 +44,19 @@
 			connected = c
 			c.connected = src
 		else
-			world.log << "DEBUG: generating console at [t.loc.x],[t.loc.y],[t.loc.z] for scanner at [src.loc.x],[src.loc.y],[src.loc.z]"
+			world.log << "DEBUG: generating console at [t.loc.x],[t.loc.y],[t.loc.z] for scanner at [loc.x],[loc.y],[loc.z]"
 			generate_console(t)
 		return
 	return
 
 /obj/machinery/bodyscanner/proc/generate_console(turf/T as turf)
 	if(connected)
-		connected.orient = src.orient
+		connected.orient = orient
 		connected.update_icon()
 		return 1
 	if(!T.density)
 		connected = new /obj/machinery/body_scanconsole(T)
-		connected.orient = src.orient
+		connected.orient = orient
 		connected.update_icon()
 		return 1
 	else
@@ -84,7 +84,7 @@
 
 /obj/machinery/bodyscanner/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)) && src.occupant)
+	if(!(stat & (BROKEN|NOPOWER)) && occupant)
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
@@ -129,12 +129,12 @@
 
 	L.loc = src
 	L.reset_view()
-	src.occupant = L
+	occupant = L
 	update_icon()
 	for(var/obj/OO in src)
-		OO.loc = src.loc
+		OO.loc = loc
 		//Foreach goto(154)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	return
@@ -191,7 +191,7 @@
 
 	if(usr.isUnconscious())
 		return
-	if(src.occupant)
+	if(occupant)
 		to_chat(usr, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
 	/*if(usr.abiotic())
@@ -202,26 +202,26 @@
 	usr.pulling = null
 	usr.loc = src
 	usr.reset_view()
-	src.occupant = usr
+	occupant = usr
 	update_icon()
 	for(var/obj/O in src)
 		qdel(O)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	return
 
 /obj/machinery/bodyscanner/proc/go_out(var/exit = loc)
-	if(!src.occupant)
+	if(!occupant)
 		return
-	for (var/atom/movable/x in src.contents)
+	for (var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
-		x.forceMove(src.loc)
+		x.forceMove(loc)
 
-	src.occupant.forceMove(exit)
-	src.occupant.reset_view()
-	src.occupant = null
+	occupant.forceMove(exit)
+	occupant.reset_view()
+	occupant = null
 	update_icon()
 	set_light(0)
 	return
@@ -257,7 +257,7 @@
 	var/obj/item/weapon/grab/G = W
 	if((!( istype(G, /obj/item/weapon/grab) ) || !( ismob(G.affecting) )))
 		return
-	if(src.occupant)
+	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
 
@@ -269,9 +269,9 @@
 	var/mob/M = G.affecting
 	M.loc = src
 	M.reset_view()
-	src.occupant = M
+	occupant = M
 	update_icon()
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	qdel(G)
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
@@ -281,21 +281,21 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.loc = loc
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.loc = loc
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.loc = loc
 					ex_act(severity)
 				qdel(src)
 				return
@@ -305,7 +305,7 @@
 /obj/machinery/bodyscanner/blob_act()
 	if(prob(50))
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.loc
+			A.loc = loc
 		qdel(src)
 
 
@@ -326,9 +326,9 @@
 	spawn(5)
 		if(orient == "RIGHT")
 			icon_state = "body_scannerconsole-r"
-			src.connected = locate(/obj/machinery/bodyscanner, get_step(src, EAST))
+			connected = locate(/obj/machinery/bodyscanner, get_step(src, EAST))
 		else
-			src.connected = locate(/obj/machinery/bodyscanner, get_step(src, WEST))
+			connected = locate(/obj/machinery/bodyscanner, get_step(src, WEST))
 	return
 
 /obj/machinery/body_scanconsole/update_icon()
@@ -369,11 +369,11 @@
 		use_power = 1
 
 /obj/machinery/body_scanconsole/attack_paw(user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/body_scanconsole/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/body_scanconsole/attack_hand(user as mob)
 	if(..())
@@ -388,13 +388,13 @@
 		return
 
 	var/dat
-	if(src.delete && src.temphtml) //Window in buffer but its just simple message, so nothing
-		src.delete = src.delete
-	else if(!src.delete && src.temphtml) //Window in buffer - its a menu, dont add clear message
-		dat = text("[]<BR><BR><A href='?src=\ref[];clear=1'>Main Menu</A>", src.temphtml, src)
+	if(delete && temphtml) //Window in buffer but its just simple message, so nothing
+		delete = delete
+	else if(!delete && temphtml) //Window in buffer - its a menu, dont add clear message
+		dat = text("[]<BR><BR><A href='?src=\ref[];clear=1'>Main Menu</A>", temphtml, src)
 	else
-		if(src.connected) //Is something connected?
-			dat = format_occupant_data(src.connected.get_occupant_data())
+		if(connected) //Is something connected?
+			dat = format_occupant_data(connected.get_occupant_data())
 			dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
 		else
 			dat = "<font color='red'>Error: No Body Scanner connected.</font>"
@@ -409,19 +409,19 @@
 		return
 
 	if(href_list["print"])
-		if(!src.connected)
+		if(!connected)
 			to_chat(usr, "[bicon(src)]<span class='warning'>Error: No body scanner connected.</span>")
 			return
-		var/mob/living/carbon/human/occupant = src.connected.occupant
-		if(!src.connected.occupant)
-			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] is empty.</span>")
+		var/mob/living/carbon/human/occupant = connected.occupant
+		if(!connected.occupant)
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [connected] is empty.</span>")
 			return
 		if(!istype(occupant,/mob/living/carbon/human))
-			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] cannot scan that lifeform.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [connected] cannot scan that lifeform.</span>")
 			return
-		var/obj/item/weapon/paper/R = new(src.loc)
+		var/obj/item/weapon/paper/R = new(loc)
 		R.name = "paper - 'body scan report'"
-		R.info = format_occupant_data(src.connected.get_occupant_data())
+		R.info = format_occupant_data(connected.get_occupant_data())
 
 
 /obj/machinery/bodyscanner/proc/get_occupant_data()
@@ -650,11 +650,11 @@
 	return dat
 
 /obj/machinery/body_scanconsole/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(!src.connected || src.connected.scanning<3)
+	if(!connected || connected.scanning<3)
 		return
 	if(speech.speaker && speech.speaker in range(src,3) && findtext(speech.message, "scanner, print"))
-		if(!src.connected.occupant||!istype(src.connected.occupant,/mob/living/carbon/human))
+		if(!connected.occupant||!istype(connected.occupant,/mob/living/carbon/human))
 			return
-		var/obj/item/weapon/paper/R = new(src.loc)
+		var/obj/item/weapon/paper/R = new(loc)
 		R.name = "paper - 'body scan report'"
-		R.info = format_occupant_data(src.connected.get_occupant_data())
+		R.info = format_occupant_data(connected.get_occupant_data())

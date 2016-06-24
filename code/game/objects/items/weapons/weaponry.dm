@@ -13,7 +13,7 @@
 
 
 /obj/item/weapon/banhammer/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [name]! It looks like \he's trying to ban \himself from life.</span>")
 	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
 
 /obj/item/weapon/sord
@@ -30,7 +30,7 @@
 
 
 /obj/item/weapon/sord/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [name]! It looks like \he's trying to commit suicide.</span>")
 	return(BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -58,7 +58,7 @@
 	return 1
 
 /obj/item/weapon/claymore/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [name]! It looks like \he's trying to commit suicide.</span>")
 	return(BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
@@ -85,7 +85,7 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [name]! It looks like \he's trying to commit seppuku.</span>")
 		return(BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
@@ -181,12 +181,12 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	else if(istype(I, /obj/item/stack/rods))
 		to_chat(user, "You fasten the metal rods together.")
 		var/obj/item/stack/rods/R = I
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/rail_assembly/Q = new (get_turf(user))
 			user.put_in_hands(Q)
 		else
-			new /obj/item/weapon/rail_assembly(get_turf(src.loc))
+			new /obj/item/weapon/rail_assembly(get_turf(loc))
 		R.use(1)
 		qdel(src)
 
@@ -215,7 +215,7 @@ obj/item/weapon/banhammer/admin
 	var/mob/living/simple_animal/borer/parent_borer = null
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [name]! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
 
 /obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)

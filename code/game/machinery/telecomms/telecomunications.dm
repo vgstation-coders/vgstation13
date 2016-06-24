@@ -178,7 +178,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 /obj/machinery/telecomms/proc/add_link(var/obj/machinery/telecomms/T)
 	var/turf/position = get_turf(src)
 	var/turf/T_position = get_turf(T)
-	if((position.z == T_position.z) || (src.long_range_link && T.long_range_link))
+	if((position.z == T_position.z) || (long_range_link && T.long_range_link))
 		if(src != T)
 			for(var/x in autolinkers)
 				if(x in T.autolinkers)
@@ -454,7 +454,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				return
 			// failed to send to a processor, relay information anyway
 			signal.data["slow"] += rand(1, 5) // slow the signal down only slightly
-			src.receive_information(signal, src)
+			receive_information(signal, src)
 
 		// Try sending it!
 		var/list/try_send = list("/obj/machinery/telecomms/server", "/obj/machinery/telecomms/hub", "/obj/machinery/telecomms/broadcaster", "/obj/machinery/telecomms/bus")
@@ -625,7 +625,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			rawcode = t
 
 /obj/machinery/telecomms/server/proc/admin_log(var/mob/mob)
-	var/msg = "[key_name(mob)] has compiled a script to [src.id]"
+	var/msg = "[key_name(mob)] has compiled a script to [id]"
 
 	diary << msg
 	diary << rawcode

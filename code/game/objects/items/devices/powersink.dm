@@ -130,5 +130,5 @@
 				playsound(src, 'sound/effects/screech.ogg', 100, 1, 1)
 			if(power_drained >= max_power)
 				processing_objects.Remove(src)
-				explosion(src.loc, 3,6,9,12)
+				explosion(loc, 3,6,9,12)
 				qdel(src)

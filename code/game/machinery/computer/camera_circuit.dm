@@ -123,5 +123,5 @@
 		updateDialog()
 
 	updateDialog()
-		if(istype(src.loc,/mob))
-			attack_self(src.loc)
+		if(istype(loc,/mob))
+			attack_self(loc)

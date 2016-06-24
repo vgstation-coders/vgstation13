@@ -87,7 +87,7 @@ var/list/all_doors = list()
 			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
 			else if(!operating)
-				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
+				playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
 	if (istype(AM, /obj/structure/bed/chair/vehicle))
@@ -99,7 +99,7 @@ var/list/all_doors = list()
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
 			else if(!operating)
-				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
+				playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
@@ -115,7 +115,7 @@ var/list/all_doors = list()
 	if(allowed(user))
 		open()
 	else if(!operating)
-		playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
+		playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 		door_animate("deny")
 
 	return
@@ -182,7 +182,7 @@ var/list/all_doors = list()
 		else
 			return open()
 
-	playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
+	playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 	if(density) //Why are we playing a denied animation on an OPEN DOOR
 		door_animate("deny")
 
@@ -250,10 +250,10 @@ var/list/all_doors = list()
 	if(!operating)		operating = 1
 
 	door_animate("opening")
-	src.set_opacity(0)
+	set_opacity(0)
 	sleep(10)
-	src.layer = base_layer
-	src.density = 0
+	layer = base_layer
+	density = 0
 	explosion_resistance = 0
 	update_icon()
 	set_opacity(0)
@@ -283,7 +283,7 @@ var/list/all_doors = list()
 	update_icon()
 
 	if (!glass)
-		src.set_opacity(1)
+		set_opacity(1)
 		// Copypasta!!!
 		var/obj/effect/beam/B = locate() in loc
 		if(B)
@@ -392,7 +392,7 @@ var/list/all_doors = list()
 
 /obj/machinery/door/proc/update_heat_protection(var/turf/simulated/source)
 	if(istype(source))
-		if(src.density && (src.opacity || src.heat_proof))
+		if(density && (opacity || heat_proof))
 			source.thermal_conductivity = DOOR_HEAT_TRANSFER_COEFFICIENT
 		else
 			source.thermal_conductivity = initial(source.thermal_conductivity)

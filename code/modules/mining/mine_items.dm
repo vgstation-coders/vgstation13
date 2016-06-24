@@ -125,7 +125,7 @@ proc/move_mining_shuttle()
 /obj/machinery/computer/mining_shuttle/attack_hand(user as mob)
 	if(..(user))
 		return
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	var/dat = "<center>Mining shuttle:<br> <b><A href='?src=\ref[src];move=[1]'>Send</A></b></center>"
 	user << browse("[dat]", "window=miningshuttle;size=200x100")
 
@@ -133,7 +133,7 @@ proc/move_mining_shuttle()
 	if(..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["move"])
 		if(ticker.mode.name == "blob")
 			if(ticker.mode:declared)
@@ -153,7 +153,7 @@ proc/move_mining_shuttle()
 
 /obj/machinery/computer/mining_shuttle/emag(mob/user as mob)
 	..()
-	src.req_access = list()
+	req_access = list()
 	to_chat(usr, "You disable the console's access requirement.")
 */
 /******************************Lantern*******************************/
@@ -346,10 +346,10 @@ proc/move_mining_shuttle()
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)
 	if(!device_turf||device_turf.z==CENTCOMM_Z||device_turf.z>=map.zLevels.len)
-		to_chat(user, "<span class='notice'>You're having difficulties getting the [src.name] to work.</span>")
+		to_chat(user, "<span class='notice'>You're having difficulties getting the [name] to work.</span>")
 		return
 	else
-		user.visible_message("<span class='notice'>[user.name] activates the [src.name]!</span>")
+		user.visible_message("<span class='notice'>[user.name] activates the [name]!</span>")
 		var/list/L = new()
 
 		for (var/obj/item/beacon/B in beacons)
@@ -360,7 +360,7 @@ proc/move_mining_shuttle()
 					L.Add(B)
 
 		if(!L.len)
-			to_chat(user, "<span class='notice'>The [src.name] failed to create a wormhole.</span>")
+			to_chat(user, "<span class='notice'>The [name] failed to create a wormhole.</span>")
 			return
 		var/chosen_beacon = pick(L)
 		var/obj/effect/portal/jaunt_tunnel/J = new /obj/effect/portal/jaunt_tunnel(get_turf(src))
@@ -477,12 +477,12 @@ proc/move_mining_shuttle()
 		spawn(50)
 			playsound(src,'sound/effects/sparks4.ogg',50,1)
 			if(creator)
-				for(var/mob/living/L in src.loc)
+				for(var/mob/living/L in loc)
 					add_logs(creator, L, "used a resonator field on", object = "resonator")
 					to_chat(L, "<span class='danger'>\The [src] ruptured with you in it!</span>")
 					L.adjustBruteLoss(resonance_damage)
 			else
-				for(var/mob/living/L in src.loc)
+				for(var/mob/living/L in loc)
 					to_chat(L, "<span class='danger'>\The [src] ruptured with you in it!</span>")
 					L.adjustBruteLoss(resonance_damage)
 			qdel(src)
@@ -577,7 +577,7 @@ proc/move_mining_shuttle()
 /mob/living/simple_animal/hostile/mining_drone/Die()
 	..()
 	visible_message("<span class='danger'>\The [src] blows apart!</span>")
-	new /obj/effect/decal/remains/robot(src.loc)
+	new /obj/effect/decal/remains/robot(loc)
 	DropOre()
 	qdel(src)
 	return
@@ -626,7 +626,7 @@ proc/move_mining_shuttle()
 
 /mob/living/simple_animal/hostile/mining_drone/proc/CollectOre()
 	var/obj/item/weapon/ore/O
-	for(O in src.loc)
+	for(O in loc)
 		O.loc = src
 	for(var/dir in alldirs)
 		var/turf/T = get_step(src,dir)
@@ -639,7 +639,7 @@ proc/move_mining_shuttle()
 		return
 	for(var/obj/item/weapon/ore/O in contents)
 		contents -= O
-		O.loc = src.loc
+		O.loc = loc
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/adjustBruteLoss()
@@ -770,19 +770,19 @@ proc/move_mining_shuttle()
 	/*
 	//Cham Projector Exception
 	for(var/obj/effect/dummy/chameleon/AD in src)
-		AD.loc = src.loc
+		AD.loc = loc
 
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.loc = loc
 
 	for(var/mob/M in src)
-		M.loc = src.loc
+		M.loc = loc
 		if(M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
 */
 	if(contained_mob)
-		contained_mob.loc = src.loc
+		contained_mob.loc = loc
 		if(contained_mob.client)
 			contained_mob.client.eye = contained_mob.client.mob
 			contained_mob.client.perspective = MOB_PERSPECTIVE
@@ -797,7 +797,7 @@ proc/move_mining_shuttle()
 	update_icon()
 
 /obj/item/device/mobcapsule/proc/take_contents(mob/user)
-	for(var/mob/living/simple_animal/AM in src.loc)
+	for(var/mob/living/simple_animal/AM in loc)
 		if(istype(AM))
 			var/mob/living/simple_animal/M = AM
 			var/mob/living/simple_animal/hostile/H = M

@@ -13,7 +13,7 @@
 
 /obj/item/projectile/missile/process(var/turf/newtarget)
 	target = newtarget
-	dir = get_dir(src.loc, target)
+	dir = get_dir(loc, target)
 	//walk_towards(src, target, MISSILE_SPEED)
 	spawn()
 		while(loc)
@@ -31,8 +31,8 @@
 	return
 
 /obj/item/projectile/missile/proc/explode()
-	explosion(src.loc, 1, 1, 2, 7, 0)
-	playsound(src.loc, "explosion", 50, 1)
+	explosion(loc, 1, 1, 2, 7, 0)
+	playsound(loc, "explosion", 50, 1)
 	del(src)
 
 /obj/item/projectile/missile/attack_hand(mob/user)
@@ -88,19 +88,19 @@
 		icon_state = "broke"
 	else
 		if( powered() )
-			if (src.enabled)
+			if (enabled)
 				icon_state = "turret1"
 			else
 				icon_state = "turret0"
 			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
-				src.icon_state = "turret0"
+				icon_state = "turret0"
 				stat |= NOPOWER
 
 /obj/machinery/meteor_battery/proc/setState(var/enabled)
-	src.enabled = enabled
-	src.power_change()
+	enabled = enabled
+	power_change()
 
 /obj/machinery/meteor_battery/proc/get_new_target()
 	var/list/new_targets = new
@@ -114,9 +114,9 @@
 /obj/machinery/meteor_battery/process()
 	if(stat & (NOPOWER|BROKEN))
 		return
-	if(src.cover==null)
-		src.cover = new /obj/machinery/turretcover(src.loc)
-		src.cover.host = src
+	if(cover==null)
+		cover = new /obj/machinery/turretcover(loc)
+		cover.host = src
 	if(!enabled)
 		if(!isDown() && !isPopping())
 			popDown()
@@ -171,7 +171,7 @@
 
 /obj/machinery/meteor_battery/proc/target()
 	while(src && enabled && !stat)
-		src.dir = get_dir(src, cur_target)
+		dir = get_dir(src, cur_target)
 		shootAt(cur_target)
 		sleep(shot_delay)
 	return
@@ -194,41 +194,41 @@
 	return (invisibility!=0)
 
 /obj/machinery/meteor_battery/proc/popUp()
-	if ((!isPopping()) || src.popping==-1)
+	if ((!isPopping()) || popping==-1)
 		invisibility = 0
 		popping = 1
-		if (src.cover!=null)
-			flick("popup", src.cover)
-			src.cover.icon_state = "openTurretCover"
+		if (cover!=null)
+			flick("popup", cover)
+			cover.icon_state = "openTurretCover"
 		spawn(10)
 			if (popping==1) popping = 0
 
 /obj/machinery/meteor_battery/proc/popDown()
-	if ((!isPopping()) || src.popping==1)
+	if ((!isPopping()) || popping==1)
 		popping = -1
-		if (src.cover!=null)
-			flick("popdown", src.cover)
-			src.cover.icon_state = "turretCover"
+		if (cover!=null)
+			flick("popdown", cover)
+			cover.icon_state = "turretCover"
 		spawn(10)
 			if (popping==-1)
 				invisibility = 2
 				popping = 0
 
 /obj/machinery/meteor_battery/bullet_act(var/obj/item/projectile/Proj)
-	src.health -= Proj.damage
+	health -= Proj.damage
 	..()
-	if(prob(45) && Proj.damage > 0) src.spark_system.start()
-	if (src.health <= 0)
-		src.die()
+	if(prob(45) && Proj.damage > 0) spark_system.start()
+	if (health <= 0)
+		die()
 	return
 
 /obj/machinery/meteor_battery/attackby(obj/item/weapon/W, mob/user)//I can't believe no one added this before/N
 	..()
-	playsound(src.loc, 'sound/weapons/smash.ogg', 60, 1)
-	src.spark_system.start()
-	src.health -= W.force * 0.5
-	if (src.health <= 0)
-		src.die()
+	playsound(loc, 'sound/weapons/smash.ogg', 60, 1)
+	spark_system.start()
+	health -= W.force * 0.5
+	if (health <= 0)
+		die()
 	return
 
 /obj/machinery/meteor_battery/emp_act(severity)
@@ -240,13 +240,13 @@
 
 /obj/machinery/meteor_battery/ex_act(severity)
 	if(severity < 3)
-		src.die()
+		die()
 
 /obj/machinery/meteor_battery/proc/die()
-	src.health = 0
-	src.density = 0
-	src.stat |= BROKEN
-	src.icon_state = "broke"
+	health = 0
+	density = 0
+	stat |= BROKEN
+	icon_state = "broke"
 	if (cover!=null)
 		del(cover)
 	sleep(3)
@@ -256,13 +256,13 @@
 
 /obj/machinery/meteor_battery/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
-		playsound(src.loc, 'sound/weapons/slash.ogg', 25, 1, -1)
+		playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
-		src.health -= 15
-		if (src.health <= 0)
-			src.die()
+		health -= 15
+		if (health <= 0)
+			die()
 	else
 		to_chat(M, "<span class='good'>That object is useless to you.</span>")
 	return

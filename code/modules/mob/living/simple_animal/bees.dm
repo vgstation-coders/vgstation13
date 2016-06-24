@@ -101,7 +101,7 @@
 
 /mob/living/simple_animal/bee/wander_move(var/turf/dest)
 	var/goodmove=0
-	if(!my_hydrotray || my_hydrotray.loc != src.loc || my_hydrotray.dead || !my_hydrotray.seed)
+	if(!my_hydrotray || my_hydrotray.loc != loc || my_hydrotray.dead || !my_hydrotray.seed)
 		// Wander the wastes
 		goodmove=1
 	else
@@ -142,7 +142,7 @@
 			)
 
 		for(var/this_type in calmers)
-			var/obj/effect/check_effect = locate(this_type) in src.loc
+			var/obj/effect/check_effect = locate(this_type) in loc
 			if(check_effect && (check_effect.reagents.has_reagent(WATER) || check_effect.reagents.has_reagent(HOLYWATER)))
 				calming = 1
 				break
@@ -151,7 +151,7 @@
 			var/oldferal = feral
 			feral = -10
 			if(oldferal > 0 && feral <= 0)
-				src.visible_message("<span class='notice'>The bees calm down!</span>")
+				visible_message("<span class='notice'>The bees calm down!</span>")
 				target = null
 				target_turf = null
 				wander = 1
@@ -195,45 +195,45 @@
 				var/turf/T = get_turf(pick(orange(src,1)))
 				var/mob/living/simple_animal/bee/B = getFromPool(/mob/living/simple_animal/bee,T)
 				B.strength = rand(1,5)
-				src.strength -= B.strength
-				if(src.strength <= 5)
-					src.icon_state = "bees[src.strength]"
+				strength -= B.strength
+				if(strength <= 5)
+					icon_state = "bees[strength]"
 				B.icon_state = "bees[B.strength]"
-				if(src.parent)
-					B.parent = src.parent
-					src.parent.owned_bee_swarms.Add(B)
+				if(parent)
+					B.parent = parent
+					parent.owned_bee_swarms.Add(B)
 
 		//make some noise
 		if(prob(1))
 			if(prob(50))
-				src.visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
+				visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
 			playsound(get_turf(src), 'sound/effects/bees.ogg', min(20*strength,100), 1)
 
-		for(var/mob/living/simple_animal/bee/B in src.loc)
+		for(var/mob/living/simple_animal/bee/B in loc)
 			if(B == src)
 				continue
 
 			if(feral > 0)
-				src.strength += B.strength
+				strength += B.strength
 				returnToPool(B)
-				src.icon_state = "bees[src.strength]"
+				icon_state = "bees[strength]"
 				if(strength > 5)
 					icon_state = "bees_swarm"
 			else if(prob(10))
 				//make the other swarm of bees stronger, then move away
-				var/total_bees = B.strength + src.strength
+				var/total_bees = B.strength + strength
 				if(total_bees < 10)
 					B.strength = min(5, total_bees)
-					src.strength = total_bees - B.strength
+					strength = total_bees - B.strength
 
 					B.icon_state = "bees[B.strength]"
-					if(src.strength <= 0)
+					if(strength <= 0)
 						returnToPool(B)
 						return
-					src.icon_state = "bees[B.strength]"
+					icon_state = "bees[B.strength]"
 					var/turf/simulated/floor/T = get_turf(get_step(src, pick(1,2,4,8)))
 					if(T.Enter(src, get_turf(src)))
-						src.loc = T
+						loc = T
 				break
 
 		if(target)
@@ -249,8 +249,8 @@
 			var/turf/move_to=get_step(src, tdir) // Called twice.
 			walk_to(src,move_to)
 			if (prob(1))
-				src.visible_message("<span class='notice'>The bees swarm after [target]!</span>")
-			if(src.loc == target_turf)
+				visible_message("<span class='notice'>The bees swarm after [target]!</span>")
+			if(loc == target_turf)
 				target_turf = null
 				wander = 1
 		else
@@ -260,8 +260,8 @@
 				turns_per_move = rand(1,3)
 			else if(feral < 0)
 				turns_since_move = 0
-			else if(!my_hydrotray || my_hydrotray.loc != src.loc || my_hydrotray.dead || !my_hydrotray.seed)
-				var/obj/machinery/portable_atmospherics/hydroponics/my_hydrotray = locate() in src.loc
+			else if(!my_hydrotray || my_hydrotray.loc != loc || my_hydrotray.dead || !my_hydrotray.seed)
+				var/obj/machinery/portable_atmospherics/hydroponics/my_hydrotray = locate() in loc
 				if(my_hydrotray)
 					if(!my_hydrotray.dead && my_hydrotray.seed)
 						turns_per_move = rand(20,50)

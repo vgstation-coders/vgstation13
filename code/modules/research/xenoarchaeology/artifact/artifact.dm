@@ -55,8 +55,8 @@
 
 /obj/structure/boulder/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/device/core_sampler))
-		src.geological_data.artifact_distance = rand(-100,100) / 100
-		src.geological_data.artifact_id = artifact_find.artifact_id
+		geological_data.artifact_distance = rand(-100,100) / 100
+		geological_data.artifact_id = artifact_find.artifact_id
 
 		var/obj/item/device/core_sampler/C = W
 		C.sample_item(src, user)
@@ -73,7 +73,7 @@
 		busy = 1
 		if(do_after(user, src, 40))
 			busy = 0
-			to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*src.excavation_level]cm.</span>")
+			to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*excavation_level]cm.</span>")
 		else
 			busy = 0
 		return
@@ -97,14 +97,14 @@
 
 			if(excavation_level > 100)
 				//failure
-				src.visible_message("<span class='danger'>\The [src] suddenly crumbles away.</span>")
+				visible_message("<span class='danger'>\The [src] suddenly crumbles away.</span>")
 				to_chat(user, "<span class='rose'>\The [src] has disintegrated under your onslaught, any secrets it was holding are long gone.</span>")
 				returnToPool(src)
 				return
 
 			if(prob(excavation_level))
 				//success
-				src.visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
+				visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
 				if(artifact_find)
 					var/spawn_type = artifact_find.artifact_find_type
 					var/obj/O = new spawn_type(get_turf(src))

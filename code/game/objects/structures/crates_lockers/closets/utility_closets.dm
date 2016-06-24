@@ -51,7 +51,7 @@
 			qdel(src)
 			return
 		/*if ("fire")
-			new /obj/structure/closet/firecloset(src.loc)
+			new /obj/structure/closet/firecloset(loc)
 			del(src)
 			return*/
 
@@ -205,7 +205,7 @@
 	anchored = 1
 	density = 0
 	wall_mounted = 1
-	pick_up_stuff = 0 // #367 - Picks up stuff at src.loc, rather than the offset location.
+	pick_up_stuff = 0 // #367 - Picks up stuff at loc, rather than the offset location.
 
 /obj/structure/closet/hydrant/New()
 	..()
@@ -228,7 +228,7 @@
 	anchored = 1
 	density = 0
 	wall_mounted = 1
-	pick_up_stuff = 0 // #367 - Picks up stuff at src.loc, rather than the offset location.
+	pick_up_stuff = 0 // #367 - Picks up stuff at loc, rather than the offset location.
 
 /obj/structure/closet/medical_wall/update_icon()
 	if(!opened)

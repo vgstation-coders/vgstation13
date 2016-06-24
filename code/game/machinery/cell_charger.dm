@@ -103,13 +103,13 @@
 			s.set_up(5, 1, src)
 			s.start()
 			spawn(15)
-				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
+				explosion(loc, -1, 1, 3, adminlog = 0) //Overload
 				Destroy(src) //It exploded, rip
 			return
 		usr.put_in_hands(charging)
 		charging.add_fingerprint(user)
 		charging.updateicon()
-		src.charging = null
+		charging = null
 		user.visible_message("<span class='notice'>[user] removes the cell from [src].</span>", "<span class='notice'>You remove the cell from [src].</span>")
 		chargelevel = -1
 		updateicon()

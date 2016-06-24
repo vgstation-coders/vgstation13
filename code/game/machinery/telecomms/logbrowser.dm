@@ -193,7 +193,7 @@
 
 	if(href_list["delete"])
 
-		if(!src.allowed(usr) && !emagged)
+		if(!allowed(usr) && !emagged)
 			to_chat(usr, "<span class='warning'>ACCESS DENIED.</span>")
 			return
 
@@ -229,7 +229,7 @@
 /obj/machinery/computer/telecomms/server/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	if(..())
 		return 1
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/computer/telecomms/server/emag(mob/user)
 	if(!emagged)

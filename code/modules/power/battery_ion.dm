@@ -42,7 +42,7 @@
 /obj/machinery/power/battery/portable/initialize()
 	..()
 	if(anchored)
-		var/obj/machinery/power/battery_port/port = locate() in src.loc
+		var/obj/machinery/power/battery_port/port = locate() in loc
 		if(port)
 			port.connect_battery(src)
 
@@ -66,7 +66,7 @@
 /obj/machinery/power/battery/portable/wrenchAnchor(mob/user)
 	if(..() == 1)
 		if(anchored)
-			var/obj/machinery/power/battery_port/port = locate() in src.loc
+			var/obj/machinery/power/battery_port/port = locate() in loc
 			if(port)
 				port.connect_battery(src)
 		else

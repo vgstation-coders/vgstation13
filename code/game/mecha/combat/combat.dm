@@ -25,7 +25,7 @@
 	if(!melee_can_hit || !istype(target, /atom)) return
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
-		if(src.occupant.a_intent == I_HURT)
+		if(occupant.a_intent == I_HURT)
 			playsound(src, 'sound/mecha/mechsmash.ogg', 50, 1)
 			if(damtype == "brute")
 				step_away(M,src,15)
@@ -77,12 +77,12 @@
 					else
 						return
 				M.updatehealth()
-			src.occupant_message("You hit [target].")
-			src.visible_message("<font color='red'><b>[src.name] hits [target].</b></font>")
+			occupant_message("You hit [target].")
+			visible_message("<font color='red'><b>[name] hits [target].</b></font>")
 		else
 			step_away(M,src)
-			src.occupant_message("You push [target] out of the way.")
-			src.visible_message("[src] pushes [target] out of the way.")
+			occupant_message("You push [target] out of the way.")
+			visible_message("[src] pushes [target] out of the way.")
 
 		melee_can_hit = 0
 		if(do_after(melee_cooldown))
@@ -91,16 +91,16 @@
 
 	else
 		if(damtype == "brute")
-			for(var/target_type in src.destroyable_obj)
+			for(var/target_type in destroyable_obj)
 				if(istype(target, target_type) && hascall(target, "attackby"))
-					src.occupant_message("You hit [target].")
-					src.visible_message("<font color='red'><b>[src.name] hits [target]</b></font>")
+					occupant_message("You hit [target].")
+					visible_message("<font color='red'><b>[name] hits [target]</b></font>")
 					if(!istype(target, /turf/simulated/wall))
-						target:attackby(src,src.occupant)
+						target:attackby(src,occupant)
 					else if(prob(5))
 						target:dismantle_wall(1)
-						src.occupant_message("<span class='notice'>You smash through the wall.</span>")
-						src.visible_message("<b>[src.name] smashes through the wall</b>")
+						occupant_message("<span class='notice'>You smash through the wall.</span>")
+						visible_message("<b>[name] smashes through the wall</b>")
 						playsound(src, 'sound/weapons/smash.ogg', 50, 1)
 					melee_can_hit = 0
 					if(do_after(melee_cooldown))
@@ -117,7 +117,7 @@
 		M.adjustBruteLoss(1)
 		M.updatehealth()
 		for (var/mob/V in viewers(src))
-			V.show_message("[src.name] shakes [M] like a rag doll.")
+			V.show_message("[name] shakes [M] like a rag doll.")
 	return
 */
 
@@ -254,8 +254,8 @@
 
 
 /obj/mecha/combat/go_out()
-	if(src.occupant && src.occupant.client)
-		src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
+	if(occupant && occupant.client)
+		occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
 	..()
 	return
 

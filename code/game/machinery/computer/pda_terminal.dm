@@ -95,7 +95,7 @@
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if (!ui)
-		ui = new(user, src, ui_key, "pda_terminal.tmpl", src.name, 800, 700)
+		ui = new(user, src, ui_key, "pda_terminal.tmpl", name, 800, 700)
 		ui.set_initial_data(data)
 		ui.open()
 
@@ -169,9 +169,9 @@
 						to_chat(usr, "[bicon(src)]<span class='notice'>Enjoy your new PDA!</span>")
 						flick("pdaterm-purchase", src)
 						if(prob(10))
-							new /obj/item/device/pda/clear(src.loc)//inserting mandatory hidden feature.
+							new /obj/item/device/pda/clear(loc)//inserting mandatory hidden feature.
 						else
-							new /obj/item/device/pda(src.loc)
+							new /obj/item/device/pda(loc)
 					else
 						flick("pdaterm-problem", src)
 				else
@@ -232,7 +232,7 @@
 
 			//create an entry on the buy's account's transaction log
 			var/datum/transaction/T = new()
-			T.target_name = "[linked_account.owner_name] (via [src.name])"
+			T.target_name = "[linked_account.owner_name] (via [name])"
 			T.purpose = "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]"
 			T.amount = "-[transaction_amount]"
 			T.source_terminal = machine_id

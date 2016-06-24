@@ -43,7 +43,7 @@
 	if(timestopped) return 0 //under effects of time magick
 
 	//MICE!
-	if((src.loc) && isturf(src.loc))
+	if((loc) && isturf(loc))
 		if(!stat && !resting && !locked_to)
 			for(var/mob/living/simple_animal/mouse/M in view(1,src))
 				if(!M.stat)

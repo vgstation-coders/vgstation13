@@ -71,7 +71,7 @@
 			var/obj/item/stack/rods/R = W
 			R.use(1)
 			arrow = new /obj/item/weapon/arrow/rod(src)
-			arrow.fingerprintslast = src.fingerprintslast
+			arrow.fingerprintslast = fingerprintslast
 			arrow.loc = src
 			icon_state = "crossbow-nocked"
 			user.visible_message("[user] haphazardly jams [arrow] into [src].","You jam [arrow] into [src].")
@@ -162,13 +162,13 @@
 /obj/item/weapon/crossbow/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
 
 	if (istype(target, /obj/item/weapon/storage/backpack ))
-		src.dropped()
+		dropped()
 		return
 
 	else if (target.loc == user.loc)
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	else if (locate (/obj/structure/table, loc))
 		return
 
 	else if(target == user)

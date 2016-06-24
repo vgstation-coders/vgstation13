@@ -23,12 +23,12 @@
 //JUST
 /obj/item/weapon/reagent_containers/glass/bottle/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
-		if(src.reagents.total_volume >= 1)
+		if(reagents.total_volume >= 1)
 			if(M.reagents.total_volume >= 1)
 				to_chat(user, "<span class='notice'>You dip \the [M]'s tip into \the [src] but don't soak anything up.</span>")
 				return 1
 			else
-				src.reagents.trans_to(M, 1)
+				reagents.trans_to(M, 1)
 				to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
 				playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 		else
@@ -294,7 +294,7 @@
 		var/datum/disease/F = new /datum/disease/fake_gbs(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 20, data)
-		
+
 /obj/item/weapon/reagent_containers/glass/bottle/chickenpox
 	name = "Chickenpox culture bottle"
 	desc = "A small bottle. Contains activated chickenpox in a vox-blood medium."
@@ -305,7 +305,7 @@
 		var/datum/disease/F = new /datum/disease2/effect/chickenpox(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 20, data)
-		
+
 /*
 /obj/item/weapon/reagent_containers/glass/bottle/rhumba_beat
 	name = "Rhumba Beat culture bottle"

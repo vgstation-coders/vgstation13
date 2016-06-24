@@ -18,7 +18,7 @@
 			getFromPool(/obj/effect/decal/cleanable/blood, src)
 		//	new /obj/effect/decal/remains/human(src) //Commented out until remains are cleanable
 
-	for(var/obj/O in src.contents) //Eject contents!
+	for(var/obj/O in contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)

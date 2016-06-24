@@ -105,7 +105,7 @@ Thus, the two variables affect pump operation are set in New():
 				[round(target_pressure,0.1)]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
 				"}
 
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
+	user << browse("<HEAD><TITLE>[name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
 
 /obj/machinery/atmospherics/binary/pump/initialize()
@@ -141,8 +141,8 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/pump/attack_hand(user as mob)
 	if(..())
 		return
-	src.add_fingerprint(usr)
-	if(!src.allowed(user))
+	add_fingerprint(usr)
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 	usr.set_machine(src)
@@ -155,12 +155,12 @@ Thus, the two variables affect pump operation are set in New():
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)].")
 	if(href_list["set_press"])
-		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",src.target_pressure) as num
-		src.target_pressure = max(0, min(4500, new_pressure))
+		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",target_pressure) as num
+		target_pressure = max(0, min(4500, new_pressure))
 		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [key_name(usr)].")
 	usr.set_machine(src)
-	src.update_icon()
-	src.updateUsrDialog()
+	update_icon()
+	updateUsrDialog()
 	return
 
 /obj/machinery/atmospherics/binary/pump/power_change()

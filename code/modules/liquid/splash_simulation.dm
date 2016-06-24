@@ -35,7 +35,7 @@ client/proc/splash()
 	var/volume = input("Volume?","Volume?", 0 ) as num
 	if(!isnum(volume)) return
 	if(volume <= LIQUID_TRANSFER_THRESHOLD) return
-	var/turf/T = get_turf(src.mob)
+	var/turf/T = get_turf(mob)
 	if(!isturf(T)) return
 	trigger_splash(T, volume)
 
@@ -95,21 +95,21 @@ obj/effect/liquid/proc/spread()
 			continue
 		var/obj/effect/liquid/L = locate(/obj/effect/liquid) in T
 		if(L)
-			if(L.volume >= src.volume)
+			if(L.volume >= volume)
 				spread_directions.Remove(direction)
 				continue
 			surrounding_volume += L.volume //If liquid already exists, add it's volume to our sum
 		else
 			var/obj/effect/liquid/NL = new(T) //Otherwise create a new object which we'll spread to.
-			NL.controller = src.controller
+			NL.controller = controller
 			controller.liquid_objects.Add(NL)
 
 	if(!spread_directions.len)
 //		to_chat(world, "ERROR: No candidate to spread to.")
 		return //No suitable candidate to spread to
 
-	var/average_volume = (src.volume + surrounding_volume) / (spread_directions.len + 1) //Average amount of volume on this and the surrounding tiles.
-	var/volume_difference = src.volume - average_volume //How much more/less volume this tile has than the surrounding tiles.
+	var/average_volume = (volume + surrounding_volume) / (spread_directions.len + 1) //Average amount of volume on this and the surrounding tiles.
+	var/volume_difference = volume - average_volume //How much more/less volume this tile has than the surrounding tiles.
 	if(volume_difference <= (spread_directions.len*LIQUID_TRANSFER_THRESHOLD)) //If we have less than the threshold excess liquid - then there is nothing to do as other tiles will be giving us volume.or the liquid is just still.
 //		to_chat(world, "ERROR: transfer volume lower than THRESHOLD!")
 		return
@@ -123,7 +123,7 @@ obj/effect/liquid/proc/spread()
 			continue //Map edge
 		var/obj/effect/liquid/L = locate(/obj/effect/liquid) in T
 		if(L)
-			src.volume -= volume_per_tile //Remove the volume from this tile
+			volume -= volume_per_tile //Remove the volume from this tile
 			L.new_volume = L.new_volume + volume_per_tile //Add it to the volume to the other tile
 
 obj/effect/liquid/proc/apply_calculated_effect()
@@ -139,7 +139,7 @@ obj/effect/liquid/Move()
 	return 0
 
 obj/effect/liquid/Destroy()
-	src.controller.liquid_objects.Remove(src)
+	controller.liquid_objects.Remove(src)
 	..()
 
 obj/effect/liquid/proc/update_icon2()

@@ -80,7 +80,7 @@ obj/item/device/mmi/Destroy()
 
 		M.cell = locate(/obj/item/weapon/cell) in contents
 		M.cell.loc = M
-		src.loc = M//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+		loc = M//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 		M.mmi = src
 		return TRUE
 	for(var/t in mommi_assembly_parts)
@@ -124,7 +124,7 @@ obj/item/device/mmi/Destroy()
 			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
 			return
 
-		src.visible_message("<span class='notice'>[user] sticks \a [O] into \the [src].</span>")
+		visible_message("<span class='notice'>[user] sticks \a [O] into \the [src].</span>")
 
 		brainmob = BO.brainmob
 		BO.brainmob = null
@@ -261,14 +261,14 @@ obj/item/device/mmi/Destroy()
 	to_chat(user, "<span class='info'>*---------*</span>")
 	..()
 	if(locked!=2)
-		if(src.brainmob)
-			if(src.brainmob.stat == DEAD)
+		if(brainmob)
+			if(brainmob.stat == DEAD)
 				to_chat(user, "<span class='deadsay'>It appears the brain has suffered irreversible tissue degeneration</span>")//suicided
 
-			else if(!src.brainmob.client)
+			else if(!brainmob.client)
 				to_chat(user, "<span class='notice'>It appears to be lost in its own thoughts</span>")//closed game window
 
-			else if(!src.brainmob.key)
+			else if(!brainmob.key)
 				to_chat(user, "<span class='warning'>It seems to be in a deep dream-state</span>")//ghosted
 
 		to_chat(user, "<span class='info'>It's interface is [locked ? "locked" : "unlocked"] </span>")

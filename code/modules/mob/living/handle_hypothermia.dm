@@ -4,7 +4,7 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You sh
 /mob/living/proc/undergoing_hypothermia()
 	if((status_flags & GODMODE) || (flags & INVULNERABLE) || istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 		return NO_HYPOTHERMIA
-	var/body_temp_celcius = src.bodytemperature - T0C
+	var/body_temp_celcius = bodytemperature - T0C
 	switch(body_temp_celcius)
 		if(32 to 35)
 			return MILD_HYPOTHERMIA // awake and shivering
@@ -88,8 +88,8 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You sh
 			// at this point, the pulse will go to rougly 30bpm, see handle_pulse for details.
 			// at this point, you are unconcious; see handle_regular_status_updates.dm for details.
 			if(prob(25))
-				src.adjustOxyLoss(5) // this seems pretty deadly but they're still breathing so it'll decay.
+				adjustOxyLoss(5) // this seems pretty deadly but they're still breathing so it'll decay.
 		if(PROFOUND_HYPOTHERMIA) // all vital signs are gone, we've can't even burn fuel it's 2cold, try to keep the brain alive.
 			// at this point, they will have no pulse, see handle_pulse for details.
 			if(prob(25))
-				src.adjustOxyLoss(5) //see handle_breath.dm, they aren't breathing.
+				adjustOxyLoss(5) //see handle_breath.dm, they aren't breathing.

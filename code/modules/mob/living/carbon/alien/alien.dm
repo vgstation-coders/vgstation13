@@ -74,8 +74,8 @@
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,"#00ff00")
-		var/obj/effect/decal/cleanable/blood/xeno/X = getFromPool(/obj/effect/decal/cleanable/blood/xeno, src.loc) //new /obj/effect/decal/cleanable/blood/xeno(src.loc)
-		X.New(src.loc)
+		var/obj/effect/decal/cleanable/blood/xeno/X = getFromPool(/obj/effect/decal/cleanable/blood/xeno, loc) //new /obj/effect/decal/cleanable/blood/xeno(loc)
+		X.New(loc)
 
 /mob/living/carbon/alien/updatehealth()
 	if(status_flags & GODMODE)
@@ -232,9 +232,9 @@
 	if(take_overall_damage(0, damage, "[source]") == 0) // godmode
 		return 0
 
-	//src.burn_skin(shock_damage)
-	//src.adjustFireLoss(shock_damage) //burn_skin will do this for us
-	//src.updatehealth()
+	//burn_skin(shock_damage)
+	//adjustFireLoss(shock_damage) //burn_skin will do this for us
+	//updatehealth()
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
@@ -245,11 +245,11 @@
 		"<span class='warning'>You hear a policeman whistling!</span>"
 	)
 
-	//if(src.stunned < shock_damage)	src.stunned = shock_damage
+	//if(stunned < shock_damage)	stunned = shock_damage
 
 	Stun(10) // this should work for now, more is really silly and makes you lay there forever
 
-	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
+	//if(weakened < 20*siemens_coeff)	weakened = 20*siemens_coeff
 
 	Weaken(10)
 

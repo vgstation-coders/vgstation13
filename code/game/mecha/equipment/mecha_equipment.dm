@@ -48,7 +48,7 @@
 		listclearnulls(chassis.equipment)
 		if(chassis.selected == src)
 			chassis.selected = null
-		src.update_chassis_page()
+		update_chassis_page()
 		chassis.occupant_message("<font color='red'>The [src] is destroyed!</font>")
 		chassis.log_append_to_last("[src] is destroyed.",1)
 		if(istype(src, /obj/item/mecha_parts/mecha_equipment/weapon))
@@ -66,7 +66,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/proc/get_equip_info()
 	if(!chassis) return
-	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][src.name][chassis.selected==src?"</b>":"</a>"]"
+	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][name][chassis.selected==src?"</b>":"</a>"]"
 
 /obj/item/mecha_parts/mecha_equipment/proc/is_ranged()//add a distance restricted equipment. Why not?
 	return range&RANGED
@@ -100,17 +100,17 @@
 /obj/item/mecha_parts/mecha_equipment/proc/attach(obj/mecha/M as obj)
 	M.equipment += src
 	chassis = M
-	src.loc = M
+	loc = M
 	M.log_message("[src] initialized.")
 	if(!M.selected)
 		M.selected = src
-	src.update_chassis_page()
+	update_chassis_page()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
 	if(!moveto)
 		moveto = get_turf(chassis)
-	src.loc = moveto
+	loc = moveto
 	chassis.equipment -= src
 	if(chassis.selected == src)
 		chassis.selected = null
@@ -131,7 +131,7 @@
 /obj/item/mecha_parts/mecha_equipment/proc/set_ready_state(state)
 	equip_ready = state
 	if(chassis)
-		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",get_equip_info())
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/occupant_message(message)

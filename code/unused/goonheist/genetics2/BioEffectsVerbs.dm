@@ -67,9 +67,9 @@
 	layer = 15
 
 	New(var/atom/location, var/icon/I, var/duration = 20, var/oname = "something")
-		src.name = oname
-		src.set_loc(location)
-		src.icon = I
+		name = oname
+		set_loc(location)
+		icon = I
 		spawn(duration)
 			qdel(src)
 ///////////////////////////////////////////////////////////////////////////////////////////

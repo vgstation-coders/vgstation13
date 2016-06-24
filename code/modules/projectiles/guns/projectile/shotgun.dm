@@ -109,7 +109,7 @@
 	for(var/obj/item/ammo_casing/shotgun/shell in src)	//This feels like a hack.	//don't code at 3:30am kids!!
 		if(shell in loaded)
 			loaded -= shell
-		shell.loc = get_turf(src.loc)
+		shell.loc = get_turf(loc)
 
 	to_chat(user, "<span class='notice'>You break \the [src].</span>")
 	update_icon()
@@ -135,6 +135,6 @@
 			name = "sawn-off shotgun"
 			desc = "Omar's coming!"
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
-			if(istype(user, /mob/living/carbon/human) && src.loc == user)
+			if(istype(user, /mob/living/carbon/human) && loc == user)
 				var/mob/living/carbon/human/H = user
 				H.update_inv_hands()

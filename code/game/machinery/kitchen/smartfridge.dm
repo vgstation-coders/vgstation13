@@ -262,9 +262,9 @@
 			if(bag.contents.len > 0)
 				to_chat(user, "<span class='notice'>Some items are refused.</span>")
 
-	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
+	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, loc))
 		var/list/params_list = params2list(params)
-		if(O.loc == src.loc && params_list.len)
+		if(O.loc == loc && params_list.len)
 			var/clamp_x = 16
 			var/clamp_y = 16
 			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
@@ -278,10 +278,10 @@
 	return 1
 
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/smartfridge/attack_ai(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/smartfridge/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -338,10 +338,10 @@
 	var/i = amount
 	for(var/obj/O in contents)
 		if(O.name == N)
-			O.loc = src.loc
+			O.loc = loc
 			i--
 			if(i <= 0)
 				break
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return

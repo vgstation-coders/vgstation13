@@ -47,7 +47,7 @@ rcd light flash thingy on matter drain
 	set name = "Fireproof Core"
 
 	ai_flags |= COREFIRERESIST
-	src.verbs -= /mob/living/silicon/ai/proc/fireproof_core
+	verbs -= /mob/living/silicon/ai/proc/fireproof_core
 	to_chat(src, "<span class='warning'>Core fireproofed.</span>")
 
 /datum/AI_Module/large/upgrade_turrets
@@ -63,7 +63,7 @@ rcd light flash thingy on matter drain
 	set category = "Malfunction"
 	set name = "Upgrade Turrets"
 
-	src.verbs -= /mob/living/silicon/ai/proc/upgrade_turrets
+	verbs -= /mob/living/silicon/ai/proc/upgrade_turrets
 	for(var/obj/machinery/turret/turret in machines)
 		turret.health += 30
 		turret.shot_delay = 20
@@ -131,10 +131,10 @@ rcd light flash thingy on matter drain
 	if(!eyeobj)
 		return
 
-	if(!isturf(src.loc)) // AI must be in it's core.
+	if(!isturf(loc)) // AI must be in it's core.
 		return
 
-	var/datum/AI_Module/large/place_cyborg_transformer/PCT = locate() in src.current_modules
+	var/datum/AI_Module/large/place_cyborg_transformer/PCT = locate() in current_modules
 	if(!PCT)
 		return
 
@@ -173,7 +173,7 @@ rcd light flash thingy on matter drain
 	// All clear, place the transformer
 	new /obj/machinery/transformer/conveyor(middle)
 	playsound(middle, 'sound/effects/phasein.ogg', 100, 1)
-	src.can_shunt = 0
+	can_shunt = 0
 	PCT.uses -= 1
 	to_chat(src, "You cannot shunt anymore.")
 
@@ -192,7 +192,7 @@ rcd light flash thingy on matter drain
 	ai_flags |= HIGHRESCAMS
 
 	eyeobj.addHear()
-	src.verbs -= /mob/living/silicon/ai/proc/highrescameras
+	verbs -= /mob/living/silicon/ai/proc/highrescameras
 
 
 /datum/AI_Module/small/blackout
@@ -230,7 +230,7 @@ rcd light flash thingy on matter drain
 	set category = "Malfunction"
 	set name = "Hack intercept"
 
-	src.verbs -= /mob/living/silicon/ai/proc/interhack
+	verbs -= /mob/living/silicon/ai/proc/interhack
 	ticker.mode:hack_intercept()
 
 /datum/AI_Module/small/reactivate_camera
@@ -312,7 +312,7 @@ rcd light flash thingy on matter drain
 	for(var/type in typesof(/datum/AI_Module))
 		var/datum/AI_Module/AM = new type
 		if(AM.power_type != null)
-			src.possible_modules += AM
+			possible_modules += AM
 
 /datum/module_picker/proc/remove_verbs(var/mob/living/silicon/ai/A)
 
@@ -325,17 +325,17 @@ rcd light flash thingy on matter drain
 
 /datum/module_picker/proc/use(user as mob)
 	var/dat
-	dat += {"<B>Select use of processing time: (currently #[src.processing_time] left.)</B><BR>
+	dat += {"<B>Select use of processing time: (currently #[processing_time] left.)</B><BR>
 			<HR>
 			<B>Install Module:</B><BR>
 			<I>The number afterwards is the amount of processing time it consumes.</I><BR>"}
-	for(var/datum/AI_Module/large/module in src.possible_modules)
+	for(var/datum/AI_Module/large/module in possible_modules)
 		dat += "<A href='byond://?src=\ref[src];[module.mod_pick_name]=1'>[module.module_name]</A> ([module.cost])<BR>"
-	for(var/datum/AI_Module/small/module in src.possible_modules)
+	for(var/datum/AI_Module/small/module in possible_modules)
 		dat += "<A href='byond://?src=\ref[src];[module.mod_pick_name]=1'>[module.module_name]</A> ([module.cost])<BR>"
 	dat += "<HR>"
-	if (src.temp)
-		dat += "[src.temp]"
+	if (temp)
+		dat += "[temp]"
 	var/datum/browser/popup = new(user, "modpicker", "Malf Module Menu")
 	popup.set_content(dat)
 	popup.open()
@@ -352,7 +352,7 @@ rcd light flash thingy on matter drain
 		if (href_list[AM.mod_pick_name])
 
 			// Cost check
-			if(AM.cost > src.processing_time)
+			if(AM.cost > processing_time)
 				temp = "You cannot afford this module."
 				break
 
@@ -361,7 +361,7 @@ rcd light flash thingy on matter drain
 			if(already_AM)
 				if(!AM.one_time)
 					already_AM.uses += AM.uses
-					src.processing_time -= AM.cost
+					processing_time -= AM.cost
 					temp = "Additional use added to [already_AM.module_name]"
 					break
 				else
@@ -372,7 +372,7 @@ rcd light flash thingy on matter drain
 			A.verbs += AM.power_type
 			A.current_modules += new AM.type
 			temp = AM.description
-			src.processing_time -= AM.cost
+			processing_time -= AM.cost
 
-	src.use(usr)
+	use(usr)
 	return

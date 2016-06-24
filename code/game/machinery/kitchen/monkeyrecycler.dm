@@ -38,7 +38,7 @@
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	..()
-	if (src.stat != 0) //NOPOWER etc
+	if (stat != 0) //NOPOWER etc
 		return
 	if (istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
@@ -56,7 +56,7 @@
 				to_chat(user, "<span class='notice'>You stuff the monkey in the machine.")
 				playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
 				use_power(500)
-				src.grinded++
+				grinded++
 				to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
 		else
 			to_chat(user, "<span class='warning'>The machine only accepts monkeys!</span>")
@@ -71,18 +71,18 @@
 			to_chat(user, "<span class='notice'>You stuff the monkey in the machine.</span>")
 			playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
 			use_power(500)
-			src.grinded++
+			grinded++
 			to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
 	return
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
-	if (src.stat != 0) //NOPOWER etc
+	if (stat != 0) //NOPOWER etc
 		return
 	if(grinded >= minimum_monkeys)
 		to_chat(user, "<span class='notice'>The machine hisses loudly as it condenses the grinded monkey meat. After a moment, it dispenses a brand new monkey cube.</span>")
 		playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
 		grinded -= minimum_monkeys
-		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src.loc)
+		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(loc)
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded] monkeys worth of material left.</span>")
 	else
 		to_chat(user, "<span class='warning'>The machine needs at least 3 monkeys worth of material to produce a monkey cube. It only has [grinded].</span>")

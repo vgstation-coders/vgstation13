@@ -50,11 +50,11 @@
 
 /datum/artifact_effect/proc/DoEffect(var/atom/originator)
 	archived_loc = originator.loc
-	if (src.effectmode == "contact")
+	if (effectmode == "contact")
 		var/mob/living/user = originator
 		if(!user)
 			return
-		switch(src.effecttype)
+		switch(effecttype)
 			if("healing")
 				//caeltodo
 				if (istype(user, /mob/living/carbon/human/))
@@ -157,11 +157,11 @@
 				user.drowsyness = min(user.drowsyness + rand(5,25), 50)
 				user.eye_blurry = min(user.eye_blurry + rand(1,3), 50)
 				return 1
-	else if (src.effectmode == "aura")
-		switch(src.effecttype)
+	else if (effectmode == "aura")
+		switch(effecttype)
 			//caeltodo
 			if("healing")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(if(prob(10)) M, "<span class='notice'>You feel a soothing energy radiating from something nearby.</span>")
@@ -173,7 +173,7 @@
 					M.updatehealth()
 				return 1
 			if("injure")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(if(prob(10)) M, "<span class='warning'>You feel a painful force radiating from something nearby.</span>")
@@ -185,7 +185,7 @@
 					M.updatehealth()
 				return 1
 			if("stun")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(if(prob(10)) M, "<span class='warning'>Energy radiating from the [originator] is making you feel numb.</span>")
@@ -196,42 +196,42 @@
 						M.stuttering += 2
 				return 1
 			if("roboheal")
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					to_chat(if(prob(10)) M, "<span class='notice'>SYSTEM ALERT: Beneficial energy field detected!</span>")
 					M.adjustBruteLoss(-1)
 					M.adjustFireLoss(-1)
 					M.updatehealth()
 				return 1
 			if("robohurt")
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					to_chat(if(prob(10)) M, "<span class='warning'>SYSTEM ALERT: Harmful energy field detected!</span>")
 					M.adjustBruteLoss(1)
 					M.adjustFireLoss(1)
 					M.updatehealth()
 				return 1
 			if("cellcharge")
-				for (var/obj/machinery/power/apc/C in range(src.aurarange,originator))
+				for (var/obj/machinery/power/apc/C in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/B in C.contents)
 						B.charge += 10
-				for (var/obj/machinery/power/smes/S in range (src.aurarange,originator)) S.charge += 20
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/obj/machinery/power/smes/S in range (aurarange,originator)) S.charge += 20
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/D in M.contents)
 						D.charge += 10
 						to_chat(if(prob(10)) M, "<span class='notice'>SYSTEM ALERT: Energy boosting field detected!</span>")
 				return 1
 			if("celldrain")
-				for (var/obj/machinery/power/apc/C in range(src.aurarange,originator))
+				for (var/obj/machinery/power/apc/C in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/B in C.contents)
 						B.charge = max(B.charge-10,0)
-				for (var/obj/machinery/power/smes/S in range (src.aurarange,originator))
+				for (var/obj/machinery/power/smes/S in range (aurarange,originator))
 					S.charge = max(S.charge-20,0)
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/D in M.contents)
 						D.charge = max(D.charge-10,0)
 						to_chat(if(prob(10)) M, "<span class='warning'>SYSTEM ALERT: Energy draining field detected!</span>")
 				return 1
 			if("planthelper")
-				for (var/obj/machinery/hydroponics/H in range(src.aurarange,originator))
+				for (var/obj/machinery/hydroponics/H in range(aurarange,originator))
 					//makes weeds and shrooms and stuff more potent too
 					if(H.planted)
 						H.waterlevel += 2
@@ -246,19 +246,19 @@
 						H.lastcycle += 5
 				return 1
 			if("sleepy")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(prob(10))
 						to_chat(M, pick("<span class='notice'>You feel like taking a nap.</span>","<span class='notice'>You feel a yawn coming on.</span>","<span class='notice'>You feel a little tired.</span>"))
 					M.drowsyness = min(M.drowsyness + 1, 25)
 					M.eye_blurry = min(M.eye_blurry + 1, 25)
 				return 1
-	else if (src.effectmode == "pulse")
+	else if (effectmode == "pulse")
 		for(var/mob/O in viewers(originator, null))
 			O.show_message(text("<b>[]</b> emits a pulse of energy!", originator), 1)
-		switch(src.effecttype)
+		switch(effecttype)
 			//caeltodo
 			if("healing")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(M, "<span class='notice'>A wave of energy invigorates you.</span>")
@@ -270,7 +270,7 @@
 					M.updatehealth()
 				return 1
 			if("injure")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(M, "<span class='warning'>A wave of energy causes you great pain!</span>")
@@ -284,7 +284,7 @@
 					M.updatehealth()
 				return 1
 			if("stun")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(M, "<span class='warning'>A wave of energy overwhelms your senses!</span>")
@@ -293,43 +293,43 @@
 					M.stuttering += 4
 				return 1
 			if("roboheal")
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					to_chat(M, "<span class='notice'>SYSTEM ALERT: Structural damage has been repaired by energy pulse!</span>")
 					M.adjustBruteLoss(-10)
 					M.adjustFireLoss(-10)
 					M.updatehealth()
 				return 1
 			if("robohurt")
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					to_chat(M, "<span class='warning'>SYSTEM ALERT: Structural damage inflicted by energy pulse!</span>")
 					M.adjustBruteLoss(10)
 					M.adjustFireLoss(10)
 					M.updatehealth()
 				return 1
 			if("cellcharge")
-				for (var/obj/machinery/power/apc/C in range(src.aurarange,originator))
+				for (var/obj/machinery/power/apc/C in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/B in C.contents)
 						B.charge += 250
-				for (var/obj/machinery/power/smes/S in range (src.aurarange,originator)) S.charge += 400
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/obj/machinery/power/smes/S in range (aurarange,originator)) S.charge += 400
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/D in M.contents)
 						D.charge += 250
 						to_chat(M, "<span class='notice'>SYSTEM ALERT: Large energy boost detected!</span>")
 				return 1
 			if("celldrain")
-				for (var/obj/machinery/power/apc/C in range(src.aurarange,originator))
+				for (var/obj/machinery/power/apc/C in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/B in C.contents)
 						B.charge = max(B.charge-500,0)
-				for (var/obj/machinery/power/smes/S in range (src.aurarange,originator))
+				for (var/obj/machinery/power/smes/S in range (aurarange,originator))
 					S.charge = max(S.charge-400,0)
-				for (var/mob/living/silicon/robot/M in range(src.aurarange,originator))
+				for (var/mob/living/silicon/robot/M in range(aurarange,originator))
 					for (var/obj/item/weapon/cell/D in M.contents)
 						D.charge = max(D.charge-500,0)
 						to_chat(M, "<span class='warning'>SYSTEM ALERT: Severe energy drain detected!</span>")
 				return 1
 			if("planthelper")
 				//makes weeds and shrooms and stuff more potent too
-				for (var/obj/machinery/hydroponics/H in range(src.aurarange,originator))
+				for (var/obj/machinery/hydroponics/H in range(aurarange,originator))
 					if(H.planted)
 						H.dead = 0
 						H.waterlevel = 200
@@ -341,7 +341,7 @@
 						H.lastcycle = H.cycledelay
 				return 1
 			if("teleport")
-				for (var/mob/living/M in range(src.aurarange,originator))
+				for (var/mob/living/M in range(aurarange,originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					var/list/randomturfs = new/list()
@@ -359,7 +359,7 @@
 						sparks.start()
 				return 1
 			if("dnaswitch")
-				for(var/mob/living/H in range(src.aurarange,originator))
+				for(var/mob/living/H in range(aurarange,originator))
 					if(ishuman(H) && istype(H:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(H:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 
@@ -378,7 +378,7 @@
 				empulse(get_turf(originator), aurarange/2, aurarange)
 				return 1
 			if("sleepy")
-				for (var/mob/living/carbon/M in range(src.aurarange,originator))
+				for (var/mob/living/carbon/M in range(aurarange,originator))
 					if(prob(30))
 						to_chat(M, pick("<span class='notice'>You feel like taking a nap.</span>","<span class='notice'>You feel a yawn coming on.</span>","<span class='notice'>You feel a little tired.</span>"))
 					if(prob(50))
@@ -386,10 +386,10 @@
 					if(prob(50))
 						M.eye_blurry = min(M.eye_blurry + rand(1,5), 25)
 				return 1
-	else if (src.effectmode == "worldpulse")
+	else if (effectmode == "worldpulse")
 		for(var/mob/O in viewers(originator, null))
 			O.show_message(text("<b>[]</b> emits a powerful burst of energy!", originator), 1)
-		switch(src.effecttype)
+		switch(effecttype)
 			if("healing")
 				for (var/mob/living/carbon/M in range(200, originator))
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
@@ -439,7 +439,7 @@
 				for (var/obj/machinery/power/apc/C in range(200, originator))
 					for (var/obj/item/weapon/cell/B in C.contents)
 						B.charge += 100
-				for (var/obj/machinery/power/smes/S in range (src.aurarange,src)) S.charge += 250
+				for (var/obj/machinery/power/smes/S in range (aurarange,src)) S.charge += 250
 				for (var/mob/living/silicon/robot/M in mob_list)
 					for (var/obj/item/weapon/cell/D in M.contents)
 						D.charge += 100
@@ -449,7 +449,7 @@
 				for (var/obj/machinery/power/apc/C in range(200, originator))
 					for (var/obj/item/weapon/cell/B in C.contents)
 						B.charge = max(B.charge-250,0)
-				for (var/obj/machinery/power/smes/S in range (src.aurarange,src))
+				for (var/obj/machinery/power/smes/S in range (aurarange,src))
 					S.charge = max(S.charge-250,0)
 				for (var/mob/living/silicon/robot/M mob_list)
 					for (var/obj/item/weapon/cell/D in M.contents)

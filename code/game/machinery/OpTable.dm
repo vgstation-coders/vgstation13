@@ -38,7 +38,7 @@
 				return
 		if(3.0)
 			if (prob(25))
-				src.density = 0
+				density = 0
 		else
 	return
 
@@ -53,7 +53,7 @@
 	if (M_HULK in usr.mutations)
 		to_chat(usr, text("<span class='notice'>You destroy the table.</span>"))
 		visible_message("<span class='warning'>[usr] destroys the operating table!</span>")
-		src.density = 0
+		density = 0
 		qdel(src)
 
 /obj/machinery/optable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -70,7 +70,7 @@
 	if ((( istype(O, /obj/item/weapon) ) || user.get_active_hand() == O))
 
 		if(user.drop_item(O))
-			if (O.loc != src.loc)
+			if (O.loc != loc)
 				step(O, get_dir(O, src))
 		return
 	else
@@ -97,7 +97,7 @@
 
 /obj/machinery/optable/proc/check_victim()
 	if (victim)
-		if (victim.loc == src.loc)
+		if (victim.loc == loc)
 			if (victim.lying)
 				if (victim.pulse)
 					icon_state = "table2-active"
@@ -155,12 +155,12 @@
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			switch(rating)
 				if(1)
-					new /obj/item/weapon/stock_parts/scanning_module(src.loc)
+					new /obj/item/weapon/stock_parts/scanning_module(loc)
 				if(2)
-					new /obj/item/weapon/stock_parts/scanning_module/adv(src.loc)
+					new /obj/item/weapon/stock_parts/scanning_module/adv(loc)
 				if(3)
-					new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src.loc)
-			new /obj/structure/table/reinforced(src.loc)
+					new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(loc)
+			new /obj/structure/table/reinforced(loc)
 			qdel(src)
 		return
 	if (istype(W, /obj/item/weapon/grab))
@@ -169,5 +169,5 @@
 			returnToPool(W)
 			return
 	if(isrobot(user)) return
-	//user.drop_item(W, src.loc) why?
+	//user.drop_item(W, loc) why?
 	return

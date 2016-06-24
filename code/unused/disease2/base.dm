@@ -314,7 +314,7 @@
 		for(var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
 //			to_chat(world, "Making [e]")
 			var/datum/disease2/effect/f = new e
-			if(f.stage == src.stage)
+			if(f.stage == stage)
 				list += f
 		effect = pick(list)
 		chance = rand(1,6)

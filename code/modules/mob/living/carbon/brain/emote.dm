@@ -9,17 +9,17 @@
 	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
 
-	if(src.stat == DEAD)
+	if(stat == DEAD)
 		return
 	switch(act)
 		if ("me")
 			if(silent)
 				return
-			if (src.client)
+			if (client)
 				if (client.prefs.muted & MUTE_IC)
 					to_chat(src, "<span class='warning'>You cannot send IC messages (muted).</span>")
 					return
-				if (src.client.handle_spam_prevention(message,MUTE_IC))
+				if (client.handle_spam_prevention(message,MUTE_IC))
 					return
 			if (stat)
 				return
@@ -78,5 +78,5 @@
 			for (var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)
 		else if (m_type & 2)
-			for (var/mob/O in hearers(src.loc, null))
+			for (var/mob/O in hearers(loc, null))
 				O.show_message(message, m_type)

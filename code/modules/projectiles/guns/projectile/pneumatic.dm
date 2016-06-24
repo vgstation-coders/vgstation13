@@ -53,7 +53,7 @@
 
 /obj/item/weapon/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
 	if(!tank && istype(W,/obj/item/weapon/tank))
-		if(!user.drop_item(W, src.tank_container))
+		if(!user.drop_item(W, tank_container))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return
 
@@ -80,7 +80,7 @@
 	else if (target.loc == user.loc)
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	else if (locate (/obj/structure/table, loc))
 		return
 
 	else if(target == user)
@@ -132,7 +132,7 @@
 
 	user.visible_message("<span class='danger'>[user] fires [src] and launches [object] at [target]!</span>","<span class='danger'>You fire [src] and launch [object] at [target]!</span>")
 
-	src.remove_from_storage(object,user.loc)
+	remove_from_storage(object,user.loc)
 	object.throw_at(target,10,speed)
 
 	if(istype(object,/obj/item/weapon/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))

@@ -53,8 +53,8 @@
 		assign_uid()
 		id_tag = num2text(uid)
 	if(ticker && ticker.current_state == 3)//if the game is running
-		//src.initialize()
-		src.broadcast_status()
+		//initialize()
+		broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_pump/high_volume
 	name = "Large Air Vent"
@@ -162,7 +162,7 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	..()
-	src.broadcast_status()
+	broadcast_status()
 	return 1
 
 /obj/machinery/atmospherics/unary/vent_pump/proc/broadcast_status()
@@ -174,8 +174,8 @@
 	signal.source = src
 
 	signal.data = list(
-		"area" = src.area_uid,
-		"tag" = src.id_tag,
+		"area" = area_uid,
+		"tag" = id_tag,
 		"device" = "AVP",
 		"power" = on,
 		"direction" = pump_direction?("release"):("siphon"),
@@ -342,7 +342,7 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
 	if("set_id" in href_list)
-		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, src.id_tag) as null|text), 1, MAX_MESSAGE_LEN)
+		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
 		if(!newid)
 			return
 		if(frequency == 1439)

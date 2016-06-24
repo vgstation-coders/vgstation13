@@ -89,7 +89,7 @@
 /obj/machinery/space_heater/examine(mob/user)
 	..()
 	if(!nocell)
-		to_chat(user, "<span class='info'>[bicon(src)]\The [src.name] is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].</span>")
+		to_chat(user, "<span class='info'>[bicon(src)]\The [name] is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].</span>")
 		if(panel_open)
 			to_chat(user, "<span class='info'>The power cell is [cell ? "installed" : "missing"].</span>")
 		else
@@ -179,7 +179,7 @@
 		user.unset_machine()
 
 /obj/machinery/space_heater/attack_hand(mob/user as mob)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	interact(user)
 
 /obj/machinery/space_heater/interact(mob/user as mob)
@@ -228,7 +228,7 @@
 /obj/machinery/space_heater/Topic(href, href_list)
 	if (usr.stat)
 		return
-	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
+	if ((in_range(src, usr) && istype(loc, /turf)) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 
 		switch(href_list["op"])
@@ -346,7 +346,7 @@
 //			gunfound = 1
 	if(istype(I,/obj/item/clothing/shoes) && !(shoesfound))
 		user.drop_item(I,src)
-		src.update_icon()
+		update_icon()
 //	else if(istype(I,/obj/item/weapon/gun/projectile) && !(gunfound))
 	else
 		..()
@@ -357,27 +357,27 @@
 	if(on)
 		var/fireintensity = min(Floor((cell.charge-1)/(cell.maxcharge/4))+1,4)
 		if(cell.charge > 150)
-			src.overlays += image(icon,"fireplace_glow",LIGHTING_LAYER + 1)
+			overlays += image(icon,"fireplace_glow",LIGHTING_LAYER + 1)
 		switch(cell.charge)
 			if(15 to 149)
-				src.overlays += image(icon,"fireplace_fire0",LIGHTING_LAYER + 1)
+				overlays += image(icon,"fireplace_fire0",LIGHTING_LAYER + 1)
 			if(150 to 249)
-				src.overlays += image(icon,"fireplace_fire1",LIGHTING_LAYER + 1)
+				overlays += image(icon,"fireplace_fire1",LIGHTING_LAYER + 1)
 			if(250 to 499)
-				src.overlays += image(icon,"fireplace_fire2",LIGHTING_LAYER + 1)
+				overlays += image(icon,"fireplace_fire2",LIGHTING_LAYER + 1)
 			if(500 to 749)
-				src.overlays += image(icon,"fireplace_fire3",LIGHTING_LAYER + 1)
+				overlays += image(icon,"fireplace_fire3",LIGHTING_LAYER + 1)
 			if(750 to INFINITY)
-				src.overlays += image(icon,"fireplace_fire4",LIGHTING_LAYER + 1)
+				overlays += image(icon,"fireplace_fire4",LIGHTING_LAYER + 1)
 		light_r = max(1.1,cell.charge/100)
 		set_temperature = 15 + 5*fireintensity
 	set_light(on ? light_r : 0, light_power_on)
 //	var/gunfound = 0
 	for(var/obj/W in contents)
 		if(istype(W,/obj/item/clothing/shoes))
-			src.overlays += image(icon,"fireplace_stocking")
+			overlays += image(icon,"fireplace_stocking")
 //		var/icon/img = image(I.icon,I.icon_state)
 //		img.Scale(12,12)
 //		//img.pixel_y += 12
-//		src.overlays += img
+//		overlays += img
 //		user.drop_item(I,src)

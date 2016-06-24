@@ -13,7 +13,7 @@
 	w_class = W_CLASS_SMALL
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is breaking open the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is breaking open the [name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
 		return (TOXLOSS)
 
 

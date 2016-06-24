@@ -19,7 +19,7 @@
 
 /datum/stack/proc/Copy()
 	var/datum/stack/S = new()
-	S.contents = src.contents.Copy()
+	S.contents = contents.Copy()
 	return S
 
 /datum/stack/proc/Clear()

@@ -303,8 +303,8 @@ datum/tech/robotics
 
 /obj/item/weapon/disk/tech_disk/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	pixel_x = rand(-5.0, 5)
+	pixel_y = rand(-5.0, 5)
 
 /obj/item/weapon/disk/tech_disk/nanotrasen
 	name = "Technology Disk (Nanotrasen 1)"

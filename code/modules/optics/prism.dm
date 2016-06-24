@@ -40,10 +40,10 @@ var/list/obj/machinery/prism/prism_list = list()
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
+	if (anchored)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)
 	qdel(beam)
 	beam=null
 	update_beams()
@@ -54,10 +54,10 @@ var/list/obj/machinery/prism/prism_list = list()
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
+	if (anchored)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 	qdel(beam)
 	beam=null
 	update_beams()

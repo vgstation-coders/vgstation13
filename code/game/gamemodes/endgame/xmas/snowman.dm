@@ -39,7 +39,7 @@
 
 	..()
 	if(!ckey && !stat)
-		if(isturf(src.loc) && !resting && !locked_to)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+		if(isturf(loc) && !resting && !locked_to)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				Move(get_step(src,pick(4,8)))
@@ -48,10 +48,10 @@
 	if(!stat && enemies.len && prob(5))
 		enemies = list()
 		LoseTarget()
-		src.say("Whatever.")
+		say("Whatever.")
 
 	if(stat)
-		visible_message("<span class='game say'><span class='name'>[src.name]</span> murmurs, [pick("Oh my snowballs...","I will...be back...")]</span>")
+		visible_message("<span class='game say'><span class='name'>[name]</span> murmurs, [pick("Oh my snowballs...","I will...be back...")]</span>")
 		visible_message("\the [src] collapses in a pile of snow.")
 		var/turf/T = get_turf(src)
 		new /obj/item/stack/sheet/snow(T, 1)
@@ -64,14 +64,14 @@
 		qdel(src)
 
 	else if(fire_alert)
-		src.say(pick("Oh god the heat...","I'm meltiiinggg...","Someone turn off the heater!"))
+		say(pick("Oh god the heat...","I'm meltiiinggg...","Someone turn off the heater!"))
 
 	regenerate_icons()
 
 /mob/living/simple_animal/hostile/retaliate/snowman/Retaliate()
 	..()
 	if(!stat)
-		src.say(pick("You, come fight me!","I say!","Coward!"))
+		say(pick("You, come fight me!","I say!","Coward!"))
 
 /mob/living/simple_animal/hostile/retaliate/snowman/attackby(var/obj/item/W, var/mob/user)
 	if(!carrot && istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/carrot))
@@ -80,9 +80,9 @@
 			carrot = W
 			overlays += image(icon = icon, icon_state = "snowman_carrot")
 			speak -= "Would you happen to have a carrot for my nose?"
-			src.say("Ah, most excellent!")
+			say("Ah, most excellent!")
 			if(prob(30))
-				call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(src.loc)
+				call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(loc)
 
 	else if(istype(W,/obj/item/clothing/head/))
 		if(hat)

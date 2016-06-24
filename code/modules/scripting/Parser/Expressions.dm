@@ -35,7 +35,7 @@
 		top = top.precedence
 
 	if(istype(input))
-		
+
 		input = input:precedence
 
 	if(top >= input)
@@ -115,7 +115,7 @@
 	if(ispath(O))
 		O = new O						//catches path from last check
 
-	else 
+	else
 		return null								//Unknown type
 
 	return O
@@ -207,7 +207,7 @@
 /datum/n_Parser/nS_Parser/proc/ParseExpression(var/list/end = list(/datum/token/end), list/ErrChars = list("{", "}"), check_functions = 0)
 	var/datum/stack/opr = new
 	var/datum/stack/val = new
-	src.expecting = VALUE
+	expecting = VALUE
 	var/loop = 0
 	for()
 		loop++
@@ -240,7 +240,7 @@
 
 		else if(istype(curToken, /datum/token/symbol))												//Operator found.
 			var/datum/node/expression/operator/curOperator											//Figure out whether it is unary or binary and get a new instance.
-			if(src.expecting == OPERATOR)
+			if(expecting == OPERATOR)
 				curOperator = GetBinaryOperator(curToken)
 				if(!curOperator)
 					errors += new/datum/scriptError/ExpectedToken("operator", curToken)
@@ -258,7 +258,7 @@
 				continue
 
 			opr.Push(curOperator)
-			src.expecting = VALUE
+			expecting = VALUE
 
 		else if(ntok && ntok.value == "(" && istype(ntok, /datum/token/symbol)\
 									&& istype(curToken, /datum/token/word))								//Parse function call
@@ -266,7 +266,7 @@
 			if(!check_functions)
 
 				var/datum/token/preToken = curToken
-				var/old_expect = src.expecting
+				var/old_expect = expecting
 				var/fex = ParseFunctionExpression()
 				if(old_expect != VALUE)
 					errors += new/datum/scriptError/ExpectedToken("operator", preToken)
@@ -298,7 +298,7 @@
 				continue
 
 			val.Push(GetExpression(curToken))
-			src.expecting = OPERATOR
+			expecting = OPERATOR
 
 		NextToken()
 

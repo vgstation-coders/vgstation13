@@ -26,14 +26,14 @@
 
 /obj/structure/particle_accelerator/particle_emitter/proc/set_delay(var/delay)
 	if(delay && delay >= 0)
-		src.fire_delay = delay
+		fire_delay = delay
 		return 1
 	return 0
 
 
 /obj/structure/particle_accelerator/particle_emitter/proc/emit_particle(var/strength = 0)
-	if((src.last_shot + src.fire_delay) <= world.time)
-		src.last_shot = world.time
+	if((last_shot + fire_delay) <= world.time)
+		last_shot = world.time
 		var/obj/effect/accelerated_particle/A = null
 		var/turf/T = get_step(src,dir)
 		switch(strength)
@@ -46,7 +46,7 @@
 			if(3)
 				A = getFromPool(/obj/effect/accelerated_particle/powerful,T)
 		if(A)
-			A.dir = src.dir
+			A.dir = dir
 			A.startMove(1)
 			return 1
 	return 0

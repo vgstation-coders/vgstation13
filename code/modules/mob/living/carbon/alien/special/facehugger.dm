@@ -54,7 +54,7 @@ var/const/MAX_ACTIVE_TIME = 400
 			continue
 		if(T && (T.stat != DEAD && T.stat != UNCONSCIOUS) )
 
-			if(get_dist(src.loc, T.loc) <= 4)
+			if(get_dist(loc, T.loc) <= 4)
 				target = T
 
 
@@ -63,9 +63,9 @@ var/const/MAX_ACTIVE_TIME = 400
 	if(!target || target.stat == DEAD || target.stat == UNCONSCIOUS || target.status_flags & XENO_HOST)
 		findtarget()
 		return
-	if(src.loc && src.loc == get_turf(src) && attached == 0 && stat == 0 && nextwalk <= world.time)
+	if(loc && loc == get_turf(src) && attached == 0 && stat == 0 && nextwalk <= world.time)
 		nextwalk = world.time + walk_speed
-		var/dist = get_dist(src.loc, target.loc)
+		var/dist = get_dist(loc, target.loc)
 		if(dist > 4)
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
 		if(target.wear_mask && istype(target.wear_mask, /obj/item/clothing/mask/facehugger))
@@ -207,7 +207,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		return
 	if(attached)
 		return 0
-	if(!src.Adjacent(M))
+	if(!Adjacent(M))
 		return 0
 	else
 		attached++
@@ -231,7 +231,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		if(!real && mouth_protection)
 			return //Toys really shouldn't be forcefully removing gear
 		var/obj/item/clothing/mask/facehugger/hugger = H.wear_mask
-		if(istype(hugger) && !hugger.sterile && !src.sterile) // Lamarr won't fight over faces and neither will normal huggers.
+		if(istype(hugger) && !hugger.sterile && !sterile) // Lamarr won't fight over faces and neither will normal huggers.
 			return
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
@@ -267,14 +267,14 @@ var/const/MAX_ACTIVE_TIME = 400
 
 			target.visible_message("<span class='danger'>\The [src] tears \the [W] off of [target]'s face!</span>")
 
-		src.loc = target
+		loc = target
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
 
 		if(!sterile) L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
 	else if (iscorgi(M))
 		var/mob/living/simple_animal/corgi/C = M
-		src.loc = C
+		loc = C
 		C.facehugger = src
 		C.wear_mask = src
 		//C.regenerate_icons()
@@ -305,7 +305,7 @@ var/const/MAX_ACTIVE_TIME = 400
 
 		if(iscorgi(target))
 			var/mob/living/simple_animal/corgi/C = target
-			src.loc = get_turf(C)
+			loc = get_turf(C)
 			C.facehugger = null
 	else
 		target.visible_message("<span class='danger'>\The [src] violates [target]'s face !</span>")
@@ -342,7 +342,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	icon_state = "[initial(icon_state)]_dead"
 	stat = DEAD
 
-	src.visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
+	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
 
 	return
 

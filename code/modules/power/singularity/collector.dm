@@ -42,7 +42,7 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/attack_hand(mob/user as mob)
 	if(anchored)
-		if(!src.locked)
+		if(!locked)
 			toggle_power()
 			user.visible_message("<span class='notice'>[user] turns the [src] [active? "on":"off"].</span>", \
 			"<span class='notice'>You turn the [src] [active? "on":"off"].</span>")
@@ -63,26 +63,26 @@ var/global/list/rad_collectors = list()
 			to_chat(user, "<span class='notice'>\The [W] registers that the unit is currently not producing power.</span>")
 		return 1
 	else if(istype(W, /obj/item/weapon/tank/plasma))
-		if(!src.anchored)
+		if(!anchored)
 			to_chat(user, "<span class='warning'>\The [src] needs to be secured to the floor first.</span>")
 			return 1
-		if(src.P)
+		if(P)
 			to_chat(user, "<span class='warning'>A plasma tank is already loaded.</span>")
 			return 1
 		if(user.drop_item(W, src))
-			src.P = W
+			P = W
 			update_icons()
 	else if(iscrowbar(W))
-		if(P && !src.locked)
+		if(P && !locked)
 			eject()
 			return 1
 	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (src.allowed(user))
+		if (allowed(user))
 			if(active)
-				src.locked = !src.locked
-				to_chat(user, "<span class='notice'>The controls are now [src.locked ? "locked." : "unlocked."]</span>")
+				locked = !locked
+				to_chat(user, "<span class='notice'>The controls are now [locked ? "locked." : "unlocked."]</span>")
 			else
-				src.locked = 0 //just in case it somehow gets locked
+				locked = 0 //just in case it somehow gets locked
 				to_chat(user, "<span class='warning'>The controls can only be locked when \the [src] is active</span>")
 		else
 			to_chat(user, "<span class='warning'>Access denied!</span>")

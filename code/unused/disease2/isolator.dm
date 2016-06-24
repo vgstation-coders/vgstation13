@@ -30,16 +30,16 @@
 		if(!istype(B,/obj/item/weapon/reagent_containers/syringe))
 			return
 
-		if(src.beaker)
+		if(beaker)
 			to_chat(user, "A syringe is already loaded into the machine.")
 			return
 
-		src.beaker =  B
+		beaker =  B
 		user.drop_item()
 		B.loc = src
 		if(istype(B,/obj/item/weapon/reagent_containers/syringe))
 			to_chat(user, "You add the syringe to the machine!")
-			src.updateUsrDialog()
+			updateUsrDialog()
 			icon_state = "isolator_in"
 
 	Topic(href, href_list)
@@ -63,17 +63,17 @@
 				virus2 = Blood.data["virus2"]
 				isolating = 40
 				icon_state = "isolator_processing"
-			src.updateUsrDialog()
+			updateUsrDialog()
 			return
 
 		else if (href_list["main"])
 			attack_hand(usr)
 			return
 		else if (href_list["eject"])
-			beaker:loc = src.loc
+			beaker:loc = loc
 			beaker = null
 			icon_state = "isolator"
-			src.updateUsrDialog()
+			updateUsrDialog()
 			return
 
 	attack_hand(mob/user as mob)
@@ -106,7 +106,7 @@
 		if(isolating > 0)
 			isolating -= 1
 			if(isolating == 0)
-				var/obj/item/weapon/virusdish/d = new /obj/item/weapon/virusdish(src.loc)
+				var/obj/item/weapon/virusdish/d = new /obj/item/weapon/virusdish(loc)
 				d.virus2 = virus2.getcopy()
 				virus2 = null
 				icon_state = "isolator_in"
@@ -135,6 +135,6 @@
 
 /obj/item/weapon/virusdish/examine(mob/user)
 	..()
-	if(src.info)
+	if(info)
 		to_chat(user, "<span class='info'>It has the following information about its contents</span>")
-		to_chat(user, src.info)
+		to_chat(user, info)

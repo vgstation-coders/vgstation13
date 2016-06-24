@@ -267,9 +267,9 @@
 
 	var/skip_freq_search=0
 	switch(channel)
-		if(MODE_HEADSET,null) // Used for ";" prefix, which always sends to src.frequency.
+		if(MODE_HEADSET,null) // Used for ";" prefix, which always sends to frequency.
 			say_testing(loc, "\[Radio\] - channel=[channel]; Forcing frequency to be [frequency].")
-			speech.frequency = src.frequency
+			speech.frequency = frequency
 			channel = null
 			skip_freq_search=1
 		if(MODE_SECURE_HEADSET) // Secure headset (?)
@@ -500,7 +500,7 @@
 		if(!position || !(position.z in level))
 			return -1
 	if(freq == SYND_FREQ)
-		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
+		if(!(syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1
 	if (!on)
 		return -1

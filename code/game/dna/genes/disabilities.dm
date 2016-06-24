@@ -45,9 +45,9 @@
 		//testing("[name]([type]) has natural flag.")
 		return 0
 	M.mutations.Remove(mutation)
-	M.active_genes.Remove(src.type)
+	M.active_genes.Remove(type)
 
-		//testing("[M] [mut ? "" : "un"]successfully removed [src.name] from mutations")
+		//testing("[M] [mut ? "" : "un"]successfully removed [name] from mutations")
 	if(disability)
 		M.disabilities &= ~disability
 	if(sdisability)

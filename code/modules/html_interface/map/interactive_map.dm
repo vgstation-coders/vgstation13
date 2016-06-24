@@ -23,14 +23,14 @@ var/const/ALLOW_CENTCOMM = FALSE
 	var/list/data
 /datum/interactive_map/New()
 	. = ..()
-	src.interfaces = list()
-	src.data = list()
+	interfaces = list()
+	data = list()
 
 /datum/interactive_map/Destroy()
-	if (src.interfaces)
+	if (interfaces)
 		for (var/datum/html_interface/hi in interfaces)
 			qdel(hi)
-		src.interfaces = null
+		interfaces = null
 
 	return ..()
 

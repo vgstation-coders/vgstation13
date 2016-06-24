@@ -45,7 +45,7 @@
 		to_chat(usr, "<span class='notice'>You can't directly interact with this machine. Use the area atmos computer.</span>")
 
 	update_icon()
-		src.overlays = 0
+		overlays = 0
 
 		if(on)
 			icon_state = "scrubber:1"
@@ -78,7 +78,7 @@
 
 
 /obj/machinery/portable_atmospherics/scrubber/update_icon()
-	src.overlays = 0
+	overlays = 0
 
 	if(on)
 		icon_state = "pscrubber:1"
@@ -143,20 +143,20 @@
 				environment.merge(removed)
 			else
 				loc.assume_air(removed)
-		//src.update_icon()
+		//update_icon()
 		nanomanager.update_uis(src)
-	//src.updateDialog()
+	//updateDialog()
 	return
 
 /obj/machinery/portable_atmospherics/scrubber/return_air()
 	return air_contents
 
 /obj/machinery/portable_atmospherics/scrubber/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/portable_atmospherics/scrubber/attack_paw(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/portable_atmospherics/scrubber/attack_hand(var/mob/user as mob)
 	ui_interact(user)
@@ -205,7 +205,7 @@
 		var/diff = text2num(href_list["volume_adj"])
 		volume_rate = Clamp(volume_rate+diff, minrate, maxrate)
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	return 1
 
 /obj/machinery/portable_atmospherics/scrubber/AltClick()

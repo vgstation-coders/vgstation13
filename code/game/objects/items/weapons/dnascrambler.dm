@@ -19,17 +19,17 @@
 		if(!ishuman(M) || !ishuman(user))
 			return
 
-		if(src.used)
+		if(used)
 			return
 
 		if(M == user)
 			user.visible_message("<span class='danger'>[user.name] injects \himself with [src]!</span>")
-			src.injected(user,user)
+			injected(user,user)
 		else
 			user.visible_message("<span class='danger'>[user.name] is trying to inject [M.name] with [src]!</span>")
 			if (do_mob(user,M,30))
 				user.visible_message("<span class='danger'>[user.name] injects [M.name] with [src].</span>")
-				src.injected(M, user)
+				injected(M, user)
 			else
 				to_chat(user, "<span class='warning'>You failed to inject [M.name].</span>")
 
@@ -42,6 +42,6 @@
 		log_attack("[key_name(user)] injected [key_name(target)] with the [name]")
 		log_game("[key_name_admin(user)] injected [key_name_admin(target)] with the [name]")
 
-		src.used = 1
-		src.update_icon()
-		src.name = "used " + src.name
+		used = 1
+		update_icon()
+		name = "used " + name

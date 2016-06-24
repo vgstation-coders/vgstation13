@@ -71,8 +71,8 @@ var/const/effectTypePower = 3
 		return
 
 	proc/GetCopy()   //Gets a copy of this effect. Used to build local effect pool from global instance list. Please don't use this for anything else as it might not work as you think it should.
-		var/datum/bioEffect/E = new src.type()
-		E.dnaBlocks.blockList = src.dnaBlocks.blockList //Since we assume that the effect being copied is the one in the global pool we copy a REFERENCE to its correct sequence into the new instance.
+		var/datum/bioEffect/E = new type()
+		E.dnaBlocks.blockList = dnaBlocks.blockList //Since we assume that the effect being copied is the one in the global pool we copy a REFERENCE to its correct sequence into the new instance.
 		return E
 
 /datum/dnaBlocks

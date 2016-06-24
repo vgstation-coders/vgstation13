@@ -24,9 +24,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
 	if(!job)
 		job = user.mind.assigned_role
-	var/dat = "<B>[src.welcome]</B><BR>"
+	var/dat = "<B>[welcome]</B><BR>"
 
-	dat += {"Tele-Crystals left: [src.uses]<BR>
+	dat += {"Tele-Crystals left: [uses]<BR>
 		<HR>
 		<B>Request item:</B><BR>
 		<I>Each item costs a number of tele-crystals as indicated by the number following their name.</I><br><BR>"}
@@ -77,7 +77,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/uplink/interact(mob/user as mob)
 
 	var/dat = "<body link='yellow' alink='white' bgcolor='#601414'><font color='white'>"
-	dat += src.generate_menu(user)
+	dat += generate_menu(user)
 
 	dat += {"<A href='byond://?src=\ref[src];lock=1'>Lock</a>
 		</font></body>"}
@@ -167,9 +167,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 // If it returns true, I recommend closing the item's normal menu with "user << browse(null, "window=name")"
 /obj/item/proc/active_uplink_check(mob/user as mob)
 	// Activates the uplink if it's active
-	if(src.hidden_uplink)
-		if(src.hidden_uplink.active)
-			src.hidden_uplink.trigger(user)
+	if(hidden_uplink)
+		if(hidden_uplink.active)
+			hidden_uplink.trigger(user)
 			return 1
 	return 0
 

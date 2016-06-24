@@ -56,7 +56,7 @@ var/global/list/atmos_controllers = list()
 
 
 /obj/machinery/computer/atmoscontrol/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/attack_paw(var/mob/user as mob)
@@ -261,14 +261,14 @@ var/global/list/atmos_controllers = list()
 			current.alarmActivated=1
 			current.areaMaster.updateDangerLevel()
 			//spawn(1)
-				//src.updateUsrDialog()
+				//updateUsrDialog()
 			current.update_icon()
 			return 1
 		if(href_list["atmos_reset"])
 			current.alarmActivated=0
 			current.areaMaster.updateDangerLevel()
 			//spawn(1)
-				//src.updateUsrDialog()
+				//updateUsrDialog()
 			current.update_icon()
 			return 1
 
@@ -276,14 +276,14 @@ var/global/list/atmos_controllers = list()
 			current.mode = text2num(href_list["mode"])
 			current.apply_mode()
 			//spawn(5)
-				//src.updateUsrDialog()
+				//updateUsrDialog()
 			return 1
 
 		if(href_list["preset"])
 			current.preset = text2num(href_list["preset"])
 			current.apply_preset()
 			//spawn(5)
-				//src.updateUsrDialog()
+				//updateUsrDialog()
 			return 1
 
 		if(href_list["temperature"])

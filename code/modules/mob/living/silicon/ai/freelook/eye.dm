@@ -68,9 +68,9 @@
 /mob/living/silicon/ai/New()
 	..()
 	eyeobj.ai = src
-	eyeobj.name = "[src.name] (AI Eye)" // Give it a name
+	eyeobj.name = "[name] (AI Eye)" // Give it a name
 	spawn(5)
-		eyeobj.loc = src.loc
+		eyeobj.loc = loc
 
 /mob/living/silicon/ai/Destroy()
 	eyeobj.ai = null
@@ -84,7 +84,7 @@
 		if(AI.eyeobj && AI.client.eye == AI.eyeobj)
 			AI.cameraFollow = null
 			//AI.eyeobj.forceMove(src)
-			if (isturf(src.loc) || isturf(src))
+			if (isturf(loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
 
 /mob/living/Click()
@@ -138,15 +138,15 @@
 	cameraFollow = null
 	unset_machine()
 
-	if(src.eyeobj && src.loc)
-		//src.eyeobj.loc = src.loc
-		src.eyeobj.forceMove(src.loc)
+	if(eyeobj && loc)
+		//eyeobj.loc = loc
+		eyeobj.forceMove(loc)
 	else
 		to_chat(src, "ERROR: Eyeobj not found. Creating new eye...")
-		src.eyeobj = new(src.loc)
-		src.eyeobj.ai = src
-		src.eyeobj.name = "[src.name] (AI Eye)" // Give it a name
-		src.eyeobj.forceMove(src.loc)
+		eyeobj = new(loc)
+		eyeobj.ai = src
+		eyeobj.name = "[name] (AI Eye)" // Give it a name
+		eyeobj.forceMove(loc)
 
 	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src

@@ -9,8 +9,8 @@
 	var/list/variables
 
 /datum/scope/New(var/datum/node/BlockDefinition/B, var/datum/scope/parent)
-	src.block = B
-	src.parent = parent
-	src.variables = B.initial_variables.Copy()
-	src.functions = B.functions.Copy()
+	block = B
+	parent = parent
+	variables = B.initial_variables.Copy()
+	functions = B.functions.Copy()
 	. = ..()

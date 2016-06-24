@@ -22,7 +22,7 @@
 /obj/item/weapon/teleportation_scroll/attack_self(mob/user as mob)
 	user.set_machine(src)
 	var/dat = "<B>Teleportation Scroll:</B><BR>"
-	dat += "Number of uses: [src.uses]<BR>"
+	dat += "Number of uses: [uses]<BR>"
 	dat += "<HR>"
 	dat += "<B>Four uses, use them wisely:</B><BR>"
 	dat += "<A href='byond://?src=\ref[src];spell_teleport=1'>Teleport</A><BR>"
@@ -33,15 +33,15 @@
 
 /obj/item/weapon/teleportation_scroll/Topic(href, href_list)
 	..()
-	if (usr.stat || usr.restrained() || src.loc != usr)
+	if (usr.stat || usr.restrained() || loc != usr)
 		return
 	var/mob/living/carbon/human/H = usr
 	if (!( istype(H, /mob/living/carbon/human)))
 		return 1
-	if ((usr == src.loc || (in_range(src, usr) && istype(src.loc, /turf))))
+	if ((usr == loc || (in_range(src, usr) && istype(loc, /turf))))
 		usr.set_machine(src)
 		if (href_list["spell_teleport"])
-			if (src.uses >= 1)
+			if (uses >= 1)
 				teleportscroll(H)
 	if(H)
 		attack_self(H)
@@ -57,7 +57,7 @@
 
 	if (!user || user.stat || user.restrained())
 		return
-	if(!((user == loc || (in_range(src, user) && istype(src.loc, /turf)))))
+	if(!((user == loc || (in_range(src, user) && istype(loc, /turf)))))
 		return
 
 	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
@@ -97,4 +97,4 @@
 		user.loc = pick(L)
 
 	smoke.start()
-	src.uses -= 1
+	uses -= 1

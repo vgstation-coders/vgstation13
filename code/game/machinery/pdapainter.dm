@@ -72,7 +72,7 @@ Feel free to do whatever with this if you think it lacks.
 
 	for(var/P in typesof(/obj/item/device/pda) - blocked)
 		var/obj/item/device/pda/D = P
-		src.colorlist[initial(D.name)] = D
+		colorlist[initial(D.name)] = D
 
 	RefreshParts()
 
@@ -102,7 +102,7 @@ Feel free to do whatever with this if you think it lacks.
 	if(!ishuman(user))
 		return
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if(storedpda)
 		var/chosenPDA
 		chosenPDA = input(user, "Select your color.", "PDA Painting") as null|anything in colorlist
@@ -120,7 +120,7 @@ Feel free to do whatever with this if you think it lacks.
 			storedpda.name = initial(P.name)
 
 		sleep(10)
-		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully recolored to \a [storedpda]\"")
+		visible_message("[bicon(src)] \The [src] beeps: \"Successfully recolored to \a [storedpda]\"")
 		busy = 0 //do not forget this
 
 	else
@@ -136,7 +136,7 @@ Feel free to do whatever with this if you think it lacks.
 		return
 
 	if(storedpda)
-		storedpda.loc = get_turf(src.loc)
+		storedpda.loc = get_turf(loc)
 		storedpda = null
 		update_icon()
 	else
@@ -156,10 +156,10 @@ Feel free to do whatever with this if you think it lacks.
 		to_chat(usr, "\The [src] is busy, try again later.")
 		return
 	if(last_print + 300 < world.timeofday)
-		src.visible_message("<span class='notice'>\The [src] begins to hum lightly.</span>")
+		visible_message("<span class='notice'>\The [src] begins to hum lightly.</span>")
 		busy = 1
 		sleep(build_time)
-		src.visible_message("<span class='notice'>\The [src] rattles and shakes, spitting out a new PDA.</span>")
+		visible_message("<span class='notice'>\The [src] rattles and shakes, spitting out a new PDA.</span>")
 		busy = 0
 		new /obj/item/device/pda(get_turf(src))
 		last_print = world.timeofday

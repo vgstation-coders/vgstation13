@@ -36,7 +36,7 @@
 			spawn(rand(15,30))
 				if(get_dist(user,src) < 2)
 					to_chat(user, "<span class='notice'>You clear away [src].</span>")
-					var/obj/item/stack/sheet/wood/W = new(src.loc)
+					var/obj/item/stack/sheet/wood/W = new(loc)
 					W.amount = rand(3,15)
 					if(prob(50))
 						icon_state = "stump[rand(1,2)]"
@@ -104,7 +104,7 @@ var/jungle_plants_init = 0
 		fruits_left--
 		to_chat(user, "<span class='notice'>You pick a fruit off [src].</span>")
 
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/jungle_fruit/J = new (src.loc)
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/jungle_fruit/J = new (loc)
 		J.potency = plant_strength
 		J.icon_state = fruit_icon_states[fruit_type]
 		J.reagents.add_reagent(reagent_effects[fruit_type], 1+round((plant_strength / 20), 1))

@@ -35,8 +35,8 @@
 
 	if(AR.name == "Space")
 		var/obj/item/bluespace_beacon/B = new(T)
-		B.id = src.id
-		B.icon_state = "[src.id]"
+		B.id = id
+		B.icon_state = "[id]"
 		beacons |= B
 	else
 		to_chat(usr, "There is already an area there.")
@@ -48,7 +48,7 @@
 	var/list/turfs = list()
 	var/conflict = 0
 	for(var/obj/item/bluespace_beacon/B in beacons)
-		if(B.id == src.id)
+		if(B.id == id)
 			var/area/AR = get_area(B)
 			if(!isspace(AR))
 				if(!conflict)
@@ -61,7 +61,7 @@
 
 	var/area/shuttle/newarea = new
 	areas += newarea
-	areas[newarea] = src.id
+	areas[newarea] = id
 
 	var/area/oldarea = get_area(usr)
 	newarea.name = input(usr, "Select a name for the new area.") as text

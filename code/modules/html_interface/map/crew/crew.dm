@@ -38,7 +38,7 @@
 		icon_state = "crewb"
 	else
 		if(stat & NOPOWER)
-			src.icon_state = "c_unpowered"
+			icon_state = "c_unpowered"
 			stat |= NOPOWER
 		else
 			icon_state = initial(icon_state)
@@ -92,18 +92,18 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 	jobs["Medical Response Officer"] = 223
 	jobs["Assistant"] = 999 //Unknowns/custom jobs should appear after civilians, and before assistants
 
-	src.jobs = jobs
+	jobs = jobs
 
 /datum/interactive_map/crewmonitor/show(mob/mob, z, datum/html_interface/currui = null)
 	if (!z) z = mob.z
 	if (z == CENTCOMM_Z) return
 	sendResources(mob.client)
 
-	if (z > 0 && src.interfaces)
+	if (z > 0 && interfaces)
 		var/datum/html_interface/hi
 
-		if (!src.interfaces["[z]"])
-			src.interfaces["[z]"] = new/datum/html_interface/nanotrasen(src, "Crew Monitoring", 900, 800, "[MAPHEADER] \
+		if (!interfaces["[z]"])
+			interfaces["[z]"] = new/datum/html_interface/nanotrasen(src, "Crew Monitoring", 900, 800, "[MAPHEADER] \
 			<link rel=\"stylesheet\" type=\"text/css\" href=\"crewmonitor.css\" /></script>\
 			<script type=\"text/javascript\">\
 			var mapname = \"[map.nameShort]\"; \
@@ -113,25 +113,25 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 			var maxy = [world.maxy];</script>\
 			<script type=\"text/javascript\" src=\"crewmonitor.js\"></script>")
 
-			hi = src.interfaces["[z]"]
+			hi = interfaces["[z]"]
 
 			hi.updateContent("content", MAPCONTENT)
 
-			src.update(z, TRUE)
+			update(z, TRUE)
 		else
-			hi = src.interfaces["[z]"]
-			src.update(z, TRUE)
+			hi = interfaces["[z]"]
+			update(z, TRUE)
 
-		hi = src.interfaces["[z]"]
+		hi = interfaces["[z]"]
 		hi.show(mob, currui)
-		src.updateFor(mob, hi, z)
+		updateFor(mob, hi, z)
 
 /datum/interactive_map/crewmonitor/updateFor(hclient_or_mob, datum/html_interface/hi, z)
 	..()
 
 /datum/interactive_map/crewmonitor/update(z, ignore_unused = FALSE)
-	if (src.interfaces["[z]"])
-		var/datum/html_interface/hi = src.interfaces["[z]"]
+	if (interfaces["[z]"])
+		var/datum/html_interface/hi = interfaces["[z]"]
 
 		if (ignore_unused || hi.isUsed())
 			var/list/results = list()
@@ -219,8 +219,8 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 
 					results[++results.len] = list(M.name, "MMI", 80, (B.stat || !B.key ? "false" : "true"), null, null, null, null, area, pos.x, pos.y, 1, see_pos_x, see_pos_y)
 
-			src.data = results
-			src.updateFor(null, hi, z) // updates for everyone
+			data = results
+			updateFor(null, hi, z) // updates for everyone
 
 /mob/living/carbon/human/proc/monitor_check()
 	var/turf/T = get_turf(src)
@@ -236,8 +236,8 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 /*	zlevel limit removed on /vg/
 	var/z = ""
 
-	for (z in src.interfaces)
-		if (src.interfaces[z] == hi) break
+	for (z in interfaces)
+		if (interfaces[z] == hi) break
 */
 	return ( ..() /*&& hclient.client.mob.z == text2num(z)*/ && hclient.client.mob.html_mob_check(/obj/machinery/computer/crew))
 

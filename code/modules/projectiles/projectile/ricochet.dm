@@ -144,7 +144,7 @@
 		return
 
 	var/turf/newspawn = locate(T1.x + X_spawn, T1.y + Y_spawn, z)
-	src.loc = newspawn
+	loc = newspawn
 
 	update_icon()
 	..()
@@ -236,25 +236,25 @@
 			if(istype(A,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = A
 				if(istype(H.wear_suit,/obj/item/clothing/suit/armor/laserproof))// bwoing!!
-					visible_message("<span class='warning'>\the [src.name] bounces off \the [A.name]'s [H.wear_suit]!</span>")
+					visible_message("<span class='warning'>\the [name] bounces off \the [A.name]'s [H.wear_suit]!</span>")
 					bounce()
 				else
-					visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+					visible_message("<span class='warning'>\the [A.name] is hit by \the [name] in the [parse_zone(def_zone)]!</span>")
 					A.bullet_act(src, def_zone)
 					admin_warn(A)
 					bulletdies(A)
 			else
-				visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+				visible_message("<span class='warning'>\the [A.name] is hit by \the [name] in the [parse_zone(def_zone)]!</span>")
 				A.bullet_act(src, def_zone)
 				admin_warn(A)
 				bulletdies(A)
 
 		else if(is_type_in_list(A,ricochet_bump))//beware fuel tanks!
-			visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name]!</span>")
+			visible_message("<span class='warning'>\the [A.name] is hit by \the [name]!</span>")
 			A.bullet_act(src)
 			bulletdies(A)
 
-		else if((istype(A,/obj/structure/window) || istype(A,/obj/machinery/door/window) || istype(A,/obj/machinery/door/firedoor/border_only)) && (A.loc == src.loc))
+		else if((istype(A,/obj/structure/window) || istype(A,/obj/machinery/door/window) || istype(A,/obj/machinery/door/firedoor/border_only)) && (A.loc == loc))
 							//all this part is to prevent a bug that causes the shot to go through walls
 							//if they are one the same tile as a one-directional window/windoor and try to cross them
 			var/turf/T = get_step(src, pos_to)
@@ -268,7 +268,7 @@
 			ricochet_jump()
 
 /obj/item/projectile/ricochet/process_step()//unlike laser guns the projectile isn't instantaneous, but it still travels twice as fast as kinetic bullets since it moves twices per ticks
-	if(src.loc)
+	if(loc)
 		if(kill_count < 1)
 			bulletdies()
 		kill_count--

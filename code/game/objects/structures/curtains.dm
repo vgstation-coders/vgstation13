@@ -44,7 +44,7 @@
 			A.amount = 4
 			qdel(src)
 		return 1
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/structure/curtain/black
 	name = "black curtain"

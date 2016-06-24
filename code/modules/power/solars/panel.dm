@@ -27,9 +27,9 @@
 	else
 		solar_assembly = S
 		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type //This is how you call up variables from an object without making one
-		src.glass_quality_factor = initial(G.glass_quality) //Don't use istype checks kids
-		src.maxhealth = initial(G.shealth)
-		src.health = initial(G.shealth)
+		glass_quality_factor = initial(G.glass_quality) //Don't use istype checks kids
+		maxhealth = initial(G.shealth)
+		health = initial(G.shealth)
 	solar_assembly.loc = src
 	update_icon()
 
@@ -83,7 +83,7 @@
 		if(stat & BROKEN)
 			icon += "-b"
 		overlays += image('icons/obj/power.dmi', icon_state = icon, layer = FLY_LAYER)
-		src.dir = angle2dir(adir)
+		dir = angle2dir(adir)
 	return
 
 /obj/machinery/power/solar/panel/proc/update_solar_exposure()

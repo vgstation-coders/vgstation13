@@ -95,7 +95,7 @@
 /obj/item/clothing/ears/attack_hand(mob/user as mob)
 	if (!user) return
 
-	if (src.loc != user || !istype(user,/mob/living/carbon/human))
+	if (loc != user || !istype(user,/mob/living/carbon/human))
 		..()
 		return
 
@@ -223,21 +223,21 @@ BLIND     // can't see anything
 		if(!can_flip)
 			to_chat(usr, "You try pushing \the [src] out of the way, but it is very uncomfortable and you look like a fool. You push it back into place.")
 			return
-		if(src.is_flipped == 2)
-			src.icon_state = initial(icon_state)
+		if(is_flipped == 2)
+			icon_state = initial(icon_state)
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
 			flags = initial(flags)
 			body_parts_covered = initial(body_parts_covered)
 			to_chat(usr, "You push \the [src] back into place.")
-			src.is_flipped = 1
+			is_flipped = 1
 		else
-			src.icon_state = "[initial(icon_state)]_up"
+			icon_state = "[initial(icon_state)]_up"
 			to_chat(usr, "You push \the [src] out of the way.")
 			gas_transfer_coefficient = null
 			permeability_coefficient = null
 			flags = 0
-			src.is_flipped = 2
+			is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
 
@@ -387,7 +387,7 @@ BLIND     // can't see anything
 	..()
 
 /obj/item/clothing/under/attack_hand(mob/user)
-	if(accessories.len && src.loc == user)
+	if(accessories.len && loc == user)
 		var/list/delayed = list()
 		for(var/obj/item/clothing/accessory/A in priority_accessories())
 			switch(A.on_accessory_interact(user, 0))
@@ -439,7 +439,7 @@ BLIND     // can't see anything
 /obj/item/clothing/under/examine(mob/user)
 	..()
 	var/mode
-	switch(src.sensor_mode)
+	switch(sensor_mode)
 		if(0)
 			mode = "Its sensors appear to be disabled."
 		if(1)
@@ -514,7 +514,7 @@ BLIND     // can't see anything
 		A = input("Select an accessory to remove from [src]") as anything in accessories
 	else
 		A = accessories[1]
-	src.remove_accessory(usr,A)
+	remove_accessory(usr,A)
 
 /obj/item/clothing/under/rank/New()
 	. = ..()

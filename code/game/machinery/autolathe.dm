@@ -162,7 +162,7 @@
 		return 1
 
 	else if(I.materials)
-		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
+		if(I.materials.getVolume() + materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
 			return 1
 		else if(I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())

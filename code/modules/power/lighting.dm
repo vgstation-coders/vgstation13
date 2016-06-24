@@ -29,7 +29,7 @@
 /obj/machinery/light_construct/examine(mob/user)
 	..()
 	var/mode
-	switch(src.stage)
+	switch(stage)
 		if(1)
 			mode = "It's empty and lacks wiring."
 		if(2)
@@ -37,9 +37,9 @@
 	to_chat(user, "<span class='info'>[mode]</span>")
 
 /obj/machinery/light_construct/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if (iswrench(W))
-		if (src.stage == 1)
+		if (stage == 1)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 			to_chat(usr, "You begin deconstructing [src].")
 			if (!do_after(usr, src, 30))
@@ -50,31 +50,31 @@
 				"You deconstruct [src].", "You hear a noise.")
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 75, 1)
 			qdel(src)
-		if (src.stage == 2)
+		if (stage == 2)
 			to_chat(usr, "You have to remove the wires first.")
 			return
 
 	if(istype(W, /obj/item/stack/cable_coil))
-		if (src.stage == 1)
+		if (stage == 1)
 			var/obj/item/stack/cable_coil/coil = W
 			coil.use(1)
 			switch(fixture_type)
 				if ("tube")
-					src.icon_state = "tube-empty"
+					icon_state = "tube-empty"
 				if("bulb")
-					src.icon_state = "bulb-empty"
-			src.stage = 2
+					icon_state = "bulb-empty"
+			stage = 2
 			user.visible_message("[user.name] adds wires to \the [src].", \
 				"You add wires to \the [src]")
 
 			switch(fixture_type)
 				if("tube")
-					newlight = new /obj/machinery/light/built(src.loc)
+					newlight = new /obj/machinery/light/built(loc)
 				if ("bulb")
-					newlight = new /obj/machinery/light/small/built(src.loc)
+					newlight = new /obj/machinery/light/small/built(loc)
 
-			newlight.dir = src.dir
-			src.transfer_fingerprints_to(newlight)
+			newlight.dir = dir
+			transfer_fingerprints_to(newlight)
 			qdel(src)
 			return
 	..()
@@ -308,7 +308,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			to_chat(user, "There is a [fitting] already inserted.")
 			return
 		else
-			src.add_fingerprint(user)
+			add_fingerprint(user)
 			var/obj/item/weapon/light/L = W
 			if(L.fitting == fitting)
 				if(!user.drop_item(L))
@@ -370,18 +370,18 @@ var/global/list/obj/machinery/light/alllights = list()
 			var/obj/machinery/light_construct/newlight = null
 			switch(fitting)
 				if("tube")
-					newlight = new /obj/machinery/light_construct(src.loc)
+					newlight = new /obj/machinery/light_construct(loc)
 					newlight.icon_state = "tube-construct-stage1"
 
 				if("bulb")
-					newlight = new /obj/machinery/light_construct/small(src.loc)
+					newlight = new /obj/machinery/light_construct/small(loc)
 					newlight.icon_state = "bulb-construct-stage1"
-			new /obj/item/stack/cable_coil(get_turf(src.loc), 1, "red")
-			newlight.dir = src.dir
+			new /obj/item/stack/cable_coil(get_turf(loc), 1, "red")
+			newlight.dir = dir
 			newlight.stage = 1
-			newlight.fingerprints = src.fingerprints
-			newlight.fingerprintshidden = src.fingerprintshidden
-			newlight.fingerprintslast = src.fingerprintslast
+			newlight.fingerprints = fingerprints
+			newlight.fingerprintshidden = fingerprintshidden
+			newlight.fingerprintslast = fingerprintslast
 			qdel(src)
 			return
 
@@ -420,8 +420,8 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/attack_ghost(mob/user)
 	if(blessed) return
-	src.add_hiddenprint(user)
-	src.flicker(1)
+	add_hiddenprint(user)
+	flicker(1)
 	return
 
 // ai attack - make lights flicker, because why not
@@ -429,8 +429,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	// attack_robot is flaky.
 	if(isMoMMI(user))
 		return attack_hand(user)
-	src.add_hiddenprint(user)
-	src.flicker(1)
+	add_hiddenprint(user)
+	flicker(1)
 	return
 
 /obj/machinery/light/attack_robot(mob/user)
@@ -727,7 +727,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/item/weapon/light/proc/shatter()
 	if(status == LIGHT_OK || status == LIGHT_BURNED)
-		src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
+		visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
 		status = LIGHT_BROKEN
 		force = 5
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)

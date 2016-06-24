@@ -20,7 +20,7 @@
 			I.loc = src
 			for(var/mob/M in viewers(src))
 				if(M == user)	continue
-				M.show_message("<span class='notice'>[user.name] inserts the [dish.name] in the [src.name].</span>", 1)
+				M.show_message("<span class='notice'>[user.name] inserts the [dish.name] in the [name].</span>", 1)
 
 
 		else
@@ -34,7 +34,7 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 	use_power(500)
-	src.updateDialog()
+	updateDialog()
 
 
 	if(scanning)
@@ -46,16 +46,16 @@
 			r += "<BR>Progress Speed : [dish.virus2.stageprob * 10]"
 			for(var/datum/disease2/effectholder/E in dish.virus2.effects)
 				r += "<BR>Effect:[E.effect.name]. Strength : [E.multiplier * 8]. Verosity : [E.chance * 15]. Type : [5-E.stage]."
-			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(src.loc)
+			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(loc)
 			P.info = r
 			dish.info = r
 			dish.analysed = 1
-			dish.loc = src.loc
+			dish.loc = loc
 			dish = null
 			icon_state = "analyser"
 
 			for(var/mob/O in hearers(src, null))
-				O.show_message("[bicon(src)] <span class='notice'>The [src.name] prints a sheet of paper.</span>", 1)
+				O.show_message("[bicon(src)] <span class='notice'>The [name] prints a sheet of paper.</span>", 1)
 	else if(dish && !scanning && !pause)
 		if(dish.virus2 && dish.growth > 50)
 			dish.growth -= 10
@@ -64,10 +64,10 @@
 		else
 			pause = 1
 			spawn(25)
-				dish.loc = src.loc
+				dish.loc = loc
 				dish = null
 				for(var/mob/M in viewers(src))
-					M.show_message("[bicon(src)] <span class='notice'>The [src.name] buzzes</span>", 2)
+					M.show_message("[bicon(src)] <span class='notice'>The [name] buzzes</span>", 2)
 				pause = 0
 
 

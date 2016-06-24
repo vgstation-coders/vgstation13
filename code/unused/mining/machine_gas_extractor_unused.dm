@@ -17,11 +17,11 @@
 	..()
 	spawn( 5 )
 		for (var/dir in cardinal)
-			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input) break
+			input = locate(/obj/machinery/mineral/input, get_step(src, dir))
+			if(input) break
 		for (var/dir in cardinal)
-			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output) break
+			output = locate(/obj/machinery/mineral/output, get_step(src, dir))
+			if(output) break
 		return
 	return
 
@@ -54,9 +54,9 @@
 		return
 
 	usr.machine = src
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["extract"])
-		if (src.output)
+		if (output)
 			if (locate(/obj/machinery/portable_atmospherics/canister,output.loc))
 				newtoxins = 0
 				processing = 1
@@ -74,5 +74,5 @@
 				message = "Canister filled with [newtoxins] units of toxins"
 			else
 				message = "No canister found"
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return

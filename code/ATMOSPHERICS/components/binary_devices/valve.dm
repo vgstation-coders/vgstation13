@@ -13,7 +13,7 @@
 
 /obj/machinery/atmospherics/binary/valve/update_icon(var/adjacent_procd,var/animation)
 	if(animation)
-		flick("hvalve[src.open][!src.open]",src)
+		flick("hvalve[open][!open]",src)
 	else
 		icon_state = "hvalve[open]"
 	..()
@@ -87,13 +87,13 @@
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")
 		return
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	update_icon(0,1)
 	sleep(10)
-	if (src.open)
-		src.close()
+	if (open)
+		close()
 	else
-		src.open()
+		open()
 
 	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
 
@@ -123,11 +123,11 @@
 	machine_flags = MULTITOOL_MENU
 
 /obj/machinery/atmospherics/binary/valve/digital/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/atmospherics/binary/valve/digital/attack_hand(mob/user as mob)
-	if(!src.allowed(user))
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 	..()
@@ -219,7 +219,7 @@
 
 // Just for digital valves.
 /obj/machinery/atmospherics/binary/valve/digital/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(src.frequency && iswrench(W))
+	if(frequency && iswrench(W))
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's digitally connected to another device.</span>")
 		return 1
 	return ..() 	// Pass to the method below (does stuff ALL valves should do)

@@ -93,24 +93,24 @@
 		else
 			to_chat(user, "<span class='notice'>You begin to dislodge the dead apiary from the tray.</span>")
 		if(do_after(user, src, 50))
-			var/obj/machinery/created_tray = new hydrotray_type(src.loc)
+			var/obj/machinery/created_tray = new hydrotray_type(loc)
 			created_tray.component_parts = list()
-			for(var/obj/I in src.component_parts)
+			for(var/obj/I in component_parts)
 				created_tray.component_parts += I
 				I.loc = created_tray
 				component_parts -= I
-			for(var/obj/I in src.contents)
+			for(var/obj/I in contents)
 				I.loc = created_tray
 				contents -= I
-			new /obj/item/apiary(src.loc)
+			new /obj/item/apiary(loc)
 			if(health > 0)
 				while(health > HONEYCOMB_COST)
 					health -= HONEYCOMB_COST
-					var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H = new(src.loc)
+					var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H = new(loc)
 					if(toxic > 0)
 						H.reagents.add_reagent(TOXIN, toxic)
 				if(honey_level >= 3)
-					new/obj/item/queen_bee(src.loc)
+					new/obj/item/queen_bee(loc)
 				to_chat(user, "<span class='notice'>You successfully harvest the honeycombs. The empty apiary can be relocated.</span>")
 			else
 				to_chat(user, "<span class='notice'>You dislodge the apiary from the tray.</span>")
@@ -139,11 +139,11 @@
 	if(swarming > 0)
 		swarming -= 1
 		if(swarming <= 0)
-			for(var/mob/living/simple_animal/bee/B in src.loc)
+			for(var/mob/living/simple_animal/bee/B in loc)
 				bees_in_hive += B.strength
 				returnToPool(B)
 	else if(bees_in_hive < 10)
-		for(var/mob/living/simple_animal/bee/B in src.loc)
+		for(var/mob/living/simple_animal/bee/B in loc)
 			bees_in_hive += B.strength
 			returnToPool(B)
 
@@ -212,7 +212,7 @@
 		//find some plants, harvest
 		for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(7, src))
 			if(H.seed && !H.dead && prob(owned_bee_swarms.len * 10))
-				src.nutrilevel++
+				nutrilevel++
 				if(H.nutrilevel < 10)
 					H.nutrilevel++
 
@@ -224,7 +224,7 @@
 				//flowers give us pollen (nutrients)
 /* - All plants should be giving nutrients to the hive.
 				if(H.myseed.type == /obj/item/seeds/harebell || H.myseed.type == /obj/item/seeds/sunflowerseed)
-					src.nutrilevel++
+					nutrilevel++
 					H.nutrilevel++
 */
 				//have a few beneficial effects on nearby plants

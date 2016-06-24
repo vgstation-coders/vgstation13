@@ -127,7 +127,7 @@
 		use_power = 1
 
 	update_icon() //This might be a bit more expensive, but it's foolproof
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/machinery/centrifuge/Topic(href, href_list)
@@ -168,11 +168,11 @@
 
 		if("sample")
 			if(sample)
-				sample.forceMove(src.loc)
+				sample.forceMove(loc)
 				sample = null
 
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	add_fingerprint(usr)
+	updateUsrDialog()
 	attack_hand(usr)
 	return
 
@@ -189,7 +189,7 @@
 	alert_noise("ping")
 
 /obj/machinery/centrifuge/proc/isolate()
-	var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
+	var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(loc)
 	dish.virus2 = virus2
 
 	alert_noise("ping")

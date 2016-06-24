@@ -86,7 +86,7 @@
 	if(can_move)
 		can_move = 0
 		alpha=128
-		forceMove(get_step(src,src.dir))
+		forceMove(get_step(src,dir))
 		if(locked_to_mob)
 			if(locked_to_mob.loc != loc)
 				locked_to_mob.locked_to = null //Temporary, so Move() succeeds.

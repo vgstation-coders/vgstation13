@@ -161,19 +161,19 @@
 	if(destroyed)
 		return 1
 
-	if (src.health <= 10)
-		var/atom/location = src.loc
+	if (health <= 10)
+		var/atom/location = loc
 		location.assume_air(air_contents)
 
-		src.destroyed = 1
+		destroyed = 1
 		playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
-		src.density = 0
+		density = 0
 		update_icon()
 		investigation_log(I_ATMOS, "was destoyed by excessive damage.")
 
-		if (src.holding)
-			src.holding.loc = src.loc
-			src.holding = null
+		if (holding)
+			holding.loc = loc
+			holding = null
 		INVOKE_EVENT(on_destroyed, list())
 		nanomanager.update_uis(src)
 		return 1
@@ -210,7 +210,7 @@
 				environment.merge(removed)
 			else
 				loc.assume_air(removed)
-			src.update_icon()
+			update_icon()
 		nanomanager.update_uis(src)
 
 	if(air_contents.return_pressure() < 1)
@@ -228,33 +228,33 @@
 	return air_contents
 
 /obj/machinery/portable_atmospherics/canister/proc/return_temperature()
-	var/datum/gas_mixture/GM = src.return_air()
+	var/datum/gas_mixture/GM = return_air()
 	if(GM && GM.volume>0)
 		return GM.temperature
 	return 0
 
 /obj/machinery/portable_atmospherics/canister/proc/return_pressure()
-	var/datum/gas_mixture/GM = src.return_air()
+	var/datum/gas_mixture/GM = return_air()
 	if(GM && GM.volume>0)
 		return GM.return_pressure()
 	return 0
 
 /obj/machinery/portable_atmospherics/canister/blob_act()
-	src.health -= 200
+	health -= 200
 	healthcheck()
 	return
 
 /obj/machinery/portable_atmospherics/canister/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damage)
-		src.health -= round(Proj.damage / 2)
+		health -= round(Proj.damage / 2)
 		healthcheck()
 	..()
 
 /obj/machinery/portable_atmospherics/canister/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(iswelder(W) && src.destroyed)
+	if(iswelder(W) && destroyed)
 		if(weld(W, user))
 			to_chat(user, "<span class='notice'>You salvage what's left of \the [src].</span>")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))//new /obj/item/stack/sheet/metal(src.loc)
+			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))//new /obj/item/stack/sheet/metal(loc)
 			M.amount = 3
 			qdel (src)
 		return
@@ -262,8 +262,8 @@
 	if(!iswrench(W) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
 		visible_message("<span class='warning'>[user] hits the [src] with a [W]!</span>")
 		investigation_log(I_ATMOS, "<span style='danger'>was smacked with \a [W] by [key_name(user)]</span>")
-		src.health -= W.force
-		src.add_fingerprint(user)
+		health -= W.force
+		add_fingerprint(user)
 		healthcheck()
 
 	if(istype(user, /mob/living/silicon/robot) && istype(W, /obj/item/weapon/tank/jetpack))
@@ -286,17 +286,17 @@
 
 
 /obj/machinery/portable_atmospherics/canister/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/portable_atmospherics/canister/attack_paw(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/portable_atmospherics/canister/attack_hand(var/mob/user as mob)
-	return src.ui_interact(user)
+	return ui_interact(user)
 
 /obj/machinery/portable_atmospherics/canister/attack_alien(var/mob/living/carbon/alien/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	health -= rand(15, 30)
 	user.visible_message("<span class='danger'>\The [user] slashes away at \the [src]!</span>", \
 						 "<span class='danger'>You slash away at \the [src]!</span>")
@@ -306,7 +306,7 @@
 	healthcheck()
 
 /obj/machinery/portable_atmospherics/canister/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if (src.destroyed || gcDestroyed || !get_turf(src))
+	if (destroyed || gcDestroyed || !get_turf(src))
 		if(!ui)
 			ui = nanomanager.get_open_ui(user, src, ui_key)
 		if(ui) ui.close()
@@ -396,12 +396,12 @@
 			)
 			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
 			if (label)
-				src.canister_color = colors[label]
-				src.icon_state = colors[label]
-				src.name = "Canister: [label]"
+				canister_color = colors[label]
+				icon_state = colors[label]
+				name = "Canister: [label]"
 
-	src.add_fingerprint(usr)
-	src.add_hiddenprint(usr)
+	add_fingerprint(usr)
+	add_hiddenprint(usr)
 	update_icon()
 
 	return 1
@@ -413,7 +413,7 @@
 
 /obj/machinery/portable_atmospherics/canister/oxygen/New(loc)
 	..(loc)
-	src.air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent/New(loc)
@@ -430,8 +430,8 @@
 	var/datum/gas/sleeping_agent/trace_gas = air_contents.trace_gases[1]
 	trace_gas.moles = 9*4000
 	spawn(10)
-		var/turf/simulated/location = src.loc
-		if (istype(src.loc))
+		var/turf/simulated/location = loc
+		if (istype(loc))
 			while (!location.air)
 				sleep(10)
 			location.assume_air(air_contents)

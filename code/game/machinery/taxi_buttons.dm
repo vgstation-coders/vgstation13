@@ -22,7 +22,7 @@
 			break
 
 /obj/machinery/door_control/taxi/attack_hand(mob/user as mob)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(stat & (NOPOWER|BROKEN))
 		return
 
@@ -48,7 +48,7 @@
 	spawn
 		if(!connected_computer.callTo(destination, wait_time))
 			if( (T.cooldown - (world.time - T.last_moved)) > 0) //If it's going to show a negative value, there's something else wrong
-				src.visible_message("Taxi engines are on cooldown for the next [round((T.cooldown - (world.time - T.last_moved)) / 10)] second\s. Please wait before trying again.")
+				visible_message("Taxi engines are on cooldown for the next [round((T.cooldown - (world.time - T.last_moved)) / 10)] second\s. Please wait before trying again.")
 
 	spawn(30)
 		icon_state = initial(icon_state)
@@ -61,7 +61,7 @@
 	req_access = list()
 
 /obj/machinery/door_control/taxi/abandoned/attack_hand(mob/user as mob)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(stat & (NOPOWER|BROKEN))
 		return
 
@@ -73,7 +73,7 @@
 	icon_state = "doorctrl1"
 	add_fingerprint(user)
 
-	src.visible_message("<span class='rose'>UNKNOWN TAXI engines are on cooldown. Plea-</span>")
+	visible_message("<span class='rose'>UNKNOWN TAXI engines are on cooldown. Plea-</span>")
 
 	spawn(30)
 		icon_state = initial(icon_state)

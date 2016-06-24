@@ -11,7 +11,7 @@
 
 /obj/structure/cable/heavyduty/attackby(obj/item/W, mob/user)
 
-	var/turf/T = src.loc
+	var/turf/T = loc
 	if(T.intact)
 		return
 

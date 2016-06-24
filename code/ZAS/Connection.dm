@@ -63,8 +63,8 @@ Class Procs:
 	ASSERT(air_master.has_valid_zone(A))
 	//ASSERT(air_master.has_valid_zone(B))
 	#endif
-	src.A = A
-	src.B = B
+	A = A
+	B = B
 	zoneA = A.zone
 	if(!istype(B))
 		mark_space()

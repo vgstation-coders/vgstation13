@@ -88,7 +88,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 
 
 /obj/machinery/computer/forensic_scanning/attack_ai(mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 
@@ -180,7 +180,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				if(card.amount > 1 || !card.fingerprints.len)
 					to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
 					if(card.loc == src)
-						card.loc = src.loc
+						card.loc = loc
 					card = null
 					return
 				if(M.drop_item(I, src))
@@ -625,7 +625,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	else
 		to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
 		if(card.loc == src)
-			card.loc = src.loc
+			card.loc = loc
 		card = null
 		return
 	return

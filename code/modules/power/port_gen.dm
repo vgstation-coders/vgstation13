@@ -72,7 +72,7 @@ display round(lastgen) and plasmatank amount
 	if(active && HasFuel() && !crit_fail && anchored && powernet)
 		add_avail(power_gen * power_output)
 		UseFuel()
-		src.updateDialog()
+		updateDialog()
 
 	else
 		active = 0
@@ -198,10 +198,10 @@ display round(lastgen) and plasmatank amount
 
 	if (heat > 0)
 		heat = max(heat - 2, 0)
-		src.updateDialog()
+		updateDialog()
 
 /obj/machinery/power/port_gen/pacman/proc/overheat()
-	explosion(src.loc, 2, 5, 2, -1)
+	explosion(loc, 2, 5, 2, -1)
 
 /obj/machinery/power/port_gen/pacman/emag(mob/user)
 	emagged = 1
@@ -211,7 +211,7 @@ display round(lastgen) and plasmatank amount
 /obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user) //don't like the copy/paste, but the proc has special handling in the middle so we need it
 	if(..())
 		while ( sheets > 0 )
-			var/obj/item/stack/sheet/G = new sheet_path(src.loc)
+			var/obj/item/stack/sheet/G = new sheet_path(loc)
 			if ( sheets > 50 )
 				G.amount = 50
 			else
@@ -234,9 +234,9 @@ display round(lastgen) and plasmatank amount
 		var/obj/item/stack/addstack = O
 		var/amount = min((max_sheets - sheets), addstack.amount)
 		if(amount < 1)
-			to_chat(user, "<span class='notice'>The [src.name] is full!</span>")
+			to_chat(user, "<span class='notice'>The [name] is full!</span>")
 			return
-		to_chat(user, "<span class='notice'>You add [amount] sheets to the [src.name].</span>")
+		to_chat(user, "<span class='notice'>You add [amount] sheets to the [name].</span>")
 		sheets += amount
 		addstack.use(amount)
 		updateUsrDialog()
@@ -253,7 +253,7 @@ display round(lastgen) and plasmatank amount
 	interact(user)
 
 /obj/machinery/power/port_gen/pacman/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	interact(user)
 
 /obj/machinery/power/port_gen/pacman/attack_paw(mob/user as mob)
@@ -287,30 +287,30 @@ display round(lastgen) and plasmatank amount
 	if(..())
 		return
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["action"])
 		if(href_list["action"] == "enable")
 			if(!active && HasFuel() && !crit_fail)
 				active = 1
 				icon_state = "portgen1"
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if(href_list["action"] == "disable")
 			if (active)
 				active = 0
 				icon_state = "portgen0"
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if(href_list["action"] == "eject")
 			if(!active)
 				DropFuel()
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if(href_list["action"] == "lower_power")
 			if (power_output > 1)
 				power_output--
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if (href_list["action"] == "higher_power")
 			if (power_output < 4 || emagged)
 				power_output++
-				src.updateUsrDialog()
+				updateUsrDialog()
 		if (href_list["action"] == "close")
 			usr << browse(null, "window=port_gen")
 			usr.unset_machine()
@@ -323,7 +323,7 @@ display round(lastgen) and plasmatank amount
 	time_per_sheet = 65
 	board_path = "/obj/item/weapon/circuitboard/pacman/super"
 	overheat()
-		explosion(src.loc, 3, 3, 3, -1)
+		explosion(loc, 3, 3, 3, -1)
 
 /obj/machinery/power/port_gen/pacman/mrs
 	name = "M.R.S.P.A.C.M.A.N.-type Portable Generator"
@@ -333,4 +333,4 @@ display round(lastgen) and plasmatank amount
 	time_per_sheet = 80
 	board_path = "/obj/item/weapon/circuitboard/pacman/mrs"
 	overheat()
-		explosion(src.loc, 4, 4, 4, -1)
+		explosion(loc, 4, 4, 4, -1)

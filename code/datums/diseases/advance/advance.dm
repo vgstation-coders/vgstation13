@@ -98,7 +98,7 @@ var/list/advance_cures = 	list(
 	if(!(istype(D, /datum/disease/advance)))
 		return 0
 
-	if(src.GetDiseaseID() != D.GetDiseaseID())
+	if(GetDiseaseID() != D.GetDiseaseID())
 		return 0
 	return 1
 
@@ -124,7 +124,7 @@ var/list/advance_cures = 	list(
 
 // Mix the symptoms of two diseases (the src and the argument)
 /datum/disease/advance/proc/Mix(var/datum/disease/advance/D)
-	if(!(src.IsSame(D)))
+	if(!(IsSame(D)))
 		for(var/datum/symptom/S in shuffle(D.symptoms))
 			AddSymptom(new S.type)
 
@@ -167,7 +167,7 @@ var/list/advance_cures = 	list(
 	return generated
 
 /datum/disease/advance/proc/Refresh(var/new_name = 0)
-//	to_chat(world, "[src.name] \ref[src] - REFRESH!")
+//	to_chat(world, "[name] \ref[src] - REFRESH!")
 	var/list/properties = GenerateProperties()
 	AssignProperties(properties)
 
@@ -290,7 +290,7 @@ var/list/advance_cures = 	list(
 
 // Name the disease.
 /datum/disease/advance/proc/AssignName(var/name = "Unknown")
-	src.name = name
+	name = name
 	return
 
 // Return a unique ID of the disease.

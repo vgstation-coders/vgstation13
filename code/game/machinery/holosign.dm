@@ -59,19 +59,19 @@ var/list/obj/machinery/holosign/holosigns = list()
 	active_power_usage = 4
 
 /obj/machinery/holosign_switch/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 /
 obj/machinery/holosign_switch/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/holosign_switch/attackby(obj/item/weapon/W, mob/user as mob)
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/holosign_switch/attack_hand(mob/user as mob)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(stat & (NOPOWER|BROKEN))
 		return
 	add_fingerprint(user)
@@ -85,7 +85,7 @@ obj/machinery/holosign_switch/attack_paw(mob/user as mob)
 		icon_state = "light0"
 
 	for(var/obj/machinery/holosign/M in holosigns)
-		if (M.id_tag == src.id_tag)
+		if (M.id_tag == id_tag)
 			spawn( 0 )
 				M.toggle()
 				return

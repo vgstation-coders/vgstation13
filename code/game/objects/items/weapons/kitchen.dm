@@ -31,7 +31,7 @@
 	. = ..()
 
 	if (prob(60))
-		src.pixel_y = rand(0, 4)
+		pixel_y = rand(0, 4)
 
 /*
  * Spoons
@@ -73,7 +73,7 @@
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != "head" && M != user && !loaded_food)
 		return ..()
 
-	if (src.loaded_food)
+	if (loaded_food)
 		reagents.update_total()
 		if(M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
@@ -113,9 +113,9 @@
 		var/icon/food_to_load = getFlatIcon(snack)
 		food_to_load.Scale(16,16)
 		loaded_food = image(food_to_load)
-		loaded_food.pixel_x = 8 + src.pixel_x
-		loaded_food.pixel_y = 15 + src.pixel_y
-		src.overlays += loaded_food
+		loaded_food.pixel_x = 8 + pixel_x
+		loaded_food.pixel_y = 15 + pixel_y
+		overlays += loaded_food
 		if(snack.reagents.total_volume > snack.bitesize)
 			snack.reagents.trans_to(src, snack.bitesize)
 		else
@@ -143,9 +143,9 @@
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his throat with the [name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his stomach open with the [name]! It looks like \he's trying to commit seppuku.</span>"))
 	return (BRUTELOSS)
 
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
@@ -194,20 +194,20 @@
 		if(WT.remove_fuel(0, user))
 			to_chat(user, "You slice the handle off of \the [src].")
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
-			if(src.loc == user)
+			if(loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/metal_blade/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/metal_blade(get_turf(src.loc))
+				new /obj/item/weapon/metal_blade(get_turf(loc))
 			qdel(src)
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 
 /obj/item/weapon/kitchen/utensil/knife/large/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his throat with the [name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his stomach open with the [name]! It looks like \he's trying to commit seppuku.</span>"))
 	return (BRUTELOSS)
 
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
@@ -276,10 +276,10 @@
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		return
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [M.name] ([M.ckey])</font>")
 
-	log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])</font>")
+	log_attack("<font color='red'>[user.name] ([user.ckey]) used the [name] to attack [M.name] ([M.ckey])</font>")
 	if(!iscarbon(user))
 		M.LAssailant = null
 	else
@@ -357,15 +357,15 @@
 
 	if(!(user.zone_sel.selecting == ("eyes" || "head"))) //////////////hitting anything else other than the eyes
 		if(prob(33))
-			src.add_blood(H)
+			add_blood(H)
 			var/turf/location = H.loc
 			if (istype(location, /turf/simulated))
 				location.add_blood(H)     ///Plik plik, the sound of blood
 
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [M.name] ([M.ckey])</font>")
 
-		log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])</font>")
+		log_attack("<font color='red'>[user.name] ([user.ckey]) used the [name] to attack [M.name] ([M.ckey])</font>")
 		if(!iscarbon(user))
 			M.LAssailant = null
 		else
@@ -393,7 +393,7 @@
 	if(istype(M, /mob/living/carbon/human) && H.check_body_part_coverage(EYES))
 		to_chat(H, "<span class='warning'>You get slammed in the face with the tray, against your mask!</span>")
 		if(prob(33))
-			src.add_blood(H)
+			add_blood(H)
 			if (H.wear_mask)
 				H.wear_mask.add_blood(H)
 			if (H.head)
@@ -423,7 +423,7 @@
 	else //No eye or head protection, tough luck!
 		to_chat(M, "<span class='warning'>You get slammed in the face with the tray!</span>")
 		if(prob(33))
-			src.add_blood(M)
+			add_blood(M)
 			var/turf/location = H.loc
 			if (istype(location, /turf/simulated))
 				location.add_blood(H)
@@ -517,7 +517,7 @@
 			return ..()
 		//This is so monumentally bad that I have to leave it in as a comment
 		/*var/mob/living/M
-		for(M in src.loc) //to handle hand switching
+		for(M in loc) //to handle hand switching
 			return*/
 		if(isturf(loc))
 			for(var/obj/structure/table/T in loc)

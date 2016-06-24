@@ -65,7 +65,7 @@
 	if(istype(user, /mob/dead/observer) || user.stat == 2) // ghosts can see anything
 		distance = 1
 
-	msg += "<EM>[src.name]</EM>!\n"
+	msg += "<EM>[name]</EM>!\n"
 
 	//uniform
 	if(w_uniform && !(slot_w_uniform in obscured))
@@ -202,7 +202,7 @@
 
 	if (isUnconscious())
 		msg += "<span class='warning'>[t_He] [t_is]n't responding to anything around [t_him] and seems to be asleep.</span>\n"
-		if((isDead() || src.health < config.health_threshold_crit) && distance <= 3)
+		if((isDead() || health < config.health_threshold_crit) && distance <= 3)
 			msg += "<span class='warning'>[t_He] does not appear to be breathing.</span>\n"
 
 		if(ishuman(user) && !user.isUnconscious() && distance <= 1)
@@ -211,7 +211,7 @@
 			spawn(15)
 				if(user && distance <= 1 && !user.isUnconscious())
 					if(pulse == PULSE_NONE || (status_flags & FAKEDEATH))
-						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[src.client ? "" : " and [t_his] soul has departed"]...</span>")
+						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[client ? "" : " and [t_his] soul has departed"]...</span>")
 					else
 						to_chat(user, "<span class='deadsay'>[t_He] has a pulse!</span>")
 
@@ -448,7 +448,7 @@
 				var/obj/item/device/pda/tempPda = wear_id
 				perpname = tempPda.owner
 		else
-			perpname = src.name
+			perpname = name
 
 		for (var/datum/data/record/E in data_core.general)
 			if (E.fields["name"] == perpname)

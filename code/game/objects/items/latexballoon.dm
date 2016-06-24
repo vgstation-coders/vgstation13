@@ -14,7 +14,7 @@
 /obj/item/latexballon/proc/blow(obj/item/weapon/tank/tank)
 	if(popped)
 		return
-	src.air_contents = tank.remove_air_volume(3)
+	air_contents = tank.remove_air_volume(3)
 	icon_state = "latexballoon_blow"
 	item_state = "latexballon"
 	name = "latex glove balloon"
@@ -56,7 +56,7 @@
 		to_chat(user, "You tie \the [src]s together.")
 		if(W.loc == user)
 			user.drop_item(W, force_drop = 1)
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/latexballon/pair/LB = new (get_turf(user))
 			LB.air_contents = air_contents
@@ -81,10 +81,10 @@
 	..()
 	if(istype(W, /obj/item/toy/crayon/red))
 		to_chat(user, "You color \the [src] light red using \the [W].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
 			user.put_in_hands(A)
 		else
-			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
+			new /obj/item/clothing/gloves/anchor_arms(get_turf(loc))
 		qdel(src)

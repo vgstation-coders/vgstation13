@@ -36,7 +36,7 @@
 		usr.emote("me",usr.emote_type,message)
 
 /mob/proc/say_dead(var/message)
-	var/name = src.real_name
+	var/name = real_name
 	var/alt_name = ""
 
 	if(say_disabled)	//This is here to try to identify lag problems
@@ -56,7 +56,7 @@
 
 
 	var/turf/T = get_turf(src)
-	message = src.say_quote("\"[html_encode(message)]\"")
+	message = say_quote("\"[html_encode(message)]\"")
 	log_say("[name]/[key_name(src)] (@[T.x],[T.y],[T.z]) Deadsay: [message]")
 	//var/rendered = "<span class='game deadsay'><span class='prefix'>DEAD:</span> <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
 	var/rendered2 = null//edited
@@ -115,11 +115,11 @@
 	return null
 
 /mob/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if (src.stat == 2)		//Dead
+	if (stat == 2)		//Dead
 		return 1
 
 	//Universal speak makes everything understandable, for obvious reasons.
-	if(src.universal_speak || src.universal_understand)
+	if(universal_speak || universal_understand)
 		return 1
 
 	//Languages are handled after.
@@ -132,12 +132,12 @@
 			return 1
 		if(isAI(src) && ispAI(other))
 			return 1
-		if (istype(other, src.type) || istype(src, other.type))
+		if (istype(other, type) || istype(src, other.type))
 			return 1
 		return 0
 
 	//Language check.
-	for(var/datum/language/L in src.languages)
+	for(var/datum/language/L in languages)
 		if(speaking.name == L.name)
 			return 1
 	return 0

@@ -13,7 +13,7 @@
 		if(..())
 			return
 
-		var/dat = src.return_text_header()
+		var/dat = return_text_header()
 
 		dat += "<h4>Crew Manifest</h4>"
 		dat += "Entries cannot be modified from this terminal.<br><br>"
@@ -35,7 +35,7 @@
 		if(..())
 			return
 
-		var/dat = src.return_text_header()
+		var/dat = return_text_header()
 
 		dat += "<h4>Station Status Display Interlink</h4>"
 
@@ -67,35 +67,35 @@
 
 				if("setmsg1")
 					message1 = input("Line 1", "Enter Message Text", message1) as text|null
-					if (!src.master || !in_range(src.master, usr) && src.master.loc != usr)
+					if (!master || !in_range(master, usr) && master.loc != usr)
 						return
 
-					if(!(src.holder in src.master))
+					if(!(holder in master))
 						return
-					src.master.updateSelfDialog()
+					master.updateSelfDialog()
 
 				if("setmsg2")
 					message2 = input("Line 2", "Enter Message Text", message2) as text|null
-					if (!src.master || !in_range(src.master, usr) && src.master.loc != usr)
+					if (!master || !in_range(master, usr) && master.loc != usr)
 						return
 
-					if(!(src.holder in src.master))
+					if(!(holder in master))
 						return
 
-					src.master.updateSelfDialog()
+					master.updateSelfDialog()
 				else
 					post_status(href_list["statdisp"])
 
-		src.master.add_fingerprint(usr)
-		src.master.updateSelfDialog()
+		master.add_fingerprint(usr)
+		master.updateSelfDialog()
 		return
 
 	proc/post_status(var/command, var/data1, var/data2)
-		if(!src.master)
+		if(!master)
 			return
 
 		var/datum/signal/status_signal = new
-		status_signal.source = src.master
+		status_signal.source = master
 		status_signal.transmission_method = 1
 		status_signal.data["command"] = command
 
@@ -106,7 +106,7 @@
 			if("alert")
 				status_signal.data["picture_state"] = data1
 
-		src.post_signal(status_signal,"1435")
+		post_signal(status_signal,"1435")
 
 //Signaler
 /datum/computer/file/pda_program/signaler
@@ -120,7 +120,7 @@
 		if(..())
 			return
 
-		var/dat = src.return_text_header()
+		var/dat = return_text_header()
 
 		dat += "<h4>Remote Signaling System</h4>"
 		dat += {"
@@ -152,27 +152,27 @@ Code:
 			last_transmission = world.time
 			spawn( 0 )
 				var/time = time2text(world.realtime,"hh:mm:ss")
-				lastsignalers.Add("[time] <B>:</B> [usr.key] used [src.master] @ location ([src.master.loc.x],[src.master.loc.y],[src.master.loc.z]) <B>:</B> [format_frequency(send_freq)]/[send_code]")
+				lastsignalers.Add("[time] <B>:</B> [usr.key] used [master] @ location ([master.loc.x],[master.loc.y],[master.loc.z]) <B>:</B> [format_frequency(send_freq)]/[send_code]")
 
 				var/datum/signal/signal = new
 				signal.source = src
 				signal.encryption = send_code
 				signal.data["message"] = "ACTIVATE"
 
-				src.post_signal(signal,"[send_freq]")
+				post_signal(signal,"[send_freq]")
 				return
 
 		else if (href_list["adj_freq"])
-			src.send_freq = sanitize_frequency(src.send_freq + text2num(href_list["adj_freq"]))
+			send_freq = sanitize_frequency(send_freq + text2num(href_list["adj_freq"]))
 
 		else if (href_list["adj_code"])
-			src.send_code += text2num(href_list["adj_code"])
-			src.send_code = round(src.send_code)
-			src.send_code = min(100, src.send_code)
-			src.send_code = max(1, src.send_code)
+			send_code += text2num(href_list["adj_code"])
+			send_code = round(send_code)
+			send_code = min(100, send_code)
+			send_code = max(1, send_code)
 
-		src.master.add_fingerprint(usr)
-		src.master.updateSelfDialog()
+		master.add_fingerprint(usr)
+		master.updateSelfDialog()
 		return
 
 //Supply record monitor
@@ -184,7 +184,7 @@ Code:
 		if(..())
 			return
 
-		var/dat = src.return_text_header()
+		var/dat = return_text_header()
 		dat += "<h4>Supply Record Interlink</h4>"
 
 		dat += "<BR><B>Supply shuttle</B><BR>"

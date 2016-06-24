@@ -39,7 +39,7 @@
 			user.visible_message("*click click*", "<span class='danger'>*click*</span>")
 			playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 		else
-			src.visible_message("*click click*")
+			visible_message("*click click*")
 			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
 		return
 
@@ -176,12 +176,12 @@
 			return
 		to_chat(user, "You cut the wires out of the film chamber.")
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/device/camera/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/device/camera(get_turf(src.loc))
+			new /obj/item/device/camera(get_turf(loc))
 		var/obj/item/stack/cable_coil/C = new (get_turf(user))
 		C.amount = 5
 		qdel(src)

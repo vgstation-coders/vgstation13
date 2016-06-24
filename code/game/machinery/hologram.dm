@@ -58,7 +58,7 @@ var/const/HOLOPAD_MODE = 0
 	/*There are pretty much only three ways to interact here.
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
-	if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
+	if(user.eyeobj.loc != loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
 	else if(!hologram)//If there is no hologram, possibly make one.
 		activate_holo(user)
@@ -67,10 +67,10 @@ var/const/HOLOPAD_MODE = 0
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
-	if(!(stat & NOPOWER) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it.
+	if(!(stat & NOPOWER) && user.eyeobj.loc == loc)//If the projector has power and client eye is on it.
 		if(!hologram)//If there is not already a hologram.
 			create_holo(user)//Create one.
-			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
+			visible_message("A holographic image of [user] flicks to life right before your eyes!")
 		else
 			to_chat(user, "<span class='warning'>ERROR: </span>Image feed in progress.")
 	else

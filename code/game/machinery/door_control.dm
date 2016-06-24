@@ -36,14 +36,14 @@
 	machine_flags = EMAGGABLE | MULTITOOL_MENU
 
 /obj/machinery/door_control/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	if(wires & 2)
-		return src.attack_hand(user)
+		return attack_hand(user)
 	else
 		to_chat(user, "Error, no route to host.")
 
 /obj/machinery/door_control/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/door_control/emag(mob/user)
 	req_access = list()
@@ -69,10 +69,10 @@
 	*/
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/door_control/attack_hand(mob/user as mob)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(stat & (NOPOWER|BROKEN))
 		return
 
@@ -87,7 +87,7 @@
 
 	if(normaldoorcontrol)
 		for(var/obj/machinery/door/airlock/D in range(range))
-			if(D.id_tag == src.id_tag)
+			if(D.id_tag == id_tag)
 				spawn(0)
 				if(D)
 					if(D.density)	D.open()
@@ -106,7 +106,7 @@
 
 	else
 		for(var/obj/machinery/door/poddoor/M in poddoors)
-			if (M.id_tag == src.id_tag)
+			if (M.id_tag == id_tag)
 				if (M.density)
 					spawn( 0 )
 						M.open()
@@ -131,11 +131,11 @@
 	name = replacetext(name,oldarea,newarea)
 
 /obj/machinery/driver_button/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/driver_button/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/driver_button/attackby(obj/item/weapon/W, mob/user as mob)
 	. = ..()
@@ -153,7 +153,7 @@
 			qdel(src)
 		return 1
 
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 
 /obj/machinery/driver_button/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
@@ -164,7 +164,7 @@
 
 /obj/machinery/driver_button/attack_hand(mob/user as mob)
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(active)
@@ -182,20 +182,20 @@
 	icon_state = "launcheract"
 
 	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if (M.id_tag == src.id_tag)
+		if (M.id_tag == id_tag)
 			spawn()
 				M.open()
 
 	sleep(20)
 
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.id_tag == src.id_tag)
+		if(M.id_tag == id_tag)
 			M.drive()
 
 	sleep(50)
 
 	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if (M.id_tag == src.id_tag)
+		if (M.id_tag == id_tag)
 			spawn()
 				M.close()
 				return

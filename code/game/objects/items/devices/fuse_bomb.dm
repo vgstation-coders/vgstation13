@@ -59,14 +59,14 @@
 /obj/item/device/fuse_bomb/proc/fuse_burn()
 	set waitfor = 0
 
-	if(src && src.fuse_lit)
-		if(src.seconds_left)
+	if(src && fuse_lit)
+		if(seconds_left)
 			sleep(10)
-			src.seconds_left--
-			src.update_icon()
+			seconds_left--
+			update_icon()
 			.()
 		else
-			src.detonation()
+			detonation()
 	return
 
 /obj/item/device/fuse_bomb/extinguish()

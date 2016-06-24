@@ -333,8 +333,8 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 		updatehealth()
@@ -642,7 +642,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
 	var/direct = get_dir(src, A)
-	var/obj/item/weapon/dummy/D = new /obj/item/weapon/dummy( src.loc )
+	var/obj/item/weapon/dummy/D = new /obj/item/weapon/dummy( loc )
 	var/ok = 0
 	if ( (direct - 1) & direct)
 		var/turf/Step_1
@@ -679,7 +679,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_1 = 0
 
-			D.loc = src.loc
+			D.loc = loc
 			if(step_to(D, Step_2))
 				check_2 = 1
 
@@ -694,13 +694,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			if(check_1 || check_2)
 				ok = 1
 	else
-		if(loc == src.loc)
+		if(loc == loc)
 			ok = 1
 		else
 			ok = 1
 
 			//Now, check objects to block exit that are on the border
-			for(var/obj/border_obstacle in src.loc)
+			for(var/obj/border_obstacle in loc)
 				if(border_obstacle.flags & ON_BORDER)
 					if(!border_obstacle.Uncross(D, A))
 						ok = 0
@@ -1141,7 +1141,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 	attack_hand(mob/living/user as mob)
 		var/mob/dead/observer/ghost
-		for(var/mob/dead/observer/O in src.loc)
+		for(var/mob/dead/observer/O in loc)
 			if(!check_observer(O))
 				continue
 			ghost = O
@@ -1151,7 +1151,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			return
 		var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
 		G.real_name = G.species.makeName()
-		G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
+		G.forceMove(loc) //we use move to get the entering procs - this fixes gravity
 		G.key = ghost.key
 		to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
 		qdel (src)
@@ -1297,9 +1297,9 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/proc/Hatch()
 	processing_objects.Remove(src)
 	var/turf/T = get_turf(src)
-	src.visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")
+	visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")
 	spawn(rand(50,100))
-		src.visible_message("<span class='notice'>The [name] bursts open!</span>")
+		visible_message("<span class='notice'>The [name] bursts open!</span>")
 		new/mob/living/carbon/slime(T)
 		qdel(src)
 
@@ -1308,7 +1308,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	var/turf/location = get_turf(src)
 	var/datum/gas_mixture/environment = location.return_air()
 	if (environment.toxins > MOLES_PLASMA_VISIBLE)//plasma exposure causes the egg to hatch
-		src.Hatch()
+		Hatch()
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype( W, /obj/item/toy/crayon ))

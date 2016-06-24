@@ -39,7 +39,7 @@
 
 /datum/unlockable/borer/end_unlock()
 //	to_chat(Redundant borer, "<span class='info'>You finally finish your task.</span>")
-	tree.unlocked.Add(src.id)
+	tree.unlocked.Add(id)
 	borer.chemicals -= cost
 
 // additional checks to perform when unlocking things.

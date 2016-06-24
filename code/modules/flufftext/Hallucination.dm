@@ -189,13 +189,13 @@ mob/living/carbon/proc/handle_hallucinations()
 							halbody = null
 			if(71 to 72)
 				//Fake death
-//				src.sleeping_willingly = 1
-				src.sleeping = 20
+//				sleeping_willingly = 1
+				sleeping = 20
 				hal_crit = 1
 				hal_screwyhud = 1
 				spawn(rand(50,100))
-//					src.sleeping_willingly = 0
-					src.sleeping = 0
+//					sleeping_willingly = 0
+					sleeping = 0
 					hal_crit = 0
 					hal_screwyhud = 0
 			if(73 to 75)
@@ -219,7 +219,7 @@ mob/living/carbon/proc/handle_hallucinations()
 					to_chat(src, "<font color='red'>[config.alert_desc_delta]</font>")
 					src << sound('sound/AI/aimalf.ogg')
 
-					if(src.client)
+					if(client)
 						message_admins("[key_name(usr)] just got a fake delta AI message from hallucinating! [formatJumpTo(get_turf(usr))]")
 				else
 					switch(rand(1,10)) //Copied from nanites disease
@@ -227,7 +227,7 @@ mob/living/carbon/proc/handle_hallucinations()
 						if(2)  to_chat(src, "<span class='warning'>Beep...boop..</span>")
 						if(3)  to_chat(src, "<span class='warning'>Bop...beeep...</span>")
 						if(4)  to_chat(src, "<span class='warning'>Your joints feel very stiff.</span>")
-						if(5)  src.say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
+						if(5)  say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
 						if(6)  to_chat(src, "Your skin feels loose.")
 						if(7)  to_chat(src, "<span class='warning'>You feel a stabbing pain in your head.</span>")
 						if(8)  to_chat(src, "<span class='warning'>You can feel something move...inside.</span>")
@@ -241,7 +241,7 @@ mob/living/carbon/proc/handle_hallucinations()
 				flash_eyes(visual = 1)
 
 				if(prob(20))
-					src.Weaken(10)
+					Weaken(10)
 			if(82 to 85) //Clown
 				src << get_sfx("clownstep")
 				spawn(rand(16,28))
@@ -265,7 +265,7 @@ mob/living/carbon/proc/handle_hallucinations()
 						foodie.loc = L
 						foodie.override = 1 //Override the affected mob's appearance with the food item
 
-						var/client/C = src.client //Get client of the hallucinating mob
+						var/client/C = client //Get client of the hallucinating mob
 
 						C.images += foodie //Give it the image!
 
@@ -361,7 +361,7 @@ proc/check_panel(mob/M)
 		to_chat(M, "<span class='danger'>[my_target] flails around wildly.</span>")
 	my_target.show_message("<span class='danger'>[src] has been attacked by [my_target] </span>", 1) //Lazy.
 
-	src.health -= P.force
+	health -= P.force
 
 
 	return
@@ -384,21 +384,21 @@ proc/check_panel(mob/M)
 
 
 /obj/effect/fake_attacker/proc/updateimage()
-//	del src.currentimage
+//	del currentimage
 
 
-	if(src.dir == NORTH)
-		del src.currentimage
-		src.currentimage = new /image(up,src)
-	else if(src.dir == SOUTH)
-		del src.currentimage
-		src.currentimage = new /image(down,src)
-	else if(src.dir == EAST)
-		del src.currentimage
-		src.currentimage = new /image(right,src)
-	else if(src.dir == WEST)
-		del src.currentimage
-		src.currentimage = new /image(left,src)
+	if(dir == NORTH)
+		del currentimage
+		currentimage = new /image(up,src)
+	else if(dir == SOUTH)
+		del currentimage
+		currentimage = new /image(down,src)
+	else if(dir == EAST)
+		del currentimage
+		currentimage = new /image(right,src)
+	else if(dir == WEST)
+		del currentimage
+		currentimage = new /image(left,src)
 	my_target << currentimage
 
 
@@ -408,19 +408,19 @@ proc/check_panel(mob/M)
 		var/timespent = rand(5,10)
 		time += timespent
 		sleep(timespent)
-		if(src.health < 0)
+		if(health < 0)
 			collapse = 1
 			updateimage()
 			continue
 		if(get_dist(src,my_target) > 1)
-			src.dir = get_dir(src,my_target)
+			dir = get_dir(src,my_target)
 			step_towards(src,my_target)
 			updateimage()
 		else
 			if(prob(15))
 				if(weapon_name)
 					my_target << sound(pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg'))
-					my_target.show_message("<span class='danger'>[my_target] has been attacked with [weapon_name] by [src.name] </span>", 1)
+					my_target.show_message("<span class='danger'>[my_target] has been attacked with [weapon_name] by [name] </span>", 1)
 					my_target.halloss += 8
 					if(prob(20)) my_target.eye_blurry += 3
 					if(prob(33))
@@ -428,7 +428,7 @@ proc/check_panel(mob/M)
 							fake_blood(my_target)
 				else
 					my_target << sound(pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg'))
-					my_target.show_message("<span class='danger'>[src.name] has punched [my_target]!</span>", 1)
+					my_target.show_message("<span class='danger'>[name] has punched [my_target]!</span>", 1)
 					my_target.halloss += 4
 					if(prob(33))
 						if(!locate(/obj/effect/overlay) in my_target.loc)

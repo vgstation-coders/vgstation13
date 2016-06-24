@@ -39,7 +39,7 @@ proc/cardinalrange(var/center)
 
 /obj/machinery/am_shielding/proc/controllerscan(var/priorscan = 0)
 	//Make sure we are the only one here
-	if(!istype(src.loc, /turf))
+	if(!istype(loc, /turf))
 		qdel(src)
 		return
 	for(var/obj/machinery/am_shielding/AMS in loc.contents)
@@ -66,7 +66,7 @@ proc/cardinalrange(var/center)
 /obj/machinery/am_shielding/Destroy()
 	if(control_unit)	control_unit.remove_shielding(src)
 	if(processing)	shutdown_core()
-	visible_message("<span class='warning'>The [src.name] melts!</span>")
+	visible_message("<span class='warning'>The [name] melts!</span>")
 	power_machines -= src
 	//Might want to have it leave a mess on the floor but no sprites for now
 	..()
@@ -93,9 +93,9 @@ proc/cardinalrange(var/center)
 	stability -= 20
 	if(prob(100-stability))
 		if(prob(10))//Might create a node
-			new /obj/effect/blob/node(src.loc,150)
+			new /obj/effect/blob/node(loc,150)
 		else
-			new /obj/effect/blob(src.loc,60)
+			new /obj/effect/blob(loc,60)
 		qdel(src)
 		return
 	check_stability()
@@ -233,7 +233,7 @@ proc/cardinalrange(var/center)
 
 /obj/item/device/am_shielding_container/attackby(var/obj/item/I, var/mob/user)
 	if(ismultitool(I) && isturf(loc))
-		new/obj/machinery/am_shielding(src.loc)
+		new/obj/machinery/am_shielding(loc)
 		qdel(src)
 		return
 	..()

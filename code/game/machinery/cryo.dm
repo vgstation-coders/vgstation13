@@ -443,7 +443,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
 	//loc.assume_air(expel_gas)
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc)
+/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = loc)
 	if(!occupant || ejecting)
 		return 0
 	if (occupant.bodytemperature > T0C+31)
@@ -454,19 +454,19 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		modify_occupant_bodytemp() //Start to heat them up a little bit immediately
 		nanomanager.update_uis(src)
 		spawn(4 SECONDS)
-			if(!src || !src.ejecting)
+			if(!src || !ejecting)
 				return
 			ejecting = 0
 			boot_contents(exit)
 	return 1
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = 1)
-	for (var/atom/movable/x in src.contents)
-		if((x in component_parts) || (x == src.beaker))
+/obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = loc, var/regulatetemp = 1)
+	for (var/atom/movable/x in contents)
+		if((x in component_parts) || (x == beaker))
 			continue
-		x.forceMove(src.loc)
+		x.forceMove(loc)
 	if(occupant)
-		if(exit == src.loc)
+		if(exit == loc)
 			occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
 		else
 			occupant.forceMove(exit)

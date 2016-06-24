@@ -40,7 +40,7 @@ var/global/list/html_machines = new/list() //for checking when we should update 
 	if (args.len > 2)
 		item.args = args.Copy(3)
 
-	src.update.Insert(1, item)
+	update.Insert(1, item)
 
 /datum/procqueue_item
 	var/ref

@@ -1,7 +1,7 @@
 /datum/hud/proc/monkey_hud(var/ui_style='icons/mob/screen1_old.dmi')
 	var/mob/living/carbon/monkey/MO = mymob //sorry
-	src.adding = list()
-	src.other = list()
+	adding = list()
+	other = list()
 
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
@@ -13,7 +13,7 @@
 	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
 	using.layer = 20
-	src.adding += using
+	adding += using
 	action_intent = using
 
 //intent small hud objects
@@ -27,7 +27,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	help_intent = using
 
 	ico = new(ui_style, "black")
@@ -38,7 +38,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	disarm_intent = using
 
 	ico = new(ui_style, "black")
@@ -49,7 +49,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	grab_intent = using
 
 	ico = new(ui_style, "black")
@@ -60,7 +60,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	hurt_intent = using
 
 //end intent small hud objects
@@ -72,7 +72,7 @@
 	using.icon_state = (mymob.m_intent == "run" ? "running" : "walking")
 	using.screen_loc = ui_movi
 	using.layer = 20
-	src.adding += using
+	adding += using
 	move_intent = using
 
 	using = getFromPool(/obj/screen)
@@ -81,7 +81,7 @@
 	using.icon_state = "act_drop"
 	using.screen_loc = ui_drop_throw
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 	init_hand_icons(ui_style)
 
@@ -97,8 +97,8 @@
 	inv_box.slot_id = null
 	inv_box.hand_index = GRASP_RIGHT_HAND
 	inv_box.layer = 19
-	src.r_hand_hud_object = inv_box
-	src.adding += inv_box
+	r_hand_hud_object = inv_box
+	adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "l_hand"
@@ -111,8 +111,8 @@
 	inv_box.slot_id = null
 	inv_box.hand_index = GRASP_LEFT_HAND
 	inv_box.layer = 19
-	src.l_hand_hud_object = inv_box
-	src.adding += inv_box
+	l_hand_hud_object = inv_box
+	adding += inv_box
 	*/
 
 	using = getFromPool(/obj/screen/inventory)
@@ -122,7 +122,7 @@
 	using.icon_state = "hand1"
 	using.screen_loc = ui_swaphand1
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
@@ -131,7 +131,7 @@
 	using.icon_state = "hand2"
 	using.screen_loc = ui_swaphand2
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 	using = getFromPool(/obj/screen)
 	using.name = "resist"
@@ -139,7 +139,7 @@
 	using.icon_state = "act_resist"
 	using.screen_loc = ui_pull_resist
 	using.layer = 19
-	src.adding += using
+	adding += using
 
 	if(MO.canWearClothes)
 		inv_box = getFromPool(/obj/screen/inventory)
@@ -150,7 +150,7 @@
 		inv_box.icon_state = "center"
 		inv_box.screen_loc = ui_monkey_uniform
 		inv_box.layer = 19
-		src.adding += inv_box
+		adding += inv_box
 
 	if(MO.canWearHats)
 		inv_box = getFromPool(/obj/screen/inventory)
@@ -160,7 +160,7 @@
 		inv_box.screen_loc = ui_monkey_hat
 		inv_box.slot_id = slot_head
 		inv_box.layer = 19
-		src.adding += inv_box
+		adding += inv_box
 
 	if(MO.canWearGlasses)
 		inv_box = getFromPool(/obj/screen/inventory)
@@ -170,7 +170,7 @@
 		inv_box.screen_loc = ui_monkey_glasses
 		inv_box.slot_id = slot_glasses
 		inv_box.layer = 19
-		src.adding += inv_box
+		adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "mask"
@@ -180,7 +180,7 @@
 	inv_box.screen_loc = ui_monkey_mask
 	inv_box.slot_id = slot_wear_mask
 	inv_box.layer = 19
-	src.adding += inv_box
+	adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "back"
@@ -190,7 +190,7 @@
 	inv_box.screen_loc = ui_back
 	inv_box.slot_id = slot_back
 	inv_box.layer = 19
-	src.adding += inv_box
+	adding += inv_box
 
 	mymob.throw_icon = getFromPool(/obj/screen)
 	mymob.throw_icon.icon = ui_style
@@ -261,19 +261,19 @@
 			mymob.item_use_icon = getFromPool(/obj/screen/gun/item)
 			if (mymob.client.target_can_click)
 				mymob.item_use_icon.dir = 1
-			src.adding += mymob.item_use_icon
+			adding += mymob.item_use_icon
 			mymob.gun_move_icon = getFromPool(/obj/screen/gun/move)
 			if (mymob.client.target_can_move)
 				mymob.gun_move_icon.dir = 1
 				mymob.gun_run_icon = getFromPool(/obj/screen/gun/run)
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
-				src.adding += mymob.gun_run_icon
-			src.adding += mymob.gun_move_icon
+				adding += mymob.gun_run_icon
+			adding += mymob.gun_move_icon
 
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
-	mymob.client.screen += src.adding + src.other
+	mymob.client.screen += adding + other
 
 	return

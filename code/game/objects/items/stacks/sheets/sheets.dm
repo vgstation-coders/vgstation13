@@ -28,6 +28,6 @@
 		if(!S.mode)
 			S.add(src,user)
 		else
-			for (var/obj/item/stack/sheet/stack in locate(src.x,src.y,src.z))
+			for (var/obj/item/stack/sheet/stack in locate(x,y,z))
 				S.add(stack,user)
 	..()*/

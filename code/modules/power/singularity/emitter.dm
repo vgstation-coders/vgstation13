@@ -44,10 +44,10 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(src.anchored || usr:stat)
+	if(anchored || usr:stat)
 		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
 		return 0
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)
 	return 1
 
 /obj/machinery/power/emitter/verb/rotate_ccw()
@@ -55,10 +55,10 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(src.anchored || usr:stat)
+	if(anchored || usr:stat)
 		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
 		return 0
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 	return 1
 
 /obj/machinery/power/emitter/initialize()
@@ -146,12 +146,12 @@
 	if(user.stat && !isAdminGhost(user))
 		return
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if(state == 2)
 		if(!get_powernet())
 			to_chat(user, "<span class='warning'>\The [src] isn't connected to a wire.</span>")
 			return 1
-		if(!src.locked)
+		if(!locked)
 			if(active)
 				turn_off()
 				user.visible_message("<span class='warning'>[user] turns \the [src] off.", \
@@ -278,12 +278,12 @@
 		if(emagged)
 			to_chat(user, "<span class='warning'>The lock appears to be broken.</span>")
 			return
-		if(src.allowed(user))
+		if(allowed(user))
 			if(active)
-				src.locked = !src.locked
-				to_chat(user, "<span class='notice'>The controls are now [src.locked ? "locked" : "unlocked"].</span>")
+				locked = !locked
+				to_chat(user, "<span class='notice'>The controls are now [locked ? "locked" : "unlocked"].</span>")
 			else
-				src.locked = 0 //just in case it somehow gets locked
+				locked = 0 //just in case it somehow gets locked
 				to_chat(user, "<span class='warning'>The controls can only be locked when \the [src] is online</span>")
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")

@@ -13,7 +13,7 @@
 	var/scan_delay = 25
 
 /obj/item/device/ano_scanner/attack_self(var/mob/user as mob)
-	return src.interact(user)
+	return interact(user)
 
 /obj/item/device/ano_scanner/interact(var/mob/user as mob)
 	var/message = "Background radiation levels detected."

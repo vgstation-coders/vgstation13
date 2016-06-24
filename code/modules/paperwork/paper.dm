@@ -53,10 +53,10 @@
 			user << browse_rsc(img.img, "tmp_photo.png")
 			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
 		if(!(istype(user, /mob/living/carbon/human) || istype(user, /mob/dead/observer) || istype(user, /mob/living/silicon)))
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_2][stars(info)][stamps]</BODY></HTML>", "window=[name]")
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[color]":""]>[info_2][stars(info)][stamps]</BODY></HTML>", "window=[name]")
 			onclose(user, "[name]")
 		else
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_2][info][stamps]</BODY></HTML>", "window=[name]")
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[color]":""]>[info_2][info][stamps]</BODY></HTML>", "window=[name]")
 			onclose(user, "[name]")
 	else
 		..() //Only show a regular description if it is too far away to read.
@@ -99,10 +99,10 @@
 	else //cyborg or AI not seeing through a camera
 		dist = get_dist(src, user)
 	if(dist < 2 || (istype(user) && (user.ai_flags & HIGHRESCAMS)))
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info][stamps]</BODY></HTML>", "window=[name]")
+		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[color]":""]>[info][stamps]</BODY></HTML>", "window=[name]")
 		onclose(usr, "[name]")
 	else
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
+		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[color]":""]>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
 		onclose(usr, "[name]")
 	return
 
@@ -267,7 +267,7 @@
 				info += t // Oh, he wants to edit to the end of the file, let him.
 				updateinfolinks()
 
-			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
+			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
 
 			update_icon()
 
@@ -285,7 +285,7 @@
 		if ( istype(P, /obj/item/weapon/pen/robopen) && P:mode == 2 )
 			P:RenamePaper(user,src)
 		else
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]")
+			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]")
 		//openhelp(user)
 		return
 
@@ -296,7 +296,7 @@
 			to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
 			return
 
-		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
+		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [name] has been stamped with the [P.name].</i>"
 
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 		stampoverlay.pixel_x = rand(-2, 2)
@@ -318,7 +318,7 @@
 			img = P
 			to_chat(user, "<span class='notice'>You attach the photo to the piece of paper.</span>")
 	else if(P.is_hot())
-		src.ashify_item(user)
+		ashify_item(user)
 		return //no fingerprints, paper is gone
 	add_fingerprint(user)
 	return ..()
@@ -332,23 +332,23 @@
 		else if(H.gloves)
 			var/obj/item/clothing/gloves/G = H.gloves
 			if(G.max_heat_protection_temperature)
-				prot = (G.max_heat_protection_temperature > src.autoignition_temperature)
+				prot = (G.max_heat_protection_temperature > autoignition_temperature)
 		if(!prot && (M_CLUMSY in H.mutations) && prob(50)) //only fail if human
 			H.apply_damage(10,BURN,(pick("l_hand", "r_hand")))
 			user.drop_hands()
 			user.visible_message( \
-				"<span class='notice'>[user] tries to burn the [src.name], but burns \his hand trying!</span>", \
-				"<span class='warning'>You try to burn the [src.name], but burn your hand trying!</span>")
+				"<span class='notice'>[user] tries to burn the [name], but burns \his hand trying!</span>", \
+				"<span class='warning'>You try to burn the [name], but burn your hand trying!</span>")
 			return //you fail before even managing to burn it!
 	if(prot) //user is human and is protected from fire, let's make them a badass
 		user.visible_message( \
-			"<span class='warning'>[user] holds up the [src.name] and sets it on fire, holding it in \his hand as it burns down to ashes. Damn, \he's cold.</span>", \
-			"<span class='warning'>You hold up the [src.name] and set it on fire, holding it in your hand as it burns down to ashes. Damn, you're cold.</span>")
+			"<span class='warning'>[user] holds up the [name] and sets it on fire, holding it in \his hand as it burns down to ashes. Damn, \he's cold.</span>", \
+			"<span class='warning'>You hold up the [name] and set it on fire, holding it in your hand as it burns down to ashes. Damn, you're cold.</span>")
 	else
 		user.visible_message( \
-			"<span class='warning'>[user] holds up the [src.name] and sets it on fire, reducing it to a heap of ashes.</span>", \
-			"<span class='warning'>You hold up the [src.name] and set it on fire, reducing it to a heap of ashes.</span>")
-	new ashtype(get_turf(src)) //not using ashify() since it calls for src.loc rather than get_turf(src), and requires the object to be on fire also
+			"<span class='warning'>[user] holds up the [name] and sets it on fire, reducing it to a heap of ashes.</span>", \
+			"<span class='warning'>You hold up the [name] and set it on fire, reducing it to a heap of ashes.</span>")
+	new ashtype(get_turf(src)) //not using ashify() since it calls for loc rather than get_turf(src), and requires the object to be on fire also
 	qdel(src)
 	return
 
@@ -375,14 +375,14 @@ var/global/list/paper_folding_results = list ( \
 	usr.drop_item(src, force_drop = 1)	//Drop the original paper to free our hand and call proper inventory handling code
 	var/obj/item/weapon/p_folded/P = new .(get_turf(usr)) 	//Let's make a new item
 	P.unfolded = src										//that unfolds into the original paper
-	src.loc = P												//and also contains it, for good measure.
+	loc = P												//and also contains it, for good measure.
 	usr.put_in_hands(P)
-	P.pixel_y = src.pixel_y
-	P.pixel_x = src.pixel_x
+	P.pixel_y = pixel_y
+	P.pixel_x = pixel_x
 	if (istype(src, /obj/item/weapon/paper/nano))
 		P.color = "#9A9A9A"
 		P.nano = 1
-	usr.visible_message("<span class='notice'>[usr] folds \the [src.name] into a [P.name].</span>", "<span class='notice'>You fold \the [src.name] into a [P.name].</span>")
+	usr.visible_message("<span class='notice'>[usr] folds \the [name] into a [P.name].</span>", "<span class='notice'>You fold \the [name] into a [P.name].</span>")
 	P.add_fingerprint(usr)
 	return
 

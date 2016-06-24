@@ -120,8 +120,8 @@ var/global/obj/screen/clicker/catcher = new()
 		inv_box.layer = UI_HAND_LAYER
 		inv_box.color = new_color ? new_color : inv_box.color
 		inv_box.alpha = new_alpha ? new_alpha : inv_box.alpha
-		src.hand_hud_objects += inv_box
-		src.adding += inv_box
+		hand_hud_objects += inv_box
+		adding += inv_box
 
 /datum/hud/proc/update_hand_icons()
 	var/obj/screen/inventory/example = locate(/obj/screen/inventory) in hand_hud_objects
@@ -202,7 +202,7 @@ var/global/obj/screen/clicker/catcher = new()
 		using.icon = 'icons/mob/screen1.dmi'
 		using.icon_state = "block"
 		using.layer = 19
-		src.adding += using
+		adding += using
 		mymob:schematics_background = using
 
 	reload_fullscreen()
@@ -215,40 +215,40 @@ var/global/obj/screen/clicker/catcher = new()
 
 	if(hud_used && client)
 		if(ishuman(src))
-			if(!src.client) return
+			if(!client) return
 
 			if(hud_used.hud_shown)
 				hud_used.hud_shown = 0
-				if(src.hud_used.adding)
-					src.client.screen -= src.hud_used.adding
-				if(src.hud_used.other)
-					src.client.screen -= src.hud_used.other
-				if(src.hud_used.hotkeybuttons)
-					src.client.screen -= src.hud_used.hotkeybuttons
-				if(src.hud_used.item_action_list)
-					src.client.screen -= src.hud_used.item_action_list
+				if(hud_used.adding)
+					client.screen -= hud_used.adding
+				if(hud_used.other)
+					client.screen -= hud_used.other
+				if(hud_used.hotkeybuttons)
+					client.screen -= hud_used.hotkeybuttons
+				if(hud_used.item_action_list)
+					client.screen -= hud_used.item_action_list
 
 				//Due to some poor coding some things need special treatment:
 				//These ones are a part of 'adding', 'other' or 'hotkeybuttons' but we want them to stay
-				src.client.screen += src.hud_used.hand_hud_objects
-				src.client.screen += src.hud_used.action_intent		//we want the intent swticher visible
-				src.hud_used.action_intent.screen_loc = ui_acti_alt	//move this to the alternative position, where zone_select usually is.
+				client.screen += hud_used.hand_hud_objects
+				client.screen += hud_used.action_intent		//we want the intent swticher visible
+				hud_used.action_intent.screen_loc = ui_acti_alt	//move this to the alternative position, where zone_select usually is.
 
 				//These ones are not a part of 'adding', 'other' or 'hotkeybuttons' but we want them gone.
-				src.client.screen -= src.zone_sel	//zone_sel is a mob variable for some reason.
+				client.screen -= zone_sel	//zone_sel is a mob variable for some reason.
 
 			else
 				hud_used.hud_shown = 1
-				if(src.hud_used.adding)
-					src.client.screen += src.hud_used.adding
-				if(src.hud_used.other && src.hud_used.inventory_shown)
-					src.client.screen += src.hud_used.other
-				if(src.hud_used.hotkeybuttons && !src.hud_used.hotkey_ui_hidden)
-					src.client.screen += src.hud_used.hotkeybuttons
+				if(hud_used.adding)
+					client.screen += hud_used.adding
+				if(hud_used.other && hud_used.inventory_shown)
+					client.screen += hud_used.other
+				if(hud_used.hotkeybuttons && !hud_used.hotkey_ui_hidden)
+					client.screen += hud_used.hotkeybuttons
 
 
-				src.hud_used.action_intent.screen_loc = ui_acti //Restore intent selection to the original position
-				src.client.screen += src.zone_sel				//This one is a special snowflake
+				hud_used.action_intent.screen_loc = ui_acti //Restore intent selection to the original position
+				client.screen += zone_sel				//This one is a special snowflake
 
 			hud_used.hidden_inventory_update()
 			hud_used.persistant_inventory_update()

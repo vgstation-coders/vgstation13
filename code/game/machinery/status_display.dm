@@ -105,8 +105,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 				var/new_icon = input(A, "Load an image to be desplayed on [src].", "Status display") in status_display_images
 
 				if(new_icon)
-					src.mode = MODE_IMAGE
-					src.set_picture(status_display_images[new_icon])
+					mode = MODE_IMAGE
+					set_picture(status_display_images[new_icon])
 			if("Supply shuttle timer")
 				mode = MODE_CARGO_TIMER
 
@@ -372,9 +372,9 @@ var/global/list/status_display_images = list(
 		var/new_icon = input(A, "Load an image to be desplayed on [src].", "AI status display") in status_display_images
 
 		if(new_icon)
-			src.mode = MODE_EMOTION
-			src.emotion = new_icon
-			src.set_picture(status_display_images[new_icon])
+			mode = MODE_EMOTION
+			emotion = new_icon
+			set_picture(status_display_images[new_icon])
 
 /obj/machinery/ai_status_display/process()
 	if(stat & NOPOWER)

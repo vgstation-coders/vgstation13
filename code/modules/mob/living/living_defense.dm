@@ -51,7 +51,7 @@
 	if(istype(get_active_hand(),/obj/item/device/assembly/signaler))
 		var/obj/item/device/assembly/signaler/signaler = get_active_hand()
 		if(signaler.deadman && prob(80))
-			src.visible_message("<span class='warning'>[src] triggers their deadman's switch!</span>")
+			visible_message("<span class='warning'>[src] triggers their deadman's switch!</span>")
 			signaler.signal()
 
 	var/absorb = run_armor_check(def_zone, P.flag)
@@ -64,7 +64,7 @@
 	P.on_hit(src, absorb)
 	if(istype(P, /obj/item/projectile/beam/lightning))
 		if(P.damage >= 200)
-			src.dust()
+			dust()
 	return absorb
 
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
@@ -77,7 +77,7 @@
 		if(istype(O,/obj/item/weapon))
 			var/obj/item/weapon/W = O
 			dtype = W.damtype
-		src.visible_message("<span class='warning'>[src] has been hit by [O].</span>")
+		visible_message("<span class='warning'>[src] has been hit by [O].</span>")
 		var/zone_normal_name
 		switch(zone)
 			if("l_arm")
@@ -107,21 +107,21 @@
 			var/momentum = speed/2
 
 			visible_message("<span class='warning'>[src] staggers under the impact!</span>","<span class='warning'>You stagger under the impact!</span>")
-			src.throw_at(get_edge_target_turf(src,dir),1,momentum)
+			throw_at(get_edge_target_turf(src,dir),1,momentum)
 
 			if(istype(W.loc,/mob/living) && W.is_sharp()) //Projectile is embedded and suitable for pinning.
 
 				if(!istype(src,/mob/living/carbon/human)) //Handles embedding for non-humans and simple_animals.
 					O.loc = src
-					src.embedded += O
+					embedded += O
 
 				var/turf/T = near_wall(dir,2)
 
 				if(T)
-					src.loc = T
+					loc = T
 					visible_message("<span class='warning'>[src] is pinned to the wall by [O]!</span>","<span class='warning'>You are pinned to the wall by [O]!</span>")
-					src.anchored = 1
-					src.pinned += O
+					anchored = 1
+					pinned += O
 
 		//Log stuf!
 
@@ -130,16 +130,16 @@
 		var/throwByName = "an unknown inanimate object"
 		if(M)
 			throwByName = M.name
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed])</font>")
+			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [name] ([ckey]) with a thrown [O] (speed: [speed])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed])</font>")
 
-		if(!src.isDead() && src.ckey) //Message admins if the hit mob is alive and has a ckey
-			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+		if(!isDead() && ckey) //Message admins if the hit mob is alive and has a ckey
+			msg_admin_attack("[name] ([ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)")
 
 		if(!iscarbon(M))
-			src.LAssailant = null
+			LAssailant = null
 		else
-			src.LAssailant = M
+			LAssailant = M
 
 /*
 	Ear and eye protection
@@ -169,7 +169,7 @@
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
 
 	adjustBruteLoss(damage)
 	return
@@ -222,7 +222,7 @@
 
 /mob/living/proc/near_wall(var/direction,var/distance=1)
 	var/turf/T = get_step(get_turf(src),direction)
-	var/turf/last_turf = src.loc
+	var/turf/last_turf = loc
 	var/i = 1
 
 	while(i>0 && i<=distance)
@@ -239,7 +239,7 @@
 /mob/living/proc/IgniteMob()
 	if(fire_stacks > 0 && !on_fire)
 		on_fire = 1
-		set_light(src.light_range + 3)
+		set_light(light_range + 3)
 		update_fire()
 		return 1
 	else return 0
@@ -248,7 +248,7 @@
 	if(on_fire)
 		on_fire = 0
 		fire_stacks = 0
-		set_light(src.light_range - 3)
+		set_light(light_range - 3)
 		update_fire()
 
 /mob/living/proc/update_fire()

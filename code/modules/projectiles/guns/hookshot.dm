@@ -111,7 +111,7 @@
 					var/obj/effect/overlay/chain/C = chain_datum.links["1"]
 					C.extremity_A = src
 					C.follow(src,get_step(loc,get_dir(loc,C)))
-					src.tether = C
+					tether = C
 				else							//else we simply rewind the chain
 					var/atom/movable/AM = chain_datum.extremity_B
 					if(AM)
@@ -125,12 +125,12 @@
 		if(user.tether)
 			return//we cannot pick up a hookshot that is part of a tether if we are part of a different tether ourselves (for now)
 		else
-			var/obj/effect/overlay/chain/C = src.tether
+			var/obj/effect/overlay/chain/C = tether
 			C.extremity_A = user
 			user.tether = C
 			chain_datum.extremity_A = user
 			C.follow(user,get_step(user,get_dir(user,C)))
-			src.tether = null
+			tether = null
 	..()
 
 /obj/item/weapon/gun/hookshot/proc/check_tether()//checking whether the hookshot is currently sustaining a tether with its user as the base

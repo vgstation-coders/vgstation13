@@ -9,12 +9,12 @@
 	volatility = 0.02
 
 /obj/effect/decal/cleanable/liquid_fuel/New(newLoc,amt=1)
-	src.amount = amt
+	amount = amt
 
 	//Be absorbed by any other liquid fuel in the tile.
 	for(var/obj/effect/decal/cleanable/liquid_fuel/other in newLoc)
 		if(other != src)
-			other.amount += src.amount
+			other.amount += amount
 			spawn other.Spread()
 			returnToPool(src)
 			return

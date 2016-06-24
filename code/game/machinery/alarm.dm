@@ -99,7 +99,7 @@
 /obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0)
 	// Propogate settings.
 	for (var/obj/machinery/alarm/AA in areaMaster)
-		if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted && AA.preset != src.preset)
+		if ( !(AA.stat & (NOPOWER|BROKEN)) && !AA.shorted && AA.preset != preset)
 			AA.preset=preset
 			apply_preset(1) // Only this air alarm should send a cycle.
 
@@ -134,10 +134,10 @@
 
 	if(building)
 		if(loc)
-			src.loc = loc
+			loc = loc
 
 		if(dir)
-			src.dir = dir
+			dir = dir
 
 		buildstage = 0
 		wiresexposed = 1
@@ -145,7 +145,7 @@
 		pixel_y = (dir & 3)? (dir ==1 ? -24 : 24) : 0
 		update_icon()
 		if(ticker && ticker.current_state == 3)//if the game is running
-			src.initialize()
+			initialize()
 		return
 
 	first_run()
@@ -615,7 +615,7 @@
 
 
 /obj/machinery/alarm/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
-	var/list/data=src.get_nano_data(user,FALSE)
+	var/list/data=get_nano_data(user,FALSE)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 
@@ -782,7 +782,7 @@
 		return 1
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 	switch(buildstage)
 		if(2)
@@ -924,36 +924,36 @@ FIRE ALARM
 	else if(stat & NOPOWER)
 		icon_state = "firep"
 	else
-		if(!src.detecting)
+		if(!detecting)
 			icon_state = "fire1"
 		else
 			icon_state = "fire0"
 		if(z == 1 && security_level)
-			src.overlays += image('icons/obj/monitors.dmi', "overlay_[get_security_level()]")
+			overlays += image('icons/obj/monitors.dmi', "overlay_[get_security_level()]")
 		else
-			src.overlays += image('icons/obj/monitors.dmi', "overlay_green")
+			overlays += image('icons/obj/monitors.dmi', "overlay_green")
 
 /obj/machinery/firealarm/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(src.detecting)
+	if(detecting)
 		if(exposed_temperature > T0C+200)
-			src.alarm()			// added check of detector status here
+			alarm()			// added check of detector status here
 
 /obj/machinery/firealarm/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/firealarm/bullet_act(BLAH)
-	return src.alarm()
+	return alarm()
 
 /obj/machinery/firealarm/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/firealarm/emp_act(severity)
 	if(prob(50/severity)) alarm()
 	..()
 
 /obj/machinery/firealarm/attackby(obj/item/W as obj, mob/user as mob)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 	if (isscrewdriver(W) && buildstage == 2)
 		wiresexposed = !wiresexposed
@@ -966,7 +966,7 @@ FIRE ALARM
 		switch(buildstage)
 			if(2)
 				if (ismultitool(W))
-					src.detecting = !( src.detecting )
+					detecting = !( detecting )
 					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]reconnected [src]'s detecting unit.")
 					playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 50, 1)
 				if(iswirecutter(W))
@@ -1012,21 +1012,21 @@ FIRE ALARM
 					qdel(src)
 		return
 
-	src.alarm()
+	alarm()
 
 /obj/machinery/firealarm/process()//Note: this processing was mostly phased out due to other code, and only runs when needed
 	if(stat & (NOPOWER|BROKEN))
 		return
 
-	if(src.timing)
-		if(src.time > 0)
-			src.time = src.time - ((world.timeofday - last_process)/10)
+	if(timing)
+		if(time > 0)
+			time = time - ((world.timeofday - last_process)/10)
 		else
-			src.alarm()
-			src.time = 0
-			src.timing = 0
+			alarm()
+			time = 0
+			timing = 0
 			processing_objects.Remove(src)
-		src.updateDialog()
+		updateDialog()
 	last_process = world.timeofday
 
 	if(locate(/obj/fire) in loc)
@@ -1059,12 +1059,12 @@ FIRE ALARM
 			d1 = text("<A href='?src=\ref[];reset=1'>Reset - Lockdown</A>", src)
 		else
 			d1 = text("<A href='?src=\ref[];alarm=1'>Alarm - Lockdown</A>", src)
-		if (src.timing)
+		if (timing)
 			d2 = text("<A href='?src=\ref[];time=0'>Stop Time Lock</A>", src)
 		else
 			d2 = text("<A href='?src=\ref[];time=1'>Initiate Time Lock</A>", src)
-		var/second = round(src.time) % 60
-		var/minute = (round(src.time) - second) / 60
+		var/second = round(time) % 60
+		var/minute = (round(time) - second) / 60
 		var/dat = "<HTML><HEAD></HEAD><BODY><TT><B>Fire alarm</B> [d1]\n<HR>The current alert level is: [get_security_level()]</b><br><br>\nTimer System: [d2]<BR>\nTime Left: [(minute ? "[minute]:" : null)][second] <A href='?src=\ref[src];tp=-30'>-</A> <A href='?src=\ref[src];tp=-1'>-</A> <A href='?src=\ref[src];tp=1'>+</A> <A href='?src=\ref[src];tp=30'>+</A>\n</TT></BODY></HTML>"
 		user << browse(dat, "window=firealarm")
 		onclose(user, "firealarm")
@@ -1073,12 +1073,12 @@ FIRE ALARM
 			d1 = text("<A href='?src=\ref[];reset=1'>[]</A>", src, stars("Reset - Lockdown"))
 		else
 			d1 = text("<A href='?src=\ref[];alarm=1'>[]</A>", src, stars("Alarm - Lockdown"))
-		if (src.timing)
+		if (timing)
 			d2 = text("<A href='?src=\ref[];time=0'>[]</A>", src, stars("Stop Time Lock"))
 		else
 			d2 = text("<A href='?src=\ref[];time=1'>[]</A>", src, stars("Initiate Time Lock"))
-		var/second = round(src.time) % 60
-		var/minute = (round(src.time) - second) / 60
+		var/second = round(time) % 60
+		var/minute = (round(time) - second) / 60
 		var/dat = "<HTML><HEAD></HEAD><BODY><TT><B>[stars("Fire alarm")]</B> [d1]\n<HR><b>The current alert level is: [stars(get_security_level())]</b><br><br>\nTimer System: [d2]<BR>\nTime Left: [(minute ? text("[]:", minute) : null)][second] <A href='?src=\ref[src];tp=-30'>-</A> <A href='?src=\ref[src];tp=-1'>-</A> <A href='?src=\ref[src];tp=1'>+</A> <A href='?src=\ref[src];tp=30'>+</A>\n</TT></BODY></HTML>"
 		user << browse(dat, "window=firealarm")
 		onclose(user, "firealarm")
@@ -1092,37 +1092,37 @@ FIRE ALARM
 	if (buildstage != 2)
 		return
 
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 		if (href_list["reset"])
-			src.reset()
+			reset()
 		else if (href_list["alarm"])
-			src.alarm()
+			alarm()
 		else if (href_list["time"])
-			src.timing = text2num(href_list["time"])
+			timing = text2num(href_list["time"])
 			last_process = world.timeofday
 			processing_objects.Add(src)
 		else if (href_list["tp"])
 			var/tp = text2num(href_list["tp"])
-			src.time += tp
-			src.time = min(max(round(src.time), 0), 120)
+			time += tp
+			time = min(max(round(time), 0), 120)
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 
-		src.add_fingerprint(usr)
+		add_fingerprint(usr)
 	else
 		usr << browse(null, "window=firealarm")
 		return
 	return
 
 /obj/machinery/firealarm/proc/reset()
-	if (!( src.working ))
+	if (!( working ))
 		return
 	areaMaster.firereset()
 	update_icon()
 
 /obj/machinery/firealarm/proc/alarm()
-	if (!( src.working ))
+	if (!( working ))
 		return
 	areaMaster.firealert()
 	update_icon()
@@ -1134,10 +1134,10 @@ var/global/list/firealarms = list() //shrug
 	..()
 	name = "[areaMaster.name] fire alarm"
 	if(loc)
-		src.loc = loc
+		loc = loc
 
 	if(dir)
-		src.dir = dir
+		dir = dir
 
 	if(building)
 		buildstage = 0

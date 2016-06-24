@@ -32,7 +32,7 @@
 	..()
 
 /obj/machinery/computer/secure_data/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/computer/secure_data/attack_paw(mob/user as mob)
@@ -42,7 +42,7 @@
 /obj/machinery/computer/secure_data/attack_hand(mob/user as mob)
 	if(..())
 		return
-	if (src.z > 6)
+	if (z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 	var/dat

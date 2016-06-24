@@ -97,10 +97,10 @@
 	visible_message("<span class='danger'>All of a sudden, \the [src] comes to life!</span>")
 
 	var/mob/living/simple_animal/hostile/viscerator/flying_skull/FS = new(get_turf(src))
-	FS.pixel_x = src.pixel_x
-	FS.pixel_y = src.pixel_y - 4 //The skull item sprite is slightly lower
+	FS.pixel_x = pixel_x
+	FS.pixel_y = pixel_y - 4 //The skull item sprite is slightly lower
 
-	animate(FS, pixel_y = src.pixel_y + 8, time = 7, easing = SINE_EASING)
+	animate(FS, pixel_y = pixel_y + 8, time = 7, easing = SINE_EASING)
 	qdel(src)
 
 /obj/effect/landmark/corpse/mummy/rafid

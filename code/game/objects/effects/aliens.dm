@@ -200,7 +200,7 @@
 
 /obj/effect/alien/weeds/node/New()
 	connected_weeds = new()
-	..(src.loc, src)
+	..(loc, src)
 
 /obj/effect/alien/weeds/node/Destroy()
 	for(var/obj/effect/alien/weeds/W in connected_weeds)
@@ -323,8 +323,8 @@
 	if(!W.is_hot())
 		damage = damage / 4.0
 
-	src.health -= damage
-	src.healthcheck()
+	health -= damage
+	healthcheck()
 
 
 /obj/effect/alien/weeds/proc/healthcheck()
@@ -372,7 +372,7 @@
 
 /obj/effect/alien/acid/New(loc, target)
 	..(loc)
-	src.target = target
+	target = target
 
 	if(isturf(target)) // Turf take twice as long to take down.
 		target_strength = 8
@@ -389,7 +389,7 @@
 	if(ticks >= target_strength)
 
 		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='good'><B>[src.target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>", 1)
+			O.show_message("<span class='good'><B>[target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>", 1)
 
 		if(istype(target, /turf/simulated/wall)) // I hate turf code.
 			var/turf/simulated/wall/W = target
@@ -401,19 +401,19 @@
 
 	switch(target_strength - ticks)
 		if(6)
-			visible_message("<span class='good'><B>[src.target] is holding up against the acid!</B></span>")
+			visible_message("<span class='good'><B>[target] is holding up against the acid!</B></span>")
 		if(4)
-			visible_message("<span class='good'><B>[src.target]\s structure is being melted by the acid!</B></span>")
+			visible_message("<span class='good'><B>[target]\s structure is being melted by the acid!</B></span>")
 		if(2)
-			visible_message("<span class='good'><B>[src.target] is struggling to withstand the acid!</B></span>")
+			visible_message("<span class='good'><B>[target] is struggling to withstand the acid!</B></span>")
 		if(0 to 1)
-			visible_message("<span class='good'><B>[src.target] begins to crumble under the acid!</B></span>")
+			visible_message("<span class='good'><B>[target] begins to crumble under the acid!</B></span>")
 	spawn(rand(150, 200)) tick()
 
 /obj/effect/alien/acid/hyper/tick()
-	visible_message("<span class='good'><B>[src.target] begins to crumble under the acid!</B></span>")
+	visible_message("<span class='good'><B>[target] begins to crumble under the acid!</B></span>")
 	spawn(rand(50,100))
-		visible_message("<span class='good'><B>[src.target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>")
+		visible_message("<span class='good'><B>[target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>")
 		if(istype(target, /turf/simulated/wall))
 			var/turf/simulated/wall/W = target
 			W.dismantle_wall(1)
@@ -494,7 +494,7 @@
 		spawn(15)
 			status = BURST
 			if(!child)
-				src.visible_message("<span class='warning'>The egg bursts apart, revealing nothing!</span>")
+				visible_message("<span class='warning'>The egg bursts apart, revealing nothing!</span>")
 				status = "GROWN"
 				getFromPool(/obj/effect/decal/cleanable/blood/xeno, src)
 				health = min(health,0)
@@ -520,17 +520,17 @@
 /obj/effect/alien/egg/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(10)
 	if(W.attack_verb && W.attack_verb.len)
-		src.visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W]!</span>")
+		visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W]!</span>")
 	else
-		src.visible_message("<span class='warning'><B>[user] attacks \the [src] with \the [W]!</span>")
+		visible_message("<span class='warning'><B>[user] attacks \the [src] with \the [W]!</span>")
 
 	var/damage = W.force
 
 	if(!W.is_hot())
 		damage = damage / 4.0
 
-	src.health -= damage
-	src.healthcheck()
+	health -= damage
+	healthcheck()
 
 
 /obj/effect/alien/egg/proc/healthcheck()

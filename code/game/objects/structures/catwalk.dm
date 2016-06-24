@@ -36,11 +36,11 @@
 			if(prob(75))
 				qdel(src)
 			else
-				new /obj/structure/lattice(src.loc)
+				new /obj/structure/lattice(loc)
 				qdel(src)
 		if(3.0)
 			if(prob(10))
-				new /obj/structure/lattice(src.loc)
+				new /obj/structure/lattice(loc)
 				qdel(src)
 
 /obj/structure/catwalk/attackby(obj/item/C as obj, mob/user as mob)
@@ -51,12 +51,12 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 80, 1)
 		if(do_after(user, src, 30) && src)
 			to_chat(user, "<span class='notice'>You finish taking taking the catwalk apart.</span>")
-			new /obj/item/stack/rods(src.loc, 2)
-			new /obj/structure/lattice(src.loc)
+			new /obj/item/stack/rods(loc, 2)
+			new /obj/structure/lattice(loc)
 			qdel(src)
 		return
 
 	if(istype(C, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/coil = C
-		if(get_turf(src) == src.loc)
-			coil.turf_place(src.loc, user)
+		if(get_turf(src) == loc)
+			coil.turf_place(loc, user)

@@ -27,7 +27,7 @@
 		var/datum/disease2/effect/f = new e
 		if (f.badness > badness)	//we don't want such strong effects
 			continue
-		if(f.stage == src.stage)
+		if(f.stage == stage)
 			list += f
 	effect = pick(list)
 	chance = rand(1,6)
@@ -285,7 +285,7 @@
 					newmeat.subjectname = sourcename
 					newmeat.subjectjob = sourcejob
 					newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment / totalslabs) //Thehehe. Fat guys go first
-					//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
+					//occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 					allmeat[i] = newmeat
 
 					var/obj/item/meatslab = allmeat[i]

@@ -4,15 +4,15 @@
 
 /mob/living/captive_brain/say(var/message)
 
-	if (src.client)
+	if (client)
 		if(client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class='warning'>You cannot speak in IC (muted).</span>")
 			return
-		if (src.client.handle_spam_prevention(message,MUTE_IC))
+		if (client.handle_spam_prevention(message,MUTE_IC))
 			return
 
-	if(istype(src.loc,/mob/living/simple_animal/borer))
-		var/mob/living/simple_animal/borer/B = src.loc
+	if(istype(loc,/mob/living/simple_animal/borer))
+		var/mob/living/simple_animal/borer/B = loc
 		to_chat(src, "You whisper silently, \"[message]\"")
 		to_chat(B.host, "The captive mind of [src] whispers, \"[message]\"")
 
@@ -26,7 +26,7 @@
 				var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
 				if(M.client.holder)
 					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
-				var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[src.name]</b> ([controls]) -> <b>[B.truename]:</b> [message]</span>"
+				var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[name]</b> ([controls]) -> <b>[B.truename]:</b> [message]</span>"
 				M.show_message(rendered, 2) //Takes into account blindness and such.
 
 /mob/living/captive_brain/emote(var/message)

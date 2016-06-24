@@ -209,7 +209,7 @@
 
 			if(CHICKEN)
 				win_value = 400 * spin_cost //6000$
-				var/mob/living/simple_animal/chicken/C = new(src.loc)
+				var/mob/living/simple_animal/chicken/C = new(loc)
 				C.name = "Pomf chicken"
 				C.body_color = "white"
 				C.icon_state = "chicken_white"
@@ -247,7 +247,7 @@
 
 					to_chat(user, "<span class='notice'>You win $[win_value]!</span>")
 				else
-					src.visible_message("<span class='danger'>[src]'s screen flashes red.</span>")
+					visible_message("<span class='danger'>[src]'s screen flashes red.</span>")
 
 		sleep(50)
 
@@ -257,7 +257,7 @@
 /obj/machinery/computer/slot_machine/proc/broadcast(var/message)
 	if(!message) return
 
-	Broadcast_Message(radio, all_languages[LANGUAGE_GALACTIC_COMMON], null, radio, message, "[capitalize(src.name)]", "Money Snatcher", "Slot machine #[id]", 0, 0, list(0,1), 1459)
+	Broadcast_Message(radio, all_languages[LANGUAGE_GALACTIC_COMMON], null, radio, message, "[capitalize(name)]", "Money Snatcher", "Slot machine #[id]", 0, 0, list(0,1), 1459)
 
 /obj/machinery/computer/slot_machine/attack_hand(mob/user as mob)
 	if(..())
@@ -300,7 +300,7 @@
 		if((stored_money >= spin_cost) && can_play())
 			spin(usr)
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 
 /obj/machinery/computer/slot_machine/attackby(obj/item/I as obj, mob/user as mob)
@@ -317,8 +317,8 @@
 		if(user.drop_item(I))
 			qdel(I)
 
-			src.stored_money += money_add
-			src.updateUsrDialog()
+			stored_money += money_add
+			updateUsrDialog()
 
 /obj/machinery/computer/slot_machine/proc/can_play() //If no money in OUR account, return 0
 	if(!our_money_account)

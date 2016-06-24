@@ -219,10 +219,10 @@
 	if(carved)
 		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
 		return
-	if(src.dat)
+	if(dat)
 		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book")
 		if(!isobserver(user))
-			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
+			user.visible_message("[user] opens a book titled \"[title]\" and begins reading intently.")
 		onclose(user, "book")
 	else
 		to_chat(user, "This book is completely blank!")
@@ -267,22 +267,22 @@
 					to_chat(usr, "The title is invalid.")
 					return
 				else
-					src.name = newtitle
-					src.title = newtitle
+					name = newtitle
+					title = newtitle
 			if("Contents")
 				var/content = sanitize(input(usr, "Write your book's contents (HTML NOT allowed):") as message|null)
 				if(!content)
 					to_chat(usr, "The content is invalid.")
 					return
 				else
-					src.dat += content
+					dat += content
 			if("Author")
 				var/newauthor = stripped_input(usr, "Write the author's name:")
 				if(!newauthor)
 					to_chat(usr, "The name is invalid.")
 					return
 				else
-					src.author = newauthor
+					author = newauthor
 			else
 				return
 	else if(istype(W, /obj/item/weapon/barcodescanner))
@@ -296,12 +296,12 @@
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer.'")
 				if(1)
 					scanner.book = src
-					scanner.computer.buffer_book = src.name
+					scanner.computer.buffer_book = name
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'")
 				if(2)
 					scanner.book = src
 					for(var/datum/borrowbook/b in scanner.computer.checkouts)
-						if(b.bookname == src.name)
+						if(b.bookname == name)
 							scanner.computer.checkouts.Remove(b)
 							to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book has been checked in.'")
 							return
@@ -358,7 +358,7 @@
 			else
 				modedesc = "ERROR"
 		to_chat(user, " - Mode [mode] : [modedesc]")
-		if(src.computer)
+		if(computer)
 			to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
 		else
 			to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")

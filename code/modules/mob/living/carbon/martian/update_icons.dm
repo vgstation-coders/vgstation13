@@ -29,10 +29,10 @@
 		var/matrix/M = matrix()
 		M.Turn(90)
 		M.Translate(1,-6)
-		src.transform = M
+		transform = M
 	else
 		var/matrix/M = matrix()
-		src.transform = M
+		transform = M
 
 /mob/living/carbon/martian/update_inv_hand(index, var/update_icons=1)
 	var/obj/item/I = get_held_item_by_index(index)
@@ -49,7 +49,7 @@
 		var/t_inhand_states = I.inhand_states[get_direction_by_index(index)]
 		if(!t_state)	t_state = I.icon_state
 
-		var/image/hand_image = image("icon" = src.icon, "icon_state" = "hand_[index]")
+		var/image/hand_image = image("icon" = icon, "icon_state" = "hand_[index]")
 		hand_image.overlays += image("icon" = t_inhand_states, "icon_state" = t_state, "pixel_x" = pixelx, "pixel_y" = pixely)
 
 		item_overlays[HAT_LAYER + index] = hand_image

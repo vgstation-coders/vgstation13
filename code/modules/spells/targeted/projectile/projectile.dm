@@ -33,7 +33,7 @@ If the spell_projectile is seeking, it will update its target every process and 
 		projectile.current = projectile.original
 		projectile.yo = target.y - user.y
 		projectile.xo = target.x - user.x
-		projectile.kill_count = src.duration
+		projectile.kill_count = duration
 		projectile.step_delay = proj_step_delay
 		if(istype(projectile, /obj/item/projectile/spell_projectile))
 			var/obj/item/projectile/spell_projectile/SP = projectile

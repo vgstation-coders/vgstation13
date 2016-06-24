@@ -108,7 +108,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
 	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_EFFECTS)
-	src.health = src.maxHealth
+	health = maxHealth
 	return 1
 /mob/living/simple_animal/New()
 	..()
@@ -116,11 +116,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(!real_name)
 		real_name = name
 
-	animal_count[src.type]++
+	animal_count[type]++
 
 /mob/living/simple_animal/Login()
-	if(src && src.client)
-		src.client.reset_screen()
+	if(src && client)
+		client.reset_screen()
 	..()
 
 /mob/living/simple_animal/updatehealth()
@@ -144,12 +144,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(stat == DEAD)
 		if(health > 0)
 			icon_state = icon_living
-			src.resurrect()
+			resurrect()
 			stat = CONSCIOUS
 			density = 1
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
-			src.delayedRegen()
+			delayedRegen()
 		return 0
 
 
@@ -194,7 +194,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	//Movement
 	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
-		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+		if(isturf(loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
@@ -314,7 +314,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		flick(icon_gib, src)
 
 	if(meat && meat_type)
-		for(var/i = 0; i < (src.size - meat_taken); i++)
+		for(var/i = 0; i < (size - meat_taken); i++)
 			drop_meat(get_turf(src))
 
 	..()
@@ -345,8 +345,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 
@@ -416,7 +416,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/strength_of_M = (M.size - 1) //Can only pick up mobs whose size is less or equal to this value. Normal human's size is 3, so his strength is 2 - he can pick up TINY and SMALL animals. Varediting human's size to 5 will allow him to pick up goliaths.
 
-	if((M.a_intent != I_HELP) && (src.size <= strength_of_M) && (isturf(src.loc)) && (src.holder_type))
+	if((M.a_intent != I_HELP) && (size <= strength_of_M) && (isturf(loc)) && (holder_type))
 		scoop_up(M)
 	else
 		..()
@@ -505,7 +505,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			if(health < maxHealth)
 				if(MED.use(1))
 					adjustBruteLoss(-MED.heal_brute)
-					src.visible_message("<span class='notice'>[user] applies \the [MED] to \the [src].</span>")
+					visible_message("<span class='notice'>[user] applies \the [MED] to \the [src].</span>")
 		else
 			to_chat(user, "<span class='notice'>This [src] is dead, medical items won't bring it back to life.</span>")
 	else if((meat_type || butchering_drops) && (stat == DEAD))	//if the animal has a meat, and if it is dead.
@@ -566,13 +566,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	stat = DEAD
 	density = 0
 
-	animal_count[src.type]--
-	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
-		var/list/L = animal_butchering_products[src.species_type]
-		src.butchering_drops = list()
+	animal_count[type]--
+	if(!butchering_drops && animal_butchering_products[species_type]) //If we already created a list of butchering drops, don't create another one
+		var/list/L = animal_butchering_products[species_type]
+		butchering_drops = list()
 
 		for(var/butchering_type in L)
-			src.butchering_drops += new butchering_type
+			butchering_drops += new butchering_type
 
 	verbs += /mob/living/proc/butcher
 
@@ -695,10 +695,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return 1
 
 /mob/living/simple_animal/proc/grow_up()
-	if(src.type == species_type) //Already grown up
+	if(type == species_type) //Already grown up
 		return
 
-	var/mob/living/simple_animal/new_animal = new species_type(src.loc)
+	var/mob/living/simple_animal/new_animal = new species_type(loc)
 
 	if(locked_to) //Handle atom locking
 		var/atom/movable/A = locked_to
@@ -706,14 +706,14 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		A.lock_atom(new_animal, /datum/locking_category/simple_animal)
 
 	new_animal.inherit_mind(src)
-	new_animal.ckey = src.ckey
-	new_animal.key = src.key
+	new_animal.ckey = ckey
+	new_animal.key = key
 
 	forceMove(get_turf(src))
 	qdel(src)
 
 /mob/living/simple_animal/proc/inherit_mind(mob/living/simple_animal/from)
-	src.faction = from.faction
+	faction = from.faction
 
 /mob/living/simple_animal/say_understands(var/mob/other,var/datum/language/speaking = null)
 	if(other) other = other.GetSource()
@@ -736,8 +736,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	set waitfor = 0
 	isRegenerating = 1
 	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
-	src.resurrect()
-	src.revive()
+	resurrect()
+	revive()
 	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
 
 /datum/locking_category/simple_animal

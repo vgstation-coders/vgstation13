@@ -45,12 +45,12 @@
 		// Make an internal copy of the list so we're not modifying the original.
 		initList(objects)
 	else
-		src.objects = objects
+		objects = objects
 
 	// Init vars
-	src.procName = procName
-	src.arguments = arguments
-	src.workerTimeout = workerTimeout
+	procName = procName
+	arguments = arguments
+	workerTimeout = workerTimeout
 
 	adjustedWorkerTimeout = workerTimeout
 	currentKillCount = 0

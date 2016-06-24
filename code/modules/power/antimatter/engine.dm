@@ -32,7 +32,7 @@
 	..()
 	spawn( 13 )
 		var/loc = get_step(src, NORTH)
-		src.connected = locate(/obj/machinery/power/am_engine/engine, get_step(loc, NORTH))
+		connected = locate(/obj/machinery/power/am_engine/engine, get_step(loc, NORTH))
 		return
 	return
 
@@ -51,7 +51,7 @@
 		F = null
 		spawn( 300 )
 			injecting = 0
-			new/obj/item/weapon/fuel(src.loc)
+			new/obj/item/weapon/fuel(loc)
 			connected.H_fuel += fuel
 
 	if(istype(F, /obj/item/weapon/fuel/antiH))
@@ -65,7 +65,7 @@
 		F = null
 		spawn( 300 )
 			injecting = 0
-			new /obj/item/weapon/fuel(src.loc)
+			new /obj/item/weapon/fuel(loc)
 			connected.antiH_fuel += fuel
 
 	return
@@ -78,7 +78,7 @@
 	..()
 	spawn( 7 )
 		var/loc = get_step(src, SOUTH)
-		src.connected = locate(/obj/machinery/power/am_engine/injector, get_step(loc, SOUTH))
+		connected = locate(/obj/machinery/power/am_engine/injector, get_step(loc, SOUTH))
 		return
 	return
 
@@ -86,7 +86,7 @@
 /obj/machinery/power/am_engine/engine/proc/engine_go()
 
 
-	if( (!src.connected) || (stat & BROKEN) )
+	if( (!connected) || (stat & BROKEN) )
 		return
 
 	if(!antiH_fuel || !H_fuel)
@@ -128,7 +128,7 @@
 
 
 	do
-		if( (!src.connected) || (stat & BROKEN) )
+		if( (!connected) || (stat & BROKEN) )
 			return
 
 		if(!antiH_fuel || !H_fuel)
@@ -185,7 +185,7 @@
 			if(energy > convert2energy(8e-12))	//FAR TOO MUCH ENERGY STILL
 				for(var/mob/M in hearers(src, null))
 					M.show_message(text("<span class='warning'><big>BANG!</big></span>"))
-				new /obj/effect/bhole(src.loc)
+				new /obj/effect/bhole(loc)
 
 		else	//this amount of energy is okay so it does the proper output thing
 

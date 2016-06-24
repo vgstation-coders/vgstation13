@@ -50,14 +50,14 @@
 			else
 				toscan += D
 
-		visible_message("<span class='notice'>[user.name] inserts the [D.name] in the [src.name].</span>")
-		src.updateUsrDialog()
+		visible_message("<span class='notice'>[user.name] inserts the [D.name] in the [name].</span>")
+		updateUsrDialog()
 
 /obj/machinery/disease2/diseaseanalyser/proc/PrintPaper(var/obj/item/weapon/virusdish/D)
-	var/obj/item/weapon/paper/P = new(src.loc)
+	var/obj/item/weapon/paper/P = new(loc)
 	P.info = D.virus2.get_info()
 	P.name = "Virus #[D.virus2.uniqueID]"
-	visible_message("\The [src.name] prints a sheet of paper.")
+	visible_message("\The [name] prints a sheet of paper.")
 
 /obj/machinery/disease2/diseaseanalyser/proc/Analyse(var/obj/item/weapon/virusdish/D)
 	dish.info = D.virus2.get_info()
@@ -65,10 +65,10 @@
 	if (D.virus2.addToDB())
 		say("Added new pathogen to database.")
 	PrintPaper(dish)
-	dish.forceMove(src.loc)
+	dish.forceMove(loc)
 	dish = null
 	icon_state = "analyser"
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/disease2/diseaseanalyser/process()
 	if(stat & (NOPOWER|BROKEN))
@@ -90,7 +90,7 @@
 		else
 			pause = 1
 			spawn(25)
-				dish.forceMove(src.loc)
+				dish.forceMove(loc)
 				dish = null
 				alert_noise("buzz")
 				pause = 0
@@ -100,24 +100,24 @@
 		return 1
 	if(usr) usr.set_machine(src)
 	if(href_list["eject"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
+		for(var/obj/item/weapon/virusdish/O in contents)
 			if("[O.virus2.uniqueID]" == href_list["name"])
-				O.forceMove(src.loc)
+				O.forceMove(loc)
 				if(toscan["O"])
 					toscan -= O
-		src.updateUsrDialog()
+		updateUsrDialog()
 	else if(href_list["print"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
+		for(var/obj/item/weapon/virusdish/O in contents)
 			if("[O.virus2.uniqueID]" == href_list["name"])
 				PrintPaper(O)
 
 /obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user as mob)
 	user.set_machine(src)
 	var/dat = list()
-	dat += "Currently stored samples: [src.contents.len]<br><hr>"
-	if (src.contents.len > 0)
+	dat += "Currently stored samples: [contents.len]<br><hr>"
+	if (contents.len > 0)
 		dat += "<table cellpadding='1' style='width: 100%;text-align:center;'><td>Name</td><td>Symptoms</td><td>Antibodies</td><td>Transmission</td><td>Options</td>"
-		for(var/obj/item/weapon/virusdish/B in src.contents)
+		for(var/obj/item/weapon/virusdish/B in contents)
 			var/ID = B.virus2.uniqueID
 			if("[ID]" in virusDB) //If it's in the DB they might have given it a name
 				var/datum/data/record/v = virusDB["[ID]"]

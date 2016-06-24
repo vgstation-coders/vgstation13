@@ -7,10 +7,10 @@
 			vomit()
 
 		//No hair for radroaches
-		if(src.radiation >= 50)
-			src.h_style = "Bald"
-			src.f_style = "Shaved"
-			src.update_hair()
+		if(radiation >= 50)
+			h_style = "Bald"
+			f_style = "Shaved"
+			update_hair()
 
 	//0.1% chance of playing a scary sound to someone who's in complete darkness
 	if(isturf(loc) && rand(1,1000) == 1)

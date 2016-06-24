@@ -109,11 +109,11 @@
 		invocation(holder)
 		spawn()
 			zapmuthafucka(holder, L, bounces)
-		src.process()
+		process()
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target
-	src.lastbumped = null
+	lastbumped = null
 	zapped.Add(target)
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
@@ -133,7 +133,7 @@
 	L.yo = U.y - T.y
 	L.xo = U.x - T.x
 	L.process()
-	while(!src.lastbumped)
+	while(!lastbumped)
 		sleep(world.tick_lag)
 	target = lastbumped
 	if(!istype(target)) //hit something

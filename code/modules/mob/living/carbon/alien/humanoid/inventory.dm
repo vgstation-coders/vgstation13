@@ -2,21 +2,21 @@
 	if(!slot) return
 	if(!istype(W)) return
 
-	if(src.is_holding_item(W))
-		src.u_equip(W)
+	if(is_holding_item(W))
+		u_equip(W)
 
 	switch(slot)
 		if(slot_head)
-			src.head = W
+			head = W
 			update_inv_head(redraw_mob)
 		if(slot_wear_suit)
-			src.wear_suit = W
+			wear_suit = W
 			update_inv_wear_suit(redraw_mob)
 		if(slot_l_store)
-			src.l_store = W
+			l_store = W
 			update_inv_pockets(redraw_mob)
 		if(slot_r_store)
-			src.r_store = W
+			r_store = W
 			update_inv_pockets(redraw_mob)
 		else
 			to_chat(usr, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")

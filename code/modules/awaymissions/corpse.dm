@@ -50,7 +50,7 @@
 	var/mob/living/carbon/human/M = new /mob/living/carbon/human(loc, mutantrace)
 
 	M.dna.mutantrace = mutantrace
-	M.real_name = src.name
+	M.real_name = name
 
 	switch(corpsegender)
 		if(G_BOTH)
@@ -88,87 +88,87 @@
 	return M
 
 /obj/effect/landmark/corpse/proc/equipCorpse(mob/living/carbon/human/M)
-	if(src.corpseuniform)
-		var/list/L = src.corpseuniform
+	if(corpseuniform)
+		var/list/L = corpseuniform
 
-		if(istype(L)) src.corpseuniform = pick(L)
+		if(istype(L)) corpseuniform = pick(L)
 
-		var/obj/item/clothing/under/U = new src.corpseuniform(M)
+		var/obj/item/clothing/under/U = new corpseuniform(M)
 
 		if(suit_sensors != -1)
 			U.sensor_mode = suit_sensors
 
 		M.equip_to_slot_or_del(U, slot_w_uniform)
 
-	if(src.corpsesuit)
-		var/list/L = src.corpsesuit
+	if(corpsesuit)
+		var/list/L = corpsesuit
 
-		if(istype(L)) src.corpsesuit = pick(L)
-		M.equip_to_slot_or_del(new src.corpsesuit(M), slot_wear_suit)
+		if(istype(L)) corpsesuit = pick(L)
+		M.equip_to_slot_or_del(new corpsesuit(M), slot_wear_suit)
 
-	if(src.corpseshoes)
-		var/list/L = src.corpseshoes
+	if(corpseshoes)
+		var/list/L = corpseshoes
 
-		if(istype(L)) src.corpseshoes = pick(L)
-		M.equip_to_slot_or_del(new src.corpseshoes(M), slot_shoes)
+		if(istype(L)) corpseshoes = pick(L)
+		M.equip_to_slot_or_del(new corpseshoes(M), slot_shoes)
 
-	if(src.corpsegloves)
-		var/list/L = src.corpsegloves
+	if(corpsegloves)
+		var/list/L = corpsegloves
 
-		if(istype(L)) src.corpsegloves = pick(L)
-		M.equip_to_slot_or_del(new src.corpsegloves(M), slot_gloves)
+		if(istype(L)) corpsegloves = pick(L)
+		M.equip_to_slot_or_del(new corpsegloves(M), slot_gloves)
 
-	if(src.corpseradio)
-		var/list/L = src.corpseradio
+	if(corpseradio)
+		var/list/L = corpseradio
 
-		if(istype(L)) src.corpseradio = pick(L)
-		M.equip_to_slot_or_del(new src.corpseradio(M), slot_ears)
+		if(istype(L)) corpseradio = pick(L)
+		M.equip_to_slot_or_del(new corpseradio(M), slot_ears)
 
-	if(src.corpseglasses)
-		var/list/L = src.corpseglasses
+	if(corpseglasses)
+		var/list/L = corpseglasses
 
-		if(istype(L)) src.corpseglasses = pick(L)
-		M.equip_to_slot_or_del(new src.corpseglasses(M), slot_glasses)
+		if(istype(L)) corpseglasses = pick(L)
+		M.equip_to_slot_or_del(new corpseglasses(M), slot_glasses)
 
-	if(src.corpsemask)
-		var/list/L = src.corpsemask
+	if(corpsemask)
+		var/list/L = corpsemask
 
-		if(istype(L)) src.corpsemask = pick(L)
-		M.equip_to_slot_or_del(new src.corpsemask(M), slot_wear_mask)
+		if(istype(L)) corpsemask = pick(L)
+		M.equip_to_slot_or_del(new corpsemask(M), slot_wear_mask)
 
-	if(src.corpsehelmet)
-		var/list/L = src.corpsehelmet
+	if(corpsehelmet)
+		var/list/L = corpsehelmet
 
-		if(istype(L)) src.corpsehelmet = pick(L)
+		if(istype(L)) corpsehelmet = pick(L)
 
-		M.equip_to_slot_or_del(new src.corpsehelmet(M), slot_head)
+		M.equip_to_slot_or_del(new corpsehelmet(M), slot_head)
 
-	if(src.corpsebelt)
-		var/list/L = src.corpsebelt
+	if(corpsebelt)
+		var/list/L = corpsebelt
 
-		if(istype(L)) src.corpsebelt = pick(L)
-		M.equip_to_slot_or_del(new src.corpsebelt(M), slot_belt)
+		if(istype(L)) corpsebelt = pick(L)
+		M.equip_to_slot_or_del(new corpsebelt(M), slot_belt)
 
-	if(src.corpsepocket1)
-		var/list/L = src.corpsepocket1
+	if(corpsepocket1)
+		var/list/L = corpsepocket1
 
-		if(istype(L)) src.corpsepocket1 = pick(L)
-		M.equip_to_slot_or_del(new src.corpsepocket1(M), slot_r_store)
+		if(istype(L)) corpsepocket1 = pick(L)
+		M.equip_to_slot_or_del(new corpsepocket1(M), slot_r_store)
 
-	if(src.corpsepocket2)
-		var/list/L = src.corpsepocket2
+	if(corpsepocket2)
+		var/list/L = corpsepocket2
 
-		if(istype(L)) src.corpsepocket2 = pick(L)
-		M.equip_to_slot_or_del(new src.corpsepocket2(M), slot_l_store)
+		if(istype(L)) corpsepocket2 = pick(L)
+		M.equip_to_slot_or_del(new corpsepocket2(M), slot_l_store)
 
-	if(src.corpseback)
-		var/list/L = src.corpseback
+	if(corpseback)
+		var/list/L = corpseback
 
-		if(istype(L)) src.corpseback = pick(L)
+		if(istype(L)) corpseback = pick(L)
 
-		M.equip_to_slot_or_del(new src.corpseback(M), slot_back)
+		M.equip_to_slot_or_del(new corpseback(M), slot_back)
 
-	if(src.corpseid == 1)
+	if(corpseid == 1)
 		var/obj/item/weapon/card/id/W = new(M)
 		W.name = "[M.real_name]'s ID Card"
 		var/datum/job/jobdatum
@@ -177,9 +177,9 @@
 			if(J.title == corpseidaccess)
 				jobdatum = J
 				break
-		if(src.corpseidicon)
+		if(corpseidicon)
 			W.icon_state = corpseidicon
-		if(src.corpseidaccess)
+		if(corpseidaccess)
 			if(jobdatum)
 				W.access = jobdatum.get_access()
 			else

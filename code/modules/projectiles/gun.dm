@@ -256,7 +256,7 @@
 			playsound(user, empty_sound, 100, 1)
 	else
 		if(empty_sound)
-			src.visible_message("*click click*")
+			visible_message("*click click*")
 			playsound(get_turf(src), empty_sound, 100, 1)
 
 /obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
@@ -302,15 +302,15 @@
 			mouthshoot = 0
 			return
 
-	if (src.process_chambered())
+	if (process_chambered())
 		//Point blank shooting if on harm intent or target we were targeting.
 		if(user.a_intent == I_HURT)
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
 			in_chamber.damage *= 1.3
-			src.Fire(M,user,0,0,1)
+			Fire(M,user,0,0,1)
 			return
 		else if(target && M in target)
-			src.Fire(M,user,0,0,1) ///Otherwise, shoot!
+			Fire(M,user,0,0,1) ///Otherwise, shoot!
 			return
 		else
 			return ..() //Allows a player to choose to melee instead of shoot, by being on help intent.

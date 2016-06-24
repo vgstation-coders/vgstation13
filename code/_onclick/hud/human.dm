@@ -1,9 +1,9 @@
 /datum/hud/proc/human_hud(var/ui_style='icons/mob/screen1_White.dmi', var/ui_color = "#ffffff", var/ui_alpha = 255)
 
 
-	src.adding = list()
-	src.other = list()
-	src.hotkeybuttons = list() //These can be disabled for hotkey usersx
+	adding = list()
+	other = list()
+	hotkeybuttons = list() //These can be disabled for hotkey usersx
 
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
@@ -15,7 +15,7 @@
 	using.icon_state = "intent_"+mymob.a_intent
 	using.screen_loc = ui_acti
 	using.layer = 20
-	src.adding += using
+	adding += using
 	action_intent = using
 
 //intent small hud objects
@@ -29,7 +29,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	help_intent = using
 
 	ico = new(ui_style, "black")
@@ -40,7 +40,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	disarm_intent = using
 
 	ico = new(ui_style, "black")
@@ -51,7 +51,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	grab_intent = using
 
 	ico = new(ui_style, "black")
@@ -62,7 +62,7 @@
 	using.icon = ico
 	using.screen_loc = ui_acti
 	using.layer = 21
-	src.adding += using
+	adding += using
 	hurt_intent = using
 
 //end intent small hud objects
@@ -76,7 +76,7 @@
 	using.layer = 20
 	using.color = ui_color
 	using.alpha = ui_alpha
-	src.adding += using
+	adding += using
 	move_intent = using
 
 	using = getFromPool(/obj/screen)
@@ -87,7 +87,7 @@
 	using.layer = 19
 	using.color = ui_color
 	using.alpha = ui_alpha
-	src.hotkeybuttons += using
+	hotkeybuttons += using
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "i_clothing"
@@ -99,7 +99,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "o_clothing"
@@ -111,7 +111,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	init_hand_icons(ui_style, ui_color, ui_alpha)
 
@@ -124,7 +124,7 @@
 	using.layer = 19
 	using.color = ui_color
 	using.alpha = ui_alpha
-	src.adding += using
+	adding += using
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
@@ -135,7 +135,7 @@
 	using.layer = 19
 	using.color = ui_color
 	using.alpha = ui_alpha
-	src.adding += using
+	adding += using
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "id"
@@ -147,7 +147,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.adding += inv_box
+	adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "mask"
@@ -159,7 +159,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "back"
@@ -171,7 +171,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.adding += inv_box
+	adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "storage1"
@@ -182,7 +182,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.adding += inv_box
+	adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "storage2"
@@ -193,7 +193,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.adding += inv_box
+	adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "suit storage"
@@ -205,7 +205,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.adding += inv_box
+	adding += inv_box
 
 	using = getFromPool(/obj/screen)
 	using.name = "resist"
@@ -215,7 +215,7 @@
 	using.layer = 19
 	using.color = ui_color
 	using.alpha = ui_alpha
-	src.hotkeybuttons += using
+	hotkeybuttons += using
 
 	using = getFromPool(/obj/screen)
 	using.name = "toggle"
@@ -225,7 +225,7 @@
 	using.layer = 20
 	using.color = ui_color
 	using.alpha = ui_alpha
-	src.adding += using
+	adding += using
 
 	using = getFromPool(/obj/screen)
 	using.name = "equip"
@@ -235,7 +235,7 @@
 	using.layer = 20
 	using.color = ui_color
 	using.alpha = ui_alpha
-	src.adding += using
+	adding += using
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "gloves"
@@ -246,7 +246,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "eyes"
@@ -257,7 +257,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "ears"
@@ -268,7 +268,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "head"
@@ -279,7 +279,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "shoes"
@@ -290,7 +290,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.other += inv_box
+	other += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "belt"
@@ -301,7 +301,7 @@
 	inv_box.layer = 19
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
-	src.adding += inv_box
+	adding += inv_box
 
 	mymob.throw_icon = getFromPool(/obj/screen)
 	mymob.throw_icon.icon = ui_style
@@ -310,7 +310,7 @@
 	mymob.throw_icon.screen_loc = ui_drop_throw
 	mymob.throw_icon.color = ui_color
 	mymob.throw_icon.alpha = ui_alpha
-	src.hotkeybuttons += mymob.throw_icon
+	hotkeybuttons += mymob.throw_icon
 
 	mymob.kick_icon = getFromPool(/obj/screen)
 	mymob.kick_icon.name = "kick"
@@ -319,7 +319,7 @@
 	mymob.kick_icon.screen_loc = ui_kick_bite
 	mymob.kick_icon.color = ui_color
 	mymob.kick_icon.alpha = ui_alpha
-	src.hotkeybuttons += mymob.kick_icon
+	hotkeybuttons += mymob.kick_icon
 
 	mymob.bite_icon = getFromPool(/obj/screen)
 	mymob.bite_icon.name = "bite"
@@ -328,7 +328,7 @@
 	mymob.bite_icon.screen_loc = ui_kick_bite
 	mymob.bite_icon.color = ui_color
 	mymob.bite_icon.alpha = ui_alpha
-	src.hotkeybuttons += mymob.bite_icon
+	hotkeybuttons += mymob.bite_icon
 
 	mymob.oxygen = getFromPool(/obj/screen)
 	mymob.oxygen.icon = ui_style
@@ -383,7 +383,7 @@
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
-	src.hotkeybuttons += mymob.pullin
+	hotkeybuttons += mymob.pullin
 
 	mymob.pain = getFromPool(/obj/screen)
 
@@ -404,21 +404,21 @@
 			mymob.item_use_icon = getFromPool(/obj/screen/gun/item)
 			if (mymob.client.target_can_click)
 				mymob.item_use_icon.dir = 1
-			src.adding += mymob.item_use_icon
+			adding += mymob.item_use_icon
 			mymob.gun_move_icon = getFromPool(/obj/screen/gun/move)
 			if (mymob.client.target_can_move)
 				mymob.gun_move_icon.dir = 1
 				mymob.gun_run_icon = getFromPool(/obj/screen/gun/run)
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
-				src.adding += mymob.gun_run_icon
-			src.adding += mymob.gun_move_icon
+				adding += mymob.gun_run_icon
+			adding += mymob.gun_move_icon
 
 
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
-	mymob.client.screen += src.adding + src.hotkeybuttons
+	mymob.client.screen += adding + hotkeybuttons
 	inventory_shown = 0
 
 	return
@@ -469,7 +469,7 @@
 			hud_used.item_action_list -= actionitem
 			returnToPool(actionitem)
 
-	for(var/obj/item/I in (src.contents-used))
+	for(var/obj/item/I in (contents-used))
 		if(I.action_button_name && (num < 6))
 			var/obj/screen/item_action/newactionitem = getFromPool(/obj/screen/item_action,null,I)
 			newactionitem.icon = ui_style2icon(client.prefs.UI_style)

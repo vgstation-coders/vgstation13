@@ -21,7 +21,7 @@
 /obj/item/weapon/grenade/chem_grenade/attack_self(mob/user as mob)
 	if(!stage || stage==1)
 		if(detonator)
-//				detonator.loc=src.loc
+//				detonator.loc=loc
 			detonator.detached()
 			usr.put_in_hands(detonator)
 			detonator=null
@@ -131,13 +131,13 @@
 		to_chat(user, "You begin pressing \the [W] into \the [src].")
 		if(do_after(user, src, 30))
 			to_chat(user, "You poke a hole in \the [src].")
-			if(src.loc == user)
+			if(loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/fuel_reservoir/I = new (get_turf(user))
 				user.put_in_hands(I)
 				qdel(src)
 			else
-				new /obj/item/weapon/fuel_reservoir(get_turf(src.loc))
+				new /obj/item/weapon/fuel_reservoir(get_turf(loc))
 				qdel(src)
 
 /obj/item/weapon/grenade/chem_grenade/examine(mob/user)
@@ -234,7 +234,7 @@
 
 	reservoir.reagents.trans_to(src, reservoir.reagents.total_volume)
 
-	if(src.reagents.total_volume) //The possible reactions didnt use up all reagents.
+	if(reagents.total_volume) //The possible reactions didnt use up all reagents.
 		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
 		steam.set_up(10, 0, get_turf(src))
 		steam.attach(src)
@@ -242,7 +242,7 @@
 
 		for(var/atom/A in view(affected_area, get_turf(src)))
 			if( A == src ) continue
-			src.reagents.reaction(A, 1, 10)
+			reagents.reaction(A, 1, 10)
 
 	invisibility = INVISIBILITY_MAXIMUM //Why am i doing this?
 	spawn(50)		   //To make sure all reagents can work
@@ -251,7 +251,7 @@
 		icon_state = initial(icon_state) + "_locked"
 		crit_fail = 1
 		for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
-			G.loc = get_turf(src.loc)*/
+			G.loc = get_turf(loc)*/
 
 /obj/item/weapon/grenade/chem_grenade/New()
 	. = ..()

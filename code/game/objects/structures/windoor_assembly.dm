@@ -34,7 +34,7 @@
 
 /obj/structure/windoor_assembly/New(dir=NORTH)
 	..()
-	src.ini_dir = src.dir
+	ini_dir = dir
 	update_nearby_tiles()
 
 obj/structure/windoor_assembly/Destroy()
@@ -99,11 +99,11 @@ obj/structure/windoor_assembly/Destroy()
 				if(do_after(user, src, 40))
 					if(!src) return
 					to_chat(user, "<span class='notice'>You've secured the windoor assembly!</span>")
-					src.anchored = 1
-					if(src.secure)
-						src.name = "Secure Anchored Windoor Assembly"
+					anchored = 1
+					if(secure)
+						name = "Secure Anchored Windoor Assembly"
 					else
-						src.name = "Anchored Windoor Assembly"
+						name = "Anchored Windoor Assembly"
 
 			//Unwrenching an unsecure assembly un-anchors it. Step 4 undone
 			else if(iswrench(W) && anchored)
@@ -113,11 +113,11 @@ obj/structure/windoor_assembly/Destroy()
 				if(do_after(user, src, 40))
 					if(!src) return
 					to_chat(user, "<span class='notice'>You've unsecured the windoor assembly!</span>")
-					src.anchored = 0
-					if(src.secure)
-						src.name = "Secure Windoor Assembly"
+					anchored = 0
+					if(secure)
+						name = "Secure Windoor Assembly"
 					else
-						src.name = "Windoor Assembly"
+						name = "Windoor Assembly"
 
 			//Adding plasteel makes the assembly a secure windoor assembly. Step 2 (optional) complete.
 			else if(istype(W, /obj/item/stack/sheet/plasteel) && !secure)
@@ -132,11 +132,11 @@ obj/structure/windoor_assembly/Destroy()
 
 					P.use(2)
 					to_chat(user, "<span class='notice'>You reinforce the windoor.</span>")
-					src.secure = "secure_"
-					if(src.anchored)
-						src.name = "Secure Anchored Windoor Assembly"
+					secure = "secure_"
+					if(anchored)
+						name = "Secure Anchored Windoor Assembly"
 					else
-						src.name = "Secure Windoor Assembly"
+						name = "Secure Windoor Assembly"
 
 			//Adding cable to the assembly. Step 5 complete.
 			else if(istype(W, /obj/item/stack/cable_coil) && anchored)
@@ -147,11 +147,11 @@ obj/structure/windoor_assembly/Destroy()
 					var/obj/item/stack/cable_coil/CC = W
 					CC.use(1)
 					to_chat(user, "<span class='notice'>You wire the windoor!</span>")
-					src.state = "02"
-					if(src.secure)
-						src.name = "Secure Wired Windoor Assembly"
+					state = "02"
+					if(secure)
+						name = "Secure Wired Windoor Assembly"
 					else
-						src.name = "Wired Windoor Assembly"
+						name = "Wired Windoor Assembly"
 			else
 				..()
 
@@ -166,11 +166,11 @@ obj/structure/windoor_assembly/Destroy()
 					if(!src || state != "02") return
 					to_chat(user, "<span class='notice'>You cut the windoor wires!</span>")
 					new/obj/item/stack/cable_coil(get_turf(user), 1)
-					src.state = "01"
-					if(src.secure)
-						src.name = "Secure Wired Windoor Assembly"
+					state = "01"
+					if(secure)
+						name = "Secure Wired Windoor Assembly"
 					else
-						src.name = "Wired Windoor Assembly"
+						name = "Wired Windoor Assembly"
 
 			//Adding airlock electronics for access. Step 6 complete.
 			else if(istype(W, /obj/item/weapon/circuitboard/airlock) && W:icon_state != "door_electronics_smoked")
@@ -182,11 +182,11 @@ obj/structure/windoor_assembly/Destroy()
 						if(!src) return
 
 						to_chat(user, "<span class='notice'>You've installed the airlock electronics!</span>")
-						src.name = "Near finished Windoor Assembly"
-						src.electronics = W
-						src.electronics.installed = 1
+						name = "Near finished Windoor Assembly"
+						electronics = W
+						electronics.installed = 1
 					else
-						W.forceMove(src.loc)
+						W.forceMove(loc)
 
 			//Screwdriver to remove airlock electronics. Step 6 undone.
 			else if(isscrewdriver(W) && electronics)
@@ -196,17 +196,17 @@ obj/structure/windoor_assembly/Destroy()
 				if(do_after(user, src, 40))
 					if(!src) return
 					to_chat(user, "<span class='notice'>You've removed the airlock electronics!</span>")
-					src.name = "Wired Windoor Assembly"
+					name = "Wired Windoor Assembly"
 					var/obj/item/weapon/circuitboard/airlock/ae
 					ae = electronics
 					ae.installed = 0
 					electronics = null
-					ae.loc = src.loc
+					ae.loc = loc
 
 
 			//Crowbar to complete the assembly, Step 7 complete.
 			else if(iscrowbar(W))
-				if(!src.electronics)
+				if(!electronics)
 					to_chat(usr, "<span class='rose'>The assembly is missing electronics.</span>")
 					return
 				usr << browse(null, "window=windoor_access")
@@ -221,18 +221,18 @@ obj/structure/windoor_assembly/Destroy()
 					to_chat(user, "<span class='notice'>You finish the windoor!</span>")
 					if(secure == "secure_")
 						secure = "secure"
-					if(src.facing == "l")
+					if(facing == "l")
 						windoor.icon_state = "left[secure]open"
 						windoor.base_state = "left[secure]"
 					else
 						windoor.icon_state = "right[secure]open"
 						windoor.base_state = "right[secure]"
-					windoor.dir = src.dir
+					windoor.dir = dir
 					windoor.density = 0
 
-					windoor.req_access = src.electronics.conf_access
-					windoor.electronics = src.electronics
-					src.electronics.loc = windoor
+					windoor.req_access = electronics.conf_access
+					windoor.electronics = electronics
+					electronics.loc = windoor
 					qdel(src)
 
 
@@ -245,13 +245,13 @@ obj/structure/windoor_assembly/Destroy()
 //I'm actually surprised this works, but boy am I pleased that it does
 /obj/structure/windoor_assembly/proc/Create()
 	if(secure && plasma)
-		return new /obj/machinery/door/window/plasma/secure(src.loc)
+		return new /obj/machinery/door/window/plasma/secure(loc)
 	else if(secure && !plasma)
-		return new /obj/machinery/door/window/brigdoor(src.loc)
+		return new /obj/machinery/door/window/brigdoor(loc)
 	else if(plasma)
-		return new /obj/machinery/door/window/plasma(src.loc)
+		return new /obj/machinery/door/window/plasma(loc)
 	else
-		return new /obj/machinery/door/window(src.loc)
+		return new /obj/machinery/door/window(loc)
 
 //Rotates the windoor assembly clockwise
 /obj/structure/windoor_assembly/verb/revrotate()
@@ -259,18 +259,18 @@ obj/structure/windoor_assembly/Destroy()
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
+	if (anchored)
 		to_chat(usr, "It is fastened to the floor; therefore, you can't rotate it!")
 		return 0
-	if(src.state != "01")
+	if(state != "01")
 		update_nearby_tiles() //Compel updates before
 
-	src.dir = turn(src.dir, 270)
+	dir = turn(dir, 270)
 
-	if(src.state != "01")
+	if(state != "01")
 		update_nearby_tiles()
 
-	src.ini_dir = src.dir
+	ini_dir = dir
 	update_icon()
 	return
 
@@ -280,11 +280,11 @@ obj/structure/windoor_assembly/Destroy()
 	set category = "Object"
 	set src in oview(1)
 
-	if(src.facing == "l")
+	if(facing == "l")
 		to_chat(usr, "The windoor will now slide to the right.")
-		src.facing = "r"
+		facing = "r"
 	else
-		src.facing = "l"
+		facing = "l"
 		to_chat(usr, "The windoor will now slide to the left.")
 
 	update_icon()

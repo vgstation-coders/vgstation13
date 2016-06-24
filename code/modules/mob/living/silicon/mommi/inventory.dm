@@ -12,15 +12,15 @@
 	return head_state
 
 /mob/living/silicon/robot/mommi/is_in_modules(obj/item/W, var/permit_sheets=0)
-	if(istype(W, src.module.emag.type))
-		return src.module.emag
+	if(istype(W, module.emag.type))
+		return module.emag
 	// Exact matching for stacks (so we can load machines)
 	if(istype(W, /obj/item/stack/sheet))
-		for(var/obj/item/stack/sheet/S in src.module.modules)
+		for(var/obj/item/stack/sheet/S in module.modules)
 			if(S.type==W.type)
 				return permit_sheets ? 0 : S
 	else
-		return (W in src.module.modules)
+		return (W in module.modules)
 
 #define MOMMI_LOW_POWER 100
 
@@ -33,7 +33,7 @@
 		drop_item(W)
 		return 0
 	// Make sure we're not picking up something that's in our factory-supplied toolbox.
-	//if(is_type_in_list(W,src.module.modules))
+	//if(is_type_in_list(W,module.modules))
 	//if(is_in_modules(W))
 //		to_chat(src, "<span class='warning'>Picking up something that's built-in to you seems a bit silly.</span>")
 		//return 0
@@ -41,12 +41,12 @@
 		drop_item(W)
 		return 0
 	if(tool_state)
-		//var/obj/item/found = locate(tool_state) in src.module.modules
+		//var/obj/item/found = locate(tool_state) in module.modules
 		var/obj/item/TS = tool_state
 		if(!is_in_modules(tool_state))
 			drop_item(TS)
 		else
-			TS.loc = src.module
+			TS.loc = module
 		contents -= tool_state
 		if (client)
 			client.screen -= tool_state
@@ -65,9 +65,9 @@
 
 //Attemps to remove an object on a mob.  Will not move it to another area or such, just removes from the mob.
 /mob/living/silicon/robot/mommi/remove_from_mob(var/obj/O)
-	src.u_equip(O,0)
-	if (src.client)
-		src.client.screen -= O
+	u_equip(O,0)
+	if (client)
+		client.screen -= O
 	O.layer = initial(O.layer)
 	O.plane = initial(O.plane)
 	O.screen_loc = null
@@ -105,9 +105,9 @@
 
 /mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
 	if(tool_state)
-		//var/obj/item/found = locate(tool_state) in src.module.modules
+		//var/obj/item/found = locate(tool_state) in module.modules
 		if(is_in_modules(tool_state))
-			if((tool_state in contents) && (tool_state in src.module.modules))
+			if((tool_state in contents) && (tool_state in module.modules))
 				to_chat(src, "<span class='warning'>This item cannot be dropped.</span>")
 				return 0
 		if(client)
@@ -138,11 +138,11 @@
 	var/obj/item/TS
 	if(isnull(module_active))
 		return
-	if((module_active in src.contents) && !(module_active in src.module.modules) && (module_active != src.module.emag) && candrop)
+	if((module_active in contents) && !(module_active in module.modules) && (module_active != module.emag) && candrop)
 		TS = tool_state
 		drop_item(TS)
 	if(tool_state == module_active)
-		//var/obj/item/found = locate(tool_state) in src.module.modules
+		//var/obj/item/found = locate(tool_state) in module.modules
 		TS = tool_state
 		if(!is_in_modules(TS))
 			drop_item()
@@ -153,7 +153,7 @@
 		tool_state = null
 		inv_tool.icon_state = "inv1"
 	if(is_in_modules(TS))
-		TS.forceMove(src.module)
+		TS.forceMove(module)
 	hud_used.update_robot_modules_display()
 
 /mob/living/silicon/robot/mommi/uneq_all()
@@ -194,7 +194,7 @@
 		tool_state = null
 		inv_tool.icon_state = "inv1"
 		if(is_in_modules(TS))
-			TS.forceMove(src.module)
+			TS.forceMove(module)
 		hud_used.update_robot_modules_display()
 
 
@@ -309,7 +309,7 @@
 				select_module(INV_SLOT_TOOL)
 
 			// Put the item on the MoMMI's head
-			src.head_state = W
+			head_state = W
 			W.equipped(src, slot)
 			// Add the item to the MoMMI's hud
 			if (client)

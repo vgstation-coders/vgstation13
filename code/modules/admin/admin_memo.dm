@@ -45,7 +45,7 @@
 		if(check_rights(R_SERVER,0))	//high ranking admins can delete other admin's memos
 			ckey = input(src,"Whose memo shall we remove?","Remove Memo",null) as null|anything in F.dir
 		else
-			ckey = src.ckey
+			ckey = ckey
 		if(ckey)
 			F.dir.Remove(ckey)
 			to_chat(src, "<b>Removed Memo created by [ckey].</b>")

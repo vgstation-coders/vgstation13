@@ -168,16 +168,16 @@ obj/effect/bmode/buildholder/New()
 		switch(master.cl.buildmode)
 			if(1)
 				master.cl.buildmode = 2
-				src.icon_state = "buildmode2"
+				icon_state = "buildmode2"
 			if(2)
 				master.cl.buildmode = 3
-				src.icon_state = "buildmode3"
+				icon_state = "buildmode3"
 			if(3)
 				master.cl.buildmode = 4
-				src.icon_state = "buildmode4"
+				icon_state = "buildmode4"
 			if(4)
 				master.cl.buildmode = 1
-				src.icon_state = "buildmode1"
+				icon_state = "buildmode1"
 
 	else if(pa.Find("right"))
 		switch(master.cl.buildmode)
@@ -226,7 +226,7 @@ obj/effect/bmode/buildholder/New()
 	..()
 
 /client/MouseDrop(src_object,over_object,src_location,over_location,src_control,over_control,params)
-	if(!src.buildmode)
+	if(!buildmode)
 		return ..()
 	var/obj/effect/bmode/buildholder/holder = null
 	for(var/obj/effect/bmode/buildholder/H in buildmodeholders)

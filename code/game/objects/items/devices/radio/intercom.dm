@@ -57,17 +57,17 @@
 		var/turf/position = get_turf(src)
 		if(isnull(position) || !(position.z in level))
 			return -1
-	if (!src.listening)
+	if (!listening)
 		return -1
 	if(freq == SYND_FREQ)
-		if(!(src.syndie))
+		if(!(syndie))
 			return -1//Prevents broadcast of messages over devices lacking the encryption
 
 	return canhear_range
 
 
 /obj/item/device/radio/intercom/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(speech.speaker && !src.anyai && !(speech.speaker in src.ai))
+	if(speech.speaker && !anyai && !(speech.speaker in ai))
 		return
 	..()
 

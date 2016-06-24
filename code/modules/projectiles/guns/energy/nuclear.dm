@@ -19,14 +19,14 @@
 				mode = 1
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Laser.ogg'
-				to_chat(user, "<span class='warning'>[src.name] is now set to kill.</span>")
+				to_chat(user, "<span class='warning'>[name] is now set to kill.</span>")
 				projectile_type = "/obj/item/projectile/beam"
 				modifystate = "energykill"
 			if(1)
 				mode = 0
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Taser.ogg'
-				to_chat(user, "<span class='warning'>[src.name] is now set to stun.</span>")
+				to_chat(user, "<span class='warning'>[name] is now set to stun.</span>")
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				modifystate = "energystun"
 		update_icon()
@@ -66,8 +66,8 @@
 	proc
 		failcheck()
 			lightfail = 0
-			if (prob(src.reliability)) return 1 //No failure
-			if (prob(src.reliability))
+			if (prob(reliability)) return 1 //No failure
+			if (prob(reliability))
 				for (var/mob/living/M in range(0,src)) //Only a minor failure, enjoy your radiation if you're in the same tile or carrying it
 					if (src in M.contents)
 						to_chat(M, "<span class='warning'>Your gun feels pleasantly warm for a moment.</span>")

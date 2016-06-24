@@ -8,9 +8,9 @@
 /mob/living/carbon/proc/give_item(mob/living/carbon/user)
 
 
-	if(src.stat == 2 || user.stat == 2 || src.client == null)
+	if(stat == 2 || user.stat == 2 || client == null)
 		return
-	if(src.handcuffed)
+	if(handcuffed)
 		to_chat(user, "<span class='warning'>Those hands are cuffed right now.</span>")
 		return //Can't receive items while cuffed
 	var/obj/item/I
@@ -46,9 +46,9 @@
 					user << "<span class='warning'>You can't seem to let go of \the [I].</span>"
 					return
 
-				src.put_in_hands(I)
-				src.visible_message("<span class='notice'>[user] handed \the [I] to [src].</span>")
+				put_in_hands(I)
+				visible_message("<span class='notice'>[user] handed \the [I] to [src].</span>")
 			if("No")
-				src.visible_message("<span class='warning'>[user] tried to hand \the [I] to [src] but \he didn't want it.</span>")
+				visible_message("<span class='warning'>[user] tried to hand \the [I] to [src] but \he didn't want it.</span>")
 	else
 		to_chat(user, "<span class='warning'>[src]'s hands are full.</span>")

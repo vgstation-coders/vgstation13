@@ -12,11 +12,11 @@
 
 /obj/item/clothing/head/helmet/tactical/examine(mob/user)
 	..()
-	if(src.flashlight)
+	if(flashlight)
 		to_chat(user, "The helmet is mounted with a flashlight attachment, it is [flashlight.on ? "":"un"]lit.")
 
 /obj/item/clothing/head/helmet/tactical/attackby(var/obj/item/I, mob/user, params)
-	if(!src.flashlight && (I.type == /obj/item/device/flashlight || istype(I,/obj/item/device/flashlight/tactical))) //have to directly check for type because flashlights are the base type and not a child
+	if(!flashlight && (I.type == /obj/item/device/flashlight || istype(I,/obj/item/device/flashlight/tactical))) //have to directly check for type because flashlights are the base type and not a child
 		user.drop_item(I, src)
 		flashlight = I
 
@@ -24,7 +24,7 @@
 		user.update_action_buttons()
 		user.update_inv_head()
 		return
-	if(isscrewdriver(I) && src.flashlight)
+	if(isscrewdriver(I) && flashlight)
 		flashlight.forceMove(get_turf(src))
 		flashlight.update_brightness(user, playsound = FALSE)
 		flashlight = null
@@ -36,7 +36,7 @@
 	return ..()
 
 obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
-	if(src.flashlight)
+	if(flashlight)
 		flashlight.on = !flashlight.on
 		if(get_turf(src))
 			if(flashlight.on)

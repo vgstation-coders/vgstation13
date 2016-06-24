@@ -9,17 +9,17 @@
 	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
 
-	var/muzzled = istype(src.wear_mask, /obj/item/clothing/mask/muzzle)
+	var/muzzled = istype(wear_mask, /obj/item/clothing/mask/muzzle)
 
 	switch(act)
 		if ("me")
 			if(silent)
 				return
-			if (src.client)
+			if (client)
 				if (client.prefs.muted & MUTE_IC)
 					to_chat(src, "<span class='warning'>You cannot send IC messages (muted).</span>")
 					return
-				if (src.client.handle_spam_prevention(message,MUTE_IC))
+				if (client.handle_spam_prevention(message,MUTE_IC))
 					return
 			if (stat)
 				return
@@ -32,7 +32,7 @@
 			return custom_emote(m_type, message)
 
 		if ("airguitar")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>\The [src]</B> is strumming the air and headbanging like a safari chimp."
 				m_type = VISIBLE
 
@@ -41,79 +41,79 @@
 			m_type = VISIBLE
 
 		if("sign")
-			if (!src.restrained())
-				message = text("<B>\The [src.name]</B> signs[].", (text2num(param) ? text(" the number []", text2num(param)) : null))
+			if (!restrained())
+				message = text("<B>\The [name]</B> signs[].", (text2num(param) ? text(" the number []", text2num(param)) : null))
 				m_type = VISIBLE
 		if("scratch")
-			if (!src.restrained())
-				message = "<B>\The [src.name]</B> scratches."
+			if (!restrained())
+				message = "<B>\The [name]</B> scratches."
 				m_type = VISIBLE
 		if("whimper")
 			if (!muzzled)
-				message = "<B>\The [src.name]</B> whimpers."
+				message = "<B>\The [name]</B> whimpers."
 				m_type = HEARABLE
 		if("roar")
 			if (!muzzled)
-				message = "<B>\The [src.name]</B> roars."
+				message = "<B>\The [name]</B> roars."
 				m_type = HEARABLE
 		if("tail")
-			message = "<B>\The [src.name]</B> waves his tail."
+			message = "<B>\The [name]</B> waves his tail."
 			m_type = VISIBLE
 		if("gasp")
-			message = "<B>\The [src.name]</B> gasps."
+			message = "<B>\The [name]</B> gasps."
 			m_type = HEARABLE
 		if("shiver")
-			message = "<B>\The [src.name]</B> shivers."
+			message = "<B>\The [name]</B> shivers."
 			m_type = HEARABLE
 		if("drool")
-			message = "<B>\The [src.name]</B> drools."
+			message = "<B>\The [name]</B> drools."
 			m_type = VISIBLE
 		if("paw")
-			if (!src.restrained())
-				message = "<B>\The [src.name]</B> flails his paw."
+			if (!restrained())
+				message = "<B>\The [name]</B> flails his paw."
 				m_type = VISIBLE
 		if("scretch")
 			if (!muzzled)
-				message = "<B>\The [src.name]</B> scretches."
+				message = "<B>\The [name]</B> scretches."
 				m_type = HEARABLE
 		if("choke")
-			message = "<B>\The [src.name]</B> chokes."
+			message = "<B>\The [name]</B> chokes."
 			m_type = HEARABLE
 		if("moan")
-			message = "<B>\The [src.name]</B> moans!"
+			message = "<B>\The [name]</B> moans!"
 			m_type = HEARABLE
 		if("nod")
-			message = "<B>\The [src.name]</B> nods his head."
+			message = "<B>\The [name]</B> nods his head."
 			m_type = VISIBLE
 		if("sit")
-			message = "<B>\The [src.name]</B> sits down."
+			message = "<B>\The [name]</B> sits down."
 			m_type = VISIBLE
 		if("sway")
-			message = "<B>\The [src.name]</B> sways around dizzily."
+			message = "<B>\The [name]</B> sways around dizzily."
 			m_type = VISIBLE
 		if("sulk")
-			message = "<B>\The [src.name]</B> sulks down sadly."
+			message = "<B>\The [name]</B> sulks down sadly."
 			m_type = VISIBLE
 		if("twitch")
-			message = "<B>\The [src.name]</B> twitches violently."
+			message = "<B>\The [name]</B> twitches violently."
 			m_type = VISIBLE
 		if("dance")
-			if (!src.restrained())
-				message = "<B>\The [src.name]</B> dances around happily."
+			if (!restrained())
+				message = "<B>\The [name]</B> dances around happily."
 				m_type = VISIBLE
 		if("roll")
-			if (!src.restrained())
-				message = "<B>\The [src.name]</B> rolls."
+			if (!restrained())
+				message = "<B>\The [name]</B> rolls."
 				m_type = VISIBLE
 		if("shake")
-			message = "<B>\The [src.name]</B> shakes his head."
+			message = "<B>\The [name]</B> shakes his head."
 			m_type = VISIBLE
 		if("gnarl")
 			if (!muzzled)
-				message = "<B>\The [src.name]</B> gnarls and shows his teeth.."
+				message = "<B>\The [name]</B> gnarls and shows his teeth.."
 				m_type = HEARABLE
 		if("jump")
-			message = "<B>\The [src.name]</B> jumps!"
+			message = "<B>\The [name]</B> jumps!"
 			m_type = VISIBLE
 		if ("spin")
 			message = "<B>\The [src]</B> spins out of control!"
@@ -123,7 +123,7 @@
 			message = text("<B>\The []</B> collapses!", src)
 			m_type = HEARABLE
 		if("deathgasp")
-			message = "<b>\The [src.name]</b> lets out a faint chimper as it collapses and stops moving..."
+			message = "<b>\The [name]</b> lets out a faint chimper as it collapses and stops moving..."
 			m_type = VISIBLE
 
 		if ("cough")
@@ -136,8 +136,8 @@
 			to_chat(src, "choke, collapse, cough, dance, deathgasp, drool, gasp, shiver, gnarl, jump, paw, moan, nod, roar, roll, scratch,\nscretch, shake, sign-#, sit, sulk, sway, tail, twitch, whimper")
 		else
 //			to_chat(custom_emote(VISIBLE, act) src, text("Invalid Emote: []", act))
-	if ((message && src.stat == 0))
-		if(src.client)
+	if ((message && stat == 0))
+		if(client)
 			log_emote("[name]/[key] (@[x],[y],[z]): [message]")
 		if (m_type & 1)
 			for(var/mob/O in viewers(src, null))

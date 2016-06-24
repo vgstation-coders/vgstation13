@@ -42,7 +42,7 @@
 		qdel(src)
 		return
 	..()
-	src.ourschematic = ourschematic
+	ourschematic = ourschematic
 	icon = ourschematic.icon
 	icon_state = ourschematic.icon_state
 	name = ourschematic.name
@@ -87,7 +87,7 @@
 	..()
 	owner = I
 	name = I.action_button_name
-	overlay = image(loc = src, layer=src.layer+1)
+	overlay = image(loc = src, layer=layer+1)
 	overlay.appearance = I.appearance
 	overlay.name = I.action_button_name
 	overlay.dir = SOUTH
@@ -772,7 +772,7 @@
 	return 1
 
 /client/proc/reset_screen()
-	for(var/obj/screen/objects in src.screen)
+	for(var/obj/screen/objects in screen)
 		if(!objects.globalscreen)
 			returnToPool(objects)
-	src.screen = null
+	screen = null

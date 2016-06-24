@@ -37,8 +37,8 @@
 
 	speech.message = "[message]"
 
-	if (src.client)
-		if (src.client.prefs.muted & MUTE_IC)
+	if (client)
+		if (client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class='danger'>You cannot whisper (muted).</span>")
 			return
 
@@ -62,7 +62,7 @@
 		speech.message = Ellipsis(speech.message, 10, 1)
 		speech.mode= SPEECH_MODE_FINAL
 		whispers = "whispers with their final breath"
-		said_last_words = src.stat
+		said_last_words = stat
 	treat_speech(speech)
 
 	var/listeners = get_hearers_in_view(1, src) | observers
@@ -92,7 +92,7 @@
 
 	eavesdroppers = null
 
-	rendered = "<span class='game say'><span class='name'>[src.name]</span> [whispers] something.</span>"
+	rendered = "<span class='game say'><span class='name'>[name]</span> [whispers] something.</span>"
 
 	for (var/mob/watcher in watchers)
 		if (watcher)

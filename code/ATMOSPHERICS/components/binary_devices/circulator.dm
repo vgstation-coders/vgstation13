@@ -148,7 +148,7 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 
 /obj/machinery/atmospherics/binary/circulator/verb/rotate_anticlockwise()
 	set category = "Object"
@@ -158,4 +158,4 @@
 	if(usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	dir = turn(dir, -90)

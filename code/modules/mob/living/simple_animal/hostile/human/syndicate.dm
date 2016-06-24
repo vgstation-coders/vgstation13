@@ -55,7 +55,7 @@
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)	return
 	if(prob(65))
-		src.health -= Proj.damage
+		health -= Proj.damage
 	else
 		visible_message("<span class='danger'>[src] blocks [Proj] with its shield!</span>")
 	return 0
@@ -98,7 +98,7 @@
 	projectiletype = /obj/item/projectile/beam
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/laser)
-	
+
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space
 	icon_state = "syndicaterangedpsace"
 	icon_living = "syndicaterangedpsace"

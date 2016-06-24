@@ -107,8 +107,8 @@
 /mob/living/carbon/martian/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
 	if(!istype(W)) return
 
-	if(src.is_holding_item(W))
-		src.u_equip(W)
+	if(is_holding_item(W))
+		u_equip(W)
 
 	if(slot == slot_head)
 		head = W

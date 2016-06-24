@@ -59,7 +59,7 @@
 
 	var/image/bomb_icon = image('icons/obj/weaponsmithing.dmi', src, "nothing")
 	bomb_icon.appearance = bomb_appearance
-	bomb_icon.layer = src.layer
+	bomb_icon.layer = layer
 	bomb_icon.pixel_x = 2
 	bomb_icon.pixel_y = 9
 
@@ -92,7 +92,7 @@
 	else if (A.loc == user)
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	else if (locate (/obj/structure/table, loc))
 		return
 
 	if(!bomb)
@@ -149,14 +149,14 @@
 			bomb_air_contents_1 = null
 			bomb_air_contents_2 = null
 
-			user.visible_message("<span class='danger'>[user] opens \the [bomb] on \his [src.name] and fires a blast wave at \the [A]!</span>","<span class='danger'>You open \the [bomb] on your [src.name] and fire a blast wave at \the [A]!</span>")
+			user.visible_message("<span class='danger'>[user] opens \the [bomb] on \his [name] and fires a blast wave at \the [A]!</span>","<span class='danger'>You open \the [bomb] on your [name] and fire a blast wave at \the [A]!</span>")
 
 			heavy_damage_range = round(range*0.25)
 			medium_damage_range = round(range*0.5)
 			light_damage_range = round(range)
 
-			if(ismob(src.loc))
-				var/mob/shooter = src.loc
+			if(ismob(loc))
+				var/mob/shooter = loc
 				var/turf/shooterturf = get_turf(shooter)
 				var/area/R = get_area(shooterturf)
 
@@ -173,8 +173,8 @@
 					bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
 
 		else
-			user.visible_message("<span class='danger'>[user] opens \the [bomb] on \his [src.name]!</span>","<span class='danger'>You open \the [bomb] on your [src.name]!</span>")
-			user.visible_message("\The [bomb] on [user]'s [src.name] hisses pitifully.","\The [bomb] on your [src.name] hisses pitifully.")
+			user.visible_message("<span class='danger'>[user] opens \the [bomb] on \his [name]!</span>","<span class='danger'>You open \the [bomb] on your [name]!</span>")
+			user.visible_message("\The [bomb] on [user]'s [name] hisses pitifully.","\The [bomb] on your [name] hisses pitifully.")
 			to_chat(user, "<span class='warning'>The bomb is a dud!</span>")
 			var/ratio1 = bomb_air_contents_1.volume/bomb_air_contents_2.volume
 			var/datum/gas_mixture/temp2
@@ -192,8 +192,8 @@
 			B.light_damage_range = light_damage_range
 			in_chamber = B
 			if(Fire(A,user,params, "struggle" = struggle))
-				if(ismob(src.loc) && !isanimal(src.loc))
-					var/mob/living/M = src.loc
+				if(ismob(loc) && !isanimal(loc))
+					var/mob/living/M = loc
 					var/turf/Q = get_turf(M)
 					var/turf/target
 					var/throwdir = turn(M.dir, 180)

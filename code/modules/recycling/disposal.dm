@@ -81,7 +81,7 @@
 	if(stat & BROKEN || !I || !user)
 		return
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if(mode<=0) // It's off
 		if(isscrewdriver(I))
 			if(contents.len > 0)
@@ -109,8 +109,8 @@
 				if(do_after(user, src,20))
 					if(!src || !W.isOn()) return
 					to_chat(user, "You sliced the floorweld off the disposal unit.")
-					var/obj/structure/disposalconstruct/C = new (src.loc)
-					src.transfer_fingerprints_to(C)
+					var/obj/structure/disposalconstruct/C = new (loc)
+					transfer_fingerprints_to(C)
 					C.ptype = 6 // 6 = disposal unit
 					C.anchored = 1
 					C.density = 1
@@ -166,9 +166,9 @@
 
 // attempt to move while inside
 /obj/machinery/disposal/relaymove(mob/user as mob)
-	if(user.stat || src.flushing)
+	if(user.stat || flushing)
 		return
-	src.go_out(user)
+	go_out(user)
 	return
 
 // leave the disposal
@@ -178,7 +178,7 @@
 	if (user.client)
 		user.client.eye = user.client.mob
 		user.client.perspective = MOB_PERSPECTIVE
-	user.loc = src.loc
+	user.loc = loc
 	update_icon()
 	return
 
@@ -194,7 +194,7 @@
 
 // ai as human but can't flush
 /obj/machinery/disposal/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	ui_interact(user)
 
 // human interact with machine
@@ -207,7 +207,7 @@
 		to_chat(usr, "<span class='warning'>The disposal units power is disabled.</span>")
 		return
 	*/
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	ui_interact(user)
 
 // user interaction
@@ -246,7 +246,7 @@
 		usr.unset_machine()
 		return 1
 	else
-		src.add_fingerprint(usr)
+		add_fingerprint(usr)
 		usr.set_machine(src)
 
 		if(href_list["close"])
@@ -275,7 +275,7 @@
 // eject the contents of the disposal unit
 /obj/machinery/disposal/proc/eject()
 	for(var/atom/movable/AM in src)
-		AM.loc = src.loc
+		AM.loc = loc
 		AM.pipe_eject(0)
 	update_icon()
 
@@ -324,7 +324,7 @@
 					flush()
 		flush_count = 0
 
-	src.updateDialog()
+	updateDialog()
 
 	if(flush && air_contents.return_pressure() >= SEND_PRESSURE )	// flush can happen even without power
 		spawn(0)
@@ -415,9 +415,9 @@
 	if(H) // Somehow, someone managed to flush a window which broke mid-transit and caused the disposal to go in an infinite loop trying to expel null, hopefully this fixes it
 		H.active = 0 // Stop disposalholder's move() processing so we don't call the trunk's expel() too
 		for(var/atom/movable/AM in H)
-			target = get_offset_target_turf(src.loc, rand(5)-rand(5), rand(5)-rand(5))
+			target = get_offset_target_turf(loc, rand(5)-rand(5), rand(5)-rand(5))
 
-			AM.loc = src.loc
+			AM.loc = loc
 			AM.pipe_eject(0)
 			spawn(1)
 				if(AM)
@@ -552,10 +552,10 @@
 				has_fat_guy = 1			// set flag on holder
 		if(istype(AM, /obj/item/delivery/large) && !hasmob)
 			var/obj/item/delivery/large/T = AM
-			src.destinationTag = T.sortTag
+			destinationTag = T.sortTag
 		if(istype(AM, /obj/item/delivery) && !hasmob)
 			var/obj/item/delivery/T = AM
-			src.destinationTag = T.sortTag
+			destinationTag = T.sortTag
 
 // start the movement process
 // argument is the disposal unit the holder started in
@@ -637,8 +637,8 @@
 /obj/structure/disposalholder/relaymove(mob/user as mob)
 	if (user.stat)
 		return
-	if (src.loc)
-		for (var/mob/M in hearers(src.loc.loc))
+	if (loc)
+		for (var/mob/M in hearers(loc.loc))
 			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
 
 	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
@@ -683,7 +683,7 @@
 		if(H)
 			// holder was present
 			H.active = 0
-			var/turf/T = src.loc
+			var/turf/T = loc
 			if(T.density)
 				// deleting pipe is inside a dense turf (wall)
 				// this is unlikely, but just dump out everything into the turf in case
@@ -730,7 +730,7 @@
 
 	// update the icon_state to reflect hidden status
 	proc/update()
-		var/turf/T = src.loc
+		var/turf/T = loc
 		hide(T.intact && !istype(T,/turf/space))	// space never hides pipes
 
 	// hide called by levelupdate if turf intact status changes
@@ -813,15 +813,15 @@
 		if(remains)
 			for(var/D in cardinal)
 				if(D & dpdir)
-					var/obj/structure/disposalpipe/broken/P = new(src.loc)
+					var/obj/structure/disposalpipe/broken/P = new(loc)
 					P.dir = D
 
-		src.invisibility = 101	// make invisible (since we won't delete the pipe immediately)
+		invisibility = 101	// make invisible (since we won't delete the pipe immediately)
 		var/obj/structure/disposalholder/H = locate() in src
 		if(H)
 			// holder was present
 			H.active = 0
-			var/turf/T = src.loc
+			var/turf/T = loc
 			if(T.density)
 				// broken pipe is inside a dense turf (wall)
 				// this is unlikely, but just dump out everything into the turf in case
@@ -872,10 +872,10 @@
 
 	attackby(var/obj/item/I, var/mob/user)
 
-		var/turf/T = src.loc
+		var/turf/T = loc
 		if(T.intact)
 			return		// prevent interaction with T-scanner revealed pipes
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		if(istype(I, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/W = I
 
@@ -899,7 +899,7 @@
 	proc/welded()
 
 
-		var/obj/structure/disposalconstruct/C = new (src.loc)
+		var/obj/structure/disposalconstruct/C = new (loc)
 		switch(base_icon_state)
 			if("pipe-s")
 				C.ptype = 0
@@ -917,7 +917,7 @@
 				C.ptype = 9
 			if("pipe-j2s")
 				C.ptype = 10
-		src.transfer_fingerprints_to(C)
+		transfer_fingerprints_to(C)
 		C.change_dir(dir)
 		C.density = 0
 		C.anchored = 1
@@ -1356,25 +1356,25 @@
 	//Disposal bins or chutes
 	/*
 	These shouldn't be required
-	var/obj/machinery/disposal/D = locate() in src.loc
+	var/obj/machinery/disposal/D = locate() in loc
 	if(D && D.anchored)
 		return
 
 	//Disposal outlet
-	var/obj/structure/disposaloutlet/O = locate() in src.loc
+	var/obj/structure/disposaloutlet/O = locate() in loc
 	if(O && O.anchored)
 		return
 	*/
 
 	//Disposal constructors
-	var/obj/structure/disposalconstruct/C = locate() in src.loc
+	var/obj/structure/disposalconstruct/C = locate() in loc
 	if(C && C.anchored)
 		return
 
-	var/turf/T = src.loc
+	var/turf/T = loc
 	if(T.intact)
 		return		// prevent interaction with T-scanner revealed pipes
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
 
@@ -1413,7 +1413,7 @@
 				D.expel(H)	// expel at disposal
 	else
 		if(H)
-			src.expel(H, src.loc, 0)	// expel at turf
+			expel(H, loc, 0)	// expel at turf
 	return null
 
 	// nextdir
@@ -1440,7 +1440,7 @@
 	// for broken pipe, remove and turn into scrap
 
 	welded()
-//		var/obj/item/scrap/S = new(src.loc)
+//		var/obj/item/scrap/S = new(loc)
 //		S.set_components(200,0,0)
 		qdel(src)
 
@@ -1500,12 +1500,12 @@
 
 		if(H)
 			for(var/atom/movable/AM in H)
-				AM.forceMove(src.loc)
+				AM.forceMove(loc)
 				AM.pipe_eject(dir)
 				spawn(5)
 					if(AM)
 						AM.throw_at(target, 3, 1)
-			H.vent_gas(src.loc)
+			H.vent_gas(loc)
 			qdel(H)
 
 		return
@@ -1513,7 +1513,7 @@
 	attackby(var/obj/item/I, var/mob/user)
 		if(!I || !user)
 			return
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		if(isscrewdriver(I))
 			if(mode==0)
 				mode=1
@@ -1533,8 +1533,8 @@
 				if(do_after(user, src,20))
 					if(!src || !W.isOn()) return
 					to_chat(user, "You sliced the floorweld off the disposal outlet.")
-					var/obj/structure/disposalconstruct/C = new (src.loc)
-					src.transfer_fingerprints_to(C)
+					var/obj/structure/disposalconstruct/C = new (loc)
+					transfer_fingerprints_to(C)
 					C.ptype = 7 // 7 =  outlet
 					C.update()
 					C.anchored = 1
@@ -1555,9 +1555,9 @@
 
 // check if mob has client, if so restore client view on eject
 /mob/pipe_eject(var/direction)
-	if (src.client)
-		src.client.perspective = MOB_PERSPECTIVE
-		src.client.eye = src
+	if (client)
+		client.perspective = MOB_PERSPECTIVE
+		client.eye = src
 
 	return
 
@@ -1568,7 +1568,7 @@
 	else
 		dirs = alldirs.Copy()
 
-	src.streak(dirs)
+	streak(dirs)
 
 /obj/effect/decal/cleanable/blood/gibs/robot/pipe_eject(var/direction)
 	var/list/dirs
@@ -1577,4 +1577,4 @@
 	else
 		dirs = alldirs.Copy()
 
-	src.streak(dirs)
+	streak(dirs)

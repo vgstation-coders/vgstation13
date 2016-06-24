@@ -123,14 +123,14 @@
 			return
 		C = loc
 	if(!C.incapacitated())
-		if(src.up)
-			src.up = !src.up
+		if(up)
+			up = !up
 			eyeprot = 2
 			body_parts_covered |= EYES
 			icon_state = initial(icon_state)
 			to_chat(C, "You flip the [src] down to protect your eyes.")
 		else
-			src.up = !src.up
+			up = !up
 			eyeprot = 0
 			body_parts_covered &= ~EYES
 			icon_state = "[initial(icon_state)]up"
@@ -177,7 +177,7 @@
 
 	New()
 		..()
-		src.hud = new/obj/item/clothing/glasses/hud/security(src)
+		hud = new/obj/item/clothing/glasses/hud/security(src)
 		return
 
 /obj/item/clothing/glasses/thermal
@@ -192,8 +192,8 @@
 	eyeprot = -2 //prepare for your eyes to get shit on
 
 	emp_act(severity)
-		if(istype(src.loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/M = src.loc
+		if(istype(loc, /mob/living/carbon/human))
+			var/mob/living/carbon/human/M = loc
 			to_chat(M, "<span class='warning'>The Optical Thermal Scanner overloads and blinds you!</span>")
 			if(M.glasses == src)
 				M.eye_blind = 3

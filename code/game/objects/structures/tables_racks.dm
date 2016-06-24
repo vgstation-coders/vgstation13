@@ -36,7 +36,7 @@
 
 /obj/structure/table/New()
 	..()
-	for(var/obj/structure/table/T in src.loc)
+	for(var/obj/structure/table/T in loc)
 		if(T != src)
 			qdel(T)
 	update_icon()
@@ -49,13 +49,13 @@
 /obj/structure/table/glass/proc/checkhealth()
 	if(health <= 0)
 		playsound(get_turf(src), "shatter", 50, 1)
-		new /obj/item/weapon/shard(src.loc)
-		new /obj/item/weapon/table_parts(src.loc)
+		new /obj/item/weapon/shard(loc)
+		new /obj/item/weapon/table_parts(loc)
 		qdel(src)
 
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
-		src.ex_act(1)
+		ex_act(1)
 	..()
 	return 0
 
@@ -80,7 +80,7 @@
 			var/tabledirs = 0
 			for(var/direction in list(turn(dir,90), turn(dir,-90)) )
 				var/obj/structure/table/T = locate(/obj/structure/table,get_step(src,direction))
-				if (T && T.flipped && T.dir == src.dir)
+				if (T && T.flipped && T.dir == dir)
 					type++
 					tabledirs |= direction
 			var/base = "table"
@@ -102,7 +102,7 @@
 		var/dir_sum = 0
 		for(var/direction in alldirs)
 			var/skip_sum = 0
-			for(var/obj/structure/window/W in src.loc)
+			for(var/obj/structure/window/W in loc)
 				if(W.dir == direction) //So smooth tables don't go smooth through windows
 					skip_sum = 1
 					continue
@@ -156,7 +156,7 @@
 			if(dir_sum%16 == 12) //12 doesn't exist as a dir.
 				dir_sum = 4
 		if(dir_sum%16 in list(5,6,9,10))
-			if(locate(/obj/structure/table,get_step(src.loc,dir_sum%16)))
+			if(locate(/obj/structure/table,get_step(loc,dir_sum%16)))
 				table_type = 3 //full table (not the 1 tile thick one, but one of the 'tabledir' tables)
 			else
 				table_type = 2 //1 tile thick, corner table (treated the same as streight tables in code later on)
@@ -234,7 +234,7 @@
 		else
 			dir = 2
 
-	clicked = new/icon(src.icon, src.icon_state, src.dir) //giving you runtime icon access is too byond Byond
+	clicked = new/icon(icon, icon_state, dir) //giving you runtime icon access is too byond Byond
 
 /obj/structure/table/ex_act(severity)
 	switch(severity)
@@ -359,7 +359,7 @@
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
 	if(user.drop_item())
-		if (O.loc != src.loc)
+		if (O.loc != loc)
 			step(O, get_dir(O, src))
 	return
 
@@ -398,8 +398,8 @@
 			destroy()
 		return
 
-	if(user.drop_item(W, src.loc))
-		if(W.loc == src.loc && params_list.len)
+	if(user.drop_item(W, loc))
+		if(W.loc == loc && params_list.len)
 			var/clamp_x = clicked.Width() / 2
 			var/clamp_y = clicked.Height() / 2
 			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
@@ -409,10 +409,10 @@
 /obj/structure/table/proc/straight_table_check(var/direction)
 	var/obj/structure/table/T
 	for(var/angle in list(-90,90))
-		T = locate() in get_step(src.loc,turn(direction,angle))
+		T = locate() in get_step(loc,turn(direction,angle))
 		if(T && !T.flipped)
 			return 0
-	T = locate() in get_step(src.loc,direction)
+	T = locate() in get_step(loc,direction)
 	if (!T || T.flipped)
 		return 1
 	if (istype(T,/obj/structure/table/reinforced/))
@@ -455,12 +455,12 @@
 	if(direction)
 		L.Add(direction)
 	else
-		L.Add(turn(src.dir,-90))
-		L.Add(turn(src.dir,90))
+		L.Add(turn(dir,-90))
+		L.Add(turn(dir,90))
 	for(var/new_dir in L)
-		var/obj/structure/table/T = locate() in get_step(src.loc,new_dir)
+		var/obj/structure/table/T = locate() in get_step(loc,new_dir)
 		if(T)
-			if(T.flipped && T.dir == src.dir && !T.unflipping_check(new_dir))
+			if(T.flipped && T.dir == dir && !T.unflipping_check(new_dir))
 				return 0
 	return 1
 
@@ -514,8 +514,8 @@
 	flipped = 0
 	flags &= ~ON_BORDER
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
-		var/obj/structure/table/T = locate() in get_step(src.loc,D)
-		if(T && T.flipped && T.dir == src.dir)
+		var/obj/structure/table/T = locate() in get_step(loc,D)
+		if(T && T.flipped && T.dir == dir)
 			T.unflip()
 	update_icon()
 	update_adjacent()
@@ -571,7 +571,7 @@
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 40))
 			if(user.drop_item(W))
-				var/obj/machinery/optable/OPT = new /obj/machinery/optable(src.loc)
+				var/obj/machinery/optable/OPT = new /obj/machinery/optable(loc)
 				var/obj/item/weapon/stock_parts/scanning_module/SM = W
 				OPT.rating = SM.rating
 
@@ -588,20 +588,20 @@
 		if(!(WT.welding)/* || (params_list.len && text2num(params_list["icon-y"]) > 8)*/) //8 above the bottom of the icon
 			return ..()
 		if(WT.remove_fuel(0, user))
-			if(src.status == 2)
+			if(status == 2)
 				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
 					if(!src || !WT.isOn()) return
 					to_chat(user, "<span class='notice'>Table weakened.</span>")
-					src.status = 1
+					status = 1
 			else
 				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
 					if(!src || !WT.isOn()) return
 					to_chat(user, "<span class='notice'>Table strengthened.</span>")
-					src.status = 2
+					status = 2
 			return
 		return
 	return ..()
@@ -629,8 +629,8 @@
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
 					playsound(get_turf(src), "shatter", 50, 1) //WRESTLEMANIA tax
-					new /obj/item/weapon/shard(src.loc)
-					new /obj/item/weapon/table_parts(src.loc)
+					new /obj/item/weapon/shard(loc)
+					new /obj/item/weapon/table_parts(loc)
 					qdel(src)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
@@ -675,7 +675,7 @@
 
 /obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
-		src.ex_act(1)
+		ex_act(1)
 	..()
 	return 0
 
@@ -686,11 +686,11 @@
 		if(2.0)
 			qdel(src)
 			if(prob(50))
-				new /obj/item/weapon/rack_parts(src.loc)
+				new /obj/item/weapon/rack_parts(loc)
 		if(3.0)
 			if(prob(25))
 				qdel(src)
-				new /obj/item/weapon/rack_parts(src.loc)
+				new /obj/item/weapon/rack_parts(loc)
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)
@@ -707,7 +707,7 @@
 		del(src)
 		return
 	else if(prob(50))
-		new /obj/item/weapon/rack_parts(src.loc)
+		new /obj/item/weapon/rack_parts(loc)
 		del(src)
 		return
 
@@ -726,19 +726,19 @@
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
 	if(user.drop_item(O))
-		if (O.loc != src.loc)
+		if (O.loc != loc)
 			step(O, get_dir(O, src))
 	return
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (iswrench(W))
-		new /obj/item/weapon/rack_parts( src.loc )
+		new /obj/item/weapon/rack_parts( loc )
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		del(src)
 		return
 
-	if(user.drop_item(W, src.loc))
-		if(W.loc == src.loc)
+	if(user.drop_item(W, loc))
+		if(W.loc == loc)
 			switch(offset_step)
 				if(1)
 					W.pixel_x = -3

@@ -65,17 +65,17 @@
 
 		process()
 			if(!crit_fail)
-				if (prob(src.reliability)) return 1 //No failure
-				if (prob(src.reliability))
-					for (var/mob/M in range(0,src.parent)) //Only a minor failure, enjoy your radiation.
-						if (src.parent in M.contents)
+				if (prob(reliability)) return 1 //No failure
+				if (prob(reliability))
+					for (var/mob/M in range(0,parent)) //Only a minor failure, enjoy your radiation.
+						if (parent in M.contents)
 							to_chat(M, "<span class='warning'>Your armor feels pleasantly warm for a moment.</span>")
 						else
 							to_chat(M, "<span class='warning'>You feel a warm sensation.</span>")
 						M.radiation += rand(1,40)
 				else
-					for (var/mob/M in range(rand(1,4),src.parent)) //Big failure, TIME FOR RADIATION BITCHES
-						if (src.parent in M.contents)
+					for (var/mob/M in range(rand(1,4),parent)) //Big failure, TIME FOR RADIATION BITCHES
+						if (parent in M.contents)
 							to_chat(M, "<span class='warning'>Your armor's reactor overloads!</span>")
 						to_chat(M, "<span class='warning'>You feel a wave of heat wash over you.</span>")
 						M.radiation += 100

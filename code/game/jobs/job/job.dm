@@ -64,12 +64,12 @@
 
 /datum/job/proc/get_access()
 	if(!config)	//Needed for robots.
-		return src.minimal_access.Copy()
+		return minimal_access.Copy()
 
 	if(config.jobs_have_minimal_access)
-		return src.minimal_access.Copy()
+		return minimal_access.Copy()
 	else
-		return src.access.Copy()
+		return access.Copy()
 
 //If the configuration option is set to require players to be logged as old enough to play certain jobs, then this proc checks that they are, otherwise it just returns 1
 /datum/job/proc/player_old_enough(client/C)
@@ -91,10 +91,10 @@
 	return max(0, minimal_player_age - C.player_age)
 
 /datum/job/proc/introduce(mob/M, job_title)
-	if(!job_title) job_title = src.title
+	if(!job_title) job_title = title
 
 	to_chat(M, "<B>You are the [job_title].</B>")
-	to_chat(M, "<b>As the [job_title] you answer directly to [src.supervisors]. Special circumstances may change this.</b>")
+	to_chat(M, "<b>As the [job_title] you answer directly to [supervisors]. Special circumstances may change this.</b>")
 
-	if(src.req_admin_notify)
+	if(req_admin_notify)
 		to_chat(M, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")

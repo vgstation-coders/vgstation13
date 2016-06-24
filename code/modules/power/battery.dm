@@ -168,7 +168,7 @@ var/global/list/battery_online =	list(
 		update_icon()
 
 /obj/machinery/power/battery/attack_ai(mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	add_fingerprint(user)
 	ui_interact(user)
 
@@ -222,7 +222,7 @@ var/global/list/battery_online =	list(
 
 //to_chat(world, "[href] ; [href_list[href]]")
 
-	if (!isturf(src.loc) && !istype(usr, /mob/living/silicon/))
+	if (!isturf(loc) && !istype(usr, /mob/living/silicon/))
 		return 0 // Do not update ui
 
 	if( href_list["cmode"] )
@@ -259,19 +259,19 @@ var/global/list/battery_online =	list(
 	return 1
 
 /obj/machinery/power/battery/proc/ion_act()
-	if(src.z == 1)
+	if(z == 1)
 		if(prob(1)) //explosion
 			message_admins("<span class='warning'>SMES explosion in [get_area(src)]</span>")
-			src.visible_message("<span class='warning'>\The [src] is making strange noises!</span>",
+			visible_message("<span class='warning'>\The [src] is making strange noises!</span>",
 								"<span class='warning'>You hear sizzling electronics.</span>")
 
 			sleep(10*pick(4,5,6,7,10,14))
 
 			var/datum/effect/effect/system/smoke_spread/smoke = new()
-			smoke.set_up(3, 0, src.loc)
+			smoke.set_up(3, 0, loc)
 			smoke.attach(src)
 			smoke.start()
-			explosion(src.loc, -1, 0, 1, 3, 0)
+			explosion(loc, -1, 0, 1, 3, 0)
 			qdel(src)
 			return
 		else if(prob(15)) //Power drain
@@ -286,7 +286,7 @@ var/global/list/battery_online =	list(
 		else if(prob(5)) //smoke only
 			message_admins("<span class='warning'>SMES smoke in [get_area(src)]</span>")
 			var/datum/effect/effect/system/smoke_spread/smoke = new()
-			smoke.set_up(3, 0, src.loc)
+			smoke.set_up(3, 0, loc)
 			smoke.attach(src)
 			smoke.start()
 

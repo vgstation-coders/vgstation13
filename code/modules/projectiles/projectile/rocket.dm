@@ -12,7 +12,7 @@
 	fire_sound = 'sound/weapons/rocket.ogg'
 
 /obj/item/projectile/rocket/process_step()
-	if(src.loc)
+	if(loc)
 		if(picked_up_speed > 1)
 			picked_up_speed--
 		if(dist_x > dist_y)
@@ -112,11 +112,11 @@
 				mob.orient_object = src
 				mob.canmove = 0
 
-	if(src.loc)
+	if(loc)
 		var/atom/step = get_step(src, dir)
 		if(!step)
 			qdel(src)
-		src.Move(step)
+		Move(step)
 
 	if(mob)
 		if(emagged)

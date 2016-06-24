@@ -91,12 +91,12 @@
 					// Create a machine frame and delete the current machine
 					var/obj/machinery/constructable_frame/machine_frame/F = new
 					F.set_build_state(2)
-					F.loc = src.loc
+					F.loc = loc
 					qdel(src)
 
 
 /obj/machinery/telecomms/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	attack_hand(user)
 
 /obj/machinery/telecomms/attack_hand(var/mob/user as mob)
@@ -122,7 +122,7 @@
 
 	dat = {"
 		<p>[temp]</p>
-		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[src.toggled ? "On" : "Off"]</a></p>"}
+		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>"}
 	if(on && toggled)
 		dat += {"
 			<p>[formatInput("Identification String","id","id")]</p>
@@ -139,7 +139,7 @@
 		var/i = 0
 		for(var/obj/machinery/telecomms/T in links)
 			i++
-			if(T.hide && !src.hide)
+			if(T.hide && !hide)
 				continue
 			dat += "<li>\ref[T] [T.name] ([T.id])  <a href='?src=\ref[src];unlink=[i]'>\[X\]</a></li>"
 
@@ -181,11 +181,11 @@
 	var/turf/position = get_turf(src)
 
 	// Toggle on/off getting signals from the station or the current Z level
-	if(src.listening_level == STATION_Z) // equals the station
-		src.listening_level = position.z
+	if(listening_level == STATION_Z) // equals the station
+		listening_level = position.z
 		return 1
 	else if(position.z == TELECOMM_Z)
-		src.listening_level = STATION_Z
+		listening_level = STATION_Z
 		return 1
 	return 0
 
@@ -211,14 +211,14 @@
 
 	if(href_list["process"])
 		temp = "<font color = #666633>-% Processing mode changed. %-</font color>"
-		src.process_mode = !src.process_mode
+		process_mode = !process_mode
 */
 
 // RELAY
 
 /obj/machinery/telecomms/relay/Options_Menu()
 	var/dat = ""
-	if(src.z == TELECOMM_Z)
+	if(z == TELECOMM_Z)
 		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == STATION_Z ? "TRUE" : "FALSE"]</a>"
 
 	dat += {"<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
@@ -282,14 +282,14 @@
 		switch(href_list["input"])
 
 			if("toggle")
-				src.toggled = !src.toggled
-				temp = "<font color = #666633>-% [src] has been [src.toggled ? "activated" : "deactivated"].</font color>"
+				toggled = !toggled
+				temp = "<font color = #666633>-% [src] has been [toggled ? "activated" : "deactivated"].</font color>"
 				update_power()
 
 			/*
 			if("hide")
-				src.hide = !hide
-				temp = "<font color = #666633>-% Shadow Link has been [src.hide ? "activated" : "deactivated"].</font color>"
+				hide = !hide
+				temp = "<font color = #666633>-% Shadow Link has been [hide ? "activated" : "deactivated"].</font color>"
 			*/
 
 			if("id")
@@ -331,7 +331,7 @@
 		temp = "<font color = #666633>-% Removed frequency filter [x] %-</font color>"
 		freq_listening.Remove(x)
 
-	src.Options_Topic(href, href_list)
+	Options_Topic(href, href_list)
 	usr.set_machine(src)
 	updateUsrDialog()
 
@@ -353,8 +353,8 @@
 		if(!(src in T.links))
 			T.links.Add(src)
 
-		if(!(T in src.links))
-			src.links.Add(T)
+		if(!(T in links))
+			links.Add(T)
 
 		temp = "<font color = #666633>-% Successfully linked with \ref[O] [O.name] %-</font color>"
 		return 1

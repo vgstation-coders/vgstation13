@@ -88,9 +88,9 @@
 /obj/machinery/atmospherics/pipe/Destroy()
 	if(parent)
 		returnToPool(parent)
-	for(var/obj/machinery/meter/M in src.loc)
+	for(var/obj/machinery/meter/M in loc)
 		if(M.target == src)
-			new /obj/item/pipe_meter(src.loc)
+			new /obj/item/pipe_meter(loc)
 			qdel(M)
 	if(air_temporary && loc)
 		loc.assume_air(air_temporary)
@@ -170,13 +170,13 @@
 	/*if(!node1)
 		parent.mingle_with_turf(loc, volume)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 
 	else if(!node2)
 		parent.mingle_with_turf(loc, volume)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 	else if (nodealert)
 		nodealert = 0
@@ -226,17 +226,17 @@
 
 /obj/machinery/atmospherics/pipe/simple/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>This [src.name] is rated up to [format_num(alert_pressure)] kPa.</span>")
+	to_chat(user, "<span class='info'>This [name] is rated up to [format_num(alert_pressure)] kPa.</span>")
 
 /obj/machinery/atmospherics/pipe/simple/proc/groan()
-	src.visible_message("<span class='warning'>\The [src] groans from the pressure!</span>");
+	visible_message("<span class='warning'>\The [src] groans from the pressure!</span>");
 
 	// Need SFX for groaning metal.
 	//playsound(get_turf(src), 'sound/effects/groan.ogg', 25, 1)
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()
-	src.visible_message("<span class='danger'>\The [src] bursts!</span>");
+	visible_message("<span class='danger'>\The [src] bursts!</span>");
 
 	var/turf/T=get_turf(src)
 
@@ -271,14 +271,14 @@
 				if(PIPE_TYPE_HE)
 					found = findConnectingHE(direction)
 				else
-					error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([node_id]): [node_type]")
+					error("UNKNOWN RESPONSE FROM [type]/getNodeType([node_id]): [node_type]")
 					return
 			if(!found) continue
 
 			var/obj/machinery/atmospherics/unary/vent/burstpipe/BP = new burst_type(T, setdir=direction)
-			BP.color=src.color
-			BP.invisibility=src.invisibility
-			BP.level=src.level
+			BP.color=color
+			BP.invisibility=invisibility
+			BP.level=level
 			BP.do_connect()
 
 	qdel(src) // NOT qdel.
@@ -328,7 +328,7 @@
 
 	findAllConnections(initialize_directions)
 
-	var/turf/T = src.loc			// hide if turf is not intact
+	var/turf/T = loc			// hide if turf is not intact
 	hide(T.intact)
 	if(!suppress_icon_check)
 		update_icon()
@@ -507,17 +507,17 @@
 	if(!node1)
 		parent.mingle_with_turf(loc, 70)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 	else if(!node2)
 		parent.mingle_with_turf(loc, 70)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 	else if(!node3)
 		parent.mingle_with_turf(loc, 70)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 	else if (nodealert)
 		nodealert = 0
@@ -573,7 +573,7 @@
 
 	findAllConnections(connect_directions)
 
-	var/turf/T = src.loc			// hide if turf is not intact
+	var/turf/T = loc			// hide if turf is not intact
 	hide(T.intact)
 	if(!skip_icon_update)
 		update_icon()
@@ -725,17 +725,17 @@
 	if(!node1)
 		parent.mingle_with_turf(loc, 70)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 	else if(!node2)
 		parent.mingle_with_turf(loc, 70)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 	else if(!node3)
 		parent.mingle_with_turf(loc, 70)
 		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//			to_chat(world, "Missing node from [src] at [x],[y],[z]")
 			nodealert = 1
 	else if (nodealert)
 		nodealert = 0
@@ -798,7 +798,7 @@
 
 	findAllConnections(initialize_directions)
 
-	var/turf/T = src.loc			// hide if turf is not intact
+	var/turf/T = loc			// hide if turf is not intact
 	hide(T.intact)
 	if(!skip_update_icon)
 		update_icon()
@@ -877,34 +877,34 @@
 		return // Coloring pipes.
 
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
-		src.color = PIPE_COLOR_RED
+		color = PIPE_COLOR_RED
 		to_chat(user, "<span class='notice'>You paint the pipe red.</span>")
 		update_icon()
 		return 1
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/blue))
-		src.color = PIPE_COLOR_BLUE
+		color = PIPE_COLOR_BLUE
 		to_chat(user, "<span class='notice'>You paint the pipe blue.</span>")
 		update_icon()
 		return 1
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/green))
-		src.color = PIPE_COLOR_GREEN
+		color = PIPE_COLOR_GREEN
 		to_chat(user, "<span class='notice'>You paint the pipe green.</span>")
 		update_icon()
 		return 1
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/yellow))
-		src.color = PIPE_COLOR_ORANGE
+		color = PIPE_COLOR_ORANGE
 		to_chat(user, "<span class='notice'>You paint the pipe yellow.</span>")
 		update_icon()
 		return 1
 
 	if(istype(W, /obj/item/pipe_meter))
 		var/obj/item/pipe_meter/meter = W
-		if(user.drop_item(meter, src.loc))
-			meter.setAttachLayer(src.piping_layer)
+		if(user.drop_item(meter, loc))
+			meter.setAttachLayer(piping_layer)
 
 	if(istype(W,/obj/item/device/analyzer))
 		var/obj/item/device/analyzer/A = W
-		var/datum/gas_mixture/environment = src.return_air()
+		var/datum/gas_mixture/environment = return_air()
 		user.show_message(A.output_gas_scan(environment,src,1))
 
 	return ..()
@@ -1005,14 +1005,14 @@
 	if(other_node)
 		var/icon/con = new/icon(icon,"manifoldl_other_con")
 
-		overlays += new/image(con, dir = turn(src.dir, 180)) //adds the back connector
+		overlays += new/image(con, dir = turn(dir, 180)) //adds the back connector
 
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
 		if(layer_nodes[pipelayer]) //we are connected at this layer
 
 			var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
 
-			var/image/con = image(icon(src.icon,"manifoldl_con",src.dir))
+			var/image/con = image(icon(icon,"manifoldl_con",dir))
 			con.pixel_x = layer_diff * PIPING_LAYER_P_X
 			con.pixel_y = layer_diff * PIPING_LAYER_P_Y
 
@@ -1027,7 +1027,7 @@
 
 	findAllConnections(initialize_directions)
 
-	var/turf/T = src.loc			// hide if turf is not intact
+	var/turf/T = loc			// hide if turf is not intact
 	hide(T.intact)
 	if(!skip_update_icon)
 		update_icon()
@@ -1047,7 +1047,7 @@
 						if(PIPE_TYPE_HE)
 							found = findConnectingHE(direction, i)
 						else
-							error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([i]): [node_type]")
+							error("UNKNOWN RESPONSE FROM [type]/getNodeType([i]): [node_type]")
 							return
 					if(!found)
 						continue
@@ -1061,13 +1061,13 @@
 					if(PIPE_TYPE_HE)
 						found = findConnectingHE(direction)
 					else
-						error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([direction]): [node_type]")
+						error("UNKNOWN RESPONSE FROM [type]/getNodeType([direction]): [node_type]")
 				if(!found)
 					continue
 				other_node = found
 
 /obj/machinery/atmospherics/pipe/layer_manifold/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	if(direction == turn(src.dir, 180))
+	if(direction == turn(dir, 180))
 		return (given_layer == PIPING_LAYER_DEFAULT)
 	return ..()
 
@@ -1196,7 +1196,7 @@
 	if(layer_node)
 		var/layer_diff = piping_layer - PIPING_LAYER_DEFAULT
 
-		var/image/con = image(icon(src.icon,"layer_con",turn(src.dir,180)))
+		var/image/con = image(icon(icon,"layer_con",turn(dir,180)))
 		con.pixel_x = layer_diff * PIPING_LAYER_P_X
 		con.pixel_y = layer_diff * PIPING_LAYER_P_Y
 
@@ -1210,7 +1210,7 @@
 
 	findAllConnections(initialize_directions)
 
-	var/turf/T = src.loc			// hide if turf is not intact
+	var/turf/T = loc			// hide if turf is not intact
 	hide(T.intact)
 	if(!skip_update_icon)
 		update_icon()
@@ -1229,7 +1229,7 @@
 					if(PIPE_TYPE_HE)
 						found = findConnectingHE(direction, PIPING_LAYER_DEFAULT)
 					else
-						error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([direction]): [node_type]")
+						error("UNKNOWN RESPONSE FROM [type]/getNodeType([direction]): [node_type]")
 				if(!found)
 					continue
 				mid_node = found
@@ -1242,7 +1242,7 @@
 					if(PIPE_TYPE_HE)
 						found = findConnectingHE(direction, piping_layer)
 					else
-						error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([piping_layer]): [node_type]")
+						error("UNKNOWN RESPONSE FROM [type]/getNodeType([piping_layer]): [node_type]")
 						return
 				if(!found)
 					continue

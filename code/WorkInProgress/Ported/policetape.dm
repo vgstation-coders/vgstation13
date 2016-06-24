@@ -137,7 +137,7 @@
 		to_chat(user, "<span class='notice'>You placed [src].</span>")
 
 /obj/item/tape/Bumped(M as mob)
-	if(src.allowed(M))
+	if(allowed(M))
 		var/turf/T = get_turf(src)
 		for(var/atom/A in T) //Check to see if there's anything solid on the tape's turf (it's possible to build on it)
 			if(A.density)
@@ -158,13 +158,13 @@
 	breaktape(W, user)
 
 /obj/item/tape/attack_hand(mob/user as mob)
-	if (user.a_intent == I_HELP && src.allowed(user))
+	if (user.a_intent == I_HELP && allowed(user))
 		if(density == 0)
 			user.visible_message("<span class='notice'>[user] pulls [src] back down.</span>")
-			src.density = 1
+			density = 1
 		else
 			user.visible_message("<span class='notice'>[user] lifts [src], allowing passage.</span>")
-			src.density = 0
+			density = 0
 	else
 		if(density == 0) //You can pass through it, moron
 			return
@@ -174,17 +174,17 @@
 	breaktape(/obj/item/weapon/wirecutters,user)
 
 /obj/item/tape/proc/breaktape(obj/item/weapon/W as obj, mob/user as mob)
-	if(user.a_intent == I_HELP && (!W || !W.is_sharp()) && !src.allowed(user))
+	if(user.a_intent == I_HELP && (!W || !W.is_sharp()) && !allowed(user))
 		to_chat(user, "<span class='notice'>You can't break [src] [W ? "with \the [W] " : ""]unless you use force.</span>")
 		return
 	user.visible_message("<span class='warning'>[user] breaks [src]!</span>")
 
 	var/dir[2]
-	var/icon_dir = src.icon_state
-	if(icon_dir == "[src.icon_base]_h")
+	var/icon_dir = icon_state
+	if(icon_dir == "[icon_base]_h")
 		dir[1] = EAST
 		dir[2] = WEST
-	if(icon_dir == "[src.icon_base]_v")
+	if(icon_dir == "[icon_base]_v")
 		dir[1] = NORTH
 		dir[2] = SOUTH
 

@@ -15,16 +15,16 @@
 	..()
 	spawn( 5 )
 		for (var/dir in cardinal)
-			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input) break
+			input = locate(/obj/machinery/mineral/input, get_step(src, dir))
+			if(input) break
 		for (var/dir in cardinal)
-			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output) break
+			output = locate(/obj/machinery/mineral/output, get_step(src, dir))
+			if(output) break
 		return
 	return
 
 /obj/machinery/mineral/unloading_machine/process()
-	if (src.output && src.input)
+	if (output && input)
 		if (locate(/obj/structure/ore_box, input.loc))
 			var/obj/structure/ore_box/BOX = locate(/obj/structure/ore_box, input.loc)
 			var/p = 0
@@ -44,6 +44,6 @@
 			for (i = 0; i<100; i++)
 				O = locate(/obj/item, input.loc)
 				if (O)
-					O.loc = src.output.loc
+					O.loc = output.loc
 				else
 					return

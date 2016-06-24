@@ -34,7 +34,7 @@
 		return 0
 	if(isInTypes(A, canSmoothWith))
 		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
-		if(src.mineral == A:mineral)
+		if(mineral == A:mineral)
 			return 1
 
 	return 0
@@ -88,7 +88,7 @@
 
 /turf/simulated/wall/Destroy()
 
-	var/temploc = src.loc
+	var/temploc = loc
 
 	if(!del_suppress_resmoothing)
 		spawn(10)

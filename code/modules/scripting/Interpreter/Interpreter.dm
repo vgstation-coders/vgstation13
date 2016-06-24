@@ -18,8 +18,8 @@
 	var/datum/scope/curScope
 	var/datum/scope/globalScope
 
-	var/datum/node/BlockDefinition/program	
-	var/datum/node/statement/FunctionDefinition/curFunction	
+	var/datum/node/BlockDefinition/program
+	var/datum/node/statement/FunctionDefinition/curFunction
 	var/datum/stack/scopes	= new()
 	var/datum/stack/functions	= new()
 
@@ -67,7 +67,7 @@
 /datum/n_Interpreter/proc/RaiseError(datum/runtimeError/e)
 	e.stack = functions.Copy()
 	e.stack.Push(curFunction)
-	src.HandleError(e)
+	HandleError(e)
 
 /datum/n_Interpreter/proc/CreateScope(datum/node/BlockDefinition/B)
 	var/datum/scope/S = new(B, curScope)

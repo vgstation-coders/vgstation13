@@ -406,7 +406,7 @@ var/const/POS_HEADER = {"<html>
 		logged_in=null
 		screen=POS_SCREEN_LOGIN
 		update_icon()
-		src.attack_hand(usr)
+		attack_hand(usr)
 		return
 	if(usr != logged_in)
 		if(logged_in)
@@ -439,7 +439,7 @@ var/const/POS_HEADER = {"<html>
 					var/list/cells = splittext(line,",")
 					if(cells.len<2)
 						to_chat(usr, "<span class='warning'>The CSV must have at least two columns: Product Name, followed by Price (as a number).</span>")
-						src.attack_hand(usr)
+						attack_hand(usr)
 						return
 					var/line_item/LI = new
 					LI.name=sanitize(cells[1])
@@ -484,7 +484,7 @@ var/const/POS_HEADER = {"<html>
 		var/line_item/LI = products[pid]
 		LI.price = newprice
 		products[pid]=LI
-	src.attack_hand(usr)
+	attack_hand(usr)
 
 /obj/machinery/pos/attackby(var/atom/movable/A, var/mob/user)
 	if(istype(A,/obj/item/weapon/card/id))
@@ -494,7 +494,7 @@ var/const/POS_HEADER = {"<html>
 			logged_in = user
 			screen=POS_SCREEN_ORDER
 			update_icon()
-			src.attack_hand(user) //why'd you use usr nexis, why
+			attack_hand(user) //why'd you use usr nexis, why
 			return
 		else
 			if(!linked_account)

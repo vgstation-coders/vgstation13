@@ -18,13 +18,13 @@
 		if (istype(W, /obj/item/weapon/f_card))
 			if (W.fingerprints)
 				return
-			if (src.amount == 20)
+			if (amount == 20)
 				return
-			if (W.amount + src.amount > 20)
-				src.amount = 20
-				W.amount = W.amount + src.amount - 20
+			if (W.amount + amount > 20)
+				amount = 20
+				W.amount = W.amount + amount - 20
 			else
-				src.amount += W.amount
+				amount += W.amount
 				//W = null
 				qdel(W)
 				W = null
@@ -41,10 +41,10 @@
 			to_chat(user, "<span class='notice'>No fingerprints found on [M]</span>")
 			return 0
 		else
-			if (src.amount < 1)
+			if (amount < 1)
 				to_chat(user, text("<span class='notice'>Fingerprints scanned on [M]. Need more cards to print.</span>"))
 			else
-				src.amount--
+				amount--
 				var/obj/item/weapon/f_card/F = new /obj/item/weapon/f_card( user.loc )
 				F.amount = 1
 				F.add_fingerprint(M)
@@ -101,9 +101,9 @@
 
 		add_fingerprint(user)
 
-		var/list/blood_DNA_found    = src.extract_blood(A)
-		var/list/fingerprints_found = src.extract_fingerprints(A)
-		var/list/fibers_found       = src.extract_fibers(A)
+		var/list/blood_DNA_found    = extract_blood(A)
+		var/list/fingerprints_found = extract_fingerprints(A)
+		var/list/fibers_found       = extract_fibers(A)
 
 		// Blood/vomit splatters no longer clickable, so scan the entire turf.
 		if (istype(A,/turf))
@@ -283,9 +283,9 @@
 
 		add_fingerprint(user)
 
-		var/list/blood_DNA_found    = src.extract_blood(A)
-		var/list/fingerprints_found = src.extract_fingerprints(A)
-		var/list/fibers_found       = src.extract_fibers(A)
+		var/list/blood_DNA_found    = extract_blood(A)
+		var/list/fingerprints_found = extract_fingerprints(A)
+		var/list/fibers_found       = extract_fibers(A)
 
 		// Blood/vomit splatters no longer clickable, so scan the entire turf.
 		if (istype(A,/turf))

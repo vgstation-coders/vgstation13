@@ -275,7 +275,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	return
 
 /**
- * What is speaking for us?  Usually src.
+ * What is speaking for us?  Usually
  */
 /atom/movable/proc/GetSource()
 	return src

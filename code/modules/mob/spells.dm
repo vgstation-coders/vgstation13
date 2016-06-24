@@ -11,7 +11,7 @@
 
 	var/obj/screen/movable/spell_master/new_spell_master = getFromPool(master_type) //we're here because either we didn't find our type, or we have no spell masters to attach to
 	if(client)
-		src.client.screen += new_spell_master
+		client.screen += new_spell_master
 	new_spell_master.spell_holder = src
 	new_spell_master.add_spell(spell_to_add)
 	if(spell_base)

@@ -20,26 +20,26 @@
 /obj/machinery/computer/laser/process()
 	/*if(on)
 		if(!first)
-			src.first = new /obj/beam/e_beam(src.loc)
-			src.first.master = src
-			src.first.dir = src.dir
-			src.first.power = src.power
-			src.first.freq = src.freq
-			src.first.phase = src.phase
-			src.first.phase_variance = src.phase_variance
+			first = new /obj/beam/e_beam(loc)
+			first.master = src
+			first.dir = dir
+			first.power = power
+			first.freq = freq
+			first.phase = phase
+			first.phase_variance = phase_variance
 			step(first, dir)
 			if(first)
-				src.first.updatebeam()
+				first.updatebeam()
 		else
-			src.first.updatebeam()
+			first.updatebeam()
 	else
 		if(first)
 			del first*/
 
 /obj/machinery/computer/laser/proc/setpower(var/powera)
-	/*src.power = powera
+	/*power = powera
 	if(first)
-		first.setpower(src.power)*/
+		first.setpower(power)*/
 
 /*
 /obj/beam/e_beam
@@ -59,24 +59,24 @@
 
 /obj/beam/e_beam/proc/updatebeam()
 	if(!next)
-		if(get_step(src.loc,src.dir))
-			var/obj/beam/e_beam/e = new /obj/beam/e_beam(src.loc)
-			e.dir = src.dir
-			src.next = e
-			e.master = src.master
-			e.power = src.power
-			e.phase = src.phase
-			src.phase+=src.phase_variance
-			e.freq = src.freq
-			e.phase_variance = src.phase_variance
-			if(src.loc.density == 0)
-				for(var/atom/o in src.loc.contents)
-					if(o.density || o == src.master || (ismob(o) && !istype(o, /mob/dead)) )
+		if(get_step(loc,dir))
+			var/obj/beam/e_beam/e = new /obj/beam/e_beam(loc)
+			e.dir = dir
+			next = e
+			e.master = master
+			e.power = power
+			e.phase = phase
+			phase+=phase_variance
+			e.freq = freq
+			e.phase_variance = phase_variance
+			if(loc.density == 0)
+				for(var/atom/o in loc.contents)
+					if(o.density || o == master || (ismob(o) && !istype(o, /mob/dead)) )
 						o.laser_act(src)
 						del src
 						return
 			else
-				src.loc.laser_act(src)
+				loc.laser_act(src)
 				del e
 				return
 			step(e,e.dir)
@@ -103,12 +103,12 @@
 
 
 /obj/beam/e_beam/proc/setpower(var/powera)
-	src.power = powera
-	if(src.next)
-		src.next.setpower(powera)
+	power = powera
+	if(next)
+		next.setpower(powera)
 
 /obj/beam/e_beam/Bumped()
-	src.hit()
+	hit()
 	return
 
 /obj/beam/e_beam/Crossed(atom/movable/AM as mob|obj)
@@ -116,7 +116,7 @@
 		return
 	spawn( 0 )
 		AM.laser_act(src)
-		src.hit()
+		hit()
 		return
 	return
 

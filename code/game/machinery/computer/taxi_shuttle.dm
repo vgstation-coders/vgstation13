@@ -66,7 +66,7 @@ var/global/list/taxi_computers = list()
 
 /obj/machinery/computer/taxi_shuttle/proc/broadcast(var/message = "")
 	if(message)
-		src.visible_message("[bicon(src)]" + message)
+		visible_message("[bicon(src)]" + message)
 	else
 		return
 	for(var/obj/machinery/door_control/taxi/TB in connected_buttons)
@@ -78,7 +78,7 @@ var/global/list/taxi_computers = list()
 	return attack_hand(user)
 
 /obj/machinery/computer/taxi_shuttle/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 /obj/machinery/computer/taxi_shuttle/attack_paw(mob/user as mob)

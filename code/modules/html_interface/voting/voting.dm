@@ -23,7 +23,7 @@ var/global/datum/controller/vote/vote = new()
 
 		var/datum/html_interface_client/hclient = getClient(usr.client)
 		if (istype(hclient))
-			src.hide(hclient)
+			hide(hclient)
 			vote.voting -= usr.client
 
 
@@ -51,12 +51,12 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/New()
 	. = ..()
-	src.data = list()
-	src.status_data = list()
+	data = list()
+	status_data = list()
 	spawn(5)
-		if(!src.interface)
-			src.interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
-			src.interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
+		if(!interface)
+			interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
+			interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
 		initialized = 1
 	if (vote != src)
 		if (istype(vote))
@@ -72,7 +72,7 @@ var/global/datum/controller/vote/vote = new()
 		// 3 is GAME_STATE_PLAYING, but that #define is undefined for some reason
 		if(mode == "gamemode" && ticker.current_state >= 2)
 			to_chat(world, "<b>Voting aborted due to game start.</b>")
-			src.reset()
+			reset()
 			return
 
 		// Calculate how much time is remaining by comparing current time, to time of vote start,
@@ -84,8 +84,8 @@ var/global/datum/controller/vote/vote = new()
 			for(var/client/C in voting)
 				if(C)
 					//nanomanager.close_user_uis(C.mob, src)
-					src.interface.hide(C)
-			src.reset()
+					interface.hide(C)
+			reset()
 		else
 			update(1)
 /datum/controller/vote/proc/reset()
@@ -351,7 +351,7 @@ var/global/datum/controller/vote/vote = new()
 			admin = 2
 	client_data[++client_data.len] = (admin)
 	interface.callJavaScript("client_data", client_data, user)
-	src.updateFor(user, interface)
+	updateFor(user, interface)
 
 
 /datum/controller/vote/proc/update(refresh = 0)

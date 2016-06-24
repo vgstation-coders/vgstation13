@@ -45,7 +45,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	return
 
 /mob/living/silicon/robot/mommi/examination(atom/A as mob|obj|turf in view()) //It used to be oview(12), but I can't really say why
-	if(ismob(A) && src.can_see_static()) //can't examine what you can't catch!
+	if(ismob(A) && can_see_static()) //can't examine what you can't catch!
 		to_chat(usr, "Your vision module can't determine any of [A]'s features.")
 		return
 
@@ -147,7 +147,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
-		module_sprites["Custom"] = "[src.ckey]-[modtype]"
+		module_sprites["Custom"] = "[ckey]-[modtype]"
 
 	hands.icon_state = lowertext(modtype)
 	feedback_inc("mommi_[lowertext(modtype)]",1)
@@ -225,9 +225,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 						var/limb_to_spawn = pick(limbs)
 						limbs -= limb_to_spawn
 
-						new limb_to_spawn(src.loc)
+						new limb_to_spawn(loc)
 					// This doesn't work.  Don't use it.
-					//src.Destroy()
+					//Destroy()
 					// del() because it's infrequent and mobs act weird in qdel.
 					qdel(src)
 					return
@@ -321,17 +321,17 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(!istype(user, /mob/living/silicon))
 		switch(user.a_intent)
 			if(I_DISARM)
-				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
-				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [user.name] ([user.ckey])</font>")
-				log_admin("ATTACK: [user.name] ([user.ckey]) disarmed [src.name] ([src.ckey])")
-				log_attack("<font color='red'>[user.name] ([user.ckey]) disarmed [src.name] ([src.ckey])</font>")
+				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [name] ([ckey])</font>")
+				attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [user.name] ([user.ckey])</font>")
+				log_admin("ATTACK: [user.name] ([user.ckey]) disarmed [name] ([ckey])")
+				log_attack("<font color='red'>[user.name] ([user.ckey]) disarmed [name] ([ckey])</font>")
 				var/randn = rand(1,100)
 				//var/talked = 0;
 				if (randn <= 25)
 					weakened = 3
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[user] has pushed [src]!</span>")
-					var/obj/item/found = locate(tool_state) in src.module.modules
+					var/obj/item/found = locate(tool_state) in module.modules
 					if(!found)
 						var/obj/item/TS = tool_state
 						drop_item(TS)
@@ -339,7 +339,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 							visible_message("<span class='warning'><B>[src]'s robotic arm loses grip on what it was holding</span>")
 					return
 				if(randn <= 50)//MoMMI's robot arm is stronger than a human's, but not by much
-					var/obj/item/found = locate(tool_state) in src.module.modules
+					var/obj/item/found = locate(tool_state) in module.modules
 					if(!found)
 						var/obj/item/TS = tool_state
 						drop_item(TS)
@@ -414,7 +414,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if (href_list["act"])
 		var/obj/item/O = locate(href_list["act"])
 		var/obj/item/TS
-		if(!(locate(O) in src.module.modules) && O != src.module.emag)
+		if(!(locate(O) in module.modules) && O != module.emag)
 			return
 		TS = tool_state
 		if(tool_state)
@@ -428,11 +428,11 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		inv_tool.icon_state = "inv1 +a"
 		module_active=tool_state
 		if(TS && istype(TS))
-			if(src.is_in_modules(TS))
-				TS.loc = src.module
+			if(is_in_modules(TS))
+				TS.loc = module
 			else
 				TS.layer=initial(TS.layer)
-				TS.loc = src.loc
+				TS.loc = loc
 
 		installed_modules()
 	return
@@ -462,9 +462,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		R.UnlinkSelf()
 		var/obj/item/weapon/aiModule/keeper/mdl = new
 
-		mdl.upload(src.laws,src,src)
+		mdl.upload(laws,src,src)
 		to_chat(src, "These are your laws now:")
-		src.show_laws()
+		show_laws()
 
-		src.verbs -= /mob/living/silicon/robot/mommi/proc/ActivateKeeper
+		verbs -= /mob/living/silicon/robot/mommi/proc/ActivateKeeper
 */

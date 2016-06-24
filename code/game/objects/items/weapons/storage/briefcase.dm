@@ -20,7 +20,7 @@
 	desc = "Smells faintly of potato."
 
 /obj/item/weapon/storage/briefcase/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'><b>[user] is smashing \his head inside the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
+	to_chat(viewers(user), "<span class='danger'><b>[user] is smashing \his head inside the [name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (BRUTELOSS)
 
 /obj/item/weapon/storage/briefcase/New()
@@ -39,9 +39,9 @@
 		return
 
 
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
-	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)")
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [M.name] ([M.ckey])</font>")
+	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)")
 	if(!iscarbon(user))
 		M.LAssailant = null
 	else

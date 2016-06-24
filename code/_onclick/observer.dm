@@ -30,7 +30,7 @@
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>A dark forcefield prevents you from entering the area.<span>")
 		else
-			if(targetloc.holy && ((src.invisibility == 0) || iscult(src)))
+			if(targetloc.holy && ((invisibility == 0) || iscult(src)))
 				to_chat(usr, "<span class='warning'>These are sacred grounds, you cannot go there!</span>")
 			else
 				forceEnter(targetloc)
@@ -71,7 +71,7 @@
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
 	if(canGhostRead(user,src,ghost_flags))
-		src.attack_ai(user)
+		attack_ai(user)
 	else
 		user.examination(src)
 

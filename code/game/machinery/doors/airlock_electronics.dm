@@ -106,12 +106,12 @@
 			if (istype(I, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = I
 				I = pda.id
-			if (I && src.check_access(I))
-				src.locked = 0
-				src.last_configurator = I:registered_name
+			if (I && check_access(I))
+				locked = 0
+				last_configurator = I:registered_name
 		if(isrobot(usr))
-			src.locked=0
-			src.last_configurator = usr.name
+			locked=0
+			last_configurator = usr.name
 
 	if(locked)
 		return

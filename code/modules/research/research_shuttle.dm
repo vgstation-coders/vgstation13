@@ -86,7 +86,7 @@ proc/move_research_shuttle()
 /obj/machinery/computer/research_shuttle/attack_hand(user as mob)
 	if(..(user))
 		return
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	var/dat = "<center>Research shuttle:<br> <b><A href='?src=\ref[src];move=[1]'>Send</A></b></center>"
 	user << browse("[dat]", "window=researchshuttle;size=200x100")
 
@@ -94,8 +94,8 @@ proc/move_research_shuttle()
 	if(..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
-	if(!src.allowed(usr))
+	add_fingerprint(usr)
+	if(!allowed(usr))
 		to_chat(usr, "<span class='warning'>Unauthorized Access.</span>")
 		return
 	if(href_list["move"])
@@ -117,5 +117,5 @@ proc/move_research_shuttle()
 
 /obj/machinery/computer/research_shuttle/emag(mob/user as mob)
 	..()
-	src.req_access = list()
+	req_access = list()
 	to_chat(usr, "You disable the console's access requirement.")

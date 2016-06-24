@@ -121,9 +121,9 @@
 
 		spawn()
 			if(do_after(user, src, 50))
-				to_chat(user, "<span class='notice'>You cut the hair from this [src.singular_name]</span>")
+				to_chat(user, "<span class='notice'>You cut the hair from this [singular_name]</span>")
 
-				if(src.use(1))
+				if(use(1))
 					drop_stack(/obj/item/stack/sheet/hairlesshide, user.loc, 1, user)
 		return 1
 	else
@@ -139,6 +139,6 @@
 		wetness--
 		if(wetness == 0)
 
-			if(src.use(1))
-				drop_stack(/obj/item/stack/sheet/leather, src.loc, 1)
+			if(use(1))
+				drop_stack(/obj/item/stack/sheet/leather, loc, 1)
 				wetness = initial(wetness)

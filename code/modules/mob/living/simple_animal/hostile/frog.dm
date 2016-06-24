@@ -64,7 +64,7 @@
 		return 1
 
 	ranged_message = "leaps"
-	src.throw_at(get_turf(target), 7, 1)
+	throw_at(get_turf(target), 7, 1)
 	return 1
 
 /mob/living/simple_animal/hostile/frog/Bump(atom/A)

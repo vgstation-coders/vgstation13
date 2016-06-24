@@ -1,12 +1,12 @@
 /mob/living/silicon/ai/death(gibbed)
 	if(stat == DEAD)	return
 	stat = DEAD
-	if (src.custom_sprite == 1)//check for custom AI sprite, defaulting to blue screen if no.
+	if (custom_sprite == 1)//check for custom AI sprite, defaulting to blue screen if no.
 		icon_state = "[ckey]-ai-crash"
 	else icon_state = "ai-crash"
 	update_canmove()
-	if(src.eyeobj)
-		src.eyeobj.forceMove(get_turf(src))
+	if(eyeobj)
+		eyeobj.forceMove(get_turf(src))
 	if(blind)	blind.layer = 0
 	sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
 	see_in_dark = 8
@@ -47,7 +47,7 @@
 
 	if(explosive)
 		spawn(10)
-			explosion(src.loc, 3, 6, 12, 15)
+			explosion(loc, 3, 6, 12, 15)
 
 	for(var/obj/machinery/ai_status_display/O in machines) //change status
 		spawn( 0 )

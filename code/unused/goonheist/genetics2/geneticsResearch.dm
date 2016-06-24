@@ -63,11 +63,11 @@ var/datum/geneticsResearchManager/genResearch = new()
 		if(istype(D, /datum/bioEffect))
 			var/datum/geneticsResearchEntry/mutation/M = new()
 
-			var/final_cost = src.mut_research_cost
+			var/final_cost = mut_research_cost
 			if (genResearch.cost_discount)
 				final_cost -= round(final_cost * genResearch.cost_discount)
 
-			if(!src.debug_mode)
+			if(!debug_mode)
 				if(final_cost > researchMaterial)
 					return 0
 				else
@@ -83,10 +83,10 @@ var/datum/geneticsResearchManager/genResearch = new()
 			M.desc = "Analysis of a potential mutation."
 			M.real_name = "[D:name]"
 
-			var/research_time = src.mut_research_time
+			var/research_time = mut_research_time
 			if (genResearch.time_discount)
 				research_time *= (1 - genResearch.time_discount)
-			if (src.debug_mode)
+			if (debug_mode)
 				research_time = 0
 			M.finishTime = world.time + research_time
 
@@ -101,7 +101,7 @@ var/datum/geneticsResearchManager/genResearch = new()
 			if (genResearch.cost_discount)
 				final_cost -= round(final_cost * genResearch.cost_discount)
 
-			if(!src.debug_mode)
+			if(!debug_mode)
 				if(final_cost > researchMaterial || D:isResearched)
 					return 0
 				else
@@ -110,7 +110,7 @@ var/datum/geneticsResearchManager/genResearch = new()
 			var/research_time = D:researchTime
 			if (genResearch.time_discount)
 				research_time *= (1 - genResearch.time_discount)
-			if (src.debug_mode)
+			if (debug_mode)
 				research_time = 0
 			D:finishTime = world.time + research_time
 
@@ -149,24 +149,24 @@ var/datum/geneticsResearchManager/genResearch = new()
 		return
 
 	proc/meetsRequirements()
-		if(src.isResearched == 1 || src.isResearched == -1)
+		if(isResearched == 1 || isResearched == -1)
 			return 0
 
 		if(genResearch.debug_mode)
 			return 1
 
-		if(src.hidden)
+		if(hidden)
 			return 0
 
-		for(var/X in src.requiredResearch) // Have we got the prerequisite researches?
+		for(var/X in requiredResearch) // Have we got the prerequisite researches?
 			if(!genResearch.isResearched(X))
 				return 0
 
-		for(var/X in src.requiredMutRes) // Do we have the required mutations researched?
+		for(var/X in requiredMutRes) // Do we have the required mutations researched?
 			if(!(X in genResearch.researchedMutations))
 				return 0
 
-		if (genResearch.researchedMutations.len < src.requiredTotalMutRes) // Do we have the neccecary # of muts researched?
+		if (genResearch.researchedMutations.len < requiredTotalMutRes) // Do we have the neccecary # of muts researched?
 			return 0
 
 		return 1

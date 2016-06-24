@@ -27,8 +27,8 @@ var/intercom_range_display_status = 0
 	icon_state = "25percent"
 
 	New()
-		src.pixel_x = -224
-		src.pixel_y = -224
+		pixel_x = -224
+		pixel_y = -224
 
 /obj/effect/debugging/marker
 	icon = 'icons/turf/areas.dmi'
@@ -129,46 +129,46 @@ var/intercom_range_display_status = 0
 
 	if(!check_rights(R_DEBUG)) return
 
-	src.verbs += /client/proc/do_not_use_these 			//-errorage
-	src.verbs += /client/proc/camera_view 				//-errorage
-	src.verbs += /client/proc/sec_camera_report 		//-errorage
-	src.verbs += /client/proc/intercom_view 			//-errorage
-	src.verbs += /client/proc/air_status //Air things
-	src.verbs += /client/proc/Cell //More air things
-	src.verbs += /client/proc/pdiff //Antigriff testing - N3X
-	src.verbs += /client/proc/atmosscan //check plumbing
-	src.verbs += /client/proc/powerdebug //check power
-	src.verbs += /client/proc/count_objects_on_z_level
-	src.verbs += /client/proc/count_objects_all
-	src.verbs += /client/proc/cmd_assume_direct_control	//-errorage
-	src.verbs += /client/proc/jump_to_dead_group
-	src.verbs += /client/proc/startSinglo
-	src.verbs += /client/proc/cheat_power // Because the above doesn't work off-station.  Or at all, occasionally - N3X
-	src.verbs += /client/proc/setup_atmos // Laziness during atmos testing - N3X
-	src.verbs += /client/proc/ticklag	//allows you to set the ticklag.
-	src.verbs += /client/proc/cmd_admin_grantfullaccess
-	src.verbs += /client/proc/kaboom
-	src.verbs += /client/proc/splash
-	src.verbs += /client/proc/cmd_admin_areatest
-	src.verbs += /client/proc/cmd_admin_rejuvenate
-	src.verbs += /datum/admins/proc/show_traitor_panel
-	src.verbs += /client/proc/print_jobban_old
-	src.verbs += /client/proc/print_jobban_old_filter
-	src.verbs += /client/proc/forceEvent
-	//src.verbs += /client/proc/break_all_air_groups
-	//src.verbs += /client/proc/regroup_all_air_groups
-	//src.verbs += /client/proc/kill_pipe_processing
-	//src.verbs += /client/proc/kill_air_processing
-	//src.verbs += /client/proc/disable_communication
-	//src.verbs += /client/proc/disable_movement
-	src.verbs += /client/proc/Zone_Info
-	src.verbs += /client/proc/Test_ZAS_Connection
-	src.verbs += /client/proc/SDQL2_query
-	src.verbs += /client/proc/check_sim_unsim
-	src.verbs += /client/proc/nanomapgen_DumpImage
-	src.verbs += /client/proc/nanomapgen_DumpImageAll
-	src.verbs += /client/proc/maprender
-	//src.verbs += /client/proc/cmd_admin_rejuvenate
+	verbs += /client/proc/do_not_use_these 			//-errorage
+	verbs += /client/proc/camera_view 				//-errorage
+	verbs += /client/proc/sec_camera_report 		//-errorage
+	verbs += /client/proc/intercom_view 			//-errorage
+	verbs += /client/proc/air_status //Air things
+	verbs += /client/proc/Cell //More air things
+	verbs += /client/proc/pdiff //Antigriff testing - N3X
+	verbs += /client/proc/atmosscan //check plumbing
+	verbs += /client/proc/powerdebug //check power
+	verbs += /client/proc/count_objects_on_z_level
+	verbs += /client/proc/count_objects_all
+	verbs += /client/proc/cmd_assume_direct_control	//-errorage
+	verbs += /client/proc/jump_to_dead_group
+	verbs += /client/proc/startSinglo
+	verbs += /client/proc/cheat_power // Because the above doesn't work off-station.  Or at all, occasionally - N3X
+	verbs += /client/proc/setup_atmos // Laziness during atmos testing - N3X
+	verbs += /client/proc/ticklag	//allows you to set the ticklag.
+	verbs += /client/proc/cmd_admin_grantfullaccess
+	verbs += /client/proc/kaboom
+	verbs += /client/proc/splash
+	verbs += /client/proc/cmd_admin_areatest
+	verbs += /client/proc/cmd_admin_rejuvenate
+	verbs += /datum/admins/proc/show_traitor_panel
+	verbs += /client/proc/print_jobban_old
+	verbs += /client/proc/print_jobban_old_filter
+	verbs += /client/proc/forceEvent
+	//verbs += /client/proc/break_all_air_groups
+	//verbs += /client/proc/regroup_all_air_groups
+	//verbs += /client/proc/kill_pipe_processing
+	//verbs += /client/proc/kill_air_processing
+	//verbs += /client/proc/disable_communication
+	//verbs += /client/proc/disable_movement
+	verbs += /client/proc/Zone_Info
+	verbs += /client/proc/Test_ZAS_Connection
+	verbs += /client/proc/SDQL2_query
+	verbs += /client/proc/check_sim_unsim
+	verbs += /client/proc/nanomapgen_DumpImage
+	verbs += /client/proc/nanomapgen_DumpImageAll
+	verbs += /client/proc/maprender
+	//verbs += /client/proc/cmd_admin_rejuvenate
 
 	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -329,7 +329,7 @@ var/global/prevent_airgroup_regroup = 0
 	/*prevent_airgroup_regroup = 1
 	for(var/datum/air_group/AG in air_master.air_groups)
 		AG.suspend_group_processing()
-	message_admins("[src.ckey] used 'Break All Airgroups'")*/
+	message_admins("[ckey] used 'Break All Airgroups'")*/
 
 /client/proc/regroup_all_air_groups()
 	set category = "Mapping"
@@ -340,7 +340,7 @@ var/global/prevent_airgroup_regroup = 0
 	/*prevent_airgroup_regroup = 0
 	for(var/datum/air_group/AG in air_master.air_groups)
 		AG.check_regroup()
-	message_admins("[src.ckey] used 'Regroup All Airgroups Attempt'")*/
+	message_admins("[ckey] used 'Regroup All Airgroups Attempt'")*/
 
 /client/proc/kill_pipe_processing()
 	set category = "Mapping"
@@ -350,9 +350,9 @@ var/global/prevent_airgroup_regroup = 0
 
 	/*pipe_processing_killed = !pipe_processing_killed
 	if(pipe_processing_killed)
-		message_admins("[src.ckey] used 'kill pipe processing', stopping all pipe processing.")
+		message_admins("[ckey] used 'kill pipe processing', stopping all pipe processing.")
 	else
-		message_admins("[src.ckey] used 'kill pipe processing', restoring all pipe processing.")*/
+		message_admins("[ckey] used 'kill pipe processing', restoring all pipe processing.")*/
 
 /client/proc/kill_air_processing()
 	set category = "Mapping"
@@ -362,9 +362,9 @@ var/global/prevent_airgroup_regroup = 0
 
 	/*air_processing_killed = !air_processing_killed
 	if(air_processing_killed)
-		message_admins("[src.ckey] used 'kill air processing', stopping all air processing.")
+		message_admins("[ckey] used 'kill air processing', stopping all air processing.")
 	else
-		message_admins("[src.ckey] used 'kill air processing', restoring all air processing.")*/
+		message_admins("[ckey] used 'kill air processing', restoring all air processing.")*/
 */
 //This proc is intended to detect lag problems relating to communication procs
 var/global/say_disabled = 0
@@ -377,9 +377,9 @@ var/global/say_disabled = 0
 
 	/*say_disabled = !say_disabled
 	if(say_disabled)
-		message_admins("[src.ckey] used 'Disable all communication verbs', killing all communication methods.")
+		message_admins("[ckey] used 'Disable all communication verbs', killing all communication methods.")
 	else
-		message_admins("[src.ckey] used 'Disable all communication verbs', restoring all communication methods.")*/
+		message_admins("[ckey] used 'Disable all communication verbs', restoring all communication methods.")*/
 
 //This proc is intended to detect lag problems relating to movement
 */
@@ -394,8 +394,8 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 
 	/*movement_disabled = !movement_disabled
 	if(movement_disabled)
-		message_admins("[src.ckey] used 'Disable all movement', killing all movement.")
+		message_admins("[ckey] used 'Disable all movement', killing all movement.")
 		movement_disabled_exception = usr.ckey
 	else
-		message_admins("[src.ckey] used 'Disable all movement', restoring all movement.")*/
+		message_admins("[ckey] used 'Disable all movement', restoring all movement.")*/
 */

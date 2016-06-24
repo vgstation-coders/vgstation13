@@ -388,10 +388,10 @@
 	isHidden = -1
 
 	OnRemove()
-		if (src.variant == 1)
+		if (variant == 1)
 			owner.bioHolder.AddEffect("cold_resist")
 			to_chat(owner, "<span class='warning'>You feel warm.</span>")
-		else if (src.variant == 2)
+		else if (variant == 2)
 			owner.bioHolder.AddEffect("fire_resist")
 			to_chat(owner, "<span class='warning'>You feel cold.</span>")
 		return
@@ -624,17 +624,17 @@
 
 	New()
 		..()
-		src.personalized_stink = stinkString()
+		personalized_stink = stinkString()
 		if (prob(5))
-			src.variant = 2
+			variant = 2
 
 	OnLife()
 		if (prob(10))
 			for(var/mob/living/carbon/C in view(6,get_turf(owner)))
 				if (C == owner)
 					continue
-				if (src.variant == 2)
-					to_chat(C, "<span class='warning'>[src.personalized_stink]</span>")
+				if (variant == 2)
+					to_chat(C, "<span class='warning'>[personalized_stink]</span>")
 				else
 					to_chat(C, "<span class='warning'>[stinkString()]</span>")
 

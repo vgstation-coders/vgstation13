@@ -132,7 +132,7 @@
 					minbodytemp = initial(minbodytemp)
 					maxbodytemp = initial(maxbodytemp)
 					set_light(0)
-					inventory_head.forceMove(src.loc)
+					inventory_head.forceMove(loc)
 					inventory_head = null
 					regenerate_icons()
 				else
@@ -140,7 +140,7 @@
 					return
 			if("back")
 				if(inventory_back)
-					inventory_back.loc = src.loc
+					inventory_back.loc = loc
 					inventory_back = null
 					regenerate_icons()
 				else
@@ -202,7 +202,7 @@
 						return
 
 					usr.drop_item(item_to_add, src, force_drop = 1)
-					src.inventory_back = item_to_add
+					inventory_back = item_to_add
 					regenerate_icons()
 
 		show_inv(usr)
@@ -379,12 +379,12 @@
 			usr.drop_item(item_to_add, src, force_drop = 1)
 		else
 			item_to_add.loc = src
-		src.inventory_head = item_to_add
+		inventory_head = item_to_add
 		regenerate_icons()
 
 	else
 		to_chat(usr, "You set [item_to_add] on [src]'s head, but \he shakes it off!")
-		usr.drop_item(item_to_add, src.loc)
+		usr.drop_item(item_to_add, loc)
 
 		if(prob(25))
 			step_rand(item_to_add)
@@ -449,18 +449,18 @@
 					step_to(src,movement_target,1)
 
 					if(movement_target)		//Not redundant due to sleeps, Item can be gone in 6 decisecomds
-						if (movement_target.loc.x < src.x)
+						if (movement_target.loc.x < x)
 							dir = WEST
-						else if (movement_target.loc.x > src.x)
+						else if (movement_target.loc.x > x)
 							dir = EAST
-						else if (movement_target.loc.y < src.y)
+						else if (movement_target.loc.y < y)
 							dir = SOUTH
-						else if (movement_target.loc.y > src.y)
+						else if (movement_target.loc.y > y)
 							dir = NORTH
 						else
 							dir = SOUTH
 
-						if(isturf(movement_target.loc) && src.Adjacent(movement_target))
+						if(isturf(movement_target.loc) && Adjacent(movement_target))
 							movement_target.attack_animal(src)
 						else if(ishuman(movement_target.loc) )
 							if(prob(20))

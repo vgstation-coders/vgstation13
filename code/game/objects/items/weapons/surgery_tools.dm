@@ -26,7 +26,7 @@
 	origin_tech = "materials=1;biotech=1"
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [name]! It looks like \he's  trying to commit suicide!</span>")
 		return (BRUTELOSS)
 
 /obj/item/weapon/retractor/manager
@@ -161,7 +161,7 @@ LOOK FOR SURGERY.DM*/
 
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [name]! It looks like \he's  trying to commit suicide!</span>")
 		return (BRUTELOSS)
 
 
@@ -304,7 +304,7 @@ LOOK FOR SURGERY.DM*/
 
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [name]! It looks like \he's  trying to commit suicide!</span>")
 		return (BRUTELOSS)
 	is_hot()
 		return 1
@@ -406,8 +406,8 @@ LOOK FOR SURGERY.DM*/
 
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [src.name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
-							"<span class='danger'>[user] is pressing [src.name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
+		to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is pressing [name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
 		return (BRUTELOSS)
 
 /*
@@ -435,9 +435,9 @@ LOOK FOR SURGERY.DM*/
 
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-							"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-							"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his throat with the [name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his stomach open with the [name]! It looks like \he's trying to commit seppuku.</span>"))
 		return (BRUTELOSS)
 
 /*
@@ -454,7 +454,7 @@ LOOK FOR SURGERY.DM*/
 	if(!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
 		return ..()
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 	if(user.zone_sel.selecting == "groin")
 		if(istype(M, /mob/living/carbon/human))
@@ -734,7 +734,7 @@ LOOK FOR SURGERY.DM*/
 
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is sawing \his head in two with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+		to_chat(viewers(user), "<span class='danger'>[user] is sawing \his head in two with the [name]! It looks like \he's  trying to commit suicide!</span>")
 		return (BRUTELOSS)
 
 
@@ -750,7 +750,7 @@ LOOK FOR SURGERY.DM*/
 	if(!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
 		return ..()
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 	if(user.zone_sel.selecting == "head" || istype(M, /mob/living/carbon/slime))
 
@@ -838,10 +838,10 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>You sever your brain's connection to the spine with [src]!</span>" \
 					)
 
-				user.attack_log += "\[[time_stamp()]\]<font color='red'> Debrained [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-				M.attack_log += "\[[time_stamp()]\]<font color='orange'> Debrained by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
+				user.attack_log += "\[[time_stamp()]\]<font color='red'> Debrained [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
+				M.attack_log += "\[[time_stamp()]\]<font color='orange'> Debrained by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
 
-				log_attack("<font color='red'>[user.name] ([user.ckey]) debrained [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+				log_attack("<font color='red'>[user.name] ([user.ckey]) debrained [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
 
 
 				var/obj/item/organ/brain/B = new(M.loc)
@@ -900,7 +900,7 @@ LOOK FOR SURGERY.DM*/
 	w_class = W_CLASS_TINY
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")//Don't eat glue kids.
+		to_chat(viewers(user), "<span class='danger'>[user] is eating the [name]! It looks like \he's  trying to commit suicide!</span>")//Don't eat glue kids.
 
 		return (TOXLOSS)
 

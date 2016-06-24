@@ -53,9 +53,9 @@
 
 		//MOVEMENT
 		if( prob(50) )
-			src.anchored = 0
+			anchored = 0
 			step(src,pick(alldirs))
-			src.anchored = 1
+			anchored = 1
 
 /obj/effect/bhole/proc/grav(var/r, var/ex_act_force, var/pull_chance, var/turf_removal_chance)
 	if(!isturf(loc))	//blackhole cannot be contained inside anything. Weird stuff might happen

@@ -364,13 +364,13 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		owner.sight |= SEE_MOBS
 
 /mob/proc/handle_bloodsucking(mob/living/carbon/human/H)
-	src.mind.vampire.draining = H
+	mind.vampire.draining = H
 	var/blood = 0
 	var/bloodtotal = 0 //used to see if we increased our blood total
 	var/bloodusable = 0 //used to see if we increased our blood usable
-	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [H.name] ([H.ckey]) in the neck and draining their blood</font>")
-	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
-	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
+	attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [H.name] ([H.ckey]) in the neck and draining their blood</font>")
+	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [name] ([ckey])</font>")
+	log_attack("[name] ([ckey]) bit [H.name] ([H.ckey]) in the neck")
 
 	to_chat(src, "<span class='danger'>You latch on firmly to \the [H]'s neck.</span>")
 	to_chat(H, "<span class='userdanger'>\The [src] latches on to your neck!</span>")
@@ -382,35 +382,35 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	while(do_mob(src, H, 50))
 		if(!mind.vampire || !(mind in ticker.mode.vampires))
 			to_chat(src, "<span class='warning'>Your fangs have disappeared!</span>")
-			src.mind.vampire.draining = null
+			mind.vampire.draining = null
 			return 0
 		if(H.species.flags & NO_BLOOD)
 			to_chat(src, "<span class='warning'>Not a drop of blood here.</span>")
-			src.mind.vampire.draining = null
+			mind.vampire.draining = null
 			return 0
 		if(!H.mind)
 			to_chat(src, "<span class='warning'>This blood is lifeless and has no power.</span>")
-			src.mind.vampire.draining = null
+			mind.vampire.draining = null
 			return 0
-		bloodtotal = src.mind.vampire.bloodtotal
-		bloodusable = src.mind.vampire.bloodusable
+		bloodtotal = mind.vampire.bloodtotal
+		bloodusable = mind.vampire.bloodusable
 		if(!H.vessel.get_reagent_amount(BLOOD))
 			to_chat(src, "<span class='warning'>They've got no blood left to give.</span>")
 			break
 		if(H.stat < 2) //alive
 			blood = min(10, H.vessel.get_reagent_amount(BLOOD))// if they have less than 10 blood, give them the remnant else they get 10 blood
-			src.mind.vampire.bloodtotal += blood
-			src.mind.vampire.bloodusable += blood
+			mind.vampire.bloodtotal += blood
+			mind.vampire.bloodusable += blood
 			H.adjustCloneLoss(10) // beep boop 10 damage
 		else
 			blood = min(5, H.vessel.get_reagent_amount(BLOOD))// The dead only give 5 bloods
-			src.mind.vampire.bloodtotal += blood
-		if(bloodtotal != src.mind.vampire.bloodtotal)
-			to_chat(src, "<span class='notice'>You have accumulated [src.mind.vampire.bloodtotal] [src.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood[src.mind.vampire.bloodusable != bloodusable ?", and have [src.mind.vampire.bloodusable] left to use" : "."]</span>")
+			mind.vampire.bloodtotal += blood
+		if(bloodtotal != mind.vampire.bloodtotal)
+			to_chat(src, "<span class='notice'>You have accumulated [mind.vampire.bloodtotal] [mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood[mind.vampire.bloodusable != bloodusable ?", and have [mind.vampire.bloodusable] left to use" : "."]</span>")
 		check_vampire_upgrade(mind)
 		H.vessel.remove_reagent(BLOOD,25)
 
-	src.mind.vampire.draining = null
+	mind.vampire.draining = null
 	to_chat(src, "<span class='notice'>You stop draining [H.name] of blood.</span>")
 	return 1
 
@@ -482,7 +482,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				if(VAMP_VISION)
 					msg = "<span class='notice'>Your vampiric vision has improved.</span>"
 					to_chat(src, "[msg]")
-					src.mind.store_memory("<font size = 1>[msg]</font>")
+					mind.store_memory("<font size = 1>[msg]</font>")
 					//no verb
 				if(VAMP_DISEASE)
 					msg = "<span class='notice'>You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically.</span>"
@@ -515,7 +515,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				if(VAMP_MATURE)
 					msg = "<span class='sinister'>You have reached physical maturity. You are more resistant to holy things, and your vision has been improved greatly.</span>"
 					to_chat(src, "[msg]")
-					src.mind.store_memory("<font size = 1>[msg]</font>")
+					mind.store_memory("<font size = 1>[msg]</font>")
 					//no verb
 				if(VAMP_SHADOW)
 					msg = "<span class='notice'>You have gained mastery over the shadows. In the dark, you can mask your identity, instantly terrify non-vampires who approach you, and enter the chapel for a longer period of time.</span>"
@@ -524,12 +524,12 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				if(VAMP_CHARISMA)
 					msg = "<span class='sinister'>You develop an uncanny charismatic aura that makes you difficult to disobey. Hypnotise and Enthrall take less time to perform, and Enthrall works on implanted targets.</span>"
 					to_chat(src, "[msg]")
-					src.mind.store_memory("<font size = 1>[msg]</font>")
+					mind.store_memory("<font size = 1>[msg]</font>")
 					//no verb
 				if(VAMP_UNDYING)
 					msg = "<span class='sinister'>You have reached the absolute peak of your power. Your abilities cannot be nullified very easily, and you may return from the grave so long as your body is not burned, destroyed or sanctified. You can also spawn a rather nice cape.</span>"
 					to_chat(src, "[msg]")
-					src.mind.store_memory("<font size = 1>[msg]</font>")
+					mind.store_memory("<font size = 1>[msg]</font>")
 					verbs += /client/proc/vampire_undeath
 					verbs += /client/proc/vampire_spawncape
 

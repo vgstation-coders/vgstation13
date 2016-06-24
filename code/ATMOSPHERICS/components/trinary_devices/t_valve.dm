@@ -14,7 +14,7 @@
 
 /obj/machinery/atmospherics/trinary/tvalve/update_icon(var/adjacent_procd, animation)
 	if(animation)
-		flick("tvalve[src.state][!src.state]",src)
+		flick("tvalve[state][!state]",src)
 	else
 		icon_state = "tvalve[state]"
 	..()
@@ -131,13 +131,13 @@
 
 	investigation_log(I_ATMOS,"was [state ? "opened (straight)" : "closed (side)"] by [key_name(usr)]")
 
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	update_icon(0,1)
 	sleep(10)
-	if (src.state)
-		src.go_straight()
+	if (state)
+		go_straight()
 	else
-		src.go_to_side()
+		go_to_side()
 
 /*
 /obj/machinery/atmospherics/trinary/tvalve/process()
@@ -148,11 +148,11 @@
 			close()
 		if(!node1)
 			if(!nodealert)
-//				to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//				to_chat(world, "Missing node from [src] at [x],[y],[z]")
 				nodealert = 1
 		else if (!node2)
 			if(!nodealert)
-//				to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
+//				to_chat(world, "Missing node from [src] at [x],[y],[z]")
 				nodealert = 1
 		else if (nodealert)
 			nodealert = 0
@@ -168,7 +168,7 @@
 
 /obj/machinery/atmospherics/trinary/tvalve/mirrored/update_icon(var/adjacent_procd,animation)
 	if(animation)
-		flick("tvalvem[src.state][!src.state]",src)
+		flick("tvalvem[state][!state]",src)
 	else
 		icon_state = "tvalvem[state]"
 	..()
@@ -189,11 +189,11 @@
 	mirror = /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored
 
 /obj/machinery/atmospherics/trinary/tvalve/digital/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/atmospherics/trinary/tvalve/digital/attack_hand(mob/user as mob)
-	if(!src.allowed(user))
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 	..()
@@ -243,6 +243,6 @@
 /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored/update_icon(var/adjacent_procd,animation)
 	..()
 	if(animation)
-		flick("tvalvem[src.state][!src.state]",src)
+		flick("tvalvem[state][!state]",src)
 	else
 		icon_state = "tvalvem[state]"

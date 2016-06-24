@@ -63,15 +63,15 @@
 				G.use(1)
 				to_chat(user, "<span class='notice'>You add the glass to the frame.</span>")
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				new /obj/structure/displaycase_frame(src.loc)
+				new /obj/structure/displaycase_frame(loc)
 				qdel(src)
 				return
 			else
 				if(iswrench(P))
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-					//new /obj/item/stack/sheet/metal(src.loc, 5)
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
+					//new /obj/item/stack/sheet/metal(loc, 5)
+					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, loc)
 					M.amount = 5
 					qdel(src)
 		if(2)
@@ -113,7 +113,7 @@
 						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
-						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
+						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( loc )
 						A.amount = 5
 
 		if(3)
@@ -121,14 +121,14 @@
 				if(iscrowbar(P))
 					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 					set_build_state(2)
-					circuit.loc = src.loc
+					circuit.loc = loc
 					circuit = null
 					if(components.len == 0)
 						to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 					else
 						to_chat(user, "<span class='notice'>You remove the circuit board and other components.</span>")
 						for(var/obj/item/weapon/W in components)
-							W.loc = src.loc
+							W.loc = loc
 					desc = initial(desc)
 					req_components = null
 					components = null
@@ -141,7 +141,7 @@
 								break
 						if(component_check)
 							playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
+							var/obj/machinery/new_machine = new circuit.build_path(loc)
 							for(var/obj/O in new_machine.component_parts)
 								returnToPool(O)
 							new_machine.component_parts = list()
@@ -279,7 +279,7 @@ to destroy them and players will be able to make replacements.
 		var/obj/item/weapon/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
-			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
+			new_item.forceMove(loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			returnToPool(src)
 			return
 	else

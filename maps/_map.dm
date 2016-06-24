@@ -85,7 +85,7 @@
 /datum/map/New()
 
 	. = ..()
-	src.loadZLevels(src.zLevels)
+	loadZLevels(zLevels)
 	return
 
 /datum/map/proc/loadZLevels(list/levelPaths)

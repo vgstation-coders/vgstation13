@@ -10,7 +10,7 @@
 
 	switch(act)
 		if ("salute")
-			if (!src.buckled)
+			if (!buckled)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -26,7 +26,7 @@
 					message = "<B>[src]</b> salutes."
 			m_type = 1
 		if ("bow")
-			if (!src.buckled)
+			if (!buckled)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -43,16 +43,16 @@
 			m_type = 1
 
 		if ("clap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> claps."
 				m_type = 2
 		if ("flap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> flaps his wings."
 				m_type = 2
 
 		if ("aflap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> flaps his wings ANGRILY!"
 				m_type = 2
 
@@ -131,7 +131,7 @@
 			m_type = 1
 		else
 //			to_chat(custom_emote(VISIBLE, act)src, text("Invalid Emote: []", act))
-	if ((message && src.stat == 0))
+	if ((message && stat == 0))
 		if (m_type & 1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)

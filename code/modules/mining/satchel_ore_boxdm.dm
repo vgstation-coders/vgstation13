@@ -43,7 +43,7 @@
 	if(..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["removeall"])
 		for(var/ore_id in materials.storage)
 			var/datum/material/mat = materials.getMaterial(ore_id)
@@ -52,5 +52,5 @@
 					getFromPool(mat.oretype, get_turf(src))
 				materials.removeAmount(ore_id, materials.storage[ore_id])
 		to_chat(usr, "<span class='notice'>You empty the box.</span>")
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return

@@ -42,7 +42,7 @@
 
 /obj/structure/cage/Destroy()
 	for(var/atom/movable/M in contents)
-		M.forceMove(src.loc)
+		M.forceMove(loc)
 
 	..()
 

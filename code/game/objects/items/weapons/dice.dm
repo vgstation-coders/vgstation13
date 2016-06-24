@@ -79,7 +79,7 @@
 		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result]. [comment]</span>", \
 							 "<span class='notice'>You throw [src]. It lands on [result]. [comment]</span>", \
 							 "<span class='notice'>You hear [src] landing on [result]. [comment]</span>")
-	else if(src.throwing == 0) //Dice was thrown and is coming to rest
+	else if(throwing == 0) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
 
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
@@ -90,7 +90,7 @@
 
 /obj/item/weapon/dice/update_icon()
 	overlays.len = 0
-	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
+	overlays += image(icon = icon, icon_state = "[icon_state][result]")
 
 /obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
 	if(!istype(user)) return 0

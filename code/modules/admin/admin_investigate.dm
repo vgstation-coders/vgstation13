@@ -35,18 +35,18 @@ var/global/list/investigations=list(
 //  filename = Set to override default filename, otherwise leave null.
 /datum/log_controller/New(var/sub, var/persist=FALSE, var/filename=null)
 	subject = sub
-	src.filename = "[INVESTIGATE_DIR][subject].html"
+	filename = "[INVESTIGATE_DIR][subject].html"
 
 	// Overridden filename?
 	if(!isnull(filename))
-		src.filename = filename
+		filename = filename
 
 	// Delete existing files before opening? (akin to 'w' mode rather than 'a'ppend)
 	if(!persist)
-		fdel(src.filename)
+		fdel(filename)
 
 	// Persistent file handle.
-	handle = file(src.filename)
+	handle = file(filename)
 
 /datum/log_controller/proc/write(var/message)
 	handle << message

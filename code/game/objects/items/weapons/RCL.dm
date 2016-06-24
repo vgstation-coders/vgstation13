@@ -115,5 +115,5 @@
 			if(is_empty(user)) return //If we've run out, display message and exit
 		else
 			last = null
-	last = loaded.turf_place(get_turf(src.loc),user,turn(user.dir,180))
+	last = loaded.turf_place(get_turf(loc),user,turn(user.dir,180))
 	is_empty(user) //If we've run out, display message

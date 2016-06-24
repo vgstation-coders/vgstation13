@@ -813,7 +813,7 @@ var/global/list/whitelisted_species = list("Human")
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it is consumed. [real_name] reconstitutes itself!.</span>")
 					qdel(A)
 					G.real_name = real_name
-					G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
+					G.forceMove(loc) //we use move to get the entering procs - this fixes gravity
 					var/datum/mind/dustmind = mind
 					G.mind = dustmind
 					dustmind.current = G

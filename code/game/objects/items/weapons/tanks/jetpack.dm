@@ -16,7 +16,7 @@
 /obj/item/weapon/tank/jetpack/verb/toggle_rockets()
 	set name = "Toggle Jetpack Stabilization"
 	set category = "Object"
-	src.stabilization_on = !( src.stabilization_on )
+	stabilization_on = !( stabilization_on )
 	to_chat(usr, "You toggle the stabilization [stabilization_on? "on":"off"].")
 	return
 
@@ -37,13 +37,13 @@
 
 
 /obj/item/weapon/tank/jetpack/proc/allow_thrust(num, mob/living/user as mob)
-	if(!(src.on))
+	if(!(on))
 		return 0
-	if((num < 0.005 || src.air_contents.total_moles() < num))
-		src.toggle()
+	if((num < 0.005 || air_contents.total_moles() < num))
+		toggle()
 		return 0
 
-	var/datum/gas_mixture/G = src.air_contents.remove(num)
+	var/datum/gas_mixture/G = air_contents.remove(num)
 	var/allgases = G.total_moles()
 
 	if(allgases >= 0.005)

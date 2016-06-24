@@ -36,10 +36,10 @@ var/global/list/moneytypes = list(
 
 /obj/item/weapon/spacecash/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
-		var/obj/item/weapon/spacecash/C = new src.type(user, new_amount=1)
+		var/obj/item/weapon/spacecash/C = new type(user, new_amount=1)
 		C.copy_evidences(src)
 		user.put_in_hands(C)
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		C.add_fingerprint(user)
 		amount--
 		if(amount<=0)
@@ -50,13 +50,13 @@ var/global/list/moneytypes = list(
 		return ..()
 
 /obj/item/weapon/spacecash/proc/copy_evidences(obj/item/stack/from as obj)
-	src.blood_DNA = from.blood_DNA
-	src.fingerprints  = from.fingerprints
-	src.fingerprintshidden  = from.fingerprintshidden
-	src.fingerprintslast  = from.fingerprintslast
+	blood_DNA = from.blood_DNA
+	fingerprints  = from.fingerprints
+	fingerprintshidden  = from.fingerprintshidden
+	fingerprintslast  = from.fingerprintslast
 
 /obj/item/weapon/spacecash/proc/can_stack_with(obj/item/other_stack)
-	return src.type == other_stack.type
+	return type == other_stack.type
 
 /obj/item/weapon/spacecash/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
@@ -109,10 +109,10 @@ var/global/list/moneytypes = list(
 		overlays += stack
 
 /obj/item/weapon/spacecash/proc/collect_from(var/obj/item/weapon/spacecash/cash)
-	if(cash.worth == src.worth)
-		var/taking = min(10-src.amount,cash.amount)
+	if(cash.worth == worth)
+		var/taking = min(10-amount,cash.amount)
 		cash.amount -= taking
-		src.amount += taking
+		amount += taking
 		if(cash.amount <= 0)
 			qdel(cash)
 		return taking
@@ -121,10 +121,10 @@ var/global/list/moneytypes = list(
 /obj/item/weapon/spacecash/afterattack(atom/A as mob|obj, mob/user as mob)
 	if(istype(A, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/cash = A
-		var/collected = src.collect_from(cash)
+		var/collected = collect_from(cash)
 		if(collected)
 			update_icon()
-			to_chat(user, "<span class='notice'>You add [collected] [src.name][amount > 1 ? "s":""] to your stack of cash.</span>")
+			to_chat(user, "<span class='notice'>You add [collected] [name][amount > 1 ? "s":""] to your stack of cash.</span>")
 
 /obj/item/weapon/spacecash/c10
 	icon_state = "cash10"

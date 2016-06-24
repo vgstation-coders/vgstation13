@@ -54,8 +54,8 @@
 	ME.attach(src)
 	ME = new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
 	ME.attach(src)
-	src.smoke_system.set_up(3, 0, src)
-	src.smoke_system.attach(src)
+	smoke_system.set_up(3, 0, src)
+	smoke_system.attach(src)
 	return
 
 /obj/mecha/combat/marauder/seraph/New()
@@ -79,7 +79,7 @@
 	return
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)
-	if(user != src.occupant) //While not "realistic", this piece is player friendly.
+	if(user != occupant) //While not "realistic", this piece is player friendly.
 		user.loc = get_turf(src)
 		to_chat(user, "You climb out from [src]")
 		return 0
@@ -87,15 +87,15 @@
 		return 0
 	if(zoom)
 		if(world.time - last_message > 20)
-			src.occupant_message("Unable to move while in zoom mode.")
+			occupant_message("Unable to move while in zoom mode.")
 			last_message = world.time
 		return 0
 	if(connected_port)
 		if(world.time - last_message > 20)
-			src.occupant_message("Unable to move while connected to the air system port")
+			occupant_message("Unable to move while connected to the air system port")
 			last_message = world.time
 		return 0
-	if(!thrusters && src.pr_inertial_movement.active())
+	if(!thrusters && pr_inertial_movement.active())
 		return 0
 	if(state || !has_charge(step_energy_drain))
 		return 0
@@ -104,16 +104,16 @@
 	var/move_result = 0
 	if(internal_damage&MECHA_INT_CONTROL_LOST)
 		move_result = mechsteprand()
-	else if(src.dir!=direction)
+	else if(dir!=direction)
 		move_result = mechturn(direction)
 	else
 		move_result	= mechstep(direction)
 	if(move_result)
-		if(istype(src.loc, /turf/space))
-			if(!src.check_for_support())
-				src.pr_inertial_movement.start(list(src,direction))
+		if(istype(loc, /turf/space))
+			if(!check_for_support())
+				pr_inertial_movement.start(list(src,direction))
 				if(thrusters)
-					src.pr_inertial_movement.set_process_args(list(src,direction))
+					pr_inertial_movement.set_process_args(list(src,direction))
 					tmp_step_energy_drain = step_energy_drain*2
 
 		can_move = 0
@@ -128,13 +128,13 @@
 	set name = "Toggle thrusters"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if(usr!=occupant)
 		return
-	if(src.occupant)
+	if(occupant)
 		if(get_charge() > 0)
 			thrusters = !thrusters
-			src.log_message("Toggled thrusters.")
-			src.occupant_message("<font color='[src.thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
+			log_message("Toggled thrusters.")
+			occupant_message("<font color='[thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
 	return
 
 
@@ -143,10 +143,10 @@
 	set name = "Smoke"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if(usr!=occupant)
 		return
 	if(smoke_ready && smoke>0)
-		src.smoke_system.start()
+		smoke_system.start()
 		smoke--
 		smoke_ready = 0
 		spawn(smoke_cooldown)
@@ -158,24 +158,24 @@
 	set name = "Zoom"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if(usr!=occupant)
 		return
-	if(src.occupant.client)
-		src.zoom = !src.zoom
-		src.log_message("Toggled zoom mode.")
-		src.occupant_message("<font color='[src.zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>")
+	if(occupant.client)
+		zoom = !zoom
+		log_message("Toggled zoom mode.")
+		occupant_message("<font color='[zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>")
 		if(zoom)
-			src.occupant.client.view = 12
-			src.occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
+			occupant.client.view = 12
+			occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
 		else
-			src.occupant.client.view = world.view//world.view - default mob view size
+			occupant.client.view = world.view//world.view - default mob view size
 	return
 
 
 /obj/mecha/combat/marauder/go_out()
-	if(src.occupant && src.occupant.client)
-		src.occupant.client.view = world.view
-		src.zoom = 0
+	if(occupant && occupant.client)
+		occupant.client.view = world.view
+		zoom = 0
 	..()
 	return
 
@@ -205,9 +205,9 @@
 /obj/mecha/combat/marauder/Topic(href, href_list)
 	..()
 	if (href_list["toggle_thrusters"])
-		src.toggle_thrusters()
+		toggle_thrusters()
 	if (href_list["smoke"])
-		src.smoke()
+		smoke()
 	if (href_list["toggle_zoom"])
-		src.zoom()
+		zoom()
 	return

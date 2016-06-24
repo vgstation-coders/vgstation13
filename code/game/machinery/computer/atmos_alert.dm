@@ -51,7 +51,7 @@
 
 /obj/machinery/computer/atmos_alert/process()
 	if(..())
-		src.updateDialog()
+		updateDialog()
 
 /obj/machinery/computer/atmos_alert/update_icon()
 	..()

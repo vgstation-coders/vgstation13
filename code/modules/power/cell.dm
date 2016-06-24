@@ -59,10 +59,10 @@
 	if(crit_fail)
 		to_chat(user, "<span class='warning'>This power cell seems to be faulty.</span>")
 	else
-		to_chat(user, "<span class='info'>The charge meter reads [round(src.percent() )]%.</span>")
+		to_chat(user, "<span class='info'>The charge meter reads [round(percent() )]%.</span>")
 
 /obj/item/weapon/cell/attack_self(mob/user as mob)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 /obj/item/weapon/cell/attackby(obj/item/W, mob/user)
 	..()
@@ -82,7 +82,7 @@
 
 
 /obj/item/weapon/cell/proc/explode()
-	var/turf/T = get_turf(src.loc)
+	var/turf/T = get_turf(loc)
 /*
  * 1000-cell	explosion(T, -1, 0, 1, 1)
  * 2500-cell	explosion(T, -1, 0, 1, 1)

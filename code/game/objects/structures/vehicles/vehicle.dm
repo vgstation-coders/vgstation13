@@ -56,7 +56,7 @@
 	if(!nick)
 		nick=name
 	if(keytype && !vin)
-		mykey = new keytype(src.loc)
+		mykey = new keytype(loc)
 		mykey.paired_to=src
 
 /obj/structure/bed/chair/vehicle/process()
@@ -70,7 +70,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			if(destroyed)
-				to_chat(user, "<span class='warning'>\The [src.name] is destroyed beyond repair.</span>")
+				to_chat(user, "<span class='warning'>\The [name] is destroyed beyond repair.</span>")
 			add_fingerprint(user)
 			user.visible_message("<span class='notice'>[user] has fixed some of the dents on \the [src].</span>", "<span class='notice'>You fix some of the dents on \the [src]</span>")
 			health += 20
@@ -137,8 +137,8 @@
 
 	update_mob()
 	/*
-	if(istype(src.loc, /turf/space) && (!src.Process_Spacemove(0, user)))
-		var/turf/space/S = src.loc
+	if(istype(loc, /turf/space) && (!Process_Spacemove(0, user)))
+		var/turf/space/S = loc
 		S.Entered(src)*/
 	return 0
 
@@ -154,7 +154,7 @@
 			if(istype(turf, /turf/space))
 				continue
 
-			if(istype(turf, /turf/simulated/floor) && (src.areaMaster && src.areaMaster.has_gravity == 0)) //No gravity
+			if(istype(turf, /turf/simulated/floor) && (areaMaster && areaMaster.has_gravity == 0)) //No gravity
 				continue
 
 			dense_object++
@@ -180,7 +180,7 @@
 			if(istype(turf, /turf/space))
 				continue
 
-			if(istype(turf, /turf/simulated/floor) && (src.areaMaster && src.areaMaster.has_gravity == 0)) //No gravity
+			if(istype(turf, /turf/simulated/floor) && (areaMaster && areaMaster.has_gravity == 0)) //No gravity
 				continue
 
 			dense_object++
@@ -208,8 +208,8 @@
 	//Check to see if we slipped
 	if(prob(5))
 		to_chat(src, "<span class='bnotice'>You slipped!</span>")
-		src.inertia_dir = src.last_move
-		step(src, src.inertia_dir)
+		inertia_dir = last_move
+		step(src, inertia_dir)
 		return 0
 	//If not then we can reset inertia and move
 	inertia_dir = 0
@@ -272,10 +272,10 @@
 /obj/structure/bed/chair/vehicle/emp_act(severity)
 	switch(severity)
 		if(1)
-			src.empstun = (rand(5,10))
+			empstun = (rand(5,10))
 		if(2)
-			src.empstun = (rand(1,5))
-	src.visible_message("<span class='danger'>The [src.name]'s motor short circuits!</span>")
+			empstun = (rand(1,5))
+	visible_message("<span class='danger'>The [name]'s motor short circuits!</span>")
 	spark_system.attach(src)
 	spark_system.set_up(5, 0, src)
 	spark_system.start()
@@ -297,7 +297,7 @@
 			return
 		if(istype(Proj, /obj/item/projectile/energy/electrode))
 			if(prob(25))
-				visible_message("<span class='warning'>\The [src.name] absorbs \the [Proj]")
+				visible_message("<span class='warning'>\The [name] absorbs \the [Proj]")
 				if(!istype(occupant, /mob/living/carbon/human))
 					occupant.bullet_act(Proj)
 				else
@@ -330,7 +330,7 @@
 	destroyed = 1
 	density = 0
 	visible_message("<span class='warning'>\The [nick] explodes!</span>")
-	explosion(src.loc,-1,0,2,7,10)
+	explosion(loc,-1,0,2,7,10)
 	icon_state = "pussywagon_destroyed"
 	unlock_atom(occupant)
 
@@ -340,7 +340,7 @@
 
 	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
 		if(!obstacle.anchored)
-			obstacle.Move(get_step(obstacle,src.dir))
+			obstacle.Move(get_step(obstacle,dir))
 	..()
 
 /obj/structure/bed/chair/vehicle/unlock_atom(var/atom/movable/AM)

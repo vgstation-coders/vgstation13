@@ -91,20 +91,20 @@
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
-		var/tmp_label = sanitize(input(user, "Enter a label for [src.name]","Label",src.label_text))
+		var/tmp_label = sanitize(input(user, "Enter a label for [name]","Label",label_text))
 		if (!Adjacent(user) || user.stat) return
 		if(length(tmp_label) > 10)
 			to_chat(user, "<span class='warning'>The label can be at most 10 characters long.</span>")
 		else
 			to_chat(user, "<span class='notice'>You set the label to \"[tmp_label]\".</span>")
-			src.label_text = tmp_label
-			src.update_name_label()
+			label_text = tmp_label
+			update_name_label()
 
 /obj/item/weapon/reagent_containers/glass/proc/update_name_label()
-	if(src.label_text == "")
-		src.name = src.base_name
+	if(label_text == "")
+		name = base_name
 	else
-		src.name = "[src.base_name] ([src.label_text])"
+		name = "[base_name] ([label_text])"
 
 /obj/item/weapon/reagent_containers/glass/beaker
 	name = "beaker"
@@ -116,44 +116,44 @@
 	origin_tech = "materials=1"
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
+	if(type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
 			to_chat(user, "You drill six holes through the bottom of \the [src].")
-			if(src.loc == user)
+			if(loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/cylinder/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/cylinder(get_turf(src.loc))
+				new /obj/item/weapon/cylinder(get_turf(loc))
 			qdel(src)
 		return
 	return ..()
 
 /obj/item/weapon/reagent_containers/glass/beaker/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
-		if (src.reagents.total_volume >= 1)
-			switch(src.reagents.total_volume)
+		if (reagents.total_volume >= 1)
+			switch(reagents.total_volume)
 				if(1 to 30)
 					if(M.reagents.total_volume >= 3)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
-					src.reagents.trans_to(M, 1)
+					reagents.trans_to(M, 1)
 					to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
 					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 				if(30 to 100)
 					if(M.reagents.total_volume >= 5)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
-					src.reagents.trans_to(M, 2)
+					reagents.trans_to(M, 2)
 					to_chat(user, "<span class='notice'>You manage to wet [M]</span>")
 					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 				if(100 to INFINITY)
 					if(M.reagents.total_volume >= 10)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
-					src.reagents.trans_to(M, 5)
+					reagents.trans_to(M, 5)
 					to_chat(user, "<span class='notice'>You manage to soak [M]</span>")
 					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 				else
@@ -301,27 +301,27 @@
 
 /obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
-		if (src.reagents.total_volume >= 1)
-			switch(src.reagents.total_volume)
+		if (reagents.total_volume >= 1)
+			switch(reagents.total_volume)
 				if(1 to 30)
 					if(M.reagents.total_volume >= 5)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
-					src.reagents.trans_to(M, 1)
+					reagents.trans_to(M, 1)
 					to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
 					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 				if(30 to 100)
 					if(M.reagents.total_volume >= 5)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
-					src.reagents.trans_to(M, 2)
+					reagents.trans_to(M, 2)
 					to_chat(user, "<span class='notice'>You manage to wet [M]</span>")
 					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 				if(100 to INFINITY)
 					if(M.reagents.total_volume >= 10)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
-					src.reagents.trans_to(M, 5)
+					reagents.trans_to(M, 5)
 					to_chat(user, "<span class='notice'>You manage to soak [M]</span>")
 					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 				else
@@ -349,7 +349,7 @@
 	volume = 100
 
 	on_reagent_change()
-		switch(src.reagents.total_volume)
+		switch(reagents.total_volume)
 			if(0)
 				icon_state = "blender_jug_e"
 			if(1 to 75)

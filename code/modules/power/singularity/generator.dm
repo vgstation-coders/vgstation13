@@ -28,7 +28,7 @@
 	qdel(src)
 
 /obj/machinery/the_singularitygen/wrenchAnchor(mob/user)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return ..()
 
 /obj/machinery/the_singularitygen/attackby(obj/item/W, mob/user)

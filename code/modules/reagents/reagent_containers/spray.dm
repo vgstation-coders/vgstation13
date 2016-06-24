@@ -32,12 +32,12 @@ var/global/list/logged_sprayed_reagents = list(SACID, PACID, LUBE, FUEL)
 		if(istype(W, /obj/item/stack/rods))
 			to_chat(user, "You press \the [W] into the melted plastic on the top of \the [src].")
 			var/obj/item/stack/rods/R = W
-			if(src.loc == user)
+			if(loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "spraybottle_assembly")
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/gun_assembly(get_turf(src.loc), "spraybottle_assembly")
+				new /obj/item/weapon/gun_assembly(get_turf(loc), "spraybottle_assembly")
 			R.use(1)
 			qdel(src)
 
@@ -175,7 +175,7 @@ var/global/list/logged_sprayed_reagents = list(SACID, PACID, LUBE, FUEL)
 	var/Sprays[3]
 
 	for (var/i = 1, i <= 3, i++)
-		if (src.reagents.total_volume < 1)
+		if (reagents.total_volume < 1)
 			break
 
 		var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)

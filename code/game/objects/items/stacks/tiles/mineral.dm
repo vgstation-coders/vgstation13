@@ -49,7 +49,7 @@
 		var/obj/item/stack/sheet/glass/rglass/G = W
 		to_chat(user, "You add a layer of reinforced glass to [src].")
 		G.use(1)
-		src.use(1)
+		use(1)
 
 		drop_stack(/obj/item/stack/tile/mineral/uranium/safe, user.loc, 1, user)
 		return

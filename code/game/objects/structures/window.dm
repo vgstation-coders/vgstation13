@@ -75,7 +75,7 @@
 
 	if(health <= 0)
 		if(M) //Did someone pass a mob ? If so, perform a pressure check
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(loc)
 			if(pdiff > 0)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
@@ -87,7 +87,7 @@
 		if(!damage_overlay)
 			damage_overlay = new(src)
 			damage_overlay.icon = icon('icons/obj/structures.dmi')
-			damage_overlay.dir = src.dir
+			damage_overlay.dir = dir
 
 		overlays.Cut()
 
@@ -319,7 +319,7 @@
 					update_nearby_icons()
 					update_icon()
 					//Perform pressure check since window no longer blocks air
-					var/pdiff = performWallPressureCheck(src.loc)
+					var/pdiff = performWallPressureCheck(loc)
 					if(pdiff > 0)
 						message_admins("Window with pdiff [pdiff] deanchored by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(loc)]!")
 						log_admin("Window with pdiff [pdiff] deanchored by [user.real_name] ([user.ckey]) at [loc]!")

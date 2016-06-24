@@ -466,14 +466,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		to_chat(usr, "You can't send PDA messages because you are dead!")
 		return
 
-	if(src.aiPDA.toff)
+	if(aiPDA.toff)
 		to_chat(usr, "Turn on your receiver in order to send messages.")
 		return
 
 	for (var/obj/item/device/pda/P in get_viewable_pdas())
 		if (P == src)
 			continue
-		else if (P == src.aiPDA)
+		else if (P == aiPDA)
 			continue
 
 		var/name = P.owner
@@ -492,7 +492,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		return
 
 	var/selected = plist[c]
-	src.aiPDA.create_message(src, selected)
+	aiPDA.create_message(src, selected)
 
 //AI verb and proc for sending PDA messages.
 /obj/item/device/pda/ai/verb/cmd_send_pdamesg()
@@ -949,7 +949,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
 				dat += {"<h4>Station Map Application</h4>"}
 				if(app)
-					var/turf/T = get_turf(src.loc)
+					var/turf/T = get_turf(loc)
 
 					if(!fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
 						dat += {"<span class='warning'>It appears that our services have yet to produce a minimap of this station. We apologize for the inconvenience.</span>"}
@@ -1424,7 +1424,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				T.target_name = user.name
 				T.purpose = "Currency printed"
 				T.amount = "-[amount]"
-				T.source_terminal = src.name
+				T.source_terminal = name
 				T.date = current_date_string
 				T.time = worldtime2text()
 				id.virtual_wallet.transaction_log.Add(T)
@@ -1713,10 +1713,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/t = input(U, "Please enter new ringtone", name, ttone) as text
 				if (in_range(src, U) && loc == U)
 					if (t)
-						if(src.hidden_uplink && hidden_uplink.check_trigger(U, trim(lowertext(t)), trim(lowertext(lock_code))))
+						if(hidden_uplink && hidden_uplink.check_trigger(U, trim(lowertext(t)), trim(lowertext(lock_code))))
 							to_chat(U, "The PDA softly beeps.")
 							U << browse(null, "window=pda")
-							src.mode = 0
+							mode = 0
 						else
 							t = copytext(sanitize(t), 1, 20)
 							ttone = t
@@ -1725,7 +1725,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					return
 			if("Message")
 				var/obj/item/device/pda/P = locate(href_list["target"])
-				src.create_message(U, P)
+				create_message(U, P)
 
 			if("transferFunds")
 				if(!id)
@@ -1752,7 +1752,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				T.target_name = P.owner
 				T.purpose = "Money transfer"
 				T.amount = "-[amount]"
-				T.source_terminal = src.name
+				T.source_terminal = name
 				T.date = current_date_string
 				T.time = worldtime2text()
 				id.virtual_wallet.transaction_log.Add(T)
@@ -1842,7 +1842,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("1")		// Configure pAI device
 						pai.attack_self(U)
 					if("2")		// Eject pAI device
-						var/turf/T = get_turf(src.loc)
+						var/turf/T = get_turf(loc)
 						if(T)
 							pai.loc = T
 
@@ -1891,11 +1891,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 
 	for (var/mob/O in hearers(3, U))
-		if(!silent) O.show_message(text("[bicon(src)] *[src.ttone]*"))
+		if(!silent) O.show_message(text("[bicon(src)] *[ttone]*"))
 
 	var/mob/living/L = null
-	if(src.loc && isliving(src.loc))
-		L = src.loc
+	if(loc && isliving(loc))
+		L = loc
 	else
 		L = get_holder_of_type(src, /mob/living/silicon)
 
@@ -1939,8 +1939,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	incoming_transactions = list()
 
 	var/mob/living/L = null
-	if(src.loc && isliving(src.loc))
-		L = src.loc
+	if(loc && isliving(loc))
+		L = loc
 	to_chat(L, "[bicon(src)]<span class='notice'> <b>Transactions successfully received! </b></span>")
 
 
@@ -1984,7 +1984,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				useMS = MS
 				break
 
-	var/datum/signal/signal = src.telecomms_process()
+	var/datum/signal/signal = telecomms_process()
 
 	var/useTC = 0
 	if(signal)
@@ -2006,12 +2006,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
-			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
+			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // client is so that ghosts don't have to listen to mice
 				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)) //Give the AI a chance of intercepting the message
-			var/who = src.owner
+			var/who = owner
 			if(prob(50))
 				who = P:owner
 			for(var/mob/living/silicon/ai/ai in mob_list)
@@ -2032,9 +2032,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			L = get_holder_of_type(P, /mob/living/silicon)
 
 		if(L)
-			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
+			L.show_message("[bicon(P)] <b>Message from [owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
 
-		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
+		log_pda("[usr] (PDA: [name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
 		P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else
@@ -2143,7 +2143,7 @@ obj/item/device/pda/AltClick()
 					updateSelfDialog()//Update self dialog on success.
 			return	//Return in case of failed check or when successful.
 		updateSelfDialog()//For the non-input related code.
-	else if(istype(C, /obj/item/device/paicard) && !src.pai)
+	else if(istype(C, /obj/item/device/paicard) && !pai)
 		if(user.drop_item(C, src))
 			pai = C
 			to_chat(user, "<span class='notice'>You slot \the [C] into [src].</span>")
@@ -2170,7 +2170,7 @@ obj/item/device/pda/AltClick()
 		T.target_name = user.name
 		T.purpose = "Currency deposit"
 		T.amount = dosh.worth * dosh.amount
-		T.source_terminal = src.name
+		T.source_terminal = name
 		T.date = current_date_string
 		T.time = worldtime2text()
 		id.virtual_wallet.transaction_log.Add(T)
@@ -2253,8 +2253,8 @@ obj/item/device/pda/AltClick()
 					return dev_analys.preattack(A, user, 1)
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
-	if(!src.detonate) return
-	var/turf/T = get_turf(src.loc)
+	if(!detonate) return
+	var/turf/T = get_turf(loc)
 
 	if (ismob(loc))
 		var/mob/M = loc
@@ -2270,10 +2270,10 @@ obj/item/device/pda/AltClick()
 
 /obj/item/device/pda/Destroy()
 	PDAs -= src
-	if (src.id)
-		src.id.loc = get_turf(src.loc)
-	if(src.pai)
-		src.pai.loc = get_turf(src.loc)
+	if (id)
+		id.loc = get_turf(loc)
+	if(pai)
+		pai.loc = get_turf(loc)
 	..()
 
 /obj/item/device/pda/Del()
@@ -2291,8 +2291,8 @@ obj/item/device/pda/AltClick()
 		if (M.Slip(8, 5))
 			to_chat(M, "<span class='notice'>You slipped on the PDA!</span>")
 
-			if ((istype(M, /mob/living/carbon/human) && (M.real_name != src.owner) && (istype(src.cartridge, /obj/item/weapon/cartridge/clown))))
-				var/obj/item/weapon/cartridge/clown/honkcartridge = src.cartridge
+			if ((istype(M, /mob/living/carbon/human) && (M.real_name != owner) && (istype(cartridge, /obj/item/weapon/cartridge/clown))))
+				var/obj/item/weapon/cartridge/clown/honkcartridge = cartridge
 				if (honkcartridge.honk_charges < 5)
 					honkcartridge.honk_charges++
 

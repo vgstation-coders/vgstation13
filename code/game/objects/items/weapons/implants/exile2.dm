@@ -9,7 +9,7 @@
 	name = "implanter-exile"
 
 /obj/item/weapon/implanter/exile/New()
-	src.imp = new /obj/item/weapon/implant/exile( src )
+	imp = new /obj/item/weapon/implant/exile( src )
 	..()
 	update()
 	return
@@ -41,7 +41,7 @@
 
 
 /obj/item/weapon/implantcase/exile/New()
-	src.imp = new /obj/item/weapon/implant/exile( src )
+	imp = new /obj/item/weapon/implant/exile( src )
 	..()
 	return
 

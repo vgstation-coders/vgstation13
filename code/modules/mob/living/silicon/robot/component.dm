@@ -17,7 +17,7 @@
 /datum/robot_component/var/obj/item/wrapped = null
 
 /datum/robot_component/New(mob/living/silicon/robot/R)
-	src.owner = R
+	owner = R
 
 /datum/robot_component/proc/install()
 /datum/robot_component/proc/uninstall()
@@ -219,5 +219,5 @@
 		user.show_message("<span class='notice'>\t Components are OK.</span>",1)
 	if(H.emagged && prob(5))
 		user.show_message("<span class='warning'>\t ERROR: INTERNAL SYSTEMS COMPROMISED</span>",1)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	return

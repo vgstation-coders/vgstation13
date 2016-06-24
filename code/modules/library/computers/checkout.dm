@@ -43,15 +43,15 @@
 				<li><A href='?src=\ref[src];switchscreen=5'>Upload New Title to Archive</A></li>
 				<li><A href='?src=\ref[src];switchscreen=6'>Print a Bible</A></li>
 				<li><A href='?src=\ref[src];switchscreen=7'>Print a Manual</A></li>"}
-			if(src.emagged)
+			if(emagged)
 				dat += "<li><A href='?src=\ref[src];switchscreen=8'>Access the Forbidden Lore Vault</A></li>"
 			dat += "</ol>"
 
-			if(src.arcanecheckout)
-				new /obj/item/weapon/tome(src.loc)
+			if(arcanecheckout)
+				new /obj/item/weapon/tome(loc)
 				to_chat(user, "<span class='warning'>Your sanity barely endures the seconds spent in the vault's browsing window. The only thing to remind you of this when you stop browsing is a dusty old tome sitting on the desk. You don't really remember printing it.</span>")
 				user.visible_message("[user] stares at the blank screen for a few moments, his expression frozen in fear. When he finally awakens from it, he looks a lot older.", 2)
-				src.arcanecheckout = 0
+				arcanecheckout = 0
 		if(1)
 			// Inventory
 			dat += "<h3>Inventory</h3>"
@@ -81,9 +81,9 @@
 			// Check Out a Book
 
 			dat += {"<h3>Check Out a Book</h3><BR>
-				Book: [src.buffer_book]
+				Book: [buffer_book]
 				<A href='?src=\ref[src];editbook=1'>\[Edit\]</A><BR>
-				Recipient: [src.buffer_mob]
+				Recipient: [buffer_mob]
 				<A href='?src=\ref[src];editmob=1'>\[Edit\]</A><BR>
 				Checkout Date : [world.time/600]<BR>
 				Due Date: [(world.time + checkoutperiod)/600]<BR>
@@ -95,7 +95,7 @@
 			if(!dbcon_old.IsConnected())
 				dat += "<font color=red><b>ERROR</b>: Unable to contact External Archive. Please contact your system administrator for assistance.</font>"
 			else
-				num_results = src.get_num_results()
+				num_results = get_num_results()
 				num_pages = Ceiling(num_results/LIBRARY_BOOKS_PER_PAGE)
 				dat += {"<ul>
 					<li><A href='?src=\ref[src];id=-1'>(Order book by SS<sup>13</sup>BN)</A></li>
@@ -198,7 +198,7 @@
 
 /obj/machinery/computer/library/checkout/emag(mob/user)
 	if(!emagged)
-		src.emagged = 1
+		emagged = 1
 		to_chat(user, "<span class='notice'>You override the library computer's printing restrictions.</span>")
 		return 1
 	return
@@ -252,7 +252,7 @@
 			query.author = null
 
 	if(href_list["search"])
-		num_results = src.get_num_results()
+		num_results = get_num_results()
 		num_pages = Ceiling(num_results/LIBRARY_BOOKS_PER_PAGE)
 		page_num = 0
 
@@ -271,7 +271,7 @@
 				return
 			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted \"[target.title]\", by [target.author] ([target.ckey])!")
 			message_admins("[key_name_admin(usr)] has deleted \"[target.title]\", by [target.author] ([target.ckey])!")
-			src.updateUsrDialog()
+			updateUsrDialog()
 			return
 
 	if(href_list["delbyckey"])
@@ -292,7 +292,7 @@
 				return
 			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted [affected] books written by [tckey]!")
 			message_admins("[key_name_admin(usr)] has deleted [affected] books written by [tckey]!")
-			src.updateUsrDialog()
+			updateUsrDialog()
 			return
 
 	if(href_list["switchscreen"])
@@ -312,7 +312,7 @@
 			if("6")
 				if(!bibledelay)
 
-					var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(src.loc)
+					var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(loc)
 					if(ticker && ( ticker.Bible_icon_state && ticker.Bible_item_state) )
 						B.icon_state = ticker.Bible_icon_state
 						B.item_state = ticker.Bible_item_state
@@ -331,9 +331,9 @@
 			if("8")
 				screenstate = 8
 	if(href_list["arccheckout"])
-		if(src.emagged)
-			src.arcanecheckout = 1
-		src.screenstate = 0
+		if(emagged)
+			arcanecheckout = 1
+		screenstate = 0
 	if(href_list["increasetime"])
 		checkoutperiod += 1
 	if(href_list["decreasetime"])
@@ -438,8 +438,8 @@
 				bibledelay = 0
 			make_external_book(newbook)
 
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
+	add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 /*
@@ -449,7 +449,7 @@
 /obj/machinery/computer/library/checkout/proc/make_external_book(var/datum/cachedbook/newbook)
 	if(!newbook || !newbook.id)
 		return
-	var/obj/item/weapon/book/B = new newbook.path(src.loc)
+	var/obj/item/weapon/book/B = new newbook.path(loc)
 
 	if (!newbook.programmatic)
 		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[newbook.id]")
@@ -463,4 +463,4 @@
 		B.author = newbook.author
 		B.dat = http
 		B.icon_state = "book[rand(1,9)]"
-	src.visible_message("[src]'s printer hums as it produces a completely bound book. How did it do that?")
+	visible_message("[src]'s printer hums as it produces a completely bound book. How did it do that?")

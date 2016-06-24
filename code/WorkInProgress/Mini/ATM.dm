@@ -49,7 +49,7 @@ log transactions
 	if(linked_db && ( (linked_db.stat & NOPOWER) || !linked_db.activated ) )
 		linked_db = null
 		authenticated_account = null
-		src.visible_message("<span class='warning'>[bicon(src)] [src] buzzes rudely, \"Connection to remote database lost.\"</span>")
+		visible_message("<span class='warning'>[bicon(src)] [src] buzzes rudely, \"Connection to remote database lost.\"</span>")
 		updateDialog()
 
 	if(ticks_left_timeout > 0)
@@ -83,7 +83,7 @@ log transactions
 		if(do_after(user, src, 40))
 			user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-			new /obj/item/stack/sheet/metal (src.loc,2)
+			new /obj/item/stack/sheet/metal (loc,2)
 			qdel(src)
 			return
 	if(istype(I, /obj/item/weapon/card/id))
@@ -93,7 +93,7 @@ log transactions
 				held_card = idcard
 				if(authenticated_account && held_card.associated_account_number != authenticated_account.account_number)
 					authenticated_account = null
-				src.attack_hand(user)
+				attack_hand(user)
 	else if(authenticated_account)
 		if(istype(I,/obj/item/weapon/spacecash))
 			var/obj/item/weapon/spacecash/dosh = I
@@ -115,7 +115,7 @@ log transactions
 			authenticated_account.transaction_log.Add(T)
 
 			to_chat(user, "<span class='info'>You insert [I] into [src].</span>")
-			src.attack_hand(user)
+			attack_hand(user)
 			qdel(I)
 	else
 		..()
@@ -419,10 +419,10 @@ log transactions
 			if("balance_statement")
 				if(authenticated_account)
 					if(world.timeofday < lastprint + PRINT_DELAY)
-						to_chat(usr, "<span class='notice'>The [src.name] flashes an error on its display.</span>")
+						to_chat(usr, "<span class='notice'>The [name] flashes an error on its display.</span>")
 						return
 					lastprint = world.timeofday
-					var/obj/item/weapon/paper/R = new(src.loc)
+					var/obj/item/weapon/paper/R = new(loc)
 					R.name = "Account balance: [authenticated_account.owner_name]"
 					R.info = {"<b>NT Automated Teller Account Statement</b><br><br>
 						<i>Account holder:</i> [authenticated_account.owner_name]<br>
@@ -446,7 +446,7 @@ log transactions
 					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 			if("insert_card")
 				if(held_card)
-					held_card.loc = src.loc
+					held_card.loc = loc
 					authenticated_account = null
 
 					if(ishuman(usr) && !usr.get_active_hand())
@@ -463,7 +463,7 @@ log transactions
 				failsafe = 1
 				//usr << browse(null,"window=atm")
 
-	src.attack_hand(usr,failsafe)
+	attack_hand(usr,failsafe)
 
 //create the most effective combination of notes to make up the requested amount
 /obj/machinery/atm/proc/withdraw_arbitrary_sum(var/mob/user,var/arbitrary_sum)

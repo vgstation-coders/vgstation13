@@ -126,9 +126,9 @@ var/list/alldepartments = list("Central Command")
 				if(dpt == "Nanotrasen HR")
 					if(findtext(tofax.stamps, "magnetic"))
 						if(findtext(tofax.name,"Demotion"))
-							new /obj/item/demote_chip(src.loc)
+							new /obj/item/demote_chip(loc)
 						if(findtext(tofax.name,"Commendation"))
-							new /obj/item/mounted/poster(src.loc,-1)
+							new /obj/item/mounted/poster(loc,-1)
 
 			else
 				SendFax(tofax.info, tofax.name, usr, dpt)
@@ -151,7 +151,7 @@ var/list/alldepartments = list("Central Command")
 					usr.put_in_hands(scan)
 				scan = null
 			else
-				scan.loc = src.loc
+				scan.loc = loc
 				scan = null
 		else
 			var/obj/item/I = usr.get_active_hand()

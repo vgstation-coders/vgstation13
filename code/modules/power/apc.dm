@@ -114,7 +114,7 @@
 	// this allows the APC to be embedded in a wall, yet still inside an area
 	if (building)
 		dir = ndir
-	src.tdir = dir		// to fix Vars bug
+	tdir = dir		// to fix Vars bug
 	dir = SOUTH
 
 	if(areaMaster.areaapc)
@@ -123,11 +123,11 @@
 		return
 	areaMaster.set_apc(src)
 
-	if(src.tdir & 3)
+	if(tdir & 3)
 		pixel_x = 0
-		pixel_y = (src.tdir == 1 ? 24 : -24)
+		pixel_y = (tdir == 1 ? 24 : -24)
 	else
-		pixel_x = (src.tdir == 4 ? 24 : -24)
+		pixel_x = (tdir == 4 ? 24 : -24)
 		pixel_y = 0
 
 	if (building==0)
@@ -144,7 +144,7 @@
 	has_electronics = 2 //installed and secured
 	// is starting with a power cell installed, create it and set its charge level
 	if(cell_type)
-		src.cell = new/obj/item/weapon/cell(src)
+		cell = new/obj/item/weapon/cell(src)
 		cell.maxcharge = cell_type	// cell_type is maximum charge (old default was 1000 or 2500 (values one and two respectively)
 		cell.charge = start_charge * cell.maxcharge / 100.0 		// (convert percentage to actual value)
 
@@ -153,7 +153,7 @@
 /obj/machinery/power/apc/finalise_terminal()
 	// create a terminal object at the same position as original turf loc
 	// wires will attach to this
-	terminal = new/obj/machinery/power/terminal {auto_holomap = 0} (src.loc)
+	terminal = new/obj/machinery/power/terminal {auto_holomap = 0} (loc)
 	terminal.dir = tdir
 	terminal.master = src
 	var/turf/T = loc
@@ -374,8 +374,8 @@
 //attack with an item - open/close cover, insert cell, or (un)lock interface
 /obj/machinery/power/apc/attackby(obj/item/W, mob/user)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
-		return src.attack_hand(user)
-	src.add_fingerprint(user)
+		return attack_hand(user)
+	add_fingerprint(user)
 	if (iscrowbar(W) && opened)
 		if (has_electronics==1)
 			if (terminal)
@@ -388,13 +388,13 @@
 				has_electronics = 0
 				if ((stat & BROKEN) || malfhack)
 					user.visible_message(\
-						"<span class='warning'>[user.name] has broken the power control board inside [src.name]!</span>",\
+						"<span class='warning'>[user.name] has broken the power control board inside [name]!</span>",\
 						"You broke the charred power control board and remove the remains.",
 						"You hear a crack!")
 					//ticker.mode:apcs-- //XSI said no and I agreed. -rastaf0
 				else
 					user.visible_message(\
-						"<span class='warning'>[user.name] has removed the power control board from [src.name]!</span>",\
+						"<span class='warning'>[user.name] has removed the power control board from [name]!</span>",\
 						"You remove the power control board.")
 					new /obj/item/weapon/circuitboard/power_control(loc)
 		else if (opened!=2) //cover isn't removed
@@ -426,7 +426,7 @@
 			if(user.drop_item(W, src))
 				cell = W
 				user.visible_message(\
-					"<span class='warning'>[user.name] has inserted the power cell to [src.name]!</span>",\
+					"<span class='warning'>[user.name] has inserted the power cell to [name]!</span>",\
 					"You insert the power cell.")
 				chargecount = 0
 				update_icon()
@@ -471,7 +471,7 @@
 		else if(stat & (BROKEN|MAINT))
 			to_chat(user, "Nothing happens.")
 		else
-			if(src.allowed(usr) && !isWireCut(APC_WIRE_IDSCAN))
+			if(allowed(usr) && !isWireCut(APC_WIRE_IDSCAN))
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
 				update_icon()
@@ -601,13 +601,13 @@
 			update_icon()
 		else
 			if (istype(user, /mob/living/silicon))
-				return src.attack_hand(user)
+				return attack_hand(user)
 			if (!opened && wiresexposed && \
 				(istype(W, /obj/item/device/multitool) || \
 				iswirecutter(W) || istype(W, /obj/item/device/assembly/signaler)))
-				return src.attack_hand(user)
-			/*user.visible_message("<span class='warning'>The [src.name] has been hit with the [W.name] by [user.name]!</span>", \
-				"<span class='warning'>You hit the [src.name] with your [W.name]!</span>", \
+				return attack_hand(user)
+			/*user.visible_message("<span class='warning'>The [name] has been hit with the [W.name] by [user.name]!</span>", \
+				"<span class='warning'>You hit the [name] with your [W.name]!</span>", \
 				"You hear bang")*/
 			..() //Sanity
 
@@ -619,49 +619,49 @@
 	if(!user)
 		return
 	if(!isobserver(user))
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 		if(usr == user && opened)
 			if(cell && Adjacent(user))
 				if(isAI(user))
 					interact(user)
 					return
 				else if(issilicon(user) && !isMoMMI(user)) // MoMMIs can hold one item in their tool slot.
-					cell.loc=src.loc // Drop it, whoops.
+					cell.loc=loc // Drop it, whoops.
 				else
 					user.put_in_hands(cell)
 
 				cell.add_fingerprint(user)
 				cell.updateicon()
 
-				src.cell = null
-				user.visible_message("<span class='warning'>[user.name] removes the power cell from [src.name]!</span>", "You remove the power cell.")
+				cell = null
+				user.visible_message("<span class='warning'>[user.name] removes the power cell from [name]!</span>", "You remove the power cell.")
 //				to_chat(user, "You remove the power cell.")
 				charging = 0
-				src.update_icon()
+				update_icon()
 			return
 		if(stat & (BROKEN|MAINT))
 			return
 
-	src.interact(user)
+	interact(user)
 
 /obj/machinery/power/apc/attack_alien(mob/living/carbon/alien/humanoid/user)
 	if(!user)
 		return
 	user.delayNextAttack(8)
-	user.visible_message("<span class='warning'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
+	user.visible_message("<span class='warning'>[user.name] slashes at the [name]!</span>", "<span class='notice'>You slash at the [name]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
 
 	var/allcut = wires.IsAllCut()
 
 	if(beenhit >= pick(3, 4) && wiresexposed != 1)
 		wiresexposed = 1
-		src.update_icon()
-		src.visible_message("<span class='warning'>The [src.name]'s cover flies open, exposing the wires!</span>")
+		update_icon()
+		visible_message("<span class='warning'>The [name]'s cover flies open, exposing the wires!</span>")
 
 	else if(wiresexposed == 1 && allcut == 0)
 		wires.CutAll()
-		src.update_icon()
-		src.visible_message("<span class='warning'>The [src.name]'s wires are shredded!</span>")
+		update_icon()
+		visible_message("<span class='warning'>The [name]'s wires are shredded!</span>")
 	else
 		beenhit += 1
 	return
@@ -681,8 +681,8 @@
 
 /obj/machinery/power/apc/proc/get_malf_status(mob/user)
 	if (ticker && ticker.mode && (user.mind in ticker.mode.malf_ai) && istype(user, /mob/living/silicon/ai))
-		if (src.malfai == (user:parent ? user:parent : user))
-			if (src.occupant == user)
+		if (malfai == (user:parent ? user:parent : user))
+			if (occupant == user)
 				return 3 // 3 = User is shunted in this APC
 			else if (istype(user.loc, /obj/machinery/power/apc))
 				return 4 // 4 = User is shunted in another APC
@@ -800,7 +800,7 @@
 		var/mob/living/silicon/ai/AI = user
 		var/mob/living/silicon/robot/robot = user
 		if (                                                             \
-			src.aidisabled ||                                            \
+			aidisabled ||                                            \
 			malfhack && istype(malfai) &&                                \
 			(                                                            \
 				(istype(AI) && (malfai!=AI && malfai != AI.parent)) ||   \
@@ -819,7 +819,7 @@
 				nanomanager.close_user_uis(user, src)
 			return 0
 	else
-		if ((!in_range(src, user) || !istype(src.loc, /turf)))
+		if ((!in_range(src, user) || !istype(loc, /turf)))
 			nanomanager.close_user_uis(user, src)
 
 			return 0
@@ -879,7 +879,7 @@
 
 	else if (href_list["overload"])
 		if(istype(usr, /mob/living/silicon))
-			src.overload_lighting()
+			overload_lighting()
 
 	else if (href_list["malfhack"])
 		var/mob/living/silicon/ai/malfai = usr
@@ -892,7 +892,7 @@
 			malfai.malfhacking = 1
 			sleep(600)
 			if(src && malfai)
-				if (!src.aidisabled)
+				if (!aidisabled)
 					malfai.malfhack = null
 					malfai.malfhacking = 0
 					locked = 1
@@ -900,9 +900,9 @@
 						if (STATION_Z == z)
 							ticker.mode:apcs++
 					if(usr:parent)
-						src.malfai = usr:parent
+						malfai = usr:parent
 					else
-						src.malfai = usr
+						malfai = usr
 					to_chat(malfai, "Hack complete. The APC is now under your exclusive control.")
 					update_icon()
 
@@ -932,7 +932,7 @@
 			if (STATION_Z == z)
 				operating ? ticker.mode:apcs++ : ticker.mode:apcs--
 
-	src.update()
+	update()
 	update_icon()
 
 /obj/machinery/power/apc/proc/malfoccupy(var/mob/living/silicon/ai/malf)
@@ -946,36 +946,36 @@
 		return
 	if(STATION_Z != z)
 		return
-	src.occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
-	src.occupant.adjustOxyLoss(malf.getOxyLoss())
-	if(!findtext(src.occupant.name,"APC Copy"))
-		src.occupant.name = "[malf.name] APC Copy"
+	occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
+	occupant.adjustOxyLoss(malf.getOxyLoss())
+	if(!findtext(occupant.name,"APC Copy"))
+		occupant.name = "[malf.name] APC Copy"
 	if(malf.parent)
-		src.occupant.parent = malf.parent
+		occupant.parent = malf.parent
 	else
-		src.occupant.parent = malf
-	malf.mind.transfer_to(src.occupant)
-	src.occupant.eyeobj.name = "[src.occupant.name] (AI Eye)"
+		occupant.parent = malf
+	malf.mind.transfer_to(occupant)
+	occupant.eyeobj.name = "[occupant.name] (AI Eye)"
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.verbs += /mob/living/silicon/ai/proc/corereturn
-	src.occupant.verbs += /datum/game_mode/malfunction/proc/takeover
-	src.occupant.cancel_camera()
+	occupant.verbs += /mob/living/silicon/ai/proc/corereturn
+	occupant.verbs += /datum/game_mode/malfunction/proc/takeover
+	occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)
 			point.the_disk = src //the pinpointer will detect the shunted AI
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)
-	if(!src.occupant)
+	if(!occupant)
 		return
-	if(src.occupant.parent && src.occupant.parent.stat != 2)
-		src.occupant.mind.transfer_to(src.occupant.parent)
-		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
-		src.occupant.parent.cancel_camera()
-		qdel(src.occupant)
-		src.occupant = null
+	if(occupant.parent && occupant.parent.stat != 2)
+		occupant.mind.transfer_to(occupant.parent)
+		occupant.parent.adjustOxyLoss(occupant.getOxyLoss())
+		occupant.parent.cancel_camera()
+		qdel(occupant)
+		occupant = null
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 			for(var/obj/item/weapon/pinpointer/point in world)
 				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
@@ -984,38 +984,38 @@
 						point.the_disk = A //The pinpointer tracks the AI back into its core.
 
 	else
-		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
+		to_chat(occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
-			src.occupant.loc = src.loc
-			src.occupant.death()
-			src.occupant.gib()
+			occupant.loc = loc
+			occupant.death()
+			occupant.gib()
 			for(var/obj/item/weapon/pinpointer/point in world)
 				point.the_disk = null //the pinpointer will go back to pointing at the nuke disc.
 
 
 /obj/machinery/power/apc/proc/ion_act()
 	//intended to be exactly the same as an AI malf attack
-	if(!src.malfhack && STATION_Z == z)
+	if(!malfhack && STATION_Z == z)
 		if(prob(3))
-			src.locked = 1
-			if (src.cell.charge > 0)
-//				to_chat(world, "<span class='warning'>blew APC in [src.loc.loc]</span>")
-				src.cell.charge = 0
+			locked = 1
+			if (cell.charge > 0)
+//				to_chat(world, "<span class='warning'>blew APC in [loc.loc]</span>")
+				cell.charge = 0
 				cell.corrupt()
-				src.malfhack = 1
+				malfhack = 1
 				update_icon()
 				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
-				smoke.set_up(3, 0, src.loc)
+				smoke.set_up(3, 0, loc)
 				smoke.attach(src)
 				smoke.start()
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(3, 1, src)
 				s.start()
 				for(var/mob/M in viewers(src))
-					M.show_message("<span class='warning'>The [src.name] suddenly lets out a blast of smoke and some sparks!</span>", 1, "<span class='warning'>You hear sizzling electronics.</span>", 2)
+					M.show_message("<span class='warning'>The [name] suddenly lets out a blast of smoke and some sparks!</span>", 1, "<span class='warning'>You hear sizzling electronics.</span>", 2)
 
 /obj/machinery/power/apc/can_attach_terminal(mob/user)
-	return user.loc == src.loc && has_electronics != 2 && !terminal
+	return user.loc == loc && has_electronics != 2 && !terminal
 
 /obj/machinery/power/apc/surplus()
 	if(terminal)
@@ -1042,11 +1042,11 @@
 
 	/*
 	if (equipment > 1) // off=0, off auto=1, on=2, on auto=3
-		use_power(src.equip_consumption, EQUIP)
+		use_power(equip_consumption, EQUIP)
 	if (lighting > 1) // off=0, off auto=1, on=2, on auto=3
-		use_power(src.light_consumption, LIGHT)
+		use_power(light_consumption, LIGHT)
 	if (environ > 1) // off=0, off auto=1, on=2, on auto=3
-		use_power(src.environ_consumption, ENVIRON)
+		use_power(environ_consumption, ENVIRON)
 
 	area.calc_lighting() */
 
@@ -1068,7 +1068,7 @@
 
 	var/excess = surplus()
 
-	if(!src.avail())
+	if(!avail())
 		main_status = 0
 	else if(excess < 0)
 		main_status = 1
@@ -1319,8 +1319,8 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		return 0
 
 /obj/machinery/power/apc/cultify()
-	if(src.invisibility != INVISIBILITY_MAXIMUM)
-		src.invisibility = INVISIBILITY_MAXIMUM
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
 
 /obj/machinery/power/apc/change_area(oldarea, newarea)
 	..()

@@ -11,7 +11,7 @@
 	if(prompt == "Cancel")
 		return
 	if(prompt == "Yes")
-		to_chat(world, "<B>[src.key] played sound [S]</B>")
+		to_chat(world, "<B>[key] played sound [S]</B>")
 	log_admin("[key_name(src)] played sound [S]")
 	message_admins("[key_name_admin(src)] played sound [S]", 1)
 	for(var/mob/M in player_list)
@@ -34,7 +34,7 @@
 	log_admin("[key_name(src)] played a local sound [S]")
 	message_admins("[key_name_admin(src)] played a local sound [S]", 1)
 	S.status = SOUND_STREAM | SOUND_UPDATE
-	playsound(get_turf(src.mob), S, 50, 0, 0)
+	playsound(get_turf(mob), S, 50, 0, 0)
 	feedback_add_details("admin_verb","PLS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 

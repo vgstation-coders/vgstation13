@@ -109,8 +109,8 @@
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 			if(anchored)
-				src.anchored = 0
+				anchored = 0
 			else
-				src.anchored = 1
+				anchored = 1
 	else
 		return..()

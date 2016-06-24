@@ -65,7 +65,7 @@
 	return 1
 
 /datum/job/trader/introduce(mob/M, job_title)
-	if(!job_title) job_title = src.title
+	if(!job_title) job_title = title
 
 	to_chat(M, "<B>You are a [job_title].</B>")
 

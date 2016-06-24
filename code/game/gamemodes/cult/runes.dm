@@ -13,13 +13,13 @@
 	return 0
 
 /obj/effect/rune/proc/invocation(var/animation_icon)
-	c_animation = new /atom/movable/overlay(src.loc)
+	c_animation = new /atom/movable/overlay(loc)
 	c_animation.name = "cultification"
 	c_animation.density = 0
 	c_animation.anchored = 1
 	c_animation.icon = 'icons/effects/effects.dmi'
 	c_animation.layer = 5
-	c_animation.master = src.loc
+	c_animation.master = loc
 	c_animation.icon_state = "[animation_icon]"
 	flick("cultification",c_animation)
 	spawn(10)
@@ -124,16 +124,16 @@
 		for(var/mob/M in IP.loc)
 			swapping += M
 
-		for(var/obj/O in src.loc)//sending the items on the rune to the other rune
+		for(var/obj/O in loc)//sending the items on the rune to the other rune
 			if(!O.anchored)
 				O.loc = IP.loc
-		for(var/mob/M in src.loc)
+		for(var/mob/M in loc)
 			M.loc = IP.loc
 
 		for(var/obj/O in swapping)//bringing the items previously marked from the other rune to our rune
-			O.loc = src.loc
+			O.loc = loc
 		for(var/mob/M in swapping)
-			M.loc = src.loc
+			M.loc = loc
 
 		swapping = 0
 		return
@@ -151,8 +151,8 @@
 	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
 	"<span class='warning'>You hear a pop and smell ozone.</span>")
 	if(istype(src,/obj/effect/rune))
-		new /obj/item/weapon/tome(src.loc)
-		src.invocation("tome_spawn")
+		new /obj/item/weapon/tome(loc)
+		invocation("tome_spawn")
 	else
 		new /obj/item/weapon/tome(usr.loc)
 	qdel(src)
@@ -165,7 +165,7 @@
 
 	var/datum/game_mode/cult/cult_round = find_active_mode("cult")
 
-	for(var/mob/living/carbon/M in src.loc)
+	for(var/mob/living/carbon/M in loc)
 		if(iscultist(M))
 			to_chat(usr, "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>")
 			return 0
@@ -312,7 +312,7 @@
 			ticker.mode.eldergod = 0
 			summonturfs = list()
 			summoning = 0
-			new /obj/machinery/singularity/narsie/large(src.loc)
+			new /obj/machinery/singularity/narsie/large(loc)
 			stat_collection.cult.narsie_summoned = 1
 		return
 
@@ -425,7 +425,7 @@
 /////////////////////////////////////////SEVENTH RUNE
 
 /obj/effect/rune/proc/seer()
-	if(usr.loc==src.loc)
+	if(usr.loc==loc)
 		if(usr.seer==1)
 			usr.say("Rash'tla sektath mal[pick("'","`")]zua. Zasan therium viortia.")
 			to_chat(usr, "<span class='warning'>The world beyond fades from your vision.</span>")
@@ -454,7 +454,7 @@
 	var/datum/game_mode/cult/cult_round = find_active_mode("cult")
 
 	var/is_sacrifice_target = 0
-	for(var/mob/living/carbon/human/M in src.loc)
+	for(var/mob/living/carbon/human/M in loc)
 		if(M.stat == DEAD)
 			if(cult_round && (M.mind == cult_round.sacrifice_target))
 				is_sacrifice_target = 1
@@ -562,7 +562,7 @@
 /////////////////////////////////////////TENTH RUNE
 
 /obj/effect/rune/proc/ajourney() //some bits copypastaed from admin tools - Urist
-	if(usr.loc==src.loc)
+	if(usr.loc==loc)
 		var/mob/living/carbon/human/L = usr
 		usr.say("Fwe[pick("'","`")]sh mah erl nyag r'ya!")
 		usr.visible_message("<span class='warning'>[usr]'s eyes glow blue as \he freezes in place, absolutely motionless.</span>", \
@@ -667,7 +667,7 @@
 /obj/effect/rune/proc/talisman()//only tome, communicate, hide, reveal, emp, teleport, deafen, blind, stun and armor runes can be imbued
 	var/obj/item/weapon/paper/newtalisman
 	var/unsuitable_newtalisman = 0
-	for(var/obj/item/weapon/paper/P in src.loc)
+	for(var/obj/item/weapon/paper/P in loc)
 		if(!P.info)
 			newtalisman = P
 			break
@@ -688,52 +688,52 @@
 		if(R==src)
 			continue
 		if(R.word1==cultwords["travel"] && R.word2==cultwords["self"])  //teleport
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "[R.word3]"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["see"] && R.word2==cultwords["blood"] && R.word3==cultwords["hell"]) //tome
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "newtome"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["destroy"] && R.word2==cultwords["see"] && R.word3==cultwords["technology"]) //emp
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "emp"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["blood"] && R.word2==cultwords["see"] && R.word3==cultwords["destroy"]) //conceal
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "conceal"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["hell"] && R.word2==cultwords["destroy"] && R.word3==cultwords["other"]) //armor
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "armor"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["blood"] && R.word2==cultwords["see"] && R.word3==cultwords["hide"]) //reveal
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "revealrunes"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["hide"] && R.word2==cultwords["other"] && R.word3==cultwords["see"]) //deafen
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "deafen"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["destroy"] && R.word2==cultwords["see"] && R.word3==cultwords["other"]) //blind
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "blind"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["self"] && R.word2==cultwords["other"] && R.word3==cultwords["technology"]) //communicate
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "communicate"
 			imbued_from = R
 			break
 		if(R.word1==cultwords["join"] && R.word2==cultwords["hide"] && R.word3==cultwords["technology"]) //stun
-			T = new(src.loc)
+			T = new(loc)
 			T.imbue = "runestun"
 			imbued_from = R
 			break
@@ -1003,10 +1003,10 @@
 
 /obj/effect/rune/proc/wall()
 	usr.say("Khari[pick("'","`")]d! Eske'te tannin!")
-	src.density = !src.density
+	density = !density
 	var/mob/living/user = usr
 	user.take_organ_damage(2, 0)
-	if(src.density)
+	if(density)
 		to_chat(usr, "<span class='warning'>Your blood flows into the rune, and you feel that the very space over the rune thickens.</span>")
 	else
 		to_chat(usr, "<span class='warning'>Your blood flows into the rune, and you feel as the rune releases its grasp on space.</span>")
@@ -1122,7 +1122,7 @@
 			return fizzle()
 		var/turf/T = get_turf(cultist)
 		T.turf_animation('icons/effects/effects.dmi',"rune_teleport")
-		cultist.loc = src.loc
+		cultist.loc = loc
 		cultist.lying = 1
 		cultist.regenerate_icons()
 		to_chat(T, visible_message("<span class='warning'>[cultist] suddenly disappears in a flash of red light!</span>"))
@@ -1247,7 +1247,7 @@
 			culcount++
 	if(culcount >= 5)
 		for(var/obj/effect/rune/R in rune_list)
-			if(R.blood_DNA == src.blood_DNA)
+			if(R.blood_DNA == blood_DNA)
 				for(var/mob/living/M in orange(2,R))
 					M.take_overall_damage(0,15)
 					if (R.invisibility>M.see_invisible)
@@ -1257,7 +1257,7 @@
 					var/turf/T = get_turf(R)
 					T.hotspot_expose(700,125,surfaces=1)
 		for(var/obj/effect/decal/cleanable/blood/B in world)
-			if(B.blood_DNA == src.blood_DNA)
+			if(B.blood_DNA == blood_DNA)
 				for(var/mob/living/M in orange(1,B))
 					M.take_overall_damage(0,5)
 					to_chat(M, "<span class='warning'>The blood suddenly ignites, burning you!</span>")
@@ -1324,7 +1324,7 @@
 		return
 	else
 		usr.say("Sa tatha najin")
-		for(var/mob/living/M in src.loc)
+		for(var/mob/living/M in loc)
 			if(iscultist(M))
 				if(ishuman(M))
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
@@ -1354,28 +1354,28 @@
 						construct_class = input("Please choose which type of construct you wish [M] to become.", "Construct Transformation") in construct_types
 						switch(construct_class)
 							if("Juggernaut")
-								var/mob/living/simple_animal/construct/armoured/C = new /mob/living/simple_animal/construct/armoured (get_turf(src.loc))
+								var/mob/living/simple_animal/construct/armoured/C = new /mob/living/simple_animal/construct/armoured (get_turf(loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now a Juggernaut. Though slow, your shell can withstand extreme punishment, create temporary walls and even deflect energy weapons, and rip apart enemies and walls alike.</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
 							if("Wraith")
-								var/mob/living/simple_animal/construct/wraith/C = new /mob/living/simple_animal/construct/wraith (get_turf(src.loc))
+								var/mob/living/simple_animal/construct/wraith/C = new /mob/living/simple_animal/construct/wraith (get_turf(loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are a now Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls.</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
 							if("Artificer")
-								var/mob/living/simple_animal/construct/builder/C = new /mob/living/simple_animal/construct/builder (get_turf(src.loc))
+								var/mob/living/simple_animal/construct/builder/C = new /mob/living/simple_animal/construct/builder (get_turf(loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now an Artificer. You are incredibly weak and fragile, but you are able to construct new floors and walls, to break some walls apart, to repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
 							if("Harvester")
-								var/mob/living/simple_animal/construct/harvester/C = new /mob/living/simple_animal/construct/harvester (get_turf(src.loc))
+								var/mob/living/simple_animal/construct/harvester/C = new /mob/living/simple_animal/construct/harvester (get_turf(loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
@@ -1386,21 +1386,21 @@
 						construct_class = input("Please choose which type of construct you wish [M] to become.", "Construct Transformation") in construct_types
 						switch(construct_class)
 							if("Juggernaut")
-								var/mob/living/simple_animal/construct/armoured/C = new /mob/living/simple_animal/construct/armoured (get_turf(src.loc))
+								var/mob/living/simple_animal/construct/armoured/C = new /mob/living/simple_animal/construct/armoured (get_turf(loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now a Juggernaut. Though slow, your shell can withstand extreme punishment, create temporary walls and even deflect energy weapons, and rip apart enemies and walls alike.</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
 							if("Wraith")
-								var/mob/living/simple_animal/construct/wraith/C = new /mob/living/simple_animal/construct/wraith (get_turf(src.loc))
+								var/mob/living/simple_animal/construct/wraith/C = new /mob/living/simple_animal/construct/wraith (get_turf(loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are a now Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls.</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
 							if("Artificer")
-								var/mob/living/simple_animal/construct/builder/C = new /mob/living/simple_animal/construct/builder (get_turf(src.loc))
+								var/mob/living/simple_animal/construct/builder/C = new /mob/living/simple_animal/construct/builder (get_turf(loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null

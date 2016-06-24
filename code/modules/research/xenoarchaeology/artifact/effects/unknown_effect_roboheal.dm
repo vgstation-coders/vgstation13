@@ -17,7 +17,7 @@
 
 /datum/artifact_effect/roboheal/DoEffectAura()
 	if(holder)
-		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
+		for (var/mob/living/silicon/robot/M in range(effectrange,holder))
 			if(prob(10))
 				to_chat(M, "<span class='notice'>SYSTEM ALERT: Beneficial energy field detected!</span>")
 			M.adjustBruteLoss(-1)
@@ -27,7 +27,7 @@
 
 /datum/artifact_effect/roboheal/DoEffectPulse()
 	if(holder)
-		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
+		for (var/mob/living/silicon/robot/M in range(effectrange,holder))
 			to_chat(M, "<span class='notice'>SYSTEM ALERT: Structural damage has been repaired by energy pulse!</span>")
 			M.adjustBruteLoss(-10)
 			M.adjustFireLoss(-10)

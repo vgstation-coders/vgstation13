@@ -40,7 +40,7 @@
 /obj/machinery/computer/skills/attack_hand(mob/user as mob)
 	if(..())
 		return
-	if (src.z > 6)
+	if (z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 	var/dat
@@ -198,16 +198,16 @@ What a mess.*/
 
 			if("Log In")
 				if (istype(usr, /mob/living/silicon/ai))
-					src.active1 = null
-					src.authenticated = usr.name
-					src.rank = "AI"
-					src.screen = 1
+					active1 = null
+					authenticated = usr.name
+					rank = "AI"
+					screen = 1
 				else if (istype(usr, /mob/living/silicon/robot))
-					src.active1 = null
-					src.authenticated = usr.name
+					active1 = null
+					authenticated = usr.name
 					var/mob/living/silicon/robot/R = usr
-					src.rank = R.braintype
-					src.screen = 1
+					rank = R.braintype
+					screen = 1
 				else if (istype(scan, /obj/item/weapon/card/id))
 					active1 = null
 					if(check_access(scan))

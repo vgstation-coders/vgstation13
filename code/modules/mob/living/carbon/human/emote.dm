@@ -9,19 +9,19 @@
 	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
 
-	var/muzzled = istype(src.wear_mask, /obj/item/clothing/mask/muzzle)
+	var/muzzled = istype(wear_mask, /obj/item/clothing/mask/muzzle)
 	//var/m_type = VISIBLE
 
 	for (var/obj/item/weapon/implant/I in src)
 		if (I.implanted)
 			I.trigger(act, src)
 
-	if(src.stat == 2.0 && (act != "deathgasp"))
+	if(stat == 2.0 && (act != "deathgasp"))
 		return
 
 	switch(act)
 		if ("airguitar")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> is strumming the air and headbanging like a safari chimp."
 				m_type = VISIBLE
 
@@ -34,7 +34,7 @@
 			m_type = VISIBLE
 
 		if ("bow")
-			if (!src.locked_to)
+			if (!locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -58,7 +58,7 @@
 			if (input2 == "Visible")
 				m_type = VISIBLE
 			else if (input2 == "Hearable")
-				if (src.miming)
+				if (miming)
 					return
 				m_type = HEARABLE
 			else
@@ -69,11 +69,11 @@
 		if ("me")
 			if(silent)
 				return
-			if (src.client)
+			if (client)
 				if (client.prefs.muted & MUTE_IC)
 					to_chat(src, "<span class = 'warning'>You cannot send IC messages (muted).</span>")
 					return
-				if (src.client.handle_spam_prevention(message,MUTE_IC))
+				if (client.handle_spam_prevention(message,MUTE_IC))
 					return
 			if (stat)
 				return
@@ -82,7 +82,7 @@
 			return custom_emote(m_type, message)
 
 		if ("salute")
-			if (!src.locked_to)
+			if (!locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -111,19 +111,19 @@
 					m_type = HEARABLE
 
 		if ("clap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> claps."
 				m_type = HEARABLE
 				if(miming)
 					m_type = VISIBLE
 		if ("flap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> flaps \his wings."
 				m_type = HEARABLE
 				if(miming)
 					m_type = VISIBLE
-				if(src.wear_suit && istype(src.wear_suit,/obj/item/clothing/suit/clownpiece))
-					var/obj/item/clothing/suit/clownpiece/wings = src.wear_suit
+				if(wear_suit && istype(wear_suit,/obj/item/clothing/suit/clownpiece))
+					var/obj/item/clothing/suit/clownpiece/wings = wear_suit
 					wings.icon_state = "clownpiece-fly"
 					update_inv_wear_suit(1)
 					spawn(5)
@@ -131,13 +131,13 @@
 						update_inv_wear_suit(1)
 
 		if ("aflap")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> flaps \his wings ANGRILY!"
 				m_type = HEARABLE
 				if(miming)
 					m_type = VISIBLE
-				if(src.wear_suit && istype(src.wear_suit,/obj/item/clothing/suit/clownpiece))
-					var/obj/item/clothing/suit/clownpiece/wings = src.wear_suit
+				if(wear_suit && istype(wear_suit,/obj/item/clothing/suit/clownpiece))
+					var/obj/item/clothing/suit/clownpiece/wings = wear_suit
 					wings.icon_state = "clownpiece-fly"
 					update_inv_wear_suit(1)
 					spawn(5)
@@ -174,9 +174,9 @@
 
 		if ("faint")
 			message = "<B>[src]</B> faints."
-			if(src.sleeping)
+			if(sleeping)
 				return //Can't faint while asleep
-			src.sleeping += 10 //Short-short nap
+			sleeping += 10 //Short-short nap
 			m_type = VISIBLE
 
 		if ("cough")
@@ -221,7 +221,7 @@
 
 		if ("deathgasp")
 			if(M_ELVIS in mutations)
-				src.emote("fart")
+				emote("fart")
 				message = "<B>[src]</B> has left the building..."
 			if(M_HARDCORE in mutations)
 				message = "<B>[src]</B> whispers with his final breath, <i>'i told u i was hardcore..'</i>"
@@ -379,11 +379,11 @@
 					message = "<B>[src]</B> takes a drag from a cigarette and blows \"[M]\" out in smoke."
 					m_type = VISIBLE
 				else
-					message = "<B>[src]</B> says, \"[M], please. He had a family.\" [src.name] takes a drag from a cigarette and blows his name out in smoke."
+					message = "<B>[src]</B> says, \"[M], please. He had a family.\" [name] takes a drag from a cigarette and blows his name out in smoke."
 					m_type = HEARABLE
 
 		if ("point")
-			if (!src.restrained())
+			if (!restrained())
 				var/atom/object_pointed = null
 
 				if(param)
@@ -400,7 +400,7 @@
 			m_type = VISIBLE
 
 		if ("raise")
-			if (!src.restrained())
+			if (!restrained())
 				message = "<B>[src]</B> raises a hand."
 			m_type = VISIBLE
 
@@ -413,7 +413,7 @@
 			m_type = VISIBLE
 
 		if ("signal")
-			if (!src.restrained())
+			if (!restrained())
 				var/t1 = round(text2num(param))
 
 				var/maximum_finger_amount = 0
@@ -512,7 +512,7 @@
 
 		if("hug")
 			m_type = VISIBLE
-			if (!src.restrained())
+			if (!restrained())
 				var/M = null
 				if (param)
 					for (var/mob/A in view(1, null))
@@ -529,7 +529,7 @@
 
 		if ("handshake")
 			m_type = VISIBLE
-			if (!src.restrained() && !get_held_item_by_index(GRASP_RIGHT_HAND))
+			if (!restrained() && !get_held_item_by_index(GRASP_RIGHT_HAND))
 				var/mob/M = null
 				if (param)
 					for (var/mob/A in view(1, null))
@@ -547,7 +547,7 @@
 
 		if("dap")
 			m_type = VISIBLE
-			if (!src.restrained())
+			if (!restrained())
 				var/M = null
 				if (param)
 					for (var/mob/A in view(1, null))
@@ -570,7 +570,7 @@
 							if(world.time-lastScream >= 30)//prevent scream spam with things like poly spray
 								message = "<B>[src]</B> screams in agony!"
 								var/list/screamSound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
-								if (src.gender == FEMALE) //Females have their own screams. Trannys be damned.
+								if (gender == FEMALE) //Females have their own screams. Trannys be damned.
 									screamSound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 								var/scream = pick(screamSound)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
 								playsound(get_turf(src), scream, 50, 0)
@@ -585,10 +585,10 @@
 
 		// Needed for M_TOXIC_FART
 		if("fart")
-			if(src.op_stage.butt != 4)
+			if(op_stage.butt != 4)
 				if(world.time-lastFart >= 400)
 					for(var/mob/living/M in view(0))
-						if(M != src && M.loc == src.loc)
+						if(M != src && M.loc == loc)
 							if(!miming)
 								visible_message("<span class = 'warning'><b>[src]</b> farts in <b>[M]</b>'s face!</span>")
 							else
@@ -703,31 +703,31 @@
 
 					lastFart=world.time
 
-					var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in src.loc
+					var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in loc
 					if(B)
 						if(iscult(src))
 							to_chat(src, "<span class='sinister'>Nar-Sie shields you from [B.deity_name]'s wrath!</span>")
 						else
-							if(istype(src.head, /obj/item/clothing/head/fedora))
+							if(istype(head, /obj/item/clothing/head/fedora))
 								to_chat(src, "<span class='notice'>You feel incredibly enlightened after farting on [B]!</span>")
-								var/obj/item/clothing/head/fedora/F = src.head
+								var/obj/item/clothing/head/fedora/F = head
 								F.tip_fedora()
 							else
 								to_chat(src, "<span class='danger'>You feel incredibly guilty for farting on [B]!</span>")
 							if(prob(80)) //20% chance to escape God's justice
 								spawn(rand(10,30))
 									if(src && B)
-										src.show_message("<span class='game say'><span class='name'>[B.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+										show_message("<span class='game say'><span class='name'>[B.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
 
 										sleep(10)
 
 										if(src && B)
 											to_chat(src, "<span class='danger'>You were disintegrated by [B.deity_name]'s bolt of lightning.</span>")
-											src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.deity_name]'s wrath.</font>")
+											attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.deity_name]'s wrath.</font>")
 
 											explosion(get_turf(src),-1,-1,1,5) //Tiny explosion with flash
 
-											src.dust()
+											dust()
 				else
 					message = "<b>[src]</b> strains, and nothing happens."
 					m_type = VISIBLE
@@ -763,7 +763,7 @@
 			for (var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)
 		else if (m_type & 2)
-			for (var/mob/O in hearers(src.loc, null))
+			for (var/mob/O in hearers(loc, null))
 				O.show_message(message, m_type)
 
 /mob/living/carbon/human/verb/pose()

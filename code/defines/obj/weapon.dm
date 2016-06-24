@@ -14,7 +14,7 @@
 	hitsound = 'sound/weapons/ring.ogg'
 
 /obj/item/weapon/phone/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
 
 /*/obj/item/weapon/syndicate_uplink
@@ -60,7 +60,7 @@
 	throw_range = 20
 
 /obj/item/weapon/bananapeel/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
+	to_chat(viewers(user), "<span class='danger'>[user] drops the [name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
 	return(OXYLOSS)
 
 /obj/item/weapon/corncob
@@ -193,7 +193,7 @@
 	var/thrown_from
 
 /obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
@@ -215,17 +215,17 @@
 	var/xadjust = 0
 	var/yadjust = 0
 	var/scaler = 0 //used to changed the normalised vector to the proper size
-	scaler = throw_range / max(abs(target.x - src.x), abs(target.y - src.y),1) //whichever is larger magnitude is what we normalise to
-	if (target.x - src.x != 0) //just to avoid fucking with math for no reason
-		xadjust = round((target.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
-		adjtarget.x = src.x + xadjust //the new target at max range
+	scaler = throw_range / max(abs(target.x - x), abs(target.y - y),1) //whichever is larger magnitude is what we normalise to
+	if (target.x - x != 0) //just to avoid fucking with math for no reason
+		xadjust = round((target.x - x) * scaler) //normalised vector is now scaled up to throw_range
+		adjtarget.x = x + xadjust //the new target at max range
 	else
-		adjtarget.x = src.x
-	if (target.y - src.y != 0)
-		yadjust = round((target.y - src.y) * scaler)
-		adjtarget.y = src.y + yadjust
+		adjtarget.x = x
+	if (target.y - y != 0)
+		yadjust = round((target.y - y) * scaler)
+		adjtarget.y = y + yadjust
 	else
-		adjtarget.y = src.y
+		adjtarget.y = y
 	// log_admin("Adjusted target of [adjtarget.x] and [adjtarget.y], adjusted with [xadjust] and [yadjust] from [scaler]")
 	..(get_turf(adjtarget), throw_range, throw_speed)
 	thrown_from = null
@@ -242,7 +242,7 @@
 					H.Stun(2) //used instead of setting damage in vars to avoid non-human targets being affected
 					H.Weaken(4)
 					H.legcuffed = src //applies legcuff properties inherited through legcuffs
-					src.loc = H
+					loc = H
 					H.update_inv_legcuffed()
 					if(!H.legcuffed) //in case it didn't happen, we need a safety net
 						throw_failed()
@@ -312,12 +312,12 @@
 
 /obj/item/weapon/legcuffs/bolas/cable/throw_failed()
 	if(prob(20))
-		src.visible_message("<span class='rose'>\The [src] falls to pieces on impact!</span>")
+		visible_message("<span class='rose'>\The [src] falls to pieces on impact!</span>")
 		if(weight1)
-			weight1.loc = src.loc
+			weight1.loc = loc
 			weight1 = null
 		if(weight2)
-			weight2.loc = src.loc
+			weight2.loc = loc
 			weight2 = null
 		update_icon(src)
 
@@ -391,7 +391,7 @@
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 
 /obj/item/weapon/legcuffs/beartrap/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is putting the [name] on \his head! It looks like \he's trying to commit suicide.</span>")
 	return (BRUTELOSS)
 
 /obj/item/weapon/legcuffs/beartrap/update_icon()
@@ -437,18 +437,18 @@
 				return
 	if(isscrewdriver(I))
 		if(IED)
-			IED.loc = get_turf(src.loc)
+			IED.loc = get_turf(loc)
 			IED = null
 			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
 			return
 	..()
 
 /obj/item/weapon/legcuffs/beartrap/Crossed(AM as mob|obj)
-	if(armed && isliving(AM) && isturf(src.loc))
+	if(armed && isliving(AM) && isturf(loc))
 		var/mob/living/L = AM
 
 		if(L.on_foot()) //Flying mobs can't get caught in beartraps! Note that this also prevents lying mobs from triggering traps
-			if(IED && isturf(src.loc))
+			if(IED && isturf(loc))
 				IED.active = 1
 				IED.overlays -= image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
 				IED.icon_state = initial(icon_state) + "_active"
@@ -461,14 +461,14 @@
 				spawn(IED.det_time)
 					IED.prime()
 
-					src.desc = initial(src.desc)
+					desc = initial(desc)
 
 			if(ishuman(L))
 				var/mob/living/carbon/H = AM
 				if(H.m_intent == "run")
 					armed = 0
 					H.legcuffed = src
-					src.loc = H
+					loc = H
 					H.update_inv_legcuffed()
 
 					feedback_add_details("handcuffs","B") //Yes, I know they're legcuffs. Don't change this, no need for an extra variable. The "B" is used to tell them apart.
@@ -554,8 +554,8 @@
 		if(istype(AM, /mob/living/carbon) && !istype(AM, /mob/living/carbon/brain))
 			var/mob/living/carbon/C = AM
 			if(C.m_intent != "walk")
-				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
-				explosion(src.loc,-1,2,0)
+				visible_message("The [name] beeps, \"Running on wet floors is hazardous to your health.\"")
+				explosion(loc,-1,2,0)
 				if(ishuman(C))
 					dead_legs(C)
 				if(src)
@@ -594,13 +594,13 @@
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
 			if(do_after(user, src, 60))
 				to_chat(user, "You cut \the [src] into a gun stock.")
-				if(src.loc == user)
+				if(loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/metal_gun_stock/I = new (get_turf(user))
 					user.put_in_hands(I)
 					qdel(src)
 				else
-					new /obj/item/weapon/metal_gun_stock(get_turf(src.loc))
+					new /obj/item/weapon/metal_gun_stock(get_turf(loc))
 					qdel(src)
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -773,7 +773,7 @@
 	attack_verb = list("whips", "lashes", "disciplines", "tickles")
 
 /obj/item/weapon/wire/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [name]! It looks like \he's trying to commit suicide.</span>")
 	return (OXYLOSS)
 
 /obj/item/weapon/module

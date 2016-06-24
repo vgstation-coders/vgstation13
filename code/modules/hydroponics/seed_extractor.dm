@@ -67,7 +67,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 			return
 		user.drop_item(force_drop = 1)
 		moveToStorage(O)
-		to_chat(user, "<span class='notice'>You add [O] to [src.name].</span>")
+		to_chat(user, "<span class='notice'>You add [O] to [name].</span>")
 		updateUsrDialog()
 		return
 
@@ -111,7 +111,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 			var/t_amount = 0
 			var/t_max = rand(1,4)
 			while(t_amount < t_max)
-				new F.nonplant_seed_type(src.loc)
+				new F.nonplant_seed_type(loc)
 				t_amount++
 			qdel(F)
 
@@ -125,8 +125,8 @@ datum/seed_pile //Maybe there's a better way to do this.
 	var/amount
 
 datum/seed_pile/New(var/seed, var/amount = 1)
-	src.seed = seed
-	src.amount = amount
+	seed = seed
+	amount = amount
 
 /obj/machinery/seed_extractor/attack_hand(mob/user as mob)
 	interact(user)
@@ -207,11 +207,11 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 	for (var/obj/item/seeds/O in contents) //Now we find the seed we need to vend
 		//if (O.seed.display_name == href_list["name"] && O.seed.lifespan == href_list["li"] && O.seed.endurance == href_list["en"] && O.seed.maturation == href_list["ma"] && O.seed.production == href_list["pr"] && O.seed.yield == href_list["yi"] && O.seed.potency == href_list["pot"] && href_list["biolum_colour"] == O.seed.biolum_colour && href_list["gasexude"] == O.seed.exude_gasses.len && O.seed.spread == href_list["spread"] && O.seed.alter_temp == href_list["alter_temp"] && O.seed.carnivorous == href_list["carnivorous"] && O.seed.parasite == href_list["parasite"] && O.seed.hematophage == href_list["hematophage"] && O.seed.thorny == href_list["thorny"] && O.seed.stinging == href_list["stinging"] && O.seed.ligneous == href_list["ligneous"] && O.seed.teleporting == href_list["teleporting"] && O.seed.juicy == href_list["juicy"]) //If the spaghetti above wasn't proof enough, the length of of this line alone should tell you that something is probably very very wrong here and this whole fucking file probably shouldn't work the way it does. What it SHOULD do is just store the seed datum itself and check the stored seed's seed datum, which would be infinitely simpler. However, since no other machines use or are dependent on this shitcode, and due to the fact that seed datums will likely not be re-structured much if at all in the future, to that I say fuck it, it just werks. Sincerely, please don't git blame me I only intended well, oh god don't take my pomfcoins way no i didn't even come up with this system originally i just ported it and lazily expanded it please okay there I made it not shit chickenman no
 		if(O.seed == S)
-			O.forceMove(src.loc)
+			O.forceMove(loc)
 			amt--
 			if (amt <= 0) break
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)

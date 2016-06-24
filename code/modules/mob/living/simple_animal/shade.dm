@@ -49,7 +49,7 @@
 	..()
 	if(stat == 2)
 		for(var/i=0;i<3;i++)
-			new /obj/item/weapon/ectoplasm (src.loc)
+			new /obj/item/weapon/ectoplasm (loc)
 		for(var/mob/M in viewers(src, null))
 			if((M.client && !( M.blinded )))
 				M.show_message("<span class='warning'> [src] lets out a contented sigh as their form unwinds.</span>")
@@ -82,7 +82,7 @@
 	return
 
 /mob/living/simple_animal/shade/shuttle_act()
-	if(!(src.flags & INVULNERABLE))
+	if(!(flags & INVULNERABLE))
 		health -= rand(5,45) //These guys are like ghosts, a collision with a shuttle wouldn't destroy one outright
 	return
 

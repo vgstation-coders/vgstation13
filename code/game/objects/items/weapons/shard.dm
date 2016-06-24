@@ -22,17 +22,17 @@
 
 /obj/item/weapon/shard/New()
 
-	src.icon_state = pick("large", "medium", "small")
-	switch(src.icon_state)
+	icon_state = pick("large", "medium", "small")
+	switch(icon_state)
 		if("small")
-			src.pixel_x = rand(-12, 12)
-			src.pixel_y = rand(-12, 12)
+			pixel_x = rand(-12, 12)
+			pixel_y = rand(-12, 12)
 		if("medium")
-			src.pixel_x = rand(-8, 8)
-			src.pixel_y = rand(-8, 8)
+			pixel_x = rand(-8, 8)
+			pixel_y = rand(-8, 8)
 		if("large")
-			src.pixel_x = rand(-5, 5)
-			src.pixel_y = rand(-5, 5)
+			pixel_x = rand(-5, 5)
+			pixel_y = rand(-5, 5)
 		else
 	..()
 	return
@@ -48,7 +48,7 @@
 
 /obj/item/weapon/shard/plasma/New()
 	..()
-	src.icon_state = pick("plasmalarge", "plasmamedium", "plasmasmall")
+	icon_state = pick("plasmalarge", "plasmamedium", "plasmasmall")
 	return
 
 /obj/item/weapon/shard/shrapnel
@@ -62,7 +62,7 @@
 
 /obj/item/weapon/shard/shrapnel/New()
 	..()
-	src.icon_state = pick("shrapnellarge", "shrapnelmedium", "shrapnelsmall")
+	icon_state = pick("shrapnellarge", "shrapnelmedium", "shrapnelsmall")
 	return
 
 /obj/item/weapon/shard/suicide_act(mob/user)
@@ -81,9 +81,9 @@
 
 	spawn( 0 )
 		if (prob(20))
-			src.force = initial(src.force) + rand(3,8)
+			force = initial(force) + rand(3,8)
 		else
-			src.force = max(1, initial(src.force) - rand(1,4))
+			force = max(1, initial(force) - rand(1,4))
 		..()
 		return
 	return

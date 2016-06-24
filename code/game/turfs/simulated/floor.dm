@@ -57,7 +57,7 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 	burn_tile()
 
 //turf/simulated/floor/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-//	if ((istype(mover, /obj/machinery/vehicle) && !(src.burnt)))
+//	if ((istype(mover, /obj/machinery/vehicle) && !(burnt)))
 //		if (!( locate(/obj/machinery/mass_driver, src) ))
 //			return 0
 //	return ..()
@@ -66,29 +66,29 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 	//set src in oview(1)
 	switch(severity)
 		if(1.0)
-			src.ChangeTurf(get_base_turf(src.z))
+			ChangeTurf(get_base_turf(z))
 		if(2.0)
 			switch(pick(1,2;75,3))
 				if (1)
-					src.ReplaceWithLattice()
+					ReplaceWithLattice()
 					if(prob(33))
 						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 						M.amount = 1
 				if(2)
-					src.ChangeTurf(get_base_turf(src.z))
+					ChangeTurf(get_base_turf(z))
 				if(3)
 					if(prob(80))
-						src.break_tile_to_plating()
+						break_tile_to_plating()
 					else
-						src.break_tile()
-					src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+						break_tile()
+					hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 					if(prob(33))
 						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 						M.amount = 1
 		if(3.0)
 			if (prob(50))
-				src.break_tile()
-				src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+				break_tile()
+				hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 	return
 
 /turf/simulated/floor/blob_act()
@@ -194,7 +194,7 @@ turf/simulated/floor/update_icon()
 
 
 /turf/simulated/floor/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /turf/simulated/floor/attack_hand(mob/user as mob)
 	if (is_light_floor())
@@ -268,22 +268,22 @@ turf/simulated/floor/update_icon()
 	if(istype(src,/turf/simulated/floor/engine)) return
 	if(broken) return
 	if(is_plasteel_floor())
-		src.icon_state = "damaged[pick(1,2,3,4,5)]"
+		icon_state = "damaged[pick(1,2,3,4,5)]"
 		broken = 1
 	else if(is_light_floor())
-		src.icon_state = "light_broken"
+		icon_state = "light_broken"
 		broken = 1
 	else if(is_plating())
-		src.icon_state = "platingdmg[pick(1,2,3)]"
+		icon_state = "platingdmg[pick(1,2,3)]"
 		broken = 1
 	else if(is_wood_floor())
-		src.icon_state = "wood-broken"
+		icon_state = "wood-broken"
 		broken = 1
 	else if((is_carpet_floor()) || (is_arcade_floor()))
-		src.icon_state = "carpet-broken"
+		icon_state = "carpet-broken"
 		broken = 1
 	else if(is_grass_floor())
-		src.icon_state = "sand[pick("1","2","3")]"
+		icon_state = "sand[pick("1","2","3")]"
 		broken = 1
 	else if(is_mineral_floor())
 		if(material=="diamond") return //diamond doesn't break
@@ -294,28 +294,28 @@ turf/simulated/floor/update_icon()
 				make_plating()
 			return
 
-		src.icon_state = "[material]_broken"
+		icon_state = "[material]_broken"
 
 /turf/simulated/floor/proc/burn_tile()
 	if(istype(src,/turf/simulated/floor/engine)) return
 	if(istype(src,/turf/unsimulated/floor/asteroid)) return//Asteroid tiles don't burn
 	if(is_plasteel_floor())
-		src.icon_state = "damaged[pick(1,2,3,4,5)]"
+		icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
 	else if(is_plasteel_floor())
-		src.icon_state = "floorscorched[pick(1,2)]"
+		icon_state = "floorscorched[pick(1,2)]"
 		burnt = 1
 	else if(is_plating())
-		src.icon_state = "panelscorched"
+		icon_state = "panelscorched"
 		burnt = 1
 	else if(is_wood_floor())
-		src.icon_state = "wood-broken"
+		icon_state = "wood-broken"
 		burnt = 1
 	else if((is_carpet_floor()) || (is_arcade_floor()))
-		src.icon_state = "carpet-broken"
+		icon_state = "carpet-broken"
 		burnt = 1
 	else if(is_grass_floor())
-		src.icon_state = "sand[pick("1","2","3")]"
+		icon_state = "sand[pick("1","2","3")]"
 		burnt = 1
 	else if(is_mineral_floor())
 		burnt = 1

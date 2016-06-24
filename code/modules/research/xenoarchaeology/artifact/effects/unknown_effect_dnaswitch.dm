@@ -30,7 +30,7 @@
 
 /datum/artifact_effect/dnaswitch/DoEffectAura()
 	if(holder)
-		for(var/mob/living/carbon/human/H in range(src.effectrange,holder))
+		for(var/mob/living/carbon/human/H in range(effectrange,holder))
 			var/weakness = GetAnomalySusceptibility(H)
 			if(prob(weakness * 100))
 				if(prob(30))

@@ -107,7 +107,7 @@
 	id="moneybag"
 	name="Money Bag"
 	result=/obj/item/weapon/storage/bag/money
-	
+
 /datum/biogen_recipe/leather/plants
 	cost=350
 	id="plants"
@@ -261,9 +261,9 @@
 	update_icon()
 
 /obj/machinery/biogenerator/update_icon()
-	if(!src.beaker)
+	if(!beaker)
 		icon_state = "biogen-empty"
-	else if(!src.processing)
+	else if(!processing)
 		icon_state = "biogen-stand"
 	else
 		icon_state = "biogen-work"
@@ -340,7 +340,7 @@
 				to_chat(user, "<span class='notice'>You empty the plant bag into the biogenerator.</span>")
 
 	else if(!istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
-		to_chat(user, "<span class='warning'>You cannot put this in [src.name]</span>")
+		to_chat(user, "<span class='warning'>You cannot put this in [name]</span>")
 	else
 		var/i = 0
 		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
@@ -349,7 +349,7 @@
 			to_chat(user, "<span class='warning'>The biogenerator is full! Activate it.</span>")
 		else
 			if(user.drop_item(O, src))
-				to_chat(user, "<span class='notice'>You put [O.name] in [src.name]</span>")
+				to_chat(user, "<span class='notice'>You put [O.name] in [name]</span>")
 	update_icon()
 	return
 
@@ -419,9 +419,9 @@
 /obj/machinery/biogenerator/proc/activate()
 	if (usr.stat != 0)
 		return
-	if (src.stat != 0) //NOPOWER etc
+	if (stat != 0) //NOPOWER etc
 		return
-	if(src.processing)
+	if(processing)
 		to_chat(usr, "<span class='warning'>The biogenerator is in the process of working.</span>")
 		return
 	var/S = 0
@@ -469,10 +469,10 @@
 		beaker.reagents.add_reagent(recipe.reagent,recipe.amount_per_unit*num)
 	else
 		if(ispath(recipe.result,/obj/item/stack))
-			drop_stack(recipe.result, src.loc, num*recipe.amount_per_unit, 1, null)
+			drop_stack(recipe.result, loc, num*recipe.amount_per_unit, 1, null)
 		else
 			for(var/i=0;i<num;i++)
-				new recipe.result(src.loc)
+				new recipe.result(loc)
 	processing = 0
 	menustat = "complete"
 	update_icon()
@@ -491,7 +491,7 @@
 			activate()
 		if("detach")
 			if(beaker)
-				beaker.loc = src.loc
+				beaker.loc = loc
 				beaker = null
 				update_icon()
 		if("create")

@@ -50,17 +50,17 @@
 			display_colour = "#1b521f"	//dark green
 		else if(holder.rights & R_ADMIN)
 			if(config.allow_admin_ooccolor)
-				display_colour = src.prefs.ooccolor
+				display_colour = prefs.ooccolor
 			else
 				display_colour = "#b82e00"	//orange
 
 	for(var/client/C in clients)
 		if(C.prefs.toggles & CHAT_OOC)
-			var/display_name = src.key
+			var/display_name = key
 			if(holder)
 				if(holder.fakekey)
 					if(C.holder)
-						display_name = "[holder.fakekey]/([src.key])"
+						display_name = "[holder.fakekey]/([key])"
 					else
 						display_name = holder.fakekey
 			to_chat(C, "<font color='[display_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>")
@@ -68,16 +68,16 @@
 			if(holder)
 				if(!holder.fakekey || C.holder)
 					if(holder.rights & R_ADMIN)
-						to_chat(C, "<font color=[config.allow_admin_ooccolor ? src.prefs.ooccolor :"#b82e00" ]><b><span class='prefix'>OOC:</span> <EM>[key][holder.fakekey ? "/([holder.fakekey])" : ""]:</EM> <span class='message'>[msg]</span></b></font>")
+						to_chat(C, "<font color=[config.allow_admin_ooccolor ? prefs.ooccolor :"#b82e00" ]><b><span class='prefix'>OOC:</span> <EM>[key][holder.fakekey ? "/([holder.fakekey])" : ""]:</EM> <span class='message'>[msg]</span></b></font>")
 					else if(holder.rights & R_MOD)
-						to_chat(C, "<font color=#184880><b><span class='prefix'>OOC:</span> <EM>[src.key][holder.fakekey ? "/([holder.fakekey])" : ""]:</EM> <span class='message'>[msg]</span></b></font>")
+						to_chat(C, "<font color=#184880><b><span class='prefix'>OOC:</span> <EM>[key][holder.fakekey ? "/([holder.fakekey])" : ""]:</EM> <span class='message'>[msg]</span></b></font>")
 					else
-						to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>")
+						to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[key]:</EM> <span class='message'>[msg]</span></span></font>")
 
 				else
-					to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[holder.fakekey ? holder.fakekey : src.key]:</EM> <span class='message'>[msg]</span></span></font>")
+					to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[holder.fakekey ? holder.fakekey : key]:</EM> <span class='message'>[msg]</span></span></font>")
 			else
-				to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>")
+				to_chat(C, "<font color='[normal_ooc_colour]'><span class='ooc'><span class='prefix'>OOC:</span> <EM>[key]:</EM> <span class='message'>[msg]</span></span></font>")
 			*/
 
 /client/proc/set_ooc(newColor as color)
@@ -133,10 +133,10 @@
 	log_ooc("(LOCAL) [mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 	var/list/heard
 	var/mob/living/silicon/ai/AI
-	if(!isAI(src.mob))
-		heard = get_hearers_in_view(7, src.mob)
+	if(!isAI(mob))
+		heard = get_hearers_in_view(7, mob)
 	else
-		AI = src.mob
+		AI = mob
 		heard = get_hearers_in_view(7, (istype(AI.eyeobj) ? AI.eyeobj : AI)) //if it doesn't have an eye somehow give it just the AI mob itself
 	for(var/mob/M in heard)
 		if(AI == M) continue
@@ -150,11 +150,11 @@
 			if(E.ai)
 				C = E.ai.client
 		if(C.prefs.toggles & CHAT_LOOC)
-			var/display_name = src.key
+			var/display_name = key
 			if(holder)
 				if(holder.fakekey)
 					if(C.holder)
-						display_name = "[holder.fakekey]/([src.key])"
+						display_name = "[holder.fakekey]/([key])"
 					else
 						display_name = holder.fakekey
 			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>")
@@ -164,18 +164,18 @@
 			var/prefix = "(R)LOOC"
 			if (C.mob in heard)
 				prefix = "LOOC"
-			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[src.key]:</EM> <span class='message'>[msg]</span></span></font>")
+			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>[prefix]:</span> <EM>[key]:</EM> <span class='message'>[msg]</span></span></font>")
 	if(istype(AI))
 		var/client/C = AI.client
 		if (C in admins)
 			return //already been handled
 
 		if(C.prefs.toggles & CHAT_LOOC)
-			var/display_name = src.key
+			var/display_name = key
 			if(holder)
 				if(holder.fakekey)
 					if(C.holder)
-						display_name = "[holder.fakekey]/([src.key])"
+						display_name = "[holder.fakekey]/([key])"
 					else
 						display_name = holder.fakekey
 			to_chat(C, "<font color='#6699CC'><span class='ooc'><span class='prefix'>LOOC:</span> <EM>[display_name]:</EM> <span class='message'>[msg]</span></span></font>")

@@ -26,7 +26,7 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 			return
 
 	else
-		if(src.resistances.Find(virus.type))
+		if(resistances.Find(virus.type))
 //			to_chat(world, "Normal virus and resisted")
 			return
 
@@ -46,10 +46,10 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 
 	if(skip_this == 1)
 //		to_chat(world, "infectin")
-		//if(src.virus)				< -- this used to replace the current disease. Not anymore!
-			//src.virus.cure(0)
+		//if(virus)				< -- this used to replace the current disease. Not anymore!
+			//virus.cure(0)
 		var/datum/disease/v = new virus.type(1, virus, 0)
-		src.viruses += v
+		viruses += v
 		v.affected_mob = src
 		v.strain_data = v.strain_data.Copy()
 		v.holder = src
@@ -57,7 +57,7 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 			v.carrier = 1
 		return
 //	to_chat(world, "Not skipping.")
-	//if(src.virus) //
+	//if(virus) //
 		//return //
 
 
@@ -197,7 +197,7 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 	else*/
 
 		var/datum/disease/v = new virus.type(1, virus, 0)
-		src.viruses += v
+		viruses += v
 		v.affected_mob = src
 		v.strain_data = v.strain_data.Copy()
 		v.holder = src

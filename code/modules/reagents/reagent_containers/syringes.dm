@@ -36,7 +36,7 @@
 	                            /obj/item/clothing/mask/facehugger/lamarr)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [name]! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
 
 /obj/item/weapon/reagent_containers/syringe/on_reagent_change()
@@ -123,7 +123,7 @@
 	if (!target)
 		return
 
-	if (src.is_full())
+	if (is_full())
 		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
 		return
 
@@ -157,7 +157,7 @@
 				to_chat(user, "<span class='warning'>You are unable to locate any blood.</span>")
 				return
 
-			var/amount = src.reagents.maximum_volume - src.reagents.total_volume
+			var/amount = reagents.maximum_volume - reagents.total_volume
 			var/datum/reagent/B = T.take_blood(null, amount)
 			//reagents.add_reagent(BLOOD,
 			if (B)
@@ -184,12 +184,12 @@
 		else if (tx_amount == 0)
 			to_chat(user, "<span class='warning'>\The [target] is empty.</span>")
 
-	if (src.is_full())
+	if (is_full())
 		mode = SYRINGE_INJECT
 		update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/proc/handle_inject(var/atom/target, var/mob/user)
-	if (src.is_empty())
+	if (is_empty())
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 
@@ -240,7 +240,7 @@
 	if (tx_amount > 0 && isobj(target) && target:log_reagents && bad_reagents && bad_reagents.len > 0)
 		log_reagents(user, src, target, tx_amount, bad_reagents)
 
-	if (src.is_empty())
+	if (is_empty())
 		mode = SYRINGE_DRAW
 		update_icon()
 
@@ -272,7 +272,7 @@
 			return
 
 		var/hit_area = affecting.display_name
-		if((user != target) && H.check_shields(7, "the [src.name]"))
+		if((user != target) && H.check_shields(7, "the [name]"))
 			return
 
 		// Check for protection on the targeted area and show messages
@@ -293,14 +293,14 @@
 		target.take_organ_damage(3)// 7 is the same as crowbar punch
 
 	// Break the syringe and transfer some of the reagents to the target
-	src.reagents.reaction(target, INGEST)
+	reagents.reaction(target, INGEST)
 	var/syringestab_amount_transferred = rand(0, (reagents.total_volume - 5)) //nerfed by popular demand
-	src.reagents.trans_to(target, syringestab_amount_transferred)
-	src.desc += " It is broken."
-	src.mode = SYRINGE_BROKEN
-	src.add_blood(target)
-	src.add_fingerprint(usr)
-	src.update_icon()
+	reagents.trans_to(target, syringestab_amount_transferred)
+	desc += " It is broken."
+	mode = SYRINGE_BROKEN
+	add_blood(target)
+	add_fingerprint(usr)
+	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/restock()
 	if(mode == 2) //SYRINGE_BROKEN

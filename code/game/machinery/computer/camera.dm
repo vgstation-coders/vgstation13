@@ -23,7 +23,7 @@ var/global/list/tv_monitors = list()
 	..()
 
 /obj/machinery/computer/security/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return attack_hand(user)
 
 
@@ -39,7 +39,7 @@ var/global/list/tv_monitors = list()
 
 
 /obj/machinery/computer/security/attack_hand(var/mob/user as mob)
-	if (src.z > 6)
+	if (z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 	if(stat & (NOPOWER|BROKEN))	return
@@ -75,7 +75,7 @@ var/global/list/tv_monitors = list()
 	if(C)
 		if ((!Adjacent(user) || user.machine != src || user.blinded || user.isStunned() || !( C.can_use() )) && (!istype(user, /mob/living/silicon/ai)))
 			if(!C.can_use() && !isAI(user))
-				src.current = null
+				current = null
 			user.cancel_camera()
 			return 0
 		else
@@ -84,7 +84,7 @@ var/global/list/tv_monitors = list()
 				A.eyeobj.forceMove(get_turf(C))
 				A.client.eye = A.eyeobj
 			else
-				src.current = C
+				current = C
 				use_power(50)
 
 			spawn(5)

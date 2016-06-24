@@ -78,7 +78,7 @@
 					instructions.name = "misprinted " + instructions.name
 				instructions.update_icon()
 */
-				machine.forceMove(src.loc)
+				machine.forceMove(loc)
 				machine = null
 				qdel(src)
 			else

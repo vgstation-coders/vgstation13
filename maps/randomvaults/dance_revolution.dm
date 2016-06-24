@@ -88,7 +88,7 @@
 	if(!dancer) return stop_game() //No dancer
 	if(!isturf(loc)) return stop_game()
 	if(!isturf(dancer.loc)) return lose() //Dancer isn't in a turf
-	if(dancer.loc.loc != src.loc.loc) return lose() //Dancer left the area
+	if(dancer.loc.loc != loc.loc) return lose() //Dancer left the area
 
 	//Check if dancer fulfilled the previous task
 	if(progress_counter > 0)

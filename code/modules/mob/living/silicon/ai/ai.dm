@@ -99,8 +99,8 @@ var/list/ai_list = list()
 	proc_holder_list = new()
 
 	//Determine the AI's lawset
-	if(L && istype(L,/datum/ai_laws)) src.laws = L
-	else src.laws = getLawset(src)
+	if(L && istype(L,/datum/ai_laws)) laws = L
+	else laws = getLawset(src)
 
 	verbs += /mob/living/silicon/ai/proc/show_laws_verb
 
@@ -201,7 +201,7 @@ var/list/ai_list = list()
 			if(Entry.len < 2)
 				continue;
 
-			if(Entry[1] == src.ckey && Entry[2] == src.real_name)
+			if(Entry[1] == ckey && Entry[2] == real_name)
 				custom_sprite = 1 //They're in the list? Custom sprite time
 				icon = 'icons/mob/custom-synthetic.dmi'
 	*/
@@ -211,7 +211,7 @@ var/list/ai_list = list()
 	if (custom_sprite == 1) icontype = ("Custom")//automagically selects custom sprite if one is available
 	else icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal")
 	switch(icontype)
-		if("Custom") icon_state = "[src.ckey]-ai"
+		if("Custom") icon_state = "[ckey]-ai"
 		if("Clown") icon_state = "ai-clown2"
 		if("Monochrome") icon_state = "ai-mono"
 		if("Inverted") icon_state = "ai-u"
@@ -301,7 +301,7 @@ var/list/ai_list = list()
 	show_station_manifest()
 
 /mob/living/silicon/ai/proc/ai_call_shuttle()
-	if(src.stat == 2)
+	if(stat == 2)
 		to_chat(src, "You can't call the shuttle because you are dead!")
 		return
 	if(istype(usr,/mob/living/silicon/ai))
@@ -326,7 +326,7 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/proc/ai_cancel_call()
 	set category = "AI Commands"
 
-	if(src.stat == 2)
+	if(stat == 2)
 		to_chat(src, "You can't send the shuttle back because you are dead!")
 		return
 	if(istype(usr,/mob/living/silicon/ai))
@@ -461,7 +461,7 @@ var/list/ai_list = list()
 			if (usr.machine == null)
 				usr.machine = usr
 
-			while (src.cameraFollow == target)
+			while (cameraFollow == target)
 				to_chat(usr, "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb).")
 				sleep(40)
 				continue
@@ -526,8 +526,8 @@ var/list/ai_list = list()
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [name] ([ckey])</font>")
+		attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 		updatehealth()
@@ -543,12 +543,12 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
 
 
-	src.cameraFollow = null
+	cameraFollow = null
 
 	if (!C || stat == 2) //C.can_use())
 		return 0
 
-	if(!src.eyeobj)
+	if(!eyeobj)
 		view_core()
 		return
 	// ok, we're alive, camera is good and in our network...
@@ -612,7 +612,7 @@ var/list/ai_list = list()
 	return !cleared
 
 /mob/living/silicon/ai/cancel_camera()
-	src.view_core()
+	view_core()
 
 
 //Replaces /mob/living/silicon/ai/verb/change_network() in ai.dm & camera.dm
@@ -622,7 +622,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "Jump To Network"
 	unset_machine()
-	src.cameraFollow = null
+	cameraFollow = null
 	var/cameralist[0]
 
 	if(usr.isDead())
@@ -760,7 +760,7 @@ var/list/ai_list = list()
 	set category = "Malfunction"
 	set name = "Return to Main Core"
 
-	var/obj/machinery/power/apc/apc = src.loc
+	var/obj/machinery/power/apc/apc = loc
 	if(!istype(apc))
 		to_chat(src, "<span class='notice'>You are already in your Main Core.</span>")
 		return

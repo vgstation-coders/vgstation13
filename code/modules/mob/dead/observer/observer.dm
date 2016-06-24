@@ -123,7 +123,7 @@
 /mob/dead/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/tome))
 		var/mob/dead/M = src
-		if(src.invisibility != 0)
+		if(invisibility != 0)
 			M.invisibility = 0
 			user.visible_message(
 				"<span class='warning'>[user] drags ghost, [M], to our plane of reality!</span>",
@@ -137,7 +137,7 @@
 
 	if(istype(W,/obj/item/weapon/storage/bible) || istype(W,/obj/item/weapon/nullrod))
 		var/mob/dead/M = src
-		if(src.invisibility == 0)
+		if(invisibility == 0)
 			M.invisibility = 60
 			user.visible_message(
 				"<span class='warning'>[user] banishes the ghost from our plane of reality!</span>",
@@ -283,7 +283,7 @@ Works together with spawning an observer, noted above.
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER)
 	if(key && !(copytext(key,1,2)=="@"))
 		var/mob/dead/observer/ghost = new(src, flags)	//Transfer safety to observer spawning proc.
-		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
+		ghost.timeofdeath = timeofdeath //BS12 EDIT
 		ghost.key = key
 		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
 			ghost.verbs -= /mob/dead/observer/verb/toggle_antagHUD	// Poor guys, don't know what they are missing!
@@ -297,7 +297,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(src.health < 0 && stat != DEAD) //crit people
+	if(health < 0 && stat != DEAD) //crit people
 		succumb()
 		ghostize(1)
 	else if(stat == DEAD)
@@ -550,7 +550,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to jump to it.</span>")
 				return
-			if(targetloc && targetloc.holy && ((src.invisibility == 0) || (src.mind in ticker.mode.cult)))
+			if(targetloc && targetloc.holy && ((invisibility == 0) || (mind in ticker.mode.cult)))
 				to_chat(usr, "<span class='warning'>The mob that you are trying to follow is standing on holy grounds, you cannot reach him!</span>")
 				return
 			var/mob/M = dest[target] //Destination mob
@@ -672,7 +672,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/obj/machinery/atmospherics/unary/vent_pump/vent_found
 	var/list/found_vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/v in atmos_machines)
-		if(!v.welded && v.z == src.z && v.canSpawnMice==1) // No more spawning in atmos.  Assuming the mappers did their jobs, anyway.
+		if(!v.welded && v.z == z && v.canSpawnMice==1) // No more spawning in atmos.  Assuming the mappers did their jobs, anyway.
 			found_vents.Add(v)
 	if(found_vents.len)
 		vent_found = pick(found_vents)
@@ -683,7 +683,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(host)
 		if(config.uneducated_mice)
 			host.universal_understand = 0
-		host.ckey = src.ckey
+		host.ckey = ckey
 		to_chat(host, "<span class='info'>You are now a mouse. Try to avoid interaction with players, and do not give hints away that you are more than a simple rodent.</span>")
 
 /mob/dead/observer/verb/view_manfiest()
@@ -706,7 +706,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(src, "<span class='warning'>That verb is not currently permitted.</span>")
 		return
 
-	if (!src.stat)
+	if (!stat)
 		return
 
 	if (usr != src)
@@ -734,7 +734,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/obj/effect/decal/cleanable/blood/choice = input(src,"What blood would you like to use?") in null|choices
 
 	var/direction = input(src,"Which way?","Tile selection") as anything in list("Here","North","South","East","West")
-	var/turf/simulated/T = src.loc
+	var/turf/simulated/T = loc
 	if (direction != "Here")
 		T = get_step(T,text2dir(direction))
 
@@ -742,7 +742,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(src, "<span class='warning'>You cannot doodle there.</span>")
 		return
 
-	if(!choice || choice.amount == 0 || !(src.Adjacent(choice)))
+	if(!choice || choice.amount == 0 || !(Adjacent(choice)))
 		return
 
 	var/doodle_color = (choice.basecolor) ? choice.basecolor : "#A10808"
@@ -825,7 +825,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(src, "<span class='warning'>Unable to find any MoMMI Spawners ready to build a MoMMI in the universe. Please try again.</span>")
 
 	//if(host)
-	//	host.ckey = src.ckey
+	//	host.ckey = ckey
 //		to_chat(host, "<span class='info'>You are now a mouse. Try to avoid interaction with players, and do not give hints away that you are more than a simple rodent.</span>")
 
 /mob/dead/observer/verb/find_arena()

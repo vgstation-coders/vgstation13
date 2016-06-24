@@ -18,7 +18,7 @@
 /obj/item/device/remote_button/New()
 	..()
 	base_state = icon_state
-	button_icon = image(src.icon)
+	button_icon = image(icon)
 
 /obj/item/device/remote_button/update_icon(button_id = 0)
 	if(holder)

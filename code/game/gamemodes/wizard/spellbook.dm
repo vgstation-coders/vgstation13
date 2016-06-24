@@ -19,8 +19,8 @@
 			to_chat(user, "The contract has been used, you can't get your points back now.")
 		else
 			to_chat(user, "You feed the contract back into the spellbook, refunding your points.")
-			src.max_uses++
-			src.uses++
+			max_uses++
+			uses++
 			qdel (O)
 			O = null
 
@@ -809,5 +809,5 @@
 	for(var/i =1; i <= 7; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)
-		src.contents += book
+		contents += book
 		possible_books -= randombook

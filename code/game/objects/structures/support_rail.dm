@@ -34,7 +34,7 @@
 	supported_mob.anchored = 0
 	supported_mob.visible_message(
 		"<span class='notice'>[supported_mob.name] let go.</span>")
-	src.supported_mob = null
+	supported_mob = null
 	return
 
 /obj/structure/support_rail/attack_hand(mob/user as mob)
@@ -46,8 +46,8 @@
 		user.visible_message(
 				"<span class='notice'>[supported_mob.name] grabbed the rail.</span>")
 		user.anchored = 1
-		user.loc = src.loc
-		user.dir = src.dir
+		user.loc = loc
+		user.dir = dir
 		user.update_canmove()
 		add_fingerprint(user)
 	return

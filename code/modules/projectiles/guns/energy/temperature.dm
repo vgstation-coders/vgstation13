@@ -49,17 +49,17 @@
 	if (..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 
 	if(href_list["temp"])
 		var/amount = text2num(href_list["temp"])
 		if(amount > 0)
-			src.target_temperature = min((500 + 500*emagged), src.target_temperature+amount)
+			target_temperature = min((500 + 500*emagged), target_temperature+amount)
 		else
-			src.target_temperature = max(0, src.target_temperature+amount)
-	if (istype(src.loc, /mob))
-		attack_self(src.loc)
-	src.add_fingerprint(usr)
+			target_temperature = max(0, target_temperature+amount)
+	if (istype(loc, /mob))
+		attack_self(loc)
+	add_fingerprint(usr)
 	return
 
 

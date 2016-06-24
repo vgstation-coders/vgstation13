@@ -39,13 +39,13 @@ datum/chemical_reaction/coolant
 /obj/structure/reagent_dispensers/coolanttank/proc/explode()
 	var/datum/effect/effect/system/smoke_spread/S = new /datum/effect/effect/system/smoke_spread
 	//S.attach(src)
-	S.set_up(5, 0, src.loc)
+	S.set_up(5, 0, loc)
 
-	playsound(src.loc, 'sound/effects/smoke.ogg', 50, 1, -3)
+	playsound(loc, 'sound/effects/smoke.ogg', 50, 1, -3)
 	spawn(0)
 		S.start()
 
-	var/datum/gas_mixture/env = src.loc.return_air()
+	var/datum/gas_mixture/env = loc.return_air()
 	if(env)
 		if (reagents.total_volume > 750)
 			env.temperature = 0

@@ -36,7 +36,7 @@
 	chassis.use_power(energy_drain)
 	A.OnFired()
 	A.process()
-	chassis.log_message("Fired from [src.name], targeting [target].")
+	chassis.log_message("Fired from [name], targeting [target].")
 	do_after_cooldown()
 	return
 
@@ -140,7 +140,7 @@
 						walk(thingy,0)
 		*/
 	chassis.use_power(energy_drain)
-	log_message("Honked from [src.name]. HONK!")
+	log_message("Honked from [name]. HONK!")
 	var/turf/T = get_turf(src)
 	message_admins("[key_name(chassis.occupant, chassis.occupant.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[chassis.occupant]'>?</A>) used a Mecha Honker in ([T.x],[T.y],[T.z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>)",0,1)
 	log_game("[chassis.occupant.ckey]([chassis.occupant]) used a Mecha Honker in ([T.x],[T.y],[T.z])")
@@ -159,7 +159,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/get_equip_info()
-	return "[..()]\[[src.projectiles]\][(src.projectiles < initial(src.projectiles))?" - <a href='?src=\ref[src];rearm=1'>Rearm</a>":null]"
+	return "[..()]\[[projectiles]\][(projectiles < initial(projectiles))?" - <a href='?src=\ref[src];rearm=1'>Rearm</a>":null]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rearm()
 	if(projectiles < initial(projectiles))
@@ -168,14 +168,14 @@
 			projectiles++
 			projectiles_to_add--
 			chassis.use_power(projectile_energy_cost)
-	send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
-	log_message("Rearmed [src.name].")
+	send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",get_equip_info())
+	log_message("Rearmed [name].")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
 	..()
 	if (href_list["rearm"])
-		src.rearm()
+		rearm()
 	return
 
 
@@ -205,7 +205,7 @@
 			break
 		playsound(chassis, fire_sound, 80, 1)
 		var/obj/item/projectile/A = getFromPool(projectile,curloc)//new projectile(curloc)
-		src.projectiles--
+		projectiles--
 		A.original = target
 		A.current = curloc
 		A.starting = curloc
@@ -214,7 +214,7 @@
 		set_ready_state(0)
 		A.OnFired()
 		A.process()
-	log_message("Fired from [src.name], targeting [target].")
+	log_message("Fired from [name], targeting [target].")
 	do_after_cooldown()
 	return
 
@@ -249,7 +249,7 @@
 
 		playsound(chassis, fire_sound, 50, 1)
 		var/obj/item/projectile/A = new projectile(curloc)
-		src.projectiles--
+		projectiles--
 		A.original = target
 		A.current = curloc
 		A.starting = curloc
@@ -259,7 +259,7 @@
 		A.process()
 		sleep(2)
 	set_ready_state(0)
-	log_message("Fired from [src.name], targeting [target].")
+	log_message("Fired from [name], targeting [target].")
 	do_after_cooldown()
 	return
 
@@ -282,7 +282,7 @@
 	playsound(chassis, fire_sound, 50, 1)
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Fired from [src.name], targeting [target].")
+	log_message("Fired from [name], targeting [target].")
 	do_after_cooldown()
 	return
 
@@ -319,7 +319,7 @@
 	playsound(chassis, fire_sound, 50, 1)
 	F.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Fired from [src.name], targeting [target].")
+	log_message("Fired from [name], targeting [target].")
 	spawn(det_time)
 		F.prime()
 	do_after_cooldown()
@@ -330,7 +330,7 @@
 	projectile = /obj/item/weapon/grenade/flashbang/clusterbang
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/get_equip_info()//Limited version of the clusterbang launcher that can't reload
-	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][src.name][chassis.selected==src?"</b>":"</a>"]\[[src.projectiles]\]"
+	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][name][chassis.selected==src?"</b>":"</a>"]\[[projectiles]\]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/rearm()
 	return//Extra bit of security
@@ -358,7 +358,7 @@
 	playsound(chassis, fire_sound, 60, 1)
 	B.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Bananed from [src.name], targeting [target]. HONK!")
+	log_message("Bananed from [name], targeting [target]. HONK!")
 	do_after_cooldown()
 	return
 
@@ -386,7 +386,7 @@
 	playsound(chassis, fire_sound, 60, 1)
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Launched a mouse-trap from [src.name], targeting [target]. HONK!")
+	log_message("Launched a mouse-trap from [name], targeting [target]. HONK!")
 	do_after_cooldown()
 	return
 
@@ -414,7 +414,7 @@
 	playsound(chassis, fire_sound, 60, 1)
 	P.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Cream-pied from [src.name], targeting [target]. HONK!")
+	log_message("Cream-pied from [name], targeting [target]. HONK!")
 	do_after_cooldown()
 	return
 
@@ -438,6 +438,6 @@
 	M.thrown_from = src
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Fired from [src.name], targeting [target].")
+	log_message("Fired from [name], targeting [target].")
 	do_after_cooldown()
 	return

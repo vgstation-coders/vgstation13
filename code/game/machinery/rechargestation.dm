@@ -45,7 +45,7 @@
 	active_power_usage = 1000 * transfer_rate_coeff
 
 /obj/machinery/recharge_station/Destroy()
-	src.go_out()
+	go_out()
 	..()
 
 /obj/machinery/recharge_station/is_airtight()
@@ -58,13 +58,13 @@
 			return
 		if(2.0)
 			if (prob(50))
-				new /obj/item/weapon/circuitboard/recharge_station(src.loc)
+				new /obj/item/weapon/circuitboard/recharge_station(loc)
 				qdel(src)
 				return
 		if(3.0)
 			if (prob(25))
-				src.anchored = 0
-				src.build_icon()
+				anchored = 0
+				build_icon()
 		else
 	return
 
@@ -73,7 +73,7 @@
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		return
 
-	if(src.occupant)
+	if(occupant)
 		process_occupant()
 	else
 		process_capacitors()
@@ -172,7 +172,7 @@
 /obj/machinery/recharge_station/relaymove(mob/user as mob)
 	if(user.stat)
 		return
-	src.go_out()
+	go_out()
 	return
 
 /obj/machinery/recharge_station/emp_act(severity)
@@ -188,13 +188,13 @@
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		icon_state = "borgcharger"
 	else
-		if(src.occupant)
+		if(occupant)
 			icon_state = "borgcharger1"
 		else
 			icon_state = "borgcharger0"
 
 /obj/machinery/recharge_station/proc/process_occupant()
-	if(src.occupant)
+	if(occupant)
 		if (istype(occupant, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = occupant
 			if((R.stat) || (!R.client))//no more borgs suiciding in recharge stations to ruin them.
@@ -228,28 +228,28 @@
 	return 1
 
 /obj/machinery/recharge_station/proc/go_out()
-	if(!( src.occupant ))
+	if(!( occupant ))
 		return
 	if(upgrading)
 		to_chat(occupant, "<span class='notice'>The upgrade hasn't completed yet, interface with \the [src] again to halt the process.</span>")
 		return
 	//for(var/obj/O in src)
-	//	O.loc = src.loc
-	if (src.occupant.client)
-		src.occupant.client.eye = src.occupant.client.mob
-		src.occupant.client.perspective = MOB_PERSPECTIVE
-	src.occupant.forceMove(src.loc)
-	src.occupant = null
+	//	O.loc = loc
+	if (occupant.client)
+		occupant.client.eye = occupant.client.mob
+		occupant.client.perspective = MOB_PERSPECTIVE
+	occupant.forceMove(loc)
+	occupant = null
 	build_icon()
-	src.use_power = 1
+	use_power = 1
 	// Removes dropped items/magically appearing mobs from the charger too
-	for (var/atom/movable/x in src.contents)
+	for (var/atom/movable/x in contents)
 		if(!(x in upgrade_holder | component_parts))
-			x.forceMove(src.loc)
+			x.forceMove(loc)
 	return
 
 /obj/machinery/recharge_station/proc/restock_modules()
-	if(src.occupant)
+	if(occupant)
 		if(istype(occupant, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = occupant
 			if(R.module && R.module.modules)
@@ -266,7 +266,7 @@
 	set src in oview(1)
 	if (usr.stat != 0)
 		return
-	src.go_out()
+	go_out()
 	add_fingerprint(usr)
 	return
 
@@ -286,7 +286,7 @@
 	if (!(istype(R, /mob/living/silicon/)))
 		to_chat(R, "<span class='notice'><B>Only non-organics may enter the recharger!</B></span>")
 		return
-	if (src.occupant)
+	if (occupant)
 		to_chat(R, "<span class='notice'><B>The cell is already occupied!</B></span>")
 		return
 	R.stop_pulling()
@@ -294,10 +294,10 @@
 		R.client.perspective = EYE_PERSPECTIVE
 		R.client.eye = src
 	R.forceMove(src)
-	src.occupant = R
-	src.add_fingerprint(R)
+	occupant = R
+	add_fingerprint(R)
 	build_icon()
-	src.use_power = 2
+	use_power = 2
 	for(var/obj/O in upgrade_holder)
 		if(istype(O, /obj/item/weapon/cell))
 			if(!R.cell)

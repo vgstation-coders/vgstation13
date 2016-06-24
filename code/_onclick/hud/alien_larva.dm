@@ -1,8 +1,8 @@
 /datum/hud/proc/larva_hud()
 
 
-	src.adding = list()
-	src.other = list()
+	adding = list()
+	other = list()
 
 	var/obj/screen/using
 
@@ -13,7 +13,7 @@
 	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
 	using.layer = 20
-	src.adding += using
+	adding += using
 	action_intent = using
 
 	using = getFromPool(/obj/screen)
@@ -23,7 +23,7 @@
 	using.icon_state = (mymob.m_intent == "run" ? "running" : "walking")
 	using.screen_loc = ui_movi
 	using.layer = 20
-	src.adding += using
+	adding += using
 	move_intent = using
 
 	mymob.oxygen = getFromPool(/obj/screen)
@@ -65,4 +65,4 @@
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.zone_sel, mymob.oxygen, mymob.toxin, mymob.fire, mymob.healths, mymob.pullin) //, mymob.rest, mymob.sleep, mymob.mach )
-	mymob.client.screen += src.adding + src.other
+	mymob.client.screen += adding + other

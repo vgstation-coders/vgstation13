@@ -102,7 +102,7 @@ sd_alert
 	New(who, tag)
 		..()
 		target = who
-		src.tag = tag
+		tag = tag
 
 	Topic(href,params[])
 		if(usr.client != target) return

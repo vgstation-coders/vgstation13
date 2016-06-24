@@ -24,7 +24,7 @@
 
 /obj/item/device/radio/electropack/initialize()
 	if(frequency < MINIMUM_FREQUENCY || frequency > MAXIMUM_FREQUENCY)
-		src.frequency = sanitize_frequency(src.frequency)
+		frequency = sanitize_frequency(frequency)
 
 	set_frequency(frequency)
 
@@ -40,8 +40,8 @@
 	..()
 
 /obj/item/device/radio/electropack/Destroy()
-	if(istype(src.loc, /obj/item/assembly/shock_kit))
-		var/obj/item/assembly/shock_kit/S = src.loc
+	if(istype(loc, /obj/item/assembly/shock_kit))
+		var/obj/item/assembly/shock_kit/S = loc
 		if(S.part1 == src)
 			S.part1 = null
 		else if(S.part2 == src)
@@ -115,12 +115,12 @@
 	if(!signal || signal.encryption != code)
 		return
 
-	if(istype(src.loc, /obj/mecha) && on)
-		var/obj/mecha/R = src.loc //R is for GIANT ROBOT
+	if(istype(loc, /obj/mecha) && on)
+		var/obj/mecha/R = loc //R is for GIANT ROBOT
 		R.shock_n_boot()
 
-	else if(istype(src.loc, /obj/item/assembly/shock_kit) && on)
-		var/obj/item/assembly/shock_kit/SK = src.loc
+	else if(istype(loc, /obj/item/assembly/shock_kit) && on)
+		var/obj/item/assembly/shock_kit/SK = loc
 		SK.receive_signal()
 
 	else if(ismob(loc) && on)

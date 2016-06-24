@@ -15,7 +15,7 @@
 			overlays += image('icons/obj/pipes/disposal.dmi', "dispover-handle")
 			return
 	user.drop_item()
-	I.loc = src.loc
+	I.loc = loc
 
 	for(var/mob/O in hearers(src, null))
-		O.show_message("[bicon(src)] <span class='notice'>The [src.name] beeps</span>", 2)
+		O.show_message("[bicon(src)] <span class='notice'>The [name] beeps</span>", 2)

@@ -197,7 +197,7 @@
 		force = round((5+potency/2.5), 1)
 
 /obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [name]! It looks like \he's trying to commit suicide.</span>")
 	return (BRUTELOSS|TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
@@ -217,9 +217,9 @@
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are stunned by the powerful acid of the Deathnettle!</span>")
 
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Had the [src.name] used on them by [user.name] ([user.ckey])</font>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] on [M.name] ([M.ckey])</font>")
-		msg_admin_attack("[user.name] ([user.ckey]) used the [src.name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Had the [name] used on them by [user.name] ([user.ckey])</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] on [M.name] ([M.ckey])</font>")
+		msg_admin_attack("[user.name] ([user.ckey]) used the [name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 		playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 

@@ -69,10 +69,10 @@
 
 
 /mob/living/simple_animal/mouse/proc/splat()
-	src.health = 0
-	src.stat = DEAD
-	src.icon_dead = "mouse_[_color]_splat"
-	src.icon_state = "mouse_[_color]_splat"
+	health = 0
+	stat = DEAD
+	icon_dead = "mouse_[_color]_splat"
+	icon_state = "mouse_[_color]_splat"
 	if(client)
 		client.time_died_as_mouse = world.time
 
@@ -118,14 +118,14 @@
 /mob/living/simple_animal/mouse/Move(var/dir)
 
 	var/turf/target_turf = get_step(src,dir)
-	//CanReachThrough(src.loc, target_turf, src)
+	//CanReachThrough(loc, target_turf, src)
 	var/can_fit_under = 0
 	if(target_turf.ZCross(get_turf(src),1))
 		can_fit_under = 1
 
 	..(dir)
 	if(can_fit_under)
-		src.loc = target_turf
+		loc = target_turf
 	for(var/d in cardinal)
 		var/turf/O = get_step(T,d)
 		//Simple pass check.
@@ -193,7 +193,7 @@
 	return "squeaks, [text]";
 
 /mob/living/simple_animal/mouse/singularity_act()
-	if(!(src.flags & INVULNERABLE))
+	if(!(flags & INVULNERABLE))
 		investigation_log(I_SINGULO,"has been consumed by a singularity")
 		gib()
 		return 0

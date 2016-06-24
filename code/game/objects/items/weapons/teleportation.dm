@@ -29,14 +29,14 @@
 /obj/item/weapon/locator/attack_self(mob/user as mob)
 	user.set_machine(src)
 	var/dat
-	if (src.temp)
-		dat = "[src.temp]<BR><BR><A href='byond://?src=\ref[src];temp=1'>Clear</A>"
+	if (temp)
+		dat = "[temp]<BR><BR><A href='byond://?src=\ref[src];temp=1'>Clear</A>"
 	else
 		dat = {"
 <B>Persistent Signal Locator</B><HR>
 Frequency:
 <A href='byond://?src=\ref[src];freq=-10'>-</A>
-<A href='byond://?src=\ref[src];freq=-2'>-</A> [format_frequency(src.frequency)]
+<A href='byond://?src=\ref[src];freq=-2'>-</A> [format_frequency(frequency)]
 <A href='byond://?src=\ref[src];freq=2'>+</A>
 <A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 
@@ -53,17 +53,17 @@ Frequency:
 	if(!current_location||current_location.z==2)//If turf was not found or they're on z level 2.
 		to_chat(usr, "The [src] is malfunctioning.")
 		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))))
 		usr.set_machine(src)
 		if (href_list["refresh"])
-			src.temp = "<B>Persistent Signal Locator</B><HR>"
+			temp = "<B>Persistent Signal Locator</B><HR>"
 			var/turf/sr = get_turf(src)
 
 			if (sr)
-				src.temp += "<B>Located Beacons:</B><BR>"
+				temp += "<B>Located Beacons:</B><BR>"
 
 				for(var/obj/item/beacon/W in beacons)
-					if (W.frequency == src.frequency)
+					if (W.frequency == frequency)
 						var/turf/tr = get_turf(W)
 						if (tr.z == sr.z && tr)
 							var/direct = max(abs(tr.x - sr.x), abs(tr.y - sr.y))
@@ -77,9 +77,9 @@ Frequency:
 										direct = "weak"
 									else
 										direct = "very weak"
-							src.temp += "[W.code]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
+							temp += "[W.code]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
-				src.temp += "<B>Extranneous Signals:</B><BR>"
+				temp += "<B>Extranneous Signals:</B><BR>"
 				for (var/obj/item/weapon/implant/tracking/W in world)
 					if (!W.implanted || !(istype(W.loc,/datum/organ/external) || ismob(W.loc)))
 						continue
@@ -100,24 +100,24 @@ Frequency:
 									direct = "strong"
 								else
 									direct = "weak"
-							src.temp += "[W.id]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
+							temp += "[W.id]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
-				src.temp += "<B>You are at \[[sr.x-WORLD_X_OFFSET[sr.z]],[sr.y-WORLD_Y_OFFSET[sr.z]],[sr.z]\]</B> in orbital coordinates.<BR><BR><A href='byond://?src=\ref[src];refresh=1'>Refresh</A><BR>"
+				temp += "<B>You are at \[[sr.x-WORLD_X_OFFSET[sr.z]],[sr.y-WORLD_Y_OFFSET[sr.z]],[sr.z]\]</B> in orbital coordinates.<BR><BR><A href='byond://?src=\ref[src];refresh=1'>Refresh</A><BR>"
 			else
-				src.temp += "<B><FONT color='red'>Processing Error:</FONT></B> Unable to locate orbital position.<BR>"
+				temp += "<B><FONT color='red'>Processing Error:</FONT></B> Unable to locate orbital position.<BR>"
 		else
 			if (href_list["freq"])
-				src.frequency += text2num(href_list["freq"])
-				src.frequency = sanitize_frequency(src.frequency)
+				frequency += text2num(href_list["freq"])
+				frequency = sanitize_frequency(frequency)
 			else
 				if (href_list["temp"])
-					src.temp = null
-		if (istype(src.loc, /mob))
-			attack_self(src.loc)
+					temp = null
+		if (istype(loc, /mob))
+			attack_self(loc)
 		else
 			for(var/mob/M in viewers(1, src))
 				if (M.client)
-					src.attack_self(M)
+					attack_self(M)
 	return
 
 
@@ -199,7 +199,7 @@ Frequency:
 	P2.blend_icon(P1)
 	portals += P1
 	portals += P2
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 	charge = max(charge - HANDTELE_PORTAL_COST,0)
 	if(!recharging)

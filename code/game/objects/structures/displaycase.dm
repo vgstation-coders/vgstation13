@@ -130,18 +130,18 @@
 			qdel(src)
 		if (2)
 			if (prob(50))
-				src.health -= 15
-				src.healthcheck()
+				health -= 15
+				healthcheck()
 		if (3)
 			if (prob(50))
-				src.health -= 5
-				src.healthcheck()
+				health -= 5
+				healthcheck()
 
 
 /obj/structure/displaycase/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
 	..()
-	src.healthcheck()
+	healthcheck()
 	return
 
 
@@ -152,10 +152,10 @@
 		qdel(src)
 
 /obj/structure/displaycase/proc/healthcheck()
-	if (src.health <= 0)
-		if (!( src.destroyed ))
-			src.density = 0
-			src.destroyed = 1
+	if (health <= 0)
+		if (!( destroyed ))
+			density = 0
+			destroyed = 1
 			getFromPool(/obj/item/weapon/shard, loc)
 			playsound(get_turf(src), "shatter", 70, 1)
 			update_icon()
@@ -164,10 +164,10 @@
 	return
 
 /obj/structure/displaycase/update_icon()
-	if(src.destroyed)
-		src.icon_state = "glassbox2b"
+	if(destroyed)
+		icon_state = "glassbox2b"
 	else
-		src.icon_state = "glassbox2[locked]"
+		icon_state = "glassbox2[locked]"
 	overlays = 0
 	if(occupant)
 		var/icon/occupant_icon=getFlatIcon(occupant)
@@ -224,8 +224,8 @@
 		qdel(src)
 	else if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
-		src.health -= W.force
-		src.healthcheck()
+		health -= W.force
+		healthcheck()
 		..()
 	else
 		if(locked)
@@ -237,7 +237,7 @@
 				update_icon()
 
 /obj/structure/displaycase/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/structure/displaycase/proc/getPrint(mob/user as mob)
 	return md5(user:dna:uni_identity)
@@ -247,7 +247,7 @@
 		if(occupant)
 			dump()
 			to_chat(user, "<span class='danger'>You smash your fist into the delicate electronics at the bottom of the case, and deactivate the hoverfield permanently.</span>")
-			src.add_fingerprint(user)
+			add_fingerprint(user)
 			update_icon()
 	else
 		if(user.a_intent == I_HURT)
@@ -255,7 +255,7 @@
 			user.visible_message("<span class='danger'>[user.name] kicks \the [src]!</span>", \
 				"<span class='danger'>You kick \the [src]!</span>", \
 				"You hear glass crack.")
-			src.health -= 2
+			health -= 2
 			healthcheck()
 		else if(!locked)
 			if(ishuman(user))

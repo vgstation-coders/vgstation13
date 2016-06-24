@@ -76,7 +76,7 @@
 	light_color = LIGHT_COLOR_RED
 
 /obj/structure/cult/tome/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	user.drop_item(W, src.loc)
+	user.drop_item(W, loc)
 	return 1
 
 //sprites for this no longer exist	-Pete
@@ -133,7 +133,7 @@
 /obj/effect/gateway/active/New()
 	spawn(rand(30,60) SECONDS)
 		var/t = pick(spawnable)
-		new t(src.loc)
+		new t(loc)
 		qdel(src)
 
 /obj/effect/gateway/active/Crossed(var/atom/A)

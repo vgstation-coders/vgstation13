@@ -262,7 +262,7 @@ obj/item/clothing/suit/powered/spawnable/badmin
 
 		verbs += /obj/item/clothing/suit/powered/proc/poweron
 
-		var/obj/item/clothing/head/powered/helm = new /obj/item/clothing/head/powered(src.loc)
+		var/obj/item/clothing/head/powered/helm = new /obj/item/clothing/head/powered(loc)
 		helm.verbs += /obj/item/clothing/head/powered/proc/atmotoggle
 
 obj/item/clothing/suit/powered/spawnable/regular
@@ -278,5 +278,5 @@ obj/item/clothing/suit/powered/spawnable/regular
 
 		verbs += /obj/item/clothing/suit/powered/proc/poweron
 
-		var/obj/item/clothing/head/powered/helm = new /obj/item/clothing/head/powered(src.loc)
+		var/obj/item/clothing/head/powered/helm = new /obj/item/clothing/head/powered(loc)
 		helm.verbs += /obj/item/clothing/head/powered/proc/atmotoggle

@@ -28,9 +28,9 @@
 
 /datum/effect/system/expl_particles/proc/start()
 	var/i = 0
-	for(i=0, i<src.number, i++)
+	for(i=0, i<number, i++)
 		spawn(0)
-			var/obj/effect/expl_particles/expl = new /obj/effect/expl_particles(src.location)
+			var/obj/effect/expl_particles/expl = new /obj/effect/expl_particles(location)
 			var/direct = pick(alldirs)
 			for(i=0, i<pick(1;25,2;50,3,4;200), i++)
 				sleep(1)
@@ -49,7 +49,7 @@
 /obj/effect/explosion/New()
 	..()
 	spawn (10)
-		src.loc = null
+		loc = null
 	return
 
 /datum/effect/system/explosion
@@ -85,7 +85,7 @@
 	pixel_y += pY
 	icon_state = ex_iconstate
 	spawn (20)
-		src.loc = null
+		loc = null
 	return
 
 /datum/effect/system/small_explosion

@@ -39,10 +39,10 @@
 	if(!user || !M) //sanity
 		return
 
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [src.name] by [key_name(user)]</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to flash [key_name(M)]</font>")
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [name] by [key_name(user)]</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to flash [key_name(M)]</font>")
 
-	log_attack("<font color='red'>[key_name(user)] Used the [src.name] to flash [key_name(M)]</font>")
+	log_attack("<font color='red'>[key_name(user)] Used the [name] to flash [key_name(M)]</font>")
 
 	if(!iscarbon(user))
 		M.LAssailant = null
@@ -134,7 +134,7 @@
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user)) 	return
 	if(broken)
-		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
+		user.show_message("<span class='warning'>The [name] is broken</span>", 2)
 		return
 
 	flash_recharge()

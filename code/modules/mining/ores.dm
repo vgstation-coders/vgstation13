@@ -170,11 +170,11 @@
 	material="erebite"
 
 /obj/item/weapon/ore/erebite/ex_act()
-	explosion(src.loc,-1,0,2)
+	explosion(loc,-1,0,2)
 	qdel(src)
 
 /obj/item/weapon/ore/erebite/bullet_act(var/obj/item/projectile/P)
-	explosion(src.loc,-1,0,2)
+	explosion(loc,-1,0,2)
 	qdel(src)
 
 /obj/item/weapon/ore/cerenkite
@@ -284,9 +284,9 @@
 			if(primed)
 				switch(quality)
 					if(1)
-						explosion(src.loc,-1,1,3,adminlog = notify_admins)
+						explosion(loc,-1,1,3,adminlog = notify_admins)
 					if(2)
-						explosion(src.loc,1,2,5,adminlog = notify_admins)
+						explosion(loc,1,2,5,adminlog = notify_admins)
 					if(3)
-						explosion(src.loc,2,4,9,adminlog = notify_admins)
+						explosion(loc,2,4,9,adminlog = notify_admins)
 				qdel(src)

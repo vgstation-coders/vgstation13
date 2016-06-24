@@ -206,7 +206,7 @@ Class Procs:
 	if(use_power && stat == 0)
 		use_power(7500/severity)
 
-		var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( src.loc )
+		var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( loc )
 		pulse2.icon = 'icons/effects/effects.dmi'
 		pulse2.icon_state = "empdisable"
 		pulse2.name = "emp sparks"
@@ -288,7 +288,7 @@ Class Procs:
 			if(!(href_list["set_tag"] in vars))
 				to_chat(usr, "<span class='warning'>Something went wrong: Unable to find [href_list["set_tag"]] in vars!</span>")
 				return 1
-			var/current_tag = src.vars[href_list["set_tag"]]
+			var/current_tag = vars[href_list["set_tag"]]
 			var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src, current_tag) as null|text),1,MAX_MESSAGE_LEN)
 			if(newid)
 				vars[href_list["set_tag"]] = newid
@@ -377,39 +377,39 @@ Class Procs:
 		var/turf/T = get_turf(usr)
 		if(!isAI(usr) && T.z != z)
 			if(usr.z != 2)
-				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [name].</span>")
 				return 1
-		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		if ((!in_range(src, usr) || !istype(loc, /turf)) && !istype(usr, /mob/living/silicon))
 			return 1
 	else if(!custom_aghost_alerts)
 		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
 
-	src.add_fingerprint(usr)
-	src.add_hiddenprint(usr)
+	add_fingerprint(usr)
+	add_hiddenprint(usr)
 
 	handle_multitool_topic(href,href_list,usr)
 	return 0
 
 /obj/machinery/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
 		if(user.client && user.client.eye == user)
-			return src.attack_hand(user)
+			return attack_hand(user)
 	else
-		return src.attack_hand(user)
+		return attack_hand(user)
 
 /obj/machinery/attack_ghost(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	var/ghost_flags=0
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
 	if(canGhostRead(usr,src,ghost_flags))
-		return src.attack_ai(user)
+		return attack_ai(user)
 
 /obj/machinery/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
 	if(stat & (NOPOWER|BROKEN|MAINT))
@@ -426,7 +426,7 @@ Class Procs:
 		return 1
 /*
 	//distance checks are made by atom/proc/DblClick
-	if ((get_dist(src, user) > 1 || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
+	if ((get_dist(src, user) > 1 || !istype(loc, /turf)) && !istype(user, /mob/living/silicon))
 		return 1
 */
 	if (ishuman(user) && !ignore_brain_damage)
@@ -438,7 +438,7 @@ Class Procs:
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 1
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	return 0
 
 /obj/machinery/proc/RefreshParts() //Placeholder proc for machines that are built using frames.
@@ -449,7 +449,7 @@ Class Procs:
 	gl_uid++
 
 /obj/machinery/proc/dropFrame()
-	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
+	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(loc)
 	M.set_build_state(2)
 	M.state = 1
 
@@ -462,10 +462,10 @@ Class Procs:
 				reagents.trans_to(I, reagents.total_volume)
 			if(I.reliability != 100 && crit_fail)
 				I.crit_fail = 1
-			I.forceMove(src.loc)
+			I.forceMove(loc)
 	for(var/atom/movable/I in src) //remove any stuff loaded, like for fridges
 		if(!prob(destroy_chance) && machine_flags &EJECTNOTDEL)
-			I.forceMove(src.loc)
+			I.forceMove(loc)
 		else
 			qdel(I)
 
@@ -497,7 +497,7 @@ Class Procs:
 		icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
 	if(isscrewdriver(toggleitem))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 	update_icon()
 	return 1
 
@@ -559,7 +559,7 @@ Class Procs:
 
 	if(iswrench(O) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
-			if(state == 2 && src.machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
+			if(state == 2 && machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")
 				return -1 //state set to 2, can't do it
 			else
@@ -570,7 +570,7 @@ Class Procs:
 		else
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
-		
+
 	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
 		return togglePanelOpen(O, user)
 
@@ -599,7 +599,7 @@ Class Procs:
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
 		return exchange_parts(user, O)
-		
+
 /obj/machinery/proc/wirejack(var/mob/living/silicon/pai/P)
 	if(!(machine_flags & WIREJACK))
 		return 0
@@ -628,7 +628,7 @@ Class Procs:
 		if(isAI(hclient.client.mob))
 			return 1
 		if(hclient.client.mob.machine == src)
-			return hclient.client.mob.html_mob_check(src.type)
+			return hclient.client.mob.html_mob_check(type)
 	return FALSE
 
 // Hook for html_interface module to unset the active machine when the window is closed by the player.
@@ -638,21 +638,21 @@ Class Procs:
 /obj/machinery/proc/alert_noise(var/notice_state = "ping")
 	switch(notice_state)
 		if("ping")
-			src.visible_message("<span class='notice'>[bicon(src)] \The [src] pings.</span>")
+			visible_message("<span class='notice'>[bicon(src)] \The [src] pings.</span>")
 			playsound(get_turf(src), 'sound/machines/notify.ogg', 50, 0)
 		if("beep")
-			src.visible_message("<span class='notice'>[bicon(src)] \The [src] beeps.</span>")
+			visible_message("<span class='notice'>[bicon(src)] \The [src] beeps.</span>")
 			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
 		if("buzz")
-			src.visible_message("<span class='notice'>[bicon(src)] \The [src] buzzes.</span>")
+			visible_message("<span class='notice'>[bicon(src)] \The [src] buzzes.</span>")
 			playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)
 
 /obj/machinery/proc/check_rebuild()
 	return
-	
+
 /obj/machinery/wrenchable()
 	return (machine_flags & WRENCHMOVE)
-	
+
 /obj/machinery/can_wrench_shuttle()
 	return (machine_flags & SHUTTLEWRENCH)
 
@@ -688,7 +688,7 @@ Class Procs:
 			W.play_rped_sound()
 		return 1
 	return 0
-	
+
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
 	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
@@ -711,4 +711,4 @@ Class Procs:
 					if(!Move(get_step(loc, kick_dir))) break
 					sleep(3)
 	else
-		src.shake(1, 3) //1 means x movement, 3 means intensity
+		shake(1, 3) //1 means x movement, 3 means intensity

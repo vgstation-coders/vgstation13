@@ -523,8 +523,8 @@ Pressure: [env.return_pressure()]"}
 			ghost.ckey = M.ckey
 	message_admins("<span class='notice'>[key_name_admin(usr)] assumed direct control of [M].</span>", 1)
 	log_admin("[key_name(usr)] assumed direct control of [M].")
-	var/mob/adminmob = src.mob
-	M.ckey = src.ckey
+	var/mob/adminmob = mob
+	M.ckey = ckey
 	if( isobserver(adminmob) )
 		del(adminmob)
 	feedback_add_details("admin_verb","ADC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -1379,9 +1379,9 @@ var/global/blood_virus_spreading_disabled = 0
 
 	blood_virus_spreading_disabled = !blood_virus_spreading_disabled
 	if(blood_virus_spreading_disabled)
-		message_admins("[src.ckey] disabled findAirborneVirii.")
+		message_admins("[ckey] disabled findAirborneVirii.")
 	else
-		message_admins("[src.ckey] enabled findAirborneVirii.")
+		message_admins("[ckey] enabled findAirborneVirii.")
 
 /client/proc/reload_style_sheet()
 	set category = "Server"
@@ -1390,7 +1390,7 @@ var/global/blood_virus_spreading_disabled = 0
 
 	for(var/client/C in clients)
 		winset(C, null, "outputwindow.output.style=[config.world_style_config];")
-	message_admins("The style sheet has been reloaded by [src.ckey]")
+	message_admins("The style sheet has been reloaded by [ckey]")
 
 /client/proc/reset_style_sheet()
 	set category = "Server"
@@ -1400,7 +1400,7 @@ var/global/blood_virus_spreading_disabled = 0
 	for(var/client/C in clients)
 		winset(C, null, "outputwindow.output.style=[world_style];")
 	config.world_style_config = world_style
-	message_admins("The style sheet has been reset by [src.ckey]")
+	message_admins("The style sheet has been reset by [ckey]")
 
 /client/proc/cmd_admin_cluwneize(var/mob/M in mob_list)
 	set category = "Fun"
@@ -1521,8 +1521,8 @@ client/proc/create_bomberman_arena()
 	if(!arena_type)
 		return
 
-	var/turf/T = get_turf(src.mob)
-	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T, arena_type, src.mob)
+	var/turf/T = get_turf(mob)
+	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T, arena_type, mob)
 	arenas += A
 
 client/proc/control_bomberman_arena()
@@ -1740,8 +1740,8 @@ client/proc/cure_disease()
 					count++
 					active_diseases -= D
 	to_chat(src, "<span class='notice'>Cured [count] mob\s of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]</span>")
-	log_admin("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
-	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
+	log_admin("[src]/([ckey(key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
+	message_admins("[src]/([ckey(key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 
 client/proc/check_convertables()
 	set name = "Check Convertables"

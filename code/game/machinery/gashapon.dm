@@ -14,10 +14,10 @@
 	if (is_type_in_list(O, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
 		if(user.drop_item(O, src))
 			user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.</span>", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
-			src.visible_message("<span class='notice'>[src] clicks softly.</span>")
+			visible_message("<span class='notice'>[src] clicks softly.</span>")
 			sleep(rand(10,15))
-			src.visible_message("<span class='notice'>[src] dispenses a capsule!</span>")
-			var/obj/item/weapon/capsule/b = new(src.loc)
+			visible_message("<span class='notice'>[src] dispenses a capsule!</span>")
+			var/obj/item/weapon/capsule/b = new(loc)
 			b.icon_state = "capsule[rand(1,12)]"
 
 			if(istype(O, /obj/item/weapon/coin/))

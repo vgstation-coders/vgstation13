@@ -46,7 +46,7 @@
 	processing_objects.Remove(src)
 	icon_state="borer egg-triggered"
 	hatching=1
-	src.visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")
+	visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")
 	recruiter.request_player()
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruiting(var/list/args)
@@ -63,14 +63,14 @@
 	var/mob/dead/observer/O = args["player"]
 	if(O)
 		var/turf/T = get_turf(src)
-		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
+		visible_message("<span class='notice'>\The [name] bursts open!</span>")
 		var/mob/living/simple_animal/borer/B = new (T, child_prefix_index)
 		B.transfer_personality(O.client)
 		// Play hatching noise here.
-		playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
+		playsound(loc, 'sound/items/borer_hatch.ogg', 50, 1)
 		qdel(src)
 	else
-		src.visible_message("<span class='notice'>\The [name] calms down.</span>")
+		visible_message("<span class='notice'>\The [name] calms down.</span>")
 		Grow() // Reset egg, check for hatchability.
 
 
@@ -85,7 +85,7 @@
 		if(environment.vars[gas_id] <= required_mols[gas_id])
 			meets_conditions=0
 	if(meets_conditions)
-		src.Hatch()
+		Hatch()
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype( W, /obj/item/toy/crayon ))

@@ -91,7 +91,7 @@ var/savefile/panicfile
 
 	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
 
-	src.update_status()
+	update_status()
 
 	makepowernets()
 	paperwork_setup()
@@ -127,7 +127,7 @@ var/savefile/panicfile
 	slmaster.plane = PLANE_EFFECTS
 	slmaster.mouse_opacity = 0
 
-	src.update_status()
+	update_status()
 
 	sleep_offline = 1
 
@@ -410,8 +410,8 @@ var/savefile/panicfile
 		s += ": [jointext(features, ", ")]"
 
 	/* does this help? I do not know */
-	if (src.status != s)
-		src.status = s
+	if (status != s)
+		status = s
 
 #define FAILED_DB_CONNECTION_CUTOFF 5
 var/failed_db_connections = 0

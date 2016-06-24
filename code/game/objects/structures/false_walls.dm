@@ -86,7 +86,7 @@
 
 /obj/structure/falsewall/Destroy()
 
-	var/temploc = src.loc
+	var/temploc = loc
 
 	spawn(10)
 		for(var/turf/simulated/wall/W in range(temploc,1))
@@ -111,7 +111,7 @@
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
-		src.add_hiddenprint(user)
+		add_hiddenprint(user)
 		attack_hand(user)
 
 /obj/structure/falsewall/attack_hand(mob/user as mob)
@@ -123,7 +123,7 @@
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
 		sleep(15)
-		src.density = 0
+		density = 0
 		set_opacity(0)
 		opening = 0
 	else
@@ -133,14 +133,14 @@
 		density = 1
 		sleep(15)
 		set_opacity(1)
-		src.relativewall()
+		relativewall()
 		opening = 0
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
 	if(density)
 		icon_state = "[mineral]0"
-		src.relativewall()
+		relativewall()
 	else
 		icon_state = "[mineral]fwall_open"
 
@@ -194,7 +194,7 @@
 	..()
 	if(density)
 		icon_state = "[mineral]0"
-		src.relativewall()
+		relativewall()
 	else
 		icon_state = "[mineral]fwall_open"
 
@@ -223,7 +223,7 @@
 
 /obj/structure/falserwall/attack_ai(mob/user as mob)
 	if(isMoMMI(user))
-		src.add_hiddenprint(user)
+		add_hiddenprint(user)
 		attack_hand(user)
 
 /obj/structure/falserwall/attack_hand(mob/user as mob)

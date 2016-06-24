@@ -389,7 +389,7 @@
 				song.tempo = tempo
 
 	add_fingerprint(usr)
-	src.updateUsrDialog()
+	updateUsrDialog()
 	//for(var/mob/M in viewers(1, loc))
 	//	if((M.client && M.machine == src))
 	//		attack_self(M)

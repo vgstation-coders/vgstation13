@@ -112,7 +112,7 @@ obj/structure/ex_act(severity)
 		for(var/atom/movable/obstacle in large_dense)
 			if(!obstacle.Cross(AM, AM.loc) && AM != obstacle)
 				return ..()
-		AM.loc = src.loc
+		AM.loc = loc
 		to_chat(AM, "<span class='info'>You slip under the tube.</span>")
 
 

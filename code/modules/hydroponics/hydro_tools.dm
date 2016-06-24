@@ -375,8 +375,8 @@
 /obj/item/weapon/reagent_containers/glass/fertilizer/New()
 	..()
 
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	pixel_x = rand(-5.0, 5)
+	pixel_y = rand(-5.0, 5)
 
 	if(fertilizer)
 		reagents.add_reagent(fertilizer,10)
@@ -488,8 +488,8 @@
 	..()
 	if(prob(40))
 		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
-		new/obj/effect/decal/cleanable/clay_fragments(src.loc)
-		src.visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+		new/obj/effect/decal/cleanable/clay_fragments(loc)
+		visible_message("<span class='warning'>\The [name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 		qdel(src)
 
 /obj/structure/claypot

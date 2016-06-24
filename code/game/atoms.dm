@@ -80,16 +80,16 @@ var/global/list/ghdel_profiling = list()
 
 	switch(xy)
 		if(1)
-			src.pixel_x += rand(-intensity, intensity)
+			pixel_x += rand(-intensity, intensity)
 		if(2)
-			src.pixel_y += rand(-intensity, intensity)
+			pixel_y += rand(-intensity, intensity)
 		if(3)
-			src.pixel_x += rand(-intensity, intensity)
-			src.pixel_y += rand(-intensity, intensity)
+			pixel_x += rand(-intensity, intensity)
+			pixel_y += rand(-intensity, intensity)
 
 	spawn(2)
-	src.pixel_x = old_pixel_x
-	src.pixel_y = old_pixel_y
+	pixel_x = old_pixel_x
+	pixel_y = old_pixel_y
 
 // NOTE FROM AMATEUR CODER WHO STRUGGLED WITH RUNTIMES
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
@@ -98,20 +98,20 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/throw_impact(atom/hit_atom, var/speed, user)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
-		M.hitby(src,speed,src.dir)
-		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by ([src.fingerprintslast])</font>")
+		M.hitby(src,speed,dir)
+		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by ([fingerprintslast])</font>")
 
 	else if(isobj(hit_atom))
 		var/obj/O = hit_atom
 		if(!O.anchored)
-			step(O, src.dir)
+			step(O, dir)
 		O.hitby(src,speed)
 
 	else if(isturf(hit_atom))
 		var/turf/T = hit_atom
 		if(T.density)
 			spawn(2)
-				step(src, turn(src.dir, 180))
+				step(src, turn(dir, 180))
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
@@ -235,7 +235,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/in_contents_of(container)//can take class or object instance as argument
 	if(ispath(container))
-		if(istype(src.loc, container))
+		if(istype(loc, container))
 			return 1
 	else if(src in container)
 		return 1
@@ -376,7 +376,7 @@ its easier to just keep the beam vertical.
 /atom/proc/examine(mob/user, var/size = "")
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
-	if(src.blood_DNA && src.blood_DNA.len)
+	if(blood_DNA && blood_DNA.len)
 		if(gender == PLURAL)
 			f_name = "some "
 		else
@@ -440,7 +440,7 @@ its easier to just keep the beam vertical.
 	return ex_act(severity, child)
 
 /atom/proc/blob_act(destroy = 0)
-	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
+	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([type])")
 	if(flags & INVULNERABLE)
 		return
 	anim(target = loc, a_icon = 'icons/mob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
@@ -468,9 +468,9 @@ its easier to just keep the beam vertical.
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
 	if(canGhostRead(user,src,ghost_flags))
-		src.attack_ai(user)
+		attack_ai(user)
 	else
-		src.examine()
+		examine()
 	return
 
 /atom/proc/attack_admin(mob/user as mob)
@@ -481,7 +481,7 @@ its easier to just keep the beam vertical.
 //for aliens, it works the same as monkeys except for alien-> mob interactions which will be defined in the
 //appropiate mob files
 /atom/proc/attack_alien(mob/user as mob)
-	src.attack_paw(user)
+	attack_paw(user)
 	return
 
 /atom/proc/attack_larva(mob/user as mob)
@@ -501,11 +501,11 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/hand_r(mob/user as mob)			//Cyborg (robot) - restrained
-	src.hand_a(user)
+	hand_a(user)
 	return
 
 /atom/proc/hand_al(mob/user as mob)			//alien - restrained
-	src.hand_p(user)
+	hand_p(user)
 	return
 
 /atom/proc/hand_m(mob/user as mob)			//slime - restrained
@@ -521,7 +521,7 @@ its easier to just keep the beam vertical.
 
 //Called on every object in a shuttle which rotates
 /atom/proc/shuttle_rotate(var/angle)
-	src.dir = turn(src.dir, -angle)
+	dir = turn(dir, -angle)
 
 	if(canSmoothWith) //Smooth the smoothable
 		spawn //Usually when this is called right after an atom is moved. Not having this "spawn" here will cause this atom to look for its neighbours BEFORE they have finished moving, causing bad stuff.
@@ -557,33 +557,33 @@ its easier to just keep the beam vertical.
 /atom/proc/add_hiddenprint(mob/living/M as mob)
 	if(isnull(M)) return
 	if(isnull(M.key)) return
-	if (!( src.flags ) & FPRINT)
+	if (!( flags ) & FPRINT)
 		return
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if (!istype(H.dna, /datum/dna))
 			return 0
 		if (H.gloves)
-			if(src.fingerprintslast != H.key)
-				src.fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []",H.real_name, H.key)
-				src.fingerprintslast = H.key
+			if(fingerprintslast != H.key)
+				fingerprintshidden += text("\[[time_stamp()]\] (Wearing gloves). Real name: [], Key: []",H.real_name, H.key)
+				fingerprintslast = H.key
 			return 0
-		if (!( src.fingerprints ))
-			if(src.fingerprintslast != H.key)
-				src.fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",H.real_name, H.key)
-				src.fingerprintslast = H.key
+		if (!( fingerprints ))
+			if(fingerprintslast != H.key)
+				fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",H.real_name, H.key)
+				fingerprintslast = H.key
 			return 1
 	else
-		if(src.fingerprintslast != M.key)
-			src.fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",M.real_name, M.key)
-			src.fingerprintslast = M.key
+		if(fingerprintslast != M.key)
+			fingerprintshidden += text("\[[time_stamp()]\] Real name: [], Key: []",M.real_name, M.key)
+			fingerprintslast = M.key
 	return
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
 	if(isnull(M)) return
 	if(isAI(M)) return
 	if(isnull(M.key)) return
-	if (!( src.flags ) & FPRINT)
+	if (!( flags ) & FPRINT)
 		return
 	if (ishuman(M))
 		//Add the list if it does not exist.
@@ -678,7 +678,7 @@ its easier to just keep the beam vertical.
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
 	M.check_dna()
-	if (!( src.flags ) & FPRINT)
+	if (!( flags ) & FPRINT)
 		return 0
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
@@ -713,7 +713,7 @@ its easier to just keep the beam vertical.
 
 
 /atom/proc/clean_blood()
-	src.germ_level = 0
+	germ_level = 0
 	if(istype(blood_DNA, /list))
 		//del(blood_DNA)
 		blood_DNA.len = 0
@@ -727,7 +727,7 @@ its easier to just keep the beam vertical.
 	var/list/y_arr = null
 	for(cur_x=1,cur_x<=global_map.len,cur_x++)
 		y_arr = global_map[cur_x]
-		cur_y = y_arr.Find(src.z)
+		cur_y = y_arr.Find(z)
 		if(cur_y)
 			break
 //	to_chat(world, "X = [cur_x]; Y = [cur_y]")
@@ -752,8 +752,8 @@ its easier to just keep the beam vertical.
 /mob/living/carbon/human/setGender(gend = FEMALE)
 	if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
 		CRASH("SOMEBODY SET A BAD GENDER ON [src] [gend]")
-	var/old_gender = src.gender
-	src.gender = gend
+	var/old_gender = gender
+	gender = gend
 	testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
 
 /atom/proc/mop_act(obj/item/weapon/mop/M, mob/user)

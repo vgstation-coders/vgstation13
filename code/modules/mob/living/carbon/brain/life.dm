@@ -211,7 +211,7 @@
 	proc/handle_regular_hud_updates()
 
 
-		if (stat == 2 || (M_XRAY in src.mutations))
+		if (stat == 2 || (M_XRAY in mutations))
 			sight |= SEE_TURFS
 			sight |= SEE_MOBS
 			sight |= SEE_OBJS
@@ -248,13 +248,13 @@
 		if (client)
 			clear_fullscreens()
 
-			if(src.eye_blind || blinded)
+			if(eye_blind || blinded)
 				overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
-			if (src.disabilities & NEARSIGHTED)
+			if (disabilities & NEARSIGHTED)
 				overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
-			if (src.eye_blurry)
+			if (eye_blurry)
 				overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
-			if (src.druggy)
+			if (druggy)
 				overlay_fullscreen("high", /obj/screen/fullscreen/high)
 
 		if (stat != 2)

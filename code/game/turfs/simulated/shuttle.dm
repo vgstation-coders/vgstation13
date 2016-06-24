@@ -19,7 +19,7 @@
 	explosion_block = 2
 
 /turf/simulated/shuttle/wall/shuttle_rotate(angle) //delete this when autosmooth is added
-	src.transform = turn(src.transform, angle)
+	transform = turn(transform, angle)
 
 /turf/simulated/shuttle/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)

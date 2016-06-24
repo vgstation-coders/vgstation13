@@ -270,8 +270,8 @@ proc/AirflowSpace(zone/A)
 		return
 	airflow_speed = Clamp(n * (9 / airflow_falloff), 1, 9)
 	var
-		xo = airflow_dest.x - src.x
-		yo = airflow_dest.y - src.y
+		xo = airflow_dest.x - x
+		yo = airflow_dest.y - y
 		od = 0
 	airflow_dest = null
 	if(!density)
@@ -292,13 +292,13 @@ proc/AirflowSpace(zone/A)
 				sleep(max(1,10-(airflow_speed+3)) * tick_multiplier)
 			if(od)
 				density = 1
-			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
+			if ((!( airflow_dest ) || loc == airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
-			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
+			if ((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 				break
 			if(!isturf(loc))
 				break
-			step_towards(src, src.airflow_dest)
+			step_towards(src, airflow_dest)
 			if(ismob(src) && src:client)
 				var/mob/M = src
 				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
@@ -331,8 +331,8 @@ proc/AirflowSpace(zone/A)
 		return
 	airflow_speed = Clamp(n * (9 / airflow_falloff), 1, 9)
 	var
-		xo = -(airflow_dest.x - src.x)
-		yo = -(airflow_dest.y - src.y)
+		xo = -(airflow_dest.x - x)
+		yo = -(airflow_dest.y - y)
 		od = 0
 	airflow_dest = null
 	if(!density)
@@ -347,13 +347,13 @@ proc/AirflowSpace(zone/A)
 					sleep(tick_multiplier)
 			else
 				sleep(max(1,10-(airflow_speed+3)) * tick_multiplier)
-			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
+			if ((!( airflow_dest ) || loc == airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
-			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
+			if ((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 				return
 			if (!isturf(loc))
 				return
-			step_towards(src, src.airflow_dest)
+			step_towards(src, airflow_dest)
 			if(ismob(src) && src:client)
 				var/mob/M = src
 				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))

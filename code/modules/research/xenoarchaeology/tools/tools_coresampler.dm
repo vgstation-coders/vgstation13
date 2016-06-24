@@ -88,8 +88,8 @@
 	if(filled_bag)
 		to_chat(usr, "<span class='notice'>You eject the full sample bag.</span>")
 		var/success = 0
-		if(istype(src.loc, /mob))
-			var/mob/M = src.loc
+		if(istype(loc, /mob))
+			var/mob/M = loc
 			success = M.put_in_inactive_hand(filled_bag)
 		if(!success)
 			filled_bag.loc = get_turf(src)

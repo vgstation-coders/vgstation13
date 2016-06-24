@@ -20,12 +20,12 @@
 	if(istype(affected_mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = affected_mob
 		if(!H.internal_organs_by_name["appendix"])
-			src.cure()
+			cure()
 
 	if(stage == 1)
 		if(affected_mob.op_stage.appendix == 2.0)
 			// appendix is removed, can't get infected again
-			src.cure()
+			cure()
 		if(prob(5))
 			to_chat(affected_mob, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
 			affected_mob.emote("me",1,"winces slightly.")
@@ -54,4 +54,4 @@
 			var/datum/wound/W = new /datum/wound/internal_bleeding(20)
 			H.adjustToxLoss(25)
 			groin.wounds += W
-			src.cure()
+			cure()

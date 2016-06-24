@@ -13,15 +13,15 @@
 
 /obj/machinery/computer/curer/attackby(var/obj/I as obj, var/mob/user as mob)
 	/*if(istype(I, /obj/item/weapon/screwdriver))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
-			if (src.stat & BROKEN)
+			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				new /obj/item/weapon/shard( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
+				new /obj/item/weapon/shard( loc )
 				var/obj/item/weapon/circuitboard/curer/M = new /obj/item/weapon/circuitboard/curer( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -29,10 +29,10 @@
 				del(src)
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
-				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 				var/obj/item/weapon/circuitboard/curer/M = new /obj/item/weapon/circuitboard/curer( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.loc = loc
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"
@@ -47,16 +47,16 @@
 			I.loc = src
 
 	//else
-	src.attack_hand(user)
+	attack_hand(user)
 	return
 
 /obj/machinery/computer/curer/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/curer/attack_paw(var/mob/user as mob)
 
-	return src.attack_hand(user)
+	return attack_hand(user)
 	return
 
 /obj/machinery/computer/curer/attack_hand(var/mob/user as mob)
@@ -93,7 +93,7 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 	use_power(500)
-	src.updateDialog()
+	updateDialog()
 
 	if(curing)
 		curing -= 1
@@ -113,41 +113,41 @@
 /obj/machinery/computer/curer/Topic(href, href_list)
 	if(..())
 		return
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon)))
 		usr.machine = src
 
 		if (href_list["antibody"])
 			curing = 30
 			dish.growth -= 50
-			src.icon_state = "dna"
+			icon_state = "dna"
 		if (href_list["virus"])
 			virusing = 30
 			dish.growth -= 100
-			src.icon_state = "dna"
+			icon_state = "dna"
 		else if(href_list["eject"])
-			dish.loc = src.loc
+			dish.loc = loc
 			dish = null
 
-		src.add_fingerprint(usr)
-	src.updateUsrDialog()
+		add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 
 /obj/machinery/computer/curer/proc/createcure(var/datum/disease2/disease/virus2)
-	var/obj/item/weapon/cureimplanter/implanter = new /obj/item/weapon/cureimplanter(src.loc)
+	var/obj/item/weapon/cureimplanter/implanter = new /obj/item/weapon/cureimplanter(loc)
 	implanter.resistance = new /datum/disease2/resistance(dish.virus2)
 	if(probG("Virus curing",3))
 		implanter.works = 0
 	else
 		implanter.works = rand(1,2)
-	state("The [src.name] Buzzes")
+	state("The [name] Buzzes")
 
 /obj/machinery/computer/curer/proc/createvirus(var/datum/disease2/disease/virus2)
-	var/obj/item/weapon/cureimplanter/implanter = new /obj/item/weapon/cureimplanter(src.loc)
+	var/obj/item/weapon/cureimplanter/implanter = new /obj/item/weapon/cureimplanter(loc)
 	implanter.name = "Viral implanter (MAJOR BIOHAZARD)"
 	implanter.virus2 = dish.virus2.getcopy()
 	implanter.works = 3
-	state("The [src.name] Buzzes")
+	state("The [name] Buzzes")
 
 
 /obj/machinery/computer/curer/proc/state(var/msg)

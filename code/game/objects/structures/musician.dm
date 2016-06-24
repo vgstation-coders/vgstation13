@@ -386,7 +386,7 @@
 		else if(href_list["import"])
 			var/t = ""
 			do
-				t = html_encode(input(usr, "Please paste the entire song, formatted:", text("[]", src.name), t)  as message)
+				t = html_encode(input(usr, "Please paste the entire song, formatted:", text("[]", name), t)  as message)
 				if (!in_range(src, usr))
 					return
 
@@ -416,10 +416,10 @@
 				song = new()
 				song.lines = lines
 				song.tempo = tempo
-				src.updateUsrDialog()
+				updateUsrDialog()
 
 	add_fingerprint(usr)
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/structure/device/piano/attackby(obj/item/O as obj, mob/user as mob)
@@ -432,7 +432,7 @@
 					"[user] loosens \the [src]'s casters.", \
 					"<span class='notice'>You have loosened \the [src]. Now it can be pulled somewhere else.</span>", \
 					"You hear ratchet.")
-				src.anchored = 0
+				anchored = 0
 		else
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You begin to tighten \the [src] to the floor...</span>")
@@ -441,6 +441,6 @@
 					"[user] tightens \the [src]'s casters.", \
 					"<span class='notice'>You have tightened \the [src]'s casters. Now it can be played again.</span>", \
 					"You hear ratchet.")
-				src.anchored = 1
+				anchored = 1
 	else
 		..()

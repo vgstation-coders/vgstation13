@@ -35,7 +35,7 @@
 
 		if(0)
 			// State 0
-			if(iswrench(W) && isturf(src.loc))
+			if(iswrench(W) && isturf(loc))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 				to_chat(user, "You wrench the assembly into place.")
 				anchored = 1
@@ -95,8 +95,8 @@
 					return
 
 				state = 4
-				var/obj/machinery/camera/C = new(src.loc)
-				src.loc = C
+				var/obj/machinery/camera/C = new(loc)
+				loc = C
 				C.assembly = src
 
 				C.auto_turn()

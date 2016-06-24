@@ -35,8 +35,8 @@
 			if(can_move)
 				can_move = 0
 				flick("phazon-phase", src)
-				src.loc = get_step(src,src.dir)
-				src.use_power(phasing_energy_drain)
+				loc = get_step(src,dir)
+				use_power(phasing_energy_drain)
 				sleep(step_in*3)
 				can_move = 1
 	else
@@ -45,7 +45,7 @@
 
 /obj/mecha/combat/phazon/click_action(atom/target,mob/user)
 	if(phasing)
-		src.occupant_message("Unable to interact with objects while phasing")
+		occupant_message("Unable to interact with objects while phasing")
 		return
 	else
 		return ..()
@@ -65,6 +65,6 @@
 	..()
 	if (href_list["phasing"])
 		phasing = !phasing
-		send_byjax(src.occupant,"exosuit.browser","phasing_command","[phasing?"Dis":"En"]able phasing")
-		src.occupant_message("<font color=\"[phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
+		send_byjax(occupant,"exosuit.browser","phasing_command","[phasing?"Dis":"En"]able phasing")
+		occupant_message("<font color=\"[phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
 	return

@@ -629,7 +629,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 /datum/seed/proc/spawn_seed_packet(turf/target)
 	add_newline_to_controller()
 	var/obj/item/seeds/seeds = new(target)
-	seeds.seed_type = src.name
+	seeds.seed_type = name
 	seeds.update_seed()
 	return
 

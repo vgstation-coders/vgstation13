@@ -29,7 +29,7 @@
 	RefreshParts()
 
 /obj/machinery/pipedispenser/attack_paw(user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/pipedispenser/attack_hand(user as mob)
 	if(..())
@@ -104,12 +104,12 @@
 		return 1
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["make"])
 		if(!wait)
 			var/p_type = text2num(href_list["make"])
 			var/p_dir = text2num(href_list["dir"])
-			var/obj/item/pipe/P = getFromPool(/obj/item/pipe, get_turf(src)) //new (/*usr.loc*/ src.loc, pipe_type=p_type, dir=p_dir)
+			var/obj/item/pipe/P = getFromPool(/obj/item/pipe, get_turf(src)) //new (/*usr.loc*/ loc, pipe_type=p_type, dir=p_dir)
 			P.New(P.loc, pipe_type=p_type, dir=p_dir)
 			P.setPipingLayer(layer_to_make)
 			P.update()
@@ -119,13 +119,13 @@
 				wait = 0
 	if(href_list["makemeter"])
 		if(!wait)
-			new /obj/item/pipe_meter(/*usr.loc*/ src.loc)
+			new /obj/item/pipe_meter(/*usr.loc*/ loc)
 			wait = 1
 			spawn(15)
 				wait = 0
 	if(href_list["makegsensor"])
 		if(!wait)
-			new /obj/item/pipe_gsensor(/*usr.loc*/ src.loc)
+			new /obj/item/pipe_gsensor(/*usr.loc*/ loc)
 			wait = 1
 			spawn(15)
 				wait = 0
@@ -138,7 +138,7 @@
 	return
 
 /obj/machinery/pipedispenser/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/pipe_meter) || istype(W, /obj/item/pipe_gsensor))
 		if(user.drop_item(W, src))
 			to_chat(usr, "<span class='notice'>You put [W] back to [src].</span>")
@@ -153,10 +153,10 @@
 /obj/machinery/pipedispenser/wrenchAnchor(mob/user)
 	if(..() == 1)
 		if(anchored)
-			src.stat &= ~MAINT
+			stat &= ~MAINT
 			power_change()
 		else
-			src.stat |= MAINT
+			stat |= MAINT
 			if (user.machine==src)
 				user << browse(null, "window=pipedispenser")
 
@@ -231,14 +231,14 @@ Nah
 	if(..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["dmake"])
 		if(!anchored || !usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
 			usr << browse(null, "window=pipedispenser")
 			return
 		if(!wait)
 			var/p_type = text2num(href_list["dmake"])
-			var/obj/structure/disposalconstruct/C = new (src.loc)
+			var/obj/structure/disposalconstruct/C = new (loc)
 			switch(p_type)
 				if(0)
 					C.ptype = 0

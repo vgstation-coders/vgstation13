@@ -41,19 +41,19 @@
 	battery = new /obj/item/weapon/cell/high()
 	add_cabin()
 	add_airtank()
-	src.ion_trail = new /datum/effect/effect/system/trail/space_trail()
-	src.ion_trail.set_up(src)
-	src.ion_trail.start()
-	src.use_internal_tank = 1
+	ion_trail = new /datum/effect/effect/system/trail/space_trail()
+	ion_trail.set_up(src)
+	ion_trail.start()
+	use_internal_tank = 1
 	pr_int_temp_processor = new /datum/global_iterator/pod_preserve_temp(list(src))
 	pr_give_air = new /datum/global_iterator/pod_tank_give_air(list(src))
 	equipment_system = new(src)
 
 /obj/spacepod/Destroy()
-	if(src.occupant)
-		src.occupant.loc = src.loc
-		src.occupant.gib()
-		src.occupant = null
+	if(occupant)
+		occupant.loc = loc
+		occupant.gib()
+		occupant = null
 	..()
 
 /obj/spacepod/proc/update_icons()
@@ -230,10 +230,10 @@
 	set category = "Object"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if(usr!=occupant)
 		return
-	src.use_internal_tank = !src.use_internal_tank
-	to_chat(src.occupant, "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>")
+	use_internal_tank = !use_internal_tank
+	to_chat(occupant, "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>")
 	return
 
 /obj/spacepod/proc/add_cabin()
@@ -297,9 +297,9 @@
 		*/
 		H.stop_pulling()
 		H.forceMove(src)
-		src.occupant = H
-		src.add_fingerprint(H)
-		src.forceMove(src.loc)
+		occupant = H
+		add_fingerprint(H)
+		forceMove(loc)
 		//dir = dir_in
 		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		return 1
@@ -316,14 +316,14 @@
 	set name = "Enter / Exit Pod"
 	set src in oview(1)
 
-	if (src.occupant) //Before the other two checks in case there's some fuckery going on where nonhumans are inside the pod
-		if(usr != src.occupant)
-			to_chat(usr, "<span class='notice'><B>The [src.name] is already occupied!</B></span>")
+	if (occupant) //Before the other two checks in case there's some fuckery going on where nonhumans are inside the pod
+		if(usr != occupant)
+			to_chat(usr, "<span class='notice'><B>The [name] is already occupied!</B></span>")
 			return
 		else
-			src.inertia_dir = 0 // engage reverse thruster and power down pod
-			src.occupant.forceMove(src.loc)
-			src.occupant = null
+			inertia_dir = 0 // engage reverse thruster and power down pod
+			occupant.forceMove(loc)
+			occupant = null
 			to_chat(usr, "<span class='notice'>You climb out of the pod</span>")
 			return
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
@@ -339,15 +339,15 @@
 		if(M.Victim == usr)
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
-//	to_chat(usr, "You start climbing into [src.name]")
+//	to_chat(usr, "You start climbing into [name]")
 
-	visible_message("<span class='notice'>[usr] starts to climb into [src.name]</span>")
+	visible_message("<span class='notice'>[usr] starts to climb into [name]</span>")
 
 	if(enter_after(40,usr))
-		if(!src.occupant)
+		if(!occupant)
 			moved_inside(usr)
-		else if(src.occupant!=usr)
-			to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
+		else if(occupant!=usr)
+			to_chat(usr, "[occupant] was faster. Try better next time, loser.")
 	else
 		to_chat(usr, "You stop entering the pod.")
 	return
@@ -407,10 +407,10 @@
 		return
 
 /obj/spacepod/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	var/oldloc = src.loc
+	var/oldloc = loc
 	. = ..()
 	if(dir && (oldloc != NewLoc))
-		src.loc.Entered(src, oldloc)
+		loc.Entered(src, oldloc)
 /obj/spacepod/proc/Process_Spacemove(var/check_drift = 0, mob/user)
 	var/dense_object = 0
 	if(!user)
@@ -428,7 +428,7 @@
 /obj/spacepod/relaymove(mob/user, direction)
 	var/moveship = 1
 	if(battery && battery.charge >= 3 && health)
-		src.dir = direction
+		dir = direction
 		switch(direction)
 			if(1)
 				if(inertia_dir == 2)
@@ -448,7 +448,7 @@
 					moveship = 0
 		if(moveship)
 			Move(get_step(src,direction), direction)
-			if(istype(src.loc, /turf/space))
+			if(istype(loc, /turf/space))
 				inertia_dir = direction
 	else
 		if(!battery)

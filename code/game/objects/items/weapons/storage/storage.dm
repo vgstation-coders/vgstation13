@@ -41,7 +41,7 @@
 		if(!( istype(over_object, /obj/screen/inventory) ))
 			return ..()
 
-		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
+		if(!(loc == usr) || (loc && loc.loc == usr))
 			return
 
 		playsound(get_turf(src), "rustle", 50, 1, -5)
@@ -51,13 +51,13 @@
 			if(OI.hand_index)
 				M.u_equip(src, 0)
 				M.put_in_hand(OI.hand_index, src)
-				src.add_fingerprint(usr)
+				add_fingerprint(usr)
 
 			return
 		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
 			if (usr.s_active)
 				usr.s_active.close(usr)
-			src.show_to(usr)
+			show_to(usr)
 			return
 	return
 
@@ -73,7 +73,7 @@
 
 	var/list/L = list(  )
 
-	L += src.contents
+	L += contents
 
 	for(var/obj/item/weapon/storage/S in src)
 		L += S.return_inv()
@@ -91,12 +91,12 @@
 					return
 	if(user.s_active)
 		user.s_active.hide_from(user)
-	user.client.screen -= src.boxes
-	user.client.screen -= src.closer
-	user.client.screen -= src.contents
-	user.client.screen += src.boxes
-	user.client.screen += src.closer
-	user.client.screen += src.contents
+	user.client.screen -= boxes
+	user.client.screen -= closer
+	user.client.screen -= contents
+	user.client.screen += boxes
+	user.client.screen += closer
+	user.client.screen += contents
 	user.s_active = src
 	is_seeing |= user
 	return
@@ -106,9 +106,9 @@
 
 	if(!user.client)
 		return
-	user.client.screen -= src.boxes
-	user.client.screen -= src.closer
-	user.client.screen -= src.contents
+	user.client.screen -= boxes
+	user.client.screen -= closer
+	user.client.screen -= contents
 	if(user.s_active == src)
 		user.s_active = null
 	is_seeing -= user
@@ -117,7 +117,7 @@
 /obj/item/weapon/storage/proc/close(mob/user as mob)
 
 
-	src.hide_from(user)
+	hide_from(user)
 	user.s_active = null
 	return
 
@@ -126,8 +126,8 @@
 /obj/item/weapon/storage/proc/orient_objs(tx, ty, mx, my)
 	var/cx = tx
 	var/cy = ty
-	src.boxes.screen_loc = "[tx]:,[ty] to [mx],[my]"
-	for(var/obj/O in src.contents)
+	boxes.screen_loc = "[tx]:,[ty] to [mx],[my]"
+	for(var/obj/O in contents)
 		O.screen_loc = "[cx],[cy]"
 		O.layer = 20
 		O.plane = PLANE_HUD
@@ -135,14 +135,14 @@
 		if (cx > mx)
 			cx = tx
 			cy--
-	src.closer.screen_loc = "[mx+1],[my]"
+	closer.screen_loc = "[mx+1],[my]"
 	return
 
 //This proc draws out the inventory and places the items on it. It uses the standard position.
 /obj/item/weapon/storage/proc/standard_orient_objs(var/rows, var/cols, var/list/obj/item/display_contents)
 	var/cx = 4
 	var/cy = 2+rows
-	src.boxes.screen_loc = "4:16,2:16 to [4+cols]:16,[2+rows]:16"
+	boxes.screen_loc = "4:16,2:16 to [4+cols]:16,[2+rows]:16"
 
 	if(display_contents_with_number)
 		for(var/datum/numbered_display/ND in display_contents)
@@ -166,7 +166,7 @@
 			if (cx > (4+cols))
 				cx = 4
 				cy--
-	src.closer.screen_loc = "[4+cols+1]:16,2:16"
+	closer.screen_loc = "[4+cols+1]:16,2:16"
 	return
 
 /datum/numbered_display
@@ -207,7 +207,7 @@
 	var/col_count = min(7,storage_slots) -1
 	if (adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
-	src.standard_orient_objs(row_num, col_count, numbered_contents)
+	standard_orient_objs(row_num, col_count, numbered_contents)
 	return
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
@@ -215,7 +215,7 @@
 /obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0)
 	if(!istype(W)) return //Not an item
 
-	if(src.loc == W)
+	if(loc == W)
 		return 0 //Means the item is already in the storage item
 	if(contents.len >= storage_slots)
 		if(!stop_messages)
@@ -296,7 +296,7 @@
 			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
 		return 0
 
-	if(W.w_class >= src.w_class && (istype(W, /obj/item/weapon/storage)))
+	if(W.w_class >= w_class && (istype(W, /obj/item/weapon/storage)))
 		if(!istype(src, /obj/item/weapon/storage/backpack/holding))	//bohs should be able to hold backpacks again. The override for putting a boh in a boh is in backpack.dm.
 			if(!stop_messages)
 				to_chat(usr, "<span class='notice'>\The [src] cannot hold \the [W] as it's a storage item of the same size.</span>")
@@ -329,7 +329,7 @@
 				else if (W && W.w_class >= W_CLASS_MEDIUM) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
-		src.orient2hud(usr)
+		orient2hud(usr)
 		if(usr.s_active)
 			usr.s_active.show_to(usr)
 	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
@@ -373,7 +373,7 @@
 		W.forceMove(get_turf(src))
 
 	if(usr)
-		src.orient2hud(usr)
+		orient2hud(usr)
 		if(usr.s_active)
 			usr.s_active.show_to(usr)
 	if(W.maptext)
@@ -431,7 +431,7 @@
 	if (over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
 		if (usr.s_active)
 			usr.s_active.close(usr)
-		src.show_to(usr)
+		show_to(usr)
 	return
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
@@ -446,9 +446,9 @@
 		if(MoM.head_state == src) //I'm so sorry. We have exactly one storage item that goes on head, and it can't hold any items while equipped. This is so you can actually take it off.
 			return ..()
 
-	src.orient2hud(user)
-	var/atom/maxloc = src.loc
-	if(src.internal_store)
+	orient2hud(user)
+	var/atom/maxloc = loc
+	if(internal_store)
 		for(var/i = 1; i++ <= internal_store)
 			if(maxloc == user)
 				break
@@ -457,13 +457,13 @@
 	if (maxloc == user)
 		if (user.s_active)
 			user.s_active.close(user)
-		src.show_to(user)
+		show_to(user)
 	else
 		..()
 		for(var/mob/M in range(1))
 			if (M.s_active == src)
-				src.close(M)
-	src.add_fingerprint(user)
+				close(M)
+	add_fingerprint(user)
 	return
 
 /obj/item/weapon/storage/attack_paw(mob/user as mob)
@@ -494,7 +494,7 @@
 	set name = "Empty Contents"
 	set category = "Object"
 
-	if((!ishuman(usr) && (src.loc != usr)) || usr.isUnconscious() || usr.restrained())
+	if((!ishuman(usr) && (loc != usr)) || usr.isUnconscious() || usr.restrained())
 		return
 
 	var/turf/T = get_turf(src)
@@ -514,26 +514,26 @@
 	else
 		verbs -= /obj/item/weapon/storage/verb/toggle_gathering_mode
 
-	src.boxes = getFromPool(/obj/screen/storage)
-	src.boxes.name = "storage"
-	src.boxes.master = src
-	src.boxes.icon_state = "block"
-	src.boxes.screen_loc = "7,7 to 10,8"
-	src.boxes.layer = 19
-	src.closer = getFromPool(/obj/screen/close)
-	src.closer.master = src
-	src.closer.icon_state = "x"
-	src.closer.layer = 20
+	boxes = getFromPool(/obj/screen/storage)
+	boxes.name = "storage"
+	boxes.master = src
+	boxes.icon_state = "block"
+	boxes.screen_loc = "7,7 to 10,8"
+	boxes.layer = 19
+	closer = getFromPool(/obj/screen/close)
+	closer.master = src
+	closer.icon_state = "x"
+	closer.layer = 20
 	orient2hud()
 
 /obj/item/weapon/storage/emp_act(severity)
-	if(!istype(src.loc, /mob/living))
+	if(!istype(loc, /mob/living))
 		for(var/obj/O in contents)
 			O.emp_act(severity)
 	..()
 
 /obj/item/weapon/storage/ex_act(var/severity,var/child=null)
-	if(!istype(src.loc, /mob/living))
+	if(!istype(loc, /mob/living))
 		for(var/obj/O in contents)
 			O.ex_act(severity)
 	..()
@@ -543,28 +543,28 @@
 
 	//Clicking on itself will empty it, if it has the verb to do that.
 	if(user.get_active_hand() == src)
-		if(src.verbs.Find(/obj/item/weapon/storage/verb/quick_empty))
-			src.quick_empty()
+		if(verbs.Find(/obj/item/weapon/storage/verb/quick_empty))
+			quick_empty()
 			return
 
 	//Otherwise we'll try to fold it.
 	if ( contents.len )
 		return
 
-	if ( !ispath(src.foldable) )
+	if ( !ispath(foldable) )
 		return
 	var/found = 0
 	// Close any open UI windows first
 	for(var/mob/M in range(1))
 		if (M.s_active == src)
-			src.close(M)
+			close(M)
 		if ( M == user )
 			found = 1
 	if ( !found )	// User is too far away
 		return
 	// Now make the cardboard
 	to_chat(user, "<span class='notice'>You fold \the [src] flat.</span>")
-	new src.foldable(get_turf(src),foldable_amount)
+	new foldable(get_turf(src),foldable_amount)
 	qdel(src)
 //BubbleWrap END
 /obj/item/weapon/storage/proc/can_see_contents()

@@ -13,7 +13,7 @@ Doesn't work on other aliens/AI.*/
 	else if(X && getPlasma() < X)
 		to_chat(src, "<span class='alien'>Not enough plasma stored.</span>")
 		return 0
-	else if(Y && (!isturf(src.loc) || istype(src.loc, /turf/space)))
+	else if(Y && (!isturf(loc) || istype(loc, /turf/space)))
 		to_chat(src, "<span class='alien'>Bad place for a garden!</span>")
 		return 0
 	else	return 1
@@ -186,7 +186,7 @@ Doesn't work on other aliens/AI.*/
 
 	if(powerc())
 		drop_stomach_contents()
-		src.visible_message("<span class='alien'>\The [src] hurls out the contents of their stomach!</span>")
+		visible_message("<span class='alien'>\The [src] hurls out the contents of their stomach!</span>")
 	return
 
 

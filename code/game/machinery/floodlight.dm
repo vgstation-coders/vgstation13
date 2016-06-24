@@ -13,7 +13,7 @@
 	machine_flags = SCREWTOGGLE | WRENCHMOVE
 
 /obj/machinery/floodlight/New()
-	src.cell = new(src)
+	cell = new(src)
 	..()
 
 /obj/machinery/floodlight/update_icon()
@@ -38,11 +38,11 @@
 			return
 
 /obj/machinery/floodlight/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/floodlight/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/floodlight/attack_hand(mob/user as mob)
 	if(panel_open && cell)

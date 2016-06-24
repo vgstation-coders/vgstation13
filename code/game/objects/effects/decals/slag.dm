@@ -18,7 +18,7 @@
 			melt_temperature=O.melt_temperature
 		else
 			// Ensure slag solidifies at a lower temp, if needed.
-			src.melt_temperature=min(src.melt_temperature,O.melt_temperature)
+			melt_temperature=min(melt_temperature,O.melt_temperature)
 		qdel(O)
 		if(!molten)
 			molten=1
@@ -94,7 +94,7 @@
 			"<span class=\"danger\">You break apart \the [src] with your [W.name]!", \
 			"You hear the sound of rock crumbling.")
 		var/obj/item/weapon/ore/slag/slag = new /obj/item/weapon/ore/slag(loc)
-		slag.materials = src.materials
+		slag.materials = materials
 		slag.materials.holder = slag
 		qdel(src)
 	else

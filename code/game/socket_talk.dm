@@ -6,7 +6,7 @@
 		dll = "./DLLSocket.so"
 	New()
 		..()
-		src.enabled = config.socket_talk
+		enabled = config.socket_talk
 
 		if(enabled)
 			call(dll,"establish_connection")("127.0.0.1","8019")

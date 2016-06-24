@@ -11,11 +11,11 @@
 	New()
 		..()
 		spawn(2)
-			if(istype(src.loc,/obj/machinery/computer2))
-				host = src.loc
+			if(istype(loc,/obj/machinery/computer2))
+				host = loc
 				host.peripherals.Add(src)
 //			var/setup_id = "\ref[src]"
-//			src.id = copytext(setup_id,4,(length(setup_id)-1) )
+//			id = copytext(setup_id,4,(length(setup_id)-1) )
 
 	Del()
 		if(host)
@@ -37,7 +37,7 @@
 			if(!command || !host)
 				return
 
-			src.host.receive_command(src, command, signal)
+			host.receive_command(src, command, signal)
 
 			return
 
@@ -69,7 +69,7 @@
 
 		switch(command)
 			if("send signal")
-				src.radio_connection.post_signal(src, signal)
+				radio_connection.post_signal(src, signal)
 
 		return
 
@@ -79,8 +79,8 @@
 
 		var/datum/signal/newsignal = new
 		newsignal.data = signal.data
-		if(src.code)
-			newsignal.encryption = src.code
+		if(code)
+			newsignal.encryption = code
 
 		send_command("radio signal",newsignal)
 		return
@@ -98,21 +98,21 @@
 		if(!signal)
 			return
 
-		if((command == "print") && !src.printing)
-			src.printing = 1
+		if((command == "print") && !printing)
+			printing = 1
 
 			var/print_data = signal.data["data"]
 			var/print_title = signal.data["title"]
 			if(!print_data)
-				src.printing = 0
+				printing = 0
 				return
 			spawn(50)
-				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( src.host.loc )
+				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( host.loc )
 				P.info = print_data
 				if(print_title)
 					P.name = "paper - '[print_title]'"
 
-				src.printing = 0
+				printing = 0
 				return
 
 		return
@@ -128,15 +128,15 @@
 			return
 
 		if(command == "vend prize")
-			src.vend_prize()
+			vend_prize()
 
 		return
 
 	attack_self(mob/user as mob)
 		if( (last_vend + 400) < world.time)
 			to_chat(user, "You shake something out of [src]!")
-			src.vend_prize()
-			src.last_vend = world.time
+			vend_prize()
+			last_vend = world.time
 		else
 			to_chat(user, "<span class='warning'>[src] isn't ready to dispense a prize yet.</span>")
 
@@ -147,8 +147,8 @@
 		var/prizeselect = rand(1,4)
 		var/turf/prize_location = null
 
-		if(src.host)
-			prize_location = src.host.loc
+		if(host)
+			prize_location = host.loc
 		else
 			prize_location = get_turf(src)
 
@@ -181,8 +181,8 @@
 	attack_self(mob/user as mob)
 		if(authid)
 			to_chat(user, "The card falls out.")
-			src.authid.loc = get_turf(user)
-			src.authid = null
+			authid.loc = get_turf(user)
+			authid = null
 
 		return
 
@@ -195,9 +195,9 @@
 
 		switch(command)
 			if("eject card")
-				if(src.authid)
-					src.authid.loc = src.host.loc
-					src.authid = null
+				if(authid)
+					authid.loc = host.loc
+					authid = null
 			if("add card access")
 				var/new_access = signal.data["access"]
 				if(!new_access)

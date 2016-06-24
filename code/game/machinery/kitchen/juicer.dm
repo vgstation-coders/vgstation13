@@ -42,19 +42,19 @@
 		else
 			if(user.drop_item(O, src))
 				beaker = O
-				src.verbs += /obj/machinery/juicer/verb/detach
+				verbs += /obj/machinery/juicer/verb/detach
 				update_icon()
-				src.updateUsrDialog()
+				updateUsrDialog()
 				return 0
 	if (!is_type_in_list(O, allowed_items))
 		to_chat(user, "It looks as not containing any juice.")
 		return 1
 	if(user.drop_item(O, src))
-		src.updateUsrDialog()
+		updateUsrDialog()
 	return 0
 
 /obj/machinery/juicer/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/juicer/attack_ai(mob/user as mob)
 	return 0
@@ -70,7 +70,7 @@
 	var/beaker_contents = ""
 
 	for (var/i in allowed_items)
-		for (var/obj/item/O in src.contents)
+		for (var/obj/item/O in contents)
 			if (!istype(O,i))
 				continue
 			processing_chamber+= "some <B>[O]</B><BR>"
@@ -113,7 +113,7 @@
 
 		if ("detach")
 			detach()
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/machinery/juicer/verb/detach()
@@ -124,8 +124,8 @@
 		return
 	if (!beaker)
 		return
-	src.verbs -= /obj/machinery/juicer/verb/detach
-	beaker.loc = src.loc
+	verbs -= /obj/machinery/juicer/verb/detach
+	beaker.loc = loc
 	beaker = null
 	update_icon()
 
@@ -149,7 +149,7 @@
 	if (!beaker || beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 		return
 	playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
-	for (var/obj/item/weapon/reagent_containers/food/snacks/O in src.contents)
+	for (var/obj/item/weapon/reagent_containers/food/snacks/O in contents)
 		var/r_id = get_juice_id(O)
 		beaker.reagents.add_reagent(r_id,get_juice_amount(O))
 		qdel(O)

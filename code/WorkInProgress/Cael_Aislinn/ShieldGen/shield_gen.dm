@@ -48,8 +48,8 @@
 
 /obj/machinery/shield_gen/emag(mob/user)
 	if(prob(75))
-		src.locked = !src.locked
-		to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
+		locked = !locked
+		to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
 		updateDialog()
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, src)
@@ -61,10 +61,10 @@
 /obj/machinery/shield_gen/wrenchAnchor(mob/user)
 	if(..())
 		for(var/obj/machinery/shield_capacitor/cap in range(1, src))
-			if(!src.anchored && owned_capacitor == cap)
+			if(!anchored && owned_capacitor == cap)
 				owned_capacitor = null
 				break
-			else if(src.anchored && !owned_capacitor)
+			else if(anchored && !owned_capacitor)
 				owned_capacitor = cap
 				break
 			cap.updateDialog()
@@ -78,18 +78,18 @@
 	else if(istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = W
 		if(access_captain in C.access || access_security in C.access || access_engine in C.access)
-			src.locked = !src.locked
-			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
+			locked = !locked
+			to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
 			updateDialog()
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 
 /obj/machinery/shield_gen/attack_paw(user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/shield_gen/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/shield_gen/attack_hand(mob/user)
 	if(stat & (NOPOWER|BROKEN))
@@ -97,7 +97,7 @@
 	interact(user)
 
 /obj/machinery/shield_gen/attack_ghost(mob/user)
-	if(isAdminGhost(user)) src.attack_hand(user)
+	if(isAdminGhost(user)) attack_hand(user)
 	return
 
 /obj/machinery/shield_gen/interact(mob/user)
@@ -217,16 +217,16 @@
 		icon_state = "broke"
 	else
 		if( powered() )
-			if (src.active)
+			if (active)
 				icon_state = "generator1"
 			else
 				icon_state = "generator0"
 			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
-				src.icon_state = "generator0"
+				icon_state = "generator0"
 				stat |= NOPOWER
-			if (src.active)
+			if (active)
 				toggle()
 
 /obj/machinery/shield_gen/ex_act(var/severity)
@@ -241,7 +241,7 @@
 	if(!anchored)
 		powered = 0
 		return 0
-	var/turf/T = src.loc
+	var/turf/T = loc
 	var/obj/structure/cable/C = T.get_cable_node()
 	var/net
 	if (C)

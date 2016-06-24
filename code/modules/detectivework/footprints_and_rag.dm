@@ -34,8 +34,8 @@
 	if(user.zone_sel.selecting == "mouth")
 		if(ismob(M) && M.reagents && reagents.total_volume)
 			user.visible_message("<span class='warning'>\The [M] has been smothered with \the [src] by \the [user]!</span>", "<span class='warning'>You smother \the [M] with \the [src]!</span>", "You hear some struggling and muffled cries of surprise")
-			src.reagents.reaction(M, TOUCH)
-			spawn(5) src.reagents.clear_reagents()
+			reagents.reaction(M, TOUCH)
+			spawn(5) reagents.clear_reagents()
 			return 1
 	else
 		..()

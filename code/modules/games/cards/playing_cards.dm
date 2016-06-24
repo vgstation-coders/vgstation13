@@ -76,16 +76,16 @@
 
 /obj/item/toy/cards/examine(mob/user)
 	..()
-	user.show_message("There are [src.cards.len] cards in the deck.", 1)
+	user.show_message("There are [cards.len] cards in the deck.", 1)
 
 /obj/item/toy/cards/attack_hand(mob/user as mob)
 	var/choice = null
 	if(!cards.len)
-		src.icon_state = "deck_empty"
+		icon_state = "deck_empty"
 		to_chat(user, "<span class = 'notice'>There are no more cards to draw.</span>")
 		return
 	choice = cards[1]
-	src.cards -= choice
+	cards -= choice
 	user.put_in_active_hand(choice)
 	user.visible_message("<span class = 'notice'>[user] draws a card from the deck.</span>",
 						"<span class = 'notice'>You draw a card from the deck.")
@@ -106,7 +106,7 @@
 			if(C.flipped == 0)
 				C.Flip() //Flip the card back face down before it's put into the deck
 			if(user.drop_item(C, src))
-				src.cards += C
+				cards += C
 				user.visible_message("<span class = 'notice'>[user] adds a card to the bottom of the deck.</span>",
 									 "You add the card to the bottom of the deck.</span>")
 		else
@@ -132,20 +132,20 @@
 
 /obj/item/toy/cards/update_icon()
 	if(cards.len > 26)
-		src.icon_state = "deck_full"
+		icon_state = "deck_full"
 	else if(cards.len > 10)
-		src.icon_state = "deck_half"
+		icon_state = "deck_half"
 	else if(cards.len > 1)
-		src.icon_state = "deck_low"
+		icon_state = "deck_low"
 
 /obj/item/toy/cards/verb/draw_specific()
 	set name = "Draw specific card"
 	set category = "Object"
 	set src in usr
 
-	var/list/card_names = new /list(src.cards.len)
-	for(var/i = 1; i <= src.cards.len; i++)
-		var/obj/item/toy/singlecard/T = src.cards[i]
+	var/list/card_names = new /list(cards.len)
+	for(var/i = 1; i <= cards.len; i++)
+		var/obj/item/toy/singlecard/T = cards[i]
 		card_names[i] = T.cardname
 
 	usr.visible_message("<span class = 'notice'>[usr] rifles through the deck.</span>",
@@ -154,8 +154,8 @@
 	var/N = input("Draw a specific card from the deck.") as null|anything in card_names
 	if (N)
 		var/obj/item/toy/singlecard/C = null
-		for(var/i = 1; i <= src.cards.len; i++)
-			var/obj/item/toy/singlecard/Q = src.cards[i]
+		for(var/i = 1; i <= cards.len; i++)
+			var/obj/item/toy/singlecard/Q = cards[i]
 			if(N == Q.cardname)
 				C = Q
 		var/mob/living/M = usr
@@ -163,7 +163,7 @@
 			to_chat(usr, "<span class = 'warning'>Your other hand is full.</span>")
 			return
 
-		src.cards -= C
+		cards -= C
 		C.Flip()
 		usr.put_in_hands(C)
 
@@ -185,7 +185,7 @@
 			if(OI.hand_index)
 				M.u_equip(src, 0)
 				M.put_in_hand(OI.hand_index, src)
-				src.add_fingerprint(usr)
+				add_fingerprint(usr)
 				to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
 
 			return
@@ -220,7 +220,7 @@
 
 /obj/item/toy/cardhand/attackby(obj/item/toy/singlecard/C, mob/living/user, params)
 	if(istype(C))
-		if(!(C.parentdeck || src.parentdeck) || C.parentdeck == src.parentdeck)
+		if(!(C.parentdeck || parentdeck) || C.parentdeck == parentdeck)
 			if(currenthand.len >= max_hand_size)
 				to_chat(user, "<span class = 'warning'>You can't add any more cards to this hand.</span>")
 				return
@@ -235,19 +235,19 @@
 	else if(istype(C, /obj/item/toy/cardhand))
 		var/obj/item/toy/cardhand/H = C
 		var/compatible = 1
-		var/cardcount = H.currenthand.len + src.currenthand.len
+		var/cardcount = H.currenthand.len + currenthand.len
 		if(cardcount > 5)
 			compatible = 0
 		for(var/obj/item/toy/singlecard/card in H.currenthand)
-			for(var/obj/item/toy/singlecard/sourcecard in src.currenthand)
+			for(var/obj/item/toy/singlecard/sourcecard in currenthand)
 				if(!(!(card.parentdeck || sourcecard.parentdeck) || card.parentdeck == sourcecard.parentdeck))
 					compatible = 0
 		if(compatible)
 			user << "<span class = 'notice'>You add \the [src] to your hand.</span>"
-			for(var/obj/item/toy/singlecard/card in src.currenthand)
-				src.currenthand -= card
+			for(var/obj/item/toy/singlecard/card in currenthand)
+				currenthand -= card
 				H.currenthand += card
-			src.forceMove(H)
+			forceMove(H)
 			H.update_icon()
 
 			qdel(src)
@@ -317,12 +317,12 @@
 		name = "card"
 	else
 		if(cardname)
-			src.icon_state = "sc_[cardname]"
-			src.name = src.cardname
+			icon_state = "sc_[cardname]"
+			name = cardname
 		else
-			src.icon_state = "sc_Ace of Spades"
-			src.name = "What Card"
-		src.pixel_x = 5
+			icon_state = "sc_Ace of Spades"
+			name = "What Card"
+		pixel_x = 5
 
 /obj/item/toy/singlecard/examine(mob/user)
 	..()
@@ -330,7 +330,7 @@
 		var/mob/living/carbon/human/cardUser = user
 		if(cardUser.is_holding_item(src))
 			cardUser.visible_message("<span class = 'notice'>[cardUser] checks \his card.",
-									 "<span class = 'notice'>The card reads: [src.name]</span>")
+									 "<span class = 'notice'>The card reads: [name]</span>")
 		else
 			to_chat(cardUser, "<span class = 'notice'>You need to have the card in your hand to check it.</span>")
 
@@ -341,7 +341,7 @@
 /obj/item/toy/singlecard/attackby(obj/item/I, mob/living/user)
 	if(istype(I, /obj/item/toy/singlecard))
 		var/obj/item/toy/singlecard/C = I
-		if(!(C.parentdeck || src.parentdeck) || C.parentdeck == src.parentdeck)
+		if(!(C.parentdeck || parentdeck) || C.parentdeck == parentdeck)
 			var/obj/item/toy/cardhand/H = new/obj/item/toy/cardhand(user.loc)
 			H.parentdeck = C.parentdeck
 			user.drop_item(C, H, force_drop = 1)
@@ -350,7 +350,7 @@
 			user.drop_item(C, H, force_drop = 1)
 
 			user.remove_from_mob(src) //we could be anywhere!
-			src.forceMove(H)
+			forceMove(H)
 			H.currenthand += C
 			H.currenthand += src
 			H.update_icon()
@@ -361,13 +361,13 @@
 		var/obj/item/toy/cardhand/H = I
 		var/compatible = 1
 		for(var/obj/item/toy/singlecard/card in H.currenthand)
-			if(!(!(card.parentdeck || src.parentdeck) || card.parentdeck == src.parentdeck))
+			if(!(!(card.parentdeck || parentdeck) || card.parentdeck == parentdeck))
 				compatible = 0
 		if(compatible)
 			user << "<span class = 'notice'>You add \the [src] to your hand.</span>"
 			user.drop_item(src, H)
 			user.remove_from_mob(src) //we could be anywhere!
-			src.forceMove(H)
+			forceMove(H)
 			H.currenthand += src
 			H.update_icon()
 		else

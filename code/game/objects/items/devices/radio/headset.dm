@@ -22,8 +22,8 @@
 	recalculateChannels()
 
 /obj/item/device/radio/headset/receive_range(freq, level)
-	if(ishuman(src.loc))
-		var/mob/living/carbon/human/H = src.loc
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
 		if(H.ears == src)
 			return ..(freq, level)
 	return -1
@@ -313,42 +313,42 @@
 
 
 /obj/item/device/radio/headset/proc/recalculateChannels()
-	src.channels = list()
-	src.translate_binary = 0
-	src.translate_hive = 0
-	src.syndie = 0
+	channels = list()
+	translate_binary = 0
+	translate_hive = 0
+	syndie = 0
 
 	if(keyslot1)
 		for(var/ch_name in keyslot1.channels)
-			if(ch_name in src.channels)
+			if(ch_name in channels)
 				continue
-			src.channels += ch_name
-			src.channels[ch_name] = keyslot1.channels[ch_name]
+			channels += ch_name
+			channels[ch_name] = keyslot1.channels[ch_name]
 
 		if(keyslot1.translate_binary)
-			src.translate_binary = 1
+			translate_binary = 1
 
 		if(keyslot1.translate_hive)
-			src.translate_hive = 1
+			translate_hive = 1
 
 		if(keyslot1.syndie)
-			src.syndie = 1
+			syndie = 1
 
 	if(keyslot2)
 		for(var/ch_name in keyslot2.channels)
-			if(ch_name in src.channels)
+			if(ch_name in channels)
 				continue
-			src.channels += ch_name
-			src.channels[ch_name] = keyslot2.channels[ch_name]
+			channels += ch_name
+			channels[ch_name] = keyslot2.channels[ch_name]
 
 		if(keyslot2.translate_binary)
-			src.translate_binary = 1
+			translate_binary = 1
 
 		if(keyslot2.translate_hive)
-			src.translate_hive = 1
+			translate_hive = 1
 
 		if(keyslot2.syndie)
-			src.syndie = 1
+			syndie = 1
 
 
 	for (var/ch_name in channels)
@@ -357,7 +357,7 @@
 		if(!radio_controller)
 			sleep(30) // Waiting for the radio_controller to be created.
 		if(!radio_controller)
-			src.name = "broken radio headset"
+			name = "broken radio headset"
 			return
 		*/
 		secure_radio_connections[ch_name] = add_radio(src, radiochannels[ch_name])

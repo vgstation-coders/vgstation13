@@ -18,7 +18,7 @@
 
 /datum/artifact_effect/stun/DoEffectAura()
 	if(holder)
-		for (var/mob/living/carbon/C in range(src.effectrange,holder))
+		for (var/mob/living/carbon/C in range(effectrange,holder))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(10 * weakness))
 				to_chat(C, "<span class='warning'>Your body goes numb for a moment.</span>")
@@ -31,7 +31,7 @@
 
 /datum/artifact_effect/stun/DoEffectPulse()
 	if(holder)
-		for (var/mob/living/carbon/C in range(src.effectrange,holder))
+		for (var/mob/living/carbon/C in range(effectrange,holder))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(100 * weakness))
 				to_chat(C, "<span class='warning'>A wave of energy overwhelms your senses!</span>")

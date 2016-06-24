@@ -29,7 +29,7 @@
 			spawn(200)
 				process()
 			return
-		else if(!src.check_if_equipped() && L)
+		else if(!check_if_equipped() && L)
 			new /obj/item/weapon/ctf_flag/green(L.loc)
 			del(src)
 	if(istype(src, /obj/item/weapon/ctf_flag/red))
@@ -38,7 +38,7 @@
 			spawn(200)
 				process()
 			return
-		else if(!src.check_if_equipped() && L)
+		else if(!check_if_equipped() && L)
 			new /obj/item/weapon/ctf_flag/red(L.loc)
 			del(src)
 	return
@@ -67,13 +67,13 @@
 	return
 
 /obj/machinery/red_injector/attackby(var/obj/item/weapon/ctf_flag/C, mob/user)
-	if(src.operating)
+	if(operating)
 		to_chat(user, "Cannot put a flag in right now")
 		return
-	src.operating = 1
+	operating = 1
 	if(istype(C, /obj/item/weapon/ctf_flag/green))
 		if(locate("landmark*Red-Flag", /obj/item/weapon/ctf_flag/red))
-			src.score++
+			score++
 			to_chat(world, "<B>[user.real_name] has scored for the red team!</B>")
 			if(ticker.mode.name == "ctf")
 				ticker.red_score++
@@ -83,7 +83,7 @@
 					new /obj/item/weapon/ctf_flag/green(L.loc)
 				else
 					to_chat(world, "No green flag spawn point detected")
-				if(src.score >= 15)
+				if(score >= 15)
 					to_chat(world, "<FONT size = 3><B>The Red Team has won!</B></FONT>")
 					to_chat(world, "<B>They have scored [score] times with the flag!</B>")
 					sleep(300)
@@ -92,7 +92,7 @@
 			to_chat(user, "<span class='warning'>You need to have your flag in the beginning position!</span>")
 	else if(istype(C, /obj/item/weapon/ctf_flag/red))
 		to_chat(world, "<B>[user.real_name] has tried to score with their own flag! Idiot!</B>")
-	src.operating = 0
+	operating = 0
 	return
 */
 /obj/machinery/green_injector
@@ -109,13 +109,13 @@
 	return
 /*
 /obj/machinery/green_injector/attackby(var/obj/item/weapon/ctf_flag/C, mob/user)
-	if(src.operating)
+	if(operating)
 		to_chat(user, "Cannot put a flag in right now")
 		return
-	src.operating = 1
+	operating = 1
 	if(istype(C, /obj/item/weapon/ctf_flag/red))
 		if(locate("landmark*Green-Flag", /obj/item/weapon/ctf_flag/green))
-			src.score++
+			score++
 			to_chat(world, "<B>[user.real_name] has scored for the green team!</B>")
 			if(ticker.mode.name == "ctf")
 				ticker.green_score++
@@ -125,7 +125,7 @@
 					new /obj/item/weapon/ctf_flag/red(L.loc)
 				else
 					to_chat(world, "No red flag spawn point detected")
-				if(src.score >= 15)
+				if(score >= 15)
 					to_chat(world, "<FONT size = 3><B>The Green Team has won!</B></FONT>")
 					to_chat(world, "<B>They have scored [score] times with the flag!</B>")
 					sleep(300)
@@ -134,6 +134,6 @@
 			to_chat(user, "<span class='warning'>You need to have your flag in the beginning position!</span>")
 	else if(istype(C, /obj/item/weapon/ctf_flag/green))
 		to_chat(world, "<B>[user.real_name] has tried to score with their own flag! Idiot!</B>")
-	src.operating = 0
+	operating = 0
 	return
 */

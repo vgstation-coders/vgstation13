@@ -209,7 +209,7 @@
 			var/datum/disease2/disease/V = virus2[ID]
 			V.cure(src)
 
-	src.findAirborneVirii()
+	findAirborneVirii()
 
 	for (var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
@@ -221,7 +221,7 @@
 		if(!V) continue
 
 		// check if we're immune
-		if(V.antigen & src.antibodies)
+		if(V.antigen & antibodies)
 			V.dead = 1
 
 	return
@@ -700,19 +700,19 @@
 				bodytemp.icon_state = "temp-4"
 
 	if(stat != DEAD)
-		if(src.eye_blind || blinded)
+		if(eye_blind || blinded)
 			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 		else
 			clear_fullscreen("blind")
-		if (src.disabilities & NEARSIGHTED)
+		if (disabilities & NEARSIGHTED)
 			overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired, 2)
 		else
 			clear_fullscreen("impaired")
-		if (src.eye_blurry)
+		if (eye_blurry)
 			overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
 		else
 			clear_fullscreen("blurry")
-		if (src.druggy)
+		if (druggy)
 			overlay_fullscreen("high", /obj/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")

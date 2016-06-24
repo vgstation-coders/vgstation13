@@ -47,5 +47,5 @@
 	precedence = OOP_GROUP
 
 /datum/node/expression/operator/unary/New(var/datum/node/expression/exp)
-	src.exp = exp
+	exp = exp
 	return ..()

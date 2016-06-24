@@ -15,7 +15,7 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 
 	var/damtype = "brute"
 	var/force = 0
-	
+
 	//Should we alert about reagents that should be logged?
 	var/log_reagents = 1
 
@@ -59,19 +59,19 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 */
 
 /obj/proc/is_conductor(var/siemens_min = 0.5)
-	if(src.siemens_coefficient >= siemens_min)
+	if(siemens_coefficient >= siemens_min)
 		return 1
 	return
 
 /obj/proc/cultify()
 	qdel(src)
-	
+
 /obj/proc/wrenchable()
 	return 0
-	
+
 /obj/proc/can_wrench_shuttle()
 	return 0
-	
+
 /obj/proc/is_sharp()
 	return sharpness
 
@@ -126,13 +126,13 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 					// AIs/Robots can do shit from afar.
 					if (isAI(M) || isrobot(M))
 						is_in_use = 1
-						src.attack_ai(M)
+						attack_ai(M)
 
 					// check for TK users
 					if(M.mutations && M.mutations.len)
 						if(M_TK in M.mutations)
 							is_in_use = 1
-							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
+							attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
 					else
 						// Remove.
 						_using.Remove(M)
@@ -157,7 +157,7 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 				_using.Remove(M)
 				continue
 			is_in_use = 1
-			src.interact(M)
+			interact(M)
 		in_use = is_in_use
 
 /obj/proc/interact(mob/user)
@@ -312,11 +312,11 @@ a {
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return -1
 	if(!anchored)
-		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
+		if(!istype(loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
+			if(istype(loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to this!</span>")
 				return -1
-			if(istype(src.loc, /turf/space)) //if on a space tile
+			if(istype(loc, /turf/space)) //if on a space tile
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to space!</span>")
 				return -1
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
@@ -331,9 +331,9 @@ a {
 	return -1
 
 /obj/item/proc/updateSelfDialog()
-	var/mob/M = src.loc
+	var/mob/M = loc
 	if(istype(M) && M.client && M.machine == src)
-		src.attack_self(M)
+		attack_self(M)
 
 
 /obj/proc/alter_health()

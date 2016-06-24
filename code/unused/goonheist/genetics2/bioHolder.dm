@@ -113,7 +113,7 @@ var/list/bioEffectList = null
 		if(hasvar(owner, "detail_icon_state"))
 			var/list/detail_list = detail_styles + detail_styles_gimmick
 			owner:detail_icon_state = detail_list[d_style]
-		owner.gender = src.gender
+		owner.gender = gender
 
 		if(hascall(owner, "set_face_icon_dirty")) owner:set_face_icon_dirty()
 		if(hascall(owner, "set_body_icon_dirty")) owner:set_body_icon_dirty()
@@ -221,10 +221,10 @@ var/list/bioEffectList = null
 		for(var/T in bioEffectList)
 			var/datum/bioEffect/instance = bioEffectList[T]
 			if(HasEffect(instance.id) || instance.isHidden) continue
-			if(src.owner)
-				if (src.owner.type in instance.mob_exclusion)
+			if(owner)
+				if (owner.type in instance.mob_exclusion)
 					continue
-				if (instance.mob_exclusive && src.owner.type != instance.mob_exclusive)
+				if (instance.mob_exclusive && owner.type != instance.mob_exclusive)
 					continue
 			if(instance.isBad)
 				filteredBad.Add(instance)

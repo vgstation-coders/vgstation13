@@ -69,7 +69,7 @@
 	return
 
 /obj/machinery/atmospherics/miner/update_icon()
-	src.overlays = 0
+	overlays = 0
 	if(stat & NOPOWER)
 		return
 	if(on)
@@ -78,7 +78,7 @@
 		if(stat & BROKEN)
 			new_icon_state="broken"
 			new_color="#FF0000"
-		var/image/I = image(icon, icon_state=new_icon_state, dir=src.dir)
+		var/image/I = image(icon, icon_state=new_icon_state, dir=dir)
 		I.color=new_color
 		overlays += I
 

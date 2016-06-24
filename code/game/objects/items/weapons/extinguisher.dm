@@ -76,8 +76,8 @@
 
 /obj/item/weapon/extinguisher/attack_self(mob/user as mob)
 	safety = !safety
-	src.icon_state = "[sprite_name][!safety]"
-	src.desc = "The safety is [safety ? "on" : "off"]."
+	icon_state = "[sprite_name][!safety]"
+	desc = "The safety is [safety ? "on" : "off"]."
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
 
@@ -135,11 +135,11 @@
 			if(reagents.has_reagent(FUEL))
 				message_admins("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 				log_game("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			src.reagents.reaction(target, TOUCH)
-			spawn(5) src.reagents.clear_reagents()
+			reagents.reaction(target, TOUCH)
+			spawn(5) reagents.clear_reagents()
 			return
 	if (!safety && !is_open_container())
-		if (src.reagents.total_volume < 1)
+		if (reagents.total_volume < 1)
 			var/pack = pack_check(user, src)
 			if (!pack) //Only display the "extinguisher empty" warning if the user is not wearing a chempack, since chempacks are designed to be used with empty items.
 				to_chat(user, "<span class='warning'>\The [src] is empty!</span>")
@@ -147,7 +147,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < last_use + 20)
 			return
 		user.delayNextAttack(5, 1)
 		var/list/badshit=list()
@@ -159,7 +159,7 @@
 			message_admins("[user.name] ([user.ckey]) used \a [src] filled with [reagents.get_reagent_ids(1)] [hl]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			log_game("[user.name] ([user.ckey]) used \a [src] filled with [reagents.get_reagent_ids(1)] [hl]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
-		src.last_use = world.time
+		last_use = world.time
 
 		playsound(get_turf(src), 'sound/effects/extinguish.ogg', 75, 1, -3)
 
@@ -259,7 +259,7 @@
 			return
 
 	if (!safety && !is_open_container())
-		if (src.reagents.total_volume < 1)
+		if (reagents.total_volume < 1)
 			var/pack = pack_check(user, src)
 			if (!pack)
 				to_chat(user, "<span class='warning'>\The [src] is empty!</span>")
@@ -267,10 +267,10 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < last_use + 20)
 			return
 		user.delayNextAttack(5, 1)
-		src.last_use = world.time
+		last_use = world.time
 
 		playsound(get_turf(src), 'sound/effects/extinguish.ogg', 75, 1, -3)
 

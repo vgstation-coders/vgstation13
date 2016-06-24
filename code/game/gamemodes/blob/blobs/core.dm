@@ -143,10 +143,10 @@
 		C = new_overmind
 
 	if(C)
-		var/mob/camera/blob/B = new(src.loc)
+		var/mob/camera/blob/B = new(loc)
 		B.key = C.key
 		B.blob_core = src
-		src.overmind = B
+		overmind = B
 
 		B.special_blobs += src
 		B.hud_used.blob_hud()

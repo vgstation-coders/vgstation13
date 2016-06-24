@@ -151,7 +151,7 @@
 		return
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 
 	if(href_list["close"])
 		usr.unset_machine(src)
@@ -475,7 +475,7 @@
 			return 1
 
 		var/datum/money_account/acct = signal.data["claimcredits"]
-		if(istype(acct) && acct.charge(-credits, null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
+		if(istype(acct) && acct.charge(-credits, null, "Claimed mining credits.", name, dest_name = "Processing Machine"))
 			credits = 0
 
 	if(signal.data["inc_priority"])

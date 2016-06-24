@@ -48,8 +48,8 @@
 		assign_uid()
 		id_tag = num2text(uid)
 	if(ticker && ticker.current_state == 3)//if the game is running
-		//src.initialize()
-		src.broadcast_status()
+		//initialize()
+		broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/update_icon()
 	if(welded)
@@ -86,7 +86,7 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	..()
-	src.broadcast_status()
+	broadcast_status()
 	return 1
 
 /obj/machinery/atmospherics/unary/vent_scrubber/proc/broadcast_status()
@@ -115,7 +115,7 @@
 		if(!areaMaster.air_scrub_names[id_tag])
 			var/new_name = "[areaMaster.name] Air Scrubber #[areaMaster.air_scrub_names.len+1]"
 			areaMaster.air_scrub_names[id_tag] = new_name
-			src.name = new_name
+			name = new_name
 		areaMaster.air_scrub_info[id_tag] = signal.data
 
 	radio_connection.post_signal(src, signal, radio_filter_out)

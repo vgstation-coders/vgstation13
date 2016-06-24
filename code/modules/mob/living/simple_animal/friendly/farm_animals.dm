@@ -40,7 +40,7 @@
 		if(enemies.len && prob(10))
 			enemies = list()
 			LoseTarget()
-			src.visible_message("<span class='notice'>[src] calms down.</span>")
+			visible_message("<span class='notice'>[src] calms down.</span>")
 
 		if(stat == CONSCIOUS)
 			if(udder && prob(5))
@@ -62,7 +62,7 @@
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
 	if(!stat)
 		..()
-		src.visible_message("<span class='warning'>[src] gets an evil-looking gleam in \his eye.</span>")
+		visible_message("<span class='warning'>[src] gets an evil-looking gleam in \his eye.</span>")
 
 /mob/living/simple_animal/hostile/retaliate/goat/Move()
 	..()
@@ -187,7 +187,7 @@
 	if(!stat && !ckey)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
-			new /mob/living/simple_animal/chicken(src.loc)
+			new /mob/living/simple_animal/chicken(loc)
 			qdel(src)
 
 /mob/living/simple_animal/chicken
@@ -257,5 +257,5 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6)
 		E.pixel_y = rand(-6,6)
-		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
+		if(animal_count[type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)

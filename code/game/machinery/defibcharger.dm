@@ -82,7 +82,7 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 /obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy()
 	if(..() == 1)
 		if(charging)
-			charging.forceMove(src.loc)
+			charging.forceMove(loc)
 			charging = null
 		return 1
 	return -1

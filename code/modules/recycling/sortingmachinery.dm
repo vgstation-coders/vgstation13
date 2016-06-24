@@ -115,7 +115,7 @@
 	..()
 	processing_objects.Remove(src)
 	spawn(5)
-		trunk = locate() in src.loc
+		trunk = locate() in loc
 		if(trunk)
 			trunk.linked = src	// link the pipe trunk to self
 
@@ -139,7 +139,7 @@
 	else if(istype(AM, /mob))
 		var/mob/M = AM
 		M.loc = src
-	//src.flush() This spams audio like fucking crazy.
+	//flush() This spams audio like fucking crazy.
 	// Instead, we queue up for the next process.
 	doFlushIn=5 // Ticks, adjust if delay is too long or too short
 	num_contents++
@@ -203,7 +203,7 @@
 			if(do_after(user, src,20))
 				if(!src || !W.isOn()) return
 				to_chat(user, "You sliced the floorweld off the delivery chute.")
-				var/obj/structure/disposalconstruct/C = new (src.loc)
+				var/obj/structure/disposalconstruct/C = new (loc)
 				C.ptype = 8 // 8 =  Delivery chute
 				C.update()
 				C.anchored = 1
@@ -219,7 +219,7 @@
 		if(doFlushIn==1 || num_contents>=50)
 			//testing("[src] FLUSHING")
 			spawn(0)
-				src.flush()
+				flush()
 		doFlushIn--
 
 //Base framework for sorting machines.
@@ -308,7 +308,7 @@
 			usr.unset_machine()
 		return 1
 
-	src.add_fingerprint(usr)//After close, else it wouldn't make sense.
+	add_fingerprint(usr)//After close, else it wouldn't make sense.
 
 /obj/machinery/sorting_machine/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return {"

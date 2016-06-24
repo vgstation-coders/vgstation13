@@ -17,7 +17,7 @@
 			freed(L)
 		else if(isbot(A))
 			var/obj/machinery/bot/B = A
-			B.forceMove(get_step(src,turn(src.dir,-90)))
+			B.forceMove(get_step(src,turn(dir,-90)))
 			B.turn_on()
 			B.flags &= ~INVULNERABLE
 			B.anchored = 0
@@ -30,7 +30,7 @@
 	return
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/freed(var/mob/living/L)
-	L.forceMove(get_step(src, turn(src.dir, -90)))
+	L.forceMove(get_step(src, turn(dir, -90)))
 	L.anchored = 0
 	L.flags &= ~INVULNERABLE
 	L.captured = 0
@@ -59,7 +59,7 @@
 
 	var/turflist[] = list()
 	for(var/turf/T in orange(src,1))
-		if((T.density == 0) && (T!=src.loc))
+		if((T.density == 0) && (T!=loc))
 			turflist += T
 
 	var/invocnum = min(count, turflist.len)
@@ -179,11 +179,11 @@
 		bususer.gui_icons.adminbus_hook.icon_state = "icon_hook-push"
 		hook = 0
 
-		var/obj/structure/hookshot/claw/C = new/obj/structure/hookshot/claw(get_step(src,src.dir))	//First we spawn the claw
+		var/obj/structure/hookshot/claw/C = new/obj/structure/hookshot/claw(get_step(src,dir))	//First we spawn the claw
 		hookshot += C
 		C.abus = src
 
-		var/obj/machinery/singularity/S = C.hook_throw(src.dir)							//The claw moves forward, spawning hookshot-chains on its path
+		var/obj/machinery/singularity/S = C.hook_throw(dir)							//The claw moves forward, spawning hookshot-chains on its path
 		if(S)
 			bususer.gui_icons.adminbus_hook.icon_state = "icon_singulo"
 			capture_singulo(S)															//If the claw hits a singulo, we remove the hookshot-chains and replace them with singulo-chains
@@ -300,7 +300,7 @@
 			throwzone += T
 		switch(goodie_type)
 			if(1)
-				var/obj/item/weapon/card/id/captains_spare/S = new/obj/item/weapon/card/id/captains_spare(src.loc)
+				var/obj/item/weapon/card/id/captains_spare/S = new/obj/item/weapon/card/id/captains_spare(loc)
 				S.throw_at(pick(throwzone),rand(2,5),0)
 			if(2)
 				var/obj/item/fuckingmoney = null
@@ -320,7 +320,7 @@
 				200;/obj/item/weapon/spacecash/c100,
 				300;/obj/item/weapon/spacecash/c1000
 				)
-				var/obj/item/C = new fuckingmoney(src.loc)
+				var/obj/item/C = new fuckingmoney(loc)
 				C.throw_at(pick(throwzone),rand(2,5),0)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/give_bombs(mob/bususer)
@@ -451,7 +451,7 @@
 	visible_message("<span class='notice'>WE BUILD!</span>")
 
 	if(!centerloc)
-		centerloc = src.loc
+		centerloc = loc
 
 	for(var/obj/machinery/M in range(centerloc,repair_range))
 		if(istype(M,/obj/machinery/door/window))//for some reason it makes the windoors' sprite disapear (until you bump into it)
@@ -577,7 +577,7 @@
 
 		else if(isbot(A))
 			var/obj/machinery/bot/B = A
-			B.forceMove(get_step(src,turn(src.dir,-90)))
+			B.forceMove(get_step(src,turn(dir,-90)))
 			B.turn_on()
 			B.flags &= ~INVULNERABLE
 			B.anchored = 0
@@ -678,10 +678,10 @@
 
 		switch(team)
 			if("Green")
-				pack = new /obj/item/packobelongings/green(src.loc)
+				pack = new /obj/item/packobelongings/green(loc)
 				pack.x = map.tDomeX+2
 			if("Red")
-				pack = new /obj/item/packobelongings/red(src.loc)
+				pack = new /obj/item/packobelongings/red(loc)
 				pack.x = map.tDomeX-2
 
 		pack.z = map.tDomeZ			//the players' belongings are stored there, in the Thunderdome Admin lodge.
@@ -790,7 +790,7 @@
 
 	else if(isbot(A))
 		var/obj/machinery/bot/B = A
-		B.forceMove(get_step(src,turn(src.dir,-90)))
+		B.forceMove(get_step(src,turn(dir,-90)))
 		B.turn_on()
 		B.flags &= ~INVULNERABLE
 		B.anchored = 0
@@ -817,8 +817,8 @@
 
 /obj/item/packobelongings/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	pixel_x = rand(-5.0, 5)
+	pixel_y = rand(-5.0, 5)
 
 /obj/item/packobelongings/attack_self(mob/user as mob)
 	var/turf/T = get_turf(user)

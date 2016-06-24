@@ -79,13 +79,13 @@
 	if (my_effect.effectmode == "aura")
 		my_effect.aurarange = rand(1,4)
 	if (my_effect.effectmode == "contact")
-		src.recharge = rand(5,15)
+		recharge = rand(5,15)
 	if (my_effect.effectmode == "pulse")
 		my_effect.aurarange = rand(2,14)
-		src.recharge = rand(5,20)
+		recharge = rand(5,20)
 	if (canworldpulse == 1 && prob(1))
 		my_effect.effectmode = "worldpulse"
-		src.recharge = rand(40,120)
+		recharge = rand(40,120)
 
 	/*
 	display_id += pick("kappa","sigma","antaeres","beta","lorard","omicron","iota","upsilon","omega","gamma","delta")
@@ -107,8 +107,8 @@
 		return ..()
 	for(var/mob/O in viewers(src, null))
 		O.show_message(text("<b>[]</b> touches [].", user, src), 1)
-	src.add_fingerprint(user)
-	src.Artifact_Contact(user)
+	add_fingerprint(user)
+	Artifact_Contact(user)
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	/*if (istype(W, /obj/item/weapon/cargotele))
@@ -118,83 +118,83 @@
 		switch(my_effect.triggerX)
 			if(HYDROGEN)
 				if (W.reagents.has_reagent(HYDROGEN, 1) || W.reagents.has_reagent(WATER, 1))
-					src.Artifact_Activate()
+					Artifact_Activate()
 					return
 			if("corrosive")
 				if (W.reagents.has_reagent("acid", 1) || W.reagents.has_reagent(PACID, 1) || W.reagents.has_reagent(DIETHYLAMINE, 1))
-					src.Artifact_Activate()
+					Artifact_Activate()
 					return
 			if("volatile")
 				if (W.reagents.has_reagent(PLASMA, 1) || W.reagents.has_reagent(THERMITE, 1))
-					src.Artifact_Activate()
+					Artifact_Activate()
 					return
 			if("toxic")
 				if (W.reagents.has_reagent(TOXIN, 1) || W.reagents.has_reagent(CYANIDE, 1) || W.reagents.has_reagent("amanitin", 1) || W.reagents.has_reagent(NEUROTOXIN, 1))
-					src.Artifact_Activate()
+					Artifact_Activate()
 					return
 	..()
-	if (my_effect.trigger == "force" && W.force >= 10 && !src.activated) src.Artifact_Activate()
+	if (my_effect.trigger == "force" && W.force >= 10 && !activated) Artifact_Activate()
 	if (my_effect.trigger == "energy")
-		if (istype(W,/obj/item/weapon/melee/baton) && W:status) src.Artifact_Activate()
-		if (istype(W,/obj/item/weapon/melee/energy)) src.Artifact_Activate()
-		if (istype(W,/obj/item/weapon/melee/cultblade)) src.Artifact_Activate()
-		if (istype(W,/obj/item/weapon/gun/energy/)) src.Artifact_Activate()
-		if (istype(W,/obj/item/device/multitool)) src.Artifact_Activate()
-		if (istype(W,/obj/item/weapon/card/emag)) src.Artifact_Activate()
+		if (istype(W,/obj/item/weapon/melee/baton) && W:status) Artifact_Activate()
+		if (istype(W,/obj/item/weapon/melee/energy)) Artifact_Activate()
+		if (istype(W,/obj/item/weapon/melee/cultblade)) Artifact_Activate()
+		if (istype(W,/obj/item/weapon/gun/energy/)) Artifact_Activate()
+		if (istype(W,/obj/item/device/multitool)) Artifact_Activate()
+		if (istype(W,/obj/item/weapon/card/emag)) Artifact_Activate()
 	if (my_effect.trigger == "heat")
-		if (istype(W,/obj/item/weapon/match) && W:lit) src.Artifact_Activate()
-		if (istype(W, /obj/item/weapon/weldingtool) && W:welding) src.Artifact_Activate()
-		if (istype(W, /obj/item/weapon/lighter) && W:lit) src.Artifact_Activate()
+		if (istype(W,/obj/item/weapon/match) && W:lit) Artifact_Activate()
+		if (istype(W, /obj/item/weapon/weldingtool) && W:welding) Artifact_Activate()
+		if (istype(W, /obj/item/weapon/lighter) && W:lit) Artifact_Activate()
 
 	//Bump(atom/A)
 
 /obj/machinery/artifact/Bumped(M as mob|obj)
-	if (istype(M,/obj/item/weapon/) && my_effect.trigger == "force" && M:throwforce >= 10) src.Artifact_Activate()
+	if (istype(M,/obj/item/weapon/) && my_effect.trigger == "force" && M:throwforce >= 10) Artifact_Activate()
 
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
 	if (my_effect.trigger == "force")
-		if(istype(P,/obj/item/projectile/bullet)) src.Artifact_Activate()
-		else if(istype(P,/obj/item/projectile/hivebotbullet)) src.Artifact_Activate()
+		if(istype(P,/obj/item/projectile/bullet)) Artifact_Activate()
+		else if(istype(P,/obj/item/projectile/hivebotbullet)) Artifact_Activate()
 	if (my_effect.trigger == "energy")
-		if(istype(P,/obj/item/projectile/beam)) src.Artifact_Activate()
-		else if(istype(P,/obj/item/projectile/ion)) src.Artifact_Activate()
-		else if(istype(P,/obj/item/projectile/energy)) src.Artifact_Activate()
+		if(istype(P,/obj/item/projectile/beam)) Artifact_Activate()
+		else if(istype(P,/obj/item/projectile/ion)) Artifact_Activate()
+		else if(istype(P,/obj/item/projectile/energy)) Artifact_Activate()
 	if (my_effect.trigger == "heat")
-		if(istype(P,/obj/item/projectile/temp)) src.Artifact_Activate()
+		if(istype(P,/obj/item/projectile/temp)) Artifact_Activate()
 
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)
 		if(1.0) qdel (src)
 		if(2.0)
 			if (prob(50)) qdel (src)
-			if (my_effect.trigger == "force") src.Artifact_Activate()
-			if (my_effect.trigger == "heat") src.Artifact_Activate()
+			if (my_effect.trigger == "force") Artifact_Activate()
+			if (my_effect.trigger == "heat") Artifact_Activate()
 		if(3.0)
-			if (my_effect.trigger == "force") src.Artifact_Activate()
-			if (my_effect.trigger == "heat") src.Artifact_Activate()
+			if (my_effect.trigger == "force") Artifact_Activate()
+			if (my_effect.trigger == "heat") Artifact_Activate()
 	return
 
 /obj/machinery/artifact/temperature_expose(null, temp, volume)
-	if (my_effect.trigger == "heat") src.Artifact_Activate()
+	if (my_effect.trigger == "heat") Artifact_Activate()
 
 /obj/machinery/artifact/process()
-	if (!src.activated)
+	if (!activated)
 		return
 	if (chargetime > 0)
 		chargetime -= 1
 	else
-		src.charged = 1
+		charged = 1
 
-	my_effect.UpdateEffect(src.loc)
+	my_effect.UpdateEffect(loc)
 
 	//activate
 	if( (my_effect.effectmode == "pulse" || my_effect.effecttype == "worldpulse") && activated)
-		if(src.charged && my_effect.DoEffect(src))
-			src.charged = 0
-			src.chargetime = src.recharge
+		if(charged && my_effect.DoEffect(src))
+			charged = 0
+			chargetime = recharge
 
 /obj/machinery/artifact/proc/Artifact_Activate()
-	src.activated = !src.activated
+	activated = !activated
 	var/display_msg = ""
 	if(activated)
 		if(prob(30))
@@ -226,17 +226,17 @@
 
 /obj/machinery/artifact/proc/Artifact_Contact(var/mob/user as mob)
 	// Trigger Code
-	if (istype (user,/mob/living/carbon/) && my_effect.trigger == "touch" && !src.activated) src.Artifact_Activate()
-	to_chat(else if (my_effect.trigger != "touch" && !src.activated) user, "Nothing happens.")
+	if (istype (user,/mob/living/carbon/) && my_effect.trigger == "touch" && !activated) Artifact_Activate()
+	to_chat(else if (my_effect.trigger != "touch" && !activated) user, "Nothing happens.")
 
-	if (my_effect.effectmode == "contact" && src.activated && src.charged)
+	if (my_effect.effectmode == "contact" && activated && charged)
 		my_effect.DoEffect(user)
-		src.charged = 0
-		src.chargetime = src.recharge
+		charged = 0
+		chargetime = recharge
 
 // this was used in QM for a time but it fell into disuse and wasn't removed, the purpose being to check if an artifact
 // was benevolent or malicious, to determine whether QMs would be paid or punished for shipping it
 
 /obj/machinery/artifact/Move()
 	..()
-	my_effect.update_move(src, src.loc)
+	my_effect.update_move(src, loc)

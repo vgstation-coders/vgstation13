@@ -64,7 +64,7 @@
 	movement_range = POWERFUL_PARTICLE_RANGE
 	energy = POWERFUL_PARTICLE_ENERGY
 	icon_state="particle3"
-	
+
 /obj/effect/accelerated_particle/powerful/resetVariables()
 	..("energy", "movement_range")
 	energy = POWERFUL_PARTICLE_ENERGY
@@ -73,8 +73,8 @@
 
 /obj/effect/accelerated_particle/New(loc, dir = 2, move = 0)
 	. = ..()
-	src.loc = loc
-	src.dir = dir
+	loc = loc
+	dir = dir
 
 /obj/effect/accelerated_particle/proc/startMove(move = 0)
 	if(movement_range > 20)
@@ -134,15 +134,15 @@
 	if(target)
 		if(movetotarget)
 			if(!step_towards(src,target))
-				src.loc = get_step(src, get_dir(src,target))
+				loc = get_step(src, get_dir(src,target))
 			if(get_dist(src,target) < 1)
 				movetotarget = 0
 		else
 			if(!step(src, get_step_away(src,source)))
-				src.loc = get_step(src, get_step_away(src,source))
+				loc = get_step(src, get_step_away(src,source))
 	else
 		if(!step(src,dir))
-			src.loc = get_step(src,dir)
+			loc = get_step(src,dir)
 	movement_range--
 	if(movement_range <= 0)
 		returnToPool(src)

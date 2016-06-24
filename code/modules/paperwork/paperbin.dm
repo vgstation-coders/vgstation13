@@ -15,7 +15,7 @@
 
 
 /obj/item/weapon/paper_bin/ashify()
-	new ashtype(src.loc)
+	new ashtype(loc)
 	papers=0
 	amount=0
 	update_icon()
@@ -32,7 +32,7 @@
 				if(OI.hand_index)
 					usr.u_equip(src, 0)
 					usr.put_in_hand(OI.hand_index, src)
-					src.add_fingerprint(usr)
+					add_fingerprint(usr)
 
 			else if(istype(over_object,/mob/living)) //We're being dragged on a living mob's sprite...
 				if(usr == over_object) //It's the user!

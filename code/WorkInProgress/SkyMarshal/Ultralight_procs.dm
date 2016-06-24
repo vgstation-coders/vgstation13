@@ -9,8 +9,8 @@ var/list/ul_FastRoot = list(0, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4
 
 atom/proc/ul_FalloffAmount(var/atom/ref)
 	if (ul_FalloffStyle == UL_I_FALLOFF_ROUND)
-		var/delta_x = (ref.x - src.x)
-		var/delta_y = (ref.y - src.y)
+		var/delta_x = (ref.x - x)
+		var/delta_y = (ref.y - y)
 
 		#ifdef ul_LightingResolution
 		if (round((delta_x*delta_x + delta_y*delta_y)*ul_LightingResolutionSqrt,1) > ul_FastRoot.len)

@@ -78,9 +78,9 @@
 	if(spawning_types.len && powered())
 		spawn_progress++
 		if(spawn_progress > max_spawn_ticks)
-			src.visible_message("<span class='notice'>[bicon(src)] [src] pings!</span>")
+			visible_message("<span class='notice'>[bicon(src)] [src] pings!</span>")
 			var/spawn_type = spawning_types[1]
-			new spawn_type(src.loc)
+			new spawn_type(loc)
 
 			spawning_types.Remove(spawning_types[1])
 			spawn_progress = 0
@@ -93,12 +93,12 @@
 			playsound(get_turf(src), 'sound/machines/heps.ogg', 50, 0)
 
 		else if(prob(5))
-			src.visible_message("<span class='notice'>[bicon(src)] [src] [pick("clicks","whizzes","whirrs","whooshes","clanks","clongs","clonks","bangs")].</span>")
+			visible_message("<span class='notice'>[bicon(src)] [src] [pick("clicks","whizzes","whirrs","whooshes","clanks","clongs","clonks","bangs")].</span>")
 
 /obj/machinery/replicator/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		log_attack("<font color='red'>[Proj.firer ? "[key_name(Proj.firer)]" : "Something"] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
-		src.visible_message("<span class='notice'>\The [Proj] [Proj.damage ? "hits" : "glances off"] \the [src]!</span>")
+		visible_message("<span class='notice'>\The [Proj] [Proj.damage ? "hits" : "glances off"] \the [src]!</span>")
 		if(prob(Proj.damage/2))
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
@@ -110,13 +110,13 @@
 		return ..()
 	else if(O.force > 10)
 		log_attack("<font color='red'>[user] damaged [src]/([formatJumpTo(src)]) with [O]</font>")
-		src.visible_message("<span class='warning'>\The [user] damages \the [src] with \the [O].</span>")
+		visible_message("<span class='warning'>\The [user] damages \the [src] with \the [O].</span>")
 		if(prob(O.force/2))
 			msg_admin_attack("[user] blew up [src]/([formatJumpTo(src)]) with [O] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			explosion(get_turf(src), -1, 2, 3, 3)
 			qdel(src)
 	else
-		src.visible_message("<span class='warning'>\The [user] taps \the [src] with \the [O].</span>")
+		visible_message("<span class='warning'>\The [user] taps \the [src] with \the [O].</span>")
 
 /obj/machinery/replicator/attack_hand(mob/user as mob)
 	if(..())
@@ -140,7 +140,7 @@
 	if(href_list["activate"])
 		var/index = text2num(href_list["activate"])
 		if(index > 0 && index <= construction.len)
-			src.visible_message("<span class='notice'>[bicon(src)] a [pick("light","dial","display","meter","pad")] on [src]'s front [pick("blinks","flashes")] [pick("red","yellow","blue","orange","purple","green","white")].[isobserver(usr) ? " Spooky." : ""]</span>")
+			visible_message("<span class='notice'>[bicon(src)] a [pick("light","dial","display","meter","pad")] on [src]'s front [pick("blinks","flashes")] [pick("red","yellow","blue","orange","purple","green","white")].[isobserver(usr) ? " Spooky." : ""]</span>")
 			spawning_types.Add(construction[construction[index]])
 			spawn_progress = 0
 			use_power = 2

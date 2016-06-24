@@ -313,8 +313,8 @@
 					D.money += transaction_amount
 
 					var/datum/transaction/T = new()
-					T.target_name = "[D.owner_name] (via [src.name]([petname]))"
-					T.purpose = "Nanocoin Transfer (from [src.name]([petname]))"
+					T.target_name = "[D.owner_name] (via [name]([petname]))"
+					T.purpose = "Nanocoin Transfer (from [name]([petname]))"
 					T.amount = "[transaction_amount]"
 					T.source_terminal = "Nanocoin Mines"
 					T.date = current_date_string

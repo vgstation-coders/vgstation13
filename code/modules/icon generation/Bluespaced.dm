@@ -236,7 +236,7 @@
 
 /atom/verb/test()
 	set src in view()
-	src.icon = generate_bluespace_icon(src.icon, src.icon_state)
+	icon = generate_bluespace_icon(icon, icon_state)
 
 /mob/verb/bluespam()
 	for(var/turf/t in view(5))

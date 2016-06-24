@@ -45,24 +45,24 @@
 		var/obj/item/stack/sheet/metal/S = W
 		if(S.amount<5) return
 		S.use(5)
-		new /obj/structure/morgue(src.loc)
+		new /obj/structure/morgue(loc)
 		qdel(src)
 	if(istype(W, /obj/item/weapon/pen))
-		var/t = copytext(sanitize(input(user, "What would you like the label to be?", text("[]", src.name), null)  as text|null), 1, MAX_NAME_LEN)
+		var/t = copytext(sanitize(input(user, "What would you like the label to be?", text("[]", name), null)  as text|null), 1, MAX_NAME_LEN)
 		if(user.get_active_hand() != W)
 			return
 		if (!Adjacent(user) || user.stat)
 			return
 		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
-		src.name = "body bag"
+		name = "body bag"
 		if(t)
-			src.name += " ([t])"
-			src.overlays += image(src.icon, "bodybag_label")
+			name += " ([t])"
+			overlays += image(icon, "bodybag_label")
 		return
 	else if(iswirecutter(W))
 		to_chat(user, "You cut the tag off the bodybag")
-		src.name = "body bag"
-		src.overlays.len = 0
+		name = "body bag"
+		overlays.len = 0
 		return
 
 
@@ -79,7 +79,7 @@
 		if(!ishuman(usr) || usr.incapacitated() || usr.lying) return
 		if(opened)	return 0
 		if(contents.len)	return 0
-		visible_message("[usr] folds up the [src.name]")
+		visible_message("[usr] folds up the [name]")
 		new/obj/item/bodybag(get_turf(src))
 		spawn(0)
 			qdel(src)
@@ -118,9 +118,9 @@
 /obj/structure/closet/body_bag/cryobag/open()
 	. = ..()
 	if(used)
-		var/obj/item/O = new/obj/item(src.loc)
+		var/obj/item/O = new/obj/item(loc)
 		O.name = "used stasis bag"
-		O.icon = src.icon
+		O.icon = icon
 		O.icon_state = "bodybag_used"
 		O.desc = "Pretty useless now.."
 		qdel(src)

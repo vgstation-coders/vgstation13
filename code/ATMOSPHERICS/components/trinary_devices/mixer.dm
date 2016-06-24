@@ -92,8 +92,8 @@ obj/machinery/atmospherics/trinary/mixer/process()
 obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 	if(..())
 		return
-	src.add_fingerprint(usr)
-	if(!src.allowed(user))
+	add_fingerprint(usr)
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 	usr.set_machine(src)
@@ -116,7 +116,7 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 				<a href='?src=\ref[src];node2_c=0.1'>+</a>
 				"}
 
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_mixer")
+	user << browse("<HEAD><TITLE>[name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_mixer")
 	onclose(user, "atmo_mixer")
 	return
 
@@ -125,18 +125,18 @@ obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
 	if(href_list["power"])
 		on = !on
 	if(href_list["set_press"])
-		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",src.target_pressure) as num
-		src.target_pressure = max(0, min(4500, new_pressure))
+		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",target_pressure) as num
+		target_pressure = max(0, min(4500, new_pressure))
 	if(href_list["node1_c"])
 		var/value = text2num(href_list["node1_c"])
-		src.node1_concentration = max(0, min(1, src.node1_concentration + value))
-		src.node2_concentration = max(0, min(1, src.node2_concentration - value))
+		node1_concentration = max(0, min(1, node1_concentration + value))
+		node2_concentration = max(0, min(1, node2_concentration - value))
 	if(href_list["node2_c"])
 		var/value = text2num(href_list["node2_c"])
-		src.node2_concentration = max(0, min(1, src.node2_concentration + value))
-		src.node1_concentration = max(0, min(1, src.node1_concentration - value))
-	src.update_icon()
-	src.updateUsrDialog()
+		node2_concentration = max(0, min(1, node2_concentration + value))
+		node1_concentration = max(0, min(1, node1_concentration - value))
+	update_icon()
+	updateUsrDialog()
 	return
 
 /obj/machinery/atmospherics/trinary/mixer/mirrored

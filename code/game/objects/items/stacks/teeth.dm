@@ -20,9 +20,9 @@
 /obj/item/stack/teeth/can_stack_with(obj/item/other_stack)
 	if(!istype(other_stack)) return 0
 
-	if(src.type == other_stack.type)
+	if(type == other_stack.type)
 		var/obj/item/stack/teeth/T = other_stack
-		if(src.animal_type == T.animal_type)
+		if(animal_type == T.animal_type)
 			return 1
 	return 0
 
@@ -32,7 +32,7 @@
 	if(istype(W,/obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
 
-		if(src.amount < 10)
+		if(amount < 10)
 			to_chat(user, "<span class='info'>You need at least 10 teeth to create a necklace.</span>")
 			return
 
@@ -41,7 +41,7 @@
 
 			var/obj/item/clothing/mask/necklace/teeth/X = new(get_turf(src))
 
-			X.animal_type = src.animal_type
+			X.animal_type = animal_type
 			X.teeth_amount = amount
 			X.update_name()
 			user.put_in_active_hand(X)
@@ -55,9 +55,9 @@
 	.=..()
 	if(istype(from, /obj/item/stack/teeth))
 		var/obj/item/stack/teeth/original_teeth = from
-		src.animal_type = original_teeth.animal_type
-		src.name = original_teeth.name
-		src.singular_name = original_teeth.name
+		animal_type = original_teeth.animal_type
+		name = original_teeth.name
+		singular_name = original_teeth.name
 
 /obj/item/stack/teeth/proc/update_name(mob/parent)
 	if(!parent) return

@@ -21,8 +21,8 @@ var/list
 /mob/proc/CanBuild()
 	if(ticker.mode.name == "sandbox")
 		sandbox = new/datum/hSB
-		sandbox.owner = src.ckey
-		if(src.client.holder)
+		sandbox.owner = ckey
+		if(client.holder)
 			sandbox.admin = 1
 		verbs += /mob/proc/sandbox_panel
 		verbs += /mob/proc/sandbox_spawn_atom
@@ -107,7 +107,7 @@ datum/hSB
 				hsbpanel += "- <a href=\"?\ref[src];hsb=hsbobj\">Spawn Object</a><br><br>"
 			usr << browse(hsbpanel, "window=hsbpanel")
 	Topic(href, href_list)
-		if(!(src.owner == usr.ckey)) return
+		if(!(owner == usr.ckey)) return
 		if(!usr) return //I guess this is possible if they log out or die with the panel open? It happened.
 		if(href_list["hsb"])
 			switch(href_list["hsb"])

@@ -79,7 +79,7 @@
 
 		if(cartridge)
 			if(cartridge.darts <= 0)
-				src.remove_cartridge()
+				remove_cartridge()
 			else
 				to_chat(user, "<span class='notice'>There's already a cartridge in [src].</span>")
 				return 0
@@ -102,7 +102,7 @@
 		if(user.drop_item(B, src))
 			beakers += B
 			to_chat(user, "<span class='notice'>You slot [B] into [src].</span>")
-			src.updateUsrDialog()
+			updateUsrDialog()
 
 /obj/item/weapon/gun/dartgun/can_fire()
 	if(!cartridge)
@@ -120,7 +120,7 @@
 		C.loc = get_turf(src)
 		C.update_icon()
 		cartridge = null
-		src.update_icon()
+		update_icon()
 
 /obj/item/weapon/gun/dartgun/proc/get_mixed_syringe()
 	if (!cartridge)
@@ -138,7 +138,7 @@
 	return dart
 
 /obj/item/weapon/gun/dartgun/proc/fire_dart(atom/target, mob/user)
-	if (locate (/obj/structure/table, src.loc))
+	if (locate (/obj/structure/table, loc))
 		return
 	else
 		var/turf/trg = get_turf(target)
@@ -151,7 +151,7 @@
 			to_chat(user, "<span class='warning'>There are no reagents available!</span>")
 			return
 		cartridge.darts--
-		src.update_icon()
+		update_icon()
 		S.reagents.trans_to(D, S.reagents.total_volume)
 		qdel(S)
 		S = null
@@ -227,13 +227,13 @@
 /obj/item/weapon/gun/dartgun/updateUsrDialog()
 	if(in_use)
 		var/is_in_use = 0
-		if ((usr.client && usr.machine == src && src.loc == usr))
+		if ((usr.client && usr.machine == src && loc == usr))
 			is_in_use = 1
-			src.attack_self(usr)
+			attack_self(usr)
 		if (isMoMMI(usr))
-			if ((usr.client && usr.machine == src && src.loc == usr)) // && M.machine == src is omitted because if we triggered this by using the dialog, it doesn't matter if our machine changed in between triggering it and this - the dialog is probably still supposed to refresh.
+			if ((usr.client && usr.machine == src && loc == usr)) // && M.machine == src is omitted because if we triggered this by using the dialog, it doesn't matter if our machine changed in between triggering it and this - the dialog is probably still supposed to refresh.
 				is_in_use = 1
-				src.attack_self(usr)
+				attack_self(usr)
 
 		// check for TK users
 		in_use = is_in_use
@@ -280,7 +280,7 @@
 	return 0
 
 /obj/item/weapon/gun/dartgun/Topic(href, href_list)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["stop_mix"])
 		var/index = text2num(href_list["stop_mix"])
 		if(index <= beakers.len)
@@ -307,7 +307,7 @@
 		in_use = 0
 		usr.unset_machine(src)
 		return
-	src.updateUsrDialog()
+	updateUsrDialog()
 	return
 
 /obj/item/weapon/gun/dartgun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)

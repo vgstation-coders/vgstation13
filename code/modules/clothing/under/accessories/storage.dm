@@ -34,7 +34,7 @@
 	hold.hide_from(user)
 	for(var/obj/item/I in hold.contents)
 		hold.remove_from_storage(I, T)
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 
 /obj/item/clothing/accessory/storage/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	hold.attackby(W,user)

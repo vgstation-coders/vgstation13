@@ -69,7 +69,7 @@
 		qdel(loaded_matter_bin)
 		loaded_matter_bin = null
 	if(stored_items.len)
-		src.visible_message("<span class='warning'>The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+		visible_message("<span class='warning'>The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
 		for(var/I in stored_items)
 			var/offset_x = rand(-3,3)
 			var/offset_y = rand(-3,3)
@@ -178,7 +178,7 @@
 	else if (target.loc == user)
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	else if (locate (/obj/structure/table, loc))
 		return
 
 	else if(target == user)
@@ -214,7 +214,7 @@
 		stored_item_mass -= mass
 		stored_items -= O
 		if(user)
-			user.visible_message("<span class='warning'>[user] ejects \the [O] from \his [src.name] through a subspace rift!</span>","You eject \the [O] from your [src.name] through a subspace rift.")
+			user.visible_message("<span class='warning'>[user] ejects \the [O] from \his [name] through a subspace rift!</span>","You eject \the [O] from your [name] through a subspace rift.")
 		playsound(O, 'sound/effects/phasein.ogg', 50, 1)
 		anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
 
@@ -273,13 +273,13 @@
 			to_chat(user, "<span class='warning'>\The [src]'s [M.name] is too full to retrieve that object!</span>")
 			return
 		else
-			user.visible_message("<span class='warning'>[user] pulls \the [O] into \his [src.name] through a subspace rift!</span>","You pull \the [O] into your [src.name] through a subspace rift.")
+			user.visible_message("<span class='warning'>[user] pulls \the [O] into \his [name] through a subspace rift!</span>","You pull \the [O] into your [name] through a subspace rift.")
 			playsound(O, 'sound/effects/phasein.ogg', 50, 1)
 			var/turf/T = O.loc
 			anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
 			if(istype(O, /obj/machinery/singularity))
 				O.forceMove(user.loc)
-				user.visible_message("<span class='danger'>[user]'s [src.name] implodes, failing to contain the power of \the [O]!</span>","<span class='danger'>Your [src.name] implodes, failing to contain the power of \the [O]!</span>")
+				user.visible_message("<span class='danger'>[user]'s [name] implodes, failing to contain the power of \the [O]!</span>","<span class='danger'>Your [name] implodes, failing to contain the power of \the [O]!</span>")
 				qdel(src)
 				return
 			stored_items += O

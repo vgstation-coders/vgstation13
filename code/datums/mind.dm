@@ -73,7 +73,7 @@
 
 
 /datum/mind/New(var/key)
-	src.key = key
+	key = key
 
 /datum/mind/proc/transfer_to(mob/living/new_character)
 	if(!istype(new_character))

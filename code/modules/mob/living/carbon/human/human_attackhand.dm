@@ -6,7 +6,7 @@
 //Vampire code
 	if(M.zone_sel && M.zone_sel.selecting == "head" && src != M)
 		if(M.mind && isvampire(M) && !M.mind.vampire.draining)
-			if(src.check_body_part_coverage(MOUTH))
+			if(check_body_part_coverage(MOUTH))
 				to_chat(M, "<span class='warning'>Remove their mask!</span>")
 				return 0
 			if(M.check_body_part_coverage(MOUTH))
@@ -16,12 +16,12 @@
 				else
 					to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 			if(mind && mind.vampire && (mind in ticker.mode.vampires))
-				to_chat(M, "<span class='warning'>Your fangs fail to pierce [src.name]'s cold flesh.</span>")
+				to_chat(M, "<span class='warning'>Your fangs fail to pierce [name]'s cold flesh.</span>")
 				return 0
 			//we're good to suck the blood, blaah
 
 			playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-			src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+			visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
 			M.handle_bloodsucking(src)
 			return
 //end vampire codes
@@ -48,7 +48,7 @@
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
 
 	for(var/datum/disease/D in M.viruses)
 		if(D.spread == "Bite")
@@ -56,13 +56,13 @@
 
 	apply_damage(damage, BRUTE, affecting)
 
-	M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
-	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
+	M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [name] ([ckey]) for [damage] damage</font>")
+	attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
 	if(!iscarbon(M))
 		LAssailant = null
 	else
 		LAssailant = M
-	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
+	log_attack("[M.name] ([M.ckey]) bitten by [name] ([ckey])")
 	return
 
 //KICKS
@@ -138,19 +138,19 @@
 				returnToPool(G)
 
 				var/throw_dir = M.dir
-				if(M.loc != src.loc) throw_dir = get_dir(M, src)
+				if(M.loc != loc) throw_dir = get_dir(M, src)
 
 				var/turf/T = get_edge_target_turf(get_turf(src), throw_dir)
 				var/throw_strength = 3 * M.get_strength()
 				throw_at(T, throw_strength, 1)
 
-	M.attack_log += text("\[[time_stamp()]\] <font color='red'>Kicked [src.name] ([src.ckey]) for [damage] damage</font>")
-	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been kicked by [M.name] ([M.ckey]) for [damage] damage</font>")
+	M.attack_log += text("\[[time_stamp()]\] <font color='red'>Kicked [name] ([ckey]) for [damage] damage</font>")
+	attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been kicked by [M.name] ([M.ckey]) for [damage] damage</font>")
 	if(!iscarbon(M))
 		LAssailant = null
 	else
 		LAssailant = M
-	log_attack("[M.name] ([M.ckey]) kicked by [src.name] ([src.ckey])")
+	log_attack("[M.name] ([M.ckey]) kicked by [name] ([ckey])")
 
 /mob/living/carbon/human/attack_hand(mob/living/carbon/human/M as mob)
 	//M.delayNextAttack(10)
@@ -177,14 +177,14 @@
 				if(G.cell.charge >= 2500)
 					G.cell.use(2500)
 					visible_message("<span class='danger'>[M] touches [src] with the stun gloves!</span>")
-					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [src.name] ([src.ckey])</font>")
-					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [M.name] ([M.ckey])</font>")
+					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [name] ([ckey])</font>")
+					attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [M.name] ([M.ckey])</font>")
 					if(!iscarbon(M))
 						LAssailant = null
 					else
 						LAssailant = M
 
-					log_attack("<font color='red'>[M.name] ([M.ckey]) stungloved [src.name] ([src.ckey])</font>")
+					log_attack("<font color='red'>[M.name] ([M.ckey]) stungloved [name] ([ckey])</font>")
 
 					var/armorblock = run_armor_check(M.zone_sel.selecting, "energy")
 					apply_effects(5,5,0,0,5,0,0,armorblock)
@@ -232,8 +232,8 @@
 			if(M.check_body_part_coverage(MOUTH))
 				to_chat(M, "<span class='notice'><B>Remove your [M.get_body_part_coverage(MOUTH)]!</B></span>")
 				return 0
-			if(src.check_body_part_coverage(MOUTH))
-				to_chat(M, "<span class='notice'><B>Remove their [src.get_body_part_coverage(MOUTH)]!</B></span>")
+			if(check_body_part_coverage(MOUTH))
+				to_chat(M, "<span class='notice'><B>Remove their [get_body_part_coverage(MOUTH)]!</B></span>")
 				return 0
 
 			if (!cpr_time)
@@ -271,14 +271,14 @@
 			return 1
 
 		if(I_HURT)
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.species.attack_verb != "punches" ? "Slashed" : "Punched"] [src.name] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.species.attack_verb == "slashes" ? "slashed" : "punched"] by [M.name] ([M.ckey])</font>")
+			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.species.attack_verb != "punches" ? "Slashed" : "Punched"] [name] ([ckey])</font>")
+			attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.species.attack_verb == "slashes" ? "slashed" : "punched"] by [M.name] ([M.ckey])</font>")
 			if(!iscarbon(M))
 				LAssailant = null
 			else
 				LAssailant = M
 
-			log_attack("[M.name] ([M.ckey]) [M.species.attack_verb] [src.name] ([src.ckey])")
+			log_attack("[M.name] ([M.ckey]) [M.species.attack_verb] [name] ([ckey])")
 
 
 			var/damage = rand(0, M.species.max_hurt_damage)//BS12 EDIT // edited again by Iamgoofball to fix species attacks
@@ -332,7 +332,7 @@
 					target = get_edge_target_turf(T, M.dir)
 				else						// otherwise limit to 10 tiles
 					target = get_ranged_target_turf(T, M.dir, M.species.punch_throw_range)
-				src.throw_at(target,100,M.species.punch_throw_speed)
+				throw_at(target,100,M.species.punch_throw_speed)
 
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
@@ -344,10 +344,10 @@
 
 
 		if(I_DISARM)
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [M.name] ([M.ckey])</font>")
+			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [name] ([ckey])</font>")
+			attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [M.name] ([M.ckey])</font>")
 
-			log_attack("[M.name] ([M.ckey]) disarmed [src.name] ([src.ckey])")
+			log_attack("[M.name] ([M.ckey]) disarmed [name] ([ckey])")
 
 			if(w_uniform)
 				w_uniform.add_fingerprint(M)
@@ -370,14 +370,14 @@
 				apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				visible_message("<span class='danger'>[M] has pushed [src]!</span>")
-				M.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [src.name] ([src.ckey])</font>")
-				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [M.name] ([M.ckey])</font>")
+				M.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [name] ([ckey])</font>")
+				attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [M.name] ([M.ckey])</font>")
 				if(!iscarbon(M))
 					LAssailant = null
 				else
 					LAssailant = M
 
-				log_attack("[M.name] ([M.ckey]) pushed [src.name] ([src.ckey])")
+				log_attack("[M.name] ([M.ckey]) pushed [name] ([ckey])")
 				return
 
 			var/talked = 0	// BubbleWrap

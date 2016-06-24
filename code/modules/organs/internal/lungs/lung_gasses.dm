@@ -11,8 +11,8 @@
 	var/datum/gas_mixture/breath = null
 
 /datum/lung_gas/New(var/gas_id, var/trace_gas=0)
-	src.id = gas_id
-	src.is_trace = trace_gas
+	id = gas_id
+	is_trace = trace_gas
 
 /datum/lung_gas/proc/get_pp()
 	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/lungs.inhale_volume
@@ -49,8 +49,8 @@
 			gas.moles += moles
 
 /datum/lung_gas/proc/set_context(var/datum/organ/internal/lungs/L, var/datum/gas_mixture/breath, var/mob/living/carbon/human/H)
-	src.lungs=L
-	src.breath=breath
+	lungs=L
+	breath=breath
 	if(is_trace)
 		// Find the trace gas we need to mess with
 		if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
@@ -78,8 +78,8 @@
 
 /datum/lung_gas/metabolizable/New(var/gas_id, var/trace_gas=0, var/min_pp=0, var/max_pp=999)
 	..(gas_id,trace_gas)
-	src.min_pp = min_pp
-	src.max_pp = max_pp
+	min_pp = min_pp
+	max_pp = max_pp
 
 /datum/lung_gas/metabolizable/handle_inhale()
 	var/pp = get_pp() // Partial pressure of our oxygen or whatever.
@@ -115,7 +115,7 @@
 
 /datum/lung_gas/waste/New(var/gas_id, var/trace_gas=0, var/max_pp=0)
 	..(gas_id,trace_gas)
-	src.max_pp = max_pp
+	max_pp = max_pp
 
 /datum/lung_gas/waste/handle_inhale()
 	..()
@@ -158,10 +158,10 @@
 
 /datum/lung_gas/toxic/New(var/gas_id, var/trace_gas=0, var/max_pp=0, var/max_pp_mask=0, var/reagent_id=PLASMA, var/reagent_mult=10)
 	..(gas_id,trace_gas)
-	src.max_pp = max_pp
-	src.max_pp_mask = max_pp_mask
-	src.reagent_id = reagent_id
-	src.reagent_mult = reagent_mult
+	max_pp = max_pp
+	max_pp_mask = max_pp_mask
+	reagent_id = reagent_id
+	reagent_mult = reagent_mult
 
 /datum/lung_gas/toxic/handle_inhale()
 	..()
@@ -199,9 +199,9 @@
 
 /datum/lung_gas/sleep_agent/New(var/gas_id, var/trace_gas=0, var/min_giggle_pp=0, var/min_sleep_pp=0, var/min_para_pp=0)
 	..(gas_id,trace_gas)
-	src.min_para_pp=min_para_pp
-	src.min_giggle_pp=min_giggle_pp
-	src.min_para_pp=min_para_pp
+	min_para_pp=min_para_pp
+	min_giggle_pp=min_giggle_pp
+	min_para_pp=min_para_pp
 
 /datum/lung_gas/sleep_agent/handle_inhale()
 	var/pp = get_pp()

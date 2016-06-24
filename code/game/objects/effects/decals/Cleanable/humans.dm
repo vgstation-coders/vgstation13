@@ -154,11 +154,11 @@ var/global/list/blood_list = list()
 		for (var/i = 0, i < pick(1, 200; 2, 150; 3, 50; 4), i++)
 			sleep(3)
 			if (i > 0)
-				var/obj/effect/decal/cleanable/blood/b = getFromPool(/obj/effect/decal/cleanable/blood/splatter, src.loc)
-				b.New(src.loc)
-				b.basecolor = src.basecolor
+				var/obj/effect/decal/cleanable/blood/b = getFromPool(/obj/effect/decal/cleanable/blood/splatter, loc)
+				b.New(loc)
+				b.basecolor = basecolor
 				b.update_icon()
-				for(var/datum/disease/D in src.viruses)
+				for(var/datum/disease/D in viruses)
 					var/datum/disease/ND = D.Copy(1)
 					b.viruses += ND
 					ND.holder = b

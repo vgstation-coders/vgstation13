@@ -15,7 +15,7 @@
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			to_chat(user, "You drill a hole through the handle of \the [src].")
-			if(src.loc == user)
+			if(loc == user)
 				user.drop_item(src, force_drop = 1)
 				if(ismetal)
 					var/obj/item/weapon/hatchet/tomahawk/metal/drilled/I = new (get_turf(user))
@@ -25,9 +25,9 @@
 					user.put_in_hands(I)
 			else
 				if(ismetal)
-					new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
+					new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(loc))
 				else
-					new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(src.loc))
+					new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(loc))
 			qdel(src)
 
 /obj/item/weapon/hatchet/tomahawk/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -68,7 +68,7 @@
 		return
 	to_chat(user, "<span class='warning'>\The [src]'s blade shatters!</span>")
 	playsound(get_turf(user), "shatter", 50, 1)
-	if(src.loc == user)
+	if(loc == user)
 		user.drop_item(src, force_drop = 1)
 		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
 			var/obj/item/weapon/hatchet/tomahawk/pipe/P = src
@@ -81,9 +81,9 @@
 			user.put_in_hands(I)
 	else
 		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
-			new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
+			new /obj/item/weapon/broken_pipe_tomahawk(get_turf(loc))
 		else
-			new /obj/item/weapon/wrench(get_turf(src.loc))
+			new /obj/item/weapon/wrench(get_turf(loc))
 	qdel(src)
 
 /obj/item/weapon/hatchet/tomahawk/examine(mob/user)
@@ -112,12 +112,12 @@
 	..()
 	if(istype(W, /obj/item/ashtray))
 		to_chat(user, "You affix \the [W] to the end of \the [src].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc))
+			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(loc))
 		qdel(src)
 		qdel(W)
 
@@ -136,12 +136,12 @@
 	..()
 	if(istype(W, /obj/item/ashtray))
 		to_chat(user, "You affix \the [W] to the end of \the [src].")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/hatchet/tomahawk/pipe/metal/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe/metal(get_turf(src.loc))
+			new /obj/item/weapon/hatchet/tomahawk/pipe/metal(get_turf(loc))
 		qdel(src)
 		qdel(W)
 
@@ -311,12 +311,12 @@
 		to_chat(user, "You fasten \the [W] to \the [src].")
 		if(current_blunt)
 			to_chat(user, "The crushed [blunt_name] falls out in the process.")
-		if(src.loc == user)
+		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc))
+			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(loc))
 		qdel(src)
 		qdel(W)
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))

@@ -7,10 +7,10 @@
 		if(istype(src, /mob/living/carbon/slime/adult))
 			//ghostize() - Messes up making momma slime a baby
 			var/mob/living/carbon/slime/M1 = new primarytype(loc)
-			if(src.mind)
-				src.mind.transfer_to(M1)
+			if(mind)
+				mind.transfer_to(M1)
 			else
-				M1.key = src.key
+				M1.key = key
 				M1.rabid()
 			var/mob/living/carbon/slime/M2 = new primarytype(loc)
 			M2.rabid()

@@ -393,26 +393,26 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	//No need to make an exception for mechas, as they get deleted as soon as they get in view of narnar
 
-	if((N.z == src.z)&&(get_dist(N,src) <= (N.consume_range+10)) && !(N in view(src)))
+	if((N.z == z)&&(get_dist(N,src) <= (N.consume_range+10)) && !(N in view(src)))
 		if(!narsimage) //Create narsimage
-			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
+			narsimage = image('icons/obj/narsie.dmi',loc,"narsie",9,1)
 			narsimage.mouse_opacity = 0
 		if(!narglow) //Create narglow
 			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", LIGHTING_LAYER + 2, 1)
 			narglow.mouse_opacity = 0
 /* Animating narsie works like shit thanks to fucking byond
 		if(!N.old_x || !N.old_y)
-			N.old_x = src.x
-			N.old_y = src.y
+			N.old_x = x
+			N.old_y = y
 		//Reset narsie's location to the mob
-		var/old_pixel_x = 32 * (N.old_x - src.x) + N.pixel_x
-		var/old_pixel_y = 32 * (N.old_y - src.y) + N.pixel_y
+		var/old_pixel_x = 32 * (N.old_x - x) + N.pixel_x
+		var/old_pixel_y = 32 * (N.old_y - y) + N.pixel_y
 		narsimage.pixel_x = old_pixel_x
 		narsimage.pixel_y = old_pixel_y
 		narglow.pixel_x = old_pixel_x
 		narglow.pixel_y = old_pixel_y
-		narsimage.loc = src.loc
-		narglow.loc = src.loc
+		narsimage.loc = loc
+		narglow.loc = loc
 		//Animate narsie based on dir
 		if(dir)
 			var/x_diff = 0
@@ -442,14 +442,14 @@ var/global/obj/screen/fuckstat/FUCK = new
 			animate(narglow, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8)
 */
 		//Else if no dir is given, simply send them the image of narsie
-		var/new_x = 32 * (N.x - src.x) + N.pixel_x
-		var/new_y = 32 * (N.y - src.y) + N.pixel_y
+		var/new_x = 32 * (N.x - x) + N.pixel_x
+		var/new_y = 32 * (N.y - y) + N.pixel_y
 		narsimage.pixel_x = new_x
 		narsimage.pixel_y = new_y
 		narglow.pixel_x = new_x
 		narglow.pixel_y = new_y
-		narsimage.loc = src.loc
-		narglow.loc = src.loc
+		narsimage.loc = loc
+		narglow.loc = loc
 		//Display the new narsimage to the player
 		src << narsimage
 		src << narglow
@@ -761,7 +761,7 @@ var/list/slot_equipment_priority = list( \
 					if(!disable_warning)
 						to_chat(usr, "You somehow have a suit with no defined allowed items for suit storage, stop that.")
 					return 0
-				if(src.w_class > W_CLASS_MEDIUM)
+				if(w_class > W_CLASS_MEDIUM)
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return 0
@@ -868,7 +868,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || usr.isUnconscious() || !isturf(loc) || !(A in view(loc)))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -910,7 +910,7 @@ var/list/slot_equipment_priority = list( \
 			if(P == temp_P)
 				return
 
-		src.pulling = P
+		pulling = P
 		P.pulledby = src
 		update_pull_icon()
 		if(ismob(P))
@@ -1071,7 +1071,7 @@ var/list/slot_equipment_priority = list( \
 		to_chat(usr, "<span class='notice'> Respawn is disabled.</span>")
 		return
 	else
-		var/deathtime = world.time - src.timeofdeath
+		var/deathtime = world.time - timeofdeath
 		if(istype(src,/mob/dead/observer))
 			var/mob/dead/observer/G = src
 			if(G.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
@@ -1310,7 +1310,7 @@ var/list/slot_equipment_priority = list( \
 			stat(null, "CPU:\t[world.cpu]")
 			stat(null, "Instances:\t[world.contents.len]")
 			stat(null, FUCK)
-			if(!src.stat_fucked)
+			if(!stat_fucked)
 				if (garbageCollector)
 					stat(null, "\tqdel - [garbageCollector.del_everything ? "off" : "on"]")
 					stat(null, "\ton queue - [garbageCollector.queue.len]")
@@ -1494,10 +1494,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Facing()
     var/datum/listener
-    for(. in src.callOnFace)
+    for(. in callOnFace)
         listener = locate(.)
-        if(listener) call(listener,src.callOnFace[.])(src)
-        else src.callOnFace -= .
+        if(listener) call(listener,callOnFace[.])(src)
+        else callOnFace -= .
 
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
@@ -1687,7 +1687,7 @@ mob/proc/on_foot()
 	return
 
 /mob/shuttle_rotate(angle)
-	src.dir = turn(src.dir, -angle) //rotating pixel_x and pixel_y is bad
+	dir = turn(dir, -angle) //rotating pixel_x and pixel_y is bad
 
 /mob/can_shuttle_move()
 	return 1
@@ -1715,7 +1715,7 @@ mob/proc/on_foot()
 	if(!deity)
 		deity = "a voice" //sanity
 	var/pre_msg = "You hear [deity] in your head... "
-	if(src.hallucinating()) //If hallucinating, make subtle messages more fun
+	if(hallucinating()) //If hallucinating, make subtle messages more fun
 		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet","an evil", "an angelic")
 		var/location = pick(" from above"," from below"," in your head"," from behind you"," from everywhere"," from nowhere in particular","")
 		pre_msg = pick("You hear [adjective] voice[location]...")

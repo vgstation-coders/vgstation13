@@ -88,7 +88,7 @@
 	if(istype(O, /obj/machinery))
 		var/obj/machinery/M = O
 
-		if(user && (!M.allowed(user) && M.mech_flags & MECH_SCAN_ACCESS) && !src.access_avoidance) //if we require access, and don't have it, and the scanner can't bypass it
+		if(user && (!M.allowed(user) && M.mech_flags & MECH_SCAN_ACCESS) && !access_avoidance) //if we require access, and don't have it, and the scanner can't bypass it
 			return -2
 
 		if(M.component_parts)
@@ -112,7 +112,7 @@
 	if(!techlist) //this don't fly
 		return 0
 
-	if(src.syndi_filter)
+	if(syndi_filter)
 		if((techlist && techlist["syndicate"]) || (O.mech_flags & MECH_SCAN_ILLEGAL))
 			return -1 //special negative return case
 	return 1

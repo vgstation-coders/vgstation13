@@ -48,25 +48,25 @@
 	return
 
 /obj/item/device/radio/borg/proc/recalculateChannels()
-	src.channels = list()
-	src.syndie = 0
+	channels = list()
+	syndie = 0
 
 	if(keyslot)
 		for(var/ch_name in keyslot.channels)
-			if(ch_name in src.channels)
+			if(ch_name in channels)
 				continue
-			src.channels += ch_name
-			src.channels[ch_name] = keyslot.channels[ch_name]
+			channels += ch_name
+			channels[ch_name] = keyslot.channels[ch_name]
 
 		if(keyslot.syndie)
-			src.syndie = 1
+			syndie = 1
 
 
 	for (var/ch_name in channels)
 		if(!radio_controller)
 			sleep(30) // Waiting for the radio_controller to be created.
 		if(!radio_controller)
-			src.name = "broken radio"
+			name = "broken radio"
 			return
 
 		secure_radio_connections[ch_name] = add_radio(src, radiochannels[ch_name])

@@ -48,7 +48,7 @@
 		return
 	if(cell.give(100))
 		use_power(200)		//this used to use CELLRATE, but CELLRATE is fucking awful. feel free to fix this properly!
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/computer/telescience/attackby(obj/item/weapon/W, mob/user)
 	if(..())
@@ -78,7 +78,7 @@
 		icon_state = "teleportb"
 	else
 		if(stat & NOPOWER)
-			src.icon_state = "teleport0"
+			icon_state = "teleport0"
 			stat |= NOPOWER
 		else
 			icon_state = initial(icon_state)
@@ -131,7 +131,7 @@
 	return
 
 /obj/machinery/computer/telescience/attack_ai(mob/user)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/telescience/attack_hand(mob/user as mob)
 	if(user.client && user.client.prefs.usenanoui)//Check if the player is using nanoUI or not.
@@ -307,12 +307,12 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		var/area/A=target.loc
 		if(A && A.jammed)
 			if(!telepad.amplifier || A.jammed==SUPER_JAMMED)
-				src.visible_message("<span class='warning'>[bicon(src)] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "[bicon(src)]<span class='warning'>You hear something buzz.</span></span>")
+				visible_message("<span class='warning'>[bicon(src)] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "[bicon(src)]<span class='warning'>You hear something buzz.</span></span>")
 				return
 			if(prob(25))
 				qdel(telepad.amplifier)
 				telepad.amplifier = null
-				src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
+				visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, telepad)
 		s.start()
@@ -369,7 +369,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 			to_chat(usr, "<span class='caution'>Error: Invalid X offset (-10 to 10)</span>")
 		else
 			x_player_off = new_x
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 	if(href_list["setPOffsetY"])
@@ -378,7 +378,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 			to_chat(usr, "<span class='caution'>Error: Invalid Y offset (-10 to 10)</span>")
 		else
 			y_player_off = new_y
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 
@@ -389,7 +389,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 			to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 		else
 			x_co = new_x
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 	if(href_list["sety"])
@@ -399,7 +399,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 			to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 		else
 			y_co = new_y
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 	if(href_list["setz"])
@@ -408,21 +408,21 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 			to_chat(usr, "<span class='caution'>Error: Invalid Z coordinate.</span>")
 		else
 			z_co = new_z
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 	if(href_list["send"])
 		if(cell && cell.charge>=teleport_cell_usage)
 			sending = 1
 			teleport(usr)
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 	if(href_list["receive"])
 		if(cell && cell.charge>=teleport_cell_usage)
 			sending = 0
 			teleport(usr)
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 	if(href_list["eject_cell"])
@@ -430,10 +430,10 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 			usr.put_in_hands(cell)
 			cell.add_fingerprint(usr)
 			cell.updateicon()
-			src.cell = null
+			cell = null
 			usr.visible_message("[usr] removes the cell from \the [name].", "You remove the cell from \the [name].")
 			update_icon()
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 
 	if(href_list["recal"])
@@ -442,6 +442,6 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		y_off = rand(-10,10)
 		sparks()
 		to_chat(usr, "<span class='caution'>Calibration successful.</span>")
-		src.updateUsrDialog()
+		updateUsrDialog()
 		return 1
 	return 0

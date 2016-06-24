@@ -149,8 +149,8 @@ to_chat(#define MP_DEBUG(x) owner, x)
 	var/playerstyle
 
 	New(var/mob/holder)
-		src.mob=holder
-		owner=src.mob.client
+		mob=holder
+		owner=mob.client
 		if(owner.prefs)
 			if(!isnull(owner.prefs.volume))
 				volume = owner.prefs.volume

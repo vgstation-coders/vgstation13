@@ -49,7 +49,7 @@ Refactored AI modules by N3X15
 
 // Make a copy of this module.
 /obj/item/weapon/aiModule/proc/copy()
-	return new src.type(loc)
+	return new type(loc)
 
 /obj/item/weapon/aiModule/proc/fmtSubject(var/atom/target)
 	if(ismob(target))
@@ -73,13 +73,13 @@ Refactored AI modules by N3X15
 	if(ismob(target))
 		var/mob/M=target
 		// This seems redundant.  Revisit. - N3X
-		if(src.modflags & HIDE_SENDER)
+		if(modflags & HIDE_SENDER)
 			to_chat(target, "<span class='danger'>\[REDACTED\] </span>has uploaded a change to the laws you must follow, using \a [name]. From now on: ")
 		else
 			to_chat(target, "[senderName] has uploaded a change to the laws you must follow, using \a [name]. From now on: ")
 		targetName="[fmtSubject(M)])"
 	var/time = time2text(world.realtime,"hh:mm:ss")
-	var/log_entry = "[fmtSubject(sender)]) used [src.name] on [targetName]"
+	var/log_entry = "[fmtSubject(sender)]) used [name] on [targetName]"
 	lawchanges.Add("[time] : [log_entry]")
 	message_admins(log_entry)
 	log_game(log_entry)

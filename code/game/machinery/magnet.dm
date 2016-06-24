@@ -245,8 +245,8 @@
 
 
 	attack_ai(mob/user as mob)
-		src.add_hiddenprint(user)
-		return src.attack_hand(user)
+		add_hiddenprint(user)
+		return attack_hand(user)
 
 	attack_hand(mob/user as mob)
 		if(stat & (BROKEN|NOPOWER))
@@ -279,7 +279,7 @@
 		if(..())
 			return 1
 		usr.set_machine(src)
-		src.add_fingerprint(usr)
+		add_fingerprint(usr)
 
 		if(href_list["radio-op"])
 

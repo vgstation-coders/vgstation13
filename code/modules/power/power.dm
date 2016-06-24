@@ -82,7 +82,7 @@
 		return powernet.load
 	else
 		return 0
-		
+
 /obj/machinery/power/proc/get_powernet()
 	check_rebuild()
 	return powernet
@@ -90,7 +90,7 @@
 /obj/machinery/power/check_rebuild()
 	if(!build_status)
 		return 0
-	for(var/obj/structure/cable/C in src.loc)
+	for(var/obj/structure/cable/C in loc)
 		if(C.check_rebuild())
 			return 1
 
@@ -105,13 +105,13 @@
 // returns true if the area has power on given channel (or doesn't require power)
 // defaults to power_channel
 /obj/machinery/proc/powered(chan = power_channel)
-	if(!src.loc)
+	if(!loc)
 		return 0
 
 	if(!use_power)
 		return 1
 
-	if(isnull(src.areaMaster) || !src.areaMaster)
+	if(isnull(areaMaster) || !areaMaster)
 		return 0						// if not, then not powered.
 
 	if((machine_flags & FIXED2WORK) && !anchored)
@@ -122,13 +122,13 @@
 // increment the power usage stats for an area
 // defaults to power_channel
 /obj/machinery/proc/use_power(amount, chan = power_channel)
-	if(isnull(src.areaMaster) || !src.areaMaster)
+	if(isnull(areaMaster) || !areaMaster)
 		return 0						// if not, then not powered.
 
 	if(!powered(chan)) //no point in trying if we don't have power
 		return 0
 
-	src.areaMaster.use_power(amount, chan)
+	areaMaster.use_power(amount, chan)
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag

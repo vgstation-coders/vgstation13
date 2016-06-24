@@ -51,14 +51,14 @@
 			for(var/mob/living/carbon/target in view(1, get_turf(src)))
 				if(airborne_can_reach(get_turf(src), get_turf(target)))
 					if(get_infection_chance(target))
-						infect_virus2(target,src.virus2, notes="([src] attacked by [key_name(user)])")
+						infect_virus2(target,virus2, notes="([src] attacked by [key_name(user)])")
 		qdel (src)
 
 /obj/item/weapon/virusdish/examine(mob/user)
 	..()
-	if(src.info)
+	if(info)
 		to_chat(user, "<span class='info'>It has the following information about its contents</span>")
-		to_chat(user, src.info)
+		to_chat(user, info)
 
 ///////////////GNA DISK///////////////
 

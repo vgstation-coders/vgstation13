@@ -28,7 +28,7 @@
 
 	contents -= module
 	if(module)
-		module.forceMove(src.module)
+		module.forceMove(module)
 	hud_used.update_robot_modules_display()
 	return 1
 
@@ -69,7 +69,7 @@
 	hud_used.update_robot_modules_display()
 
 /mob/living/silicon/robot/proc/activate_module(var/obj/item/O)
-	if(!(locate(O) in src.module.modules) && O != src.module.emag)
+	if(!(locate(O) in module.modules) && O != module.emag)
 		return
 	if(activated(O))
 		to_chat(src, "<span class='notice'>Already activated</span>")
@@ -252,5 +252,5 @@
 
 /mob/living/silicon/robot/before_take_item(var/obj/item/W)
 	..()
-	if(W.loc == src.module)
-		src.module.modules -= W //maybe fix the cable issues.
+	if(W.loc == module)
+		module.modules -= W //maybe fix the cable issues.

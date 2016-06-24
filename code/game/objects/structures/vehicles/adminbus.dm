@@ -41,12 +41,12 @@
 	underbus.plane = PLANE_OBJ
 	overlays += underbus
 	overlays += image(icon,"ad")
-	src.dir = EAST
+	dir = EAST
 	playsound(src, 'sound/misc/adminbus.ogg', 50, 0, 0)
-	lightsource = new/obj/structure/buslight(src.loc)
+	lightsource = new/obj/structure/buslight(loc)
 	update_lightsource()
-	warp = new/obj/structure/teleportwarp(src.loc)
-	busjuke = new/obj/machinery/media/jukebox/superjuke/adminbus(src.loc)
+	warp = new/obj/structure/teleportwarp(loc)
+	busjuke = new/obj/machinery/media/jukebox/superjuke/adminbus(loc)
 	busjuke.plane = PLANE_EFFECTS
 	busjuke.dir = EAST
 
@@ -171,10 +171,10 @@
 			var/obj/machinery/bot/B = A
 			B.forceMove(loc)
 	for(var/obj/structure/hookshot/H in hookshot)
-		H.forceMove(get_step(H,src.dir))
+		H.forceMove(get_step(H,dir))
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/update_lightsource()
-	var/turf/T = get_step(src,src.dir)
+	var/turf/T = get_step(src,dir)
 	if(T.opacity)
 		lightsource.forceMove(T)
 		switch(roadlights)							//if the bus is right against a wall, only the wall's tile is lit
@@ -185,9 +185,9 @@
 				if(lightsource.light_range != 1)
 					lightsource.set_light(1)
 	else
-		T = get_step(T,src.dir)						//if there is a wall two tiles in front of the bus, the lightsource is right in front of the bus, though weaker
+		T = get_step(T,dir)						//if there is a wall two tiles in front of the bus, the lightsource is right in front of the bus, though weaker
 		if(T.opacity)
-			lightsource.forceMove(get_step(src,src.dir))
+			lightsource.forceMove(get_step(src,dir))
 			switch(roadlights)
 				if(0)
 					if(lightsource.light_range != 0)
@@ -262,11 +262,11 @@
 			if (H.engaged)
 				H.teleport(src)
 				H.use_power(5000)
-				src.Move()
+				Move()
 
 	if(can_move)
 		can_move = 0
-		forceMove(get_step(src,src.dir))
+		forceMove(get_step(src,dir))
 		sleep(1)
 		can_move = 1
 	else
@@ -295,7 +295,7 @@
 			if(occupant)
 				to_chat(occupant, "[M.name] captured!")
 		to_chat(M, "<span class='notice'>Welcome aboard \the [src]. Please keep your hands and arms inside the bus at all times.</span>")
-		src.add_fingerprint(M)
+		add_fingerprint(M)
 	else if(isbot(A))
 		var/obj/machinery/bot/B = A
 		if(B.flags & INVULNERABLE)
@@ -347,7 +347,7 @@
 			"<span class='notice'>[M.name] unbuckles \himself!</span>",
 			"You unbuckle yourself from \the [src].")
 		unlock_atom(M)
-		src.add_fingerprint(user)
+		add_fingerprint(user)
 	else
 		if(door_mode)
 			if(locate(user) in passengers)
@@ -447,11 +447,11 @@
 
 /obj/structure/hookshot/claw/proc/hook_throw(var/toward)
 	max_distance--
-	var/obj/machinery/singularity/S = locate(/obj/machinery/singularity) in src.loc
+	var/obj/machinery/singularity/S = locate(/obj/machinery/singularity) in loc
 	if(S)
 		return S
 	else
-		var/obj/structure/hookshot/H = new/obj/structure/hookshot(src.loc)
+		var/obj/structure/hookshot/H = new/obj/structure/hookshot(loc)
 		abus.hookshot += H
 		H.dir = toward
 		H.max_distance = max_distance
@@ -478,7 +478,7 @@
 
 /obj/structure/hookshot/claw/hook_back()
 	if(!dropped)
-		var/obj/machinery/singularity/S = locate(/obj/machinery/singularity) in src.loc
+		var/obj/machinery/singularity/S = locate(/obj/machinery/singularity) in loc
 		if(S)
 			if(abus.occupant)
 				var/mob/living/M = abus.occupant
@@ -531,7 +531,7 @@
 /obj/structure/singulo_chain/proc/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)//I don't see how this could be null but a sanity check won't hurt
-		src.loc = parent
+		loc = parent
 	if(child)
 		if(get_dist(src,child) > 1)
 			child.move_child(T)
@@ -542,11 +542,11 @@
 /obj/structure/singulo_chain/anchor/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)
-		src.loc = parent
+		loc = parent
 	else
 		dir = get_dir(T,src)
 	if(target)
-		target.loc = src.loc
+		target.loc = loc
 
 /obj/structure/singulo_chain/cultify()
 	return

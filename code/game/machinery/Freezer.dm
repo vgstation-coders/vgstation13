@@ -41,8 +41,8 @@
 	temp_offset = initial(temp_offset) - 5*lasercount
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
-	if(src.node)
-		if(src.on)
+	if(node)
+		if(on)
 			icon_state = "freezer_1"
 		else
 			icon_state = "freezer"
@@ -50,14 +50,14 @@
 		icon_state = "freezer_0"
 	..()
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user)
-	if(src.on || anchored)
+	if(on || anchored)
 		return
 	return ..()
 
@@ -65,13 +65,13 @@
 	if(anchored)
 		to_chat(user, "You have to unanchor the [src] first!")
 		return
-	if(src.on)
+	if(on)
 		to_chat(user, "You have to turn off the [src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(mob/user)
-	if(src.on)
+	if(on)
 		to_chat(user, "You have to turn off the [src] first!")
 		return
 	..()
@@ -123,23 +123,23 @@
 		if (href_list["start"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
 				return
-			src.on = !src.on
+			on = !on
 			update_icon()
 		if(href_list["temp"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
 				return
 			var/amount = text2num(href_list["temp"])
 			if(amount > 0)
-				src.current_temperature = min(T20C, src.current_temperature+amount)
+				current_temperature = min(T20C, current_temperature+amount)
 			else
-				src.current_temperature = max((T0C - 200 + temp_offset), src.current_temperature+amount)
-	src.updateUsrDialog()
-	src.add_fingerprint(usr)
+				current_temperature = max((T0C - 200 + temp_offset), current_temperature+amount)
+	updateUsrDialog()
+	add_fingerprint(usr)
 	return
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/process()
 	..()
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
@@ -147,10 +147,10 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored || usr:stat)
+	if (anchored || usr:stat)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 270)
+	dir = turn(dir, 270)
 	return 1
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw()
@@ -158,10 +158,10 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored || usr:stat)
+	if (anchored || usr:stat)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 	return 1
 
 
@@ -207,8 +207,8 @@
 	temp_offset = initial(temp_offset) + 5*lasercount
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
-	if(src.node)
-		if(src.on)
+	if(node)
+		if(on)
 			icon_state = "heater_1"
 		else
 			icon_state = "heater"
@@ -218,14 +218,14 @@
 	return
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user)
-	if(src.on || anchored)
+	if(on || anchored)
 		return
 	return ..()
 
@@ -233,13 +233,13 @@
 	if(anchored)
 		to_chat(user, "You have to unanchor the [src] first!")
 		return
-	if(src.on)
+	if(on)
 		to_chat(user, "You have to turn off the [src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(mob/user)
-	if(src.on)
+	if(on)
 		to_chat(user, "You have to turn off the [src] first!")
 		return
 	..()
@@ -288,23 +288,23 @@
 		if (href_list["start"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
 				return
-			src.on = !src.on
+			on = !on
 			update_icon()
 		if(href_list["temp"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
 				return
 			var/amount = text2num(href_list["temp"])
 			if(amount > 0)
-				src.current_temperature = min((T20C+280+temp_offset), src.current_temperature+amount)
+				current_temperature = min((T20C+280+temp_offset), current_temperature+amount)
 			else
-				src.current_temperature = max(T20C, src.current_temperature+amount)
-	src.updateUsrDialog()
-	src.add_fingerprint(usr)
+				current_temperature = max(T20C, current_temperature+amount)
+	updateUsrDialog()
+	add_fingerprint(usr)
 	return
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/process()
 	..()
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate()
@@ -312,10 +312,10 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored || usr:stat)
+	if (anchored || usr:stat)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 270)
+	dir = turn(dir, 270)
 	return 1
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw()
@@ -323,8 +323,8 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored || usr:stat)
+	if (anchored || usr:stat)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
-	src.dir = turn(src.dir, 90)
+	dir = turn(dir, 90)
 	return 1

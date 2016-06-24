@@ -9,9 +9,9 @@
 /mob/living/silicon/pai/proc/securityHUD()
 	if(client)
 		var/image/holder
-		var/turf/T = get_turf(src.loc)
+		var/turf/T = get_turf(loc)
 		for(var/mob/living/carbon/human/perp in view(T))
-			if(src.see_invisible < perp.invisibility)
+			if(see_invisible < perp.invisibility)
 				continue
 			var/perpname = "wot"
 			holder = perp.hud_list[ID_HUD]
@@ -53,9 +53,9 @@
 /mob/living/silicon/pai/proc/medicalHUD()
 	if(client)
 		var/image/holder
-		var/turf/T = get_turf(src.loc)
+		var/turf/T = get_turf(loc)
 		for(var/mob/living/carbon/human/patient in view(T))
-			if(src.see_invisible < patient.invisibility)
+			if(see_invisible < patient.invisibility)
 				continue
 			var/foundVirus = 0
 			for(var/datum/disease/D in patient.viruses)

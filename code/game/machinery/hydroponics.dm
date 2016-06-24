@@ -775,7 +775,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			user.visible_message("<span class='warning'>[user] starts uprooting the weeds.</span>", "<span class='warning'>You remove the weeds from the [src].</span>")
 			weedlevel = 0
 			updateicon()
-			src.updateicon()
+			updateicon()
 		else
 			to_chat(user, "<span class='warning'>This plot is completely devoid of weeds. It doesn't need uprooting.</span>")
 
@@ -828,10 +828,10 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			qdel(O)
 			O = null
 
-			var/obj/machinery/apiary/A = new(src.loc)
-			A.icon = src.icon
-			A.icon_state = src.icon_state
-			A.hydrotray_type = src.type
+			var/obj/machinery/apiary/A = new(loc)
+			A.icon = icon
+			A.icon_state = icon_state
+			A.hydrotray_type = type
 			A.component_parts = component_parts.Copy()
 			A.contents = contents.Copy()
 			contents.len = 0

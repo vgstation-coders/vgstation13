@@ -41,13 +41,13 @@
 	..()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/user)
-	if(!src.process_chambered()) //No rocket in the rocket launcher
+	if(!process_chambered()) //No rocket in the rocket launcher
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
 	else //Needed to get that shitty default suicide_act out of the way
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, -1, 1, 4, 8)
+			explosion(loc, -1, 1, 4, 8)
 			if(src) //Is the rocket launcher somehow still here ?
 				qdel(src) //This never happened
 			return(BRUTELOSS)
@@ -88,7 +88,7 @@
 	else
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, -1, 1, 4, 8)
+			explosion(loc, -1, 1, 4, 8)
 			return(BRUTELOSS)
 	return
 

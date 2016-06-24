@@ -219,7 +219,7 @@
 		loaded_disk = null
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 
 /obj/machinery/botany/extractor/Topic(href, href_list)
 
@@ -227,7 +227,7 @@
 		return 1
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 
 	if(href_list["scan_genome"])
 
@@ -367,5 +367,5 @@
 				mode = GENEGUN_MODE_SPLICE
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	return 1
