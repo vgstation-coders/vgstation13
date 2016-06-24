@@ -85,7 +85,7 @@
 	..()
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(5))
-			audible_cough(owner)		//respitory tract infection
+			owner.audible_cough()		//respitory tract infection
 
 	if(is_bruised())
 		if(prob(2))
