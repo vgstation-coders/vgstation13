@@ -10,6 +10,7 @@
     var/ticks_not_whispered = 0
     var/next_whisper = 300
     var/whispers = list("...bring me flesh...", "...make us whole...", "...we must be whole...", "...join us in unity...", "...one mind, one soul, one flesh...", "...MAKE US WHOLE...")
+    var/mob/dead/observer = list()
 
     machine_flags = WRENCHMOVE
 
@@ -22,12 +23,14 @@
     if(Adjacent(user))
         Consume(M)
 
-/obj/machinery/necromarker/Consume(mob/M as mob, mob/user as mob)
+/obj/machinery/necromarker/proc/Consume(mob/M as mob, mob/user as mob)
     if(anchored && ismob(M) && Adjacent(M))
         M.forceMove(src.loc)
-        var/mob/living/simple_animal/hostile/necro/zombie/Z = new(src.loc)
+        var/mob/living/simple_animal/hostile/monster/necromorph/Z = new(src.loc)
         if(M.ckey)
-            Z.ckey = M.ckey
+            // Z.ckey = M.ckey
+            if(M.mind)
+                M.mind.transfer_to(Z)
         visible_message("<span class='warning'>[src] spins the flesh and bone of [M] into a hellish monstrosity!</span>")
         M.gib()
         if(user)
@@ -47,10 +50,14 @@
         visible_message("<span class='info'>[src]'s glow slowly diminishes.'</span>")
 
 /obj/machinery/necromarker/attack_hand(mob/user)
-    if(Adjacent(user) && !isghost(user))
-        Consume(user)
+    if(!isobserver(user))
+        if(Adjacent(user))
+            Consume(user)
+    else
+        
 
-/obj/machinery/auto_cloner/process()
+
+/obj/machinery/necromarker/process()
     if(ticks_not_whispered > next_whisper)
         ticks_not_whispered = 0
         visible_message("[pick(whispers)]")
