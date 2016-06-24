@@ -137,7 +137,7 @@ var/paperwork_library
 	return "<span style=\"[style];color:[P.color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
-//	addReplacement(REG_BBTAG("*"), "<li>")
+	addReplacement(REG_BBTAG("\\*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
 	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
 	addReplacement(REG_BBTAG("/small"), "</span>")
