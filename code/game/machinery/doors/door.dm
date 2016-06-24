@@ -109,6 +109,10 @@ var/list/all_doors = list()
 
 	if(allowed(user))
 		open()
+	else if(isanimal(user))
+		var/mob/living/simple_animal/SA = user
+		if(SA.can_open_doors)
+			open()
 	else if(!operating)
 		denied()
 
@@ -117,6 +121,9 @@ var/list/all_doors = list()
 	attack_hand(user)
 
 /obj/machinery/door/attack_paw(mob/user as mob)
+	attack_hand(user)
+
+/obj/machinery/door/attack_animal(mob/user as mob)
 	attack_hand(user)
 
 /obj/machinery/door/attack_hand(mob/user as mob)
@@ -170,6 +177,10 @@ var/list/all_doors = list()
 			return close()
 		else
 			return open()
+	else if(isanimal(user))
+		var/mob/living/simple_animal/SA = user
+		if(SA.can_open_doors)
+			open()
 
 	if(horror_force(user))
 		return

@@ -216,6 +216,9 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)
 
+/obj/machinery/door/firedoor/attack_animal(mob/user as mob)
+	force_open(user)
+	
 /obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
 	force_open(user)
 
