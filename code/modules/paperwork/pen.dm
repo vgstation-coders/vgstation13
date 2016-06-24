@@ -128,6 +128,7 @@ var/paperwork_library
 					break
 				count++
 				var/datum/speech_filter_action/SFA = expressions[key]
+				to_chat(world, "BBcode run on <br>[t], name is [SFA.expr.name], flags are [SFA.expr.flags]")
 				if(SFA && !SFA.broken)
 					t = SFA.Run(t,user,paper)
 				if(count%100 == 0)
@@ -137,7 +138,7 @@ var/paperwork_library
 	return "<span style=\"[style];color:[P.color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
-	addReplacement(REG_BBTAG("*"), "<li>")
+//	addReplacement(REG_BBTAG("*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
 	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
 	addReplacement(REG_BBTAG("/small"), "</span>")
@@ -166,14 +167,12 @@ var/paperwork_library
 	addReplacement(REG_BBTAG("tnr"),		"<span style=\"font-family:Times New Roman\">")
 	addReplacement(REG_BBTAG("/tnr"),		"</span>")
 
-	// : is our delimiter, gi = global search, case-insensitive.
-	addExpression(":"+REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img")+":gi", ACT_BBCODE_IMG,list())
+	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
 
 	..() // Order of operations
 
 /datum/writing_style/pen/nano_paper/New()
-	// : is our delimiter, gi = global search, case-insensitive.
-	addExpression(":"+REG_BBTAG("video")+"("+REG_NOTBB+")"+REG_BBTAG("/video")+":gi", ACT_BBCODE_VIDEO,list())
+	addExpression(REG_BBTAG("video")+"("+REG_NOTBB+")"+REG_BBTAG("/video"), ACT_BBCODE_VIDEO,list(),flags = "gi")
 
 	..()
 
