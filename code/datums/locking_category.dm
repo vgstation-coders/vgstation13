@@ -46,14 +46,14 @@
 				new_x = x_offset
 				new_y = y_offset
 			if (EAST) // right
-				new_x = x_offset
-				new_y = -y_offset
+				new_x = y_offset
+				new_y = -x_offset
 			if (SOUTH) //down
 				new_x = -x_offset
 				new_y = -y_offset
 			if (WEST) //left
-				new_x = -x_offset
-				new_y = y_offset
+				new_x = -y_offset
+				new_y = x_offset
 
 	if (new_x || new_y)
 		var/newer_loc = locate(owner.x + new_x, owner.y + new_y, owner.z)
