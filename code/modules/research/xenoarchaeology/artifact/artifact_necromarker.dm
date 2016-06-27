@@ -74,7 +74,7 @@
 
 /obj/machinery/necromarker/attackby(obj/item/weapon/W, mob/user)
     if(istype(W, /obj/item/weapon/grab))
-        var/obj/weapon/item/grab/G = W
+        var/obj/item/weapon/grab/G = W
         if(ismob(G.affecting))
             Consume(G.affecting)
             return //Mission complete, everyone get the fuck out
