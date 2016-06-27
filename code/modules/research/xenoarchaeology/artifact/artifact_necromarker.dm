@@ -24,7 +24,7 @@
         Consume(M)
 
 /obj/machinery/necromarker/proc/Consume(mob/M as mob, mob/user as mob)
-    if(anchored && ismob(M) && Adjacent(M))
+    if(anchored && ismob(M) && Adjacent(M) && iscarbon(M))
         var/mob/living/simple_animal/hostile/monster/necromorph/Z = new(src.loc)
         if(M.ckey)
             // Z.ckey = M.ckey
@@ -34,10 +34,11 @@
             for(var/mob/dead/observer/O in candidates)
                 if(O && O.mind && O.ckey)
                     O.mind.transfer_to(Z)
+                    Z.ckey = O.ckey // Because ghosts don't get key changes
                     candidates -= O
                     break
                 else
-                    candidates -= 0
+                    candidates -= O
         visible_message("<span class='warning'>[src] spins the flesh and bone of [M] into a hellish monstrosity!</span>")
         M.gib()
         if(user)
@@ -48,7 +49,10 @@
             log_game("[M]/[M.ckey] turned into a necromorph.")
 
 /obj/machinery/necromarker/wrenchAnchor(var/mob/user)
+    var/wasanchored = anchored
     . = ..()
+    if(anchored == wasanchored)
+        return //Nothing changed so change nothing
     if(anchored)
         icon_state = "red"
         visible_message("<span class='warning'>[src] begins to glow an ominous shade of red...</span>")
@@ -57,7 +61,7 @@
         visible_message("<span class='info'>[src]'s glow slowly diminishes.'</span>")
 
 /obj/machinery/necromarker/attack_hand(mob/user)
-    if(!isobserver(user))
+    if(!isobserver(user) && !issilicon(user))
         if(Adjacent(user))
             Consume(user)
     else
@@ -76,3 +80,7 @@
         next_whisper = rand(NECROMARKER_MIN_WHISPER_INTERVAL, NECROMARKER_MAX_WHISPER_INTERVAL)
     else
         ticks_not_whispered++
+
+/obj/machinery/necromarker/Destroy()
+    candidates = null
+    ..()
