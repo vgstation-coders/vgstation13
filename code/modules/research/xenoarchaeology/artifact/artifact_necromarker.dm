@@ -24,7 +24,7 @@
         Consume(M)
 
 /obj/machinery/necromarker/proc/Consume(mob/M as mob, mob/user as mob)
-    if(anchored && ismob(M) && Adjacent(M) && iscarbon(M))
+    if(anchored && ismob(M) && Adjacent(M) && iscarbon(M) && !istype(M, /mob/living/simple_animal/hostile/monster/necromorph/))
         var/mob/living/simple_animal/hostile/monster/necromorph/Z = new(src.loc)
         if(M.ckey)
             // Z.ckey = M.ckey
