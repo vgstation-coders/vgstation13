@@ -96,3 +96,4 @@
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
 	qdel(recruiter)
 	recruiter = null
+	..()
