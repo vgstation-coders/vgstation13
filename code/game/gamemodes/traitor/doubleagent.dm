@@ -9,7 +9,6 @@
 	traitor_name = "double agent"
 
 	var/list/target_list = list()
-	var/list/required_protection = list() //Civilians chosen for assassinate targets. Other agents get objectives to protect them
 
 /datum/game_mode/traitor/double_agents/announce()
 	to_chat(world, "<B>The current game mode is - Double Agents!</B>")
