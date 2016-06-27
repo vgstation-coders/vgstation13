@@ -9,7 +9,7 @@
 
     var/ticks_not_whispered = 0
     var/next_whisper = 300
-    var/whispers = list("...bring me flesh...", "...make us whole...", "...we must be whole...", "...join us in unity...", "...one mind, one soul, one flesh...", "...MAKE US WHOLE...")
+    var/whispers = list("...bring us flesh...", "...make us whole...", "...we must be whole...", "...join us in unity...", "...one mind, one soul, one flesh...", "...MAKE US WHOLE...")
     var/list/mob/dead/observer/candidates = list()
 
     machine_flags = WRENCHMOVE
@@ -71,6 +71,14 @@
         else
             to_chat(user, "<span class='info'>You have been signed up to take control of the next mindless necromorph that the marker spawns. Click again to revoke this.</span>")
             candidates += user
+
+/obj/machinery/necromarker/attackby(obj/item/weapon/W, mob/user)
+    if(istype(W, /obj/item/weapon/grab))
+        var/obj/weapon/item/grab/G = W
+        if(ismob(G.affecting))
+            Consume(G.affecting)
+            return //Mission complete, everyone get the fuck out
+    ..()
 
 
 /obj/machinery/necromarker/process()
