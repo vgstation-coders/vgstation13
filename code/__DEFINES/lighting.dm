@@ -1,5 +1,5 @@
 //Bay lighting engine shit, not in /code/modules/lighting because BYOND is being shit about it
-#define LIGHTING_INTERVAL       5 // frequency, in 1/10ths of a second, of the lighting process
+#define LIGHTING_INSTANT_UPDATES
 
 #ifndef LIGHTING_INSTANT_UPDATES
 #define LIGHTING_INTERVAL       5    // Frequency, in 1/10ths of a second, of the lighting process.

@@ -33,8 +33,9 @@
 
 /atom/movable/lighting_overlay/Destroy()
 	global.all_lighting_overlays    -= src
+#ifndef LIGHTING_INSTANT_UPDATES
 	global.lighting_update_overlays -= src
-
+#endif
 	var/turf/T   = loc
 	if(istype(T))
 		T.lighting_overlay = null
