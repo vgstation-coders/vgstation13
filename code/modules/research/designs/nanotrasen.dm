@@ -31,3 +31,15 @@
 	build_path = /obj/item/weapon/gun/gravitywell
 	locked = 1
 	req_lock_access = list(access_rd)
+
+/datum/design/nuclear_gun
+	name = "Advanced Energy Gun"
+	desc = "An energy gun enhanced to automatically charge itself."
+	id = "nuclear_gun"
+	req_tech = list("combat" = 3, "materials" = 5, "powerstorage" = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 12000, MAT_GLASS = 7500, MAT_URANIUM = 5000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/gun/energy/gun/nuclear
+	locked = 1
+	req_lock_access = list(access_armory)
