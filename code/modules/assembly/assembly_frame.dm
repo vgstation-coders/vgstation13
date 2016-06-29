@@ -155,7 +155,7 @@
 			return
 
 		if(lock_ejection)
-			to_chat("<span class='info'>\The [src] is locked! You must unlock it before ejecting any assemblies.</span>")
+			to_chat(usr, "<span class='info'>\The [src] is locked! You must unlock it before ejecting any assemblies.</span>")
 			return
 
 		if(AS.loc != src)
@@ -298,21 +298,38 @@
 		return
 
 	if(istype(W, /obj/item/weapon/paper))
-		if(assemblies.len || connections.len)
-			to_chat(user, "<span class='notice'>Unable to import configuration: the assembly frame must be empty.</span>")
-			return
 
-		var/obj/item/weapon/paper/P = W
-		var/turf/T = get_turf(src)
-		var/list/used_parts = T.contents.Copy()
+		to_chat(user, "<span class='info'>You start inserting \the [W] into \the [src].</span>")
 
-		switch(from_text(P.info, 1, used_parts))
-			if(1)
-				to_chat(user, "<span class='info'>Configuration imported successfully.</span>")
-			if(null)
-				to_chat(user, "<span class='notice'>Unable to import configuration: corrupt input data.</span>")
-			if(0)
-				to_chat(user, "<span class='notice'>Unable to import configuration: encountered an error while enstablishing device connections.</span>")
+		spawn()
+			if(do_after(user, src, 30))
+				if(assemblies.len || connections.len)
+					to_chat(user, "<span class='notice'>Unable to import configuration: the assembly frame must be empty.</span>")
+					return
+
+				var/obj/item/weapon/paper/P = W
+				var/turf/T = get_turf(src)
+				var/list/used_parts = T.contents.Copy()
+
+				var/assembly_data = P.info
+				//Clean all the <span> tags
+				assembly_data = replacetext(assembly_data, "</span>", "")
+
+				if(copytext(assembly_data, 1,2) == "<") //Text starts with an opening <span> tag
+					var/last_span = findtext(assembly_data, ">")
+					if(last_span)
+						assembly_data = copytext(assembly_data, last_span + 1) //Cut it off
+
+				switch(from_text(assembly_data, 1, used_parts))
+					if(1)
+						to_chat(user, "<span class='info'>Configuration imported successfully.</span>")
+						message_admins("[key_name_admin(user)] has imported a configuration into an assembly frame! [formatJumpTo(get_turf(src))]")
+					if(null)
+						to_chat(user, "<span class='notice'>Unable to import configuration: corrupt input data.</span>")
+					if(0)
+						to_chat(user, "<span class='notice'>Unable to import configuration: encountered an error while enstablishing device connections.</span>")
+
+		return 1
 
 /obj/item/device/assembly_frame/proc/insert_assembly(obj/item/device/assembly/AS, mob/user = null)
 	if(!istype(AS))
@@ -377,7 +394,7 @@
 		else
 			midholder.Add("")
 		mainholder.Add(jointext(midholder, "|"))
-	return jointext(mainholder, "<br>")
+	return jointext(mainholder, "<BR>")
 
 /obj/item/device/assembly_frame/proc/debug_to_text() //Spawns a paper with the to_text data
 	var/obj/item/weapon/paper/P = new(get_turf(src))
@@ -454,7 +471,7 @@
 /obj/item/device/assembly_frame/proc/decompose_text(assembly_data)
 	if(!istext(assembly_data))
 		return null
-	var/list/mainholder = splittext(assembly_data, "<br>")
+	var/list/mainholder = splittext(assembly_data, "<BR>")
 	. = list()
 	for(var/a_data in mainholder)
 		var/list/subholder = splittext(a_data, "|")
