@@ -13,7 +13,7 @@ var/list/parallax_on_clients = list()
 	name = "space parallax"
 	blend_mode = BLEND_ADD
 	layer = AREA_LAYER
-	plane = PLANE_SPACE_PARALLAX//changing this var doesn't actually change the plane of its overlays
+	plane = PLANE_SPACE_PARALLAX
 	globalscreen = 1
 	var/parallax_speed = 0
 
@@ -24,12 +24,22 @@ var/list/parallax_on_clients = list()
 
 /obj/screen/plane_master/parallax_master
 	plane = PLANE_SPACE_PARALLAX
+	blend_mode = BLEND_MULTIPLY
 	color = list(
 	1,0,0,0,
 	0,1,0,0,
 	0,0,1,0,
 	0,0,0,0,
 	0,0,0,1)
+
+/obj/screen/plane_master/parallax_spacemaster //Turns space white, causing the parallax to only show in areas with opacity. Somehow
+	plane = PLANE_SPACE_BACKGROUND
+	color = list(
+	0,0,0,0,
+	0,0,0,0,
+	0,0,0,0,
+	0,0,0,0,
+	1,1,1,1)
 
 /obj/screen/plane_master/parallax_dustmaster
 	plane = PLANE_SPACE_DUST
@@ -38,10 +48,8 @@ var/list/parallax_on_clients = list()
 	var/client/C = mymob.client
 	if(!parallax_initialized || C.updating_parallax) return
 
-	for(var/turf/T in range(get_turf(C.eye),C.view))
-		if(istype(T,/turf/space))
-			C.updating_parallax = 1
-			break
+	if(locate(/turf/space) in range(get_turf(C.eye),C.view))
+		C.updating_parallax = 1
 
 	if(!C.updating_parallax)
 		return
@@ -75,11 +83,13 @@ var/list/parallax_on_clients = list()
 			C.screen -= bgobj
 		parallax_on_clients -= C
 		C.screen -= C.parallax_master
-		C.screen -= C.parallax_dustmaster
+		C.screen -= C.parallax_spacemaster
 		return 0
 
 	if(!C.parallax_master)
 		C.parallax_master = getFromPool(/obj/screen/plane_master/parallax_master)
+	if(!C.parallax_spacemaster)
+		C.parallax_spacemaster = getFromPool(/obj/screen/plane_master/parallax_spacemaster)
 	if(!C.parallax_dustmaster)
 		C.parallax_dustmaster = getFromPool(/obj/screen/plane_master/parallax_dustmaster)
 	return 1
@@ -97,17 +107,12 @@ var/list/parallax_on_clients = list()
 			parallax_layer.parallax_speed = bgobj.parallax_speed
 			C.parallax += parallax_layer
 
-	var/parallax_loaded = 0
-	for(var/obj/screen/S in C.screen)
-		if(istype(S,/obj/screen/parallax))
-			parallax_loaded = 1
-			break
-
-	if(forcerecalibrate || !parallax_loaded)
+	if(forcerecalibrate || !(locate(/obj/screen/parallax) in C.screen))
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
 
 		C.screen |= C.parallax_master
+		C.screen |= C.parallax_spacemaster
 		C.screen |= C.parallax_dustmaster
 		C.parallax_dustmaster.color = list(0,0,0,0)
 		if(C.prefs.space_dust)
@@ -150,9 +155,9 @@ var/list/parallax_on_clients = list()
 			while(accumulated_offset_y < -720)
 				accumulated_offset_y += 1440
 
-			bgobj.screen_loc = "CENTER-7:[accumulated_offset_x],CENTER-7:[accumulated_offset_y]"
+			bgobj.screen_loc = "CENTER:[accumulated_offset_x],CENTER:[accumulated_offset_y]"
 		else
-			bgobj.screen_loc = "CENTER-7:[bgobj.base_offset_x],CENTER-7:[bgobj.base_offset_y]"
+			bgobj.screen_loc = "CENTER:[bgobj.base_offset_x],CENTER:[bgobj.base_offset_y]"
 
 //Parallax generation code below
 
@@ -176,7 +181,7 @@ var/list/parallax_on_clients = list()
 		pixel_y += 32 * round(i/15)
 
 	for(var/i in 0 to 8)
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 
 		var/list/L = list()
 		for(var/j in 1 to 225)
@@ -184,18 +189,17 @@ var/list/parallax_on_clients = list()
 				var/image/I = image('icons/turf/space_parallax4.dmi',"[plane1[j+i*225]]")
 				I.pixel_x = pixel_x[j]
 				I.pixel_y = pixel_y[j]
-				I.plane = PLANE_SPACE_PARALLAX
 				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 0
 		parallax_layer.plane = PLANE_SPACE_PARALLAX
-		calibrate_parallax(parallax_layer,i+1)
+		parallax_layer.calibrate_parallax(i+1)
 		parallax_icon[index] = parallax_layer
 		index++
 
 	for(var/i in 0 to 8)
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 
 		var/list/L = list()
 		for(var/j in 1 to 225)
@@ -203,54 +207,54 @@ var/list/parallax_on_clients = list()
 				var/image/I = image('icons/turf/space_parallax3.dmi',"[plane2[j+i*225]]")
 				I.pixel_x = pixel_x[j]
 				I.pixel_y = pixel_y[j]
-				I.plane = PLANE_SPACE_PARALLAX
 				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 1
 		parallax_layer.plane = PLANE_SPACE_PARALLAX
-		calibrate_parallax(parallax_layer,i+1)
+		parallax_layer.calibrate_parallax(i+1)
 		parallax_icon[index] = parallax_layer
 		index++
 
 	for(var/i in 0 to 8)
-		var/obj/screen/parallax/parallax_layer = new /obj/screen/parallax()
+		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 		var/list/L = list()
 		for(var/j in 1 to 225)
 			if(plane3[j+i*225] <= PARALLAX2_ICON_NUMBER)
 				var/image/I = image('icons/turf/space_parallax2.dmi',"[plane3[j+i*225]]")
 				I.pixel_x = pixel_x[j]
 				I.pixel_y = pixel_y[j]
-				I.plane = PLANE_SPACE_PARALLAX
 				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 2
 		parallax_layer.plane = PLANE_SPACE_PARALLAX
-		calibrate_parallax(parallax_layer,i+1)
+		parallax_layer.calibrate_parallax(i+1)
 		parallax_icon[index] = parallax_layer
 		index++
 
 	parallax_initialized = 1
 
-/proc/calibrate_parallax(var/obj/screen/parallax/p_layer,var/i)
-	if(!p_layer || !i) return
+/obj/screen/parallax/proc/calibrate_parallax(var/i)
+	if(!i) return
 
 	/* Placement of screen objects
 	1	2	3
 	4	5	6
 	7	8	9
 	*/
+	base_offset_x = -7*32
+	base_offset_y = -7*32
 	switch(i)
 		if(1,4,7)
-			p_layer.base_offset_x = -480
+			base_offset_x -= 480
 		if(3,6,9)
-			p_layer.base_offset_x = 480
+			base_offset_x += 480
 	switch(i)
 		if(1,2,3)
-			p_layer.base_offset_y = 480
+			base_offset_y += 480
 		if(7,8,9)
-			p_layer.base_offset_y = -480
+			base_offset_y -= 480
 
 #undef PARALLAX4_ICON_NUMBER
 #undef PARALLAX3_ICON_NUMBER
