@@ -830,10 +830,8 @@
 	if(popper)
 		popper.visible_message("<span class='warning'>[popper] pops the \the [src]!</span>","<span class='warning'>You pop \the [src]!</span>")
 	for(var/mob/living/carbon/C in view(1))
-		if(ishuman(C))
-			var/mob/living/carbon/human/H = C
-			if(H.shoes && H.CheckSlip() < 1)
-				continue
+		if(C.CheckSlip() < 1)
+			continue
 		C.Weaken(5)
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
