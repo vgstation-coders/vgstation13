@@ -166,10 +166,14 @@
 			return
 
 		if(client.prefs.species != "Human")
-
-			if(!is_alien_whitelisted(src, client.prefs.species) && config.usealienwhitelist)
-				to_chat(src, alert("You are currently not whitelisted to play [client.prefs.species]."))
-				return 0
+			if(config.usealienwhitelist)
+				if(!is_alien_whitelisted(src, client.prefs.species))
+					to_chat(src, alert("You are currently not whitelisted to play [client.prefs.species]."))
+					return 0
+			else
+				if(jobban_isbanned(src, client.prefs.species))
+					to_chat(src, alert("You are currently not banned from play [client.prefs.species]."))
+					return 0
 
 		LateChoices()
 

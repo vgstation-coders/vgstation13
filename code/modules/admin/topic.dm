@@ -869,6 +869,26 @@
 
 		jobs += "</tr></table>"
 
+		//Species
+		counter = 0
+		jobs += "<table cellpadding='1' cellspacing='0' width='100%'>"
+		jobs += "<tr bgcolor='dddddd'><th colspan='[length(whitelisted_species)-1]'>Species</th></tr><tr align='center'>"
+		for(var/species in whitelisted_species)
+			if(species == "Human")
+				continue
+			if(jobban_isbanned(M, species))
+				jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=[species];jobban4=\ref[M]'><font color=red>[replacetext(species, " ", "&nbsp")]</font></a></td>"
+				counter++
+			else
+				jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=[species];jobban4=\ref[M]'>[replacetext(species, " ", "&nbsp")]</a></td>"
+				counter++
+
+			if(counter >= 5) //So things dont get squiiiiished!
+				jobs += "</tr><tr align='center'>"
+				counter = 0
+		jobs += "</tr></table>"
+
+
 		//Other races  (BLUE, because I have no idea what other color to make this)
 		jobs += "<table cellpadding='1' cellspacing='0' width='100%'>"
 		jobs += "<tr bgcolor='ccccff'><th colspan='1'>Other Races</th></tr><tr align='center'>"

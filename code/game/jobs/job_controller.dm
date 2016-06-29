@@ -205,6 +205,10 @@ var/global/datum/controller/occupations/job_master
 
 	//Get the players who are ready
 	for(var/mob/new_player/player in player_list)
+		if(jobban_isbanned(player, player.client.prefs.species))
+			player.ready = 0
+			player << "<span class='warning'>You are banned from playing as [player.client.prefs.species]</span>"
+			continue
 		if(player.ready && player.mind && !player.mind.assigned_role)
 			unassigned += player
 			if(player.client.prefs.randomslot) player.client.prefs.random_character_sqlite(player, player.ckey)

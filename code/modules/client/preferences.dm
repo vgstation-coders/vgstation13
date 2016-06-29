@@ -1081,17 +1081,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						age = max(min( round(text2num(new_age)), AGE_MAX),AGE_MIN)
 				if("species")
 
-					var/list/new_species = list(
-                        		"Human",
-                        		"Unathi",
-                        		"Skellington",
-                			"Skeletal Vox",
-                        		"Tajaran",
-                        		"Grey",
-                        		"Skrell",
-                        		"Vox",
-                        		"Diona",
-                        		)
+					var/list/new_species = list("Human")
 					var/prev_species = species
 					var/whitelisted = 0
 
@@ -1103,8 +1093,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if(!whitelisted)
 							alert(user, "You cannot change your species as you need to be whitelisted. If you wish to be whitelisted contact an admin in-game, on the forums, or on IRC.")
 					else //Not using the whitelist? Aliens for everyone!
-						new_species = whitelisted_species
-						//new_species += S
+						for(var/S in whitelisted_species)
+							if(!jobban_isbanned(user, S))
+								new_species += S
 
 					species = input("Please select a species", "Character Generation", null) in new_species
 
