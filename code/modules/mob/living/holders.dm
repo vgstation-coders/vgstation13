@@ -175,6 +175,7 @@
 	item_state = "cockatrice"
 
 	armor_modifier = 100
+	force = 1
 
 /obj/item/weapon/holder/animal/cockatrice/prepickup(mob/user)
 	. = hold_check(user)
@@ -198,11 +199,25 @@
 	if(istype(L) && L.held_items.Find(src))
 		hold_check(L)
 
-/obj/item/weapon/holder/animal/cockatrice/applied_damage(mob/living/victim, organ, armor)
-	if(!armor)
+/obj/item/weapon/holder/animal/cockatrice/afterattack(mob/living/simple_animal/victim, mob/user, proximity_flag)
+	//Turn simple animals into statues. Human mobs are handled below, in applied_damage
+	if(!proximity_flag)
 		return
 
-	if(prob(80)) //20% chance of this working (if it bypasses armor)
+	if(!istype(victim))
+		return
+
+	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob
+	if(!istype(C))
+		return
+
+	C.sting(victim)
+
+/obj/item/weapon/holder/animal/cockatrice/applied_damage(mob/living/victim, organ, armor)
+	if(armor)
+		return
+
+	if(prob(60)) //40% chance of this working (if it bypasses armor)
 		return
 
 	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob

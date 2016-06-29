@@ -33,6 +33,9 @@
 
 	holder_type = /obj/item/weapon/holder/animal/cockatrice
 
+	meat_type = null
+	can_butcher = 0
+
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/sting(mob/living/L, instant = 0)
 	//Turn the mob into a statue forever
 	//Return 1 on success
@@ -132,10 +135,10 @@
 		sting(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/UnarmedAttack(A)
-	if(check_sting(A))
-		sting(A)
+	.=..()
 
-	return ..()
+	if(!ishuman(A) && check_sting(A)) //Humans are handled below in applied_damage()
+		sting(A)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/applied_damage(mob/victim, amount, organ, armor)
 	if(armor)

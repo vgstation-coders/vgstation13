@@ -746,10 +746,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return
 
 /mob/living/simple_animal/turn_into_statue(forever = 0)
+	..()
+
 	if(forever)
 		Die()
-
-	return ..()
 
 
 /datum/locking_category/simple_animal
