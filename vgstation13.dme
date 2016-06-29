@@ -1505,6 +1505,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\human\wizard.dm"
 #include "code\modules\mob\living\simple_animal\hostile\retaliate\clown.dm"
 #include "code\modules\mob\living\simple_animal\hostile\retaliate\cluwne.dm"
+#include "code\modules\mob\living\simple_animal\hostile\retaliate\cockatrice.dm"
 #include "code\modules\mob\living\simple_animal\hostile\retaliate\drone.dm"
 #include "code\modules\mob\living\simple_animal\hostile\retaliate\mime.dm"
 #include "code\modules\mob\living\simple_animal\hostile\retaliate\retaliate.dm"
