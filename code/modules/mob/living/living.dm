@@ -1382,7 +1382,11 @@ default behaviour is:
 /mob/proc/CheckSlip()
 	return 0
 
-
+/mob/living/proc/turn_into_statue(forever = 0)
+	if(forever)
+		return new /obj/structure/closet/statue/eternal(get_turf(src), src)
+	else
+		return new /obj/structure/closet/statue(get_turf(src), src)
 
 /*
 	How this proc that I took from /tg/ works:

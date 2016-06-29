@@ -201,7 +201,7 @@ emp_act
 		visible_message("<span class='danger'>[user] attacks [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
 
-	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
+	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", modifier = I.armor_modifier)
 	if(armor >= 2)	return 1 //We still connected
 	if(!I.force)	return 1
 
@@ -225,6 +225,7 @@ emp_act
 					knock_out_teeth(user)
 
 	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), I)
+	I.applied_damage(src, affecting, armor)
 
 	var/bloody = 0
 	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))

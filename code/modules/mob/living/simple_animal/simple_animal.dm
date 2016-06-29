@@ -69,6 +69,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/attack_sound = null
 	var/friendly = "nuzzles" //If the mob does no damage with it's attack
 	var/environment_smash = 0 //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
+	var/armor_modifier = 1 //The higher, the more effective armor is agaisnt this mob
 
 	var/speed = 0 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
 
@@ -740,5 +741,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	src.resurrect()
 	src.revive()
 	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+
+/mob/living/simple_animal/proc/applied_damage(mob/victim, amount, organ, armor) //Called when the animal hits a human
+	return
+
+/mob/living/simple_animal/turn_into_statue(forever = 0)
+	if(forever)
+		Die()
+
+	return ..()
+
 
 /datum/locking_category/simple_animal

@@ -914,6 +914,7 @@ var/list/slot_equipment_priority = list( \
 			if(P == temp_P)
 				return
 
+		P.get_pulled(AM)
 		src.pulling = P
 		P.pulledby = src
 		update_pull_icon()

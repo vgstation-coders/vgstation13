@@ -47,7 +47,7 @@
 	var/nonplant_seed_type
 
 	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
-
+	var/armor_modifier = 1 //The higher, the lower the chance to penetrate armor
 
 
 	var/vending_cat = null// subcategory for vending machines.
@@ -1001,6 +1001,9 @@ var/global/list/image/blood_overlays = list()
 //Gets the rating of the item, used in stuff like machine construction.
 /obj/item/proc/get_rating()
 	return 0
+
+/obj/item/proc/applied_damage(mob/living/victim, organ, armor)
+	return
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())

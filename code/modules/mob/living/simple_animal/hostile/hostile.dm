@@ -200,7 +200,8 @@
 			if(canmove)
 				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
-				A.attack_animal(src)
+				//A.attack_animal(src)
+				UnarmedAttack(A)
 			return
 		else
 			LostTarget()
@@ -241,7 +242,8 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
-	target.attack_animal(src)
+	UnarmedAttack(target)
+	//target.attack_animal(src)
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
@@ -351,18 +353,22 @@
 		for(var/dir in cardinal)
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall))
-				T.attack_animal(src)
+				//T.attack_animal(src)
+				UnarmedAttack(T)
 			for(var/atom/A in T)
 				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
-					A.attack_animal(src)
+					//A.attack_animal(src)
+					UnarmedAttack(A)
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
 	if(locked_to)
-		locked_to.attack_animal(src)
+		//locked_to.attack_animal(src)
+		UnarmedAttack(locked_to)
 	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
-		A.attack_animal(src)//Bang on it till we get out
+		//A.attack_animal(src)//Bang on it till we get out
+		UnarmedAttack(A)
 	return
 
 /mob/living/simple_animal/hostile/proc/FindHidden(var/atom/hidden_target)
