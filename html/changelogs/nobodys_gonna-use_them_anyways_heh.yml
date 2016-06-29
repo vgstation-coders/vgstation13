@@ -5,3 +5,4 @@ delete-after: True
 changes: 
 - rscadd: "Added MOVE, EXPORT and LOCK buttons to assembly frames. MOVE lets you change the order in which assemblies are displayed. LOCK prevents you from accidentally ejecting assemblies from the frame. EXPORT saves the assembly frame's data to a blank sheet of paper."
 - rscadd: "Inserting a sheet of paper with exported data into an empty assembly frame with all the required components nearby will instantly assemble and configure the frame!"
+- tweak: Comparison circuits can now work with text.
