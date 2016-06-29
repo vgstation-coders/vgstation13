@@ -9,6 +9,8 @@
 
 	var/list/connections = list() //Assembly associated with the list of assemblies it's connected to
 
+	var/lock_ejection = 0 //If 1, prevent ejecting assemblies
+
 /obj/item/device/assembly_frame/Destroy()
 	for(var/obj/item/device/assembly/AS in connections)
 		var/list/L = connections[AS]
@@ -26,7 +28,7 @@
 	..()
 
 /obj/item/device/assembly_frame/proc/get_assembly_href(var/obj/item/device/assembly/A)
-	var/txt_buttons = "<a href='?src=\ref[src];eject=1;assembly=\ref[A]'>\[X\]</a><a href='?src=\ref[src];pulse=1;assembly=\ref[A]'>\[P\]</a>"
+	var/txt_buttons = "<a href='?src=\ref[src];eject=1;assembly=\ref[A]'>\[X\]</a><a href='?src=\ref[src];pulse=1;assembly=\ref[A]'>\[P\]</a><a href='?src=\ref[src];reorder=1;assembly=\ref[A]'>\[M\]</a>"
 
 	var/txt_assembly_number = "([assemblies.Find(A)])"
 
@@ -51,7 +53,7 @@
 ///////
 
 /obj/item/device/assembly_frame/attack_self(mob/user)
-	var/dat = "<h4>AdCo. Assembly Frame MK II <small>\[<a href='?src=\ref[src];help=1'>?</a>\]</small></h4><br>"
+	var/dat = "<h4>AdCo. Assembly Frame MK II <small>\[<a href='?src=\ref[src];help=1'>?</a>\] \[<a href='?src=\ref[src];lock=1'>[lock_ejection ? "UNLOCK" : "LOCK"]</a>\] \[<a href='?src=\ref[src];export=1'>EXPORT</a>\]</small></h4><br>"
 
 	if(!assemblies.len)
 		dat += "<p>No assemblies found!</p>"
@@ -62,13 +64,14 @@
 
 			//Example result:
 
-			//[X][P] (1) remote signalling device sending signals to: 2-speaker (alert), 3-timer (countdown), add more
-			//[X][P] (2) speaker (alert) (connect)
-			//[X][P] (3) timer (countdown) sending signals to: 4-signaler (radio alert), add more
-			//[X][P] (4) signaler (radio alert) (connect)
+			//[X][P][M] (1) remote signalling device sending signals to: 2-speaker (alert), 3-timer (countdown), add more
+			//[X][P][M] (2) speaker (alert) (connect)
+			//[X][P][M] (3) timer (countdown) sending signals to: 4-signaler (radio alert), add more
+			//[X][P][M] (4) signaler (radio alert) (connect)
 
 			//Clicking on [X] ejects the assembly
 			//Clicking on [P] pulses the assembly
+			//Clicking on [M] moves the assembly to a different index (for example clicking 2-[M] and entering 3 will move the speaker to index 3)
 			//Clicking on the assembly's name allows you to change its settings (or otherwise interact with it
 			//Clicking on (connect) or "add more" allows you to select an assembly to connect to
 			//Clicking on any assembly after "sending signals to" will remove the connection
@@ -86,6 +89,13 @@
 
 	var/obj/item/device/assembly/AS = locate(href_list["assembly"])
 
+	if(href_list["lock"])
+		lock_ejection = !lock_ejection
+
+		if(lock_ejection)
+			to_chat(usr, "<span class='info'>You have locked \the [src]. Assemblies can no longer be ejected.</span>")
+		else
+			to_chat(usr, "<span class='info'>You have unlocked \the [src]. Assemblies can now be ejected freely.</span>")
 	if(href_list["connect"]) //Connect AS to another assembly
 		if(!istype(AS))
 			return
@@ -144,6 +154,10 @@
 		if(!assemblies.Find(AS))
 			return
 
+		if(lock_ejection)
+			to_chat("<span class='info'>\The [src] is locked! You must unlock it before ejecting any assemblies.</span>")
+			return
+
 		if(AS.loc != src)
 			to_chat(usr, "<span class='warning'>A pink light flashes on \the [src], indicating an error.</span>")
 			return
@@ -165,6 +179,23 @@
 
 		AS.pulsed()
 
+	if(href_list["reorder"])
+		if(!istype(AS))
+			return
+
+		if(!assemblies.Find(AS))
+			return
+
+		if(AS.loc != src)
+			to_chat(usr, "<span class='warning'>A purple light flashes on \the [src], indicating an error.</span>")
+			return
+
+		var/new_index = input("Enter a new index for \the [assemblies.Find(AS)]-[AS].") as null|num
+		new_index = Clamp(new_index, 1, assemblies.len)
+
+		assemblies.Remove(AS)
+		assemblies.Insert(new_index, AS)
+
 	if(href_list["interact"])
 		if(!istype(AS))
 			return
@@ -173,6 +204,26 @@
 			return
 
 		AS.attack_self(usr)
+
+	if(href_list["export"])
+		//Find a blank sheet of paper on the same turf, export to it
+		var/obj/item/weapon/paper/P
+
+		for(var/obj/item/weapon/paper/check in get_turf(src))
+			if(check.info)
+				continue
+
+			P = check
+			break
+
+		if(!P)
+			to_chat(usr, "<span class='notice'>Unable to export configuration: unable to find an empty paper sheet.</span>")
+			return
+
+		P.info = to_text()
+		P.update_icon()
+
+		to_chat(usr, "<span class='info'>Configuration exported successfully.</span>")
 
 	if(href_list["disconnect"]) //Remove link from AS to specified assembly
 		var/obj/item/device/assembly/disconnected = locate(href_list["disconnect_which"]) //Find assembly to disconnect from AS
@@ -212,10 +263,14 @@
 			sleep(5)
 			to_chat(usr, "<span class='info'>To connect a device to the assembly frame, insert it into any of the numbered sockets inside.</span>")
 			to_chat(usr, "<span class='info'>The device list on the monitor displays all connected devices along with their number. To the right of each device is a list of other devices that are connected to it.</span>")
-			to_chat(usr, "<span class='info'>To make device A send signals to device B, first ensure that both devices are connected to the assembly frame. Then press the \"connect\" button next to device A on the monitor, and select device B. Any signals emitted by device A will now be received by device B (but not vice versa).")
-			to_chat(usr, "<span class='info'>To stop device A from receiving device B's signals, find device B in the device list. To the right of device B is a list of other devices that are connected to it. Find device A in that list and select it. Device A will no longer receive signals from device B.")
-			to_chat(usr, "<span class='info'>To pulse a device, press the \[P\] button next to it.")
-			to_chat(usr, "<span class='info'>To eject a device, press the \[X\] button next to it.")
+			to_chat(usr, "<span class='info'>To make device A send signals to device B, first ensure that both devices are connected to the assembly frame. Then press the \"connect\" button next to device A on the monitor, and select device B. Any signals emitted by device A will now be received by device B (but not vice versa).</span>")
+			to_chat(usr, "<span class='info'>To stop device A from receiving device B's signals, find device B in the device list. To the right of device B is a list of other devices that are connected to it. Find device A in that list and select it. Device A will no longer receive signals from device B.</span>")
+			to_chat(usr, "<span class='info'>To pulse a device, press the \[P\] button next to it.</span>")
+			to_chat(usr, "<span class='info'>To eject a device, press the \[X\] button next to it. To prevent yourself from accidentally ejecting important devices, lock the assembly frame by pressing on the LOCK button.</span>")
+			to_chat(usr, "<span class='info'>To change a device's index, press the \[M\] button next to it.</span>")
+			to_chat(usr, "----------------------------------")
+			to_chat(usr, "<span class='info'>To export the device data to a sheet of paper, place a blank paper sheet under the assembly frame and press the \[<b>EXPORT</b>\] button. The sheet of paper will then contain complete information about the inserted devices and the connections between them.</span>")
+			to_chat(usr, "<span class='info'>To import the device data from a sheet of paper, place all the necessary devices under an empty assembly frame and insert the paper with the exported device data into the assembly frame. As long as all necessary devices are present and the data isn't corrupted, the frame will automatically assemble, link and set up everything.</span>")
 
 		return
 
@@ -241,6 +296,23 @@
 	else if(istype(W, /obj/item/device/assembly_holder))
 		to_chat(user, "<span class='notice'>\The [W] is too big for any of the sockets here. Try taking it apart.")
 		return
+
+	if(istype(W, /obj/item/weapon/paper))
+		if(assemblies.len || connections.len)
+			to_chat(user, "<span class='notice'>Unable to import configuration: the assembly frame must be empty.</span>")
+			return
+
+		var/obj/item/weapon/paper/P = W
+		var/turf/T = get_turf(src)
+		var/list/used_parts = T.contents.Copy()
+
+		switch(from_text(P.info, 1, used_parts))
+			if(1)
+				to_chat(user, "<span class='info'>Configuration imported successfully.</span>")
+			if(null)
+				to_chat(user, "<span class='notice'>Unable to import configuration: corrupt input data.</span>")
+			if(0)
+				to_chat(user, "<span class='notice'>Unable to import configuration: encountered an error while enstablishing device connections.</span>")
 
 /obj/item/device/assembly_frame/proc/insert_assembly(obj/item/device/assembly/AS, mob/user = null)
 	if(!istype(AS))
@@ -426,7 +498,7 @@
 //This is not a problem as long as from_text() is called with use_parts = 1, as those assemblies are unobtainable and thus the construction will fail elsewhere.
 //However, this means that the ability to call, in any way, from_text() with use_parts = 0 should be restricted to admins and *maybe* trusted players unless extra checks are added.
 /obj/item/device/assembly_frame/proc/get_req_parts(list/data_list)
-	
+
 	if(!assembly_short_name_to_type.len) //Populate the list the first time someone calls this proc
 		for(var/assembly_path in typesof(/obj/item/device/assembly))
 			var/obj/item/device/assembly/assembly_type = assembly_path//So I can use the undocumented behavior of initial() to retrieve the value without initializing the object.

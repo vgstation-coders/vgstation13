@@ -39,13 +39,13 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 	if(!..()) return 0
 
 	var/value_1 = 0
-	if(isnum(check_this))
+	if(isnum(check_this) || istext(check_this))
 		value_1 = check_this
 	else if(check_this)
 		value_1 = check_this.get_value(checked_value_1)
 
 	var/value_2 = 0
-	if(isnum(check_against))
+	if(isnum(check_against) || istext(check_against))
 		value_2 = check_against
 	else if(check_against)
 		value_2 = check_against.get_value(checked_value_2)
@@ -77,14 +77,14 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	dat += "<a href='?src=\ref[src];change_check_this=1'>[check_this]</a>"
 
-	if(!isnum(check_this))
+	if(istype(check_this))
 		dat += " ([checked_value_1])"
 
 	dat += " is <a href='?src=\ref[src];change_check_type=1'>[check_type]</a> "
 
 	dat += "<a href='?src=\ref[src];change_check_against=1'>[check_against]</a>"
 
-	if(!isnum(check_against))
+	if(istype(check_against))
 		dat += " ([checked_value_2])"
 
 	dat += "<BR>"
@@ -126,7 +126,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 	//Trigger warning: horrible code below
 
 	if(href_list["change_check_this"])
-		var/choice = input(usr, "Select a new checked value #1 for \the [src].", "\The [src]") as null|anything in (device_pool + "Constant number") //Select an assembly, or "Constant number"
+		var/choice = input(usr, "Select a new checked value #1 for \the [src].", "\The [src]") as null|anything in (device_pool + "Constant number" + "Constant string") //Select an assembly, or "Constant number"
 
 		if(isnull(choice)) return
 		if(..()) return
@@ -139,7 +139,16 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 			check_this = new_num
 
-			to_chat(usr, "<span class='info'>Value #1 set to be [check_against]</span>")
+			to_chat(usr, "<span class='info'>Value #1 set to be [check_this]</span>")
+		else if(choice == "Constant string")
+			var/new_txt = input(usr, "Please type in a string that will be used as value #1.", "\The [src]") as null|text
+
+			if(isnull(new_txt)) return
+			if(..()) return
+
+			check_this = new_txt
+
+			to_chat(usr, "<span class='info'>Value #1 set to be \"[check_this]\"</span>")
 		else //Selected an assembly - ask the user to select a value
 			var/obj/item/device/assembly/A = choice
 			if(!istype(A)) return
@@ -153,13 +162,14 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			if(isnull(new_value)) return
 			if(..()) return
 
-			//Check if the selected value is a number
+			/*//Check if the selected value is a number
 
 			var/new_values_params = A.accessible_values[new_value]
 			var/list/L = params2list(new_values_params)
 			if(L[VALUE_VARIABLE_TYPE] != "number")
 				to_chat(usr, "<span class='info'>Only numbers may be used in \the [src].</span>")
 				return
+			*/ //Let's try permitting strings to be used
 
 			//Just some more sanity
 			if(!device_pool.Find(choice)) return
@@ -172,7 +182,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			to_chat(usr, "<span class='info'>Value #1 set to be [check_this] - [checked_value_1]</span>")
 
 	if(href_list["change_check_against"]) //Copy of the above, with some slight tweaks
-		var/choice = input(usr, "Select a new checked value #2 for \the [src].", "\The [src]") as null|anything in (device_pool + "Constant number") //Select an assembly, or "Constant number"
+		var/choice = input(usr, "Select a new checked value #2 for \the [src].", "\The [src]") as null|anything in (device_pool + "Constant number" + "Constant string") //Select an assembly, or "Constant number"
 
 		if(isnull(choice)) return
 		if(..()) return
@@ -186,6 +196,15 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			check_against = new_num
 
 			to_chat(usr, "<span class='info'>Value #2 set to be [check_against]</span>")
+		else if(choice == "Constant string")
+			var/new_txt = input(usr, "Please type in a string that will be used as value #2.", "\The [src]") as null|text
+
+			if(isnull(new_txt)) return
+			if(..()) return
+
+			check_against = new_txt
+
+			to_chat(usr, "<span class='info'>Value #2 set to be \"[check_against]\"</span>")
 		else //Selected an assembly - ask the user to select a value
 			var/obj/item/device/assembly/A = choice
 			if(!istype(A)) return
