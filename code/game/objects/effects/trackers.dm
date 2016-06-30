@@ -33,6 +33,11 @@
 	name = "blood"
 	color = "red"
 
+/obj/effect/tracker/heal
+	name = "heal"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "heal3"
+
 /obj/effect/tracker/proc/process_step()
 	if(!target)
 		target = pick(player_list)

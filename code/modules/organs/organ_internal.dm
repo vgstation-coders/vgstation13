@@ -15,6 +15,7 @@
 	var/rejecting            // Is this organ already being rejected?
 	var/obj/item/organ/organ_holder
 	var/datum/dna/owner_dna
+	var/list/modifiers = list()
 
 
 /datum/organ/internal/Copy()
@@ -148,7 +149,6 @@
 	if (!silent)
 		owner.custom_pain("Something inside your [parent.display_name] hurts a lot.", 1)
 
-
 /datum/organ/internal/proc/emp_act(severity)
 	switch(robotic)
 		if(0)
@@ -195,6 +195,12 @@
 	name = "heart"
 	parent_organ = "chest"
 	removed_type = /obj/item/organ/heart
+
+/datum/organ/internal/heart/take_damage(amount, var/silent=0)
+	if(modifiers & OMODIFER_UBER)
+		return
+	else
+		return ..()
 
 /datum/organ/internal/kidney
 	name = "kidneys"

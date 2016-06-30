@@ -744,8 +744,6 @@ var/list/beam_master = list()
 						draw_ray(target)
 						Bump(original)
 
-	return
-
 /obj/item/projectile/beam/bison/bullet_die()
 	draw_ray(loc)
 	..()
@@ -788,7 +786,6 @@ var/list/beam_master = list()
 			X.icon=null
 		else
 			X.icon=I
-
 
 		var/Pixel_x=round(sin(Angle)+32*sin(Angle)*(N+16)/32)
 		var/Pixel_y=round(cos(Angle)+32*cos(Angle)*(N+16)/32)
@@ -869,3 +866,127 @@ var/list/beam_master = list()
 		return 1
 	else
 		return ..()
+
+/obj/item/projectile/beam/bison/heal
+	name = "heal ray"
+	damage = 0
+	icon = 'icons/obj/lightning.dmi'
+	icon_state = "heal"
+	fire_sound = null
+	custom_impact = 1
+	var/found_target = 0
+
+/obj/item/projectile/beam/bison/heal/hurt
+	icon_state = "hurt"
+
+/obj/item/projectile/beam/bison/heal/process()
+	OnFired()
+	//calculating the turfs that we go through
+	var/lastposition = loc
+	target = get_turf(original)
+	dist_x = abs(target.x - src.x)
+	dist_y = abs(target.y - src.y)
+
+	if (target.x > src.x)
+		dx = EAST
+	else
+		dx = WEST
+
+	if (target.y > src.y)
+		dy = NORTH
+	else
+		dy = SOUTH
+
+	if(dist_x > dist_y)
+		error = dist_x/2 - dist_y
+
+		while(src && src.loc)
+			// only stop when we've hit something, or hit the end of the map
+			if(error < 0)
+				var/atom/step = get_step(src, dy)
+				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					break
+				src.Move(step)
+				error += dist_x
+			else
+				var/atom/step = get_step(src, dx)
+				if(!step)
+					break
+				src.Move(step)
+				error -= dist_y
+
+			if(isnull(loc))
+				return 0
+			if(lastposition == loc)
+				kill_count = 0
+			lastposition = loc
+			if(kill_count < 1)
+				if(found_target)
+					draw_ray(lastposition)
+				return found_target
+			kill_count--
+
+			if(loc == target)
+				draw_ray(lastposition)
+				return 1
+
+	else
+		error = dist_y/2 - dist_x
+		while(src && src.loc)
+			// only stop when we've hit something, or hit the end of the map
+			if(error < 0)
+				var/atom/step = get_step(src, dx)
+				if(!step)
+					break
+				src.Move(step)
+				error += dist_y
+			else
+				var/atom/step = get_step(src, dy)
+				if(!step)
+					break
+				src.Move(step)
+				error -= dist_x
+
+			if(isnull(loc))
+				return 0
+			if(lastposition == loc)
+				kill_count = 0
+			lastposition = loc
+			if(kill_count < 1)
+				if(found_target)
+					draw_ray(lastposition)
+				return found_target
+			kill_count--
+
+			if(loc == target)
+				draw_ray(lastposition)
+				return 1
+
+
+/obj/item/projectile/beam/bison/heal/bullet_die()
+	spawn()
+		OnDeath()
+		returnToPool(src)
+
+/obj/item/projectile/beam/bison/heal/draw_ray(var/turf/lastloc)
+	kill_count = 10
+	..()
+
+/obj/item/projectile/beam/bison/heal/Bump(atom/A as mob|obj|turf|area)
+
+	if(A == firer)
+		forceMove(A.loc)
+		return
+
+	else if(istype(A, /mob/living))//beam can move through mobs only
+		forceMove(A.loc)
+		if(loc == target)
+			kill_count = 0
+			found_target = 1
+	else
+		kill_count = 0
+		if(A.loc == target)
+			forceMove(A.loc)
+			found_target = 1
+			return
+		bullet_die()

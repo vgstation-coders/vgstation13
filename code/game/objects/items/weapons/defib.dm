@@ -109,7 +109,7 @@
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
 	target.Weaken(rand(6,12))
 	target.apply_damage(rand(30,60),BURN,"chest")
-	heart.damage += rand(5,60)
+	heart.take_damage(rand(5,60))
 	target.emote("scream",,, 1) //If we're going this route, it kinda hurts
 	target.updatehealth()
 	spawn() //Logging
@@ -159,7 +159,7 @@
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
 		var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
-		if(prob(25)) heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
+		if(prob(25)) heart.take_damage(5) //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")

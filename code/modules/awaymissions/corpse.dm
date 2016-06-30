@@ -37,6 +37,8 @@
 	var/burn_dmg = 0
 	var/toxin_dmg = 0
 
+	var/uberheart = 0
+
 /obj/effect/landmark/corpse/New()
 	if(ticker)
 		initialize()
@@ -83,6 +85,10 @@
 
 	if(husk)
 		M.ChangeToHusk()
+
+	if(uberheart)
+		var/datum/organ/internal/heart/heartcheck = M.internal_organs_by_name["heart"]
+		heartcheck.modifiers |= OMODIFER_UBER
 
 	qdel(src)
 	return M
@@ -390,6 +396,42 @@
 
 /obj/effect/landmark/corpse/russian/ranged
 	corpsehelmet = /obj/item/clothing/head/ushanka
+
+/obj/effect/landmark/corpse/nazi
+	name = "Nazi"
+	uberheart = 1
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpseuniform = /obj/item/clothing/under/soldieruniform
+	corpsehelmet = /obj/item/clothing/head/panzer
+
+/obj/effect/landmark/corpse/nazi/soldier
+	name = "Nazi Soldier"
+	corpsehelmet = /obj/item/clothing/head/stalhelm
+	corpsesuit = /obj/item/clothing/suit/soldiercoat
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpsemask = /obj/item/clothing/mask/gas
+
+/obj/effect/landmark/corpse/nazi/mateba
+	name = "Nazi Officer"
+	corpseuniform = /obj/item/clothing/under/officeruniform
+	corpsehelmet = /obj/item/clothing/head/naziofficer
+	corpsesuit = /obj/item/clothing/suit/officercoat
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+
+/obj/effect/landmark/corpse/nazi/mateba/spacetrooper
+	name = "Nazi Trooper"
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/nazi
+	corpsesuit = /obj/item/clothing/suit/space/rig/nazi
+
+/obj/effect/landmark/corpse/nazi/medic
+	name = "Nazi Medic"
+	corpsehelmet = /obj/item/clothing/head/stalhelm
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat
+	corpsegloves = /obj/item/clothing/gloves/latex
+	corpseglasses = /obj/item/clothing/glasses/hud/health
+	corpsemask = /obj/item/clothing/mask/gas
+	corpseback = /obj/item/medigunpack
 
 //////////////////Misc Corpses///////////////////////////
 

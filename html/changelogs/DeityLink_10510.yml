@@ -1,0 +1,14 @@
+author: Deity Link
+delete-after: true
+changes:
+  - rscadd: Added a new Vault, the Doktor's Hideout. Featuring a tough Nazi NPC that has limited ammo, and runs to melee you once he's run out of it. If you kill him, you get what ammo he had left on him, as well as his mateba. The vault also contains a single Medigun, and 3 Uber devices. It's the only way to acquire those items.
+  - rscadd: Added a new item, the Medigun. You need either both hands free, or wear it on your back before you can use it. Can target mobs up to 3 tiles away, and heal a tiny bit of their health every second, along with various misc beneficial effects such as fixing external bleedings and removing harmful reagents. It doesn't heal internal organs however, nor prevents stuns.
+  - rscadd: Added a new item, the Uber device. Can be placed on a not dead heart organ. A heart with that device on it won't take periodical damage even if it's outside of a freezer.
+  - tweak: Fridges (like the one in the kitchen) now prevent organs from dying.
+  - rscadd: If you emag the Medigun, it turns red, and will deal a bit of all types of damages at once to the people it heals.
+  - rscadd: People that have an uber heart will be healed at double rate. Whether the gun is emagged or not.
+  - rscadd: When healing someone with an uber heart, your medigun will charge 1% per second. At 100% you can click the medigun to give your target a few seconds of invulnerability. Last a bit longer on players with uber hearts.
+  - rscadd: Emagged mediguns can ubercharge too, and for a longer duration, but have a chance of gibbing their target at the end of the uber. Having an uber heart will significantly lower this probability.
+  - bugfix: Fixed ranged hostile NPCs dropping casings with unfired bullets in them. You can no longer abuse their AI to farm easy ammo.
+  - rscadd: Added a bunch of new Nazis NPCs. They draw their weapons in presence of an enemy. They can run out of ammo and switch from ranged to melee combat. Nazi Medics will heal nearby allied nazis.
+  - experiment: Also MECHA FUCKING HITLER
