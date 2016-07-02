@@ -251,9 +251,8 @@
 	bonus_kick_damage = 3
 
 /obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
-	var/obj/item/clothing/accessory/holster/knife/boot/preloaded/holster = new(src)
-	accessories += holster
-	holster.on_attached(src, null)
+	..()
+	attach_accessory(new /obj/item/clothing/accessory/holster/knife/boot/preloaded)
 
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
