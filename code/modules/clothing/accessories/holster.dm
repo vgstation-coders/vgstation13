@@ -15,7 +15,7 @@
 		return
 
 	if (!can_holster(I))
-		to_chat(user, "<span class='warning'>This [I] won't fit in the [src]!</span>")
+		to_chat(user, "<span class='warning'>\The [I] won't fit in the [src]!</span>")
 		return
 
 	if(user.drop_item(I, src))
@@ -92,7 +92,7 @@
 	else
 		to_chat(user, "It is empty.")
 
-/obj/item/clothing/accessory/holster/on_attached(obj/item/clothing/under/S, mob/user as mob)
+/obj/item/clothing/accessory/holster/on_attached(obj/item/clothing/under/S)
 	..()
 	attached_to.verbs += /obj/item/clothing/accessory/holster/verb/holster_verb
 

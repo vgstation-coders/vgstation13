@@ -25,16 +25,10 @@
 /obj/item/clothing/accessory/proc/can_attach_to(obj/item/clothing/C)
 	return istype(C, /obj/item/clothing/under) //By default, accessories can only be attached to jumpsuits
 
-/obj/item/clothing/accessory/proc/on_attached(obj/item/clothing/C, mob/user as mob)
+/obj/item/clothing/accessory/proc/on_attached(obj/item/clothing/C)
 	if(!istype(C))
 		return
 	attached_to = C
-	if(user)
-		if(user.drop_item(src, attached_to))
-			to_chat(user, "<span class='notice'>You attach [src] to [attached_to].</span>")
-			add_fingerprint(user)
-	else
-		forceMove(attached_to)
 	attached_to.overlays += inv_overlay
 
 /obj/item/clothing/accessory/proc/on_removed(mob/user as mob)
