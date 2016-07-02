@@ -250,6 +250,11 @@
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
 
+/obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
+	var/obj/item/clothing/accessory/holster/knife/boot/preloaded/holster = new(src)
+	accessories += holster
+	holster.on_attached(src, null)
+
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
 	desc = "Criminal stomping boots for fighting crime and looking good."
