@@ -1,6 +1,8 @@
 /*
  * This file handles all parallax-related business once the parallax itself is initialized with the rest of the HUD
  */
+#define PARALLAX_IMAGE_WIDTH 15
+#define PARALLAX_IMAGE_TILES (PARALLAX_IMAGE_WIDTH**2)
 
 var/list/parallax_on_clients = list()
 
@@ -11,6 +13,7 @@ var/list/parallax_on_clients = list()
 	icon = 'icons/turf/space.dmi'
 	icon_state = "blank"
 	name = "space parallax"
+	screen_loc = "CENTER,CENTER"
 	blend_mode = BLEND_ADD
 	layer = AREA_LAYER
 	plane = PLANE_SPACE_PARALLAX
@@ -43,48 +46,17 @@ var/list/parallax_on_clients = list()
 
 /obj/screen/plane_master/parallax_dustmaster
 	plane = PLANE_SPACE_DUST
+	color = list(0,0,0,0)
 
-/datum/hud/proc/update_parallax()
-	var/client/C = mymob.client
-	if(!parallax_initialized || C.updating_parallax) return
-
-	if(locate(/turf/space) in range(get_turf(C.eye),C.view))
-		C.updating_parallax = 1
-
-	if(!C.updating_parallax)
+/datum/hud/proc/update_parallax_existence()
+	if(!parallax_initialized)
 		return
+	initialize_parallax()
+	update_parallax()
+	update_parallax_values()
 
-	//multiple sub-procs for profiling purposes
-	if(update_parallax1())
-		update_parallax2(0)
-		update_parallax3()
-		C.updating_parallax = 0
-	else
-		C.updating_parallax = 0
-
-/datum/hud/proc/update_parallax_and_dust()
+/datum/hud/proc/initialize_parallax()
 	var/client/C = mymob.client
-	if(!parallax_initialized || C.updating_parallax) return
-	C.updating_parallax = 1
-	if(update_parallax1())
-		update_parallax2(1)
-		update_parallax3()
-		C.updating_parallax = 0
-	else
-		C.updating_parallax = 0
-
-/datum/hud/proc/update_parallax1()
-	var/client/C = mymob.client
-	//DO WE UPDATE PARALLAX
-	if(C.prefs.space_parallax)//have to exclude Centcom so parallax doens't appear during hyperspace
-		parallax_on_clients |= C
-	else
-		for(var/obj/screen/parallax/bgobj in C.parallax)
-			C.screen -= bgobj
-		parallax_on_clients -= C
-		C.screen -= C.parallax_master
-		C.screen -= C.parallax_spacemaster
-		return 0
 
 	if(!C.parallax_master)
 		C.parallax_master = getFromPool(/obj/screen/plane_master/parallax_master)
@@ -92,11 +64,6 @@ var/list/parallax_on_clients = list()
 		C.parallax_spacemaster = getFromPool(/obj/screen/plane_master/parallax_spacemaster)
 	if(!C.parallax_dustmaster)
 		C.parallax_dustmaster = getFromPool(/obj/screen/plane_master/parallax_dustmaster)
-	return 1
-
-/datum/hud/proc/update_parallax2(forcerecalibrate = 0)
-	var/client/C = mymob.client
-	//DO WE HAVE TO REPLACE ALL THE LAYERS
 
 	if(!C.parallax.len)
 		for(var/obj/screen/parallax/bgobj in parallax_icon)
@@ -105,29 +72,49 @@ var/list/parallax_on_clients = list()
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
 			parallax_layer.parallax_speed = bgobj.parallax_speed
+			parallax_layer.screen_loc = bgobj.screen_loc
 			C.parallax += parallax_layer
+			if(bgobj.parallax_speed)
+				C.parallax_movable += parallax_layer
 
-	if(forcerecalibrate || !(locate(/obj/screen/parallax) in C.screen))
+	if(!C.parallax_offset.len)
+		C.parallax_offset["horizontal"] = 0
+		C.parallax_offset["vertical"] = 0
+
+	C.screen |= C.parallax_dustmaster
+
+/datum/hud/proc/update_parallax()
+	var/client/C = mymob.client
+	if(C.prefs.space_parallax)
+		parallax_on_clients |= C
 		for(var/obj/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
-
 		C.screen |= C.parallax_master
 		C.screen |= C.parallax_spacemaster
-		C.screen |= C.parallax_dustmaster
-		C.parallax_dustmaster.color = list(0,0,0,0)
 		if(C.prefs.space_dust)
 			C.parallax_dustmaster.color = list(
 			1,0,0,0,
 			0,1,0,0,
 			0,0,1,0,
 			0,0,0,1)
+		else
+			C.parallax_dustmaster.color = list(0,0,0,0)
+	else
+		for(var/obj/screen/parallax/bgobj in C.parallax)
+			C.screen -= bgobj
+		parallax_on_clients -= C
+		C.screen -= C.parallax_master
+		C.screen -= C.parallax_spacemaster
+		C.parallax_dustmaster.color = list(0,0,0,0)
 
-	if(!C.parallax_offset.len)
-		C.parallax_offset["horizontal"] = 0
-		C.parallax_offset["vertical"] = 0
-
-/datum/hud/proc/update_parallax3()
+/datum/hud/proc/update_parallax_values()
 	var/client/C = mymob.client
+	if(!parallax_initialized)
+		return
+
+	if(!(locate(/turf/space) in trange(C.view,get_turf(C.eye))))
+		return
+
 	//ACTUALLY MOVING THE PARALLAX
 	var/turf/posobj = get_turf(C.eye)
 
@@ -140,7 +127,7 @@ var/list/parallax_on_clients = list()
 
 	C.previous_turf = posobj
 
-	for(var/obj/screen/parallax/bgobj in C.parallax)
+	for(var/obj/screen/parallax/bgobj in C.parallax_movable)
 		if(bgobj.parallax_speed)//only the middle and front layers actually move
 			var/accumulated_offset_x = bgobj.base_offset_x - round(C.parallax_offset["horizontal"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
 			var/accumulated_offset_y = bgobj.base_offset_y - round(C.parallax_offset["vertical"] * bgobj.parallax_speed * (C.prefs.parallax_speed/2))
@@ -165,35 +152,34 @@ var/list/parallax_on_clients = list()
 #define PARALLAX3_ICON_NUMBER 14
 #define PARALLAX2_ICON_NUMBER 10
 
-/datum/controller/game_controller/proc/cachespaceparallax()
+/datum/controller/game_controller/proc/create_global_parallax_icons()
 	var/list/plane1 = list()
 	var/list/plane2 = list()
 	var/list/plane3 = list()
 	var/list/pixel_x = list()
 	var/list/pixel_y = list()
 	var/index = 1
-	for(var/i = 0 to 224)
+	for(var/i = 0 to (PARALLAX_IMAGE_TILES-1))
 		for(var/j = 1 to 9)
 			plane1 += rand(1,26)
 			plane2 += rand(1,26)
 			plane3 += rand(1,26)
-		pixel_x += 32 * (i%15)
-		pixel_y += 32 * round(i/15)
+		pixel_x += world.icon_size * (i%PARALLAX_IMAGE_WIDTH)
+		pixel_y += world.icon_size * round(i/PARALLAX_IMAGE_WIDTH)
 
 	for(var/i in 0 to 8)
 		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 
 		var/list/L = list()
-		for(var/j in 1 to 225)
-			if(plane1[j+i*225] <= PARALLAX4_ICON_NUMBER)
-				var/image/I = image('icons/turf/space_parallax4.dmi',"[plane1[j+i*225]]")
+		for(var/j in 1 to PARALLAX_IMAGE_TILES)
+			if(plane1[j+i*PARALLAX_IMAGE_TILES] <= PARALLAX4_ICON_NUMBER)
+				var/image/I = image('icons/turf/space_parallax4.dmi',"[plane1[j+i*PARALLAX_IMAGE_TILES]]")
 				I.pixel_x = pixel_x[j]
 				I.pixel_y = pixel_y[j]
 				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 0
-		parallax_layer.plane = PLANE_SPACE_PARALLAX
 		parallax_layer.calibrate_parallax(i+1)
 		parallax_icon[index] = parallax_layer
 		index++
@@ -202,16 +188,15 @@ var/list/parallax_on_clients = list()
 		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 
 		var/list/L = list()
-		for(var/j in 1 to 225)
-			if(plane2[j+i*225] <= PARALLAX3_ICON_NUMBER)
-				var/image/I = image('icons/turf/space_parallax3.dmi',"[plane2[j+i*225]]")
+		for(var/j in 1 to PARALLAX_IMAGE_TILES)
+			if(plane2[j+i*PARALLAX_IMAGE_TILES] <= PARALLAX3_ICON_NUMBER)
+				var/image/I = image('icons/turf/space_parallax3.dmi',"[plane2[j+i*PARALLAX_IMAGE_TILES]]")
 				I.pixel_x = pixel_x[j]
 				I.pixel_y = pixel_y[j]
 				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 1
-		parallax_layer.plane = PLANE_SPACE_PARALLAX
 		parallax_layer.calibrate_parallax(i+1)
 		parallax_icon[index] = parallax_layer
 		index++
@@ -219,16 +204,15 @@ var/list/parallax_on_clients = list()
 	for(var/i in 0 to 8)
 		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 		var/list/L = list()
-		for(var/j in 1 to 225)
-			if(plane3[j+i*225] <= PARALLAX2_ICON_NUMBER)
-				var/image/I = image('icons/turf/space_parallax2.dmi',"[plane3[j+i*225]]")
+		for(var/j in 1 to PARALLAX_IMAGE_TILES)
+			if(plane3[j+i*PARALLAX_IMAGE_TILES] <= PARALLAX2_ICON_NUMBER)
+				var/image/I = image('icons/turf/space_parallax2.dmi',"[plane3[j+i*PARALLAX_IMAGE_TILES]]")
 				I.pixel_x = pixel_x[j]
 				I.pixel_y = pixel_y[j]
 				L += I
 
 		parallax_layer.overlays = L
 		parallax_layer.parallax_speed = 2
-		parallax_layer.plane = PLANE_SPACE_PARALLAX
 		parallax_layer.calibrate_parallax(i+1)
 		parallax_icon[index] = parallax_layer
 		index++
@@ -243,19 +227,24 @@ var/list/parallax_on_clients = list()
 	4	5	6
 	7	8	9
 	*/
-	base_offset_x = -7*32
-	base_offset_y = -7*32
+	base_offset_x = -7*world.icon_size
+	base_offset_y = -7*world.icon_size
+
 	switch(i)
 		if(1,4,7)
-			base_offset_x -= 480
+			base_offset_x -= world.icon_size*PARALLAX_IMAGE_WIDTH
 		if(3,6,9)
-			base_offset_x += 480
+			base_offset_x += world.icon_size*PARALLAX_IMAGE_WIDTH
 	switch(i)
 		if(1,2,3)
-			base_offset_y += 480
+			base_offset_y += world.icon_size*PARALLAX_IMAGE_WIDTH
 		if(7,8,9)
-			base_offset_y -= 480
+			base_offset_y -= world.icon_size*PARALLAX_IMAGE_WIDTH
+
+	screen_loc = "CENTER:[base_offset_x],CENTER:[base_offset_y]"
 
 #undef PARALLAX4_ICON_NUMBER
 #undef PARALLAX3_ICON_NUMBER
 #undef PARALLAX2_ICON_NUMBER
+#undef PARALLAX_IMAGE_WIDTH
+#undef PARALLAX_IMAGE_TILES
