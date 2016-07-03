@@ -127,12 +127,10 @@
 		return
 
 	spawn()
-		do
+		while(meteors_allowed && istype(src, /datum/universal_state/meteor_storm))
 			var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
 			meteor_wave(meteors_in_wave, 3)
 			sleep(10)
-
-		while(meteors_allowed && istype(src, /datum/universal_state/meteor_storm))
 
 //Important note : This will only fire if the Meteors gamemode was fired
 /datum/game_mode/meteor/declare_completion()
