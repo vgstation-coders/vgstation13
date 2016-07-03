@@ -118,12 +118,21 @@
 
 		spawn(meteor_delay)
 			meteors_allowed = 1
+			check_meteor_storm()
 
-/datum/universal_state/meteor_storm/process()
-	if(meteors_allowed)
-		var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
-		meteor_wave(meteors_in_wave, 3)
-	return
+//This proc needs to be called every time meteors_allowed is set to 1, aka when starting the mayhem. Obviously, do not call it in repeating procs
+/datum/universal_state/meteor_storm/proc/check_meteor_storm()
+
+	if(!meteors_allowed)
+		return
+
+	spawn()
+		do
+			var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
+			meteor_wave(meteors_in_wave, 3)
+			sleep(10)
+
+		while(meteors_allowed && istype(src, /datum/universal_state/meteor_storm))
 
 //Important note : This will only fire if the Meteors gamemode was fired
 /datum/game_mode/meteor/declare_completion()
