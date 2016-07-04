@@ -653,72 +653,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 	return 1
 
-//A prototype implementation of can_see() that doesn't suck massive ass. Ignores darkness.
-//The functional part of this is probably completely inscrutable unless you understand BYOND occlusion very well.
-/proc/accurate_can_see(var/atom/source, var/atom/target, var/length=world.view)
-	if(source.z != target.z) //Can't see things on other Z-levels.
-		return 0
-
-	var/dx = target.x - source.x
-	var/dy = target.y - source.y
-	if(dx > length || dy > length) //Too far away
-		return 0
-
-	var/Xdir = 0 //Whether the target is to the east or west of the source.
-	if(dx)
-		if(dx > 0)
-			Xdir = EAST
-		else
-			Xdir = WEST
-
-	var/Ydir = 0 //Whether the target is to he north or south of the source.
-	if(dy)
-		if(dy > 0)
-			Ydir = NORTH
-		else
-			Ydir = SOUTH
-
-	var/Gdir = Xdir | Ydir //The GENERAL direction the target is from the source.
-
-	if(!Gdir) //If it's on your own tile, you can see it.
-		return 1
-
-	var/adx = abs(dx)
-	if(adx <= 1 && !dy) //You can always see cardinally-adjacent tiles.
-		return 1
-
-	var/ady = abs(dy)
-	if(ady <= 1 && !dx) //You can always see cardinally-adjacent tiles.
-		return 1
-
-	var/turf/target_turf = get_turf(target)
-	if(target_turf.opacity)
-		if(adx <= 1 && ady <= 1) //You can always see diagonally-adjacent tiles IF their TURFS are opaque. It's true, but don't ask me why.
-			return 1
-
-	//if(!dx || !dy) //source and target are aligned horizontally or vertically.
-	//	if(!target_turf.opacity) //The turf target is on is not opaque, so things behave as one would normally expect.
-	//		var/turf/current = get_step(source, Gdir)
-	//		while(current != target_turf)
-	//			if(current.check_opacity())
-	//				return 0
-	//			current = get_step(current, Gdir)
-	//		return 1
-	//	else //So target is on an opaque turf. Fuck.
-	//		var/list/checkdirs = list(Xdir << 2 | Ydir >> 2, ((Xdir << 1 | Xdir >> 1) & 12) | ((Ydir << 1 | Ydir >> 1) & 3)) //Gets both directions perpendicular to Gdir through bitwise magic.
-	//		for(var/checkdir in checkdirs)
-	//			var/turf/current = get_step(source, Gdir | checkdir)
-	//			var/turf/pseudo_target_turf = get_step(target_turf, checkdir)
-	//			while(current != pseudo_target_turf)
-	//				if(current.check_opacity())
-	//					//Nothing!
-
-	var/Pdir = 0 //Primary direction: Which of the horizontal distance and vertical distance is greater, if either. 0 if they are equal.
-	if(adx > ady)
-		Pdir = Xdir
-	else if(ady > adx)
-		Pdir = Ydir
-
 /proc/is_blocked_turf(var/turf/T)
 	var/cant_pass = 0
 	if(T.density) cant_pass = 1
@@ -1155,20 +1089,6 @@ proc/get_mob_with_client_list()
 			return "right foot"
 		else
 			return zone
-
-/*
-	get_turf(): Returns the turf that contains the atom.
-	Example: A fork inside a box inside a locker will return the turf the locker is standing on.
-	The weird for loop with an empty statement is apparently the fastest way possible to do this.
-
-	This is now a macro, over in _macros.dm. It's functionally the same, but the code is different and much faster.
-*/
-///proc/get_turf(const/atom/O)
-//	if(!istype(O) || isarea(O))
-//		return
-//	var/atom/A
-//	for(A=O, A && !isturf(A), A=A.loc);  // semicolon is for the empty statement
-//	return A
 
 /*
 	get_holder_at_turf_level(): Similar to get_turf(), will return the "highest up" holder of this atom, excluding the turf.
