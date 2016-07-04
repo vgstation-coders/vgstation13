@@ -57,7 +57,6 @@
 	desc = "The nemesis of explorers since the dawn of times."
 
 /obj/effect/forcefield/invisible_wall/New()
-
 	..()
 
 	alpha = 0
@@ -65,5 +64,4 @@
 
 //This is a system object, don't cultify it
 /obj/effect/forcefield/invisible_wall/cultify()
-
 	return
