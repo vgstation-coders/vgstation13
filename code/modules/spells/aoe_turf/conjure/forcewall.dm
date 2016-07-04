@@ -55,11 +55,6 @@
 /obj/effect/forcefield/invisible_wall
 	name = "invisible wall"
 	desc = "The nemesis of explorers since the dawn of times."
-
-/obj/effect/forcefield/invisible_wall/New()
-	..()
-
-	alpha = 0
 	invisibility = 101
 
 //This is a system object, don't cultify it
