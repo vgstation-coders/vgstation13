@@ -22,6 +22,7 @@
 		holstered = I
 		holstered.add_fingerprint(user)
 		user.visible_message("<span class='notice'>[user] holsters \the [holstered].</span>", "<span class='notice'>You holster \the [holstered].</span>")
+		update_icon()
 		return 1
 	else
 		to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
@@ -34,6 +35,7 @@
 		unholster_message(user)
 		holstered.add_fingerprint(user)
 		holstered = null
+		update_icon()
 	else
 		to_chat(user, "<span class='warning'>You need an empty hand to draw \the [holstered]!</span>")
 
@@ -152,13 +154,24 @@
 /obj/item/clothing/accessory/holster/knife/boot
 	name = "knife holster"
 	desc = "A knife holster that can be attached to any pair of boots."
-	icon_state = "pinksquare"
-	_color = "pinksquare"
+	item_state = "bootknife"
+	icon_state = "bootknife"
+	_color = "bootknife"
 
 /obj/item/clothing/accessory/holster/knife/boot/can_attach_to(obj/item/clothing/C)
 	return istype(C, /obj/item/clothing/shoes)
+
+/obj/item/clothing/accessory/holster/knife/update_icon()
+	if(holstered)
+		icon_state = "[initial(icon_state)]_1"
+		_color = "[initial(_color)]_1"
+	else
+		icon_state = "[initial(icon_state)]_0"
+		_color = "[initial(_color)]_0"
+	..()
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/New()
 	..()
 	if(!holstered)
 		holstered = new /obj/item/weapon/kitchen/utensil/knife/tactical(src)
+		update_icon()

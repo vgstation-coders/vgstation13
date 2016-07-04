@@ -195,6 +195,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	desc = "It makes you run faster."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "tacknife"
+	item_state = "knife"
 	force = 10
 
 obj/item/weapon/banhammer/admin
