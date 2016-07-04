@@ -1091,16 +1091,6 @@ proc/get_mob_with_client_list()
 			return zone
 
 /*
-	get_turf(): Returns the turf that contains the atom.
-	Example: A fork inside a box inside a locker will return the turf the locker is standing on.
-	Considering how poorly stock BYOND procs often run, it's surprising this is the fastest way to do this, but it is. By a lot.
-	The sanity that used to be here too is apparently handled by get_step() anyway.
-	It's actually (comparatively) substantially faster to directly call get_step(whatever, 0) than to call this proc, so maybe do that when you really need the best possible performance.
-*/
-/proc/get_turf(const/atom/O)
-	return get_step(O, 0)
-
-/*
 	get_holder_at_turf_level(): Similar to get_turf(), will return the "highest up" holder of this atom, excluding the turf.
 	Example: A fork inside a box inside a locker will return the locker. Essentially, get_just_before_turf().
 */

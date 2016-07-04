@@ -185,6 +185,8 @@
 	dview_mob.see_invisible = invis_flags; \
 	for(type in view(range, dview_mob))
 
+#define get_turf(A) (get_step(A, 0))
+
 //HARDCORE MODE STUFF (mainly hunger)
 
 #define hardcore_mode_on (hardcore_mode)//((ticker) && (ticker.hardcore_mode))
