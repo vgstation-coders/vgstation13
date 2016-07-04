@@ -69,6 +69,7 @@
 		universe.OnExit()
 
 	var/datum/universal_state/meteor_storm/meteor_storm = new /datum/universal_state/meteor_storm
+	universe = meteor_storm
 
 	meteor_storm.meteor_extra_announce_delay = extra_delay
 	meteor_storm.supply_delay = supply_delay
@@ -127,7 +128,7 @@
 		return
 
 	spawn()
-		while(meteors_allowed && istype(src, /datum/universal_state/meteor_storm))
+		while(meteors_allowed && src == global.universe)
 			var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
 			meteor_wave(meteors_in_wave, 3)
 			sleep(10)
