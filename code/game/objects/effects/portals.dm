@@ -7,6 +7,7 @@
 	unacidable = 1//Can't destroy energy portals.
 	var/obj/target = null
 	var/obj/item/weapon/creator = null
+	var/mob/owner = null
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 	var/undergoing_deletion = 0
@@ -36,7 +37,7 @@
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
 	spawn()
-		src.teleport(AM)
+		teleport(AM)
 
 /obj/effect/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/effect/beam))
@@ -120,7 +121,10 @@ var/list/portal_cache = list()
 			qdel(src)
 		else
 			do_teleport(M, target, 0, 1, 1, 1, 'sound/effects/portal_enter.ogg', 'sound/effects/portal_exit.ogg')
-
+			if(ismob(M))
+				var/mob/target = M
+				if(target.mind && owner)
+					log_attack("[target.name]([target.ckey]) entered a portal made by [owner.name]([owner.ckey]) at [loc]([x],[y],[z]), exiting at [target.loc]([target.x],[target.y],[target.z]).")
 
 /obj/effect/portal/beam_connect(var/obj/effect/beam/B)
 	if(istype(B))
