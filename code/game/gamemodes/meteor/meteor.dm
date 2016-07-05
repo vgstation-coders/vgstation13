@@ -38,7 +38,7 @@
 
 	spawn(meteor_announce_delay)
 
-		meteor_universal_state()
+		SetUniversalState(/datum/universal_state/meteor_storm, 1, 1)
 
 /datum/universal_state/meteor_storm
 	name = "Meteor Storm"
@@ -60,25 +60,6 @@
 
 	var/meteor_wave_size_l = 150 //Lower interval to meteor wave size
 	var/meteor_wave_size_h = 200 //Higher interval to meteor wave size
-
-//We want a ton of extra variables to allow us to do fancy things with it
-//We can't inherit directly because of a host of reasons, all good I assure you
-/proc/meteor_universal_state(var/on_exit = 1, var/extra_delay = 100, var/supply_delay = 100, var/shuttle_mult = 3, var/delay = 0, var/size_l = 150, var/size_h = 200)
-
-	if(on_exit)
-		universe.OnExit()
-
-	var/datum/universal_state/meteor_storm/meteor_storm = new /datum/universal_state/meteor_storm
-	universe = meteor_storm
-
-	meteor_storm.meteor_extra_announce_delay = extra_delay
-	meteor_storm.supply_delay = supply_delay
-	meteor_storm.meteor_shuttle_multiplier = shuttle_mult
-	meteor_storm.meteor_delay = delay
-	meteor_storm.meteor_wave_size_l = size_l
-	meteor_storm.meteor_wave_size_h = size_h
-
-	meteor_storm.OnEnter()
 
 /datum/universal_state/meteor_storm/OnShuttleCall(var/mob/user)
 	if(user)
