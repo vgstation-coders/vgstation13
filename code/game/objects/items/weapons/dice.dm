@@ -15,12 +15,12 @@
 	update_icon()
 
 /obj/item/weapon/dice/borg //8 in 1
-	name = "poly-d6"
-	desc = "A polymorphic die made of a mysterious material."
+	name = "digi-d6"
+	desc = "A digital die that simulates multiple dice."
 	var/possible_sides = list(2,4,6,8,10,12,20,100)
 
 /obj/item/weapon/dice/borg/verb/set_die_sides() //so we can change die sides
-	set name = "Set Poly-die Sides"
+	set name = "Set Digi-die Sides"
 	set category = "Object"
 	set src in range(0)
 	if(usr.incapacitated())
@@ -31,12 +31,12 @@
 	var/S = input("Number of sides:") as null|anything in possible_sides
 	if (S)
 		if(S == 100)
-			name = "poly-d00"
+			name = "digi-d00"
 			icon_state = "d00"
 			sides = 10
 			multiplier = 10
 		else
-			name = "poly-d[S]"
+			name = "digi-d[S]"
 			icon_state = "d[S]"
 			sides = S
 			multiplier = 0
