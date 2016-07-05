@@ -104,7 +104,7 @@
 			comment = "Ouch, bad luck."
 	update_icon()
 	if(multiplier)
-		result = result * multiplier
+		result = (result - 1) * multiplier
 	if(!thrown) //Dice was rolled in someone's hand
 		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result]. [comment]</span>", \
 							 "<span class='notice'>You throw [src]. It lands on [result]. [comment]</span>", \
