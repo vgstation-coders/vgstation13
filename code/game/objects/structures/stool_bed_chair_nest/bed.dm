@@ -55,6 +55,10 @@
 	if(!locked_atoms.len)
 		return
 
+	if(user.size <= SIZE_TINY)
+		to_chat(user, "<span class='warning'>You are much too small to do that.</span>")
+		return
+
 	var/mob/M = locked_atoms[1]
 	if(M != user)
 		M.visible_message(\
