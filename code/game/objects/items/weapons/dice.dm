@@ -7,11 +7,39 @@
 	var/sides = 6
 	var/minsides = 1
 	var/result = null
+	var/multiplier = 0 //For modifying the result (d00 etc)
 
 /obj/item/weapon/dice/New()
 	..()
 	result = rand(minsides, sides)
 	update_icon()
+
+/obj/item/weapon/dice/borg //8 in 1
+	name = "poly-d6"
+	desc = "A polymorphic die made of a mysterious material."
+	var/possible_sides = list(2,4,6,8,10,12,20,100)
+
+/obj/item/weapon/dice/borg/verb/set_die_sides() //so we can change die sides
+	set name = "Set Poly-die Sides"
+	set category = "Object"
+	set src in range(0)
+	set_sides()
+
+/obj/item/weapon/dice/borg/proc/set_sides()
+	var/S = input("Number of sides:") as null|anything in possible_sides
+	if (S)
+		if(S == 100)
+			name = "poly-d00"
+			icon_state = "d00"
+			sides = 10
+			multiplier = 10
+		else
+			name = "poly-d[S]"
+			icon_state = "d[S]"
+			sides = S
+			multiplier = 0
+		result = 1 //For icon
+		update_icon()
 
 /obj/item/weapon/dice/d2
 	name = "d2"
@@ -42,6 +70,7 @@
 	desc = "A die with ten sides. Works better for d100 rolls than a golfball."
 	icon_state = "d00"
 	sides = 10
+	multiplier = 10
 
 /obj/item/weapon/dice/d12
 	name = "d12"
@@ -68,13 +97,14 @@
 /obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
 	result = rand(minsides, sides)
 	var/comment = ""
-	if(sides == 20 && result == 20)
-		comment = "Nat 20!"
-	else if(sides == 20 && result == 1)
-		comment = "Ouch, bad luck."
+	if(sides == 20)
+		if(result == 20)
+			comment = "Nat 20!"
+		else if(result == 1)
+			comment = "Ouch, bad luck."
 	update_icon()
-	if(initial(icon_state) == "d00")
-		result = (result - 1)*10
+	if(multiplier)
+		result = result * multiplier
 	if(!thrown) //Dice was rolled in someone's hand
 		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result]. [comment]</span>", \
 							 "<span class='notice'>You throw [src]. It lands on [result]. [comment]</span>", \
