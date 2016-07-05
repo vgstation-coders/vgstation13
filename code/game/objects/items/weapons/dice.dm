@@ -23,6 +23,8 @@
 	set name = "Set Poly-die Sides"
 	set category = "Object"
 	set src in range(0)
+	if(usr.incapacitated())
+		return
 	set_sides()
 
 /obj/item/weapon/dice/borg/proc/set_sides()
