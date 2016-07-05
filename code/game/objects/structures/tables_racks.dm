@@ -24,6 +24,7 @@
 	var/icon/clicked
 	var/flipped = 0
 	var/health = 100
+	var/mob/tableclimber
 
 /obj/structure/table/proc/update_adjacent()
 	for(var/direction in alldirs)
@@ -775,3 +776,42 @@
 
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return
+
+/*
+ * TABLE CLIMBING
+ */
+
+
+/obj/structure/table/proc/climb_table(mob/user)
+	src.add_fingerprint(user)
+	user.visible_message("<span class='warning'>[user] is trying to climb on [src].</span>", \
+								"<span class='notice'>You are trying to climb on [src].</span>")
+	var/climb_time = 20
+	if(user.restrained()) //Table climbing takes twice as long when restrained.
+		climb_time *= 2
+	tableclimber = user
+	if(do_mob(user, user, climb_time))
+		if(src.loc) //Checking if table has been destroyed
+			user.pass_flags += PASSTABLE
+			step(user,get_dir(user,src.loc))
+			user.pass_flags -= PASSTABLE
+			add_logs(user, src, "climbed onto")
+			tableclimber = null
+			return 1
+	tableclimber = null
+	
+	/obj/structure/table/MouseDrop_T(atom/movable/O, mob/user)
+	if(ismob(O) && user == O && ishuman(user))
+		if(user.canmove)
+			climb_table(user)
+			return
+	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
+		return
+	if(isrobot(user))
+		return
+	if(!user.drop_item())
+		return
+	if (O.loc != src.loc)
+		step(O, get_dir(O, src))
+	return
+	return 0
