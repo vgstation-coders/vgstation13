@@ -58,7 +58,7 @@
 	playsound(loc,'sound/effects/portal_close.ogg',60,1)
 
 	purge_beams()
-
+	owner = null
 	if(target)
 		if(istype(target,/obj/effect/portal) && !istype(creator,/obj/item/weapon/gun/portalgun))
 			qdel(target)
@@ -76,7 +76,6 @@
 			else if(src == P.red_portal)
 				P.red_portal = null
 				P.sync_portals()
-
 	var/datum/effect/effect/system/spark_spread/aeffect = new
 	aeffect.set_up(5, 1, loc)
 	aeffect.start()
