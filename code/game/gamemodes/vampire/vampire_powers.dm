@@ -317,16 +317,17 @@
 	set name = "Enthrall (150)"
 	set desc = "You use a large portion of your power to sway those loyal to none to be loyal to you only."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 	var/mob/living/carbon/C = M.current.vampire_active(150, 0, 1)
-	if(!C) return
-	M.current.visible_message("<span class='warning'>[M.current.name] bites [C.name]'s neck!</span>", "<span class='warning'>You bite [C.name]'s neck and begin the flow of power.</span>")
-	to_chat(C, "<span class='sinister'>You feel the tendrils of evil [(VAMP_CHARISMA in M.vampire.powers) ? "aggressively" : "slowly"] invade your mind.</span>")
+	if(!C)
+		return
 	if(!ishuman(C))
 		to_chat(M.current, "<span class='warning'>You can only enthrall humanoids.</span>")
 		return
-
 	if(M.current.can_enthrall(C)) //takes half the time with Charisma unlocked
+		M.current.visible_message("<span class='warning'>[M.current.name] bites [C.name]'s neck!</span>", "<span class='warning'>You bite [C.name]'s neck and begin the flow of power.</span>")
+		to_chat(C, "<span class='sinister'>You feel the tendrils of evil [(VAMP_CHARISMA in M.vampire.powers) ? "aggressively" : "slowly"] invade your mind.</span>")
 		if(do_mob(M.current, C, (VAMP_CHARISMA in M.vampire.powers) ? 150 : 300))
 			if(M.current.vampire_power(150, 0)) // recheck
 				M.current.remove_vampire_blood(150)
@@ -339,8 +340,6 @@
 		else
 			to_chat(M.current, "<span class='warning'>Either you or your target moved, and you couldn't finish enthralling them!</span>")
 			return
-
-
 
 /client/proc/vampire_cloak()
 	set category = "Vampire"
@@ -378,6 +377,9 @@
 
 /mob/proc/can_enthrall(mob/living/carbon/C)
 	var/enthrall_safe = 0
+	if(restrained())
+		to_chat(src, "<span class ='warning'> You cannot do this while restrained! </span>")
+		return 0
 	if(!VAMP_CHARISMA in mind.vampire.powers) //Charisma allows implanted targets to be enthralled.
 		for(var/obj/item/weapon/implant/loyalty/L in C)
 			if(L && L.implanted)
@@ -399,8 +401,18 @@
 	if(!C.vampire_affected(mind))
 		C.visible_message("<span class='warning'>[C] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil</span>")
 	if(!ishuman(C))
-		to_chat(src, "<span class='warning'>You can only enthrall humanoids!")
+		to_chat(src, "<span class='warning'>You can only enthrall humanoids!</span>")
 		return 0
+	if(ishuman(src))
+		var/mob/living/carbon/human/M = src
+		if(M.check_body_part_coverage(MOUTH))
+			to_chat(src, "<span class='warning'>Remove your mask!</span>")
+			return 0
+	var/mob/living/carbon/human/H = C
+	if(H.check_body_part_coverage(MOUTH))
+		if(H.species.breath_type == "oxygen")
+			to_chat(src, "<span class='warning'>Remove their mask!</span>")
+			return 0
 	return 1
 
 /mob/proc/handle_enthrall(mob/living/carbon/human/H as mob)
