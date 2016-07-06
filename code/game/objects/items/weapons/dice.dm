@@ -27,6 +27,11 @@
 		return
 	set_sides()
 
+/obj/item/weapon/dice/borg/AltClick()
+	if(usr.incapacitated() || !is_holder_of(usr, src))
+		return ..()
+	set_die_sides()
+
 /obj/item/weapon/dice/borg/proc/set_sides()
 	var/S = input("Number of sides:") as null|anything in possible_sides
 	if (S)
