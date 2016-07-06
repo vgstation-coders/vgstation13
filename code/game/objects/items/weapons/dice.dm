@@ -16,7 +16,7 @@
 
 /obj/item/weapon/dice/borg //8 in 1
 	name = "digi-d6"
-	desc = "A digital die that simulates multiple dice."
+	desc = "A device that simulates dice rolls."
 	var/possible_sides = list(2,4,6,8,10,12,20,100)
 
 /obj/item/weapon/dice/borg/verb/set_die_sides() //so we can change die sides
@@ -42,6 +42,11 @@
 			multiplier = 0
 		result = 1 //For icon
 		update_icon()
+
+/obj/item/weapon/dice/borg/update_icon()
+	..()
+	underlays.len = 0
+	underlays += image(icon = icon, icon_state = "ddbg")
 
 /obj/item/weapon/dice/d2
 	name = "d2"
