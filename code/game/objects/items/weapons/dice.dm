@@ -19,18 +19,10 @@
 	desc = "A device that simulates dice rolls."
 	var/possible_sides = list(2,4,6,8,10,12,20,100)
 
-/obj/item/weapon/dice/borg/verb/set_die_sides() //so we can change die sides
-	set name = "Set Digi-die Sides"
-	set category = "Object"
-	set src in range(0)
-	if(usr.incapacitated())
-		return
-	set_sides()
-
 /obj/item/weapon/dice/borg/AltClick()
 	if(usr.incapacitated() || !is_holder_of(usr, src))
 		return ..()
-	set_die_sides()
+	set_sides()
 
 /obj/item/weapon/dice/borg/proc/set_sides()
 	var/S = input("Number of sides:") as null|anything in possible_sides
