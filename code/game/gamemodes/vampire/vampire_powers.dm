@@ -375,6 +375,22 @@
 		else
 			alphas["vampire_cloak"] = round((255 * 0.80))
 
+/mob/proc/can_suck(mob/living/carbon/target) 
+	if(ishuman(target))
+		var/mob/living/carbon/human/T = target
+		if(T.check_body_part_coverage(MOUTH))
+			to_chat(src, "<span class='warning'>Remove their mask!</span>")
+			return 0
+	if(ishuman(src))
+		var/mob/living/carbon/human/M = src
+		if(M.check_body_part_coverage(MOUTH))
+			if(M.species.breath_type == "oxygen")
+				to_chat(src, "<span class='warning'>Remove your mask!</span>")
+				return 0
+			else
+				to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
+	return 1
+	
 /mob/proc/can_enthrall(mob/living/carbon/C)
 	var/enthrall_safe = 0
 	if(restrained())
@@ -403,16 +419,8 @@
 	if(!ishuman(C))
 		to_chat(src, "<span class='warning'>You can only enthrall humanoids!</span>")
 		return 0
-	if(ishuman(src))
-		var/mob/living/carbon/human/M = src
-		if(M.check_body_part_coverage(MOUTH))
-			to_chat(src, "<span class='warning'>Remove your mask!</span>")
-			return 0
-	var/mob/living/carbon/human/H = C
-	if(H.check_body_part_coverage(MOUTH))
-		if(H.species.breath_type == "oxygen")
-			to_chat(src, "<span class='warning'>Remove their mask!</span>")
-			return 0
+	if(!can_suck(C))
+		return 0
 	return 1
 
 /mob/proc/handle_enthrall(mob/living/carbon/human/H as mob)
