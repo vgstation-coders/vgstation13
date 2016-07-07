@@ -23,6 +23,9 @@
 	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
 	var/last_sound = 0
 
+	holomap = TRUE
+	auto_holomap = TRUE
+
 // create a new disposal
 // find the attached trunk (if present) and init gas resvr.
 /obj/machinery/disposal/New()
@@ -70,7 +73,6 @@
 				if(severity==2)
 					qdel(src)
 		if(1)
-			eject()
 			qdel(src)
 
 
@@ -79,11 +81,9 @@
 	if(stat & BROKEN || !I || !user)
 		return
 
-	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !istype(user,/mob/living/silicon/robot/mommi))
-		return
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
-		if(istype(I, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(I))
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
@@ -120,6 +120,9 @@
 			else
 				to_chat(user, "You need more welding fuel to complete this task.")
 				return
+
+	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !istype(user,/mob/living/silicon/robot/mommi) )
+		return
 
 	if(istype(I, /obj/item/weapon/storage/bag/))
 		var/obj/item/weapon/storage/bag/B = I
@@ -423,7 +426,7 @@
 		H.vent_gas(loc)
 		qdel(H)
 
-/obj/machinery/disposal/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/disposal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
@@ -439,67 +442,70 @@
 	else
 		return ..(mover, target, height, air_group)
 
-/obj/machinery/disposal/MouseDrop_T(atom/dropping, mob/user)
-	if(istype(user, /mob/living/silicon/ai))
+/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+
+	if(isAI(user))
 		return
 
-	if(!ismob(dropping))
+	//We are restrained or can't move, this will compromise taking out the trash
+	if(user.restrained() || !user.canmove)
+		return
+
+	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
 		if(istype(dropping, /obj/item))
-			if(!user.restrained() && user.canmove)
-				attackby(dropping, user)
 
+			if(dropping.locked_to) //Items can very specifically be locked to something, check that here
+				return
+
+			attackby(dropping, user)
 		return
+
+	//From there, we are working on a mob (as our target, user is supposed to be a mob)
 
 	var/locHolder = dropping.loc
 	var/mob/target = dropping
 
+	//Our target, now confirmed to be a mob, is locked to something, same thing
+	if(target.locked_to)
+		return
+
 	if(target == user)
-		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] starts climbing into the [src].", "You start climbing into the [src].")
-		else
-			return
+		target.visible_message("[target] starts climbing into \the [src].", "You start climbing into \the [src].")
+
 	else
+
 		if(isanimal(user))
-			return // animals cannot put mobs other than themselves into disposal
+			return //Animals cannot put mobs other than themselves into disposal
 
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
-
-			user.visible_message("[user] starts stuffing [target] into the [src].", "You start stuffing [target] into the [src].")
-		else
-			return
+		user.visible_message("[user] starts stuffing \the [target] into \the [src].", "You start stuffing \the [target] into \the [src].")
 
 	if(!do_after(user, src, 20))
+		return
+
+	if(user.restrained() || !user.canmove)
+		return
+
+	if(target.locked_to)
 		return
 
 	if(locHolder != target.loc)
 		return
 
 	if(target == user)
-		if(!user.restrained() && user.canmove)
-			target.visible_message("[target] climbed into the [src].", "You climbed into the [src].")
-		else
-			return
-	else
-		if(!user.restrained() && user.canmove)
-			if(target.locked_to)
-				return
+		target.visible_message("[target] climbs into \the [src].", "You climb into \the [src].")
 
-			user.visible_message("[user] stuffed [target] into the [src]!", "You stuffed [target] into the [src]!")
-			log_attack("<SPAN CLASS='warning'>[key_name(user)] placed [key_name(target)] in a disposals unit/([src]).</SPAN>")
-		else
-			return
+	else
+
+		user.visible_message("[user] stuffed \the [target] into \the [src]!", "You stuffed \the [target] into \the [src]!")
+		log_attack("<span class='warning'>[key_name(user)] stuffed [key_name(target)] into a disposal unit/([src]).</span>")
 
 	add_fingerprint(user)
-
-	if(target.client)
-		target.client.perspective = EYE_PERSPECTIVE
-		target.client.eye = src
-
-	target.loc = src
-
+	target.forceMove(src)
 	update_icon()
+
+/obj/machinery/disposal/Destroy()
+	eject()
+	..()
 
 // virtual disposal object
 // travels through pipes in lieu of actual items
@@ -519,132 +525,131 @@
 
 
 	// initialize a holder from the contents of a disposal unit
-	proc/init(var/obj/machinery/disposal/D)
-		gas = D.air_contents// transfer gas resv. into holder object
+/obj/structure/disposalholder/proc/init(var/obj/machinery/disposal/D)
+	gas = D.air_contents// transfer gas resv. into holder object
 
-		//Check for any living mobs trigger hasmob.
-		//hasmob effects whether the package goes to cargo or its tagged destination.
-		for(var/mob/living/M in D)
-			if(M && M.stat != 2)
-				hasmob = 1
+	//Check for any living mobs trigger hasmob.
+	//hasmob effects whether the package goes to cargo or its tagged destination.
+	for(var/mob/living/M in D)
+		if(M && M.stat != 2)
+			hasmob = 1
 
-		//Checks 1 contents level deep. This means that players can be sent through disposals...
-		//...but it should require a second person to open the package. (i.e. person inside a wrapped locker)
-		for(var/obj/O in D)
-			if(O.contents)
-				for(var/mob/living/M in O.contents)
-					if(M && M.stat != 2)
-						hasmob = 1
+	//Checks 1 contents level deep. This means that players can be sent through disposals...
+	//...but it should require a second person to open the package. (i.e. person inside a wrapped locker)
+	for(var/obj/O in D)
+		if(O.contents)
+			for(var/mob/living/M in O.contents)
+				if(M && M.stat != 2)
+					hasmob = 1
 
-		// now everything inside the disposal gets put into the holder
-		// note AM since can contain mobs or objs
-		for(var/atom/movable/AM in D)
-			AM.forceMove(src)
-			if(istype(AM, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H = AM
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT))		// is a human and fat?
-					has_fat_guy = 1			// set flag on holder
-			if(istype(AM, /obj/item/delivery/large) && !hasmob)
-				var/obj/item/delivery/large/T = AM
-				src.destinationTag = T.sortTag
-			if(istype(AM, /obj/item/delivery) && !hasmob)
-				var/obj/item/delivery/T = AM
-				src.destinationTag = T.sortTag
+	// now everything inside the disposal gets put into the holder
+	// note AM since can contain mobs or objs
+	for(var/atom/movable/AM in D)
+		AM.forceMove(src)
+		if(istype(AM, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = AM
+			if(((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT)) || H.species.flags & IS_BULKY)		// is a human and fat?
+				has_fat_guy = 1			// set flag on holder
+		if(istype(AM, /obj/item/delivery/large) && !hasmob)
+			var/obj/item/delivery/large/T = AM
+			src.destinationTag = T.sortTag
+		if(istype(AM, /obj/item/delivery) && !hasmob)
+			var/obj/item/delivery/T = AM
+			src.destinationTag = T.sortTag
 
-	// start the movement process
-	// argument is the disposal unit the holder started in
-	proc/start(var/obj/machinery/disposal/D)
-		if(!D.trunk)
-			D.expel(src)	// no trunk connected, so expel immediately
-			return
-
-		forceMove(D.trunk)
-		active = 1
-		dir = DOWN
-		spawn(1)
-			move()		// spawn off the movement process
-
-	// movement process, persists while holder is moving through pipes
-	proc/move()
-		var/obj/structure/disposalpipe/last
-		while(active)
-			/* vg edit
-			if(hasmob && prob(3))
-				for(var/mob/living/H in src)
-					H.take_overall_damage(20, 0, "Blunt Trauma")//horribly maim any living creature jumping down disposals.  c'est la vie
-					*/
-
-			if(has_fat_guy && prob(2)) // chance of becoming stuck per segment if contains a fat guy
-				active = 0
-				// find the fat guys
-				for(var/mob/living/carbon/human/H in src)
-
-				break
-			sleep(1)		// was 1
-			if(!loc || isnull(loc))
-				qdel(src)
-				return
-
-			var/obj/structure/disposalpipe/curr = loc
-			last = curr
-			curr = curr.transfer(src)
-			if(!curr)
-				last.expel(src, loc, dir)
-
-			//
-			if(!(count--))
-				active = 0
+// start the movement process
+// argument is the disposal unit the holder started in
+/obj/structure/disposalholder/proc/start(var/obj/machinery/disposal/D)
+	if(!D.trunk)
+		D.expel(src)	// no trunk connected, so expel immediately
 		return
 
+	forceMove(D.trunk)
+	active = 1
+	dir = DOWN
+	spawn(1)
+		move()		// spawn off the movement process
 
+// movement process, persists while holder is moving through pipes
+/obj/structure/disposalholder/proc/move()
+	var/obj/structure/disposalpipe/last
+	while(active)
+		/* vg edit
+		if(hasmob && prob(3))
+			for(var/mob/living/H in src)
+				H.take_overall_damage(20, 0, "Blunt Trauma")//horribly maim any living creature jumping down disposals.  c'est la vie
+				*/
 
-	// find the turf which should contain the next pipe
-	proc/nextloc()
-		return get_step(loc,dir)
+		if(has_fat_guy && prob(2)) // chance of becoming stuck per segment if contains a fat guy
+			active = 0
+			// find the fat guys
+			for(var/mob/living/carbon/human/H in src)
 
-	// find a matching pipe on a turf
-	proc/findpipe(var/turf/T)
+			break
+		sleep(1)		// was 1
+		if(!loc || isnull(loc))
+			qdel(src)
+			return
 
+		var/obj/structure/disposalpipe/curr = loc
+		last = curr
+		curr = curr.transfer(src)
+		if(!curr)
+			last.expel(src, loc, dir)
 
-		if(!T)
-			return null
+		//
+		if(!(count--))
+			active = 0
+	return
 
-		var/fdir = turn(dir, 180)	// flip the movement direction
-		for(var/obj/structure/disposalpipe/P in T)
-			if(fdir & P.dpdir)		// find pipe direction mask that matches flipped dir
-				return P
-		// if no matching pipe, return null
+// find the turf which should contain the next pipe
+/obj/structure/disposalholder/proc/nextloc()
+	return get_step(loc,dir)
+
+// find a matching pipe on a turf
+/obj/structure/disposalholder/proc/findpipe(var/turf/T)
+	if(!T)
 		return null
 
-	// merge two holder objects
-	// used when a a holder meets a stuck holder
-	proc/merge(var/obj/structure/disposalholder/other)
-		for(var/atom/movable/AM in other)
-			AM.forceMove(src)		// move everything in other holder to this one
-			if(ismob(AM))
-				var/mob/M = AM
-				if(M.client)	// if a client mob, update eye to follow this holder
-					M.client.eye = src
+	var/fdir = turn(dir, 180)	// flip the movement direction
+	for(var/obj/structure/disposalpipe/P in T)
+		if(fdir & P.dpdir)		// find pipe direction mask that matches flipped dir
+			return P
+	// if no matching pipe, return null
+	return null
 
-		if(other.has_fat_guy)
-			has_fat_guy = 1
-		qdel(other)
+// merge two holder objects
+// used when a a holder meets a stuck holder
+/obj/structure/disposalholder/proc/merge(var/obj/structure/disposalholder/other)
+	for(var/atom/movable/AM in other)
+		AM.forceMove(src)		// move everything in other holder to this one
+		if(ismob(AM))
+			var/mob/M = AM
+			if(M.client)	// if a client mob, update eye to follow this holder
+				M.client.eye = src
+
+	if(other.has_fat_guy)
+		has_fat_guy = 1
+	qdel(other)
 
 
-	// called when player tries to move while in a pipe
-	relaymove(mob/user as mob)
-		if (user.stat)
-			return
-		if (src.loc)
-			for (var/mob/M in hearers(src.loc.loc))
-				to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
-
-		playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
-
-	// called to vent all gas in holder to a location
-	proc/vent_gas(var/atom/location)
-		location.assume_air(gas)  // vent all gas to turf
+// called when player tries to move while in a pipe
+/obj/structure/disposalholder/relaymove(mob/user as mob)
+	if (user.stat)
 		return
+	if (src.loc)
+		for (var/mob/M in hearers(src.loc.loc))
+			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
+
+	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
+
+/obj/machinery/disposal/is_airtight() //No polyacid smoke while inside the pipes. The disposals bins, inlets/outlets and such aren't counted for this purpose
+	return 1
+
+// called to vent all gas in holder to a location
+/obj/structure/disposalholder/proc/vent_gas(var/atom/location)
+	location.assume_air(gas)  // vent all gas to turf
+	return
 
 // Disposal pipes
 
@@ -655,6 +660,8 @@
 	anchored = 1
 	density = 0
 
+	holomap = TRUE
+	auto_holomap = TRUE
 	level = 1			// underfloor only
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
@@ -836,6 +843,8 @@
 	// pipe affected by explosion
 	ex_act(severity)
 
+		for(var/atom/movable/A in src)
+			A.ex_act(severity)
 		switch(severity)
 			if(1.0)
 				broken(0)
@@ -1007,7 +1016,10 @@
 /obj/structure/disposalpipe/sortjunction/New()
 	. = ..()
 	if(sortType && !sort_tag)
-		sort_tag = uppertext(DEFAULT_TAGGER_LOCATIONS[sortType])
+		sort_tag = uppertext(map.default_tagger_locations[sortType])
+
+	else if(sort_tag)
+		sort_tag = uppertext(sort_tag)
 
 	updatedir()
 	updatedesc()
@@ -1062,84 +1074,162 @@
 	return P
 
 ////////////////// SortJunctionSubtypes//////////////////
-//Box
+
 /obj/structure/disposalpipe/sortjunction/Disposals
-	sortType = 1
+	sort_tag = DISP_DISPOSALS
+
+/obj/structure/disposalpipe/sortjunction/Disposals/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Cargo
-	sortType = 2
+	sort_tag = DISP_CARGO_BAY
+
+/obj/structure/disposalpipe/sortjunction/Cargo/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/QM
-	sortType = 3
+	sort_tag = DISP_QM_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/QM/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Engineering
-	sortType = 4
+	sort_tag = DISP_ENGINEERING
+
+/obj/structure/disposalpipe/sortjunction/Engineering/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CE
-	sortType = 5
+	sort_tag = DISP_CE_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/CE/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Atmos
-	sortType = 6
+	sort_tag = DISP_ATMOSPHERICS
+
+/obj/structure/disposalpipe/sortjunction/Atmos/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Security
-	sortType = 7
+	sort_tag = DISP_SECURITY
+
+/obj/structure/disposalpipe/sortjunction/Security/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoS
-	sortType = 8
+	sort_tag = DISP_HOS_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/HoS/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Medbay
-	sortType = 9
+	sort_tag = DISP_MEDBAY
+
+/obj/structure/disposalpipe/sortjunction/Medbay/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/CMO
-	sortType = 10
+	sort_tag = DISP_CMO_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/CMO/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chemistry
-	sortType = 11
+	sort_tag = DISP_CHEMISTRY
+
+/obj/structure/disposalpipe/sortjunction/Chemistry/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Research
-	sortType = 12
+		sort_tag = DISP_RESEARCH
+
+/obj/structure/disposalpipe/sortjunction/Research/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/RD
-	sortType = 13
+		sort_tag = DISP_RD_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/RD/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Robotics
-	sortType = 14
+		sort_tag = DISP_ROBOTICS
+
+/obj/structure/disposalpipe/sortjunction/Robotics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoP
-	sortType = 15
+		sort_tag = DISP_HOP_OFFICE
+
+/obj/structure/disposalpipe/sortjunction/HoP/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Library
-	sortType = 16
+		sort_tag = DISP_LIBRARY
+
+/obj/structure/disposalpipe/sortjunction/Library/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chapel
-	sortType = 17
+		sort_tag = DISP_CHAPEL
+
+/obj/structure/disposalpipe/sortjunction/Chapel/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Theatre
-	sortType = 18
+		sort_tag = DISP_THEATRE
+
+/obj/structure/disposalpipe/sortjunction/Theatre/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Bar
-	sortType = 19
+		sort_tag = DISP_BAR
+
+/obj/structure/disposalpipe/sortjunction/Bar/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Kitchen
-	sortType = 20
+		sort_tag = DISP_KITCHEN
+
+/obj/structure/disposalpipe/sortjunction/Kitchen/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics
-	sortType = 21
+		sort_tag = DISP_HYDROPONICS
+
+/obj/structure/disposalpipe/sortjunction/Hydroponics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Janitor
-	sortType = 22
+		sort_tag = DISP_JANITOR_CLOSET
+
+/obj/structure/disposalpipe/sortjunction/Janitor/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Genetics
-	sortType = 23
+		sort_tag = DISP_GENETICS
+
+/obj/structure/disposalpipe/sortjunction/Genetics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telecomms
-	sortType = 24
+		sort_tag = DISP_TELECOMMS
+
+/obj/structure/disposalpipe/sortjunction/Telecomms/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Mechanics
-	sortType = 25
+		sort_tag = DISP_MECHANICS
+
+/obj/structure/disposalpipe/sortjunction/Mechanics/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telescience
-	sortType = 26
+		sort_tag = DISP_TELESCIENCE
+
+/obj/structure/disposalpipe/sortjunction/Telescience/mirrored
+	icon_state = "pipe-j2s"
 
 //////////////////
 //a three-way junction that sorts objects destined for the mail office mail table (tomail = 1)
@@ -1150,6 +1240,9 @@
 	var/posdir = 0
 	var/negdir = 0
 	var/sortdir = 0
+
+/obj/structure/disposalpipe/wrapsortjunction/mirrored
+	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/wrapsortjunction/New()
 	. = ..()
@@ -1365,6 +1458,9 @@
 	var/mode = 0
 	var/obj/structure/disposalpipe/trunk/trunk
 
+	holomap = TRUE
+	auto_holomap = TRUE
+
 	New()
 		. = ..()
 
@@ -1418,7 +1514,7 @@
 		if(!I || !user)
 			return
 		src.add_fingerprint(user)
-		if(istype(I, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(I))
 			if(mode==0)
 				mode=1
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

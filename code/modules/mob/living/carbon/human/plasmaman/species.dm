@@ -3,7 +3,7 @@
 	icobase = 'icons/mob/human_races/r_plasmaman_sb.dmi'
 	deform = 'icons/mob/human_races/r_plasmaman_pb.dmi'  // TODO: Need deform.
 	language = "Clatter"
-	attack_verb = "punch"
+	attack_verb = "punches"
 	has_sweat_glands = 0
 
 	//flags = IS_WHITELISTED /*| HAS_LIPS | HAS_TAIL | NO_EAT | NO_BREATHE | NON_GENDERED*/ | NO_BLOOD
@@ -12,12 +12,13 @@
 
 	//default_mutations=list(SKELETON) // This screws things up
 
-	breath_type = "plasma"
+	breath_type = "toxins"
 
 	heat_level_1 = 350  // Heat damage level 1 above this point.
 	heat_level_2 = 400  // Heat damage level 2 above this point.
 	heat_level_3 = 500  // Heat damage level 3 above this point.
 	burn_mod = 0.5
+	brute_mod = 1.5
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -30,8 +31,8 @@
 	)
 
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", stutter("ss"))
-	return ..(speech,H)
+	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
+	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
 
 /datum/species/plasmaman/equip(var/mob/living/carbon/human/H)
 	H.fire_sprite = "Plasmaman"

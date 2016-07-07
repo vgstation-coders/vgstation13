@@ -8,7 +8,7 @@
 	icon_state = "plastic-explosive0"
 	item_state = "plasticx"
 	flags = FPRINT
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	origin_tech = "syndicate=2"
 	var/datum/wires/explosive/plastic/wires = null
 	var/timer = 10
@@ -45,10 +45,10 @@
 	return .
 
 /obj/item/weapon/plastique/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I, /obj/item/weapon/screwdriver))
+	if(isscrewdriver(I))
 		open_panel = !open_panel
 		to_chat(user, "<span class='notice'>You [open_panel ? "open" : "close"] the wire panel.</span>")
-	else if(istype(I, /obj/item/weapon/wirecutters) || istype(I, /obj/item/device/multitool) || istype(I, /obj/item/device/assembly/signaler ))
+	else if(iswiretool(I))
 		wires.Interact(user)
 	else
 		..()
@@ -110,7 +110,7 @@
 
 
 	if(!target)
-		target = get_atom_on_turf(src)
+		target = get_holder_at_turf_level(src)
 	if(!target)
 		target = src
 	if(location)
@@ -118,9 +118,6 @@
 
 	if(target)
 		target.overlays -= image('icons/obj/assemblies.dmi', "plastic-explosive2")
-		if(!(target.singuloCanEat()))//mostly adminbus objects. It'd make sense though that C4 can't destroy what even a singulo can't eat.
-			qdel(src)
-			return
 		if (istype(target, /turf/simulated/wall))
 			target:dismantle_wall(1)
 		else

@@ -27,6 +27,7 @@
 	var/next_firetime = 0
 	var/list/pod_overlays
 	var/health = 400
+	appearance_flags = 0
 
 /obj/spacepod/New()
 	. = ..()
@@ -143,7 +144,7 @@
 				to_chat(user, "<span class='notice'>The pod already has a weapon system, remove it first.</span>")
 				return
 			else
-				if(user.drop_item(W, equipment_system))
+				if(user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You insert \the [W] into the equipment system.</span>")
 					equipment_system.weapon_system = W
 					equipment_system.weapon_system.my_atom = src
@@ -226,7 +227,7 @@
 
 /obj/spacepod/verb/toggle_internal_tank()
 	set name = "Toggle internal airtank usage"
-	set category = "Spacepod"
+	set category = "Object"
 	set src = usr.loc
 	set popup_menu = 0
 	if(usr!=src.occupant)
@@ -312,15 +313,22 @@
 
 /obj/spacepod/verb/move_inside()
 	set category = "Object"
-	set name = "Enter Pod"
+	set name = "Enter / Exit Pod"
 	set src in oview(1)
 
+	if (src.occupant) //Before the other two checks in case there's some fuckery going on where nonhumans are inside the pod
+		if(usr != src.occupant)
+			to_chat(usr, "<span class='notice'><B>The [src.name] is already occupied!</B></span>")
+			return
+		else
+			src.inertia_dir = 0 // engage reverse thruster and power down pod
+			src.occupant.forceMove(src.loc)
+			src.occupant = null
+			to_chat(usr, "<span class='notice'>You climb out of the pod</span>")
+			return
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr))
-		return
-	if (src.occupant)
-		to_chat(usr, "<span class='notice'><B>The [src.name] is already occupied!</B></span>")
 		return
 /*
 	if (usr.abiotic())
@@ -341,20 +349,7 @@
 		else if(src.occupant!=usr)
 			to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
 	else
-		to_chat(usr, "You stop entering the exosuit.")
-	return
-
-/obj/spacepod/verb/exit_pod()
-	set name = "Exit pod"
-	set category = "Spacepod"
-	set src = usr.loc
-
-	if(usr != src.occupant)
-		return
-	src.inertia_dir = 0 // engage reverse thruster and power down pod
-	src.occupant.loc = src.loc
-	src.occupant = null
-	to_chat(usr, "<span class='notice'>You climb out of the pod</span>")
+		to_chat(usr, "You stop entering the pod.")
 	return
 
 /obj/spacepod/proc/enter_after(delay as num, var/mob/user as mob, var/numticks = 5)
@@ -467,7 +462,7 @@
 		return 0
 	battery.charge = max(0, battery.charge - 3)
 
-/obj/effect/landmark/spacepod/random
+/obj/effect/landmark/spacepod/random //One of these will be chosen from across all Z levels to receive a pod in gameticker.dm
 	name = "spacepod spawner"
 	invisibility = 101
 	icon = 'icons/mob/screen1.dmi'
@@ -476,6 +471,18 @@
 
 /obj/effect/landmark/spacepod/random/New()
 	..()
+
+/obj/effect/landmark/spacepod/guaranteed //We're not messing around: we want a guaranteed pod!
+	name = "guaranteed spacepod spawner"
+	invisibility = 101
+	anchored = 1
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "x"
+
+/obj/effect/landmark/spacepod/guaranteed/New()
+	sleep(10)
+	new /obj/spacepod/random(get_turf(src))
+	qdel(src)
 
 #undef DAMAGE
 #undef FIRE

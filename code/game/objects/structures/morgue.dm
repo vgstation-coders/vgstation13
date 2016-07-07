@@ -160,7 +160,7 @@
 	var/obj/structure/morgue/connected = null
 	anchored = 1.0
 
-/obj/structure/m_tray/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/m_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
 		return 1
 	else
@@ -349,7 +349,7 @@
 				M.show_message("<span class='warning'>You hear a roar as the crematorium activates.</span>", 1)
 			else
 				M.show_message("<span class='notice'>You hear chewing as the crematorium consumes its meal.</span>", 1)
-				to_chat(M, 'sound/items/eatfood.ogg')
+				M << 'sound/items/eatfood.ogg'
 
 		locked = 1
 		cremating = 1
@@ -394,7 +394,7 @@
 	var/obj/structure/crematorium/connected = null
 	anchored = 1.0
 
-/obj/structure/c_tray/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/c_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
 		return 1
 	else

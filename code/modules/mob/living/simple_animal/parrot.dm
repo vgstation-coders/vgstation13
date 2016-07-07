@@ -61,7 +61,7 @@
 	var/parrot_state = PARROT_WANDER //Hunt for a perch when created
 	var/parrot_sleep_max = 25 //The time the parrot sits while perched before looking around. Mosly a way to avoid the parrot's AI in life() being run every single tick.
 	var/parrot_sleep_dur = 25 //Same as above, this is the var that physically counts down
-	var/parrot_dam_zone = list("chest", "head", "l_arm", "l_leg", "r_arm", "r_leg") //For humans, select a bodypart to attack
+	var/parrot_dam_zone = list(LIMB_CHEST, LIMB_HEAD, LIMB_LEFT_ARM, LIMB_LEFT_LEG, LIMB_RIGHT_ARM, LIMB_RIGHT_LEG) //For humans, select a bodypart to attack
 
 	var/parrot_speed = 5 //"Delay in world ticks between movement." according to byond. Yeah, that's BS but it does directly affect movement. Higher number = slower.
 	//var/parrot_been_shot = 0 this wasn't working right, and parrots don't survive bullets.((Parrots get a speed bonus after being shot. This will deincrement every Life() and at 0 the parrot will return to regular speed.))
@@ -618,7 +618,7 @@
 /mob/living/simple_animal/parrot/movement_delay()
 	if(client && stat == CONSCIOUS && parrot_state != "parrot_fly")
 		icon_state = "parrot_fly"
-	..()
+	return ..()
 
 /mob/living/simple_animal/parrot/proc/isStuck()
 	//Check to see if the parrot is stuck due to things like windows or doors or windowdoors
@@ -643,13 +643,15 @@
 
 		if(istype(AM, /obj/item))
 			var/obj/item/I = AM
-			if(I.w_class < 2)
+			if(I.w_class < W_CLASS_SMALL)
 				return I
 
 		if(iscarbon(AM))
 			var/mob/living/carbon/C = AM
-			if((C.l_hand && C.l_hand.w_class <= 2) || (C.r_hand && C.r_hand.w_class <= 2))
-				return C
+			for(var/obj/item/I in C.held_items)
+				if(I.w_class <= W_CLASS_SMALL)
+					return C
+
 	return null
 
 /mob/living/simple_animal/parrot/proc/search_for_perch()
@@ -672,13 +674,15 @@
 
 		if(istype(AM, /obj/item))
 			var/obj/item/I = AM
-			if(I.w_class <= 2)
+			if(I.w_class <= W_CLASS_SMALL)
 				return I
 
 		if(iscarbon(AM))
 			var/mob/living/carbon/C = AM
-			if(C.l_hand && C.l_hand.w_class <= 2 || C.r_hand && C.r_hand.w_class <= 2)
-				return C
+
+			for(var/obj/item/I in C.held_items)
+				if(I.w_class <= W_CLASS_SMALL)
+					return C
 	return null
 
 
@@ -701,7 +705,7 @@
 		if(!Adjacent(I))
 			continue
 		//Make sure we're not already holding it and it's small enough
-		if(I.loc != src && I.w_class <= 2)
+		if(I.loc != src && I.w_class <= W_CLASS_SMALL)
 
 			//If we have a perch and the item is sitting on it, continue
 			if(!client && parrot_perch && I.loc == parrot_perch.loc)
@@ -733,11 +737,10 @@
 		if(!Adjacent(C))
 			continue
 
-		if(C.l_hand && C.l_hand.w_class <= 2)
-			stolen_item = C.l_hand
+		for(var/obj/item/I in C.held_items)
+			if(I.w_class > W_CLASS_SMALL) continue
 
-		if(C.r_hand && C.r_hand.w_class <= 2)
-			stolen_item = C.r_hand
+			stolen_item = I
 
 		if(stolen_item)
 			C.u_equip(stolen_item)

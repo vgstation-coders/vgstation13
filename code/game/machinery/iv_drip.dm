@@ -20,7 +20,7 @@
 	if(beaker)
 		var/datum/reagents/reagents = beaker.reagents
 		if(reagents.total_volume)
-			var/image/filling = image('icons/obj/iv_drip.dmi', src, "reagent")
+			var/image/filling = image('icons/obj/iv_drip.dmi', src, REAGENT)
 
 			var/percent = round((reagents.total_volume / beaker.volume) * 100)
 			switch(percent)
@@ -61,7 +61,7 @@
 	if(isobserver(user)) return
 	if(user.stat)
 		return
-	if(istype(W, /obj/item/weapon/wrench))
+	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
@@ -90,7 +90,7 @@
 	if(src.attached)
 		if(!(get_dist(src, src.attached) <= 1 && isturf(src.attached.loc)))
 			visible_message("The needle is ripped out of [src.attached], doesn't that hurt?")
-			src.attached:apply_damage(3, BRUTE, pick("r_arm", "l_arm"))
+			src.attached:apply_damage(3, BRUTE, pick(LIMB_RIGHT_ARM, LIMB_LEFT_ARM))
 			src.attached = null
 			src.update_icon()
 			return
@@ -100,7 +100,7 @@
 		if(mode)
 			if(src.beaker.volume > 0)
 				var/transfer_amount = REAGENTS_METABOLISM
-				if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent("blood"))
+				if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent(BLOOD))
 					// speed up transfer if the container has ONLY blood
 					transfer_amount = 4
 				src.beaker.reagents.trans_to(src.attached, transfer_amount)
@@ -124,7 +124,7 @@
 				return
 
 			// If the human is losing too much blood, beep.
-			if(T.vessel.get_reagent_amount("blood") < BLOOD_VOLUME_SAFE) if(prob(5))
+			if(T.vessel.get_reagent_amount(BLOOD) < BLOOD_VOLUME_SAFE) if(prob(5))
 				visible_message("\The [src] beeps loudly.")
 
 			var/datum/reagent/B = T.take_blood(beaker,amount)
@@ -137,7 +137,7 @@
 				update_icon()
 
 /obj/machinery/iv_drip/attack_hand(mob/user as mob)
-	if(isobserver(usr) || user.stat)
+	if(isobserver(usr) || user.incapacitated())
 		return
 	if(attached)
 		visible_message("[src.attached] is detached from \the [src].")
@@ -164,11 +164,17 @@
 		return
 
 	mode = !mode
-	to_chat(usr, "The [src] is now [mode ? "injecting" : "taking blood"].")
+	to_chat(usr, "<span class='info'>The [src] is now [mode ? "injecting" : "taking blood"].</span>")
+
+/obj/machinery/iv_drip/AltClick()
+	if(!usr.isUnconscious() && Adjacent(usr))
+		toggle_mode()
+		return
+	return ..()
 
 /obj/machinery/iv_drip/examine(mob/user)
 	..()
-	to_chat(user, "The [src] is [mode ? "injecting" : "taking blood"].")
+	to_chat(user, "<span class='info'>\The [src] is [mode ? "injecting" : "taking blood"].</span>")
 	if(beaker)
 		if(beaker.reagents && beaker.reagents.reagent_list.len)
 			to_chat(user, "<span class='info'>Attached is \a [beaker] with [beaker.reagents.total_volume] units of liquid.</span>")

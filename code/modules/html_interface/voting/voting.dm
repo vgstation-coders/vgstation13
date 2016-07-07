@@ -166,7 +166,7 @@ var/global/datum/controller/vote/vote = new()
 			text = "<b>Vote Tied Between:</b><br>"
 			for(var/option in winners)
 				text += "\t[option]<br>"
-			feedbackanswer = list2text(winners, " ")
+			feedbackanswer = jointext(winners, " ")
 		. = pick(winners)
 		if(mode == "map")
 			if(!feedbackanswer)
@@ -297,13 +297,13 @@ var/global/datum/controller/vote/vote = new()
 		to_chat(world, "<font color='purple'><b>[text]</b><br>Type vote to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
 		switch(vote_type)
 			if("crew_transfer")
-				to_chat(world, sound('sound/voice/Serithi/Shuttlehere.ogg'))
+				world << sound('sound/voice/Serithi/Shuttlehere.ogg')
 			if("gamemode")
-				to_chat(world, sound('sound/voice/Serithi/pretenddemoc.ogg'))
+				world << sound('sound/voice/Serithi/pretenddemoc.ogg')
 			if("custom")
-				to_chat(world, sound('sound/voice/Serithi/weneedvote.ogg'))
+				world << sound('sound/voice/Serithi/weneedvote.ogg')
 			if("map")
-				to_chat(world, sound('sound/misc/rockthevote.ogg'))
+				world << sound('sound/misc/rockthevote.ogg')
 		if(mode == "gamemode" && going)
 			going = 0
 			to_chat(world, "<font color='red'><b>Round start has been delayed.</b></font>")
@@ -330,7 +330,11 @@ var/global/datum/controller/vote/vote = new()
 		return
 
 	if(ismob(user))
-		user = user:client
+		var/mob/M = user
+		if(M.client)
+			user = M.client
+		else
+			CRASH("The user [M.name] of type [M.type] has been passed as a mob reference without a client to voting.interact()")
 
 	voting |= user
 	interface.show(user)

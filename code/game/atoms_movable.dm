@@ -4,7 +4,10 @@
 	var/w_type = NOT_RECYCLABLE  // Waste category for sorters. See setup.dm
 
 	layer = 3
-	var/last_move = null
+
+	var/last_move = null //Direction in which this atom last moved
+	var/last_moved = 0   //world.time when this atom last moved
+
 	var/anchored = 0
 	var/move_speed = 10
 	var/l_move_time = 1
@@ -30,10 +33,12 @@
 	//glide_size = 8
 
 	//Atom locking stuff.
-	var/list/locked_atoms
+	var/list/locked_atoms // Assoc list of atom = category.
 	var/atom/movable/locked_to
-	var/locked_should_lie = 0	//Whether locked mobs should lie down, used by beds.
-	var/lockflags = DENSE_WHEN_LOCKING | DENSE_WHEN_LOCKED
+	var/list/datum/locking_category/locking_categories // List of categories, unorganized.
+	var/list/datum/locking_category/locking_categories_name // Same as above but assoc with the key being the name or type.
+
+	var/lockflags = 0 // Flags for locking. DO NOT CONFUSE WITH /datum/locking_category/flags! These effect being locked.
 
 	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
 	var/internal_gravity = 0
@@ -44,7 +49,9 @@
 	if(flags & HEAR && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
-	locked_atoms = list()
+	locked_atoms            = list()
+	locking_categories      = list()
+	locking_categories_name = list()
 
 /atom/movable/Destroy()
 	if(flags & HEAR && !ismob(src))
@@ -53,13 +60,26 @@
 				returnToPool(VH)
 	gcDestroyed = "Bye, world!"
 	tag = null
-	loc = null
 
-	for(var/atom/movable/AM in locked_atoms)
+	var/turf/un_opaque
+	if (opacity && isturf(loc))
+		un_opaque = loc
+
+	loc = null
+	if (un_opaque)
+		un_opaque.recalc_atom_opacity()
+
+	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
 
-	if(locked_to)
+	if (locked_to)
 		locked_to.unlock_atom(src)
+
+	for (var/datum/locking_category/category in locking_categories)
+		qdel(category)
+
+	locking_categories      = null
+	locking_categories_name = null
 
 	..()
 
@@ -153,16 +173,20 @@
 					else if (step(src, WEST))
 						. = step(src, SOUTH)
 
+
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
 			for(var/atom/movable/AM in locked_atoms)
-				AM.forceMove(loc)
+				var/datum/locking_category/category = locked_atoms[AM]
+				category.update_lock(AM)
 
 	update_dir()
 
 	if(!loc || (loc == oldloc && oldloc != newLoc))
 		last_move = 0
 		return
+
+	update_client_hook(loc)
 
 	if(tether && can_pull_tether && !tether_pull)
 		tether.follow(src,oldloc)
@@ -172,6 +196,7 @@
 			tether_datum.Delete_Chain()
 
 	last_move = Dir
+	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
 	// Update on_moved listeners.
@@ -193,45 +218,33 @@
 		dir = new_dir
 		update_dir()
 
-//Atom locking, lock an atom to another atom, and the locked atom will move when the other atom moves.
-//Essentially buckling mobs to chairs. For all atoms.
-//Please don't lock atoms to other atoms if the atoms locked to expect for example a different type, it's basically bound to runtime/glitch.
-/atom/movable/proc/lock_atom(var/atom/movable/AM)
-	if(AM in locked_atoms || AM.locked_to || !istype(AM))
-		return
+// Atom locking, lock an atom to another atom, and the locked atom will move when the other atom moves.
+// Essentially buckling mobs to chairs. For all atoms.
+// Category is the locking category to lock this atom to, see /code/datums/locking_category.dm.
+// For category you should pass the typepath of the category, however strings should be used for slots made dynamically at runtime.
+/atom/movable/proc/lock_atom(var/atom/movable/AM, var/datum/locking_category/category = /datum/locking_category)
+	if (AM in locked_atoms || AM.locked_to || !istype(AM))
+		return 0
+
+	category = get_lock_cat(category)
+	if (!category) // String category which didn't exist.
+		return 0
 
 	AM.locked_to = src
-	locked_atoms += AM
 
-	AM.forceMove(loc)
-	AM.change_dir(dir, src)
-
-	if(ismob(AM))
-		var/mob/M = AM
-		M.update_canmove()
-
-	AM.anchored = 1
-
-	if((lockflags & DENSE_WHEN_LOCKING) && (AM.lockflags & DENSE_WHEN_LOCKED))
-		density = 1
+	locked_atoms[AM] = category
+	category.lock(AM)
 
 	return 1
 
 /atom/movable/proc/unlock_atom(var/atom/movable/AM)
-	if(!(AM in locked_atoms))
+	if (!locked_atoms.Find(AM))
 		return
 
-	locked_atoms -= AM
-	AM.locked_to = null
-
-	if(ismob(AM))
-		var/mob/M = AM
-		M.update_canmove()
-
-	AM.anchored = initial(AM.anchored)
-
-	if((lockflags & DENSE_WHEN_LOCKING) && (AM.lockflags && DENSE_WHEN_LOCKED))
-		density = initial(density)
+	var/datum/locking_category/category = locked_atoms[AM]
+	locked_atoms    -= AM
+	AM.locked_to     = null
+	category.unlock(AM)
 
 	return 1
 
@@ -240,6 +253,31 @@
 		return 0
 
 	locked_to.unlock_atom(src)
+
+/atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
+	. = locking_categories_name[category]
+
+	if (!.)
+		if (istext(category))
+			return
+
+		. = getFromPool(category, src)
+		locking_categories_name[category] = .
+		locking_categories += .
+
+/atom/movable/proc/get_locked(var/category)
+	if (!category)
+		return locked_atoms
+
+	if (locking_categories_name.Find(category))
+		var/datum/locking_category/C = locking_categories_name[category]
+		return C.locked
+
+	return list()
+
+/atom/movable/proc/is_locking(var/category) // Returns true if we have any locked atoms in this category.
+	var/list/atom/movable/locked = get_locked(category)
+	return locked && locked.len
 
 /atom/movable/proc/recycle(var/datum/materials/rec)
 	if(materials)
@@ -255,40 +293,57 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/Bump(atom/Obstacle, yes)
+/atom/movable/Bump(atom/Obstacle)
 	if(src.throwing)
 		src.throw_impact(Obstacle)
 		src.throwing = 0
 
-	if ((Obstacle && yes))
-		Obstacle.last_bumped = world.time
+	if (Obstacle)
 		Obstacle.Bumped(src)
-	return
-	..()
-	return
 
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0)
 	if(destination)
 		if(loc)
 			loc.Exited(src)
 
+		last_move = get_dir(loc, destination)
+		last_moved = world.time
+
 		loc = destination
+
 		loc.Entered(src)
 		if(isturf(destination))
 			var/area/A = get_area_master(destination)
 			A.Entered(src)
 
-		for(var/atom/movable/AM in loc)
-			AM.Crossed(src,no_tp)
+			for(var/atom/movable/AM in loc)
+				AM.Crossed(src,no_tp)
 
 
 		for(var/atom/movable/AM in locked_atoms)
-			AM.forceMove(loc)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
+
+		update_client_hook(destination)
 
 		// Update on_moved listeners.
 		INVOKE_EVENT(on_moved,list("loc"=loc))
 		return 1
 	return 0
+
+/atom/movable/proc/update_client_hook(atom/destination)
+	if(locate(/mob) in src)
+		for(var/client/C in parallax_on_clients)
+			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+				C.mob.hud_used.update_parallax()
+
+/mob/update_client_hook(atom/destination)
+	if(locate(/mob) in src)
+		for(var/client/C in parallax_on_clients)
+			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+				C.mob.hud_used.update_parallax()
+	else if(client && hud_used)
+		hud_used.update_parallax()
 
 /atom/movable/proc/forceEnter(atom/destination)
 	if(destination)
@@ -303,10 +358,13 @@
 		for(var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)
 
+		update_client_hook(destination)
 		return 1
 	return 0
 
 /atom/movable/proc/hit_check(var/speed, mob/user)
+	. = 1
+
 	if(src.throwing)
 		for(var/atom/A in get_turf(src))
 			if(A == src) continue
@@ -318,13 +376,15 @@
 
 				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
 					src.throwing = 0
+					. = 0
 
 			else if(isobj(A))
 				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
 					src.throw_impact(A, speed, user)
 					src.throwing = 0
+					. = 0
 
-/atom/movable/proc/throw_at(atom/target, range, speed, override = 1)
+/atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	if(!target || !src)	return 0
 	if(override)
 		sound_override = 1
@@ -333,6 +393,8 @@
 	throwing = 1
 	if(!speed)
 		speed = throw_speed
+	if(!fly_speed)
+		fly_speed = speed
 
 	var/mob/user
 	if(usr)
@@ -357,6 +419,9 @@
 	var/dist_travelled = 0
 	var/dist_since_sleep = 0
 	var/area/a = get_area(src.loc)
+
+	. = 1
+
 	if(dist_x > dist_y)
 		var/error = dist_x/2 - dist_y
 
@@ -375,25 +440,29 @@
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			a = get_area(src.loc)
@@ -407,25 +476,29 @@
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+					. = 0
 					break
+
 				src.Move(step)
-				hit_check(speed, user)
+				. = hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= speed)
+				if(dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 
@@ -449,6 +522,9 @@
 	. = ..()
 	verbs.len = 0
 
+/atom/movable/overlay/blob_act()
+	return
+
 /atom/movable/overlay/attackby(a, b, c)
 	if (src.master)
 		return src.master.attackby(a, b, c)
@@ -470,14 +546,15 @@
 	if(get_dist(T,loc) <= 1)
 		return 1
 	else
-		var/turf/U = A.loc
-		return U.Enter(src,loc)
+		var/turf/U = get_turf(A)
+		if(!U) return null
+		return src.forceMove(U)
 
 /////////////////////////////
 // SINGULOTH PULL REFACTOR
 /////////////////////////////
 /atom/movable/proc/canSingulothPull(var/obj/machinery/singularity/singulo)
-	return singuloCanEat()
+	return 1
 
 /atom/movable/proc/say_understands(var/mob/other)
 	return 1

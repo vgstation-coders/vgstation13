@@ -5,7 +5,7 @@
 // A plant analyzer, a bucket, a mini-hoe and then a proximity sensor (in that order)
 
 // Will water, weed and fertilize plants that need it
-// When emagged, it will "water", "weed" and "fertilize" humans instead
+// When emagged, it will WATER, "weed" and "fertilize" humans instead
 // Holds up to 10 fertilizers (only the type dispensed by the machines, not chemistry bottles)
 // It will fill up it's water tank at a sink when low.
 
@@ -30,6 +30,7 @@
 	desc = "The botanist's best friend."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "farmbot0"
+	icon_initial = "farmbot"
 	layer = 5.0
 	density = 1
 	anchored = 0
@@ -57,7 +58,7 @@
 
 /obj/machinery/bot/farmbot/New()
 	..()
-	src.icon_state = "farmbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	spawn (4)
 		src.botcard = new /obj/item/weapon/card/id(src)
 		src.botcard.access = req_access
@@ -79,13 +80,13 @@
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
-	src.icon_state = "farmbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/farmbot/turn_off()
 	..()
 	src.path = new()
-	src.icon_state = "farmbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/farmbot/attack_paw(mob/user as mob)
@@ -143,7 +144,7 @@
 		else
 			turn_on()
 
-	else if((href_list["water"]) && (!src.locked))
+	else if((href_list[WATER]) && (!src.locked))
 		setting_water = !setting_water
 	else if((href_list["refill"]) && (!src.locked))
 		setting_refill = !setting_refill
@@ -158,7 +159,7 @@
 	else if((href_list["ignoreEmpty"]) && (!src.locked))
 		setting_ignoreEmpty = !setting_ignoreEmpty
 	else if (href_list["eject"] )
-		flick("farmbot_hatch",src)
+		flick("[src.icon_initial]_hatch",src)
 		for (var/obj/item/weapon/reagent_containers/glass/fertilizer/fert in contents)
 			fert.loc = get_turf(src)
 
@@ -180,7 +181,7 @@
 			return
 		if(user.drop_item(W, src))
 			to_chat(user, "You insert [W].")
-			flick("farmbot_hatch",src)
+			flick("[src.icon_initial]_hatch",src)
 			src.updateUsrDialog()
 			return
 
@@ -193,10 +194,10 @@
 	spawn(0)
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
-	flick("farmbot_broke", src)
+	flick("[src.icon_initial]_broke", src)
 	src.emagged = 1
 	src.on = 1
-	src.icon_state = "farmbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	target = null
 	mode = FARMBOT_MODE_WAITING //Give the emagger a chance to get away! 15 seconds should be good.
 	spawn(150)
@@ -235,7 +236,7 @@
 		return
 
 	if ( emagged && prob(1) )
-		flick("farmbot_broke", src)
+		flick("[src.icon_initial]_broke", src)
 
 	if ( mode == FARMBOT_MODE_WAITING )
 		return
@@ -402,7 +403,7 @@
 			fert.loc = src.loc
 			fert.throw_at(target, 16, 3)
 		src.visible_message("<span class='danger'>[src] launches [fert.name] at [target.name]!</span>")
-		flick("farmbot_broke", src)
+		flick("[src.icon_initial]_broke", src)
 		spawn (FARMBOT_EMAG_DELAY)
 			mode = 0
 			target = null
@@ -415,20 +416,20 @@
 		qdel (fert)
 		fert = null
 		//tray.updateicon()
-		icon_state = "farmbot_fertile"
+		icon_state = "[src.icon_initial]_fertile"
 		mode = FARMBOT_MODE_WAITING
 
 		spawn (FARMBOT_ACTION_DELAY)
 			mode = 0
 			target = null
 		spawn (FARMBOT_ANIMATION_TIME)
-			icon_state = "farmbot[src.on]"
+			icon_state = "[src.icon_initial][src.on]"
 		return 1
 
 /obj/machinery/bot/farmbot/proc/weed()
-	icon_state = "farmbot_hoe"
+	icon_state = "[src.icon_initial]_hoe"
 	spawn(FARMBOT_ANIMATION_TIME)
-		icon_state = "farmbot[src.on]"
+		icon_state = "[src.icon_initial][src.on]"
 
 	if ( emagged ) // Warning, humans infested with weeds!
 		mode = FARMBOT_MODE_WAITING
@@ -439,12 +440,12 @@
 			src.visible_message("<span class='danger'>[src] swings wildly at [target] with a minihoe, missing completely!</span>")
 
 		else // yayyy take that weeds~
-			var/attackVerb = pick("slashed", "sliced", "cut", "clawed")
+			var/attackVerb = pick("slashes", "slices", "cuts", "claws")
 			var /mob/living/carbon/human/human = target
 
 			src.visible_message("<span class='danger'>[src] [attackVerb] [human]!</span>")
 			var/damage = 15
-			var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
+			var/dam_zone = pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
 			var/datum/organ/external/affecting = human.get_organ(ran_zone(dam_zone))
 			var/armor = human.run_armor_check(affecting, "melee")
 			human.apply_damage(damage,BRUTE,affecting,armor)
@@ -464,9 +465,9 @@
 		target = null
 		return 0
 
-	icon_state = "farmbot_water"
+	icon_state = "[src.icon_initial]_water"
 	spawn(FARMBOT_ANIMATION_TIME)
-		icon_state = "farmbot[src.on]"
+		icon_state = "[src.icon_initial][src.on]"
 
 	if ( emagged ) // warning, humans are thirsty!
 		var splashAmount = min(70,tank.reagents.total_volume)
@@ -484,11 +485,11 @@
 			mode = 0
 	else
 		var /obj/machinery/portable_atmospherics/hydroponics/tray = target
-		var/b_amount = tank.reagents.get_reagent_amount("water")
+		var/b_amount = tank.reagents.get_reagent_amount(WATER)
 		if(b_amount > 0 && tray.waterlevel < 100)
 			if(b_amount + tray.waterlevel > 100)
 				b_amount = 100 - tray.waterlevel
-			tank.reagents.remove_reagent("water", b_amount)
+			tank.reagents.remove_reagent(WATER, b_amount)
 			tray.adjust_water(b_amount)
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 
@@ -509,7 +510,7 @@
 	spawn(300)
 		src.visible_message("<span class='notice'>[src] finishes filling it's tank.</span>")
 		src.mode = 0
-		tank.reagents.add_reagent("water", tank.reagents.maximum_volume - tank.reagents.total_volume )
+		tank.reagents.add_reagent(WATER, tank.reagents.maximum_volume - tank.reagents.total_volume )
 		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 
 
@@ -520,7 +521,7 @@
 	icon_state = "water_arm"
 	var/build_step = 0
 	var/created_name = "Farmbot" //To preserve the name if it's a unique farmbot I guess
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 
 	New()
 		..()

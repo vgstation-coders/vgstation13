@@ -20,7 +20,6 @@
 	response_harm   = "stamps on the"
 	density = 0
 	var/_color //brown, gray and white, leave blank for random
-	layer = MOB_LAYER
 	min_oxy = 16 //Require atleast 16kPA oxygen
 	minbodytemp = 223		//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
@@ -35,7 +34,7 @@
 	..()
 	if(!stat && prob(speak_chance))
 		for(var/mob/M in view())
-			to_chat(M, 'sound/effects/mousesqueek.ogg')
+			M << 'sound/effects/mousesqueek.ogg'
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5))
 		stat = UNCONSCIOUS
@@ -97,6 +96,7 @@
 
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
+		plane = PLANE_TURF
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
 		/*
 		for(var/mob/O in oviewers(src, null))
@@ -105,6 +105,7 @@
 		*/
 	else
 		layer = MOB_LAYER
+		plane = PLANE_MOB
 		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
 		/*
 		for(var/mob/O in oviewers(src, null))
@@ -119,7 +120,7 @@
 	var/turf/target_turf = get_step(src,dir)
 	//CanReachThrough(src.loc, target_turf, src)
 	var/can_fit_under = 0
-	if(target_turf.ZCanPass(get_turf(src),1))
+	if(target_turf.ZCross(get_turf(src),1))
 		can_fit_under = 1
 
 	..(dir)
@@ -128,7 +129,7 @@
 	for(var/d in cardinal)
 		var/turf/O = get_step(T,d)
 		//Simple pass check.
-		if(O.ZCanPass(T, 1) && !(O in open) && !(O in closed) && O in possibles)
+		if(O.ZCross(T, 1) && !(O in open) && !(O in closed) && O in possibles)
 			open += O
 			*/
 
@@ -137,14 +138,13 @@
 
 /mob/living/simple_animal/mouse/start_pulling(var/atom/movable/AM)//Prevents mouse from pulling things
 	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
-	return
 
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
 		if(!stat)
 			var/mob/M = AM
-			to_chat(M, "<span class='notice'>\icon[src] Squeek!</span>")
-			to_chat(M, 'sound/effects/mousesqueek.ogg')
+			to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
+			M << 'sound/effects/mousesqueek.ogg'
 	..()
 
 /mob/living/simple_animal/mouse/Die()

@@ -23,6 +23,11 @@ var/global/datum/controller/occupations/job_master
 		var/datum/job/job = new J()
 		if(!job)	continue
 		if(job.faction != faction)	continue
+
+		if(job.must_be_map_enabled)
+			if(!map) continue
+			if(!map.enabled_jobs.Find(job.type)) continue
+
 		occupations += job
 
 
@@ -97,10 +102,10 @@ var/global/datum/controller/occupations/job_master
 		if(!job)
 			continue
 
-		if(istype(job, GetJob("Assistant"))) // We don't want to give him assistant, that's boring!
+		if(job.no_random_roll)
 			continue
 
-		if(job in command_positions) //If you want a command position, select it!
+		if(job.title in command_positions) //If you want a command position, select it!
 			continue
 
 		if(jobban_isbanned(player, job.title))
@@ -319,16 +324,18 @@ var/global/datum/controller/occupations/job_master
 				count = (officer.current_positions + warden.current_positions + hos.current_positions)
 				if(master_assistant.current_positions > (config.assistantratio * count))
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
 						unassigned -= player
 						continue
+
 			Debug("AC2 Assistant located, Player: [player]")
 			AssignRole(player, "Assistant")
 
 	//For ones returning to lobby
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == RETURN_TO_LOBBY)
-			to_chat(player, "<span class='danger'>You have not been placed in the game due to job related restrictions.")
+			to_chat(player, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 			player.ready = 0
 			unassigned -= player
 	return 1
@@ -356,41 +363,43 @@ var/global/datum/controller/occupations/job_master
 		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
 			H.loc = S.loc
 
-	//give them an account in the station database
-	// Total between $200 and $500
-	var/balance_bank = rand(100,250)
-	var/balance_wallet = rand(100,250)
-	if(centcomm_account_db)
-		var/datum/money_account/M = create_account(H.real_name, balance_bank , null)
-		if(H.mind)
-			var/remembered_info = ""
-			remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
-			remembered_info += "<b>Your account pin is:</b> [M.remote_access_pin]<br>"
-			remembered_info += "<b>Your bank account funds are:</b> $[balance_bank]<br>"
-			remembered_info += "<b>Your virtual wallet funds are:</b> $[balance_wallet]<br>"
+	var/balance_wallet = 0
+	if(job && !job.no_starting_money)
+		//give them an account in the station database
+		// Total between $200 and $500
+		var/balance_bank = rand(100,250)
+		balance_wallet = rand(100,250)
+		if(centcomm_account_db)
+			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE)
+			if(H.mind)
+				var/remembered_info = ""
+				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
+				remembered_info += "<b>Your account pin is:</b> [M.remote_access_pin]<br>"
+				remembered_info += "<b>Your bank account funds are:</b> $[balance_bank]<br>"
+				remembered_info += "<b>Your virtual wallet funds are:</b> $[balance_wallet]<br>"
 
-			if(M.transaction_log.len)
-				var/datum/transaction/T = M.transaction_log[1]
-				remembered_info += "<b>Your account was created:</b> [T.time], [T.date] at [T.source_terminal]<br>"
-			H.mind.store_memory(remembered_info)
+				if(M.transaction_log.len)
+					var/datum/transaction/T = M.transaction_log[1]
+					remembered_info += "<b>Your account was created:</b> [T.time], [T.date] at [T.source_terminal]<br>"
+				H.mind.store_memory(remembered_info)
 
-			H.mind.initial_account = M
+				H.mind.initial_account = M
 
-		// If they're head, give them the account info for their department
-		if(H.mind && job.head_position)
-			var/remembered_info = ""
-			var/datum/money_account/department_account = department_accounts[job.department]
+			// If they're head, give them the account info for their department
+			if(H.mind && job.head_position)
+				var/remembered_info = ""
+				var/datum/money_account/department_account = department_accounts[job.department]
 
-			if(department_account)
-				remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"
-				remembered_info += "<b>Your department's account pin is:</b> [department_account.remote_access_pin]<br>"
-				remembered_info += "<b>Your department's account funds are:</b> $[department_account.money]<br>"
+				if(department_account)
+					remembered_info += "<b>Your department's account number is:</b> #[department_account.account_number]<br>"
+					remembered_info += "<b>Your department's account pin is:</b> [department_account.remote_access_pin]<br>"
+					remembered_info += "<b>Your department's account funds are:</b> $[department_account.money]<br>"
 
-			H.mind.store_memory(remembered_info)
+				H.mind.store_memory(remembered_info)
 
-		spawn()
-			to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
-			to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
+			spawn()
+				to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
+				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
 
 	var/alt_title = null
 	if(H.mind)
@@ -412,7 +421,7 @@ var/global/datum/controller/occupations/job_master
 				switch(H.backbag) //BS12 EDIT
 					if(1)
 						if(H.species.survival_gear)
-							H.equip_to_slot_or_del(new H.species.survival_gear(H), slot_r_hand)
+							H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 					if(2)
 						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack(H)
 						if(H.species.survival_gear)
@@ -430,14 +439,18 @@ var/global/datum/controller/occupations/job_master
 						H.equip_to_slot_or_del(BPK, slot_back,1)
 				H.species.equip(H)
 
-
-	to_chat(H, "<B>You are the [alt_title ? alt_title : rank].</B>")
-	to_chat(H, "<b>As the [alt_title ? alt_title : rank] you answer directly to [job.supervisors]. Special circumstances may change this.</b>")
-	if(job.req_admin_notify)
-		to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
+	if(job)
+		job.introduce(H, (alt_title ? alt_title : rank))
+	else
+		to_chat(H, "<B>You are the [alt_title ? alt_title : rank].</B>")
+		to_chat(H, "<b>As the [alt_title ? alt_title : rank] you answer directly to [job.supervisors]. Special circumstances may change this.</b>")
+		if(job.req_admin_notify)
+			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
 	spawnId(H, rank, alt_title, balance_wallet)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
+
+	if(!job || !job.no_headset)
+		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
 
 	//Gives glasses to the vision impaired
 	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
@@ -447,8 +460,8 @@ var/global/datum/controller/occupations/job_master
 			G.prescription = 1
 //		H.update_icons()
 	//Gives wheelchair to those missing both of their feet
-	var/datum/organ/external/left_leg = H.get_organ("l_foot")
-	var/datum/organ/external/right_leg = H.get_organ("r_foot")
+	var/datum/organ/external/left_leg = H.get_organ(LIMB_LEFT_FOOT)
+	var/datum/organ/external/right_leg = H.get_organ(LIMB_RIGHT_FOOT)
 
 	if(!joined_late) //late joins get their location set elsewhere
 		if( (!left_leg || left_leg.status & ORGAN_DESTROYED) && (!right_leg || right_leg.status & ORGAN_DESTROYED) ) //If the character is missing both of his feet
@@ -467,14 +480,18 @@ var/global/datum/controller/occupations/job_master
 			job = J
 			break
 
+	if(!job || !job.no_pda)
+		H.equip_or_collect(new job.pdatype(H), job.pdaslot)
+
 	if(job)
-		if(job.title == "Cyborg" || job.title=="Mobile MMI")
+		if(job.no_id)
 			return
 		else
 			C = new job.idtype(H)
 			C.access = job.get_access()
 	else
 		C = new /obj/item/weapon/card/id(H)
+
 	if(C)
 		C.registered_name = H.real_name
 		C.rank = rank
@@ -487,9 +504,9 @@ var/global/datum/controller/occupations/job_master
 
 		H.equip_or_collect(C, slot_wear_id)
 
-		C.update_virtual_wallet(wallet_funds)
+		if(C.virtual_wallet)
+			C.update_virtual_wallet(wallet_funds)
 
-	H.equip_or_collect(new job.pdatype(H), job.pdaslot)
 	if(locate(/obj/item/device/pda,H))
 		var/obj/item/device/pda/pda = locate(/obj/item/device/pda,H)
 		pda.owner = H.real_name
@@ -530,7 +547,7 @@ var/global/datum/controller/occupations/job_master
 			if(!J)	continue
 			J.total_positions = text2num(value)
 			J.spawn_positions = text2num(value)
-			if(name == "AI" || name == "Cyborg" || name == "Mobile MMI")//I dont like this here but it will do for now
+			if(name == "AI" || name == "Cyborg" || name == "Mobile MMI" || name == "Trader")//I dont like this here but it will do for now
 				J.total_positions = 0
 
 	return 1

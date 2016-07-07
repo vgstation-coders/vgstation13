@@ -18,8 +18,6 @@
 			return 0
 		if (affected.status & ORGAN_DESTROYED)
 			return 0
-		if (target_zone == "head" && target.species && (target.species.flags & IS_SYNTHETIC))
-			return 1
 		if (affected.status & ORGAN_ROBOT)
 			return 0
 		if (affected.status & ORGAN_PEG)
@@ -251,10 +249,10 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/msg = "[user] starts to pry open the incision on [target]'s [affected.display_name] with \the [tool]."
 	var/self_msg = "You start to pry open the incision on [target]'s [affected.display_name] with \the [tool]."
-	if (target_zone == "chest")
+	if (target_zone == LIMB_CHEST)
 		msg = "[user] starts to separate the ribcage and rearrange the organs in [target]'s torso with \the [tool]."
 		self_msg = "You start to separate the ribcage and rearrange the organs in [target]'s torso with \the [tool]."
-	if (target_zone == "groin")
+	if (target_zone == LIMB_GROIN)
 		msg = "[user] starts to pry open the incision and rearrange the organs in [target]'s lower abdomen with \the [tool]."
 		self_msg = "You start to pry open the incision and rearrange the organs in [target]'s lower abdomen with \the [tool]."
 	user.visible_message(msg, self_msg)
@@ -265,10 +263,10 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/msg = "<span class='notice'>[user] keeps the incision open on [target]'s [affected.display_name] with \the [tool].</span>"
 	var/self_msg = "<span class='notice'>You keep the incision open on [target]'s [affected.display_name] with \the [tool].</span>"
-	if (target_zone == "chest")
+	if (target_zone == LIMB_CHEST)
 		msg = "<span class='notice'>[user] keeps the ribcage open on [target]'s torso with \the [tool].</span>"
 		self_msg = "<span class='notice'>You keep the ribcage open on [target]'s torso with \the [tool].</span>"
-	if (target_zone == "groin")
+	if (target_zone == LIMB_GROIN)
 		msg = "<span class='notice'>[user] keeps the incision open on [target]'s lower abdomen with \the [tool].</span>"
 		self_msg = "<span class='notice'>You keep the incision open on [target]'s lower abdomen with \the [tool].</span>"
 	user.visible_message(msg, self_msg)
@@ -278,10 +276,10 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/msg = "<span class='warning'>[user]'s hand slips, tearing the edges of the incision on [target]'s [affected.display_name] with \the [tool]!</span>"
 	var/self_msg = "<span class='warning'>Your hand slips, tearing the edges of the incision on [target]'s [affected.display_name] with \the [tool]!</span>"
-	if (target_zone == "chest")
+	if (target_zone == LIMB_CHEST)
 		msg = "<span class='warning'>[user]'s hand slips, damaging several organs in [target]'s torso with \the [tool]!</span>"
 		self_msg = "<span class='warning'>Your hand slips, damaging several organs in [target]'s torso with \the [tool]!</span>"
-	if (target_zone == "groin")
+	if (target_zone == LIMB_GROIN)
 		msg = "<span class='warning'>[user]'s hand slips, damaging several organs in [target]'s lower abdomen with \the [tool]</span>"
 		self_msg = "<span class='warning'>Your hand slips, damaging several organs in [target]'s lower abdomen with \the [tool]!</span>"
 	user.visible_message(msg, self_msg)
@@ -338,7 +336,64 @@
 	"<span class='warning'>Your hand slips, leaving a small burn on [target]'s [affected.display_name] with \the [tool]!</span>")
 	target.apply_damage(3, BURN, affected)
 
+/*
+////////FIX LIMB CANCER////////
 
+/datum/surgery_step/generic/fix_limb_cancer
+	allowed_tools = list(
+		/obj/item/weapon/FixOVein = 100,
+		/obj/item/stack/cable_coil = 75,
+		)
+
+	priority = 4 //Maximum priority, even higher than fixing brain hematomas
+	min_duration = 90
+	max_duration = 110
+	blood_level = 1
+
+/datum/surgery_step/internal/fix_organ_cancer/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+
+	if(..())
+		var/datum/organ/external/affected = target.get_organ(target_zone)
+
+		var/cancer_found = 0
+		if(affected.cancer_stage >= 1)
+			cancer_found = 1
+		return affected.open == 1 && cancer_found
+
+/datum/surgery_step/internal/fix_organ_cancer/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+
+	if(!hasorgans(target))
+		return
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+
+	if(affected && affected.cancer_stage >= 1)
+		user.visible_message("[user] starts carefully removing the cancerous growths in [target]'s [affected.name] with \the [tool].", \
+		"You start carefully removing the cancerous growths in [target]'s [affected.name] with \the [tool]." )
+
+	target.custom_pain("The pain in your [affected.display_name] is living hell!", 1)
+	..()
+
+/datum/surgery_step/internal/fix_organ_cancer/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+
+	if(!hasorgans(target))
+		return
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+
+	if(affected && affected.cancer_stage >= 1)
+		user.visible_message("[user] carefully removes and mends the area around the cancerous growths in [target]'s [affected.name] with \the [tool].", \
+		"You carefully remove and mends the area around the cancerous growths in [target]'s [affected.name] with \the [tool]." )
+		affected.cancer_stage = 0
+
+/datum/surgery_step/internal/fix_organ_cancer/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+
+	if(!hasorgans(target))
+		return
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+
+	user.visible_message("<span class='warning'>[user]'s hand slips, getting mess in and tearing the inside of [target]'s [affected.display_name] with \the [tool]!</span>", \
+	"<span class='warning'>Your hand slips, getting mess in and tearing the inside of [target]'s [affected.display_name] with \the [tool]!</span>")
+	affected.createwound(CUT, 10)
+*/
 
 ////////CUT LIMB/////////
 /datum/surgery_step/generic/cut_limb
@@ -361,7 +416,7 @@
 		return 0
 	if (affected.status & ORGAN_DESTROYED)
 		return 0
-	return target_zone != "chest" && target_zone != "groin" && target_zone != "head"
+	return target_zone != LIMB_CHEST && target_zone != LIMB_GROIN && target_zone != LIMB_HEAD
 
 /datum/surgery_step/generic/cut_limb/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

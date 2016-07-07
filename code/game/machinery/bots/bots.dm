@@ -3,8 +3,10 @@
 /obj/machinery/bot
 	icon = 'icons/obj/aibots.dmi'
 	layer = MOB_LAYER
+	plane = PLANE_MOB
 	luminosity = 3
 	use_power = 0
+	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/on = 1
 	var/health = 0 //do not forget to set health for your bot!
@@ -28,6 +30,12 @@
 			I.bots += src
 	..()
 
+/obj/machinery/bot/Destroy()
+	. = ..()
+	if(botcard)
+		qdel(botcard)
+		botcard = null
+
 /obj/machinery/bot/proc/turn_on()
 	if(stat)	return 0
 	on = 1
@@ -49,9 +57,10 @@
 	if(locked)
 		locked = 0
 		emagged = 1
-		to_chat(user, "<span class='warning'>You bypass [src]'s controls.</span>")
+		to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
 	if(!locked && open)
 		emagged = 2
+		to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
 /obj/machinery/bot/examine(mob/user)
 	..()
@@ -104,10 +113,9 @@
 /obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(flags & INVULNERABLE)
 		return
-	if(istype(W, /obj/item/weapon/screwdriver))
-		if(!locked)
-			open = !open
-			to_chat(user, "<span class='notice'>Maintenance panel is now [src.open ? "opened" : "closed"].</span>")
+	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
+		open = !open
+		to_chat(user, "<span class='notice'>Maintenance panel is now [src.open ? "opened" : "closed"].</span>")
 	else if(istype(W, /obj/item/weapon/weldingtool))
 		if(health < maxhealth)
 			if(open)
@@ -130,6 +138,15 @@
 			healthcheck()
 		else
 			..()
+
+/obj/machinery/bot/kick_act(mob/living/H)
+	..()
+
+	if(flags & INVULNERABLE)
+		return
+
+	health -= rand(1,8) * brute_dam_coeff
+	healthcheck()
 
 /obj/machinery/bot/bullet_act(var/obj/item/projectile/Proj)
 	if(flags & INVULNERABLE)

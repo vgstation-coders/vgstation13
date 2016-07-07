@@ -22,7 +22,7 @@
 					circuit.installed = 1
 					state++
 					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-			if(istype(W, /obj/item/weapon/crowbar))
+			if(iscrowbar(W))
 				var/obj/machinery/constructable_frame/machine_frame/MF = new /obj/machinery/constructable_frame/machine_frame(T)
 				MF.state = 1
 				MF.set_build_state(1)
@@ -43,7 +43,7 @@
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				qdel(src)
 				return
-			if(istype(W, /obj/item/weapon/crowbar))
+			if(iscrowbar(W))
 				circuit.loc=T
 				circuit.installed = 0
 				circuit=null
@@ -94,6 +94,7 @@
 /obj/structure/displaycase/gooncode/New()
 	..()
 	occupant=new /obj/item/toy/gooncode(src)
+	desc = "The glass is cracked and there are traces of something leaking out."
 	locked=1
 	req_access=list(access_captain)
 	update_icon()
@@ -109,7 +110,7 @@
 	..()
 	var/msg = "<span class='info'>Peering through the glass, you see that it contains:</span>"
 	if(occupant)
-		msg+= "\icon[occupant] <span class='notice'>\A [occupant]</span>"
+		msg+= "[bicon(occupant)] <span class='notice'>\A [occupant]</span>"
 	else
 		msg+= "Nothing."
 	to_chat(user, msg)
@@ -189,11 +190,11 @@
 			return
 		locked = !locked
 		if(!locked)
-			to_chat(user, "\icon[src] <span class='notice'>\The [src] clicks as locks release, and it slowly opens for you.</span>")
+			to_chat(user, "[bicon(src)] <span class='notice'>\The [src] clicks as locks release, and it slowly opens for you.</span>")
 		else
-			to_chat(user, "\icon[src] <span class='notice'>You close \the [src] and swipe your card, locking it.</span>")
+			to_chat(user, "[bicon(src)] <span class='notice'>You close \the [src] and swipe your card, locking it.</span>")
 		update_icon()
-	else if(istype(W, /obj/item/weapon/crowbar) && (!locked || destroyed))
+	else if(iscrowbar(W) && (!locked || destroyed))
 		user.visible_message("[user.name] pries \the [src] apart.", \
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
@@ -271,9 +272,19 @@
 					dump()
 					update_icon()
 				else
-					to_chat(src, "\icon[src] <span class='rose'>\The [src] is empty!</span>")
+					to_chat(src, "[bicon(src)] <span class='rose'>\The [src] is empty!</span>")
 		else
 			user.delayNextAttack(10) // prevent spam
 			user.visible_message("[user.name] gently runs their hands over \the [src] in appreciation of its contents.", \
 				"You gently run your hands over \the [src] in appreciation of its contents.", \
 				"You hear someone streaking glass with their greasy hands.")
+
+
+/obj/structure/displaycase/broken
+	name = "display case"
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "glassbox2b"
+	desc = "A display case for prized possessions."
+	density = 0
+	health = 0
+	destroyed = 1

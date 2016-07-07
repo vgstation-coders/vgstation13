@@ -8,7 +8,7 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	origin_tech = "syndicate=4;magnets=4"
 	var/cham_proj_scan = 1 //Scanning function starts on
 	var/can_use = 1
@@ -110,6 +110,7 @@
 			var/mob/M = A
 			M.reset_view(null)
 			M.layer = MOB_LAYER //Reset the mob's layer
+			M.plane = PLANE_MOB
 
 /obj/effect/dummy/chameleon
 	name = ""
@@ -128,6 +129,7 @@
 	dir = O.dir
 	M.loc = src
 	M.layer = OBJ_LAYER //Needed for some things, notably lockers
+	M.plane = PLANE_OBJ
 	master = C
 	master.active_dummy = src
 

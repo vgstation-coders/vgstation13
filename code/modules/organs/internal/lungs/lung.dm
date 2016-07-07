@@ -5,7 +5,7 @@
 
 /datum/organ/internal/lungs
 	name = "lungs"
-	parent_organ = "chest"
+	parent_organ = LIMB_CHEST
 	removed_type = /obj/item/organ/lungs
 
 	// /vg/ now delegates breathing to the appropriate organ.
@@ -14,7 +14,7 @@
 	var/list/datum/lung_gas/gasses = list(
 		new /datum/lung_gas/metabolizable("oxygen",            min_pp=16, max_pp=140),
 		new /datum/lung_gas/waste("carbon_dioxide",            max_pp=10),
-		new /datum/lung_gas/toxic("toxins",                    max_pp=0.5, max_pp_mask=5, reagent_id="plasma", reagent_mult=10),
+		new /datum/lung_gas/toxic("toxins",                    max_pp=0.5, max_pp_mask=5, reagent_id=PLASMA, reagent_mult=0.1),
 		new /datum/lung_gas/sleep_agent("/datum/gas/sleeping_agent", trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
 
@@ -58,34 +58,34 @@
 		else
 			switch(breath.temperature)
 				if(-INFINITY to H.species.cold_level_3)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, "head", used_weapon = "Excessive Cold")
+					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)
 
 				if(H.species.cold_level_3 to H.species.cold_level_2)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_2, BURN, "head", used_weapon = "Excessive Cold")
+					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)
 
 				if(H.species.cold_level_2 to H.species.cold_level_1)
-					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_1, BURN, "head", used_weapon = "Excessive Cold")
+					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)
 
 				if(H.species.heat_level_1 to H.species.heat_level_2)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_1, BURN, "head", used_weapon = "Excessive Heat")
+					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
 					H.fire_alert = max(H.fire_alert, 2)
 
 				if(H.species.heat_level_2 to H.species.heat_level_3)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_2, BURN, "head", used_weapon = "Excessive Heat")
+					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
 					H.fire_alert = max(H.fire_alert, 2)
 
 				if(H.species.heat_level_3 to INFINITY)
-					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_3, BURN, "head", used_weapon = "Excessive Heat")
+					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
 					H.fire_alert = max(H.fire_alert, 2)
 
 /datum/organ/internal/lungs/process()
 	..()
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(5))
-			owner.emote("cough")		//respitory tract infection
+			owner.audible_cough()		//respitory tract infection
 
 	if(is_bruised())
 		if(prob(2))
@@ -103,7 +103,7 @@
 	gasses = list(
 		new /datum/lung_gas/metabolizable("nitrogen",          min_pp=16, max_pp=140),
 		new /datum/lung_gas/waste("carbon_dioxide",            max_pp=10), // I guess? Ideally it'd be some sort of nitrogen compound.  Maybe N2O?
-		new /datum/lung_gas/toxic("oxygen",                    max_pp=0.5, max_pp_mask=0, reagent_id="oxygen", reagent_mult=1000),
+		new /datum/lung_gas/toxic(OXYGEN,                    max_pp=0.5, max_pp_mask=0, reagent_id=OXYGEN, reagent_mult=0.1),
 		new /datum/lung_gas/sleep_agent("/datum/gas/sleeping_agent", trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
 
@@ -113,7 +113,7 @@
 	removed_type = /obj/item/organ/lungs/plasmaman
 
 	gasses = list(
-		new /datum/lung_gas/metabolizable("plasma", min_pp=16, max_pp=140),
-		new /datum/lung_gas/waste("oxygen",         max_pp=10), // ???
+		new /datum/lung_gas/metabolizable("toxins", min_pp=16, max_pp=140),
+		new /datum/lung_gas/waste("oxygen",         max_pp=0),
 		new /datum/lung_gas/sleep_agent("/datum/gas/sleeping_agent", trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)

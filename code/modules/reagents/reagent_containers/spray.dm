@@ -1,5 +1,5 @@
 // Reagents to log when sprayed
-var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
+var/global/list/logged_sprayed_reagents = list(SACID, PACID, LUBE, FUEL)
 
 /obj/item/weapon/reagent_containers/spray
 	name = "spray bottle"
@@ -10,7 +10,7 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 	flags = OPENCONTAINER|FPRINT
 	slot_flags = SLOT_BELT
 	throwforce = 3
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 10
 	amount_per_transfer_from_this = 10
@@ -90,6 +90,12 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
 	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this] units per spray.</span>")
 
+/obj/item/weapon/reagent_containers/spray/restock()
+	if(name == "Polyacid spray")
+		reagents.add_reagent(PACID, 2)
+	else if(name == "Lube spray")
+		reagents.add_reagent(LUBE, 2)
+
 /obj/item/weapon/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puff
 	var/transfer_amount = amount_per_transfer_from_this
@@ -110,18 +116,6 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
 
-/obj/item/weapon/reagent_containers/spray/verb/empty()
-
-
-	set name = "Empty Spray Bottle"
-	set category = "Object"
-	set src in usr
-
-	if(isturf(usr.loc))
-		to_chat(usr, "<span class='notice'>You empty the [src] onto the floor.</span>")
-		reagents.reaction(usr.loc)
-		spawn(5) src.reagents.clear_reagents()
-
 //space cleaner
 /obj/item/weapon/reagent_containers/spray/cleaner
 	name = "space cleaner"
@@ -130,7 +124,7 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 
 /obj/item/weapon/reagent_containers/spray/cleaner/New()
 	..()
-	reagents.add_reagent("cleaner", 250)
+	reagents.add_reagent(CLEANER, 250)
 
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
@@ -145,7 +139,7 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 
 /obj/item/weapon/reagent_containers/spray/pepper/New()
 	..()
-	reagents.add_reagent("condensedcapsaicin", 40)
+	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
@@ -158,7 +152,7 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 
 /obj/item/weapon/reagent_containers/spray/plantbgone/New()
 	..()
-	reagents.add_reagent("plantbgone", 100)
+	reagents.add_reagent(PLANTBGONE, 100)
 
 
 //chemsprayer
@@ -169,7 +163,7 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 	icon_state = "chemsprayer"
 	item_state = "chemsprayer"
 	throwforce = 3
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	volume = 600
 	origin_tech = "combat=3;materials=3;engineering=3;syndicate=5"
 
@@ -213,4 +207,3 @@ var/global/list/logged_sprayed_reagents = list("sacid", "pacid", "lube", "fuel")
 			returnToPool(D)
 
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
-

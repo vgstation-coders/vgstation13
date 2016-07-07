@@ -25,8 +25,8 @@
 		user.client.remove_gun_icons()
 	return ..()
 
-/obj/item/weapon/gun/equipped(var/mob/user, var/slot)
-	if (slot != slot_l_hand && slot != slot_r_hand)
+/obj/item/weapon/gun/equipped(var/mob/user, var/slot, hand_index)
+	if(!hand_index)
 		stop_aim()
 		if (user.client)
 			user.client.remove_gun_icons()
@@ -159,7 +159,7 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 	else
 		return
 	for(var/mob/living/K in viewers(usr))
-		to_chat(K, 'sound/weapons/TargetOn.ogg')
+		K << 'sound/weapons/TargetOn.ogg'
 
 	if(!targeted_by) targeted_by = list()
 	targeted_by += I
@@ -217,7 +217,7 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
 	if(!I.silenced)
 		for(var/mob/living/M in viewers(src))
-			to_chat(M, 'sound/weapons/TargetOff.ogg')
+			M << 'sound/weapons/TargetOff.ogg'
 	targeted_by -= I
 	I.target.Remove(src) //De-target them
 	if(!I.target.len)

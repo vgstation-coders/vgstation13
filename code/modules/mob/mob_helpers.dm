@@ -14,6 +14,62 @@
 	if(isStunned() || restrained())
 		return 1
 
+/mob/proc/get_screen_colour()
+	if(!client)
+		return 0
+	if(M_NOIR in mutations)
+		return NOIRMATRIX
+
+/mob/proc/can_wield()
+	return 0
+
+/mob/dead/observer/get_screen_colour()
+	return default_colour_matrix
+
+/mob/living/simple_animal/get_screen_colour()
+	. = ..()
+	if(.)
+		return .
+	else if(src.colourmatrix.len)
+		return src.colourmatrix
+
+/mob/living/carbon/human/get_screen_colour()
+	. = ..()
+	if(.)
+		return .
+	else if(has_reagent_in_blood(DETCOFFEE))
+		return NOIRMATRIX
+	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
+	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
+		return eyes.colourmatrix
+	else return default_colour_matrix
+
+/mob/proc/update_colour(var/time = 50,var/forceupdate = 0)
+	if(!client || (client.updating_colour && !forceupdate))
+		return
+	var/list/colour_to_apply = get_screen_colour()
+	var/list/difference = difflist(client.color,colour_to_apply)
+	if(difference || !(client.color) || !istype(difference) || !difference.len)
+		client.updating_colour = 1
+		var/cached_ckey = client.ckey
+		if(forceupdate)
+			time = 0
+		else if(colour_to_apply == NOIRMATRIX)
+			time = 170
+			src << sound('sound/misc/noirdarkcoffee.ogg')
+		client.colour_transition(colour_to_apply,time = time)
+		spawn(time)
+			if(client && client.mob != src)
+				return
+			if(client)
+				client.color = colour_to_apply
+				client.updating_colour = 0
+				difference = difflist(client.color,get_screen_colour())
+				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
+					src.update_colour(forceupdate = 1)
+			else
+				bad_changing_colour_ckeys["[cached_ckey]"] = 1
+
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
 	ticker.mode.update_cult_icons_removed(M)
 	ticker.mode.update_rev_icons_removed(M)
@@ -62,27 +118,24 @@
 proc/hasorgans(A)
 	return ishuman(A)
 
-/proc/hsl2rgb(h, s, l)
-	return
-
 
 /proc/check_zone(zone)
-	if(!zone)	return "chest"
+	if(!zone)	return LIMB_CHEST
 	switch(zone)
 		if("eyes")
-			zone = "head"
+			zone = LIMB_HEAD
 		if("mouth")
-			zone = "head"
-/*		if("l_hand")
-			zone = "l_arm"
-		if("r_hand")
-			zone = "r_arm"
-		if("l_foot")
-			zone = "l_leg"
-		if("r_foot")
-			zone = "r_leg"
-		if("groin")
-			zone = "chest"
+			zone = LIMB_HEAD
+/*		if(LIMB_LEFT_HAND)
+			zone = LIMB_LEFT_ARM
+		if(LIMB_RIGHT_HAND)
+			zone = LIMB_RIGHT_ARM
+		if(LIMB_LEFT_FOOT)
+			zone = LIMB_LEFT_LEG
+		if(LIMB_RIGHT_FOOT)
+			zone = LIMB_RIGHT_LEG
+		if(LIMB_GROIN)
+			zone = LIMB_CHEST
 */
 	return zone
 
@@ -92,16 +145,16 @@ proc/hasorgans(A)
 	if(!probability)	probability = 90
 	if(probability == 100)	return zone
 
-	if(zone == "chest")
-		if(prob(probability))	return "chest"
+	if(zone == LIMB_CHEST)
+		if(prob(probability))	return LIMB_CHEST
 		var/t = rand(1, 9)
 		switch(t)
-			if(1 to 3)	return "head"
-			if(4 to 6)	return "l_arm"
-			if(7 to 9)	return "r_arm"
+			if(1 to 3)	return LIMB_HEAD
+			if(4 to 6)	return LIMB_LEFT_ARM
+			if(7 to 9)	return LIMB_RIGHT_ARM
 
 	if(prob(probability * 0.75))	return zone
-	return "chest"
+	return LIMB_CHEST
 
 // Emulates targetting a specific body part, and miss chances
 // May return null if missed
@@ -113,23 +166,23 @@ proc/hasorgans(A)
 	if(!target.locked_to && !target.lying)
 		var/miss_chance = 10
 		switch(zone)
-			if("head")
+			if(LIMB_HEAD)
 				miss_chance = 40
-			if("l_leg")
+			if(LIMB_LEFT_LEG)
 				miss_chance = 20
-			if("r_leg")
+			if(LIMB_RIGHT_LEG)
 				miss_chance = 20
-			if("l_arm")
+			if(LIMB_LEFT_ARM)
 				miss_chance = 20
-			if("r_arm")
+			if(LIMB_RIGHT_ARM)
 				miss_chance = 20
-			if("l_hand")
+			if(LIMB_LEFT_HAND)
 				miss_chance = 50
-			if("r_hand")
+			if(LIMB_RIGHT_HAND)
 				miss_chance = 50
-			if("l_foot")
+			if(LIMB_LEFT_FOOT)
 				miss_chance = 50
-			if("r_foot")
+			if(LIMB_RIGHT_FOOT)
 				miss_chance = 50
 		miss_chance = max(miss_chance + miss_chance_mod, 0)
 		if(prob(miss_chance))
@@ -138,16 +191,16 @@ proc/hasorgans(A)
 			else
 				var/t = rand(1, 10)
 				switch(t)
-					if(1)	return "head"
-					if(2)	return "l_arm"
-					if(3)	return "r_arm"
-					if(4) 	return "chest"
-					if(5) 	return "l_foot"
-					if(6)	return "r_foot"
-					if(7)	return "l_hand"
-					if(8)	return "r_hand"
-					if(9)	return "l_leg"
-					if(10)	return "r_leg"
+					if(1)	return LIMB_HEAD
+					if(2)	return LIMB_LEFT_ARM
+					if(3)	return LIMB_RIGHT_ARM
+					if(4) 	return LIMB_CHEST
+					if(5) 	return LIMB_LEFT_FOOT
+					if(6)	return LIMB_RIGHT_FOOT
+					if(7)	return LIMB_LEFT_HAND
+					if(8)	return LIMB_RIGHT_HAND
+					if(9)	return LIMB_LEFT_LEG
+					if(10)	return LIMB_RIGHT_LEG
 
 	return zone
 
@@ -177,7 +230,6 @@ proc/hasorgans(A)
 	return t
 
 proc/slur(phrase)
-	phrase = html_decode(phrase)
 	var/leng=length(phrase)
 	var/counter=length(phrase)
 	var/newphrase=""
@@ -200,7 +252,7 @@ proc/slur(phrase)
 	return newphrase
 
 /proc/stutter(n)
-	var/te = html_decode(n)
+	var/te = n
 	var/t = ""//placed before the message. Not really sure what it's for.
 	n = length(n)//length of the entire word
 	var/p = null
@@ -220,7 +272,7 @@ proc/slur(phrase)
 						n_letter = text("[n_letter]-[n_letter]")
 		t = text("[t][n_letter]")//since the above is ran through for each letter, the text just adds up back to the original word.
 		p++//for each letter p is increased to find where the next letter will be.
-	return copytext(sanitize(t),1,MAX_MESSAGE_LEN)
+	return copytext(t,1,MAX_MESSAGE_LEN)
 
 
 proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
@@ -287,10 +339,12 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 
 /mob/proc/abiotic(var/full_body = 0)
-	if(full_body && ((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )) || (src.back || src.wear_mask)))
+	for(var/obj/item/I in held_items)
+		if(I.abstract) continue
+
 		return 1
 
-	if((src.l_hand && !( src.l_hand.abstract )) || (src.r_hand && !( src.r_hand.abstract )))
+	if(full_body && (src.back || src.wear_mask))
 		return 1
 
 	return 0
@@ -340,6 +394,25 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 				hud_used.action_intent.icon_state = "harm"
 			else
 				hud_used.action_intent.icon_state = "help"
+
+//For hotkeys
+
+/mob/verb/a_kick()
+	set name = "a-kick"
+	set hidden = 1
+
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		H.set_attack_type(ATTACK_KICK)
+
+/mob/verb/a_bite()
+	set name = "a-bite"
+	set hidden = 1
+
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		H.set_attack_type(ATTACK_BITE)
+
 proc/is_blind(A)
 	if(istype(A, /mob/living/carbon))
 		var/mob/living/carbon/C = A
@@ -369,9 +442,12 @@ proc/is_blind(A)
 /proc/broadcast_medical_hud_message(var/message, var/broadcast_source)
 	broadcast_hud_message(message, broadcast_source, med_hud_users, /obj/item/clothing/glasses/hud/health)
 
-/proc/broadcast_hud_message(var/message, var/broadcast_source, var/list/targets, var/icon)
+/proc/broadcast_hud_message(var/message, var/broadcast_source, var/list/targets, var/obj/ic)
+	var/biconthing = initial(ic.icon)
+	var/biconthingstate = initial(ic.icon_state)
+	var/icon/I = new(biconthing, biconthingstate)
 	var/turf/sourceturf = get_turf(broadcast_source)
 	for(var/mob/M in targets)
 		var/turf/targetturf = get_turf(M)
 		if((targetturf.z == sourceturf.z))
-			M.show_message("<span class='info'>\icon[icon] [message]</span>", 1)
+			M.show_message("<span class='info'>[bicon(I)] [message]</span>", 1)

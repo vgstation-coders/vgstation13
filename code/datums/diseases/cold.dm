@@ -3,7 +3,7 @@
 	max_stages = 3
 	spread = "Airborne"
 	cure = "Rest & Spaceacillin"
-	cure_id = "spaceacillin"
+	cure_id = SPACEACILLIN
 	agent = "XY-rhinovirus"
 	affected_species = list("Human", "Monkey")
 	permeability_mod = 0.5
@@ -31,7 +31,7 @@
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your throat feels sore.</span>")
 			if(prob(1))
@@ -54,7 +54,7 @@
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your throat feels sore.</span>")
 			if(prob(1))

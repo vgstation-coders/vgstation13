@@ -1,3 +1,21 @@
+var/global/nextDecTalkDelay = 5 //seconds
+var/global/lastDecTalkUse = 0
+
+/proc/dectalk(msg)
+	if(!msg) return 0
+	if (world.timeofday > (lastDecTalkUse + (nextDecTalkDelay * 10)))
+		lastDecTalkUse = world.timeofday
+		msg = copytext(msg, 1, 2000)
+		var/res[] = world.Export("[config.tts_server]?tts=[url_encode(msg)]")
+		//var/res[] = world.Export("http://localhost:1203/?tts=[url_encode(msg)]") //change server
+		if(!res || !res["CONTENT"])
+			return 0
+
+		var/audio = file2text(res["CONTENT"])
+		return list("audio" = audio, "message" = msg)
+	else
+		return list("cooldown" = 1)
+
 /*
  	Miauw's big Say() rewrite.
 	This file has the basic atom/movable level speech procs.
@@ -80,7 +98,7 @@ var/list/freqtoname = list(
 	var/radioicon = ""
 	if(speech.frequency)
 		if(speech.radio)
-			radioicon = "\icon[speech.radio]"
+			radioicon = "[bicon(speech.radio)]"
 		freqpart = " [radioicon]\[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
 	var/pooled=0
@@ -100,7 +118,7 @@ var/list/freqtoname = list(
 		say_testing(speech.speaker," We <i>do</i> understand this gentle\[wo\]man.")
 
 #ifdef SAY_DEBUG
-	var/enc_wrapclass=list2text(filtered_speech.wrapper_classes, ", ")
+	var/enc_wrapclass=jointext(filtered_speech.wrapper_classes, ", ")
 	say_testing(src, "render_speech() - wrapper_classes = \[[enc_wrapclass]\]")
 #endif
 	// Below, but formatted nicely.
@@ -184,7 +202,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 		else
 			return speech.speaker.say_quote(rendered)
 	/*else if(message_langs & SPOOKY)
-		return "\icon[ghostimg] <span class='sinister'>Too spooky...</span> \icon[ghostimg]"
+		return "[bicon(ghostimg)] <span class='sinister'>Too spooky...</span> [bicon(ghostimg)]"
 	else if(message_langs & MONKEY)
 		return "chimpers."
 	else if(message_langs & ALIEN)

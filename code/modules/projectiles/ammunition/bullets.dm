@@ -65,10 +65,13 @@
 	projectile_type = "/obj/item/projectile/bullet/midbullet"
 	w_type = RECYK_METAL
 
+/obj/item/ammo_casing/a12mm/bounce
+	desc = "A rubber-titanium 12mm bullet casing."
+	projectile_type = "/obj/item/projectile/bullet/midbullet/bouncebullet"
 
 /obj/item/ammo_casing/shotgun
 	name = "shotgun shell"
-	desc = "A 12 gauge shell."
+	desc = "A 12 gauge slug."
 	icon_state = "gshell"
 	caliber = "shotgun"
 	projectile_type = "/obj/item/projectile/bullet"
@@ -120,6 +123,11 @@
 	projectile_type = "/obj/item/projectile/bullet/dart"
 	starting_materials = list(MAT_IRON = 12500)
 	w_type = RECYK_METAL
+
+/obj/item/ammo_casing/shotgun/buckshot
+	name = "buckshot shell"
+	desc = "A 12 gauge shell filled with standard double-aught buckshot."
+	projectile_type = "/obj/item/projectile/bullet/buckshot"
 
 /obj/item/ammo_casing/a762
 	desc = "A 7.62 bullet casing."

@@ -6,6 +6,7 @@
  *		Energy Blade
  *		Energy Axe
  *		Energy Shield
+ *		Bone Sword
  */
 
 /*
@@ -37,7 +38,7 @@
 		user.Weaken(3 * force)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
-			H.apply_damage(2*force, BRUTE, "head")
+			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
 		else
 			user.take_organ_damage(2*force)
 		return
@@ -83,7 +84,7 @@
 	origin_tech = "combat=2"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	force = 3
 	var/on = 0
 
@@ -100,9 +101,9 @@
 
 		icon_state = "telebaton_1"
 		item_state = "telebaton_1"
-		w_class = 4
+		w_class = W_CLASS_LARGE
 		force = 15//quite robust
-		attack_verb = list("smacked", "struck", "slapped")
+		attack_verb = list("smacks", "strikes", "slaps")
 	else
 		user.visible_message("<span class='notice'>[user] collapses their telescopic baton.</span>",\
 		"<span class='notice'>You collapse the baton.</span>",\
@@ -111,11 +112,11 @@
 		"<span class='warning'>You collapse the fishing rod.</span>",\
 		"You hear a balloon exploding.")
 
-		icon_state = "telebaton_0"
-		item_state = "telebaton_0"
-		w_class = 2
-		force = 3//not so robust now
-		attack_verb = list("hit", "punched")
+		icon_state = initial(icon_state)
+		item_state = initial(item_state)
+		w_class = initial(w_class)
+		force = initial(force) //not so robust now
+		attack_verb = list("hits", "punches")
 	playsound(get_turf(src), 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
@@ -144,7 +145,7 @@
 			user.Weaken(3 * force)
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
-				H.apply_damage(2*force, BRUTE, "head")
+				H.apply_damage(2*force, BRUTE, LIMB_HEAD)
 			else
 				user.take_organ_damage(2*force)
 			return
@@ -199,13 +200,68 @@
 		to_chat(user, "<span class='notice'>The axe is now energised.</span>")
 		src.force = 150
 		src.icon_state = "axe1"
-		src.w_class = 5
+		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
 	else
 		to_chat(user, "<span class='notice'>The axe can now be concealed.</span>")
-		src.force = 40
-		src.icon_state = "axe0"
-		src.w_class = 5
-		src.sharpness = 1.0
+		src.force = initial(src.force)
+		src.icon_state = initial(src.icon_state)
+		src.w_class = initial(src.w_class)
+		src.sharpness = initial(src.sharpness)
 	src.add_fingerprint(user)
 	return
+
+/obj/item/weapon/melee/bone_sword
+	name = "bone sword"
+	desc = "A somewhat gruesome blade that appears to be made of solid bone."
+	icon_state = "bone_sword"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	hitsound = "sound/weapons/bloodyslice.ogg"
+	flags = FPRINT
+	siemens_coefficient = 0
+	slot_flags = null
+	force = 18
+	throwforce = 0
+	w_class = 5
+	sharpness = 1.5
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	mech_flags = MECH_SCAN_ILLEGAL
+	cant_drop = 1
+	var/mob/living/simple_animal/borer/parent_borer = null
+
+	suicide_act(mob/user)
+		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+		return(BRUTELOSS)
+
+/obj/item/weapon/melee/bone_sword/New(turf/T, var/p_borer = null)
+	..(T)
+	if(istype(p_borer, /mob/living/simple_animal/borer))
+		parent_borer = p_borer
+	if(!parent_borer)
+		qdel(src)
+	else
+		processing_objects.Add(src)
+
+/obj/item/weapon/melee/bone_sword/Destroy()
+	if(parent_borer)
+		if(parent_borer.channeling_bone_sword)
+			parent_borer.channeling_bone_sword = 0
+		if(parent_borer.channeling)
+			parent_borer.channeling = 0
+		parent_borer = null
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/melee/bone_sword/process()
+	set waitfor = 0
+	if(!parent_borer)
+		return
+	if(!parent_borer.channeling_bone_sword) //the borer has stopped sustaining the sword
+		qdel(src)
+		return
+	if(parent_borer.chemicals < 5) //the parent borer no longer has the chemicals required to sustain the sword
+		qdel(src)
+		return
+	else
+		parent_borer.chemicals -= 5
+		sleep(10)

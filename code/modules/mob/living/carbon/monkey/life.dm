@@ -5,8 +5,9 @@
 	var/toxins_alert = 0
 	var/fire_alert = 0
 	var/pressure_alert = 0
-
+	base_insulation = 0.5
 	var/temperature_alert = 0
+	var/safe_oxygen_min = 16 // Minimum safe partial pressure of O2, in kPa
 
 
 /mob/living/carbon/monkey/Life()
@@ -25,8 +26,8 @@
 		environment = loc.return_air()
 
 	if (stat != DEAD) //still breathing
-		//Is not a Diona Nymph - Snowflake Code
-		if(!istype(src,/mob/living/carbon/monkey/diona))
+		//Is not a Diona Nymph or Rock - Snowflake Code
+		if(!istype(src,/mob/living/carbon/monkey/diona) && !istype(src,/mob/living/carbon/monkey/rock))
 			//First, resolve location and get a breath
 			if(air_master.current_cycle%4==2)
 				//Only try to take a breath every 4 seconds, unless suffocating
@@ -92,8 +93,6 @@
 	..()
 	return pressure
 
-/mob/living/carbon/monkey
-
 /mob/living/carbon/monkey/proc/handle_disabilities()
 
 
@@ -134,8 +133,8 @@
 		to_chat(src, "<span class='warning'>You suddenly feel very weak.</span>")
 		Weaken(3)
 		emote("collapse")
-		if(reagents.has_reagent("creatine"))
-			var/datum/reagent/creatine/C = reagents.get_reagent("creatine")
+		if(reagents.has_reagent(CREATINE))
+			var/datum/reagent/creatine/C = reagents.get_reagent(CREATINE)
 			C.dehulk(src)
 
 	if (radiation)
@@ -233,7 +232,7 @@
 		return
 
 	if(reagents)
-		if(reagents.has_reagent("lexorin")) return
+		if(reagents.has_reagent(LEXORIN)) return
 
 	if(!loc) return //probably ought to make a proper fix for this, but :effort: --NeoFite
 
@@ -313,7 +312,7 @@
 
 		return 0
 
-	var/safe_oxygen_min = 16 // Minimum safe partial pressure of O2, in kPa
+
 	//var/safe_oxygen_max = 140 // Maximum safe partial pressure of O2, in kPa (Not used for now)
 	var/safe_co2_max = 10 // Yes it's an arbitrary value who cares?
 	var/safe_toxins_max = 0.5
@@ -378,7 +377,7 @@
 					ratio = 0
 		if(ratio)
 			if(reagents)
-				reagents.add_reagent("plasma", Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
+				reagents.add_reagent(PLASMA, Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
 			toxins_alert = max(toxins_alert, 1)
 	else
 		toxins_alert = 0
@@ -428,7 +427,7 @@
 	if(uniform)
 		thermal_protection += uniform.return_thermal_protection()
 
-	var/max_protection = get_thermal_protection(get_thermal_protection_flags())
+	var/max_protection = max(get_thermal_protection(get_thermal_protection_flags()),base_insulation) // monkies have fur, silly!
 	return min(thermal_protection,max_protection)
 
 /mob/living/carbon/monkey/get_heat_protection_flags(temperature)
@@ -525,8 +524,8 @@
 	burn_calories(HUNGER_FACTOR,1)
 	if(reagents) reagents.metabolize(src,alien)
 
-	if (drowsyness)
-		drowsyness--
+	if (drowsyness > 0)
+		drowsyness = max(0, drowsyness - 1)
 		eye_blurry = max(2, eye_blurry)
 		if (prob(5))
 			sleeping += 1
@@ -562,7 +561,7 @@
 			if( health <= 20 && prob(1) )
 				spawn(0)
 					emote("gasp")
-			if(!reagents.has_reagent("inaprovaline"))
+			if(!reagents.has_reagent(INAPROVALINE))
 				adjustOxyLoss(1)
 			Paralyse(3)
 		if(halloss > 100)
@@ -634,21 +633,6 @@
 
 
 /mob/living/carbon/monkey/proc/handle_regular_hud_updates()
-
-
-	if(!canWearHats && m_hatbg)
-		if(m_hatbg.icon_state != "blank")
-			m_hatbg.icon_state = "blank"
-
-	if(!canWearClothes && m_suitclothesbg)
-		if(m_suitclothesbg.icon_state != "blank")
-			m_suitclothesbg.icon_state = "blank"
-
-	if(!canWearGlasses && m_glassesbg)
-		if(m_glassesbg.icon_state != "blank")
-			m_glassesbg.icon_state = "blank"
-
-
 	if (stat == 2 || (M_XRAY in mutations))
 		sight |= SEE_TURFS
 		sight |= SEE_MOBS
@@ -686,7 +670,7 @@
 	if(pressure)
 		pressure.icon_state = "pressure[pressure_alert]"
 
-	if(pullin)	pullin.icon_state = "pull[pulling ? 1 : 0]"
+	update_pull_icon()
 
 
 	if (toxin)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
@@ -716,22 +700,23 @@
 			else
 				bodytemp.icon_state = "temp-4"
 
-	client.screen.Remove(global_hud.blurry,global_hud.druggy,global_hud.vimpaired)
-
-	if(blind && stat != DEAD)
-		if(blinded)
-			blind.layer = 18
+	if(stat != DEAD)
+		if(src.eye_blind || blinded)
+			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 		else
-			blind.layer = 0
-
-			if(disabilities & NEARSIGHTED)
-				client.screen += global_hud.vimpaired
-
-			if(eye_blurry)
-				client.screen += global_hud.blurry
-
-			if(druggy)
-				client.screen += global_hud.druggy
+			clear_fullscreen("blind")
+		if (src.disabilities & NEARSIGHTED)
+			overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired, 2)
+		else
+			clear_fullscreen("impaired")
+		if (src.eye_blurry)
+			overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+		else
+			clear_fullscreen("blurry")
+		if (src.druggy)
+			overlay_fullscreen("high", /obj/screen/fullscreen/high)
+		else
+			clear_fullscreen("high")
 
 	if (stat != 2)
 		if (machine)

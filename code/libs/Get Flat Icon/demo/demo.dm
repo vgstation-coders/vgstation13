@@ -38,7 +38,7 @@ mob
 		overlays += '_flat_demoIcons2.dmi'
 
 		// Testing icon_state overlays (defaults to mob's icon)
-		overlays += "white"
+		overlays += image(icon = icon, icon_state = "white")
 
 		// Testing dynamic icon overlays
 		var/icon/I = icon('_flat_demoIcons.dmi', icon_state="aqua")
@@ -82,7 +82,7 @@ mob
 
 		Output_Icon()
 			set name = "3. Output Icon"
-			to_chat(src, "\icon[getFlatIcon(src)]")
+			to_chat(src, "[bicon(getFlatIcon(src))]")
 			to_chat(src, "-----------------------------------------")
 
 		Output_Fullsize_Icon()

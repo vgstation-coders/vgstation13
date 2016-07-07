@@ -46,6 +46,9 @@
 	var/obj/item/l_ear	 = null
 	var/obj/item/r_ear	 = null
 
+	//Special attacks (bite, kicks, ...)
+	var/attack_type = NORMAL_ATTACK
+
 	var/used_skillpoints = 0
 	var/skill_specialization = null
 	var/list/skills = null
@@ -72,8 +75,9 @@
 	var/check_mutations=0 // Check mutations on next life tick
 
 	var/lastFart = 0 // Toxic fart cooldown.
-	var/lastScream = 0 // Prevent scream spam in some situations
+	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
+	var/obj/item/weapon/organ/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"

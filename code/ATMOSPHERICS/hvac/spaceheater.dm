@@ -69,7 +69,7 @@
 	icon_state = "[base_state][on]"
 	set_light(on ? light_range_on : 0, light_power_on)
 	if(panel_open)
-		overlays  += "[base_state]-open"
+		overlays += image(icon = icon, icon_state = "[base_state]-open")
 	return
 
 /obj/machinery/space_heater/campfire/update_icon()
@@ -89,7 +89,7 @@
 /obj/machinery/space_heater/examine(mob/user)
 	..()
 	if(!nocell)
-		to_chat(user, "<span class='info'>\icon[src]\The [src.name] is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].</span>")
+		to_chat(user, "<span class='info'>[bicon(src)]\The [src.name] is [on ? "on" : "off"] and the hatch is [panel_open ? "open" : "closed"].</span>")
 		if(panel_open)
 			to_chat(user, "<span class='info'>The power cell is [cell ? "installed" : "missing"].</span>")
 		else
@@ -219,7 +219,8 @@
 			var/mob/living/M = user
 			if ((M_CLUMSY in M.mutations) && (prob(50)))
 				user.visible_message("<span class='danger'>[user] slides \his hands straight into \the [src]!</span>", "<span class='danger'>You accidentally slide your hands into \the [src]!</span>")
-				M.apply_damage(10,BURN,(pick("l_hand", "r_hand")))
+
+				M.apply_damage(10,BURN,pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND))
 			else
 				user.visible_message("<span class='notice'>[user] warms \his hands around \the [src].</span>", "<span class='notice'>You warm your hands around \the [src].</span>")
 			M.bodytemperature += 2

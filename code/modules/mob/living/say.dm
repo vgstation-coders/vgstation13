@@ -117,14 +117,14 @@ var/list/department_radio_keys = list(
 	say_testing(src, "Say start, message=[message]")
 	if(!message) return
 
+	var/message_mode = get_message_mode(message)
 	if(silent)
 		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
 		return
-	if((status_flags & FAKEDEATH) && !stat)
+	if((status_flags & FAKEDEATH) && !stat && message_mode != MODE_CHANGELING)
 		to_chat(src, "<span class='danger'>Talking right now would give us away!</span>")
 		return
 
-	var/message_mode = get_message_mode(message)
 	//var/message_mode_name = message_mode_to_name(message_mode)
 	if (stat == DEAD) // Dead.
 		say_testing(src, "ur ded kid")
@@ -246,7 +246,7 @@ var/list/department_radio_keys = list(
 	for (var/atom/movable/listener in listeners)
 		listener.Hear(speech, rendered)
 
-	send_speech_bubble(speech, bubble_type, listeners)
+	send_speech_bubble(speech.message, bubble_type, listeners)
 
 /mob/living/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))
@@ -333,8 +333,9 @@ var/list/department_radio_keys = list(
 					var/turf/T = get_turf(src)
 					log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Ancient chat: [html_encode(speech.message)]")
 					for(var/thestone in stones)
-						var/mob/M = find_holder_of_type(thestone,/mob)
-						handle_render(M,themessage,src)
+						var/mob/M = get_holder_of_type(thestone,/mob)
+						if(M)
+							handle_render(M,themessage,src)
 					for(var/M in dead_mob_list)
 						if(!istype(M,/mob/new_player))
 							handle_render(M,themessage,src)
@@ -352,13 +353,15 @@ var/list/department_radio_keys = list(
 	switch(message_mode)
 		if(MODE_R_HAND)
 			say_testing(src, "/mob/living/radio() - MODE_R_HAND")
-			if (r_hand)
-				r_hand.talk_into(speech)
+			var/obj/item/I = get_held_item_by_index(GRASP_RIGHT_HAND)
+			if(I)
+				I.talk_into(speech)
 			return ITALICS | REDUCE_RANGE
 		if(MODE_L_HAND)
 			say_testing(src, "/mob/living/radio() - MODE_L_HAND")
-			if (l_hand)
-				l_hand.talk_into(speech)
+			var/obj/item/I = get_held_item_by_index(GRASP_LEFT_HAND)
+			if(I)
+				I.talk_into(speech)
 			return ITALICS | REDUCE_RANGE
 		if(MODE_INTERCOM)
 			say_testing(src, "/mob/living/radio() - MODE_INTERCOM")
@@ -403,10 +406,12 @@ var/list/department_radio_keys = list(
 	//speech bubble
 	var/list/speech_bubble_recipients = list()
 	for(var/mob/M in hearers)
+		M.heard(src)
 		if(M.client)
 			speech_bubble_recipients.Add(M.client)
 	spawn(0)
-		var/image/speech_bubble = image('icons/mob/talk.dmi', find_holder(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1)
+		var/image/speech_bubble = image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1)
+		speech_bubble.plane = PLANE_BASE
 		speech_bubble.appearance_flags = RESET_COLOR
 		flick_overlay(speech_bubble, speech_bubble_recipients, 30)
 

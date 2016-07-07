@@ -15,10 +15,16 @@ var/global/dmm_suite/preloader/_preloader = null
  *		e.g aa = /turf/unsimulated/wall{icon_state = "rock"}
  * 2) Read the map line by line, parsing the result (using parse_grid)
  *
+ * RETURNS :
+ *
+ * A list of all atoms created
+ *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num)
 	if(!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
+
+	var/list/spawned_atoms = list()
 
 	var/quote = ascii2text(34)
 	var/tfile = file2text(dmm_file)//the map file we're creating
@@ -30,6 +36,7 @@ var/global/dmm_suite/preloader/_preloader = null
 	///////////////////////////////////////////////////////////////////////////////////////
 	var/list/grid_models = list()
 	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
+	if(!key_len) key_len = 1
 
 	//proceed line by line
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
@@ -47,8 +54,8 @@ var/global/dmm_suite/preloader/_preloader = null
 
 	//position of the currently processed square
 	var/zcrd=-1
-	var/ycrd=0
-	var/xcrd=0
+	var/ycrd=x_offset
+	var/xcrd=y_offset
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
 
@@ -58,29 +65,31 @@ var/global/dmm_suite/preloader/_preloader = null
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
 
 		var/zgrid = copytext(tfile,findtext(tfile,quote+"\n",zpos,0)+2,findtext(tfile,"\n"+quote,zpos,0)+1) //copy the whole map grid
-		var/z_depth = length(zgrid)
+		var/z_depth = length(zgrid) //Length of the whole block (with multiple lines in them)
 
 		//if exceeding the world max x or y, increase it
-		var/x_depth = length(copytext(zgrid,1,findtext(zgrid,"\n",2,0)))
-		if(world.maxx<x_depth)
-			world.maxx=x_depth
+		var/x_depth = length(copytext(zgrid,1,findtext(zgrid,"\n",2,0))) //This is the length of an encoded line (like "aaaaaaaaBBBBaaaaccccaaa")
+		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
-		var/y_depth = z_depth / (x_depth+1)//x_depth + 1 because we're counting the '\n' characters in z_depth
-		if(world.maxy<y_depth)
-			world.maxy=y_depth
+		if(world.maxx < map_width + x_offset)
+			world.maxx = map_width + x_offset
+
+		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
+		if(world.maxy < y_depth + y_offset)
+			world.maxy = y_depth + y_offset
 
 		//then proceed it line by line, starting from top
-		ycrd = y_depth
+		ycrd = y_offset + y_depth
 
 		for(var/gpos=1;gpos!=0;gpos=findtext(zgrid,"\n",gpos,0)+1)
 			var/grid_line = copytext(zgrid,gpos,findtext(zgrid,"\n",gpos,0))
 
 			//fill the current square using the model map
-			xcrd=0
+			xcrd=x_offset
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
-				parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+				spawned_atoms += parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
 
 			//reached end of current map
 			if(gpos+x_depth+1>z_depth)
@@ -94,6 +103,8 @@ var/global/dmm_suite/preloader/_preloader = null
 		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
 			break
 		sleep(-1)
+
+	return spawned_atoms
 
 /**
  * Fill a given tile with its area/turf/objects/mobs
@@ -111,6 +122,10 @@ var/global/dmm_suite/preloader/_preloader = null
  *
  * 4) Instanciates the atom with its variables
  *
+ * RETURNS :
+ *
+ * A list with all spawned atoms
+ *
  */
 /dmm_suite/proc/parse_grid(var/model as text,var/xcrd as num,var/ycrd as num,var/zcrd as num)
 	/*Method parse_grid()
@@ -121,6 +136,7 @@ var/global/dmm_suite/preloader/_preloader = null
 	var/list/members = list()//will contain all members (paths) in model (in our example : /turf/unsimulated/wall and /area/mine/explored)
 	var/list/members_attributes = list()//will contain lists filled with corresponding variables, if any (in our example : list(icon_state = "rock") and list())
 
+	var/list/spawned_atoms = list()
 
 	/////////////////////////////////////////////////////////
 	//Constructing members and corresponding variables lists
@@ -145,7 +161,7 @@ var/global/dmm_suite/preloader/_preloader = null
 		var/variables_start = findtext(full_def,"{")
 		if(variables_start)//if there's any variable
 			full_def = copytext(full_def,variables_start+1,length(full_def))//removing the last '}'
-			fields = text2list(full_def,";")
+			fields = readlist(full_def,";")
 
 		//then fill the members_attributes list with the corresponding variables
 		members_attributes.len++
@@ -161,44 +177,52 @@ var/global/dmm_suite/preloader/_preloader = null
 
 	//The next part of the code assumes there's ALWAYS an /area AND a /turf on a given tile
 
-	//in case of multiples turfs on one tile,
-	//will contains the images of all underlying turfs, to simulate the DMM multiple tiles piling
-	var/list/turfs_underlays = list()
-
 	//first instance the /area and remove it from the members list
 	index = members.len
 	var/atom/instance
 	_preloader = new(members_attributes[index])//preloader for assigning  set variables on atom creation
 
+	//Locate the area object
 	instance = locate(members[index])
-	instance.contents.Add(locate(xcrd,ycrd,zcrd))
+
+	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
+		instance.contents.Add(locate(xcrd,ycrd,zcrd))
 
 	if(_preloader && instance)
 		_preloader.load(instance)
 
 	members.Remove(members[index])
 
-	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect
+	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
 
 	var/first_turf_index = 1
 	while(!ispath(members[first_turf_index],/turf)) //find first /turf object in members
 		first_turf_index++
 
-	//instanciate the first /turf
-	var/turf/T = instance_atom(members[first_turf_index],members_attributes[first_turf_index],xcrd,ycrd,zcrd)
+	var/last_turf_index = first_turf_index
+	while(last_turf_index+1 <= members.len && ispath(members[last_turf_index + 1], /turf))
+		last_turf_index++
 
-	//if others /turf are presents, simulates the underlays piling effect
-	index = first_turf_index + 1
-	while(index <= members.len)
-		turfs_underlays.Insert(1,image(T.icon,null,T.icon_state,T.layer,T.dir))//add the current turf image to the underlays list
-		var/turf/UT = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd)//instance new turf
-		add_underlying_turf(UT,T,turfs_underlays)//simulates the DMM piling effect
-		T = UT
-		index++
+	//instanciate the last /turf
+	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd)
+
+	if(first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
+		var/turf_index = first_turf_index
+		while(turf_index < last_turf_index)
+			var/turf/underlying_turf = members[turf_index]
+			var/image/new_underlay = image(icon = null) //Because just image() doesn't work, and neither does image(appearance=...)
+
+			new_underlay.appearance = initial(underlying_turf.appearance)
+			T.underlays.Add(new_underlay)
+			turf_index++
+
+	spawned_atoms.Add(T)
 
 	//finally instance all remainings objects/mobs
 	for(index=1,index < first_turf_index,index++)
-		instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd)
+		spawned_atoms.Add(instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd))
+
+	return spawned_atoms
 
 ////////////////
 //Helpers procs
@@ -211,7 +235,12 @@ var/global/dmm_suite/preloader/_preloader = null
 	var/atom/instance
 	_preloader = new(attributes, path)
 
-	instance = new path (locate(x,y,z))//first preloader pass
+	if(ispath(path, /turf)) //Turfs use ChangeTurf
+		var/turf/oldTurf = locate(x,y,z)
+		if(path != oldTurf.type)
+			instance = oldTurf.ChangeTurf(path, allow = 1)
+	else
+		instance = new path (locate(x,y,z))//first preloader pass
 
 	if(_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
@@ -249,7 +278,7 @@ var/global/dmm_suite/preloader/_preloader = null
 
 //build a list from variables in text form (e.g {var1="derp"; var2; var3=7} => list(var1="derp", var2, var3=7))
 //return the filled list
-/dmm_suite/proc/text2list(var/text as text,var/delimiter=",")
+/dmm_suite/proc/readlist(var/text as text,var/delimiter=",")
 
 
 	var/list/to_return = list()
@@ -284,7 +313,7 @@ var/global/dmm_suite/preloader/_preloader = null
 
 			//Check for list
 			else if(copytext(trim_right,1,5) == "list")
-				trim_right = text2list(copytext(trim_right,6,length(trim_right)))
+				trim_right = readlist(copytext(trim_right,6,length(trim_right)))
 
 			//Check for file
 			else if(copytext(trim_right,1,2) == "'")

@@ -41,7 +41,7 @@
 /obj/item/toy/balloon/afterattack(atom/A as mob|obj, mob/user as mob)
 	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
 		A.reagents.trans_to(src, 10)
-		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of [A].</span>")
+		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
 		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
 		src.update_icon()
 	return
@@ -52,21 +52,21 @@
 			if(O.reagents.total_volume < 1)
 				to_chat(user, "The [O] is empty.")
 			else if(O.reagents.total_volume >= 1)
-				if(O.reagents.has_reagent("pacid", 1))
+				if(O.reagents.has_reagent(PACID, 1))
 					to_chat(user, "The acid chews through the balloon!")
 					O.reagents.reaction(user)
 					qdel(src)
 					return
 				else
 					src.desc = "A translucent balloon with some form of liquid sloshing around in it."
-					to_chat(user, "<span class = 'info'>You fill the balloon with the contents of [O].</span>")
+					to_chat(user, "<span class = 'info'>You fill the balloon with the contents of \the [O].</span>")
 					O.reagents.trans_to(src, 10)
 	src.update_icon()
 	return
 
 /obj/item/toy/balloon/throw_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
-		src.visible_message("<span class = 'danger'>The [src] bursts!</span>","You hear a pop and a splash.")
+		src.visible_message("<span class = 'danger'>\The [src] bursts!</span>","You hear a pop and a splash.")
 		src.reagents.reaction(get_turf(hit_atom))
 		for(var/atom/A in get_turf(hit_atom))
 			src.reagents.reaction(A)
@@ -86,7 +86,7 @@
 
 /obj/item/toy/syndicateballoon
 	name = "syndicate balloon"
-	desc = "There is a tag on the back that reads \"FUK NT!11!\"."
+	desc = "It's just a balloon. There is a tag on the back that reads \"FUK NT!11!\"."
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -94,7 +94,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "syndballoon"
 	item_state = "syndballoon"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 
 /*
  * Fake telebeacon
@@ -116,7 +116,7 @@
 	icon_state = "singularity_s1"
 
 	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
+		to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 		return (BRUTELOSS|TOXLOSS|OXYLOSS)
 
 
@@ -132,11 +132,11 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 10)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	attack_verb = list("struck", "pistol whipped", "hit", "bashed")
+	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
 	var/bullets = 7.0
 
 /obj/item/toy/gun/examine(mob/user)
@@ -149,7 +149,7 @@
 			to_chat(user, "<span class = 'notice'>It's already fully loaded!</span>")
 			return 1
 		if (A.amount_left <= 0)
-			to_chat(user, "<span class = 'warning'>There is no more caps!</span>")
+			to_chat(user, "<span class = 'warning'>There are no more caps left in \the [A]!</span>")
 			return 1
 		if (A.amount_left < (7 - src.bullets))
 			src.bullets += A.amount_left
@@ -177,7 +177,7 @@
 	playsound(user, 'sound/weapons/Gunshot.ogg', 100, 1)
 	src.bullets--
 	for(var/mob/O in viewers(user, null))
-		O.show_message(text("<span class = 'danger'><B>[] fires a cap gun at []!</B></span>", user, target), 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
+		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
 	name = "ammo-caps"
@@ -186,7 +186,7 @@
 	icon_state = "357-7"
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 10)
 	melt_temperature = MELTPOINT_PLASTIC
 	w_type = RECYK_MISC
@@ -194,7 +194,7 @@
 
 /obj/item/toy/ammo/gun/update_icon()
 	src.icon_state = text("357-[]", src.amount_left)
-	src.desc = text("There are [] caps\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
+	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] caps\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
 	return
 
 /obj/item/toy/ammo/gun/examine(mob/user)
@@ -213,8 +213,8 @@
 	icon_state = "crossbow"
 	item_state = "crossbow"
 	flags = FPRINT
-	w_class = 2.0
-	attack_verb = list("attacked", "struck", "hit")
+	w_class = W_CLASS_SMALL
+	attack_verb = list("attacks", "strikes", "hits")
 	var/bullets = 5
 
 /obj/item/toy/crossbow/examine(mob/user)
@@ -229,7 +229,7 @@
 				qdel(I)
 				I = null
 				bullets++
-				to_chat(user, "<span class = 'info'>You load the foam dart into the crossbow.</span>")
+				to_chat(user, "<span class = 'info'>You load the foam dart into \the [src].</span>")
 		else
 			to_chat(usr, "<span class = 'warning'>It's already fully loaded.</span>")
 
@@ -282,7 +282,7 @@
 	else if (bullets == 0)
 		user.Weaken(5)
 		for(var/mob/O in viewers(world.view, user))
-			O.show_message(text("<span class = 'danger'>[] realized they were out of ammo and starting scrounging for some!<span>", user), 1)
+			O.show_message(text("<span class = 'danger'>[] realizes they are out of ammo and starts scrounging for some!<span>", user), 1)
 
 
 /obj/item/toy/crossbow/attack(mob/M as mob, mob/user as mob)
@@ -312,7 +312,7 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "foamdart"
 	flags = FPRINT
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 
 /obj/effect/foam_dart_dummy
 	name = ""
@@ -333,9 +333,9 @@
 	icon_state = "sword0"
 	item_state = "sword0"
 	var/active = 0.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
-	attack_verb = list("attacked", "struck", "hit")
+	attack_verb = list("attacks", "strikes", "hits")
 
 	attack_self(mob/user as mob)
 		src.active = !( src.active )
@@ -344,13 +344,13 @@
 			playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 			src.icon_state = "swordblue"
 			src.item_state = "swordblue"
-			src.w_class = 4
+			src.w_class = W_CLASS_LARGE
 		else
 			to_chat(user, "<span class = 'info'>You push the plastic blade back down into the handle.</span>")
 			playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 			src.icon_state = "sword0"
 			src.item_state = "sword0"
-			src.w_class = 2
+			src.w_class = W_CLASS_SMALL
 		src.add_fingerprint(user)
 		return
 
@@ -365,8 +365,8 @@
 	slot_flags = SLOT_BELT | SLOT_BACK
 	force = 5
 	throwforce = 5
-	w_class = 3
-	attack_verb = list("attacked", "slashed", "stabbed", "sliced")
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("attacks", "slashes", "stabs", "slices")
 
 /*
  * Clock bomb
@@ -380,11 +380,11 @@
 
 /obj/item/toy/bomb/New()
 	..()
-	overlays += "plasma"
+	overlays += image(icon = icon, icon_state = "plasma")
 	var/icon/J = new(icon, icon_state = "oxygen")
 	J.Shift(WEST, 13)
 	underlays += J
-	overlays += "device"
+	overlays += image(icon = icon, icon_state = "device")
 	rendered = getFlatIcon(src)
 
 /obj/item/toy/bomb/examine(mob/user)
@@ -393,7 +393,7 @@
 
 /obj/item/toy/bomb/attack_self(mob/user)
 	var/turf/T = get_turf(src)
-	T.visible_message("\icon[rendered]*beep* *beep*", "*beep* *beep*")
+	T.visible_message("[bicon(rendered)]*beep* *beep*", "*beep* *beep*")
 
 /*
  * Crayons
@@ -404,8 +404,8 @@
 	desc = "A colourful crayon. Looks tasty. Mmmm..."
 	icon = 'icons/obj/crayons.dmi'
 	icon_state = "crayonred"
-	w_class = 1.0
-	attack_verb = list("attacked", "coloured")
+	w_class = W_CLASS_TINY
+	attack_verb = list("attacks", "colours", "colors")//teehee
 	var/colour = "#A10808" //RGB
 	var/shadeColour = "#220000" //RGB
 	var/uses = 30 //0 for unlimited uses
@@ -423,7 +423,7 @@
 	return style.Format(text,src,user,P)
 
 /obj/item/toy/crayon/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class = 'danger'><b>[user] is jamming the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
+	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
 	return (BRUTELOSS|OXYLOSS)
 
 
@@ -440,7 +440,7 @@
 	throwforce = 30.0
 	throw_speed = 10
 	throw_range = 30
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 
 /obj/item/toy/snappop/virus/throw_impact(atom/hit_atom)
@@ -449,7 +449,7 @@
 	s.set_up(3, 1, src)
 	s.start()
 	new /obj/effect/decal/cleanable/ash(src.loc)
-	src.visible_message("<span class = 'danger'>The [src.name] explodes!</span>","</span class = 'danger'>You hear a bang!</span>")
+	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","</span class = 'danger'>You hear a bang!</span>")
 
 
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
@@ -467,7 +467,7 @@
 	desc = "Wow!"
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "snappop"
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/throw_impact(atom/hit_atom)
 	..()
@@ -475,7 +475,7 @@
 	s.set_up(3, 1, src)
 	s.start()
 	new /obj/effect/decal/cleanable/ash(src.loc)
-	src.visible_message("<span class = 'danger'>The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
+	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
 	qdel(src)
 
@@ -483,13 +483,13 @@
 	if((ishuman(H))) //i guess carp and shit shouldn't set them off
 		var/mob/living/carbon/M = H
 		if(M.m_intent == "run")
-			to_chat(M, "<span class = 'warning'>You step on the snap pop!</span>")
+			to_chat(M, "<span class = 'warning'>You step on \the [src.name]!</span>")
 
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(2, 0, src)
 			s.start()
 			new /obj/effect/decal/cleanable/ash(src.loc)
-			src.visible_message("<span class = 'danger'>The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
+			src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
 			playsound(src, 'sound/effects/snap.ogg', 50, 1)
 			qdel(src)
 
@@ -508,7 +508,7 @@
 /obj/item/toy/waterflower/New()
 	. = ..()
 	create_reagents(10)
-	reagents.add_reagent("water", 10)
+	reagents.add_reagent(WATER, 10)
 
 /obj/item/toy/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
@@ -568,18 +568,19 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "ripleytoy"
 	var/cooldown = 0
+	w_class = W_CLASS_SMALL
 
 //all credit to skasi for toy mech fun ideas
 /obj/item/toy/prize/attack_self(mob/user as mob)
 	if(cooldown < world.time - 8)
-		to_chat(user, "<span class='notice'>You play with [src].</span>")
+		to_chat(user, "<span class='notice'>You play with \the [src].</span>")
 		playsound(user, 'sound/mecha/mechstep.ogg', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/prize/attack_hand(mob/user as mob)
 	if(loc == user)
 		if(cooldown < world.time - 8)
-			to_chat(user, "<span class='notice'>You play with [src].</span>")
+			to_chat(user, "<span class='notice'>You play with \the [src].</span>")
 			playsound(user, 'sound/mecha/mechturn.ogg', 20, 1)
 			cooldown = world.time
 			return
@@ -645,9 +646,10 @@
  */
 /obj/item/toy/gooncode
 	name = "Goonecode"
-	desc = "The holy grail of all programmers."
+	desc = "The holy grail of all programmers. It seems a bit leaky."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
+	w_class = W_CLASS_TINY
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
@@ -656,19 +658,20 @@
 
 /obj/item/toy/minimeteor
 	name = "Mini Meteor"
-	desc = "Relive the horror of a meteor shower! SweetMeat-eor. Co is not responsible for any injury caused by Mini Meteor"
+	desc = "Relive the horrors of a meteor storm! Space Weather Incorporated is not responsible for any injuries caused by Mini Meteor."
 	icon = 'icons/obj/meteor.dmi'
-	icon_state = "flaming"
+	icon_state = "small"
 
-	attack_self(mob/user as mob)
-		playsound(user, 'sound/effects/bamf.ogg', 20, 1)
+/obj/item/toy/minimeteor/attack_self(mob/user as mob)
+
+	playsound(user, 'sound/effects/bamf.ogg', 20, 1)
 
 /obj/item/device/whisperphone
 	name = "whisperphone"
 	desc = "A device used to project your voice. Quietly."
 	icon_state = "megaphone"
 	item_state = "radio"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
 
@@ -707,6 +710,7 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "greyshirt"
 	var/cooldown = 0
+	w_class = W_CLASS_SMALL
 
 /obj/item/toy/gasha/greyshirt
 	name = "toy greyshirt"
@@ -939,7 +943,6 @@
 
 /obj/item/toy/gasha/bomberman/blue
 	icon_state = "bomberman4"
-
 
 /obj/item/toy/gasha/corgitoy
 	name = "plush corgi"

@@ -14,7 +14,7 @@
 		if (affected.parent)
 			if (affected.parent.status & ORGAN_DESTROYED)
 				return 0
-		return target_zone == "head"
+		return target_zone == LIMB_HEAD
 
 
 
@@ -197,12 +197,19 @@
 	affected.status = 0
 	affected.amputated = 0
 	affected.destspawn = 0
+
+	var/obj/item/weapon/organ/O = tool
+	if(istype(O))
+		affected.species = O.species
+
 	target.update_body()
 	target.updatehealth()
 	target.UpdateDamageIcon()
 	var/obj/item/weapon/organ/head/B = tool
 	if (B.brainmob.mind)
 		B.brainmob.mind.transfer_to(target)
+	target.languages = B.brainmob.languages
+	target.default_language = B.brainmob.default_language
 
 	if (B.butchering_drops.len) //Transferring teeth and other stuff
 		for(var/datum/butchering_product/BP in B.butchering_drops) //First, search for all "stuff" inside the head
@@ -212,8 +219,10 @@
 				target.butchering_drops -= match //Remove it!
 				qdel(match)
 
-			target.butchering_drops += BP //Transfer
-			B.butchering_drops -= BP
+			target.butchering_drops.Add(BP) //Transfer
+			B.butchering_drops.Remove(BP)
+
+	affected.cancer_stage = B.cancer_stage
 
 	var/datum/organ/internal/brain/copied
 	if(B.organ_data)
@@ -224,11 +233,11 @@
 	copied.owner = target
 	target.internal_organs_by_name["brain"] = copied
 	target.internal_organs += copied
+	target.decapitated = null
 	affected.internal_organs += copied
 
 	user.u_equip(B,1)
-	B.loc = target
-	affected.organ_item = B //this stores the organ for continuity
+	qdel(B)
 
 
 /datum/surgery_step/head/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

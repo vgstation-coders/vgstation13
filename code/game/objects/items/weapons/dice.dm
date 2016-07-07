@@ -3,7 +3,7 @@
 	desc = "A die with six sides. Basic and servicable."
 	icon = 'icons/obj/dice.dmi'
 	icon_state = "d6"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	var/sides = 6
 	var/minsides = 1
 	var/result = null
@@ -85,12 +85,12 @@
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
-		H.apply_damage(4,BRUTE,(pick("l_leg", "r_leg")))
+		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
 		H.Weaken(3)
 
 /obj/item/weapon/dice/update_icon()
 	overlays.len = 0
-	overlays += "[src.icon_state][src.result]"
+	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
 
 /obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
 	if(!istype(user)) return 0
@@ -144,11 +144,11 @@
 			switch(result)
 				if(1)
 					to_chat(user, "<span class=sinister><B>A natural failure, your poor roll has cursed you. Better luck next time! </span></B>")
-					flick("e_flash", user.flash)
+					h.flash_eyes(visual = 1)
 					h.Cluwneize()
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
-					flick("e_flash", user.flash)
+					h.flash_eyes(visual = 1)
 					switch(pick(1,2,3))
 						if(1)
 							if(h.species.name != "Tajaran")
@@ -162,11 +162,11 @@
 							for(var/datum/organ/external/E in h.organs)
 								E.droplimb(1)
 						if(3)
-							user.reagents.add_reagent("amutationtoxin", 1)
+							user.reagents.add_reagent(AMUTATIONTOXIN, 1)
 							to_chat(user, "<span class=danger><B>You've been turned into a slime! </span></B>")
 				if(6 to 9)
 					to_chat(user, "<span class=sinister></B>You have rolled low and shall recieve a curse! It could be a lot worse however! </span></B>")
-					flick("e_flash", user.flash)
+					h.flash_eyes(visual = 1)
 					switch(pick(1,2,3,4))
 						if(1)
 							user.dna.SetSEState(DEAFBLOCK,1)
@@ -217,7 +217,7 @@
 												E.droplimb(1)
 						if(4)
 							h.adjustBrainLoss(200)
-							user.reagents.add_reagent("nutriment", 1000)
+							user.reagents.add_reagent(NUTRIMENT, 1000)
 							user.overeatduration = 1000
 
 							to_chat(user, "<span class=danger><B>In this moment you feel euphoric! </span></B>")

@@ -60,6 +60,7 @@ var/global/datum/controller/gameticker/ticker
 		"sound/music/moonbaseoddity.ogg",
 		"sound/music/whatisthissong.ogg",
 		"sound/music/space_asshole.ogg",
+		"sound/music/starman.ogg",
 		))
 	login_music = fcopy_rsc(oursong)
 	// Wait for MC to get its shit together
@@ -188,21 +189,22 @@ var/global/datum/controller/gameticker/ticker
 				qdel(obj)
 		stat_collection.death_stats = list() // Get rid of the corpses that spawn on startup.
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
-//		to_chat(world, sound('sound/AI/welcome.ogg'))// Skie //Out with the old, in with the new. - N3X15
+//		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 
-		var/welcome_sentence=list('sound/AI/vox_login.ogg')
-		welcome_sentence += pick(
-			'sound/AI/vox_reminder1.ogg',
-			'sound/AI/vox_reminder2.ogg',
-			'sound/AI/vox_reminder3.ogg',
-			'sound/AI/vox_reminder4.ogg',
-			'sound/AI/vox_reminder5.ogg',
-			'sound/AI/vox_reminder6.ogg',
-			'sound/AI/vox_reminder7.ogg',
-			'sound/AI/vox_reminder8.ogg',
-			'sound/AI/vox_reminder9.ogg')
-		for(var/sound in welcome_sentence)
-			play_vox_sound(sound,STATION_Z,null)
+		if(!config.shut_up_automatic_diagnostic_and_announcement_system)
+			var/welcome_sentence=list('sound/AI/vox_login.ogg')
+			welcome_sentence += pick(
+				'sound/AI/vox_reminder1.ogg',
+				'sound/AI/vox_reminder2.ogg',
+				'sound/AI/vox_reminder3.ogg',
+				'sound/AI/vox_reminder4.ogg',
+				'sound/AI/vox_reminder5.ogg',
+				'sound/AI/vox_reminder6.ogg',
+				'sound/AI/vox_reminder7.ogg',
+				'sound/AI/vox_reminder8.ogg',
+				'sound/AI/vox_reminder9.ogg')
+			for(var/sound in welcome_sentence)
+				play_vox_sound(sound,STATION_Z,null)
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		mode.Clean_Antags()
@@ -226,6 +228,8 @@ var/global/datum/controller/gameticker/ticker
 
 	stat_collection.round_start_time = world.realtime
 
+	wageSetup()
+
 	return 1
 
 /datum/controller/gameticker
@@ -245,6 +249,7 @@ var/global/datum/controller/gameticker/ticker
 	cinematic.icon = 'icons/effects/station_explosion.dmi'
 	cinematic.icon_state = "station_intact"
 	cinematic.layer = 20
+	cinematic.plane = PLANE_HUD
 	cinematic.mouse_opacity = 0
 	cinematic.screen_loc = "1,0"
 
@@ -395,7 +400,7 @@ var/global/datum/controller/gameticker/ticker
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = 1)
-				var/options = list2text(vote.choices, " ")
+				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
 
 			else

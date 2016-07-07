@@ -8,7 +8,7 @@
 	var/damage = 0 // amount of damage to the organ
 	var/min_bruised_damage = 10
 	var/min_broken_damage = 30
-	var/parent_organ = "chest"
+	var/parent_organ = LIMB_CHEST
 	var/robotic = 0 //For being a robot
 	var/removed_type //When removed, forms this object.
 	var/list/transplant_data // Blood DNA and colour of donor
@@ -32,7 +32,9 @@
 	return I
 
 /datum/organ/internal/proc/rejuvenate()
-	damage=0
+	damage = 0
+	germ_level = 0
+	cancer_stage = 0
 
 /datum/organ/internal/proc/is_bruised()
 	return damage >= min_bruised_damage
@@ -61,12 +63,12 @@
 		germ_level = 0
 		return
 
-	if(owner.bodytemperature >= 170)	//cryo stops germs from moving and doing their bad stuffs
+	if(owner.bodytemperature >= 170)	//cryo stops germs and cancer from moving and doing their bad stuffs
 		//** Handle antibiotics and curing infections
 		handle_antibiotics()
 
 		//** Handle the effects of infections
-		var/antibiotics = owner.reagents.get_reagent_amount("spaceacillin")
+		var/antibiotics = owner.reagents.get_reagent_amount(SPACEACILLIN)
 
 		if (germ_level > 0 && germ_level < INFECTION_LEVEL_ONE/2 && prob(30))
 			germ_level--
@@ -103,10 +105,37 @@
 							take_damage(rand(2,3))
 						if(201 to 500)
 							take_damage(rand(3,4))
-							owner.reagents.add_reagent("toxin", 1)
+							owner.reagents.add_reagent(TOXIN, 1)
 						if(501 to INFINITY)
 							take_damage(5)
-							owner.reagents.add_reagent("toxin", rand(3,5))
+							owner.reagents.add_reagent(TOXIN, rand(3,5))
+
+		if(cancer_stage)
+			handle_cancer()
+
+/datum/organ/internal/handle_cancer()
+
+	if(robotic == 2) //This is a fully robotic limb, no cells for cancer to grow from
+		return 0
+
+	var/datum/organ/external/parent = owner.get_organ(parent_organ)
+
+	switch(cancer_stage)
+		if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR) //Small tumors will not damage your organ, but might flash pain
+			if(prob(1))
+				owner.custom_pain("Something inside your [parent.display_name] hurts a lot.", 1)
+		if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS) //Large tumors will start damaging your organ and give the owner DNA damage (bodywide, can't go per limb)
+			if(prob(20))
+				take_damage(0.25)
+			if(prob(1))
+				owner.apply_damage(0.5, CLONE, parent)
+		if(CANCER_STAGE_METASTASIS to INFINITY) //Metastasis achieved, limb will start breaking down very rapidly, and cancer will spread to all other limbs in short order through bloodstream
+			if(prob(33))
+				take_damage(0.25)
+			if(prob(10))
+				owner.apply_damage(0.5, CLONE, parent)
+			if(prob(1))
+				owner.add_cancer() //Add a new cancerous growth
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
 	if(!owner) return
@@ -159,26 +188,29 @@
 				INTERNAL ORGANS DEFINES
 ****************************************************/
 
-/datum/organ/internal/heart // This is not set to vital because death immediately occurs in blood.dm if it is removed.
+//All the internal organs without specific code to them are below
+//Hopefully this will be filled in soon ?
+
+/datum/organ/internal/heart //This is not set to vital because death immediately occurs in blood.dm if it is removed.
 	name = "heart"
-	parent_organ = "chest"
+	parent_organ = LIMB_CHEST
 	removed_type = /obj/item/organ/heart
 
 /datum/organ/internal/kidney
 	name = "kidneys"
-	parent_organ = "groin"
+	parent_organ = LIMB_GROIN
 	removed_type = /obj/item/organ/kidneys
 
 /datum/organ/internal/brain
 	name = "brain"
-	parent_organ = "head"
+	parent_organ = LIMB_HEAD
 	removed_type = /obj/item/organ/brain
 	vital = 1
 
 
 /datum/organ/internal/appendix
 	name = "appendix"
-	parent_organ = "groin"
+	parent_organ = LIMB_GROIN
 	removed_type = /obj/item/organ/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)

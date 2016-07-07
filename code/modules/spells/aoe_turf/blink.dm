@@ -11,6 +11,7 @@
 	inner_radius = 1
 	cooldown_min = 5 //4 deciseconds reduction per rank
 	hud_state = "wiz_blink"
+	selection_type = "range"
 
 /spell/aoe_turf/blink/cast(var/list/targets, mob/user)
 	if(!targets.len)
@@ -19,8 +20,7 @@
 	var/turf/T = pick(targets)
 	var/turf/starting = get_turf(user)
 	if(T)
-		if(user.locked_to)
-			user.locked_to.unlock_atom(user)
+		user.unlock_from()
 		user.forceMove(T)
 
 		var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()

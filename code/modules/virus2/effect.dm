@@ -87,9 +87,9 @@
 	name = "Creosote Syndrome"
 	stage = 4
 /datum/disease2/effect/minttoxin/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob) && mob.reagents.get_reagent_amount("minttoxin") < 5)
+	if(istype(mob) && mob.reagents.get_reagent_amount(MINTTOXIN) < 5)
 		to_chat(mob, "<span class='notice'>You feel a minty freshness</span>")
-		mob.reagents.add_reagent("minttoxin", 5)
+		mob.reagents.add_reagent(MINTTOXIN, 5)
 
 /datum/disease2/effect/gibbingtons
 	name = "Gibbingtons Syndrome"
@@ -175,7 +175,7 @@
 /datum/disease2/effect/organs/activate(var/mob/living/carbon/mob,var/multiplier)
 	if(istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		var/organ = pick(list("r_arm","l_arm","r_leg","r_leg"))
+		var/organ = pick(list(LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_RIGHT_LEG))
 		var/datum/organ/external/E = H.organs_by_name[organ]
 		if (!(E.status & ORGAN_DEAD))
 			E.status |= ORGAN_DEAD
@@ -245,7 +245,7 @@
 	//
 	if(!ishuman(mob)) return 0
 	var/mob/living/carbon/human/H = mob
-	mob.reagents.add_reagent("pacid", 10)
+	mob.reagents.add_reagent(PACID, 10)
 	to_chat(mob, "<span class = 'warning'>Your body burns as your cells break down.</span>")
 	shake_camera(mob,5*multiplier)
 
@@ -284,7 +284,7 @@
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
 					newmeat.subjectjob = sourcejob
-					newmeat.reagents.add_reagent("nutriment", sourcenutriment / totalslabs) //Thehehe. Fat guys go first
+					newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment / totalslabs) //Thehehe. Fat guys go first
 					//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 					allmeat[i] = newmeat
 
@@ -331,8 +331,8 @@
 	stage = 4
 /datum/disease2/effect/delightful/activate(var/mob/living/carbon/mob,var/multiplier)
 	to_chat(mob, "<span class = 'notice'>You feel delightful!</span>")
-	if (mob.reagents.get_reagent_amount("doctorsdelight") < 1)
-		mob.reagents.add_reagent("doctorsdelight", 1)
+	if (mob.reagents.get_reagent_amount(DOCTORSDELIGHT) < 1)
+		mob.reagents.add_reagent(DOCTORSDELIGHT, 1)
 
 
 
@@ -361,7 +361,7 @@
 	stage = 4
 /datum/disease2/effect/orbweapon/activate(var/mob/living/carbon/mob,var/multiplier)
 	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus
-	mob.equip_to_slot_or_drop(virus, slot_l_hand)
+	mob.put_in_hands(virus)
 
 /obj/item/clothing/mask/gas/virusclown_hat
 
@@ -369,8 +369,8 @@
 	canremove = 1
 	..()
 
-/obj/item/clothing/mask/gas/virusclown_hat/equipped(var/mob/user, var/slot)
-	if (slot == slot_l_hand)
+/obj/item/clothing/mask/gas/virusclown_hat/equipped(var/mob/user, var/slot, hand_index)
+	if(hand_index == GRASP_LEFT_HAND) //what the heck
 		canremove = 1		//curses!
 	..()
 
@@ -589,7 +589,7 @@
 		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
 	if(!mob.wear_mask)
 		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
-	mob.reagents.add_reagent("psilocybin", 20)
+	mob.reagents.add_reagent(PSILOCYBIN, 20)
 	mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
 
 
@@ -651,18 +651,18 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	stage = 5
 /datum/disease2/effect/spaceadapt/activate(var/mob/living/carbon/mob,var/multiplier)
 	var/mob/living/carbon/human/H = mob
-	if (mob.reagents.get_reagent_amount("dexalinp") < 10)
-		mob.reagents.add_reagent("dexalinp", 4)
-	if (mob.reagents.get_reagent_amount("leporazine") < 10)
-		mob.reagents.add_reagent("leporazine", 4)
-	if (mob.reagents.get_reagent_amount("bicaridine") < 10)
-		mob.reagents.add_reagent("bicaridine", 4)
-	if (mob.reagents.get_reagent_amount("dermaline") < 10)
-		mob.reagents.add_reagent("dermaline", 4)
+	if (mob.reagents.get_reagent_amount(DEXALINP) < 10)
+		mob.reagents.add_reagent(DEXALINP, 4)
+	if (mob.reagents.get_reagent_amount(LEPORAZINE) < 10)
+		mob.reagents.add_reagent(LEPORAZINE, 4)
+	if (mob.reagents.get_reagent_amount(BICARIDINE) < 10)
+		mob.reagents.add_reagent(BICARIDINE, 4)
+	if (mob.reagents.get_reagent_amount(DERMALINE) < 10)
+		mob.reagents.add_reagent(DERMALINE, 4)
 	mob.emote("me",1,"exhales slowly.")
 
 	if(ishuman(H))
-		var/datum/organ/external/chest/chest = H.get_organ("chest")
+		var/datum/organ/external/chest/chest = H.get_organ(LIMB_CHEST)
 		for(var/datum/organ/internal/I in chest.internal_organs)
 			I.damage = 0
 
@@ -730,8 +730,8 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	stage = 2
 /datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob,var/multiplier)
 	to_chat(mob, "<span class='notice'>You feel a rush of energy inside you!</span>")
-	if (mob.reagents.get_reagent_amount("hyperzine") < 10)
-		mob.reagents.add_reagent("hyperzine", 4)
+	if (mob.reagents.get_reagent_amount(HYPERZINE) < 10)
+		mob.reagents.add_reagent(HYPERZINE, 4)
 	if (prob(30))
 		mob.jitteriness += 10
 
@@ -740,8 +740,8 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	stage = 2
 /datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob,var/multiplier)
 	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
-	if (mob.reagents.get_reagent_amount("ethanol") < 325)
-		mob.reagents.add_reagent("ethanol", 5*multiplier)
+	if (mob.reagents.get_reagent_amount(ETHANOL) < 325)
+		mob.reagents.add_reagent(ETHANOL, 5*multiplier)
 
 /datum/disease2/effect/gaben
 	name = "Gaben Syndrome"
@@ -749,7 +749,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 /datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob,var/multiplier)
 	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
 	if (prob(10))
-		mob.reagents.add_reagent("nutriment", 1000)
+		mob.reagents.add_reagent(NUTRIMENT, 1000)
 		mob.overeatduration = 1000
 
 
@@ -885,5 +885,5 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	stage = 1
 /datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob,var/multiplier)
 	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
-	if (mob.reagents.get_reagent_amount("tricordrazine") < 1)
-		mob.reagents.add_reagent("tricordrazine", 1)
+	if (mob.reagents.get_reagent_amount(TRICORDRAZINE) < 1)
+		mob.reagents.add_reagent(TRICORDRAZINE, 1)

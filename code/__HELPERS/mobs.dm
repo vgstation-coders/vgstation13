@@ -59,27 +59,39 @@ proc/random_name(gender, speciesName = "Human")
 
 
 
-proc/random_skin_tone()
-	switch(pick(60;"caucasian", 15;"afroamerican", 10;"african", 10;"latino", 5;"albino"))
-		if("caucasian")		. = -10
-		if("afroamerican")	. = -115
-		if("african")		. = -165
-		if("latino")		. = -55
-		if("albino")		. = 34
-		else				. = rand(-185,34)
-	return min(max( .+rand(-25, 25), -185),34)
+proc/random_skin_tone(species = "Human")
+	if(species == "Human")
+		switch(pick(60;"caucasian", 15;"afroamerican", 10;"african", 10;"latino", 5;"albino"))
+			if("caucasian")		. = -10
+			if("afroamerican")	. = -115
+			if("african")		. = -165
+			if("latino")		. = -55
+			if("albino")		. = 34
+			else				. = rand(-185,34)
+		return min(max( .+rand(-25, 25), -185),34)
+	else if(species == "Vox")
+		. = rand(1,3)
+		return .
+	else return 0
 
-proc/skintone2racedescription(tone)
-	switch (tone)
-		if(30 to INFINITY)		return "albino"
-		if(20 to 30)			return "pale"
-		if(5 to 15)				return "light skinned"
-		if(-10 to 5)			return "white"
-		if(-25 to -10)			return "tan"
-		if(-45 to -25)			return "darker skinned"
-		if(-65 to -45)			return "brown"
-		if(-INFINITY to -65)	return "black"
-		else					return "unknown"
+proc/skintone2racedescription(tone, species = "Human")
+	if(species == "Human")
+		switch (tone)
+			if(30 to INFINITY)		return "albino"
+			if(20 to 30)			return "pale"
+			if(5 to 15)				return "light skinned"
+			if(-10 to 5)			return "white"
+			if(-25 to -10)			return "tan"
+			if(-45 to -25)			return "darker skinned"
+			if(-65 to -45)			return "brown"
+			if(-INFINITY to -65)	return "black"
+			else					return "unknown"
+	else if(species == "Vox")
+		switch(tone)
+			if(2)					return "brown"
+			if(3)					return "gray"
+			else					return "green"
+	else return "unknown"
 
 proc/age2agedescription(age)
 	switch(age)
@@ -180,3 +192,35 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 		2.7; "A-",\
 		0.8; "B-",\
 		0.3; "AB-")*/
+
+//Returns list of organs that are affected by items worn in the slot. For example, calling get_organ_by_slot(slot_belt) will return list(groin)
+//If H is null, a list of organ names is returned: list(LIMB_LEFT_ARM, LIMB_LEFT_HAND)
+//If H isn't null, a list of organ objects from H is returned: list(H.get_organ(LIMB_LEFT_ARM), H.get_organ(LIMB_LEFT_HAND))
+
+/proc/get_organs_by_slot(input_slot, mob/living/carbon/human/H = null)
+	var/list/L
+
+	switch(input_slot)
+		if(slot_wear_suit) //Exosuit
+			L = list(LIMB_CHEST, LIMB_GROIN, LIMB_LEFT_ARM, LIMB_LEFT_HAND, LIMB_RIGHT_ARM, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_LEG, LIMB_RIGHT_FOOT)
+		if(slot_w_uniform) //Uniform
+			L = list(LIMB_CHEST, LIMB_GROIN, LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+		if(slot_gloves, slot_handcuffed) //Gloves
+			L = list(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
+		if(slot_wear_mask, slot_ears, slot_glasses, slot_head)
+			L = list(LIMB_HEAD)
+		if(slot_shoes)
+			L = list(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+		if(slot_belt)
+			L = list(LIMB_GROIN)
+		if(slot_back, slot_wear_id)
+			L = list(LIMB_CHEST)
+		if(slot_legs, slot_legcuffed)
+			L = list(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+
+	if(H)
+		for(var/organ in L)
+			L |= (H.get_organ(organ))
+			L.Remove(organ)
+
+	return L

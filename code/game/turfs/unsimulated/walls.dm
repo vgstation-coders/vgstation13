@@ -5,6 +5,7 @@
 	opacity = 1
 	density = 1
 	explosion_block = 2
+	blocks_air = 1
 	canSmoothWith = "/turf/unsimulated/wall=0"
 
 	var/walltype = "riveted"
@@ -13,6 +14,12 @@
 	name = "window"
 	icon_state = "fakewindows"
 	opacity = 0
+	canSmoothWith = null
+
+/turf/unsimulated/wall/rock
+	name = "unnaturally hard rock wall"
+	icon = 'icons/turf/walls.dmi'
+	icon_state = "rock"
 	canSmoothWith = null
 
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -34,6 +41,7 @@ turf/unsimulated/wall/splashscreen
 	icon = null
 	icon_state = null
 	layer = FLY_LAYER
+	plane = PLANE_EFFECTS
 	canSmoothWith = null
 
 	New()
@@ -58,7 +66,7 @@ turf/unsimulated/wall/splashscreen
 
 /turf/unsimulated/wall/cultify()
 	ChangeTurf(/turf/unsimulated/wall/cult)
-	turf_animation('icons/effects/effects.dmi',"cultwall",0,0,MOB_LAYER-1)
+	turf_animation('icons/effects/effects.dmi',"cultwall",0,0,MOB_LAYER-1, anim_plane = PLANE_TURF)
 	return
 
 /turf/unsimulated/wall/cult/cultify()

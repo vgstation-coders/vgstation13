@@ -44,7 +44,6 @@
 		new /obj/item/weapon/wrench(), \
 		new /obj/item/weapon/solder(),\
 		new /obj/item/device/analyzer(), \
-		new /obj/item/device/t_scanner(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
 		),
@@ -116,7 +115,7 @@
 		new /obj/item/stack/rods(), \
 		),
 		"Hidden_Items" = list(
-		new /obj/item/weapon/flamethrower/full(), \
+		new /obj/item/weapon/gun/projectile/flamethrower/full(), \
 		new /obj/item/ammo_storage/box/flare(), \
 		new /obj/item/device/rcd/matter/engineering(), \
 		new /obj/item/device/rcd/rpd(),\

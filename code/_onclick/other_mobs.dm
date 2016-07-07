@@ -10,10 +10,38 @@
 	// Special glove functions:
 	// If the gloves do anything, have them return 1 to stop
 	// normal attack_hand() here.
-	if(ismob(A))
-		delayNextAttack(10)
 	if(proximity && istype(G) && G.Touch(A, src, 1))
 		return
+
+	if(a_intent == "hurt" && A.loc != src)
+
+		switch(attack_type) //Special attacks - kicks, bites
+			if(ATTACK_KICK)
+				if(can_kick(A))
+
+					delayNextAttack(10)
+
+					if(!A.kick_act(src)) //kick_act returns 1 if the kick failed or couldn't be done
+						return
+
+					delayNextAttack(-10) //This is only called when the kick fails
+				else
+					set_attack_type() //Reset attack type
+
+			if(ATTACK_BITE)
+				if(can_bite(A))
+
+					delayNextAttack(10)
+
+					if(!A.bite_act(src)) //bite_act returns 1 if the bite failed or couldn't be done
+						return
+
+					delayNextAttack(-10) //This is only called when the bite fails
+				else
+					set_attack_type() //Reset attack type
+
+	if(ismob(A))
+		delayNextAttack(10)
 
 	if(src.can_use_hand())
 		A.attack_hand(src, params)
@@ -30,7 +58,7 @@
 	if(!requires_dexterity(user))
 		attack_hand(user) //if the object doesn't need dexterity, we can use our stump
 	else
-		to_chat(user, "Your [user.hand ? "left hand" : "right hand"] is not fine enough for this action.")
+		to_chat(user, "Your [user.get_index_limb_name(user.active_hand)] is not fine enough for this action.")
 
 /atom/proc/requires_dexterity(mob/user)
 	return 0
@@ -100,7 +128,7 @@
 	if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 		return
 	var/mob/living/carbon/ML = A
-	var/dam_zone = ran_zone(pick("chest", "l_hand", "r_hand", "l_leg", "r_leg"))
+	var/dam_zone = ran_zone(pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 	var/armor = ML.run_armor_check(dam_zone, "melee")
 	if(prob(75))
 		ML.apply_damage(rand(1,3), BRUTE, dam_zone, armor)

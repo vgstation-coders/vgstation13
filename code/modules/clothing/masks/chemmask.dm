@@ -28,7 +28,7 @@
 	name = "chemical mask"
 	icon_state = "chemmask0"
 	flags = FPRINT | MASKINTERNALS
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	var/power = 0
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -40,7 +40,7 @@
 	var/beaker_time_interval = 970
 	var/beaker_injection_rate = 10
 	var/beaker_threshold = 10
-	var/beaker_threshold_reagent = "creatine"
+	var/beaker_threshold_reagent = CREATINE
 	var/beaker_has_injected_time = 0
 	var/firstalert_tank = 0
 	var/firstalert_beaker = 0
@@ -55,7 +55,7 @@
 		/obj/item/clothing/mask/chemmask/verb/set_beaker_threshold,
 		/obj/item/clothing/mask/chemmask/verb/set_beaker_threshold_reagent
 		)
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/chempack.dmi', "right_hand" = 'icons/mob/in-hand/right/chempack.dmi')
 	origin_tech = "biotech=5;materials=5;engineering=5;syndicate=5;combat=5"
 
@@ -73,7 +73,8 @@
 	if(H.wear_mask == src)
 		update_verbs()
 
-/obj/item/clothing/mask/chemmask/proc/update_verbs()
+/obj/item/clothing/mask/chemmask/update_verbs()
+	..()
 	var/mob/living/carbon/human/H
 	if (power)
 		verbs += /obj/item/clothing/mask/chemmask/verb/set_pack_injection

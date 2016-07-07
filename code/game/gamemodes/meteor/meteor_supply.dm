@@ -1,4 +1,4 @@
-/datum/game_mode/meteor/proc/meteor_initial_supply()
+/datum/universal_state/meteor_storm/proc/meteor_initial_supply()
 
 	var/list/meteor_initial_drop = list(/obj/structure/closet/crate/engi/meteor_materials, \
 	/obj/structure/closet/crate/meteor_assorted_protection, \
@@ -118,10 +118,10 @@
 /obj/structure/closet/crate/secure/large/meteor_shieldwallgen/New()
 
 	..()
-	new /obj/machinery/shieldwallgen(src)
-	new /obj/machinery/shieldwallgen(src)
-	new /obj/machinery/shieldwallgen(src)
-	new /obj/machinery/shieldwallgen(src)
+	new /obj/machinery/shieldwallgen/free_access(src)
+	new /obj/machinery/shieldwallgen/free_access(src)
+	new /obj/machinery/shieldwallgen/free_access(src)
+	new /obj/machinery/shieldwallgen/free_access(src)
 
 //Can protect window bays locally by putting forcefields in front of them, limited usefulness
 /obj/structure/closet/crate/secure/large/meteor_shieldgens

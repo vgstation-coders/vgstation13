@@ -113,36 +113,7 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "r_hand"
-	inv_box.dir = WEST
-	inv_box.icon = ui_style
-	inv_box.icon_state = "hand_inactive"
-	if(mymob && !mymob.hand)	//This being 0 or null means the right hand is in use
-		inv_box.icon_state = "hand_active"
-	inv_box.screen_loc = ui_rhand
-	inv_box.slot_id = slot_r_hand
-	inv_box.layer = 19
-	inv_box.color = ui_color
-	inv_box.alpha = ui_alpha
-
-	src.r_hand_hud_object = inv_box
-	src.adding += inv_box
-
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "l_hand"
-	inv_box.dir = EAST
-	inv_box.icon = ui_style
-	inv_box.icon_state = "hand_inactive"
-	if(mymob && mymob.hand)	//This being 1 means the left hand is in use
-		inv_box.icon_state = "hand_active"
-	inv_box.screen_loc = ui_lhand
-	inv_box.slot_id = slot_l_hand
-	inv_box.layer = 19
-	inv_box.color = ui_color
-	inv_box.alpha = ui_alpha
-	src.l_hand_hud_object = inv_box
-	src.adding += inv_box
+	init_hand_icons(ui_style, ui_color, ui_alpha)
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
@@ -341,6 +312,24 @@
 	mymob.throw_icon.alpha = ui_alpha
 	src.hotkeybuttons += mymob.throw_icon
 
+	mymob.kick_icon = getFromPool(/obj/screen)
+	mymob.kick_icon.name = "kick"
+	mymob.kick_icon.icon = ui_style
+	mymob.kick_icon.icon_state = "act_kick"
+	mymob.kick_icon.screen_loc = ui_kick_bite
+	mymob.kick_icon.color = ui_color
+	mymob.kick_icon.alpha = ui_alpha
+	src.hotkeybuttons += mymob.kick_icon
+
+	mymob.bite_icon = getFromPool(/obj/screen)
+	mymob.bite_icon.name = "bite"
+	mymob.bite_icon.icon = ui_style
+	mymob.bite_icon.icon_state = "act_bite"
+	mymob.bite_icon.screen_loc = ui_kick_bite
+	mymob.bite_icon.color = ui_color
+	mymob.bite_icon.alpha = ui_alpha
+	src.hotkeybuttons += mymob.bite_icon
+
 	mymob.oxygen = getFromPool(/obj/screen)
 	mymob.oxygen.icon = ui_style
 	mymob.oxygen.icon_state = "oxy0"
@@ -396,29 +385,6 @@
 	mymob.pullin.screen_loc = ui_pull_resist
 	src.hotkeybuttons += mymob.pullin
 
-	mymob.blind = getFromPool(/obj/screen)
-	mymob.blind.icon = 'icons/mob/screen1_full.dmi'
-	mymob.blind.icon_state = "blackimageoverlay"
-	mymob.blind.name = ""
-	mymob.blind.screen_loc = "1,1"
-	mymob.blind.mouse_opacity = 1
-	mymob.blind.layer = 0
-
-	mymob.damageoverlay = getFromPool(/obj/screen)
-	mymob.damageoverlay.icon = 'icons/mob/screen1_full.dmi'
-	mymob.damageoverlay.icon_state = "oxydamageoverlay0"
-	mymob.damageoverlay.name = "dmg"
-	mymob.damageoverlay.screen_loc = "1,1"
-	mymob.damageoverlay.mouse_opacity = 0
-	mymob.damageoverlay.layer = 18.1 //The black screen overlay sets layer to 18 to display it, this one has to be just on top.
-
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = ui_style
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = 17
-
 	mymob.pain = getFromPool(/obj/screen)
 
 	mymob.zone_sel = getFromPool(/obj/screen/zone_sel)
@@ -451,9 +417,9 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.blind, mymob.flash, mymob.damageoverlay, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
 	mymob.client.screen += src.adding + src.hotkeybuttons
-	inventory_shown = 0;
+	inventory_shown = 0
 
 	return
 

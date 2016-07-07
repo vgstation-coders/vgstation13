@@ -3,6 +3,7 @@
 	desc = "A little security robot.  He looks less than thrilled."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "secbot0"
+	icon_initial = "secbot"
 	layer = 5.0
 	density = 0
 	anchored = 0
@@ -53,13 +54,17 @@
 
 	var/nearest_beacon			// the nearest beacon's tag
 	var/turf/nearest_beacon_loc	// the nearest beacon's location
-	var/weapons_check = 0
-	var/safe_weapons = list(
+
+	//List of weapons that secbots will not arrest for, also copypasted in ed209.dm and metaldetector.dm
+	var/list/safe_weapons = list(
 		/obj/item/weapon/gun/energy/laser/bluetag,
 		/obj/item/weapon/gun/energy/laser/redtag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
+		/obj/item/weapon/gun/energy/floragun,
+		/obj/item/weapon/melee/defibrillator
 		)
+
 	light_color = LIGHT_COLOR_RED
 	power_change()
 		..()
@@ -72,9 +77,7 @@
 /obj/machinery/bot/secbot/beepsky
 	name = "Officer Beep O'sky"
 	desc = "It's Officer Beep O'sky! Powered by a potato and a shot of whiskey."
-	idcheck = 0
 	auto_patrol = 1
-	weapons_check = 0
 	declare_arrests = 1
 
 /obj/item/weapon/secbot_assembly
@@ -88,7 +91,7 @@
 
 /obj/machinery/bot/secbot/New()
 	..()
-	src.icon_state = "secbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	spawn(3)
 		src.botcard = new /obj/item/weapon/card/id(src)
 		var/datum/job/detective/J = new/datum/job/detective
@@ -100,7 +103,7 @@
 
 /obj/machinery/bot/secbot/turn_on()
 	..()
-	src.icon_state = "secbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/secbot/turn_off()
@@ -110,7 +113,7 @@
 	src.anchored = 0
 	src.mode = SECBOT_IDLE
 	walk_to(src,0)
-	src.icon_state = "secbot[src.on]"
+	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
 /obj/machinery/bot/secbot/attack_hand(mob/user as mob)
@@ -201,12 +204,22 @@ Auto Patrol: []"},
 		..()
 	if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent != "harm") // Any intent but harm will heal, so we shouldn't get angry.
 		return
-	if(!istype(W, /obj/item/weapon/screwdriver) && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
+	if(!isscrewdriver(W) && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
 		threatlevel = user.assess_threat(src)
 		threatlevel += 6
 		if(threatlevel > 0)
 			target = user
 			mode = SECBOT_HUNT
+
+/obj/machinery/bot/secbot/kick_act(mob/living/H)
+	..()
+
+	threatlevel = H.assess_threat(src)
+	threatlevel += 6
+
+	if(threatlevel > 0)
+		src.target = H
+		src.mode = SECBOT_HUNT
 
 /obj/machinery/bot/secbot/Emag(mob/user as mob)
 	..()
@@ -221,7 +234,7 @@ Auto Patrol: []"},
 		src.anchored = 0
 		src.emagged = 2
 		src.on = 1
-		src.icon_state = "secbot[src.on]"
+		src.icon_state = "[src.icon_initial][src.on]"
 		mode = SECBOT_IDLE
 
 /obj/machinery/bot/secbot/process()
@@ -257,9 +270,9 @@ Auto Patrol: []"},
 				if(get_dist(src, src.target) <= 1)		// if right next to perp
 					if(istype(src.target,/mob/living/carbon))
 						playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
-						src.icon_state = "secbot-c"
+						src.icon_state = "[src.icon_initial]-c"
 						spawn(2)
-							src.icon_state = "secbot[src.on]"
+							src.icon_state = "[icon_initial][src.on]"
 						var/mob/living/carbon/M = src.target
 						var/maxstuns = 4
 						if(istype(M, /mob/living/carbon/human))
@@ -294,9 +307,9 @@ Auto Patrol: []"},
 							next_harm_time = world.time + 15
 							playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
 							visible_message("<span class='danger'>[src] beats [src.target] with the stun baton!</span>")
-							src.icon_state = "secbot-c"
+							src.icon_state = "[src.icon_initial]-c"
 							spawn(2)
-								src.icon_state = "secbot[src.on]"
+								src.icon_state = "[src.icon_initial][src.on]"
 
 							var/mob/living/simple_animal/S = src.target
 							if(S && istype(S))
@@ -686,39 +699,37 @@ Auto Patrol: []"},
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.
+//THIS CODE IS COPYPASTED IN ed209bot.dm AND metaldetector.dm, with slight variations
 /obj/machinery/bot/secbot/proc/assess_perp(mob/living/carbon/human/perp as mob)
-	var/threatcount = 0
+	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
 
 	if(src.emagged == 2) return 10 //Everyone is a criminal!
 
-	if(src.idcheck && !src.allowed(perp))
+	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 
-		if(istype(perp.l_hand, /obj/item/weapon/gun) || istype(perp.l_hand, /obj/item/weapon/melee))
-			if(!istype(perp.l_hand, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp.l_hand, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp.l_hand, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 4
+		if(weaponscheck && !wpermit(perp))
+			for(var/obj/item/I in perp.held_items)
+				if(check_for_weapons(I))
+					threatcount += 4
 
-		if(istype(perp.r_hand, /obj/item/weapon/gun) || istype(perp.r_hand, /obj/item/weapon/melee))
-			if(!istype(perp.r_hand, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp.r_hand, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp.r_hand, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 4
+			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
+				if(!(perp.belt.type in safe_weapons))
+					threatcount += 2
 
-		if(istype(perp:belt, /obj/item/weapon/gun) || istype(perp:belt, /obj/item/weapon/melee))
-			if(!istype(perp:belt, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp:belt, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp:belt, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 2
-
-		if(istype(perp:wear_suit, /obj/item/clothing/suit/wizrobe))
+		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
 			threatcount += 2
 
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
 			threatcount += 2
 
+		if(!perp.wear_id)
+			if(idcheck)
+				threatcount += 4
+			else
+				threatcount += 2
+
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp:wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 			threatcount -= 2
 
 	if(src.check_records)
@@ -794,13 +805,10 @@ Auto Patrol: []"},
 
 //Secbot Construction
 
-/obj/item/clothing/head/helmet/attackby(var/obj/item/device/assembly/signaler/S, mob/user as mob)
+/obj/item/clothing/head/helmet/tactical/sec/attackby(var/obj/item/device/assembly/signaler/S, mob/user as mob)
 	..()
 	if(!issignaler(S))
 		..()
-		return
-
-	if(src.type != /obj/item/clothing/head/helmet) //Eh, but we don't want people making secbots out of space helmets.
 		return
 
 	if(S.secured)
@@ -858,10 +866,10 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/declare()
 	var/area/location = get_area(src)
-	declare_message = "<span class='info'>\icon[src] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
+	declare_message = "<span class='info'>[bicon(src)] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
 	..()
 
-/obj/machinery/bot/secbot/proc/check_for_weapons(var/obj/item/slot_item)
+/obj/machinery/bot/secbot/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in ed209bot.dm
 	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
 		if(!(slot_item.type in safe_weapons))
 			return 1

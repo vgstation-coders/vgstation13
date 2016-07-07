@@ -40,7 +40,7 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted)) return 1
 	return (!density)
 
@@ -51,7 +51,7 @@
 
 /obj/structure/closet/proc/can_close()
 	for(var/obj/structure/closet/closet in get_turf(src))
-		if(closet != src)
+		if(closet != src && !closet.wall_mounted)
 			return 0
 	return 1
 
@@ -121,7 +121,7 @@
 			L.client.eye = src
 	else if(!istype(AM, /obj/item) && !istype(AM, /obj/effect/dummy/chameleon))
 		return 0
-	else if(AM.density || AM.anchored)
+	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 		return 0
 	AM.loc = src
 	return 1
@@ -201,6 +201,13 @@
 					A.loc = src.loc
 					A.ex_act(severity++)
 				qdel(src)
+
+/obj/structure/closet/shuttle_act()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(src.loc)
+		AM.shuttle_act()
+
+	..()
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
@@ -371,8 +378,8 @@
 			temp_overlay.overlays += spooky_overlay
 
 			C.images += temp_overlay
-			to_chat(L, sound('sound/machines/click.ogg'))
-			to_chat(L, sound('sound/hallucinations/scary.ogg'))
+			L << sound('sound/machines/click.ogg')
+			L << sound('sound/hallucinations/scary.ogg')
 			L.Weaken(5)
 
 			sleep(50)
@@ -412,7 +419,7 @@
 	if(!opened)
 		icon_state = icon_closed
 		if(welded)
-			overlays += "welded"
+			overlays += image(icon = icon, icon_state = "welded")
 	else
 		icon_state = icon_opened
 

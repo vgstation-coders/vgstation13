@@ -7,6 +7,7 @@
 
 #define ACT_BBCODE_IMG /datum/speech_filter_action/bbcode/img
 #define ACT_BBCODE_VIDEO /datum/speech_filter_action/bbcode/video
+#define ACT_BBCODE_YOUTUBE /datum/speech_filter_action/bbcode/youtube
 #define CHECK_NANO /obj/item/weapon/pen
 // MACROS
 #define REG_NOTBB "\[^\\\[\]+"    // [^\]]+
@@ -23,21 +24,33 @@
 	return
 
 /datum/speech_filter_action/bbcode/img/Run(var/text, var/mob/user, var/atom/movable/P)
-	expr.index=1
-	while(expr.FindNext(text))
-		message_admins("[key_name_admin(user)] added an image ([html_encode(expr.GroupText(1))]) to [P] at [formatJumpTo(get_turf(P))]")
-		var/rtxt="<img src=\"[html_encode(expr.GroupText(1))]\" />"
-		text=copytext(text,1,expr.match)+rtxt+copytext(text,expr.index)
-		expr.index=expr.match+length(rtxt)
+	expr.index = 1
+	while(expr.Find(text, expr.index))
+		message_admins("[key_name_admin(user)] added an image ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
+		var/rtxt   = "<img src=\"[html_encode(expr.group[1])]\" />"
+		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
+		expr.index = expr.index + length(rtxt)
 	return text
 
 /datum/speech_filter_action/bbcode/video/Run(var/text, var/mob/user, var/atom/movable/P)
-	expr.index=1
-	while(expr.FindNext(text))
-		message_admins("[key_name_admin(user)] added a video ([html_encode(expr.GroupText(1))]) to [P] at [formatJumpTo(get_turf(P))]")
-		var/rtxt="<embed src=\"[html_encode(expr.GroupText(1))]\" width=\"420\" height=\"344\" type=\"x-ms-wmv\" volume=\"85\" autoStart=\"0\" autoplay=\"true\" />"
-		text=copytext(text,1,expr.match)+rtxt+copytext(text,expr.index)
-		expr.index=expr.match+length(rtxt)
+	expr.index = 1
+	while(expr.Find(text, expr.index))
+		message_admins("[key_name_admin(user)] added a video ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
+		var/rtxt   = "<embed src=\"[html_encode(expr.group[1])]\" width=\"420\" height=\"344\" type=\"x-ms-wmv\" volume=\"85\" autoStart=\"0\" autoplay=\"true\" />"
+		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
+		expr.index = expr.index + length(rtxt)
+	return text
+
+/datum/speech_filter_action/bbcode/youtube/Run(var/text, var/mob/user, var/atom/movable/P)
+	expr.index = 1
+	while(expr.Find(text,expr.index))
+		var/regex/youtubeid = regex("(youtu\\.be\\/|youtube\\.com\\/(watch\\?(.*&)?v=|(embed|v)\\/))(\[\\w\]+)", "gi")
+		youtubeid.Find(expr.group[1])
+		var/link = "http://www.youtube.com/embed/[youtubeid.group[5]]?autoplay=1&loop=1&controls=0&showinfo=0&rel=0"
+		message_admins("[key_name_admin(user)] added a youtube video ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
+		var/rtxt   = "<iframe width=\"420\" height=\"345\" src=\"[link]\" frameborder=\"0\">"
+		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
+		expr.index = expr.index + length(rtxt)
 	return text
 
 // Attached to writing instrument. (pen/pencil/etc)
@@ -137,7 +150,7 @@ var/paperwork_library
 	return "<span style=\"[style];color:[P.color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
-	addReplacement(REG_BBTAG("*"), "<li>")
+	addReplacement(REG_BBTAG("\\*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
 	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
 	addReplacement(REG_BBTAG("/small"), "</span>")
@@ -166,14 +179,13 @@ var/paperwork_library
 	addReplacement(REG_BBTAG("tnr"),		"<span style=\"font-family:Times New Roman\">")
 	addReplacement(REG_BBTAG("/tnr"),		"</span>")
 
-	// : is our delimiter, gi = global search, case-insensitive.
-	addExpression(":"+REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img")+":gi", ACT_BBCODE_IMG,list())
+	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
 
 	..() // Order of operations
 
 /datum/writing_style/pen/nano_paper/New()
-	// : is our delimiter, gi = global search, case-insensitive.
-	addExpression(":"+REG_BBTAG("video")+"("+REG_NOTBB+")"+REG_BBTAG("/video")+":gi", ACT_BBCODE_VIDEO,list())
+	addExpression(REG_BBTAG("video")+"("+REG_NOTBB+")"+REG_BBTAG("/video"), ACT_BBCODE_VIDEO,list(),flags = "gi")
+	addExpression(REG_BBTAG("youtube")+"("+REG_NOTBB+")"+REG_BBTAG("/youtube"), ACT_BBCODE_YOUTUBE,list(),flags = "gi")
 
 	..()
 
@@ -193,9 +205,9 @@ var/paperwork_library
 	origin_tech = "materials=1"
 	sharpness = 0.5
 	flags = FPRINT
-	slot_flags = SLOT_BELT | slot_ears
+	slot_flags = SLOT_BELT | SLOT_EARS
 	throwforce = 0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 7
 	throw_range = 15
 	starting_materials = list(MAT_IRON = 10)
@@ -246,9 +258,9 @@ var/paperwork_library
 		return
 	to_chat(user, "<span class='warning'>You stab [M] with the pen.</span>")
 	to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stabbed with [name]  by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to stab [M.name] ([M.ckey])</font>")
-	msg_admin_attack("[user.name] ([user.ckey]) Used the [name] to stab [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stabbed with [type]  by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [type] to stab [M.name] ([M.ckey])</font>")
+	msg_admin_attack("[user.name] ([user.ckey]) Used the [type] to stab [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 	if(!iscarbon(user))
 		M.LAssailant = null
 	else
@@ -269,7 +281,7 @@ var/paperwork_library
 /obj/item/weapon/pen/sleepypen/New()
 	. = ..()
 	create_reagents(30) // Used to be 300
-	reagents.add_reagent("chloralhydrate", 22) // Used to be 100 sleep toxin // 30 Chloral seems to be fatal, reducing it to 22. /N
+	reagents.add_reagent(CHLORALHYDRATE, 22) // Used to be 100 sleep toxin // 30 Chloral seems to be fatal, reducing it to 22. /N
 
 /obj/item/weapon/pen/sleepypen/attack(mob/M as mob, mob/user as mob)
 	if(!(istype(M,/mob)))
@@ -302,8 +314,8 @@ var/paperwork_library
 	var/datum/reagents/R = new/datum/reagents(50)
 	reagents = R
 	R.my_atom = src
-	R.add_reagent("zombiepowder", 10)
-	R.add_reagent("impedrezene", 25)
-	R.add_reagent("cryptobiolin", 15)
+	R.add_reagent(ZOMBIEPOWDER, 10)
+	R.add_reagent(IMPEDREZENE, 25)
+	R.add_reagent(CRYPTOBIOLIN, 15)
 	..()
 	return

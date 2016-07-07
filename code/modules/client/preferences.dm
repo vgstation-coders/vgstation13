@@ -94,6 +94,9 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/toggles = TOGGLES_DEFAULT
 	var/UI_style_color = "#ffffff"
 	var/UI_style_alpha = 255
+	var/space_parallax = 1
+	var/space_dust = 1
+	var/parallax_speed = 2
 	var/special_popup = 0
 
 	//character preferences
@@ -178,18 +181,42 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
 	var/client/client
+	var/saveloaded = 0
 
 /datum/preferences/New(client/C)
 	client=C
 	if(istype(C))
-		if(!IsGuestKey(C.key))
-			var/load_pref = load_preferences_sqlite(C.ckey)
-			if(load_pref)
-				if(load_save_sqlite(C.ckey, src, default_slot))
+		var/theckey = C.ckey
+		var/thekey = C.key
+		spawn()
+			if(!IsGuestKey(thekey))
+				var/load_pref = load_preferences_sqlite(theckey)
+				if(load_pref)
+					while(!speciesinit)
+						sleep(1)
+					try_load_save_sqlite(theckey, C, default_slot)
 					return
+
+			while(!speciesinit)
+				sleep(1)
+			randomize_appearance_for()
+			real_name = random_name(gender)
+			save_character_sqlite(theckey, C, default_slot)
+			saveloaded = 1
+
+/datum/preferences/proc/try_load_save_sqlite(var/theckey, var/theclient, var/theslot)
+	var/attempts = 0
+	while(!load_save_sqlite(theckey, theclient, theslot) && attempts < 5)
+		sleep(15)
+		attempts++
+	if(attempts >= 5)//failsafe so people don't get locked out of the round forever
 		randomize_appearance_for()
 		real_name = random_name(gender)
-		save_character_sqlite(src, C.ckey, default_slot)
+		log_debug("Player [theckey] FAILED to load save 5 times and has been randomized.")
+		log_admin("Player [theckey] FAILED to load save 5 times and has been randomized.")
+		if(theclient)
+			alert(theclient, "For some reason you've failed to load your save slot 5 times now, so you've been generated a random character. Don't worry, it didn't overwrite your old one.","Randomized Character", "OK")
+	saveloaded = 1
 
 /datum/preferences/proc/setup_character_options(var/dat, var/user)
 
@@ -212,7 +239,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<table width='100%'><tr><td width='24%' valign='top'>
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
 	<b>Secondary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
-	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[-s_tone + 35]/220<br></a><BR>
+	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
 	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'><b>Set</a></b><br>
 	<b>Limbs:</b> <a href='byond://?src=\ref[user];preference=limbs;task=input'>Set</a><br>
 	<b>Organs:</b> <a href='byond://?src=\ref[user];preference=organs;task=input'>Set</a><br>
@@ -250,6 +277,9 @@ var/const/MAX_SAVE_SLOTS = 8
 /datum/preferences/proc/setup_special(var/dat, var/user)
 	dat += {"<table><tr><td width='340px' height='300px' valign='top'>
 	<h2>General Settings</h2>
+	<b>Space Parallax:</b> <a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
+	<b>Parallax Speed:</b> <a href='?_src_=prefs;preference=p_speed'><b>[parallax_speed]</b></a><br>
+	<b>Space Dust:</b> <a href='?_src_=prefs;preference=dust'><b>[space_dust ? "Yes" : "No"]</b></a><br>
 	<b>Play admin midis:</b> <a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
 	<b>Play lobby music:</b> <a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
 	<b>Hear streamed media:</b> <a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
@@ -347,7 +377,7 @@ var/const/MAX_SAVE_SLOTS = 8
 			function mouseDown(event,levelup,leveldown,rank){
 				return false;
 				}
-			
+
 			function mouseUp(event,levelup,leveldown,rank){
 				if(event.button == 0){
 					//alert("left click " + levelup + " " + rank);
@@ -444,6 +474,19 @@ var/const/MAX_SAVE_SLOTS = 8
 			prefLevelColor = "red"
 			prefUpperLevel = 3
 			prefLowerLevel = 1
+
+		if(job.species_whitelist.len)
+			if(!job.species_whitelist.Find(src.species))
+				prefLevelLabel = "Unavailable"
+				prefLevelColor = "gray"
+				prefUpperLevel = 0
+				prefLowerLevel = 0
+		else if(job.species_blacklist.len)
+			if(job.species_blacklist.Find(src.species))
+				prefLevelLabel = "Unavailable"
+				prefLevelColor = "gray"
+				prefUpperLevel = 0
+				prefLowerLevel = 0
 
 		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");' oncontextmenu='javascript:return mouseDown(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");'>"
 
@@ -546,6 +589,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_FAT,        "Obese")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_EPILEPTIC,  "Seizures")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_DEAF,       "Deaf")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_BLIND,      "Blind")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -619,6 +663,23 @@ var/const/MAX_SAVE_SLOTS = 8
 			job_civilian_low |= job.flag
 		SetChoices(user)
 		return 1
+
+	if(job.species_blacklist.Find(src.species)) //Check if our species is in the blacklist
+		to_chat(user, "<span class='notice'>Your species ("+src.species+") can't have this job!</span>")
+		return
+
+	if(job.species_whitelist.len) //Whitelist isn't empty - check if our species is in the whitelist
+		if(!job.species_whitelist.Find(src.species))
+			var/allowed_species = ""
+			for(var/S in job.species_whitelist)
+				allowed_species += "[S]"
+
+				if(job.species_whitelist.Find(S) != job.species_whitelist.len)
+					allowed_species += ", "
+
+			to_chat(user, "<span class='notice'>Only the following species can have this job: [allowed_species]. Your species is ([src.species]).</span>")
+			return
+
 	if(inc == null)
 		if(GetJobDepartment(job, 1) & job.flag)
 			SetJobDepartment(job, 1)
@@ -703,6 +764,7 @@ var/const/MAX_SAVE_SLOTS = 8
 			job_civilian_med |= job_civilian_high
 			job_medsci_med |= job_medsci_high
 			job_engsec_med |= job_engsec_high
+
 			job_civilian_high = 0
 			job_medsci_high = 0
 			job_engsec_high = 0
@@ -741,6 +803,57 @@ var/const/MAX_SAVE_SLOTS = 8
 	return 1
 
 
+/datum/preferences/proc/SetDepartmentFlags(datum/job/job, level, new_flags)	//Sets a department's preference flags (job_medsci_high, job_engsec_med - those variables) to 'new_flags'.
+																		//First argument can either be a job, or the department's flag (ENGSEC, MISC, ...)
+																		//Second argument can be either text ("high", "MEDIUM", "LoW") or number (1-high, 2-med, 3-low)
+
+																		//NOTE: If you're not sure what you're doing, be careful when using this proc.
+
+	//Determine department flag
+	var/d_flag
+	if(istype(job))
+		d_flag = job.department_flag
+	else
+		d_flag = job
+
+	//Determine department level
+	var/d_level
+	if(istext(level))
+		switch(lowertext(level))
+			if("high")
+				d_level = 1
+			if("med", "medium")
+				d_level = 2
+			if("low")
+				d_level = 3
+	else
+		d_level = level
+
+	switch(d_flag)
+		if(CIVILIAN)
+			switch(d_level)
+				if(1) //high
+					job_civilian_high = new_flags
+				if(2) //med
+					job_civilian_med = new_flags
+				if(3) //low
+					job_civilian_low = new_flags
+		if(MEDSCI)
+			switch(d_level)
+				if(1) //high
+					job_medsci_high = new_flags
+				if(2) //med
+					job_medsci_med = new_flags
+				if(3) //low
+					job_medsci_low = new_flags
+		if(ENGSEC)
+			switch(d_level)
+				if(1) //high
+					job_engsec_high = new_flags
+				if(2) //med
+					job_engsec_med = new_flags
+				if(3) //low
+					job_engsec_low = new_flags
 
 /datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
 	// We just grab the role from the POST(?) data.
@@ -928,7 +1041,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					g_eyes = rand(0,255)
 					b_eyes = rand(0,255)
 				if("s_tone")
-					s_tone = random_skin_tone()
+					s_tone = random_skin_tone(species)
 				if("bag")
 					backbag = rand(1,4)
 				/*if("skin_style")
@@ -1030,6 +1143,27 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 						s_tone = 0
 
+					for(var/datum/job/job in job_master.occupations)
+						if(job.species_blacklist.Find(species)) //If new species is in a job's blacklist
+							for(var/i = 1 to 3)
+								var/F = GetJobDepartment(job, i)
+
+								F &= ~job.flag //Disable that job in our preferences
+								SetDepartmentFlags(job, i, F)
+
+							to_chat(usr, "<span class='info'>Your new species ([species]) is blacklisted from [job.title].</span>")
+
+						if(job.species_whitelist.len) //If the job has a species whitelist
+							if(!job.species_whitelist.Find(species)) //And it doesn't include our new species
+								for(var/i = 1 to 3)
+									var/F = GetJobDepartment(job, i)
+
+									if(F & job.flag)
+										to_chat(usr, "<span class='info'>Your new species ([species]) can't be [job.title]. Your preferences have been adjusted.</span>")
+
+									F &= ~job.flag //Disable that job in our preferences
+									SetDepartmentFlags(job, i, F)
+
 				if("language")
 					var/languages_available
 					var/list/new_languages = list("None")
@@ -1079,11 +1213,12 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						h_style = new_h_style
 
 				if("facial")
-					var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference") as color|null
-					if(new_facial)
-						r_facial = hex2num(copytext(new_facial, 2, 4))
-						g_facial = hex2num(copytext(new_facial, 4, 6))
-						b_facial = hex2num(copytext(new_facial, 6, 8))
+					if(species == "Human" || species == "Unathi")
+						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference") as color|null
+						if(new_facial)
+							r_facial = hex2num(copytext(new_facial, 2, 4))
+							g_facial = hex2num(copytext(new_facial, 4, 6))
+							b_facial = hex2num(copytext(new_facial, 6, 8))
 
 				if("f_style")
 					var/list/valid_facialhairstyles = list()
@@ -1122,11 +1257,24 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
 				if("s_tone")
-					if(species != "Human")
+					if(species == "Human")
+						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
+						if(new_s_tone)
+							s_tone = 35 - max(min(round(new_s_tone),220),1)
+					else if(species == "Vox")//Can't reference species flags here, sorry.
+						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray)", "Character Preference") as num|null
+						if(skin_c)
+							s_tone = max(min(round(skin_c),3),1)
+							switch(s_tone)
+								if(3)
+									to_chat(user,"Your vox will now be gray.")
+								if(2)
+									to_chat(user,"Your vox will now be brown.")
+								else
+									to_chat(user,"Your vox will now be green.")
+					else
+						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return
-					var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
-					if(new_s_tone)
-						s_tone = 35 - max(min( round(new_s_tone), 220),1)
 
 				if("ooccolor")
 					var/new_ooccolor = input(user, "Choose your OOC colour:", "Game Preference") as color|null
@@ -1152,43 +1300,54 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						flavor_text = msg
 
 				if("limbs")
-					var/limb_name = input(user, "Which limb do you want to change?") as null|anything in list("Left Leg","Right Leg","Left Arm","Right Arm","Left Foot","Right Foot","Left Hand","Right Hand")
+					var/list/limb_input = list(
+						"Left Leg [organ_data[LIMB_LEFT_LEG]]" = LIMB_LEFT_LEG,
+						"Right Leg [organ_data[LIMB_RIGHT_LEG]]" = LIMB_RIGHT_LEG,
+						"Left Arm [organ_data[LIMB_LEFT_ARM]]" = LIMB_LEFT_ARM,
+						"Right Arm [organ_data[LIMB_RIGHT_ARM]]" = LIMB_RIGHT_ARM,
+						"Left Foot [organ_data[LIMB_LEFT_FOOT]]" = LIMB_LEFT_FOOT,
+						"Right Foot [organ_data[LIMB_RIGHT_FOOT]]" = LIMB_RIGHT_FOOT,
+						"Left Hand [organ_data[LIMB_LEFT_HAND]]" = LIMB_LEFT_HAND,
+						"Right Hand [organ_data[LIMB_RIGHT_HAND]]" = LIMB_RIGHT_HAND
+						)
+
+					var/limb_name = input(user, "Which limb do you want to change?") as null|anything in limb_input
 					if(!limb_name) return
 
 					var/limb = null
 					var/second_limb = null // if you try to change the arm, the hand should also change
 					var/third_limb = null  // if you try to unchange the hand, the arm should also change
 					var/valid_limb_states=list("Normal","Amputated","Prothesis")
-					switch(limb_name)
-						if("Left Leg")
-							limb = "l_leg"
-							second_limb = "l_foot"
+					switch(limb_input[limb_name])
+						if(LIMB_LEFT_LEG)
+							limb = LIMB_LEFT_LEG
+							second_limb = LIMB_LEFT_FOOT
 							valid_limb_states += "Peg Leg"
-						if("Right Leg")
-							limb = "r_leg"
-							second_limb = "r_foot"
+						if(LIMB_RIGHT_LEG)
+							limb = LIMB_RIGHT_LEG
+							second_limb = LIMB_RIGHT_FOOT
 							valid_limb_states += "Peg Leg"
-						if("Left Arm")
-							limb = "l_arm"
-							second_limb = "l_hand"
+						if(LIMB_LEFT_ARM)
+							limb = LIMB_LEFT_ARM
+							second_limb = LIMB_LEFT_HAND
 							valid_limb_states += "Wooden Prosthesis"
-						if("Right Arm")
-							limb = "r_arm"
-							second_limb = "r_hand"
+						if(LIMB_RIGHT_ARM)
+							limb = LIMB_RIGHT_ARM
+							second_limb = LIMB_RIGHT_HAND
 							valid_limb_states += "Wooden Prosthesis"
-						if("Left Foot")
-							limb = "l_foot"
-							third_limb = "l_leg"
-						if("Right Foot")
-							limb = "r_foot"
-							third_limb = "r_leg"
-						if("Left Hand")
-							limb = "l_hand"
-							third_limb = "l_arm"
+						if(LIMB_LEFT_FOOT)
+							limb = LIMB_LEFT_FOOT
+							third_limb = LIMB_LEFT_LEG
+						if(LIMB_RIGHT_FOOT)
+							limb = LIMB_RIGHT_FOOT
+							third_limb = LIMB_RIGHT_LEG
+						if(LIMB_LEFT_HAND)
+							limb = LIMB_LEFT_HAND
+							third_limb = LIMB_LEFT_ARM
 							valid_limb_states += "Hook Prosthesis"
-						if("Right Hand")
-							limb = "r_hand"
-							third_limb = "r_arm"
+						if(LIMB_RIGHT_HAND)
+							limb = LIMB_RIGHT_HAND
+							third_limb = LIMB_RIGHT_ARM
 							valid_limb_states += "Hook Prosthesis"
 
 					var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in valid_limb_states
@@ -1210,7 +1369,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if("Peg Leg","Wooden Prosthesis","Hook Prosthesis")
 							organ_data[limb] = "peg"
 							if(second_limb)
-								if(limb == "l_arm" || limb == "r_arm")
+								if(limb == LIMB_LEFT_ARM || limb == LIMB_RIGHT_ARM)
 									organ_data[second_limb] = "peg"
 								else
 									organ_data[second_limb] = "amputated"
@@ -1281,6 +1440,15 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(!UI_style_alpha_new | !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50)) return
 					UI_style_alpha = UI_style_alpha_new
 
+				if("parallax")
+					space_parallax = !space_parallax
+
+				if("dust")
+					space_dust = !space_dust
+
+				if("p_speed")
+					parallax_speed = min(max(input(user, "Enter a number between 0 and 5 included (default=2)","Parallax Speed Preferences",parallax_speed),0),5)
+
 				if("name")
 					be_random_name = !be_random_name
 
@@ -1299,9 +1467,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("lobby_music")
 					toggles ^= SOUND_LOBBY
 					if(toggles & SOUND_LOBBY)
-						to_chat(user, sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1))
+						user << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1)
 					else
-						to_chat(user, sound(null, repeat = 0, wait = 0, volume = 85, channel = 1))
+						user << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)
 
 				if("jukebox")
 					toggles ^= SOUND_STREAMING
@@ -1334,7 +1502,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					//random_character_sqlite(user, user.ckey)
 
 				if("reload")
-					load_preferences_sqlite(user, user.ckey)
+					load_preferences_sqlite(user.ckey)
 					load_save_sqlite(user.ckey, user, default_slot)
 
 				if("open_load_dialog")
@@ -1434,6 +1602,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		character.disabilities|=EPILEPSY
 	if(disabilities & DISABILITY_FLAG_DEAF)
 		character.sdisabilities|=DEAF
+	if(disabilities & DISABILITY_FLAG_BLIND)
+		character.sdisabilities|=BLIND
 	/*if(disabilities & DISABILITY_FLAG_COUGHING)
 		character.sdisabilities|=COUGHING
 	if(disabilities & DISABILITY_FLAG_TOURETTES)
@@ -1449,7 +1619,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 	//Debugging report to track down a bug, which randomly assigned the plural gender to people.
 	if(character.gender in list(PLURAL, NEUTER))
-		if(isliving(src)) //Ghosts get neuter by default
+		if(isliving(character)) //Ghosts get neuter by default
 			message_admins("[character] ([character.ckey]) has spawned with their gender as plural or neuter. Please notify coders.")
 			character.setGender(MALE)
 

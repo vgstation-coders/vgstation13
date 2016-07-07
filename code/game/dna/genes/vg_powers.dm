@@ -121,10 +121,22 @@ Obviously, requires DNA2.
 		return 0
 	return ..(M,flags)
 
-var/list/NOIRLIST = list(0.3,0.3,0.3,0,\
-			 			 0.3,0.3,0.3,0,\
-						 0.3,0.3,0.3,0,\
-						 0.0,0.0,0.0,1,)
+// NOIR
+
+/obj/screen/plane_master/noir_master
+	plane = PLANE_NOIR_BLOOD
+	color = list(1,0,0,0,
+				 0,1,0,0,
+				 0,0,1,0,
+				 0,0,0,1)
+	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER
+
+/obj/screen/plane_master/noir_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	appearance_flags = 0
+	plane = PLANE_NOIR_BLOOD
+
+var/noir_master = list(new /obj/screen/plane_master/noir_master(),new /obj/screen/plane_master/noir_dummy())
 
 /datum/dna/gene/basic/noir
 	name="Noir"
@@ -138,12 +150,12 @@ var/list/NOIRLIST = list(0.3,0.3,0.3,0,\
 	block=NOIRBLOCK
 	..()
 
-/datum/dna/gene/basic/noir/OnMobLife(var/mob/M)
+/datum/dna/gene/basic/noir/activate(var/mob/M)
 	..()
-	if(M.client != NOIRLIST)
-		M.client.color = NOIRLIST
+	M.update_colour()
+	M.client.screen += noir_master
 
 /datum/dna/gene/basic/noir/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
-		if(M.client)
-			M.client.color = null
+		M.update_colour()
+		M.client.screen -= noir_master

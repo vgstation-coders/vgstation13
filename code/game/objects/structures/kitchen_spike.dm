@@ -23,7 +23,7 @@
 
 /obj/structure/kitchenspike/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if (istype(W, /obj/item/weapon/wrench))
+	if (iswrench(W))
 		if(occupant)
 			to_chat(user, "<span class='warning'>You can't disassemble [src] with meat and gore all over it.</span>")
 			return
@@ -67,6 +67,10 @@
 				our_mob.ghostize()
 
 				our_mob.forceMove(src)
+				if(iscarbon(our_mob))
+					var/mob/living/carbon/C = our_mob
+					C.drop_stomach_contents()
+					user.visible_message("<span class='warning'>\The [C]'s stomach contents drop to the ground!</span>")
 
 				returnToPool(G)
 				return

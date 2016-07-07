@@ -5,7 +5,7 @@ hi
 
 /obj/item/fluff // so that they don't spam up the object tree
 	icon = 'icons/obj/custom_items.dmi'
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 
 //////////////////////////////////
 ////////// Fluff Items ///////////
@@ -104,7 +104,7 @@ hi
 
 /obj/item/fluff/victor_kaminsky_1/attack_self(mob/user as mob)
 	for(var/mob/O in viewers(user, null))
-		O.show_message(text("[] shows you: \icon[] [].", user, src, src.name), 1)
+		O.show_message("[user] shows you: [bicon(src)] [name].", 1)
 	src.add_fingerprint(user)
 
 /obj/item/weapon/clipboard/fluff/smallnote //lexusjjss: Lexus Langg, Zachary Tomlinson
@@ -178,7 +178,7 @@ hi
 /obj/item/weapon/fluff/cado_keppel_1 //sparklysheep: Cado Keppel
 	name = "purple comb"
 	desc = "A pristine purple comb made from flexible plastic. It has a small K etched into its side."
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "purplecomb"
 	item_state = "purplecomb"
@@ -260,9 +260,9 @@ hi
 	icon_state = "pill9"
 	New()
 		..()
-		reagents.add_reagent("stoxin", 5)
-		reagents.add_reagent("sugar", 10)
-		reagents.add_reagent("ethanol", 5)
+		reagents.add_reagent(STOXIN, 5)
+		reagents.add_reagent(SUGAR, 10)
+		reagents.add_reagent(ETHANOL, 5)
 
 /obj/item/clothing/mask/fluff/electriccig //CubeJackal: Barry Sharke
 	name = "Electronic cigarette"
@@ -271,7 +271,7 @@ hi
 	icon_state = "cigon"
 	throw_speed = 0.5
 	item_state = "ciglit"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	body_parts_covered = null
 	flags = FPRINT|TABLEPASS
 
@@ -287,8 +287,8 @@ hi
 
 /obj/item/weapon/reagent_containers/hypospray/fluff/asher_spock_1/New()
 	..()
-	reagents.remove_reagent("tricordrazine", 30)
-	reagents.add_reagent("oxycodone", 15)
+	reagents.remove_reagent(TRICORDRAZINE, 30)
+	reagents.add_reagent(OXYCODONE, 15)
 	update_icon()
 	return
 
@@ -410,7 +410,7 @@ hi
 
 //////////// Eye Wear ////////////
 
-/obj/item/clothing/glasses/meson/fluff/book_berner_1 //asanadas: Book Berner
+/obj/item/clothing/glasses/scanner/meson/fluff/book_berner_1 //asanadas: Book Berner
 	name = "bespectacled mesonic surveyors"
 	desc = "One of the older meson scanner models retrofitted to perform like its modern counterparts."
 	icon = 'icons/obj/custom_items.dmi'
@@ -632,7 +632,7 @@ hi
 	icon_state = "flagmask"
 	item_state = "flagmask"
 	flags = FPRINT|TABLEPASS|MASKCOVERSMOUTH
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 */
 
@@ -642,7 +642,7 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "mara_kilpatrick_1"
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 ////// Small locket - Altair An-Nasaqan - Serithi
 
@@ -655,7 +655,7 @@ hi
 	color = "altair_locket"
 	slot_flags = 0
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 	slot_flags = SLOT_MASK
 
 //////  Medallion - Nasir Khayyam - Jamini
@@ -666,7 +666,7 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "nasir_khayyam_1"
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 	slot_flags = SLOT_MASK
 
 ////// Emerald necklace - Ty Foster - Nega
@@ -677,7 +677,7 @@ hi
 	icon = 'icons/obj/custom_items.dmi'
 	icon_state = "ty_foster"
 	flags = FPRINT|TABLEPASS
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 //////////// Shoes ////////////
 

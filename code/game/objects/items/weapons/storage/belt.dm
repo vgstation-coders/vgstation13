@@ -6,7 +6,7 @@
 	item_state = "utility"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	attack_verb = list("whipped", "lashed", "disciplined")
+	attack_verb = list("whips", "lashes", "disciplines")
 
 
 /obj/item/weapon/storage/belt/proc/can_use()
@@ -17,16 +17,21 @@
 	else
 		return 0
 
+/obj/item/weapon/storage/belt/can_quick_store(var/obj/item/I)
+	return can_be_inserted(I,1)
+	
+/obj/item/weapon/storage/belt/quick_store(var/obj/item/I)
+	return handle_item_insertion(I,0)
+
 /obj/item/weapon/storage/belt/utility
 	name = "tool-belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
 	desc = "It has a tag that rates it for compatibility with standard tools, device analyzers, flashlights, cables, engineering tape, small fire extinguishers, compressed matter cartridges, light replacers, and fuel cans."
 	icon_state = "utilitybelt"
 	item_state = "utility"
-	w_class = 4
-	max_w_class = 2
+	w_class = W_CLASS_LARGE
 	storage_slots = 14
 	max_combined_w_class = 200 //This actually doesn't matter as long as it is arbitrarily high, bar will be set by storage slots
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/weapon/crowbar",
 		"/obj/item/weapon/screwdriver",
 		"/obj/item/weapon/weldingtool",
@@ -82,10 +87,9 @@
 	desc = "The ancestral belt of Many-APCs-Charging, the original chief engineer from Space Native America. It's made out of the skins of the ancient enemy of engineers, giant spiders."
 	icon_state = "utilitychief"
 	item_state = "utilitychief"
-	w_class = 4
-	max_w_class = 3
+	w_class = W_CLASS_LARGE
 	storage_slots = 14
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/weapon/crowbar",
 		"/obj/item/weapon/screwdriver",
 		"/obj/item/weapon/weldingtool",
@@ -121,7 +125,7 @@
 	desc = "Can hold various medical equipment."
 	icon_state = "medicalbelt"
 	item_state = "medical"
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
 		"/obj/item/weapon/reagent_containers/dropper",
@@ -140,7 +144,8 @@
         "/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/gps/paramedic",
-		"/obj/item/device/antibody_scanner"
+		"/obj/item/device/antibody_scanner",
+		"/obj/item/weapon/switchtool/surgery"
 	)
 
 
@@ -150,9 +155,8 @@
 	icon_state = "securitybelt"
 	item_state = "security"//Could likely use a better one.
 	storage_slots = 7
-	max_w_class = 3
 	max_combined_w_class = 21
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/weapon/grenade",
 		"/obj/item/weapon/reagent_containers/spray/pepper",
 		"/obj/item/weapon/handcuffs",
@@ -183,9 +187,10 @@
 	desc = "For all your crime-fighting bat needs."
 	icon_state = "bmbelt"
 	item_state = "bmbelt"
+
 /obj/item/weapon/storage/belt/security/batmanbelt/New()
 	..()
-	can_hold |= "/obj/item/weapon/gun/hookshot"
+	can_only_hold |= "/obj/item/weapon/gun/hookshot"
 
 /obj/item/weapon/storage/belt/soulstone
 	name = "soul stone belt"
@@ -193,7 +198,7 @@
 	icon_state = "soulstonebelt"
 	item_state = "soulstonebelt"
 	storage_slots = 6
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/device/soulstone"
 		)
 
@@ -213,7 +218,7 @@
 	icon_state = "championbelt"
 	item_state = "champion"
 	storage_slots = 1
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/clothing/mask/luchador"
 		)
 
@@ -223,9 +228,8 @@
 	desc = "Excellent for holding the heads of your fallen foes."
 	icon_state = "utilitybelt"
 	item_state = "utility"
-	max_w_class = 4
 	max_combined_w_class = 28
-	can_hold = list(
+	can_only_hold = list(
  		"/obj/item/weapon/organ/head"
  	)
 
@@ -235,10 +239,9 @@
 	desc = "Can hold various mining gear like pickaxes or drills."
 	icon_state = "miningbelt"
 	item_state = "mining"
-	w_class = 4 //Lets it hold mining satchels.
-	max_w_class = 4
+	w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
-	can_hold = list(
+	can_only_hold = list(
 		"/obj/item/weapon/storage/bag/ore",
 		"/obj/item/weapon/pickaxe/shovel",
 		"/obj/item/weapon/storage/box/samplebags",
@@ -261,18 +264,20 @@
 		"/obj/item/weapon/resonator",
 		"/obj/item/device/wormhole_jaunter",
 		"/obj/item/weapon/lazarus_injector",
-		"/obj/item/weapon/anobattery")
+		"/obj/item/weapon/anobattery",
+		"/obj/item/weapon/mining_drone_cube")
 
 /obj/item/weapon/storage/belt/lazarus
 	name = "trainer's belt"
 	desc = "For the pokemo- mining master, holds your lazarus capsules."
 	icon_state = "lazarusbelt_0"
 	item_state = "lazbelt"
-	w_class = 4
-	max_w_class = 4
+	w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
 	storage_slots = 6
-	can_hold = list("/obj/item/device/mobcapsule")
+	can_only_hold = list(
+		"/obj/item/device/mobcapsule",
+		"/obj/item/weapon/lazarus_injector")
 
 /obj/item/weapon/storage/belt/lazarus/New()
 	..()
@@ -294,15 +299,7 @@
 	update_icon()
 
 /obj/item/weapon/storage/belt/lazarus/antag
-	name = "master trainer's belt"
-	desc = "For the pokemo- mining master, holds your lazarus capsules."
 	icon_state = "lazarusbelt"
-	item_state = "lazbelt"
-	storage_slots = 6
-	w_class = 4
-	max_w_class = 4
-	max_combined_w_class = 28
-	can_hold = list("/obj/item/device/mobcapsule")
 
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
 	var/blocked = list(
@@ -318,6 +315,7 @@
 		NM.faction = "lazarus \ref[user]"
 		NM.friends += user
 		MC.contained_mob = NM
+		MC.name = "lazarus capsule - [NM.name]"
 	..()
 
 /obj/item/weapon/storage/belt/thunderdome
@@ -325,7 +323,7 @@
 	desc = "Can hold the thunderdome IDs of your fallen foes."
 	item_state = ""
 	storage_slots = 30
-	can_hold = list("/obj/item/weapon/card/id/thunderdome")
+	can_only_hold = list("/obj/item/weapon/card/id/thunderdome")
 
 /obj/item/weapon/storage/belt/thunderdome/green
 	icon_state = "td_belt-green"

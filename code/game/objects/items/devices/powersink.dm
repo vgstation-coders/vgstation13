@@ -5,7 +5,7 @@
 	name = "power sink"
 	icon_state = "powersink0"
 	item_state = "electronic"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
 	throwforce = 5
@@ -24,7 +24,7 @@
 	var/obj/structure/cable/attached		// the attached cable
 
 	attackby(var/obj/item/I, var/mob/user)
-		if(istype(I, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(I))
 			if(mode == 0)
 				var/turf/T = loc
 				if(isturf(T) && !T.intact)

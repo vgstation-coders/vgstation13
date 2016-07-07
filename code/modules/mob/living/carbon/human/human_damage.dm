@@ -46,8 +46,8 @@
 
 
 /mob/living/carbon/human/adjustBruteLoss(var/amount)
-	if(species && species.brute_mod)
-		amount = amount*species.brute_mod
+
+	amount = amount * brute_damage_modifier
 
 	if(amount > 0)
 		take_overall_damage(amount, 0)
@@ -56,8 +56,7 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/adjustFireLoss(var/amount)
-	if(species && species.burn_mod)
-		amount = amount*species.burn_mod
+	amount = amount * burn_damage_modifier
 
 	if(amount > 0)
 		take_overall_damage(0, amount)
@@ -66,8 +65,7 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustBruteLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
-	if(species && species.brute_mod)
-		amount = amount*species.brute_mod
+	amount = amount * brute_damage_modifier
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
@@ -81,8 +79,7 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
-	if(species && species.burn_mod)
-		amount = amount*species.burn_mod
+	amount = amount * burn_damage_modifier
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
@@ -110,8 +107,7 @@
 /mob/living/carbon/human/adjustCloneLoss(var/amount)
 	..()
 
-	if(species.flags & IS_SYNTHETIC)
-		return
+	amount = amount * clone_damage_modifier
 
 	var/heal_prob = max(0, 80 - getCloneLoss())
 	var/mut_prob = min(80, getCloneLoss()+10)
@@ -213,6 +209,11 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 
 // damage MANY external organs, in random order
 /mob/living/carbon/human/take_overall_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/used_weapon = null)
+	if(species && species.burn_mod)
+		burn = burn*species.burn_mod
+	if(species && species.brute_mod)
+		brute = brute*species.brute_mod
+
 	if(status_flags & GODMODE)	return	//godmode
 	var/list/datum/organ/external/parts = get_damageable_organs()
 	var/update = 0
@@ -239,8 +240,8 @@ This function restores the subjects blood to max.
 */
 /mob/living/carbon/human/proc/restore_blood()
 	if(!species.flags & NO_BLOOD)
-		var/blood_volume = vessel.get_reagent_amount("blood")
-		vessel.add_reagent("blood",560.0-blood_volume)
+		var/blood_volume = vessel.get_reagent_amount(BLOOD)
+		vessel.add_reagent(BLOOD,560.0-blood_volume)
 
 
 /*
@@ -262,9 +263,9 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/proc/get_organ(var/zone)
-	if(!zone)	zone = "chest"
+	if(!zone)	zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
-		zone = "head"
+		zone = LIMB_HEAD
 	return organs_by_name[zone]
 
 /mob/living/carbon/human/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/sharp = 0, var/edge = 0, var/obj/used_weapon = null)
@@ -290,14 +291,12 @@ This function restores all organs.
 	switch(damagetype)
 		if(BRUTE)
 			damageoverlaytemp = 20
-			if(species && species.brute_mod)
-				damage = damage*species.brute_mod
+			damage = damage * brute_damage_modifier
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 		if(BURN)
 			damageoverlaytemp = 20
-			if(species && species.burn_mod)
-				damage = damage*species.burn_mod
+			damage = damage * burn_damage_modifier
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 
@@ -349,3 +348,19 @@ This function restores all organs.
 				update_icon = 1
 			qdel(F)
 	return 1
+
+//Adds cancer, including stage of cancer and limb
+//Right now cancer is adminbus only. You can inflict it via the full (old) Player Panel and all "prayer types" (includes Centcomm message)
+//Of course, should it ever come back for realsies, that's the right way to do it. But let's not be silly now
+//IMPORTANT NOTE: Currently only works on external organs, because the person who wrote organ code has brain cancer, hopefully I will sweep back to fix this in a later PR
+//Since I'd have to change hundreds of procs going through organs, that's not something I'll do now
+/mob/living/carbon/human/proc/add_cancer(var/stage = 1, var/target)
+
+	var/datum/organ/picked_organ
+	if(target)
+		picked_organ = organs_by_name["[target]"]
+	else
+		picked_organ = pick(organs)
+
+	if(picked_organ)
+		picked_organ.cancer_stage += stage //This can pick a limb which already has cancer, in which case it will add to it

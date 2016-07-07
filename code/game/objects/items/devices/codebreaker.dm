@@ -6,7 +6,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 5.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throwforce = 5.0
 	throw_range = 15
 	throw_speed = 3
@@ -29,7 +29,7 @@
 
 		for(var/i = 0, i<6, i++)
 			sleep(delayfraction)
-			if(!user || user.incapacitated() || !(user.loc == loc_user) || !(O.loc == loc_nuke) || (!(user.l_hand == src) && !(user.r_hand == src)))
+			if(!user || user.incapacitated() || !(user.loc == loc_user) || !(O.loc == loc_nuke) || !user.is_holding_item(src))
 				to_chat(user, "<span class='warning'>You need to stand still for the whole duration of the code breaking for the device to work, and keep it in one of your hands.</span>")
 				icon_state = "codebreaker"
 				operation = 0

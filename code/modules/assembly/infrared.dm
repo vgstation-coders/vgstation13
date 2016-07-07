@@ -54,8 +54,8 @@
 	overlays.len = 0
 	attached_overlays = list()
 	if(on)
-		overlays += "infrared_on"
 		attached_overlays += "infrared_on"
+		overlays += image(icon = icon, icon_state = "infrared_on")
 
 	if(holder)
 		holder.update_icon()
@@ -111,7 +111,7 @@
 	if((!secured)||(!on)||(cooldown > 0))	return 0
 	pulse(0)
 	if(!holder)
-		visible_message("\icon[src] *beep* *beep*")
+		visible_message("[bicon(src)] *beep* *beep*")
 	cooldown = 2
 	spawn(10)
 		process_cooldown()

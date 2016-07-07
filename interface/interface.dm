@@ -9,19 +9,8 @@
 		return
 	if(alert("This will open the map render(s) in your browser. Are you sure?",,"Yes","No")=="No")
 		return
-	if(map)
-		switch(map.nameShort)
-			if("meta")
-				src << link("[config.renders_url]/metaclub/")
-			if("deff")
-				src << link("[config.renders_url]/defficiency/")
-			if("box")
-				src << link("[config.renders_url]/tgstation/")
-			if("taxi")
-				src << link("[config.renders_url]/taxistation/")
-			else
-				to_chat(src, "<span class='warning'>No map render for [map.nameLong], bug Pomf about it!</span>")
-	return
+	var/mapname = replacetext(map.nameLong, " ", "")
+	src << link("[config.renders_url]/images/maps/[mapname]")
 
 /client/verb/wiki()
 	set name = "wiki"
@@ -80,6 +69,8 @@ Hotkey-Mode: (hotkey-mode must be on)
 \t2 = disarm-intent
 \t3 = grab-intent
 \t4 = harm-intent
+\t5 = kick
+\t6 = bite
 </font>"}
 
 	var/other = {"<font color='purple'>
@@ -99,12 +90,16 @@ Any-Mode: (hotkey doesn't need to be on)
 \tCtrl+2 = disarm-intent
 \tCtrl+3 = grab-intent
 \tCtrl+4 = harm-intent
+\tCtrl+5 = kick
+\tCtrl+6 = bite
 \tDEL = pull
 \tINS = cycle-intents-right
 \tHOME = drop
 \tPGUP = swap-hand
 \tPGDN = activate held object
 \tEND = throw
+
+For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 </font>"}
 
 	var/admin = {"<font color='purple'>

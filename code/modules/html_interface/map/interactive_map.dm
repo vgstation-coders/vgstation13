@@ -1,5 +1,18 @@
-#define MAPHEADER "<script type=\"text/javascript\" src=\"3-jquery.timers.js\"></script><script type=\"text/javascript\" src=\"libraries.min.js\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\"html_interface_icons.css\" /><link rel=\"stylesheet\" type=\"text/css\" href=\"map_shared.css\" /><script type=\"text/javascript\" src=\"map_shared.js\">"
-#define MAPCONTENT "<div id='switches'><a href=\"javascript:switchTo(0);\">Switch to mini map</a> <a href=\"javascript:switchTo(1);\">Switch to text-based</a> <a href='javascript:changezlevels();'>Change Z-Level</a> </div><div id=\"uiMapContainer\"><div id=\"uiMap\" unselectable=\"on\"></div></div><div id=\"textbased\"></div>"
+#define MAPHEADER \
+"<script type=\"text/javascript\" src=\"3-jquery.timers.js\"></script>\
+<script type=\"text/javascript\" src=\"libraries.min.js\"></script>\
+<link rel=\"stylesheet\" type=\"text/css\" href=\"html_interface_icons.css\" />\
+<link rel=\"stylesheet\" type=\"text/css\" href=\"map_shared.css\" />\
+<script type=\"text/javascript\" src=\"map_shared.js\">"
+
+#define MAPCONTENT \
+"<div id='switches'>\
+<a href=\"javascript:switchTo(0);\">Switch to mini map</a> \
+<a href=\"javascript:switchTo(1);\">Switch to text-based</a> \
+<a href='javascript:changezlevels();'>Change Z-Level</a> </div>\
+<div id=\"uiMapContainer\">\
+<div id=\"uiMap\" unselectable=\"on\"></div></div>\
+<div id=\"textbased\"></div>"
 // Base datum for html_interface interactive maps.
 var/const/MAX_ICON_DIMENSION = 2000
 var/const/ICON_SIZE = 4
@@ -16,7 +29,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 /datum/interactive_map/Destroy()
 	if (src.interfaces)
 		for (var/datum/html_interface/hi in interfaces)
-			Destroy(hi)
+			qdel(hi)
 		src.interfaces = null
 
 	return ..()
@@ -75,10 +88,10 @@ var/const/ALLOW_CENTCOMM = FALSE
 	C << browse_rsc('map_shared.css')
 	for (var/z = 1 to world.maxz)
 		if(z == CENTCOMM_Z) continue
-		C << browse_rsc(file("[getMinimapFile(z)].png"), "minimap_[z].png")
+		C << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
 
 /proc/getMinimapFile(z)
-	return "data/minimaps/map_[z]"
+	return "data/minimaps/map_[map.nameLong][z]"
 
 // Activate this to debug tile mismatches in the minimap.
 // This will store the full information on each tile and compare it the next time you run the minimap.
@@ -168,7 +181,9 @@ var/const/ALLOW_CENTCOMM = FALSE
 		for(var/s = x1 to x2)
 			for(var/r = y1 to y2)
 				var/turf/tile = locate(s, r, z)
-				if (tile.loc.type != /area/start && (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile) || (locate(/obj/structure/transit_tube) in tile)) && !istype(tile, /turf/space/transit))
+				if (tile.flags & NO_MINIMAP) continue
+
+				if (tile.loc.type != /area/start && (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile) || (locate(/obj/structure/transit_tube) in tile)) && !istype(tile, /turf/space/transit) && !istype(tile.loc, /area/vault))
 					if (istype(tile.loc, /area/asteroid) || istype(tile.loc, /area/mine/unexplored) || istype(tile, /turf/unsimulated/mineral) || (isspace(tile.loc) && istype(tile, /turf/unsimulated/floor/asteroid)))
 						new_icon = 'icons/turf/walls.dmi'
 						new_icon_state = "rock"

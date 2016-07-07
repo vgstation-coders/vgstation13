@@ -1,16 +1,13 @@
 // QUALITY COPYPASTA
 /turf/unsimulated/wall/supermatter
-	name = "Bluespace"
+	name = "Supermatter Sea"
 	desc = "THE END IS right now actually."
-
-	icon = 'icons/turf/space.dmi'
-	icon_state = "bluespace"
+	icon_state = "supermatter"
 
 	//luminosity = 5
 	//light_color="#0066FF"
 	layer = LIGHTING_LAYER + 1
 
-	var/spawned=0 // DIR mask
 	var/next_check=0
 	var/list/avail_dirs = list(NORTH,SOUTH,EAST,WEST)
 
@@ -40,11 +37,14 @@
 	var/pdir = pick(avail_dirs)
 	avail_dirs -= pdir
 	var/turf/T=get_step(src,pdir)
+	if(istype(T, /turf/unsimulated/wall/supermatter/))
+		avail_dirs -= pdir
+		return
 
 	// EXPAND DONG
 	if(isturf(T))
-		// Do pretty fadeout animation for 1s.
-		new /obj/effect/overlay/bluespacify(T)
+		// This is normally where a growth animation would occur
+//		new /obj/effect/overlay/bluespacify(T)
 		spawn(10)
 			// Nom.
 			for(var/atom/movable/A in T)
@@ -58,10 +58,9 @@
 					A = null
 				tcheck(80,1)
 			T.ChangeTurf(type)
-
-	if((spawned & (NORTH|SOUTH|EAST|WEST)) == (NORTH|SOUTH|EAST|WEST))
-		processing_objects -= src
-		return
+			var/turf/unsimulated/wall/supermatter/SM = T
+			if(SM.avail_dirs)
+				SM.avail_dirs -= get_dir(T, src)
 
 /turf/unsimulated/wall/supermatter/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -119,3 +118,6 @@
 		return
 
 	qdel(user)
+
+/turf/unsimulated/wall/supermatter/singularity_act()
+	return

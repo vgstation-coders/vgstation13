@@ -8,14 +8,14 @@ REAGENT SCANNER
 */
 
 /obj/item/device/t_scanner
-	name = "T-ray scanner"
+	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
 	icon_state = "t-ray0"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	item_state = "electronic"
-	starting_materials = list(MAT_IRON = 150, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = "magnets=1;engineering=1"
@@ -75,6 +75,15 @@ REAGENT SCANNER
 				if(M)
 					M.invisibility = INVISIBILITY_LEVEL_TWO
 
+/obj/item/device/t_scanner/advanced
+	name = "\improper P-ray scanner"
+	desc = "A petahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible. Has a significantly better range than t-ray scanners."
+	icon_state = "p-ray0"
+	origin_tech = "magnets=3;engineering=3"
+
+	base_state = "p-ray"
+	ray_range = 3
+
 /obj/item/device/healthanalyzer
 	name = "health analyzer"
 	icon_state = "health"
@@ -84,7 +93,7 @@ REAGENT SCANNER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throwforce = 3
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 5
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
@@ -203,8 +212,8 @@ Subject's pulse: ??? BPM"})
 	for(var/datum/disease/D in M.viruses)
 		if(!D.hidden[SCANNER])
 			message += "<br><span class='warning'><b>Warning: [D.form] Detected</b><br>Name: [D.name].<br>Type: [D.spread].<br>Stage: [D.stage]/[D.max_stages].<br>Possible Cure: [D.cure]</span>"
-	if(M.reagents && M.reagents.get_reagent_amount("inaprovaline"))
-		message += "<br><span class='notice'>Bloodstream Analysis located [M.reagents:get_reagent_amount("inaprovaline")] units of rejuvenation chemicals.</span>"
+	if(M.reagents && M.reagents.get_reagent_amount(INAPROVALINE))
+		message += "<br><span class='notice'>Bloodstream Analysis located [M.reagents:get_reagent_amount(INAPROVALINE)] units of rejuvenation chemicals.</span>"
 	if(M.has_brain_worms())
 		message += "<br><span class='warning'>Strange MRI readout. Subject needs further scanning.</span>"
 	else if(M.getBrainLoss() >= 100 || !M.has_brain())
@@ -221,7 +230,7 @@ Subject's pulse: ??? BPM"})
 			/*
 			 * Doesn't belong here, only the advanced scanner can locate fractures
 			if(e.is_broken())
-				if((e.name == "l_arm") || (e.name == "r_arm") || (e.name == "l_leg") || (e.name == "r_leg")) //Only these limbs can be splinted
+				if((e.name == LIMB_LEFT_ARM) || (e.name == LIMB_RIGHT_ARM) || (e.name == LIMB_LEFT_LEG) || (e.name == LIMB_RIGHT_LEG)) //Only these limbs can be splinted
 					message += "<br><span class='warning'>Unsecured fracture in subject's [limb]. Splinting recommended for transport.</span>"
 			 */
 			if(e.has_infected_wound())
@@ -237,8 +246,11 @@ Subject's pulse: ??? BPM"})
 				if(W.internal)
 					message += text("<br><span class='danger'>Internal bleeding detected. Advanced scan required for location.</span>")
 					break
+			if(e.cancer_stage > CANCER_STAGE_LARGE_TUMOR) //Health analyzers can detect large tumors and above in external limbs, if all else fails
+				message += text("<br><span class='danger'>Serious cancerous growth detected. Advanced scan required for location.</span>")
+				break
 		if(H.vessel)
-			var/blood_volume = round(H.vessel.get_reagent_amount("blood"))
+			var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
 			var/blood_percent =  round((blood_volume / 560) * 100)
 			switch(blood_volume)
 				if(BLOOD_VOLUME_SAFE to 1000000000)
@@ -268,7 +280,7 @@ Subject's pulse: ??? BPM"})
 	name = "atmospheric analyzer"
 	icon_state = "atmos"
 	item_state = "analyzer"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -297,7 +309,7 @@ Subject's pulse: ??? BPM"})
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	user << output_gas_scan(environment, location, 1)
+	to_chat(user, output_gas_scan(environment, location, 1))
 
 	src.add_fingerprint(user)
 	return
@@ -313,7 +325,7 @@ Subject's pulse: ??? BPM"})
 	if(!container || istype(container, /turf))
 		message += "<span class='bnotice'>Results:</span>"
 	else
-		message += "<span class='bnotice'><B>\icon [container] Results of [container] scan:</span>"
+		message += "<span class='bnotice'><B>[bicon(container)] Results of [container] scan:</span></B>"
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
 		var/o2_concentration = scanned.oxygen/total_moles
@@ -344,7 +356,7 @@ Subject's pulse: ??? BPM"})
 	name = "mass-spectrometer"
 	icon_state = "spectrometer"
 	item_state = "analyzer"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT | OPENCONTAINER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -404,7 +416,7 @@ Subject's pulse: ??? BPM"})
 	if(reagents.total_volume)
 		var/list/blood_traces = list()
 		for(var/datum/reagent/R in reagents.reagent_list)
-			if(R.id != "blood")
+			if(R.id != BLOOD)
 				reagents.clear_reagents()
 				to_chat(user, "<span class='warning'>The sample was contaminated! Please insert another sample.</span>")
 				return
@@ -433,7 +445,7 @@ Subject's pulse: ??? BPM"})
 	desc = "A hand-held reagent scanner which identifies chemical agents."
 	icon_state = "spectrometer"
 	item_state = "analyzer"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT

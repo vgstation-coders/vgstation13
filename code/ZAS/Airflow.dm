@@ -57,7 +57,7 @@ mob/proc/airflow_stun()
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
 
-	if(weakened <= 0) src << "<span class='warning'>The sudden rush of air knocks you over!</span>"
+	if(weakened <= 0) to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
 	SetWeakened(5)
 	last_airflow_stun = world.time
 	return
@@ -77,7 +77,7 @@ mob/living/carbon/human/airflow_stun()
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
 
-	if(weakened <= 0) src << "<span class='warning'>The sudden rush of air knocks you over!</span>"
+	if(weakened <= 0) to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
 	SetWeakened(rand(1,5))
 	last_airflow_stun = world.time
 	return
@@ -350,9 +350,9 @@ proc/AirflowSpace(zone/A)
 			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
-				return
+				break
 			if (!isturf(loc))
-				return
+				break
 			step_towards(src, src.airflow_dest)
 			if(ismob(src) && src:client)
 				var/mob/M = src
@@ -405,20 +405,40 @@ mob/living/carbon/human/airflow_hit(atom/A)
 //	for(var/mob/M in hearers(src))
 //		M.show_message("<span class='danger'>[src] slams into [A]!</span>",1,"<span class='warning'>You hear a loud slam!</span>",2)
 	//playsound(get_turf(src), "punch", 25, 1, -1)
+
+
+	/*See this? This is how you DON'T handle armor values for protection
 	if(prob(33))
 		loc:add_blood(src)
 		bloody_body(src)
 
 	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
 
-	var/blocked = run_armor_check("head","melee")
-	apply_damage(b_loss/3, BRUTE, "head", blocked, 0, used_weapon = "Airflow")
+	var/blocked = run_armor_check(LIMB_HEAD,"melee")
+	apply_damage(b_loss/3, BRUTE, LIMB_HEAD, blocked, 0, used_weapon = "Airflow")
 
-	blocked = run_armor_check("chest","melee")
-	apply_damage(b_loss/3, BRUTE, "chest", blocked, 0, used_weapon = "Airflow")
+	blocked = run_armor_check(LIMB_CHEST,"melee")
+	apply_damage(b_loss/3, BRUTE, LIMB_CHEST, blocked, 0, used_weapon = "Airflow")
 
-	blocked = run_armor_check("groin","melee")
-	apply_damage(b_loss/3, BRUTE, "groin", blocked, 0, used_weapon = "Airflow")
+	blocked = run_armor_check(LIMB_GROIN,"melee")
+	apply_damage(b_loss/3, BRUTE, LIMB_GROIN, blocked, 0, used_weapon = "Airflow")
+	*/
+
+	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
+
+	var/head_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_HEAD,"melee"))
+	apply_damage(head_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
+
+	var/chest_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_CHEST,"melee"))
+	apply_damage(chest_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
+
+	var/groin_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_GROIN,"melee"))
+	apply_damage(groin_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
+
+	if((head_damage + chest_damage + groin_damage) > 15)
+		var/turf/T = get_turf(src)
+		T.add_blood(src)
+		bloody_body(src)
 
 	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanPush())
 		if(airflow_speed > 10)

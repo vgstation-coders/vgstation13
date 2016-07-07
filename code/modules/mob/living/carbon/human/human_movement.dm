@@ -3,12 +3,15 @@
 
 	if(flying) return -1
 
-	if(istype(loc,/turf/simulated/floor))
-		var/turf/simulated/floor/T = loc
-		if(T.material=="phazon")
-			return -1 // Phazon floors make us go fast
-
 	var/tally = 0
+
+	var/turf/T = loc
+	if(istype(T))
+		tally = T.adjust_slowdown(src, tally)
+
+		if(tally == -1)
+			return tally
+
 	if(species && species.move_speed_mod)
 		tally += species.move_speed_mod
 
@@ -22,7 +25,7 @@
 
 	//(/vg/ EDIT disabling for now) handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
 
-	if(reagents.has_reagent("nuka_cola")) tally -= 10
+	if(reagents.has_reagent(NUKA_COLA)) tally -= 10
 
 	if((M_RUN in mutations)) tally -= 10
 
@@ -38,13 +41,11 @@
 	if(shoes)
 		tally += shoes.slowdown
 
-	if(istype(l_hand,/obj/item/offhand))
-		tally += r_hand.slowdown
+	for(var/obj/item/I in held_items)
+		if(I.flags & SLOWDOWN_WHEN_CARRIED)
+			tally += I.slowdown
 
-	if(istype(r_hand,/obj/item/offhand))
-		tally += l_hand.slowdown
-
-	for(var/organ_name in list("l_foot","r_foot","l_leg","r_leg"))
+	for(var/organ_name in list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG))
 		var/datum/organ/external/E = get_organ(organ_name)
 		if(!E || (E.status & ORGAN_DESTROYED))
 			tally += 4
@@ -65,13 +66,13 @@
 		skate_bonus = max(skate_bonus, dispenser.speed_bonus)//if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
 	tally = tally - skate_bonus + (6 * disease_slow)
 
-	if(reagents.has_reagent("hyperzine"))
+	if(reagents.has_reagent(HYPERZINE))
 		if(dna.mutantrace == "slime")
 			tally *= 2
 		else
 			tally -= 10
 
-	if(reagents.has_reagent("frostoil") && dna.mutantrace == "slime")
+	if(reagents.has_reagent(FROSTOIL) && dna.mutantrace == "slime")
 		tally *= 5
 
 	return max((tally+config.human_delay), -1) //cap at -1 as the 'fastest'
@@ -109,10 +110,13 @@
 		prob_slip = 0
 
 	//Check hands and mod slip
-	if(!l_hand)	prob_slip -= 2
-	else if(l_hand.w_class <= 2)	prob_slip -= 1
-	if (!r_hand)	prob_slip -= 2
-	else if(r_hand.w_class <= 2)	prob_slip -= 1
+	for(var/i = 1 to held_items.len)
+		var/obj/item/I = held_items[i]
+
+		if(!I)
+			prob_slip -= 2
+		else if(I.w_class <= W_CLASS_SMALL)
+			prob_slip -= 1
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
@@ -132,6 +136,10 @@
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
+
+		if(wear_suit && istype(wear_suit, /obj/item/clothing/suit))
+			var/obj/item/clothing/suit/SU = wear_suit
+			SU.step_action()
 
 		for(var/obj/item/weapon/bomberman/dispenser in src)
 			if(dispenser.spam_bomb)

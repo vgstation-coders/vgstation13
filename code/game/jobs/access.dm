@@ -10,7 +10,7 @@
 /var/const/access_tox_storage = 8	// Toxins mixing and storage
 /var/const/access_genetics = 9
 /var/const/access_engine = 10		// Power Engines
-/var/const/access_engine_equip= 11	// Engineering Foyer
+/var/const/access_engine_equip = 11	// Engineering Foyer
 /var/const/access_maint_tunnels = 12
 /var/const/access_external_airlocks = 13
 /var/const/access_emergency_storage = 14
@@ -84,6 +84,9 @@
 	//The Syndicate
 /var/const/access_syndicate = 150//General Syndicate Access
 
+	//Vox are Pox
+/var/const/access_trade = 140//Vox Trader Access
+
 	//MONEY
 /var/const/access_crate_cash = 200
 
@@ -112,12 +115,15 @@
 /obj/item/proc/GetID()
 	return null
 
+/obj/item/proc/get_owner_name_from_ID()
+	return null
+
 /obj/proc/set_up_access()
 	//These generations have been moved out of /obj/New() because they were slowing down the creation of objects that never even used the access system.
 	if(!src.req_access)
 		src.req_access = list()
 		if(src.req_access_txt)
-			var/list/req_access_str = text2list(req_access_txt,";")
+			var/list/req_access_str = splittext(req_access_txt,";")
 			for(var/x in req_access_str)
 				var/n = text2num(x)
 				if(n)
@@ -126,7 +132,7 @@
 	if(!src.req_one_access)
 		src.req_one_access = list()
 		if(src.req_one_access_txt)
-			var/list/req_one_access_str = text2list(req_one_access_txt,";")
+			var/list/req_one_access_str = splittext(req_one_access_txt,";")
 			for(var/x in req_one_access_str)
 				var/n = text2num(x)
 				if(n)
@@ -186,6 +192,12 @@
 				return 1
 		return 0
 	return 1
+
+/proc/wpermit(var/mob/M) //weapons permit checking
+	var/list/L = M.GetAccess()
+	if(access_weapons in L)
+		return 1
+	return 0
 
 /proc/get_centcom_access(job)
 	switch(job)

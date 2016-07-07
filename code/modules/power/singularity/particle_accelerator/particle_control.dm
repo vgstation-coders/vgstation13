@@ -26,6 +26,7 @@
 /obj/machinery/particle_accelerator/control_box/New()
 	wires = new(src)
 	connected_parts = list()
+	update_icon()
 	..()
 
 /obj/machinery/particle_accelerator/control_box/Destroy()
@@ -74,11 +75,9 @@
 		if(stat & NOPOWER)
 			icon_state = "[reference]w"
 			return
-		if(use_power)
+		else if(use_power)
 			if(assembled)
 				icon_state = "[reference]p"
-			else
-				icon_state = "u[reference]p"
 		else
 			switch(construction_state)
 				if(0)

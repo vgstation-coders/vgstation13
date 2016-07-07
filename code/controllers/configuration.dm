@@ -6,6 +6,7 @@
 	var/nudge_script_path = "nudge.py"  // where the nudge.py script is located
 
 	var/log_ooc = 0						// log OOC channel
+	var/tts_server = ""					// TTS Server
 	var/log_access = 0					// log login/logout
 	var/log_say = 0						// log client say
 	var/log_admin = 0					// log admin actions
@@ -167,6 +168,18 @@
 
 	var/mommi_static = 0 //Scrambling mobs for mommis or not
 
+	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
+	var/skip_vault_generation = 0 //If 1, don't generate vaults
+	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
+
+	var/enable_roundstart_away_missions = 0
+
+	// Error handler config options.
+	var/error_cooldown = 600 // The "cooldown" time for each occurrence of a unique error
+	var/error_limit = 9 // How many occurrences before the next will silence them
+	var/error_silence_time = 6000 // How long a unique error will be silenced for
+	var/error_msg_delay = 50 // How long to wait between messaging admins about occurrences of a unique error
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -217,8 +230,11 @@
 		if(type == "config")
 			switch (name)
 				if ("resource_urls")
-					config.resource_urls = text2list(value, " ")
-
+					config.resource_urls = splittext(value, " ")
+					
+				if("tts_server")	
+					config.tts_server = value
+					
 				if ("admin_legacy_system")
 					config.admin_legacy_system = 1
 
@@ -524,6 +540,25 @@
 					renders_url = value
 				if("mommi_static")
 					mommi_static = 1
+				if("skip_minimap_generation")
+					skip_minimap_generation = 1
+				if("skip_vault_generation")
+					skip_vault_generation = 1
+				if("shut_up_automatic_diagnostic_and_announcement_system")
+					shut_up_automatic_diagnostic_and_announcement_system = 1
+				if("enable_roundstart_away_missions")
+					enable_roundstart_away_missions = 1
+				if("enable_wages")
+					roundstart_enable_wages = 1
+				if("error_cooldown")
+					error_cooldown = value
+				if("error_limit")
+					error_limit = value
+				if("error_silence_time")
+					error_silence_time = value
+				if("error_msg_delay")
+					error_msg_delay = value
+
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

@@ -9,7 +9,7 @@
 	anchored = 0.0
 	origin_tech = "materials=2"
 	var/darts = 5
-	w_class = 2
+	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/dart_cartridge/update_icon()
 	if(!darts)
@@ -322,7 +322,7 @@
 	desc = "A small gas-powered dartgun, fitted for nonhuman hands."
 
 /obj/item/weapon/gun/dartgun/vox/medical
-	starting_chems = list("kelotane","bicaridine","anti_toxin")
+	starting_chems = list(KELOTANE,BICARIDINE,ANTI_TOXIN)
 
 /obj/item/weapon/gun/dartgun/vox/raider
-	starting_chems = list("stoxin","chloralhydrate")
+	starting_chems = list(STOXIN,CHLORALHYDRATE)

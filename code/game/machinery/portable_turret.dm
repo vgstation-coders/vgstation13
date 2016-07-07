@@ -81,8 +81,8 @@
 				// All energy-based weapons are applicable
 		switch(E.type)
 			if(/obj/item/weapon/gun/energy/laser/bluetag)
-				projectile = /obj/item/projectile/beam/lastertag/blue
-				eprojectile = /obj/item/projectile/beam/lastertag/omni//This bolt will stun ERRYONE with a vest
+				projectile = /obj/item/projectile/beam/lasertag/blue
+				eprojectile = /obj/item/projectile/beam/lasertag/omni//This bolt will stun ERRYONE with a vest
 				iconholder = null
 				reqpower = 100
 				lasercolor = "b"
@@ -95,8 +95,8 @@
 				shot_delay = 30
 
 			if(/obj/item/weapon/gun/energy/laser/redtag)
-				projectile = /obj/item/projectile/beam/lastertag/red
-				eprojectile = /obj/item/projectile/beam/lastertag/omni
+				projectile = /obj/item/projectile/beam/lasertag/red
+				eprojectile = /obj/item/projectile/beam/lasertag/omni
 				iconholder = null
 				reqpower = 100
 				lasercolor = "r"
@@ -357,7 +357,7 @@ Status: []<BR>"},
 		on = 1 // turns it back on. The cover popUp() popDown() are automatically called in process(), no need to define it here
 /obj/machinery/porta_turret/attackby(obj/item/W as obj, mob/user as mob)
 	if(stat & BROKEN)
-		if(istype(W, /obj/item/weapon/crowbar))
+		if(iscrowbar(W))
 
 			// If the turret is destroyed, you can remove it with a crowbar to
 			// try and salvage its components
@@ -381,7 +381,7 @@ Status: []<BR>"},
 
 	..()
 
-	if((istype(W, /obj/item/weapon/wrench)) && (!on))
+	if((iswrench(W)) && (!on))
 		if(raised) return
 		// This code handles moving the turret around. After all, it's a portable turret!
 
@@ -436,14 +436,14 @@ Status: []<BR>"},
 	if (src.health <= 0)
 		src.die() // the death process :(
 	if((src.lasercolor == "b") && (src.disabled == 0))
-		if(istype(Proj, /obj/item/projectile/beam/lastertag/red))
+		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
 			src.disabled = 1
 			qdel (Proj)
 			Proj = null
 			sleep(100)
 			src.disabled = 0
 	if((src.lasercolor == "r") && (src.disabled == 0))
-		if(istype(Proj, /obj/item/projectile/beam/lastertag/blue))
+		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
 			src.disabled = 1
 			qdel (Proj)
 			Proj = null
@@ -646,10 +646,13 @@ Status: []<BR>"},
 			if((src.allowed(perp)) && !(src.lasercolor)) // if the perp has security access, return 0
 				return 0
 
-			if((istype(perp.l_hand, /obj/item/weapon/gun) && !istype(perp.l_hand, /obj/item/weapon/gun/projectile/shotgun)) || istype(perp.l_hand, /obj/item/weapon/melee/baton))
-				threatcount += 4
+			for(var/obj/item/G in perp.held_items)
+				if(istype(G, /obj/item/weapon/gun))
+					if(istype(G, /obj/item/weapon/gun/projectile/shotgun)) continue
+				else if(!istype(G, /obj/item/weapon/melee/baton))
+					continue
+				//Scan for guns and stun batons. Bartender's shotgun doesn't trigger the turret
 
-			if((istype(perp.r_hand, /obj/item/weapon/gun) && !istype(perp.r_hand, /obj/item/weapon/gun/projectile/shotgun)) || istype(perp.r_hand, /obj/item/weapon/melee/baton))
 				threatcount += 4
 
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee/baton))
@@ -659,7 +662,7 @@ Status: []<BR>"},
 		threatcount = 0//But does not target anyone else
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
 			threatcount += 4
-		if((istype(perp.r_hand,/obj/item/weapon/gun/energy/laser/redtag)) || (istype(perp.l_hand,/obj/item/weapon/gun/energy/laser/redtag)))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
 			threatcount += 4
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag))
 			threatcount += 2
@@ -668,7 +671,7 @@ Status: []<BR>"},
 		threatcount = 0
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
 			threatcount += 4
-		if((istype(perp.r_hand,/obj/item/weapon/gun/energy/laser/bluetag)) || (istype(perp.l_hand,/obj/item/weapon/gun/energy/laser/bluetag)))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
 			threatcount += 4
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag))
 			threatcount += 2
@@ -778,14 +781,14 @@ Status: []<BR>"},
 	// this is a bit unweildy but self-explanitory
 	switch(build_step)
 		if(0) // first step
-			if(istype(W, /obj/item/weapon/wrench) && !anchored)
+			if(iswrench(W) && !anchored)
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 				to_chat(user, "<span class='notice'>You secure the external bolts.</span>")
 				anchored = 1
 				build_step = 1
 				return
 
-			else if(istype(W, /obj/item/weapon/crowbar) && !anchored)
+			else if(iscrowbar(W) && !anchored)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, "You dismantle the turret construction.")
 				//new /obj/item/stack/sheet/metal( loc, 5)
@@ -805,7 +808,7 @@ Status: []<BR>"},
 						returnToPool(W)
 					return
 
-			else if(istype(W, /obj/item/weapon/wrench))
+			else if(iswrench(W))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 				to_chat(user, "You unfasten the external bolts.")
 				anchored = 0
@@ -814,7 +817,7 @@ Status: []<BR>"},
 
 
 		if(2)
-			if(istype(W, /obj/item/weapon/wrench))
+			if(iswrench(W))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 				to_chat(user, "<span class='notice'>You bolt the metal armor into place.</span>")
 				build_step = 3
@@ -849,7 +852,7 @@ Status: []<BR>"},
 				qdel(W) // delete the gun :(
 				return
 
-			else if(istype(W, /obj/item/weapon/wrench))
+			else if(iswrench(W))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 				to_chat(user, "You remove the turret's metal armor bolts.")
 				build_step = 2
@@ -866,7 +869,7 @@ Status: []<BR>"},
 			// attack_hand() removes the gun
 
 		if(5)
-			if(istype(W, /obj/item/weapon/screwdriver))
+			if(isscrewdriver(W))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 6
 				to_chat(user, "<span class='notice'>You close the internal access hatch.</span>")
@@ -884,14 +887,14 @@ Status: []<BR>"},
 						qdel(W)
 					return
 
-			else if(istype(W, /obj/item/weapon/screwdriver))
+			else if(isscrewdriver(W))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 5
 				to_chat(user, "You open the internal access hatch.")
 				return
 
 		if(7)
-			if(istype(W, /obj/item/weapon/weldingtool))
+			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
 				if(!WT.isOn()) return
 				if (WT.get_fuel() < 5)
@@ -911,7 +914,7 @@ Status: []<BR>"},
 					Turret.update_gun()
 					qdel(src)
 
-			else if(istype(W, /obj/item/weapon/crowbar))
+			else if(iscrowbar(W))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, "You pry off the turret's exterior armor.")
 				//new /obj/item/stack/sheet/metal( loc, 2)
@@ -1105,7 +1108,7 @@ Status: []<BR>"},
 		sleep(40)
 		Parent_Turret.on = 1
 
-	else if((istype(W, /obj/item/weapon/wrench)) && (!Parent_Turret.on))
+	else if((iswrench(W)) && (!Parent_Turret.on))
 		if(Parent_Turret.raised) return
 
 		if(!Parent_Turret.anchored)

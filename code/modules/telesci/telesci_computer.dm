@@ -199,14 +199,16 @@
 	browserdatum.set_content(out)
 	browserdatum.open()
 
-/obj/machinery/computer/telescience/proc/sparks()
-	if(telepad)
-		var/L = get_turf(E)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, L)
-		s.start()
-	else
-		return
+/obj/machinery/computer/telescience/proc/sparks(var/atom/target)
+	if(!target)
+		if(telepad && get_turf(telepad))
+			target = telepad
+		else
+			return
+	var/L = get_turf(target)
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(5, 1, L)
+	s.start()
 
 /obj/machinery/computer/telescience/proc/telefail()
 	if(prob(95))
@@ -218,7 +220,7 @@
 		// Irradiate everyone in telescience!
 		for(var/obj/machinery/telepad/E in machines)
 			var/L = get_turf(E)
-			sparks()
+			sparks(target = L)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
 				M.apply_effect((rand(10, 20)), IRRADIATE, 0)
 				to_chat(M, "<span class='warning'>You feel strange.</span>")
@@ -251,7 +253,7 @@
 	if(prob(5))
 		// HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONK
 		for(var/mob/living/carbon/M in hearers(src, null))
-			to_chat(M, sound('sound/items/AirHorn.ogg'))
+			M << sound('sound/items/AirHorn.ogg')
 			if(istype(M, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
 				if(H.earprot())
@@ -266,7 +268,7 @@
 				M.Paralyse(4)
 			else
 				M.Jitter(500)
-			sparks()
+			sparks(target = M)
 		return
 	if(prob(1))
 		// They did the mash! (They did the monster mash!) The monster mash! (It was a graveyard smash!)
@@ -281,7 +283,7 @@
 			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
 			playsound(L, 'sound/effects/phasein.ogg', 100, 1, extrarange = 3, falloff = 5)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
-				flick("e_flash", M.flash)
+				M.flash_eyes(visual = 1)
 			var/chosen = pick(hostiles)
 			var/mob/living/simple_animal/hostile/H = new chosen
 			H.loc = L
@@ -305,12 +307,12 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		var/area/A=target.loc
 		if(A && A.jammed)
 			if(!telepad.amplifier || A.jammed==SUPER_JAMMED)
-				src.visible_message("<span class='warning'>\icon[src] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "\icon[src]<span class='warning'>You hear something buzz.</span></span>")
+				src.visible_message("<span class='warning'>[bicon(src)] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "[bicon(src)]<span class='warning'>You hear something buzz.</span></span>")
 				return
 			if(prob(25))
 				qdel(telepad.amplifier)
 				telepad.amplifier = null
-				src.visible_message("\icon[src]<span class='notice'>You hear something shatter.</span>","\icon[src]<span class='notice'>You hear something shatter.</span>")
+				src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, telepad)
 		s.start()
@@ -354,11 +356,13 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 	return
 
 /obj/machinery/computer/telescience/Topic(href, href_list)
-	if(stat & (NOPOWER|BROKEN))
-		return 0
 	if(href_list["close"])
 		if(usr.machine == src) usr.unset_machine()
 		return 1
+
+	if(..())
+		return 1
+
 	if(href_list["setPOffsetX"])
 		var/new_x = input("Please input desired X offset.", name, x_player_off) as num
 		if(new_x < -10 || new_x > 10)

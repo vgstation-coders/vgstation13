@@ -77,8 +77,9 @@
 		if(M) //Did someone pass a mob ? If so, perform a pressure check
 			var/pdiff = performWallPressureCheck(src.loc)
 			if(pdiff > 0)
-				message_admins("Window with pdiff [pdiff] at [formatJumpTo(loc)] destroyed by [M.real_name] ([formatPlayerPanel(M,M.ckey)])!")
-				log_admin("Window with pdiff [pdiff] at [loc] destroyed by [M.real_name] ([M.ckey])!")
+				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
+					message_admins("\The [src] with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		Destroy(brokenup = 1)
 	else
 		if(sound)
@@ -125,23 +126,41 @@
 			return
 
 /obj/structure/window/blob_act()
-
+	..()
 	health -= rand(30, 50)
 	healthcheck()
 
-/obj/structure/window/CheckExit(var/atom/movable/O, var/turf/target)
+/obj/structure/window/kick_act(mob/living/carbon/human/H)
+	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
 
-	if(istype(O) && O.checkpass(PASSGLASS))
-		return 1
-	if(get_dir(O.loc, target) == dir)
-		return !density
-	return 1
+	H.visible_message("<span class='danger'>\The [H] kicks \the [src].</span>", \
+	"<span class='danger'>You kick \the [src].</span>")
 
-/obj/structure/window/CanPass(atom/movable/mover, turf/target, height = 0)
+	var/damage = rand(1,7) * (H.get_strength() - reinforced) //By default, humanoids can't damage windows with kicks. Being strong or a hulk changes that
+	var/obj/item/clothing/shoes/S = H.shoes
+	if(istype(S))
+		damage += S.bonus_kick_damage //Unless they're wearing heavy boots
 
+	if(damage > 0)
+		health -= damage
+		healthcheck()
+
+/obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir)
+	if(flags & ON_BORDER)
+		if(target) //Are we doing a manual check to see
+			if(get_dir(loc, target) == dir)
+				return !density
+		else if(mover.dir == dir) //Or are we using move code
+			if(density)	mover.Bump(src)
+			return !density
+	return 1
+
+/obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return 1
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
 
@@ -258,7 +277,7 @@
 
 			if(WINDOWSECURE) //Reinforced, fully secured
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 					"<span class='notice'>You unfasten \the [src] from its frame.</span>")
@@ -267,14 +286,14 @@
 
 			if(WINDOWUNSECUREFRAME)
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 					"<span class='notice'>You fasten \the [src] to its frame.</span>")
 					d_state = WINDOWSECURE
 					return
 
-				if(istype(W, /obj/item/weapon/crowbar))
+				if(iscrowbar(W))
 					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 					"<span class='notice'>You pry \the [src] from its frame.</span>")
@@ -283,14 +302,14 @@
 
 			if(WINDOWLOOSEFRAME)
 
-				if(istype(W, /obj/item/weapon/crowbar))
+				if(iscrowbar(W))
 					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 					"<span class='notice'>You pry \the [src] into its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
 					return
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src]'s frame from the floor.</span>", \
 					"<span class='notice'>You unfasten \the [src]'s frame from the floor.</span>")
@@ -308,7 +327,7 @@
 
 			if(WINDOWLOOSE)
 
-				if(istype(W, /obj/item/weapon/screwdriver))
+				if(isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src]'s frame to the floor.</span>", \
 					"<span class='notice'>You fasten \the [src]'s frame to the floor.</span>")
@@ -338,7 +357,7 @@
 
 	else if(!reinforced) //Normal window steps
 
-		if(istype(W, /obj/item/weapon/screwdriver))
+		if(isscrewdriver(W))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 			user.visible_message("<span class='[d_state ? "warning":"notice"]'>[user] [d_state ? "un":""]fastens \the [src].</span>", \
 			"<span class='notice'>You [d_state ? "un":""]fasten \the [src].</span>")
@@ -385,7 +404,7 @@
 	if(!is_fulltile())
 		if(get_dir(user, src) & dir)
 			for(var/obj/O in loc)
-				if(!O.CanPass(user, user.loc, 1, 0))
+				if(!O.Cross(user, user.loc, 1, 0))
 					return 0
 	return 1
 

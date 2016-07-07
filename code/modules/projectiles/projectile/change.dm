@@ -6,6 +6,7 @@
 	nodamage = 1
 	flag = "energy"
 	var/changetype=null
+	fire_sound = 'sound/weapons/radgun.ogg'
 
 /obj/item/projectile/change/on_hit(var/atom/change)
 	var/type = changetype
@@ -38,6 +39,7 @@
 					qdel(W)
 					continue
 				W.layer = initial(W.layer)
+				W.plane = initial(W.plane)
 				W.loc = M.loc
 				W.dropped(M)
 		// END TODO
@@ -153,6 +155,17 @@
 				H.languages |= M.languages
 				if(M.default_language) H.default_language = M.default_language
 				H.generate_name()
+			if("frankenstein")
+				new_mob = new /mob/living/carbon/human/frankenstein(M.loc, delay_ready_dna=1)
+
+				if((M.gender == MALE) || (M.gender == FEMALE)) //If the transformed mob is MALE or FEMALE
+					new_mob.setGender(M.gender) //The new human will inherit its gender
+				else //If its gender is NEUTRAL or PLURAL,
+					new_mob.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
+
+				var/mob/living/carbon/human/frankenstein/H = new_mob
+				H.generate_name()
+
 			/* RIP
 			if("cluwne")
 				new_mob = new /mob/living/simple_animal/hostile/retaliate/cluwne(M.loc)

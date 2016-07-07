@@ -5,7 +5,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "riotgun"
 	item_state = "riotgun"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	throw_speed = 2
 	throw_range = 10
 	force = 5.0
@@ -21,7 +21,7 @@
 		return
 	to_chat(user, "<span class='info'>It has [grenades.len] / [max_grenades] grenades loaded.</span>")
 	for(var/obj/item/weapon/grenade/G in grenades)
-		to_chat(user, "\icon [G] [G.name]")
+		to_chat(user, "[bicon(G)] [G.name]")
 
 /obj/item/weapon/gun/grenadelauncher/attackby(obj/item/I as obj, mob/user as mob)
 

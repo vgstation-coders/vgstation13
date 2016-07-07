@@ -5,11 +5,12 @@
 	icon_state = "scroll"
 	var/uses = 4.0
 	flags = FPRINT
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	item_state = "paper"
 	throw_speed = 4
 	throw_range = 20
 	origin_tech = "bluespace=4"
+	mech_flags = MECH_SCAN_FAIL // Because why should the crew be able to make scrolls out of nothing
 
 /obj/item/weapon/teleportation_scroll/apprentice
 	name = "lesser scroll of teleportation"
@@ -79,7 +80,7 @@
 		return
 
 	if(user && user.locked_to)
-		user.locked_to.unlock_atom(user)
+		user.unlock_from()
 
 	var/list/tempL = L
 	var/attempt = null

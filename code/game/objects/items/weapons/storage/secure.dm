@@ -23,8 +23,8 @@
 	var/l_hacking = 0
 	var/emagged = 0
 	var/open = 0
-	w_class = 3.0
-	max_w_class = 2
+	w_class = W_CLASS_MEDIUM
+	fits_max_w_class = W_CLASS_SMALL
 	max_combined_w_class = 14
 
 /obj/item/weapon/storage/secure/examine(mob/user)
@@ -43,7 +43,7 @@
 			to_chat(user, "You short out the lock on [src].")
 			return
 
-		if (istype(W, /obj/item/weapon/screwdriver))
+		if (isscrewdriver(W))
 			if (do_after(user, src, 20))
 				src.open =! src.open
 				user.show_message(text("<span class='notice'>You [] the service panel.</span>", (src.open ? "open" : "close")))
@@ -143,7 +143,7 @@
 	force = 8.0
 	throw_speed = 1
 	throw_range = 4
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 
 /obj/item/weapon/storage/secure/briefcase/New()
 	..()
@@ -181,7 +181,7 @@
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
 		var/t = user:zone_sel.selecting
-		if (t == "head")
+		if (t == LIMB_HEAD)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if (H.stat < 2 && H.health < 50 && prob(90))
@@ -217,7 +217,7 @@
 	flags = FPRINT
 	force = 8.0
 	w_class = 8.0
-	max_w_class = 8
+	fits_max_w_class = 8
 	anchored = 1.0
 	density = 0
 	cant_hold = list("/obj/item/weapon/storage/secure/briefcase")

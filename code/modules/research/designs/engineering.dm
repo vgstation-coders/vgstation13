@@ -99,7 +99,7 @@
 	id = "rped"
 	req_tech = list("engineering" = 4, "materials" = 4, "programming" = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_PLASTIC = 20000)
+	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
 	category = "Engineering"
 
@@ -141,4 +141,24 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1500, MAT_GLASS = 200)
 	build_path = /obj/item/device/assembly/light_tile_control
+	category = "Engineering"
+
+/datum/design/t_ray_scanner
+	name = "T-Ray Scanner"
+	desc = "A terahertz ray device used to pick up the faintest traces of energy, used to detect the invisible."
+	id = "tray_scanner"
+	req_tech = list("engineering" = 1, "magnets" = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
+	build_path = /obj/item/device/t_scanner
+	category = "Engineering"
+
+/datum/design/p_ray_scanner
+	name = "P-Ray Scanner"
+	desc = "A petahertz ray device used to pick up the faintest traces of energy, used to detect the invisible."
+	id = "pray_scanner"
+	req_tech = list("engineering" = 3, "magnets" = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
+	build_path = /obj/item/device/t_scanner/advanced
 	category = "Engineering"

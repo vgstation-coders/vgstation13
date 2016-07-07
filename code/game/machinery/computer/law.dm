@@ -42,7 +42,7 @@
 
 		if (current.stat == 2 || current.control_disabled == 1)
 			to_chat(usr, "Upload failed. No signal is being detected from the AI.")
-		else if (current.see_in_dark == 0)
+		else if (current.aiRestorePowerRoutine)
 			to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
 		else
 			// Modules should throw their own errors.
@@ -52,7 +52,7 @@
 				return 0
 			if(!M.upload(current.laws,current,user))
 				return 0
-		return 1
+			return 1
 
 	proc/announce_law_changes(var/mob/user)
 		to_chat(current, "These are your laws now:")
@@ -87,12 +87,12 @@
 
 			if (current.stat == 2 || current.control_disabled == 1)
 				to_chat(usr, "Upload failed. No signal is being detected from the AI.")
-			else if (current.see_in_dark == 0)
+			else if (current.aiRestorePowerRoutine)
 				to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
 			else
 				var/obj/item/weapon/planning_frame/frame=O
 				if(frame.modules.len>0)
-					to_chat(user, "<span class='notice'>You load \the [frame] into \the [src]...</span>")
+					to_chat(user, "<span class='notice'>You begin to load \the [frame] into \the [src]...</span>")
 					if(do_after(user, src,50))
 						var/failed=0
 						for(var/i=1;i<=frame.modules.len;i++)
@@ -208,7 +208,7 @@
 			else
 				var/obj/item/weapon/planning_frame/frame=W
 				if(frame.modules.len>0)
-					to_chat(user, "<span class='notice'>You load \the [frame] into \the [src]...</span>")
+					to_chat(user, "<span class='notice'>You begin to load \the [frame] into \the [src]...</span>")
 					if(do_after(user, src,50))
 						var/failed=0
 						for(var/i=1;i<=frame.modules.len;i++)
@@ -243,4 +243,3 @@
 		else
 			to_chat(usr, "[src.current.name] selected for law changes.")
 		return
-

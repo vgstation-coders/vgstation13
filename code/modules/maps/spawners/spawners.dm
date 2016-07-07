@@ -12,19 +12,18 @@
 	var/amount = 1
 	var/chance = 100
 	var/jiggle = 0
-	var/list/toSpawn = list()
+	var/list/to_spawn = list()
 
-/obj/map/spawner/New()
+/obj/map/spawner/perform_spawn()
+
 	var/obj/spawned
-	for(src.amount,src.amount,src.amount--)
-		if(prob(src.chance))
-			spawned = pick(src.toSpawn)
-			spawned = new spawned(src.loc)
-			if(src.jiggle)
-				spawned.pixel_x = rand(-src.jiggle,src.jiggle)
-				spawned.pixel_y = rand(-src.jiggle,src.jiggle)
-	qdel(src)
-	return
+	for(amount, amount, amount--)
+		if(prob(chance))
+			spawned = pick(to_spawn)
+			spawned = new spawned(loc)
+			if(jiggle)
+				spawned.pixel_x = rand(-jiggle, jiggle)
+				spawned.pixel_y = rand(-jiggle, jiggle)
 
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////
@@ -37,7 +36,7 @@
 	icon_state = "med_drugs"
 	amount = 5
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
 		/obj/item/weapon/reagent_containers/glass/bottle/antitoxin,
 		/obj/item/weapon/reagent_containers/glass/bottle/mutagen,
@@ -62,7 +61,7 @@
 	amount = 10
 	chance = 75
 	jiggle = 6
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/weapon/reagent_containers/pill/antitox,
 		/obj/item/weapon/reagent_containers/pill/tox,
 		/obj/item/weapon/reagent_containers/pill/stox,
@@ -82,7 +81,7 @@
 /obj/map/spawner/security/armor
 	name = "armory armor spawner"
 	icon_state = "armory_armor"
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/clothing/suit/armor/riot,
 		/obj/item/clothing/suit/armor/bulletproof,
 		/obj/item/clothing/suit/armor/laserproof,
@@ -94,8 +93,8 @@
 	name = "armory gear spawner"
 	icon_state = "armory_gear"
 	amount = 3
-	toSpawn = list(
-		/obj/item/clothing/head/helmet/riot,
+	to_spawn = list(
+		/obj/item/clothing/head/helmet/tactical/riot,
 		/obj/item/weapon/shield/riot,
 		/obj/item/weapon/melee/baton/loaded,
 		/obj/item/clothing/suit/armor/vest/security,
@@ -107,7 +106,7 @@
 /obj/map/spawner/security/weapons
 	name = "armory weapon spawner"
 	icon_state = "armory_weapons"
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/weapon/gun/energy/ionrifle,
 		/obj/item/weapon/gun/energy/laser,
@@ -127,7 +126,7 @@
 	icon_state = "armory_misc"
 	amount = 2
 	jiggle = 5
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/weapon/storage/box/flashbangs,
 		/obj/item/weapon/storage/box/emps,
 		/obj/item/weapon/storage/box/handcuffs,
@@ -142,24 +141,24 @@
 	icon_state = "engi_materials"
 	amount = 2
 	chance = 75
-	toSpawn = list(
-		/obj/item/stack/sheet/glass/glass{amount=50},
-		/obj/item/stack/sheet/glass/rglass{amount=50},
-		/obj/item/stack/sheet/glass/plasmaglass{amount=50},
-		/obj/item/stack/light_w{amount=50},
-		/obj/item/stack/sheet/mineral/plastic{amount=50},
-		/obj/item/stack/sheet/metal{amount=50},
-		/obj/item/stack/sheet/plasteel{amount=50},
-		/obj/item/stack/sheet/wood{amount=50},
-		/obj/item/stack/rods{amount=50},
-		/obj/item/stack/tile/grass{amount=50},
+	to_spawn = list(
+		/obj/item/stack/sheet/glass/glass{amount = 50},
+		/obj/item/stack/sheet/glass/rglass{amount = 50},
+		/obj/item/stack/sheet/glass/plasmaglass{amount = 50},
+		/obj/item/stack/light_w{amount = 50},
+		/obj/item/stack/sheet/mineral/plastic{amount = 50},
+		/obj/item/stack/sheet/metal{amount = 50},
+		/obj/item/stack/sheet/plasteel{amount = 50},
+		/obj/item/stack/sheet/wood{amount = 50},
+		/obj/item/stack/rods{amount = 50},
+		/obj/item/stack/tile/grass{amount = 50},
 		)
 
 /obj/map/spawner/engi/dispensers
 	name = "engie dispenser spawner"
 	icon_state = "engi_dispensers"
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/obj/structure/reagent_dispensers/fueltank,
 		/obj/structure/reagent_dispensers/watertank,
 		)
@@ -168,7 +167,7 @@
 	name = "engie machinery spawner"
 	icon_state = "engi_machinery"
 	chance = 75
-	toSpawn = list(
+	to_spawn = list(
 		/obj/machinery/atmospherics/binary/circulator,
 		/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
 		/obj/machinery/field_generator,
@@ -222,7 +221,7 @@
 	icon_state = "ass_tools"
 	amount = 3
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/device/analyzer,
 		/obj/item/device/assembly/igniter,
 		/obj/item/device/assembly/infra,
@@ -268,16 +267,16 @@
 	icon_state = "ass_materials"
 	amount = 2
 	chance = 50
-	toSpawn = list(
-		/obj/item/stack/sheet/glass/glass{amount=50},
-		/obj/item/stack/sheet/leather{amount=50},
-		/obj/item/stack/sheet/mineral/plastic{amount=50},
-		/obj/item/stack/sheet/metal{amount=50},
-		/obj/item/stack/sheet/wood{amount=50},
-		/obj/item/stack/sheet/cloth{amount=50},
-		/obj/item/stack/sheet/cardboard{amount=50},
-		/obj/item/stack/rods{amount=50},
-		/obj/item/stack/sheet/mineral/sandstone{amount=50},
+	to_spawn = list(
+		/obj/item/stack/sheet/glass/glass{amount = 50},
+		/obj/item/stack/sheet/leather{amount = 50},
+		/obj/item/stack/sheet/mineral/plastic{amount = 50},
+		/obj/item/stack/sheet/metal{amount = 50},
+		/obj/item/stack/sheet/wood{amount = 50},
+		/obj/item/stack/sheet/cloth{amount = 50},
+		/obj/item/stack/sheet/cardboard{amount = 50},
+		/obj/item/stack/rods{amount = 50},
+		/obj/item/stack/sheet/mineral/sandstone{amount = 50},
 		)
 
 // Maintenance /////////////////////////////////////////////////
@@ -287,7 +286,7 @@
 	icon_state = "maint"
 	amount = 2
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/device/assembly/igniter,
 		/obj/item/device/assembly/infra,
 		/obj/item/device/assembly/mousetrap,
@@ -366,7 +365,7 @@
 		/obj/item/clothing/shoes/laceup,
 		/obj/item/clothing/glasses/welding/superior,
 		/obj/item/clothing/glasses/sunglasses/sechud,
-		/obj/item/clothing/glasses/meson,
+		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/clothing/gloves/yellow,
 		/obj/item/clothing/gloves/knuckles,
 		/obj/item/clothing/gloves/knuckles/spiked,
@@ -527,7 +526,7 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
-		/obj/item/weapon/flamethrower/full,
+		/obj/item/weapon/gun/projectile/flamethrower/full,
 		/obj/item/weapon/gun/projectile/deagle/gold,
 		/obj/item/weapon/gun/projectile/russian,
 		/obj/item/weapon/handcuffs,
@@ -596,7 +595,7 @@
 	name = "space weapons spawner"
 	icon_state = "space_weapons"
 	chance = 20
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver,
 		/obj/item/weapon/crossbow,
 		/obj/item/weapon/grenade/spawnergrenade/manhacks,
@@ -617,17 +616,41 @@
 		/obj/item/weapon/melee/classic_baton,
 		/obj/item/weapon/pickaxe/plasmacutter,
 		/obj/item/weapon/shield/energy,
-		/obj/item/weapon/organ/head,
-		/obj/item/weapon/organ/r_leg,
-		/obj/item/weapon/organ/l_arm,
-		/obj/item/weapon/organ/l_foot,
+		)
+
+/obj/map/spawner/space/weapons2
+	name = "exotic space weapons spawner"
+	icon_state = "space_weapons"
+	amount = 2
+	to_spawn = list(
+		/obj/item/weapon/grenade/spawnergrenade/beenade,
+		/obj/item/weapon/grenade/spawnergrenade/spesscarp,
+		/obj/item/weapon/grenade/flashbang/clusterbang,
+		/obj/item/weapon/gun/energy/decloner,
+		/obj/item/weapon/gun/energy/mindflayer,
+		/obj/item/weapon/gun/energy/laser/retro,
+		/obj/item/weapon/gun/energy/gun/nuclear,
+		/obj/item/weapon/gun/energy/gun,
+		/obj/item/weapon/gun/energy/xray,
+		/obj/item/weapon/gun/energy/radgun,
+		/obj/item/weapon/gun/energy/crossbow,
+		/obj/item/weapon/gun/projectile/gyropistol,
+		/obj/item/weapon/gun/projectile/hecate,
+		/obj/item/weapon/gun/projectile/pistol,
+		/obj/item/weapon/gun/projectile/mateba,
+		/obj/item/weapon/gun/projectile/silenced,
+		/obj/item/weapon/gun/projectile/deagle/camo,
+		/obj/item/weapon/gun/projectile/automatic/xcom,
+		/obj/item/weapon/gun/osipr,
+		/obj/item/weapon/gun/gravitywell,
+		/obj/item/weapon/gun/grenadelauncher,
 		)
 
 /obj/map/spawner/space/tools
 	name = "space tool spawner"
 	icon_state = "space_tools"
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/bluespace_crystal,
 		/obj/item/bodybag/cryobag,
 		/obj/item/borg/upgrade/syndicate,
@@ -683,7 +706,7 @@
 	name = "space gear spawner"
 	icon_state = "space_gear"
 	chance = 30
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/clothing/mask/cigarette/cigar/cohiba,
 		/obj/item/clothing/mask/cigarette/pipe/cobpipe,
 		/obj/item/clothing/mask/balaclava,
@@ -712,7 +735,7 @@
 	icon_state = "space_supply"
 	amount = 2
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/clothing/mask/breath/medical,
 		/obj/item/device/radio,
 		/obj/item/device/flashlight/flare,
@@ -763,7 +786,7 @@
 	chance = 50
 	amount = 4
 	jiggle = 5
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 		/obj/item/weapon/reagent_containers/food/drinks/beer,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe,
@@ -776,7 +799,7 @@
 	name = "space russian spawner"
 	icon_state = "space_russian"
 	chance = 5
-	toSpawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
+	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
 
 // Mobs ////////////////////////////////////////////////////////
 
@@ -784,21 +807,21 @@
 	name = "carp spawner"
 	icon_state = "mob_carp"
 	chance = 50
-	toSpawn = list(/mob/living/simple_animal/hostile/carp)
+	to_spawn = list(/mob/living/simple_animal/hostile/carp)
 
 /obj/map/spawner/mobs/lizard
 	name = "lizard spawner"
 	icon_state = "mob_lizard"
 	amount = 2
 	chance = 50
-	toSpawn = list(/mob/living/simple_animal/lizard)
+	to_spawn = list(/mob/living/simple_animal/lizard)
 
 /obj/map/spawner/mobs/mouse
 	name = "mouse spawner"
 	icon_state = "mob_mouse"
 	amount = 2
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/mob/living/simple_animal/mouse/brown,
 		/mob/living/simple_animal/mouse/gray,
 		/mob/living/simple_animal/mouse/white,
@@ -808,18 +831,26 @@
 	name = "bear spawner"
 	icon_state = "mob_bear"
 	chance = 50
-	toSpawn = list(/mob/living/simple_animal/hostile/bear)
+	to_spawn = list(/mob/living/simple_animal/hostile/bear)
 
 /obj/map/spawner/mobs/spider
 	name = "spider spawner"
 	icon_state = "mob_spider"
 	amount = 3
 	chance = 50
-	toSpawn = list(
+	to_spawn = list(
 		/mob/living/simple_animal/hostile/giant_spider,
 		/mob/living/simple_animal/hostile/giant_spider/nurse,
 		/mob/living/simple_animal/hostile/giant_spider/hunter,
 		)
+
+/obj/map/spawner/mobs/humanoid/wiz
+	name = "wizard spawner"
+	icon_state = "mob_wiz"
+	amount = 2
+	chance = 50
+	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
+
 
 // Robutts /////////////////////////////////////////////////////
 
@@ -827,7 +858,7 @@
 	name = "robot spawner"
 	icon_state = "robot_any"
 	chance = 20
-	toSpawn = list(
+	to_spawn = list(
 		/obj/machinery/bot/cleanbot,
 		/obj/machinery/bot/farmbot,
 		/obj/machinery/bot/floorbot,
@@ -838,27 +869,27 @@
 /obj/map/spawner/robot/sec
 	name = "secbot spawner"
 	icon_state = "robot_sec"
-	toSpawn = list(/obj/machinery/bot/secbot)
+	to_spawn = list(/obj/machinery/bot/secbot)
 
 /obj/map/spawner/robot/clean
 	name = "cleanbot spawner"
 	icon_state = "robot_clean"
-	toSpawn = list(/obj/machinery/bot/cleanbot)
+	to_spawn = list(/obj/machinery/bot/cleanbot)
 
 /obj/map/spawner/robot/med
 	name = "medbot spawner"
 	icon_state = "robot_med"
-	toSpawn = list(/obj/machinery/bot/medbot)
+	to_spawn = list(/obj/machinery/bot/medbot)
 
 /obj/map/spawner/robot/floor
 	name = "floorbot spawner"
 	icon_state = "robot_floor"
-	toSpawn = list(/obj/machinery/bot/floorbot)
+	to_spawn = list(/obj/machinery/bot/floorbot)
 
 /obj/map/spawner/robot/farm
 	name = "farmbot spawner"
 	icon_state = "robot_farm"
-	toSpawn = list(/obj/machinery/bot/farmbot)
+	to_spawn = list(/obj/machinery/bot/farmbot)
 
 // Seeds ///////////////////////////////////////////////////////
 
@@ -868,7 +899,7 @@
 	chance = 50
 	amount = 4
 	jiggle = 5
-	toSpawn = list(
+	to_spawn = list(
 		/obj/item/seeds/amanitamycelium,
 		/obj/item/seeds/ambrosiadeusseed,
 		/obj/item/seeds/ambrosiavulgarisseed,
@@ -930,4 +961,29 @@
 		/obj/item/seeds/wheatseed,
 		/obj/item/seeds/whitebeetseed,
 		/obj/item/seeds/cinnamomum,
+		)
+
+// Gym ///////////////////////////////////////////////////////
+
+/obj/map/spawner/misc/gym //for the gym space vault
+	name = "gym spawner"
+	icon_state = "gym"
+	chance = 80
+	amount = 1
+	jiggle = 5
+	to_spawn = list(
+		/obj/item/weapon/dnainjector/nofail/hulkmut,
+		/obj/item/weapon/dnainjector/nofail/midgit,
+		/obj/item/weapon/dnainjector/nofail/fat,
+		/obj/item/weapon/dnainjector/nofail/runfast,
+		/obj/item/weapon/dnainjector/nofail/strong,
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet,
+		/obj/item/clothing/under/shorts/black,
+		/obj/item/clothing/under/shorts/blue,
+		/obj/item/clothing/under/shorts/red,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/storage/pill_bottle/hyperzine,
+		/obj/item/weapon/storage/pill_bottle/creatine,
+		/obj/item/weapon/storage/firstaid/regular,
+		/obj/item/weapon/storage/box/handcuffs,
 		)

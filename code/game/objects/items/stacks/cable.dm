@@ -5,9 +5,12 @@
 ////////////////////////////////
 // Definitions
 ////////////////////////////////
+/datum/stack_recipe/cable_cuffs/finish_building(var/mob/usr, var/obj/item/stack/cable_coil/S, var/obj/item/weapon/handcuffs/cable/C)
+	C._color = S._color
+	C.update_icon()
 
 var/global/list/datum/stack_recipe/cable_recipes = list ( \
-	new/datum/stack_recipe("cable cuffs", /obj/item/weapon/handcuffs/cable, 15, time = 3, one_per_turf = 0, on_floor = 0))
+	new/datum/stack_recipe/cable_cuffs("cable cuffs", /obj/item/weapon/handcuffs/cable, 15, time = 3, one_per_turf = 0, on_floor = 0))
 
 #define MAXCOIL 30
 
@@ -17,12 +20,13 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	icon_state = "coil_red"
 	gender = NEUTER
 	amount = MAXCOIL
+	restock_amount = 2
 	singular_name = "cable piece"
 	max_amount = MAXCOIL
 	_color = "red"
 	desc = "A coil of power cable."
 	throwforce = 10
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 5
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
@@ -31,7 +35,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	siemens_coefficient = 1.5 //Extra conducting
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"
-	attack_verb = list("whipped", "lashed", "disciplined", "flogged")
+	attack_verb = list("whips", "lashes", "disciplines", "flogs")
 
 /obj/item/stack/cable_coil/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -82,6 +86,10 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	. = ..()
 	update_icon()
 
+/obj/item/stack/cable_coil/add(var/amount)
+	. = ..()
+	update_icon()
+
 /obj/item/stack/cable_coil/can_stack_with(obj/item/other_stack)
 	return istype(other_stack, /obj/item/stack/cable_coil) && !istype(other_stack, /obj/item/stack/cable_coil/heavyduty) //It can be any cable, except the fat stuff
 
@@ -113,7 +121,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 // - Wirecutters : Cut a piece off
 // - Cable coil : Merge the cables
 /obj/item/stack/cable_coil/attackby(obj/item/weapon/W, mob/user)
-	if((istype(W, /obj/item/weapon/wirecutters)) && (amount > 1))
+	if((iswirecutter(W)) && (amount > 1))
 		use(1)
 		getFromPool(/obj/item/stack/cable_coil, user.loc, 1, _color)
 		to_chat(user, "<span class='notice'>You cut a piece off the cable coil.</span>")

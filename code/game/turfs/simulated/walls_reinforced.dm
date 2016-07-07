@@ -95,11 +95,12 @@
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
 			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with \the [W].</span>", \
 			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
-			src.dismantle_wall()
+			dismantle_wall()
 
 			var/pdiff = performWallPressureCheck(src.loc)
 			if(pdiff)
-				message_admins("[user.real_name] ([formatPlayerPanel(user,user.ckey)]) broke a rotting reinforced wall with a pdiff of [pdiff] at [formatJumpTo(loc)]!")
+				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				message_admins("\The [src] with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 			return
 
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting simulated walls and the relevant effects
@@ -116,7 +117,7 @@
 	//Deconstruction and reconstruction
 	switch(d_state)
 		if(WALLCOMPLETED)
-			if(istype(W, /obj/item/weapon/wirecutters))
+			if(iswirecutter(W))
 				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 				src.d_state = WALLCOVEREXPOSED
 				update_icon()
@@ -125,7 +126,7 @@
 				return
 
 		if(WALLCOVEREXPOSED)
-			if(istype(W, /obj/item/weapon/screwdriver))
+			if(isscrewdriver(W))
 				user.visible_message("<span class='warning'>[user] begins unsecuring \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin unsecuring \the [src]'s external cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
@@ -138,7 +139,7 @@
 				return
 
 			//Repairing outer grille, use welding tool
-			else if(istype(W, /obj/item/weapon/weldingtool))
+			else if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0, user))
 					user.visible_message("<span class='notice'>[user] begins mending the damage on \the [src]'s outer grille.</span>", \
@@ -157,7 +158,7 @@
 				return
 
 		if(WALLCOVERUNSECURED)
-			if(istype(W, /obj/item/weapon/weldingtool))
+			if(iswelder(W))
 
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0, user))
@@ -194,7 +195,7 @@
 				return
 
 			//Re-secure external cover, unsurprisingly exact same step as above
-			else if(istype(W, /obj/item/weapon/screwdriver))
+			else if(isscrewdriver(W))
 				user.visible_message("<span class='notice'>[user] begins securing \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin securing \the [src]'s external cover.</span>")
 				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
@@ -207,7 +208,7 @@
 				return
 
 		if(WALLCOVERWEAKENED)
-			if(istype(W, /obj/item/weapon/crowbar))
+			if(iscrowbar(W))
 
 				user.visible_message("<span class='warning'>[user] starts prying off \the [src]'s external cover.</span>", \
 				"<span class='notice'>You struggle to pry off \the [src]'s external cover.</span>", \
@@ -224,7 +225,7 @@
 				return
 
 			//Fix welding damage caused above, by welding shit into place again
-			else if(istype(W, /obj/item/weapon/weldingtool))
+			else if(iswelder(W))
 
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0, user))
@@ -245,7 +246,7 @@
 				return
 
 		if(WALLCOVERREMOVED)
-			if(istype(W, /obj/item/weapon/wrench))
+			if(iswrench(W))
 
 				user.visible_message("<span class='warning'>[user] starts loosening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start loosening the bolts anchoring \the [src]'s external support rods.</span>")
@@ -275,7 +276,7 @@
 				return
 
 		if(WALLRODSUNSECURED)
-			if(istype(W, /obj/item/weapon/weldingtool))
+			if(iswelder(W))
 
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
@@ -308,7 +309,7 @@
 				return
 
 			//Repair step, tighten the anchoring bolts
-			else if(istype(W, /obj/item/weapon/wrench))
+			else if(iswrench(W))
 
 				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start tightening the bolts anchoring \the [src]'s external support rods.</span>")
@@ -322,7 +323,7 @@
 				return
 
 		if(WALLRODSCUT)
-			if(istype(W, /obj/item/weapon/crowbar))
+			if(iscrowbar(W))
 
 				user.visible_message("<span class='warning'>[user] starts prying off [src]'s internal cover.</span>", \
 				"<span class='notice'>You struggle to pry off [src]'s internal cover.</span>")
@@ -331,8 +332,15 @@
 				if(do_after(user, src, 100) && d_state == WALLRODSCUT)
 					user.visible_message("<span class='warning'>[user] pries off [src]'s internal cover.</span>", \
 					"<span class='notice'>You pry off [src]'s internal cover.</span>")
-					dismantle_wall() //Mr. Engineer, break down that reinforced wall
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
+
+					var/pdiff = performWallPressureCheck(loc)
+					if(pdiff)
+						investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+						message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+
+					dismantle_wall() //Mr. Engineer, break down that reinforced wall
+
 				return
 
 			//Repair the external support rods welded through in the previous step, with a welding tool. Naturally
@@ -370,6 +378,11 @@
 		if(do_after(user, src, PK.digspeed * 50))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
+			var/pdiff = performWallPressureCheck(src.loc)
+			if(pdiff)
+				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+				message_admins("\The [src] with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
+
 			dismantle_wall()
 		return
 

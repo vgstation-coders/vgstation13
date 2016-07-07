@@ -211,7 +211,7 @@
 				special_role_text = "antagonist"
 			if(Mind.total_TC)
 				if(Mind.spent_TC)
-					text += "<br><span class='sinister'>TC Remaining: [Mind.total_TC - Mind.spent_TC]/[Mind.total_TC] - The tools used by the Enthralled were: [list2text(Mind.uplink_items_bought, ", ")]</span>"
+					text += "<br><span class='sinister'>TC Remaining: [Mind.total_TC - Mind.spent_TC]/[Mind.total_TC] - The tools used by the Enthralled were: [jointext(Mind.uplink_items_bought, ", ")]</span>"
 				else
 					text += "<span class='sinister'>The Enthralled was a smooth operator this round (did not purchase any uplink items)</span>"
 			if(traitorwin)
@@ -266,7 +266,7 @@
 	var/dat
 	if (you_are)
 		dat = "<span class='danger'>You are a Vampire!</br></span>"
-	dat += {"To bite someone, target the head and use harm intent with an empty hand. Drink blood to gain new powers and use coffins to regenerate your body if injured.
+	dat += {"To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand). Drink blood to gain new powers and use coffins to regenerate your body if injured.
 You are weak to holy things and starlight. Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water."}
 	to_chat(vampire.current, dat)
 	to_chat(vampire.current, "<B>You must complete the following tasks:</B>")
@@ -371,7 +371,10 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [H.name] ([H.ckey]) in the neck and draining their blood</font>")
 	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [src.name] ([src.ckey])</font>")
 	log_attack("[src.name] ([src.ckey]) bit [H.name] ([H.ckey]) in the neck")
-	src.visible_message("<span class='danger'>[src.name] bites [H.name]'s neck!</span>", "<span class='danger'>You bite [H.name]'s neck and begin to drain their blood.</span>", "<span class='notice'>You hear a soft puncture and a wet sucking noise.</span>")
+
+	to_chat(src, "<span class='danger'>You latch on firmly to \the [H]'s neck.</span>")
+	to_chat(H, "<span class='userdanger'>\The [src] latches on to your neck!</span>")
+
 	if(!iscarbon(src))
 		H.LAssailant = null
 	else
@@ -382,26 +385,30 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			src.mind.vampire.draining = null
 			return 0
 		if(H.species.flags & NO_BLOOD)
-			to_chat(src, "<span class='warning'>Not a drop of blood here</span>")
+			to_chat(src, "<span class='warning'>Not a drop of blood here.</span>")
+			src.mind.vampire.draining = null
+			return 0
+		if(!H.mind)
+			to_chat(src, "<span class='warning'>This blood is lifeless and has no power.</span>")
 			src.mind.vampire.draining = null
 			return 0
 		bloodtotal = src.mind.vampire.bloodtotal
 		bloodusable = src.mind.vampire.bloodusable
-		if(!H.vessel.get_reagent_amount("blood"))
+		if(!H.vessel.get_reagent_amount(BLOOD))
 			to_chat(src, "<span class='warning'>They've got no blood left to give.</span>")
 			break
 		if(H.stat < 2) //alive
-			blood = min(10, H.vessel.get_reagent_amount("blood"))// if they have less than 10 blood, give them the remnant else they get 10 blood
+			blood = min(10, H.vessel.get_reagent_amount(BLOOD))// if they have less than 10 blood, give them the remnant else they get 10 blood
 			src.mind.vampire.bloodtotal += blood
 			src.mind.vampire.bloodusable += blood
 			H.adjustCloneLoss(10) // beep boop 10 damage
 		else
-			blood = min(5, H.vessel.get_reagent_amount("blood"))// The dead only give 5 bloods
+			blood = min(5, H.vessel.get_reagent_amount(BLOOD))// The dead only give 5 bloods
 			src.mind.vampire.bloodtotal += blood
 		if(bloodtotal != src.mind.vampire.bloodtotal)
 			to_chat(src, "<span class='notice'>You have accumulated [src.mind.vampire.bloodtotal] [src.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood[src.mind.vampire.bloodusable != bloodusable ?", and have [src.mind.vampire.bloodusable] left to use" : "."]</span>")
 		check_vampire_upgrade(mind)
-		H.vessel.remove_reagent("blood",25)
+		H.vessel.remove_reagent(BLOOD,25)
 
 	src.mind.vampire.draining = null
 	to_chat(src, "<span class='notice'>You stop draining [H.name] of blood.</span>")
@@ -723,6 +730,41 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		adjustBruteLoss(-4)
 		adjustFireLoss(-4)
 		adjustToxLoss(-4)
+		adjustOxyLoss(-4)
 		mind.vampire.smitecounter = 0
 		mind.vampire.nullified -= 5
+		for(var/datum/organ/internal/I in internal_organs)
+			if(I && I.damage > 0)
+				I.damage = max(0, I.damage - 4)
+			if(I)
+				I.status &= ~ORGAN_BROKEN
+				I.status &= ~ORGAN_SPLINTED
+				I.status &= ~ORGAN_BLEEDING
 	mind.vampire.nullified = max(0, mind.vampire.nullified - 1)
+
+/datum/mind/proc/make_new_vampire(var/show_message = 1, var/generate_objectives = 1)
+	if(!isvampire(current))
+		ticker.mode.vampires += src
+		ticker.mode.grant_vampire_powers(current)
+		special_role = "Vampire"
+		if(show_message)
+			to_chat(current, "<B><font color='red'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</font></B>")
+			var/wikiroute = role_wiki[ROLE_VAMPIRE]
+			to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+		if(generate_objectives)
+			ticker.mode.forge_vampire_objectives(src)
+		return 1
+	return 0
+
+/datum/mind/proc/remove_vampire_status(var/show_message = 1)
+	if(isvampire(current))
+		ticker.mode.vampires -= src
+		special_role = null
+		current.remove_vampire_powers()
+		if(vampire)
+			qdel(vampire)
+			vampire = null
+		if(show_message)
+			to_chat(current, "<FONT color='red' size = 3><B>You grow weak and lose your powers! You are no longer a vampire and are stuck in your current form!</B></FONT>")
+		return 1
+	return 0

@@ -32,16 +32,16 @@
 
 //Raider Gear
 /obj/item/clothing/suit/space/vox
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
 	slowdown = 2
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("Vox")
+	species_restricted = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/vox
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 30, bio = 30, rad = 30)
-	species_restricted = list("Vox")
+	species_restricted = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
@@ -93,7 +93,7 @@
 
 /obj/item/clothing/under/vox
 	has_sensor = 0
-	species_restricted = list("Vox")
+	species_restricted = list(VOX_SHAPED)
 
 /obj/item/clothing/under/vox/vox_casual
 	name = "alien clothing"
@@ -117,7 +117,7 @@
 	siemens_coefficient = 0
 	permeability_coefficient = 0.05
 	_color="gloves-vox"
-	species_restricted = list("Vox")
+	species_restricted = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/magboots/vox
 
@@ -125,7 +125,11 @@
 	name = "vox boots"
 	item_state = "boots-vox"
 	icon_state = "boots-vox"
-	species_restricted = list("Vox")
+	species_restricted = list(VOX_SHAPED)
+
+	stomp_attack_power = 0
+
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
 
 /obj/item/clothing/shoes/magboots/vox/toggle()
 	//set name = "Toggle Floor Grip"
@@ -160,6 +164,7 @@
 	flags = FPRINT //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
+	eyeprot = 0
 
 /obj/item/clothing/suit/space/vox/civ/bartender
 	name = "vox bartender pressure suit"
@@ -211,18 +216,22 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	eyeprot = 3
 
 /obj/item/clothing/suit/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. Has some heat protection."
 	icon_state = "vox-civ-atmos"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
+	flags = FPRINT  | PLASMAGUARD
+	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure helmet"
 	icon_state = "vox-civ-atmos"
 	desc = "A very alien-looking helmet for vox crewmembers. Has some heat protection."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
+	flags = FPRINT  | PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/suit/space/vox/civ/engineer/ce
@@ -254,6 +263,7 @@
 	item_state = "vox-pressure-science"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for SCIENCE!"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 25)
+	eyeprot = 0
 
 /obj/item/clothing/suit/space/vox/civ/science/rd
 	name = "vox research director pressure suit"
@@ -283,6 +293,7 @@
 	item_state = "vox-pressure-medical"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for medical personnel."
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	eyeprot = 0
 
 /obj/item/clothing/suit/space/vox/civ/medical/virologist
 	name = "vox virologist pressure suit"
@@ -360,14 +371,14 @@
 	item_state = "vox-pressure-normal"
 	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 10)
-	species_restricted = list("Vox")
+	species_restricted = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old
 	name = "vox civilian pressure helmet"
 	icon_state = "vox-pressure-normal"
 	item_state = "vox-pressure-normal"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox."
-	species_restricted = list("Vox")
+	species_restricted = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/space/vox/civ/old/engineer
 	name = "vox engineering pressure suit"
@@ -428,7 +439,7 @@
 	name = "grey pressure helmet"
 	icon_state = "grey-fishbowl-helm"
 	item_state = "grey-fishbowl-helm"
-	desc = "A strange globe-like structure. Despite looking like a decent glare would break it, it is surprisingly durable. Emough thinking room for a Grey."
+	desc = "A strange globe-like structure. Despite looking like a decent glare would break it, it is surprisingly durable. Enough thinking room for a Grey."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY

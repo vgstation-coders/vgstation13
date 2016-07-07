@@ -36,6 +36,9 @@ players2.sqlite
 # New CMC Minimap images.
 /data/minimaps/*
 
+# Map rendering
+/maprendering/renderoutput/*
+
 # Backup maps created by maptools
 *.dmm.backup
 
@@ -45,3 +48,9 @@ players2.sqlite
 
 # Map player count config
 /maps/voting/*/playercount.txt
+
+# Runtime condenser I/O files.
+/tools/Runtime\ Condenser/*.txt
+
+# Investigate logs that have an annoying tendency to generate during testing
+/data/investigate/*

@@ -7,7 +7,7 @@
 	item_state = "bolt"
 	flags = FPRINT
 	throwforce = 8
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	sharpness = 1
 
 /obj/item/weapon/arrow/proc/removed() //Helper for metal rods falling apart.
@@ -42,12 +42,12 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "crossbow"
 	item_state = "crossbow-solid"
-	w_class = 5.0
+	w_class = W_CLASS_HUGE
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT | SLOT_BACK
 
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 
 	var/tension = 0                       // Current draw on the bow.
 	var/max_tension = 5                   // Highest possible tension.
@@ -100,7 +100,7 @@
 		else
 			to_chat(user, "<span class='notice'>[src] already has a cell installed.</span>")
 
-	else if(istype(W, /obj/item/weapon/screwdriver))
+	else if(isscrewdriver(W))
 		if(cell)
 			var/obj/item/C = cell
 			C.loc = get_turf(user)

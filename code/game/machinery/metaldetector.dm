@@ -24,79 +24,44 @@
 	flags = FPRINT | PROXMOVE
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
+	//List of weapons that metaldetector will not flash for, also copypasted in secbot.dm and ed209bot.dm
+	var/safe_weapons = list(
+		/obj/item/weapon/gun/energy/laser/bluetag,
+		/obj/item/weapon/gun/energy/laser/redtag,
+		/obj/item/weapon/gun/energy/laser/practice,
+		/obj/item/weapon/gun/hookshot,
+		/obj/item/weapon/gun/energy/floragun,
+		/obj/item/weapon/melee/defibrillator
+		)
+
+//THIS CODE IS COPYPASTED IN ed209bot.dm AND secbot.dm, with slight variations
 /obj/machinery/detector/proc/assess_perp(mob/living/carbon/human/perp as mob)
-	var/threatcount = 0
+	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
 	if(!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
 		return -1
 
-	if(!src.allowed(perp))
+	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest
 
-		if(istype(perp.l_hand, /obj/item/weapon/gun) || istype(perp.l_hand, /obj/item/weapon/melee))
-			if(!istype(perp.l_hand, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp.l_hand, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp.l_hand, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 4
+		if(!wpermit(perp))
+			for(var/obj/item/I in perp.held_items)
+				if(check_for_weapons(I))
+					threatcount += 4
 
-		if(istype(perp.r_hand, /obj/item/weapon/gun) || istype(perp.r_hand, /obj/item/weapon/melee))
-			if(!istype(perp.r_hand, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp.r_hand, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp.r_hand, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 4
-
-		if(istype(perp.back, /obj/item/weapon/gun) || istype(perp.back, /obj/item/weapon/melee))
-			if(!istype(perp.back, /obj/item/weapon/gun/energy/laser/bluetag) \
-			&& !istype(perp.back, /obj/item/weapon/gun/energy/laser/redtag) \
-			&& !istype(perp.back, /obj/item/weapon/gun/energy/laser/practice))
-				threatcount += 2
-
-		if(ishuman(perp))
-			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
-				if(!istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag) \
-				&& !istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag) \
-				&& !istype(perp.belt, /obj/item/weapon/gun/energy/laser/practice))
-					threatcount += 2
-			if(istype(perp.s_store, /obj/item/weapon/gun) || istype(perp.s_store, /obj/item/weapon/melee))
-				if(!istype(perp.s_store, /obj/item/weapon/gun/energy/laser/bluetag) \
-				&& !istype(perp.s_store, /obj/item/weapon/gun/energy/laser/redtag) \
-				&& !istype(perp.s_store, /obj/item/weapon/gun/energy/laser/practice))
+			for(var/obj/item/I in list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null))
+				if(check_for_weapons(I))
 					threatcount += 2
 
-		if(scanmode)
-			//
-			if(istype(perp.l_store, /obj/item/weapon/gun) || istype(perp.l_store, /obj/item/weapon/melee))
-				if(!istype(perp.l_store, /obj/item/weapon/gun/energy/laser/bluetag) \
-				&& !istype(perp.l_store, /obj/item/weapon/gun/energy/laser/redtag) \
-				&& !istype(perp.l_store, /obj/item/weapon/gun/energy/laser/practice))
-					threatcount += 2
-
-
-			if(istype(perp.r_store, /obj/item/weapon/gun) || istype(perp.r_store, /obj/item/weapon/melee))
-				if(!istype(perp.r_store, /obj/item/weapon/gun/energy/laser/bluetag) \
-				&& !istype(perp.r_store, /obj/item/weapon/gun/energy/laser/redtag) \
-				&& !istype(perp.r_store, /obj/item/weapon/gun/energy/laser/practice))
-					threatcount += 2
-
-
-
-			if (perp.back && istype(perp.back, /obj/item/weapon/storage/backpack))
-				//
-				var/obj/item/weapon/storage/backpack/B = perp.back
-							//
-				for(var/things in B.contents)
-					//
-					if(istype(things, /obj/item/weapon/gun) || istype(things, /obj/item/weapon/melee))
-						if(!istype(things, /obj/item/weapon/gun/energy/laser/bluetag) \
-						&& !istype(things, /obj/item/weapon/gun/energy/laser/redtag) \
-						&& !istype(things, /obj/item/weapon/gun/energy/laser/practice))
+				if (perp.back && istype(perp.back, /obj/item/weapon/storage/backpack))
+					var/obj/item/weapon/storage/backpack/B = perp.back
+					for(var/obj/item/weapon/thing in B.contents)
+						if(check_for_weapons(I))
 							threatcount += 2
 
 		if(idmode)
-			//
 			if(!perp.wear_id)
 				threatcount += 4
 
 		else
-
 			if(!perp.wear_id)
 				threatcount += 2
 
@@ -108,8 +73,8 @@
 			threatcount += 2
 
 		//Agent cards lower threatlevel.
-		//if(perp.wear_id && istype(perp:wear_id.GetID(), /obj/item/weapon/card/id/syndicate)) ///////////////nah, i dont think so
-		//	threatcount -= 2
+		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+			threatcount -= 2
 
 	var/passperpname = ""
 	for (var/datum/data/record/E in data_core.general)
@@ -139,20 +104,18 @@
 
 
 /obj/machinery/detector/power_change()
-	if ( powered() )
+	if (powered())
 		stat &= ~NOPOWER
-		icon_state = "[base_state]1"
-//		src.sd_SetLuminosity(2)
+//		icon_state = "[base_state]1"
 	else
-		stat |= ~NOPOWER
-		icon_state = "[base_state]1"
-//		src.sd_SetLuminosity(0)
+		stat |= NOPOWER
+//		icon_state = "[base_state]1"
 
 /obj/machinery/detector/attackby(obj/item/W, mob/user)
 	if(..(W, user) == 1)
 		return 1 // resolved for click code!
 
-	/*if (istype(W, /obj/item/weapon/wirecutters))
+	/*if (iswirecutter(W))
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)
@@ -242,7 +205,7 @@
 
 			src.last_read = world.time
 			use_power(1000)
-			src.visible_message("<span class = 'warning'>Theat Detected! Subject: [dudesname]</span>")////
+			src.visible_message("<span class = 'warning'>Threat Detected! Subject: [dudesname]</span>")////
 
 
 		else if(dudesthreat <= 3 && dudesthreat != 0 && senset)
@@ -273,7 +236,11 @@
 	playsound(get_turf(src), sndstr, 100, 1)
 
 
-
+/obj/machinery/detector/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
+	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
+		if(!(slot_item.type in safe_weapons))
+			return 1
+	return 0
 
 
 /obj/machinery/detector/emp_act(severity)
@@ -295,7 +262,8 @@
 
 /obj/machinery/detector/wrenchAnchor(mob/user)
 	if(..() == 1)
+		overlays.len = 0
 		if(anchored)
-			src.overlays += "[base_state]-s"
+			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
 
 

@@ -63,6 +63,7 @@
 #define ui_dropbutton "EAST-4:22,SOUTH:5"
 #define ui_drop_throw "EAST-1:28,SOUTH+1:7"
 #define ui_pull_resist "EAST-2:26,SOUTH+1:7"
+#define ui_kick_bite "EAST-3:24,SOUTH+1:7"
 #define ui_acti "EAST-2:26,SOUTH:5"
 #define ui_movi "EAST-3:24,SOUTH:5"
 #define ui_zonesel "EAST-1:28,SOUTH:5"
@@ -191,3 +192,21 @@
 #define ui_adminbus_tdarena "2:4,13:26"
 #define ui_adminbus_tdgreen "3:6,13:26"
 #define ui_adminbus_tdobs "2:4,14:28"
+
+//Blob HUD
+#define ui_blob_bgLEFT "WEST:0,CENTER-7:0"
+#define ui_blob_bgRIGHT "EAST-14:0,CENTER-7:0"
+#define ui_blob_powerbar "WEST:0,CENTER-3:0"
+#define ui_blob_healthbar "EAST:14,CENTER-3:0"
+#define ui_blob_spawnblob "WEST:18,CENTER-3:5"
+#define ui_blob_spawnstrong "WEST:18,CENTER-2:9"
+#define ui_blob_spawnresource "WEST:18,CENTER-1:13"
+#define ui_blob_spawnfactory "WEST:18,CENTER:17"
+#define ui_blob_spawnnode "WEST:18,CENTER+1:21"
+#define ui_blob_spawncore "WEST:18,CENTER+2:25"
+#define ui_blob_ping "EAST-1:24,CENTER+3:21"
+#define ui_blob_rally "EAST-1:24,CENTER+4:25"
+#define ui_blob_taunt "EAST-1:24,CENTER+5:29"
+
+//Layers
+#define UI_HAND_LAYER 19

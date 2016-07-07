@@ -39,6 +39,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	layer = 2.44							// just below unary stuff, which is at 2.45 and above pipes, which are at 2.4
 	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"
+	color = "red"
 
 	//For rebuilding powernets from scratch
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
@@ -46,26 +47,36 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/oldnewavail = 0
 	var/oldload = 0
 
+	holomap      = TRUE
+	auto_holomap = TRUE
+
 /obj/structure/cable/yellow
 	_color = "yellow"
+	color = "yellow"
 
 /obj/structure/cable/green
 	_color = "green"
+	color = "green"
 
 /obj/structure/cable/blue
 	_color = "blue"
+	color = "blue"
 
 /obj/structure/cable/pink
 	_color = "pink"
+	color = CABLE_PINK
 
 /obj/structure/cable/orange
 	_color = "orange"
+	color = CABLE_ORANGE
 
 /obj/structure/cable/cyan
 	_color = "cyan"
+	color = "cyan"
 
 /obj/structure/cable/white
 	_color = "white"
+	color = "white"
 
 // the power cable object
 /obj/structure/cable/New(loc)
@@ -162,7 +173,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(T.intact)
 		return
 
-	if(istype(W, /obj/item/weapon/wirecutters))
+	if(iswirecutter(W))
 		if(shock(user, 50))
 			return
 
@@ -184,7 +195,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 			message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"}
 
-			var/mob/M = get(A, /mob)
+			var/mob/M = get_holder_of_type(A, /mob) //Why is this here? The use already IS a mob...
 
 			if(M)
 				message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
@@ -210,10 +221,15 @@ By design, d1 is the smallest direction and d2 is the highest
 
 		shock(user, 5, 0.2)
 	else
-		if(W.is_conductor())
+		if(src.d1 && W.is_conductor()) // d1 determines if this is a cable end
 			shock(user, 50, 0.7)
 
 	src.add_fingerprint(user)
+
+/obj/structure/cable/bite_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span></span>")
+
+	shock(H, 100, 2.0)
 
 // shock the user with probability prb
 /obj/structure/cable/proc/shock(mob/user, prb, siemens_coeff = 1.0)

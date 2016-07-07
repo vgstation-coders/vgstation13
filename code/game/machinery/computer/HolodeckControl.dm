@@ -147,7 +147,7 @@
 			emagged = !emagged
 			if(emagged)
 				message_admins("[key_name_admin(usr)] overrode the holodeck's safeties")
-				log_game("[key_name(usr)] overrided the holodeck's safeties")
+				log_game("[key_name(usr)] overrode the holodeck's safeties")
 				visible_message("<span class='warning'>Warning: Holodeck safeties overriden. Please contact Nanotrasen maintenance and cease all operation if you are not source of that command.</span>")
 			else
 				message_admins("[key_name_admin(usr)] restored the holodeck's safeties")
@@ -390,7 +390,7 @@
 		qdel(W)
 		return
 
-	if(istype(W, /obj/item/weapon/wrench))
+	if(iswrench(W))
 		to_chat(user, "It's a holotable!  There are no bolts!")
 		return
 
@@ -420,8 +420,24 @@
 	anchored = 1.0
 	flags = ON_BORDER
 
-/obj/structure/holowindow/Destroy()
-	..()
+/obj/structure/holowindow/Uncross(var/atom/movable/mover, var/turf/target)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return 1
+	if(flags & ON_BORDER)
+		if(target) //Are we doing a manual check to see
+			if(get_dir(loc, target) == dir)
+				return !density
+		else if(mover.dir == dir) //Or are we using move code
+			if(density)	mover.Bump(src)
+			return !density
+	return 1
+
+/obj/structure/holowindow/Cross(atom/movable/mover, turf/target, height = 0)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return 1
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
+		return !density
+	return 1
 
 /obj/item/weapon/holo
 	damtype = HALLOSS
@@ -433,7 +449,7 @@
 	throw_speed = 1
 	throw_range = 5
 	throwforce = 0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	var/active = 0
 
@@ -464,13 +480,13 @@
 	if(active)
 		force = 30
 		icon_state = "sword[_color]"
-		w_class = 4
+		w_class = W_CLASS_LARGE
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>[src] is now active.</span>")
 	else
 		force = 3
 		icon_state = "sword0"
-		w_class = 2
+		w_class = W_CLASS_SMALL
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>[src] can now be concealed.</span>")
 	add_fingerprint(user)
@@ -484,7 +500,7 @@
 	name = "basketball"
 	item_state = "basketball"
 	desc = "Here's your chance, do your dance at the Space Jam."
-	w_class = 4 //Stops people from hiding it in their bags/pockets
+	w_class = W_CLASS_LARGE //Stops people from hiding it in their bags/pockets
 
 /obj/structure/holohoop
 	name = "basketball hoop"
@@ -501,7 +517,8 @@
 		if(G.state<GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
-		G.affecting.loc = src.loc
+
+		G.affecting.forceMove(src.loc)
 		G.affecting.Weaken(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
@@ -511,16 +528,16 @@
 			visible_message("<span class='notice'>[user] dunks [W] into the [src]!</span>")
 			return
 
-/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/holohoop/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
 		if(prob(50))
-			I.loc = src.loc
+			I.forceMove(src.loc)
 			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
 		else
-			visible_message("<span class='warning'>\the [I] bounces off of \the [src]'s rim!</span>")
+			visible_message("<span class='warning'>\The [I] bounces off of \the [src]'s rim!</span>")
 		return 0
 	else
 		return ..(mover, target, height, air_group)

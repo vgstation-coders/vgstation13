@@ -13,10 +13,10 @@ var/list/archive_diseases = list()
 
 // The order goes from easy to cure to hard to cure.
 var/list/advance_cures = 	list(
-									"nutriment", "sugar", "orangejuice",
-									"spaceacillin", "kelotane", "ethanol",
-									"leporazine", "synaptizine", "lipozine",
-									"silver", "gold", "plasma"
+									NUTRIMENT, SUGAR, ORANGEJUICE,
+									SPACEACILLIN, KELOTANE, ETHANOL,
+									LEPORAZINE, SYNAPTIZINE, LIPOZINE,
+									SILVER, GOLD, PLASMA
 								)
 
 /*
@@ -208,7 +208,7 @@ var/list/advance_cures = 	list(
 
 		hidden = list( (properties["stealth"] > 2), (properties["stealth"] > 3) )
 		// The more symptoms we have, the less transmittable it is but some symptoms can make up for it.
-		SetSpread(Clamp(properties["transmittable"] - symptoms.len, BLOOD, AIRBORNE))
+		SetSpread(Clamp(properties["transmittable"] - symptoms.len, BLOODBORNE, AIRBORNE))
 		permeability_mod = max(Ceiling(0.4 * properties["transmittable"]), 1)
 		cure_chance = 15 - Clamp(properties["resistance"], -5, 5) // can be between 10 and 20
 		stage_prob = max(properties["stage_rate"], 2)
@@ -230,7 +230,7 @@ var/list/advance_cures = 	list(
 			spread = "On contact"
 		if(AIRBORNE)
 			spread = "Airborne"
-		if(BLOOD)
+		if(BLOODBORNE)
 			spread = "Blood"
 
 	spread_type = spread_id
@@ -301,7 +301,7 @@ var/list/advance_cures = 	list(
 	for(var/datum/symptom/S in symptoms)
 		L += S.id
 	L = sortList(L) // Sort the list so it doesn't matter which order the symptoms are in.
-	var/result = list2text(L, ":")
+	var/result = jointext(L, ":")
 	id = result
 	return result
 

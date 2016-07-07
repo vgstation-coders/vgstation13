@@ -55,13 +55,13 @@
 	src.being_built = new part.build_path(src)
 
 	src.busy = 1
-	src.overlays += "[base_state]_ani"
+	src.overlays += image(icon = icon, icon_state = "[base_state]_ani")
 	src.use_power = 2
 	src.updateUsrDialog()
 	//message_admins("We're going building with [get_construction_time_w_coeff(part)]")
 	sleep(get_construction_time_w_coeff(part))
 	src.use_power = 1
-	src.overlays -= "[base_state]_ani"
+	src.overlays -= image(icon = icon, icon_state = "[base_state]_ani")
 	if(being_built)
 		var/obj/structure/closet/crate/flatpack/FP = new
 		being_built.loc = FP
@@ -70,7 +70,7 @@
 		FP.update_icon()
 		var/turf/output = get_output()
 		FP.loc = get_turf(output)
-		src.visible_message("\icon [src] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
+		src.visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
 		src.being_built = null
 
 	src.updateUsrDialog()

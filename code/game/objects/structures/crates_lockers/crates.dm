@@ -61,6 +61,13 @@
 	icon_opened = "chestopen"
 	icon_closed = "chest"
 
+/obj/structure/closet/crate/chest/potential_mimic/New()
+	..()
+
+	if(prob(33))
+		var/mob/living/simple_animal/hostile/mimic/crate/chest/C = new(src.loc)
+		forceMove(C)
+
 /*these aren't needed anymore
 /obj/structure/closet/crate/hat
 	desc = "A crate filled with Valuable Collector's Hats!."
@@ -354,7 +361,7 @@
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted)) return 1
 	if(istype(mover, /obj/structure/closet/crate)) return 0
 	return (!density)
@@ -486,7 +493,7 @@
 			if(user.drop_item(W, src.loc))
 				to_chat(user, "<span class='notice'>You attach [W] to [src].</span>")
 			return
-	else if(istype(W, /obj/item/weapon/wirecutters))
+	else if(iswirecutter(W))
 		if(rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
@@ -566,7 +573,7 @@
 			new/obj/item/weapon/gun/energy/polarstar(src)
 		if("gatling")
 			new/obj/item/clothing/suit/armor/riot(src)
-			new/obj/item/clothing/head/helmet/riot(src)
+			new/obj/item/clothing/head/helmet/tactical/riot(src)
 			new/obj/item/clothing/shoes/swat(src)
 			new/obj/item/clothing/gloves/swat(src)
 			new/obj/item/weapon/gun/gatling(src)

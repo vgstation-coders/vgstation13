@@ -15,7 +15,6 @@ var/global/list/ghdel_profiling = list()
 	var/fingerprintslast = null
 	var/list/blood_DNA
 	var/blood_color
-	var/last_bumped = 0
 	var/pass_flags = 0
 	var/throwpass = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
@@ -57,6 +56,7 @@ var/global/list/ghdel_profiling = list()
 	var/tempoverlay
 	var/timestopped
 
+	appearance_flags = TILE_BOUND
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks) last_beamchecks = list()
@@ -75,18 +75,21 @@ var/global/list/ghdel_profiling = list()
 	return 1
 
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
+	var/old_pixel_x = pixel_x
+	var/old_pixel_y = pixel_y
+
 	switch(xy)
 		if(1)
-			src.pixel_x = rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity)
 		if(2)
-			src.pixel_y = rand(-intensity, intensity)
+			src.pixel_y += rand(-intensity, intensity)
 		if(3)
-			src.pixel_x = rand(-intensity, intensity)
-			src.pixel_y = rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity)
+			src.pixel_y += rand(-intensity, intensity)
 
 	spawn(2)
-	src.pixel_x = 0
-	src.pixel_y = 0
+	src.pixel_x = old_pixel_x
+	src.pixel_y = old_pixel_y
 
 // NOTE FROM AMATEUR CODER WHO STRUGGLED WITH RUNTIMES
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
@@ -96,7 +99,6 @@ var/global/list/ghdel_profiling = list()
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
 		M.hitby(src,speed,src.dir)
-
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by ([src.fingerprintslast])</font>")
 
 	else if(isobj(hit_atom))
@@ -199,6 +201,11 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
 
+// As a rule of thumb, should smoke be able to pop out from inside this object?
+// Currently only used for chemical reactions, see Chemistry-Recipes.dm
+/atom/proc/is_airtight()
+	return 0
+
 /*//Convenience proc to see whether a container can be accessed in a certain way.
 
 	proc/can_subract_container()
@@ -211,16 +218,16 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/allow_drop()
 	return 1
 
-/atom/proc/CheckExit()
-	return 1
-
 /atom/proc/HasProximity(atom/movable/AM as mob|obj) //IF you want to use this, the atom must have the PROXMOVE flag, and the moving atom must also have the PROXMOVE flag currently to help with lag
 	return
 
 /atom/proc/emp_act(var/severity)
 	return
 
-/atom/proc/singuloCanEat()
+/atom/proc/kick_act(mob/living/carbon/human/user) //Called when this atom is kicked. If returns 1, normal click action will be performed after calling this (so attack_hand() in most cases)
+	return 1
+
+/atom/proc/bite_act(mob/living/carbon/human/user) //Called when this atom is bitten. If returns 1, same as kick_act()
 	return 1
 
 /atom/proc/bullet_act(var/obj/item/projectile/Proj)
@@ -351,7 +358,7 @@ its easier to just keep the beam vertical.
 				qdel(X)
 				break
 			for(var/obj/O in TT)
-				if(!O.CanPass(light))
+				if(!O.Cross(light))
 					broken = 1
 					break
 				else if(O.density)
@@ -376,7 +383,7 @@ its easier to just keep the beam vertical.
 			f_name = "a "
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	to_chat(user, "\icon[src] That's [f_name]" + size)
+	to_chat(user, "[bicon(src)] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 
@@ -432,7 +439,11 @@ its easier to just keep the beam vertical.
 /atom/proc/mech_drill_act(var/severity, var/child=null)
 	return ex_act(severity, child)
 
-/atom/proc/blob_act()
+/atom/proc/blob_act(destroy = 0)
+	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
+	if(flags & INVULNERABLE)
+		return
+	anim(target = loc, a_icon = 'icons/mob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	return
 
 /*
@@ -685,13 +696,20 @@ its easier to just keep the beam vertical.
 		return 1 //we applied blood to the item
 	return
 
-/atom/proc/add_vomit_floor(mob/living/carbon/M as mob, var/toxvomit = 0)
+/atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)
 	if( istype(src, /turf/simulated) )
-		var/obj/effect/decal/cleanable/vomit/this = new /obj/effect/decal/cleanable/vomit(src)
+		var/obj/effect/decal/cleanable/vomit/this
+		if(active)
+			this = new /obj/effect/decal/cleanable/vomit/active(src)
+		else
+			this = new /obj/effect/decal/cleanable/vomit(src)
 
 		// Make toxins vomit look different
 		if(toxvomit)
 			this.icon_state = "vomittox_[pick(1,4)]"
+
+		if(active && steal_reagents_from_mob && M && M.reagents)
+			M.reagents.trans_to(this, M.reagents.total_volume * 0.1)
 
 
 /atom/proc/clean_blood()

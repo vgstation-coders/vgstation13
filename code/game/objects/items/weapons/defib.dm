@@ -8,7 +8,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "defib_full"
 	item_state = "defib"
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	force = 5
 	throwforce = 5
 	origin_tech = "biotech=3"
@@ -71,15 +71,14 @@
 	item_state = "fireaxe[wielded ? 1 : 0]"
 	force = wielded ? 40 : 10
 	if(user)
-		user.update_inv_l_hand()
-		user.update_inv_r_hand()
+		user.update_inv_hands()
 
 /obj/item/weapon/melee/defibrillator/attackby(obj/item/weapon/W,mob/user)
 	if(istype(W,/obj/item/weapon/card/emag))
 		emagged = !src.emagged
 		if(emagged)
 			to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
-			overlays += "defib_emag"
+			overlays += image(icon = icon, icon_state = "defib_emag")
 		else
 			to_chat(user, "<span class='notice'>You reset [src]'s safety protocols.</span>")
 			overlays.len = 0
@@ -109,7 +108,7 @@
 	var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
 	target.Weaken(rand(6,12))
-	target.apply_damage(rand(30,60),BURN,"chest")
+	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
 	heart.damage += rand(5,60)
 	target.emote("scream",,, 1) //If we're going this route, it kinda hurts
 	target.updatehealth()
@@ -136,22 +135,22 @@
 		charges--
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
-		var/datum/organ/external/head/head = target.get_organ("head")
+		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
 		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations  || !target.has_brain() || target.suiciding == 1)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
 		if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here
 			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
-			target.apply_damage(rand(1,5),BURN,"chest")
+			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.w_uniform && istype(target.w_uniform,/obj/item/clothing/under) && prob(50))
 			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
-			target.apply_damage(rand(1,5),BURN,"chest")
+			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
 			for(var/mob/dead/observer/ghost in player_list)
 				if(ghost.mind == target.mind  && ghost.client && ghost.can_reenter_corpse)
-					to_chat(ghost, 'sound/effects/adminhelp.ogg')
+					ghost << 'sound/effects/adminhelp.ogg'
 					to_chat(ghost, "<span class='interface'><b><font size = 3>Someone is trying to revive your body. Return to it if you want to be resurrected!</b> \
 						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
 					to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
@@ -174,7 +173,7 @@
 			target.stat = UNCONSCIOUS
 			target.regenerate_icons()
 			target.update_canmove()
-			flick("e_flash",target.flash)
+			target.flash_eyes(visual = 1)
 			target.apply_effect(10, EYE_BLUR) //I'll still put this back in to avoid dumb "pounce back up" behavior
 			target.apply_effect(10, PARALYZE)
 			target.update_canmove()
@@ -182,3 +181,6 @@
 		else
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 		return
+
+/obj/item/weapon/melee/defibrillator/restock()
+	charges = initial(charges)

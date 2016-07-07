@@ -17,7 +17,8 @@
 	var/possible_transfer_amounts = list(10,25,50,100)
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	return
+	if(iswrench(W) && wrenchable())
+		return wrenchAnchor(user)
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
@@ -83,7 +84,7 @@
 
 /obj/structure/reagent_dispensers/watertank/New()
 	. = ..()
-	reagents.add_reagent("water", 1000)
+	reagents.add_reagent(WATER, 1000)
 
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
@@ -162,7 +163,7 @@
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
@@ -199,7 +200,7 @@
 
 /obj/structure/reagent_dispensers/fueltank/New()
 	. = ..()
-	reagents.add_reagent("fuel", 1000)
+	reagents.add_reagent(FUEL, 1000)
 
 /obj/structure/reagent_dispensers/peppertank
 	name = "Pepper Spray Refiller"
@@ -212,7 +213,7 @@
 
 /obj/structure/reagent_dispensers/peppertank/New()
 	. = ..()
-	reagents.add_reagent("condensedcapsaicin", 1000)
+	reagents.add_reagent(CONDENSEDCAPSAICIN, 1000)
 
 /obj/structure/reagent_dispensers/water_cooler
 	name = "Water-Cooler"
@@ -221,14 +222,18 @@
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "water_cooler"
 	possible_transfer_amounts = null
-	anchored = 1
+	anchored = 0
 	var/addedliquid = 500
 	var/paper_cups = 10
 
+
 /obj/structure/reagent_dispensers/water_cooler/New()
 	. = ..()
-	reagents.add_reagent("water", addedliquid)
+	reagents.add_reagent(WATER, addedliquid)
 	desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
+
+/obj/structure/reagent_dispensers/water_cooler/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/water_cooler/attack_hand(mob/user as mob)
 	if(paper_cups > 0)
@@ -259,7 +264,10 @@
 
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
-	reagents.add_reagent("beer", 1000)
+	reagents.add_reagent(BEER, 1000)
+
+/obj/structure/reagent_dispensers/beerkeg/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/bloodkeg
 	name = "old keg"
@@ -270,7 +278,10 @@
 
 /obj/structure/reagent_dispensers/bloodkeg/New()
 	. = ..()
-	reagents.add_reagent("blood", 1000)
+	reagents.add_reagent(BLOOD, 1000)
+
+/obj/structure/reagent_dispensers/bloodkeg/wrenchable()
+	return 1
 
 /obj/structure/reagent_dispensers/bloodkeg/cultify()
 	return
@@ -289,7 +300,7 @@
 
 /obj/structure/reagent_dispensers/virusfood/New()
 	. = ..()
-	reagents.add_reagent("virusfood", 1000)
+	reagents.add_reagent(VIRUSFOOD, 1000)
 
 /obj/structure/reagent_dispensers/corn_oil_tank
 	name = "oil vat"
@@ -300,7 +311,7 @@
 
 /obj/structure/reagent_dispensers/corn_oil_tank/New()
 	. = ..()
-	reagents.add_reagent("cornoil", 1000)
+	reagents.add_reagent(CORNOIL, 1000)
 
 /obj/structure/reagent_dispensers/silicate
 	name = "\improper Silicate Tank"
@@ -311,7 +322,7 @@
 
 /obj/structure/reagent_dispensers/silicate/New()
 	. = ..()
-	reagents.add_reagent("silicate", 1000)
+	reagents.add_reagent(SILICATE, 1000)
 
 /obj/structure/reagent_dispensers/silicate/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
@@ -329,3 +340,4 @@
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
+

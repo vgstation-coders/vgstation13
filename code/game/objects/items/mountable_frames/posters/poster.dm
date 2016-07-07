@@ -2,7 +2,7 @@
 /obj/item/mounted/poster
 	name = "rolled-up poster"
 	desc = "The poster comes with its own automatic adhesive mechanism, for easy pinning to any vertical surface."
-	icon = 'icons/obj/contraband.dmi'
+	icon = 'icons/obj/posters.dmi'
 	icon_state = "rolled_poster"
 	var/serial_number = 0
 	w_type=RECYK_MISC
@@ -46,7 +46,7 @@
 obj/structure/sign/poster
 	name = "poster"
 	desc = "A large piece of space-resistant printed paper. "
-	icon = 'icons/obj/contraband.dmi'
+	icon = 'icons/obj/posters.dmi'
 	anchored = 1
 	var/serial_number	//Will hold the value of src.loc if nobody initialises it
 	var/ruined = 0
@@ -57,10 +57,9 @@ obj/structure/sign/poster/New(var/serial)
 	serial_number = serial
 
 	if(serial_number == -1)
-		name += "Award of Sufficiency"
-		desc += "The mere sight of it makes you very proud."
+		name = "Award of Sufficiency"
+		desc = "The mere sight of it makes you very proud."
 		icon_state = "goldstar"
-
 	else
 		if(serial_number == loc)
 			serial_number = rand(1, poster_designs.len)	//This is for the mappers that want individual posters without having to use rolled posters.
@@ -73,7 +72,7 @@ obj/structure/sign/poster/New(var/serial)
 		..()
 
 obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/wirecutters))
+	if(iswirecutter(W))
 		playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
 		if(ruined)
 			to_chat(user, "<span class='notice'>You remove the remnants of the poster.</span>")
@@ -107,6 +106,15 @@ obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	else
 		new /obj/item/mounted/poster(get_turf(src), serial_number)
 	qdel(src)
+
+/obj/structure/sign/poster/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
+
+	if(prob(70))
+		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
+
+		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+
 
 /datum/poster
 	// Name suffix. Poster - [name]

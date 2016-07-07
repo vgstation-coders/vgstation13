@@ -30,11 +30,11 @@
 /obj/structure/dispenser/update_icon()
 	overlays.len = 0
 	switch(oxygentanks)
-		if(1 to 3)	overlays += "oxygen-[oxygentanks]"
-		if(4 to INFINITY) overlays += "oxygen-4"
+		if(1 to 3)	overlays += image(icon = icon, icon_state = "oxygen-[oxygentanks]")
+		if(4 to INFINITY) overlays += image(icon = icon, icon_state = "oxygen-4")
 	switch(plasmatanks)
-		if(1 to 4)	overlays += "plasma-[plasmatanks]"
-		if(5 to INFINITY) overlays += "plasma-5"
+		if(1 to 4)	overlays += image(icon = icon, icon_state = "plasma-[plasmatanks]")
+		if(5 to INFINITY) overlays += image(icon = icon, icon_state = "plasma-5")
 
 
 /obj/structure/dispenser/attack_robot(mob/user as mob)
@@ -74,12 +74,14 @@
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
 		return
-	if(istype(I, /obj/item/weapon/wrench))
+	if(iswrench(I))
 		if(anchored)
 			to_chat(user, "<span class='notice'>You lean down and unwrench [src].</span>")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 0
 		else
 			to_chat(user, "<span class='notice'>You wrench [src] into place.</span>")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 1
 		return
 

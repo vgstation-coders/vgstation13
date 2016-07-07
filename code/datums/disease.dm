@@ -1,6 +1,6 @@
 #define SPECIAL -1
 #define NON_CONTAGIOUS 0
-#define BLOOD 1
+#define BLOODBORNE 1
 #define CONTACT_FEET 2
 #define CONTACT_HANDS 3
 #define CONTACT_GENERAL 4
@@ -78,27 +78,31 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	return
 
 /datum/disease/proc/has_cure()//check if affected_mob has required reagents.
-	if(!cure_id) return 0
+	if((!cure_id && !cure_list) || !curable) return 0
 	var/result = 1
-	if(cure_list == list(cure_id))
-		if(istype(cure_id, /list))
+	if(!cure_list || cure_list == cure_id) //if no cure_list or cure list is the same as cure_id, just check _id
+		if(istype(cure_id, /list)) //if cure_id is a list, check inside of it
 			for(var/C_id in cure_id)
-				if(!affected_mob.reagents.has_reagent(C_id))
+				if(affected_mob.reagents.has_reagent(C_id))
+					result = 1
+					break //you only need one of the ones in cure_id
+				else
 					result = 0
-		else if(!affected_mob.reagents.has_reagent(cure_id))
+		else if(!affected_mob.reagents.has_reagent(cure_id)) //if cure id is just text, just check it against the reagents
 			result = 0
 	else
-		for(var/C_list in cure_list)
-			if(istype(C_list, /list))
-				for(var/C_id in cure_id)
-					if(affected_mob.reagents != null)
+		for(var/C_list in cure_list) //if cure_list isn't the same as cure_id, check its contents. You must have ALL of the contents of cure_list to cure if it doesn't match cure_id
+			if(istype(C_list, /list)) //if cure_list's contents is a list
+				for(var/C_id in C_list)	 //check inside of C_list
+					if(affected_mob.reagents == null) //null reagants
 						result = 0
-					else if(!affected_mob.reagents.has_reagent(C_id))
+					else if(!affected_mob.reagents.has_reagent(C_id)) //doesn't have one of the reagents in C_list
 						result = 0
 			else if(affected_mob.reagents != null)
-				if(!affected_mob.reagents.has_reagent(C_list))
+				if(!affected_mob.reagents.has_reagent(C_list)) //if cure list contents is text, just check it against the reagents
 					result = 0
-
+			else //null reagents
+				result = 0
 	return result
 
 /datum/disease/proc/spread_by_touch()
@@ -117,7 +121,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	if(force_spread)
 		how_spread = force_spread
 
-	if(how_spread == SPECIAL || how_spread == NON_CONTAGIOUS || how_spread == BLOOD)//does not spread
+	if(how_spread == SPECIAL || how_spread == NON_CONTAGIOUS || how_spread == BLOODBORNE)//does not spread
 		return
 
 	if(stage < contagious_period) //the disease is not contagious at this stage
@@ -130,7 +134,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 			return
 	if(affected_mob.reagents != null)
 		if(affected_mob)
-			if(affected_mob.reagents.has_reagent("spaceacillin"))
+			if(affected_mob.reagents.has_reagent(SPACEACILLIN))
 				return // Don't spread if we have spaceacillin in our system.
 
 	var/check_range = airborne_range//defaults to airborne - range 2
@@ -192,7 +196,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	if(affected_mob)
 		affected_mob.viruses -= src
 	..()
-	
+
 /datum/disease/New(var/process=1, var/datum/disease/D)//process = 1 - adding the object to global list. List is processed by master controller.
 	cure_list = list(cure_id) // to add more cures, add more vars to this list in the actual disease's New()
 	if(process)				 // Viruses in list are considered active.

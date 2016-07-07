@@ -3,7 +3,7 @@
 	max_stages = 3
 	spread = "Airborne"
 	cure = "Spaceacillin"
-	cure_id = "spaceacillin"
+	cure_id = SPACEACILLIN
 	cure_chance = 10
 	agent = "H13N1 flu virion"
 	affected_species = list("Human", "Monkey")
@@ -28,7 +28,7 @@
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your muscles ache.</span>")
 				if(prob(20))
@@ -53,7 +53,7 @@
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your muscles ache.</span>")
 				if(prob(20))

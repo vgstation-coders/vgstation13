@@ -8,6 +8,7 @@
 	var/heated = 0		//whether the bunsen has been on long enough to let stuff react
 	var/obj/item/weapon/reagent_containers/held_container
 	var/heat_time = 50
+	pixel_y = 15
 	ghost_read = 0
 
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -39,7 +40,7 @@
 		to_chat(user, "<span class='warning'>There is nothing on the [src].</span>")
 
 /obj/machinery/bunsen_burner/proc/try_heating()
-	src.visible_message("<span class='notice'>\icon[src] [src] hisses.</span>")
+	src.visible_message("<span class='notice'>[bicon(src)] [src] hisses.</span>")
 	if(held_container && heating)
 		heated = 1
 		held_container.reagents.handle_reactions()

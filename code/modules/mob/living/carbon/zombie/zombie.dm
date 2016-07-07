@@ -443,7 +443,7 @@
 		R.my_atom = src
 		var/datum/disease/F = new /datum/disease/z_virus(0)
 		var/list/data = list("virus"= F)
-		R.add_reagent("blood", 20, data)
+		R.add_reagent(BLOOD, 20, data)
 
 ///////////////////////////CURE//////////////////////////////////////////
 
@@ -466,7 +466,7 @@ datum/reagent/zed
 	icon_state = "zed_1"
 	flags = FPRINT | TABLEPASS/* | ONBELT*/
 	throwforce = 0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 7
 	throw_range = 15
 	m_amt = 60

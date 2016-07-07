@@ -12,12 +12,11 @@
 	endWhen = rand(45, 90) //More drawn out than the shower, but not too powerful. Supposed to be a devastating event
 
 /datum/event/meteor_wave/announce()
-	command_alert("A meteor storm has been detected on collision course with the station. Seek shelter within the core of the station immediately.", "Meteor Alert")
-	to_chat(world, sound('sound/AI/meteors.ogg'))
+	command_alert("A meteor storm has been detected on collision course with the station. Seek shelter within the core of the station immediately.", "Meteor Alert",alert='sound/AI/meteors.ogg')
 
-//One to three waves. So 10 to 60. Note that it used to be (20, 50) per wave with two to three waves
+//Two to three waves. So 40 to 120
 /datum/event/meteor_wave/tick()
-	meteor_wave(rand(10, 15), max_size = 2) //Large waves, panic is mandatory
+	meteor_wave(rand(20, 40), max_size = 2) //Large waves, panic is mandatory
 
 /datum/event/meteor_wave/end()
 	command_alert("The station has cleared the meteor storm.", "Meteor Alert")
@@ -28,15 +27,15 @@
 	endWhen 		= 30
 
 /datum/event/meteor_shower/setup()
-	endWhen	= rand(30, 60) //From thirty seconds to one minute
+	endWhen	= rand(45, 60) //From thirty seconds to one minute
 
 /datum/event/meteor_shower/announce()
 	command_alert("The station is about to be hit by a small-intensity meteor storm. Seek shelter within the core of the station immediately.", "Meteor Alert")
 
 //Meteor showers are lighter and more common
-//Usually a single wave, rarely two, so anywhere from 5 to 20 small meteors
+//Sometimes a single wave, most likely two, so anywhere from 10 to 30 small meteors
 /datum/event/meteor_shower/tick()
-	meteor_wave(rand(5, 10), max_size = 1) //Much more clement
+	meteor_wave(rand(10, 15), max_size = 1) //Much more clement
 
 /datum/event/meteor_shower/end()
 	command_alert("The station has cleared the meteor shower.", "Meteor Alert")
@@ -74,6 +73,40 @@ var/global/list/thing_storm_types = list(
 	"sausage party" = list(
 		/obj/item/weapon/reagent_containers/food/snacks/sausage,
 		/obj/item/weapon/reagent_containers/food/snacks/faggot,
+	),
+	"blob shower" = list(
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob/node,
+	),
+	"blob storm" = list(
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
+		/obj/item/projectile/meteor/blob/node,
 	),
 )
 
@@ -115,3 +148,42 @@ var/global/list/thing_storm_types = list(
 
 /datum/event/thing_storm/meaty_gore/end()
 	command_alert("The station has cleared the organic debris field.", "Organic Debris Field")
+
+/datum/event/thing_storm/blob_shower
+
+/datum/event/thing_storm/blob_shower/setup()
+	endWhen = rand(45, 60) + 10
+	storm_name="blob shower"
+
+/datum/event/thing_storm/blob_shower/tick()
+	meteor_wave(rand(12, 24), types = thing_storm_types[storm_name])
+
+/datum/event/thing_storm/blob_shower/announce()
+	command_alert("The station is about to pass through a Blob cluster. No overmind brainwaves detected.", "Blob Cluster")
+
+/datum/event/thing_storm/blob_shower/end()
+	command_alert("The station has cleared the Blob cluster. Eradicate the blob from hit areas.", "Blob Cluster")
+
+/datum/event/thing_storm/blob_storm
+	var/cores_spawned = 0
+
+/datum/event/thing_storm/blob_storm/setup()
+	endWhen = rand(60, 90) + 10
+	storm_name="blob storm"
+
+/datum/event/thing_storm/blob_storm/tick()
+	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types[storm_name])
+	if(!cores_spawned)
+		var/living = 0
+		for(var/mob/living/M in player_list)
+			if(M.stat == CONSCIOUS)
+				living++
+		cores_spawned = round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
+		for(var/i = 0 to cores_spawned)
+			spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
+
+/datum/event/thing_storm/blob_storm/announce()
+	command_alert("The station is about to pass through a Blob conglomerate. Overmind brainwaves possibly detected.", "Blob Conglomerate")
+
+/datum/event/thing_storm/blob_storm/end()
+	command_alert("The station has cleared the Blob conglomerate. Investigate the hit areas at once and clear the blob. Beware for possible Overmind presence.", "Blob Conglomerate")

@@ -19,15 +19,6 @@
 	if(src.stat == 2.0 && (act != "deathgasp"))
 		return
 
-	if(act == "oath" && src.miming)
-		src.miming = 0
-		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in src.spell_list)
-			src.remove_spell(spell)
-			qdel(spell)
-		message_admins("[src.name] ([src.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]'>JMP</a>)")
-		to_chat(src, "<span class = 'notice'>An unsettling feeling surrounds you...</span>")
-		return
-
 	switch(act)
 		if ("airguitar")
 			if (!src.restrained())
@@ -194,8 +185,18 @@
 				m_type = VISIBLE
 			else
 				if (!muzzled)
-					message = "<B>[src]</B> coughs!"
-					m_type = HEARABLE
+					if (auto == 1)
+						if(world.time-last_emote_sound >= 30)//prevent cough spam
+							//Cough sounds from freesound.org and an anon in ss13g
+							var/coughSound = "malecough"
+							if (src.gender == FEMALE) //Females have their own coughes
+								coughSound = "femalecough"
+
+							playsound(get_turf(src), coughSound, 20, 0)
+							last_emote_sound = world.time
+
+						message = "<B>[src]</B> coughs!"
+						m_type = HEARABLE
 				else
 					message = "<B>[src]</B> makes a strong noise."
 					m_type = HEARABLE
@@ -235,7 +236,10 @@
 			if(M_HARDCORE in mutations)
 				message = "<B>[src]</B> whispers with his final breath, <i>'i told u i was hardcore..'</i>"
 			else
-				message = "<B>[src]</B> seizes up and falls limp, \his eyes dead and lifeless..."
+				if(isgolem(src))
+					message = "<B>[src]</B> crumbles into dust..."
+				else
+					message = "<B>[src]</B> seizes up and falls limp, \his eyes dead and lifeless..."
 			m_type = VISIBLE
 
 		if ("giggle")
@@ -421,10 +425,16 @@
 		if ("signal")
 			if (!src.restrained())
 				var/t1 = round(text2num(param))
+
+				var/maximum_finger_amount = 0
+				for(var/datum/organ/external/OE in list(organs_by_name[LIMB_LEFT_HAND], organs_by_name[LIMB_RIGHT_HAND]))
+					if(OE.is_usable())
+						maximum_finger_amount += 5
+
 				if (isnum(t1))
-					if (t1 <= 5 && (!src.r_hand || !src.l_hand))
-						message = "<B>[src]</B> raises [t1] finger\s."
-					else if (t1 <= 10 && (!src.r_hand && !src.l_hand))
+					t1 = Clamp(t1, 0, maximum_finger_amount)
+
+					if(t1 > 0)
 						message = "<B>[src]</B> raises [t1] finger\s."
 			m_type = VISIBLE
 
@@ -529,7 +539,7 @@
 
 		if ("handshake")
 			m_type = VISIBLE
-			if (!src.restrained() && !src.r_hand)
+			if (!src.restrained() && !get_held_item_by_index(GRASP_RIGHT_HAND))
 				var/mob/M = null
 				if (param)
 					for (var/mob/A in view(1, null))
@@ -540,7 +550,7 @@
 					M = null
 
 				if (M)
-					if (M.canmove && !M.r_hand && !M.restrained())
+					if (M.canmove && !M.get_held_item_by_index(GRASP_RIGHT_HAND) && !M.restrained())
 						message = "<B>[src]</B> shakes hands with [M]."
 					else
 						message = "<B>[src]</B> holds out \his hand to [M]."
@@ -567,7 +577,7 @@
 				if(!stat)
 					if (!muzzled)
 						if (auto == 1)
-							if(world.time-lastScream >= 30)//prevent scream spam with things like poly spray
+							if(world.time-last_emote_sound >= 30)//prevent scream spam with things like poly spray
 								message = "<B>[src]</B> screams in agony!"
 								var/list/screamSound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
 								if (src.gender == FEMALE) //Females have their own screams. Trannys be damned.
@@ -575,7 +585,7 @@
 								var/scream = pick(screamSound)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
 								playsound(get_turf(src), scream, 50, 0)
 								m_type = HEARABLE
-								lastScream = world.time
+								last_emote_sound = world.time
 						else
 							message = "<B>[src]</B> screams!"
 							m_type = HEARABLE
@@ -654,7 +664,7 @@
 						if(wearing_suit)
 							if(!wearing_mask)
 								to_chat(src, "<span class = 'warning'>You gas yourself!</span>")
-								reagents.add_reagent("space_drugs", rand(10,50))
+								reagents.add_reagent(SPACE_DRUGS, rand(10,50))
 						else
 							// Was /turf/, now /mob/
 							for(var/mob/living/M in view(location,aoe_range))
@@ -670,7 +680,7 @@
 								// <[REDACTED]> the user, of course, isn't impacted because it's not an actual smoke cloud
 								// So, let's give 'em space drugs.
 								if(M.reagents)
-									M.reagents.add_reagent("space_drugs",rand(1,50))
+									M.reagents.add_reagent(SPACE_DRUGS,rand(1,50))
 							/*
 							var/datum/effect/effect/system/smoke_spread/chem/fart/S = new /datum/effect/effect/system/smoke_spread/chem/fart
 							S.attach(location)

@@ -63,11 +63,11 @@
 /obj/item/device/assembly/prox_sensor/proc/sense()
 	var/turf/mainloc = get_turf(src)
 //	if(scanning && cooldown <= 0)
-//		mainloc.visible_message("\icon[src] *boop* *boop*", "*boop* *boop*")
+//		mainloc.visible_message("[bicon(src)] *boop* *boop*", "*boop* *boop*")
 	if((!holder && !secured)||(!scanning)||(cooldown > 0))	return 0
 	pulse(0)
 	if(!holder)
-		mainloc.visible_message("\icon[src] *beep* *beep*", "*beep* *beep*")
+		mainloc.visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	cooldown = 2
 	spawn(10)
 		process_cooldown()
@@ -104,11 +104,11 @@
 	overlays.len = 0
 	attached_overlays = list()
 	if(timing)
-		overlays += "prox_timing"
 		attached_overlays += "prox_timing"
+		overlays += image(icon = icon, icon_state = "prox_timing")
 	if(scanning)
-		overlays += "prox_scanning"
 		attached_overlays += "prox_scanning"
+		overlays += image(icon = icon, icon_state = "prox_scanning")
 	if(holder)
 		holder.update_icon()
 	if(holder && istype(holder.loc,/obj/item/weapon/grenade/chem_grenade))

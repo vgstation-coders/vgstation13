@@ -1,4 +1,4 @@
-/mob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/mob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(ismob(mover))
@@ -45,11 +45,23 @@
 
 
 /client/Northwest()
+	if(mob.remove_spell_channeling()) //Interrupt to remove spell channeling on dropping
+		to_chat(usr, "<span class='notice'>You cease waiting to use your power")
+		return
 	if(iscarbon(usr))
 		var/mob/living/carbon/C = usr
 		if(!C.get_active_hand())
 			to_chat(usr, "<span class='warning'>You have nothing to drop in your hand.</span>")
 			return
+		if(ishuman(C))
+			var/mob/living/carbon/human/H = C
+			var/list/borers_in_host = H.get_brain_worms()
+			if(borers_in_host && borers_in_host.len) //to allow a host to drop an item at-range mid-extension
+				for(var/mob/living/simple_animal/borer/B in borers_in_host)
+					if((B.hostlimb == LIMB_RIGHT_ARM && H.get_active_hand() == H.get_held_item_by_index(GRASP_RIGHT_HAND)) || (B.hostlimb == LIMB_LEFT_ARM && H.get_active_hand() == H.get_held_item_by_index(GRASP_LEFT_HAND)))
+						var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+						F.to_be_dropped = H.get_active_hand()
+						F.item_overlay = null
 		drop_item()
 	else if(isMoMMI(usr))
 		var/mob/living/silicon/robot/mommi/M = usr
@@ -63,6 +75,34 @@
 			return
 		R.uneq_active()
 	else
+		if(istype(usr, /mob/living/simple_animal/borer))
+			var/mob/living/simple_animal/borer/B = usr
+			if(B.host && ishuman(B.host))
+				var/mob/living/carbon/human/H = B.host
+				if(B.hostlimb == LIMB_RIGHT_ARM)
+					if(B.extend_o_arm)
+						var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+						if(H.get_held_item_by_index(GRASP_RIGHT_HAND))
+							F.to_be_dropped = H.get_held_item_by_index(GRASP_RIGHT_HAND)
+							F.item_overlay = null
+						F.attack_self(H)
+						H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND))
+						return
+					else
+						to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] right hand.</span>")
+						return
+				else if(B.hostlimb == LIMB_LEFT_ARM)
+					if(B.extend_o_arm)
+						var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+						if(H.get_held_item_by_index(GRASP_LEFT_HAND))
+							F.to_be_dropped = H.get_held_item_by_index(GRASP_LEFT_HAND)
+							F.item_overlay = null
+						F.attack_self(H)
+						H.drop_item(H.get_held_item_by_index(GRASP_LEFT_HAND))
+						return
+					else
+						to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] left hand.</span>")
+						return
 		to_chat(usr, "<span class='warning'>This mob type cannot drop items.</span>")
 	return
 
@@ -152,7 +192,7 @@
 
 
 
-/client/verb/attack_self()
+/client/verb/attack_self() //Called when pagedown or Z is pressed
 	set hidden = 1
 	if(mob)
 		mob.mode()
@@ -201,10 +241,6 @@
 		O.dir = direct
 
 /client/Move(loc,dir)
-	if(!mob)
-		return // Moved here to avoid nullrefs below. - N3X
-	if(mob.timestopped)
-		return 0
 	if(move_delayer.next_allowed > world.time)
 		return 0
 
@@ -223,10 +259,6 @@
 	if(mob.incorporeal_move)
 		Process_Incorpmove(dir)
 		return
-
-	for(var/obj/effect/stop/S in mob.loc)
-		if(S.victim == mob)
-			return
 
 	if(mob.stat == DEAD)
 		return
@@ -310,6 +342,8 @@
 
 		//We are now going to move
 		move_delay = max(move_delay,1)
+		if(mob.movement_speed_modifier)
+			move_delay *= (1/mob.movement_speed_modifier)
 		mob.delayNextMove(move_delay)
 		//Something with pulling things
 		if(Findgrab)
@@ -356,12 +390,10 @@
 /client/proc/Process_Grab()
 	if(locate(/obj/item/weapon/grab, locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
 		var/list/grabbing = list()
-		if(istype(mob.l_hand, /obj/item/weapon/grab))
-			var/obj/item/weapon/grab/G = mob.l_hand
+
+		for(var/obj/item/weapon/grab/G in mob.held_items)
 			grabbing += G.affecting
-		if(istype(mob.r_hand, /obj/item/weapon/grab))
-			var/obj/item/weapon/grab/G = mob.r_hand
-			grabbing += G.affecting
+
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
 			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))	del(G)
 			if(G.state == GRAB_AGGRESSIVE)
@@ -401,6 +433,11 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
+			if(isobserver(mob))
+				var/mob/dead/observer/observer = mob
+				mob.delayNextMove(observer.movespeed)
+			else
+				mob.delayNextMove(1)
 		if(INCORPOREAL_NINJA)
 			if(prob(50))
 				var/locx
@@ -439,6 +476,7 @@
 				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 				mob.forceEnter(get_step(mob, direct))
 			mob.dir = direct
+			mob.delayNextMove(1)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.flags & NOJAUNT))
@@ -452,7 +490,6 @@
 	for(var/obj/S in mob.loc)
 		if(istype(S,/obj/effect/step_trigger) || istype(S,/obj/effect/beam))
 			S.Crossed(mob)
-	mob.delayNextMove(1)
 
 	return 1
 
@@ -487,6 +524,8 @@
 	if(!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
 		dense_object++
 	if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
+		dense_object++
+	if(!dense_object && (locate(/obj/effect/blob) in oview(1, src)))
 		dense_object++
 
 	//Lastly attempt to locate any dense objects we could push off of
@@ -529,6 +568,8 @@
 	if(!canmove || restrained() || !pulling)
 		return
 	if(pulling.anchored)
+		return
+	if(src.locked_to == pulling)
 		return
 	if(!pulling.Adjacent(src))
 		return

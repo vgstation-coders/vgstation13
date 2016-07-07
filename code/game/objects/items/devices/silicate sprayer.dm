@@ -6,7 +6,7 @@
 #define SILICATE_PER_REINFORCE			0.1		// Silicate used to reinforce 1 unit of health on a window.
 #define MODE_REPAIR		0
 #define MODE_REINFORCE	1
-	
+
 /obj/item/device/silicate_sprayer
 	name = "\improper Silicate Sprayer"
 	desc = "Used to repair damaged windows with silicate."
@@ -14,7 +14,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "silicate sprayer"
 
-	w_class = 2
+	w_class = W_CLASS_SMALL
 
 	origin_tech = "engineering=2"
 
@@ -31,19 +31,19 @@
 	create_reagents(max_silicate)
 
 	if(start_filled)
-		reagents.add_reagent("silicate", max_silicate)
+		reagents.add_reagent(SILICATE, max_silicate)
 
 	update_icon()
 
 /obj/item/device/silicate_sprayer/proc/get_amount()
-	return reagents.get_reagent_amount("silicate")
+	return reagents.get_reagent_amount(SILICATE)
 
 /obj/item/device/silicate_sprayer/examine(var/mob/user)
 	. = ..()
 	to_chat(user, "<span class='notice'>It contains [get_amount()]/[max_silicate] units of silicate!</span>")
 
 /obj/item/device/silicate_sprayer/proc/remove_silicate(var/amount = 0)
-	reagents.remove_reagent("silicate", amount)
+	reagents.remove_reagent(SILICATE, amount)
 
 	update_icon()
 
@@ -64,7 +64,7 @@
 	else
 		i = Ceiling(amount / silicate_per_state, 1)
 
-	overlays += "silicate sprayer [i]"
+	overlays += image(icon = icon, icon_state = "silicate sprayer [i]")
 
 /obj/item/device/silicate_sprayer/on_reagent_change()
 	update_icon()
@@ -86,15 +86,15 @@
 	if(!diff) // Not damaged.
 		to_chat(user, "<span class='notice'>\The [W] is already in perfect condition!</span>")
 		return 1
-		
+
 	diff = min(diff, get_amount() / SILICATE_PER_DAMAGE)
-		
+
 	W.health += diff
 	W.healthcheck(user, FALSE)
 
 	user.visible_message("<span class='notice'>[user] repairs \the [W] with their [name]!</span>", "<span class='notice'>You repair \the [W] with your [name].</span>")
 	playsound(get_turf(src), 'sound/effects/refill.ogg', 10, 1, -6)
-	
+
 	remove_silicate(diff * SILICATE_PER_DAMAGE)
 
 	return 1
@@ -126,7 +126,7 @@
 /obj/item/device/silicate_sprayer/advanced/update_icon()
 	. = ..()
 	if(mode == MODE_REINFORCE)
-		overlays += "silicate sprayer reinforce"
+		overlays += image(icon = icon, icon_state = "silicate sprayer reinforce")
 
 /obj/item/device/silicate_sprayer/advanced/examine(var/mob/user)
 	. = ..()

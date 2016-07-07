@@ -13,7 +13,8 @@ var/global/list/blood_list = list()
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mfloor1"
 	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
-	appearance_flags = NO_CLIENT_COLOR
+	plane = PLANE_NOIR_BLOOD
+	appearance_flags = TILE_BOUND
 	var/base_icon = 'icons/effects/blood.dmi'
 
 	basecolor="#A10808" // Color when wet.
@@ -33,7 +34,10 @@ var/global/list/blood_list = list()
 /obj/effect/decal/cleanable/blood/update_icon()
 	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
-
+	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
+		plane = PLANE_NOIR_BLOOD
+	else
+		plane = PLANE_TURF
 	var/icon/blood = icon(base_icon,icon_state,dir)
 	blood.Blend(basecolor,ICON_MULTIPLY)
 
@@ -88,7 +92,10 @@ var/global/list/blood_list = list()
 	var/fleshcolor = "#FFFFFF"
 
 /obj/effect/decal/cleanable/blood/gibs/update_icon()
-
+	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
+		plane = PLANE_NOIR_BLOOD
+	else
+		plane = PLANE_TURF
 	var/image/giblets = new(base_icon, "[icon_state]_flesh", dir)
 	if(!fleshcolor || fleshcolor == "rainbow")
 		fleshcolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
@@ -141,10 +148,10 @@ var/global/list/blood_list = list()
 
 
 
-/obj/effect/decal/cleanable/blood/gibs/proc/streak(var/list/directions)
+/obj/effect/decal/cleanable/blood/gibs/proc/streak(var/list/directions, spread_radius = 0)
 	spawn (0)
 		var/direction = pick(directions)
-		for (var/i = 0, i < pick(1, 200; 2, 150; 3, 50; 4), i++)
+		for (var/i = 0 to spread_radius)
 			sleep(3)
 			if (i > 0)
 				var/obj/effect/decal/cleanable/blood/b = getFromPool(/obj/effect/decal/cleanable/blood/splatter, src.loc)
@@ -156,8 +163,7 @@ var/global/list/blood_list = list()
 					b.viruses += ND
 					ND.holder = b
 
-			if (step_to(src, get_step(src, direction), 0))
-				break
+			step_to(src, get_step(src, direction), 0)
 
 
 /obj/effect/decal/cleanable/mucus

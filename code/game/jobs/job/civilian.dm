@@ -28,7 +28,7 @@
 
 		if(H.backbag == 1)
 			var/obj/item/weapon/storage/box/survival/Barpack = new H.species.survival_gear(H)
-			H.equip_or_collect(Barpack, slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, Barpack)
 			new /obj/item/ammo_casing/shotgun/beanbag(Barpack)
 			new /obj/item/ammo_casing/shotgun/beanbag(Barpack)
 			new /obj/item/ammo_casing/shotgun/beanbag(Barpack)
@@ -73,7 +73,7 @@
 		H.equip_or_collect(new /obj/item/clothing/head/chefhat(H), slot_head)
 		//H.equip_or_collect(new /obj/item/device/pda/chef(H), slot_belt)
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		return 1
@@ -119,7 +119,7 @@
 		H.equip_or_collect(new /obj/item/device/analyzer/plant_analyzer(H), slot_s_store)
 		//H.equip_or_collect(new /obj/item/device/pda/botanist(H), slot_belt)
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		return 1
@@ -151,9 +151,9 @@
 		//H.equip_or_collect(new /obj/item/device/pda/quartermaster(H), slot_belt)
 //		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
-		H.equip_or_collect(new /obj/item/weapon/clipboard(H), slot_l_hand)
+		H.put_in_hands(new /obj/item/weapon/clipboard(H))
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hands(new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		return 1
@@ -184,7 +184,7 @@
 		//H.equip_or_collect(new /obj/item/device/pda/cargo(H), slot_belt)
 //		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		return 1
@@ -219,11 +219,11 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 //		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 		if(H.backbag == 1)
-			H.equip_or_collect(new /obj/item/weapon/storage/box/engineer(H), slot_r_hand)
-			H.equip_or_collect(new /obj/item/weapon/crowbar(H), slot_l_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
+			H.put_in_hands(new /obj/item/weapon/crowbar(H))
 			H.equip_or_collect(new /obj/item/weapon/storage/bag/ore(H), slot_l_store)
 		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/engineer(H.back), slot_in_backpack)
+			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/weapon/crowbar(H), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/weapon/storage/bag/ore(H), slot_in_backpack)
 		return 1
@@ -301,18 +301,46 @@
 		H.equip_or_collect(new /obj/item/clothing/head/beret(H), slot_head)
 		H.equip_or_collect(new /obj/item/clothing/suit/suspenders(H), slot_wear_suit)
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 			H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_l_store)
-			H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_l_hand)
+			H.put_in_hands(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/toy/crayon/mime(H), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
+		H.add_spell(new /spell/targeted/oathbreak/)
 		H.miming = 1
 		H.rename_self("mime")
 		return 1
 
+//Mime's break vow spell, couldn't think of anywhere else to put this
+
+/spell/targeted/oathbreak
+	name = "Break Oath of Silence"
+	desc = "Break your oath of silence."
+	school = "mime"
+	panel = "Mime"
+	charge_max = 10
+	spell_flags = INCLUDEUSER
+	range = 0
+	max_targets = 1
+
+	hud_state = "mime_oath"
+	override_base = "const"
+
+/spell/targeted/oathbreak/cast(list/targets)
+	for(var/mob/living/carbon/human/M in targets)
+		var/response = alert(M, "Are you -sure- you want to break your oath of silence?\n(This removes your ability to create invisible walls and cannot be undone!)","Are you sure you want to break your oath?","Yes","No")
+		if(response != "Yes")	return
+		M.miming=0
+		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in M.spell_list)
+			M.remove_spell(spell)
+		for(var/spell/targeted/oathbreak/spell in M.spell_list)
+			M.remove_spell(spell)
+		message_admins("[M.name] ([M.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]'>JMP</a>)")
+		to_chat(M, "<span class = 'notice'>An unsettling feeling surrounds you...</span>")
+		return
 
 /datum/job/janitor
 	title = "Janitor"
@@ -335,7 +363,7 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/janitor(H), slot_belt)
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		// Now spawns on the janikart.  H.equip_or_collect(new /obj/item/key(H), slot_l_store)
@@ -365,9 +393,9 @@
 		H.equip_or_collect(new /obj/item/clothing/under/suit_jacket/red(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/librarian(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/weapon/barcodescanner(H), slot_l_hand)
+		H.put_in_hands(new /obj/item/weapon/barcodescanner(H))
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		return 1
@@ -385,8 +413,8 @@
 	spawn_positions = 2
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_sec_doors, access_maint_tunnels, access_cargo, access_medical,  access_bar, access_kitchen, access_hydroponics)
-	minimal_access = list(access_lawyer, access_court, access_sec_doors, access_cargo,  access_bar, access_kitchen)
+	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_maint_tunnels, access_cargo, access_medical,  access_bar, access_kitchen, access_hydroponics)
+	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)
 	alt_titles = list("Lawyer")
 
 	pdaslot=slot_belt
@@ -409,9 +437,9 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		//H.equip_or_collect(new /obj/item/device/pda/lawyer(H), slot_belt)
-		H.equip_or_collect(new /obj/item/weapon/storage/briefcase(H), slot_l_hand)
+		H.put_in_hands(new /obj/item/weapon/storage/briefcase(H))
 		if(H.backbag == 1)
-			H.equip_or_collect(new H.species.survival_gear(H), slot_r_hand)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)

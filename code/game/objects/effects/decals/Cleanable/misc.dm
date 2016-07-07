@@ -30,7 +30,6 @@
 	layer = 2
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "dirt"
-	mouse_opacity = 0
 
 /obj/effect/decal/cleanable/flour
 	name = "flour"
@@ -95,6 +94,38 @@
 	amount = 2
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
 	transfers_dna = 1
+
+/obj/effect/decal/cleanable/vomit/active
+	desc = "A small pool of vomit. Gosh, how unpleasant."
+	mouse_opacity = 1
+	flags = OPENCONTAINER
+	var/dry_state = 40 //Decreases by 1. When it reaches 0, the vomit becomes dry
+
+/obj/effect/decal/cleanable/vomit/active/New()
+	..()
+
+	dry_state = rand(50,80)
+	create_reagents(10)
+	reagents.add_reagent(VOMIT, rand(2,5))
+
+	processing_objects.Add(src)
+
+/obj/effect/decal/cleanable/vomit/active/Destroy()
+	..()
+
+	processing_objects.Remove(src)
+
+/obj/effect/decal/cleanable/vomit/active/process()
+	if(--dry_state <= 0) //Decrease dry_state by 1. Check if it's equal to zero
+		processing_objects.Remove(src)
+
+		qdel(reagents)
+		reagents = null
+		name = "dry vomit"
+		desc = "Gosh, how unpleasant."
+		mouse_opacity = 0
+		icon_state = "vomit_[rand(1,4)]_dry"
+		amount = 0
 
 /obj/effect/decal/cleanable/tomato_smudge
 	name = "tomato smudge"
@@ -175,6 +206,7 @@
 	icon_state = "tile_soot"
 	anchored = 1
 	layer=2
+	mouse_opacity = 0
 
 
 
@@ -200,3 +232,9 @@
 /obj/effect/decal/cleanable/cockroach_remains/New()
 	..()
 	icon_state = "cockroach_remains[rand(1,2)]"
+
+/obj/effect/decal/cleanable/wizrune
+	name = "rune"
+	desc = "Looks unfinished."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "wizrune"

@@ -4,11 +4,20 @@
 	name = "egg"
 	desc = "An egg!"
 	icon_state = "egg"
+	var/amount_grown = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent(NUTRIMENT, 4)
 	src.bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/process()
+	if(is_in_valid_nest(src)) //_macros.dm
+		amount_grown += rand(1,2)
+		if(amount_grown >= 100)
+			hatch()
+	else
+		processing_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom)
 	..()
@@ -52,13 +61,14 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/reagent_containers))
-		if(W.reagents.amount_cache.len == 1 && W.reagents.has_reagent("flour", 5))
-			W.reagents.remove_reagent("flour",5)
+		if(W.reagents.amount_cache.len == 1 && W.reagents.has_reagent(FLOUR, 5))
+			W.reagents.remove_reagent(FLOUR,5)
 			new /obj/item/weapon/reagent_containers/food/snacks/dough(src)
 			to_chat(user, "You make some dough.")
 			qdel(src)
 			return 1
-	else if (istype(W, /obj/item/toy/crayon))
+	else if (istype(W, /obj/item/toy/crayon) && !(istype(src, /obj/item/weapon/reagent_containers/food/snacks/egg/vox)))
+
 		var/obj/item/toy/crayon/C = W
 		var/clr = C.colourName
 
@@ -71,3 +81,20 @@
 		_color = clr
 	else
 		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
+	visible_message("[src] hatches with a quiet cracking sound.")
+	new /mob/living/simple_animal/chick(get_turf(src))
+	processing_objects.Remove(src)
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/vox
+	name = "green egg"
+	desc = "Looks like it came from some genetically engineered chicken"
+	icon_state = "egg-vox"
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/vox/hatch()
+	visible_message("[src] hatches with a quiet cracking sound.")
+	new /mob/living/carbon/monkey/vox(get_turf(src))
+	processing_objects.Remove(src)
+	qdel(src)

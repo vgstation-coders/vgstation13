@@ -34,10 +34,10 @@ In short:
 
 /datum/universal_state/hell/OnTurfChange(var/turf/T)
 	if(T.name == "space")
-		T.overlays += "hell01"
+		T.overlays += image(icon = T.icon, icon_state = "hell01")
 		T.underlays -= "hell01"
 	else
-		T.overlays -= "hell01"
+		T.overlays -= image(icon = T.icon, icon_state = "hell01")
 
 // Apply changes when entering state
 /datum/universal_state/hell/OnEnter()
@@ -103,21 +103,27 @@ In short:
 		tcheck(80,1)
 
 /datum/universal_state/hell/OverlayAndAmbientSet()
+	set waitfor = FALSE
 	var/count = 0
 	for(var/turf/T in turfs)
 		count++
 		if(!(count % 50000)) sleep(world.tick_lag)
 		if(istype(T, /turf/space))
-			T.overlays += "hell01"
+			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
 			if(!T.holy && prob(1))
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
 		tcheck(85,1)
-	for(var/atom/movable/lighting_overlay/L in all_lighting_overlays)
+
+	for(var/datum/lighting_corner/C in global.all_lighting_corners)
+		if (!C.active)
+			continue
 		count++
-		if(!(count % 50000)) sleep(world.tick_lag)
-		L.update_lumcount(0.5, 0, 0)
+		if(!(count % 200000))
+			sleep(world.tick_lag)
+
+		C.update_lumcount(0.5, 0, 0)
 		tcheck(80,1)
 
 /datum/universal_state/hell/proc/MiscSet()

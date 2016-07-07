@@ -33,7 +33,7 @@
 			command_alert("Meteors have been detected on collision course with the station.", "Meteor Alert")
 			for(var/mob/M in player_list)
 				if(!istype(M,/mob/new_player) && M.client)
-					to_chat(M, sound('sound/AI/meteors.ogg'))
+					M << sound('sound/AI/meteors.ogg')
 			spawn(100)
 				meteor_wave()
 				spawn_meteors()
@@ -45,7 +45,7 @@
 			command_alert("Gravitational anomalies detected on the station. There is no additional data.", "Anomaly Alert")
 			for(var/mob/M in player_list)
 				if(!istype(M,/mob/new_player) && M.client)
-					to_chat(M, sound('sound/AI/granomalies.ogg'))
+					M << sound('sound/AI/granomalies.ogg')
 			var/turf/T = pick(blobstart)
 			var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 			spawn(rand(50, 300))
@@ -53,7 +53,7 @@
 		/*
 		if(3) //Leaving the code in so someone can try and delag it, but this event can no longer occur randomly, per SoS's request. --NEO
 			command_alert("Space-time anomalies detected on the station. There is no additional data.", "Anomaly Alert")
-			to_chat(world, sound('sound/AI/spanomalies.ogg'))
+			world << sound('sound/AI/spanomalies.ogg')
 			var/list/turfs = new
 			var/turf/picked
 			for(var/turf/simulated/floor/T in world)
@@ -119,7 +119,7 @@
 
 /proc/viral_outbreak(var/virus = null)
 //	command_alert("Confirmed outbreak of level 7 viral biohazard aboard [station_name()]. All personnel must contain the outbreak.", "Biohazard Alert")
-//	to_chat(world, sound('sound/AI/outbreak7.ogg'))
+//	world << sound('sound/AI/outbreak7.ogg')
 	var/virus_type
 	if(!virus)
 		virus_type = pick(/datum/disease/dnaspread,/datum/disease/advance/flu,/datum/disease/advance/cold,/datum/disease/brainrot,/datum/disease/magnitis,/datum/disease/pierrot_throat)
@@ -182,7 +182,7 @@
 
 /proc/alien_infestation(var/spawncount = 1) // -- TLE
 	//command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert")
-//	to_chat(world, sound('sound/AI/aliens.ogg'))
+//	world << sound('sound/AI/aliens.ogg')
 	var/list/vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
 		if(temp_vent.loc.z == 1 && !temp_vent.welded && temp_vent.network && temp_vent.canSpawnMice)
@@ -205,9 +205,8 @@
 		spawncount--
 
 	spawn(rand(5000, 6000)) //Delayed announcements to keep the crew on their toes.
-		command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert")
-		for(var/mob/M in player_list)
-			if(M.client) M << sound('sound/AI/aliens.ogg')
+		command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert",alert = 'sound/AI/aliens.ogg')
+
 
 /proc/high_radiation_event()
 
@@ -243,10 +242,7 @@
 			continue
 		M.apply_effect((rand(15,75)),IRRADIATE,0)
 	sleep(100)
-	command_alert("High levels of radiation detected near the station. Please report to the Med-bay if you feel strange.", "Anomaly Alert")
-	for(var/mob/M in player_list)
-		if(M.client) M << sound('sound/AI/radiation.ogg')
-
+	command_alert("High levels of radiation detected near the station. Please report to the Med-bay if you feel strange.", "Anomaly Alert",alert='sound/AI/radiation.ogg')
 
 
 //Changing this to affect the main station. Blame Urist. --Pete
@@ -297,8 +293,6 @@
 	//sleep(100)
 	spawn(rand(300, 600)) //Delayed announcements to keep the crew on their toes.
 		command_alert("Unknown biological entities have been detected near [station_name()], please stand-by.", "Lifesign Alert")
-		for(var/mob/M in player_list)
-			if(M.client) M << sound('sound/AI/commandreport.ogg', volume = 60)
 
 /proc/lightsout(isEvent = 0, lightsoutAmount = 1,lightsoutRange = 25) //leave lightsoutAmount as 0 to break ALL lights
 	if(isEvent)

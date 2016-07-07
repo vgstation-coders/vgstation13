@@ -410,14 +410,14 @@
 
 	if(href_list["print"])
 		if(!src.connected)
-			to_chat(usr, "\icon[src]<span class='warning'>Error: No body scanner connected.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>Error: No body scanner connected.</span>")
 			return
 		var/mob/living/carbon/human/occupant = src.connected.occupant
 		if(!src.connected.occupant)
-			to_chat(usr, "\icon[src]<span class='warning'>\The [src.connected] is empty.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] is empty.</span>")
 			return
 		if(!istype(occupant,/mob/living/carbon/human))
-			to_chat(usr, "\icon[src]<span class='warning'>\The [src.connected] cannot scan that lifeform.</span>")
+			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src.connected] cannot scan that lifeform.</span>")
 			return
 		var/obj/item/weapon/paper/R = new(src.loc)
 		R.name = "paper - 'body scan report'"
@@ -442,13 +442,18 @@
 		"brainloss" = H.getBrainLoss(),
 		"paralysis" = H.paralysis,
 		"bodytemp" = H.bodytemperature,
-		"borer_present" = H.has_brain_worms(),
-		"inaprovaline_amount" = H.reagents.get_reagent_amount("inaprovaline"),
-		"dexalin_amount" = H.reagents.get_reagent_amount("dexalin"),
-		"stoxin_amount" = H.reagents.get_reagent_amount("stoxin"),
-		"bicaridine_amount" = H.reagents.get_reagent_amount("bicaridine"),
-		"dermaline_amount" = H.reagents.get_reagent_amount("dermaline"),
-		"blood_amount" = H.vessel.get_reagent_amount("blood"),
+		"borer_present_head" = H.has_brain_worms(),
+		"borer_present_chest" = H.has_brain_worms(LIMB_CHEST),
+		"borer_present_r_arm" = H.has_brain_worms(LIMB_RIGHT_ARM),
+		"borer_present_l_arm" = H.has_brain_worms(LIMB_LEFT_ARM),
+		"borer_present_r_leg" = H.has_brain_worms(LIMB_RIGHT_LEG),
+		"borer_present_l_leg" = H.has_brain_worms(LIMB_LEFT_LEG),
+		"inaprovaline_amount" = H.reagents.get_reagent_amount(INAPROVALINE),
+		"dexalin_amount" = H.reagents.get_reagent_amount(DEXALIN),
+		"stoxin_amount" = H.reagents.get_reagent_amount(STOXIN),
+		"bicaridine_amount" = H.reagents.get_reagent_amount(BICARIDINE),
+		"dermaline_amount" = H.reagents.get_reagent_amount(DERMALINE),
+		"blood_amount" = H.vessel.get_reagent_amount(BLOOD),
 		"all_chems" = H.reagents.reagent_list,
 		"btype" = H.dna.b_type,
 		"disabilities" = H.sdisabilities,
@@ -485,8 +490,18 @@
 	dat += text("Paralysis Summary %: [] ([] seconds left!)<br>", occ["paralysis"], round(occ["paralysis"] / 4))
 	dat += text("Body Temperature: [occ["bodytemp"]-T0C]&deg;C ([occ["bodytemp"]*1.8-459.67]&deg;F)<br><HR>")
 
-	if(occ["borer_present"])
+	if(occ["borer_present_head"])
 		dat += "Large growth detected in frontal lobe, possibly cancerous. Surgical removal is recommended.<br>"
+	if(occ["borer_present_chest"])
+		dat += "Large growth detected in chest cavity, possibly cancerous. Surgical removal is recommended.<br>"
+	if(occ["borer_present_r_arm"])
+		dat += "Large growth detected in right arm, possibly cancerous. Surgical removal is recommended.<br>"
+	if(occ["borer_present_l_arm"])
+		dat += "Large growth detected in left arm, possibly cancerous. Surgical removal is recommended.<br>"
+	if(occ["borer_present_r_leg"])
+		dat += "Large growth detected in right leg, possibly cancerous. Surgical removal is recommended.<br>"
+	if(occ["borer_present_l_leg"])
+		dat += "Large growth detected in left leg, possibly cancerous. Surgical removal is recommended.<br>"
 
 	dat += text("[]\tBlood Level %: [] ([] units)</FONT><BR>", (occ["blood_amount"] > 448 ?"<font color='blue'>" : "<font color='red'>"), occ["blood_amount"]*100 / 560, occ["blood_amount"])
 	if(connected.scanning>=2)
@@ -500,7 +515,7 @@
 
 	if(connected.scanning>2)
 		for(var/datum/reagent/R in occ["all_chems"])
-			if(R.id == "blood" || R.id == "inaprovaline" || R.id == "stoxin" || R.id == "dermaline" || R.id == "bicaridine" || R.id == "dexalin") continue //no repeats
+			if(R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN) continue //no repeats
 			else
 				dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
 	for(var/datum/disease/D in occ["tg_diseases_list"])
@@ -525,6 +540,7 @@
 		var/splint = ""
 		var/internal_bleeding = ""
 		var/lung_ruptured = ""
+		var/e_cancer = ""
 
 		dat += "<tr>"
 
@@ -571,10 +587,20 @@
 			if(unknown_body || e.hidden)
 				imp += "Unknown body present:"
 
-		if(!AN && !open && !infected & !imp)
+		switch(e.cancer_stage)
+			if(CANCER_STAGE_BENIGN to CANCER_STAGE_SMALL_TUMOR)
+				e_cancer = "Benign Tumor:"
+			if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR)
+				e_cancer = "Small Tumor:"
+			if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS)
+				e_cancer = "Large Tumor:"
+			if(CANCER_STAGE_METASTASIS to INFINITY)
+				e_cancer = "Metastatic Tumor:"
+
+		if(!AN && !open && !infected && !e_cancer & !imp)
 			AN = "None:"
 		if(!(e.status & ORGAN_DESTROYED))
-			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][internal_bleeding][lung_ruptured]</td>"
+			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][e_cancer][internal_bleeding][lung_ruptured]</td>"
 		else
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
 		dat += "</tr>"
@@ -601,8 +627,19 @@
 			if (INFECTION_LEVEL_TWO + 300 to INFINITY)
 				infection = "Acute Infection++:"
 
+		var/i_cancer
+		switch(i.cancer_stage)
+			if(CANCER_STAGE_BENIGN to CANCER_STAGE_SMALL_TUMOR)
+				i_cancer = "Benign Tumor:"
+			if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR)
+				i_cancer = "Small Tumor:"
+			if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS)
+				i_cancer = "Large Tumor:"
+			if(CANCER_STAGE_METASTASIS to INFINITY)
+				i_cancer = "Metastatic Tumor:"
+
 		dat += "<tr>"
-		dat += "<td>[i.name]</td><td>N/A</td><td>[i.damage]</td><td>[infection]:[mech]</td><td></td>"
+		dat += "<td>[i.name]</td><td>N/A</td><td>[i.damage]</td><td>[infection][i_cancer][mech]</td><td></td>"
 		dat += "</tr>"
 	dat += "</table>"
 

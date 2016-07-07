@@ -34,6 +34,10 @@
 		icon_state = "[initial(icon_state)]-b"
 		density = 0 //Not blocking anything anymore
 		getFromPool(/obj/item/stack/rods, get_turf(src)) //One rod set
+	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
+		broken = 0
+		icon_state = initial(icon_state)
+		density = 1
 	if(health <= 0) //Dead
 		getFromPool(/obj/item/stack/rods, get_turf(src)) //Drop the second set of rods
 		returnToPool(src)
@@ -50,6 +54,7 @@
 	return
 
 /obj/structure/grille/blob_act()
+	..()
 	health -= rand(initial(health)*0.8, initial(health)*3) //Grille will always be blasted, but chances of leaving things over
 	healthcheck(hitsound = 1)
 
@@ -110,7 +115,7 @@
 	return
 
 
-/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/grille/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
@@ -190,6 +195,10 @@
 			"<span class='notice'>You place \a [WD] on \the [src].</span>")
 		return
 
+	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
+		health = 0
+		healthcheck()
+
 	switch(W.damtype)
 		if("fire")
 			health -= W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
@@ -234,12 +243,20 @@
 /obj/structure/grille/broken //THIS IS ONLY TO BE USED FOR MAPPING, THANK YOU FOR YOUR UNDERSTANDING
 
 	//We need to set all variables for broken grilles manually, notably to have those show up nicely in mapmaker
-	broken = 1
 	icon_state = "grille-b"
+	broken = 1
 	density = 0 //Not blocking anything anymore
-	New()
-		health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
-		healthcheck() //Send this to healthcheck just in case we want to do something else with it
+
+/obj/structure/grille/broken/New()
+	health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
+	healthcheck() //Send this to healthcheck just in case we want to do something else with it
+
+/obj/structure/grille/broken/healthcheck(var/hitsound = 0) //needed because initial icon_state for broken is grille-b for mapping
+	..()
+	if(broken)
+		icon_state = "grille-b"
+	else
+		icon_state = "grille"
 
 /obj/structure/grille/cult //Used to get rid of those ugly fucking walls everywhere while still blocking air
 
@@ -248,7 +265,20 @@
 	icon_state = "grillecult"
 	health = 40 //Make it strong enough to avoid people breaking in too easily
 
-/obj/structure/grille/cult/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/grille/cult/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || !broken)
 		return 0 //Make sure air doesn't drain
 	..()
+
+
+/obj/structure/grille/invulnerable
+	desc = "A reinforced grille made with advanced alloys and techniques. It's impossible to break one without the use of heavy machinery."
+
+/obj/structure/grille/invulnerable/healthcheck(hitsound)
+	return
+
+/obj/structure/grille/invulnerable/ex_act()
+	return
+
+/obj/structure/grille/invulnerable/attackby()
+	return

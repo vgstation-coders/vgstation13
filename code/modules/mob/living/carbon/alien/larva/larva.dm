@@ -44,7 +44,7 @@
 		return
 
 	if(!blinded)
-		flick("flash", flash)
+		flash_eyes(visual = 1)
 
 	var/b_loss = null
 	var/f_loss = null
@@ -72,8 +72,10 @@
 /mob/living/carbon/alien/larva/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if(stat == 2)
+	if(stat == DEAD)
 		return
+	..()
+	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 	var/shielded = 0
 
 	var/damage = null
@@ -140,6 +142,8 @@
 		for(var/mob/O in viewers(src, null))
 			visible_message("<span class='danger'>\The [M] glomps \the [src]!</span>")
 
+		add_logs(M, src, "glomped on", 0)
+
 		var/damage = rand(1, 3)
 
 		if(istype(src, /mob/living/carbon/slime/adult))
@@ -185,23 +189,7 @@
 	switch(M.a_intent)
 
 		if(I_HELP)
-			if(health > 0)
-				help_shake_act(M)
-			else
-				if(M.health >= -75.0)
-					if ((M.head && M.head.flags & 4) || (M.wear_mask && !( M.wear_mask.flags & 32 )) )
-						to_chat(M, "<span class='notice'>Remove that mask!</span>")
-						return
-					var/obj/effect/equip_e/human/O = new /obj/effect/equip_e/human()
-					O.source = M
-					O.target = src
-					O.s_loc = M.loc
-					O.t_loc = loc
-					O.place = "CPR"
-					requests += O
-					spawn(0)
-						O.process()
-						return
+			help_shake_act(M)
 
 		if(I_GRAB)
 			if(M == src)
@@ -304,3 +292,8 @@
 		return 1
 	return ..()
 */
+
+/mob/living/carbon/alien/larva/reset_layer()
+	if(stat == DEAD)
+		layer = MOB_LAYER //unhide
+		plane = PLANE_MOB

@@ -10,11 +10,11 @@
 	icon_state = "railgun"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	force = 10
 	flags = FPRINT
 	siemens_coefficient = 1
-	slot_flags = SLOT_BACK
+	slot_flags = SLOT_BACK | SLOT_BELT
 	origin_tech = "materials=1;engineering=1;combat=1;power=1"
 	ejectshell = 0
 	caliber = null
@@ -158,7 +158,7 @@
 		to_chat(user, "You insert \the [W] into the barrel of \the [src].")
 		rails = W
 
-	else if(istype(W, /obj/item/weapon/screwdriver))
+	else if(isscrewdriver(W))
 		if(rails)
 			if(rails_secure)
 				to_chat(user, "You loosen the rail assembly within \the [src].")

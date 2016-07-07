@@ -14,6 +14,8 @@
 	var/obj/master = null	//A reference to the object in the slot. Grabs or items, generally.
 	var/gun_click_time = -100 //I'm lazy.
 	var/globalscreen = 0 //This screen object is not unique to one screen, can be seen by many
+	appearance_flags = NO_CLIENT_COLOR
+	plane = PLANE_HUD
 
 /obj/screen/Destroy()
 	master = null
@@ -26,6 +28,11 @@
 	screen_loc = "CENTER-7,CENTER-7"
 	maptext_height = 480
 	maptext_width = 480
+
+/obj/screen/adminbus
+
+/obj/screen/specialblob
+	var/obj/effect/blob/linked_blob = null
 
 /obj/screen/schematics
 	var/datum/rcd_schematic/ourschematic
@@ -51,6 +58,7 @@
 
 /obj/screen/inventory
 	var/slot_id	//The indentifier for the slot. It has nothing to do with ID cards.
+	var/hand_index
 
 /obj/screen/close
 	name = "close"
@@ -175,7 +183,7 @@
 	name = "damage zone"
 	icon_state = "zone_sel"
 	screen_loc = ui_zonesel
-	var/selecting = "chest"
+	var/selecting = LIMB_CHEST
 
 /obj/screen/zone_sel/Click(location, control,params)
 	var/list/PL = params2list(params)
@@ -187,42 +195,42 @@
 		if(1 to 3) //Feet
 			switch(icon_x)
 				if(10 to 15)
-					selecting = "r_foot"
+					selecting = LIMB_RIGHT_FOOT
 				if(17 to 22)
-					selecting = "l_foot"
+					selecting = LIMB_LEFT_FOOT
 				else
 					return 1
 		if(4 to 9) //Legs
 			switch(icon_x)
 				if(10 to 15)
-					selecting = "r_leg"
+					selecting = LIMB_RIGHT_LEG
 				if(17 to 22)
-					selecting = "l_leg"
+					selecting = LIMB_LEFT_LEG
 				else
 					return 1
 		if(10 to 13) //Hands and groin
 			switch(icon_x)
 				if(8 to 11)
-					selecting = "r_hand"
+					selecting = LIMB_RIGHT_HAND
 				if(12 to 20)
-					selecting = "groin"
+					selecting = LIMB_GROIN
 				if(21 to 24)
-					selecting = "l_hand"
+					selecting = LIMB_LEFT_HAND
 				else
 					return 1
 		if(14 to 22) //Chest and arms to shoulders
 			switch(icon_x)
 				if(8 to 11)
-					selecting = "r_arm"
+					selecting = LIMB_RIGHT_ARM
 				if(12 to 20)
-					selecting = "chest"
+					selecting = LIMB_CHEST
 				if(21 to 24)
-					selecting = "l_arm"
+					selecting = LIMB_LEFT_ARM
 				else
 					return 1
 		if(23 to 30) //Head, but we need to check for eye or mouth
 			if(icon_x in 12 to 20)
-				selecting = "head"
+				selecting = LIMB_HEAD
 				switch(icon_y)
 					if(23 to 24)
 						if(icon_x in 15 to 17)
@@ -245,7 +253,7 @@
 /obj/screen/clicker
 	icon = 'icons/mob/screen1.dmi'
 	icon_state = "blank"
-	layer = 0
+	plane = CLICKCATCHER_PLANE
 	mouse_opacity = 2
 	globalscreen = 1
 	screen_loc = ui_entire_screen
@@ -257,9 +265,9 @@
 	return 1
 
 /proc/screen_loc2turf(scr_loc, turf/origin)
-	var/list/screenxy = text2list(scr_loc, ",")
-	var/list/screenx = text2list(screenxy[1], ":")
-	var/list/screeny = text2list(screenxy[2], ":")
+	var/list/screenxy = splittext(scr_loc, ",")
+	var/list/screenx = splittext(screenxy[1], ":")
+	var/list/screeny = splittext(screenxy[2], ":")
 	var/X = screenx[1]
 	var/Y = screeny[1]
 	X = Clamp((origin.x + text2num(X) - (world.view + 1)), 1, world.maxx)
@@ -334,96 +342,7 @@
 		if("internal")
 			if(iscarbon(usr))
 				var/mob/living/carbon/C = usr
-				if(!C.stat && !C.stunned && !C.paralysis && !C.restrained())
-					if(C.internal)
-						C.internal = null
-						to_chat(C, "<span class='notice'>No longer running on internals.</span>")
-						if(C.internals)
-							C.internals.icon_state = "internal0"
-					else
-						if(!istype(C.wear_mask, /obj/item/clothing/mask))
-							to_chat(C, "<span class='notice'>You are not wearing a mask.</span>")
-							return 1
-						else
-							var/list/nicename = null
-							var/list/tankcheck = null
-							var/breathes = "oxygen"    //default, we'll check later
-							var/list/contents = list()
-
-							if(ishuman(C))
-								var/mob/living/carbon/human/H = C
-								breathes = H.species.breath_type
-								nicename = list ("suit", "back", "belt", "right hand", "left hand", "left pocket", "right pocket")
-								tankcheck = list (H.s_store, C.back, H.belt, C.r_hand, C.l_hand, H.l_store, H.r_store)
-
-							else
-								nicename = list("Right Hand", "Left Hand", "Back")
-								tankcheck = list(C.r_hand, C.l_hand, C.back)
-
-							for(var/i=1, i<tankcheck.len+1, ++i)
-								if(istype(tankcheck[i], /obj/item/weapon/tank))
-									var/obj/item/weapon/tank/t = tankcheck[i]
-									if (!isnull(t.manipulated_by) && t.manipulated_by != C.real_name)
-										contents.Add(t.air_contents.total_moles)	//Someone messed with the tank and put unknown gasses
-										continue					//in it, so we're going to believe the tank is what it says it is
-									switch(breathes)
-																		//These tanks we're sure of their contents
-										if("nitrogen") 							//So we're a bit more picky about them.
-
-											if(t.air_contents.nitrogen && !t.air_contents.oxygen)
-												contents.Add(t.air_contents.nitrogen)
-											else
-												contents.Add(0)
-
-										if ("oxygen")
-											if(t.air_contents.oxygen && !t.air_contents.toxins)
-												contents.Add(t.air_contents.oxygen)
-											else
-												contents.Add(0)
-
-										// No races breath this, but never know about downstream servers.
-										if ("carbon dioxide")
-											if(t.air_contents.carbon_dioxide && !t.air_contents.toxins)
-												contents.Add(t.air_contents.carbon_dioxide)
-											else
-												contents.Add(0)
-
-										// ACK ACK ACK Plasmen
-										if ("plasma")
-											if(t.air_contents.toxins)
-												contents.Add(t.air_contents.toxins)
-											else
-												contents.Add(0)
-
-
-								else
-									//no tank so we set contents to 0
-									contents.Add(0)
-
-							//Alright now we know the contents of the tanks so we have to pick the best one.
-
-							var/best = 0
-							var/bestcontents = 0
-							for(var/i=1, i <  contents.len + 1 , ++i)
-								if(!contents[i])
-									continue
-								if(contents[i] > bestcontents)
-									best = i
-									bestcontents = contents[i]
-
-
-							//We've determined the best container now we set it as our internals
-
-							if(best)
-								to_chat(C, "<span class='notice'>You are now running on internals from [tankcheck[best]] on your [nicename[best]].</span>")
-								C.internal = tankcheck[best]
-
-
-							if(C.internal)
-								if(C.internals)
-									C.internals.icon_state = "internal1"
-							else
-								to_chat(C, "<span class='notice'>You don't have a[breathes=="oxygen" ? "n oxygen" : addtext(" ",breathes)] tank.</span>")
+				C.toggle_internals(usr)
 		if("act_intent")
 			usr.a_intent_change("right")
 		if("help")
@@ -444,6 +363,26 @@
 		if("throw")
 			if(!usr.stat && isturf(usr.loc) && !usr.restrained())
 				usr:toggle_throw_mode()
+
+		if("kick")
+			if(ishuman(usr))
+				var/mob/living/carbon/human/H = usr
+
+				var/list/modifiers = params2list(params)
+				if(modifiers["middle"] || modifiers["right"] || modifiers["ctrl"] || modifiers["shift"] || modifiers["alt"])
+					H.set_attack_type() //Reset
+				else
+					H.set_attack_type(ATTACK_KICK)
+		if("bite")
+			if(ishuman(usr))
+				var/mob/living/carbon/human/H = usr
+
+				var/list/modifiers = params2list(params)
+				if(modifiers["middle"] || modifiers["right"] || modifiers["ctrl"] || modifiers["shift"] || modifiers["alt"])
+					H.set_attack_type() //Reset
+				else
+					H.set_attack_type(ATTACK_BITE)
+
 		if("drop")
 			usr.drop_item_v()
 
@@ -619,34 +558,12 @@
 		if("Toggle Gun Mode")
 			usr.client.ToggleGunMode()
 
-		if("uniform")
-			if(ismonkey(usr))
-				var/mob/living/carbon/monkey/M = usr
-				if(M.canWearClothes)
-					if (!M.get_active_hand())
-						M.wearclothes(null)
-					else if (istype(M.get_active_hand(), /obj/item/clothing/monkeyclothes))
-						M.wearclothes(M.get_active_hand())
+		else
+			return 0
+	return 1
 
-		if("hat")
-			if(ismonkey(usr))
-				var/mob/living/carbon/monkey/M = usr
-				if(M.canWearHats)
-					if (!M.get_active_hand())
-						M.wearhat(null)
-					else if (istype(M.get_active_hand(), /obj/item/clothing/head))
-						M.wearhat(M.get_active_hand())
-
-		if("glasses")
-			if(ismonkey(usr))
-				var/mob/living/carbon/monkey/M = usr
-				if(M.canWearGlasses)
-					if (!M.get_active_hand())
-						M.wearglasses(null)
-					else if (istype(M.get_active_hand(), /obj/item/clothing/glasses))
-						M.wearglasses(M.get_active_hand())
-
-////////////ADMINBUS HUD ICONS////////////
+/obj/screen/adminbus/Click()
+	switch(name)
 		if("Delete Bus")
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
@@ -783,8 +700,51 @@
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
 				A.toggle_lights(usr,2)
-		else
-			return 0
+
+/obj/screen/specialblob/Click()
+	switch(name)
+		if("Spawn Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.expand_blob_power()
+		if("Spawn Strong Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_shield_power()
+		if("Spawn Resource Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_resource()
+		if("Spawn Factory Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_factory()
+		if("Spawn Node Blob")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_node()
+		if("Spawn Blob Core")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.create_core()
+		if("Call Overminds")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.callblobs()
+		if("Rally Spores")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				overmind.rally_spores_power()
+		if("Psionic Message")
+			if(isovermind(usr))
+				var/mob/camera/blob/overmind = usr
+				var/message = input(overmind,"Send a message to the crew.","Psionic Message") as null|text
+				if(message)
+					overmind.telepathy(message)
+		if("Jump to Blob")
+			if(isovermind(usr) && linked_blob)
+				var/mob/camera/blob/overmind = usr
+				overmind.loc = linked_blob.loc
 	return 1
 
 /obj/screen/inventory/Click()
@@ -796,25 +756,18 @@
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
+
+	if(hand_index)
+		usr.activate_hand(hand_index)
+
 	switch(name)
-		if("r_hand")
-			if(iscarbon(usr))
-				var/mob/living/carbon/C = usr
-				C.activate_hand("r")
-				//usr.next_move = world.time+2
-		if("l_hand")
-			if(iscarbon(usr))
-				var/mob/living/carbon/C = usr
-				C.activate_hand("l")
-				//usr.next_move = world.time+2
 		if("swap")
 			usr:swap_hand()
 		if("hand")
 			usr:swap_hand()
 		else
 			if(usr.attack_ui(slot_id))
-				usr.update_inv_l_hand(0)
-				usr.update_inv_r_hand(0)
+				usr.update_inv_hands()
 				usr.delayNextAttack(6)
 	return 1
 

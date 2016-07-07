@@ -6,7 +6,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 3
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
@@ -116,6 +116,7 @@
 	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
 	deployed = null
 	overlays.len = 0
+	deployed.cant_drop = 0
 	w_class = initial(w_class)
 
 /obj/item/weapon/switchtool/proc/deploy(var/module)
@@ -127,6 +128,7 @@
 
 	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
 	deployed = stored_modules[module]
+	deployed.cant_drop = 1
 	overlays += get_module_name(module)
 	w_class = max(w_class, deployed.w_class)
 
@@ -164,7 +166,6 @@
 	icon_state = "surg_switchtool"
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
 
-	w_class = 3.0
 	origin_tech = "materials=4;bluespace=3;biotech=3"
 	stored_modules = list("/obj/item/weapon/scalpel:scalpel" = null,
 						"/obj/item/weapon/circular_saw:circular saw" = null,

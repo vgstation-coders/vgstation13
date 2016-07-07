@@ -5,7 +5,7 @@
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
 		nullblock = 1
-		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg')
+		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = PLANE_EFFECTS)
 		return 1
 	else if(target.contents)
 		for(var/atom/A in target.contents)
@@ -327,7 +327,7 @@
 	name = "summoning"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "summoning"
-	mouse_opacity = 0
+	mouse_opacity = 1
 	density = 0
 	flags = 0
 	var/obj/effect/rune/summon_target = null
@@ -368,6 +368,7 @@
 
 /obj/effect/rune/proc/drain()
 	var/drain = 0
+	var/list/drain_turflist = list()
 	for(var/obj/effect/rune/R in rune_list)
 		if(R.word1==cultwords["travel"] && R.word2==cultwords["blood"] && R.word3==cultwords["self"])
 			for(var/mob/living/carbon/D in R.loc)
@@ -380,13 +381,22 @@
 						to_chat(D, "<span class='warning'>You feel weakened.</span>")
 						D.take_overall_damage(bdrain, 0)
 						drain += bdrain
+						drain_turflist += get_turf(R)
 	if(!drain)
 		return fizzle()
 	usr.say ("Yu[pick("'","`")]gular faras desdae. Havas mithum javara. Umathar uf'kal thenar!")
 	usr.visible_message("<span class='warning'>Blood flows from the rune into [usr]!</span>", \
 	"<span class='warning'>The blood starts flowing from the rune and into your frail mortal body. You feel... empowered.</span>", \
 	"<span class='warning'>You hear a liquid flowing.</span>")
+
 	var/mob/living/user = usr
+
+	spawn()
+		for(var/i = 0;i < 2;i++)
+			for(var/turf/T in drain_turflist)
+				make_tracker_effects(T, user, 1, "soul", 3, /obj/effect/tracker/drain)
+				sleep(1)
+
 	if(user.bhunger)
 		user.bhunger = max(user.bhunger-2*drain,0)
 	if(drain>=50)
@@ -1057,13 +1067,9 @@
 			return
 		cultist.unlock_from()
 		if (cultist.handcuffed)
-			cultist.handcuffed.loc = cultist.loc
-			cultist.handcuffed = null
-			cultist.update_inv_handcuffed()
+			cultist.drop_from_inventory(cultist.handcuffed)
 		if (cultist.legcuffed)
-			cultist.legcuffed.loc = cultist.loc
-			cultist.legcuffed = null
-			cultist.update_inv_legcuffed()
+			cultist.drop_from_inventory(cultist.legcuffed)
 		if (istype(cultist.wear_mask, /obj/item/clothing/mask/muzzle))
 			cultist.u_equip(cultist.wear_mask, 1)
 		if(istype(cultist.loc, /obj/structure/closet))
@@ -1272,7 +1278,7 @@
 		if(!nullblock)
 			if(iscarbon(L))
 				var/mob/living/carbon/C = L
-				flick("e_flash", C.flash)
+				C.flash_eyes(visual = 1)
 				if(C.stuttering < 1 && (!(M_HULK in C.mutations)))
 					C.stuttering = 1
 				C.Weaken(1)
@@ -1311,13 +1317,9 @@
 			var/mob/living/carbon/monkey/K = user
 			K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor. Might not offer much protection due to its size though.</span>")
-			if(!istype(K.uniform, /obj/item/clothing/monkeyclothes/cultrobes))
-				var/obj/item/clothing/monkeyclothes/cultrobes/CR = new /obj/item/clothing/monkeyclothes/cultrobes(user.loc)
-				K.wearclothes(CR)
-			if(!istype(K.hat, /obj/item/clothing/head/culthood/alt))
-				var/obj/item/clothing/head/culthood/alt/CH = new /obj/item/clothing/head/culthood/alt(user.loc)
-				K.wearhat(CH)
-			K.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(K), slot_back)
+			K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
+			K.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/alt, slot_head)
+			K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
 			K.put_in_hands(new /obj/item/weapon/melee/cultblade(K))
 		return
 	else
@@ -1341,11 +1343,9 @@
 					var/mob/living/carbon/monkey/K = M
 					K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor. Might not offer much protection due to its size though.</span>")
-					var/obj/item/clothing/monkeyclothes/cultrobes/CR = new /obj/item/clothing/monkeyclothes/cultrobes(loc)
-					K.wearclothes(CR)
-					var/obj/item/clothing/head/culthood/alt/CH = new /obj/item/clothing/head/culthood/alt(loc)
-					K.wearhat(CH)
-					K.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(K), slot_back)
+					K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
+					K.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/alt, slot_head)
+					K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
 					K.put_in_hands(new /obj/item/weapon/melee/cultblade(K))
 				else if(isconstruct(M))
 					var/construct_class

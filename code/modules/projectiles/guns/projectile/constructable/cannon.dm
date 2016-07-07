@@ -91,7 +91,7 @@
 	for(var/i=1, i<=prohibited_items.len, i++)
 		if(istype(W,prohibited_items[i]))
 			item_prohibited = 1
-	if(!loaded_item && istype(W,/obj/item) && !istype(W,/obj/item/weapon/reagent_containers) && !item_prohibited)
+	if(!loaded_item && istype(W,/obj/item) && !W.is_open_container() && !item_prohibited)
 		if(!user.drop_item(W, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return 1
@@ -101,10 +101,10 @@
 	else if(!loaded_item && item_prohibited)
 		to_chat(user, "<span class='warning'>That won't fit into the barrel!</span>")
 		return 1
-	else if(loaded_item && istype(W,/obj/item/weapon/reagent_containers))
+	else if(loaded_item && W.is_open_container())
 		to_chat(user, "<span class='warning'>The fuel needs to be put in before the ammunition!</span>")
 		return 1
-	else if(!loaded_item && istype(W,/obj/item/weapon/reagent_containers))
+	else if(!loaded_item && W.is_open_container())
 		transfer_fuel(W, user)
 		return 1
 	else if(loaded_item && istype(W,/obj/item))
@@ -116,6 +116,8 @@
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/proc/transfer_fuel(obj/item/weapon/reagent_containers/S, mob/user as mob)
 	if(!S.is_open_container())
 		return
+	if(!istype(S))
+		return
 	if(S.is_empty())
 		to_chat(user, "<span class='warning'>\The [S] is empty.</span>")
 		return
@@ -124,7 +126,7 @@
 		return
 	var/pure_fuel = 1
 	for (var/datum/reagent/current_reagent in S.reagents.reagent_list)
-		if (current_reagent.id != "fuel")
+		if (current_reagent.id != FUEL)
 			pure_fuel = 0
 	if(!pure_fuel)
 		to_chat(user, "<span class='warning'>\The [src] won't fire if you fill it with anything but pure welding fuel!</span>")
@@ -134,7 +136,7 @@
 	if((fuel_level + transfer_amount) >= max_fuel)
 		transfer_amount = max_fuel-fuel_level
 		full = 1
-	S.reagents.remove_reagent("fuel", transfer_amount)
+	S.reagents.remove_reagent(FUEL, transfer_amount)
 	fuel_level += transfer_amount
 	if(full)
 		to_chat(user, "<span class='notice'>You fill \the [src] to the brim with fuel from \the [S].</span>")
@@ -192,11 +194,11 @@
 
 	var/obj/item/object = loaded_item
 	var/speed
-	if(object.w_class > 1)
+	if(object.w_class > W_CLASS_TINY)
 		speed = (((fire_force*(4/object.w_class))/5)*2) //projectile speed.
 	else
 		speed = (((fire_force*2)/5)*2)
-		
+
 	speed = speed * damage_multiplier
 
 	var/distance = round(((20/object.w_class)*(fuel_level/10))*1.5)

@@ -2,6 +2,7 @@
 Mineral Sheets
 	Contains:
 		- Sandstone
+		- Brick
 		- Diamond
 		- Uranium
 		- Plasma
@@ -53,6 +54,21 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 	..()
 
 /*
+ * Brick
+ */
+/obj/item/stack/sheet/mineral/brick
+	name ="brick"
+	singular_name = "brick"
+	icon_state = "sheet-brick"
+	force = 5.0
+	throwforce = 5
+	throw_range = 3
+	throw_speed = 3
+	w_class = W_CLASS_MEDIUM
+	melt_temperature = 2473.15
+	sheettype = "brick"
+
+/*
  * Diamond
  */
 /obj/item/stack/sheet/mineral/diamond
@@ -61,7 +77,7 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 	icon_state = "sheet-diamond"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_range = 3
 	origin_tech = "materials=6"
 	perunit = 1750
@@ -87,7 +103,7 @@ var/global/list/datum/stack_recipe/diamond_recipes = list ( \
 	icon_state = "sheet-uranium"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -114,7 +130,7 @@ var/global/list/datum/stack_recipe/uranium_recipes = list ( \
 	icon_state = "sheet-plasma"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "plasmatech=2;materials=2"
@@ -139,7 +155,7 @@ var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 	icon_state = "sheet-plastic"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=3"
@@ -160,6 +176,17 @@ var/global/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic coat", /obj/item/clothing/suit/raincoat, 5), \
 	new/datum/stack_recipe("plastic flaps", /obj/structure/plasticflaps, 10, one_per_turf = 1, on_floor = 1, start_unanchored = 1), \
 	new/datum/stack_recipe("water-cooler", /obj/structure/reagent_dispensers/water_cooler, 4, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe_list("curtains",list(
+		new/datum/stack_recipe("white curtains", /obj/structure/curtain, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("black curtains", /obj/structure/curtain/black, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("medical curtains", /obj/structure/curtain/medical, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("bed curtains", /obj/structure/curtain/open/bed, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("privacy curtains", /obj/structure/curtain/open/privacy, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("shower curtains", /obj/structure/curtain/open/shower, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("engineering shower curtains", /obj/structure/curtain/open/shower/engineering, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("security shower curtains", /obj/structure/curtain/open/shower/medical, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("medical shower curtains", /obj/structure/curtain/open/shower/security, 4, one_per_turf = 1, on_floor = 1), \
+		), 4),
 	)
 
 /obj/item/stack/sheet/mineral/plastic/New(var/loc, var/amount=null)
@@ -175,7 +202,7 @@ var/global/list/datum/stack_recipe/plastic_recipes = list ( \
 	icon_state = "sheet-gold"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=4"
@@ -228,7 +255,7 @@ var/global/list/datum/stack_recipe/phazon_recipes = list( \
 	icon_state = "sheet-silver"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=3"
@@ -254,7 +281,7 @@ var/global/list/datum/stack_recipe/silver_recipes = list ( \
 	icon_state = "sheet-clown"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=4"
@@ -271,21 +298,6 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	..()
 
 /****************************** Others ****************************/
-
-/*
- * Enriched Uranium
- */
-/obj/item/stack/sheet/mineral/enruranium
-	name = "enriched uranium"
-	icon_state = "sheet-enruranium"
-	force = 5.0
-	throwforce = 5
-	w_class = 3.0
-	throw_speed = 3
-	throw_range = 3
-	origin_tech = "materials=5"
-	perunit = 1000
-
 /*
  * Adamantine
  */
@@ -294,7 +306,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-adamantine"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=4"
@@ -308,7 +320,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-mythril"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=4"
@@ -320,7 +332,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-pharosium"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -331,7 +343,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-char"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -343,7 +355,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-claretine"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -355,7 +367,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-cobryl"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -367,7 +379,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-bohrum"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -379,7 +391,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-syreline"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -391,7 +403,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-erebite"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -403,7 +415,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-cerenkite"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -415,7 +427,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-cytine"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -427,7 +439,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-uqill"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -439,7 +451,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-telecrystal"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -451,7 +463,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-mauxite"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"
@@ -463,7 +475,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	icon_state = "sheet-molitz"
 	force = 5.0
 	throwforce = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
 	origin_tech = "materials=5"

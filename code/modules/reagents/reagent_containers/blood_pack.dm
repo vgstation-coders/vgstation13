@@ -11,14 +11,14 @@
 	..()
 	if(blood_type != null)
 		name = "[blood_type] Bloodpack"
-	reagents.add_reagent("blood", 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null))
+	reagents.add_reagent(BLOOD, 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null))
 	update_icon()
 
 /obj/item/weapon/reagent_containers/blood/on_reagent_change()
 	update_icon()
 	if(reagents.total_volume == 0 && name != "Empty Bloodback")
 		name = "Empty Bloodpack"
-		desc = "Empty bloodpacks are good in vampire movies, but bad in hospitals."
+		desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	else if (reagents.reagent_list.len > 0)
 		var/target_type = null
 		var/the_volume = 0
@@ -51,7 +51,7 @@
 		to_chat(user, "It contains:")
 		if(reagents.reagent_list.len)
 			for(var/datum/reagent/R in reagents.reagent_list)
-				if (R.id == "blood")
+				if (R.id == BLOOD)
 					var/type = R.data["blood_type"]
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name], of type [type]</span>")
 				else
@@ -79,7 +79,7 @@
 	blood_type = "O-"
 
 /obj/item/weapon/reagent_containers/blood/empty
-	name = "Empty BloodPack"
+	name = "Empty Bloodpack"
 	desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	icon_state = "empty"
 	New()
@@ -95,5 +95,5 @@
 	New()
 		..()
 		reagents.clear_reagents()
-		reagents.add_reagent("phalanximine", 200)
+		reagents.add_reagent(PHALANXIMINE, 200)
 		update_icon()

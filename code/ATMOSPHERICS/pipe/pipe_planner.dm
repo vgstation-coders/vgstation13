@@ -5,11 +5,12 @@
 	icon = 'icons/obj/pipe-item.dmi'
 	icon_state = "pipe-planner"
 
-	w_class = 4
+	w_class = W_CLASS_LARGE
 
 	var/datum/context_click/pipe_planner/planner
 
 	layer = OBJ_LAYER + (PIPING_LAYER_MIN - (PIPING_LAYER_DEFAULT + PIPING_LAYER_INCREMENT)) * PIPING_LAYER_LCHANGE
+	plane = PLANE_OBJ
 
 /obj/item/pipe_planner/New()
 	..()

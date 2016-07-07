@@ -5,8 +5,8 @@
 	desc = "A locked box."
 	icon_state = "lockbox+l"
 	item_state = "syringe_kit"
-	w_class = 4
-	max_w_class = 3
+	w_class = W_CLASS_LARGE
+	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 4
 	req_access = list(access_armory)
@@ -66,7 +66,7 @@
 	// WHY MUST WE DO THIS
 	// WHY
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
+		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
 			health -= Proj.damage
 	..()
 	if(health <= 0)
@@ -112,7 +112,7 @@
 	return
 
 /obj/item/weapon/storage/lockbox/loyalty
-	name = "Lockbox (Loyalty Implants)"
+	name = "lockbox (loyalty implants)"
 	req_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/loyalty/New()
@@ -123,7 +123,7 @@
 	new /obj/item/weapon/implanter/loyalty(src)
 
 /obj/item/weapon/storage/lockbox/tracking
-	name = "Lockbox (Tracking Implants)"
+	name = "lockbox (tracking implants)"
 	req_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/tracking/New()
@@ -135,7 +135,7 @@
 	new /obj/item/weapon/implanter(src)
 
 /obj/item/weapon/storage/lockbox/chem
-	name = "Lockbox (Chemical Implants)"
+	name = "lockbox (chemical implants)"
 	req_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/chem/New()
@@ -189,9 +189,8 @@
 	name = "coinbox"
 	desc = "A secure container for the profits of a vending machine."
 	icon_state = "coinbox+l"
-	w_class = 2
-	max_w_class = 1
-	can_hold = list("/obj/item/voucher","/obj/item/weapon/coin","/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin","/obj/item/weapon/reagent_containers/food/snacks/chococoin")
+	w_class = W_CLASS_SMALL
+	can_only_hold = list("/obj/item/voucher","/obj/item/weapon/coin","/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin","/obj/item/weapon/reagent_containers/food/snacks/chococoin")
 	max_combined_w_class = 30
 	force = 8
 	throwforce = 10
@@ -202,3 +201,11 @@
 	icon_locked = "coinbox+l"
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
+
+/obj/item/weapon/storage/lockbox/lawgiver
+	name = "lockbox (lawgiver)"
+	req_access = list(access_armory)
+
+/obj/item/weapon/storage/lockbox/lawgiver/New()
+	..()
+	new /obj/item/weapon/gun/lawgiver(src)

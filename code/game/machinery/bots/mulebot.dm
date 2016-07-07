@@ -10,7 +10,9 @@ var/global/mulebot_count = 0
 	name = "\improper MULEbot"
 	desc = "A Multiple Utility Load Effector bot."
 	icon_state = "mulebot0"
+	icon_initial = "mulebot"
 	layer = MOB_LAYER
+	plane = PLANE_MOB
 	density = 1
 	anchored = 1
 	animate_movement=1
@@ -114,7 +116,7 @@ var/global/mulebot_count = 0
 	if(istype(I,/obj/item/weapon/card/emag))
 		locked = !locked
 		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] the mulebot's controls!</span>")
-		flick("mulebot-emagged", src)
+		flick("[icon_initial]-emagged", src)
 		playsound(get_turf(src), 'sound/effects/sparks1.ogg', 100, 0)
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
@@ -136,13 +138,13 @@ var/global/mulebot_count = 0
 		if(open)
 			src.visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
 			on = 0
-			icon_state="mulebot-hatch"
+			icon_state="[icon_initial]-hatch"
 		else
 			src.visible_message("[user] closes the maintenance hatch of [src]", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
-			icon_state = "mulebot0"
+			icon_state = "[icon_initial]0"
 
 		updateDialog()
-	else if (istype(I, /obj/item/weapon/wrench))
+	else if (iswrench(I))
 		if (src.health < maxhealth)
 			src.health = min(maxhealth, src.health+25)
 			user.visible_message(
@@ -425,7 +427,7 @@ var/global/mulebot_count = 0
 	if(get_dist(C, src) > 1 || load || !on)
 		return
 	for(var/obj/structure/plasticflaps/P in src.loc)//Takes flaps into account
-		if(!CanPass(C,P))
+		if(!Cross(C,P))
 			return
 	mode = 1
 
@@ -478,7 +480,7 @@ var/global/mulebot_count = 0
 	if(dirn)
 		var/turf/T = src.loc
 		T = get_step(T,dirn)
-		if(CanPass(load,T))//Can't get off onto anything that wouldn't let you pass normally
+		if(Cross(load,T))//Can't get off onto anything that wouldn't let you pass normally
 			step(load, dirn)
 		else
 			load.loc = src.loc//Drops you right there, so you shouldn't be able to get yourself stuck
@@ -536,7 +538,7 @@ var/global/mulebot_count = 0
 //	to_chat(if(mode) world, "Mode: [mode]")
 	switch(mode)
 		if(0)		// idle
-			icon_state = "mulebot0"
+			icon_state = "[icon_initial]0"
 			return
 		if(1)		// loading/unloading
 			return
@@ -675,7 +677,7 @@ var/global/mulebot_count = 0
 		mode = 3
 	else
 		mode = 2
-	icon_state = "mulebot[(wires.MobAvoid() != 0)]"
+	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
 // starts bot moving to home
 // sends a beacon query to find
@@ -683,7 +685,7 @@ var/global/mulebot_count = 0
 	spawn(0)
 		set_destination(home_destination)
 		mode = 4
-	icon_state = "mulebot[(wires.MobAvoid() != 0)]"
+	icon_state = "[icon_initial][(wires.MobAvoid() != 0)]"
 
 // called when bot reaches current target
 /obj/machinery/bot/mulebot/proc/at_target()
@@ -748,12 +750,12 @@ var/global/mulebot_count = 0
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
 	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,15)
-	H.apply_damage(2*damage, BRUTE, "head")
-	H.apply_damage(2*damage, BRUTE, "chest")
-	H.apply_damage(0.5*damage, BRUTE, "l_leg")
-	H.apply_damage(0.5*damage, BRUTE, "r_leg")
-	H.apply_damage(0.5*damage, BRUTE, "l_arm")
-	H.apply_damage(0.5*damage, BRUTE, "r_arm")
+	H.apply_damage(2*damage, BRUTE, LIMB_HEAD)
+	H.apply_damage(2*damage, BRUTE, LIMB_CHEST)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_LEFT_LEG)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_RIGHT_LEG)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_LEFT_ARM)
+	H.apply_damage(0.5*damage, BRUTE, LIMB_RIGHT_ARM)
 	bloodiness += 4
 	currentBloodColor=bloodcolor // For if species get different blood colors.
 
@@ -835,7 +837,7 @@ var/global/mulebot_count = 0
 				loaddir = text2num(direction)
 			else
 				loaddir = 0
-			icon_state = "mulebot[(wires.MobAvoid() != null)]"
+			icon_state = "[icon_initial][(wires.MobAvoid() != null)]"
 			calc_path()
 			updateDialog()
 

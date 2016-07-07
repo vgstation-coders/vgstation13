@@ -5,7 +5,29 @@
 // fun if you want to typecast humans/monkeys/etc without writing long path-filled lines.
 #define ishuman(A) istype(A, /mob/living/carbon/human)
 
+#define isjusthuman(A) (ishuman(A) && A.species && istype(A.species, /datum/species/human))
+
 #define ismonkey(A) istype(A, /mob/living/carbon/monkey)
+
+#define isvox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/vox))
+
+#define isdiona(A) (ishuman(A) && A.species && istype(A.species, /datum/species/diona))
+
+#define isgrey(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grey))
+
+#define isplasmaman(A) (ishuman(A) && A.species && istype(A.species, /datum/species/plasmaman))
+
+#define isskellington(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skellington))
+
+#define iscatbeast(A) (ishuman(A) && A.species && istype(A.species, /datum/species/tajaran))
+
+#define isunathi(A) (ishuman(A) && A.species && istype(A.species, /datum/species/unathi))
+
+#define isskrell(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skrell))
+
+#define ismuton(A) (ishuman(A) && A.species && istype(A.species, /datum/species/muton))
+
+#define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
 #define isbrain(A) istype(A, /mob/living/carbon/brain)
 
@@ -83,6 +105,8 @@
 
 #define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
 
+#define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
+
 #define isscrewdriver(A) istype(A, /obj/item/weapon/screwdriver)
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
@@ -104,6 +128,10 @@
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
+
+#define isclient(A) (istype(A, /client))
+
+#define isatom(A) (istype(A, /atom))
 
 //Macros for antags
 
@@ -136,6 +164,9 @@
 
 #define isspace(A) (A.type == /area)
 
+//This one returns the "space" area
+#define get_space_area (get_area(locate(1,1,2))) //xd
+
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
 //x is the number you want to clamp
@@ -153,6 +184,11 @@
 	dview_mob.loc = center; \
 	dview_mob.see_invisible = invis_flags; \
 	for(type in view(range, dview_mob))
+
+//get_turf(): Returns the turf that contains the atom.
+//Example: A fork inside a box inside a locker will return the turf the locker is standing on.
+//Yes, this is the fastest known way to do it.
+#define get_turf(A) (get_step(A, 0))
 
 //HARDCORE MODE STUFF (mainly hunger)
 

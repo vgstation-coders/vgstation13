@@ -48,7 +48,7 @@ Feel free to do whatever with this if you think it lacks.
 		return
 
 	if(storedpda)
-		overlays += "[initial(icon_state)]-closed"
+		overlays += image(icon = icon, icon_state = "[initial(icon_state)]-closed")
 
 	if(powered())
 		icon_state = initial(icon_state)
@@ -120,7 +120,7 @@ Feel free to do whatever with this if you think it lacks.
 			storedpda.name = initial(P.name)
 
 		sleep(10)
-		src.visible_message("\icon [src] \The [src] beeps: \"Successfully recolored to \a [storedpda]\"")
+		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully recolored to \a [storedpda]\"")
 		busy = 0 //do not forget this
 
 	else

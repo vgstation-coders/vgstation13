@@ -46,8 +46,7 @@
 
 	if(stat & (NOPOWER | BROKEN) && id) //Power out/this thing is broken, but at least allow the guy to take his ID out if it's still in there.
 		id.forceMove(get_turf(src))
-		if(!user.get_active_hand()) //User's hand is empty.
-			user.put_in_hands(id)
+		user.put_in_hands(id)
 
 		to_chat(user, "<span class='notify'>You pry the ID card out of \the [src]</span>")
 		id = null
@@ -172,9 +171,8 @@
 			return
 
 		id.forceMove(get_turf(src))
-		if(!usr.get_active_hand()) //Nothing in the user's hand.
+		if(usr.Adjacent(src))
 			usr.put_in_hands(id)
-
 		id = null
 		updateUsrDialog()
 		return 1
@@ -427,7 +425,7 @@
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.CanPass(mover, in_T) || !in_T.Enter(mover) || !out_T.CanPass(mover, out_T) || !out_T.Enter(mover))
+	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
 		return
 
 	grab_ores() //Grab some more ore to process this tick.

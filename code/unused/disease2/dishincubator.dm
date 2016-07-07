@@ -166,11 +166,11 @@
 
 
 		if(beaker)
-			if(!beaker.reagents.remove_reagent("virusfood",5))
+			if(!beaker.reagents.remove_reagent(VIRUSFOOD,5))
 				foodsupply += 20
 			if(!beaker.reagents.remove_reagent("toxins",1))
 				toxins += 1
 
 	proc/state(var/msg)
 		for(var/mob/O in hearers(src, null))
-			O.show_message("\icon[src] <span class='notice'>[msg]</span>", 2)
+			O.show_message("[bicon(src)] <span class='notice'>[msg]</span>", 2)

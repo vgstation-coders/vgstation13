@@ -232,8 +232,8 @@
 	M.Paralyse(2)
 	M.Weaken(2)
 	M.Stun(2)
-	if(M.reagents.get_reagent_amount("inaprovaline") < 5)
-		M.reagents.add_reagent("inaprovaline", 5)
+	if(M.reagents.get_reagent_amount(INAPROVALINE) < 5)
+		M.reagents.add_reagent(INAPROVALINE, 5)
 	S.chassis.use_power(S.energy_drain)
 	S.update_equip_info()
 	return
@@ -407,7 +407,7 @@
 	..()
 	flags |= NOREACT
 	syringes = new
-	known_reagents = list("inaprovaline"="Inaprovaline","anti_toxin"="Anti-Toxin (Dylovene)")
+	known_reagents = list(INAPROVALINE="Inaprovaline",ANTI_TOXIN="Anti-Toxin (Dylovene)")
 	processed_reagents = new
 	create_reagents(max_volume)
 	synth = new (list(src),0)
@@ -597,11 +597,11 @@
 			occupant_message("The syringe is too far away.")
 			return 0
 		for(var/obj/structure/D in S.loc)//Basic level check for structures in the way (Like grilles and windows)
-			if(!(D.CanPass(S,src.loc)))
+			if(!(D.Cross(S,src.loc)))
 				occupant_message("Unable to load syringe.")
 				return 0
 		for(var/obj/machinery/door/D in S.loc)//Checks for doors
-			if(!(D.CanPass(S,src.loc)))
+			if(!(D.Cross(S,src.loc)))
 				occupant_message("Unable to load syringe.")
 				return 0
 		S.reagents.trans_to(src, S.reagents.total_volume)

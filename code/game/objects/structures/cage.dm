@@ -27,14 +27,35 @@
 
 	update_icon()
 
+/obj/structure/cage/autoclose/New() //Close when created - catching any creatures on the same turf
+	..()
+
+	spawn()
+		toggle_door() //Open it
+		toggle_door() //Close it again!
+
+/obj/structure/cage/autoclose/cover/New()
+	..()
+
+	spawn()
+		toggle_cover()
+
+/obj/structure/cage/Destroy()
+	for(var/atom/movable/M in contents)
+		M.forceMove(src.loc)
+
+	..()
+
 /obj/structure/cage/update_icon()
 	overlays = list()
 
 	if(cover_state == C_CLOSED)
 		var/image/cover_overlay = image('icons/obj/cage.dmi', icon_state = "cage_cover", layer = OBJ_LAYER)
+		cover_overlay.plane = PLANE_OBJ
 		overlays += cover_overlay
 	else if(door_state == C_CLOSED) //Door is only visible when the cover is open
 		var/image/door_overlay = image('icons/obj/cage.dmi', icon_state = "cage_door", layer = MOB_LAYER + 0.5) //Above mobs
+		door_overlay.plane = PLANE_MOB
 		overlays += door_overlay
 
 /obj/structure/cage/attack_animal(mob/living/simple_animal/user)
@@ -47,16 +68,18 @@
 		else
 			toggle_door(user)
 
-/obj/structure/cage/examine(mob/user)
-	..()
+/obj/structure/cage/verb/toggle_cover_v()
+	set name = "Toggle Cover"
+	set category = "Object"
+	set src in oview(1)
 
-	to_chat(user, "<span class='info'>Alt + click opens/closes the cage's cover.</span>")
+	return AltClick()
 
 /obj/structure/cage/AltClick()
 	if(Adjacent(usr) && !usr.incapacitated() && !mob_is_inside(usr))
 		toggle_cover(usr)
 
-/obj/structure/cage/attackby(obj/W, mob/user)
+/obj/structure/cage/attackby(obj/item/W, mob/user)
 	if(iswrench(W))
 		if(anchored)
 			to_chat(user, "<span class='info'>You start unsecuring \the [src] from \the [loc].</span>")
@@ -73,6 +96,19 @@
 				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")
 
 		return 1
+	else if(door_state == C_CLOSED)
+		if(W.force >= 20 && (W.is_sharp() >= 1.0 || W.is_hot()))
+			var/time = 15 SECONDS
+
+			user.visible_message("<span class='danger'>[user] starts forcing \the [src]'s door open with \the [W]!</span>", "<span class='info'>You start forcing \the [src]'s door open with \the [W]. This will take around [(time / 10)] seconds.</span>")
+			if(do_after(user, src, time))
+				if(door_state == C_CLOSED) toggle_door(user)
+
+		else
+			if(W.force < 20) //Force
+				to_chat(user, "<span class='info'>\The [W] won't damage \the [src]'s bars.</span>")
+			else //No sharpness/hotness
+				to_chat(user, "<span class='info'>\The [W] isn't sharp or hot enough to cut through \the [src]'s bars!</span>")
 
 /obj/structure/cage/relaymove(mob/living/user)
 	if(!istype(user)) return
@@ -115,6 +151,10 @@
 
 		return 1
 
+/obj/structure/cage/attack_robot(mob/living/user)
+	if(Adjacent(user))
+		attack_hand(user)
+
 //How the cage cover is implemented
 //When it's closed, mobs are stored in the cage's contents. This causes them to be unable to interact with the outside world or move
 //When it's opened, mobs are atom locked to the cage. This causes them to be able to interact with the outside world, but they still can't move
@@ -126,7 +166,7 @@
 		cover_state = C_CLOSED
 		if(user) user.visible_message("<span class='info'>\The [user] closes \the [src]'s cover.</span>")
 
-		for(var/mob/living/L in locked_atoms) //Move atom locked mobs inside
+		for(var/mob/living/L in get_locked(/datum/locking_category/cage)) //Move atom locked mobs inside
 			unlock_atom(L)
 			L.forceMove(src)
 
@@ -136,7 +176,7 @@
 
 		for(var/mob/living/L in contents) //Move hidden mobs to the outside
 			L.forceMove(get_turf(src))
-			lock_atom(L)
+			lock_atom(L, /datum/locking_category/cage)
 
 	update_icon()
 
@@ -154,20 +194,21 @@
 		if(C_CLOSED) //Open the door
 			if(cover_state == C_CLOSED) toggle_cover() //Open the cover, too
 
-			door_state = C_OPENED
-			density = 0
-
-			for(var/mob/living/L in (contents + locked_atoms))
+			for(var/mob/living/L in (contents + get_locked(/datum/locking_category/cage)))
 				unlock_atom(L)
 				L.forceMove(get_turf(src))
 
+			door_state = C_OPENED
+			density = 0
+
+	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 	update_icon()
 
 /obj/structure/cage/proc/add_mob(mob/victim)
 	switch(cover_state)
 		if(C_OPENED) //Cover is opened - mob is atom locked to the cage
 			victim.forceMove(get_turf(src))
-			lock_atom(victim)
+			lock_atom(victim, /datum/locking_category/cage)
 			to_chat(victim, "<span class='notice'>You suddenly find yourself locked in a cage!</span>")
 		if(C_CLOSED) //Cover is closed - mob is stored inside the cage
 			victim.forceMove(src)
@@ -178,3 +219,6 @@
 
 #undef C_OPENED
 #undef C_CLOSED
+
+/datum/locking_category/cage
+	flags = LOCKED_CAN_LIE_AND_STAND | CANT_BE_MOVED_BY_LOCKED_MOBS

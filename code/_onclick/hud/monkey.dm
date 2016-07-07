@@ -1,6 +1,5 @@
 /datum/hud/proc/monkey_hud(var/ui_style='icons/mob/screen1_old.dmi')
-
-
+	var/mob/living/carbon/monkey/MO = mymob //sorry
 	src.adding = list()
 	src.other = list()
 
@@ -84,15 +83,19 @@
 	using.layer = 19
 	src.adding += using
 
+	init_hand_icons(ui_style)
+
+	/*
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "r_hand"
 	inv_box.dir = WEST
 	inv_box.icon = ui_style
 	inv_box.icon_state = "hand_inactive"
-	if(mymob && !mymob.hand)	//This being 0 or null means the right hand is in use
+	if(mymob && mymob.active_hand == GRASP_RIGHT_HAND)
 		inv_box.icon_state = "hand_active"
 	inv_box.screen_loc = ui_rhand
-	inv_box.slot_id = slot_r_hand
+	inv_box.slot_id = null
+	inv_box.hand_index = GRASP_RIGHT_HAND
 	inv_box.layer = 19
 	src.r_hand_hud_object = inv_box
 	src.adding += inv_box
@@ -102,13 +105,15 @@
 	inv_box.dir = EAST
 	inv_box.icon = ui_style
 	inv_box.icon_state = "hand_inactive"
-	if(mymob && mymob.hand)	//This being 1 means the left hand is in use
+	if(mymob && mymob.active_hand == GRASP_LEFT_HAND)
 		inv_box.icon_state = "hand_active"
 	inv_box.screen_loc = ui_lhand
-	inv_box.slot_id = slot_l_hand
+	inv_box.slot_id = null
+	inv_box.hand_index = GRASP_LEFT_HAND
 	inv_box.layer = 19
 	src.l_hand_hud_object = inv_box
 	src.adding += inv_box
+	*/
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
@@ -136,41 +141,36 @@
 	using.layer = 19
 	src.adding += using
 
-	mymob.m_suitclothesbg = getFromPool(/obj/screen)
-	mymob.m_suitclothesbg.icon = ui_style
-	mymob.m_suitclothesbg.icon_state = "center"
-	mymob.m_suitclothesbg.name = "uniform"
-	mymob.m_suitclothesbg.screen_loc = ui_monkey_uniform
+	if(MO.canWearClothes)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "i_clothing"
+		inv_box.dir = SOUTH
+		inv_box.icon = ui_style
+		inv_box.slot_id = slot_w_uniform
+		inv_box.icon_state = "center"
+		inv_box.screen_loc = ui_monkey_uniform
+		inv_box.layer = 19
+		src.adding += inv_box
 
-	mymob.m_suitclothes = getFromPool(/obj/screen)
-	mymob.m_suitclothes.icon = 'icons/mob/monkey.dmi'
-	mymob.m_suitclothes.icon_state = "none"
-	mymob.m_suitclothes.name = "uniform"
-	mymob.m_suitclothes.screen_loc = ui_monkey_uniform
+	if(MO.canWearHats)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "head"
+		inv_box.icon = ui_style
+		inv_box.icon_state = "hair"
+		inv_box.screen_loc = ui_monkey_hat
+		inv_box.slot_id = slot_head
+		inv_box.layer = 19
+		src.adding += inv_box
 
-	mymob.m_hatbg = getFromPool(/obj/screen)
-	mymob.m_hatbg.icon = ui_style
-	mymob.m_hatbg.icon_state = "hair"
-	mymob.m_hatbg.name = "hat"
-	mymob.m_hatbg.screen_loc = ui_monkey_hat
-
-	mymob.m_hat = getFromPool(/obj/screen)
-	mymob.m_hat.icon = 'icons/obj/clothing/hats.dmi'
-	mymob.m_hat.icon_state = "none"
-	mymob.m_hat.name = "hat"
-	mymob.m_hat.screen_loc = ui_monkey_hat
-
-	mymob.m_glassesbg = getFromPool(/obj/screen)
-	mymob.m_glassesbg.icon = ui_style
-	mymob.m_glassesbg.icon_state = "glasses"
-	mymob.m_glassesbg.name = "glasses"
-	mymob.m_glassesbg.screen_loc = ui_monkey_glasses
-
-	mymob.m_glasses = getFromPool(/obj/screen)
-	mymob.m_glasses.icon = 'icons/obj/clothing/glasses.dmi'
-	mymob.m_glasses.icon_state = "none"
-	mymob.m_glasses.name = "glasses"
-	mymob.m_glasses.screen_loc = ui_monkey_glasses
+	if(MO.canWearGlasses)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "eyes"
+		inv_box.icon = ui_style
+		inv_box.icon_state = "glasses"
+		inv_box.screen_loc = ui_monkey_glasses
+		inv_box.slot_id = slot_glasses
+		inv_box.layer = 19
+		src.adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
 	inv_box.name = "mask"
@@ -246,21 +246,6 @@
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 
-	mymob.blind = getFromPool(/obj/screen)
-	mymob.blind.icon = 'icons/mob/screen1_full.dmi'
-	mymob.blind.icon_state = "blackimageoverlay"
-	mymob.blind.name = ""
-	mymob.blind.screen_loc = "1,1"
-	mymob.blind.layer = 0
-	mymob.blind.mouse_opacity = 1
-
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = ui_style
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = 17
-
 	mymob.zone_sel = getFromPool(/obj/screen/zone_sel)
 	mymob.zone_sel.icon = ui_style
 	mymob.zone_sel.overlays.len = 0
@@ -288,7 +273,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.m_hatbg, mymob.m_hat, mymob.m_suitclothesbg, mymob.m_suitclothes, mymob.m_glassesbg, mymob.m_glasses, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.blind, mymob.flash, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
 	mymob.client.screen += src.adding + src.other
 
 	return

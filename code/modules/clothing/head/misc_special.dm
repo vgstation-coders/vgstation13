@@ -5,6 +5,7 @@
  *		Ushanka
  *		Pumpkin head
  *		Kitty ears
+ *		Butt
  *		Tinfoil Hat
  */
 
@@ -25,7 +26,7 @@
 	body_parts_covered = FACE
 	action_button_name = "Toggle Welding Helmet"
 	siemens_coefficient = 0.9
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -79,7 +80,7 @@
 	if(istype(location, /mob/))
 		var/mob/living/carbon/human/M = location
 		if(istype(M))
-			if(M.l_hand == src || M.r_hand == src || M.head == src)
+			if(M.head == src || M.is_holding_item(src))
 				location = M.loc
 		else
 			return
@@ -183,7 +184,7 @@
 	item_state = "butt"
 	flags = 0
 	force = 4.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 2
 	throw_speed = 3
 	throw_range = 5

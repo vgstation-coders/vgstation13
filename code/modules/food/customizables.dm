@@ -104,7 +104,7 @@
 	. = ..()
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
-	src.reagents.add_reagent("nutriment",3)
+	src.reagents.add_reagent(NUTRIMENT,3)
 	src.updateName()
 	return
 
@@ -119,10 +119,9 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/SC = S
 			if(src.fullyCustom && SC.fullyCustom)
 				to_chat(user, "<span class='warning'>You slap yourself on the back of the head for thinking that stacking plates is an interesting dish.</span>")
-				message_admins("<span class='warning'>POSSIBLE EXPLOIT ATTEMPT:</span> [key_name_admin(user)] tried to stack multiple plates together, which used to generate excessive atom names, resulting in crashes. See <a href='https://github.com/d3athrow/vgstation13/issues/6402'>#6402</a>.")
 				return
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
-			to_chat(user, "<span class='warning'>[pick("Sorry, no recursive food.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
+			to_chat(user, "<span class='warning'>[pick("As uniquely original as that idea is, you can't figure out how to perform it.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 			return
 		if(!user.drop_item(I, src))
 			user << "<span class='warning'>\The [I] is stuck to your hands!</span>"
@@ -434,28 +433,28 @@
 	name = "wine"
 	desc = "Classy."
 	icon_state = "winecustom"
-	initReagent = "wine"
+	initReagent = WINE
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/whiskey
 	name = "whiskey"
 	desc = "A bottle of quite-a-bit-proof whiskey."
 	icon_state = "whiskeycustom"
-	initReagent = "whiskey"
+	initReagent = WHISKEY
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vermouth
 	name = "vermouth"
 	desc = "Shaken, not stirred."
 	icon_state = "vermouthcustom"
-	initReagent = "vermouth"
+	initReagent = VERMOUTH
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vodka
 	name = "vodka"
 	desc = "Get drunk, comrade."
 	icon_state = "vodkacustom"
-	initReagent = "vodka"
+	initReagent = VODKA
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/ale
 	name = "ale"
 	desc = "Strike the asteroid!"
 	icon_state = "alecustom"
-	initReagent = "ale"
+	initReagent = ALE

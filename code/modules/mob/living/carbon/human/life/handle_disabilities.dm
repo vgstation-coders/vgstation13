@@ -16,7 +16,7 @@
 	if(disabilities & COUGHING)
 		if((prob(5) && paralysis <= 1))
 			drop_item()
-			emote("cough")
+			audible_cough(src)
 	if(disabilities & TOURETTES)
 		if((prob(10) && paralysis <= 1))
 			//Stun(10)
@@ -87,7 +87,7 @@
 				to_chat(src, "<span class='warning'>It becomes hard to see for some reason.</span>")
 				eye_blurry = 10
 		if(getBrainLoss() >= 35)
-			if(7 <= rn && rn <= 9) if(hand && get_active_hand())
+			if(7 <= rn && rn <= 9) if(get_active_hand())
 				to_chat(src, "<span class='warning'>Your hand won't respond properly, you drop what you're holding.</span>")
 				drop_item()
 		if(getBrainLoss() >= 50)

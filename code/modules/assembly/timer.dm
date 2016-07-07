@@ -41,7 +41,7 @@
 	if(!secured)	return 0
 	pulse(0)
 	if(!holder)
-		visible_message("\icon[src] *beep* *beep*", "*beep* *beep*")
+		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	cooldown = 2
 	spawn(10)
 		process_cooldown()
@@ -61,8 +61,8 @@
 	overlays.len = 0
 	attached_overlays = list()
 	if(timing)
-		overlays += "timer_timing"
 		attached_overlays += "timer_timing"
+		overlays += image(icon = icon, icon_state = "timer_timing")
 	if(holder)
 		holder.update_icon()
 	return
