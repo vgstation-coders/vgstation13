@@ -376,6 +376,9 @@
 			alphas["vampire_cloak"] = round((255 * 0.80))
 
 /mob/proc/can_suck(mob/living/carbon/target) 
+	if(lying || incapacitated())
+		to_chat(src, "<span class='warning'> You cannot do this while on the ground!</span>")
+		return 0
 	if(ishuman(target))
 		var/mob/living/carbon/human/T = target
 		if(T.check_body_part_coverage(MOUTH))
