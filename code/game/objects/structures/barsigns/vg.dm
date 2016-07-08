@@ -77,3 +77,23 @@
 	name = "Honking Clown"
 	icon = "clown"
 	desc = "Bananas not included."
+
+/datum/barsign/vg/thesingulo
+	name = "The Singulo"
+	icon = "thesingulo"
+	desc = "For when you want your sorrows sucked away."
+
+/datum/barsign/vg/drunkcarp
+	name = "The Drunk Carp"
+	icon = "drunkcarp"
+	desc = "Man and carp, co-existing for a good drink."
+
+/datum/barsign/vg/harmbaton
+	name = "The Harm Baton"
+	icon = "harmbaton"
+	desc = "Now with less greyshirt!"
+
+/datum/barsign/vg/scotchservinwilly
+	name = "Scotch Servin' Willy's"
+	icon = "scotchservinwilly"
+	desc = "No shirt, no shoes, yes service!"
