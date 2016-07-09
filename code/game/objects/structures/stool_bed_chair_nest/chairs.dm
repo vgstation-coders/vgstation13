@@ -4,6 +4,7 @@
 	icon_state = "chair"
 	sheet_amt = 1
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
+	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/overrideghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
 
 	lock_type = /datum/locking_category/chair
@@ -153,8 +154,12 @@
 	..()
 	if(locked_atoms.len)
 		overlays += buckle_overlay
+		if(secondary_buckle_overlay)
+			overlays += secondary_buckle_overlay
 	else
 		overlays -= buckle_overlay
+		if(secondary_buckle_overlay)
+			overlays -= secondary_buckle_overlay
 
 /obj/structure/bed/chair/comfy/brown
 	icon_state = "comfychair_brown"
@@ -233,29 +238,30 @@
 	anchored = 1
 	overrideghostspin = 1
 	var/image/legs
-	var/couch_colour = "#37FDFC"  // currently cyan for testing
-	var/colourName = "grey" // dont think ill need this
+	color = null
 
 // layer stuff
 
 /obj/structure/bed/chair/comfy/couch/New()
 
 	legs = image("icons/obj/objects.dmi", "[icon_state]_legs", MOB_LAYER - 0.1)		// since i dont want the legs colored they are a separate overlay
-	legs.plane = PLANE_MOB
+	legs.plane = PLANE_MOB															//
+	legs.appearance_flags = RESET_COLOR												//
 	overlays += legs
+	secondary_buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]_armrest_legs", MOB_LAYER + 0.2)		// since i dont want the legs colored they are a separate overlay
+	secondary_buckle_overlay.plane = PLANE_MOB															//
+	secondary_buckle_overlay.appearance_flags = RESET_COLOR
 	..()
-	if(couch_colour)  // the couch color will have null as default
-		buckle_overlay.icon += couch_colour // doesnt work (why?)
-		icon += couch_colour // doesnt work
+	overlays += buckle_overlay
 
 
 /obj/structure/bed/chair/comfy/couch/turn/handle_layer() // makes sure mobs arent buried under certain chair sprites
 	layer = OBJ_LAYER
 	plane = PLANE_OBJ
 
-/obj/structure/bed/chair/comfy/couch/turn/New()			 // adds in the overlay at all times so that it looks like mobs are in the couch rather than infront of or buried under it
-	..()
-	overlays += buckle_overlay							 // since the corners are "3 dimensional" the sprites were a bit tricky.
+
+
+
 
 
 
@@ -280,72 +286,80 @@
 	icon_state = "couch_turn_out"
 
 
+// #cbcab9 beige
 
-// Beige couch
-
-/obj/structure/bed/chair/comfy/couch/left/beige // might be better to do ..../biege/(direction) so that one can add different flavour text for different colors more easily
-	icon_state = "couch_left_beige"				// but since i need to fix the sprites for the .../turn/... parts this is the way it is
-
+/obj/structure/bed/chair/comfy/couch/left/beige
+	color = "#cbcab9"
 /obj/structure/bed/chair/comfy/couch/right/beige
-	icon_state = "couch_right_beige"
-
-/obj/structure/bed/chair/comfy/couch/mid/beige // mid refers to a straight couch part
-	icon_state = "couch_mid_beige"
-
-/obj/structure/bed/chair/comfy/couch/turn/inward/beige // and turn is a corner couch part
-	icon_state = "couch_turn_in_beige"
-
+	color = "#cbcab9"
+/obj/structure/bed/chair/comfy/couch/mid/beige
+	color = "#cbcab9"
+/obj/structure/bed/chair/comfy/couch/turn/inward/beige
+	color = "#cbcab9"
 /obj/structure/bed/chair/comfy/couch/turn/outward/beige
-	icon_state = "couch_turn_out_beige"
+	color = "#cbcab9"
 
-// Red couch
+// #bab866 lime
+/obj/structure/bed/chair/comfy/couch/left/lime
+	color = "#bab866"
+/obj/structure/bed/chair/comfy/couch/right/lime
+	color = "#bab866"
+/obj/structure/bed/chair/comfy/couch/mid/lime
+	color = "#bab866"
+/obj/structure/bed/chair/comfy/couch/turn/inward/lime
+	color = "#bab866"
+/obj/structure/bed/chair/comfy/couch/turn/outward/lime
 
-/obj/structure/bed/chair/comfy/couch/left/red
-	icon_state = "couch_left_red"
 
-/obj/structure/bed/chair/comfy/couch/right/red
-	icon_state = "couch_right_red"
+// #ae774c brown
 
-/obj/structure/bed/chair/comfy/couch/mid/red
-	icon_state = "couch_mid_red"
+/obj/structure/bed/chair/comfy/couch/left/brown
+	color = "#ae774c"
+/obj/structure/bed/chair/comfy/couch/right/brown
+	color = "#ae774c"
+/obj/structure/bed/chair/comfy/couch/mid/brown
+	color = "#ae774c"
+/obj/structure/bed/chair/comfy/couch/turn/inward/brown
+	color = "#ae774c"
+/obj/structure/bed/chair/comfy/couch/turn/outward/brown
+	color = "#ae774c"
 
-/obj/structure/bed/chair/comfy/couch/turn/inward/red
-	icon_state = "couch_turn_in_red"
-
-/obj/structure/bed/chair/comfy/couch/turn/outward/red
-	icon_state = "couch_turn_out_red"
-
-// Black couch
-
-/obj/structure/bed/chair/comfy/couch/left/black
-	icon_state = "couch_left_black"
-
-/obj/structure/bed/chair/comfy/couch/right/black
-	icon_state = "couch_right_black"
-
-/obj/structure/bed/chair/comfy/couch/mid/black
-	icon_state = "couch_mid_black"
-
-/obj/structure/bed/chair/comfy/couch/turn/inward/black
-	icon_state = "couch_turn_in_black"
-
-/obj/structure/bed/chair/comfy/couch/turn/outward/black
-	icon_state = "couch_turn_out_black"
-
-//Teal couch
+// #66baba teal
 
 /obj/structure/bed/chair/comfy/couch/left/teal
-	icon_state = "couch_left_teal"
-
+	color = "#66baba"
 /obj/structure/bed/chair/comfy/couch/right/teal
-	icon_state = "couch_right_teal"
-
+	color = "#66baba"
 /obj/structure/bed/chair/comfy/couch/mid/teal
-	icon_state = "couch_mid_teal"
-
+	color = "#66baba"
 /obj/structure/bed/chair/comfy/couch/turn/inward/teal
-	icon_state = "couch_turn_in_teal"
-
+	color = "#66baba"
 /obj/structure/bed/chair/comfy/couch/turn/outward/teal
-	icon_state = "couch_turn_out_teal"
+	color = "#66baba"
 
+// #81807c black
+
+/obj/structure/bed/chair/comfy/couch/left/black
+	color = "#81807c"
+/obj/structure/bed/chair/comfy/couch/right/black
+	color = "#81807c"
+/obj/structure/bed/chair/comfy/couch/mid/black
+	color = "#81807c"
+/obj/structure/bed/chair/comfy/couch/turn/inward/black
+	color = "#81807c"
+/obj/structure/bed/chair/comfy/couch/turn/outward/black
+	color = "#81807c"
+
+
+// #c94c4c red
+
+/obj/structure/bed/chair/comfy/couch/left/red
+	color = "#c94c4c"
+/obj/structure/bed/chair/comfy/couch/right/red
+	color = "#c94c4c"
+/obj/structure/bed/chair/comfy/couch/mid/red
+	color = "#c94c4c"
+/obj/structure/bed/chair/comfy/couch/turn/inward/red
+	color = "#c94c4c"
+/obj/structure/bed/chair/comfy/couch/turn/outward/red
+	color = "#c94c4c"
