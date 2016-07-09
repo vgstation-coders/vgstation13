@@ -22,7 +22,7 @@
 #################################
 
 # Your name.
-author: u
+author: ultraPLEN
 
 # Optional: Remove this file after generating master changelog.  Useful for PR changelogs that won't get used again.
 delete-after: True
@@ -33,12 +33,14 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- rscadd: "added modular couches"
+- rscadd: "Added modular couches."
 
-- bugfix: "fixed a problem with the officer chairs overlay"
+- bugfix: "Fixed a problem with the office chairs´ overlay."
 
-- tweak: "made buckle_overlay the standard variable for overlays in chairs"
+- tweak: "Made buckle_overlay the standard variable for overlays in chairs."
 
-- tweak: "minor tweaks to couch sprites to make them fit together better"
+- tweak: "Minor tweaks to some couch sprites to make them fit together better."
 
-- bugfix: "unfucked my changelog, hopefully"
+- bugfix: "Unfucked my changelog, hopefully."
+
+- bugfix: "Second unfuck attempt."
