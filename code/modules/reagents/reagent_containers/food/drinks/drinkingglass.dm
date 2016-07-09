@@ -14,18 +14,8 @@
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
 
-//removed smashing - now uses smashing proc from drinks.dm - Hinaichigo
-//also now produces a broken glass when smashed instead of just a shard
-
 	on_reagent_change()
 		..()
-		/*if(reagents.reagent_list.len > 1 )
-			icon_state = "glass_brown"
-			name = "Glass of Hooch"
-			desc = "Two or more drinks, mixed together."*/
-		/*else if(reagents.reagent_list.len == 1)
-			for(var/datum/reagent/R in reagents.reagent_list)
-				switch(R.id)*/
 		viewcontents = 1
 		overlays.len = 0
 		if (reagents.reagent_list.len > 0)
@@ -36,6 +26,7 @@
 			light_color = null
 			set_light(0)
 			isGlass = 1
+			origin_tech = ""
 			switch(reagents.get_master_reagent_id())
 				if(BEER)
 					icon_state = "beerglass"
@@ -481,6 +472,57 @@
 					icon_state = PINACOLADA
 					name = "\improper Pina Colada"
 					desc = "If you like this and getting caught in the rain, come with me and escape."
+				if(SCIENTISTS_SERENDIPITY)
+					if(reagents.get_reagent_amount(SCIENTISTS_SERENDIPITY)<10) //You need at least 10u to get the tech bonus
+						icon_state = "scientists_surprise"
+						name = "\improper Scientist's Surprise"
+						desc = "There is as yet insufficient data for a meaningful answer."
+					else
+						icon_state = SCIENTISTS_SERENDIPITY
+						name = "\improper Scientist's Serendipity"
+						desc = "Knock back a cold glass of R&D."
+						origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
+				if(METABUDDY)
+					icon_state = METABUDDY
+					name = "\improper Metabuddy"
+					desc = "The glass is etched with the name of a very deserving spaceman. This one is made out to:"
+				if(SPIDERS)
+					icon_state = SPIDERS
+					name = "\improper This glass is full of spiders"
+					desc = "Seriously, dude, don't touch it."
+				if(WEED_EATER)
+					icon_state = WEED_EATER
+					name = "Weed Eater"
+					desc = "The vegetarian equivalant of a snake eater."
+				if(RAGSTORICHES)
+					icon_state = RAGSTORICHES
+					name = "\improper Rags to Riches"
+					desc = "The Spaceman Dream, incarnated as a cocktail."
+				if(WAIFU)
+					icon_state = WAIFU
+					name = "\improper Waifu"
+					desc = "Don't drink more than one waifu if you value your laifu."
+				if(BEEPSKY_CLASSIC)
+					name = "\improper Beepsky Classic"
+					icon_state = BEEPSKY_CLASSIC
+					desc = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
+				if(ELECTRIC_SHEEP)
+					icon_state = ELECTRIC_SHEEP
+					name = "\improper Electric Sheep"
+					desc = "Silicons dream about this."
+				if(SMOKYROOM)
+					icon_state = SMOKYROOM
+					name = "\improper Smoky Room"
+					desc = "It was the kind of cool, black night that clung to you like something real... a black, tangible fabric of smoke, deceit, and murder. I had finished working my way through the fat cigars for the day - or at least told myself that to feel the sense of accomplishment for another night wasted on little more than chasing cheating dames and abusive husbands. It was enough to drive a man to drink... and it did. I sauntered into the cantina and wordlessly nodded to the barman. He knew my poison. I was a regular, after all. By the time the night was over, there would be another empty bottle and a case no closer to being cracked. Then I saw her, like a mirage across a desert, or a striken starlet on stage across a smoky room."
+				if(BAD_TOUCH)
+					icon_state = BAD_TOUCH
+					name = "\improper Bad Touch"
+					desc = "Somewhere on the scale of bad touches between 'fondled by clown' and 'brushed by supermatter shard'."
+				if(SUICIDE)
+					icon_state = SUICIDE
+					name = "\improper Suicide"
+					desc = "It's only tolerable because of the added alcohol."
+
 				else
 					icon_state ="glass_colour"
 					get_reagent_name(src)
@@ -488,8 +530,6 @@
 					filling.icon += mix_color_from_reagents(reagents.reagent_list)
 					filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 					overlays += filling
-
-
 
 			if(reagents.has_reagent(BLACKCOLOR))
 				icon_state ="blackglass"
@@ -501,6 +541,11 @@
 			name = "drinking glass"
 			desc = "Your standard drinking glass."
 			return
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
+	..()
+	if(reagents.get_master_reagent_id() == METABUDDY && user.client)
+		to_chat(user,"[user.client.ckey]")
 
 // for /obj/machinery/vending/sovietsoda
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda

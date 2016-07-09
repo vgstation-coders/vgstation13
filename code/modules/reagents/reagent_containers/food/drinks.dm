@@ -255,7 +255,12 @@
 		lit = 0
 
 	if(isrobot(user))
-		reagents.remove_any(gulp_size)
+		if(reagents.has_reagent(ELECTRIC_SHEEP))
+			var/partial_volume = reagents.get_reagent_amount(ELECTRIC_SHEEP) / reagents.total_volume
+			reagents.trans_id_to(user, ELECTRIC_SHEEP, partial_volume)
+			reagents.remove_any(reagents.total_volume-partial_volume) //In the case of containing Electric Sheep, you can drink that, but throw out everything else in the gulp
+		else
+			reagents.remove_any(gulp_size)
 		return 1
 	if(reagents.total_volume)
 		if (ishuman(user))
@@ -1015,6 +1020,19 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/wine/New()
 	..()
 	reagents.add_reagent(WINE, 100)
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine
+	name = "Vintage 2018 Special Reserve"
+	desc = "Fermentened during tumultuous years, and aged to perfection over several centuries."
+	icon_state = "pwinebottle"
+	vending_cat = "fermented" //doesn't actually matter, will appear under premium
+	bottleheight = 30
+	molotov = -1
+	isGlass = 1
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine/New()
+	..()
+	reagents.add_reagent(PWINE, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe
 	name = "Jailbreaker Verte"

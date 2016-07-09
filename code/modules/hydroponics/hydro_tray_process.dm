@@ -319,7 +319,7 @@
 		overlays += image(icon = icon, icon_state = "hydrocover")
 
 	//Updated the various alert icons.
-	if(draw_warnings)
+	if(draw_warnings&& !reagents.has_reagent(SPORTDRINK))
 		if(waterlevel <= 10)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		if(nutrilevel <= 2)
