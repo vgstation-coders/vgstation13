@@ -232,8 +232,22 @@
 	sheet_amt = 3
 	anchored = 1
 	overrideghostspin = 1
+	var/image/legs
+	var/couch_colour = "#37FDFC"  // currently cyan for testing
+	var/colourName = "grey" // dont think ill need this
 
 // layer stuff
+
+/obj/structure/bed/chair/comfy/couch/New()
+
+	legs = image("icons/obj/objects.dmi", "[icon_state]_legs", MOB_LAYER - 0.1)		// since i dont want the legs colored they are a separate overlay
+	legs.plane = PLANE_MOB
+	overlays += legs
+	..()
+	if(couch_colour)  // the couch color will have null as default
+		buckle_overlay.icon += couch_colour // doesnt work (why?)
+		icon += couch_colour // doesnt work
+
 
 /obj/structure/bed/chair/comfy/couch/turn/handle_layer() // makes sure mobs arent buried under certain chair sprites
 	layer = OBJ_LAYER
@@ -242,6 +256,29 @@
 /obj/structure/bed/chair/comfy/couch/turn/New()			 // adds in the overlay at all times so that it looks like mobs are in the couch rather than infront of or buried under it
 	..()
 	overlays += buckle_overlay							 // since the corners are "3 dimensional" the sprites were a bit tricky.
+
+
+
+
+
+// Grey base couch
+
+
+/obj/structure/bed/chair/comfy/couch/left
+	icon_state = "couch_left"
+
+/obj/structure/bed/chair/comfy/couch/right/
+	icon_state = "couch_right"
+
+/obj/structure/bed/chair/comfy/couch/mid/ // mid refers to a straight couch part
+	icon_state = "couch_mid"
+
+/obj/structure/bed/chair/comfy/couch/turn/inward// and turn is a corner couch part
+	icon_state = "couch_turn_in"
+
+/obj/structure/bed/chair/comfy/couch/turn/outward/
+	icon_state = "couch_turn_out"
+
 
 
 // Beige couch

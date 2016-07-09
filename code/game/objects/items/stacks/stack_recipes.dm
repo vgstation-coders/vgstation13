@@ -97,10 +97,10 @@ var/global/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
-		new/datum/stack_recipe/chair("beige couch left end",      /obj/structure/bed/chair/comfy/couch/left/beige,         3, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("beige couch left end",      /obj/structure/bed/chair/comfy/couch/left/,         3, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("beige couch right end",     /obj/structure/bed/chair/comfy/couch/right/beige,        3, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("beige couch straight",      /obj/structure/bed/chair/comfy/couch/mid/beige,          3, one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe/chair("beige couch inwards turn",  /obj/structure/bed/chair/comfy/couch/turn/inward/beige,  3, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("beige couch inwards turn",  /obj/structure/bed/chair/comfy/couch/turn/inward/,  3, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("beige couch outwards turn", /obj/structure/bed/chair/comfy/couch/turn/outward/beige, 3, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("red couch left end",        /obj/structure/bed/chair/comfy/couch/left/red,           3, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("red couch right end",       /obj/structure/bed/chair/comfy/couch/right/red,          3, one_per_turf = 1, on_floor = 1),
