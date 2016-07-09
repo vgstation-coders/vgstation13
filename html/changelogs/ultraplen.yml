@@ -33,14 +33,8 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- rscadd: "Added modular couches."
+- rscadd: "Added modular couches contstructable from metal sheets."
 
-- bugfix: "Fixed a problem with the office chairs´ overlay."
-
-- tweak: "Made buckle_overlay the standard variable for overlays in chairs."
+- bugfix: "Fixed a problem with the office-chairs overlay."
 
 - tweak: "Minor tweaks to some couch sprites to make them fit together better."
-
-- bugfix: "Unfucked my changelog, hopefully."
-
-- bugfix: "Second unfuck attempt."
