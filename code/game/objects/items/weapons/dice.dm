@@ -316,7 +316,7 @@
 /obj/item/weapon/dice/borg/AltClick()
 	if(usr.incapacitated() || !is_holder_of(usr, src))
 		return ..()
-	set_sides()
+	set_sides(usr)
 
 /datum/context_click/digi_die/return_clicked_id(x_pos, y_pos)
 	if(23 <= x_pos && x_pos <= 26) //yellow bit
@@ -326,11 +326,13 @@
 /datum/context_click/digi_die/action(obj/item/used_item, mob/usr, params)
 	var/obj/item/weapon/dice/borg/d = holder
 	if(return_clicked_id_by_params(params))
-		d.set_sides()
+		d.set_sides(usr)
 		return 1
 
-/obj/item/weapon/dice/borg/proc/set_sides()
+/obj/item/weapon/dice/borg/proc/set_sides(mob/usr)
 	var/S = input("Number of sides:") as null|anything in possible_sides
+	if(usr.incapacitated() || !is_holder_of(usr, src)) //sanity
+		return
 	if (S)
 		if(S == 100)
 			name = "digi-d00"
