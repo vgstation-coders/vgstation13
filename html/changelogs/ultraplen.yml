@@ -35,6 +35,6 @@ delete-after: True
 changes: 
 - rscadd: "Added modular couches contstructable from metal sheets."
 
-- bugfix: "Fixed a problem with the office-chairs overlay."
+- bugfix: "Fixed an overlay issue with roller chairs"
 
 - tweak: "Minor tweaks to some couch sprites to make them fit together better."
