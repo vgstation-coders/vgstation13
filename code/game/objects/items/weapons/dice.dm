@@ -14,37 +14,6 @@
 	result = rand(minsides, sides)
 	update_icon()
 
-/obj/item/weapon/dice/borg //8 in 1
-	name = "digi-d6"
-	desc = "A device that simulates dice rolls."
-	var/possible_sides = list(2,4,6,8,10,12,20,100)
-
-/obj/item/weapon/dice/borg/AltClick()
-	if(usr.incapacitated() || !is_holder_of(usr, src))
-		return ..()
-	set_sides()
-
-/obj/item/weapon/dice/borg/proc/set_sides()
-	var/S = input("Number of sides:") as null|anything in possible_sides
-	if (S)
-		if(S == 100)
-			name = "digi-d00"
-			icon_state = "d00"
-			sides = 10
-			multiplier = 10
-		else
-			name = "digi-d[S]"
-			icon_state = "d[S]"
-			sides = S
-			multiplier = 0
-		result = 1 //For icon
-		update_icon()
-
-/obj/item/weapon/dice/borg/update_icon()
-	..()
-	underlays.len = 0
-	underlays += image(icon = icon, icon_state = "ddbg")
-
 /obj/item/weapon/dice/d2
 	name = "d2"
 	desc = "A die with two sides. Coins are undignified!"
@@ -324,3 +293,54 @@
 				desc = "A die with twenty sides. The prefered die to throw at the GM."
 	else
 		return 0
+
+//####Borg Die
+/obj/item/weapon/dice/borg //8 in 1
+	name = "digi-d6"
+	desc = "A device that simulates dice rolls.\nIt has a small button to change the mode."
+	var/possible_sides = list(2,4,6,8,10,12,20,100)
+	var/datum/context_click/digi_die/dd
+
+/obj/item/weapon/dice/borg/New()
+	..()
+	underlays.len = 0
+	underlays += image(icon = icon, icon_state = "ddbg")
+	dd = new(src)
+
+/obj/item/weapon/dice/borg/attack_self(mob/usr, params)
+	if(!usr.incapacitated() && is_holder_of(usr, src))
+		if(dd.action(null, usr, params))
+			return
+		..()
+
+/obj/item/weapon/dice/borg/AltClick()
+	if(usr.incapacitated() || !is_holder_of(usr, src))
+		return ..()
+	set_sides()
+
+/datum/context_click/digi_die/return_clicked_id(x_pos, y_pos)
+	if(23 <= x_pos && x_pos <= 26) //yellow bit
+		if(23 <= y_pos && y_pos <= 26)
+			return 1
+
+/datum/context_click/digi_die/action(obj/item/used_item, mob/usr, params)
+	var/obj/item/weapon/dice/borg/d = holder
+	if(return_clicked_id_by_params(params))
+		d.set_sides()
+		return 1
+
+/obj/item/weapon/dice/borg/proc/set_sides()
+	var/S = input("Number of sides:") as null|anything in possible_sides
+	if (S)
+		if(S == 100)
+			name = "digi-d00"
+			icon_state = "d00"
+			sides = 10
+			multiplier = 10
+		else
+			name = "digi-d[S]"
+			icon_state = "d[S]"
+			sides = S
+			multiplier = 0
+		result = 1 //For icon
+		update_icon()
