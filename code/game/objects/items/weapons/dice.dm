@@ -307,9 +307,9 @@
 	underlays += image(icon = icon, icon_state = "ddbg")
 	dd = new(src)
 
-/obj/item/weapon/dice/borg/attack_self(mob/usr, params)
-	if(!usr.incapacitated() && is_holder_of(usr, src))
-		if(dd.action(null, usr, params))
+/obj/item/weapon/dice/borg/attack_self(mob/user, params)
+	if(!user.incapacitated() && is_holder_of(user, src))
+		if(dd.action(null, user, params))
 			return
 		..()
 
@@ -323,15 +323,15 @@
 		if(23 <= y_pos && y_pos <= 26)
 			return 1
 
-/datum/context_click/digi_die/action(obj/item/used_item, mob/usr, params)
+/datum/context_click/digi_die/action(obj/item/used_item, mob/user, params)
 	var/obj/item/weapon/dice/borg/d = holder
 	if(return_clicked_id_by_params(params))
-		d.set_sides(usr)
+		d.set_sides(user)
 		return 1
 
-/obj/item/weapon/dice/borg/proc/set_sides(mob/usr)
+/obj/item/weapon/dice/borg/proc/set_sides(mob/user)
 	var/S = input("Number of sides:") as null|anything in possible_sides
-	if(usr.incapacitated() || !is_holder_of(usr, src)) //sanity
+	if(user.incapacitated() || !is_holder_of(user, src)) //sanity
 		return
 	if (S)
 		if(S == 100)
