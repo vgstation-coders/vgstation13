@@ -34,3 +34,10 @@
 				continue
 
 			T.corners[i] = new/datum/lighting_corner(T, LIGHTING_CORNER_DIAGONAL[i])
+
+#ifdef LIGHTING_INSTANT_UPDATES
+/hook_handler/lighting/proc/OnStartup(var/list/args)
+	create_all_lighting_overlays()
+	create_all_lighting_corners()
+
+#endif

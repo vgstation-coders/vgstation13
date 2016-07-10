@@ -10,6 +10,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
+#include "code\__early_includes.dm"
 #include "code\_planes.dm"
 #include "code\global.dm"
 #include "code\hub.dm"
@@ -51,6 +52,7 @@
 #include "code\_hooks\events.dm"
 #include "code\_hooks\hooks.dm"
 #include "code\_hooks\mob.dm"
+#include "code\_hooks\startup.dm"
 #include "code\_onclick\adjacent.dm"
 #include "code\_onclick\ai.dm"
 #include "code\_onclick\click.dm"
