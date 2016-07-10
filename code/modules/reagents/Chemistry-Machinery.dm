@@ -1499,7 +1499,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/reagentgrinder/AltClick()
 	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
-		detach()
+		if(holdingitems.len)
+			grind()
+		else			
+			detach()
 		return
 	return ..()
 
