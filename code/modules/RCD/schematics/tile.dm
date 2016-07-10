@@ -15,7 +15,7 @@
 
 	flags = RCD_GET_TURF
 
-/datum/rcd_schematic/clear_decals/attack(var/atom/A, var/mob/user)
+/datum/rcd_schematic/clear_decals/attack(var/turf/A, var/mob/user)
 	to_chat(user, "Clearing decals...")
 	playsound(get_turf(master), 'sound/effects/spray3.ogg', 15, 1)
 	if (!do_after(user, A, 20))
@@ -23,11 +23,7 @@
 
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 
-	var/turf/T = A
-	if (!isturf(T))
-		return
-
-	T.ClearDecals()
+	A.ClearDecals()
 
 /datum/rcd_schematic/tile
 	name				= "Decals"
