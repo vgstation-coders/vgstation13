@@ -229,7 +229,7 @@
 			if(!user.drop_item(O, src))
 				return 1
 
-			var/sanitized_name = sanitize(O.name, list("\"" = "", "'" = "", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
+			var/sanitized_name = sanitize(O.name)
 			O.name = sanitized_name
 			if(item_quants[sanitized_name])
 				item_quants[sanitized_name]++
@@ -248,7 +248,7 @@
 					return 1
 				else
 					bag.remove_from_storage(G,src)
-					var/sanitized_name = sanitize(G.name, list("\"" = "", "'" = "", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
+					var/sanitized_name = sanitize(G.name)
 					G.name = sanitized_name
 					if(item_quants[sanitized_name])
 						item_quants[sanitized_name]++
