@@ -139,12 +139,18 @@
 	if(isnull(module_active))
 		return
 	if((module_active in src.contents) && !(module_active in src.module.modules) && (module_active != src.module.emag) && candrop)
+		if(isVentCrawling())
+			to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+			return
 		TS = tool_state
 		drop_item(TS)
 	if(tool_state == module_active)
 		//var/obj/item/found = locate(tool_state) in src.module.modules
 		TS = tool_state
 		if(!is_in_modules(TS))
+			if(isVentCrawling())
+				to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+				return
 			drop_item()
 		if (client)
 			client.screen -= tool_state
