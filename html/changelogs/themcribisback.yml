@@ -32,4 +32,4 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- rscadd: "All-in-One Grinders will now try to start grindind their ingredients when alt-clicked, and only eject their beaker if no ingredients are loaded (previously they would only eject their beaker)."
+- rscadd: "All-in-One Grinders will now try to start grinding their ingredients when alt-clicked, and only eject their beaker if no ingredients are loaded (previously they would only eject their beaker)."
