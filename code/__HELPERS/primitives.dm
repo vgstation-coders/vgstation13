@@ -2,3 +2,4 @@
 /int
 /float
 /string
+/appearance
