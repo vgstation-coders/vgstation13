@@ -667,8 +667,8 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/attack_hand(mob/user)
-	if(timestopped)
-		..()
+//	if(timestopped)
+//		..()
 
 /obj/item/projectile/friendlyCheck
 	invisibility = 101
