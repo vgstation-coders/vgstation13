@@ -255,7 +255,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 //			chargecount = 0
 		updateicon()
 
-	else if (iswirecutter(W) || istype(W, /obj/item/device/multitool))
+	else if (iswiretool(W))
 		if (wiresexposed)
 			wires.Interact(user)
 		else
@@ -295,21 +295,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	else if(istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
-		if(!opened)
-			to_chat(user, "You must access the borgs internals!")
-		else if(!src.module && U.require_module)
-			to_chat(user, "The borg must choose a module before he can be upgraded!")
-		else if(U.locked)
-			to_chat(user, "The upgrade is locked and cannot be used yet!")
-		else
-			if(istype(U, /obj/item/borg/upgrade/reset))
-				to_chat(user, "<span class='warning'>No.</span>")
-				return
-			if(U.action(src))
-				to_chat(user, "You apply the upgrade to [src]!")
-				user.drop_item(U, src)
-			else
-				to_chat(user, "Upgrade error!")
+		U.attempt_action(src,user)
 
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
@@ -437,6 +423,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				client.screen -= tool_state
 		tool_state = O
 		O.layer = 20
+		O.plane = PLANE_HUD
 		contents += O
 		inv_tool.icon_state = "inv1 +a"
 		module_active=tool_state

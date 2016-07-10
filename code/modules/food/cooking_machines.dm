@@ -136,14 +136,14 @@ var/global/ingredientLimit = 10
 	else . = ..()
 
 /obj/machinery/cooking/attackby(obj/item/I,mob/user)
-	if(stat & (NOPOWER | BROKEN))
-		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
-		return
 	if(src.active)
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
 	else if(..())
 		return 1
+	else if(stat & (NOPOWER | BROKEN))
+		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
+		return
 	else if(istype(user,/mob/living/silicon))
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
@@ -364,7 +364,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
-	reagents.add_reagent("cornoil", 300)
+	reagents.add_reagent(CORNOIL, 300)
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
@@ -480,7 +480,7 @@ var/global/ingredientLimit = 10
 		src.transfer_reagents_to_food()
 	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food))
 		var/obj/item/weapon/reagent_containers/food/F = src.ingredient
-		F.reagents.add_reagent("nutriment",10)
+		F.reagents.add_reagent(NUTRIMENT,10)
 		F.reagents.trans_to(src.ingredient,src.ingredient.reagents.total_volume)
 	src.ingredient.mouse_opacity = 1
 	if(!(findtext(src.ingredient.name,"rotisserie")))

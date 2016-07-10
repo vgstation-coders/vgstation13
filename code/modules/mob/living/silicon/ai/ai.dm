@@ -190,11 +190,11 @@ var/list/ai_list = list()
 	/* Jesus christ, more of this shit?
 	if(!custom_sprite) //Check to see if custom sprite time, checking the appopriate file to change a var
 		var/file = file2text("config/custom_sprites.txt")
-		var/lines = text2list(file, "\n")
+		var/lines = splittext(file, "\n")
 
 		for(var/line in lines)
 		// split & clean up
-			var/list/Entry = text2list(line, "-")
+			var/list/Entry = splittext(line, "-")
 			for(var/i = 1 to Entry.len)
 				Entry[i] = trim(Entry[i])
 
@@ -345,7 +345,9 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if (stat != 2)
+	if (stat != DEAD)
+		..()
+		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 		adjustBruteLoss(60)
 		updatehealth()
 		return 1
@@ -371,8 +373,8 @@ var/list/ai_list = list()
 	if(flags & INVULNERABLE)
 		return
 
-	if(!blinded)
-		flick("flash", flash)
+	// if(!blinded) (this is now in flash_eyes)
+	flash_eyes(visual = 1, affect_silicon = 1)
 
 	switch(severity)
 		if(1.0)
@@ -504,7 +506,7 @@ var/list/ai_list = list()
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 				if(prob(8))
-					flick("noise", flash)
+					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 				adjustBruteLoss(damage)
 				updatehealth()
 			else

@@ -9,9 +9,13 @@
 	desc = "It's an underfloor wiring terminal for power equipment."
 	level = 1
 	layer = TURF_LAYER
+	plane = PLANE_TURF
 	var/obj/machinery/power/master
 	anchored = 1
 	layer = 2.6 // a bit above wires
+
+	holomap = TRUE
+	auto_holomap = TRUE
 
 
 /obj/machinery/power/terminal/New()

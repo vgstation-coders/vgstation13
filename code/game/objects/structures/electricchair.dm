@@ -9,7 +9,9 @@
 
 /obj/structure/bed/chair/e_chair/New()
 	..()
-	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir)
+	var/image/over = image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir)
+	over.plane = PLANE_MOB
+	overlays += over
 	spark_system = new
 	spark_system.set_up(12, 0, src)
 	spark_system.attach(src)
@@ -34,19 +36,17 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(on)
-		on = 0
-		icon_state = "echair0"
-	else
-		on = 1
-		icon_state = "echair1"
+	if(usr.incapacitated())
+		return
+
+	on = !on
+	icon_state = "echair[on]"
 	to_chat(usr, "<span class='notice'>You switch [on ? "on" : "off"] [src].</span>")
-	return
 
 /obj/structure/bed/chair/e_chair/rotate()
 	..()
 	overlays.len = 0
-	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir)	//there's probably a better way of handling this, but eh. -Pete
+	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir,plane = PLANE_MOB)	//there's probably a better way of handling this, but eh. -Pete
 	return
 
 /obj/structure/bed/chair/e_chair/proc/shock()

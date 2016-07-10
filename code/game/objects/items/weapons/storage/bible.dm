@@ -4,7 +4,7 @@
 	icon_state = "bible"
 	throw_speed = 1
 	throw_range = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 2.5 //A big book, solely used for non-Chaplains trying to use it on people
 	flags = FPRINT
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
@@ -78,7 +78,7 @@
 	if((M_CLUMSY in user.mutations) && prob(50)) //Using it while clumsy, let's have some fun
 		user.visible_message("<span class='warning'>\The [src] slips out of [user]'s hands and hits \his head.</span>",
 		"<span class='warning'>\The [src] slips out of your hands and hits your head.</span>")
-		user.apply_damage(10, BRUTE, "head")
+		user.apply_damage(10, BRUTE, LIMB_HEAD)
 		user.Stun(5)
 		return 1
 
@@ -154,13 +154,13 @@
 /obj/item/weapon/storage/bible/afterattack(atom/A, mob/user as mob)
 	user.delayNextAttack(5)
 	if(user.mind && (user.mind.assigned_role == "Chaplain")) //Make sure we still are a Chaplain, just in case
-		if(A.reagents && A.reagents.has_reagent("water")) //Blesses all the water in the holder
+		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
 			user.visible_message("<span class='notice'>[user] blesses \the [A].</span>",
 			"<span class='notice'>You bless \the [A].</span>")
 			//Ugly but functional conversion proc
-			var/water2holy = A.reagents.get_reagent_amount("water")
-			A.reagents.del_reagent("water")
-			A.reagents.add_reagent("holywater", water2holy)
+			var/water2holy = A.reagents.get_reagent_amount(WATER)
+			A.reagents.del_reagent(WATER)
+			A.reagents.add_reagent(HOLYWATER, water2holy)
 
 /obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	playsound(get_turf(src), "rustle", 50, 1, -5)

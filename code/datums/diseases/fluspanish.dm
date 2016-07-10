@@ -3,7 +3,7 @@
 	max_stages = 3
 	spread = "Airborne"
 	cure = "Spaceacillin or Anti-bodies to the common flu"
-	cure_id = "spaceacillin"
+	cure_id = SPACEACILLIN
 	cure_chance = 10
 	agent = "1nqu1s1t10n flu virion"
 	affected_species = list("Human")
@@ -19,7 +19,7 @@
 			if(prob(5))
 				affected_mob.emote("sneeze")
 			if(prob(5))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(1))
 				to_chat(affected_mob, "<span class='warning'>You're burning in your own skin!</span>")
 				affected_mob.take_organ_damage(0,5)
@@ -29,7 +29,7 @@
 			if(prob(5))
 				affected_mob.emote("sneeze")
 			if(prob(5))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(5))
 				to_chat(affected_mob, "<span class='warning'>You're burning in your own skin!</span>")
 				affected_mob.take_organ_damage(0,5)

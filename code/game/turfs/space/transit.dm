@@ -1,4 +1,5 @@
 /turf/space/transit
+	plane = PLANE_TURF
 	var/pushdirection // push things that get caught in the transit tile this direction
 
 /turf/space/transit/New()
@@ -19,6 +20,10 @@
 		if(WEST) // East to west
 			dira="ew"
 			i=1+(((y^2)+x)%15) // Vary widely across Y, but just increment across X
+
+		if(EAST) // West to east
+			dira="ew"
+			i=1+(((y^2)-x)%15) // Vary widely across Y, but just increment across X
 
 
 		/*
@@ -66,4 +71,10 @@
 
 	pushdirection = WEST
 	icon_state="debug-east"
+
+/turf/space/transit/west // moving to the west
+
+	pushdirection = EAST
+	icon_state="debug-west"
+
 

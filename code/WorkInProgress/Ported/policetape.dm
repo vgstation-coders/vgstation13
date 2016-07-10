@@ -4,7 +4,7 @@
 	icon = 'icons/policetape.dmi'
 	icon_state = "rollstart"
 	flags = FPRINT
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/turf/start
 	var/turf/end
 	var/tape_type = /obj/item/tape
@@ -144,11 +144,12 @@
 				return
 		M:loc = T
 
-/obj/item/tape/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(!density) return 1
-	if(air_group || (height==0)) return 1
-
-	if ((mover.flags & 2 || istype(mover, /obj/effect/meteor) || mover.throwing == 1) )
+/obj/item/tape/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	if(!density)
+		return 1
+	if(air_group || (height == 0))
+		return 1
+	if((mover.checkpass(PASSGLASS) || istype(mover, /obj/item/projectile/meteor) || mover.throwing == 1))
 		return 1
 	else
 		return 0

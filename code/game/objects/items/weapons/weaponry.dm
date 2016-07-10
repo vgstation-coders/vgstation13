@@ -6,7 +6,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	throwforce = 0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 7
 	throw_range = 15
 	attack_verb = list("bans")
@@ -25,7 +25,7 @@
 	slot_flags = SLOT_BELT
 	force = 2
 	throwforce = 1
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
@@ -49,7 +49,7 @@
 	slot_flags = SLOT_BELT
 	force = 40
 	throwforce = 10
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
@@ -80,7 +80,7 @@
 	slot_flags = SLOT_BELT | SLOT_BACK
 	force = 40
 	throwforce = 10
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
@@ -104,7 +104,7 @@
 	hitsound = "sound/weapons/bladeslice.ogg"
 	force = 20
 	throwforce = 15
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	attack_verb = list("jabs","stabs","rips")
 
 obj/item/weapon/wirerod
@@ -116,7 +116,7 @@ obj/item/weapon/wirerod
 	siemens_coefficient = 1
 	force = 9
 	throwforce = 10
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1875)
 	w_type = RECYK_METAL
 	attack_verb = list("hits", "bludgeons", "whacks", "bonks")
@@ -128,7 +128,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		user.visible_message("<span class='notice'>[user] starts securing \the [I] to the top of \the [src].</span>",\
 		"<span class='info'>You attempt to create a spear by securing \the [I] to \the [src].</span>")
 
-		if(do_after(user, src, 5 SECONDS))
+		if(do_after(user, get_turf(src), 5 SECONDS))
 			if(!I || !src) return
 
 			if(!user.drop_item(I))
@@ -190,8 +190,71 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		R.use(1)
 		qdel(src)
 
+/obj/item/weapon/kitchen/utensil/knife/tactical
+	name = "tactical knife"
+	desc = "It makes you run faster."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "tacknife"
+	item_state = "knife"
+	force = 10
 
 obj/item/weapon/banhammer/admin
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
 	force = 999
+
+/obj/item/weapon/melee/bone_hammer
+	name = "bone hammer"
+	desc = "A large growth that appears to be made of solid bone. It looks heavy."
+	icon_state = "bone_hammer"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	hitsound = "sound/weapons/heavysmash.ogg"
+	flags = FPRINT
+	siemens_coefficient = 0
+	slot_flags = null
+	force = 25
+	throwforce = 0
+	w_class = 5
+	sharpness = 0
+	attack_verb = list("bludgeons", "smashes", "pummels", "crushes", "slams")
+	mech_flags = MECH_SCAN_ILLEGAL
+	cant_drop = 1
+	var/mob/living/simple_animal/borer/parent_borer = null
+
+	suicide_act(mob/user)
+		to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
+		return(BRUTELOSS)
+
+/obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
+	user.delayNextAttack(50) //five times the regular attack delay
+
+/obj/item/weapon/melee/bone_hammer/New(turf/T, var/p_borer = null)
+	..(T)
+	if(istype(p_borer, /mob/living/simple_animal/borer))
+		parent_borer = p_borer
+	if(!parent_borer)
+		qdel(src)
+	else
+		processing_objects.Add(src)
+
+/obj/item/weapon/melee/bone_hammer/Destroy()
+	if(parent_borer)
+		if(parent_borer.channeling_bone_hammer)
+			parent_borer.channeling_bone_hammer = 0
+		if(parent_borer.channeling)
+			parent_borer.channeling = 0
+		parent_borer = null
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/melee/bone_hammer/process()
+	set waitfor = 0
+	if(!parent_borer)
+		return
+	if(!parent_borer.channeling_bone_hammer) //the borer has stopped sustaining the hammer
+		qdel(src)
+	if(parent_borer.chemicals < 10) //the parent borer no longer has the chemicals required to sustain the hammer
+		qdel(src)
+	else
+		parent_borer.chemicals -= 10
+		sleep(10)

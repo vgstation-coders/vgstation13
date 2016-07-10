@@ -54,7 +54,10 @@
 	if(name != real_name)
 		alt_name = " (died as [real_name])"
 
+
+	var/turf/T = get_turf(src)
 	message = src.say_quote("\"[html_encode(message)]\"")
+	log_say("[name]/[key_name(src)] (@[T.x],[T.y],[T.z]) Deadsay: [message]")
 	//var/rendered = "<span class='game deadsay'><span class='prefix'>DEAD:</span> <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>"
 	var/rendered2 = null//edited
 	for(var/mob/M in player_list)
@@ -67,7 +70,8 @@
 		else if(M.client && M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD))
 			//M.show_message(rendered2, 2) //Takes into account blindness and such.
 			to_chat(M, rendered2)
-	return
+		else if(M.client && istype(M,/mob/living/carbon/brain) && !istype(M.loc, /obj/item/device/mmi) && (M.client.prefs.toggles & CHAT_DEAD))
+			to_chat(M, rendered2)
 
 /mob/proc/emote(var/act, var/type, var/message, var/auto)
 	if(timestopped) return //under effects of time magick

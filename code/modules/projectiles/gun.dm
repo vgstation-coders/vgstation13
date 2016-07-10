@@ -9,7 +9,7 @@
 	slot_flags = SLOT_BELT
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_METAL
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throwforce = 5
 	throw_speed = 4
 	throw_range = 5
@@ -107,7 +107,7 @@
 	if(ishuman(user))
 		var/mob/living/carbon/human/H=user
 		if(golem_check)
-			if(user.dna && (user.dna.mutantrace == "adamantine" || user.dna.mutantrace=="coalgolem"))
+			if(isgolem(H) || (H.dna && (H.dna.mutantrace == "adamantine" || H.dna.mutantrace=="coalgolem"))) //leaving the mutantrace checks in just in case
 				if(display_message)
 					to_chat(user, "<span class='warning'>Your fat fingers don't fit in the trigger guard!</span>")
 				return 0
@@ -160,7 +160,7 @@
 	if(user.zone_sel)
 		in_chamber.def_zone = user.zone_sel.selecting
 	else
-		in_chamber.def_zone = "chest"
+		in_chamber.def_zone = LIMB_CHEST
 
 	if(targloc == curloc)
 		user.bullet_act(in_chamber)
@@ -239,10 +239,7 @@
 
 	update_icon()
 
-	if(user.hand)
-		user.update_inv_l_hand()
-	else
-		user.update_inv_r_hand()
+	user.update_inv_hand(user.active_hand)
 
 	return 1
 
@@ -254,11 +251,13 @@
 
 /obj/item/weapon/gun/proc/click_empty(mob/user = null)
 	if (user)
-		user.visible_message("*click click*", "<span class='danger'>*click*</span>")
-		playsound(user, empty_sound, 100, 1)
+		if(empty_sound)
+			user.visible_message("*click click*", "<span class='danger'>*click*</span>")
+			playsound(user, empty_sound, 100, 1)
 	else
-		src.visible_message("*click click*")
-		playsound(get_turf(src), empty_sound, 100, 1)
+		if(empty_sound)
+			src.visible_message("*click click*")
+			playsound(get_turf(src), empty_sound, 100, 1)
 
 /obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	//Suicide handling.
@@ -286,7 +285,7 @@
 					playsound(user, in_chamber.fire_sound, fire_volume, 1)
 			in_chamber.on_hit(M)
 			if (!in_chamber.nodamage)
-				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, "head", used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
+				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
 				user.stat=2 // Just to be sure
 				user.death()
 				var/suicidesound = pick('sound/misc/suicide/suicide1.ogg','sound/misc/suicide/suicide2.ogg','sound/misc/suicide/suicide3.ogg','sound/misc/suicide/suicide4.ogg','sound/misc/suicide/suicide5.ogg','sound/misc/suicide/suicide6.ogg')

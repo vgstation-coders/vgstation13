@@ -9,7 +9,7 @@
 	throw_speed = 1
 	throw_range = 4
 	throwforce = 10
-	w_class = 1
+	w_class = W_CLASS_TINY
 
 /obj/item/weapon/nullrod/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -34,7 +34,7 @@
 	if((M_CLUMSY in user.mutations) && prob(50))
 		user.visible_message("<span class='warning'>\The [src] slips out of [user]'s hands and hits \his head.</span>",
 		"<span class='warning'>\The [src] slips out of your hands and hits your head.</span>")
-		user.apply_damage(10, BRUTE, "head")
+		user.apply_damage(10, BRUTE, LIMB_HEAD)
 		user.Stun(5)
 		return
 

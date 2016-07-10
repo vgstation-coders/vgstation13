@@ -61,7 +61,7 @@
 
 	qdel(src)
 
-/mob/living/simple_animal/bee/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/mob/living/simple_animal/bee/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return 1
 
 /mob/living/simple_animal/bee/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -143,7 +143,7 @@
 
 		for(var/this_type in calmers)
 			var/obj/effect/check_effect = locate(this_type) in src.loc
-			if(check_effect && (check_effect.reagents.has_reagent("water") || check_effect.reagents.has_reagent("holywater")))
+			if(check_effect && (check_effect.reagents.has_reagent(WATER) || check_effect.reagents.has_reagent(HOLYWATER)))
 				calming = 1
 				break
 

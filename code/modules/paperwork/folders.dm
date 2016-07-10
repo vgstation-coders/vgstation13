@@ -3,7 +3,7 @@
 	desc = "A folder."
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "folder"
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	pressure_resistance = 2
 
 	autoignition_temperature = 522 // Kelvin
@@ -28,7 +28,7 @@
 /obj/item/weapon/folder/update_icon()
 	overlays.len = 0
 	if(contents.len)
-		overlays += "folder_paper"
+		overlays += image(icon = icon, icon_state = "folder_paper")
 	return
 
 /obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)

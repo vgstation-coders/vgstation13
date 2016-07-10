@@ -38,8 +38,8 @@ mob/living/carbon/proc/handle_hallucinations()
 				if(!halitem)
 					halitem = new
 					var/list/slots_free = list(ui_lhand,ui_rhand)
-					if(l_hand) slots_free -= ui_lhand
-					if(r_hand) slots_free -= ui_rhand
+					if(get_held_item_by_index(GRASP_LEFT_HAND)) slots_free -= ui_lhand
+					if(get_held_item_by_index(GRASP_RIGHT_HAND)) slots_free -= ui_rhand
 					if(istype(src,/mob/living/carbon/human))
 						var/mob/living/carbon/human/H = src
 						if(!H.belt) slots_free += ui_belt
@@ -48,6 +48,7 @@ mob/living/carbon/proc/handle_hallucinations()
 					if(slots_free.len)
 						halitem.screen_loc = pick(slots_free)
 						halitem.layer = 50
+						halitem.plane = PLANE_HUD
 						switch(rand(1,6))
 							if(1) //revolver
 								halitem.icon = 'icons/obj/gun.dmi'
@@ -89,7 +90,7 @@ mob/living/carbon/proc/handle_hallucinations()
 						possible_points += F
 					if(possible_points.len)
 						var/turf/simulated/floor/target = pick(possible_points)
-
+						halimage.plane = PLANE_OBJ
 						switch(rand(1,4))
 							if(1) //Space
 								halimage = image('icons/turf/space.dmi',target,"[rand(1,25)]",TURF_LAYER)
@@ -171,6 +172,7 @@ mob/living/carbon/proc/handle_hallucinations()
 						possible_points += F
 					if(possible_points.len)
 						var/turf/simulated/floor/target = pick(possible_points)
+						halbody.plane = PLANE_MOB
 						switch(rand(1,4))
 							if(1)
 								halbody = image('icons/mob/human.dmi',target,"husk_l",TURF_LAYER)
@@ -236,7 +238,7 @@ mob/living/carbon/proc/handle_hallucinations()
 				to_chat(src, "<i>[pick(boo_phrases)]</i>")
 			if(81) //Fake flash
 				src << sound('sound/weapons/flash.ogg')
-				flick("e_flash", src.flash)
+				flash_eyes(visual = 1)
 
 				if(prob(20))
 					src.Weaken(10)
@@ -281,11 +283,14 @@ mob/living/carbon/proc/handle_hallucinations()
 				var/angle = rand(1,3)*90
 				var/duration = rand(10 SECONDS, 40 SECONDS)
 
-				client.dir = turn(client.dir, angle)
-				to_chat(src, "<span class='danger'>[pick("You feel lost.", "The walls suddenly start moving.", "Everything around you shifts and distorts.")]</span>")
+				var/client/C = client
+				if(C)
+					C.dir = turn(C.dir, angle)
+					to_chat(src, "<span class='danger'>[pick("You feel lost.", "The walls suddenly start moving.", "Everything around you shifts and distorts.")]</span>")
 
-				spawn(duration)
-					client.dir = turn(client.dir, -angle)
+					spawn(duration)
+						if(C)
+							C.dir = turn(C.dir, -angle)
 
 	handling_hal = 0
 
@@ -477,14 +482,12 @@ var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/ite
 
 	//var/obj/effect/fake_attacker/F = new/obj/effect/fake_attacker(outside_range(target))
 	var/obj/effect/fake_attacker/F = getFromPool(/obj/effect/fake_attacker,target.loc)
-	if(clone.l_hand)
-		if(!(locate(clone.l_hand) in non_fakeattack_weapons))
-			clone_weapon = clone.l_hand.name
-			F.weap = clone.l_hand
-	else if (clone.r_hand)
-		if(!(locate(clone.r_hand) in non_fakeattack_weapons))
-			clone_weapon = clone.r_hand.name
-			F.weap = clone.r_hand
+
+	for(var/obj/item/I in clone.held_items)
+		if(!non_fakeattack_weapons.Find(I.type))
+			clone_weapon = I.name
+			F.weap = I
+			break
 
 	F.name = clone.name
 	F.my_target = target

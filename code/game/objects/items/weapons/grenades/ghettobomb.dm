@@ -18,7 +18,7 @@
 /obj/item/weapon/grenade/iedcasing
 	name = "improvised explosive assembly"
 	desc = "An igniter stuffed into an aluminum shell."
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "improvised_grenade"
 	item_state = "flashbang"
@@ -40,7 +40,7 @@
 				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
 				return
 			var/obj/structure/reagent_dispensers/fueltank/F = target
-			F.reagents.remove_reagent("fuel", 50, 1)//Deleting 50 fuel from the welding fuel tank,
+			F.reagents.remove_reagent(FUEL, 50, 1)//Deleting 50 fuel from the welding fuel tank,
 			assembled = 1
 			to_chat(user, "<span  class='notice'>You've filled the makeshift explosive with welding fuel.</span>")
 			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)

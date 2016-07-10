@@ -46,7 +46,7 @@
 
 //Germs
 /datum/organ/proc/handle_antibiotics()
-	var/antibiotics = owner.reagents.get_reagent_amount("spaceacillin")
+	var/antibiotics = owner.reagents.get_reagent_amount(SPACEACILLIN)
 
 	if(!germ_level || antibiotics < 5)
 		return
@@ -80,10 +80,11 @@
 /mob/living/carbon/human/var/list/organs = list()
 /mob/living/carbon/human/var/list/organs_by_name = list() //Map organ names to organs
 /mob/living/carbon/human/var/list/internal_organs_by_name = list() //So internal organs have less ickiness too
+/mob/living/carbon/human/var/list/grasp_organs = list()
 
-/mob/living/carbon/human/proc/can_use_hand(var/this_hand = hand)
+/mob/living/carbon/human/proc/can_use_hand(var/this_hand = active_hand)
 	if(hasorgans(src))
-		var/datum/organ/external/temp = src.organs_by_name[(this_hand ? "l_hand" : "r_hand")]
+		var/datum/organ/external/temp = src.find_organ_by_grasp_index(this_hand)
 		if(temp && !temp.is_usable())
 			return
 		else if (!temp)
@@ -91,11 +92,10 @@
 	return 1
 
 //Takes care of organ related updates, such as broken and missing limbs
-/mob/living/carbon/human/proc/handle_organs()
+/mob/living/carbon/human/proc/handle_organs(var/force_process = 0)
 
 	number_wounds = 0
 	var/stand_broken = 0 //We cannot stand because one of our legs or foot is completely broken and unsplinted, or missing
-	var/force_process = 0
 	var/damage_this_tick = getBruteLoss() + getFireLoss() + getToxLoss()
 	if(damage_this_tick > last_dam)
 		force_process = 1
@@ -121,12 +121,12 @@
 	if(species.has_organ["liver"])
 		var/datum/organ/internal/liver = internal_organs_by_name["liver"]
 		if(!liver || liver.status & ORGAN_CUT_AWAY)
-			reagents.add_reagent("toxin", rand(1, 3))
+			reagents.add_reagent(TOXIN, rand(1, 3))
 
 	if(species.has_organ["kidneys"])
 		var/datum/organ/internal/kidney = internal_organs_by_name["kidneys"]
 		if(!kidney || kidney.status & ORGAN_CUT_AWAY)
-			reagents.add_reagent("toxin", rand(1, 3))
+			reagents.add_reagent(TOXIN, rand(1, 3))
 
 	if(!force_process && !bad_external_organs.len) //Nothing to update, just drop it
 		return
@@ -151,17 +151,11 @@
 
 			//Special effects for arms and hands
 			//is_usable() is here for sanity, in case we somehow get an item in an unusable hand
-			if(E.name in list("l_hand","l_arm","r_hand", "r_arm") && (E.is_broken() || E.is_malfunctioning()))
-				var/obj/item/c_hand	//Getting what's in this hand
-				if(E.name == "l_hand" || E.name == "l_arm")
-					c_hand = l_hand
-				if(E.name == "r_hand" || E.name == "r_arm")
-					c_hand = r_hand
-
-				E.process_grasp(c_hand, E.name) //See organ_external.dm for helper proc
+			if(E.grasp_id && (E.is_broken() || E.is_malfunctioning()))
+				E.process_grasp(held_items[E.grasp_id], get_index_limb_name(E.grasp_id))
 
 			//Special effects for legs and foot
-			else if(E.name in list("l_leg", "l_foot", "r_leg", "r_foot") && !lying)
+			else if(E.name in list(LIMB_LEFT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_LEG, LIMB_RIGHT_FOOT) && !lying)
 				if(E.is_malfunctioning() || E.is_broken())
 					stand_broken = 1 //We can't stand like this
 
@@ -181,31 +175,31 @@
 	var/hasleg_r =   1 //Have right leg
 	var/hasarm_l =   1 //Have left arm
 	var/hasarm_r =   1 //Have right arm
-	//var/datum/organ/external/E = organs_by_name["l_foot"]
+	//var/datum/organ/external/E = organs_by_name[LIMB_LEFT_FOOT]
 	var/datum/organ/external/E
-	E = organs_by_name["l_leg"]
+	E = organs_by_name[LIMB_LEFT_LEG]
 	if(!E.is_usable()) //The leg is missing, that's going to throw a wrench into our plans
 		canstand_l = 0
 		hasleg_l = 0
 	legispeg_l = E.is_peg() //Need to check this here for the feet
 
-	E = organs_by_name["r_leg"]
+	E = organs_by_name[LIMB_RIGHT_LEG]
 	if(!E.is_usable())
 		canstand_r = 0
 		hasleg_r = 0
 	legispeg_r = E.is_peg()
 
 	//We can stand if we're on a peg leg, otherwise same logic.
-	E = organs_by_name["l_foot"]
+	E = organs_by_name[LIMB_LEFT_FOOT]
 	if(!E.is_usable() && !legispeg_l)
 		canstand_l = 0
-	E = organs_by_name["r_foot"]
+	E = organs_by_name[LIMB_RIGHT_FOOT]
 	if(!E.is_usable() && !legispeg_r)
 		canstand_r = 0
-	E = organs_by_name["l_arm"]
+	E = organs_by_name[LIMB_LEFT_ARM]
 	if(!E.is_usable())
 		hasarm_l = 0
-	E = organs_by_name["r_arm"]
+	E = organs_by_name[LIMB_RIGHT_ARM]
 	if(!E.is_usable())
 		hasarm_r = 0
 
@@ -230,12 +224,12 @@
 	//List of reagents which will affect cancerous growth
 	//Phalanximine and Medical Nanobots are the only reagent which can reverse cancerous growth in high doses, the others can stall it, some can even accelerate it
 	//Every "unit" here corresponds to a tick of cancer growth, so for example 20 units of Phalanximine counters one unit of cancer growth
-	var/phalanximine = owner.reagents.get_reagent_amount("phalanximine") / 5 //Phalanximine only works in large doses, but can actually cure cancer past the threshold unlike all other reagents below
-	var/medbots = owner.reagents.get_reagent_amount("mednanobots") * 2 //Medical nanobots for a cancer-free future tomorrow. Try not to overdose them, powerful enough to not risk going above 5u
-	var/hardcores = owner.reagents.get_reagent_amount("bustanut") //Bustanuts contain the very essence of Bustatime, stalling even the most robust ailments with a small dose
-	var/ryetalyn = owner.reagents.get_reagent_amount("ryetalyn") //Ryetalin will very easily suppress the rogue DNA in cancer cells, but cannot actually cure it, you need to destroy the cells
-	var/holywater = owner.reagents.get_reagent_amount("holywater") / 10 //Holy water has very potent effects with stalling cancer
-	var/mutagen = owner.reagents.get_reagent_amount("mutagen") / 5 //Mutagen will cause disastrous cancer growth if there already is one. It's the virus food of tumors
+	var/phalanximine = owner.reagents.get_reagent_amount(PHALANXIMINE) / 5 //Phalanximine only works in large doses, but can actually cure cancer past the threshold unlike all other reagents below
+	var/medbots = owner.reagents.get_reagent_amount(MEDNANOBOTS) * 2 //Medical nanobots for a cancer-free future tomorrow. Try not to overdose them, powerful enough to not risk going above 5u
+	var/hardcores = owner.reagents.get_reagent_amount(BUSTANUT) //Bustanuts contain the very essence of Bustatime, stalling even the most robust ailments with a small dose
+	var/ryetalyn = owner.reagents.get_reagent_amount(RYETALYN) //Ryetalin will very easily suppress the rogue DNA in cancer cells, but cannot actually cure it, you need to destroy the cells
+	var/holywater = owner.reagents.get_reagent_amount(HOLYWATER) / 10 //Holy water has very potent effects with stalling cancer
+	var/mutagen = owner.reagents.get_reagent_amount(MUTAGEN) / 5 //Mutagen will cause disastrous cancer growth if there already is one. It's the virus food of tumors
 
 	var/cancerous_growth = 1 //Every tick, cancer grows by one tick, without any external factors
 

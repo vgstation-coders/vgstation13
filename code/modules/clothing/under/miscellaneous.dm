@@ -82,7 +82,7 @@
 	icon_state = "black"
 	item_state = "bl_suit"
 	_color = "black"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02
 	flags = FPRINT
@@ -175,7 +175,7 @@
 	icon_state = "red_suit"
 	item_state = "r_suit"
 	_color = "red_suit"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/under/blackskirt
 	name = "black skirt"
@@ -206,7 +206,7 @@
 	icon_state = "pirate"
 	item_state = "pirate"
 	_color = "pirate"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/under/soviet
 	name = "soviet uniform"
@@ -384,7 +384,7 @@
 	icon_state = "spants"
 	_color = "simonpants"
 	item_state = "spants"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	gender = PLURAL
 
 /obj/item/clothing/under/batmansuit
@@ -441,7 +441,7 @@
 	icon_state = "aviator_uniform"
 	item_state = "aviator_uniform"
 	_color = "aviator_uniform"
-	species_restricted = list("exclude","Vox")
+	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/under/libertyshirt
 	name = "liberty shirt"
@@ -556,11 +556,16 @@
 
 /obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
 	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)
-	var/list/slot_must_be_empty = list(slot_back,slot_handcuffed,slot_legcuffed,slot_l_hand,slot_r_hand,slot_belt,slot_head,slot_wear_suit)
+	var/list/slot_must_be_empty = list(slot_back,slot_handcuffed,slot_legcuffed,slot_belt,slot_head,slot_wear_suit)
 	for(var/slot_id in slot_must_be_empty)
 		if(user.get_item_by_slot(slot_id))
 			to_chat(user, "<span class='warning'>You can't fit inside while wearing that \the [user.get_item_by_slot(slot_id)].</span>")
 			return 0
+
+	for(var/obj/item/I in user.held_items)
+		to_chat(user, "<span class='warning'>You can't fit inside while holding \the [I].</span>")
+		return 0
+
 	return 1
 
 /obj/item/clothing/under/clownpiece
@@ -634,3 +639,12 @@
 	icon_state = "hoodieskirt"
 	item_state = "hoodieskirt"
 	_color = "hoodieskirt"
+
+/obj/item/clothing/under/mummy_rags
+	name = "mummy rags"
+	desc = "Ancient rags taken off from some mummy."
+	icon_state = "mummy"
+	item_state = "mummy"
+	_color = "mummy"
+
+	has_sensor = 0

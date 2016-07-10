@@ -4,7 +4,6 @@
 	gender = PLURAL
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "slagcold"
-	anchored = 1
 	melt_temperature=0
 	light_color = LIGHT_COLOR_ORANGE
 
@@ -79,8 +78,8 @@
 
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H=M
-		H.apply_damage(3, BURN, "l_leg", 0, 0, "Slag")
-		H.apply_damage(3, BURN, "r_leg", 0, 0, "Slag")
+		H.apply_damage(3, BURN, LIMB_LEFT_LEG, 0, 0, "Slag")
+		H.apply_damage(3, BURN, LIMB_RIGHT_LEG, 0, 0, "Slag")
 	else if(istype(M,/mob/living))
 		var/mob/living/L=M
 		L.apply_damage(125, BURN)
@@ -89,7 +88,7 @@
 	if(molten)
 		user.show_message("<span class=\"warning\">You need to wait for \the [src] to cool.</span>")
 		return
-	if(W.force >= 5 && W.w_class >= 3.0)
+	if(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM)
 		user.visible_message("<span class=\"danger\">\The [src] is broken apart with the [W.name] by [user.name]!</span>", \
 			"<span class=\"danger\">You break apart \the [src] with your [W.name]!", \
 			"You hear the sound of rock crumbling.")

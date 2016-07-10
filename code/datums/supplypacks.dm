@@ -255,7 +255,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/mining_scanner,
 					/obj/item/weapon/storage/bag/ore,
 					/obj/item/weapon/storage/bag/ore,
-					/obj/item/weapon/storage/bag/ore)
+					/obj/item/weapon/storage/bag/ore,
+					/obj/item/weapon/storage/bag/money,
+					/obj/item/weapon/storage/bag/money)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "Mining Equipment Crate"
@@ -418,6 +420,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/under/dress/dress_pink,
 					/obj/item/clothing/under/dress/dress_yellow,
 					/obj/item/clothing/under/dress/dress_saloon,
+					/obj/item/clothing/head/hairflower,
 					/obj/item/clothing/under/wedding/bride_orange,
 					/obj/item/clothing/under/wedding/bride_purple,
 					/obj/item/clothing/under/wedding/bride_blue,
@@ -546,8 +549,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/armor
 	name = "Armor crate"
-	contains = list(/obj/item/clothing/head/helmet,
-					/obj/item/clothing/head/helmet,
+	contains = list(/obj/item/clothing/head/helmet/tactical/sec,
+					/obj/item/clothing/head/helmet/tactical/sec,
 					/obj/item/clothing/suit/armor/vest,
 					/obj/item/clothing/suit/armor/vest)
 	cost = 15
@@ -570,11 +573,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/handcuffs,
 					/obj/item/weapon/handcuffs,
 					/obj/item/weapon/handcuffs,
-					/obj/item/clothing/head/helmet/riot,
+					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot,
-					/obj/item/clothing/head/helmet/riot,
+					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot,
-					/obj/item/clothing/head/helmet/riot,
+					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot,
 					/obj/item/weapon/storage/box/bolas,
 					/obj/item/weapon/storage/box/bolas)
@@ -625,16 +628,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/shotgunammo
 	name = "Shotgun shells"
-	contains = list(/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun,
-					/obj/item/ammo_casing/shotgun)
+	contains = list(/obj/item/weapon/storage/box/lethalshells,
+					/obj/item/weapon/storage/box/buckshotshells,
+					/obj/item/weapon/storage/box/beanbagshells,
+					/obj/item/weapon/storage/box/stunshells,
+					/obj/item/weapon/storage/box/dartshells)
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Shotgun shells"
@@ -657,7 +655,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Experimental armor crate"
 	contains = list(/obj/item/clothing/suit/armor/laserproof,
 					/obj/item/clothing/suit/armor/bulletproof,
-					/obj/item/clothing/head/helmet/riot,
+					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot)
 	cost = 35
 	containertype = /obj/structure/closet/crate/secure
@@ -1322,6 +1320,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "Stok crate"
+	group = "Hydroponics"
+
+/datum/supply_packs/vox
+	name = "Genetically modified chicken crate"
+	contains = list(/obj/item/weapon/storage/fancy/egg_box/vox)
+	cost = 30
+	containertype = /obj/structure/closet/crate/freezer
+	containername = "Green egg crate"
 	group = "Hydroponics"
 
 /* Defined below

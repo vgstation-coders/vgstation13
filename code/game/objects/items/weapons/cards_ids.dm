@@ -15,7 +15,7 @@
 	name = "card"
 	desc = "Does card things."
 	icon = 'icons/obj/card.dmi'
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/associated_account_number = 0
 
 	var/list/files = list(  )
@@ -184,16 +184,18 @@
 	var/rank = null			//actual job
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
-	var/datum/money_account/virtual_wallet = null	//money!
+	var/datum/money_account/virtual_wallet = 1	//money! If 0, don't create a wallet. Otherwise create one!
 
 /obj/item/weapon/card/id/New()
 	..()
-	update_virtual_wallet()
-	spawn(30) //AWFULNESS AHOY
-		if(ishuman(loc))
-			var/mob/living/carbon/human/H = loc
-			SetOwnerInfo(H)
+
+	if(virtual_wallet)
 		update_virtual_wallet()
+		spawn(30) //AWFULNESS AHOY
+			if(ishuman(loc))
+				var/mob/living/carbon/human/H = loc
+				SetOwnerInfo(H)
+			update_virtual_wallet()
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -216,8 +218,11 @@
 /obj/item/weapon/card/id/GetID()
 	return src
 
+/obj/item/weapon/card/id/get_owner_name_from_ID()
+	return registered_name
+
 /obj/item/weapon/card/id/proc/update_virtual_wallet(var/new_funds=0)
-	if(!virtual_wallet)
+	if(!istype(virtual_wallet))
 		virtual_wallet = new()
 		virtual_wallet.virtual = 1
 
@@ -588,3 +593,11 @@
 	assignment = "Green Team Fighter"
 	icon_state = "TDgreen"
 	desc = "This ID card is given to those who fought inside the thunderdome for the Green Team. Not many have lived to see one of those, even fewer lived to keep it."
+
+/obj/item/weapon/card/id/vox
+	name = "traveler's ID"
+	desc = "A traveler's ID card, required to legally travel in human-controlled territories. It's very worn out and the photo is almost unrecognizable."
+	registered_name = "traveler"
+	assignment = "visitor"
+	icon_state = "trader"
+	access = list(access_trade)

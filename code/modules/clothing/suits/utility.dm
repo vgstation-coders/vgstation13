@@ -15,7 +15,7 @@
 	icon_state = "fire"
 	item_state = "fire_suit"
 	origin_tech = "materials=2;engineering=1"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
@@ -52,7 +52,7 @@
 	desc = "A suit that protects against extreme fire and heat."
 	//icon_state = "thermal"
 	item_state = "ro_suit"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	slowdown = 1.5
 
 /*
@@ -66,14 +66,14 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 0
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/bomb_suit
 	name = "bomb suit"
 	desc = "A suit designed for safety when handling explosives."
 	icon_state = "bombsuit"
 	item_state = "bombsuit"
-	w_class = 4 //Bulky item
+	w_class = W_CLASS_LARGE //Bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
@@ -81,7 +81,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/bomb_hood/security
 	icon_state = "bombsuitsec"
@@ -101,7 +101,7 @@
 	flags = FPRINT
 	armor = list(melee = 80, bullet = 80, laser = 40,energy = 20, bomb = 100, bio = 0, rad = 0)
 	body_parts_covered = FULL_HEAD|BEARD
-	species_restricted = list("exclude","Vox")
+	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
 
 
@@ -110,7 +110,7 @@
 	desc = "A heavy suit designed for heavy protection."
 	icon_state = "advancedeod"
 	item_state = "advancedeod"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
@@ -118,7 +118,7 @@
 	slowdown = 6
 	armor = list(melee = 80, bullet = 80, laser = 40,energy = 20, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("exclude","Vox")
+	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
 
 /*
@@ -131,18 +131,18 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/suit/radiation
 	name = "radiation suit"
 	desc = "A suit that protects against radiation. Label: Made with lead, do not eat insulation."
 	icon_state = "rad"
 	item_state = "rad_suit"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
 	body_parts_covered = FULL_BODY
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 1.5
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)

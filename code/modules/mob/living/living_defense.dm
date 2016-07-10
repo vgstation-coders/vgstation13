@@ -72,7 +72,7 @@
 		return
 	if(istype(AM,/obj/))
 		var/obj/O = AM
-		var/zone = ran_zone("chest",75)//Hits a random part of the body, geared towards the chest
+		var/zone = ran_zone(LIMB_CHEST,75)//Hits a random part of the body, geared towards the chest
 		var/dtype = BRUTE
 		if(istype(O,/obj/item/weapon))
 			var/obj/item/weapon/W = O
@@ -80,13 +80,13 @@
 		src.visible_message("<span class='warning'>[src] has been hit by [O].</span>")
 		var/zone_normal_name
 		switch(zone)
-			if("l_arm")
+			if(LIMB_LEFT_ARM)
 				zone_normal_name = "left arm"
-			if("r_arm")
+			if(LIMB_RIGHT_ARM)
 				zone_normal_name = "right arm"
-			if("l_leg")
+			if(LIMB_LEFT_LEG)
 				zone_normal_name = "left leg"
-			if("r_leg")
+			if(LIMB_RIGHT_LEG)
 				zone_normal_name = "right leg"
 			else
 				zone_normal_name = zone
@@ -132,11 +132,28 @@
 			throwByName = M.name
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed])</font>")
-		msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+
+		if(!src.isDead() && src.ckey) //Message admins if the hit mob is alive and has a ckey
+			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+
 		if(!iscarbon(M))
 			src.LAssailant = null
 		else
 			src.LAssailant = M
+
+/*
+	Ear and eye protection
+
+	Some mobs have built-in ear or eye protection, mobs that can wear equipment may account their eye/ear wear into this proc
+*/
+
+//earprot(): retuns 0 for no protection, 1 for full protection (no ears, earmuffs, etc)
+/mob/living/proc/earprot()
+	return 0
+
+//eyecheck(): retuns 0 for no protection, 1 for partial protection, 2 for full protection
+/mob/living/proc/eyecheck()
+	return 0
 
 
 //BITES
@@ -177,7 +194,7 @@
 	if(stomping) //Stomps = more damage and armor bypassing
 		damage += rand(0,7)
 		attack_verb = "stomps on"
-	else if(M.reagents && M.reagents.has_reagent("gyro"))
+	else if(M.reagents && M.reagents.has_reagent(GYRO))
 		damage += rand(0,4)
 		attack_verb = "roundhouse kicks"
 

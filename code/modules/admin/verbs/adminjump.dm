@@ -110,9 +110,9 @@
 	else
 		alert("Admin jumping disabled")
 
-/client/proc/jumptovault()
+/client/proc/jumptomapelement()
 	set category = "Admin"
-	set name = "Jump to Vault"
+	set name = "Jump to Map Element"
 
 	if(!check_rights())
 		return
@@ -120,16 +120,18 @@
 	if(config.allow_admin_jump)
 		var/list/vaults = list()
 
-		for(var/datum/vault/V in existing_vaults)
-			vaults["[V.map_name] at [V.location ? "[V.location.x], [V.location.y], [V.location.z]" : "UNKNOWN"]"] = V
+		for(var/datum/map_element/V in map_elements)
+			var/name = "[V.type_abbreviation] [V.name ? V.name : V.file_path] @ [V.location ? "[V.location.x],[V.location.y],[V.location.z]" : "UNKNOWN"]"
 
-		var/selection = input("Select a vault to teleport to.", "Admin Jumping", null, null) as null|anything in sortList(vaults)
+			vaults[name] = V
+
+		var/selection = input("Select a map element to teleport to. AM = Away Mission, V = Vault.", "Admin Jumping", null, null) as null|anything in sortList(vaults)
 		if(!selection)
 			return
 
-		var/datum/vault/V = vaults[selection]
+		var/datum/map_element/V = vaults[selection]
 		if(!V.location)
-			to_chat(src, "[V.map_name] doesn't have a location! Report this")
+			to_chat(src, "[V.file_path] doesn't have a location! Report this")
 			return
 
 		usr.forceMove(V.location)

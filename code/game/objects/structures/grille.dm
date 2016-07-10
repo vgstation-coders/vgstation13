@@ -34,6 +34,10 @@
 		icon_state = "[initial(icon_state)]-b"
 		density = 0 //Not blocking anything anymore
 		getFromPool(/obj/item/stack/rods, get_turf(src)) //One rod set
+	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
+		broken = 0
+		icon_state = initial(icon_state)
+		density = 1
 	if(health <= 0) //Dead
 		getFromPool(/obj/item/stack/rods, get_turf(src)) //Drop the second set of rods
 		returnToPool(src)
@@ -50,6 +54,7 @@
 	return
 
 /obj/structure/grille/blob_act()
+	..()
 	health -= rand(initial(health)*0.8, initial(health)*3) //Grille will always be blasted, but chances of leaving things over
 	healthcheck(hitsound = 1)
 
@@ -110,7 +115,7 @@
 	return
 
 
-/obj/structure/grille/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/grille/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
@@ -190,6 +195,10 @@
 			"<span class='notice'>You place \a [WD] on \the [src].</span>")
 		return
 
+	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
+		health = 0
+		healthcheck()
+
 	switch(W.damtype)
 		if("fire")
 			health -= W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
@@ -256,7 +265,20 @@
 	icon_state = "grillecult"
 	health = 40 //Make it strong enough to avoid people breaking in too easily
 
-/obj/structure/grille/cult/CanPass(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/grille/cult/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || !broken)
 		return 0 //Make sure air doesn't drain
 	..()
+
+
+/obj/structure/grille/invulnerable
+	desc = "A reinforced grille made with advanced alloys and techniques. It's impossible to break one without the use of heavy machinery."
+
+/obj/structure/grille/invulnerable/healthcheck(hitsound)
+	return
+
+/obj/structure/grille/invulnerable/ex_act()
+	return
+
+/obj/structure/grille/invulnerable/attackby()
+	return

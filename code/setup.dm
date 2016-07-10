@@ -1,6 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 508
-#error Your version of byond is too old, you need version 508 or higher
+#if DM_VERSION < 510
+#error Your version of byond is too old, you need version 510 or higher
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
@@ -13,6 +13,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
+#define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
 #define CHECK_DISABLED(TYPE) if(disable_##TYPE) return
@@ -68,9 +69,14 @@ var/global/disable_vents     = 0
 #define HAZARD_LOW_PRESSURE 20		//This is when the black ultra-low pressure icon is displayed. (This one is set as a constant)
 
 #define TEMPERATURE_DAMAGE_COEFFICIENT 1.5	//This is used in handle_temperature_damage() for humans, and in reagents that affect body temperature. Temperature damage is multiplied by this amount.
-#define BODYTEMP_AUTORECOVERY_DIVISOR 4 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
-#define BODYTEMP_AUTORECOVERY_MAXIMUM 0.25 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
-#define BODYTEMP_COLD_DIVISOR 150 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
+#define BODYTEMP_AUTORECOVERY_DIVISOR 0.5 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
+#define BODYTEMP_AUTORECOVERY_MAXIMUM 2.0 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
+
+#define BODYTEMP_COLD_DIVISOR 100 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
+
+#define PRESSUREFACTOR_NO_LINEAR 1.5  // Where growth of the pressure factor stops being linear
+#define COLD_PRESSUREFACTOR_MAX (PRESSUREFACTOR_NO_LINEAR)/((-1/PRESSUREFACTOR_NO_LINEAR)+1)    // The highest that heat loss can be multiplied by due to pressure. Depends on where non linear starts.
+
 #define BODYTEMP_HEAT_DIVISOR 80 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is higher than their body temperature. Make it lower to gain bodytemp faster.
 #define BODYTEMP_HEATING_MAX 10 //The maximum number of degrees that your body can heat up in 1 tick, when in a hot area.
 
@@ -122,6 +128,328 @@ var/global/disable_vents     = 0
 
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
+
+//Reagents
+
+#define VAPORSALT			"vaporsalt"
+#define BUSTANUT 			"bustanut"
+#define ROGAN 			"rogan"
+#define SLIMEJELLY 			"slimejelly"
+#define BLOOD 			"blood"
+#define VACCINE 			"vaccine"
+#define WATER 			"water"
+#define LUBE 			"lube"
+#define PHALANXIMINE 			"phalanximine"
+#define TOXIN 			"toxin"
+#define PLASTICIDE 			"plasticide"
+#define CYANIDE "cyanide"
+#define CHEFSPECIAL 			"chefspecial"
+#define MINTTOXIN 			"minttoxin"
+#define MUTATIONTOXIN 			"mutationtoxin"
+#define AMUTATIONTOXIN 			"amutationtoxin"
+#define STOXIN 			"stoxin"
+#define INAPROVALINE 			"inaprovaline"
+#define HOLYWATER 			"holywater"
+#define SEROTROTIUM 			"serotrotium"
+#define SILICATE 			"silicate"
+#define OXYGEN 			"oxygen"
+#define COPPER 			"copper"
+#define NITROGEN 			"nitrogen"
+#define HYDROGEN 			"hydrogen"
+#define POTASSIUM 			"potassium"
+#define MERCURY 			"mercury"
+#define SULFUR 			"sulfur"
+#define CARBON 			"carbon"
+#define CHLORINE 			"chlorine"
+#define FLUORINE 			"fluorine"
+#define SODIUM 			"sodium"
+#define PHOSPHORUS 			"phosphorus"
+#define LITHIUM 			"lithium"
+#define SUGAR 			"sugar"
+#define SACID 			"sacid"
+#define PACID 			"pacid"
+#define GLYCEROL 			"glycerol"
+#define NITROGLYCERIN 			"nitroglycerin"
+#define RADIUM 			"radium"
+#define RYETALYN 			"ryetalyn"
+#define PAISMOKE 			"paismoke"
+#define THERMITE 			"thermite"
+#define PARACETAMOL 			"paracetamol"
+#define MUTAGEN 			"mutagen"
+#define TRAMADOL 			"tramadol"
+#define OXYCODONE 			"oxycodone"
+#define VIRUSFOOD 			"virusfood"
+#define STERILIZINE 			"sterilizine"
+#define IRON 			"iron"
+#define GOLD 			"gold"
+#define SILVER 			"silver"
+#define URANIUM 			"uranium"
+#define ALUMINUM 			"aluminum"
+#define SILICON 			"silicon"
+#define FUEL 			"fuel"
+#define VOMIT 			"vomit"
+#define CLEANER 			"cleaner"
+#define FERTILIZER 			"fertilizer"
+#define EZNUTRIENT 			"eznutrient"
+#define ROBUSTHARVEST 			"robustharvest"
+#define PLANTBGONE 			"plantbgone"
+#define PLASMA 			"plasma"
+#define LEPORAZINE 			"leporazine"
+#define CRYPTOBIOLIN 			"cryptobiolin"
+#define LEXORIN 			"lexorin"
+#define KELOTANE 			"kelotane"
+#define DERMALINE 			"dermaline"
+#define DEXALIN 			"dexalin"
+#define DEXALINP 			"dexalinp"
+#define TRICORDRAZINE 			"tricordrazine"
+#define ADMINORDRAZINE 			"adminordrazine"
+#define SYNAPTIZINE 			"synaptizine"
+#define IMPEDREZENE 			"impedrezene"
+#define HYRONALIN 			"hyronalin"
+#define ARITHRAZINE 			"arithrazine"
+#define ALKYSINE 			"alkysine"
+#define IMIDAZOLINE 			"imidazoline"
+#define INACUSIATE 			"inacusiate"
+#define PERIDAXON 			"peridaxon"
+#define BICARIDINE 			"bicaridine"
+#define HYPERZINE 			"hyperzine"
+#define CRYOXADONE 			"cryoxadone"
+#define CLONEXADONE 			"clonexadone"
+#define REZADONE 			"rezadone"
+#define SPACEACILLIN 			"spaceacillin"
+#define CARPOTOXIN 			"carpotoxin"
+#define ZOMBIEPOWDER 			"zombiepowder"
+#define MINDBREAKER 			"mindbreaker"
+#define SPIRITBREAKER 			"spiritbreaker"
+#define METHYLIN 			"methylin"
+#define BICARODYNE 			"bicarodyne"
+#define STABILIZINE 			"stabilizine"
+#define NANITES 			"nanites"
+#define AUTISTNANITES 			"autistnanites"
+#define XENOMICROBES 			"xenomicrobes"
+#define NANOBOTS 			"nanobots"
+#define MEDNANOBOTS 			"mednanobots"
+#define COMNANOBOTS 			"comnanobots"
+#define FLUOROSURFACTANT 			"fluorosurfactant"
+#define NICOTINE 			"nicotine"
+#define AMMONIA 			"ammonia"
+#define GLUE 			"glue"
+#define DIETHYLAMINE 			"diethylamine"
+#define ETHYLREDOXRAZINE 			"ethylredoxrazine"
+#define CHLORALHYDRATE 			"chloralhydrate"
+#define NUTRIMENT 			"nutriment"
+#define LIPOZINE 			"lipozine"
+#define SOYSAUCE 			"soysauce"
+#define KETCHUP 			"ketchup"
+#define CAPSAICIN 			"capsaicin"
+#define CONDENSEDCAPSAICIN 			"condensedcapsaicin"
+#define BLACKCOLOR 			"blackcolor"
+#define FROSTOIL 			"frostoil"
+#define SODIUMCHLORIDE 			"sodiumchloride"
+#define CREATINE 			"creatine"
+#define CARPPHEROMONES 			"carppheromones"
+#define BLACKPEPPER 			"blackpepper"
+#define CINNAMON 			"cinnamon"
+#define COCO 			"coco"
+#define AMATOXIN 			"amatoxin"
+#define AMANATIN 			"amanatin"
+#define PSILOCYBIN 			"psilocybin"
+#define SPRINKLES 			"sprinkles"
+#define SYNDICREAM 			"syndicream"
+#define CORNOIL 			"cornoil"
+#define ENZYME 			"enzyme"
+#define FLOUR 			"flour"
+#define RICE 			"rice"
+#define CHERRYJELLY 			"cherryjelly"
+#define DISCOUNT 			"discount"
+#define IRRADIATEDBEANS 			"irradiatedbeans"
+#define TOXICWASTE 			"toxicwaste"
+#define REFRIEDBEANS 			"refriedbeans"
+#define MUTATEDBEANS 			"mutatedbeans"
+#define BEFF 			"beff"
+#define HORSEMEAT 			"horsemeat"
+#define MOONROCKS 			"moonrocks"
+#define OFFCOLORCHEESE 			"offcolorcheese"
+#define BONEMARROW 			"bonemarrow"
+#define GREENRAMEN 			"greenramen"
+#define GLOWINGRAMEN 			"glowingramen"
+#define DEEPFRIEDRAMEN 			"deepfriedramen"
+#define PEPTOBISMOL 			"peptobismol"
+#define DRINK 			"drink"
+#define ORANGEJUICE 			"orangejuice"
+#define TOMATOJUICE 			"tomatojuice"
+#define LIMEJUICE 			"limejuice"
+#define CARROTJUICE 			"carrotjuice"
+#define BERRYJUICE 			"berryjuice"
+#define POISONBERRYJUICE 			"poisonberryjuice"
+#define WATERMELONJUICE 			"watermelonjuice"
+#define APPLEJUICE 			"applejuice"
+#define LEMONJUICE 			"lemonjuice"
+#define BANANA 			"banana"
+#define NOTHING 			"nothing"
+#define POTATO 			"potato"
+#define MILK 			"milk"
+#define SOYMILK 			"soymilk"
+#define CREAM 			"cream"
+#define COFFEE 			"coffee"
+#define ICECOFFEE 			"icecoffee"
+#define TEA 			"tea"
+#define ICETEA 			"icetea"
+#define ARNOLDPALMER 			"arnoldpalmer"
+#define KAHLUA 			"kahlua"
+#define TONIC 			"tonic"
+#define SODAWATER 			"sodawater"
+#define ICE 			"ice"
+#define COLA 			"cola"
+#define SPACEMOUNTAINWIND 			"spacemountainwind"
+#define LEMONADE 			"lemonade"
+#define KIRASPECIAL 			"kiraspecial"
+#define BROWNSTAR 			"brownstar"
+#define MILKSHAKE 			"milkshake"
+#define REWRITER 			"rewriter"
+#define HIPPIESDELIGHT 			"hippiesdelight"
+#define ETHANOL 			"ethanol"
+#define BEER 			"beer"
+#define WHISKEY 			"whiskey"
+#define SPECIALWHISKEY 			"specialwhiskey"
+#define GIN 			"gin"
+#define ABSINTHE 			"absinthe"
+#define RUM 			"rum"
+#define TEQUILA 			"tequila"
+#define VERMOUTH 			"vermouth"
+#define WINE 			"wine"
+#define COGNAC 			"cognac"
+#define HOOCH 			"hooch"
+#define ALE 			"ale"
+#define PWINE 			"pwine"
+#define RUM 			"rum"
+#define VODKA 			"vodka"
+#define SAKE 			"sake"
+#define TEQUILA 			"tequila"
+#define VERMOUTH 			"vermouth"
+#define WINE 			"wine"
+#define COGNAC 			"cognac"
+#define HOOCH 			"hooch"
+#define ALE 			"ale"
+#define THIRTEENLOKO 			"thirteenloko"
+#define BILK 			"bilk"
+#define ATOMICBOMB 			"atomicbomb"
+#define THREEMILEISLAND 			"threemileisland"
+#define GOLDSCHLAGER 			"goldschlager"
+#define PATRON 			"patron"
+#define GINTONIC 			"gintonic"
+#define CUBALIBRE 			"cubalibre"
+#define WHISKEYCOLA 			"whiskeycola"
+#define MARTINI 			"martini"
+#define VODKAMARTINI 			"vodkamartini"
+#define WHITERUSSIAN 			"whiterussian"
+#define SCREWDRIVERCOCKTAIL 			"screwdrivercocktail"
+#define BOOGER 			"booger"
+#define BLOODYMARY 			"bloodymary"
+#define GARGLEBLASTER 			"gargleblaster"
+#define BRAVEBULL 			"bravebull"
+#define TEQUILASUNRISE 			"tequilasunrise"
+#define TOXINSSPECIAL 			"toxinsspecial"
+#define BEEPSKYSMASH 			"beepskysmash"
+#define DOCTORSDELIGHT 			"doctorsdelight"
+#define CHANGELINGSTING 			"changelingsting"
+#define IRISHCREAM 			"irishcream"
+#define MANLYDORF 			"manlydorf"
+#define LONGISLANDICEDTEA 			"longislandicedtea"
+#define MOONSHINE 			"moonshine"
+#define IRISHCOFFEE 			"irishcoffee"
+#define MARGARITA 			"margarita"
+#define BLACKRUSSIAN 			"blackrussian"
+#define MANHATTAN 			"manhattan"
+#define WHISKEYSODA 			"whiskeysoda"
+#define ANTIFREEZE 			"antifreeze"
+#define BAREFOOT 			"barefoot"
+#define SNOWWHITE 			"snowwhite"
+#define DEMONSBLOOD 			"demonsblood"
+#define VODKATONIC 			"vodkatonic"
+#define GINFIZZ 			"ginfizz"
+#define PINACOLADA 			"pinacolada"
+#define SINGULO 			"singulo"
+#define SBITEN 			"sbiten"
+#define DEVILSKISS 			"devilskiss"
+#define MEAD 			"mead"
+#define GROG 			"grog"
+#define ALOE 			"aloe"
+#define ANDALUSIA 			"andalusia"
+#define ALLIESCOCKTAIL 			"alliescocktail"
+#define ACIDSPIT 			"acidspit"
+#define AMASEC 			"amasec"
+#define NEUROTOXIN 			"neurotoxin"
+#define BANANAHONK 			"bananahonk"
+#define SILENCER 			"silencer"
+#define CHANGELINGSTING 			"changelingsting"
+#define ERIKASURPRISE 			"erikasurprise"
+#define IRISHCARBOMB 			"irishcarbomb"
+#define SYNDICATEBOMB 			"syndicatebomb"
+#define DRIESTMARTINI 			"driestmartini"
+#define VINEGAR 			"vinegar"
+#define HONKSERUM 			"honkserum"
+#define HAMSERUM 			"hamserum"
+#define GREENTEA 			"greentea"
+#define REDTEA 			"redtea"
+#define SINGULARITEA 			"singularitea"
+#define CHIFIR 			"chifir"
+#define ACIDTEA 			"acidtea"
+#define YINYANG 			"yinyang"
+#define GYRO 			"gyro"
+#define DANTEA 			"dantea"
+#define MINT 			"mint"
+#define CHAMOMILE 			"chamomile"
+#define EXCHAMOMILE 			"exchamomile"
+#define FANCYDAN 			"fancydan"
+#define PLASMATEA 			"plasmatea"
+#define GREYTEA 			"greytea"
+#define ESPRESSO 			"espresso"
+#define TONIO 			"tonio"
+#define CAPPUCCINO 			"cappuccino"
+#define DOPPIO 			"doppio"
+#define PASSIONE 			"passione"
+#define SECCOFFEE 			"seccoffee"
+#define MEDCOFFEE 			"medcoffee"
+#define DETCOFFEE 			"detcoffee"
+#define ETANK 			"etank"
+#define QUANTUM 			"quantum"
+#define SPORTDRINK 			"sportdrink"
+#define CITALOPRAM 			"citalopram"
+#define PAROXETINE 			"paroxetine"
+#define GRAVY 			"gravy"
+#define LEFT4ZED		"left4zed"
+#define ANTI_TOXIN		"anti_toxin"
+#define REAGENT			"reagent"
+#define STOXIN2			"stoxin2"
+#define SPACE_DRUGS		"space_drugs"
+#define FOAMING_AGENT	"foaming_agent"
+#define BEER2			"beer2"
+#define HOT_COCO		"hot_coco"
+#define DRY_RAMEN		"dry_ramen"
+#define HOT_RAMEN		"hot_ramen"
+#define HELL_RAMEN		"hell_ramen"
+#define CLOTTING_AGENT	"clotting_agent"
+#define SOY_LATTE		"soy_latte"
+#define CAFE_LATTE		"cafe_latte"
+#define NUKA_COLA		"nuka_cola"
+#define DR_GIBB			"dr_gibb"
+#define SPACE_UP		"space_up"
+#define LEMON_LIME		"lemon_lime"
+#define B52				"b52"
+#define MANHATTAN_PROJ	"manhattan_proj"
+#define BAHAMA_MAMA		"bahama_mama"
+#define RED_MEAD		"red_mead"
+#define ICED_BEER		"iced_beer"
+#define CHARCOAL		"charcoal"
+
+#define TUNGSTEN 			"tungsten"
+#define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
+#define GROUND_ROCK 			"ground_rock"
+#define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
+#define ANALYSIS_SAMPLE 			"analysis_sample"
+#define CHEMICAL_WASTE 			"chemical_waste"
+
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -196,6 +524,9 @@ var/MAX_EXPLOSION_RANGE = 14
 //#define MAX_EXPLOSION_RANGE		14					// Defaults to 12 (was 8) -- TLE
 
 #define HUMAN_STRIP_DELAY 40 //takes 40ds = 4s to strip someone.
+#define HUMAN_REVERSESTRIP_DELAY 20
+#define MONKEY_STRIP_DELAY 40
+#define MONKEY_REVERSESTRIP_DELAY 5
 
 #define ALIEN_SELECT_AFK_BUFFER 1 // How many minutes that a person can be AFK before not being allowed to be an alien.
 #define ROLE_SELECT_AFK_BUFFER  1 // Default value.
@@ -206,6 +537,14 @@ var/MAX_EXPLOSION_RANGE = 14
 #define FLOWFRAC 0.99				// fraction of gas transfered per process
 
 #define SHOES_SLOWDOWN -1.0			// How much shoes slow you down by default. Negative values speed you up
+
+//WEIGHT CLASSES
+#define W_CLASS_TINY 1
+#define W_CLASS_SMALL 2
+#define W_CLASS_MEDIUM 3
+#define W_CLASS_LARGE 4
+#define W_CLASS_HUGE 5
+#define W_CLASS_GIANT 20
 
 
 //ITEM INVENTORY SLOT BITMASKS
@@ -295,23 +634,21 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_back 1
 #define slot_wear_mask 2
 #define slot_handcuffed 3
-#define slot_l_hand 4
-#define slot_r_hand 5
-#define slot_belt 6
-#define slot_wear_id 7
-#define slot_ears 8
-#define slot_glasses 9
-#define slot_gloves 10
-#define slot_head 11
-#define slot_shoes 12
-#define slot_wear_suit 13
-#define slot_w_uniform 14
-#define slot_l_store 15
-#define slot_r_store 16
-#define slot_s_store 17
-#define slot_in_backpack 18
-#define slot_legcuffed 19
-#define slot_legs 21
+#define slot_belt 4
+#define slot_wear_id 5
+#define slot_ears 6
+#define slot_glasses 7
+#define slot_gloves 8
+#define slot_head 9
+#define slot_shoes 10
+#define slot_wear_suit 11
+#define slot_w_uniform 12
+#define slot_l_store 13
+#define slot_r_store 14
+#define slot_s_store 15
+#define slot_in_backpack 16
+#define slot_legcuffed 17
+#define slot_legs 18
 
 //Cant seem to find a mob bitflags area other than the powers one
 
@@ -410,6 +747,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_FAT         2
 #define DISABILITY_FLAG_EPILEPTIC   4
 #define DISABILITY_FLAG_DEAF        8
+#define DISABILITY_FLAG_BLIND       16
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -663,22 +1001,34 @@ var/list/liftable_structures = list(\
 
 #define SEE_INVISIBLE_MINIMUM 5
 
-#define SEE_INVISIBLE_OBSERVER_NOLIGHTING 15
+#define SEE_INVISIBLE_OBSERVER_NOLIGHTING 15	//Used by Ghosts when they click "Toggle Darkness".
 
-#define INVISIBILITY_LIGHTING 20
+#define INVISIBILITY_LIGHTING 20	//Used by the lighting_overlay. Any value bellow that one will let you see in the dark.
 
-#define SEE_INVISIBLE_LIVING 25
+#define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
-#define SEE_INVISIBLE_LEVEL_ONE 35	//Used by some stuff in code. It's really poorly organized.
-#define INVISIBILITY_LEVEL_ONE 35	//Used by some stuff in code. It's really poorly organized.
+#define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
+#define INVISIBILITY_LEVEL_ONE 35	//Unused.
 
-#define SEE_INVISIBLE_LEVEL_TWO 45	//Used by some other stuff in code. It's really poorly organized.
-#define INVISIBILITY_LEVEL_TWO 45	//Used by some other stuff in code. It's really poorly organized.
+#define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
+#define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
 
-#define INVISIBILITY_OBSERVER 60
-#define SEE_INVISIBLE_OBSERVER 60
+#define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
+#define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
 
 #define INVISIBILITY_MAXIMUM 100
+
+/*
+FOR IN-GAME TESTING PURPOSES (var/sight bitflags)
+
+BLIND		1
+SEE_MOBS	4
+SEE_OBJS	8
+SEE_TURFS	16
+SEE_SELF	32
+SEE_INFRA	64
+SEE_PIXELS	256
+*/
 
 // Object specific defines.
 #define CANDLE_LUM 2 //For how bright candles are.
@@ -882,10 +1232,10 @@ var/list/liftable_structures = list(\
 #define PULSE_2FAST		5	//>120 bpm
 #define PULSE_THREADY	6	//occurs during hypovolemic shock
 //feel free to add shit to lists below
-var/list/tachycardics = list("coffee", "inaprovaline", "hyperzine", "nitroglycerin", "thirteenloko", "nicotine")	//increase heart rate
-var/list/bradycardics = list("neurotoxin", "cryoxadone", "clonexadone", "space_drugs", "stoxin")					//decrease heart rate
-var/list/heartstopper = list("potassium_phorochloride", "zombie_powder") //this stops the heart
-var/list/cheartstopper = list("potassium_chloride") //this stops the heart when overdose is met -- c = conditional
+var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE)	//increase heart rate
+var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN)					//decrease heart rate
+var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
+var/list/cheartstopper = list(/*"potassium_chloride"*/) //this stops the heart when overdose is met -- c = conditional
 
 //proc/get_pulse methods
 #define GETPULSE_HAND	0	//less accurate (hand)
@@ -918,7 +1268,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define CAN_BE_FAT 8192 // /vg/
 
-#define IS_SYNTHETIC 16384 // from baystation
+#define IS_BULKY 16384 //can't wear exosuits, gloves, masks, or hardsuits
 
 #define NO_SKIN 32768
 
@@ -933,7 +1283,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define NO_SPLASH 4
 #define NO_INJECT 8
 #define NO_CRYO 16
-
 
 
 // from bay station
@@ -954,6 +1303,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define EQUIP_FAILACTION_NOTHING 0
 #define EQUIP_FAILACTION_DELETE 1
 #define EQUIP_FAILACTION_DROP 2
+
+//mob_can_equip flags
+#define CANNOT_EQUIP 0
+#define CAN_EQUIP 1
+#define CAN_EQUIP_BUT_SLOT_TAKEN 2
 
 // Vampire power defines
 #define VAMP_REJUV    1
@@ -1131,32 +1485,31 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_FIVE	9
 #define STAGE_SUPER	11
 
-//Human Overlays Indexes/////////
+//Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
 #define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
 #define MUTANTRACE_LAYER		2		//TODO: make part of body?
 #define MUTATIONS_LAYER			3
 #define DAMAGE_LAYER			4
 #define UNIFORM_LAYER			5
-#define SUIT_LAYER				6
-#define SHOES_LAYER				7
-#define GLOVES_LAYER			8
-#define EARS_LAYER				9
+#define SHOES_LAYER				6
+#define GLOVES_LAYER			7
+#define EARS_LAYER				8
+#define SUIT_LAYER				9
 #define GLASSES_LAYER			10
 #define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
 #define SUIT_STORE_LAYER		12
-#define BACK_LAYER				13
-#define ID_LAYER				14
-#define HAIR_LAYER				15		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	16
-#define FACEMASK_LAYER			17
-#define HEAD_LAYER				18
+#define HAIR_LAYER				13		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	14
+#define FACEMASK_LAYER			15
+#define HEAD_LAYER				16
+#define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
+#define ID_LAYER				18		//IDs should be visible above suits and backpacks
 #define HANDCUFF_LAYER			19
 #define LEGCUFF_LAYER			20
-#define L_HAND_LAYER			21
-#define R_HAND_LAYER			22
-#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
-#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			25
+#define HAND_LAYER				21
+#define TAIL_LAYER				22		//bs12 specific. this hack is probably gonna come back to haunt me
+#define TARGETED_LAYER			23		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			23
 //////////////////////////////////
 
 
@@ -1199,6 +1552,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 //End split flags
 #define CONSTRUCT_CHECK	256	//used by construct spells - checks for nullrods
 #define NO_BUTTON		512	//spell won't show up in the HUD with this
+#define WAIT_FOR_CLICK	1024//spells wait for you to click on a target to cast
+#define TALKED_BEFORE	2048//spells require you to have heard the person you are casting it upon
 
 //invocation
 #define SpI_SHOUT	"shout"
@@ -1276,42 +1631,6 @@ var/proccalls = 1
 #else
 	#define writepanic(a) null << a
 #endif*/
-
-//Bay lighting engine shit, not in /code/modules/lighting because BYOND is being shit about it
-#define LIGHTING_INTERVAL 5 // frequency, in 1/10ths of a second, of the lighting process
-
-#define LIGHTING_FALLOFF 1 // type of falloff to use for lighting; 1 for circular, 2 for square
-#define LIGHTING_LAMBERTIAN 0 // use lambertian shading for light sources
-#define LIGHTING_HEIGHT 1 // height off the ground of light sources on the pseudo-z-axis, you should probably leave this alone
-#define LIGHTING_TRANSITIONS 0 // smooth, animated transitions, similar to TG station
-#ifdef LIGHTING_TRANSITIONS
-#define LIGHTING_TRANSITION_SPEED (LIGHTING_INTERVAL - 2)
-#endif
-#define LIGHTING_ROUND_VALUE 1 / 128 //Value used to round lumcounts, values smaller than 1/255 don't matter (if they do, thanks sinking points), greater values will make lighting less precise, but in turn increase performance, VERY SLIGHTLY.
-
-#define LIGHTING_LAYER 10 // drawing layer for lighting overlays
-#define LIGHTING_ICON 'icons/effects/lighting_overlay.dmi' // icon used for lighting shading effects
-
-#define LIGHTING_SOFT_THRESHOLD 0.05 // If the max of the lighting lumcounts of each spectrum drops below this, disable luminosity on the lighting overlays.
-
-//Some defines to generalise colours used in lighting.
-//Important note on colors. Colors can end up significantly different from the basic html picture, especially when saturated
-#define LIGHT_COLOR_RED "#FA8282" //Warm but extremely diluted red. rgb(250, 130, 130)
-#define LIGHT_COLOR_GREEN "#64C864" //Bright but quickly dissipating neon green. rgb(100, 200, 100)
-#define LIGHT_COLOR_BLUE "#6496FA" //Cold, diluted blue. rgb(100, 150, 250)
-
-#define LIGHT_COLOR_CYAN "#7DE1E1" //Diluted cyan. rgb(125, 225, 225)
-#define LIGHT_COLOR_PINK "#E17DE1" //Diluted, mid-warmth pink. rgb(225, 125, 225)
-#define LIGHT_COLOR_YELLOW "#E1E17D" //Dimmed yellow, leaning kaki. rgb(225, 225, 125)
-#define LIGHT_COLOR_BROWN "#966432" //Clear brown, mostly dim. rgb(150, 100, 50)
-#define LIGHT_COLOR_ORANGE "#FA9632" //Mostly pure orange. rgb(250, 150, 50)
-
-//These ones aren't a direct colour like the ones above, because nothing would fit
-#define LIGHT_COLOR_FIRE "#FAA019" //Warm orange color, leaning strongly towards yellow. rgb(250, 160, 25)
-#define LIGHT_COLOR_FLARE "#FA644B" //Bright, non-saturated red. Leaning slightly towards pink for visibility. rgb(250, 100, 75)
-#define LIGHT_COLOR_SLIME_LAMP "#AFC84B" //Weird color, between yellow and green, very slimy. rgb(175, 200, 75)
-#define LIGHT_COLOR_TUNGSTEN "#FAE1AF" //Extremely diluted yellow, close to skin color (for some reason). rgb(250, 225, 175)
-#define LIGHT_COLOR_HALOGEN "#F0FAFA" //Barely visible cyan-ish hue, as the doctor prescribed. rgb(240, 250, 250)
 
 //Default frequencies of signal based RC stuff, because comic and his magic numbers.
 #define FREQ_DISPOSAL 1367
@@ -1393,6 +1712,9 @@ var/proccalls = 1
 
 #define log_adminwarn(text) diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
 #define log_pda(text) diary << html_decode("\[[time_stamp()]]PDA: [text]")
+
+#define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
+#define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
@@ -1478,3 +1800,14 @@ var/proccalls = 1
 #define CANCER_STAGE_SMALL_TUMOR 300 //Cancer starts to have small effects depending on what the affected limb is, generally inconclusive ones. 5 minutes
 #define CANCER_STAGE_LARGE_TUMOR 600 //Cancer starts to have serious effects depending on what the affected limb is, generally obvious one, up to visible tumor growth. 15 minutes
 #define CANCER_STAGE_METASTASIS 1200 //Cancer has maximal effects, growing out of control in the organ, and can start "colonizing" other organs very quickly, dooming the patient. 30 minutes
+
+#define EVENT_OBJECT_INDEX "o"
+#define EVENT_PROC_INDEX "p"
+
+#define HIGHLANDER "highlander"
+
+//Grasp indexes
+#define GRASP_RIGHT_HAND 1
+#define GRASP_LEFT_HAND 2
+
+#define BLOB_CORE_PROPORTION 20

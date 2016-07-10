@@ -202,7 +202,7 @@
 		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."
 
 	if(dat)
-		dat = list2text(dat)
+		dat = jointext(dat,"")
 		last_data = dat
 		dat += "<br><br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
 		user << browse(dat,"window=plant_analyzer_\ref[src];size=400x500")
@@ -259,7 +259,7 @@
 	flags = FPRINT | NOBLUDGEON
 	slot_flags = SLOT_BELT
 	throwforce = 4
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 10
 	var/toxicity = 4
@@ -312,7 +312,7 @@
 	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
 
@@ -364,7 +364,7 @@
 	icon_state = "bottle16"
 	flags = FPRINT | OPENCONTAINER
 	possible_transfer_amounts = null
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 
 	var/fertilizer //Reagent contained, if any.
 
@@ -384,17 +384,17 @@
 /obj/item/weapon/reagent_containers/glass/fertilizer/ez
 	name = "bottle of E-Z-Nutrient"
 	icon_state = "bottle16"
-	fertilizer = "eznutrient"
+	fertilizer = EZNUTRIENT
 
 /obj/item/weapon/reagent_containers/glass/fertilizer/l4z
 	name = "bottle of Left 4 Zed"
 	icon_state = "bottle18"
-	fertilizer = "left4zed"
+	fertilizer = LEFT4ZED
 
 /obj/item/weapon/reagent_containers/glass/fertilizer/rh
 	name = "bottle of Robust Harvest"
 	icon_state = "bottle15"
-	fertilizer = "robustharvest"
+	fertilizer = ROBUSTHARVEST
 
 //Hatchets and things to kill kudzu
 /obj/item/weapon/hatchet
@@ -405,7 +405,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 12.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throwforce = 15.0
 	throw_speed = 4
 	throw_range = 4
@@ -434,7 +434,7 @@
 	throw_speed = 1
 	throw_range = 3
 	sharpness = 1.0
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	slot_flags = SLOT_BACK
 	origin_tech = "materials=2;combat=2"
@@ -468,7 +468,7 @@
 	icon_state = "claypot-item"
 	item_state = "claypot"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 5.0
 	throwforce = 20.0
 	throw_speed = 1

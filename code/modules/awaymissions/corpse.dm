@@ -48,6 +48,7 @@
 
 /obj/effect/landmark/corpse/proc/createCorpse() //Creates a mob and checks for gear in each slot before attempting to equip it.
 	var/mob/living/carbon/human/M = new /mob/living/carbon/human(loc, mutantrace)
+
 	M.dna.mutantrace = mutantrace
 	M.real_name = src.name
 
@@ -202,7 +203,7 @@
 	corpsegloves = /obj/item/clothing/gloves/swat
 	corpseradio = /obj/item/device/radio/headset
 	corpsemask = /obj/item/clothing/mask/gas
-	corpsehelmet = /obj/item/clothing/head/helmet/swat
+	corpsehelmet = /obj/item/clothing/head/helmet/tactical/swat
 	corpseback = /obj/item/weapon/storage/backpack
 	corpseid = 1
 	corpseidjob = "Operative"
@@ -307,6 +308,15 @@
 	corpseidjob = "Scientist"
 	corpseidaccess = "Scientist"
 
+/obj/effect/landmark/corpse/scientist/voxresearch
+	name = "Research Geneticist"
+	corpseradio = /obj/item/device/radio/headset/headset_sci
+	corpseuniform = /obj/item/clothing/under/rank/scientist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 0
+
 /obj/effect/landmark/corpse/miner
 	corpseradio = /obj/item/device/radio/headset/headset_mining
 	corpseuniform = /obj/item/clothing/under/rank/miner
@@ -410,6 +420,14 @@
 
 	corpsemask = /obj/item/clothing/mask/breath
 
+/obj/effect/landmark/corpse/vox
+	name = "Dead vox"
+	mutantrace = "Vox"
+	generate_random_mob_name = 1
+	generate_random_appearance = 1
+	corpsegender = G_BOTH
+	burn_dmg = 100
+
 /obj/effect/landmark/corpse/civilian/New()
 	corpseuniform += existing_typesof(/obj/item/clothing/under/color)
 	corpsehelmet += existing_typesof(/obj/item/clothing/head/soft)
@@ -433,6 +451,11 @@
 		corpsegloves = null
 	if(prob(80))
 		corpseglasses = null
+
+/obj/effect/landmark/corpse/mutilated
+	husk = 1
+	brute_dmg = 250
+	burn_dmg = 100
 
 #undef G_MALE
 #undef G_FEMALE

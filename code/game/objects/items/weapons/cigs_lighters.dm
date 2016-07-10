@@ -27,7 +27,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "materials=1"
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
@@ -151,7 +151,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
 	icon_state = "cig"
 	item_state = "cig"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	body_parts_covered = 0
 	attack_verb = list("burns", "singes")
 	heat_production = 1000
@@ -261,14 +261,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob)
 	..()
 	if(istype(glass))	//You can dip cigarettes into beakers and beaker subtypes
-		if(glass.reagents.has_reagent("sacid") || glass.reagents.has_reagent("pacid")) //Dumping into acid, a dumb idea
+		if(glass.reagents.has_reagent(SACID) || glass.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
 			new type_butt(get_turf(glass))
 			processing_objects.Remove(src)
 			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [glass].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-		if(glass.reagents.has_reagent("water") && lit) //Dumping a lit cigarette into water, the result is obvious
+		if(glass.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
 			new type_butt(get_turf(glass))
 			processing_objects.Remove(src)
 			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [glass].</span>")
@@ -287,13 +287,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(lit) //Failsafe
 		return //"Normal" situations were already handled in attackby, don't show a message
 
-	if(reagents.get_reagent_amount("water")) //The cigarette was dipped into water, it's useless now
+	if(reagents.get_reagent_amount(WATER)) //The cigarette was dipped into water, it's useless now
 		to_chat(usr, "<span class='warning'>You fail to light \the [src]. It appears to be wet.</span>")
 		return
 
-	if(reagents.get_reagent_amount("plasma")) //Plasma explodes when exposed to fire
+	if(reagents.get_reagent_amount(PLASMA)) //Plasma explodes when exposed to fire
 		var/datum/effect/effect/system/reagents_explosion/e = new()
-		e.set_up(round(reagents.get_reagent_amount("plasma")/2.5, 1), get_turf(src), 0, 0)
+		e.set_up(round(reagents.get_reagent_amount(PLASMA)/2.5, 1), get_turf(src), 0, 0)
 		e.start()
 		if(ismob(loc))
 			var/mob/M = loc
@@ -301,9 +301,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		qdel(src)
 		return
 
-	if(reagents.get_reagent_amount("fuel")) //Fuel explodes, too, but much less violently
+	if(reagents.get_reagent_amount(FUEL)) //Fuel explodes, too, but much less violently
 		var/datum/effect/effect/system/reagents_explosion/e = new()
-		e.set_up(round(reagents.get_reagent_amount("fuel")/5, 1), get_turf(src), 0, 0)
+		e.set_up(round(reagents.get_reagent_amount(FUEL)/5, 1), get_turf(src), 0, 0)
 		e.start()
 		if(ismob(loc))
 			var/mob/M = loc
@@ -329,12 +329,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_wear_mask(0)
-		M.update_inv_l_hand(0)
-		M.update_inv_r_hand(1)
+		M.update_inv_hands()
 
 /obj/item/clothing/mask/cigarette/process()
 	var/turf/location = get_turf(src)
-	var/mob/living/M = find_holder_of_type(src,/mob/living)
+	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	if(isliving(loc))
 		M.IgniteMob()
 	smoketime--
@@ -353,7 +352,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_reagent("lexorin") || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_reagent(LEXORIN) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
@@ -410,6 +409,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 20
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
 	name = "Cohiba Robusto Cigar"
@@ -430,13 +430,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A manky old cigarette butt."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "cigbutt"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 1
 
 /obj/item/weapon/cigbutt/cigarbutt
 	name = "cigar butt"
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
+	species_fit = list(VOX_SHAPED)
 
 /*
 //I'll light my cigar with an energy sword if I want to, thanks
@@ -469,12 +470,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /*/obj/item/clothing/mask/cigarette/blunt/cruciatus/New()
 	. = ..()
 	reagents.clear_reagents()
-	reagents.add_reagent("nutriment", 1)
-	reagents.add_reagent("space_drugs", 7)
-	reagents.add_reagent("kelotane", 7)
-	reagents.add_reagent("bicaridine", 5)
-	reagents.add_reagent("toxin", 5)
-	reagents.add_reagent("spiritbreaker", 10)
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(SPACE_DRUGS, 7)
+	reagents.add_reagent(KELOTANE, 7)
+	reagents.add_reagent(BICARIDINE, 5)
+	reagents.add_reagent(TOXIN, 5)
+	reagents.add_reagent(SPIRITBREAKER, 10)
 	update_brightness()*/
 
 /obj/item/clothing/mask/cigarette/blunt/cruciatus/rolled
@@ -488,11 +489,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /*/obj/item/clothing/mask/cigarette/blunt/deus/New()
 	. = ..()
 	reagents.clear_reagents()
-	reagents.add_reagent("nutriment", 1)
-	reagents.add_reagent("bicaridine", 7)
-	reagents.add_reagent("synaptizine", 7)
-	reagents.add_reagent("hyperzine", 5)
-	reagents.add_reagent("space_drugs", 5)
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(BICARIDINE, 7)
+	reagents.add_reagent(SYNAPTIZINE, 7)
+	reagents.add_reagent(HYPERZINE, 5)
+	reagents.add_reagent(SPACE_DRUGS, 5)
 	update_brightness()*/
 
 /obj/item/clothing/mask/cigarette/blunt/deus/rolled
@@ -502,7 +503,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A manky old blunt butt."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "bluntbutt"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 1
 
 /////////////////
@@ -589,7 +590,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lighter-g"
 	item_state = "lighter-g"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 4
 	flags = null
 	siemens_coefficient = 1

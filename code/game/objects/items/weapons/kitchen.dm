@@ -18,7 +18,7 @@
  */
 /obj/item/weapon/kitchen/utensil
 	force = 5.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
@@ -70,7 +70,7 @@
 	if(!istype(M) || !istype(user))
 		return ..()
 
-	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != "head" && M != user && !loaded_food)
+	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
 	if (src.loaded_food)
@@ -134,9 +134,10 @@
  * Knives
  */
 /obj/item/weapon/kitchen/utensil/knife
-	name = "knife"
+	name = "small knife"
 	desc = "Can cut through any food."
-	icon_state = "knife"
+	icon_state = "smallknife"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 10.0
 	throwforce = 10.0
 	sharpness = 1.2
@@ -177,7 +178,7 @@
 	siemens_coefficient = 1
 	sharpness = 1.5
 	force = 10.0
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
@@ -229,7 +230,7 @@
 	siemens_coefficient = 1
 	sharpness = 1.2
 	force = 15.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throwforce = 8.0
 	throw_speed = 3
 	throw_range = 6
@@ -266,7 +267,7 @@
 	throwforce = 10.0
 	throw_speed = 2
 	throw_range = 7
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	autoignition_temperature=AUTOIGNITION_WOOD
 	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "whacks") //I think the rollingpin attackby will end up ignoring this anyway.
 
@@ -286,7 +287,7 @@
 		M.LAssailant = user
 
 	var/t = user:zone_sel.selecting
-	if (t == "head")
+	if (t == LIMB_HEAD)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if (H.stat < 2 && H.health < 50 && prob(90))
@@ -319,16 +320,16 @@
 	force = 5 //look at us, we don't even use this var in our attack because we're so snowflake!
 	throw_speed = 1
 	throw_range = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = list(MAT_IRON = 3000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	var/list/carrying = list() // List of things on the tray. - Doohl
-	var/max_carry = 10 // w_class = 1 -- takes up 1
-					   // w_class = 2 -- takes up 3
-					   // w_class = 3 -- takes up 5
+	var/max_carry = 10 // w_class = W_CLASS_TINY -- takes up 1
+					   // w_class = W_CLASS_SMALL -- takes up 3
+					   // w_class = W_CLASS_MEDIUM -- takes up 5
 
 /obj/item/weapon/tray/Destroy()
 	for(var/atom/thing in carrying)
@@ -355,7 +356,7 @@
 	var/mob/living/carbon/human/H = M      ///////////////////////////////////// /Let's have this ready for later.
 
 
-	if(!(user.zone_sel.selecting == ("eyes" || "head"))) //////////////hitting anything else other than the eyes
+	if(!(user.zone_sel.selecting == ("eyes" || LIMB_HEAD))) //////////////hitting anything else other than the eyes
 		if(prob(33))
 			src.add_blood(H)
 			var/turf/location = H.loc
@@ -470,11 +471,11 @@
 	var/val = 0 // value to return
 
 	for(var/obj/item/I in carrying)
-		if(I.w_class == 1.0)
+		if(I.w_class > W_CLASS_TINY)
 			val ++
-		else if(I.w_class == 2.0)
+		else if(I.w_class == W_CLASS_SMALL)
 			val += 3
-		else if(I.w_class == 3.0)
+		else if(I.w_class > W_CLASS_MEDIUM)
 			val += 5
 		else //Shouldn't happen
 			val += INFINITY
@@ -490,11 +491,11 @@
 	for(var/obj/item/I in loc)
 		if( I != src && !I.anchored && !is_type_in_list(I, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
 			var/add = 0
-			if(I.w_class == 1.0)
+			if(I.w_class > W_CLASS_TINY)
 				add = 1
-			else if(I.w_class == 2.0)
+			else if(I.w_class == W_CLASS_SMALL)
 				add = 3
-			else if(I.w_class == 3.0)
+			else if(I.w_class > W_CLASS_MEDIUM)
 				add = 5
 			else
 				continue
@@ -507,6 +508,7 @@
 			var/image/image = image(icon = null) //image(appearance = ...) doesn't work, and neither does image().
 			image.appearance = I.appearance
 			image.layer = I.layer + 30
+			image.plane = FLOAT_PLANE
 
 			overlays += image
 			//overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
@@ -571,7 +573,7 @@
 		W.icon = 'icons/obj/kitchen.dmi'
 		W.icon_state = "forkloaded"
 		to_chat(viewers(3,user), "[user] takes a piece of omelette with his fork!")
-		reagents.remove_reagent("nutriment", 1)
+		reagents.remove_reagent(NUTRIMENT, 1)
 		if (reagents.total_volume <= 0)
 			del(src)*/
 

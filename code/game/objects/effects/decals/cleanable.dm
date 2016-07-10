@@ -1,8 +1,9 @@
 /obj/effect/decal/cleanable
 	var/list/random_icon_states = list()
 	var/targeted_by = null	//Used so cleanbots can claim a mess.
-	mouse_opacity = 0 //So it's not completely impossible to fix the brig after some asshole bombs and then dirt grenades the place. - N3X
+	mouse_opacity = 1 //N3X made this 0, which made it impossible to click things, and in the current 510 version right-click things.
 	w_type = NOT_RECYCLABLE
+	anchored = 1
 
 	// For tracking shit across the floor.
 	var/amount=0 // 0 = don't track
@@ -111,7 +112,7 @@
 		return
 	if(perp.shoes)
 		var/obj/item/clothing/shoes/S = perp.shoes
-		S.track_blood = max(0,amount,S.track_blood)                //Adding blood to shoes
+		S.track_blood = max(0, amount, S.track_blood)                //Adding blood to shoes
 
 		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
 			S.generate_blood_overlay()
@@ -130,9 +131,9 @@
 		if(blood_DNA)
 			S.blood_DNA |= blood_DNA.Copy()
 		perp.update_inv_shoes(1)
-	else
 
-		perp.track_blood = Clamp(amount, 0, perp.track_blood)                                //Or feet
+	else
+		perp.track_blood = max(amount, 0, perp.track_blood)                                //Or feet
 		if(!perp.feet_blood_DNA)
 			perp.feet_blood_DNA = list()
 		if(!istype(blood_DNA, /list))

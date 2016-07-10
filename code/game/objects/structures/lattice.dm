@@ -6,6 +6,8 @@
 	density = 0
 	anchored = 1.0
 	layer = 2.3 //under pipes
+	plane = PLANE_TURF // thanks for using a define up there it's really useful and maintainable.
+
 	//	flags = CONDUCT
 
 	canSmoothWith = "/obj/structure/lattice=0&/obj/structure/catwalk=0&/turf=0"
@@ -51,7 +53,7 @@
 		T.attackby(C, user) //Attacking to the lattice will attack to the space turf
 
 /obj/structure/lattice/wood/attackby(obj/item/C as obj, mob/user as mob)
-	if((C.is_sharp() >= 1.2) && (C.w_class >= 2)) // If C is able to cut down a tree
+	if((C.is_sharp() >= 1.2) && (C.w_class <= W_CLASS_SMALL)) // If C is able to cut down a tree
 		new/obj/item/stack/sheet/wood(loc)
 		to_chat(user, "<span class='notice'>You chop the [src] apart!</span>")
 		qdel(src)

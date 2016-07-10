@@ -33,6 +33,8 @@ var/list/camera_names=list()
 
 	var/hear_voice = 0
 
+	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
+
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
 	var/deactivated = !status
@@ -54,6 +56,12 @@ var/list/camera_names=list()
 	if(hear_voice && !isHearing())
 		hear_voice = 0
 		removeHear()
+
+/obj/machinery/camera/proc/update_upgrades()//Called when an upgrade is added or removed.
+	if(isXRay())
+		vision_flags |= SEE_TURFS | SEE_MOBS | SEE_OBJS
+	else
+		vision_flags &= ~(SEE_TURFS | SEE_MOBS | SEE_OBJS)
 
 /obj/machinery/camera/New()
 	wires = new(src)
@@ -176,7 +184,7 @@ var/list/camera_names=list()
 		//if(toggle_panel(user)) // No delay because no one likes screwdrivers trying to be hip and have a duration cooldown
 		togglePanelOpen(W, user, icon_state, icon_state)
 
-	else if((iswirecutter(W) || istype(W, /obj/item/device/multitool)) && panel_open)
+	else if(panel_open && iswiretool(W))
 		wires.Interact(user)
 
 	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
@@ -207,6 +215,7 @@ var/list/camera_names=list()
 			if(!user.drop_item(W, src)) return
 			assembly.upgrades += W
 		to_chat(user, "You attach the [W] into the camera's inner circuits.")
+		update_upgrades()
 		update_icon()
 		update_hear()
 		cameranet.updateVisibility(src, 0)
@@ -227,6 +236,7 @@ var/list/camera_names=list()
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				U.loc = get_turf(src)
 				assembly.upgrades -= U
+				update_upgrades()
 				update_icon()
 				update_hear()
 				cameranet.updateVisibility(src, 0)
@@ -473,4 +483,4 @@ var/list/camera_names=list()
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
-	H.apply_damage(rand(1,2), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))

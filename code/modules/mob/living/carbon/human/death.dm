@@ -13,8 +13,12 @@
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
 
+	var/gib_radius = 0
+	if(reagents.has_reagent(LUBE))
+		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
+
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
-	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color)
+	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
 
 /mob/living/carbon/human/dust()
@@ -31,7 +35,11 @@
 	else
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
 
-	new /obj/effect/decal/remains/human(loc)
+	var/datum/organ/external/head_organ = get_organ(LIMB_HEAD)
+	if(head_organ.status & ORGAN_DESTROYED)
+		new /obj/effect/decal/remains/human/noskull(loc)
+	else
+		new /obj/effect/decal/remains/human(loc)
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
@@ -39,12 +47,18 @@
 		ticker.mode.update_cult_icons_removed(mind)
 		ticker.mode.cult -= mind
 
-	for(var/obj/Overlays/O in obj_overlays)
-		returnToPool(O)
-	
-	obj_overlays = null
+	species = null
+
+	if(decapitated)
+		decapitated.origin_body = null
+		decapitated = null
 
 	..()
+
+	for(var/obj/Overlays/O in obj_overlays)
+		returnToPool(O)
+
+	obj_overlays = null
 
 /mob/living/carbon/human/death(gibbed)
 	if(stat == DEAD)
@@ -78,7 +92,6 @@
 		emote("deathgasp") //Let the world KNOW WE ARE DEAD
 
 		update_canmove()
-		if(client)	blind.layer = 0
 
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)
@@ -89,6 +102,7 @@
 //		world.log << "k"
 		sql_report_death(src)
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
+	species.handle_death(src)
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
@@ -120,7 +134,7 @@
 	status_flags |= DISFIGURED	//Makes them unknown without fucking up other stuff like admintools
 	update_body(0)
 	update_mutantrace()
-	vessel.remove_reagent("blood",vessel.get_reagent_amount("blood"))
+	vessel.remove_reagent(BLOOD,vessel.get_reagent_amount(BLOOD))
 	return
 
 /mob/living/carbon/human/proc/Drain()

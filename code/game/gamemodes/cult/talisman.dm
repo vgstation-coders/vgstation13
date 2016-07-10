@@ -39,7 +39,7 @@
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
 		nullblock = 1
-		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg')
+		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = PLANE_EFFECTS)
 		return 1
 	else if(target.contents)
 		for(var/atom/A in target.contents)
@@ -190,7 +190,7 @@
 
 		else if(iscarbon(T))
 			var/mob/living/carbon/C = T
-			flick("e_flash", C.flash)
+			C.flash_eyes(visual = 1)
 			if (!(M_HULK in C.mutations))
 				C.silent += 15
 			C.Weaken(25)

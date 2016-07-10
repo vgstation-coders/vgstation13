@@ -188,6 +188,12 @@
 	icon = 'icons/obj/doors/doorresearch.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_research
 
+/obj/machinery/door/airlock/research/voxresearch
+	name = "Airlock"
+	icon = 'icons/obj/doors/doorresearch.dmi'
+	assembly_type = /obj/structure/door_assembly/door_assembly_research
+	var/const/AIRLOCK_WIRE_IDSCAN = 0
+
 /obj/machinery/door/airlock/glass_research
 	name = "Maintenance Hatch"
 	icon = 'icons/obj/doors/doorresearchglass.dmi'
@@ -196,6 +202,16 @@
 	glass = 1
 	heat_proof = 1
 	penetration_dampening = 3
+
+/obj/machinery/door/airlock/glass_research/voxresearch
+	name = "Maintenance Hatch"
+	icon = 'icons/obj/doors/doorresearchglass.dmi'
+	opacity = 0
+	assembly_type = /obj/structure/door_assembly/door_assembly_research
+	glass = 1
+	heat_proof = 1
+	penetration_dampening = 3
+	var/const/AIRLOCK_WIRE_IDSCAN = 0
 
 /obj/machinery/door/airlock/glass_mining
 	name = "Maintenance Hatch"
@@ -652,8 +668,8 @@ About the new airlock wires panel:
 			if (user)
 				src.attack_ai(user)
 
-/obj/machinery/door/airlock/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (src.isElectrified())
+/obj/machinery/door/airlock/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if (isElectrified())
 		if (istype(mover, /obj/item))
 			var/obj/item/i = mover
 			if (i.materials && (i.materials.getAmount(MAT_IRON) > 0))
@@ -1057,14 +1073,14 @@ About the new airlock wires panel:
 					welded = null
 
 				update_icon()
-	else if (iswirecutter(I))
-		if (!operating && panel_open)
-			wires.Interact(user)
 	else if (ismultitool(I))
 		if (!operating)
 			if(panel_open) wires.Interact(user)
 			else update_multitool_menu(user)
 		attack_hand(user)
+	else if (iswiretool(I))
+		if (!operating && panel_open)
+			wires.Interact(user)
 	else if(iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe) )
 		if(src.busy) return
 		src.busy = 1

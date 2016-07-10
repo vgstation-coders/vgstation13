@@ -4,9 +4,10 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "deliveryPaper"
 	singular_name = "paper sheet"
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	amount = 24
 	max_amount = 24
+	restock_amount = 2
 	//If it's null, it can't wrap that type.
 	var/smallpath = /obj/item/delivery //We use this for items
 	var/bigpath = /obj/item/delivery/large //We use this for structures (crates, closets, recharge packs, etc.)
@@ -31,13 +32,19 @@
 		)
 
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
-	if(ishuman(attacked)) return try_wrap_human(attacked,user)
-	if(!istype(attacked,/obj)) return
 	var/obj/target = attacked
-	if(is_type_in_list(target, cannot_wrap)) return
-	if(target.anchored) return
-	if(target in user) return
-	if(!proximity_flag) return
+	if(is_type_in_list(target, cannot_wrap))
+		return
+	if(target.anchored)
+		return
+	if(target in user)
+		return
+	if(!proximity_flag)
+		return
+	if(ishuman(attacked))
+		return try_wrap_human(attacked,user)
+	if(!istype(target))
+		return
 
 	user.attack_log += "\[[time_stamp()]\] <font color='blue'>Has used [src.name] on \ref[target]</font>"
 	target.add_fingerprint(user)
@@ -133,10 +140,10 @@
 /obj/item/delivery/attack_self(mob/user as mob)
 	if(wrapped)
 		if(ishuman(user))
+			qdel(src)
 			user.put_in_hands(wrapped)
 		else
 			wrapped.forceMove(get_turf(src))
-	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/destTagger))
@@ -148,7 +155,7 @@
 			sortTag = tag
 			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
 			overlays = 0
-			overlays += "deliverytag"
+			overlays += image(icon = icon, icon_state = "deliverytag")
 			src.desc = "A small wrapped package. It has a label reading [tag]"
 
 	else if(istype(W, /obj/item/weapon/pen))
@@ -165,7 +172,7 @@
 	desc = "A big wrapped package."
 	name = "large parcel"
 	density = 1
-	w_class = 200 //Someone was going to find a way to exploit this some day
+	w_class = W_CLASS_GIANT //Someone was going to find a way to exploit this some day
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 

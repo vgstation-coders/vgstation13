@@ -14,7 +14,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "facehugger"
 	item_state = "facehugger"
-	w_class = 1 //note: can be picked up by aliens unlike most other items of w_class below 4
+	w_class = W_CLASS_TINY //note: can be picked up by aliens unlike most other items of w_class below 4
 	flags = FPRINT  | MASKINTERNALS | PROXMOVE
 	throw_range = 5
 	health = 5
@@ -30,7 +30,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	var/target_time = 0.5 // seconds
 	var/walk_speed = 1
 	var/nextwalk = 0
-	var/mob/living/carbon/human/target = null
+	var/mob/living/carbon/target = null
 
 /obj/item/clothing/mask/facehugger/can_contaminate()
 	return 0
@@ -47,13 +47,17 @@ var/const/MAX_ACTIVE_TIME = 400
 
 /obj/item/clothing/mask/facehugger/proc/findtarget()
 	if(!real) return
-	for(var/mob/living/carbon/human/T in hearers(src,4))
+	for(var/mob/living/carbon/T in hearers(src,4))
+		if(!ishuman(T) && !ismonkey(T))
+			continue
 		if(!CanHug(T))
 			continue
 		if(T && (T.stat != DEAD && T.stat != UNCONSCIOUS) )
 
 			if(get_dist(src.loc, T.loc) <= 4)
 				target = T
+
+
 /obj/item/clothing/mask/facehugger/proc/followtarget()
 	if(!real) return // Why are you trying to path stupid toy
 	if(!target || target.stat == DEAD || target.stat == UNCONSCIOUS || target.status_flags & XENO_HOST)
@@ -64,9 +68,8 @@ var/const/MAX_ACTIVE_TIME = 400
 		var/dist = get_dist(src.loc, target.loc)
 		if(dist > 4)
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
-		var/obj/item/mask = target.get_body_part_coverage(MOUTH)
-		if(mask && istype(mask, /obj/item/clothing/mask/facehugger))
-			var/obj/item/clothing/mask/facehugger/F = mask
+		if(target.wear_mask && istype(target.wear_mask, /obj/item/clothing/mask/facehugger))
+			var/obj/item/clothing/mask/facehugger/F = target.wear_mask
 			if(F.sterile) // Toy's won't prevent real huggers
 				findtarget()
 				return
@@ -292,7 +295,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		target.status_flags |= XENO_HOST
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/T = target
-			var/datum/organ/external/chest/affected = T.get_organ("chest")
+			var/datum/organ/external/chest/affected = T.get_organ(LIMB_CHEST)
 			affected.implants += E
 		target.visible_message("<span class='danger'>\The [src] falls limp after violating [target]'s face !</span>")
 		stat_collection.xeno.faces_hugged++

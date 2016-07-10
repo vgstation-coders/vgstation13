@@ -228,6 +228,8 @@ var/global/datum/controller/gameticker/ticker
 
 	stat_collection.round_start_time = world.realtime
 
+	wageSetup()
+
 	return 1
 
 /datum/controller/gameticker
@@ -247,6 +249,7 @@ var/global/datum/controller/gameticker/ticker
 	cinematic.icon = 'icons/effects/station_explosion.dmi'
 	cinematic.icon_state = "station_intact"
 	cinematic.layer = 20
+	cinematic.plane = PLANE_HUD
 	cinematic.mouse_opacity = 0
 	cinematic.screen_loc = "1,0"
 
@@ -397,7 +400,7 @@ var/global/datum/controller/gameticker/ticker
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = 1)
-				var/options = list2text(vote.choices, " ")
+				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
 
 			else

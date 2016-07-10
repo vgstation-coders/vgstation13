@@ -89,6 +89,7 @@
 	name = "egg box"
 	storage_slots = 12
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/egg")
+	var/egg_type = "chicken"
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -98,13 +99,19 @@
 	empty = 1
 	icon_state = "eggbox0"
 
+/obj/item/weapon/storage/fancy/egg_box/vox
+	egg_type = "vox"
+
 /obj/item/weapon/storage/fancy/egg_box/New()
 	..()
 	if(empty)
 		update_icon() //Make it look actually empty
 		return
 	for(var/i = 1; i <= storage_slots; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/egg(src)
+		if(egg_type == "chicken")
+			new /obj/item/weapon/reagent_containers/food/snacks/egg(src)
+		if(egg_type == "vox")
+			new /obj/item/weapon/reagent_containers/food/snacks/egg/vox(src)
 	return
 
 /*
@@ -150,7 +157,7 @@
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	storage_slots = 6
 	icon_type = "crayon"
 	can_only_hold = list(
@@ -201,7 +208,8 @@
 	icon_type = "match"
 	plural_type = "es"
 	storage_slots = 21 //3 rows of 7 items
-	w_class = 1
+	max_combined_w_class = 21
+	w_class = W_CLASS_TINY
 	flags = 0
 	var/matchtype = /obj/item/weapon/match
 	can_only_hold = list("/obj/item/weapon/match") // Strict type check.
@@ -260,7 +268,7 @@
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "cigpacket"
 	item_state = "cigpacket"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throwforce = 2
 	flags = 0
 	slot_flags = SLOT_BELT

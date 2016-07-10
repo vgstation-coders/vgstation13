@@ -6,7 +6,7 @@
 	icon_state = "tooth"
 	amount = 1
 	max_amount = 50
-	w_class = 1
+	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 10
 
@@ -68,7 +68,11 @@
 		var/parent_species_name = initial(parent_species.name)
 
 		if(ishuman(parent))
-			parent_species_name = "[parent]'s" //Like "Dick Johnson's"
+			var/mob/living/carbon/human/H = parent
+			if(H.species)
+				parent_species_name = lowertext(H.species.name)
+			else
+				parent_species_name = "human"
 
 		name = "[parent_species_name] teeth"
 		singular_name = "[parent_species_name] tooth"

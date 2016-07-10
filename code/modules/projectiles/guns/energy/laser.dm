@@ -4,7 +4,7 @@
 	icon_state = "laser"
 	item_state = "laser"
 	fire_sound = 'sound/weapons/Laser.ogg'
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = "combat=3;magnets=2"
@@ -22,7 +22,7 @@
 	desc = "A laser pistol issued to high ranking members of a certain shadow corporation."
 	icon_state = "xcomlaserpistol"
 	item_state = null
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	projectile_type = /obj/item/projectile/beam/lightlaser
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
@@ -40,6 +40,8 @@
 	name = "infinite laser gun"
 	desc = "Spray and /pray."
 	icon_state = "laseradmin"
+	item_state = "laseradmin"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 0
 
@@ -213,7 +215,7 @@ obj/item/weapon/gun/energy/laser/retro
 	desc = "A state of the art pistol utilizing plasma in a uranium-235 lined core to output searing bolts of energy."
 	icon_state = "alienpistol"
 	item_state = null
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	projectile_type = /obj/item/projectile/energy/plasma/pistol
 	charge_cost = 100
 
@@ -230,7 +232,7 @@ obj/item/weapon/gun/energy/laser/retro
 	desc = "A state of the art cannon utilizing plasma in a uranium-235 lined core to output hi-power, radiating bolts of energy."
 	icon_state = "alienrifle"
 	item_state = null
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	slot_flags = null
 	projectile_type = /obj/item/projectile/energy/plasma/rifle
 	charge_cost = 150
@@ -260,7 +262,7 @@ obj/item/weapon/gun/energy/laser/retro
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	desc = "Standard issue weapon of the Imperial Guard."
-	projectile_type = "/obj/item/projectile/beam/lastertag/blue"
+	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
 	origin_tech = "magnets=2"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	clumsy_check = 0
@@ -300,7 +302,7 @@ obj/item/weapon/gun/energy/laser/retro
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	desc = "Standard issue weapon of the Imperial Guard."
-	projectile_type = "/obj/item/projectile/beam/lastertag/red"
+	projectile_type = "/obj/item/projectile/beam/lasertag/red"
 	origin_tech = "magnets=2"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	clumsy_check = 0
@@ -338,7 +340,7 @@ obj/item/weapon/gun/energy/laser/retro
 	desc = "An arm-mounted buster toy!"
 	icon_state = "megabuster"
 	item_state = null
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	projectile_type = "/obj/item/projectile/energy/megabuster"
 	charge_states = 0
 	charge_cost = 5
@@ -354,7 +356,7 @@ obj/item/weapon/gun/energy/laser/retro
 	desc = "An antique arm-mounted buster cannon."
 	icon_state = "mmlbuster"
 	item_state = null
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	charge_states = 0
 	projectile_type = "/obj/item/projectile/energy/buster"
 	charge_cost = 25

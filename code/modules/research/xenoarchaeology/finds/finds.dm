@@ -236,7 +236,7 @@
 			possible_spawns += /obj/item/stack/sheet/mineral/mythril
 			possible_spawns += /obj/item/stack/sheet/mineral/gold
 			possible_spawns += /obj/item/stack/sheet/mineral/silver
-			possible_spawns += /obj/item/stack/sheet/mineral/enruranium
+			possible_spawns += /obj/item/stack/sheet/mineral/uranium
 			possible_spawns += /obj/item/stack/sheet/mineral/sandstone
 			possible_spawns += /obj/item/stack/sheet/mineral/silver
 
@@ -274,7 +274,7 @@
 		if(17)
 			//cultblade
 			apply_prefix = 0
-			new_item = new /obj/item/weapon/melee/cultblade(src.loc)
+			new_item = new /obj/item/weapon/melee/cultblade/nocult(src.loc)
 			apply_material_decorations = 0
 			apply_image_decorations = 0
 		if(18)

@@ -283,7 +283,7 @@
 			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
 			playsound(L, 'sound/effects/phasein.ogg', 100, 1, extrarange = 3, falloff = 5)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
-				flick("e_flash", M.flash)
+				M.flash_eyes(visual = 1)
 			var/chosen = pick(hostiles)
 			var/mob/living/simple_animal/hostile/H = new chosen
 			H.loc = L
@@ -356,11 +356,13 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 	return
 
 /obj/machinery/computer/telescience/Topic(href, href_list)
-	if(stat & (NOPOWER|BROKEN))
-		return 0
 	if(href_list["close"])
 		if(usr.machine == src) usr.unset_machine()
 		return 1
+
+	if(..())
+		return 1
+
 	if(href_list["setPOffsetX"])
 		var/new_x = input("Please input desired X offset.", name, x_player_off) as num
 		if(new_x < -10 || new_x > 10)

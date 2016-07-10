@@ -501,35 +501,6 @@ Class Procs:
 	update_icon()
 	return 1
 
-/obj/machinery/proc/wrenchAnchor(var/mob/user)
-	if(state == 2 && src.machine_flags & WELD_FIXED)
-		to_chat(user, "\The [src] has to be unwelded from the floor first.")
-		return -1 //state set to 2, can't do it
-	for(var/obj/machinery/other in loc)
-		if(other.anchored == 1 && other.density == 1 && density && !anchored)
-			to_chat(user, "\The [other] is already anchored in this location.")
-			return -1 //other machines are already taking up all the space in this location
-
-	if(!anchored)
-		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if( !(istype(src.loc, /turf/simulated/shuttle) && (machine_flags & SHUTTLEWRENCH)) ) //If NOT (on top of a shuttle AND can be secured to shuttles)
-				to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
-				return
-
-	user.visible_message(	"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
-							"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts...")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-	if(do_after(user, src, 30))
-		anchored = !anchored
-		if(machine_flags & FIXED2WORK)
-			power_change() //updates us to turn on or off as necessary
-		state = anchored //since these values will match as long as state isn't 2, we can do this safely
-		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
-								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
-								"<span class='notice'>You hear a ratchet.</span>")
-		return 1
-	return -1
-
 /obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
 	if(!anchored)
 		state = 0 //since this might be wrong, we go sanity
@@ -586,13 +557,20 @@ Class Procs:
 			emag(user)
 			return
 
-	if(iswrench(O) && machine_flags & WRENCHMOVE) //make sure this is BEFORE the fixed2work check
+	if(iswrench(O) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
-			return wrenchAnchor(user)
+			if(state == 2 && src.machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
+				to_chat(user, "\The [src] has to be unwelded from the floor first.")
+				return -1 //state set to 2, can't do it
+			else
+				if(wrenchAnchor(user) && machine_flags && FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
+					state = anchored
+					power_change() //updates us to turn on or off as necessary
+					return 1
 		else
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
-
+		
 	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
 		return togglePanelOpen(O, user)
 
@@ -621,7 +599,7 @@ Class Procs:
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
 		return exchange_parts(user, O)
-
+		
 /obj/machinery/proc/wirejack(var/mob/living/silicon/pai/P)
 	if(!(machine_flags & WIREJACK))
 		return 0
@@ -671,6 +649,12 @@ Class Procs:
 
 /obj/machinery/proc/check_rebuild()
 	return
+	
+/obj/machinery/wrenchable()
+	return (machine_flags & WRENCHMOVE)
+	
+/obj/machinery/can_wrench_shuttle()
+	return (machine_flags & SHUTTLEWRENCH)
 
 /obj/machinery/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
 	var/shouldplaysound = 0
@@ -704,20 +688,21 @@ Class Procs:
 			W.play_rped_sound()
 		return 1
 	return 0
+	
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
 	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src].</span>", "<span class='danger'>You kick \the [src].</span>")
 	if(prob(70))
-		H.apply_damage(rand(2,4), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+		H.apply_damage(rand(2,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 
 	if(!anchored && !locked_to) //What could go wrong
 		var/strength = H.get_strength()
 		var/kick_dir = get_dir(H, src)
 
 		if(!Move(get_step(loc, kick_dir))) //The structure that we kicked is up against a wall - this hurts our foot
-			H.apply_damage(rand(2,4), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+			H.apply_damage(rand(2,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 
 		if(strength > 1) //Strong - kick further
 			spawn()

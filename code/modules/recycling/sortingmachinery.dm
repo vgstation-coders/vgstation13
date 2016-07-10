@@ -11,7 +11,7 @@
 	var/currTag = 0
 	var/list/destinations  = list()
 
-	w_class = 1
+	w_class = W_CLASS_TINY
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -273,7 +273,7 @@
 	var/turf/out_T = get_step(src, output_dir)
 	var/turf/filter_T = get_step(src, filter_dir)
 
-	if(!out_T.CanPass(mover, out_T) || !out_T.Enter(mover) || !filter_T.CanPass(mover, filter_T) || !filter_T.Enter(mover))
+	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
 		return
 
 	var/affecting = in_T.contents

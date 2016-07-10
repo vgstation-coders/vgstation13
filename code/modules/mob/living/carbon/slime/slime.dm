@@ -104,6 +104,13 @@
 /mob/living/carbon/slime/movement_delay()
 	var/tally = 0
 
+	var/turf/T = loc
+	if(istype(T))
+		tally = T.adjust_slowdown(src, tally)
+
+		if(tally == -1)
+			return tally
+
 	var/health_deficiency = (100 - health)
 	if(health_deficiency >= 45) tally += (health_deficiency / 25)
 
@@ -111,10 +118,10 @@
 		tally += (283.222 - bodytemperature) / 10 * 1.75
 
 	if(reagents)
-		if(reagents.has_reagent("hyperzine")) // hyperzine slows slimes down
+		if(reagents.has_reagent(HYPERZINE)) // hyperzine slows slimes down
 			tally *= 2 // moves twice as slow
 
-		if(reagents.has_reagent("frostoil")) // frostoil also makes them move VEEERRYYYYY slow
+		if(reagents.has_reagent(FROSTOIL)) // frostoil also makes them move VEEERRYYYYY slow
 			tally *= 5
 
 	if(health <= 0) // if damaged, the slime moves twice as slow
@@ -126,8 +133,8 @@
 	return tally+config.slime_delay
 
 
-/mob/living/carbon/slime/Bump(atom/movable/AM as mob|obj, yes)
-	if ((!( yes ) || now_pushing))
+/mob/living/carbon/slime/Bump(atom/movable/AM as mob|obj)
+	if(now_pushing)
 		return
 	now_pushing = 1
 
@@ -264,8 +271,11 @@
 /mob/living/carbon/slime/blob_act()
 	if(flags & INVULNERABLE)
 		return
-	if (stat == 2)
+	if (stat == DEAD)
 		return
+	..()
+
+	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 	var/shielded = 0
 
 	var/damage = null
@@ -304,6 +314,7 @@
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("<span class='danger'>The [M.name] has glomped []!</span>", src), 1)
+		add_logs(M, src, "glomped on", 0)
 
 		var/damage = rand(1, 3)
 		attacked += 5
@@ -668,11 +679,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 				check_1 = 1
 				for(var/obj/border_obstacle in Step_1)
 					if(border_obstacle.flags & ON_BORDER)
-						if(!border_obstacle.CheckExit(D, A))
+						if(!border_obstacle.Uncross(D, A))
 							check_1 = 0
 				for(var/obj/border_obstacle in get_turf(A))
 					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
-						if(!border_obstacle.CanPass(D, D.loc, 1, 0))
+						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_1 = 0
 
 			D.loc = src.loc
@@ -681,11 +692,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 				for(var/obj/border_obstacle in Step_2)
 					if(border_obstacle.flags & ON_BORDER)
-						if(!border_obstacle.CheckExit(D, A))
+						if(!border_obstacle.Uncross(D, A))
 							check_2 = 0
 				for(var/obj/border_obstacle in get_turf(A))
 					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
-						if(!border_obstacle.CanPass(D, D.loc, 1, 0))
+						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_2 = 0
 			if(check_1 || check_2)
 				ok = 1
@@ -698,13 +709,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			//Now, check objects to block exit that are on the border
 			for(var/obj/border_obstacle in src.loc)
 				if(border_obstacle.flags & ON_BORDER)
-					if(!border_obstacle.CheckExit(D, A))
+					if(!border_obstacle.Uncross(D, A))
 						ok = 0
 
 			//Next, check objects to block entry that are on the border
 			for(var/obj/border_obstacle in get_turf(A))
 				if((border_obstacle.flags & ON_BORDER) && (A != border_obstacle))
-					if(!border_obstacle.CanPass(D, D.loc, 1, 0))
+					if(!border_obstacle.Cross(D, D.loc, 1, 0))
 						ok = 0
 
 	//del(D)
@@ -725,7 +736,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "grey slime extract"
 	flags = FPRINT
 	force = 1.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 1.0
 	throw_speed = 3
 	throw_range = 6
@@ -922,7 +933,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(M.stat)
 			to_chat(user, "<span class='warning'>The slime is dead!</span>")
 			return..()
-		var/mob/living/simple_animal/adultslime/pet = new /mob/living/simple_animal/adultslime(M.loc)
+		var/mob/living/simple_animal/slime/adult/pet = new /mob/living/simple_animal/slime/adult(M.loc)
 		pet.icon_state = "[M.colour] adult slime"
 		pet.icon_living = "[M.colour] adult slime"
 		pet.icon_dead = "[M.colour] baby slime dead"
@@ -943,7 +954,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		pet.name = newname
 		pet.real_name = newname
 		qdel (src)
-
 
 /obj/item/weapon/slimesteroid
 	name = "slime steroid"
@@ -1062,7 +1072,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "a golem's thick outer shell"
 	icon_state = "golem"
 	item_state = "golem"
-	w_class = 4//bulky item
+	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS|HEAD
@@ -1146,18 +1156,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(!ghost)
 			to_chat(user, "The rune fizzles uselessly. There is no spirit nearby.")
 			return
-		var/mob/living/carbon/human/G = new /mob/living/carbon/human
-		G.dna.mutantrace = "adamantine"
-		G.real_name = text("Adamantine Golem ([rand(1, 1000)])")
-		G.equip_to_slot_or_del(new /obj/item/clothing/under/golem(G), slot_w_uniform)
-		G.equip_to_slot_or_del(new /obj/item/clothing/suit/golem(G), slot_wear_suit)
-		G.equip_to_slot_or_del(new /obj/item/clothing/shoes/golem(G), slot_shoes)
-		G.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/golem(G), slot_wear_mask)
-		G.equip_to_slot_or_del(new /obj/item/clothing/gloves/golem(G), slot_gloves)
-		//G.equip_to_slot_or_del(new /obj/item/clothing/head/space/golem(G), slot_head)
+		var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
+		G.real_name = G.species.makeName()
 		G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
 		G.key = ghost.key
-		to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as blunt trauma. You are unable to wear clothes, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
+		to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
 		qdel (src)
 		if(ticker.mode.name == "sandbox")
 			G.CanBuild()
@@ -1241,7 +1244,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "slime extract"
 	flags = 0
 	force = 1.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 1.0
 	throw_speed = 3
 	throw_range = 6
@@ -1287,8 +1290,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
-	reagents.add_reagent("slimejelly", 1)
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(SLIMEJELLY, 1)
 	spawn(rand(1200,1500))//the egg takes a while to "ripen"
 		Grow()
 

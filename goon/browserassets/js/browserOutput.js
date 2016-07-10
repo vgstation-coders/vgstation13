@@ -348,7 +348,9 @@ function handleClientData(ckey, ip, compid) {
 //Or, y'know, whenever really
 function ehjaxCallback(data) {
 	opts.lastPang = Date.now();
-	if (data == 'pang') {
+	if (data == 'softPang') {
+		return;
+	} else if (data == 'pang') {
 		opts.pingCounter = 0; //reset
 		opts.pingTime = Date.now();
 		runByond('?_src_=chat&proc=ping');
@@ -618,6 +620,8 @@ $(function() {
 			return;
 		}
 
+		e.preventDefault()
+
 		var k = e.which;
 		var command; // Command to execute through winset.
 
@@ -712,6 +716,7 @@ $(function() {
 		var messagesHeight = $messages.outerHeight();
 		$('body,html').scrollTop(messagesHeight);
 		$('#newMessages').remove();
+		runByond('byond://winset?mapwindow.map.focus=true');
 	});
 
 	$('#toggleOptions').click(function(e) {

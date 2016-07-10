@@ -8,6 +8,9 @@
 /obj/item/stack/tile
 	var/material
 
+/obj/item/stack/tile/proc/adjust_slowdown(mob/living/L, current_slowdown)
+	return current_slowdown
+
 /obj/item/stack/tile/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -39,7 +42,7 @@
 	singular_name = "grass floor tile"
 	desc = "A patch of grass like they often use on golf courses"
 	icon_state = "tile_grass"
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
@@ -59,7 +62,7 @@
 	singular_name = "wood floor tile"
 	desc = "an easy to fit wood floor tile"
 	icon_state = "tile-wood"
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
@@ -102,7 +105,7 @@
 	singular_name = "length of carpet"
 	desc = "A piece of carpet. It is the same size as a floor tile"
 	icon_state = "tile-carpet"
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
@@ -118,7 +121,7 @@
 	singular_name = "length of arcade carpet"
 	desc = "A piece of arcade carpet. It has a snazzy space theme."
 	icon_state = "tile-arcade"
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5

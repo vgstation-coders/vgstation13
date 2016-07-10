@@ -15,7 +15,7 @@ var/list/potential_theft_objectives=list(
 	var/target_amount = 0				//If they are focused on a particular number. Steal objectives have their own counter.
 	var/completed = 0					//currently only used for custom objectives.
 	var/blocked = 0                     // Universe fucked, you lost.
-	var/list/bad_targets = list("AI","Cyborg","Mobile MMI")//For roundstart cases where they are still human at the time of objective assignment
+	var/list/bad_assassinate_targets = list("AI","Cyborg","Mobile MMI","Trader")
 
 /datum/objective/New(var/text)
 	if(text)
@@ -27,7 +27,7 @@ var/list/potential_theft_objectives=list(
 /datum/objective/proc/find_target()
 	var/list/possible_targets = list()
 	for(var/datum/mind/possible_target in ticker.minds)
-		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_targets))
+		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
 			possible_targets += possible_target
 	if(possible_targets.len > 0)
 		target = pick(possible_targets)
@@ -35,7 +35,7 @@ var/list/potential_theft_objectives=list(
 
 /datum/objective/proc/find_target_by_role(role, role_type = 0)//Option sets either to check assigned role or special role. Default to assigned.
 	for(var/datum/mind/possible_target in ticker.minds)
-		if((possible_target != owner) && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) && !(possible_target.assigned_role in bad_targets))
+		if((possible_target != owner) && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) && !(possible_target.assigned_role in bad_assassinate_targets))
 			target = possible_target
 			break
 
@@ -508,7 +508,7 @@ var/list/potential_theft_objectives=list(
 				already_completed = 1
 				return 1
 
-		var/datum/organ/external/head/head = H.get_organ("head")
+		var/datum/organ/external/head/head = H.get_organ(LIMB_HEAD)
 		if(head.disfigured)
 			return 1
 	return 0
@@ -535,6 +535,9 @@ var/list/potential_theft_objectives=list(
 
 		var/pickedObjective = pick(possibleObjectives)
 		var/datum/theft_objective/objective = new pickedObjective
+
+		if(objective.typepath in map.unavailable_items)
+			continue
 
 		if(owner && owner.assigned_role in objective.protected_jobs)
 			continue

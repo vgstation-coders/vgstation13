@@ -39,7 +39,7 @@
 	desc = "Yarr."
 	icon_state = "pirate"
 	flags = FPRINT
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 /obj/item/clothing/suit/hgpirate
@@ -47,7 +47,7 @@
 	desc = "Yarr."
 	icon_state = "hgpirate"
 	flags = FPRINT
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 
@@ -113,7 +113,7 @@
 	icon_state = "syndicate"
 	item_state = "space_suit_syndicate"
 	desc = "A plastic replica of the syndicate space suit, you'll look just like a real murderous syndicate agent in this! This is a toy, it is not made for use in space!"
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
@@ -324,7 +324,7 @@
 	name = "Simon's Jacket"
 	desc = "Now you too can pierce the heavens"
 	icon_state = "simonjacket"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 /obj/item/clothing/suit/kaminacape
@@ -332,14 +332,6 @@
 	desc = "Don't believe in yourself, dumbass. Believe in me. Believe in the Kamina who believes in you."
 	icon_state = "kaminacape"
 	body_parts_covered = 0
-
-/obj/item/clothing/suit/storage/bandolier
-	name = "bandolier"
-	desc = "A bandolier designed to hold up to eight shotgun shells."
-	icon_state = "bandolier"
-	storage_slots = 8
-	max_combined_w_class = 20
-	can_only_hold = list("/obj/item/ammo_casing/shotgun")
 
 /obj/item/clothing/suit/officercoat
 	name = "Officer's Coat"
@@ -465,7 +457,7 @@
 	icon_state = "cjumper-green"
 
 /obj/item/clothing/suit/spaceblanket
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	icon_state = "shittyuglyawfulBADblanket"
 	name = "space blanket"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS

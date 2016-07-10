@@ -11,7 +11,7 @@
 	throwforce = 10.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
@@ -55,7 +55,7 @@
 	var/turf/location = loc
 	if(istype(location, /mob/))
 		var/mob/M = location
-		if(M.l_hand == src || M.r_hand == src)
+		if(M.is_holding_item(src))
 			location = M.loc
 	if(isturf(location)) //start a fire if possible
 		location.hotspot_expose(700, 2,surfaces=istype(loc,/turf))
@@ -65,11 +65,11 @@
 /obj/item/weapon/gun/projectile/flamethrower/update_icon()
 	overlays.len = 0
 	if(igniter)
-		overlays += "+igniter[status]"
+		overlays += image(icon = icon, icon_state = "+igniter[status]")
 	if(ptank)
-		overlays += "+ptank"
+		overlays += image(icon = icon, icon_state = "+ptank")
 	if(lit)
-		overlays += "+lit"
+		overlays += image(icon = icon, icon_state = "+lit")
 		item_state = "flamethrower_1"
 	else
 		item_state = "flamethrower_0"
@@ -226,8 +226,7 @@
 	update_icon()
 	if(istype(loc, /mob/living/carbon))
 		var/mob/living/carbon/C = loc
-		C.update_inv_r_hand()
-		C.update_inv_l_hand()
+		C.update_inv_hands()
 	return
 
 /obj/item/weapon/gun/projectile/flamethrower/full/New(var/loc)

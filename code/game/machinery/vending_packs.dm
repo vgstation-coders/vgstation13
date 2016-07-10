@@ -33,7 +33,7 @@
 /obj/structure/vendomatpack/coffee
 	name = "Hot Drinks machine recharge pack"
 	targetvendomat = /obj/machinery/vending/coffee
-	icon_state = "coffee"
+	icon_state = COFFEE
 
 /obj/structure/vendomatpack/snack
 	name = "Getmore Chocolate Corp recharge pack"
@@ -128,7 +128,7 @@
 /obj/structure/vendomatpack/discount
 	name = "Discount Dan's recharge pack"
 	targetvendomat = /obj/machinery/vending/discount
-	icon_state = "discount"
+	icon_state = DISCOUNT
 
 /obj/structure/vendomatpack/groans
 	name = "Groans Soda recharge pack"
@@ -168,7 +168,7 @@
 	icon = 'icons/obj/vending_pack.dmi'
 	icon_state = "generic"
 	item_state = "syringe_kit"
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	flags = FPRINT
 
 	var/foldable = /obj/item/stack/sheet/cardboard

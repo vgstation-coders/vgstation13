@@ -76,7 +76,9 @@ datum/controller/game_controller/proc/setup()
 	socket_talk = new /datum/socket_talk()
 	socket_talk.send_raw("type=startup")
 
-	createRandomZlevel()
+	if(config.enable_roundstart_away_missions)
+		log_startup_progress("Attempting to generate an away mission...")
+		createRandomZlevel()
 /*
 	if(!air_master)
 		air_master = new /datum/controller/air_system()
@@ -90,8 +92,8 @@ datum/controller/game_controller/proc/setup()
 		garbageCollector = global.garbageCollector
 */
 
-	setup_objects() // Most log_startup spam happens here
 	setupgenetics()
+	setup_objects() // Most log_startup spam happens here
 	setupfactions()
 	setup_economy()
 	SetupXenoarch()
@@ -99,6 +101,10 @@ datum/controller/game_controller/proc/setup()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
 	log_startup_progress("  Finished caching damage icons in [stop_watch(watch)]s.")
+
+	log_startup_progress("Caching space parallax simulation...")
+	create_global_parallax_icons()
+	log_startup_progress("  Finished caching space parallax simulation in [stop_watch(watch)]s.")
 
 	buildcamlist()
 

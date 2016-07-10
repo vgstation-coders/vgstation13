@@ -4,7 +4,7 @@
 	icon_state = "flash"
 	item_state = "flash"
 	throwforce = 5
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 10
 	flags = FPRINT
@@ -83,7 +83,7 @@
 
 		if(safe <= 0)
 			Subject.Weaken(10)
-			flick("e_flash", Subject.flash)
+			Subject.flash_eyes(visual = 1, affect_silicon = 1)
 
 			if(user.mind && isrevhead(user)) // alien revhead when?
 				if(ishuman(Subject))
@@ -122,7 +122,7 @@
 			qdel(animation)
 
 	if(!flashfail)
-		flick("flash2", src)
+		M.flash_eyes(affect_silicon = 1)
 
 		if(!issilicon(M))
 			user.visible_message("<span class=\"disarm\">[user] blinds [M] with the flash!</span>")
@@ -183,8 +183,7 @@
 					M.alpha = oldalpha
 		var/safety = M:eyecheck()
 		if(!safety)
-			if(!M.blinded)
-				flick("flash", M.flash)
+			M.flash_eyes(affect_silicon = 1)
 
 	return
 
@@ -203,7 +202,7 @@
 				var/safety = M.eyecheck()
 				if(safety <= 0)
 					M.Weaken(10)
-					flick("e_flash", M.flash)
+					M.flash_eyes(visual = 1)
 					for(var/mob/O in viewers(M, null))
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")
 	..()

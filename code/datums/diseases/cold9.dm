@@ -4,7 +4,7 @@
 	spread = "On contact"
 	spread_type = CONTACT_GENERAL
 	cure = "Common Cold Anti-bodies or Spaceacillin"
-	cure_id = "spaceacillin"
+	cure_id = SPACEACILLIN
 	agent = "ICE9-rhinovirus"
 	affected_species = list("Human")
 	desc = "If left untreated the subject will slow, as if partly frozen."
@@ -22,7 +22,7 @@
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your throat feels sore.</span>")
 			if(prob(5))
@@ -32,7 +32,7 @@
 			if(prob(1))
 				affected_mob.emote("sneeze")
 			if(prob(1))
-				affected_mob.emote("cough")
+				affected_mob.audible_cough()
 			if(prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your throat feels sore.</span>")
 			if(prob(10))

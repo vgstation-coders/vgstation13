@@ -8,13 +8,13 @@
 /obj/effect/overlay/cultify()
 	return
 
-/obj/effect/overlay/singuloCanEat()
-	return 0
-
 /obj/effect/overlay/singularity_act()
 	return
 
 /obj/effect/overlay/singularity_pull()
+	return
+
+/obj/effect/overlay/blob_act()
 	return
 
 /obj/effect/overlay/beam//Not actually a projectile, just an effect.

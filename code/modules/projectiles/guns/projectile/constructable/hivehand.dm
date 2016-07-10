@@ -5,7 +5,7 @@
 	icon_state = "hivehand"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	force = 20
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -19,6 +19,7 @@
 	sharpness = 1
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	attack_verb = list("claws", "rends", "slashes")
+	mech_flags = MECH_SCAN_ILLEGAL
 	conventional_firearm = 0
 	var/shots_remaining = 0
 	var/has_shot = 0
@@ -26,8 +27,7 @@
 /obj/item/weapon/gun/projectile/hivehand/pickup(mob/user as mob)
 	..()
 	to_chat(user, "<span class='warning'>\The [src] latches tightly onto your arm!</span>")
-	user.update_inv_r_hand()
-	user.update_inv_l_hand()
+	user.update_inv_hands()
 	processing_objects.Add(src)
 
 /obj/item/weapon/gun/projectile/hivehand/dropped(mob/user as mob)

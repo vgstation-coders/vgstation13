@@ -3,7 +3,7 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	lighting_use_dynamic = 1
+	dynamic_lighting = 1
 
 /area/vault/icetruck
 
@@ -37,6 +37,12 @@
 /area/vault/hive_shuttle
 
 /area/vault/listening
+	requires_power = 1
+
+/area/vault/biodome
+	requires_power = 1
+
+/area/vault/brokeufo
 	requires_power = 1
 
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
@@ -158,3 +164,21 @@
 
 /obj/machinery/power/solar/control/vault_listening
 	track = 2 // Automatic
+
+/obj/machinery/floodlight/on/New()
+	..()
+	on = 1
+	set_light(brightness_on)
+	update_icon()
+
+/obj/machinery/floodlight/on/infinite
+	cell = /obj/item/weapon/cell/infinite
+
+/obj/machinery/bot/farmbot/duey
+	name = "Duey"
+	desc = "Looks like a maintenance droid, repurposed for botany management. Seems the years haven't been too kind."
+	health = 150
+	maxhealth = 150
+	icon_state = "duey0"
+	icon_initial = "duey"
+	Max_Fertilizers = 50

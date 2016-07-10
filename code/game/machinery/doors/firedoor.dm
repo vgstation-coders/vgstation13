@@ -204,14 +204,13 @@ var/global/list/alert_overlays_global = list()
 		ASSERT(istype(A)) // This worries me.
 		var/alarmed = A.doors_down || A.fire
 		var/old_density = src.density
-		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock safeties and open \the [src]?",,"Yes","No") == "Yes")
+		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
 			open()
 		else if(!old_density)
 			close()
 		else
 			return
-		admin_diary << ("[user]/([user.ckey]) [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at [formatJumpTo(get_turf(src))]")
-		message_admins("[user]/([user.ckey]) [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at [formatJumpTo(get_turf(src))]")
+		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)
@@ -305,7 +304,7 @@ var/global/list/alert_overlays_global = list()
 	else
 		spawn()
 			close()
-	admin_diary << ("[user]/([user.ckey]) [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at [formatJumpTo(get_turf(src))]")
+	investigation_log(I_ATMOS, "has been [density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 	if(needs_to_close)
 		spawn(50)
@@ -345,7 +344,7 @@ var/global/list/alert_overlays_global = list()
 	else
 		spawn(0)
 			close()
-	admin_diary << ("[user]/([user.ckey]) [density ? "closed the open" : "opened the closed"] [alarmed ? "and alarming" : ""] firelock at [formatJumpTo(get_turf(src))]")
+	investigation_log(I_ATMOS, "has been [density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 	return
 
 /obj/machinery/door/firedoor/close()
@@ -369,9 +368,9 @@ var/global/list/alert_overlays_global = list()
 	if(density)
 		icon_state = "door_closed"
 		if(blocked)
-			overlays += "welded"
+			overlays += image(icon = icon, icon_state = "welded")
 		if(pdiff_alert)
-			overlays += "palert"
+			overlays += image(icon = icon, icon_state = "palert")
 		if(dir_alerts)
 			for(var/d=1;d<=4;d++)
 				var/cdir = cardinal[d]
@@ -387,7 +386,7 @@ var/global/list/alert_overlays_global = list()
 	else
 		icon_state = "door_open"
 		if(blocked)
-			overlays += "welded_open"
+			overlays += image(icon = icon, icon_state = "welded_open")
 	return
 
 // CHECK PRESSURE
@@ -457,28 +456,30 @@ var/global/list/alert_overlays_global = list()
 	air_properties_vary_with_direction = 1
 	flags = ON_BORDER
 
-/obj/machinery/door/firedoor/border_only/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-
-	if(get_dir(loc, target) == dir) //Make sure looking at appropriate border
-		//if(air_group) return 0
+	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
-	else
-		return 1
+	return 1
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/firedoor/CanAStarPass()
 	return !density
 
 
-/obj/machinery/door/firedoor/border_only/CheckExit(atom/movable/mover as mob|obj, turf/target as turf)
+/obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir)
-		return !density
-	else
-		return 1
+	if(flags & ON_BORDER)
+		if(target) //Are we doing a manual check to see
+			if(get_dir(loc, target) == dir)
+				return !density
+		else if(mover.dir == dir) //Or are we using move code
+			if(density)	mover.Bump(src)
+			return !density
+	return 1
+
 
 /obj/machinery/door/firedoor/multi_tile
 	icon = 'icons/obj/doors/DoorHazard2x1.dmi'

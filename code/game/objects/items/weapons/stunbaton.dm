@@ -2,12 +2,13 @@
 	name = "stun baton"
 	desc = "A stun baton for incapacitating people with."
 	icon_state = "stun baton"
-	item_state = "baton"
+	item_state = "baton0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 10
 	throwforce = 7
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	origin_tech = "combat=2"
 	attack_verb = list("beats")
 	var/stunforce = 10
@@ -47,10 +48,18 @@
 /obj/item/weapon/melee/baton/update_icon()
 	if(status)
 		icon_state = "[initial(name)]_active"
+		item_state = "baton1"
 	else if(!bcell)
 		icon_state = "[initial(name)]_nocell"
+		item_state = "baton0"
 	else
 		icon_state = "[initial(name)]"
+		item_state = "baton0"
+
+	if (istype(loc,/mob/living/carbon))
+		var/mob/living/carbon/M = loc
+		M.update_inv_back()
+		M.update_inv_hands()
 
 /obj/item/weapon/melee/baton/examine(mob/user)
 	..()
@@ -86,6 +95,7 @@
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
 			"<span class='danger'>The [name] blasts you with its power!</span>")
 		user.Weaken(stunforce*3)
+		playsound(loc, "sparks", 75, 1, -1)
 		deductcharge(hitcost)
 		return
 	if(bcell && bcell.charge >= hitcost)
@@ -102,6 +112,7 @@
 		else
 			user.simple_message("<span class='warning'>[src] is out of charge.</span>",
 				"<span class='warning'>[src] refuses to obey you.</span>")
+
 	add_fingerprint(user)
 
 /obj/item/weapon/melee/baton/attack(mob/M, mob/user)

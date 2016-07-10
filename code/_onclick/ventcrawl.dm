@@ -71,6 +71,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/simple_animal/borer/can_ventcrawl()
 	return 1
 
+/mob/living/simple_animal/borer/ventcrawl_carry()
+	return 1
+
 /mob/living/simple_animal/mouse/can_ventcrawl()
 	return 1
 
@@ -180,6 +183,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 		for(var/obj/machinery/atmospherics/A in (pipeline.members || pipeline.edges))
 			if(!A.pipe_image)
 				A.pipe_image = image(A, A.loc, layer = 20, dir = A.dir) //the 20 puts it above Byond's darkness (not its opacity view)
+				A.pipe_image.plane = PLANE_LIGHTING
 			pipes_shown += A.pipe_image
 			client.images += A.pipe_image
 

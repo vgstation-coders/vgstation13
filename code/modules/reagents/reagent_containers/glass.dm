@@ -116,9 +116,7 @@
 	origin_tech = "materials=1"
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(!(src.type == /obj/item/weapon/reagent_containers/glass/beaker))
-		return //regular beakers only
-	if(istype(W, /obj/item/weapon/surgicaldrill))
+	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
@@ -130,6 +128,8 @@
 			else
 				new /obj/item/weapon/cylinder(get_turf(src.loc))
 			qdel(src)
+		return
+	return ..()
 
 /obj/item/weapon/reagent_containers/glass/beaker/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
@@ -270,19 +270,19 @@
 
 	New()
 		..()
-		reagents.add_reagent("cryoxadone", 30)
+		reagents.add_reagent(CRYOXADONE, 30)
 
 /obj/item/weapon/reagent_containers/glass/beaker/sulphuric
 
 	New()
 		..()
-		reagents.add_reagent("sacid", 50)
+		reagents.add_reagent(SACID, 50)
 
 /obj/item/weapon/reagent_containers/glass/beaker/slime
 
 	New()
 		..()
-		reagents.add_reagent("slimejelly", 50)
+		reagents.add_reagent(SLIMEJELLY, 50)
 
 /obj/item/weapon/reagent_containers/glass/bucket
 	desc = "It's a bucket."
@@ -292,7 +292,7 @@
 	item_state = "bucket"
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_METAL
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,30,50,70)
 	volume = 70
@@ -365,7 +365,7 @@
 	item_state = "canister"
 	m_amt = 300
 	g_amt = 0
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,30,60)
@@ -386,7 +386,7 @@
 
 	New()
 		..()
-		reagents.add_reagent("fluorosurfactant", 20)
+		reagents.add_reagent(FLUOROSURFACTANT, 20)
 
 */
 

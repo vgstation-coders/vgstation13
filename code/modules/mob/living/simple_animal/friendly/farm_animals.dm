@@ -44,7 +44,7 @@
 
 		if(stat == CONSCIOUS)
 			if(udder && prob(5))
-				udder.add_reagent("milk", rand(5, 10))
+				udder.add_reagent(MILK, rand(5, 10))
 
 		if(locate(/obj/effect/plantsegment) in loc)
 			var/obj/effect/plantsegment/SV = locate(/obj/effect/plantsegment) in loc
@@ -77,7 +77,7 @@
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = udder.trans_id_to(G, "milk", rand(5,10))
+		var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
@@ -119,7 +119,7 @@
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = udder.trans_id_to(G, "milk", rand(5,10))
+		var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
@@ -132,7 +132,7 @@
 	. = ..()
 	if(stat == CONSCIOUS)
 		if(udder && prob(5))
-			udder.add_reagent("milk", rand(5, 10))
+			udder.add_reagent(MILK, rand(5, 10))
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
@@ -260,17 +260,80 @@
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/var/amount_grown = 0
-/obj/item/weapon/reagent_containers/food/snacks/egg/process()
-	if(is_in_valid_nest(src)) //_macros.dm
-		amount_grown += rand(1,2)
-		if(amount_grown >= 100)
-			hatch()
-	else
-		processing_objects.Remove(src)
+#define BOX_GROWTH_BAR 200
+/mob/living/simple_animal/hostile/retaliate/box
+	name = "box"
+	desc = "A distant descendent of the common domesticated Earth pig, corrupted by generations of splicing and genetic decay."
+	icon_state = "box_2"
+	icon_living = "box_2"
+	icon_dead = "box_2_dead"
+	speak = list("SQUEEEEE!","Oink...","Oink, oink", "Oink, oink, oink", "Oink!", "Oiiink.")
+	emote_hear = list("squeals hauntingly")
+	emote_see = list("roots about","squeals hauntingly")
+	speak_chance = 1
+	turns_per_move = 6
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box
+	response_help  = "pets"
+	response_disarm = "gently pushes aside"
+	response_harm   = "kicks"
+	attacktext = "kicks"
+	health = 60
+	melee_damage_lower = 10
+	melee_damage_upper = 12 //Those tusk will maul you!
+	size = SIZE_SMALL
+	min_oxy = 0
+	max_oxy = 1
+	min_n2 = 5
+	max_n2 = 0
+	treadmill_speed = 1.5
+	var/fat = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
-	visible_message("[src] hatches with a quiet cracking sound.")
-	new /mob/living/simple_animal/chick(get_turf(src))
-	processing_objects.Remove(src)
-	qdel(src)
+/mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
+	if(size<SIZE_BIG)
+		size++
+		fat = 0
+	update_icon()
+
+/mob/living/simple_animal/hostile/retaliate/box/update_icon()
+	icon_state = "box_[size]"
+	icon_living = "box_[size]"
+	icon_dead = "box_[size]_dead"
+
+/mob/living/simple_animal/hostile/retaliate/box/examine(mob/user)
+	..()
+	switch(size)
+		if(SIZE_SMALL)
+			to_chat(user, "<span class='info'>It's a box baby.</span>")
+		if(SIZE_NORMAL)
+			to_chat(user, "<span class='info'>It's a respectable size.</span>")
+		if(SIZE_BIG)
+			to_chat(user, "<span class='info'>It's huge - a prize winning porker!</span>")
+
+/mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
+	if(ishuman(A))
+		var/mob/living/carbon/human/H = A
+		if(isvox(H)) return 0 //Won't attack Vox
+	else ..()
+
+/mob/living/simple_animal/hostile/retaliate/box/Life()
+	. = ..()
+	if(size<SIZE_BIG)
+		fat += rand(2)
+	if(fat>BOX_GROWTH_BAR)
+		updatefat()
+
+/mob/living/simple_animal/hostile/retaliate/box/death()
+	..()
+	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
+
+/mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
+		if(!stat && size < SIZE_BIG)
+			if(!user.drop_item(O))
+				user << "<span class='notice'>You can't let go of \the [O]!</span>"
+				return
+
+			user.visible_message("<span class='notice'>[user] feeds [O] to [name].</span>","<span class='notice'>You feed [O] to [name].</span>")
+			qdel(O)
+			fat += rand(15,25)
+	else ..()

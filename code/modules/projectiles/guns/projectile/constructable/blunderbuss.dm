@@ -5,11 +5,11 @@
 	icon_state = "blunderbuss"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null
-	w_class = 4.0
+	w_class = W_CLASS_LARGE
 	force = 10
 	flags = FPRINT
 	siemens_coefficient = 1
-	slot_flags = SLOT_BACK
+	slot_flags = SLOT_BACK | SLOT_BELT
 	origin_tech = "materials=1;engineering=1;combat=1"
 	attack_verb = list("strikes", "hits", "bashes")
 	mech_flags = MECH_SCAN_ILLEGAL
@@ -97,7 +97,7 @@
 	for(var/i=1, i<=prohibited_items.len, i++)
 		if(istype(W,prohibited_items[i]))
 			item_prohibited = 1
-	if(!loaded_item && istype(W,/obj/item) && !istype(W,/obj/item/weapon/reagent_containers) && !item_prohibited)
+	if(!loaded_item && istype(W,/obj/item) && !W.is_open_container() && !item_prohibited)
 		if(istype(W, /obj/item/stack))
 			var/obj/item/stack/S = W
 			S.use(1)
@@ -113,10 +113,10 @@
 	else if(!loaded_item && item_prohibited)
 		to_chat(user, "<span class='warning'>That won't fit into the muzzle!</span>")
 		return 1
-	else if(loaded_item && istype(W,/obj/item/weapon/reagent_containers))
+	else if(loaded_item && W.is_open_container())
 		to_chat(user, "<span class='warning'>You can't reach the fuel chamber when there's something stuck in the barrel!</span>")
 		return 1
-	else if(!loaded_item && istype(W,/obj/item/weapon/reagent_containers))
+	else if(!loaded_item && W.is_open_container())
 		transfer_fuel(W, user)
 		return 1
 	else if(loaded_item && istype(W,/obj/item))
@@ -128,6 +128,8 @@
 /obj/item/weapon/blunderbuss/proc/transfer_fuel(obj/item/weapon/reagent_containers/S, mob/user as mob)
 	if(!S.is_open_container())
 		return
+	if(!istype(S))
+		return
 	if(S.is_empty())
 		to_chat(user, "<span class='warning'>\The [S] is empty.</span>")
 		return
@@ -136,7 +138,7 @@
 		return
 	var/pure_fuel = 1
 	for (var/datum/reagent/current_reagent in S.reagents.reagent_list)
-		if (current_reagent.id != "fuel")
+		if (current_reagent.id != FUEL)
 			pure_fuel = 0
 	if(!pure_fuel)
 		to_chat(user, "<span class='warning'>\The [src] won't fire if you fill it with anything but pure welding fuel!</span>")
@@ -146,7 +148,7 @@
 	if((fuel_level + transfer_amount) >= max_fuel)
 		transfer_amount = max_fuel-fuel_level
 		full = 1
-	S.reagents.remove_reagent("fuel", transfer_amount)
+	S.reagents.remove_reagent(FUEL, transfer_amount)
 	fuel_level += transfer_amount
 	if(full)
 		to_chat(user, "<span class='notice'>You fill \the [src] to the brim with fuel from \the [S].</span>")
@@ -232,7 +234,7 @@
 	var/fire_force = fuel_level + (fuel_level * (1/(fuel_level/10)))
 
 	var/speed
-	if(loaded_item.w_class > 1)
+	if(loaded_item.w_class > W_CLASS_TINY)
 		speed = ((fire_force*(4/loaded_item.w_class))/5) //projectile speed.
 	else
 		speed = ((fire_force*2)/5)

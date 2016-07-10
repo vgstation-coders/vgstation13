@@ -108,7 +108,7 @@
 					health -= HONEYCOMB_COST
 					var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H = new(src.loc)
 					if(toxic > 0)
-						H.reagents.add_reagent("toxin", toxic)
+						H.reagents.add_reagent(TOXIN, toxic)
 				if(honey_level >= 3)
 					new/obj/item/queen_bee(src.loc)
 				to_chat(user, "<span class='notice'>You successfully harvest the honeycombs. The empty apiary can be relocated.</span>")
@@ -127,7 +127,7 @@
 		user.visible_message("<span class='warning'>\the [user] hits \the [src] with \the [O]!</span>","<span class='warning'>You hit \the [src] with \the [O]!</span>")
 		angry_swarm(user)
 
-/obj/machinery/apiary/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/apiary/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	if(istype(mover) && mover.checkpass(PASSTABLE))

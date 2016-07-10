@@ -141,7 +141,7 @@
 	qdel(src)
 	return 20000
 
-/obj/machinery/power/supermatter/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/power/supermatter/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/structure/closet/crate/secure/large/reinforced))
 		return 1
 	. = ..()
@@ -293,7 +293,7 @@
 	env.merge(removed)
 
 	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
-		if(!istype(l.glasses, /obj/item/clothing/glasses/meson))
+		if(!istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))

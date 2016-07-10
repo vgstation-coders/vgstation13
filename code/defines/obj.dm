@@ -17,13 +17,13 @@
 				return
 
 /obj/effect/mark
-		var/mark = ""
-		icon = 'icons/misc/mark.dmi'
-		icon_state = "blank"
-		anchored = 1
-		layer = 99
-		mouse_opacity = 0
-		unacidable = 1//Just to be sure.
+	var/mark = ""
+	icon = 'icons/misc/mark.dmi'
+	icon_state = "blank"
+	anchored = 1
+	layer = 99
+	mouse_opacity = 0
+	unacidable = 1//Just to be sure.
 
 
 
@@ -322,7 +322,7 @@ var/global/list/PDA_Manifest = list()
 	item_state = "beachball"
 	density = 0
 	anchored = 0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	force = 0.0
 	throwforce = 0.0
 	throw_speed = 1
@@ -341,8 +341,8 @@ var/global/list/PDA_Manifest = list()
 	desc = "You can't resist."
 	// name = ""
 
-/obj/effect/stop/Uncross(atom/movable/O)
-	if(victim == O)
+/obj/effect/stop/Uncross(atom/movable/mover)
+	if(victim == mover)
 		return 0
 	return 1
 

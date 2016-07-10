@@ -69,14 +69,15 @@
 	set category = "Special Verbs"
 	set name = "Global Narrate"
 
-	if (!holder)
+	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to everyone:")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to everyone, input nothing to cancel.")) as text
 
-	if (!msg)
+	if(!msg)
 		return
+
 	to_chat(world, "[msg]")
 	log_admin("GlobalNarrate: [key_name(usr)] : [msg]")
 	message_admins("<span class='notice'><B>GlobalNarrate: [key_name_admin(usr)] : [msg]<BR></B></span>", 1)
@@ -96,9 +97,9 @@
 	if(!M)
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to your target:")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as text
 
-	if( !msg )
+	if(!msg)
 		return
 
 	to_chat(M, msg)
@@ -114,9 +115,9 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to your target:")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as text
 
-	if( !msg )
+	if(!msg)
 		return
 
 	for(var/mob/M in view())
@@ -124,7 +125,7 @@
 			to_chat(M, msg)
 
 	log_admin("LocalNarrate: [key_name(usr)] at [formatJumpTo(get_turf(usr))]: [msg]")
-	message_admins("<span class='notice'><B>DirectNarrate: [key_name(usr)] at [formatJumpTo(get_turf(usr))]: [msg]<BR></B></span>", 1)
+	message_admins("<span class='notice'><B>LocalNarrate: [key_name(usr)] at [formatJumpTo(get_turf(usr))]: [msg]<BR></B></span>", 1)
 	feedback_add_details("admin_verb","LIRN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_godmode(mob/M as mob in mob_list)
@@ -380,7 +381,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	var/input = ckey(input(src, "Please specify which key will be respawned.", "Key", ""))
+
+	var/input = ckey(input(src, "Please specify which key will be respawned. Input nothing to cancel.", "Key", ""))
 	if(!input)
 		return
 
@@ -640,7 +642,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		feedback_add_details("admin_verb","DEL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		if(istype(O,/turf))
 			var/turf/T=O
-			T.ChangeTurf(get_base_turf(T.z))
+			T.ChangeTurf(T.get_underlying_turf())
 		else
 			qdel(O)
 
@@ -733,13 +735,12 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
 	if(confirm == "Yes")
-		if (istype(mob, /mob/dead/observer)) // so they don't spam gibs everywhere
-			return
-		else
-			mob.gib()
-
 		log_admin("[key_name(usr)] used gibself.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] used gibself.</span>", 1)
+		if(!istype(mob, /mob/dead/observer))
+			mob.gib()
+		else
+			gibs(mob.loc, mob.viruses)
 		feedback_add_details("admin_verb","GIBS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /*
 /client/proc/cmd_manual_ban()

@@ -3,7 +3,7 @@
 	max_stages = 4
 	spread = "Airborne"
 	cure = "The Manly Dorf"
-	cure_id = "manlydorf"
+	cure_id = MANLYDORF
 	cure_chance = 100
 	agent = "Rincewindus Vulgaris"
 	affected_species = list("Human")
@@ -63,6 +63,7 @@ STI KALY - blind
 					H.drop_from_inventory(H.head)
 				H.head = new /obj/item/clothing/head/wizard(H)
 				H.head.layer = 20
+				H.shoes.plane = PLANE_HUD
 			return
 		if(prob(chance))
 			if(!istype(H.wear_suit, /obj/item/clothing/suit/wizrobe))
@@ -70,6 +71,7 @@ STI KALY - blind
 					H.drop_from_inventory(H.wear_suit)
 				H.wear_suit = new /obj/item/clothing/suit/wizrobe(H)
 				H.wear_suit.layer = 20
+				H.shoes.plane = PLANE_HUD
 			return
 		if(prob(chance))
 			if(!istype(H.shoes, /obj/item/clothing/shoes/sandal))
@@ -77,12 +79,13 @@ STI KALY - blind
 					H.drop_from_inventory(H.shoes)
 				H.shoes = new /obj/item/clothing/shoes/sandal(H)
 				H.shoes.layer = 20
+				H.shoes.plane = PLANE_HUD
 			return
 	else
 		var/mob/living/carbon/H = affected_mob
 		if(prob(chance))
-			if(!istype(H.r_hand, /obj/item/weapon/staff))
-				if(H.r_hand || H.drop_item(H.r_hand))
+			if(!istype(H.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/staff))
+				if(H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND)))
 					H.put_in_r_hand( new /obj/item/weapon/staff(H) )
 			return
 	return

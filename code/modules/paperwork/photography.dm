@@ -15,7 +15,7 @@
 	desc = "A camera film cartridge. Insert it into a camera to reload it."
 	icon_state = "film"
 	item_state = "electropack"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	origin_tech = "materials=1;programming=1"
 
 
@@ -27,7 +27,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "photo"
 	item_state = "paper"
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	var/icon/img		//Big photo image
 	var/scribble		//Scribble on the back.
 	var/blueprints = 0	//Does it include the blueprints?
@@ -102,7 +102,7 @@
 	desc = "A polaroid camera."
 	icon_state = "polaroid"
 	item_state = "polaroid"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -347,13 +347,16 @@
 	for(var/mob/living/carbon/A in the_turf)
 		if(A.invisibility) continue
 		var/holding = null
-		if(A.l_hand || A.r_hand)
-			if(A.l_hand) holding = "They are holding \a [A.l_hand]"
-			if(A.r_hand)
-				if(holding)
-					holding += " and \a [A.r_hand]"
+		for(var/obj/item/I in A.held_items)
+			var/item_count = 0
+
+			switch(item_count)
+				if(0)
+					holding = "They are holding \a [I]"
 				else
-					holding = "They are holding \a [A.r_hand]"
+					holding += " and \a [I]"
+
+			item_count++
 
 		if(!mob_detail)
 			mob_detail = "You can see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "
@@ -378,13 +381,16 @@
 	var/mob_detail
 	for(var/mob/living/carbon/A in the_turf)
 		var/holding = null
-		if(A.l_hand || A.r_hand)
-			if(A.l_hand) holding = "They are holding \a [A.l_hand]"
-			if(A.r_hand)
-				if(holding)
-					holding += " and \a [A.r_hand]"
+		for(var/obj/item/I in A.held_items)
+			var/item_count = 0
+
+			switch(item_count)
+				if(0)
+					holding = "They are holding \a [I]"
 				else
-					holding = "They are holding \a [A.r_hand]"
+					holding += " and \a [I]"
+
+			item_count++
 
 		if(!mob_detail)
 			mob_detail = "You can see [A] on the photo[A.health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "

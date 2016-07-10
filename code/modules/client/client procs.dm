@@ -3,7 +3,7 @@
 	////////////
 #define TOPIC_SPAM_DELAY	2		//2 ticks is about 2/10ths of a second; it was 4 ticks, but that caused too many clicks to be lost due to lag
 #define UPLOAD_LIMIT		10485760	//Restricts client uploads to the server to 10MB //Boosted this thing. What's the worst that can happen?
-#define MIN_CLIENT_VERSION	0		//Just an ambiguously low version for now, I don't want to suddenly stop people playing.
+#define MIN_CLIENT_VERSION	510		//Just an ambiguously low version for now, I don't want to suddenly stop people playing.
 									//I would just like the code ready should it ever need to be used.
 	/*
 	When somebody clicks a link in game, this Topic is called first.
@@ -64,6 +64,9 @@
 		completed_asset_jobs += job
 		return
 
+	if(href_list["_src_"] == "chat") // Oh god the ping hrefs.
+		return chatOutput.Topic(href, href_list)
+
 	//Logs all hrefs
 	if(config && config.log_hrefs && investigations[I_HREFS])
 		var/datum/log_controller/I = investigations[I_HREFS]
@@ -74,7 +77,6 @@
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
-		if("chat")		return chatOutput.Topic(href, href_list)
 
 	switch(href_list["action"])
 		if ("openLink")
@@ -134,12 +136,18 @@
 		admins += src
 		holder.owner = src
 
-	if(connection != "seeker")					//Invalid connection type.
-		return null
-	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
-		return null
+	if(connection != "seeker")			//Invalid connection type.
+		if(connection == "web")
+			if(!holder) return null
+		else return null
 
-	if(IsGuestKey(key))
+	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
+		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
+		alert(src,"Your BYOND client is out of date. Please make sure you have have at least version [world.byond_version] installed. Check for a beta update if necessary.", "Update Yo'Self", "OK")
+		spawn(5 SECONDS)
+			del(src)
+
+	if(!guests_allowed && IsGuestKey(key))
 		alert(src,"This server doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
 		del(src)
 		return
@@ -356,6 +364,7 @@
 
 	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
 	nanomanager.send_resources(src)
+	send_html_resources()
 
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()

@@ -11,7 +11,7 @@
 /mob/living/silicon/robot/mommi/get_equipped_items()
 	return head_state
 
-/mob/living/silicon/robot/mommi/proc/is_in_modules(obj/item/W, var/permit_sheets=0)
+/mob/living/silicon/robot/mommi/is_in_modules(obj/item/W, var/permit_sheets=0)
 	if(istype(W, src.module.emag.type))
 		return src.module.emag
 	// Exact matching for stacks (so we can load machines)
@@ -52,6 +52,7 @@
 			client.screen -= tool_state
 	tool_state = W
 	W.layer = 20
+	W.plane = PLANE_HUD
 	W.forceMove(src)
 
 	// Make crap we pick up active so there's less clicking and carpal. - N3X
@@ -68,6 +69,7 @@
 	if (src.client)
 		src.client.screen -= O
 	O.layer = initial(O.layer)
+	O.plane = initial(O.plane)
 	O.screen_loc = null
 	return 1
 
@@ -317,6 +319,7 @@
 			return 0
 	// Set the item layer and update the MoMMI's icons
 	W.layer = 20
+	W.plane = PLANE_HUD
 	update_inv_head()
 	return 1
 

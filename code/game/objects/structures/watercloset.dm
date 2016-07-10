@@ -20,6 +20,26 @@
 	open = round(rand(0, 1))
 	update_icon()
 
+/obj/structure/toilet/verb/empty_container_into()
+	set name = "Empty container into"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!usr || !isturf(usr.loc))
+		return
+	if(!open)
+		to_chat(usr, "<span class='warning'>\The [src] is closed!</span>")
+		return
+	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
+	if(!istype(container))
+		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
+		return
+	return container.drain_into(usr, src)
+
+/obj/structure/toilet/AltClick()
+	if(Adjacent(usr))
+		return empty_container_into()
+	return ..()
 /obj/structure/toilet/attack_hand(mob/living/user as mob)
 	if(swirlie)
 		usr.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='notice'>You slam the toilet seat onto [swirlie.name]'s head!</span>", "You hear reverberating porcelain.")
@@ -100,10 +120,10 @@
 				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
 
 	if(cistern)
-		if(I.w_class > 3)
+		if(I.w_class > W_CLASS_MEDIUM)
 			to_chat(user, "<span class='notice'>\The [I] does not fit.</span>")
 			return
-		if(w_items + I.w_class > 5)
+		if(w_items + I.w_class > W_CLASS_HUGE)
 			to_chat(user, "<span class='notice'>The cistern is full.</span>")
 			return
 		if(user.drop_item(I, src))
@@ -121,6 +141,24 @@
 	icon_state = "urinal"
 	density = 0
 	anchored = 1
+
+/obj/structure/urinal/verb/empty_container_into()
+	set name = "Empty container into"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!usr || !isturf(usr.loc))
+		return
+	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
+	if(!istype(container))
+		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
+		return
+	return container.drain_into(usr, src)
+
+/obj/structure/urinal/AltClick()
+	if(Adjacent(usr))
+		return empty_container_into()
+	return ..()
 
 /obj/structure/urinal/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/grab))
@@ -171,6 +209,7 @@
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "mist"
 	layer = MOB_LAYER + 1
+	plane = PLANE_EFFECTS
 	anchored = 1
 	mouse_opacity = 0
 
@@ -184,15 +223,15 @@
 	if(..())
 		return
 	if(panel_open)
-		to_chat(M, "<span class='warning'>The shower's maintenance hatch needs to be closed first.</span>")
+		to_chat(M, "<span class='warning'>\The [src]'s maintenance hatch needs to be closed first.</span>")
 		return
 	if(!anchored)
-		to_chat(M, "<span class='warning'>The shower needs to be bolted to the floor to work.</span>")
+		to_chat(M, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
 		return
 
 	on = !on
-	M.visible_message("<span class='notice'>[M] turns the shower [on ? "on":"off"]</span>", \
-					  "<span class='notice'>You turn the shower [on ? "on":"off"]</span>")
+	M.visible_message("<span class='notice'>[M] turns \the [src] [on ? "on":"off"]</span>", \
+					  "<span class='notice'>You turn \the [src] [on ? "on":"off"]</span>")
 	update_icon()
 	if(on)
 		for(var/atom/movable/G in get_turf(src))
@@ -220,8 +259,8 @@
 					anchored = 1
 	else
 		if(iswrench(I))
-			user.visible_message("<span class='warning'>[user] begins to adjust the [src]'s temperature valve with \a [I.name].</span>", \
-								 "<span class='notice'>You begin to adjust the [src]'s temperature valve with \a [I.name].</span>")
+			user.visible_message("<span class='warning'>[user] begins to adjust \the [src]'s temperature valve with \a [I.name].</span>", \
+								 "<span class='notice'>You begin to adjust \the [src]'s temperature valve with \a [I.name].</span>")
 			if(do_after(user, src, 50))
 				switch(watertemp)
 					if("cool")
@@ -230,8 +269,8 @@
 						watertemp = "searing hot"
 					if("searing hot")
 						watertemp = "cool"
-				user.visible_message("<span class='warning'>[user] adjusts the [src]'s temperature with \a [I.name].</span>",
-				"<span class='notice'>You adjust the [src]'s temperature with \a [I.name], the water is now [watertemp].</span>")
+				user.visible_message("<span class='warning'>[user] adjusts \the [src]'s temperature with \a [I.name].</span>",
+				"<span class='notice'>You adjust \the [src]'s temperature with \a [I.name], the water is now [watertemp].</span>")
 				add_fingerprint(user)
 
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
@@ -240,7 +279,9 @@
 		returnToPool(mymist)
 
 	if(on)
-		overlays += image('icons/obj/watercloset.dmi', src, "water", MOB_LAYER + 1, dir)
+		var/image/water = image('icons/obj/watercloset.dmi', src, "water", MOB_LAYER + 1, dir)
+		water.plane = PLANE_EFFECTS
+		overlays += water
 		if(watertemp == "freezing") //No mist if the water is really cold
 			return
 		if(!ismist)
@@ -270,18 +311,23 @@
 		mobpresent--
 	..()
 
-//Yes, showers are super powerful as far as washing goes.
+//Yes, showers are super powerful as far as washing goes
+//Shower cleaning has been nerfed (no, really). 75 % chance to clean everything on each tick
+//You'll have to stay under it for a bit to clean every last noggin
+
+#define CLEAN_PROB 75 //Percentage
+
 /obj/machinery/shower/proc/wash(atom/movable/O as obj|mob)
 	if(!on)
 		return
 
 	if(iscarbon(O))
 		var/mob/living/carbon/M = O
-		if(M.r_hand)
-			M.r_hand.clean_blood()
-		if(M.l_hand)
-			M.l_hand.clean_blood()
-		if(M.back)
+		for(var/obj/item/I in M.held_items)
+			if(prob(CLEAN_PROB))
+				I.clean_blood()
+				M.update_inv_hand(M.is_holding_item(I))
+		if(M.back && prob(CLEAN_PROB))
 			if(M.back.clean_blood())
 				M.update_inv_back(0)
 		if(ishuman(M))
@@ -293,59 +339,61 @@
 			var/washglasses = 1
 
 			if(H.wear_suit)
-				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered,HIDEGLOVES))
-				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered,HIDESHOES))
+				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES))
+				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES))
 
 			if(H.head)
-				washmask = !(is_slot_hidden(H.head.body_parts_covered,HIDEMASK))
-				washglasses = !(is_slot_hidden(H.head.body_parts_covered,HIDEEYES))
-				washears = !(is_slot_hidden(H.head.body_parts_covered,HIDEEARS))
+				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK))
+				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES))
+				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS))
 
 			if(H.wear_mask)
-				if (washears)
-					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered,HIDEEARS))
-				if (washglasses)
-					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered,HIDEEYES))
+				if(washears)
+					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS))
+				if(washglasses)
+					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES))
 
 			if(H.head)
-				if(H.head.clean_blood())
+				if(prob(CLEAN_PROB) && H.head.clean_blood())
 					H.update_inv_head(0)
 			if(H.wear_suit)
-				if(H.wear_suit.clean_blood())
+				if(prob(CLEAN_PROB) && H.wear_suit.clean_blood())
 					H.update_inv_wear_suit(0)
 			else if(H.w_uniform)
-				if(H.w_uniform.clean_blood())
+				if(prob(CLEAN_PROB) && H.w_uniform.clean_blood())
 					H.update_inv_w_uniform(0)
 			if(H.gloves && washgloves)
-				if(H.gloves.clean_blood())
+				if(prob(CLEAN_PROB) && H.gloves.clean_blood())
 					H.update_inv_gloves(0)
 			if(H.shoes && washshoes)
-				if(H.shoes.clean_blood())
+				if(prob(CLEAN_PROB) && H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 			if(H.wear_mask && washmask)
-				if(H.wear_mask.clean_blood())
+				if(prob(CLEAN_PROB) && H.wear_mask.clean_blood())
 					H.update_inv_wear_mask(0)
 			if(H.glasses && washglasses)
-				if(H.glasses.clean_blood())
+				if(prob(CLEAN_PROB) && H.glasses.clean_blood())
 					H.update_inv_glasses(0)
 			if(H.ears && washears)
-				if(H.ears.clean_blood())
+				if(prob(CLEAN_PROB) && H.ears.clean_blood())
 					H.update_inv_ears(0)
 			if(H.belt)
-				if(H.belt.clean_blood())
+				if(prob(CLEAN_PROB) && H.belt.clean_blood())
 					H.update_inv_belt(0)
 		else
 			if(M.wear_mask) //If the mob is not human, it cleans the mask without asking for bitflags
-				if(M.wear_mask.clean_blood())
+				if(prob(CLEAN_PROB) && M.wear_mask.clean_blood())
 					M.update_inv_wear_mask(0)
 	else
-		O.clean_blood()
+		if(prob(CLEAN_PROB))
+			O.clean_blood()
 
 	var/turf/turf = get_turf(src)
-	turf.clean_blood()
-	for(var/obj/effect/E in turf)
-		if(istype(E, /obj/effect/rune) || istype(E, /obj/effect/decal/cleanable) || istype(E, /obj/effect/overlay))
-			qdel(E)
+	if(prob(CLEAN_PROB))
+		turf.clean_blood()
+		for(var/obj/effect/E in turf)
+			if(istype(E, /obj/effect/rune) || istype(E, /obj/effect/decal/cleanable) || istype(E, /obj/effect/overlay))
+				qdel(E)
 
 /obj/machinery/shower/process()
 	if(!on)
@@ -355,24 +403,31 @@
 			var/mob/living/carbon/C = O
 			check_heat(C)
 		wash(O)
-		O.clean_blood()
 		watersource.reagents.reaction(O, TOUCH)
 		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 			var/obj/item/weapon/reagent_containers/glass/G = O
-			G.reagents.add_reagent("water", 5)
+			G.reagents.add_reagent(WATER, 5)
 	watersource.reagents.reaction(get_turf(src), TOUCH)
 
 /obj/machinery/shower/proc/check_heat(mob/living/carbon/C as mob)
-	if(!on || watertemp == "cool")
+	if(!on)
 		return
 
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
-	if(watertemp == "freezing cold")
-		C.bodytemperature = max(T0C - 10, C.bodytemperature - 0.5) //Down to -10°C - sorry.
+	//Every second under the shower adjusts body temperature by 0.5°C. Water conducts heat pretty efficiently in real life too
+	if(watertemp == "freezing cold") //Down to 0°C, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
+		C.bodytemperature = max(T0C, C.bodytemperature - 0.5)
 		return
-	if(watertemp == "searing hot")
-		C.bodytemperature = min(T0C + 300, C.bodytemperature + 50) //Up to 300°C
+	if(watertemp == "searing hot") //Up to 60°c, upper limit for common water boilers
+		C.bodytemperature = min(T0C + 60, C.bodytemperature + 0.5)
 		return
+	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5°C. Actual showers tend to average at 40°C, but it's the future
+		if(C.bodytemperature > T0C + 37.5) //Cooling down
+			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 0.5)
+			return
+		if(C.bodytemperature < T0C + 37.5) //Heating up
+			C.bodytemperature = min(T0C + 37.5, C.bodytemperature + 0.5)
+			return
 
 /obj/structure/sink
 	name = "sink"
@@ -381,6 +436,24 @@
 	desc = "A sink used for washing one's hands and face."
 	anchored = 1
 	var/busy = 0 	//Something's being washed at the moment
+
+/obj/structure/sink/verb/empty_container_into()
+	set name = "Empty container into"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!usr || !isturf(usr.loc))
+		return
+	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
+	if(!istype(container))
+		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
+		return
+	return container.drain_into(usr, src)
+
+/obj/structure/sink/AltClick()
+	if(Adjacent(usr))
+		return empty_container_into()
+	return ..()
 
 /obj/structure/sink/attack_hand(mob/M as mob)
 	if(isrobot(M) || isAI(M))
@@ -419,7 +492,7 @@
 	M.clean_blood()
 	if(M.reagents.maximum_volume > M.reagents.total_volume)
 		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
-		M.reagents.add_reagent("water", min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
+		M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
 		user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
 	else
 		user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
@@ -445,9 +518,9 @@
 			return
 		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
 			var/obj/item/weapon/reagent_containers/chempack/C = RG
-			C.reagents.add_reagent("water", C.fill_amount)
+			C.reagents.add_reagent(WATER, C.fill_amount)
 		else
-			RG.reagents.add_reagent("water", min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 

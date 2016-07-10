@@ -53,7 +53,7 @@
 	name = "sign"
 	desc = ""
 	icon = 'icons/obj/decals.dmi'
-	w_class = 3		//big
+	w_class = W_CLASS_MEDIUM		//big
 	var/sign_state = ""
 
 /obj/item/sign/attackby(obj/item/tool as obj, mob/user as mob)	//construction
@@ -85,7 +85,7 @@
 	if(prob(70))
 		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
-		H.apply_damage(rand(5,7), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 
 /obj/structure/sign/double/map
 	name = "station map"
@@ -232,3 +232,8 @@
 	name = "Escape Arm"
 	desc = "A direction sign, pointing out which way escape shuttle dock is."
 	icon_state = "direction_evac"
+
+/obj/structure/sign/crime
+	name = "CRIME DOES NOT PAY"
+	desc = "A warning sign which suggests that you reconsider your poor life choices."
+	icon_state = "crime"

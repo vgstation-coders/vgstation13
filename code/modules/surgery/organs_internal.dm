@@ -35,7 +35,7 @@
 	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return ..() && embryo && affected.open == 3 && target_zone == "chest"
+	return ..() && embryo && affected.open == 3 && target_zone == LIMB_CHEST
 
 /datum/surgery_step/internal/remove_embryo/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/msg = "[user] starts to pull something out from [target]'s ribcage with \the [tool]."
@@ -408,7 +408,7 @@
 				O.organ_data.rejecting = null
 
 				// Transfer over some blood data, if the organ doesn't have data.
-				var/datum/reagent/blood/organ_blood = O.reagents.reagent_list["blood"]
+				var/datum/reagent/blood/organ_blood = O.reagents.reagent_list[BLOOD]
 				if(!organ_blood || !organ_blood.data["blood_DNA"])
 					target.vessel.trans_to(O, 5, 1, 1)
 
@@ -496,7 +496,7 @@
 
 	if(istype(O))
 
-		var/datum/reagent/blood/transplant_blood = O.reagents.reagent_list["blood"]
+		var/datum/reagent/blood/transplant_blood = O.reagents.reagent_list[BLOOD]
 		if(!transplant_blood)
 			O.organ_data.transplant_data = list()
 			O.organ_data.transplant_data["species"] =    target.species.name

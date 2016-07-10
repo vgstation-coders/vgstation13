@@ -6,7 +6,7 @@
 	flags = FPRINT | PROXMOVE
 	siemens_coefficient = 1
 	throwforce = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 10
 
@@ -80,13 +80,13 @@
 /obj/item/device/assembly_holder/update_icon()
 	overlays.len = 0
 	if(a_left)
-		overlays += "[a_left.icon_state]_left"
+		overlays += image(icon = icon, icon_state = "[a_left.icon_state]_left")
 		for(var/O in a_left.attached_overlays)
-			overlays += "[O]_l"
+			overlays += image(icon = icon, icon_state = "[O]_l")
 	if(a_right)
-		src.overlays += "[a_right.icon_state]_right"
+		src.overlays += image(icon = icon, icon_state = "[a_right.icon_state]_right")
 		for(var/O in a_right.attached_overlays)
-			overlays += "[O]_r"
+			overlays += image(icon = icon, icon_state = "[O]_r")
 	if(master)
 		master.update_icon()
 

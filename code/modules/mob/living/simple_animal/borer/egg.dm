@@ -9,6 +9,7 @@
 	var/grown = 0
 	var/hatching = 0 // So we don't spam ghosts.
 	var/datum/recruiter/recruiter = null
+	var/child_prefix_index = 1
 
 	var/list/required_mols=list(
 		"toxins"=MOLES_PLASMA_VISIBLE,
@@ -17,7 +18,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/New()
 	..()
-	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent(NUTRIMENT, 4)
 	spawn(rand(1200,1500))//the egg takes a while to "ripen"
 		Grow()
 
@@ -63,7 +64,7 @@
 	if(O)
 		var/turf/T = get_turf(src)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
-		var/mob/living/simple_animal/borer/B = new (T)
+		var/mob/living/simple_animal/borer/B = new (T, child_prefix_index)
 		B.transfer_personality(O.client)
 		// Play hatching noise here.
 		playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
@@ -91,3 +92,8 @@
 		return
 	else
 		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
+	qdel(recruiter)
+	recruiter = null
+	..()

@@ -18,7 +18,7 @@ var/list/beam_master = list()
 	animate_movement = 2
 	linear_movement = 1
 	layer = 13
-
+	plane = PLANE_LIGHTING
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 30
 	damage_type = BURN
@@ -408,8 +408,8 @@ var/list/beam_master = list()
 			qdel(X)
 			X = null
 			break
-		for(var/atom/O in TT)
-			if(!O.CanPass(src))
+		for(var/atom/movable/O in TT)
+			if(!O.Cross(src))
 				qdel(X)
 				broke = 1
 				break
@@ -427,7 +427,7 @@ var/list/beam_master = list()
 			break
 	spawn(10)
 		for(var/atom/thing in ouroverlays)
-			if(!thing.timestopped && !thing.loc.timestopped)
+			if(!thing.timestopped && thing.loc && !thing.loc.timestopped)
 				ouroverlays -= thing
 				returnToPool(thing)
 	spawn
@@ -577,7 +577,7 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/emitter/singularity_pull()
 	return
 
-/obj/item/projectile/beam/lastertag/blue
+/obj/item/projectile/beam/lasertag/blue
 	name = "lasertag beam"
 	icon_state = "bluelaser"
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
@@ -592,7 +592,7 @@ var/list/beam_master = list()
 				M.Weaken(5)
 		return 1
 
-/obj/item/projectile/beam/lastertag/red
+/obj/item/projectile/beam/lasertag/red
 	name = "lasertag beam"
 	icon_state = "laser"
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
@@ -607,7 +607,7 @@ var/list/beam_master = list()
 				M.Weaken(5)
 		return 1
 
-/obj/item/projectile/beam/lastertag/omni//A laser tag bolt that stuns EVERYONE
+/obj/item/projectile/beam/lasertag/omni//A laser tag bolt that stuns EVERYONE
 	name = "lasertag beam"
 	icon_state = "omnilaser"
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE

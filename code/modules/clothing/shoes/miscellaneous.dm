@@ -10,7 +10,7 @@
 	origin_tech = "syndicate=3"
 	var/list/clothing_choices = list()
 	siemens_coefficient = 0.8
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
@@ -67,7 +67,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	siemens_coefficient = 0.6
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
@@ -78,7 +78,7 @@
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
@@ -90,6 +90,11 @@
 	icon_state = "wizard"
 
 	wizard_garb = 1
+
+/obj/item/clothing/shoes/sandal/slippers
+	name = "magic slippers"
+	icon_state = "slippers"
+	desc = "For the wizard that puts comfort first. Who's going to laugh?"
 
 /obj/item/clothing/shoes/sandal/marisa
 	desc = "A pair of magic, black shoes."
@@ -107,7 +112,7 @@
 	permeability_coefficient = 0.05
 	flags = NOSLIP
 	slowdown = SHOES_SLOWDOWN+1
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/shoes/clown_shoes
@@ -163,6 +168,8 @@
 		"Taser" = 'sound/weapons/Taser.ogg',
 		"Male scream" = "malescream",
 		"Female scream" = "femalescream",
+		"Male cough" = "malecough",
+		"Female cough" = "femalecough",
 		"Sad trombone" = 'sound/misc/sadtrombone.ogg',
 		"Awooga" = 'sound/effects/awooga.ogg',
 		"Bubbles" = 'sound/effects/bubbles.ogg',
@@ -239,9 +246,13 @@
 	item_state = "jackboots"
 	_color = "hosred"
 	siemens_coefficient = 0.7
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
+
+/obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
+	..()
+	attach_accessory(new /obj/item/clothing/accessory/holster/knife/boot/preloaded)
 
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
@@ -281,7 +292,7 @@
 	name = "laceup shoes"
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/roman
 	name = "roman sandals"
@@ -294,7 +305,7 @@
 	desc = "Simon's Shoes"
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/kneesocks
 	name = "kneesocks"
@@ -313,7 +324,7 @@
 	desc = "Boots suitable for just about any occasion"
 	icon_state = "aviator_boots"
 	item_state = "aviator_boots"
-	species_restricted = list("exclude","Vox")
+	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/shoes/libertyshoes
 	name = "Liberty Shoes"

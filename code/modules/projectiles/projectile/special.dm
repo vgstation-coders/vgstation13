@@ -92,27 +92,6 @@
 			playsound(M.loc, 'sound/effects/bamf.ogg', 50, 0)
 	return 1
 
-//This shouldn't fucking exist, just spawn a meteor damnit
-/obj/item/projectile/meteor
-	name = "meteor"
-	icon = 'icons/obj/meteor.dmi'
-	icon_state = "smallf"
-	damage = 0
-	damage_type = BRUTE
-	nodamage = 1
-	flag = "bullet"
-
-/obj/item/projectile/meteor/Bump(atom/A as mob|obj|turf|area)
-	if(A == firer)
-		loc = A.loc
-		return
-
-	//Copied straight from small meteor code
-	spawn(0)
-		playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 10, 1)
-		explosion(src.loc, -1, 1, 3, 4, 0) //Tiny meteor doesn't cause too much damage
-		qdel(src)
-
 //Simple fireball
 /obj/item/projectile/simple_fireball
 	name = "fireball"
@@ -339,5 +318,40 @@ obj/item/projectile/kinetic/New()
 		forceMove(get_step(loc,dir))
 
 	if(!(locate(/obj/effect/portal) in loc))
-		P.open_portal(setting,loc,A)
+		P.open_portal(setting,loc,A,firer)
 	bullet_die()
+
+
+//Fire breath
+//Fairly simple projectile that doesn't use any atmos calculations. Intended to be used by simple mobs
+/obj/item/projectile/fire_breath
+	name = "fiery breath"
+	icon_state = null
+	damage = 0
+	penetration = -1
+	phase_type = PROJREACT_MOBS|PROJREACT_BLOB|PROJREACT_OBJS
+	bounce_sound = null
+	custom_impact = 1
+	penetration_message = 0
+	grillepasschance = 100
+
+	var/stepped_range = 0
+	var/max_range = 9
+
+	var/fire_damage = 10
+	var/pressure = ONE_ATMOSPHERE * 4.5
+	var/temperature = T0C + 175
+
+/obj/item/projectile/fire_breath/process_step()
+	..()
+
+	if(stepped_range <= max_range)
+		stepped_range++
+	else
+		bullet_die()
+		return
+
+	var/turf/T = get_turf(src)
+	if(!T) return
+
+	new /obj/effect/fire_blast(T, fire_damage, stepped_range, 1, pressure, temperature)

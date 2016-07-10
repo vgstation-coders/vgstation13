@@ -63,32 +63,6 @@
 	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.oxygen, mymob.toxin, mymob.flash)
 
 /datum/hud/proc/brain_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
-	mymob.blind = getFromPool(/obj/screen)
-	mymob.blind.icon = 'icons/mob/screen1_full.dmi'
-	mymob.blind.icon_state = "blackimageoverlay"
-	mymob.blind.name = ""
-	mymob.blind.screen_loc = "1,1"
-	mymob.blind.layer = 0
-	mymob.blind.mouse_opacity = 1
-
-/datum/hud/proc/blob_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
-
-
-	blobpwrdisplay = getFromPool(/obj/screen)
-	blobpwrdisplay.name = "blob power"
-	blobpwrdisplay.icon_state = "block"
-	blobpwrdisplay.screen_loc = ui_health
-	blobpwrdisplay.layer = 20
-
-	blobhealthdisplay = getFromPool(/obj/screen)
-	blobhealthdisplay.name = "blob health"
-	blobhealthdisplay.icon_state = "block"
-	blobhealthdisplay.screen_loc = ui_internal
-	blobhealthdisplay.layer = 20
-
-	mymob.client.reset_screen()
-
-	mymob.client.screen += list(blobpwrdisplay, blobhealthdisplay)
 
 /datum/hud/proc/shade_hud()
 
@@ -126,6 +100,17 @@
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged, mymob.flash)
+
+/datum/hud/proc/borer_hud()
+
+	mymob.zone_sel = getFromPool(/obj/screen/zone_sel)
+	mymob.zone_sel.icon = 'icons/mob/screen1_shade.dmi'
+	mymob.zone_sel.overlays.len = 0
+	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+
+	mymob.client.reset_screen()
+
+	mymob.client.screen += list(mymob.zone_sel)
 
 /datum/hud/proc/construct_hud()
 	var/constructtype
@@ -199,5 +184,3 @@
 	vampire_blood_display.layer = 20
 
 	mymob.client.screen += list(vampire_blood_display)
-
-

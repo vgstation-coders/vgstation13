@@ -5,7 +5,7 @@
 	icon_state = "rods"
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	force = 9.0
 	throwforce = 15.0
 	throw_speed = 5
@@ -87,8 +87,6 @@
 		for(var/obj/structure/grille/G in user.loc)
 			if(G.broken)
 				G.health = initial(G.health)
-				G.density = 1
-				G.broken = 0
 				G.healthcheck()
 				use(1)
 			else

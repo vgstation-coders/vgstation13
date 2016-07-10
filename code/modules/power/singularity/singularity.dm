@@ -3,6 +3,7 @@
 //Added spess ghoasts/cameras to this so they don't add to the lag. - N3X.
 
 //Added a singuloCanEat proc to atoms. This list is now kinda obsolete.
+//Removed singuloCanEat proc from the repo.  This is now here ironically - Probe 4/30/16
 //var/global/list/uneatable = list(
 //	/obj/effect/overlay,
 //	/mob/dead,
@@ -39,7 +40,7 @@
 	var:last_movement_dir = 0 //Log the singularity's last movement to produce biased movement (singularity prefers constant movement due to inertia)
 	var/last_failed_movement = 0 //Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing.
 	var/last_warning
-
+	appearance_flags = 0
 	var/chained = 0 //Adminbus chain-grab
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
@@ -147,7 +148,7 @@
 			dissipate_strength = 1
 			overlays = 0
 			if(chained)
-				overlays += "chain_s1"
+				overlays += image(icon = icon, icon_state = "chain_s1")
 			visible_message("<span class='notice'>\The [src] shrinks to a rather pitiful size.</span>")
 		if(STAGE_TWO) //1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them.
 			current_size = 3
@@ -162,7 +163,7 @@
 			dissipate_strength = 5
 			overlays = 0
 			if(chained)
-				overlays += "chain_s3"
+				overlays += image(icon = icon, icon_state = "chain_s3")
 			if(growing)
 				visible_message("<span class='notice'>\The [src] noticeably grows in size.</span>")
 			else
@@ -181,7 +182,7 @@
 				dissipate_strength = 20
 				overlays = 0
 				if(chained)
-					overlays += "chain_s5"
+					overlays += image(icon = icon, icon_state = "chain_s5")
 				if(growing)
 					visible_message("<span class='notice'>\The [src] expands to a reasonable size.</span>")
 				else
@@ -200,7 +201,7 @@
 				dissipate_strength = 10
 				overlays = 0
 				if(chained)
-					overlays += "chain_s7"
+					overlays += image(icon = icon, icon_state = "chain_s7")
 				if(growing)
 					visible_message("<span class='warning'>\The [src] expands to a dangerous size.</span>")
 				else
@@ -216,7 +217,7 @@
 			dissipate = 0 //It cant go smaller due to energy loss.
 			overlays = 0
 			if(chained)
-				overlays += "chain_s9"
+				overlays += image(icon = icon, icon_state = "chain_s9")
 			if(growing)
 				visible_message("<span class='danger'><font size='2'>\The [src] has grown out of control!</font></span>")
 			else
@@ -237,7 +238,7 @@
 			dissipate = 0 //It cant go smaller due to e loss
 			event_chance = 25 //Events will fire off more often.
 			if(chained)
-				overlays += "chain_s9"
+				overlays += image(icon = icon, icon_state = "chain_s9")
 			visible_message("<span class='sinister'><font size='3'>You witness the creation of a destructive force that cannot possibly be stopped by human hands.</font></span>")
 
 	if(current_size == allowed_size)
@@ -492,7 +493,7 @@
 		if(M.stat == CONSCIOUS)
 			if(istype(M,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
-				if(istype(H.glasses,/obj/item/clothing/glasses/meson) && current_size != 11)
+				if(istype(H.glasses,/obj/item/clothing/glasses/scanner/meson) && current_size != 11)
 					to_chat(H, "<span class='notice'>You stare directly into \the [src], good thing you had your protective eyewear on!</span>")
 					return
 				else

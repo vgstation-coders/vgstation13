@@ -59,24 +59,25 @@
 	..()
 	// Set up wordfilter
 	filter = new
-	filter.addPickReplacement("\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)", list(
+	filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
+	list(
 		"honker",
 		"fun police",
 		"unfun",
 	))
 	// HELP THEY'RE KILLING ME
 	// FINALLY THEY'RE TICKLING ME
-	var/tickle_prefixes="\b(kill+|murder|beat|wound|hurt|harm)"
+	var/tickle_prefixes="\\b(kill+|murder|beat|wound|hurt|harm)"
 	filter.addReplacement("[tickle_prefixes]ing","tickling")
 	filter.addReplacement("[tickle_prefixes]ed", "tickled")
 	filter.addReplacement(tickle_prefixes,       "tickle")
 
-	filter.addReplacement("^h\[aei\]lp.*","END THE SHOW")
 	filter.addReplacement("h\[aei\]lp\\s+me","end my show")
 	filter.addReplacement("h\[aei\]lp\\s+him","end his show")
 	filter.addReplacement("h\[aei\]lp\\s+her","end her show")
 	filter.addReplacement("h\[aei\]lp\\s+them","end their show")
 	filter.addReplacement("h\[aei\]lp\\s+(\[^\\s\]+)","end $1's show")
+	filter.addReplacement("^h\[aei\]lp.*","END THE SHOW")
 
 /*
 	var/stance = CLOWN_STANCE_IDLE	//Used to determine behavior
@@ -263,8 +264,8 @@
 				M.show_message("<span class='danger'>[src] has been attacked with the [O] by [user].</span>")
 	*/
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/Bump(atom/movable/AM as mob|obj, yes)
-	if ((!( yes ) || now_pushing))
+/mob/living/simple_animal/hostile/retaliate/cluwne/Bump(atom/movable/AM as mob|obj)
+	if(now_pushing)
 		return
 	if(ismob(AM))
 		var/mob/M = AM
@@ -275,12 +276,12 @@
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/say(var/message)
 	message = filter.FilterSpeech(lowertext(message))
-	var/list/temp_message = text2list(message, " ") //List each word in the message
+	var/list/temp_message = splittext(message, " ") //List each word in the message
 	// Stolen from peirrot's throat
 	for(var/i=1, (i <= temp_message.len), i++) //Loop for each stage of the disease or until we run out of words
 		if(prob(50)) //Stage 1: 3% Stage 2: 6% Stage 3: 9% Stage 4: 12%
 			temp_message[i] = "HONK"
-	message = uppertext(list2text(temp_message, " "))
+	message = uppertext(jointext(temp_message, " "))
 	return ..(message)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/Die()
@@ -292,11 +293,12 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/emote(var/act)
+/mob/living/simple_animal/hostile/retaliate/cluwne/emote(var/act, var/type, var/message, var/auto)
 	if(timestopped) return //under effects of time magick
-	var/message=pick("quietly sobs into a dirty handkerchief","cries into [gender==MALE?"his":"her"] hands","bawls like a cow")
-	message = "<B>[src]</B> [message]"
-	return ..(message)
+
+	var/msg = pick("quietly sobs into a dirty handkerchief","cries into [gender==MALE?"his":"her"] hands","bawls like a cow")
+	msg = "<B>[src]</B> [msg]"
+	return ..(msg)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
 	. = ..(NewLoc, Dir, step_x, step_y)

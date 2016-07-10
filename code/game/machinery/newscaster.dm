@@ -168,7 +168,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		return
 
 	if(alert) //new message alert overlay
-		src.overlays += "newscaster_alert"
+		src.overlays += image(icon = icon, icon_state = "newscaster_alert")
 
 	if(hitstaken > 0) //Cosmetic damage overlay
 		src.overlays += image(src.icon, "crack[hitstaken]")
@@ -209,7 +209,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 /obj/machinery/newscaster/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			hitstaken++
 			if(hitstaken>=3 && !(stat & BROKEN))
 				stat |= BROKEN
@@ -1021,7 +1021,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	icon_state = "newspaper"
 	force = 1 //Getting hit by rolled up newspapers hurts!
 	throwforce = 0
-	w_class = 2	//Let's make it fit in trashbags!
+	w_class = W_CLASS_SMALL	//Let's make it fit in trashbags!
 	w_type = RECYK_WOOD
 	throw_range = 1
 	throw_speed = 1

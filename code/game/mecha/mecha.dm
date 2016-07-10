@@ -20,6 +20,7 @@
 	anchored = 1 //no pulling around.
 	unacidable = 1 //and no deleting hoomans inside
 	layer = MOB_LAYER //icon draw layer
+	plane = PLANE_MOB
 	infra_luminosity = 15 //byond implementation is bugged.
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
@@ -53,6 +54,7 @@
 	var/obj/item/device/radio/radio = null
 	var/obj/item/device/radio/electropack/electropack = null
 	var/obj/item/mecha_parts/mecha_tracking/tracking = null
+	var/starts_with_tracking_beacon = TRUE
 
 	var/max_temperature = 25000
 	var/internal_damage_threshold = 50 //health percentage below which internal damage is possible
@@ -95,6 +97,8 @@
 	spark_system.set_up(2, 0, src)
 	spark_system.attach(src)
 	add_cell()
+	if(starts_with_tracking_beacon)
+		add_tracking_beacon()
 	add_iterators()
 	removeVerb(/obj/mecha/verb/disconnect_from_port)
 	log_message("[src.name] created.")
@@ -108,6 +112,8 @@
 	..()
 	return
 
+/obj/mecha/is_airtight()
+	return !use_internal_tank
 ////////////////////////
 ////// Helpers /////////
 ////////////////////////
@@ -145,6 +151,10 @@
 	radio.icon = icon
 	radio.icon_state = icon_state
 	radio.subspace_transmission = 1
+
+/obj/mecha/proc/add_tracking_beacon()
+	tracking = new(src)
+	return tracking
 
 /obj/mecha/proc/add_iterators()
 	pr_int_temp_processor = new /datum/global_iterator/mecha_preserve_temp(list(src))

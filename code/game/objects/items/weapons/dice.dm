@@ -3,10 +3,11 @@
 	desc = "A die with six sides. Basic and servicable."
 	icon = 'icons/obj/dice.dmi'
 	icon_state = "d6"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	var/sides = 6
 	var/minsides = 1
 	var/result = null
+	var/multiplier = 0 //For modifying the result (d00 etc)
 
 /obj/item/weapon/dice/New()
 	..()
@@ -42,6 +43,7 @@
 	desc = "A die with ten sides. Works better for d100 rolls than a golfball."
 	icon_state = "d00"
 	sides = 10
+	multiplier = 10
 
 /obj/item/weapon/dice/d12
 	name = "d12"
@@ -68,13 +70,14 @@
 /obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
 	result = rand(minsides, sides)
 	var/comment = ""
-	if(sides == 20 && result == 20)
-		comment = "Nat 20!"
-	else if(sides == 20 && result == 1)
-		comment = "Ouch, bad luck."
+	if(sides == 20)
+		if(result == 20)
+			comment = "Nat 20!"
+		else if(result == 1)
+			comment = "Ouch, bad luck."
 	update_icon()
-	if(initial(icon_state) == "d00")
-		result = (result - 1)*10
+	if(multiplier)
+		result = (result - 1) * multiplier
 	if(!thrown) //Dice was rolled in someone's hand
 		user.visible_message("<span class='notice'>[user] has thrown [src]. It lands on [result]. [comment]</span>", \
 							 "<span class='notice'>You throw [src]. It lands on [result]. [comment]</span>", \
@@ -85,12 +88,12 @@
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
-		H.apply_damage(4,BRUTE,(pick("l_leg", "r_leg")))
+		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
 		H.Weaken(3)
 
 /obj/item/weapon/dice/update_icon()
 	overlays.len = 0
-	overlays += "[src.icon_state][src.result]"
+	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
 
 /obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
 	if(!istype(user)) return 0
@@ -144,11 +147,11 @@
 			switch(result)
 				if(1)
 					to_chat(user, "<span class=sinister><B>A natural failure, your poor roll has cursed you. Better luck next time! </span></B>")
-					flick("e_flash", user.flash)
+					h.flash_eyes(visual = 1)
 					h.Cluwneize()
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
-					flick("e_flash", user.flash)
+					h.flash_eyes(visual = 1)
 					switch(pick(1,2,3))
 						if(1)
 							if(h.species.name != "Tajaran")
@@ -162,11 +165,11 @@
 							for(var/datum/organ/external/E in h.organs)
 								E.droplimb(1)
 						if(3)
-							user.reagents.add_reagent("amutationtoxin", 1)
+							user.reagents.add_reagent(AMUTATIONTOXIN, 1)
 							to_chat(user, "<span class=danger><B>You've been turned into a slime! </span></B>")
 				if(6 to 9)
 					to_chat(user, "<span class=sinister></B>You have rolled low and shall recieve a curse! It could be a lot worse however! </span></B>")
-					flick("e_flash", user.flash)
+					h.flash_eyes(visual = 1)
 					switch(pick(1,2,3,4))
 						if(1)
 							user.dna.SetSEState(DEAFBLOCK,1)
@@ -217,7 +220,7 @@
 												E.droplimb(1)
 						if(4)
 							h.adjustBrainLoss(200)
-							user.reagents.add_reagent("nutriment", 1000)
+							user.reagents.add_reagent(NUTRIMENT, 1000)
 							user.overeatduration = 1000
 
 							to_chat(user, "<span class=danger><B>In this moment you feel euphoric! </span></B>")
@@ -290,3 +293,56 @@
 				desc = "A die with twenty sides. The prefered die to throw at the GM."
 	else
 		return 0
+
+//####Borg Die
+/obj/item/weapon/dice/borg //8 in 1
+	name = "digi-d6"
+	desc = "A device that simulates dice rolls.\nIt has a small button to change the mode."
+	var/possible_sides = list(2,4,6,8,10,12,20,100)
+	var/datum/context_click/digi_die/dd
+
+/obj/item/weapon/dice/borg/New()
+	..()
+	underlays.len = 0
+	underlays += image(icon = icon, icon_state = "ddbg")
+	dd = new(src)
+
+/obj/item/weapon/dice/borg/attack_self(mob/user, params)
+	if(!user.incapacitated() && is_holder_of(user, src))
+		if(dd.action(null, user, params))
+			return
+		..()
+
+/obj/item/weapon/dice/borg/AltClick()
+	if(usr.incapacitated() || !is_holder_of(usr, src))
+		return ..()
+	set_sides(usr)
+
+/datum/context_click/digi_die/return_clicked_id(x_pos, y_pos)
+	if(23 <= x_pos && x_pos <= 26) //yellow bit
+		if(23 <= y_pos && y_pos <= 26)
+			return 1
+
+/datum/context_click/digi_die/action(obj/item/used_item, mob/user, params)
+	var/obj/item/weapon/dice/borg/d = holder
+	if(return_clicked_id_by_params(params))
+		d.set_sides(user)
+		return 1
+
+/obj/item/weapon/dice/borg/proc/set_sides(mob/user)
+	var/S = input("Number of sides:") as null|anything in possible_sides
+	if(user.incapacitated() || !is_holder_of(user, src)) //sanity
+		return
+	if (S)
+		if(S == 100)
+			name = "digi-d00"
+			icon_state = "d00"
+			sides = 10
+			multiplier = 10
+		else
+			name = "digi-d[S]"
+			icon_state = "d[S]"
+			sides = S
+			multiplier = 0
+		result = 1 //For icon
+		update_icon()

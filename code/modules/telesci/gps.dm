@@ -6,7 +6,7 @@ var/list/SPS_list = list()
 	desc = "Helping lost spacemen find their way through the planets since 2016."
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "gps-c"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	origin_tech = "bluespace=2;magnets=2"
@@ -15,7 +15,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/New()
 	..()
-	overlays += "working"
+	overlays += image(icon = icon, icon_state = "working")
 	handle_list()
 
 
@@ -32,12 +32,12 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/emp_act(severity)
 	emped = 1
-	overlays -= "working"
-	overlays += "emp"
+	overlays -= image(icon = icon, icon_state = "working")
+	overlays += image(icon = icon, icon_state = "emp")
 	spawn(300)
 		emped = 0
-		overlays -= "emp"
-		overlays += "working"
+		overlays -= image(icon = icon, icon_state = "emp")
+		overlays += image(icon = icon, icon_state = "working")
 
 /obj/item/device/gps/attack_self(mob/user as mob)
 	var/obj/item/device/gps/t = ""
@@ -152,8 +152,8 @@ var/global/secure_GPS_count = 0
 
 /obj/item/device/gps/secure/proc/announce(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/reason)
 	var/turf/pos = get_turf(SPS)
-	if(istype(find_holder(src), /mob/living))
-		var/mob/living/L = find_holder(src)
+	var/mob/living/L = get_holder_of_type(src, /mob/living/)
+	if(L)
 		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
 	else if(isturf(src.loc))
 		src.visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")

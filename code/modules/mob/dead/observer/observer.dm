@@ -7,7 +7,7 @@
 	desc = "It's a g-g-g-g-ghooooost!" //jinkies!
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "ghost1"
-	layer = 4
+	layer = 8
 	stat = DEAD
 	density = 0
 	lockflags = 0 //Neither dense when locking or dense when locked to something
@@ -19,7 +19,7 @@
 	universal_understand = 1
 	universal_speak = 1
 	//languages = ALL
-
+	plane = PLANE_LIGHTING
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
 
@@ -148,7 +148,7 @@
 	return ghostMulti
 
 
-/mob/dead/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/mob/dead/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return 1
 /*
 Transfer_mind is there to check if mob is being deleted/not going to have a body.
@@ -297,13 +297,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(src.health < 0 && src.health > -95.0) //crit people
+	if(src.health < 0 && stat != DEAD) //crit people
 		succumb()
 		ghostize(1)
 	else if(stat == DEAD)
 		ghostize(1)
 	else
-		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you won't be able to play this round for another 30 minutes! You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
+		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you will not be able to re-enter your current body!  You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
 		if(response != "Ghost")	return	//didn't want to ghost after-all
 		resting = 1
 		if(client && key)
@@ -923,5 +923,5 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	speed = text2num(copytext(speed,1,4))/100
 	movespeed = 1/speed
-	
+
 /datum/locking_category/observer

@@ -4,6 +4,8 @@
 	desc = "The final frontier."
 	icon_state = "0"
 
+	plane = PLANE_SPACE_BACKGROUND
+
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 700000
@@ -16,8 +18,12 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	var/image/I = image('icons/turf/space_parallax1.dmi',"[icon_state]")
+	I.plane = PLANE_SPACE_DUST
+	I.alpha = 80
+	I.blend_mode = BLEND_ADD
+	overlays += I
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -61,10 +67,6 @@
 	var/list/y_arr
 
 	if(src.x <= 1)
-		if(istype(A, /obj/effect/meteor)||istype(A, /obj/effect/space_dust))
-			qdel(A)
-			A = null
-			return
 
 		var/list/cur_pos = src.get_global_map_pos()
 		if(!cur_pos) return
@@ -87,7 +89,7 @@
 				if ((A && A.loc))
 					A.loc.Entered(A)
 	else if (src.x >= world.maxx)
-		if(istype(A, /obj/effect/meteor))
+		if(istype(A, /obj/item/projectile/meteor))
 			qdel(A)
 			A = null
 			return
@@ -113,7 +115,7 @@
 				if ((A && A.loc))
 					A.loc.Entered(A)
 	else if (src.y <= 1)
-		if(istype(A, /obj/effect/meteor))
+		if(istype(A, /obj/item/projectile/meteor))
 			qdel(A)
 			A = null
 			return
@@ -139,7 +141,7 @@
 					A.loc.Entered(A)
 
 	else if (src.y >= world.maxy)
-		if(istype(A, /obj/effect/meteor)||istype(A, /obj/effect/space_dust))
+		if(istype(A, /obj/item/projectile/meteor)||istype(A, /obj/effect/space_dust))
 			qdel(A)
 			A = null
 			return
@@ -171,5 +173,13 @@
 /turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	return ..(N, tell_universe, 1, allow)
 
-/turf/space/lighting_build_overlays()
+/turf/space/lighting_build_overlay()
+	return
+
+/turf/space/void
+	name = "the void"
+	icon_state = "void"
+	desc = "The final final frontier."
+
+/turf/space/void/New()
 	return

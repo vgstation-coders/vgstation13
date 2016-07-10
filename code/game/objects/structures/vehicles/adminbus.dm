@@ -11,8 +11,10 @@
 	icon_state = "adminbus"
 	can_spacemove=1
 	layer = FLY_LAYER+1
+	plane = PLANE_EFFECTS
 	pixel_x = -32
 	pixel_y = -32
+	unacidable = 1
 	var/can_move=1
 	var/list/passengers = list()
 	var/unloading = 0
@@ -34,8 +36,10 @@
 /obj/structure/bed/chair/vehicle/adminbus/New()
 	..()
 	var/turf/T = get_turf(src)
-	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg')
-	overlays += image(icon,"underbus",MOB_LAYER-1)
+	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = PLANE_EFFECTS)
+	var/image/underbus = image(icon,"underbus",MOB_LAYER-1)
+	underbus.plane = PLANE_OBJ
+	overlays += underbus
 	overlays += image(icon,"ad")
 	src.dir = EAST
 	playsound(src, 'sound/misc/adminbus.ogg', 50, 0, 0)
@@ -43,10 +47,8 @@
 	update_lightsource()
 	warp = new/obj/structure/teleportwarp(src.loc)
 	busjuke = new/obj/machinery/media/jukebox/superjuke/adminbus(src.loc)
+	busjuke.plane = PLANE_EFFECTS
 	busjuke.dir = EAST
-	layer = FLY_LAYER+1
-	spawn(10)
-		layer = FLY_LAYER+1
 
 //Don't want the layer to change.
 /obj/structure/bed/chair/vehicle/adminbus/handle_layer()
@@ -386,7 +388,7 @@
 		for(var/i=1;i<=MAX_CAPACITY;i++)
 			var/mob/living/M = occupant
 			M.client.screen -= M.gui_icons.rearviews[i]
-			var/obj/screen/S = M.gui_icons.rearviews[i]
+			var/obj/screen/adminbus/S = M.gui_icons.rearviews[i]
 			var/icon/passenger_img = null
 			var/atom/A = null
 			if(i<=passengers.len)
@@ -413,9 +415,6 @@
 
 /obj/structure/bed/chair/vehicle/adminbus/cultify()
 	return
-
-/obj/structure/bed/chair/vehicle/adminbus/singuloCanEat()
-	return 0
 
 /obj/structure/bed/chair/vehicle/adminbus/singularity_act()
 	return 0
@@ -504,9 +503,6 @@
 /obj/structure/hookshot/cultify()
 	return
 
-/obj/structure/hookshot/singuloCanEat()
-	return 0
-
 /obj/structure/hookshot/singularity_act()
 	return 0
 
@@ -555,9 +551,6 @@
 /obj/structure/singulo_chain/cultify()
 	return
 
-/obj/structure/singulo_chain/singuloCanEat()
-	return 0
-
 /obj/structure/singulo_chain/singularity_act()
 	return 0
 
@@ -580,9 +573,6 @@
 /obj/structure/buslight/cultify()
 	return
 
-/obj/structure/buslight/singuloCanEat()
-	return 0
-
 /obj/structure/buslight/singularity_act()
 	return 0
 
@@ -600,6 +590,7 @@
 	pixel_x = -64
 	pixel_y = -64
 	layer = MOB_LAYER-1
+	plane = PLANE_OBJ
 	anchored = 1
 	density = 0
 	mouse_opacity = 0
@@ -609,9 +600,6 @@
 
 /obj/structure/teleportwarp/cultify()
 	return
-
-/obj/structure/teleportwarp/singuloCanEat()
-	return 0
 
 /obj/structure/teleportwarp/singularity_act()
 	return 0

@@ -93,7 +93,7 @@
 
 /obj/machinery/media/transmitter/broadcast/attackby(var/obj/item/W, mob/user)
 	. = ..()
-	if(panel_open && (istype(W, /obj/item/device/multitool)||iswirecutter(W)))
+	if(panel_open && iswiretool(W))
 		attack_hand(user)
 	if(issolder(W))
 		if(integrity>=100)
@@ -159,14 +159,14 @@
 	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on)
-		overlays+="broadcaster on"
+		overlays += image(icon = icon, icon_state = "broadcaster on")
 		set_light(3) // OH FUUUUCK
 		use_power = 2
 	else
 		set_light(1) // Only the tile we're on.
 		use_power = 1
 	if(sources.len)
-		overlays+="broadcaster linked"
+		overlays += image(icon = icon, icon_state = "broadcaster linked")
 
 /obj/machinery/media/transmitter/broadcast/proc/update_on()
 	if(on)

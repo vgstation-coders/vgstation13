@@ -7,6 +7,7 @@
  */
 
 
+
 /*
  * Tables
  */
@@ -45,6 +46,13 @@
 	update_adjacent()
 	..()
 
+/obj/structure/table/glass/proc/checkhealth()
+	if(health <= 0)
+		playsound(get_turf(src), "shatter", 50, 1)
+		new /obj/item/weapon/shard(src.loc)
+		new /obj/item/weapon/table_parts(src.loc)
+		qdel(src)
+
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
@@ -80,6 +88,8 @@
 				base = "wood"
 			if (istype(src, /obj/structure/table/reinforced))
 				base = "rtable"
+			if (istype(src, /obj/structure/table/glass))
+				base = "glasstable"
 
 			icon_state = "[base]flip[type]"
 			if (type==1)
@@ -247,6 +257,11 @@
 	if(!usr) return
 	do_flip()
 
+/obj/structure/table/glass/kick_act()
+	health -= 5
+	checkhealth()
+	..()
+
 /obj/structure/table/blob_act()
 	if(prob(75))
 		destroy()
@@ -279,7 +294,7 @@
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
 
-/obj/structure/table/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
@@ -289,8 +304,8 @@
 			return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
-	if (flipped)
-		if (get_dir(loc, target) == dir)
+	if(flipped)
+		if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 			return !density
 		else
 			return 1
@@ -328,14 +343,16 @@
 				return 1
 	return 1
 
-/obj/structure/table/CheckExit(atom/movable/O as mob|obj, target as turf)
-	if(istype(O) && O.checkpass(PASSTABLE))
+/obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
+	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
-	if (flipped)
-		if (get_dir(loc, target) == dir)
+	if(flags & ON_BORDER)
+		if(target) //Are we doing a manual check to see
+			if(get_dir(loc, target) == dir)
+				return !density
+		else if(mover.dir == dir) //Or are we using move code
+			if(density)	mover.Bump(src)
 			return !density
-		else
-			return 1
 	return 1
 
 /obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
@@ -356,17 +373,18 @@
 		var/obj/item/weapon/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
-			if (G.state < 2)
+			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
+					G.affecting.forceMove(loc)
 					if (prob(15))	M.Weaken(5)
-					M.apply_damage(8,def_zone = "head")
+					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.loc = src.loc
+				G.affecting.forceMove(loc)
 				G.affecting.Weaken(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
@@ -412,6 +430,7 @@
 		to_chat(user, "<span class='notice'>You need hands for this.</span>")
 		return 0
 	return 1
+
 
 /obj/structure/table/verb/do_flip()
 	set name = "Flip table"
@@ -491,6 +510,7 @@
 	verbs +=/obj/structure/table/verb/do_flip
 
 	layer = initial(layer)
+	plane = initial(plane)
 	flipped = 0
 	flags &= ~ON_BORDER
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
@@ -501,6 +521,10 @@
 	update_adjacent()
 
 	return 1
+
+/obj/structure/table/flipped
+	icon_state = "tableflip0"
+	flipped = 1
 
 /*
  * Wooden tables
@@ -583,6 +607,57 @@
 	return ..()
 
 /*
+ * Glass
+ */
+
+/obj/structure/table/glass
+	name = "glass table"
+	desc = "A standard table with a fine glass finish."
+	icon_state = "glass_table"
+	parts = /obj/item/weapon/table_parts/glass
+	health = 30
+
+/obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if (istype(G.affecting, /mob/living))
+			var/mob/living/M = G.affecting
+			if (G.state < GRAB_AGGRESSIVE)
+				if(user.a_intent == I_HURT)
+					if (prob(15))	M.Weaken(5)
+					M.apply_damage(15,def_zone = LIMB_HEAD)
+					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
+					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+					playsound(get_turf(src), "shatter", 50, 1) //WRESTLEMANIA tax
+					new /obj/item/weapon/shard(src.loc)
+					new /obj/item/weapon/table_parts(src.loc)
+					qdel(src)
+				else
+					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
+					return
+			else
+				G.affecting.forceMove(loc)
+				G.affecting.Weaken(5)
+				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
+			returnToPool(W)
+
+	else if (user.a_intent == I_HURT)
+		user.delayNextAttack(10)
+		health -= W.force
+		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
+		"<span class='warning'>You hit \the [src] with \the [W].</span>")
+		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
+		checkhealth()
+
+	else
+		..()
+
+
+
+
+
+
+/*
  * Racks
  */
 /obj/structure/rack
@@ -596,6 +671,7 @@
 	throwpass = 1	//You can throw objects over this, despite it's density.
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
+	var/health = 20
 
 /obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
@@ -616,6 +692,16 @@
 				qdel(src)
 				new /obj/item/weapon/rack_parts(src.loc)
 
+/obj/structure/rack/proc/checkhealth()
+	if(health <= 0)
+		new /obj/item/weapon/rack_parts(loc)
+		qdel(src)
+
+/obj/structure/rack/kick_act()
+	health -= 5
+	checkhealth()
+	..()
+
 /obj/structure/rack/blob_act()
 	if(prob(75))
 		del(src)
@@ -625,14 +711,11 @@
 		del(src)
 		return
 
-/obj/structure/rack/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
-	if(src.density == 0) //Because broken racks -Agouri |TODO: SPRITE!|
-		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
-	else
-		return 0
+	return !density
 
 /obj/structure/rack/Bumped(atom/AM)
 	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))

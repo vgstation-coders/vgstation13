@@ -96,7 +96,7 @@
 			dat += "Please insert a container."
 		dat += "</td></tr></table><br>"
 		dat += "<hr>"
-	dat = list2text(dat)
+	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "iso_centrifuge", "Isolation Centrifuge", 400, 300, src)
 	popup.set_content(dat)
 	popup.open()
@@ -182,8 +182,8 @@
 		return
 
 	var/list/data = list("antibodies" = B.data["antibodies"])
-	var/amt= sample.reagents.get_reagent_amount("blood")
-	sample.reagents.remove_reagent("blood",amt)
+	var/amt= sample.reagents.get_reagent_amount(BLOOD)
+	sample.reagents.remove_reagent(BLOOD,amt)
 	sample.reagents.add_reagent("antibodies",amt,data)
 
 	alert_noise("ping")

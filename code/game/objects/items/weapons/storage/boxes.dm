@@ -36,7 +36,7 @@
 	desc = "You could build a fort with this."
 	icon_state = "largebox"
 	item_state = "largebox"
-	w_class = 42 // Big, bulky.
+	w_class = W_CLASS_GIANT // Big, bulky.
 	foldable = /obj/item/stack/sheet/cardboard
 	foldable_amount = 4 // Takes 4 to make. - N3X
 	starting_materials = list(MAT_CARDBOARD = 15000)
@@ -52,7 +52,7 @@
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "Dpacket"
 	item_state = "Dpacket"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	foldable = null
 
 /obj/item/weapon/storage/box/surveillance/New()
@@ -100,7 +100,7 @@
 
 /obj/item/weapon/storage/box/gloves/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/clothing/gloves/latex(src)
 
 /obj/item/weapon/storage/box/bgloves
@@ -110,7 +110,7 @@
 
 /obj/item/weapon/storage/box/bgloves/New()
 	..()
-	for(var/i = 0, i < 7, i++)
+	for(var/i = 1 to 7)
 		new /obj/item/clothing/gloves/black(src)
 
 /obj/item/weapon/storage/box/sunglasses
@@ -120,7 +120,7 @@
 
 /obj/item/weapon/storage/box/sunglasses/New()
 	..()
-	for(var/i = 0, i < 7, i++)
+	for(var/i = 1 to 7)
 		new /obj/item/clothing/glasses/sunglasses(src)
 
 /obj/item/weapon/storage/box/masks
@@ -130,7 +130,7 @@
 
 /obj/item/weapon/storage/box/masks/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/clothing/mask/surgical(src)
 
 
@@ -141,7 +141,7 @@
 
 /obj/item/weapon/storage/box/syringes/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/syringe(src)
 
 /obj/item/weapon/storage/box/beakers
@@ -150,7 +150,7 @@
 
 /obj/item/weapon/storage/box/beakers/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/glass/beaker(src)
 
 /obj/item/weapon/storage/box/injectors
@@ -159,9 +159,9 @@
 
 /obj/item/weapon/storage/box/injectors/New()
 	..()
-	for(var/i=0,i<3,i++)
+	for(var/i = 1 to 3)
 		new /obj/item/weapon/dnainjector/nofail/h2m(src)
-	for(var/i=0,i<3,i++)
+	for(var/i = 1 to 3)
 		new /obj/item/weapon/dnainjector/nofail/m2h(src)
 
 
@@ -171,7 +171,7 @@
 
 /obj/item/weapon/storage/box/blanks/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/ammo_casing/shotgun/blank(src)
 
 
@@ -183,7 +183,7 @@
 
 /obj/item/weapon/storage/box/flashbangs/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/flashbang(src)
 
 /obj/item/weapon/storage/box/smokebombs
@@ -192,7 +192,7 @@
 
 /obj/item/weapon/storage/box/smokebombs/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/smokebomb(src)
 
 /obj/item/weapon/storage/box/stickybombs
@@ -201,7 +201,7 @@
 
 /obj/item/weapon/storage/box/stickybombs/New()
 	..()
-	for(var/i=0,i<24,i++)
+	for(var/i = 1 to 24)
 		new /obj/item/stickybomb(src)
 
 /obj/item/weapon/storage/box/emps
@@ -211,8 +211,18 @@
 
 /obj/item/weapon/storage/box/emps/New()
 	..()
-	for(var/i=0,i<5,i++)
+	for(var/i = 1 to 5)
 		new /obj/item/weapon/grenade/empgrenade(src)
+
+/obj/item/weapon/storage/box/wind
+	name = "wind grenades"
+	desc = "A box containing 3 wind grenades"
+	icon_state = "flashbang"
+
+/obj/item/weapon/storage/box/wind/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/weapon/grenade/chem_grenade/wind(src)
 
 /obj/item/weapon/storage/box/foam
 	name = "metal foam grenades"
@@ -221,8 +231,18 @@
 
 /obj/item/weapon/storage/box/foam/New()
 	..()
-	for(var/i = 0, i < 7, i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+
+/obj/item/weapon/storage/box/boxen
+	name = "boxen ranching kit"
+	desc = "Everything you need to engage in your own horrific flesh cloning."
+
+/obj/item/weapon/storage/box/boxen/New()
+	..()
+	new /obj/item/weapon/circuitboard/box_cloner(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/meat/box(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/meat/box(src)
 
 /obj/item/weapon/storage/box/trackimp
 	name = "tracking implant kit"
@@ -231,7 +251,7 @@
 
 /obj/item/weapon/storage/box/trackimp/New()
 	..()
-	for(var/i=0,i<4,i++)
+	for(var/i = 1 to 4)
 		new /obj/item/weapon/implantcase/tracking(src)
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
@@ -244,7 +264,7 @@
 
 /obj/item/weapon/storage/box/chemimp/New()
 	..()
-	for(var/i=0,i<5,i++)
+	for(var/i = 1 to 5)
 		new /obj/item/weapon/implantcase/chem(src)
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
@@ -256,7 +276,7 @@
 
 /obj/item/weapon/storage/box/bolas/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/legcuffs/bolas(src)
 
 
@@ -267,7 +287,7 @@
 
 /obj/item/weapon/storage/box/rxglasses/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/clothing/glasses/regular(src)
 
 /obj/item/weapon/storage/box/drinkingglasses
@@ -276,7 +296,7 @@
 
 /obj/item/weapon/storage/box/drinkingglasses/New()
 	..()
-	for(var/i=0,i<6,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(src)
 
 /obj/item/weapon/storage/box/cdeathalarm_kit
@@ -288,7 +308,7 @@
 /obj/item/weapon/storage/box/cdeathalarm_kit/New()
 	..()
 	new /obj/item/weapon/implanter(src)
-	for(var/i=0,i<6,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/implantcase/death_alarm(src)
 
 /obj/item/weapon/storage/box/condimentbottles
@@ -297,7 +317,7 @@
 
 /obj/item/weapon/storage/box/condimentbottles/New()
 	..()
-	for(var/i=0,i<6,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/food/condiment(src)
 
 
@@ -308,7 +328,7 @@
 
 /obj/item/weapon/storage/box/cups/New()
 	..()
-	for(var/i=0,i<7,i++)
+	for(var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/food/drinks/sillycup(src)
 
 
@@ -316,11 +336,17 @@
 	name = "box of donk-pockets"
 	desc = "<B>Instructions:</B> <I>Heat in microwave. Product will cool if not eaten within seven minutes.</I>"
 	icon_state = "donk_kit"
+	var/pocket_amount = 6
 
 /obj/item/weapon/storage/box/donkpockets/New()
 	..()
-	for(var/i=0,i<6,i++)
+	for(var/i=0,i<pocket_amount,i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/donkpocket(src)
+
+/obj/item/weapon/storage/box/donkpockets/random_amount/New()
+	pocket_amount = rand(1,6)
+
+	..()
 
 /obj/item/weapon/storage/box/monkeycubes
 	name = "monkey cube box"
@@ -448,6 +474,15 @@
 	..()
 	for(var/i=0,i<15,i++)
 		new /obj/item/ammo_casing/shotgun/dart(src)
+
+/obj/item/weapon/storage/box/buckshotshells
+	name = "buckshot shells"
+	icon_state = "lethal shells"
+
+/obj/item/weapon/storage/box/buckshotshells/New()
+	..()
+	for(var/i=0,i<15,i++)
+		new /obj/item/ammo_casing/shotgun/buckshot(src)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"

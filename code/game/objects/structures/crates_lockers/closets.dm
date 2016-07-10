@@ -40,7 +40,7 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted)) return 1
 	return (!density)
 
@@ -201,6 +201,13 @@
 					A.loc = src.loc
 					A.ex_act(severity++)
 				qdel(src)
+
+/obj/structure/closet/shuttle_act()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(src.loc)
+		AM.shuttle_act()
+
+	..()
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
@@ -412,7 +419,7 @@
 	if(!opened)
 		icon_state = icon_closed
 		if(welded)
-			overlays += "welded"
+			overlays += image(icon = icon, icon_state = "welded")
 	else
 		icon_state = icon_opened
 

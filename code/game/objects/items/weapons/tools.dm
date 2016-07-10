@@ -41,7 +41,7 @@
 	slot_flags = SLOT_BELT
 	force = 5.0
 	throwforce = 7.0
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
@@ -66,7 +66,7 @@
 	name = "socket wrench"
 	desc = "A wrench intended to be wrenchier than other wrenches. It's the wrenchiest."
 	icon_state = "socket_wrench"
-	w_class = 4.0 //big shit, to balance its power
+	w_class = W_CLASS_LARGE //big shit, to balance its power
 
 /*
  * Screwdriver
@@ -82,7 +82,7 @@
 	sharpness = 1
 	slot_flags = SLOT_BELT
 	force = 5.0
-	w_class = 1.0
+	w_class = W_CLASS_TINY
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
@@ -129,7 +129,7 @@
 	if(!istype(M))	return ..()
 	if(can_operate(M))
 		return ..()
-	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != "head")
+	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD)
 		return ..()
 	if((M_CLUMSY in user.mutations) && prob(50))
 		M = user
@@ -172,7 +172,7 @@
 	force = 6.0
 	throw_speed = 2
 	throw_range = 9
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 80)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
@@ -188,12 +188,10 @@
 
 /obj/item/weapon/wirecutters/attack(mob/living/carbon/C as mob, mob/user as mob)
 	if((iscarbon(C)) && (C.handcuffed) && (istype(C.handcuffed, /obj/item/weapon/handcuffs/cable)))
-		usr.visible_message("\The [usr] cuts \the [C]'s restraints with \the [src]!",\
-		"You cut \the [C]'s restraints with \the [src]!",\
+		usr.visible_message("\The [user] cuts \the [C]'s [C.handcuffed.name] with \the [src]!",\
+		"You cut \the [C]'s [C.handcuffed.name] with \the [src]!",\
 		"You hear cable being cut.")
-		C.handcuffed.loc = null	//garbage collector awaaaaay
-		C.handcuffed = null
-		C.update_inv_handcuffed()
+		qdel(C.handcuffed)
 		return
 	else
 		..()
@@ -214,7 +212,7 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	sharpness = 0.8
 	heat_production = 3800
 
@@ -240,7 +238,7 @@
 	. = ..()
 	create_reagents(max_fuel)
 	if(start_fueled)
-		reagents.add_reagent("fuel", max_fuel)
+		reagents.add_reagent(FUEL, max_fuel)
 
 /obj/item/weapon/weldingtool/examine(mob/user)
 	..()
@@ -267,10 +265,9 @@
 		F.weldtool = src
 		if (user.client)
 			user.client.screen -= src
-		if (user.r_hand == src)
-			user.u_equip(src,0)
-		else
-			user.u_equip(src,0)
+
+		user.u_equip(src,0)
+
 		src.master = F
 		src.layer = initial(src.layer)
 		user.u_equip(src,0)
@@ -318,7 +315,7 @@
 	var/turf/location = src.loc
 	if(istype(location, /mob/))
 		var/mob/M = location
-		if(M.l_hand == src || M.r_hand == src)
+		if(M.is_holding_item(src))
 			location = get_turf(M)
 	if (istype(location, /turf))
 		location.hotspot_expose(700, 5,surfaces=istype(loc,/turf))
@@ -355,7 +352,7 @@
 
 //Returns the amount of fuel in the welder
 /obj/item/weapon/weldingtool/proc/get_fuel()
-	return reagents.get_reagent_amount("fuel")
+	return reagents.get_reagent_amount(FUEL)
 
 
 //Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
@@ -363,7 +360,7 @@
 	if(!welding || !check_fuel())
 		return 0
 	if(get_fuel() >= amount)
-		reagents.remove_reagent("fuel", amount)
+		reagents.remove_reagent(FUEL, amount)
 		check_fuel()
 		if(M)
 			eyecheck(M)
@@ -455,18 +452,19 @@
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 		if(!E)
 			return
-		if(H.species.flags & IS_SYNTHETIC)
+		if(E.welding_proof)
+			user.simple_message("<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
 			return
 		if(safety < 2)
 			switch(safety)
 				if(1)
-					usr.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
+					user.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
 						"<span class='warning'>You shed a tear.</span>")
 					E.damage += rand(1, 2)
 					if(E.damage > 12)
 						user.eye_blurry += rand(3,6)
 				if(0)
-					usr.simple_message("<span class='warning'>Your eyes burn.</span>",\
+					user.simple_message("<span class='warning'>Your eyes burn.</span>",\
 						"<span class='warning'>Some tears fall down from your eyes.</span>")
 					E.damage += rand(2, 4)
 					if(E.damage > 10)
@@ -475,7 +473,7 @@
 					var/obj/item/clothing/to_blame = H.head //blame the hat
 					if(!to_blame || (istype(to_blame) && H.glasses && H.glasses.eyeprot < to_blame.eyeprot)) //if we don't have a hat, the issue is the glasses. Otherwise, if the glasses are worse, blame the glasses
 						to_blame = H.glasses
-					usr.simple_message("<span class='warning'>Your [to_blame] intensifies the welder's glow. Your eyes itch and burn severely.</span>",\
+					user.simple_message("<span class='warning'>Your [to_blame] intensifies the welder's glow. Your eyes itch and burn severely.</span>",\
 						"<span class='warning'>Somebody's cutting onions.</span>")
 					user.eye_blurry += rand(12,20)
 					E.damage += rand(12, 16)
@@ -509,7 +507,7 @@
 /obj/item/weapon/weldingtool/hugetank
 	name = "Upgraded Welding Tool"
 	max_fuel = 80
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
 	origin_tech = "engineering=3"
 
@@ -519,7 +517,7 @@
 /obj/item/weapon/weldingtool/experimental
 	name = "Experimental Welding Tool"
 	max_fuel = 40
-	w_class = 3.0
+	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
 	origin_tech = "engineering=4;plasmatech=3"
 	icon_state = "ewelder"
@@ -550,7 +548,7 @@
 	force = 5.0
 	throwforce = 7.0
 	item_state = "crowbar"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
@@ -603,7 +601,7 @@
 	icon_state = "kit"
 	flags = FPRINT
 	siemens_coefficient = 1
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	w_type = RECYK_MISC
 	origin_tech = "combat=2"
 	var/open = 0
@@ -636,7 +634,7 @@
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
@@ -650,7 +648,7 @@
 
 /obj/item/weapon/solder/update_icon()
 	..()
-	switch(reagents.get_reagent_amount("sacid"))
+	switch(reagents.get_reagent_amount(SACID))
 		if(16 to INFINITY)
 			icon_state = "solder-20"
 		if(11 to 15)
@@ -664,7 +662,7 @@
 
 /obj/item/weapon/solder/examine(mob/user)
 	..()
-	to_chat(user, "It contains [reagents.get_reagent_amount("sacid")]/[src.max_fuel] units of fuel!")
+	to_chat(user, "It contains [reagents.get_reagent_amount(SACID)]/[src.max_fuel] units of fuel!")
 
 /obj/item/weapon/solder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/reagent_containers/glass/))
@@ -673,7 +671,7 @@
 			user.simple_message("<span class='warning'>The mixture is rejected by the tool.</span>",
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")
 			return
-		if(!G.reagents.has_reagent("sacid", 1))
+		if(!G.reagents.has_reagent(SACID, 1))
 			user.simple_message("<span class='warning'>The tool is not compatible with that.</span>",
 				"<span class='warning'>The tool won't drink that.</span>")
 			return
@@ -686,14 +684,14 @@
 			var/transfer_amount = min(G.amount_per_transfer_from_this,space)
 			user.simple_message("<span class='info'>You transfer [transfer_amount] units to the [src].</span>",
 				"<span class='info'>The tool gulps down your drink!</span>")
-			G.reagents.trans_id_to(src,"sacid",transfer_amount)
+			G.reagents.trans_id_to(src,SACID,transfer_amount)
 			update_icon()
 	else
 		return ..()
 
 /obj/item/weapon/solder/proc/remove_fuel(var/amount, mob/user as mob)
-	if(reagents.get_reagent_amount("sacid") >= amount)
-		reagents.remove_reagent("sacid", amount)
+	if(reagents.get_reagent_amount(SACID) >= amount)
+		reagents.remove_reagent(SACID, amount)
 		update_icon()
 		return 1
 	else
@@ -722,7 +720,7 @@
 	slotzero = reagents
 	slotone = new/datum/reagents(volume)
 	slotone.my_atom = src
-	reagents.add_reagent("fuel", 50)
+	reagents.add_reagent(FUEL, 50)
 
 /obj/item/weapon/reagent_containers/glass/fuelcan/attack_self(mob/user as mob)
 	if(!slot)

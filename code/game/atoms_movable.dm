@@ -60,7 +60,14 @@
 				returnToPool(VH)
 	gcDestroyed = "Bye, world!"
 	tag = null
+
+	var/turf/un_opaque
+	if (opacity && isturf(loc))
+		un_opaque = loc
+
 	loc = null
+	if (un_opaque)
+		un_opaque.recalc_atom_opacity()
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -166,6 +173,7 @@
 					else if (step(src, WEST))
 						. = step(src, SOUTH)
 
+
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
 			for(var/atom/movable/AM in locked_atoms)
@@ -177,6 +185,8 @@
 	if(!loc || (loc == oldloc && oldloc != newLoc))
 		last_move = 0
 		return
+
+	update_client_hook(loc)
 
 	if(tether && can_pull_tether && !tether_pull)
 		tether.follow(src,oldloc)
@@ -283,16 +293,13 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/Bump(atom/Obstacle, yes)
+/atom/movable/Bump(atom/Obstacle)
 	if(src.throwing)
 		src.throw_impact(Obstacle)
 		src.throwing = 0
 
-	if ((Obstacle && yes))
+	if (Obstacle)
 		Obstacle.Bumped(src)
-	return
-	..()
-	return
 
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0)
 	if(destination)
@@ -309,19 +316,34 @@
 			var/area/A = get_area_master(destination)
 			A.Entered(src)
 
-		for(var/atom/movable/AM in loc)
-			AM.Crossed(src,no_tp)
+			for(var/atom/movable/AM in loc)
+				AM.Crossed(src,no_tp)
 
 
 		for(var/atom/movable/AM in locked_atoms)
 			var/datum/locking_category/category = locked_atoms[AM]
 			category.update_lock(AM)
 
+		update_client_hook(destination)
 
 		// Update on_moved listeners.
 		INVOKE_EVENT(on_moved,list("loc"=loc))
 		return 1
 	return 0
+
+/atom/movable/proc/update_client_hook(atom/destination)
+	if(locate(/mob) in src)
+		for(var/client/C in parallax_on_clients)
+			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+				C.mob.hud_used.update_parallax_values()
+
+/mob/update_client_hook(atom/destination)
+	if(locate(/mob) in src)
+		for(var/client/C in parallax_on_clients)
+			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+				C.mob.hud_used.update_parallax_values()
+	else if(client && hud_used)
+		hud_used.update_parallax_values()
 
 /atom/movable/proc/forceEnter(atom/destination)
 	if(destination)
@@ -336,6 +358,7 @@
 		for(var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)
 
+		update_client_hook(destination)
 		return 1
 	return 0
 
@@ -499,6 +522,9 @@
 	. = ..()
 	verbs.len = 0
 
+/atom/movable/overlay/blob_act()
+	return
+
 /atom/movable/overlay/attackby(a, b, c)
 	if (src.master)
 		return src.master.attackby(a, b, c)
@@ -528,7 +554,7 @@
 // SINGULOTH PULL REFACTOR
 /////////////////////////////
 /atom/movable/proc/canSingulothPull(var/obj/machinery/singularity/singulo)
-	return singuloCanEat()
+	return 1
 
 /atom/movable/proc/say_understands(var/mob/other)
 	return 1

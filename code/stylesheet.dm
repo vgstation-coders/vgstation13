@@ -33,7 +33,8 @@ em						{font-style: normal;	font-weight: bold;}
 .supradio				{color: #5F4519;}
 .serradio				{color: #3399CC;}
 .djradio				{color: #663300;}
-.mommi					{color: navy;}
+.binaryradio			{color: #300050;	font-family: 'Courier New', Courier, monospace;}
+.mommiradio				{color: navy;}
 .alert					{color: #ff0000;}
 h1.alert, h2.alert		{color: #000000;}
 .emote					{					font-style: italic;}
@@ -75,6 +76,10 @@ h1.alert, h2.alert		{color: #000000;}
 .grey					{color: #585858; font-family: Dotum, sans-serif;}
 .skeleton				{color: #585858; font-weight: bold; font-style: italic;}
 .gutter					{color: #61380B; font-style: italic;}
+.orange					{color: #ffa500;}
+.orangei				{color: #ffa500; font-style: italic;}
+.orangeb				{color: #ffa500; font-weight: bold;}
+
 /* /vg/ */
 .good					{color: green;}
 .average				{color: #FF8000;}

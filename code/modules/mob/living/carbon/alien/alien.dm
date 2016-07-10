@@ -18,6 +18,7 @@
 
 	var/storedPlasma = 250
 	var/max_plasma = 500
+	var/neurotoxin_cooldown = 0
 
 	var/obj/item/weapon/card/id/wear_id = null // Fix for station bounced radios -- Skie
 	var/has_fine_manipulation = 0
@@ -64,6 +65,9 @@
 
 /mob/living/carbon/alien/eyecheck()
 	return 2
+
+/mob/living/carbon/alien/earprot()
+	return 1
 
 // MULEBOT SMASH
 /mob/living/carbon/alien/Crossed(var/atom/movable/AM)

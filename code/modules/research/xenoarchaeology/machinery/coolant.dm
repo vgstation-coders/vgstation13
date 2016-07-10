@@ -10,7 +10,7 @@ datum/chemical_reaction/coolant
 	name = "Coolant"
 	id = "coolant"
 	result = "coolant"
-	required_reagents = list("tungsten" = 1, "oxygen" = 1, "water" = 1)
+	required_reagents = list(TUNGSTEN = 1, OXYGEN = 1, WATER = 1)
 	result_amount = 3
 
 
@@ -27,7 +27,7 @@ datum/chemical_reaction/coolant
 
 /obj/structure/reagent_dispensers/coolanttank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lastertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			explode()
 
 /obj/structure/reagent_dispensers/coolanttank/blob_act()

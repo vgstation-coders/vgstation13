@@ -4,9 +4,9 @@
 	icon_state = "muzzle"
 	item_state = "muzzle"
 	flags = FPRINT
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 	origin_tech = "biotech=2"
 	body_parts_covered = MOUTH
 
@@ -24,12 +24,12 @@
 	desc = "A sterile mask designed to help prevent the spread of diseases."
 	icon_state = "sterile"
 	item_state = "sterile"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	flags = FPRINT
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
-	species_fit = list("Vox")
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"
@@ -42,7 +42,7 @@
 /obj/item/clothing/mask/scarf
 	flags = FPRINT
 	action_button_name = "Toggle Scarf"
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	can_flip = 1
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
@@ -74,8 +74,8 @@
 	item_state = "balaclava"
 	flags = FPRINT
 	body_parts_covered = FACE
-	w_class = 2
-	species_fit = list("Vox")
+	w_class = W_CLASS_SMALL
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/mask/pig
 	name = "pig mask"
@@ -84,7 +84,7 @@
 	item_state = "pig"
 	flags = FPRINT
 	body_parts_covered = FACE
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/mask/horsehead
@@ -94,7 +94,7 @@
 	item_state = "horsehead"
 	flags = FPRINT
 	body_parts_covered = FACE
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	var/voicechange = 0
 	siemens_coefficient = 0.9
 
@@ -109,14 +109,14 @@
 	item_state = "chapmask"
 	flags = FPRINT
 	body_parts_covered = FACE
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 
 /obj/item/clothing/mask/bandana
 	name = "bandana"
 	desc = "A colorful bandana."
 	action_button_name = "Toggle Bandana"
-	w_class = 1
+	w_class = W_CLASS_TINY
 	can_flip = 1
 
 obj/item/clothing/mask/bandana/red

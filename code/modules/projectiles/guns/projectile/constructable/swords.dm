@@ -4,7 +4,7 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "sword"
-	w_class = 3
+	w_class = W_CLASS_MEDIUM
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -116,26 +116,23 @@
 			if(lhand.alpha >= 150)
 				lhand.alpha -= 100
 
-			dynamic_overlay["[L_HAND_LAYER]"] = lhand
-			dynamic_overlay["[R_HAND_LAYER]"] = rhand
+			dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = lhand
+			dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = rhand
 
 			overlays += inventory
 			if (istype(loc, /mob/living/carbon/human)) //Needs to always update its own overlay, but only update mob overlays if it's actually on a mob.
-				H.update_inv_r_hand()
-				H.update_inv_l_hand()
+				H.update_inv_hands()
 		else
-			dynamic_overlay["[L_HAND_LAYER]"] = null
-			dynamic_overlay["[R_HAND_LAYER]"] = null
+			dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+			dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
 			if (istype(loc, /mob/living/carbon/human))
-				H.update_inv_r_hand()
-				H.update_inv_l_hand()
+				H.update_inv_hands()
 
 	else
-		dynamic_overlay["[L_HAND_LAYER]"] = null
-		dynamic_overlay["[R_HAND_LAYER]"] = null
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
 		if (istype(loc, /mob/living/carbon/human))
-			H.update_inv_r_hand()
-			H.update_inv_l_hand()
+			H.update_inv_hands()
 
 /obj/item/weapon/sword/venom/attack_self(mob/user as mob)
 	if(!beaker)
@@ -183,7 +180,8 @@
 		qdel(src)
 
 /obj/item/weapon/sword/venom/attack(mob/M as mob, mob/user as mob)
-	..()
+	if(!..())	//If the attack missed.
+		return
 	if(!beaker)
 		return
 	var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
@@ -247,7 +245,7 @@
 				desc = "A huge sword. It looks almost too heavy to lift."
 				icon_state = "executioners_sword"
 				hitsound = "sound/weapons/bloodyslice.ogg"
-				w_class = 4
+				w_class = W_CLASS_LARGE
 				force = 25
 				sharpness = 2.0
 				slot_flags = SLOT_BACK
@@ -255,8 +253,7 @@
 				complete = 1
 				if (istype(loc,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = loc
-					H.update_inv_r_hand()
-					H.update_inv_l_hand()
+					H.update_inv_hands()
 					H.update_inv_back()
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")

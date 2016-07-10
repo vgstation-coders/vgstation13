@@ -161,6 +161,14 @@ var/list/uplink_items = list()
 	cost = 3
 	job = list("Clown", "Mime")
 
+//Security
+/datum/uplink_item/jobspecific/syndicuffs
+	name = "Syndicate Cuffs"
+	desc = "A pair of cuffs rigged with electronics and laced with a C4 charge. Can be toggled between explosion on application and explosion on removal."
+	item = /obj/item/weapon/handcuffs/syndicate
+	cost = 2
+	job = list("Security Officer", "Warden", "Head of Security")
+
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger
 	name = "Evidence Forger"
@@ -211,7 +219,7 @@ var/list/uplink_items = list()
 //Assistant
 /datum/uplink_item/jobspecific/pickpocketgloves
 	name = "Pickpocket's Gloves"
-	desc = "A pair of sleek gloves to aid in pickpocketing, while wearing these you can see inside the pockets of any unsuspecting mark, loot the ID, belt, or pockets without them knowing, and pickpocketing puts the item directly into your hand."
+	desc = "A pair of sleek gloves to aid in pickpocketing, while wearing these you can sneakily empty pockets and strip clothing with nobody seeing you. Pickpocketed items will also be put into your hand rather than fall to the ground."
 	item = /obj/item/clothing/gloves/black/thief
 	cost = 3
 	job = list("Assistant")

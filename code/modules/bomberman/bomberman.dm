@@ -33,7 +33,7 @@ var/global/list/bombermangear = list()
 /obj/item/weapon/bomberman/
 	name = "Bomberman's Bomb Dispenser"
 	desc = "Now to not get yourself stuck in a corner."
-	w_class = 5.0
+	w_class = W_CLASS_HUGE
 	icon = 'icons/obj/bomberman.dmi'
 	icon_state = "dispenser"
 	var/bomblimit = 1	//how many bombs are currently in the dispenser
@@ -254,9 +254,6 @@ var/global/list/bombermangear = list()
 /obj/structure/bomberman/cultify()
 	return
 
-/obj/structure/bomberman/singuloCanEat()
-	return 0
-
 ///////////////////////////////FLAME/EXPLOSION//////////////////////////
 /obj/structure/bomberflame
 	name = "explosion"
@@ -314,7 +311,7 @@ obj/structure/bomberflame/Destroy()
 
 	for(var/obj/item/weapon/bomberman/dispenser in T)
 		dispenser.lost()
-		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg')
+		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
 
 	for(var/mob/living/L in T)
 		for(var/obj/item/weapon/bomberman/dispenser in L)
@@ -322,7 +319,7 @@ obj/structure/bomberflame/Destroy()
 			dispenser.loc = L.loc
 			//dispenser.dropped(C)
 			dispenser.lost()
-			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg')
+			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
 
 	if(hurt_players)
 		for(var/mob/living/L in T)
@@ -350,6 +347,14 @@ obj/structure/bomberflame/Destroy()
 	else if(istype(obstacle, /obj/structure/softwall/))
 		var/obj/structure/softwall/wall_break = obstacle
 		wall_break.pulverized()
+
+	else if(istype(obstacle, /obj/effect/blob/))
+		if(fuel <= 2)
+			obstacle.ex_act(3)
+		else if(fuel <= 10)
+			obstacle.ex_act(2)
+		else
+			obstacle.ex_act(1)
 
 	if(destroy_environnement)
 		if(istype(obstacle, /obj/structure/closet/))
@@ -412,9 +417,6 @@ obj/structure/bomberflame/Destroy()
 /obj/structure/bomberflame/cultify()
 	return
 
-/obj/structure/bomberflame/singuloCanEat()
-	return 0
-
 
 ///////////////////////////////SOFT WALLS/////////////////////////////
 /obj/structure/softwall
@@ -463,9 +465,6 @@ obj/structure/bomberflame/Destroy()
 /obj/structure/softwall/cultify()
 	return
 
-/obj/structure/softwall/singuloCanEat()
-	return 0
-
 ///////////////////////////////HARD WALLS/////////////////////////////
 /turf/unsimulated/wall/bomberman
 	name = "hard wall"
@@ -478,9 +477,6 @@ obj/structure/bomberflame/Destroy()
 
 /turf/unsimulated/wall/cultify()
 	return
-
-/turf/unsimulated/wall/singuloCanEat()
-	return 0
 
 ///////////////////////////////POWER-UPS//////////////////////////////
 /obj/structure/powerup
@@ -659,10 +655,6 @@ obj/structure/bomberflame/Destroy()
 /obj/structure/powerup/cultify()
 	return
 
-/obj/structure/powerup/singuloCanEat()
-	return 0
-
-
 ///////////////////////////////CLOTHING///////////////////////////////
 /obj/item/clothing/suit/space/bomberman
 	name = "Bomberman's suit"
@@ -834,7 +826,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 					if(opacity)
 						T.opacity = 1
 				else
-					T.ChangeTurf(/turf/simulated/floor/plating)
+					T.ChangeTurf(/turf/unsimulated/floor)
 					turfs += T
 				pencil.x++
 			sleep(2)	//giving the game some time to process to avoid unbearable lag spikes when we create an arena, plus it looks cool.
@@ -917,7 +909,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			pencil.x = x
 			while(pencil.x <= (x+w))
 				T = pencil.loc
-				if(istype(T, /turf/simulated/floor/plating))
+				if(istype(T, /turf/unsimulated/floor))
 					if(prob(60))
 						T = pencil.loc
 						var/obj/structure/softwall/W = new(T)
@@ -1188,7 +1180,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		while(pencil.x <= (x+w))
 			T = pencil.loc
-			if(istype(T, /turf/simulated/floor/plating))
+			if(istype(T, /turf/unsimulated/floor))
 				if(prob(60))
 					T = pencil.loc
 					var/obj/structure/softwall/W = new(T)
@@ -1254,7 +1246,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		for(var/atom/movable/AM in T)
 			AM.areaMaster = get_area_master(T)
 		if(open_space && (under.name == "Space"))
-			T.ChangeTurf(get_base_turf(T.z))
+			T.ChangeTurf(T.get_underlying_turf())
 		else
 			T.ChangeTurf(/turf/simulated/floor/plating)
 		T.maptext = null
@@ -1387,9 +1379,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 /obj/structure/planner/cultify()
 	return
-
-/obj/structure/planner/singuloCanEat()
-	return 0
 
 /obj/structure/planner/spawnpoint
 	name = "Spawn Point"

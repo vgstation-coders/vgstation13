@@ -119,7 +119,7 @@
 	icon_state = "pill_canister"
 	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
-	w_class = 2.0
+	w_class = W_CLASS_SMALL
 	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper")
 	allow_quick_gather = 1
 	use_to_pickup = 1
@@ -137,17 +137,16 @@
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
 		var/mob/M = usr //I don't see how this is necessary
-		if (!( istype(over_object, /obj/screen) ))
+		if (!( istype(over_object, /obj/screen/inventory) ))
 			return ..()
 		if (!M.incapacitated())
-			switch(over_object.name)
-				if("r_hand")
-					M.u_equip(src,0)
-					M.put_in_r_hand(src)
-				if("l_hand")
-					M.u_equip(src,0)
-					M.put_in_l_hand(src)
-			src.add_fingerprint(usr)
+			var/obj/screen/inventory/SI = over_object
+
+			if(SI.hand_index)
+				M.u_equip(src, 0)
+				M.put_in_hand(SI.hand_index, src)
+				src.add_fingerprint(usr)
+
 			return
 		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
 			if (usr.s_active)

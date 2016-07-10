@@ -44,6 +44,7 @@ var/const/CHAPLAIN			=(1<<10)
 var/const/CLOWN				=(1<<11)
 var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
+var/const/TRADER			=(1<<14)
 
 
 var/list/assistant_occupations = list(
@@ -72,6 +73,7 @@ var/list/medical_positions = list(
 	"Chief Medical Officer",
 	"Medical Doctor",
 	"Geneticist",
+	"Virologist",
 //	"Psychiatrist",
 	"Paramedic",
 	"Chemist"
@@ -122,6 +124,9 @@ var/list/nonhuman_positions = list(
 	"Mobile MMI"
 )
 
+var/list/misc_positions = list(
+	"Trader",
+)
 
 /proc/guest_jobbans(var/job)
 	return ((job in command_positions) || (job in nonhuman_positions) || (job in security_positions))

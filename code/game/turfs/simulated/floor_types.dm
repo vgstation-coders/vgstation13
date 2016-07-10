@@ -126,7 +126,7 @@
 			if(prob(80))
 				src.ReplaceWithLattice()
 			else if(prob(50))
-				src.ChangeTurf(get_base_turf(src.z))
+				src.ChangeTurf(get_underlying_turf())
 			else
 				var/turf/simulated/floor/F = src
 				F.make_plating()
@@ -261,7 +261,9 @@
 
 /turf/simulated/floor/beach/water/New()
 	..()
-	overlays += image("icon"='icons/misc/beach.dmi',"icon_state"="water5","layer"=MOB_LAYER+0.1)
+	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water5","layer"=MOB_LAYER+0.1)
+	water.plane = PLANE_MOB
+	overlays += water
 
 /turf/simulated/floor/grass
 	name = "Grass patch"

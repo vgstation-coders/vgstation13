@@ -92,7 +92,7 @@
 
 	proc/breathe()
 		if(reagents)
-			if(reagents.has_reagent("lexorin")) return
+			if(reagents.has_reagent(LEXORIN)) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
 
 		var/datum/gas_mixture/environment = loc.return_air()
@@ -276,8 +276,8 @@
 		if (nutrition > 0)
 			nutrition -= HUNGER_FACTOR
 
-		if (drowsyness)
-			drowsyness--
+		if (drowsyness > 0)
+			drowsyness = max(0, drowsyness - 1)
 			eye_blurry = max(2, eye_blurry)
 			if (prob(5))
 				sleeping += 1
@@ -316,7 +316,7 @@
 				if( health <= 20 && prob(1) )
 					spawn(0)
 						emote("gasp")
-				if(!reagents.has_reagent("inaprovaline"))
+				if(!reagents.has_reagent(INAPROVALINE))
 					adjustOxyLoss(1)
 				Paralyse(3)
 
@@ -410,7 +410,7 @@
 			else
 				healths.icon_state = "health6"
 
-		if(pullin)	pullin.icon_state = "pull[pulling ? 1 : 0]"
+		update_pull_icon()
 
 
 		if (toxin)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
@@ -419,22 +419,16 @@
 		//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 		//blame the person who coded them. Temporary fix added.
 		if (client)
-			client.screen.Remove(global_hud.blurry,global_hud.druggy,global_hud.vimpaired)
+			clear_fullscreens()
 
-		if ((blind && stat != 2))
-			if ((blinded))
-				blind.layer = 18
-			else
-				blind.layer = 0
-
-				if (disabilities & NEARSIGHTED)
-					client.screen += global_hud.vimpaired
-
-				if (eye_blurry)
-					client.screen += global_hud.blurry
-
-				if (druggy)
-					client.screen += global_hud.druggy
+			if(src.eye_blind)
+				overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			if (src.disabilities & NEARSIGHTED)
+				overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
+			if (src.eye_blurry)
+				overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+			if (src.druggy)
+				overlay_fullscreen("high", /obj/screen/fullscreen/high)
 
 		if (stat != 2)
 			if (machine)
@@ -452,14 +446,25 @@
 				if(M.loc != src)
 					stomach_contents.Remove(M)
 					continue
-				if(istype(M, /mob/living/carbon) && stat != 2)
+				if(istype(M, /mob/living/carbon) && stat & stat != 2)
+					var/digest = 0
 					if(M.stat == 2)
-						M.death(1)
-						stomach_contents.Remove(M)
-						qdel(M)
-						M = null
+						if(prob(5))
+							switch(digest)
+								if(0)
+									to_chat(src, "<span class='warning'>\The [M] shifts around in your stomach cavity as digestion begins.</span>")
+								if(1)
+									to_chat(src, "<span class='warning'>\The [M] feels a little bit lighter in your stomach cavity.</span>")
+								if(2)
+									to_chat(src, "<span class='danger'>You barely feel the weight of [M] in your stomach cavity anymore.</span>")
+								if(3 to INFINITY)
+									to_chat(src, "<span class='warning'>The weight of [M] is no longer there. Digestion has completed.</span>")
+									M.ghostize(1)
+									drop_stomach_contents()
+									qdel(M)
+							digest++
 						continue
 					if(air_master.current_cycle%3==1)
-						if(!(status_flags & GODMODE))
+						if(!(M.status_flags & GODMODE))
 							M.adjustBruteLoss(5)
 						nutrition += 10
