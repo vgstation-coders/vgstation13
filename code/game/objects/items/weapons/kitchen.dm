@@ -330,6 +330,8 @@
 	var/max_carry = 10 // w_class = W_CLASS_TINY -- takes up 1
 					   // w_class = W_CLASS_SMALL -- takes up 3
 					   // w_class = W_CLASS_MEDIUM -- takes up 5
+	var/currentweight = 0
+	var/cooldown = 0	//shield bash cooldown. based on world.time
 
 /obj/item/weapon/tray/Destroy()
 	for(var/atom/thing in carrying)
@@ -447,18 +449,6 @@
 				M.Weaken(2)
 				return
 			return
-
-/obj/item/weapon/tray/var/cooldown = 0	//shield bash cooldown. based on world.time //why is this defined down here?
-
-/obj/item/weapon/tray/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/kitchen/rollingpin))
-		if(cooldown < world.time - 25)
-			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
-			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
-			cooldown = world.time
-	else
-		..()
-
 /*
 ===============~~~~~================================~~~~~====================
 =																			=
@@ -466,7 +456,55 @@
 =																			=
 ===============~~~~~================================~~~~~====================
 */
-/obj/item/weapon/tray/proc/calc_carry()
+/obj/item/proc/get_trayweight() //calculates weight for the purpose of trays, 0 if too big
+	if(w_class > W_CLASS_MEDIUM)
+		return 0
+	if(w_class == W_CLASS_TINY)
+		return 1
+	if(w_class == W_CLASS_SMALL)
+		return 3
+	if(w_class == W_CLASS_MEDIUM)
+		return 5
+
+/obj/item/weapon/tray/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(istype(W, /obj/item/weapon/kitchen/rollingpin)) //shield bash
+		if(cooldown < world.time - 25)
+			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
+			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
+			cooldown = world.time
+			return
+	if(!user.candrop)
+		return
+	var/weight = W.get_trayweight()
+	if(!weight)
+		to_chat(user, "<span class='warning'>\The [W] is too heavy!</span>")
+		return
+	if(weight + currentweight > max_carry)
+		to_chat(user, "<span class='warning'>The tray is carrying too much!</span>")
+		return
+	if( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
+		to_chat(user, "<span class='warning'>This doesn't seem like a good idea.</span>")
+		return
+	if(user.drop_item(W, user.loc))
+		currentweight += weight
+		W.loc = src
+		carrying.Add(W)
+		var/list/params_list = params2list(params)
+		if(params_list.len)
+			var/icon/clicked = new/icon(icon, icon_state, dir)
+			var/clamp_x = clicked.Width() / 2
+			var/clamp_y = clicked.Height() / 2
+			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			W.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
+		var/image/image = image(icon = null)
+		image.appearance = W.appearance
+		image.layer = W.layer + 30
+		image.plane = FLOAT_PLANE
+
+		overlays += image
+	else
+		..()
+/obj/item/weapon/tray/proc/calc_carry() 
 	// calculate the weight of the items on the tray
 	var/val = 0 // value to return
 
@@ -481,7 +519,7 @@
 			val += INFINITY
 
 	return val
-
+/* previous functionality of trays, 
 /obj/item/weapon/tray/prepickup(mob/user)
 	..()
 
@@ -512,7 +550,7 @@
 
 			overlays += image
 			//overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
-
+*/
 /obj/item/weapon/tray/dropped(mob/user)
 	spawn() //because throwing drops items before setting their throwing var, and a lot of other zany bullshit
 		if(throwing)
@@ -538,6 +576,7 @@
 	overlays.len = 0
 	for(var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
+		currentweight -= I.get_trayweight()
 		carrying.Remove(I)
 
 /obj/item/weapon/tray/proc/send_items_flying()
@@ -545,6 +584,7 @@
 	for(var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
 		carrying.Remove(I)
+		currentweight -= I.get_trayweight()
 		spawn(rand(1,3))
 			if(I && prob(75))
 				step(I, pick(alldirs))
