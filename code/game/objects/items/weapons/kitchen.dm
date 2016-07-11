@@ -330,7 +330,6 @@
 	var/max_carry = 10 // w_class = W_CLASS_TINY -- takes up 1
 					   // w_class = W_CLASS_SMALL -- takes up 3
 					   // w_class = W_CLASS_MEDIUM -- takes up 5
-	var/currentweight = 0
 	var/cooldown = 0	//shield bash cooldown. based on world.time
 
 /obj/item/weapon/tray/Destroy()
@@ -479,14 +478,13 @@
 	if(!weight)
 		to_chat(user, "<span class='warning'>\The [W] is too heavy!</span>")
 		return
-	if(weight + currentweight > max_carry)
+	if(weight + calc_carry() > max_carry)
 		to_chat(user, "<span class='warning'>The tray is carrying too much!</span>")
 		return
 	if( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
 		to_chat(user, "<span class='warning'>This doesn't seem like a good idea.</span>")
 		return
 	if(user.drop_item(W, user.loc))
-		currentweight += weight
 		W.loc = src
 		carrying.Add(W)
 		var/list/params_list = params2list(params)
@@ -509,11 +507,11 @@
 	var/val = 0 // value to return
 
 	for(var/obj/item/I in carrying)
-		if(I.w_class > W_CLASS_TINY)
-			val ++
+		if(I.w_class == W_CLASS_TINY)
+			val += 1
 		else if(I.w_class == W_CLASS_SMALL)
 			val += 3
-		else if(I.w_class > W_CLASS_MEDIUM)
+		else if(I.w_class == W_CLASS_MEDIUM)
 			val += 5
 		else //Shouldn't happen
 			val += INFINITY
@@ -576,7 +574,6 @@
 	overlays.len = 0
 	for(var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
-		currentweight -= I.get_trayweight()
 		carrying.Remove(I)
 
 /obj/item/weapon/tray/proc/send_items_flying()
@@ -584,7 +581,6 @@
 	for(var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
 		carrying.Remove(I)
-		currentweight -= I.get_trayweight()
 		spawn(rand(1,3))
 			if(I && prob(75))
 				step(I, pick(alldirs))
