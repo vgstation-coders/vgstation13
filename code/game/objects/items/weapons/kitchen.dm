@@ -507,14 +507,10 @@
 	var/val = 0 // value to return
 
 	for(var/obj/item/I in carrying)
-		if(I.w_class == W_CLASS_TINY)
-			val += 1
-		else if(I.w_class == W_CLASS_SMALL)
-			val += 3
-		else if(I.w_class == W_CLASS_MEDIUM)
-			val += 5
-		else //Shouldn't happen
-			val += INFINITY
+		if(I.get_trayweight())
+			val += I.get_trayweight()
+		else
+			return INFINITY
 
 	return val
 /* previous functionality of trays, 
