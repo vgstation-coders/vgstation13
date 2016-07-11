@@ -481,7 +481,7 @@
 	if(weight + calc_carry() > max_carry)
 		to_chat(user, "<span class='warning'>The tray is carrying too much!</span>")
 		return
-	if( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
+	if( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray, /obj/item/weapon/holder/) ) )
 		to_chat(user, "<span class='warning'>This doesn't seem like a good idea.</span>")
 		return
 	if(user.drop_item(W, user.loc))
@@ -504,15 +504,10 @@
 		..()
 /obj/item/weapon/tray/proc/calc_carry() 
 	// calculate the weight of the items on the tray
-	var/val = 0 // value to return
+	. = 0 // value to return
 
 	for(var/obj/item/I in carrying)
-		if(I.get_trayweight())
-			val += I.get_trayweight()
-		else
-			return INFINITY
-
-	return val
+		. += I.get_trayweight() || INFINITY
 /* previous functionality of trays, 
 /obj/item/weapon/tray/prepickup(mob/user)
 	..()
