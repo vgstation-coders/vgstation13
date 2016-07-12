@@ -41,6 +41,17 @@
 
 /obj/structure/bed/chair/vehicle/secway/Bump(var/atom/obstacle)
 	..()
+	
+	if(istype(obstacle, /mob/living))
+		var/mob/living/idiot = obstacle
+		idiot.Weaken(2)
+		idiot.Stun(2)
+		occupant.Weaken(2)
+		occupant.Stun(2)
+		playsound(get_turf(src), "sound/effects/meteorimpact.ogg", 25, 1)
+		occupant.visible_message("<span class='danger'>[occupant] crashes into \the [obstacle]!</span>", "<span class='danger'>You crash into \the [obstacle]!</span>")
+		return
+		
 
 	if(clumsy_check)
 		if(istype(occupant, /mob/living))
