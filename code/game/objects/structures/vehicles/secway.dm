@@ -51,8 +51,7 @@
 		playsound(get_turf(src), "sound/effects/meteorimpact.ogg", 25, 1)
 		occupant.visible_message("<span class='danger'>[occupant] crashes into \the [obstacle]!</span>", "<span class='danger'>You crash into \the [obstacle]!</span>")
 		return
-		
-
+	
 	if(clumsy_check)
 		if(istype(occupant, /mob/living))
 			var/mob/living/M = occupant
