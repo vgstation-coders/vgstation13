@@ -1233,6 +1233,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SpI_SHOUT	"shout"
 #define SpI_WHISPER	"whisper"
 #define SpI_EMOTE	"emote"
+#define SpI_VISIBLEMESSAGE "visiblemessage"
 #define SpI_NONE	"none"
 
 //upgrading

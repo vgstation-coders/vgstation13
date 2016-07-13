@@ -5,7 +5,6 @@ These are general powers. Specific powers are stored under the appropriate alien
 /*Alien spit now works like a taser shot. It won't home in on the target but will act the same once it does hit.
 Doesn't work on other aliens/AI.*/
 
-
 /mob/living/carbon/alien/proc/powerc(X, Y)//Y is optional, checks for weed planting. X can be null.
 	if(stat)
 		to_chat(src, "<span class='alien'>You must be conscious to do this.</span>")
@@ -19,16 +18,26 @@ Doesn't work on other aliens/AI.*/
 	else
 		return 1
 
-/mob/living/carbon/alien/humanoid/verb/plant()
-	set name = "Plant Weeds (50)"
-	set desc = "Plants some alien weeds"
-	set category = "Alien"
+/spell/aoe_turf/conjure/alienweeds
+	name = "Plant Weeds"
+	desc = "Plants some alien weeds"
+	panel = "Alien"
 
-	if(powerc(50,1))
-		adjustToxLoss(-50)
-		visible_message("<span class='alien'>[src] has planted some alien weeds!</span>")
-		new /obj/effect/alien/weeds/node(loc)
-	return
+	charge_type = Sp_HOLDVAR
+	holder_var_type = "storedPlasma"
+	holder_var_amount = 50
+
+	spell_flags = IGNORESPACE
+
+	invocation = "<span class='alien'>The alien has planted some alien weeds!</span>"
+	invocation_type = SpI_VISIBLEMESSAGE
+
+	summon_type = list(/obj/effect/alien/weeds/node)
+
+/spell/aoe_turf/conjure/alienweeds/cast(var/list/targets, mob/user)
+	..()
+//	user.adjustToxLoss(-50)
+
 
 /*
 /mob/living/carbon/alien/humanoid/verb/ActivateHuggers()
@@ -43,38 +52,78 @@ Doesn't work on other aliens/AI.*/
 		emote("roar")
 	return
 */
-/mob/living/carbon/alien/humanoid/verb/whisp(mob/M as mob in oview())
-	set name = "Whisper (10)"
-	set desc = "Whisper to someone"
-	set category = "Alien"
 
-	if(powerc(10))
-		adjustToxLoss(-10)
-		var/msg = sanitize(input("Message:", "Alien Whisper") as text|null)
-		if(msg)
-			var/turf/T = get_turf(src)
-			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Alien Whisper: [msg]")
-			to_chat(M, "<span class='alien'>You hear a strange, alien voice in your head... <em>[msg]</span></em>")
-			to_chat(src, "<span class='alien'>You said: [msg] to [M]</span>")
-	return
+/spell/targeted/alienwhisper
+	name = "Whisper"
+	desc = "Whisper to someone"
+	panel = "Alien"
 
-/mob/living/carbon/alien/humanoid/verb/transfer_plasma(mob/living/carbon/alien/M as mob in oview())
-	set name = "Transfer Plasma"
-	set desc = "Transfer Plasma to another alien"
-	set category = "Alien"
+	charge_type = Sp_HOLDVAR
+	holder_var_type = "storedPlasma"
+	holder_var_amount = 10
 
-	if(isalien(M))
-		var/amount = input("Amount:", "Transfer Plasma to [M]") as num
-		if (amount)
-			amount = abs(round(amount))
-			if(powerc(amount))
-				if (get_dist(src,M) <= 1)
-					M.adjustToxLoss(amount)
-					adjustToxLoss(-amount)
-					to_chat(M, "<span class='alien'>\The [src] has transfered [amount] plasma to you.</span>")
-					to_chat(src, "<span class='alien'>You have trasferred [amount] plasma to [M]</span>")
-				else
-					to_chat(src, "<span class='alien'>You need to be closer.</span>")
+	range = 7
+	spell_flags = WAIT_FOR_CLICK
+	var/storedmessage
+
+/spell/targeted/alienwhisper/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
+	if(!..()) //We only make it to this point if we succeeded in channeling or are removing channeling
+		return 0
+	if(user.spell_channeling && !force_remove)
+		storedmessage = sanitize(input("Message:", "Alien Whisper") as text|null)
+		if(!storedmessage) //They refused to supply a spell channeling
+			channel_spell(force_remove = 1)
+			return 0
+	else
+		storedmessage = null
+	return 1
+
+/spell/targeted/alienwhisper/is_valid_target(var/target)
+	if(!(spell_flags & INCLUDEUSER) && target == usr)
+		return 0
+	if(get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
+		return 0
+	return istype(target, /mob)
+
+/spell/targeted/alienwhisper/cast(var/list/targets, mob/user)
+	var/mob/M = targets[1]
+	if(!storedmessage) //Compatibility if someone reverts this to SELECTABLE from WAIT_FOR_CLICK
+		storedmessage = sanitize(input("Message:", "Alien Whisper") as text|null)
+	if(storedmessage)
+		var/turf/T = get_turf(src)
+		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Alien Whisper: [storedmessage]")
+		to_chat(M, "<span class='alien'>You hear a strange, alien voice in your head... <em>[storedmessage]</span></em>")
+		to_chat(src, "<span class='alien'>You said: [storedmessage] to [M]</span>")
+//	user.adjustToxLoss(-10)
+
+/spell/targeted/alientransferplasma
+	name = "Transfer Plasma"
+	desc = "Transfer your plasma to another alien"
+	panel = "Alien"
+
+	charge_type = Sp_HOLDVAR
+	holder_var_type = "storedPlasma"
+
+	range = 2
+	compatible_mobs = list(/mob/living/carbon/alien)
+
+
+//Does it take charge before casting? How to transfer to new alien
+/spell/targeted/alientransferplasma/cast(var/list/targets, mob/user)
+	var/mob/living/carbon/alien/M = targets[1]
+	var/amount = input("Amount:", "Transfer Plasma to [M]") as num
+	if(amount)
+		amount = abs(round(amount))
+		holder_var_amount = amount
+		if(check_charge(user = user))
+			M.adjustToxLoss(amount)
+//			user.adjustToxLoss(-amount)
+			take_charge(user = user)
+			to_chat(M, "<span class='alien'>\The [src] has transfered [amount] plasma to you.</span>")
+			to_chat(src, "<span class='alien'>You have trasferred [amount] plasma to [M]</span>")
+		else
+			to_chat(src, "<span class='alien'>You need to be closer.</span>")
+	holder_var_amount = 0
 	return
 
 
@@ -194,12 +243,12 @@ Doesn't work on other aliens/AI.*/
 
 /mob/living/carbon/alien/humanoid/AltClickOn(var/atom/A)
 	if(ismob(A))
-		neurotoxin(A)
+//		neurotoxin(A)
 		return
 	. = ..()
 
 /mob/living/carbon/alien/humanoid/CtrlClickOn(var/atom/A)
 	if(isalien(A))
-		transfer_plasma(A)
+//		transfer_plasma(A)
 		return
 	. = ..()

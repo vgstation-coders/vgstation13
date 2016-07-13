@@ -18,6 +18,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //same. The amount adjusted with the mob's var when the spell is used
+	var/datum/special_var_holder //if a holder var is stored on a different object or a datum
 
 	var/spell_flags = NEEDSCLOTHES
 	//Possible spell flags:
@@ -184,6 +185,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/adjust_var(mob/living/target = usr, type, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
+	var/variable = target.vars[type]
+	if(!isnum(variable) && !isnull(variable))
+		world.log << "Spell [type] of user [usr] adjusting non-numeric value on [target], aborting"
+		return
 	switch(type)
 		if("bruteloss")
 			target.adjustBruteLoss(amount)
@@ -327,6 +332,15 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				if(!charge_counter)
 					to_chat(user, "<span class='notice'>[name] has no charges left.</span>")
 					return 0
+			if(Sp_HOLDVAR)
+				if(special_var_holder)
+					if(special_var_holder.vars[type] < holder_var_amount)
+						to_chat(user, still_recharging_msg)
+						return 0
+				else
+					if(user.vars[type] < holder_var_amount)
+						to_chat(user, still_recharging_msg)
+						return 0
 	return 1
 
 /spell/proc/take_charge(mob/user = user, var/skipcharge)
@@ -340,7 +354,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				charge_counter-- //returns the charge if the targets selecting fails
 				return 1
 			if(Sp_HOLDVAR)
-				adjust_var(user, holder_var_type, holder_var_amount)
+				if(special_var_holder)
+					adjust_var(special_var_holder, holder_var_type, holder_var_amount)
+				else
+					adjust_var(user, holder_var_type, holder_var_amount)
 				return 1
 		return 0
 	return 1
@@ -361,6 +378,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				user.whisper(replacetext(invocation," ","`"))
 		if(SpI_EMOTE)
 			user.emote("me", 1, invocation) //the 1 means it's for everyone in view, the me makes it an emote, and the invocation is written accordingly.
+		if(SpI_VISIBLEMESSAGE)
+			user.visible_message(invocation)
 
 /////////////////////
 ///UPGRADING PROCS///
