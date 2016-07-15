@@ -8,16 +8,16 @@
 /client/proc/show_plant_genes()
 	set category = "Debug"
 	set name = "Show Plant Genes"
-	set desc = "Prints the round's plant gene masks."
+	set desc = "Prints the round's plant gene tags."
 
 	if(!holder)	return
 
-	if(!plant_controller || !plant_controller.gene_tag_masks)
-		to_chat(usr, "Gene masks not set.")
+	if(!plant_controller || !plant_controller.gene_tag_list)
+		to_chat(usr, "Gene tags not set.")
 		return
 
-	for(var/mask in plant_controller.gene_tag_masks)
-		to_chat(usr, "[mask]: [plant_controller.gene_tag_masks[mask]]")
+	for(var/tag in plant_controller.gene_tag_list)
+		to_chat(usr, tag)
 
 var/global/datum/controller/plants/plant_controller // Set in New().
 
@@ -25,9 +25,9 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 
 	var/plants_per_tick = PLANTS_PER_TICK
 	var/plant_tick_time = PLANT_TICK_TIME
-	var/list/plant_queue = list()           // All queued plants.
-	var/list/datum/seed/seeds = list()      // All seed data stored here.
-	var/list/gene_tag_masks = list()        // Gene obfuscation for delicious trial and error goodness.
+	var/list/plant_queue = list()      // All queued plants.
+	var/list/datum/seed/seeds = list() // All seed data stored here.
+	var/list/gene_tag_list = list()    // List of gene tags, how they appear in the centrifuge and bioballistic.
 
 /datum/controller/plants/New()
 	if(plant_controller && plant_controller != src)
@@ -56,18 +56,12 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 
 	//Might as well mask the gene types while we're at it.
 	var/list/gene_tags = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_NUTRITION, GENE_DEVELOPMENT)
-	var/list/used_masks = list()
 
 	while(gene_tags && gene_tags.len)
 		var/gene_tag = pick(gene_tags)
-		var/gene_mask = "[num2hex(rand(0,255))]"
 
-		while(gene_mask in used_masks)
-			gene_mask = "[num2hex(rand(0,255))]"
-
-		used_masks += gene_mask
 		gene_tags -= gene_tag
-		gene_tag_masks[gene_tag] = gene_mask
+		gene_tag_list += gene_tag
 
 // Proc for creating a random seed type.
 /datum/controller/plants/proc/create_random_seed(var/survive_on_station)

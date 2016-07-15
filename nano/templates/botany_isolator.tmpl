@@ -1,5 +1,5 @@
-<!-- 
-Title: Lysis-isolation Centrifuge UI 
+<!--
+Title: Lysis-isolation Centrifuge UI
 Used In File(s): \code\modules\hydroponics\seed_machines.dm
  -->
 
@@ -26,7 +26,7 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 			{{for data.geneMasks}}
 				<div class="item">
 					<div class="itemLabel">
-						{{:value.mask}}
+						{{:value.tag}}
 					</div>
 					<div class="itemContent">
 						{{:helper.link('Extract', 'circle-arrow-s', {'get_gene' : value.tag}, null)}}
@@ -70,4 +70,4 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 	{{else}}
 		<div class="notice">No seeds loaded.</div>
 	{{/if}}
-{{/if}} 
+{{/if}}
