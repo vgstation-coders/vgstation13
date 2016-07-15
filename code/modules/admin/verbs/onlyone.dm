@@ -161,7 +161,7 @@
 	var/mob/living/carbon/human/H = ..(M)
 
 	H.revive() //Fully heal all converted mobs...
-	H.status_flags |= INVULNERABLE //...and make them invincible. This invincibility is removed in event_setup_end(), after a delay.
+	H.status_flags |= (INVULNERABLE | GODMODE) //...and make them invincible. This invincibility is removed in event_setup_end(), after a delay.
 	H.nospells = 1 //Also no casting. Also removed in event_setup_end() after a delay.
 
 	ticker.mode.wizards += H
@@ -216,6 +216,6 @@
 /datum/only_one/wizardwars/event_setup_end(var/list/converted_mobs)
 	sleep(200) //Twenty seconds.
 	for(var/mob/M in converted_mobs)
-		M.status_flags &= ~INVULNERABLE
+		M.status_flags &= ~(INVULNERABLE | GODMODE)
 		M.nospells = 0
 		to_chat(M, "<span class='warning'>Invincibility period over. Let the battle begin!</span>")
