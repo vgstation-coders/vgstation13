@@ -161,7 +161,8 @@
 	var/mob/living/carbon/human/H = ..(M)
 
 	H.revive() //Fully heal all converted mobs...
-	H.status_flags |= GODMODE //...and make them invincible. This invincibility is removed in event_setup_end(), after a delay.
+	H.status_flags |= INVULNERABLE //...and make them invincible. This invincibility is removed in event_setup_end(), after a delay.
+	H.nospell = 1 //Also no casting. Also removed in event_setup_end() after a delay.
 
 	ticker.mode.wizards += H
 	H.mind.special_role = "Wizard"
@@ -208,12 +209,13 @@
 
 	H.make_all_robot_parts_organic()
 
-	to_chat(H, "<span class='info'>Your spellbook is in your backpack. All wizards are invincible for the next 20 seconds. Take this time to select your spells.</span>")
+	to_chat(H, "<span class='info'>Your spellbook is in your backpack. All wizards are invincible for the next 20 seconds, and no spells can be cast in that time. Take this time to select your spells.</span>")
 
 	return H
 
 /datum/only_one/wizardwars/event_setup_end(var/list/converted_mobs)
 	sleep(200) //Twenty seconds.
 	for(var/mob/M in converted_mobs)
-		M.status_flags &= ~GODMODE
+		M.status_flags &= ~INVULNERABLE
+		M.nospell = 0
 		to_chat(M, "<span class='warning'>Invincibility period over. Let the battle begin!</span>")

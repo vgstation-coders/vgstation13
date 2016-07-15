@@ -106,6 +106,7 @@
 	var/candrop = 1
 	var/lastpuke = 0
 	var/unacidable = 0
+	var/nospells = 0 //Can't use spells. At all.
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
