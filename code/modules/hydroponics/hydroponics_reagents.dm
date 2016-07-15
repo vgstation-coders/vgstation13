@@ -207,12 +207,11 @@
 /datum/reagent/drink/sportdrink/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.adjust_nutrient(1)
-	T.adjust_water(1)
-	T.weedlevel -= 5
-	T.pestlevel -= 5
-	T.toxins -= 5
+	T.adjust_water(-.5)
+	T.weedlevel += 3
+	T.pestlevel += 5
 	if(T.seed && !T.dead)
-		T.health += 50
+		T.health += 5
 
 /datum/reagent/anti_toxin/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
