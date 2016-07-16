@@ -35,3 +35,4 @@ delete-after: True
 changes: 
   - rscadd: "Added a small shop on box, so go fence your stuff there!"
   - rscadd: "Added redundant wires so cutting 1 wire wont cause a blackout in half the station. Now you gotta cut 2 or 3 wires."
+  - rscadd: "Added a new access type for the shop to prevent anyone from being able to open the windoors into the cashier's place."
