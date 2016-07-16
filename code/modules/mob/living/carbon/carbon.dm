@@ -585,7 +585,7 @@
 
 	return 1
 
-/mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
+/mob/living/carbon/proc/transferImplantsTo(var/mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
 		I.loc = newmob
 		I.implanted = 1
@@ -609,7 +609,7 @@
 		else
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
 
-/mob/living/carbon/proc/transferBorers(mob/living/target)
+/mob/living/carbon/proc/transferBorers(var/mob/living/target)
 	var/mob/living/simple_animal/borer/B = has_brain_worms()
 	if(B)
 		B.detach()
