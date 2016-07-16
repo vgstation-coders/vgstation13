@@ -941,6 +941,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Dormitories"
 	icon_state = "Sleep"
 
+/area/crew_quarters/shop
+	name = "\improper Shop"
+	icon_state = "shop"
+
 /area/crew_quarters/toilet
 	name = "\improper Dormitory Toilets"
 	icon_state = "toilet"
