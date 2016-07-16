@@ -4218,7 +4218,7 @@
 	if(prob(4)) //Small chance per tick to some noir stuff and gain NOIRBLOCK if we don't have it.
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if(!H.mutations & M_NOIR)
+			if(!(H.mutations & M_NOIR))
 				H.mutations += M_NOIR
 				H.dna.SetSEState(NOIRBLOCK,1)
 		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
@@ -4230,7 +4230,7 @@
 			"The young dame was pride and joy of the station. Little did she know that looks can breed envy... or worse.",
 			"The new case reeked of the same bad blood as that now half-forgotten case of the turncoat chef. A recipe for murder.",
 			"I dragged myself out of my drink-addled torpor and called to the shadowy figure at my door - come in - because if I didn't take a new case I'd be through my bottle by noon.",
-			"I glanced across the bar and spotted trouble in the form of a bruiser with brass knuckles across the smoke-filled nightclub's cabaret.",
+			"Nursing my scotch, I turned my gaze upward and spotted trouble in the form of a bruiser with brass knuckles across the smoke-filled nightclub's cabaret.",
 			"I didn't even know who she was. Just stumbled across a girl and four toughs. Took her home and the mayor named me a hero.",
 			"She was a flapper and a swinger, but she was also in some hot water. Told me she'd make it worth my while if I could get her out of it. I told her that I wanted payment in cold hard simoleons.",
 			"What he did just didn't compare. He killed an innocent person. What drives a man to kill in cold blood? I didn't want to hang around and find out.",
@@ -4272,8 +4272,8 @@
 	if(..()) return 1
 	if(ishuman(M))
 		var/datum/effect/effect/system/spark_spread/spark_system = new
-		spark_system.set_up(5, 0, src)
-		spark_system.attach(src)
+		spark_system.set_up(5, 0, M)
+		spark_system.attach(M)
 		spark_system.start()
 	else if(isrobot(M))
 		M.Jitter(4)
@@ -4334,7 +4334,11 @@
 			var/turf/T = get_turf(H)
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_MOB)
 			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
-			H.equip_to_slot_if_possible(new /obj/item/clothing/under/schoolgirl(get_turf(H)), w_uniform, 1, 1, 1) //Needs testing, quick equip has some weird sanity
+			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
+			if(!H.put_in_hands(S)) //For quickswap, it needs to be in a hand for some reason. But...
+				H.uniform.forceMove(get_turf(H)) //If both hands are occupied, we have another solution: just drop the current suit (empties ID and pockets)
+				H.uniform.unequipped()
+			H.equip_to_slot_if_possible(S, slot_w_uniform, 1, 1, 1) //This is the safe quickswap proc.
 			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
 	M.regenerate_icons()
 
@@ -4350,16 +4354,17 @@
 	id = BEEPSKY_CLASSIC
 	description = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
 	color = "#664300" //rgb: 102, 67, 0
+	custom_metabolism = 2 //Ten times the normal rate.
 
 /datum/reagent/ethanol/beepskyclassic/on_mob_life(var/mob/living/M)
 	if(..()) return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
-			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, vary = 0)
+			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
 		else
-			H.Weaken(30)
-			playsound(get_turf(H), "sparks", 75, 1, -1)
+			H.Weaken(10)
+			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
 	name = "Spiders"
@@ -4376,6 +4381,7 @@
 		new /mob/living/simple_animal/hostile/giant_spider/spiderling(calculate_offset)
 		holder.remove_reagent(SPIDERS,4)
 		M.emote("scream", , , 1)
+		M.visible_message("<span class='warning'>[M] recoils as a spider emerges from \his mouth!</span>")
 
 /datum/reagent/ethanol/weedeater
 	name = "Weed Eater"
@@ -4385,9 +4391,10 @@
 
 /datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
 	if(..()) return 1
-	if(!/spell/targeted/weedeat in M.spell_list)
+	if(!/spell/targeted/genetic/eat_weed in M.spell_list)
 		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
-		M.add_spell(/spell/targeted/weedeat)
+		M.add_spell(/spell/targeted/genetic/eat_weed)
+		M.spell_list += /spell/targeted/genetic/eat_weed //Why isn't this handled in add_spell?
 
 /datum/reagent/ethanol/deadrum
 	name = "Deadrum"

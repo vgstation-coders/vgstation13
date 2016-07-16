@@ -485,7 +485,7 @@
 				if(METABUDDY)
 					icon_state = METABUDDY
 					name = "\improper Metabuddy"
-					desc = "The glass is etched with the name of a very deserving spaceman. This one is made out to:"
+					desc = "The glass is etched with the name of a very deserving spaceman. There's a special note etched in the bottom..."
 				if(SPIDERS)
 					icon_state = SPIDERS
 					name = "\improper This glass is full of spiders"
@@ -545,7 +545,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
 	..()
 	if(reagents.get_master_reagent_id() == METABUDDY && user.client)
-		to_chat(user,"[user.client.ckey]")
+		to_chat(user,"<span class='warning'>This one is made out to 'My very best friend, [user.client.ckey]'</span>")
 
 // for /obj/machinery/vending/sovietsoda
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda

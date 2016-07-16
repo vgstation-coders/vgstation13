@@ -1,0 +1,18 @@
+author: Kurfurst
+delete-after: True
+
+changes: 
+- tweak: A number of prehistoric plants have been changed so that they're more useful to botanists instead of being mere curiosities.
+- tweak: Surik is now a source of Karmotrine
+- tweak: Jurlmah is now a source of Clonexadone
+- tweak: Amauri fruit has the curious NOREACT property and contains smoke
+- tweak: Thaadra now contains only Frostoil and has the Altertemp mutation and startlingly high default potency
+- tweak: Vale contains only Brawndo now
+- tweak: Gelthi contains only nutriment now, but has the unusual harvest_repeat = 2 trait
+- rscadd: Added a new trait, when harvest_repeat = 2, a plant will self-harvest itself.
+- rscadd: Added many new alchohols mixed from Karmotrine, each with special effects.
+- rscadd: Poison Wine is now a premium item at the Boozeomat instead of a product of Telriis.
+- rscadd: Added a new sprite for harvested items missing sprites. You shouldn't ever have to see this, but at least it will be less confusing than the old sprite.
+- rscadd: Brawndo now has what plants crave. Pour it into a tray and watch all the alerts go away!
+- rscadd: New formula for Lemon Lime Soda: Lemon Juice + Lime Juice + Tonic
+- rscadd: There is a 30% chance that while attempting to buy Starkist (an orange-flavored soda) that you will instead receive Lemon Lime. It's a conspiracy.
