@@ -4,21 +4,6 @@
 #define PLANTS_PER_TICK 500 // Cap on number of plant segments processed.
 #define PLANT_TICK_TIME 50  // Number of ticks between the plant processor cycling.
 
-// Debug for testing seed genes.
-/client/proc/show_plant_genes()
-	set category = "Debug"
-	set name = "Show Plant Genes"
-	set desc = "Prints the round's plant gene tags."
-
-	if(!holder)	return
-
-	if(!plant_controller || !plant_controller.gene_tag_list)
-		to_chat(usr, "Gene tags not set.")
-		return
-
-	for(var/tag in plant_controller.gene_tag_list)
-		to_chat(usr, tag)
-
 var/global/datum/controller/plants/plant_controller // Set in New().
 
 /datum/controller/plants
