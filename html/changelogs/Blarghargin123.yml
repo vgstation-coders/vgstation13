@@ -33,5 +33,5 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
--rscadd Added a small shop on box, so go fence your stuff there!
--rscadd Added redundant wires so cutting 1 wire wont cause a blackout in half the station. Now you gotta cut 2 or 3 wires.
+  -rscadd: "Added a small shop on box, so go fence your stuff there!"
+  -rscadd: "Added redundant wires so cutting 1 wire wont cause a blackout in half the station. Now you gotta cut 2 or 3 wires."
