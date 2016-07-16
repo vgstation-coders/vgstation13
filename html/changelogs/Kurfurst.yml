@@ -14,5 +14,5 @@ changes:
 - rscadd: Poison Wine is now a premium item at the Boozeomat instead of a product of Telriis.
 - rscadd: Added a new sprite for harvested items missing sprites. You shouldn't ever have to see this, but at least it will be less confusing than the old sprite.
 - rscadd: Brawndo now has what plants crave. Pour it into a tray and watch all the alerts go away!
-- rscadd: New formula for Lemon Lime Soda: Lemon Juice + Lime Juice + Tonic
+- rscadd: New formula for Lemon Lime Soda, Lemon Juice + Lime Juice + Tonic
 - rscadd: There is a 30% chance that while attempting to buy Starkist (an orange-flavored soda) that you will instead receive Lemon Lime. It's a conspiracy.

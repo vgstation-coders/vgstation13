@@ -4275,7 +4275,7 @@
 		spark_system.set_up(5, 0, M)
 		spark_system.attach(M)
 		spark_system.start()
-	else if(isrobot(M))
+	else if(issilicon(M))
 		M.Jitter(4)
 		M.Dizzy(4)
 		M.druggy = max(M.druggy, 60)
