@@ -4335,9 +4335,9 @@
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_MOB)
 			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
 			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
-			if(!H.put_in_hands(S)) //For quickswap, it needs to be in a hand for some reason. But...
-				H.uniform.forceMove(get_turf(H)) //If both hands are occupied, we have another solution: just drop the current suit (empties ID and pockets)
-				H.uniform.unequipped()
+			if(!H.put_in_hands(S) && H.w_uniform) //For quickswap, it needs to be in a hand for some reason. But...
+				H.w_uniform.forceMove(get_turf(H)) //If both hands are occupied, we have another solution: just drop the current suit (empties ID and pockets)
+				H.w_uniform.unequipped()
 			H.equip_to_slot_if_possible(S, slot_w_uniform, 1, 1, 1) //This is the safe quickswap proc.
 			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
 	M.regenerate_icons()
