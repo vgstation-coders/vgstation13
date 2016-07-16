@@ -1226,7 +1226,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "showroom"
 
 /area/assembly/assembly_line //Derelict Assembly Line
-	name = "\improper Shop"
+	name = "\improper Assembly Line"
 	icon_state = "ass_line"
 	power_equip = 0
 	power_light = 0
