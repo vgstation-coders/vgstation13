@@ -82,7 +82,7 @@
 	if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
 		return
 
-	if(locked_atoms.len)
+	for(var/mob/living/L in get_locked(lock_type))
 		to_chat(user, "<span class='warning'>Somebody else is already buckled into \the [src]!</span>")
 		return
 
