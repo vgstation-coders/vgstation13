@@ -7,7 +7,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice
 	name = "cockatrice"
-	desc = "A bizarre creature that looks like a tiny chicken with a snake's tail and a long, sharp beak. It uses a powerful venom to turn anybody bit or touched by it into stone. Thankfully, it's relatively docile until something provokes it."
+	desc = "A bizarre creature that looks like a tiny chicken with a snake's tail and a long, sharp beak. Any living being that touches it immediately turns into solid stone. Thankfully, it's relatively docile until something provokes it."
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "cockatrice"
@@ -47,7 +47,7 @@
 
 	if(!isDead() && prob(80))
 		var/msg = pick("\The [src] hisses!", "\The [src] hisses angrily!")
-		visible_message("<span class='danger'>[msg]</span>", "<span class='info'>You feel \the [L] touch your body.</span>", "<span class='notice'>You hear an angry hiss.</span>")
+		visible_message("<span class='danger'>[msg]</span>", "<span class='notice'>\The [L] touches you!</span>", "<span class='notice'>You hear an angry hiss.</span>")
 
 	to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
 	L.turn_into_statue(1) //Statue forever
@@ -61,6 +61,10 @@
 		var/body_part_to_check = HAND_LEFT
 		if(H.active_hand == GRASP_RIGHT_HAND) //No better way to do it!
 			body_part_to_check = HAND_RIGHT
+
+		var/datum/organ/external/OE = H.find_organ_by_grasp_index(H.active_hand)
+		if(!OE.is_organic()) //Touching with a peg/robohand is fine!
+			return
 
 		if(!H.check_body_part_coverage(body_part_to_check))
 			sting(H)
@@ -119,19 +123,27 @@
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Cross(mob/living/L)
 	.=..()
 
-	if(!istype(L))
-		return
+	movement_touch_check(L)
 
-	if(check_sting(L, FEET) || (!isDead() && check_sting(L, LEGS))) //Check leg coverage only if the chicken is alive (as it can brush against our legs)
-		sting(L)
+/mob/living/simple_animal/hostile/retaliate/cockatrice/Move()
+	.=..()
+
+	for(var/mob/living/L in loc)
+		movement_touch_check(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Bump(mob/living/L)
 	.=..()
 
+	movement_touch_check(L)
+
+/mob/living/simple_animal/hostile/retaliate/cockatrice/proc/movement_touch_check(mob/living/L)
 	if(!istype(L))
 		return
 
-	if(check_sting(L, FEET) || (!isDead() && check_sting(L, LEGS))) //Check leg coverage only if the chicken is alive (as it can brush against our legs)
+	if(L.lying) //If the chicken steps onto a lying body, check if it's covered completely. If it's not lying, only check feet/legs
+		if(check_sting(L, FULL_BODY))
+			sting(L)
+	else if(check_sting(L, FEET) || (!isDead() && check_sting(L, LEGS))) //Check leg coverage only if the chicken is alive (as it can brush against our legs)
 		sting(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/UnarmedAttack(A)

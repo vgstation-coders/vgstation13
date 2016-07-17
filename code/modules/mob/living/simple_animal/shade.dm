@@ -26,9 +26,10 @@
 	status_flags = 0
 	faction = "cult"
 	status_flags = CANPUSH
-	supernatural = 1
+
 	flying = 1
 	meat_type = /obj/item/weapon/ectoplasm
+	mob_species_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/shade/gib()
 	death(1)

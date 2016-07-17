@@ -36,6 +36,8 @@
 	flying = 1
 	meat_type = 0
 
+	mob_species_flags = MOB_SWARM
+
 	var/max_hive_dist=5
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_parent)

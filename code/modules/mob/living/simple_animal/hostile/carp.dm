@@ -191,6 +191,11 @@
 	pheromones_act = PHEROMONES_NO_EFFECT
 	holder_type = null
 
+	mob_species_flags = MOB_HOLOGRAPHIC
+
+/mob/living/simple_animal/hostile/carp/holocarp/turn_into_statue(forever, force)
+	return
+
 /mob/living/simple_animal/hostile/carp/holocarp/Die()
 	qdel(src)
 	return

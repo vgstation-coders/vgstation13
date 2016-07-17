@@ -17,6 +17,7 @@
 	response_harm   = "slaps"
 
 	meat_type = null
+	mob_species_flags = MOB_CONSTRUCT
 
 /mob/living/simple_animal/puddi/happy
 	icon_state = "livingpuddi-happy"

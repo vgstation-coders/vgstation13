@@ -74,9 +74,15 @@ emp_act
 	if(!body_part_flags)
 		return 0
 	for(var/obj/item/clothing/C in get_clothing_items())
-		if(!C) continue
-		if(C.body_parts_covered & body_part_flags)
+		if(!C || !C.body_parts_covered) continue
+
+		//Subtract every clothing item's coverage until nothing is left
+		//If anything remains, the specified body parts aren't covered
+		body_part_flags &= ~C.body_parts_covered
+		if(!body_part_flags)
 			return 1
+		//if(C.body_parts_covered & body_part_flags)
+		//	return 1
 	return 0
 
 /mob/living/carbon/human/proc/get_body_part_coverage(var/body_part_flags=0)

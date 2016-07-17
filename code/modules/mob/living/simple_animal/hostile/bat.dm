@@ -37,6 +37,7 @@
 
 	environment_smash = 1
 	size = SIZE_TINY
+	mob_species_flags = MOB_SWARM
 
 	faction = "scarybat"
 	var/mob/living/owner
@@ -77,7 +78,7 @@
 	var/shuttletarget = null
 	var/enroute = 0
 
-	supernatural = 1
+	mob_species_flags = MOB_SWARM|MOB_SUPERNATURAL
 
 /mob/living/simple_animal/hostile/scarybat/cult/CanAttack(var/atom/the_target)
 	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS

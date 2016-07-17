@@ -1,5 +1,7 @@
 /mob/living/simple_animal/hostile/necro
 	var/mob/creator
+	mob_species_flags = MOB_UNDEAD
+
 /mob/living/simple_animal/hostile/necro/skeleton
 	name = "skeleton"
 	desc = "Truly the ride never ends."

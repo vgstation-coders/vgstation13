@@ -10,7 +10,7 @@
 	var/intialFire = 0	//it's a little sloppy I know but it was this or the GODMODE flag. Lesser of two evils.
 	var/intialBrute = 0
 	var/intialOxy = 0
-	var/timer = 80 // time in seconds = 2.5(timer) - 50, this makes 150 seconds = 2.5m
+	var/timer = 80 // time in seconds = 2.5(timer) - 50, this makes 150 seconds = 2.5m. Set to -1 to make the statue last forever
 
 /obj/structure/closet/statue/eternal
 	timer = -1 //forever
@@ -28,6 +28,8 @@
 		for(var/obj/item/I in L.held_items)
 			L.drop_item(I)
 
+		if(L.locked_to)
+			L.unlock_from()
 		L.forceMove(src)
 		L.sdisabilities |= MUTE
 		L.delayNextAttack(timer)
@@ -50,6 +52,17 @@
 			desc = "If it takes forever, I will wait for you..."
 		else
 			name = "statue of [L.name]"
+
+		density = L.density
+
+		//Monsters with animated icons look bad as statues!
+		var/icon/static_icon = icon(L.icon)
+		var/icon/original = icon(L.icon, L.icon_state, frame = 1)
+		var/new_iconstate = "[L.icon_state]\ref[L]" //to avoid conflict with other icon states eh
+		static_icon.Insert(original, new_iconstate)
+
+		icon = static_icon
+		icon_state = new_iconstate
 
 		animate(src, color = grayscale, 30)
 

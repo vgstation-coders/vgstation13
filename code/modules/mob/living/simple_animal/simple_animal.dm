@@ -80,7 +80,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/can_breed = 0
 
 	//Null rod stuff
-	var/supernatural = 0
 	var/purge = 0
 
 	//For those that we want to just pop back up a little while after they're killed
@@ -522,7 +521,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
-			if(supernatural && istype(O,/obj/item/weapon/nullrod))
+			if((mob_species_flags & MOB_SUPERNATURAL) && istype(O,/obj/item/weapon/nullrod))
 				damage *= 2
 				purge = 3
 			adjustBruteLoss(damage)
@@ -728,10 +727,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	switch(id)
 		if(SACID)
-			if(!supernatural)
+			if(!(mob_species_flags & MOB_SUPERNATURAL))
 				adjustBruteLoss(volume * 0.5)
 		if(PACID)
-			if(!supernatural)
+			if(!(mob_species_flags & MOB_SUPERNATURAL))
 				adjustBruteLoss(volume * 0.5)
 
 /mob/living/simple_animal/proc/delayedRegen()

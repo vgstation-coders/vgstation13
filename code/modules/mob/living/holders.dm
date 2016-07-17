@@ -188,6 +188,12 @@
 	if(!istype(C))
 		return
 
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		var/datum/organ/external/OE = H.find_organ_by_grasp_index(L.held_items.Find(src))
+		if(!OE.is_organic()) //Touching with a peg/robohand is fine!
+			return
+
 	if(C.check_sting(L, HANDS))
 		return C.sting(L)
 
@@ -221,4 +227,18 @@
 		return
 
 	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob
+	if(!istype(C))
+		return
+
 	C.sting(victim)
+
+/obj/item/weapon/holder/animal/cockatrice/throw_impact(mob/living/hit_atom)
+	..()
+
+	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob
+	if(!istype(C))
+		return
+	if(!C.check_sting(hit_atom, FULL_BODY))
+		return
+
+	C.sting(hit_atom)

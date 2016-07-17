@@ -554,6 +554,8 @@ proc/move_mining_shuttle()
 	wanted_objects = list(/obj/item/weapon/ore)
 	meat_type = null
 
+	mob_species_flags = MOB_ROBOTIC
+
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
@@ -646,6 +648,11 @@ proc/move_mining_shuttle()
 	if(search_objects)
 		SetOffenseBehavior()
 	..()
+
+/mob/living/simple_animal/hostile/mining_drone/turn_into_statue(forever, force)
+	if(!force)
+		return
+	.=..()
 
 /**********************Lazarus Injector**********************/
 

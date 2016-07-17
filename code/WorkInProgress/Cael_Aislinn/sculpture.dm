@@ -14,6 +14,9 @@
 	response_harm   = "hits the"
 	meat_type = null
 	see_in_dark = 8 //Needs to see in darkness to snap in darkness
+
+	mob_species_flags = MOB_CONSTRUCT
+
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"
 	var/snap_sound = list('sound/scp/firstpersonsnap.ogg','sound/scp/firstpersonsnap2.ogg','sound/scp/firstpersonsnap3.ogg')
