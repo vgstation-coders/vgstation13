@@ -28,9 +28,11 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	var/list/obj/item/device/assembly/values = list() //List of constants (numbers) or variables (assemblies). All assemblies in this list have a string associated with them, which tells this circuit which of the assembly's values to use
 	var/operation = "ADD"
 
+	//Allow devices to read this circiut's result. First parameter (variable name, which is "null" here) isn't important - the functions are overwritten
 	accessible_values = list("Result" = "null;number",\
-		"Operation" = "operation;text") //Allow devices to read this circiut's result. First parameter (variable name, which is "null" here) isn't important - the functions are overwritten
-
+		"Operation" = "operation;text",\
+		"Variables" = "null;text")
+	//"Variables": Export data about variables to text, in this format: "1&2&a1+Remaining Time&a2+Remaining Time&55", divided by ampersands. Numbers like 1, 2 are constant numbers. a1+[whatever], a2+[whatever] are pointers to assemblies
 
 /obj/item/device/assembly/math/interact(mob/user as mob)
 	var/dat = ""
@@ -171,100 +173,153 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 /obj/item/device/assembly/math/get_value(value)
 	if(!values.len) return 0
 
-	if(value != "Result")
+	if(value != "Result" && value != "Variables")
 		return ..(value)
 
-	if(values.len == 1)
-		var/obj/item/device/assembly/a = values[1]
-		return VALUE(a)
-
-	switch(operation)
-		if("AVERAGE")
-			. = 0
-
-			for(var/number in values) //Add all values in the list together
-				var/obj/item/device/assembly/a = number
-				. += VALUE(a)
-
-			. = . / values.len //Divide the resulting value by the length of the list
-		if("MIN") //Return minimum value
-			var/list/L = list()
-			for(var/number in values)
-				var/obj/item/device/assembly/a = number
-				L += VALUE(a)
-
-			. = min(L)
-		if("MAX") //Return maximum value
-			var/list/L = list()
-			for(var/number in values)
-				var/obj/item/device/assembly/a = number
-				L += VALUE(a)
-
-			. = max(L)
-
-		if("COS")
+	if(value == "Result")
+		if(values.len == 1)
 			var/obj/item/device/assembly/a = values[1]
-			. = cos(VALUE(a))
-		if("SIN")
-			var/obj/item/device/assembly/a = values[1]
-			. = sin(VALUE(a))
-		if("TG")
-			var/obj/item/device/assembly/a = values[1]
+			return VALUE(a)
 
-			if(cos(VALUE(a)) == 0) return 0 //Avoid division by 0
+		switch(operation)
+			if("AVERAGE")
+				. = 0
 
-			. = sin(VALUE(a)) / cos(VALUE(a))
-		if("COTG")
-			var/obj/item/device/assembly/a = values[1]
+				for(var/number in values) //Add all values in the list together
+					var/obj/item/device/assembly/a = number
+					. += VALUE(a)
 
-			if(sin(VALUE(a)) == 0) return 0 //Avoid division by 0
+				. = . / values.len //Divide the resulting value by the length of the list
+			if("MIN") //Return minimum value
+				var/list/L = list()
+				for(var/number in values)
+					var/obj/item/device/assembly/a = number
+					L += VALUE(a)
 
-			. = cos(VALUE(a)) / sin(VALUE(a))
-		if("ACOS")
-			var/obj/item/device/assembly/a = values[1]
-			. = arccos(VALUE(a))
-		if("ASIN")
-			var/obj/item/device/assembly/a = values[1]
-			. = arcsin(VALUE(a))
+				. = min(L)
+			if("MAX") //Return maximum value
+				var/list/L = list()
+				for(var/number in values)
+					var/obj/item/device/assembly/a = number
+					L += VALUE(a)
 
-		else
+				. = max(L)
 
-			var/obj/item/device/assembly/a = values[1]
-			. = VALUE(a)
+			if("COS")
+				var/obj/item/device/assembly/a = values[1]
+				. = cos(VALUE(a))
+			if("SIN")
+				var/obj/item/device/assembly/a = values[1]
+				. = sin(VALUE(a))
+			if("TG")
+				var/obj/item/device/assembly/a = values[1]
 
-			for(var/i = 2 to values.len)
-				var/number = values[i]
+				if(cos(VALUE(a)) == 0) return 0 //Avoid division by 0
 
-				if(istype(number, /obj/item/device/assembly))
-					var/obj/item/device/assembly/A = number
+				. = sin(VALUE(a)) / cos(VALUE(a))
+			if("COTG")
+				var/obj/item/device/assembly/a = values[1]
 
-					number = A.get_value(values[A])
+				if(sin(VALUE(a)) == 0) return 0 //Avoid division by 0
 
-				switch(operation)
-					if("ADD")
-						. += number
-					if("SUBTRACT")
-						. -= number
-					if("MULTIPLY")
-						. *= number
-					if("DIVIDE")
-						if(number == 0) return 0
+				. = cos(VALUE(a)) / sin(VALUE(a))
+			if("ACOS")
+				var/obj/item/device/assembly/a = values[1]
+				. = arccos(VALUE(a))
+			if("ASIN")
+				var/obj/item/device/assembly/a = values[1]
+				. = arcsin(VALUE(a))
 
-						. /= number
-					if("POWER")
-						if(. < 0)
-							if(number != round(number)) //No fractions in the exponent if value is negative
-								return 0
+			else
 
-						. = . ** number
-					if("MOD")
-						. %= number
+				var/obj/item/device/assembly/a = values[1]
+				. = VALUE(a)
 
-	. = round(. , 0.00001) //Round to 5 decimal places (prevent shit like cos(90) = 6.12323e-017)
+				for(var/i = 2 to values.len)
+					var/number = values[i]
+
+					if(istype(number, /obj/item/device/assembly))
+						var/obj/item/device/assembly/A = number
+
+						number = A.get_value(values[A])
+
+					switch(operation)
+						if("ADD")
+							. += number
+						if("SUBTRACT")
+							. -= number
+						if("MULTIPLY")
+							. *= number
+						if("DIVIDE")
+							if(number == 0) return 0
+
+							. /= number
+						if("POWER")
+							if(. < 0)
+								if(number != round(number)) //No fractions in the exponent if value is negative
+									return 0
+
+							. = . ** number
+						if("MOD")
+							. %= number
+
+		. = round(. , 0.00001) //Round to 5 decimal places (prevent shit like cos(90) = 6.12323e-017)
+
+	else if(value == "Variables")
+		//EXPORT all nomials in a single string
+		//Example: list(1, 4, [TIMER WITH INDEX 5], [ADDITION CIRCUIT WITH INDEX 99], 15) turns into "1&4&a5&a99&15"
+		//All nomials are separated by &
+		//Numbers are written normally
+		//Assemblies are written as "a[i]+[v]", where [i] is the assembly's index in the assembly frame and [v] is the reading value (for example "Remaining time"
+
+		var/exported_string = ""
+		var/obj/item/device/assembly_frame/AF = loc
+		if(!istype(AF))
+			return 0
+
+		for(var/A in values)
+			if(isnum(A))
+				exported_string += "[A]&"
+			else
+				exported_string += "a[AF.assemblies.Find(A)]+[values[A]]&"
+
+		//Remove the last ampersand
+		exported_string = copytext(exported_string, 1, length(exported_string))
+
+		return exported_string
 
 /obj/item/device/assembly/math/write_to_value(value, new_value)
 	if(value == "Result") //Can't write to result
 		return
+	else if(value == "Variables") //Importing variables
+		var/obj/item/device/assembly_frame/AF = loc
+		if(!istype(AF))
+			return 0
+
+		var/list/raw_data = params2list(new_value)
+		var/list/new_value_list = list()
+		if(!raw_data.len)
+			return
+
+		for(var/A in raw_data)
+			if(copytext(A, 1, 2) == "a") //First letter is a - this indicates a pointer
+				var/read_value = copytext(A, findtext(A, "+") + 1) //Everything after the + sign is the read value
+				var/index_data = replacetext(A, "+[read_value]", "") //Cut the read value and the plus sign off, leaving just "a[i]"
+
+				var/assembly_index = text2num(replacetext(index_data, "a", ""))
+				if(!assembly_index || (AF.assemblies.len < assembly_index))
+					continue
+
+				var/obj/item/device/assembly/found = AF.assemblies[assembly_index]
+				if(istype(found))
+					new_value_list[found] = read_value
+			else
+				new_value_list.Add(text2num(A))
+
+		values = new_value_list
+
+		return
+
 	else if(value == "Operation") //Modifying operation
 		new_value = uppertext(new_value)
 

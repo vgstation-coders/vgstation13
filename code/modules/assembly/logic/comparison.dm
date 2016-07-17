@@ -33,7 +33,13 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	var/list/device_pool = list() //List of all connected devices
 
-	accessible_values = list("Operation" = "check_type;text")
+	accessible_values = list("Operation" = "check_type;text",\
+		"Checked Value 1" = "checked_value_1;text",\
+		"Checked Value 2" = "checked_value_2;text",\
+		"Device 1" = "check_this;pointer",\
+		"Device 2" = "check_against;pointer",\
+		"Pulse if true" = "pulse_if_true;pointer",\
+		"Pulse if false" = "pulse_if_false;pointer")
 
 /obj/item/device/assembly/comparison/activate()
 	if(!..()) return 0
@@ -138,6 +144,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			if(..()) return
 
 			check_this = new_num
+			checked_value_1 = null
 
 			to_chat(usr, "<span class='info'>Value #1 set to be [check_this]</span>")
 		else if(choice == "Constant string")
@@ -147,6 +154,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			if(..()) return
 
 			check_this = new_txt
+			checked_value_1 = null
 
 			to_chat(usr, "<span class='info'>Value #1 set to be \"[check_this]\"</span>")
 		else //Selected an assembly - ask the user to select a value
@@ -194,6 +202,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			if(..()) return
 
 			check_against = new_num
+			checked_value_2 = null
 
 			to_chat(usr, "<span class='info'>Value #2 set to be [check_against]</span>")
 		else if(choice == "Constant string")
@@ -203,6 +212,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			if(..()) return
 
 			check_against = new_txt
+			checked_value_2 = null
 
 			to_chat(usr, "<span class='info'>Value #2 set to be \"[check_against]\"</span>")
 		else //Selected an assembly - ask the user to select a value
@@ -269,6 +279,22 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	if(usr)
 		attack_self(usr)
+
+/obj/item/device/assembly/comparison/write_to_value(value, new_value)
+	switch(value)
+		//Shitcode warning
+		//Special cases for Device 1 and Device 2 variables - they can work both as numbers and as pointers. Turn them into numbers if there's no accessed value data for them
+		if("Device 1")
+			if(!checked_value_1 && isnum(new_value))
+				set_value("check_this", new_value)
+				return
+
+		if("Device 2")
+			if(!checked_value_2 && isnum(new_value))
+				set_value("check_against", new_value)
+				return
+
+	return ..()
 
 /obj/item/device/assembly/comparison/set_value(var_name, new_value)
 	if(var_name == "check_type")

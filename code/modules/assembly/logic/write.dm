@@ -2,6 +2,12 @@
 // * Can be connected to two assemblies - READ and WRITE
 // * Two stored values: stored_num and stored_txt. One stores a number, the other one text.
 //
+// * Two additional accessible values: Read Index and Write Index. They contain the index of READ/WRITE assemblies in the assembly frame. For example,
+//   if the circuit is reading value of a timer at index 1, Read Index will equal to 1. Changing the value of Read Index will cause the circuit to attempt to connect
+//   to the assembly at that index.
+// * Two additional accessible values: Read Value and Write Value. They contain data about the values read from the READ/WRITE assemblies (for example, if you're writing to a timer's
+//   remaining time, Write Value will contain "Remaining time".
+//
 // * When pulsed, read READ's value and store it. Write the stored value to WRITE
 // * READ's value converted to number is written to stored_num, READ's value converted to text is written to stored_txt
 
@@ -24,7 +30,11 @@
 	var/stored_txt = "NULL"
 
 	accessible_values = list("Stored number" = "stored_num;number",\
-		"Stored string" = "stored_txt;text")
+		"Stored string" = "stored_txt;text",\
+		"Read Index" = "READ;pointer",\
+		"Read Value" = "READ_value;text",\
+		"Write Index" = "WRITE;pointer",\
+		"Write Value" = "WRITE_value;text")
 
 	var/obj/item/device/assembly/READ = null
 	var/READ_value = ""
@@ -52,7 +62,7 @@
 		switch(W_params[VALUE_VARIABLE_TYPE])
 			if("text")
 				WRITE.write_to_value(WRITE_value, stored_txt)
-			if("number")
+			if("number", "pointer")
 				WRITE.write_to_value(WRITE_value, stored_num)
 
 /obj/item/device/assembly/read_write/interact(mob/user)
@@ -144,5 +154,66 @@
 
 	//Remove all references and make the disconnected assembly unavailable
 	device_pool.Remove(A)
-	if(READ == A) READ = null
-	if(WRITE == A) WRITE = null
+	if(READ == A)
+		READ = null
+		//READ_value = ""
+
+	if(WRITE == A)
+		WRITE = null
+		//WRITE_value = ""
+
+/*
+/obj/item/device/assembly/read_write/get_value(value)
+	if(value == "Read Index")
+		return get_device_index(READ)
+	else if(value == "Write Index")
+		return get_device_index(WRITE)
+
+	return ..()
+
+/obj/item/device/assembly/read_write/write_to_value(value, new_value)
+	var/obj/item/device/assembly_frame/AF = loc
+	var/obj/item/device/assembly/A
+
+	if(!istype(AF))
+		return "bad location"
+
+	if((value == "Read Index") || (value == "Write Index"))
+		A = get_device_by_index(new_value)
+	else
+		return ..()
+
+	if(A == src)
+		return "can't connect to itself"//Can't connect to itself
+	if(!istype(A))
+		return "not an assembly" //Connect to assemblies only
+
+	switch(value)
+		if("Read Index")
+			AF.disconnect_assembly_from(src, READ)
+			AF.start_new_connection(src, A)
+			src.READ = A
+		if("Write Index")
+			AF.disconnect_assembly_from(src, WRITE)
+			AF.start_new_connection(src, A)
+			src.WRITE = A
+*/
+
+//Helper proc for finding a device's index
+/obj/item/device/assembly/read_write/proc/get_device_index(obj/item/device/assembly/A)
+	var/obj/item/device/assembly_frame/AF = loc
+	if(!istype(AF))
+		return 0
+
+	return AF.assemblies.Find(A)
+
+//Helper proc for finding a device at a certain index
+/obj/item/device/assembly/read_write/proc/get_device_by_index(index)
+	var/obj/item/device/assembly_frame/AF = loc
+	if(!istype(AF))
+		return "not in assembly frame"
+
+	if(AF.assemblies.len < index)
+		return null
+
+	return AF.assemblies[index]
