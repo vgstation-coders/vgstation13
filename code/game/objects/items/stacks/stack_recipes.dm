@@ -84,8 +84,8 @@ var/global/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe/conveyor_frame("conveyor frame", /obj/machinery/conveyor_assembly,   5, time = 25, one_per_turf = 1, on_floor = 1),
 	null,
 	new/datum/stack_recipe_list("chairs and beds",list(
-		new/datum/stack_recipe/chair("dark office chair",  /obj/structure/bed/chair/office/dark,  2, one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe/chair("light office chair", /obj/structure/bed/chair/office/light, 2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("dark office chair",  /obj/structure/bed/chair/office/dark,  1, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("light office chair", /obj/structure/bed/chair/office/light, 1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("beige comfy chair",  /obj/structure/bed/chair/comfy/beige,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("black comfy chair",  /obj/structure/bed/chair/comfy/black,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("brown comfy chair",  /obj/structure/bed/chair/comfy/brown,  1, one_per_turf = 1, on_floor = 1),

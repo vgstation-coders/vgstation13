@@ -180,7 +180,7 @@
 
 /obj/structure/bed/chair/office
 	icon_state = "officechair_white"
-	sheet_amt = 2
+	sheet_amt = 1
 
 	anchored = 0
 
