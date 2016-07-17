@@ -341,10 +341,10 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 		var/parameters = A.accessible_values[test_value] //First, grab their parameters
 
 		if(parameters)
-			var/list/L = params2list(parameters) //Turn them into a list and check the second value (the one that determines whether the value is number or text).
+			var/list/L = params2list(parameters)
 
-			if(L[VALUE_VARIABLE_TYPE] == "number")
-				values[A] = test_value //Finally, if the added assembly HAS a numeric value that we can use, add the assembly to the list (and use the found numeric value)
+			if(VALUE_IS_NUMBER(L))
+				values[A] = test_value //Finally, if the added assembly HAS a numeric (number/pointer) value that we can use, add the assembly to the list (and use the found numeric value)
 				return
 
 

@@ -280,8 +280,8 @@
 					if(last_span)
 						assembly_data = copytext(assembly_data, last_span + 1) //Cut it off
 
-				var/scan_for_nearby_parts = 0
-				#warning OVERPOWERED ASSEMBLY FRAMES ENABLED SHUT IT DOWN
+				var/scan_for_nearby_parts = 1
+				//#warning OVERPOWERED ASSEMBLY FRAMES ENABLED SHUT IT DOWN
 				switch(from_text(assembly_data, scan_for_nearby_parts, used_parts))
 					if(1)
 						to_chat(user, "<span class='info'>Configuration imported successfully.</span>")
