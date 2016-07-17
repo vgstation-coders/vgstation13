@@ -145,10 +145,13 @@
 
 /mob/living/carbon/monkey/movement_delay()
 	var/tally = 0
-	if(reagents)
-		if(reagents.has_reagent(HYPERZINE)) return -1
 
-		if(reagents.has_reagent(NUKA_COLA)) return -1
+	if(reagents)
+		if(reagents.has_reagent(HYPERZINE))
+			return -1
+
+		if(reagents.has_reagent(NUKA_COLA))
+			return -1
 
 	var/health_deficiency = (100 - health)
 	if(health_deficiency >= 45) tally += (health_deficiency / 25)
@@ -156,11 +159,12 @@
 	if (bodytemperature < 283.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
 
-	if(istype(loc,/turf/simulated/floor))
-		var/turf/simulated/floor/T = loc
+	var/turf/T = loc
+	if(istype(T))
+		tally = T.adjust_slowdown(src, tally)
 
-		if(T.material=="phazon")
-			return -1 // Phazon floors make us go fast
+		if(tally == -1)
+			return tally
 
 	return tally+config.monkey_delay
 
@@ -207,7 +211,7 @@
 /mob/living/carbon/monkey/getarmor(var/def_zone, var/type)
 
 	var/armorscore = 0
-	if((def_zone == "head") || (def_zone == "eyes") || (def_zone == "head"))
+	if((def_zone == LIMB_HEAD) || (def_zone == "eyes") || (def_zone == LIMB_HEAD))
 		if(hat)
 			armorscore = hat.armor[type]
 	else

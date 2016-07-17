@@ -332,7 +332,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			return "[emote], [text]"
 	return "says, [text]";
 
-/mob/living/simple_animal/emote(var/act, var/type, var/desc)
+/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto)
 	if(timestopped) return //under effects of time magick
 	if(stat)
 		return
@@ -544,11 +544,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			tally = 1
 		tally *= purge
 
-	if(istype(loc,/turf/simulated/floor))
-		var/turf/simulated/floor/T = loc
+	var/turf/T = loc
+	if(istype(T))
+		tally = T.adjust_slowdown(src, tally)
 
-		if(T.material=="phazon")
-			return -1 // Phazon floors make us go fast
+		if(tally == -1)
+			return tally
 
 	return tally+config.animal_delay
 

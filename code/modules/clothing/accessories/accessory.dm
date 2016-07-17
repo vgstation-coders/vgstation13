@@ -7,49 +7,56 @@
 /obj/item/clothing/accessory
 	name = "tie"
 	desc = "A neosilk clip-on tie."
-	icon = 'icons/obj/clothing/ties.dmi'
+	icon = 'icons/obj/clothing/accessories.dmi'
 	icon_state = "bluetie"
-	item_state = ""	//no inhands
+	item_state = ""	//no inhands by default
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_accessories.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_accessories.dmi')
 	_color = "bluetie"
 	flags = FPRINT
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
 	var/accessory_exclusion = DECORATION
-	var/obj/item/clothing/under/has_suit = null
+	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
-
 
 /obj/item/clothing/accessory/New()
 	..()
-	inv_overlay = image("icon" = 'icons/obj/clothing/ties_overlay.dmi', "icon_state" = "[_color || icon_state]")
+	update_icon()
 
-/obj/item/clothing/accessory/proc/on_attached(obj/item/clothing/under/S, mob/user as mob)
-	if(!istype(S))
+/obj/item/clothing/accessory/update_icon()
+	if(attached_to)
+		attached_to.overlays -= inv_overlay
+	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	if(attached_to)
+		attached_to.overlays += inv_overlay
+		if(ishuman(attached_to.loc))
+			var/mob/living/carbon/human/H = attached_to.loc
+			H.update_inv_by_slot(attached_to.slot_flags)
+
+/obj/item/clothing/accessory/proc/can_attach_to(obj/item/clothing/C)
+	return istype(C, /obj/item/clothing/under) //By default, accessories can only be attached to jumpsuits
+
+/obj/item/clothing/accessory/proc/on_attached(obj/item/clothing/C)
+	if(!istype(C))
 		return
-	has_suit = S
-	if(user)
-		if(user.drop_item(src, has_suit))
-			to_chat(user, "<span class='notice'>You attach [src] to [has_suit].</span>")
-			add_fingerprint(user)
-	else
-		loc = has_suit
-	has_suit.overlays += inv_overlay
+	attached_to = C
+	attached_to.overlays += inv_overlay
 
 /obj/item/clothing/accessory/proc/on_removed(mob/user as mob)
-	if(!has_suit)
+	if(!attached_to)
 		return
-	has_suit.overlays -= inv_overlay
-	has_suit = null
+	attached_to.overlays -= inv_overlay
+	attached_to = null
 	forceMove(get_turf(user || src))
 	if(user)
 		user.put_in_hands(src)
 		add_fingerprint(user)
 
 /obj/item/clothing/accessory/proc/on_accessory_interact(mob/user, delayed = 0)
-	if(!has_suit)
+	if(!attached_to)
 		return
 	if(delayed)
-		has_suit.remove_accessory(user, src)
+		attached_to.remove_accessory(user, src)
 		attack_hand(user)
 		return 1
 	return -1
@@ -58,6 +65,38 @@
 	on_removed(null)
 	inv_overlay = null
 	return ..()
+
+//Defining this at item level to prevent CASTING HELL
+/obj/item/proc/generate_accessory_overlays()
+	return
+
+/obj/item/clothing/generate_accessory_overlays(var/obj/Overlays/O)
+	if(accessories.len)
+		for(var/obj/item/clothing/accessory/accessory in accessories)
+			O.overlays += image("icon" = 'icons/mob/clothing_accessories.dmi', "icon_state" = "[accessory._color || accessory.icon_state]")
+
+//Defining this at item level to prevent CASTING HELL
+/obj/item/proc/description_accessories()
+	return
+
+/obj/item/clothing/description_accessories()
+	if(accessories.len)
+		. = list()
+		for(var/obj/item/clothing/accessory/accessory in accessories)
+			. += "[bicon(accessory)] \a [accessory]"
+		return " It has [english_list(.)]."
+
+/obj/item/clothing/accessory/pinksquare
+	name = "pink square"
+	desc = "It's a pink square."
+	icon_state = "pinksquare"
+	_color = "pinksquare"
+/obj/item/clothing/accessory/pinksquare/can_attach_to(obj/item/clothing/C)
+	return 1
+
+/obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
+	if(istype(C))
+		return (C.body_parts_covered & UPPER_TORSO) //Sure why not
 
 /obj/item/clothing/accessory/tie/blue
 	name = "blue tie"
@@ -104,7 +143,7 @@
 				else
 					sound_strength = "hear a weak"
 					switch(body_part)
-						if("chest")
+						if(LIMB_CHEST)
 							if(M.oxyloss < 50)
 								sound_strength = "hear a healthy"
 							sound = "pulse and respiration"
@@ -125,6 +164,10 @@
 	desc = "A bronze medal."
 	icon_state = "bronze"
 	_color = "bronze"
+
+/obj/item/clothing/accessory/medal/can_attach_to(obj/item/clothing/C)
+	if(istype(C))
+		return (C.body_parts_covered & UPPER_TORSO) //Sure why not
 
 /obj/item/clothing/accessory/medal/conduct
 	name = "distinguished conduct medal"

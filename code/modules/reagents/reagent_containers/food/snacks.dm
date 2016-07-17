@@ -273,7 +273,7 @@
 			M.delayNextAttack(10)
 			var/mob/living/simple_animal/mouse/N = M
 			if(prob(25)) //We are noticed
-				N.visible_message("[N] nibbles away at \the [src].", "You nibble away at \the [src]")
+				N.visible_message("[N] nibbles away at \the [src].", "<span class='notice'>You nibble away at \the [src].</span>")
 			else
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
@@ -1635,7 +1635,7 @@
 		surprise.transform *= 0.6
 		surprise.add_blood(M)
 		var/mob/living/carbon/human/H = M
-		var/datum/organ/external/E = H.get_organ("chest")
+		var/datum/organ/external/E = H.get_organ(LIMB_CHEST)
 		E.fracture()
 		for (var/datum/organ/internal/I in E.internal_organs)
 			I.take_damage(rand(I.min_bruised_damage, I.min_broken_damage+1))
@@ -2118,9 +2118,9 @@
 		bitesize = 3
 */
 /obj/item/weapon/reagent_containers/food/snacks/mint
-	name = MINT
+	name = "mint"
 	desc = "It is only wafer thin."
-	icon_state = MINT
+	icon_state = "mint"
 	New()
 		..()
 		reagents.add_reagent(MINTTOXIN, 1)
@@ -4173,7 +4173,6 @@
 	bitesize = 3
 	New()
 		..()
-		reagents.clear_reagents()
 		reagents.add_reagent(NUTRIMENT, 4)
 		reagents.add_reagent(HOLYWATER, 2)
 
@@ -4184,7 +4183,6 @@
 	bitesize = 4
 	New()
 		..()
-		reagents.clear_reagents()
 		reagents.add_reagent(NUTRIMENT, 30)
 		reagents.add_reagent(HOLYWATER, 10)
 
@@ -4197,3 +4195,89 @@
 /obj/item/weapon/reagent_containers/food/snacks/frog_leg/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/welcomepie
+	name = "friendship pie"
+	desc = "Offered as a gesture of Vox goodwill." //"Goodwill"
+	icon_state = "welcomepie"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(SACID,6)
+		reagents.add_reagent(NUTRIMENT,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan
+	name = "zhu lóng cao fàn"
+	desc = "Literally meaning 'pitcher plant rice'. After carefully cleansing and steaming the pitcher plant, it is stuffed with steamed rice. The carnivorous plant is rich with minerals from fauna it has consumed."
+	icon_state = "zhulongcaofan"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,6)
+		reagents.add_reagent(IRON,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/bacon
+	name = "bacon strip"
+	desc = "A heavenly aroma surrounds this meat."
+	icon_state = "bacon"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/porktenderloin
+	name = "pork tenderloin"
+	desc = "Delicious, gravy-covered meat that will melt-in-your-beak. Or mouth."
+	icon_state = "zhulongcaofan"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,10) //Competitive with chicken buckets
+
+/obj/item/weapon/reagent_containers/food/snacks/hoboburger
+	name = "hoboburger"
+	desc = "A burger which uses a sack-shaped plant as a 'bun'. Any sufficiently poor Vox is indistinguishable from a hobo."
+	icon_state = "hoboburger"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,14) //Competitive with big bite burger
+
+/obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork
+	name = "sweet and sour pork"
+	desc = "Makes your insides burn with flavor! With this in your stomach, you won't want to stop moving any time soon."
+	icon_state = "sweetsourpork"
+	bitesize = 2
+	New()
+		..()
+		//3 nutriment inherited from the meat
+		reagents.add_reagent(LITHIUM,2) //Random movement for a short period
+		reagents.add_reagent(SYNAPTIZINE,1) //Stay on your feet, loads of toxins
+
+/obj/item/weapon/reagent_containers/food/snacks/reclaimed
+	name = "reclaimed nutrition cube"
+	desc = "This food represents a highly efficient use of station resources. The Corporate AI's favorite!"
+	icon_state = "monkeycubewrap"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/poachedaloe
+	name = "poached aloe"
+	desc = "Extremely oily and slippery gel contained inside aloe."
+	icon_state = "poachedaloe"
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/vanishingstew
+	name = "vapor stew"
+	desc = "Most stews vanish, but this one does so before you eat it."
+	icon_state = "vanishingstew"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,3)

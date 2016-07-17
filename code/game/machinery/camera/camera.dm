@@ -33,7 +33,7 @@ var/list/camera_names=list()
 
 	var/hear_voice = 0
 
-	var/vision_flags = SEE_SELF | SEE_PIXELS //Only applies when viewing the camera through a console. REMOVE SEE_PIXELS IF IT IS DEEMED TOO BUGGY TO WORK AND LUMMOX REFUSES TO FIX IT
+	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
 
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
@@ -483,4 +483,4 @@ var/list/camera_names=list()
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
-	H.apply_damage(rand(1,2), BRUTE, pick("r_leg", "l_leg", "r_foot", "l_foot"))
+	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))

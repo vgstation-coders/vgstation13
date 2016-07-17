@@ -347,7 +347,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
 	if(world.time>resethearers) sethearing()
-	for(var/mob/virtualhearer/hearer in viewers(src))
+	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
 		if(istype(hearer.attached, /mob))
 			var/mob/M = hearer.attached
 			if(M.see_invisible < invisibility || M == src)
@@ -1032,6 +1032,8 @@ var/list/slot_equipment_priority = list( \
 
 	if(usr != src)
 		to_chat(usr, "No.")
+		return
+
 	var/msg = input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",html_decode(flavor_text)) as message|null
 
 	if(msg != null)

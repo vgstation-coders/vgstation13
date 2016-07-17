@@ -174,17 +174,17 @@ var/global/list/whitelisted_species = list("Human")
 
 	//This is a basic humanoid limb setup.
 	H.organs = list()
-	H.organs_by_name["chest"] = new/datum/organ/external/chest()
-	H.organs_by_name["groin"] = new/datum/organ/external/groin(H.organs_by_name["chest"])
-	H.organs_by_name["head"] = new/datum/organ/external/head(H.organs_by_name["chest"])
-	H.organs_by_name["l_arm"] = new/datum/organ/external/l_arm(H.organs_by_name["chest"])
-	H.organs_by_name["r_arm"] = new/datum/organ/external/r_arm(H.organs_by_name["chest"])
-	H.organs_by_name["r_leg"] = new/datum/organ/external/r_leg(H.organs_by_name["groin"])
-	H.organs_by_name["l_leg"] = new/datum/organ/external/l_leg(H.organs_by_name["groin"])
-	H.organs_by_name["l_hand"] = new/datum/organ/external/l_hand(H.organs_by_name["l_arm"])
-	H.organs_by_name["r_hand"] = new/datum/organ/external/r_hand(H.organs_by_name["r_arm"])
-	H.organs_by_name["l_foot"] = new/datum/organ/external/l_foot(H.organs_by_name["l_leg"])
-	H.organs_by_name["r_foot"] = new/datum/organ/external/r_foot(H.organs_by_name["r_leg"])
+	H.organs_by_name[LIMB_CHEST] = new/datum/organ/external/chest()
+	H.organs_by_name[LIMB_GROIN] = new/datum/organ/external/groin(H.organs_by_name[LIMB_CHEST])
+	H.organs_by_name[LIMB_HEAD] = new/datum/organ/external/head(H.organs_by_name[LIMB_CHEST])
+	H.organs_by_name[LIMB_LEFT_ARM] = new/datum/organ/external/l_arm(H.organs_by_name[LIMB_CHEST])
+	H.organs_by_name[LIMB_RIGHT_ARM] = new/datum/organ/external/r_arm(H.organs_by_name[LIMB_CHEST])
+	H.organs_by_name[LIMB_RIGHT_LEG] = new/datum/organ/external/r_leg(H.organs_by_name[LIMB_GROIN])
+	H.organs_by_name[LIMB_LEFT_LEG] = new/datum/organ/external/l_leg(H.organs_by_name[LIMB_GROIN])
+	H.organs_by_name[LIMB_LEFT_HAND] = new/datum/organ/external/l_hand(H.organs_by_name[LIMB_LEFT_ARM])
+	H.organs_by_name[LIMB_RIGHT_HAND] = new/datum/organ/external/r_hand(H.organs_by_name[LIMB_RIGHT_ARM])
+	H.organs_by_name[LIMB_LEFT_FOOT] = new/datum/organ/external/l_foot(H.organs_by_name[LIMB_LEFT_LEG])
+	H.organs_by_name[LIMB_RIGHT_FOOT] = new/datum/organ/external/r_foot(H.organs_by_name[LIMB_RIGHT_LEG])
 
 	H.internal_organs = list()
 	for(var/organ in has_organ)
@@ -588,6 +588,15 @@ var/global/list/whitelisted_species = list("Human")
 		if("Chef")
 			suit=/obj/item/clothing/suit/space/vox/civ/chef
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
+		if("Botanist")
+			suit=/obj/item/clothing/suit/space/vox/civ/botanist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/botanist
+		if("Janitor")
+			suit=/obj/item/clothing/suit/space/vox/civ/janitor
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/janitor
+		if("Cargo Technician","Quartermaster")
+			suit=/obj/item/clothing/suit/space/vox/civ/cargo
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/cargo
 		if("Chaplain")
 			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
@@ -635,9 +644,9 @@ var/global/list/whitelisted_species = list("Human")
 			suit=/obj/item/clothing/suit/space/vox/civ/security
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
 
-		if("Clown","Mime")
-			tank_slot=null
-			tank_slot_name = "hand"
+//		if("Clown","Mime")
+//			tank_slot=null
+//			tank_slot_name = "hand"
 		if("Trader")
 			suit = /obj/item/clothing/suit/space/vox/pressure
 			helm = /obj/item/clothing/head/helmet/space/vox/pressure

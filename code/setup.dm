@@ -131,6 +131,7 @@ var/global/disable_vents     = 0
 
 //Reagents
 
+#define VAPORSALT			"vaporsalt"
 #define BUSTANUT 			"bustanut"
 #define ROGAN 			"rogan"
 #define SLIMEJELLY 			"slimejelly"
@@ -523,6 +524,9 @@ var/MAX_EXPLOSION_RANGE = 14
 //#define MAX_EXPLOSION_RANGE		14					// Defaults to 12 (was 8) -- TLE
 
 #define HUMAN_STRIP_DELAY 40 //takes 40ds = 4s to strip someone.
+#define HUMAN_REVERSESTRIP_DELAY 20
+#define MONKEY_STRIP_DELAY 40
+#define MONKEY_REVERSESTRIP_DELAY 5
 
 #define ALIEN_SELECT_AFK_BUFFER 1 // How many minutes that a person can be AFK before not being allowed to be an alien.
 #define ROLE_SELECT_AFK_BUFFER  1 // Default value.
@@ -743,6 +747,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_FAT         2
 #define DISABILITY_FLAG_EPILEPTIC   4
 #define DISABILITY_FLAG_DEAF        8
+#define DISABILITY_FLAG_BLIND       16
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -1804,3 +1809,5 @@ var/proccalls = 1
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
+
+#define BLOB_CORE_PROPORTION 20

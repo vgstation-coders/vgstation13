@@ -30,7 +30,7 @@
 			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new /obj/item/device/radio/headset/heads/hos(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/head_of_security(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/shoes/jackboots(H), slot_shoes)
+		H.equip_or_collect(new /obj/item/clothing/shoes/jackboots/knifeholster(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/heads/hos(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 //		H.equip_or_collect(new /obj/item/clothing/mask/gas(H), slot_wear_mask) //Grab one from the armory you donk
@@ -46,7 +46,7 @@
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
-		var/datum/organ/external/affected = H.get_organ("head")
+		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
 		L.part = affected
 		return 1
@@ -93,7 +93,7 @@
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
-		var/datum/organ/external/affected = H.get_organ("head")
+		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
 		L.part = affected
 		return 1
@@ -162,7 +162,7 @@
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
-		var/datum/organ/external/affected = H.get_organ("head")
+		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
 		L.part = affected
 		H.dna.SetSEState(SOBERBLOCK,1)
@@ -212,7 +212,7 @@
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
-		var/datum/organ/external/affected = H.get_organ("head")
+		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
 		affected.implants += L
 		L.part = affected
 		return 1

@@ -168,6 +168,8 @@
 		"Taser" = 'sound/weapons/Taser.ogg',
 		"Male scream" = "malescream",
 		"Female scream" = "femalescream",
+		"Male cough" = "malecough",
+		"Female cough" = "femalecough",
 		"Sad trombone" = 'sound/misc/sadtrombone.ogg',
 		"Awooga" = 'sound/effects/awooga.ogg',
 		"Bubbles" = 'sound/effects/bubbles.ogg',
@@ -247,6 +249,10 @@
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
+
+/obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
+	..()
+	attach_accessory(new /obj/item/clothing/accessory/holster/knife/boot/preloaded)
 
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
