@@ -10,6 +10,8 @@
 #define VT_TEXT "text" //Text values, for example "hello", "help"
 #define VT_POINTER "pointer" //Pointers to other assemblies - the value is dynamic. If the variable contains an assembly, returns the assembly's position in the assembly frame. Writing to them is possible
 
+#define MAX_TEXT_VALUE_LEN 200
+
 var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't give two different types of assembly the same short_name
 
 /obj/item/device/assembly
@@ -170,9 +172,11 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 				AF.start_new_connection(src, AS)
 
 		new_value = AS
-	else
+	else //Text
 		if(!istext(new_value))  //Attempted to write a non-string to a string var - convert the non-string into a string and continue
 			new_value = "[new_value]"
+
+		new_value = strip_html(new_value, MAX_TEXT_VALUE_LEN)
 
 	//text values can accept either numbers or text, so don't check for that
 
