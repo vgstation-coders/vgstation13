@@ -3,12 +3,12 @@
 #define VALUE_VARIABLE_MIN  3 //Minimum possible number value
 #define VALUE_VARIABLE_MAX  4 //Maximum possible number value
 
-#define VALUE_IS_NUMBER(value_parameters) (value_parameters[VALUE_VARIABLE_TYPE] == VT_NUMBER || value_parameters[VALUE_VARIABLE_TYPE] == VT_POINTER)
-#define VALUE_IS_POINTER(value_parameters)(value_parameters[VALUE_VARIABLE_TYPE] == VT_POINTER)
-
 #define VT_NUMBER "number" //Number values, for example 1, 4, -15
 #define VT_TEXT "text" //Text values, for example "hello", "help"
 #define VT_POINTER "pointer" //Pointers to other assemblies - the value is dynamic. If the variable contains an assembly, returns the assembly's position in the assembly frame. Writing to them is possible
+
+#define VALUE_IS_NUMBER(value_parameters) (value_parameters[VALUE_VARIABLE_TYPE] == VT_NUMBER || value_parameters[VALUE_VARIABLE_TYPE] == VT_POINTER)
+#define VALUE_IS_POINTER(value_parameters)(value_parameters[VALUE_VARIABLE_TYPE] == VT_POINTER)
 
 #define MAX_TEXT_VALUE_LEN 200
 
@@ -129,14 +129,14 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	if(var_to_change == "null")
 		return
 
-	if(L[VALUE_VARIABLE_TYPE] == "number")
+	if(L[VALUE_VARIABLE_TYPE] == VT_NUMBER)
 		if(!isnum(new_value)) //Attempted to write a non-number to a number var - abort!
 			return
 
 		if(L.len >= VALUE_VARIABLE_MAX)
 			new_value = Clamp(new_value, text2num(L[VALUE_VARIABLE_MIN]), text2num(L[VALUE_VARIABLE_MAX]))
 
-	else if(L[VALUE_VARIABLE_TYPE] == "pointer")
+	else if(L[VALUE_VARIABLE_TYPE] == VT_POINTER)
 		//When importing assembly frames, assemblies can't connect to stuff with a higher index (because it's not loaded yet)
 		//The sleep below ensures that pointers are handled after everything is loaded
 		sleep()
