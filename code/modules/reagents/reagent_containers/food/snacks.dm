@@ -4374,3 +4374,134 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/threebeanburrito
+	name = "three bean burrito"
+	desc = "Beans, beans a magical fruit."
+	icon_state = "danburrito"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/midnightsnack
+	name = "midnight snack"
+	desc = "Perfect for those occasions when engineering doesn't set up power."
+	icon_state = "midnightsnack"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+		set_light(2)
+
+/obj/item/weapon/reagent_containers/food/snacks/primordialsoup
+	name = "primordial soup"
+	desc = "From a soup just like this, a sentient race could one day emerge. Better eat it to be safe."
+	icon_state = "primordialsoup"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+
+/obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
+	name = "starry night salad"
+	desc = "Eating too much of this salad may cause you to want to cut off your own ear."
+	icon_state = "vanishingstew"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
+		reagents.add_reagent(INACUSIATE,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/fruitsalad
+	name = "fruit salad"
+	desc = "Popular among cargo technicians who break into fruit crates."
+	icon_state = "fruitsalad"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/vampiresdelight
+	name = "vampire's delight"
+	desc = "One, two, three, four, five. Five stars, ah ha ha ha!"
+	icon_state = "vampiresdelight"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/revenge
+	name = "revenge"
+	desc = "Best served cold."
+	icon_state = "revenge"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
+	name = "spicy cold noodles"
+	desc = "A noodle dish in the style popular in Space China."
+	icon_state = ""
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
+	name = "chinese cold salad"
+	desc = "A whirlwind of strong flavors, served chilled. Found its origins in the old Terran nation-state of China before the rise of Space China."
+	icon_state = "chinesecoldsalad"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(FROSTOIL,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken
+	name = "honey citrus chicken"
+	desc = "The strong, tangy flavor of the orange and soy sauce highlights the smooth, thick taste of the honey. This fusion dish is one of the highlights Terran cuisine."
+	icon_state = "honeycitruschicken"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(HONEY,4)
+		reagents.add_reagent(SUGAR,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/pimiento
+	name = "pimiento"
+	desc = "A vital component in the caviar of the South."
+	icon_state = "pimiento"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/confederatespirit
+	name = "confederate spirit"
+	desc = "Even in space, where a north/south orientation is meaningless, the South will rise again."
+	icon_state = "confederatespirit"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+
+/obj/item/weapon/reagent_containers/food/snacks/ultimatefishtaco
+	name = "ultimate fish taco"
+	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
+	icon_state = "ultimatefishtaco"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/poissoncru
+	name = "Poisson Cru"
+	desc = "The national dish of Tongo, a country that you had previously never heard about."
+	icon_state = "poissoncru"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
