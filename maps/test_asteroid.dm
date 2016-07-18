@@ -4,9 +4,9 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "test_box"
+	nameShort = "test_asteroid"
 	nameLong = "Test Station"
-	map_dir = "teststation_box"
+	map_dir = "teststation_asteroid"
 	tDomeX = 8
 	tDomeY = 8
 	tDomeZ = 1
@@ -15,4 +15,4 @@
 		)
 
 ////////////////////////////////////////////////////////////////
-#include "test_box.dmm"
+#include "test_asteroid.dmm"

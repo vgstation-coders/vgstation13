@@ -4,9 +4,9 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "test"
+	nameShort = "test_tiny"
 	nameLong = "Test Station"
-	map_dir = "teststation"
+	map_dir = "teststation_tiny"
 	tDomeX = 100
 	tDomeY = 100
 	tDomeZ = 1
@@ -15,4 +15,4 @@
 		)
 
 ////////////////////////////////////////////////////////////////
-#include "test_map.dmm"
+#include "test_tiny.dmm"
