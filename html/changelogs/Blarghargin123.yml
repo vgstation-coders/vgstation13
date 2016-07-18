@@ -33,4 +33,4 @@
 +# If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 +# SCREW ANY OF THIS UP AND IT WON'T WORK.
 +changes: 
-+- rscadd: "Added a new access type that you can get from the HoP called Shop. Now you can change the access requirement on the airlocks to your shop and know only the power gayming all access grabbing weenies can get in :D."
+  - rscadd: "Added a new access type that you can get from the HoP called Shop. Now you can change the access requirement on the airlocks to your shop and know only the power gayming all access grabbing weenies can get in :D."
