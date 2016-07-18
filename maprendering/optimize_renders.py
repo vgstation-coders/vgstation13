@@ -41,10 +41,14 @@ def main():
 
 def optimize(filename):
 	print(filename)
-	print("Reducing colour depth to 128 with Pillow.")
 	image = PIL.Image.open(filename)
-	image = image.quantize(128)
-	image.save(filename)
+	if image.getcolors(128) == None: # None will happen if the amount is greater than 128.
+		print("Reducing colour depth to 128 with Pillow.")
+		image = image.quantize(128)
+		image.save(filename)
+	else:
+		print("Colour depth already at or lower than 128 colours.")
+
 	print("Optimizing with optipng.")
 	subprocess.call([optipng, filename])
 
