@@ -12,7 +12,7 @@
 #define INVESTIGATE_DIR "data/investigate/"
 
 // Just in case
-#define AVAILABLE_INVESTIGATIONS list("hrefs","notes","ntsl","singulo","atmos")
+#define AVAILABLE_INVESTIGATIONS list("hrefs","notes","ntsl","singulo","atmos","chems")
 
 // Actual list of global controllers.
 var/global/list/investigations=list(
@@ -21,6 +21,7 @@ var/global/list/investigations=list(
 	"ntsl"    = new /datum/log_controller("ntsl"),
 	"singulo" = new /datum/log_controller("singulo"),
 	"atmos"   = null, //new /datum/log_controller("atmos",filename="data/logs/[date_string] atmos.htm", persist=TRUE),
+	"chems" = null // Set on world.New() with hrefs and atmos
 )
 
 // Handles appending shit to log.

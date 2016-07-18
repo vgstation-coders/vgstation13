@@ -354,9 +354,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 					var/created_volume = C.result_amount*multiplier
 					if(C.result)
-						feedback_add_details("chemical_reaction","[C.result]|[C.result_amount*multiplier]")
+						feedback_add_details("chemical_reaction","[created_volume][C.result]")
 						multiplier = max(multiplier, 1) //this shouldnt happen ...
-						add_reagent(C.result, C.result_amount*multiplier)
+						add_reagent(C.result, created_volume)
 						set_data(C.result, preserved_data)
 
 						//add secondary products
@@ -365,10 +365,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 					if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade))
 						my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
+						//Logging inside chem_grenade.dm, prime()
 					else if	(istype(my_atom, /mob/living/carbon/human))
 						my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
+						//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
 					else
 						my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
+						C.log_reaction(src, created_volume)
 
 					if(istype(my_atom, /obj/item/slime_extract))
 						var/obj/item/slime_extract/ME2 = my_atom
@@ -590,10 +593,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	var/list/stuff = list()
 	for(var/datum/reagent/A in reagent_list)
 		if(and_amount)
-			stuff += "[get_reagent_amount(A.id)]U of [A.id]"
+			stuff += "[get_reagent_amount(A.id)]u of [A.id]"
 		else
 			stuff += A.id
-	return english_list(stuff)
+	return english_list(stuff, "no reagents")
 
 /datum/reagents/proc/remove_all_type(var/reagent_type, var/amount, var/strict = 0, var/safety = 1) // Removes all reagent of X type. @strict set to 1 determines whether the childs of the type are included.
 	if(!isnum(amount)) return 1

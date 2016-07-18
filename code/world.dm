@@ -34,6 +34,7 @@ var/savefile/panicfile
 
 	investigations["hrefs"] = new /datum/log_controller("hrefs", filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
 	investigations["atmos"] = new /datum/log_controller("atmos", filename="data/logs/[date_string] atmos.htm", persist=TRUE)
+	investigations["chems"] = new /datum/log_controller("chems", filename="data/logs/[date_string] chemistry.htm", persist=TRUE)
 
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")

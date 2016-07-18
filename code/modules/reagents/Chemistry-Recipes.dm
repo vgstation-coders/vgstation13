@@ -32,11 +32,36 @@
 			log_game("[message_prefix] in [my_area.name] ([T.x],[T.y],[T.z]) - Carried by [M.real_name] ([M.key])")
 		else
 			message += " - Last Fingerprint: [(A.fingerprintslast ? A.fingerprintslast : "N/A")]"
-			log_game("[message_prefix] in [my_area.name] ([T.x],[T.y],[T.z]) - last fingerprint  [(A.fingerprintslast ? A.fingerprintslast : "N/A")]")
+			log_game("[message_prefix] in [my_area.name] ([T.x],[T.y],[T.z]) - last fingerprint  [(A.fingerprintslast ? A.fingerprintslast : "N/A (Last user processed: [usr.ckey])")]")
 	else
 		message += "."
 
 	message_admins(message, 0, 1)
+
+/datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
+	var/datum/log_controller/I = investigations[I_CHEMS]
+	var/atom/A = holder.my_atom
+	var/turf/T = get_turf(holder.my_atom)
+	to_chat(world, "holder being [A]")
+
+	var/formatted = "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[A] ([T.x],[T.y],[T.z])</small> || "
+
+	formatted += format_investigation_text(amt)
+
+	var/obj/machinery/M = get_holder_of_type(A, /obj/machinery)
+	if(istype(M))
+		formatted += " in \a [M], last touched by [(M.fingerprintslast ? M.fingerprintslast : "N/A (Last user processed: [usr.ckey])")] (Container: \a [A])"
+	else
+		formatted += " in \a [A], last touched by [(A.fingerprintslast ? A.fingerprintslast : "N/A (Last user processed: [usr.ckey])")]"
+
+	formatted += "<br />"
+
+	I.write(formatted)
+	return formatted
+
+// Permits special snowflake formatting.
+/datum/chemical_reaction/proc/format_investigation_text(var/amt)
+	return "[amt]u of [result] have been created"
 
 /datum/chemical_reaction/proc/on_reaction(var/datum/reagents/holder, var/created_volume)
 	return
