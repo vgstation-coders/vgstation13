@@ -87,13 +87,6 @@
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
 
-/mob/living/Click()
-	if(isAI(usr)) //IDK why this is needed
-		var/mob/living/silicon/ai/A = usr
-		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
-			return
-	..()
-
 /mob/living/DblClick()
 	if(isAI(usr) && usr != src)
 		var/mob/living/silicon/ai/A = usr
