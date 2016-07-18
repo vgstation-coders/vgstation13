@@ -38,6 +38,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(isturf(usr.loc))
 		if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		usr.investigation_log(I_CHEMS, "has emptied \a [src] \ref[src] containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		reagents.reaction(usr.loc)
 		spawn() src.reagents.clear_reagents()
 		usr.visible_message("<span class='warning'>[usr] splashes something onto the floor!</span>",
@@ -161,12 +162,16 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	reagents.reaction(target, TOUCH)
 
 	if (amount > 0)
+		if(user)
+			user.investigation_log(I_CHEMS, "has splashed [amount]u of [reagents.get_reagent_ids()] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
 		reagents.remove_any(amount)
 		if(user)
 			if(user.Adjacent(target))
 				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
 			                     "<span class='notice'>You splash some of the solution onto \the [target].</span>")
 	else
+		if(user)
+			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
 		reagents.clear_reagents()
 		if(user)
 			if(user.Adjacent(target))
@@ -205,16 +210,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers))
 			return -1
 
-		var/list/bad_reagents = reagents.get_bad_reagent_names() // Used for logging
-		var/tx_amount = transfer_sub(src, target, amount_per_transfer_from_this, user)
+		var/tx_amount = log_reagent_transfer(user, src, target, amount_per_transfer_from_this)
+
 		success = tx_amount
 		if(success)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You transfer [tx_amount] units of the solution to \the [target].</span>")
-
-			// Log transfers of 'bad things' (/vg/)
-			if (tx_amount > 0 && container.log_reagents && bad_reagents && bad_reagents.len > 0)
-				log_reagents(user, src, target, tx_amount, bad_reagents)
 
 			return (tx_amount)
 

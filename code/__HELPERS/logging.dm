@@ -118,15 +118,26 @@
  * @param amount The amount of units transferred
  * @param reagent_names List of reagent names to log
  */
-/proc/log_reagents(var/mob/user, var/source, var/target, var/amount, var/list/reagent_names)
-	if (amount == 0)
+/proc/log_reagent_transfer(var/mob/user, var/atom/source, var/atom/target, var/amount_desired)
+	if(amount_desired == 0)
 		return
+	if(isobj(target)) //Wouldn't it be nice to just use : sometimes?
+		var/obj/O = target
+		if(!O.log_reagents)
+			return
 
-	if (reagent_names && reagent_names.len > 0)
-		var/reagent_text = "<span class='danger'>[english_list(reagent_names)]</span>"
-		add_gamelogs(user, "added [amount]u (inc. [reagent_text]) to \a [target] with \the [source]", admin = TRUE, tp_link = TRUE)
-	else
-		add_gamelogs(user, "added [amount]u to \a [target] with \the [source]", admin = TRUE, tp_link = FALSE)
+	var/list/bad_reagents = source.reagents.get_bad_reagent_names()
+	var/all_reagents = source.reagents.get_reagent_ids()
+	var/success = source.reagents.trans_to(target, amount_desired)
+
+	if(success)
+		if(bad_reagents.len > 0)
+			message_admins("<span class='notice'>[user] ([user.ckey]) (<A HREF='?_src_=holder;adminplayeropts=\ref[user]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) \
+				has transferred [success]u of chemicals (including <span class='warning'>[english_list(bad_reagents)]</span>) \
+				from \a [source] (<A HREF='?_src_=vars;Vars=\ref[source]'>VV</A>) to \a [target] (<A HREF='?_src_=vars;Vars=\ref[target]'>VV</A>).</span>")
+		user.investigation_log(I_CHEMS, "[user.ckey] transferred [success]u of [all_reagents] from \a [source] \ref[source] to \a [target] \ref[target].")
+
+	return success
 
 
 /**
