@@ -67,7 +67,7 @@ var/global/list/investigations=list(
 
 // Permits special snowflake formatting.
 /atom/proc/format_investigation_text(var/message)
-	return "<small>[time2text(world.timeofday,"hh:mm")] \ref[src] ([x],[y],[z])</small> || [src] [message]<br />"
+	return "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[src] ([x],[y],[z])</small> || [src] [message]<br />"
 
 //ADMINVERBS
 /client/proc/investigate_show(var/subject in AVAILABLE_INVESTIGATIONS)
