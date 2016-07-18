@@ -1,3 +1,6 @@
+#define ALERT_AMOUNT_ONLY 1
+#define ALERT_ALL_REAGENTS 2
+
 ///////////////////////////////////////////////////////////////////////////////////
 /datum/chemical_reaction
 	var/name = null
@@ -59,7 +62,7 @@
 	result = null
 	required_reagents = list(WATER = 1, POTASSIUM = 1)
 	result_amount = 2
-	alert_admins = 1
+	alert_admins = ALERT_AMOUNT_ONLY
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/effect/system/reagents_explosion/e = new()
@@ -414,7 +417,7 @@
 	result = NITROGLYCERIN
 	required_reagents = list(GLYCEROL = 1, PACID = 1, SACID = 1)
 	result_amount = 2
-	alert_admins = 1
+	alert_admins = ALERT_AMOUNT_ONLY
 
 /datum/chemical_reaction/nitroglycerin/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/effect/system/reagents_explosion/e = new()
@@ -497,7 +500,7 @@
 	required_reagents = list(POTASSIUM = 1, SUGAR = 1, PHOSPHORUS = 1)
 	result_amount = null
 	secondary = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/chemsmoke/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
@@ -810,7 +813,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/grey
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimespawn/on_reaction(var/datum/reagents/holder)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
@@ -1011,7 +1014,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/gold
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimecrit/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1067,7 +1070,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/gold
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimecritlesser/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1115,7 +1118,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/gold
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimecritweak/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1310,7 +1313,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/darkblue
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimefreeze/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1359,7 +1362,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/orange
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimefire/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1386,7 +1389,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/yellow
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimeoverload/on_reaction(var/datum/reagents/holder, var/created_volume)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1446,7 +1449,7 @@
 	result_amount = 10
 	required_container = /obj/item/slime_extract/purple
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimejam/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used","[replacetext(name, " ", "_")]")
@@ -1476,7 +1479,7 @@
 	result_amount = 8
 	required_container = /obj/item/slime_extract/red
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimeglycerol/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1503,7 +1506,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/red
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimebloodlust/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1539,7 +1542,7 @@
 	result_amount = 1
 	required_other = 1
 	required_container = /obj/item/slime_extract/black
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimemutate2/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1552,7 +1555,7 @@
 	result_amount = 1
 	required_other = 1
 	required_container = /obj/item/slime_extract/black
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimemednanobots/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1565,7 +1568,7 @@
 	result_amount = 1
 	required_other = 1
 	required_container = /obj/item/slime_extract/black
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimecomnanobots/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1579,7 +1582,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/oil
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimeexplosion/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1596,7 +1599,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/oil
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimegenocide/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -1703,7 +1706,7 @@
 	result_amount = 1
 	required_container = /obj/item/slime_extract/bluespace
 	required_other = 1
-	alert_admins = 2
+	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slimeteleport/on_reaction(var/datum/reagents/holder, var/created_volume)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
@@ -2693,3 +2696,7 @@
 	result = PAROXETINE
 	required_reagents = list(MINDBREAKER = 1, OXYGEN = 1, INAPROVALINE = 1)
 	result_amount = 3
+
+
+#undef ALERT_AMOUNT_ONLY
+#undef ALERT_ALL_REAGENTS
