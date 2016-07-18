@@ -67,7 +67,7 @@
 /var/const/access_salvage_captain = 65 // Salvage ship captain's quarters
 /var/const/access_weapons = 66 //Weapon authorization for secbots
 /var/const/access_taxi = 67 // Taxi drivers
-/var/const/access_taxi = 68
+/var/const/access_shop = 68
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
 /var/const/Mostly for admin fun times.*/
@@ -291,7 +291,7 @@
 
 /proc/get_access_desc(A)
 	switch(A)
-		if(access_Shop)
+		if(access_shop)
 			return "Shop"
 		if(access_cargo)
 			return "Cargo Bay"
