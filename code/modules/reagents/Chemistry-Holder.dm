@@ -354,7 +354,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 					var/created_volume = C.result_amount*multiplier
 					if(C.result)
-						feedback_add_details("chemical_reaction","[created_volume][C.result]")
+						feedback_add_details("chemical_reaction","[C.result][created_volume]")
 						multiplier = max(multiplier, 1) //this shouldnt happen ...
 						add_reagent(C.result, created_volume)
 						set_data(C.result, preserved_data)
