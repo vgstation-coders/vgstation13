@@ -68,7 +68,7 @@
 	for(var/line in sortList(Lines))
 		msg += "[line]\n"
 	if(holder)
-		msg += "<b><span class='notice'>Living: [living]</span> | Dead: [dead] | <font color='gray'>Observing: [observers]</font> | <font color='gray'><i>In Lobby: [lobby]</i></font> | <span class='bad'>Living Antags: [living_antags]</span> | <span class='good'>Dead Antags: [dead_antags]</span></b>\n"
+		msg += "<b><span class='notice'>Total Living: [living]</span> | Total Dead: [dead] | <font color='gray'>Observing: [observers]</font> | <font color='gray'><i>In Lobby: [lobby]</i></font> | <span class='bad'>Living Antags: [living_antags]</span> | <span class='good'>Dead Antags: [dead_antags]</span></b>\n"
 	msg += "<b>Total Players: [length(Lines)]</b>\n"
 	to_chat(src, msg)
 
