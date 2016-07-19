@@ -2,6 +2,8 @@
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 
+#define GREY_SHAPED "Grey"
+
 //Content of the Round End Information window
 var/round_end_info = ""
 

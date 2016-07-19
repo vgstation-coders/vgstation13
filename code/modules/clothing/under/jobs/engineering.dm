@@ -16,7 +16,7 @@
 	item_state = "atmos_suit"
 	_color = "atmos"
 	flags = FPRINT  | ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/engineer
 	desc = "It's an orange high visibility jumpsuit worn by engineers. It has minor radiation shielding."
