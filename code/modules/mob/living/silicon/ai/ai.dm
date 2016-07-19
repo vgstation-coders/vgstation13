@@ -614,7 +614,12 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/cancel_camera()
 	src.view_core()
 
-
+/mob/living/silicon/ai/examination(atom/A as obj|mob|turf) //proc for AIs to examine things
+	if(!(cameranet.checkCameraVis(A) || client.eye == src )) //under static or out core's sight range
+		to_chat(src, "That isn't in range of your cameras.")
+	else
+		A.examine(src)
+	
 //Replaces /mob/living/silicon/ai/verb/change_network() in ai.dm & camera.dm
 //Adds in /mob/living/silicon/ai/proc/ai_network_change() instead
 //Addition by Mord_Sith to define AI's network change ability

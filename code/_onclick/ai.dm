@@ -98,7 +98,7 @@
 
 /atom/proc/AIShiftClick(var/mob/user)
 	if(user.client)
-		examine(user)
+		user.examination(src)
 	return
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
