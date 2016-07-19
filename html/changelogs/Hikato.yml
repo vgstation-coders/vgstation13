@@ -33,5 +33,5 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- rscadd: Plastic crates now store the proper materials for deconstruction.
-- rscdel: Deconstructing closets/crates give proper materials back. (Plastic crates will get 10 plastic back.)
+- bugfix: Plastic crates now store the proper materials for deconstruction.
+- bugfix: Deconstructing closets/crates give proper materials back. (Plastic crates will get 10 plastic back.)
