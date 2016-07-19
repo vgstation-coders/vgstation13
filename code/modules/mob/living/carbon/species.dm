@@ -453,6 +453,7 @@ var/global/list/whitelisted_species = list("Human")
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")
 
+	//PLEASE IF YOU MAKE A NEW RACE, KEEP IN MIND PEOPLE WILL PROBABLY MAKE UNIFORM SPRITES.
 	uniform_icons = 'icons/mob/species/grey/uniform.dmi'
 //	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
 //	gloves_icons    = 'icons/mob/gloves.dmi'
