@@ -243,11 +243,13 @@
 		var/list/close_mobs = list()
 		var/list/dist_mobs = list()
 		for(var/mob/living/L in view(1))
-			if(!L.vampire_affected(M)) continue
+			if(!L.vampire_affected(M))
+				continue
 			//if(!M.current.vampire_can_reach(C, 1)) continue
 			if(istype(L)) close_mobs |= L // using |= prevents adding 'large bounded' mobs twice with how the loop works
 		for(var/mob/living/L in view(3))
-			if(!L.vampire_affected(M)) continue
+			if(!L.vampire_affected(M))
+				continue
 			if(istype(L)) dist_mobs |= L
 		dist_mobs -= close_mobs //So they don't get double affected.
 		for(var/mob/living/L in close_mobs)
@@ -256,7 +258,8 @@
 				L.Stun(8)
 				L.Weaken(8)
 				L.stuttering += 20
-				if(!L.blinded) L.blinded = 1
+				if(!L.blinded)
+					L.blinded = 1
 				L.blinded += 5
 			else
 				var/mob/living/silicon/robot/R = L
@@ -267,7 +270,8 @@
 			if(!isrobot(L))
 				L.Stun(distance_value)
 				L.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
-				if(!L.blinded) L.blinded = 1
+				if(!L.blinded)
+					L.blinded = 1
 				L.blinded += max(1, distance_value)
 				if(distance_value > 1)
 					L.flash_eyes(visual = 1, forced = 1)
