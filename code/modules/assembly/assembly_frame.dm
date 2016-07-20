@@ -10,6 +10,11 @@
 	var/list/connections = list() //Assembly associated with the list of assemblies it's connected to
 
 	var/lock_ejection = 0 //If 1, prevent ejecting assemblies
+	var/require_parts_for_import = 1 //If 1, importing doesn't take nearby parts (instead, required parts are generated out of thin air)
+
+/obj/item/device/assembly_frame/admin
+	name = "turbo assembly frame"
+	require_parts_for_import = 0
 
 /obj/item/device/assembly_frame/Destroy()
 	for(var/obj/item/device/assembly/AS in connections)
@@ -280,12 +285,10 @@
 					if(last_span)
 						assembly_data = copytext(assembly_data, last_span + 1) //Cut it off
 
-				var/scan_for_nearby_parts = 1
-				//#warning OVERPOWERED ASSEMBLY FRAMES ENABLED SHUT IT DOWN
-				switch(from_text(assembly_data, scan_for_nearby_parts, used_parts))
+				switch(from_text(assembly_data, require_parts_for_import, used_parts))
 					if(1)
 						to_chat(user, "<span class='info'>Configuration imported successfully.</span>")
-						message_admins("[key_name_admin(user)] has imported a configuration into an assembly frame! [formatJumpTo(get_turf(src))]")
+						message_admins("[key_name_admin(user)] has imported a configuration with [assemblies.len] elements into an assembly frame! [formatJumpTo(get_turf(src))]")
 					if(null)
 						to_chat(user, "<span class='notice'>Unable to import configuration: corrupt input data.</span>")
 					if(0)
