@@ -616,6 +616,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_power = 3
 	cost = 8
 
+/obj/item/weapon/light/throw_impact(atom/hit_atom)
+	..()
+	shatter()
+
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
 	desc = "An efficient light used to reduce strain on the station's power grid."
@@ -630,6 +634,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_power = 4
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
 	cost = 15
+
+/obj/item/weapon/light/tube/broken/New()
+	..()
+	shatter()
 
 /obj/item/weapon/light/bulb
 	name = "light bulb"
@@ -653,10 +661,6 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 150, MAT_IRON = 30)
 	brightness_color = null//These should be white
 
-/obj/item/weapon/light/throw_impact(atom/hit_atom)
-	..()
-	shatter()
-
 /obj/item/weapon/light/bulb/fire
 	name = "fire bulb"
 	desc = "A replacement fire bulb."
@@ -666,6 +670,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 5
 	brightness_power = 2
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
+
+/obj/item/weapon/light/bulb/broken/New()
+	..()
+	shatter()
 
 // update the icon state and description of the light
 

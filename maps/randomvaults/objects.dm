@@ -45,6 +45,8 @@
 /area/vault/brokeufo
 	requires_power = 1
 
+/area/vault/zoo
+
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
 	speak_chance = 1 //shut the fuck up
 
@@ -182,3 +184,59 @@
 	icon_state = "duey0"
 	icon_initial = "duey"
 	Max_Fertilizers = 50
+
+/obj/item/weapon/paper/feeding_schedule
+	name = "note"
+	info = {"
+	<h2><b></b></h2>
+	<s>PE</s> PANDA - meat, water daily (large portions)<br>
+	Chicken (<b>WHITE</b>) - wheat, water (daily)<br>
+	<s>snake chicken - special food (crate</s><br>
+	Snake Chicken (<b>PURPLE and green</b>) - greens and water daily. remove eggs every 1000 hours and dispose by protocol. <b>ALWAYS WEAR A BIOSUIT WHEN HANDLING, DO NOT TOUCH OR PROVOKE</b><br>
+	scrite - meat, water (large portions every 160 hours) (DANGEROUS use food delivery)<br>
+	dog - special food (crate 2) and water <s>every 2</s>daily<br>
+	cat - special food (crate 2) and water daily<br>
+	crab - special food (crate 3) every 80 hours<br>
+	goat - greens and water daily<br>
+	<s>mem</s> <s>mimec</s> <s>Mi</s> items in secure crate 5 - moisturize every 500 hours, DO NOT TOUCH (it's alive)<br>
+	<br>
+
+	Remember to update computer database after feeding!<br>
+	"}
+
+/obj/effect/landmark/stonefier
+	name = "STONIFIER"
+	desc = "Turns all mobs on this turf into statues forever. Used for map editing!"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "statue"
+
+	layer = 100
+	plane = 100
+	//So that it's more visible in the map editor
+
+/obj/effect/landmark/stonefier/New()
+	var/turf/T = get_turf(src)
+
+	spawn()
+		for(var/mob/living/L in T)
+			L.turn_into_statue(1, 1)
+
+	qdel(src)
+
+
+/obj/effect/trap/cockatrice_notice //When triggered, cockatrices turn and hiss at you
+	name = "cockatrice trigger"
+
+/obj/effect/trap/cockatrice_notice/can_activate(atom/movable/AM)
+	if(istype(AM, /mob/living/simple_animal/hostile/retaliate/cockatrice))
+		return 0
+
+	return ..()
+
+/obj/effect/trap/cockatrice_notice/activate(atom/movable/AM)
+	for(var/mob/living/simple_animal/hostile/retaliate/cockatrice/CO in view(7))
+		if(CO.isDead())
+			continue
+
+		CO.face_atom(AM)
+		CO.visible_message("<span class='notice'>\The [CO] looks at \the [AM] and hisses angrily!</span>")

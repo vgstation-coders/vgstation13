@@ -45,12 +45,14 @@
 	if(istype(L, /mob/living/simple_animal/hostile/retaliate/cockatrice))
 		return 0
 
+	if(!L.turn_into_statue(1)) //Statue forever
+		return 0
+
 	if(!isDead() && prob(80))
 		var/msg = pick("\The [src] hisses!", "\The [src] hisses angrily!")
 		visible_message("<span class='danger'>[msg]</span>", "<span class='notice'>\The [L] touches you!</span>", "<span class='notice'>You hear an angry hiss.</span>")
 
 	to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
-	L.turn_into_statue(1) //Statue forever
 
 	return 1
 
@@ -61,10 +63,6 @@
 		var/body_part_to_check = HAND_LEFT
 		if(H.active_hand == GRASP_RIGHT_HAND) //No better way to do it!
 			body_part_to_check = HAND_RIGHT
-
-		var/datum/organ/external/OE = H.find_organ_by_grasp_index(H.active_hand)
-		if(!OE.is_organic()) //Touching with a peg/robohand is fine!
-			return
 
 		if(!H.check_body_part_coverage(body_part_to_check))
 			sting(H)
@@ -121,9 +119,8 @@
 				pulledby.stop_pulling()
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Cross(mob/living/L)
-	.=..()
-
-	movement_touch_check(L)
+	//Let the other object overlap us if we can't stone them
+	return !movement_touch_check(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Move()
 	.=..()
@@ -132,9 +129,8 @@
 		movement_touch_check(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Bump(mob/living/L)
-	.=..()
-
-	movement_touch_check(L)
+	if(!movement_touch_check(L))
+		return ..()
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/movement_touch_check(mob/living/L)
 	if(!istype(L))
@@ -142,9 +138,9 @@
 
 	if(L.lying) //If the chicken steps onto a lying body, check if it's covered completely. If it's not lying, only check feet/legs
 		if(check_sting(L, FULL_BODY))
-			sting(L)
+			return sting(L)
 	else if(check_sting(L, FEET) || (!isDead() && check_sting(L, LEGS))) //Check leg coverage only if the chicken is alive (as it can brush against our legs)
-		sting(L)
+		return sting(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/UnarmedAttack(A)
 	.=..()

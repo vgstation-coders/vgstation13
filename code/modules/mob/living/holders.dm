@@ -190,8 +190,8 @@
 
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
-		var/datum/organ/external/OE = H.find_organ_by_grasp_index(L.held_items.Find(src))
-		if(!OE.is_organic()) //Touching with a peg/robohand is fine!
+		var/datum/organ/external/OE = H.find_organ_by_grasp_index(L.held_items.Find(src) || H.active_hand)
+		if(OE && !OE.is_organic()) //Touching with a peg/robohand is fine!
 			return
 
 	if(C.check_sting(L, HANDS))

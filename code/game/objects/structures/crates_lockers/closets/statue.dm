@@ -68,8 +68,8 @@
 
 		processing_objects.Add(src)
 
-		if(timer < 0) //No timer - the guy's going to be in there forever, might as well ghost him
-			L.ghostize()
+		if(timer < 0) //No timer - the guy's going to be in there forever, might as well kill him
+			L.stat = DEAD
 
 	if(health == 0) //meaning if the statue didn't find a valid target
 		qdel(src)

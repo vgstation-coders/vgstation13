@@ -1387,10 +1387,11 @@ default behaviour is:
 		if(mob_species_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL))
 			return 0
 
-	if(forever)
-		return new /obj/structure/closet/statue/eternal(get_turf(src), src)
-	else
-		return new /obj/structure/closet/statue(get_turf(src), src)
+	spawn()
+		if(forever)
+			return new /obj/structure/closet/statue/eternal(get_turf(src), src)
+		else
+			return new /obj/structure/closet/statue(get_turf(src), src)
 
 /*
 	How this proc that I took from /tg/ works:

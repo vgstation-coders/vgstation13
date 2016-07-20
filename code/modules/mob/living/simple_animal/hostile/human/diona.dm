@@ -90,5 +90,6 @@
 	..()
 
 	var/turf/T = get_turf(src)
-	T.visible_message("<span class='danger'>Some green fluid flows out of the chemical pack!</span>") //because the pack spawns empty
-	getFromPool(/obj/effect/decal/cleanable/greenglow, T)
+	if(T)
+		T.visible_message("<span class='danger'>Some green fluid flows out of the chemical pack!</span>") //because the pack spawns empty
+		getFromPool(/obj/effect/decal/cleanable/greenglow, T)
