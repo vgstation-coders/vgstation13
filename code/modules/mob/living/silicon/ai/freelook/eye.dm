@@ -9,6 +9,7 @@
 
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
+	var/hires = 0
 
 
 // Use this when setting the aiEye's location.
@@ -39,8 +40,10 @@
 /mob/camera/aiEye/Move()
 	return 0
 
-//An AI eyeobj mob cant have a virtualhearer to hear with unless it gets one from a malf module
+//An AI eyeobj mob cant hear unless it updates hires with a Malf Module
 /mob/camera/aiEye/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(!hires)
+		return
 	if(speech.frequency) //HOW CAN IT POSSIBLY READ LIPS THROUGH RADIOS
 		return
 
