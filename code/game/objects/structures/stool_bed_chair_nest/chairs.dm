@@ -234,7 +234,7 @@
 /obj/structure/bed/chair/comfy/couch
 	name = "couch"
 	desc = "Looks really comfy."
-	sheet_amt = 3
+	sheet_amt = 2
 	anchored = 1
 	overrideghostspin = 1
 	var/image/legs
