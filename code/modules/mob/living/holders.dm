@@ -168,7 +168,7 @@
 /obj/item/weapon/holder/animal/slime/attack_self(mob/user)
 	..()
 	unfreeze()
-
+/*
 /obj/item/weapon/holder/animal/cockatrice
 	name = "cockatrice holder"
 	desc = "The rubber chicken"
@@ -176,69 +176,4 @@
 
 	armor_modifier = 100
 	force = 1
-
-/obj/item/weapon/holder/animal/cockatrice/prepickup(mob/user)
-	. = hold_check(user)
-
-	if(.)
-		forceMove(get_turf(src))
-
-/obj/item/weapon/holder/animal/cockatrice/proc/hold_check(mob/living/L)
-	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob
-	if(!istype(C))
-		return
-
-	if(ishuman(L))
-		var/mob/living/carbon/human/H = L
-		var/datum/organ/external/OE = H.find_organ_by_grasp_index(L.held_items.Find(src) || H.active_hand)
-		if(OE && !OE.is_organic()) //Touching with a peg/robohand is fine!
-			return
-
-	if(C.check_sting(L, HANDS))
-		return C.sting(L)
-
-/obj/item/weapon/holder/animal/cockatrice/process()
-	.=..()
-
-	var/mob/living/L = loc
-
-	if(istype(L) && L.held_items.Find(src))
-		hold_check(L)
-
-/obj/item/weapon/holder/animal/cockatrice/afterattack(mob/living/simple_animal/victim, mob/user, proximity_flag)
-	//Turn simple animals into statues. Human mobs are handled below, in applied_damage
-	if(!proximity_flag)
-		return
-
-	if(!istype(victim))
-		return
-
-	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob
-	if(!istype(C))
-		return
-
-	C.sting(victim)
-
-/obj/item/weapon/holder/animal/cockatrice/applied_damage(mob/living/victim, organ, armor)
-	if(armor)
-		return
-
-	if(prob(60)) //40% chance of this working (if it bypasses armor)
-		return
-
-	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob
-	if(!istype(C))
-		return
-
-	C.sting(victim)
-
-/obj/item/weapon/holder/animal/cockatrice/throw_impact(mob/living/hit_atom)
-	..()
-
-	var/mob/living/simple_animal/hostile/retaliate/cockatrice/C = stored_mob
-	if(!istype(C))
-		return
-	if(!C.check_sting(hit_atom, FULL_BODY))
-		return
-
-	C.sting(hit_atom)
+*/

@@ -27,5 +27,6 @@ author: Unid
 delete-after: True
 
 changes: 
-- rscadd: "Added cockatrices - snake/chicken hybrids that don't attack unless provoked. All organic lifeforms that touch them with an exposed part of their body turn to stone. Currently they will only appear through xenobiology or adminbus."
+- rscadd: A spaceship transporting wild animals can spawn somewhere in space.
+- rscadd: "Added cockatrices - snake/chicken hybrids that don't attack unless provoked. All organic lifeforms that touch them with an exposed part of their body start rapidly turning to stone."
 - rscadd: Statues (created by cockatrices and the Flesh to Stone spell) are now prettier and have an animation when created

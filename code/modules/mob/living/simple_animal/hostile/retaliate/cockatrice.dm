@@ -7,11 +7,12 @@
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice
 	name = "cockatrice"
-	desc = "A bizarre creature that looks like a tiny chicken with a snake's tail and a long, sharp beak. Any living being that touches it immediately turns into solid stone. Thankfully, it's relatively docile until something provokes it."
+	desc = "A large chicken-like creature with a reptile's tail. Its body constantly generates a petrifying pathogen that spreads through direct contact with skin. Any living being that touches a cockatrice will rapidly turn to stone, unless given immediate treatment."
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "cockatrice"
 	icon_living = "cockatrice"
+	var/icon_angry = "cockatrice_angry"
 	icon_dead = "cockatrice_dead"
 
 	response_help = "pets"
@@ -20,12 +21,12 @@
 
 	maxHealth = 50
 	health = 50
-	size = SIZE_TINY
+	size = SIZE_SMALL
 
 	harm_intent_damage = 8
-	melee_damage_lower = 2
-	melee_damage_upper = 6
-	armor_modifier = 60 //Very high armor modifier - attacks stopped by any armor/hardsuit
+	melee_damage_lower = 8
+	melee_damage_upper = 12
+	armor_modifier = 4 //High armor modifier - attacks are less likely to pierce armor
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 
@@ -34,7 +35,6 @@
 	holder_type = /obj/item/weapon/holder/animal/cockatrice
 
 	meat_type = null
-	can_butcher = 0
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/sting(mob/living/L, instant = 0)
 	//Turn the mob into a statue forever
@@ -45,14 +45,16 @@
 	if(istype(L, /mob/living/simple_animal/hostile/retaliate/cockatrice))
 		return 0
 
-	if(!L.turn_into_statue(1)) //Statue forever
-		return 0
-
 	if(!isDead() && prob(80))
 		var/msg = pick("\The [src] hisses!", "\The [src] hisses angrily!")
 		visible_message("<span class='danger'>[msg]</span>", "<span class='notice'>\The [L] touches you!</span>", "<span class='notice'>You hear an angry hiss.</span>")
 
-	to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
+	if(instant)
+		to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
+		if(!L.turn_into_statue(1)) //Statue forever
+			return 0
+	else
+
 
 	return 1
 
@@ -118,9 +120,19 @@
 			if(sting(pulledby))
 				pulledby.stop_pulling()
 
+	if(isDead())
+		return
+
+	if(target) //Targetting somebody
+		icon_state = icon_angry
+	else
+		icon_state = icon_living
+
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Cross(mob/living/L)
 	//Let the other object overlap us if we can't stone them
-	return !movement_touch_check(L)
+	if(movement_touch_check(L))
+		return 0
+	return 1
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Move()
 	.=..()
@@ -149,13 +161,16 @@
 		sting(A)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/applied_damage(mob/victim, amount, organ, armor)
+	set waitfor = 0
+
 	if(armor)
 		return
 	if(prob(50)) //50% chance of getting stoned if the armor didn't block the attack
 		return
 
-	spawn()
-		sting(victim)
+	sleep()
+
+	sting(victim)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/check_sting(mob/living/L, bodyparts)
 	if(ishuman(L))
