@@ -758,6 +758,7 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Box Cloner)"
 	build_path = "/obj/machinery/egg_incubator/box_cloner"
 	origin_tech = "syndicate=3"
+	board_type = "machine"
 	frame_desc = "Requires 1 Matter Bin and 2 Capacitors   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
