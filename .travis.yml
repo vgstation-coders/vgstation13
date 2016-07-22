@@ -7,7 +7,6 @@ env:
     - BYOND_MAJOR="510"
     - BYOND_MINOR="1345"
     matrix:
-    - DM_MAPFILE="tgstation"
     - DM_MAPFILE="metaclub"
     - DM_MAPFILE="defficiency"
     - DM_MAPFILE="taxistation"

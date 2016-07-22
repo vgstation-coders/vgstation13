@@ -3,7 +3,6 @@
 #MAPROOT='../../_maps/map_files/'
 MAPROOT="../maps/"
 MAPFILES=(
-	$MAPROOT"tgstation.dmm"
 #	$MAPROOT"vgstation.dmm"
 	$MAPROOT"defficiency.dmm"
 	$MAPROOT"taxistation.dmm"
