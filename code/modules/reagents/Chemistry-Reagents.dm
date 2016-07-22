@@ -4199,6 +4199,202 @@
 					L.take_damage(100, 0)
 	data++
 
+/datum/reagent/ethanol/karmotrine
+	name = "Karmotrine"
+	id = KARMOTRINE
+	description = "Served exclusively by waifu bartenders."
+	color = "#66ffff" //rgb(102, 255, 255)
+	blur_start = 40 //Blur very early
+
+/datum/reagent/ethanol/smokyroom
+	name = "Smoky Room"
+	id = SMOKYROOM
+	description = "It was the kind of cool, black night that clung to you like something real... a black, tangible fabric of smoke, deceit, and murder. I had finished working my way through the fat cigars for the day - or at least told myself that to feel the sense of accomplishment for another night wasted on little more than chasing cheating dames and abusive husbands. It was enough to drive a man to drink... and it did. I sauntered into the cantina and wordlessly nodded to the barman. He knew my poison. I was a regular, after all. By the time the night was over, there would be another empty bottle and a case no closer to being cracked. Then I saw her, like a mirage across a desert, or a striken starlet on stage across a smoky room."
+	color = "#664300"
+
+/datum/reagent/ethanol/smokyroom/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	if(prob(4)) //Small chance per tick to some noir stuff and gain NOIRBLOCK if we don't have it.
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(!(H.mutations & M_NOIR))
+				H.mutations += M_NOIR
+				H.dna.SetSEState(NOIRBLOCK,1)
+		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
+			"The lights, the smoke, the grime... the city itself seemed alive that day. Was it the pulse that made me think so? Or just all the blood?",
+			"I caressed my .44 magnum. Ever since Jimmy bit it against the Two Bit Gang, the gun and its six rounds were the only partner I could trust.",
+			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that’d make you dizzy. Wouldn’t give her name, said she was related to the captain",
+			"Judging by the boys at the lab, the perp took a sander to the tooth profiles, but did a sloppy job. Lab report came in early this morning. Guess my vacation is on pause.",
+			"The blacktop was baking that day, and the broads working 19th and Main were wearing even less than usual.",
+			"The young dame was pride and joy of the station. Little did she know that looks can breed envy... or worse.",
+			"The new case reeked of the same bad blood as that now half-forgotten case of the turncoat chef. A recipe for murder.",
+			"I dragged myself out of my drink-addled torpor and called to the shadowy figure at my door - come in - because if I didn't take a new case I'd be through my bottle by noon.",
+			"Nursing my scotch, I turned my gaze upward and spotted trouble in the form of a bruiser with brass knuckles across the smoke-filled nightclub's cabaret.",
+			"I didn't even know who she was. Just stumbled across a girl and four toughs. Took her home and the mayor named me a hero.",
+			"She was a flapper and a swinger, but she was also in some hot water. Told me she'd make it worth my while if I could get her out of it. I told her that I wanted payment in cold hard simoleons.",
+			"What he did just didn't compare. He killed an innocent person. What drives a man to kill in cold blood? I didn't want to hang around and find out.",
+			"I breathed in the smoke of the underground speakeasy like a fish breathes water. The brass at the precinct couldn't understand: I was in my element.",
+			"I put enough holes in the man to drop a goliath, but he kept coming. Some kind of blood-fueled hatred. The adrenaline of a dying man can snap bones in one last moment of spite. I can still see the anger in those dying eyes."))
+
+/datum/reagent/ethanol/rags_to_riches
+	name = "Rags to Riches"
+	id = RAGSTORICHES
+	description = "The Spaceman Dream, incarnated as a cocktail."
+	color = "#664300"
+
+/datum/reagent/ethanol/rags_to_riches/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	if(!M.loc || prob(70))
+		return
+	playsound(get_turf(src), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	dispense_cash(rand(5,15),get_turf(M))
+
+/datum/reagent/ethanol/bad_touch
+	name = "Bad Touch"
+	id = BAD_TOUCH
+	description = "Somewhere on the scale of bad touches between 'fondled by clown' and 'brushed by supermatter shard'."
+	color = "#664300"
+
+/datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
+	if(..()) return 1
+	M.hallucination = max(M.hallucination, 3)
+	M.halloss++
+
+/datum/reagent/ethanol/electric_sheep
+	name = "Electric Sheep"
+	id = ELECTRIC_SHEEP
+	description = "This is what robots dream about."
+	color = "#664300"
+	custom_metabolism = 1
+
+/datum/reagent/ethanol/electric_sheep/on_mob_life(var/mob/living/M) //If it's human, shoot sparks every tick! If MoMMI, cause alcohol effects.
+	if(..()) return 1
+	if(ishuman(M))
+		var/datum/effect/effect/system/spark_spread/spark_system = new
+		spark_system.set_up(5, 0, M)
+		spark_system.attach(M)
+		spark_system.start()
+	else if(issilicon(M))
+		M.Jitter(4)
+		M.Dizzy(4)
+		M.druggy = max(M.druggy, 60)
+
+/datum/reagent/ethanol/suicide
+	name = "Suicide"
+	id = SUICIDE
+	description = "It's only tolerable because of the added alcohol."
+	color = "#664300"
+	custom_metabolism = 2
+
+/datum/reagent/ethanol/suicide/on_mob_life(var/mob/living/M)  //Instant vomit. Every tick.
+	if(..()) return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.vomit(0,1)
+
+/datum/reagent/ethanol/metabuddy
+	name = "Metabuddy"
+	id = METABUDDY
+	description = "Ban when?"
+	color = "#664300"
+	var/global/list/datum/mind/metaclub = list()
+
+/datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
+	if(..()) return 1
+	if(!metaclub.Find(L) && L.mind)
+		metaclub += L
+		var/datum/mind/new_buddy = L.mind
+		for(var/datum/mind/M in metaclub) //Update metaclub icons
+			if(M.current.client && new_buddy.current && new_buddy.current.client)
+				var/imageloc = new_buddy.current
+				var/imagelocB = M.current
+				if(istype(M.current.loc,/obj/mecha))
+					imageloc = M.current.loc
+				if(istype(M.current.loc,/obj/mecha))
+					imagelocB = M.current.loc
+				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "metaclub", layer = 13)
+				M.current.client.images += I
+				var/image/J = image('icons/mob/mob.dmi', loc = imagelocB, icon_state = "metaclub", layer = 13)
+				new_buddy.current.client.images += J
+
+/datum/reagent/ethanol/waifu
+	name = "Waifu"
+	id = WAIFU
+	description = "Don't drink more than one waifu if you value your laifu."
+	color = "#664300"
+
+/datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	if(M.gender == MALE)
+		M.setGender(FEMALE)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!istype(H.w_uniform,/obj/item/clothing/under/schoolgirl))
+			var/turf/T = get_turf(H)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_MOB)
+			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
+			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
+			if(!H.put_in_hands(S) && H.w_uniform) //For quickswap, it needs to be in a hand for some reason. But...
+				H.w_uniform.forceMove(get_turf(H)) //If both hands are occupied, we have another solution: just drop the current suit (empties ID and pockets)
+				H.w_uniform.unequipped()
+			H.equip_to_slot_if_possible(S, slot_w_uniform, 1, 1, 1) //This is the safe quickswap proc.
+			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
+	M.regenerate_icons()
+
+/datum/reagent/ethanol/scientists_serendipity
+	name = "Scientist's Serendipity"
+	id = SCIENTISTS_SERENDIPITY
+	description = "Go ahead and blow the research budget on drinking this." //Can deconstruct a glass with this for loadsoftech
+	color = "#664300"
+	custom_metabolism = 0.01
+
+/datum/reagent/ethanol/beepskyclassic
+	name = "Beepsky Classic"
+	id = BEEPSKY_CLASSIC
+	description = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
+	color = "#664300" //rgb: 102, 67, 0
+	custom_metabolism = 2 //Ten times the normal rate.
+
+/datum/reagent/ethanol/beepskyclassic/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
+			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
+		else
+			H.Weaken(10)
+			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
+
+/datum/reagent/ethanol/spiders
+	name = "Spiders"
+	id = SPIDERS
+	description = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA."
+	color = "#666666" //rgb(102, 102, 102)
+	custom_metabolism = 0.01 //Spiders really 'hang around'
+
+/datum/reagent/ethanol/spiders/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	M.take_organ_damage(REM, 0) //Drinking a glass of live spiders is bad for you.
+	if(holder.get_reagent_amount(SPIDERS)>=4) //The main reason we need to have a minimum cost rather than just high custom metabolism is so that someone can't give themselves an IV of spiders for "fun"
+		var/calculate_offset = locate(M.x + pick(1,-1), M.y, M.z)
+		new /mob/living/simple_animal/hostile/giant_spider/spiderling(calculate_offset)
+		holder.remove_reagent(SPIDERS,4)
+		M.emote("scream", , , 1)
+		M.visible_message("<span class='warning'>[M] recoils as a spider emerges from \his mouth!</span>")
+
+/datum/reagent/ethanol/weedeater
+	name = "Weed Eater"
+	id = WEED_EATER
+	description = "The vegetarian equivalant of a snake eater."
+	color = "#009933" //rgb(0, 153, 51)
+
+/datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
+	if(..()) return 1
+	if(!/spell/targeted/genetic/eat_weed in M.spell_list)
+		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
+		M.add_spell(/spell/targeted/genetic/eat_weed)
+		M.spell_list += /spell/targeted/genetic/eat_weed //Why isn't this handled in add_spell?
+
 /datum/reagent/ethanol/deadrum
 	name = "Deadrum"
 	id = RUM
@@ -5037,6 +5233,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	sport = 5
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
+	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
 /datum/reagent/antidepressant/citalopram
 	name = "Citalopram"

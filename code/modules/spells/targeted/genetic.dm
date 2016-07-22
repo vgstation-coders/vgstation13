@@ -66,3 +66,30 @@ code\game\\dna\genes\goon_powers.dm
 	cooldown_min = 300 //25 deciseconds reduction per rank
 
 	hud_state = "wiz_hulk"
+
+/spell/targeted/genetic/eat_weed
+	name = "Eat Weeds"
+	desc = "Devour weeds from soil or a hydroponics tray, gaining nutriment."
+	spell_flags = INCLUDEUSER
+	message = "<span class='notice'>You begin ripping out weeds and eating them noisily.</span>"
+	range = 0
+	duration = 0
+	max_targets = 1
+	//mutations = list(M_EATWEEDS) - Some day, maybe, if this is ported to Diona nymphs instead of a verb
+	//hud_state = "" - Needs icon
+
+/spell/targeted/genetic/eat_weed/cast(list/targets)
+	..()
+	if(!ishuman(usr)) return //We'll have to add an exception for monkeys if this is ported to diona
+	var/mob/living/carbon/human/H = usr
+	var/list/trays = list()
+	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
+		if(tray.weedlevel > 0)
+			trays += tray
+
+	var/obj/machinery/portable_atmospherics/hydroponics/target = input(H,"Select a tray:") as null|anything in trays
+
+	if(!src || !target || target.weedlevel == 0) return
+
+	H.reagents.add_reagent(NUTRIMENT, target.weedlevel)
+	target.weedlevel = 0
