@@ -53,7 +53,7 @@
 		return
 
 	var/target_was_empty = (target.reagents.total_volume == 0)
-	var/tx_amount = log_reagent_transfer(user, src, target, reagents.total_volume)
+	var/tx_amount = reagents.trans_to(target, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 
 	// Show messages
 	if (tx_amount > 0)

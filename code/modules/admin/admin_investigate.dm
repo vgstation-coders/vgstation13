@@ -69,6 +69,14 @@ var/global/list/investigations=list(
 /atom/proc/format_investigation_text(var/message)
 	return "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[src] ([x],[y],[z])</small> || [src] [message]<br />"
 
+// For non-atoms or very specific messages.
+/proc/minimal_investigation_log(var/subject, var/message, var/prefix)
+	var/datum/log_controller/I = investigations[subject]
+	if(!I)
+		warning("SOME ASSHAT USED INVALID INVESTIGATION ID [subject]")
+		return
+	I.write("<small>[time2text(world.timeofday,"hh:mm:ss")][prefix]</small> || [message]<br />")
+
 //ADMINVERBS
 /client/proc/investigate_show(var/subject in AVAILABLE_INVESTIGATIONS)
 	set name = "Investigate"

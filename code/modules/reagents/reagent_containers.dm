@@ -106,7 +106,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /**
  * Transfer reagents between reagent_containers/reagent_dispensers.
  */
-/proc/transfer_sub(var/atom/source, var/atom/target, var/amount, var/mob/user)
+/proc/transfer_sub(var/atom/source, var/atom/target, var/amount, var/mob/user, var/log_transfer = FALSE)
 	// Typecheck shenanigans
 	var/source_empty
 	var/target_full
@@ -148,7 +148,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		to_chat(user, "<span class='warning'>\The [target] is full.</span>")
 		return -1
 
-	return source.reagents.trans_to(target, amount)
+	return source.reagents.trans_to(target, amount, log_transfer = log_transfer, whodunnit = user)
 
 /**
  * Helper proc to handle reagent splashes. A negative `amount` will splash all the reagents.
@@ -210,14 +210,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers))
 			return -1
 
-		var/tx_amount = log_reagent_transfer(user, src, target, amount_per_transfer_from_this)
+		success = transfer_sub(src, target, amount_per_transfer_from_this, user, log_transfer = TRUE)
 
-		success = tx_amount
 		if(success)
-			if (tx_amount > 0)
-				to_chat(user, "<span class='notice'>You transfer [tx_amount] units of the solution to \the [target].</span>")
+			if (success > 0)
+				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
 
-			return (tx_amount)
+			return (success)
 
 	if(!success)
 		// Mob splashing

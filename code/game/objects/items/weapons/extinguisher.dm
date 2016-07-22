@@ -116,16 +116,7 @@
 /obj/item/weapon/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
 		if((istype(target, /obj/structure/reagent_dispensers)))
-			var/obj/o = target
-			var/list/badshit=list()
-			for(var/bad_reagent in reagents_to_log)
-				if(o.reagents.has_reagent(bad_reagent))
-					badshit += reagents_to_log[bad_reagent]
-			if(badshit.len)
-				var/hl="<span class='danger'>([english_list(badshit)])"
-				// message_admins("[user.name] ([user.ckey]) filled \a [src] with [o.reagents.get_reagent_ids()] [hl]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-				log_game("[user.name] ([user.ckey]) filled \a [src] with [o.reagents.get_reagent_ids()] [hl]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			o.reagents.trans_to(src, 50)
+			target.reagents.trans_to(src, 50, log_transfer = TRUE, whodunnit = user)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
 			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 			return
@@ -151,14 +142,10 @@
 		if (world.time < src.last_use + 20)
 			return
 		user.delayNextAttack(5, 1)
-		var/list/badshit=list()
-		for(var/bad_reagent in reagents_to_log)
-			if(reagents.has_reagent(bad_reagent))
-				badshit += reagents_to_log[bad_reagent]
-		if(badshit.len)
-			var/hl="<span class='danger'>([english_list(badshit)])</span>"
-			message_admins("[user.name] ([user.ckey]) used \a [src] filled with [reagents.get_reagent_ids(1)] [hl]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			log_game("[user.name] ([user.ckey]) used \a [src] filled with [reagents.get_reagent_ids(1)] [hl]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		var/badshit = reagents.write_logged_reagents()
+		if(badshit)
+			message_admins("[user.name] ([user.ckey]) used \a [src] that contained (<span class='warning'>[badshit]</span>). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+			log_game("[user.name] ([user.ckey]) used \a [src] that contained [badshit] at [user.x], [user.y], [user.z]")
 
 		src.last_use = world.time
 

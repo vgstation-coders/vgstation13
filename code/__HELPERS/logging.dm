@@ -110,37 +110,6 @@
 		message_admins(msg)
 
 /**
- * Helper function to log reagent transfers, usually 'bad' ones.
- *
- * @param user The user that performed the transfer
- * @param source The item from which the reagents are transferred.
- * @param target The destination of the transfer
- * @param amount The amount of units transferred
- * @param reagent_names List of reagent names to log
- */
-/proc/log_reagent_transfer(var/mob/user, var/atom/source, var/atom/target, var/amount_desired)
-	if(amount_desired == 0)
-		return
-	if(isobj(target)) //Wouldn't it be nice to just use : sometimes?
-		var/obj/O = target
-		if(!O.log_reagents)
-			return
-
-	var/list/bad_reagents = source.reagents.get_bad_reagent_names()
-	var/all_reagents = source.reagents.get_reagent_ids()
-	var/success = source.reagents.trans_to(target, amount_desired)
-
-	if(success)
-		if(bad_reagents.len > 0)
-			message_admins("<span class='notice'>[user] ([user.ckey]) (<A HREF='?_src_=holder;adminplayeropts=\ref[user]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>) \
-				has transferred [success]u of chemicals (including <span class='warning'>[english_list(bad_reagents)]</span>) \
-				from \a [source] (<A HREF='?_src_=vars;Vars=\ref[source]'>VV</A>) to \a [target] (<A HREF='?_src_=vars;Vars=\ref[target]'>VV</A>).</span>")
-		user.investigation_log(I_CHEMS, "[user.ckey] transferred [success]u of [all_reagents] from \a [source] \ref[source] to \a [target] \ref[target].")
-
-	return success
-
-
-/**
  * Standardized method for tracking startup times.
  */
 /proc/log_startup_progress(var/message)

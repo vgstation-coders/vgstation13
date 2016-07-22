@@ -232,7 +232,7 @@
 		// TODO which is pretty irrelevant now but should be fixed
 		reagents.reaction(target, INGEST)
 
-	tx_amount = log_reagent_transfer(user, src, target, tx_amount)
+	tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
 	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
 
 	if (src.is_empty())

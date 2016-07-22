@@ -73,7 +73,7 @@
 			else
 				M.LAssailant = user
 
-		trans = log_reagent_transfer(user, src, target, amount_per_transfer_from_this)
+		trans = src.reagents.trans_to(target, amount_per_transfer_from_this, log_transfer = TRUE, whodunnit = user)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the solution.</span>")
 		update_icon()
 
@@ -87,7 +87,7 @@
 			to_chat(user, "<span class='warning'>[target] is empty.</span>")
 			return
 
-		var/trans = log_reagent_transfer(user, target, src, amount_per_transfer_from_this)
+		var/trans = target.reagents.trans_to(src, amount_per_transfer_from_this, log_transfer = TRUE, whodunnit = user)
 
 		to_chat(user, "<span class='notice'>You fill [src] with [trans] units of the solution.</span>")
 

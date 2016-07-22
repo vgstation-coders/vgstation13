@@ -1,4 +1,4 @@
-var/global/list/reagents_to_log = list(FUEL = "welder fuel", PLASMA = "plasma", PACID =  "polytrinic acid", SACID = "sulphuric acid", AMUTATIONTOXIN = "slime mutation toxin", MINDBREAKER = "mindbreaker toxin", CYANIDE = "cyanide", IMPEDREZENE = "impedrezene")
+var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE)
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
