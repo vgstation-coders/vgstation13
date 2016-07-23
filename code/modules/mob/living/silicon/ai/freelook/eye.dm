@@ -40,7 +40,7 @@
 /mob/camera/aiEye/Move()
 	return 0
 
-//An AI eyeobj mob cant hear unless it updates hires with a Malf Module
+//An AI eyeobj mob cant hear unless it updates high_res with a Malf Module
 /mob/camera/aiEye/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!high_res)
 		return
