@@ -857,9 +857,21 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			dat += "Buffer is empty.<BR>"
 		if(!condi)
-
 			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><a href=\"?src=\ref[src]&change_bottle=1\"><img src=\"bottle[bottlesprite].png\" /></a><BR>"}
-			dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"}
+			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"}
+
+			dat += "<table>"
+			for(var/i = 1 to MAX_PILL_SPRITE)
+				if(i%10 == 1)
+					dat += "<tr>"
+
+				dat += "<td><a href=\"?src=\ref[src]&pill_sprite=[i]\"><span class=\"pillIcon\"><img src=\"pill[i].png\" /></div></a></td>"
+
+				if (i%10 == 0)
+					dat +="</tr>"
+			dat += "</table>"
+
+
 			dat += {"<HR><BR><A href='?src=\ref[src];createpill=1'>Create single pill (50 units max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills (50 units max each; [max_pill_count] max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
@@ -868,7 +880,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 400, src)
+	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 500, src)
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "[windowtype]")
