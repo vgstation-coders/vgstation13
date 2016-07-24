@@ -377,7 +377,7 @@ var/global/list/paper_folding_results = list ( \
 
 	usr.drop_item(src, force_drop = 1)	//Drop the original paper to free our hand and call proper inventory handling code
 	var/obj/item/weapon/p_folded/P = new foldtype(get_turf(src), unfolds_into = src) //Let's make a new item that unfolds into the original paper
-	src.loc = P	//and also contains it, for good measure.
+	src.forceMove(P)	//and also contains it, for good measure.
 	usr.put_in_hands(P)
 	P.pixel_y = src.pixel_y
 	P.pixel_x = src.pixel_x
