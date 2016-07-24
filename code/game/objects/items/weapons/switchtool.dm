@@ -114,6 +114,7 @@
 
 /obj/item/weapon/switchtool/proc/undeploy()
 	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
+	deployed.cant_drop = 0
 	deployed = null
 	overlays.len = 0
 	w_class = initial(w_class)
