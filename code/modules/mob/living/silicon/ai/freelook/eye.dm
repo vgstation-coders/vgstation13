@@ -39,7 +39,10 @@
 
 /mob/camera/aiEye/Move()
 	return 0
-
+/mob/camera/aiEye/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A) //proc for eye seeing visible messages from atom A
+	if(ai && cameranet.checkCameraVis(A)) //check it's actually in view of a camera
+		ai.show_message( message, 1, blind_message, 2)
+			
 //An AI eyeobj mob cant hear unless it updates hires with a Malf Module
 /mob/camera/aiEye/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!high_res)
