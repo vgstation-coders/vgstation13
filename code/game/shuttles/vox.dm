@@ -52,6 +52,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 /obj/machinery/computer/shuttle_control/vox
 	icon_state = "syndishuttle"
+	allow_silicons = 0
 
 	req_access = list(access_syndicate)
 
