@@ -69,6 +69,10 @@ var/global/list/investigations=list(
 /atom/proc/format_investigation_text(var/message)
 	return "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[src] ([x],[y],[z])</small> || [src] [message]<br />"
 
+// Permits special snowflake formatting.
+/mob/format_investigation_text(var/message)
+	return "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[src] ([x],[y],[z])</small> || [key_name(src)] [message]<br />"
+
 // For non-atoms or very specific messages.
 /proc/minimal_investigation_log(var/subject, var/message, var/prefix)
 	var/datum/log_controller/I = investigations[subject]
