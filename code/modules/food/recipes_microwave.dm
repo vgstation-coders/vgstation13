@@ -1209,6 +1209,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
 		/obj/item/weapon/reagent_containers/food/snacks/spaghetti
 		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
 
 // Salad ///////////////////////////////////////////////////////
 
@@ -1272,8 +1273,10 @@
 	reagents = list (VINEGAR = 5, SOYSAUCE = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic
+		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
 
 /datum/recipe/confederatespirit
 	items = list(
@@ -1382,6 +1385,34 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
+
+/datum/recipe/tortillachips
+	reagents = list (FLOUR = 20, CORNOIL = 10, SODIUMCHLORIDE = 10)
+	result = /obj/item/weapon/chipbasket
+
+/datum/recipe/queso
+	reagents = list(BLACKPEPPER = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/chili
+		)
+	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/queso
+
+/datum/recipe/guacemole
+	reagents = list(LIMEJUICE = 10, SODIUMCHLORIDE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
+		)
+	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/guacemole
+
+/datum/recipe/salsa
+	reagents = list(LIMEJUICE = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic
+		)
+	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/salsa
 
 
 // Misc ////////////////////////////////////////////////////////
@@ -1557,10 +1588,10 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
 
 /datum/recipe/honeycitruschicken
-	reagents = (SOYSAUCE = 5, HONEY = 10)
+	reagents = list(SOYSAUCE = 5, HONEY = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
 			/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
-	result = honeycitruschicken
+	result = /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken
 
 /datum/recipe/gigapuddi
 	reagents = list(MILK = 15)
@@ -1614,7 +1645,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/flan
 
 /datum/recipe/honeyflan
-	reagents = list(MILK = 5,CINNAMON = 5,"honey" = 5)
+	reagents = list(MILK = 5,CINNAMON = 5,HONEY = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg
 		)
@@ -1805,43 +1836,23 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pimiento
 
-///Dan Food///
-/datum/recipe/danburrito
-	reagents = list(DISCOUNT = 5)
+/datum/recipe/burrito
+	reagents = list(FLOUR = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/threebeanburrito
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/discountburrito
-	result_amount = 3
+		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
+		/obj/item/weapon/reagent_containers/food/snacks/beans
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/threebeanburrito
 
-/datum/recipe/danbar
-	reagents = list(DISCOUNT = 5)
+/datum/recipe/hauntedjam
+	reagents = list(SUGAR = 5, VINEGAR = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/discountchocolate
-	result_amount = 3
-
-/datum/recipe/danitos
-	reagents = list(DISCOUNT = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/chips/cookable
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/danitos
-	result_amount = 3
-
-/datum/recipe/danburger
-	reagents = list(DISCOUNT = 5, FLOUR = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/discountburger
-	result_amount = 3
-
-/datum/recipe/danpie
-	reagents = list(DISCOUNT = 5, FLOUR = 10)
-	result = /obj/item/weapon/reagent_containers/food/snacks/pie/discount
-	result_amount = 3
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/hauntedjam
 
 ///Vox Food///
 /datum/recipe/gravyboat

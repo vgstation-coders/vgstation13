@@ -3,7 +3,6 @@
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
 	desc = "yummy"
-	icon = 'icons/obj/food.dmi'
 	icon_state = null
 	log_reagents = 1
 
@@ -3613,7 +3612,7 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 8)
 		reagents.add_reagent(CINNAMON, 5)
-		reagents.add_reagent("honey", 6)
+		reagents.add_reagent(HONEY, 6)
 		bitesize = 3
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
 
@@ -4406,7 +4405,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
 	name = "starry night salad"
 	desc = "Eating too much of this salad may cause you to want to cut off your own ear."
-	icon_state = "vanishingstew"
+	icon_state = "starrynight"
 	bitesize = 2
 	New()
 		..()
@@ -4438,16 +4437,16 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent(NUTRIMENT,3)
+		reagents.add_reagent(NUTRIMENT,1)
 
 /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
 	name = "spicy cold noodles"
 	desc = "A noodle dish in the style popular in Space China."
-	icon_state = ""
+	icon_state = "spicycoldnoodles"
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent(NUTRIMENT,2)
+		reagents.add_reagent(NUTRIMENT,4)
 
 /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
 	name = "chinese cold salad"
@@ -4461,7 +4460,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken
 	name = "honey citrus chicken"
-	desc = "The strong, tangy flavor of the orange and soy sauce highlights the smooth, thick taste of the honey. This fusion dish is one of the highlights Terran cuisine."
+	desc = "The strong, tangy flavor of the orange and soy sauce highlights the smooth, thick taste of the honey. This fusion dish is one of the highlights of Terran cuisine."
 	icon_state = "honeycitruschicken"
 	bitesize = 4
 	New()
@@ -4477,7 +4476,7 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent(NUTRIMENT,3)
+		reagents.add_reagent(SUGAR,1)
 
 /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
 	name = "confederate spirit"
@@ -4488,20 +4487,33 @@
 		..()
 		reagents.add_reagent(NUTRIMENT,8)
 
-/obj/item/weapon/reagent_containers/food/snacks/ultimatefishtaco
-	name = "ultimate fish taco"
+/obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
+	name = "fish taco supreme"
 	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
-	icon_state = "ultimatefishtaco"
+	icon_state = "fishtacosupreme"
 	bitesize = 3
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT,6)
 
 /obj/item/weapon/reagent_containers/food/snacks/poissoncru
-	name = "Poisson Cru"
-	desc = "The national dish of Tongo, a country that you had previously never heard about."
+	name = "poisson cru"
+	desc = "The national dish of Tonga, a country that you had previously never heard about."
 	icon_state = "poissoncru"
 	bitesize = 2
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/hauntedjam
+	name = "haunted jam"
+	desc = "I woke up one morning to find that the entire city had been covered in a three-foot layer of man-eating jam."
+	icon_state = "ghostjam"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(HELL_RAMEN,8) //This should be enough to at least seriously wound, if not kill, someone.
+
+/obj/item/weapon/reagent_containers/food/snacks/hauntedjam/spook()
+	visible_message("<span class='warning'>\The [src] rattles maliciously!</span>")
+	forceMove(get_step(src, pick(cardinal))) //Move in a random direction

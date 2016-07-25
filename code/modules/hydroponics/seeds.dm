@@ -168,6 +168,11 @@
 	seed_type = "icechili"
 	vending_cat = "vegetables"
 
+/obj/item/seeds/ghostpepperseed
+	name = "packet of ghost pepper seeds"
+	seed_type = "ghostpepper"
+	vending_cat = "vegetables"
+
 /obj/item/seeds/soyaseed
 	name = "packet of soybean seeds"
 	seed_type = "soybean"
@@ -432,7 +437,7 @@
 	display_name = "chili plants"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/chili)
 	chems = list(CAPSAICIN = list(3,5), NUTRIMENT = list(1,25))
-	mutants = list("icechili")
+	mutants = list("icechili", "ghostpepper")
 	packet_icon = "seed-chili"
 	plant_icon = "chili"
 	harvest_repeat = 1
@@ -457,6 +462,18 @@
 
 	maturation = 4
 	production = 4
+
+/datum/seed/chili/ghost
+	name = "ghostpepper"
+	seed_name = "ghostpepper"
+	display_name = "ghost pepper plants"
+	mutants = null
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper)
+	chems = list(CONDENSEDCAPSAICIN = list(3,4), NEUROTOXIN = list(0,40))
+	packet_icon = "seed-ghostpepper"
+	plant_icon = "chilighost"
+
+	production = 3
 
 // Berry plants/variants.
 /datum/seed/berry
@@ -1102,7 +1119,7 @@
 	packet_icon = "seed-mtear"
 	products = list(/obj/item/stack/medical/ointment/tajaran)
 	plant_icon = "mtear"
-	chems = list("honey" = list(1,10), KELOTANE = list(3,5))
+	chems = list(HONEY = list(1,10), KELOTANE = list(3,5))
 
 	lifespan = 50
 	maturation = 3
