@@ -65,7 +65,7 @@
 	user.visible_message("<span class='notice'>[user] starts climbing into \the [src]!</span>")
 	if(do_after(user, src, 60))
 		user.forceMove(src)
-		to_chat(user, "<span class='info'><b>You are now inside the cake! When you're ready to emerge from the cake in a blaze of confetti and party horns, pull on the string by clicking on \the [src]. If you wish to leave without setting off the confetti, just attempt to move out of the cake!</b></span>")
+		to_chat(user, "<span class='info'>You are now inside the cake! When you're ready to emerge from the cake in a blaze of confetti and party horns, pull on the string by clicking on \the [src] (<b>this can only be done once</b>). If you wish to leave without setting off the confetti, just attempt to move out of the cake!</span>")
 
 /obj/structure/popout_cake/attack_slime(mob/user)
 	return attack_hand(user)
