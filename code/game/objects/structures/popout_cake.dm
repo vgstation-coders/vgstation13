@@ -9,14 +9,17 @@
 	var/pixel_y_offset_max = 24
 
 /datum/locking_category/popout_cake/lock(atom/movable/AM)
-	AM.pixel_y = 0
-	AM.pixel_x = 0
+	pixel_y_offset -= AM.pixel_y
+	pixel_x_offset -= AM.pixel_x
+
+	//AM.pixel_y = 0
+	//AM.pixel_x = 0
 
 	..()
 
 	owner.plane = AM.plane
 	owner.layer = AM.layer + 0.1
-	animate(AM, pixel_y = pixel_y_offset_max, 40) //Increase pixel_y over 4 seconds
+	animate(AM, pixel_y = pixel_y_offset_max + AM.pixel_y, 40) //Increase pixel_y over 4 seconds
 
 /datum/locking_category/popout_cake/unlock(atom/movable/AM)
 	..()
