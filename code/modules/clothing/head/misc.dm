@@ -211,6 +211,16 @@
 
 	usr.visible_message("[usr] tips \his fedora.", "You tip your fedora.")
 
+/obj/item/clothing/head/fedora/white
+	name = "white fedora"
+	icon_state = "fedora_white"
+	desc = "A great white hat ruined by being within fifty yards of you."
+
+/obj/item/clothing/head/fedora/brown
+	name = "brown fedora"
+	icon_state = "fedora_brown"
+	desc = "Don't you even think about losing it."
+
 /obj/item/clothing/head/fez
 	name = "\improper fez"
 	icon_state = "fez"
@@ -402,3 +412,9 @@
 	icon_state = "mummy"
 	item_state = "mummy"
 	_color = "mummy"
+
+/obj/item/clothing/head/dunce_cap
+	name = "dunce cap"
+	desc = "A conical paper hat which used to be used as a punishment in schools. Misbehaving children had to wear it while standing in a corner. The writing on it says \"DUNCE\"."
+	icon_state = "dunce_cap"
+	item_state = "dunce_cap"
