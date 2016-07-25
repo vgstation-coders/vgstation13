@@ -416,5 +416,5 @@
 /obj/item/clothing/head/dunce_cap
 	name = "dunce cap"
 	desc = "A conical paper hat which used to be used as a punishment in schools. Misbehaving children had to wear it while standing in a corner. The writing on it says \"DUNCE\"."
-	icon_state = "dunce_cap"
-	item_state = "dunce_cap"
+	icon_state = "duncecap"
+	item_state = "duncecap"
