@@ -31,12 +31,20 @@
 	item_state = "magus"
 	siemens_coefficient = 0.8
 
+/obj/item/clothing/head/wizard/magus/fake
+	desc = "A mysterious helmet."
+	wizard_garb = 0
+
 /obj/item/clothing/head/wizard/clown
 	name = "purple wizard hat"
 	desc = "Strange-looking purple hat-wear that most certainly belongs to a real magic user."
 	icon_state = "wizhatclown"
 	item_state = "wizhatclown" // cheating
 	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/clown/fake
+	desc = "Strange-looking purple hat-wear that most certainly doesn't belong to a real magic user."
+	wizard_garb = 0
 
 /obj/item/clothing/head/wizard/amp
 	name = "psychic amplifier"
@@ -50,6 +58,10 @@
 	icon_state = "necromancer"
 	item_state = "necrohood"
 	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/necro/fake
+	desc = "An elegant hood woven with child labor somewhere in Space China."
+	wizard_garb = 0
 
 /obj/item/clothing/head/wizard/magician
 	name = "Magical Tophat"

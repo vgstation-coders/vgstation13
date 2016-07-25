@@ -420,9 +420,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/clothing/head/headband,
 	/obj/item/clothing/head/libertyhat,
 	/obj/item/clothing/head/mailman,
+	/obj/item/clothing/head/naziofficer,
+	/obj/item/clothing/head/panzer,
+	/obj/item/clothing/head/powdered_wig,
+	/obj/item/clothing/head/soft/mime,
 	/obj/item/clothing/head/squatter_hat,
 	/obj/item/clothing/head/that,
-	/obj/item/clothing/head/ushanka
+	/obj/item/clothing/head/ushanka,
+	/obj/item/clothing/head/wizard/magus/fake,
+	/obj/item/clothing/head/wizard/clown/fake,
+	/obj/item/clothing/head/wizard/necro/fake
 	)
 
 /datum/supply_packs/randomised/cheap_glasses
