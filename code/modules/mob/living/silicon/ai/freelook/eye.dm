@@ -43,7 +43,7 @@
 	if(ai && cameranet.checkCameraVis(A)) //check it's actually in view of a camera
 		ai.show_message( message, 1, blind_message, 2)
 			
-//An AI eyeobj mob cant hear unless it updates hires with a Malf Module
+//An AI eyeobj mob cant hear unless it updates high_res with a Malf Module
 /mob/camera/aiEye/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!high_res)
 		return
