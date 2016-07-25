@@ -34,7 +34,7 @@
 
 
 /datum/event/bluespace_anomaly/announce()
-	command_alert("Bluespace anomaly detected in the vicinity of [station_name()]. [impact_area.name] has been affected.", "Anomaly Alert")
+	command_alert(new /datum/command_alert/bluespace_anomaly(impact_area.name))
 
 
 /datum/event/bluespace_anomaly/start()

@@ -115,7 +115,7 @@
 
 
 /datum/event/hostile_infestation/announce()
-	command_alert("One or more hostile creatures have entered the station in [localestring]. External security cameras indicate that the creature has [monsterstring].", "WARNING: Hostile Creature(s)")
+	command_alert(new /datum/command_alert/hostile_creatures(localestring, monsterstring))
 
 
 #undef LOC_KITCHEN

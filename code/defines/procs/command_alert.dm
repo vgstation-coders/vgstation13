@@ -1,4 +1,13 @@
+//First argument can be a /datum/command_alert object or path. See "code/datums/helper_datums/command_alerts.dm" for more info
+
 /proc/command_alert(var/text, var/title = "",var/force_report = 0,var/alert,var/noalert = 0)
+	if(ispath(text, /datum/command_alert))
+		var/datum/command_alert/CA = new text
+		return CA.announce()
+	else if(istype(text, /datum/command_alert))
+		var/datum/command_alert/CA = text
+		return CA.announce()
+
 	if(!alert && !noalert)
 		alert = 'sound/AI/commandreport.ogg'
 	var/gibberish = map.linked_to_centcomm ? 0 : 1

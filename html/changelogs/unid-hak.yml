@@ -1,0 +1,7 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscdel: "Changed Malf AI modules: Replaced Interhack (useless module) with Fake Centcom Announcement:"
+- rscadd: "Fake Centcom Announcement: Buying it lets you create up to 3 centcom announcements (such as meteor waves warning, unidentified lifesigns warning etc). Costs 15 units."

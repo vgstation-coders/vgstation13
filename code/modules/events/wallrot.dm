@@ -10,7 +10,7 @@ datum/event/wallrot/setup()
 	severity = rand(5, 10)
 
 datum/event/wallrot/announce()
-	command_alert("Harmful fungi detected on station. Station structures may be contaminated.", "Biohazard Alert")
+	command_alert(/datum/command_alert/wall_fungi)
 
 datum/event/wallrot/start()
 	spawn()
