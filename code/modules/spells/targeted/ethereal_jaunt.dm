@@ -5,8 +5,8 @@
 	school = "transmutation"
 	charge_max = 300
 	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
-	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation = "Rah'dee K'Alari"
+	invocation_type = SpI_SHOUT
 	range = -1
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
@@ -18,11 +18,25 @@
 	var/exitanim = "reappear"
 	var/mist = 1
 
-/spell/targeted/ethereal_jaunt/cast(list/targets) //magnets, so mostly hardcoded
+/spell/targeted/ethereal_jaunt/cast(list/targets)
 	if(targets.len > 1)
+		var/list/jaunts = list()
+		for(var/mob/living/target in targets)
+			var/image/I = image(icon = target.icon, loc = target, icon_state = target.icon_state)
+			I.appearance = target.appearance
+			I.alpha = 125
+			jaunts += I
 		for(var/mob/living/target in targets)
 			spawn(0)
-				ethereal_jaunt(target, duration, enteranim, exitanim, mist)
+				if(!target.incorporeal_move == INCORPOREAL_ETHEREAL) //To avoid the potential for infinite jaunt
+					if(target.client)
+						target.client.images += jaunts
+					ethereal_jaunt(target, duration, enteranim, exitanim, mist)
+					if(target.client)
+						target.client.images -= jaunts
+		sleep(duration + 60 SECONDS)
+		for(var/image/I in jaunts) //Garbage collection of images
+			I.loc = null
 	else
 		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist)
 
@@ -75,6 +89,18 @@
 	target.incorporeal_move = previncorp
 	target.alphas -= "etheral_jaunt"
 	target.handle_alpha()
+
+/spell/targeted/ethereal_jaunt/jauntgroup
+	name = "Group Jaunt"
+	desc = "This spell allows all people within range to be jaunted along with the user"
+	spell_flags = Z2NOCAST | INCLUDEUSER //Adminbus spell, so we'll exclude robe requirement for ease of use
+
+	invocation = "Tc'ln Oc'lip"
+	max_targets = 0
+	range = 3
+
+	charge_max = 600 //Double cooldown, makes it less spammable
+	duration = 100 //Double jaunt time, makes it easier to cooperate
 
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
