@@ -26,23 +26,23 @@
 
 			switch(C.mob.stat)
 				if(UNCONSCIOUS)
-					entry += " - <font color='darkgray'><b>Unconscious</b></font>"
+					entry += " - <span style='color:darkgray'><b>Unconscious</b></span>"
 
 				if(DEAD)
 					if(isobserver(C.mob))
 						var/mob/dead/observer/O = C.mob
 
 						if(O.started_as_observer)
-							entry += " - <font color='gray'>Observing</font>"
+							entry += " - <span style='color:gray'>Observing</span>"
 							observers++
 						else
-							entry += " - <font color='black'><b>DEAD</b></font>"
+							entry += " - <b>DEAD</b>"
 							dead++
 					else if (isnewplayer(C.mob))
-						entry += " - <font color='gray'><i>Lobby</i></font>"
+						entry += " - <span style='color:gray'><i>Lobby</i></span>"
 						lobby++
 					else
-						entry += " - <font color='black'><b>DEAD</b></font>"
+						entry += " - <b>DEAD</b>"
 						dead++
 				else
 					living++
@@ -68,7 +68,7 @@
 	for(var/line in sortList(Lines))
 		msg += "[line]\n"
 	if(holder)
-		msg += "<b><span class='notice'>Total Living: [living]</span> | Total Dead: [dead] | <font color='gray'>Observing: [observers]</font> | <font color='gray'><i>In Lobby: [lobby]</i></font> | <span class='bad'>Living Antags: [living_antags]</span> | <span class='good'>Dead Antags: [dead_antags]</span></b>\n"
+		msg += "<b><span class='notice'>Total Living: [living]</span> | Total Dead: [dead] | <span style='color:gray'>Observing: [observers]</span> | <span style='color:gray'><i>In Lobby: [lobby]</i></span> | <span class='bad'>Living Antags: [living_antags]</span> | <span class='good'>Dead Antags: [dead_antags]</span></b>\n"
 	msg += "<b>Total Players: [length(Lines)]</b>\n"
 	to_chat(src, msg)
 
