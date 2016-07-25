@@ -332,7 +332,6 @@ div.notice
 	/* The pill image will be enlarged to 64x64, the box that contains it will remain 32x32 though. Essentially cropping it out. */
     width: 32px;
     height: 32px;
-	display: inline-block;
 	/* Since we can't really crop shit we're just hiding the rest */
     overflow: hidden;
 }
@@ -343,8 +342,6 @@ div.notice
     height: 64px;
 	/* "Center" it, since we can only crop out the top-left  */
     margin: -16px -16px -16px -16px;
-	/* Even though the empty borders of the image are being hidden by overflow:hidden, they still cause you to select the link when moused over, this fixes that problem */
-	pointer-events: none;
 	/* Remove antialias to prevent cataracts */
 	-ms-interpolation-mode: nearest-neighbor;
 }
