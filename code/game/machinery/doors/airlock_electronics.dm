@@ -89,7 +89,7 @@
 
 /obj/item/weapon/circuitboard/airlock/Topic(href, href_list)
 	if(..()) return 1 //Its not as though this does ANYTHING
-	if(!Adjacent(usr) || usr.restrained() || (!ishuman(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked" || installed)
+	if(!Adjacent(usr) || usr.incapacitated() || (!ishuman(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked" || installed)
 		return
 	if(href_list["close"])
 		usr << browse(null, "window=airlock")
