@@ -1,3 +1,11 @@
+#define VALUE_OPERATION "Operation"
+#define VALUE_CHECK_1 "Checked Value 1"
+#define VALUE_CHECK_2 "Checked Value 2"
+#define VALUE_DEVICE_1 "Device 1"
+#define VALUE_DEVICE_2 "Device 2"
+#define VALUE_PULSE_IF_TRUE "Pulse if true"
+#define VALUE_PULSE_IF_FALSE "Pulse if false"
+
 //////////////////////////Comparison circuit////////////////////////
 // * When pulsed, check FIRST connected assembly. If the condition is TRUE, emit a pulse to the SECOND connected assembly. If the condition is false, emit a pulse to the THIRD connected assembly.
 //
@@ -33,13 +41,13 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	var/list/device_pool = list() //List of all connected devices
 
-	accessible_values = list("Operation" = "check_type;text",\
-		"Checked Value 1" = "checked_value_1;text",\
-		"Checked Value 2" = "checked_value_2;text",\
-		"Device 1" = "check_this;pointer",\
-		"Device 2" = "check_against;pointer",\
-		"Pulse if true" = "pulse_if_true;pointer",\
-		"Pulse if false" = "pulse_if_false;pointer")
+	accessible_values = list(VALUE_OPERATION = "check_type;"+VT_TEXT,\
+		VALUE_CHECK_1 = "checked_value_1;"+VT_TEXT,\
+		VALUE_CHECK_2 = "checked_value_2;"+VT_TEXT,\
+		VALUE_DEVICE_1 = "check_this;"+VT_POINTER,\
+		VALUE_DEVICE_2 = "check_against;"+VT_POINTER,\
+		VALUE_PULSE_IF_TRUE = "pulse_if_true;"+VT_POINTER,\
+		VALUE_PULSE_IF_FALSE = "pulse_if_false;"+VT_POINTER)
 
 /obj/item/device/assembly/comparison/activate()
 	if(!..()) return 0
@@ -284,12 +292,12 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 	switch(value)
 		//Shitcode warning
 		//Special cases for Device 1 and Device 2 variables - they can work both as numbers and as pointers. Turn them into numbers if there's no accessed value data for them
-		if("Device 1")
+		if(VALUE_DEVICE_1)
 			if(!checked_value_1 && isnum(new_value))
 				set_value("check_this", new_value)
 				return
 
-		if("Device 2")
+		if(VALUE_DEVICE_2)
 			if(!checked_value_2 && isnum(new_value))
 				set_value("check_against", new_value)
 				return
@@ -317,3 +325,11 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 	if(check_against == A) check_against = 1
 	if(pulse_if_true == A) pulse_if_true = null
 	if(pulse_if_false == A) pulse_if_false = null
+
+#undef VALUE_OPERATION
+#undef VALUE_CHECK_1
+#undef VALUE_CHECK_2
+#undef VALUE_DEVICE_1
+#undef VALUE_DEVICE_2
+#undef VALUE_PULSE_IF_TRUE
+#undef VALUE_PULSE_IF_FALSE

@@ -1,3 +1,5 @@
+#define VALUE_MESSAGE "Message"
+
 /obj/item/device/assembly/speaker
 	name = "speaker"
 	var/real_name = "speaker" //speakers can be renamed with a pen
@@ -10,7 +12,7 @@
 
 	var/message = "Thank you for using NanoSpeaker!"
 
-	accessible_values = list("Message" = "message;text")
+	accessible_values = list(VALUE_MESSAGE = "message;"+VT_TEXT)
 
 /obj/item/device/assembly/speaker/activate()
 	src.say(message)
@@ -50,3 +52,5 @@
 	for(var/mob/O in hearers(location, null)) //to all living
 		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[msg]\"",2)
 */
+
+#undef VALUE_MESSAGE

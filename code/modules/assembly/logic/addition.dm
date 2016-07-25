@@ -1,3 +1,6 @@
+#define VALUE_COUNTER "Counter"
+#define VALUE_LIMIT "Limit"
+
 //////////////////////////Addition circuit////////////////////////
 // * When pulsed, increase counter by 1. When counter reaches a specified value, reset it to 0 and emit a pulse.
 
@@ -16,8 +19,9 @@
 	var/pulse_counter = 0
 	var/limit = 1 //When the pulse counter reaches this value, emit a signal.
 
-	accessible_values = list("Counter" = "pulse_counter;number",\
-		"Limit" = "limit;number")
+	accessible_values = list(\
+		VALUE_COUNTER = "pulse_counter;"+VT_NUMBER,\
+		VALUE_LIMIT = "limit;"+VT_NUMBER)
 
 /obj/item/device/assembly/addition/activate()
 	if(!..()) return 0
@@ -69,3 +73,6 @@
 #undef sub_counter_href
 #undef add_limit_href
 #undef sub_limit_href
+
+#undef VALUE_COUNTER
+#undef VALUE_LIMIT

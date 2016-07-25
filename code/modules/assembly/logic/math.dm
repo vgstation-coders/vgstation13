@@ -1,3 +1,7 @@
+#define VALUE_RESULT "Result"
+#define VALUE_OPERATION "Operation"
+#define VALUE_VARIABLES "Variables"
+
 //////////////////////////Math circuit////////////////////////
 // * Autism
 // * Only works in assembly frames. Performs one of the following operations between all variables/constants: ADD, SUBTRACT, MULTIPLY, DIVIDE, POWER, AVERAGE, MIN, MAX and trigonometric functions
@@ -29,9 +33,9 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	var/operation = "ADD"
 
 	//Allow devices to read this circiut's result. First parameter (variable name, which is "null" here) isn't important - the functions are overwritten
-	accessible_values = list("Result" = "null;number",\
-		"Operation" = "operation;text",\
-		"Variables" = "null;text")
+	accessible_values = list(VALUE_RESULT = "null;"+VT_NUMBER,\
+		VALUE_OPERATION = "operation;"+VT_TEXT,\
+		VALUE_VARIABLES = "null;"+VT_TEXT)
 	//"Variables": Export data about variables to text, in this format: "1&2&a1+Remaining Time&a2+Remaining Time&55", divided by ampersands. Numbers like 1, 2 are constant numbers. a1+[whatever], a2+[whatever] are pointers to assemblies
 
 /obj/item/device/assembly/math/interact(mob/user as mob)
@@ -100,7 +104,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	if(..()) return
 
 	if(href_list["output_value"])
-		to_chat(usr, "<span class='info'>Result: [get_value("Result")]</span>")
+		to_chat(usr, "<span class='info'>Result: [get_value(VALUE_RESULT)]</span>")
 		return
 
 	if(href_list["add_const"])
@@ -173,10 +177,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 /obj/item/device/assembly/math/get_value(value)
 	if(!values.len) return 0
 
-	if(value != "Result" && value != "Variables")
-		return ..(value)
-
-	if(value == "Result")
+	if(value == VALUE_RESULT)
 		if(values.len == 1)
 			var/obj/item/device/assembly/a = values[1]
 			return VALUE(a)
@@ -265,7 +266,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 		. = round(. , 0.00001) //Round to 5 decimal places (prevent shit like cos(90) = 6.12323e-017)
 
-	else if(value == "Variables")
+	else if(value == VALUE_VARIABLES)
 		//EXPORT all nomials in a single string
 		//Example: list(1, 4, [TIMER WITH INDEX 5], [ADDITION CIRCUIT WITH INDEX 99], 15) turns into "1&4&a5&a99&15"
 		//All nomials are separated by &
@@ -287,11 +288,13 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 		exported_string = copytext(exported_string, 1, length(exported_string))
 
 		return exported_string
+	else
+		return ..()
 
 /obj/item/device/assembly/math/write_to_value(value, new_value)
-	if(value == "Result") //Can't write to result
+	if(value == VALUE_RESULT) //Can't write to result
 		return
-	else if(value == "Variables") //Importing variables
+	else if(value == VALUE_VARIABLES) //Importing variables
 		var/obj/item/device/assembly_frame/AF = loc
 		if(!istype(AF))
 			return 0
@@ -320,7 +323,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 		return
 
-	else if(value == "Operation") //Modifying operation
+	else if(value == VALUE_OPERATION) //Modifying operation
 		new_value = uppertext(new_value)
 
 		if(!math_circuit_operations_list.Find(new_value)) //Not a valid operation
@@ -353,3 +356,6 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	values.Remove(A)
 
 #undef VALUE
+#undef VALUE_RESULT
+#undef VALUE_OPERATION
+#undef VALUE_VARIABLES

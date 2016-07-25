@@ -1,3 +1,10 @@
+#define VALUE_STORED_NUMBER "Stored number"
+#define VALUE_STORED_STRING "Stored string"
+#define VALUE_READ_INDEX "Read Index"
+#define VALUE_READ_VALUE "Read Value"
+#define VALUE_WRITE_INDEX "Write Index"
+#define VALUE_WRITE_VALUE "Write Value"
+
 //////////////////////////Write/Read circuit////////////////////////
 // * Can be connected to two assemblies - READ and WRITE
 // * Two stored values: stored_num and stored_txt. One stores a number, the other one text.
@@ -29,12 +36,13 @@
 	var/stored_num = 0
 	var/stored_txt = "NULL"
 
-	accessible_values = list("Stored number" = "stored_num;number",\
-		"Stored string" = "stored_txt;text",\
-		"Read Index" = "READ;pointer",\
-		"Read Value" = "READ_value;text",\
-		"Write Index" = "WRITE;pointer",\
-		"Write Value" = "WRITE_value;text")
+	accessible_values = list(\
+		VALUE_STORED_NUMBER = "stored_num;"+VT_NUMBER,\
+		VALUE_STORED_STRING = "stored_txt;"+VT_TEXT,\
+		VALUE_READ_INDEX = "READ;"+VT_POINTER,\
+		VALUE_READ_VALUE = "READ_value;"+VT_TEXT,\
+		VALUE_WRITE_INDEX = "WRITE;"+VT_POINTER,\
+		VALUE_WRITE_VALUE = "WRITE_value;"+VT_TEXT)
 
 	var/obj/item/device/assembly/READ = null
 	var/READ_value = ""
@@ -47,6 +55,7 @@
 /obj/item/device/assembly/read_write/activate()
 	if(!..()) return 0
 
+	//First read values
 	if(READ && READ_value)
 		var/value = READ.get_value(READ_value)
 
@@ -57,12 +66,15 @@
 			stored_num = value
 			stored_txt = num2text(value)
 
+	//Then write values
 	if(WRITE && WRITE_value)
 		var/list/W_params = params2list(WRITE.accessible_values[WRITE_value])
+
+		//See the type of the value we're writing to (if it's text, write stored text. Otherwise write stored number)
 		switch(W_params[VALUE_VARIABLE_TYPE])
-			if("text")
+			if(VT_TEXT) //text
 				WRITE.write_to_value(WRITE_value, stored_txt)
-			if("number", "pointer")
+			if(VT_NUMBER, VT_POINTER) //numbers, pointers
 				WRITE.write_to_value(WRITE_value, stored_num)
 
 /obj/item/device/assembly/read_write/interact(mob/user)
@@ -162,43 +174,6 @@
 		WRITE = null
 		//WRITE_value = ""
 
-/*
-/obj/item/device/assembly/read_write/get_value(value)
-	if(value == "Read Index")
-		return get_device_index(READ)
-	else if(value == "Write Index")
-		return get_device_index(WRITE)
-
-	return ..()
-
-/obj/item/device/assembly/read_write/write_to_value(value, new_value)
-	var/obj/item/device/assembly_frame/AF = loc
-	var/obj/item/device/assembly/A
-
-	if(!istype(AF))
-		return "bad location"
-
-	if((value == "Read Index") || (value == "Write Index"))
-		A = get_device_by_index(new_value)
-	else
-		return ..()
-
-	if(A == src)
-		return "can't connect to itself"//Can't connect to itself
-	if(!istype(A))
-		return "not an assembly" //Connect to assemblies only
-
-	switch(value)
-		if("Read Index")
-			AF.disconnect_assembly_from(src, READ)
-			AF.start_new_connection(src, A)
-			src.READ = A
-		if("Write Index")
-			AF.disconnect_assembly_from(src, WRITE)
-			AF.start_new_connection(src, A)
-			src.WRITE = A
-*/
-
 //Helper proc for finding a device's index
 /obj/item/device/assembly/read_write/proc/get_device_index(obj/item/device/assembly/A)
 	var/obj/item/device/assembly_frame/AF = loc
@@ -217,3 +192,10 @@
 		return null
 
 	return AF.assemblies[index]
+
+#undef VALUE_STORED_NUMBER
+#undef VALUE_STORED_STRING
+#undef VALUE_READ_INDEX
+#undef VALUE_READ_VALUE
+#undef VALUE_WRITE_INDEX
+#undef VALUE_WRITE_VALUE

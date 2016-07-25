@@ -1,3 +1,8 @@
+#define VALUE_TURN_ON "Turn light floors on"
+#define VALUE_R "Red color (0 to 255)"
+#define VALUE_G "Green color (0 to 255)"
+#define VALUE_B "Blue color (0 to 255)"
+
 #define MODE_ADDING 1
 #define MODE_DELETING 2
 
@@ -13,11 +18,11 @@
 
 	wires = WIRE_RECEIVE
 
-	accessible_values = list(
-		"Turn light floors on" = "set_state;number",\
-		"Red color"   = "color_r;number;0;255",\
-		"Green color" = "color_g;number;0;255",\
-		"Blue color"  = "color_b;number;0;255"
+	accessible_values = list(\
+		VALUE_TURN_ON = "set_state;"+VT_NUMBER,\
+		VALUE_R = "color_r;"+VT_NUMBER+";0;255",\
+		VALUE_G = "color_g;"+VT_NUMBER+";0;255",\
+		VALUE_B = "color_b;"+VT_NUMBER+";0;255"
 	)
 
 	var/list/connected_floors = list()
@@ -212,3 +217,8 @@
 
 #undef MODE_ADDING
 #undef MODE_DELETING
+
+#undef VALUE_TURN_ON
+#undef VALUE_R
+#undef VALUE_G
+#undef VALUE_B

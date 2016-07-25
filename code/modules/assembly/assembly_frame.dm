@@ -123,8 +123,8 @@
 			list_for_input["[assemblies.Find(A)]-[A]"] = A //The list is full of strings that are associated with assemblies
 
 
-		var/choice = input(usr, "Send output from [AS] to which device?", "[src]") as null|anything in list_for_input //This input only returns a string with the assembly's number and name
-		choice = list_for_input[choice] //Get the ACTUAL assembly object
+		var/choice_input = input(usr, "Send output from [AS] to which device?", "[src]") as null|anything in list_for_input //This input only returns a string with the assembly's number and name
+		var/obj/item/device/assembly/choice = list_for_input[choice_input] //Get the ACTUAL assembly object
 
 		if(!choice)
 			return
