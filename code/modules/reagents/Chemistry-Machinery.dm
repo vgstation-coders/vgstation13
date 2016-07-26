@@ -665,6 +665,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			if(!name)
 				return
 
+			var/logged_message = " - [usr] ([usr.ckey]) has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
+
 			while(count--)
 				if((amount_per_pill == 0 || reagents.total_volume == 0) && !href_list["createempty"]) //Don't create empty pills unless "createempty" is 1!
 					break
@@ -680,6 +682,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				if(src.loaded_pill_bottle)
 					if(loaded_pill_bottle.contents.len < loaded_pill_bottle.storage_slots)
 						P.loc = loaded_pill_bottle
+				if(count == 0) //only do this ONCE
+					logged_message += "[P.reagents.get_reagent_ids(1)]"
+
+			investigation_log(I_CHEMS, logged_message)
 
 			src.updateUsrDialog()
 			return 1
@@ -1498,8 +1504,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	update_icon()
 
 /obj/machinery/reagentgrinder/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
-		detach()
+	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()) && !inuse)
+		if(holdingitems.len)
+			grind()
+		else
+			detach()
 		return
 	return ..()
 
@@ -1600,7 +1609,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	inuse = 1
 	spawn(60/speed_multiplier)
 		inuse = 0
-		interact(usr)
+		updateUsrDialog()
 	//Snacks and Plants
 	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)

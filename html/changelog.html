@@ -86,6 +86,67 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">2016.07.24</h2>
+			<h3 class="author">9600bauds updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">All-in-One Grinders will now try to start grinding their ingredients when alt-clicked, and only eject their beaker if no ingredients are loaded (previously they would only eject their beaker).</li>
+			</ul>
+			<h3 class="author">JustSumGuy updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Made the food tray more like a table, add items to trays by clicking on the tray with the item in hand. Trays drop all their items upon being placed on a table,thrown, or dropped.</li>
+			</ul>
+			<h3 class="author">mph55 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed an unreported bug which items removed from the switchtool were stuck on your hands after being picked up.</li>
+			</ul>
+
+			<h2 class="date">2016.07.22</h2>
+			<h3 class="author">9600bauds updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where limbs that had burn damage would not be severed from the body via brute damage. This was most commonly seen when trying to decapitate people that were lasered.</li>
+				<li class="rscadd">Trying to put a brain in a MMI now produces a special message telling you to try again if the brain has ghosted but can still rejoin their body, much like how cloners work with corpses. When this happens, the ghosted player will get bwoinked and told to rejoin their corpse.</li>
+				<li class="bugfix">Fixed the message you get when examining a brain, which was supposed to differentiate brains with a player still inside and brains belonging to a ghosted player.</li>
+				<li class="bugfix">Fixed Diona nymphs not regenerating health from bright lights. Note that their health regen is much much slower than grown Diona. Did not 'fix' the way they take damage from darkness, meaning they still pretty much just don't.</li>
+			</ul>
+			<h3 class="author">Intigracy updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Supermatter crates ordered from cargo now cost 500 credits, as opposed to 100.</li>
+			</ul>
+			<h3 class="author">JustSumGuy updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The 'Box Cloner' is now properly built from a machine frame rather than a computer frame.</li>
+				<li class="tweak">Removed the overdose limit on imidazoline, and by extension carrots.</li>
+			</ul>
+
+			<h2 class="date">2016.07.21</h2>
+			<h3 class="author">Hikato updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Plastic crates now store the proper materials for deconstruction.</li>
+				<li class="bugfix">Deconstructing closets/crates give proper materials back. (Plastic crates will get 10 plastic back.)</li>
+			</ul>
+
+			<h2 class="date">2016.07.20</h2>
+			<h3 class="author">Hikato updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Skeletons "drinking" will now remove the liquid from the container.</li>
+			</ul>
+
+			<h2 class="date">2016.07.19</h2>
+			<h3 class="author">Hikato updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Virologists will only spawn with one PDA.</li>
+			</ul>
+
+			<h2 class="date">2016.07.18</h2>
+			<h3 class="author">9600bauds updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed MoMMIs being able to drop held items while ventcrawling, which would make the dropped item magically pop out on the floor above the vent.</li>
+			</ul>
+			<h3 class="author">JustSumGuy updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The High-res camera module for Malf AI now once again lets you read lips as long as their mouth is unobstructed.</li>
+			</ul>
+
 			<h2 class="date">2016.07.17</h2>
 			<h3 class="author">PJB3005 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1474,134 +1535,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">Cameras can take both 1x1 and 3x3 photos. Use the new Set Camera Zoom verb (or alt-click) to switch between the modes.</li>
 				<li class="bugfix">Fixed being unable to take photos of yourself. Fixed AIs being unable to photograph mobs.</li>
 				<li class="wip">Added admin-spawnable cameras that take 5x5 and 7x7 photos. They are experimental and may lag.</li>
-			</ul>
-
-			<h2 class="date">2016.02.22</h2>
-			<h3 class="author">Sood updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Plasmen now react to oxygen and actually need plasma to breathe again. Blame N3X for everything it's fine :^)</li>
-			</ul>
-			<h3 class="author">Unid updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed some bugs with cages. Cyborgs can now interact with cages.</li>
-				<li class="tweak">Cages can now be quickly opened with some weapons or tools.</li>
-				<li class="soundadd">Cages make a sound when opened or closed</li>
-			</ul>
-
-			<h2 class="date">2016.02.19</h2>
-			<h3 class="author">CptWad updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">PBJ's code that makes it so now supermatters not on your z-level exploding will have no effect on your z-level.</li>
-				<li class="tweak">The following apply to Boxstation</li>
-				<li class="rscadd">Enlarged maint in the south east and north east quarters of the map.</li>
-				<li class="experiment">Moved Toxins Test Site/Zoo back a few tiles for dylan</li>
-				<li class="rscadd">New toys scattered around the station, collect them all!</li>
-				<li class="rscadd">More loot at goonecode sat, just bring a weapon or two.</li>
-				<li class="rscadd">New SME shard at derelict. Blessed be the crab</li>
-				<li class="rscadd">New Holopads in CMO and HoS offices.</li>
-				<li class="rscadd">Pen and paper in Chemistry</li>
-				<li class="rscadd">Added all but one of Nigglys pets to their respective homes.</li>
-				<li class="rscadd">Viro expanded a tad, new newscaster.</li>
-				<li class="rscadd">Added 1 pill collector and 2 more antibody scanners.</li>
-				<li class="bugfix">Turned that one vent at arrivals on that should have been on in the first place.</li>
-				<li class="bugfix">Repaired the pipes at cryo.</li>
-				<li class="bugfix">The lightswitch in atmospherics is now reachable.</li>
-				<li class="tweak">Moved the Phalanximine out of the CMO's office. You can still find it however.</li>
-			</ul>
-			<h3 class="author">Skullyton updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The following changes are to Defficiency</li>
-				<li class="rscadd">Ported over metaclubs Centcomm, so ERT and Deathsquad can exist and more room for bus</li>
-				<li class="rscadd">Added the Vox Skipjack from box, so now Vox Raiders can happen on Defficiency</li>
-				<li class="rscadd">Added the salvage shuttle to Z level 6, but as Defficiency is defficient of an aux-docking port, it cant dock to the station properly.</li>
-				<li class="rscadd">Fixed a piping error in xenobiology, gave it and the research corridor some more vents considering the size</li>
-				<li class="rscadd">Expanded the xenobotany area on the research outpost. It now also has gas-controlled trays (just need to wrench them down)</li>
-				<li class="rscadd">Added an autolathe to R&D</li>
-				<li class="rscadd">Fixed a few area mishaps (Area in front of the HoPs office that had no defined area, areas in the SME room that werent correct)</li>
-				<li class="rscadd">Relocated the Mancrowave in medical to somewhere a bit more sensible, removed the Sec outpost from medical as it was unused.</li>
-				<li class="rscadd">Removed stools from the brig as they no longer counted as chairs, but weapons.</li>
-				<li class="rscadd">Added a vox outpost to the asteroid z-level, a bit off the beaten track</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Ian now wears his engineering RIG properly. He can also wear security vests and a SWAT helmet.</li>
-			</ul>
-			<h3 class="author">Sood updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">Deus Ex Update:</li>
-				<li class="tweak">(Deus Ex Update hijacked by Sood from N3X15)</li>
-				<li class="rscadd">Lungs are now fully modular and actually process gas for humans.  Lungs must be compatible with a species or they will die of suffocation.</li>
-				<li class="rscadd">Vox and Plasmamen have their own lungs.</li>
-				<li class="rscadd">Most species currently exhale CO<sub>2</sub>.  Vox may be tweaked later to exhale N<sub>2</sub>O. Plasmamen exhale oxygen, though.</li>
-				<li class="rscadd">Robotics can make Advanced Lungs (programming 2, biomech 4), which are compatible with all species and filter out some gasses (N2O and plasma), up to certain partial pressures.</li>
-				<li class="rscadd">Livers are also modular and can be set to enhance "natural" removal rates of reagents. Nothing yet makes any use of this, so all livers are standard UNTIL YOU CODE IT.</li>
-				<li class="rscadd">Livers which are bruised will deal toxin damage to their owner if the user has any toxic reagents in their system. Ethanol with a bruised liver is extremely dangerous.</li>
-				<li class="rscadd">Livers become damaged over time if their owner has a lot of toxin damage. Doctors beware.</li>
-				<li class="rscadd">Eyes are modular and Advanced Type 1 eyes can grant enhanced nightvision and built-in welder goggles.</li>
-			</ul>
-			<h3 class="author">Unid updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added cages. Mobs inside cages can interact with the outside world, unless the cage's cover is closed. Alt-clicking a cage will toggle its cover. Cages with closed covers can be used to safely transport hostile animals (or assistants).</li>
-				<li class="rscadd">Cages can be crafted with 6 plasteel sheets.</li>
-			</ul>
-
-			<h2 class="date">2016.02.17</h2>
-			<h3 class="author">9600bauds updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Cryo cells now pop you out at a safe temperature once again, though just cold enough to give you the jitters for a few seconds. However, it takes 4 seconds to eject somebody from a Cryo cell. Essentially, the Mancrowave's body heat regulation functionality was directly implemented into Cryo.</li>
-				<li class="rscadd">Cryo cells now also give a short period of grace to non-oxygen-breathing races after being ejected from Cryo, in which they won't breathe (and Plasmamen won't combust) so that they may be given internals safely. This is to replace the effects of post-cryo Hypothermia, which made people not breathe.</li>
-			</ul>
-
-			<h2 class="date">2016.02.16</h2>
-			<h3 class="author">JoeMother0 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">The Gumshoe detective alt title now starts with his own original suit and coat</li>
-			</ul>
-
-			<h2 class="date">2016.02.15</h2>
-			<h3 class="author">Unid updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Baby carps now attack unconscious mobs. When they attack living mobs enough times, they grow up.</li>
-				<li class="rscadd">Baby carps can be fed by attacking them with meat. Feeding them has a slight chance of making them your friend, and will eventually cause them to grow up.</li>
-				<li class="rscadd">Baby animals now consider their mother's friends their friends. This applies to space carps, too</li>
-			</ul>
-
-			<h2 class="date">2016.02.14</h2>
-			<h3 class="author">9600bauds updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a very bizzare bug that could result in humans (especially lings, monkeymen, and head transplanted players) having TWO different blood types, each one of them only used for certain things.</li>
-				<li class="bugfix">Monkeymen will now properly have randomized blood types.</li>
-				<li class="rscdel">Players will now have randomized blood types as well. Random blood types follow a weighted distribution. Hopefully this will save Medbay from a lot of headaches.</li>
-				<li class="experiment">The blood type distribution is as follows: 36% O+, 28% A+, 20% B+, 5% AB+, 4% O-, 3% A-, 1% B-, 1% AB-. This is the same distribution Monkeymen were supposed to have, although a bug prevented it from working properly.</li>
-				<li class="rscadd">Your blood type is now added to your character notes when you spawn, in case you lose your ID (use the 'notes' verb, IC tab). You can check on other people's blood type by examining their ID or using the Medical Records database.</li>
-				<li class="rscadd">Added a 'Wake-Up Cycle' option to Sleepers, which will try to wake up the occupant. This is intended to work as an alternative to the Mancrowave. Alt-clicking a Sleeper while an occupant is inside will automatically start this cycle.</li>
-				<li class="bugfix">Fixed the Paralysis Summary timer not working properly on Sleepers (this will give you an approximation of how long the occupant's paralysis/sleep would last if left alone).</li>
-			</ul>
-			<h3 class="author">Shadowmech88 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added the blunderbuss.</li>
-				<li class="rscadd">Added the tomahawk.</li>
-				<li class="rscadd">Added the pipe tomahawk.</li>
-				<li class="rscadd">Added the cannon.</li>
-				<li class="rscadd">Added the railgun.</li>
-				<li class="rscadd">Added the sword.</li>
-				<li class="rscadd">Added the executioner's sword.</li>
-				<li class="rscadd">Added the venom sword.</li>
-				<li class="rscadd">Added the Hivehand.</li>
-				<li class="rscadd">Added the revialver.</li>
-				<li class="rscadd">Added the blast cannon.</li>
-				<li class="rscadd">Added the subspace tunneler.</li>
-				<li class="soundadd">Added a cylinder spin sound for the russian revolver.</li>
-				<li class="tweak">The chance of a limb being severed by a sharp weapon now scales with the weapon's sharpness.</li>
-				<li class="rscadd">Added Anchor Arms.</li>
-			</ul>
-			<h3 class="author">Sood updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Wizards now spawn with all organic limbs and internal organs.</li>
-			</ul>
-			<h3 class="author">Unid updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a new, disorienting hallucination effect.</li>
 			</ul>
 		</div>
 		<!--
