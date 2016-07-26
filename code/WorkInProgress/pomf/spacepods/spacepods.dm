@@ -317,8 +317,13 @@
 	if(!occupant == usr)
 		return ..() //Handle mousedrop T
 	var/turf/T = get_turf(over)
-	if(!Adjacent(T))
+	if(!Adjacent(T) || T.density)
 		return
+	for(var/atom/movable/A in T.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
 	move_outside(usr, T)
 
 /obj/spacepod/proc/move_outside(mob/living/user, turf/exit_loc = src.loc)
