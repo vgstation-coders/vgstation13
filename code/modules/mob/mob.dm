@@ -61,11 +61,12 @@ var/global/obj/screen/fuckstat/FUCK = new
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	if(on_uattack)
-		on_uattack.holder = null
-		on_uattack = null
 	qdel(on_logout)
 	on_logout = null
+	qdel(on_moved)
+	on_moved = null
+	qdel(on_uattack)
+	on_uattack = null
 
 	..()
 
