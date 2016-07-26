@@ -28,15 +28,12 @@
 			jaunts += I
 		for(var/mob/living/target in targets)
 			spawn(0)
-				if(!target.incorporeal_move == INCORPOREAL_ETHEREAL) //To avoid the potential for infinite jaunt
+				if(target.incorporeal_move != INCORPOREAL_ETHEREAL) //To avoid the potential for infinite jaunt
 					if(target.client)
 						target.client.images += jaunts
 					ethereal_jaunt(target, duration, enteranim, exitanim, mist)
 					if(target.client)
 						target.client.images -= jaunts
-		sleep(duration + 60 SECONDS)
-		for(var/image/I in jaunts) //Garbage collection of images
-			I.loc = null
 	else
 		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist)
 
@@ -93,6 +90,8 @@
 /spell/targeted/ethereal_jaunt/jauntgroup
 	name = "Group Jaunt"
 	desc = "This spell allows all people within range to be jaunted along with the user"
+	hud_state = "group_jaunt"
+
 	spell_flags = Z2NOCAST | INCLUDEUSER //Adminbus spell, so we'll exclude robe requirement for ease of use
 
 	invocation = "Tc'ln Oc'lip"
