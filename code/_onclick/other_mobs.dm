@@ -23,6 +23,7 @@
 
 					special_attack_result = A.kick_act(src)
 					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
+						after_special_attack(A, attack_type, special_attack_result)
 						return
 
 					delayNextAttack(-10) //This is only called when the kick fails
@@ -36,13 +37,12 @@
 
 					special_attack_result = A.bite_act(src)
 					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
+						after_special_attack(A, attack_type, special_attack_result)
 						return
 
 					delayNextAttack(-10) //This is only called when the bite fails
 				else
 					set_attack_type() //Reset attack type
-		if(special_attack_result != SPECIAL_ATTACK_CANCEL)
-			after_special_attack(A, attack_type, special_attack_result)
 
 	if(ismob(A))
 		delayNextAttack(10)
