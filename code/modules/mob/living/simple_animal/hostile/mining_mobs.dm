@@ -56,7 +56,7 @@
 	icon_aggro = "Basilisk_alert"
 	icon_dead = "Basilisk_dead"
 	icon_gib = "syndicate_gib"
-	move_to_delay = 20
+	speed = 20
 	projectiletype = /obj/item/projectile/temp/basilisk
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1
@@ -64,7 +64,6 @@
 	ranged_cooldown_cap = 20
 	throw_message = "does nothing against the hard shell of"
 	vision_range = 2
-	speed = 3
 	maxHealth = 200
 	health = 200
 	harm_intent_damage = 5
@@ -129,7 +128,7 @@
 	vision_range = 3
 	aggro_vision_range = 9
 	idle_vision_range = 3
-	move_to_delay = 3
+	speed = 3
 	friendly = "harmlessly rolls into"
 	maxHealth = 60
 	health = 60
@@ -222,12 +221,11 @@
 	icon_dead = "Hivelord_dead"
 	icon_gib = "syndicate_gib"
 	mouse_opacity = 2
-	move_to_delay = 14
+	speed = 14
 	ranged = 1
 	vision_range = 5
 	aggro_vision_range = 9
 	idle_vision_range = 5
-	speed = 3
 	maxHealth = 75
 	health = 75
 	harm_intent_damage = 5
@@ -326,10 +324,9 @@
 	icon_dead = "Hivelordbrood"
 	icon_gib = "syndicate_gib"
 	mouse_opacity = 2
-	move_to_delay = 0
+	speed = 0
 	friendly = "buzzes near"
 	vision_range = 10
-	speed = 3
 	maxHealth = 1
 	health = 1
 	harm_intent_damage = 5
@@ -358,12 +355,11 @@
 	icon_dead = "Goliath_dead"
 	icon_gib = "syndicate_gib"
 	attack_sound = 'sound/weapons/heavysmash.ogg'
-	move_to_delay = 40
+	speed = 40
 	ranged = 1
 	ranged_cooldown_cap = 8
 	friendly = "wails at"
 	vision_range = 5
-	speed = 3
 	maxHealth = 300
 	health = 300
 	harm_intent_damage = 0

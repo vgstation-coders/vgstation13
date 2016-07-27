@@ -536,7 +536,7 @@ proc/move_mining_shuttle()
 	minbodytemp = 0
 	wander = 0
 	idle_vision_range = 5
-	move_to_delay = 10
+	speed = 10
 	retreat_distance = 1
 	minimum_distance = 2
 	health = 100

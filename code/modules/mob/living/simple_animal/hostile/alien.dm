@@ -202,7 +202,7 @@ var/list/nest_locations = list()
 				if(last_loc && (last_loc == loc))
 					DestroySurroundings()
 				last_loc = loc
-				Goto(dragging,move_to_delay,1)
+				Goto(dragging, speed, 1)
 		else//if another alien is dragging them, just leave them alone
 			dragging = null
 			walk(src, 0)
@@ -229,7 +229,7 @@ var/list/nest_locations = list()
 			if(last_loc && (last_loc == loc))
 				DestroySurroundings()
 			last_loc = loc
-			Goto(dest,move_to_delay,0)
+			Goto(dest, speed, 0)
 
 
 /mob/living/simple_animal/hostile/alien/proc/CanOpenDoor(var/obj/machinery/door/D)
@@ -284,7 +284,7 @@ var/list/nest_locations = list()
 	melee_damage_lower = 15
 	melee_damage_upper = 15
 	ranged = 1
-	move_to_delay = 3
+	speed = 3
 	projectiletype = /obj/item/projectile/neurotox
 	projectilesound = 'sound/weapons/pierce.ogg'
 	rapid = 1
@@ -337,7 +337,7 @@ var/list/nest_locations = list()
 	icon_state = "queen_s"
 	icon_living = "queen_s"
 	icon_dead = "queen_dead"
-	move_to_delay = 4
+	speed = 4
 	maxHealth = 400
 	health = 400
 	pixel_x = -16
