@@ -754,14 +754,14 @@ Auto Patrol: []"},
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
 			threatcount += 2
 
-		if(!perp.wear_id)
+		if(!(perp.wear_id || perp.find_held_item_by_type(/obj/item/weapon/card/id))) //check for ID in either the ID slot or hands
 			if(idcheck)
 				threatcount += 4
 			else
 				threatcount += 2
 
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate) || perp.find_held_item_by_type(/obj/item/weapon/card/id/syndicate) )
 			threatcount -= 2
 
 	if(src.lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
@@ -1017,6 +1017,8 @@ Auto Patrol: []"},
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>You start to wire [src]...</span>")
 				sleep(40)
+				if(build_step != 6)
+					return
 				if(get_turf(user) == T)
 					coil.use(1)
 					build_step++
@@ -1054,6 +1056,8 @@ Auto Patrol: []"},
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")
 				sleep(40)
+				if(build_step != 8)
+					return
 				if(get_turf(user) == T)
 					build_step++
 					name = "armed [name]"
