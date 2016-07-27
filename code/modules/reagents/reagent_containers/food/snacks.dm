@@ -83,9 +83,8 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_self(mob/user)
-
-	attack(user, user) //This is painful, but it works, I guess
-	return
+	if(can_consume(user, user))
+		consume(user, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/bite_act(mob/user) //nom nom
 	if(can_consume(user, user))
