@@ -234,7 +234,7 @@
 	attacktext = "lashes out at"
 	throw_message = "falls right through the strange body of the"
 	ranged_cooldown = 0
-	ranged_cooldown_cap = 0
+	ranged_cooldown_cap = 1
 	environment_smash = 0
 	retreat_distance = 3
 	minimum_distance = 3
@@ -372,10 +372,12 @@
 
 	size = SIZE_BIG
 
-/mob/living/simple_animal/hostile/asteroid/goliath/OpenFire()
-	visible_message("<span class='warning'>The [src.name] digs its tentacles under [target.name]!</span>")
+/mob/living/simple_animal/hostile/asteroid/goliath/OpenFire(atom/ttarget)
+	if(istype(ttarget))
+		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
+
 	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
-	var/tturf = get_turf(target)
+	var/tturf = get_turf(ttarget)
 	new /obj/effect/goliath_tentacle/original(tturf)
 	ranged_cooldown = ranged_cooldown_cap
 	return

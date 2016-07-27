@@ -37,6 +37,10 @@
 /mob/living/simple_animal/hostile/Life()
 	if(timestopped) return 0 //under effects of time magick
 	. = ..()
+	//Cooldowns
+	if(ranged)
+		ranged_cooldown--
+
 	if(istype(loc, /obj/item/device/mobcapsule))
 		return 0
 	if(!.)
@@ -68,9 +72,6 @@
 				if(!(flags & INVULNERABLE))
 					AttackTarget()
 					DestroySurroundings()
-
-		if(ranged)
-			ranged_cooldown--
 
 //////////////HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
@@ -281,16 +282,19 @@
 	var/target_turf = get_turf(ttarget)
 	if(rapid)
 		sleep(1)
-		TryToShoot(target_turf)
+		TryToShoot(target_turf, ttarget)
 		sleep(4)
-		TryToShoot(target_turf)
+		TryToShoot(target_turf, ttarget)
 		sleep(6)
-		TryToShoot(target_turf)
+		TryToShoot(target_turf, ttarget)
 	else
-		TryToShoot(target_turf)
+		TryToShoot(target_turf, ttarget)
 	return
 
-/mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf)
+/mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf, atom/target)
+	if(!target)
+		target = src.target
+
 	if(Shoot(target_turf, src.loc, src))
 		ranged_cooldown = ranged_cooldown_cap
 		if(ranged_message)
@@ -374,6 +378,12 @@
 		return 0
 
 //Let players use mobs' ranged attacks
+/mob/living/simple_animal/hostile/Stat()
+	..()
+
+	if(ranged && statpanel("Status"))
+		stat(null, "Ranged Attack: [ranged_cooldown <= 0 ? "READY" : "[100 - round((ranged_cooldown / ranged_cooldown_cap) * 100)]%"]")
+
 /mob/living/simple_animal/hostile/RangedAttack(atom/A, params)
 	if(ranged && ranged_cooldown <= 0)
 		OpenFire(A)
