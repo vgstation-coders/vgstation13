@@ -79,7 +79,10 @@
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 		else
 			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
-			if(do_mob(user, M) && src.loaded_food)
+			if(do_mob(user, M))
+				if(!loaded_food)
+					return
+
 				user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M.reagents, reagents.total_volume)
