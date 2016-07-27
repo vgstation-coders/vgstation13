@@ -411,11 +411,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/comms_blackout/announce()
 	message = pick(	"Ionospheric anomalies detected. Temporary telecommunication failure imminent. Please contact you*%fj00)`5vc-BZZT", \
-						"Ionospheric anomalies detected. Temporary telecommunication failu*3mga;b4;'1v¬-BZZZT", \
+						"Ionospheric anomalies detected. Temporary telecommunication failu*3mga;b4;'1vÂ¬-BZZZT", \
 						"Ionospheric anomalies detected. Temporary telec#MCi46:5.;@63-BZZZZT", \
 						"Ionospheric anomalies dete'fZ\\kg5_0-BZZZZZT", \
-						"Ionospheri:%£ MCayj^j<.3-BZZZZZZT", \
-						"#4nd%;f4y6,>£%-BZZZZZZZT")
+						"Ionospheri:%Â£ MCayj^j<.3-BZZZZZZT", \
+						"#4nd%;f4y6,>Â£%-BZZZZZZZT")
 	..()
 
 /datum/command_alert/electrical_storm
@@ -432,15 +432,15 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Rogue Drones - Alert"
 	alert_title = "Rogue Drone Alert"
 
-/datum/command_alert/rogue_drone/New()
-	..()
-
+/datum/command_alert/rogue_drone/announce()
 	if(prob(33))
 		message = "A combat drone wing operating out of the NMV Icarus has failed to return from a sweep of this sector, if any are sighted approach with caution."
 	else if(prob(50))
 		message = "Contact has been lost with a combat drone wing operating out of the NMV Icarus. If any are sighted in the area, approach with caution."
 	else
 		message = "Unidentified hackers have targeted a combat drone wing deployed from the NMV Icarus. If any are sighted in the area, approach with caution."
+	
+	..()
 
 /datum/command_alert/drones_recovered
 	name = "Rogue Drones - Recovered Successfully"
