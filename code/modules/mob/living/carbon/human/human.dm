@@ -1634,6 +1634,12 @@
 
 	return 0
 
+/mob/living/carbon/human/proc/after_special_attack(atom/target, attack_type, attack_result)
+	switch(attack_type)
+		if(ATTACK_KICK)
+			if(attack_result != SPECIAL_ATTACK_FAILED) //The kick landed successfully
+				apply_inertia(get_dir(target, src))
+
 /mob/living/carbon/human/proc/get_footprint_type()
 	var/obj/item/clothing/shoes/S = shoes //Why isn't shoes just typecast in the first place?
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.

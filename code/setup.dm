@@ -1790,6 +1790,11 @@ var/proccalls = 1
 #define ATTACK_BITE 1
 #define ATTACK_KICK 2
 
+//Special attack returns (for procs like kick_act and bite_act)
+#define SPECIAL_ATTACK_SUCCESS 0
+#define SPECIAL_ATTACK_CANCEL 1 //Default return for the procs; cancel the special attack and perform a normal click instead
+#define SPECIAL_ATTACK_FAILED 2
+
 // Defines for the map writer, moved here for reasons.
 #define DMM_IGNORE_AREAS 1
 #define DMM_IGNORE_TURFS 2
