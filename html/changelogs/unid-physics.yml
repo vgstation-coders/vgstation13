@@ -1,0 +1,6 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: All objects are now subject to space drift, including vehicles. This means crates, lockers and janicarts will now fly off into space, instead of immediately stopping moving.

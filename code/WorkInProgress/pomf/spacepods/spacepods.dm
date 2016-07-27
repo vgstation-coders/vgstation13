@@ -22,7 +22,6 @@
 	var/use_internal_tank = 0
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
-	var/inertia_dir = 0
 	var/hatch_open = 0
 	var/next_firetime = 0
 	var/list/pod_overlays
@@ -430,7 +429,7 @@
 	. = ..()
 	if(dir && (oldloc != NewLoc))
 		src.loc.Entered(src, oldloc)
-/obj/spacepod/proc/Process_Spacemove(var/check_drift = 0, mob/user)
+/obj/spacepod/Process_Spacemove(var/check_drift = 0, mob/user)
 	var/dense_object = 0
 	if(!user)
 		for(var/direction in list(NORTH, NORTHEAST, EAST))
@@ -448,23 +447,11 @@
 	var/moveship = 1
 	if(battery && battery.charge >= 3 && health)
 		src.dir = direction
-		switch(direction)
-			if(1)
-				if(inertia_dir == 2)
-					inertia_dir = 0
-					moveship = 0
-			if(2)
-				if(inertia_dir == 1)
-					inertia_dir = 0
-					moveship = 0
-			if(4)
-				if(inertia_dir == 8)
-					inertia_dir = 0
-					moveship = 0
-			if(8)
-				if(inertia_dir == 4)
-					inertia_dir = 0
-					moveship = 0
+
+		if(inertia_dir == turn(direction, 180))
+			inertia_dir = 0
+			moveship = 0
+
 		if(moveship)
 			Move(get_step(src,direction), direction)
 			if(istype(src.loc, /turf/space))
@@ -480,6 +467,21 @@
 			to_chat(user, "<span class='warning'>Unknown error has occurred, yell at pomf.</span>")
 		return 0
 	battery.charge = max(0, battery.charge - 3)
+
+/obj/spacepod/process_inertia(turf/start)
+	set waitfor = 0
+
+	if(Process_Spacemove(1))
+		inertia_dir = 0
+		return
+
+	sleep(5)
+
+	if(loc == start)
+		if(inertia_dir)
+			Move(get_step(src, inertia_dir), inertia_dir)
+			return
+
 
 /obj/effect/landmark/spacepod/random //One of these will be chosen from across all Z levels to receive a pod in gameticker.dm
 	name = "spacepod spawner"

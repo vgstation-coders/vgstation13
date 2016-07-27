@@ -144,7 +144,7 @@ steam.start() -- spawns the effect
 	icon_state = "sparks"
 	anchored = 1
 
-	var/inertia_dir = 0
+	var/move_dir = 0
 	var/energy = 0
 
 /obj/effect/effect/sparks/New(var/travel_dir)
@@ -154,7 +154,7 @@ steam.start() -- spawns the effect
 		T.hotspot_expose(1000, 100, surfaces = 1)
 
 /obj/effect/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
-	inertia_dir=travel_dir
+	move_dir=travel_dir
 	energy=rand(1,max_energy)
 	processing_objects.Add(src)
 	var/turf/T = loc
@@ -183,7 +183,7 @@ steam.start() -- spawns the effect
 		returnToPool(src)
 		return
 	else
-		step(src,inertia_dir)
+		step(src,move_dir)
 	energy--
 
 /datum/effect/effect/system/spark_spread/set_up(var/n = 3, var/use_cardinals = 0, loca)
