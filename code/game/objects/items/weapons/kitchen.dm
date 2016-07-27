@@ -78,7 +78,9 @@
 		if(M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 		else
-			user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
+			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
+			if(do_mob(user, M) && src.loaded_food)
+				user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M.reagents, reagents.total_volume)
 		overlays -= loaded_food
@@ -502,13 +504,13 @@
 		overlays += image
 	else
 		..()
-/obj/item/weapon/tray/proc/calc_carry() 
+/obj/item/weapon/tray/proc/calc_carry()
 	// calculate the weight of the items on the tray
 	. = 0 // value to return
 
 	for(var/obj/item/I in carrying)
 		. += I.get_trayweight() || INFINITY
-/* previous functionality of trays, 
+/* previous functionality of trays,
 /obj/item/weapon/tray/prepickup(mob/user)
 	..()
 

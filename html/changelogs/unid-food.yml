@@ -1,0 +1,6 @@
+author: Ghost of N3X15
+
+delete-after: True
+
+changes: 
+- bugfix: Fixed being unable to eat some food by biting it
