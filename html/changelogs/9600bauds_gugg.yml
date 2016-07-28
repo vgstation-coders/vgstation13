@@ -35,3 +35,4 @@ delete-after: True
 changes: 
 - rscadd: "Added pill color selection directly into the main menu of ChemMasters, to make it more convenient to switch pill colors."
 - rscadd: "ChemMasters will now remember the last amount of pills and bottles created, making that the default input."
+- experiment: "Some optimization that should hopefully fix ChemMasters taking a little while to open their window when used for the first time in the round."

@@ -420,7 +420,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	//var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
 
-	var/client/has_sprites = list()
+	var/global/list/pill_icon_cache
+
 	var/chem_board = /obj/item/weapon/circuitboard/chemmaster3000
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
@@ -457,6 +458,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	RefreshParts()
 	update_icon() //Needed to add the prongs cleanly
+
+	if (!pill_icon_cache)
+		generate_pill_icon_cache()
 
 /obj/machinery/chem_master/RefreshParts()
 	var/scancount = 0
@@ -779,22 +783,19 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_master/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/chem_master/attack_hand(mob/user as mob)
 
+/obj/machinery/chem_master/proc/generate_pill_icon_cache()
+	pill_icon_cache = list()
+	for(var/i = 1 to MAX_PILL_SPRITE)
+		pill_icon_cache += "<img src='data:image/png;base64,[icon2base64(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))]'>"
+		//This is essentially just bicon(). Ideally we WOULD use just bicon(), but right now it's fucked up when used on icons because it goes by their \ref.
+
+/obj/machinery/chem_master/attack_hand(mob/user as mob)
 	. = ..()
 	if(.)
 		return
 
 	user.set_machine(src)
-	if(!(user.client in has_sprites))
-		spawn()
-			has_sprites += user.client
-			for(var/i = 1 to MAX_PILL_SPRITE)
-				usr << browse_rsc(icon('icons/obj/chemical.dmi', "pill" + num2text(i)), "pill[i].png")
-			/*
-			for(var/i = 1 to MAX_BOTTLE_SPRITE)
-				usr << browse_rsc(icon('icons/obj/chemical.dmi', "bottle" + num2text(i)), "bottle[i].png")
-			*/
 
 	var/dat = list()
 	if(!beaker)
@@ -847,7 +848,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			for(var/i = 1 to MAX_PILL_SPRITE)
 				dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" style="display: inline-block; padding:0px 4px 0px 4px; margin:0 2px 2px 0; [i == text2num(pillsprite) ? "background: #2f943c;" : ""]"> <!--Yes we are setting the style here because I suck at CSS and I have no shame-->
 							<div class="pillIcon">
-								<img src="pill[i].png" />
+								[pill_icon_cache[i]]
 							</div>
 						</a>"}
 				if (i%10 == 0)

@@ -98,7 +98,7 @@
 	It is just a timer that only permits a download every [FTPDELAY] ticks.
 	This can be changed by modifying FTPDELAY's value above.
 
-	PLEASE USE RESPONSIBLY, Some log files canr each sizes of 4MB!	*/
+	PLEASE USE RESPONSIBLY, Some log files can reach sizes of 4MB!	*/
 /client/proc/file_spam_check()
 	var/time_to_wait = fileaccess_timer - world.time
 	if(time_to_wait > 0)
