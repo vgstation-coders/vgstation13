@@ -150,7 +150,7 @@
 				if(H.species && !(H.species.flags & NO_PAIN))
 					H.drop_item(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/On_Consume(var/mob/living/carbon/human/H)
+/obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
 	if(seed.thorny && istype(H))
 		var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 		if(affecting)

@@ -126,7 +126,7 @@
 		else
 			snack.reagents.trans_to(src, snack.reagents.total_volume)
 			snack.bitecount++
-			snack.On_Consume(user)
+			snack.after_consume(user)
 	return 1
 
 /obj/item/weapon/kitchen/utensil/fork/plastic

@@ -37,7 +37,7 @@
 	..()
 
 //Proc for effects that trigger on eating that aren't directly tied to the reagents.
-/obj/item/weapon/reagent_containers/food/snacks/proc/On_Consume(var/mob/user, var/datum/reagents/reagentreference)
+/obj/item/weapon/reagent_containers/food/snacks/proc/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
 		return
 	if(reagents)
@@ -191,7 +191,7 @@
 				else
 					reagentreference.trans_to(eater, reagentreference.total_volume)
 				bitecount++
-				On_Consume(eater, reagentreference)
+				after_consume(eater, reagentreference)
 		return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/can_consume(mob/living/carbon/eater, mob/user)
@@ -1178,7 +1178,7 @@
 		reagents.add_reagent(NUTRIMENT, 2)
 		bitesize = 0.1 //this snack is supposed to be eating during looooong time. And this it not dinner food! --rastaf0
 
-/obj/item/weapon/reagent_containers/food/snacks/popcorn/On_Consume()
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/after_consume()
 	if(prob(unpopped))	//lol ...what's the point? << AINT SO POINTLESS NO MORE
 		to_chat(usr, "<span class='warning'>You bite down on an un-popped kernel, and it hurts your teeth!</span>")
 		unpopped = max(0, unpopped-1)
@@ -1636,7 +1636,7 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 4)
 		baconbeacon = new /obj/item/beacon/bacon(src)
-	On_Consume()
+	after_consume()
 		if(!reagents.total_volume)
 			baconbeacon.loc = usr
 			baconbeacon.digest_delay()
@@ -1667,7 +1667,7 @@
 	if(wrapped)
 		Unwrap(user)
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/On_Consume(var/mob/M)
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/after_consume(var/mob/M)
 
 	to_chat(M, "<span class = 'warning'>Something inside of you suddently expands!</span>")
 
