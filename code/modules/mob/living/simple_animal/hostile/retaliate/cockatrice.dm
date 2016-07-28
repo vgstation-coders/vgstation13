@@ -1,26 +1,28 @@
 //Cockatrice
-//Very dangerous beast the size of a chicken
-//Touching it with any exposed part of your body will result in you turning into a statue
-//That includes bumping, pulling it, picking it up, having it attack you, stepping on its corpse without shoes, etc.
+//Very dangerous chicken-like beast
+//Touching it with any exposed part of your body will result in you turning into a statue (only if it's alive!)
+//That includes bumping, pulling it, picking it up, having it attack you, etc.
+//Dead cockatrices and their meat are fair game
+
+//They can lay eggs when surrounded by statues. The eggs are unsafe to eat, but can be touched just fine
 
 //http://nethack.wikia.com/wiki/Cockatrice for more info
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice
 	name = "cockatrice"
-	desc = "A large chicken-like creature with a reptile's tail. Its body constantly generates a petrifying pathogen that spreads through direct contact with skin. Any living being that touches a cockatrice will rapidly turn to stone, unless given immediate treatment."
+	desc = "A large chicken-like creature with a reptile's tail. Anybody who touches a living cockatrice without proper protection starts rapidly turning into stone. There is no known cure, and there are no recorded survivors."
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "cockatrice"
 	icon_living = "cockatrice"
-	var/icon_angry = "cockatrice_angry"
 	icon_dead = "cockatrice_dead"
 
-	response_help = "pets"
+	response_help = "bravely touches"
 	response_disarm = "gently pushes aside"
-	response_harm = "hits"
+	response_harm = "recklessly punches"
 
-	maxHealth = 50
-	health = 50
+	maxHealth = 60
+	health = 60
 	size = SIZE_SMALL
 
 	harm_intent_damage = 8
@@ -32,9 +34,29 @@
 
 	environment_smash = 0
 
-	holder_type = /obj/item/weapon/holder/animal/cockatrice
+	species_type = /mob/living/simple_animal/hostile/retaliate/cockatrice
+	childtype = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
+	holder_type = null
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/cockatrice
 
-	meat_type = null
+/mob/living/simple_animal/hostile/retaliate/cockatrice/chick
+	name = "chickatrice"
+	desc = "A young cockatrice. Despite being smaller, it's still capable of petrifying anybody that touches it."
+	maxHealth = 10
+	health = 10
+	size = SIZE_TINY
+
+	icon_state = "chickatrice"
+	icon_living = "chickatrice"
+	icon_dead = "chickatrice_dead"
+
+	melee_damage_lower = 2
+	melee_damage_upper = 4
+	attacktext = "pecks"
+
+/mob/living/simple_animal/hostile/retaliate/cockatrice/New()
+	..()
+	gender = pick(MALE, FEMALE)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/sting(mob/living/L, instant = 0)
 	//Turn the mob into a statue forever
@@ -44,17 +66,28 @@
 		return 0
 	if(istype(L, /mob/living/simple_animal/hostile/retaliate/cockatrice))
 		return 0
+	if(isDead())
+		return
 
-	if(!isDead() && prob(80))
+	if(prob(80))
 		var/msg = pick("\The [src] hisses!", "\The [src] hisses angrily!")
 		visible_message("<span class='danger'>[msg]</span>", "<span class='notice'>\The [L] touches you!</span>", "<span class='notice'>You hear an angry hiss.</span>")
 
-	if(instant)
+	if(!ishuman(L) || instant)
 		to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
 		if(!L.turn_into_statue(1)) //Statue forever
 			return 0
-	else
+	else if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		for(var/datum/disease/petrification/P in H.viruses) //If already petrifying, speed up the process!
+			P.stage = P.max_stages
+			P.stage_act()
+			return 1
 
+		var/datum/disease/D = new /datum/disease/petrification
+		D.holder = H
+		D.affected_mob = H
+		H.viruses += D
 
 	return 1
 
@@ -97,7 +130,7 @@
 /mob/living/simple_animal/hostile/retaliate/cockatrice/bite_act(mob/living/L)
 	.=..()
 
-	sting(L, 1) //Instant stonefying in this case
+	sting(L, 1) //Instant stonefying if you bite the chicken
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/kick_act(mob/living/L)
 	.=..()
@@ -115,24 +148,37 @@
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Life()
 	.=..()
 
+	if(isDead())
+		return
+
 	if(isliving(pulledby))
 		if(check_sting(pulledby, HANDS))
 			if(sting(pulledby))
 				pulledby.stop_pulling()
 
-	if(isDead())
-		return
+	if(!stat && gender == FEMALE && prob(1))
+		var/statue_amount = 0//Gotta have at least 4 statues around
+		for(var/obj/structure/closet/statue/S in oview(5, src))
+			statue_amount++
 
-	if(target) //Targetting somebody
-		icon_state = icon_angry
-	else
-		icon_state = icon_living
+			if(statue_amount >= 4)
+				break
+
+		if(statue_amount < 4)
+			return
+
+		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
+
+		var/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/E = new(get_turf(src))
+		E.pixel_x = rand(-6,6)
+		E.pixel_y = rand(-6,6)
+		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
+			processing_objects.Add(E)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Cross(mob/living/L)
-	//Let the other object overlap us if we can't stone them
-	if(movement_touch_check(L))
-		return 0
-	return 1
+	movement_touch_check(L)
+
+	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Move()
 	.=..()
@@ -141,8 +187,9 @@
 		movement_touch_check(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Bump(mob/living/L)
-	if(!movement_touch_check(L))
-		return ..()
+	movement_touch_check(L)
+
+	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/movement_touch_check(mob/living/L)
 	if(!istype(L))
@@ -173,6 +220,9 @@
 	sting(victim)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/check_sting(mob/living/L, bodyparts)
+	if(isDead())
+		return
+
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
 

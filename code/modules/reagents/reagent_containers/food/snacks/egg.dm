@@ -4,6 +4,8 @@
 	name = "egg"
 	desc = "An egg!"
 	icon_state = "egg"
+
+	var/can_color = 1
 	var/amount_grown = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/New()
@@ -67,7 +69,7 @@
 			to_chat(user, "You make some dough.")
 			qdel(src)
 			return 1
-	else if (istype(W, /obj/item/toy/crayon) && !(istype(src, /obj/item/weapon/reagent_containers/food/snacks/egg/vox)))
+	else if (istype(W, /obj/item/toy/crayon) && can_color)
 
 		var/obj/item/toy/crayon/C = W
 		var/clr = C.colourName
@@ -92,9 +94,53 @@
 	name = "green egg"
 	desc = "Looks like it came from some genetically engineered chicken"
 	icon_state = "egg-vox"
+	can_color = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/vox/hatch()
 	visible_message("[src] hatches with a quiet cracking sound.")
 	new /mob/living/carbon/monkey/vox(get_turf(src))
 	processing_objects.Remove(src)
 	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice
+	name = "cockatrice egg"
+	desc = "A very hard egg. Its thick shell makes it safe to handle, as long as you don't break it and touch the embryo inside."
+	icon_state = "egg-cockatrice"
+	can_color = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/hatch()
+	visible_message("\The [src] hatches with a quiet cracking sound.")
+	new /mob/living/simple_animal/hostile/retaliate/cockatrice/chick(get_turf(src))
+	processing_objects.Remove(src)
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/On_Consume(mob/living/user, datum/reagents/reagentreference)
+	if(user && user.held_items.Find(src))
+		if(user.turn_into_statue(1))
+			to_chat(user, "<span class='danger'>You've been turned to stone by \the [src].</span>")
+		else
+			to_chat(user, "<span class='info'>You feel very lucky.</span>")
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/throw_impact(atom/hit_atom)
+	.=..()
+
+	if(isliving(hit_atom))
+		if(ishuman(hit_atom))
+			var/mob/living/carbon/human/H = hit_atom
+			var/armor = H.getarmor(null, "bio") + H.getarmor(null, "melee")
+			if(armor < rand(75,100))
+				for(var/datum/disease/petrification/P in H.viruses) //If already petrifying, speed up the process!
+					P.stage = P.max_stages
+					P.stage_act()
+					return 1
+
+				var/datum/disease/D = new /datum/disease/petrification
+				D.holder = H
+				D.affected_mob = H
+				H.viruses += D
+				to_chat(H, "<span class='info'>You feel worried.</span>")
+		else
+			var/mob/living/L = hit_atom
+			if(L.turn_into_statue(1)) //Statue forever
+				L.visible_message("<span class='danger'>\The [L] has been turned to stone!</span>")

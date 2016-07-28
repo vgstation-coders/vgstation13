@@ -188,20 +188,10 @@
 /obj/item/weapon/paper/feeding_schedule
 	name = "note"
 	info = {"
-	<h2><b></b></h2>
-	<s>PE</s> PANDA - meat, water daily (large portions)<br>
-	Chicken (<b>WHITE</b>) - wheat, water (daily)<br>
-	<s>snake chicken - special food (crate</s><br>
-	Snake Chicken (<b>PURPLE and green</b>) - greens and water daily. remove eggs every 1000 hours and dispose by protocol. <b>ALWAYS WEAR A BIOSUIT WHEN HANDLING, DO NOT TOUCH OR PROVOKE</b><br>
-	scrite - meat, water (large portions every 160 hours) (DANGEROUS use food delivery)<br>
-	dog - special food (crate 2) and water <s>every 2</s>daily<br>
-	cat - special food (crate 2) and water daily<br>
-	crab - special food (crate 3) every 80 hours<br>
-	goat - greens and water daily<br>
-	<s>mem</s> <s>mimec</s> <s>Mi</s> items in secure crate 5 - moisturize every 500 hours, DO NOT TOUCH (it's alive)<br>
+	Reminder to ALWAYS wear biohazard suit and gloves when being ANYWHERE near cockatrices. If the suit or gloves are damaged or missing, just lock them in and let them die.
+	They may have cost us a lot of money, but I'd rather have a bunch of dead cockatrices than a dead crew.
 	<br>
-
-	Remember to update computer database after feeding!<br>
+	And remember to update the computer database after feeding!<br>
 	"}
 
 /obj/effect/landmark/stonefier

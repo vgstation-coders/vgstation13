@@ -27,6 +27,6 @@ author: Unid
 delete-after: True
 
 changes: 
-- rscadd: A spaceship transporting wild animals can spawn somewhere in space.
-- rscadd: "Added cockatrices - snake/chicken hybrids that don't attack unless provoked. All organic lifeforms that touch them with an exposed part of their body start rapidly turning to stone."
+- rscadd: A mysterious spaceship transporting wild animals can spawn somewhere in space.
+- rscadd: "Added cockatrices - extremely dangerous chicken-like beasts. Any living being that touches them will immediately start turning to stone. They can lay eggs. Young cockatrices are called chickatrices, and are just as dangerous as adults."
 - rscadd: Statues (created by cockatrices and the Flesh to Stone spell) are now prettier and have an animation when created

@@ -748,7 +748,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	..()
 
 	if(forever)
-		Die()
+		spawn(10)
+			Die()
 
 
 /datum/locking_category/simple_animal

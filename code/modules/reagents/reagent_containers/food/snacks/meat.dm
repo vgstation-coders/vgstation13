@@ -155,3 +155,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cockatrice
+	name = "cockatrice meat"
+	desc = "A slab of cockatrice meat. Not many dare eat it, even though it's perfectly safe to."

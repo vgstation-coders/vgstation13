@@ -1389,9 +1389,11 @@ default behaviour is:
 
 	spawn()
 		if(forever)
-			return new /obj/structure/closet/statue/eternal(get_turf(src), src)
+			new /obj/structure/closet/statue/eternal(get_turf(src), src)
 		else
-			return new /obj/structure/closet/statue(get_turf(src), src)
+			new /obj/structure/closet/statue(get_turf(src), src)
+
+	return 1
 
 /*
 	How this proc that I took from /tg/ works:
