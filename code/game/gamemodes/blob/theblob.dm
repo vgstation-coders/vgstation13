@@ -51,8 +51,8 @@ var/list/blob_looks
 	var/health_timestamp = 0
 	var/brute_resist = 4
 	var/fire_resist = 1
-	pixel_x = -WORLD_ICON_SIZE/4
-	pixel_y = -WORLD_ICON_SIZE/4
+	pixel_x = -WORLD_ICON_SIZE/2
+	pixel_y = -WORLD_ICON_SIZE/2
 	layer = 6
 	var/spawning = 2
 	var/dying = 0
@@ -244,8 +244,8 @@ var/list/blob_looks
 	switch(blob_looks[looks])
 		if(64)
 			icon_state = icon_new
-			pixel_x = -WORLD_ICON_SIZE/4
-			pixel_y = -WORLD_ICON_SIZE/4
+			pixel_x = -WORLD_ICON_SIZE/2
+			pixel_y = -WORLD_ICON_SIZE/2
 			layer = layer_new
 			if(right_now)
 				spawning = 0

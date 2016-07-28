@@ -9,7 +9,7 @@
 	icon = 'icons/obj/flora/deadtrees.dmi'
 	icon_state = "tree_1"
 
-	pixel_x = -WORLD_ICON_SIZE/4
+	pixel_x = -WORLD_ICON_SIZE/2
 
 	var/health = 100
 	var/maxHealth = 100

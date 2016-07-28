@@ -334,8 +334,8 @@
 	light_range_on = 0
 	nocell = 2
 	density = 0
-	pixel_x = -WORLD_ICON_SIZE/4
-	pixel_y = WORLD_ICON_SIZE/4
+	pixel_x = -WORLD_ICON_SIZE/2
+	pixel_y = WORLD_ICON_SIZE/2
 
 /obj/machinery/space_heater/campfire/stove/fireplace/attackby(obj/item/I, mob/user)
 	var/shoesfound = 0
