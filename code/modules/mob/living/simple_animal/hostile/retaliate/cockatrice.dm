@@ -187,7 +187,8 @@
 		movement_touch_check(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Bump(mob/living/L)
-	movement_touch_check(L)
+	spawn()
+		movement_touch_check(L)
 
 	return ..()
 
