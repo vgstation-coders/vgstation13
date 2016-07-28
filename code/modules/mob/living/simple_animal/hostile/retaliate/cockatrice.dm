@@ -44,8 +44,8 @@
 /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 	name = "chickatrice"
 	desc = "A young cockatrice. Despite being smaller, it's still capable of petrifying anybody that touches it."
-	maxHealth = 10
-	health = 10
+	maxHealth = 25
+	health = 25
 	size = SIZE_TINY
 
 	icon_state = "chickatrice"
