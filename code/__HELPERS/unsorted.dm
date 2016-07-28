@@ -1205,16 +1205,16 @@ var/list/WALLITEMS = list(
 				//Some stuff doesn't use dir properly, so we need to check pixel instead
 				switch(dir)
 					if(SOUTH)
-						if(O.pixel_y > 10)
+						if(O.pixel_y > 10*PIXEL_MULTIPLIER)
 							return 1
 					if(NORTH)
-						if(O.pixel_y < -10)
+						if(O.pixel_y < -10*PIXEL_MULTIPLIER)
 							return 1
 					if(WEST)
-						if(O.pixel_x > 10)
+						if(O.pixel_x > 10*PIXEL_MULTIPLIER)
 							return 1
 					if(EAST)
-						if(O.pixel_x < -10)
+						if(O.pixel_x < -10*PIXEL_MULTIPLIER)
 							return 1
 
 
@@ -1222,7 +1222,7 @@ var/list/WALLITEMS = list(
 	for(var/obj/O in get_step(loc, dir))
 		for(var/item in WALLITEMS)
 			if(istype(O, text2path(item)))
-				if(abs(O.pixel_x) <= 10 && abs(O.pixel_y) <=10)
+				if(abs(O.pixel_x) <= 10*PIXEL_MULTIPLIER && abs(O.pixel_y) <=10*PIXEL_MULTIPLIER)
 					return 1
 	return 0
 

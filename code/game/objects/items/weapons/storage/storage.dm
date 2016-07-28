@@ -65,8 +65,8 @@
 	var/turf = get_turf(place)
 	for(var/obj/objects in contents)
 		remove_from_storage(objects, turf)
-		objects.pixel_x = rand(-6,6)
-		objects.pixel_y = rand(-6,6)
+		objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/storage/proc/return_inv()
 

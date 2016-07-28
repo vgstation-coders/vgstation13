@@ -80,12 +80,12 @@ var/global/list/ghdel_profiling = list()
 
 	switch(xy)
 		if(1)
-			src.pixel_x += rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 		if(2)
-			src.pixel_y += rand(-intensity, intensity)
+			src.pixel_y += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 		if(3)
-			src.pixel_x += rand(-intensity, intensity)
-			src.pixel_y += rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity) * PIXEL_MULTIPLIER
+			src.pixel_y += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 
 	spawn(2)
 	src.pixel_x = old_pixel_x

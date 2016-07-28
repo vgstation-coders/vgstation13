@@ -96,8 +96,8 @@ var/global/list/moneytypes = list(
 	//Up to 100 items per stack.
 	overlays = 0
 	var/stacksize=round(amount/2.5)
-	pixel_x = rand(-7, 7)
-	pixel_y = rand(-14, 14)
+	pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER
+	pixel_y = rand(-14, 14) * PIXEL_MULTIPLIER
 	if(stacksize)
 		// 0 = single
 		// 1 = 1/4 stack

@@ -817,8 +817,8 @@
 
 /obj/item/packobelongings/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/packobelongings/attack_self(mob/user as mob)
 	var/turf/T = get_turf(user)

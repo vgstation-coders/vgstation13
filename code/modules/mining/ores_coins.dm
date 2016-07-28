@@ -293,8 +293,8 @@
 
 /obj/item/weapon/ore/New()
 	. = ..()
-	pixel_x = rand(-8, 8)
-	pixel_y = rand(-8, 0)
+	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/ore/ex_act()
 	return
@@ -323,8 +323,8 @@
 
 /obj/item/weapon/coin/New()
 	. = ..()
-	pixel_x = rand(-8, 8)
-	pixel_y = rand(-8, 0)
+	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)

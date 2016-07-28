@@ -456,8 +456,8 @@
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
-	P.pixel_x = rand(-10, 10)
-	P.pixel_y = rand(-10, 10)
+	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 	if(blueprints)
 		P.blueprints = 1
@@ -473,8 +473,8 @@
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
-	P.pixel_x = rand(-10, 10)
-	P.pixel_y = rand(-10, 10)
+	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 	if(blueprints)
 		P.blueprints = 1
@@ -499,8 +499,8 @@
 	var/icon = ic
 	var/img = temp
 	var/info = mobs
-	var/pixel_x = rand(-10, 10)
-	var/pixel_y = rand(-10, 10)
+	var/pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	var/pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 	var/injectblueprints = 1
 	if(blueprints)

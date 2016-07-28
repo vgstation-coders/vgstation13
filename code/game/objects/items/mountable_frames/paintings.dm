@@ -45,8 +45,8 @@ var/global/list/available_paintings = list(
 
 /obj/item/mounted/frame/painting/New()
 	..()
-	pixel_x = rand(-6,6)
-	pixel_y = rand(-6,6)
+	pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+	pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 	if(!paint)
 		paint = pick(available_paintings)

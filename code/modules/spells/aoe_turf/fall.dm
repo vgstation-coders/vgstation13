@@ -42,8 +42,8 @@
 /spell/aoe_turf/fall/proc/buildimage()
 	aoe_underlay = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = 2.1)
 	aoe_underlay.transform /= 50
-	aoe_underlay.pixel_x = -304
-	aoe_underlay.pixel_y = -304
+	aoe_underlay.pixel_x = -304 * PIXEL_MULTIPLIER
+	aoe_underlay.pixel_y = -304 * PIXEL_MULTIPLIER
 	aoe_underlay.mouse_opacity = 0
 /proc/CircleCoords(var/c_x, var/c_y, var/r)
 	. = list()

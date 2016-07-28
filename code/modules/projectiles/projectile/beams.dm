@@ -790,8 +790,8 @@ var/list/beam_master = list()
 			X.icon=I
 
 
-		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+16)/WORLD_ICON_SIZE)
-		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+16)/WORLD_ICON_SIZE)
+		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
 		if(DX==0) Pixel_x=0
 		if(DY==0) Pixel_y=0
 		if(Pixel_x>WORLD_ICON_SIZE)

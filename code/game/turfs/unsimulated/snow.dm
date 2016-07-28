@@ -74,8 +74,8 @@
 
 	for(var/i = 0; i < extract_amount, i++)
 		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(user.loc)
-		snowball.pixel_x = rand(-16, 16) //Would be wise to move this into snowball New() down the line
-		snowball.pixel_y = rand(-16, 16)
+		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
+		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
 
 		if(pick_up)
 			user.put_in_hands(snowball)

@@ -252,8 +252,8 @@
 			if(char == " ")
 				continue
 			var/image/ID = image('icons/obj/status_display.dmi', icon_state=char)
-			ID.pixel_x = -(d-1)*5 + px
-			ID.pixel_y = py
+			ID.pixel_x = (-(d-1)*5 + px) * PIXEL_MULTIPLIER
+			ID.pixel_y = py * PIXEL_MULTIPLIER
 			I.overlays += ID
 		return I
 

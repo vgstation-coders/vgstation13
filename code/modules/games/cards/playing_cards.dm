@@ -276,7 +276,7 @@
 		var/obj/item/toy/singlecard/card = currenthand[i]
 		if(card)
 			card.layer = FLOAT_LAYER
-			card.pixel_x = i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE
+			card.pixel_x = (i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE) * PIXEL_MULTIPLIER
 			overlays += card
 
 /*
@@ -299,7 +299,7 @@
 	var/cardname = null
 	var/obj/item/toy/cards/parentdeck = null
 	var/flipped = 1 //Cards start flipped so that dealers can deal without having to see the card.
-	pixel_x = -5
+	pixel_x = -5 * PIXEL_MULTIPLIER
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
 	..(NewLoc)
@@ -313,7 +313,7 @@
 /obj/item/toy/singlecard/update_icon()
 	if(flipped)
 		icon_state = "singlecard_down"
-		pixel_x = -5
+		pixel_x = -5 * PIXEL_MULTIPLIER
 		name = "card"
 	else
 		if(cardname)
@@ -322,7 +322,7 @@
 		else
 			src.icon_state = "sc_Ace of Spades"
 			src.name = "What Card"
-		src.pixel_x = 5
+		src.pixel_x = 5 * PIXEL_MULTIPLIER
 
 /obj/item/toy/singlecard/examine(mob/user)
 	..()

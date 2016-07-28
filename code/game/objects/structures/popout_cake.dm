@@ -6,7 +6,7 @@
 /datum/locking_category/popout_cake
 	pixel_y_offset = 1 //First row of pixels on the cake is transparent :^
 
-	var/pixel_y_offset_max = 24
+	var/pixel_y_offset_max = 24 * PIXEL_MULTIPLIER
 
 /datum/locking_category/popout_cake/lock(atom/movable/AM)
 	pixel_y_offset -= AM.pixel_y
@@ -25,7 +25,7 @@
 	..()
 
 	animate(AM) //Stop the animation
-	AM.pixel_y -= pixel_y_offset_max
+	AM.pixel_y -= pixel_y_offset_max * PIXEL_MULTIPLIER
 
 	owner.plane = initial(owner.plane)
 	owner.layer = initial(owner.layer)

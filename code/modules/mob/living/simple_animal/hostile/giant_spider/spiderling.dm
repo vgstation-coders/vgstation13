@@ -42,8 +42,8 @@
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/New()
 	..()
-	pixel_x = rand(6,-6)
-	pixel_y = rand(6,-6)
+	pixel_x = rand(6,-6) * PIXEL_MULTIPLIER
+	pixel_y = rand(6,-6) * PIXEL_MULTIPLIER
 	//75% chance to grow up
 	if(prob(75))
 		amount_grown = 1

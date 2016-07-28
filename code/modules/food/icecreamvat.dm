@@ -121,8 +121,8 @@
 		if(href_list["createcup"]) C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup(src.loc)
 		else C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone(src.loc)
 		C.name = "[src.generateName(src.reagents.get_master_reagent_name())] [C.name]"
-		C.pixel_x = rand(-8,8)
-		C.pixel_y = -16
+		C.pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
+		C.pixel_y = -16 * PIXEL_MULTIPLIER
 		src.reagents.trans_to(C,30)
 		src.reagents.clear_reagents()
 		C.update_icon()

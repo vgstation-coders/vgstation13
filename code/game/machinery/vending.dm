@@ -571,7 +571,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
 	if(user.lying || user.incapacitated())
 		return 0
-		
+
 	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
 		if(!Adjacent(user))
 			to_chat(user, "<span class='danger'>You slam the [src] with your mind!</span>")
@@ -580,7 +580,7 @@ var/global/num_vending_terminals = 1
 
 	if(stat & (BROKEN|NOPOWER))
 		return
-		
+
 	if(seconds_electrified > 0)
 		if(shock(user, 100))
 			return
@@ -1331,8 +1331,8 @@ var/global/num_vending_terminals = 1
 	// offset 32 pixels in direction of dir
 	// this allows the NanoMed to be embedded in a wall, yet still inside an area
 	dir = ndir
-	pixel_x = (dir & 3)? 0 : (dir == 4 ? 30 : -30)
-	pixel_y = (dir & 3)? (dir ==1 ? 30 : -30) : 0
+	pixel_x = (dir & 3)? 0 : (dir == 4 ? 30 * PIXEL_MULTIPLIER: -30 * PIXEL_MULTIPLIER)
+	pixel_y = (dir & 3)? (dir ==1 ? 30 * PIXEL_MULTIPLIER: -30 * PIXEL_MULTIPLIER) : 0
 
 /obj/machinery/wallmed_frame/update_icon()
 	icon_state = "wallmed_frame[build]"

@@ -308,8 +308,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 					for(var/client/C in clients)
 						spawn
 							vote.interface.sendAssets(C)
-					
-				
+
+
 				return 1
 
 		else
@@ -330,8 +330,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 /obj/effect/bgstar/New()
 	. = ..()
-	pixel_x += rand(-2, 30)
-	pixel_y += rand(-2, 30)
+	pixel_x += rand(-2, 30) * PIXEL_MULTIPLIER
+	pixel_y += rand(-2, 30) * PIXEL_MULTIPLIER
 	icon_state = "star" + pick("1", "1", "1", "2", "3", "4")
 	speed = rand(2, 5)
 

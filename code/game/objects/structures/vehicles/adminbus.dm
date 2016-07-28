@@ -59,31 +59,31 @@
 		if(iscorgi(occupant))//Hail Ian
 			switch(dir)
 				if(SOUTH)
-					occupant.pixel_x = 6
-					occupant.pixel_y = -4
+					occupant.pixel_x = 6 * PIXEL_MULTIPLIER
+					occupant.pixel_y = -4 * PIXEL_MULTIPLIER
 				if(WEST)
-					occupant.pixel_x = -16
-					occupant.pixel_y = 9
+					occupant.pixel_x = -16 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 9 * PIXEL_MULTIPLIER
 				if(NORTH)
 					occupant.pixel_x = 0
 					occupant.pixel_y = 0
 				if(EAST)
-					occupant.pixel_x = 16
-					occupant.pixel_y = 9
+					occupant.pixel_x = 16 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 9 * PIXEL_MULTIPLIER
 		else
 			switch(dir)
 				if(SOUTH)
-					occupant.pixel_x = 7
-					occupant.pixel_y = -12
+					occupant.pixel_x = 7 * PIXEL_MULTIPLIER
+					occupant.pixel_y = -12 * PIXEL_MULTIPLIER
 				if(WEST)
-					occupant.pixel_x = -25
-					occupant.pixel_y = 1
+					occupant.pixel_x = -25 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 1 * PIXEL_MULTIPLIER
 				if(NORTH)
 					occupant.pixel_x = 0
 					occupant.pixel_y = 0
 				if(EAST)
-					occupant.pixel_x = 25
-					occupant.pixel_y = 1
+					occupant.pixel_x = 25 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 1 * PIXEL_MULTIPLIER
 
 	for(var/i=1;i<=passengers.len;i++)
 		var/atom/A = passengers[i]
@@ -93,59 +93,59 @@
 				if(1,5,9,13)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = -6
+							L.pixel_x = -6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(WEST)
-							L.pixel_x = -13
-							L.pixel_y = 4
+							L.pixel_x = -13 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = -6
+							L.pixel_x = -6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(EAST)
-							L.pixel_x = 12
-							L.pixel_y = 4
+							L.pixel_x = 12 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 				if(2,6,10,14)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = 6
+							L.pixel_x = 6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(WEST)
-							L.pixel_x = -1
-							L.pixel_y = 4
+							L.pixel_x = -1 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = 6
+							L.pixel_x = 6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(EAST)
-							L.pixel_x = 1
-							L.pixel_y = 4
+							L.pixel_x = 1 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 				if(3,7,11,15)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = -3
-							L.pixel_y = 8
+							L.pixel_x = -3 * PIXEL_MULTIPLIER
+							L.pixel_y = 8 * PIXEL_MULTIPLIER
 						if(WEST)
-							L.pixel_x = 11
-							L.pixel_y = 4
+							L.pixel_x = 11 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = -3
-							L.pixel_y = 8
+							L.pixel_x = -3 * PIXEL_MULTIPLIER
+							L.pixel_y = 8 * PIXEL_MULTIPLIER
 						if(EAST)
-							L.pixel_x = -11
-							L.pixel_y = 4
+							L.pixel_x = -11 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 				if(4,8,12,16)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = 7
-							L.pixel_y = -12
+							L.pixel_x = 7 * PIXEL_MULTIPLIER
+							L.pixel_y = -12 * PIXEL_MULTIPLIER
 						if(WEST)
-							L.pixel_x = 22
-							L.pixel_y = 4
+							L.pixel_x = 22 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = -3
-							L.pixel_y = 8
+							L.pixel_x = -3 * PIXEL_MULTIPLIER
+							L.pixel_y = 8 * PIXEL_MULTIPLIER
 						if(EAST)
-							L.pixel_x = -22
-							L.pixel_y = 4
+							L.pixel_x = -22 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 			L.dir = dir
 
 /obj/structure/bed/chair/vehicle/adminbus/Move()
@@ -587,8 +587,8 @@
 	desc = "The bus is about to jump..."
 	icon = 'icons/effects/160x160.dmi'
 	icon_state = ""
-	pixel_x = -64
-	pixel_y = -64
+	pixel_x = -WORLD_ICON_SIZE*2
+	pixel_y = -WORLD_ICON_SIZE*2
 	layer = MOB_LAYER-1
 	plane = PLANE_OBJ
 	anchored = 1

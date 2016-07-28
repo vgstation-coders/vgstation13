@@ -185,5 +185,5 @@
 	flags = LOCKED_SHOULD_LIE
 
 /datum/locking_category/bed/roller
-	pixel_y_offset = 6
+	pixel_y_offset = 6 * PIXEL_MULTIPLIER
 	flags = DENSE_WHEN_LOCKING | LOCKED_SHOULD_LIE

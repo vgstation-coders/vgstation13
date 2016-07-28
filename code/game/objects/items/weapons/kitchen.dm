@@ -31,7 +31,7 @@
 	. = ..()
 
 	if (prob(60))
-		src.pixel_y = rand(0, 4)
+		src.pixel_y = rand(0, 4) * PIXEL_MULTIPLIER
 
 /*
  * Spoons
@@ -113,8 +113,8 @@
 		var/icon/food_to_load = getFlatIcon(snack)
 		food_to_load.Scale(16,16)
 		loaded_food = image(food_to_load)
-		loaded_food.pixel_x = 8 + src.pixel_x
-		loaded_food.pixel_y = 15 + src.pixel_y
+		loaded_food.pixel_x = 8 * PIXEL_MULTIPLIER + src.pixel_x
+		loaded_food.pixel_y = 15 * PIXEL_MULTIPLIER + src.pixel_y
 		src.overlays += loaded_food
 		if(snack.reagents.total_volume > snack.bitesize)
 			snack.reagents.trans_to(src, snack.bitesize)
@@ -502,13 +502,13 @@
 		overlays += image
 	else
 		..()
-/obj/item/weapon/tray/proc/calc_carry() 
+/obj/item/weapon/tray/proc/calc_carry()
 	// calculate the weight of the items on the tray
 	. = 0 // value to return
 
 	for(var/obj/item/I in carrying)
 		. += I.get_trayweight() || INFINITY
-/* previous functionality of trays, 
+/* previous functionality of trays,
 /obj/item/weapon/tray/prepickup(mob/user)
 	..()
 

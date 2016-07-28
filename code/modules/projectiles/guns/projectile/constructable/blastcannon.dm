@@ -60,8 +60,8 @@
 	var/image/bomb_icon = image('icons/obj/weaponsmithing.dmi', src, "nothing")
 	bomb_icon.appearance = bomb_appearance
 	bomb_icon.layer = src.layer
-	bomb_icon.pixel_x = 2
-	bomb_icon.pixel_y = 9
+	bomb_icon.pixel_x = 2 * PIXEL_MULTIPLIER
+	bomb_icon.pixel_y = 9 * PIXEL_MULTIPLIER
 
 	overlays += bomb_icon
 

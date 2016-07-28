@@ -6,8 +6,8 @@ var/global/list/narsie_list = list()
 	desc = "Your mind begins to bubble and ooze as it tries to comprehend what it sees."
 	icon = 'icons/obj/narsie.dmi'
 	icon_state = "narsie-small"
-	pixel_x = -236
-	pixel_y = -256
+	pixel_x = -236 * PIXEL_MULTIPLIER
+	pixel_y = -256 * PIXEL_MULTIPLIER
 
 	current_size = 9 //It moves/eats like a max-size singulo, aside from range. --NEO.
 	contained = 0 // Are we going to move around?
@@ -30,8 +30,8 @@ var/global/list/narsie_list = list()
 	icon_state = "narsie"//mobs perceive the geometer of blood through their see_narsie proc
 
 	// Pixel stuff centers Narsie.
-	pixel_x = -236
-	pixel_y = -256
+	pixel_x = -236 * PIXEL_MULTIPLIER
+	pixel_y = -256 * PIXEL_MULTIPLIER
 	light_range = 1
 	light_color = LIGHT_COLOR_RED
 
@@ -216,7 +216,7 @@ var/global/list/narsie_list = list()
 
 //OLD BEHAVIOUR
 	else if(narsie_behaviour == "Nar-Singulo")
-		
+
 		if (istype(A, /mob/living/))
 			var/mob/living/C2 = A
 
@@ -246,7 +246,7 @@ var/global/list/narsie_list = list()
 					continue
 
 				if (dist > consume_range && canPull(AM2))
-					
+
 					if (101 == AM2.invisibility)
 						continue
 
@@ -259,7 +259,7 @@ var/global/list/narsie_list = list()
 
 
 /obj/machinery/singularity/narsie/consume(const/atom/A) //This one is for the small ones.
-	
+
 	if (istype(A, /mob/living/))
 		var/mob/living/C2 = A
 

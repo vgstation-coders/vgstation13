@@ -258,16 +258,16 @@
 	switch(dir)
 		if(SOUTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 7
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 		if(WEST)
-			occupant.pixel_x = 13
-			occupant.pixel_y = 7
+			occupant.pixel_x = 13 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 		if(NORTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 4
+			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
 		if(EAST)
-			occupant.pixel_x = -13
-			occupant.pixel_y = 7
+			occupant.pixel_x = -13 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 
 /obj/structure/bed/chair/vehicle/emp_act(severity)
 	switch(severity)

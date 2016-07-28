@@ -60,7 +60,7 @@
 
 				var/image/gun = image(icon(src.icon, gun_state))
 
-				gun.pixel_x = (i-2)*2
+				gun.pixel_x = ((i-2)*2) * PIXEL_MULTIPLIER
 				overlays += gun
 
 

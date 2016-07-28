@@ -234,13 +234,13 @@
 	..()
 	switch(w_dir)
 		if(NORTH)
-			pixel_y = 25
+			pixel_y = 25 * PIXEL_MULTIPLIER
 		if(SOUTH)
-			pixel_y = -25
+			pixel_y = -25 * PIXEL_MULTIPLIER
 		if(EAST)
-			pixel_x = 25
+			pixel_x = 25 * PIXEL_MULTIPLIER
 		if(WEST)
-			pixel_x = -25
+			pixel_x = -25 * PIXEL_MULTIPLIER
 
 /obj/item/device/assembly/signaler/signaler_button/attack_hand(mob/user)
 	if(!activated)
