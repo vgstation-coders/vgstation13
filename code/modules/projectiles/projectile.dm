@@ -465,10 +465,10 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/update_pixel()
 	if(src && starting && target)
-		var/AX = (override_starting_X - src.x)*32
-		var/AY = (override_starting_Y - src.y)*32
-		var/BX = (override_target_X - src.x)*32
-		var/BY = (override_target_Y - src.y)*32
+		var/AX = (override_starting_X - src.x)*WORLD_ICON_SIZE
+		var/AY = (override_starting_Y - src.y)*WORLD_ICON_SIZE
+		var/BX = (override_target_X - src.x)*WORLD_ICON_SIZE
+		var/BY = (override_target_Y - src.y)*WORLD_ICON_SIZE
 		var/XXcheck = ((BX-AX)*(BX-AX))+((BY-AY)*(BY-AY))
 		if(!XXcheck)
 			return
@@ -594,8 +594,8 @@ var/list/impact_master = list()
 	var/disty
 	var/distx
 	var/newangle
-	disty = (32 * override_target_Y)-(32 * override_starting_Y)
-	distx = (32 * override_target_X)-(32 * override_starting_X)
+	disty = (WORLD_ICON_SIZE * override_target_Y)-(WORLD_ICON_SIZE * override_starting_Y)
+	distx = (WORLD_ICON_SIZE * override_target_X)-(WORLD_ICON_SIZE * override_starting_X)
 	if(!disty)
 		if(distx >= 0)
 			newangle = 90

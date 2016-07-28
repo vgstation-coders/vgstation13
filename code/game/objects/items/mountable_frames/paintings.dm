@@ -153,13 +153,13 @@ var/global/list/available_paintings = list(
 
 	var/pDir = get_dir(user,on_wall)
 	if(pDir & NORTH)
-		P.pixel_y = 32
+		P.pixel_y = WORLD_ICON_SIZE
 	if(pDir & SOUTH)
-		P.pixel_y = -32
+		P.pixel_y = -WORLD_ICON_SIZE
 	if(pDir & EAST)
-		P.pixel_x = 32
+		P.pixel_x = WORLD_ICON_SIZE
 	if(pDir & WEST)
-		P.pixel_x = -32
+		P.pixel_x = -WORLD_ICON_SIZE
 
 	playsound(on_wall, 'sound/items/Deconstruct.ogg', 25, 1)
 

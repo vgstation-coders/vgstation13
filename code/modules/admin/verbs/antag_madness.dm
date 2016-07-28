@@ -67,7 +67,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			return
 
 	var/turf/T = get_turf(M)
-	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
 
 	feedback_add_details("admin_verb","AM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -106,7 +106,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		return
 
 	var/turf/T = get_turf(M)
-	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
 
 	to_chat(M, "<span class='danger'>You get the feeling that you're not the only one who remembered his true origin. Will they be your allies or your foes? That is for you to decide.</span>")
 

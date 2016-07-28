@@ -199,8 +199,8 @@
 			original = fallimage.transform
 			fallimage.transform /= 50
 			fallimage.mouse_opacity = 0
-		var/new_x = 32 * (T.x - T_mob.x) - 304
-		var/new_y = 32 * (T.y - T_mob.y) - 304
+		var/new_x = WORLD_ICON_SIZE * (T.x - T_mob.x) - (9.5*WORLD_ICON_SIZE)
+		var/new_y = WORLD_ICON_SIZE * (T.y - T_mob.y) - (9.4*WORLD_ICON_SIZE)
 		fallimage.pixel_x = new_x
 		fallimage.pixel_y = new_y
 		fallimage.loc = T_mob

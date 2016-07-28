@@ -158,24 +158,24 @@
 			snow2.alpha = 255
 			switch(direction)
 				if(1)
-					snow1.pixel_y = 32
+					snow1.pixel_y = WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_y = 32
+					snow2.pixel_y = WORLD_ICON_SIZE
 					overlays += snow2
 				if(2)
-					snow1.pixel_y = -32
+					snow1.pixel_y = -WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_y = -32
+					snow2.pixel_y = -WORLD_ICON_SIZE
 					overlays += snow2
 				if(4)
-					snow1.pixel_x = 32
+					snow1.pixel_x = WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_x = 32
+					snow2.pixel_x = WORLD_ICON_SIZE
 					overlays += snow2
 				if(8)
-					snow1.pixel_x = -32
+					snow1.pixel_x = -WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_x = -32
+					snow2.pixel_x = -WORLD_ICON_SIZE
 					overlays += snow2
 			snow1.alpha = 64
 			snow2.alpha = 64

@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 //How to copypaste human life code and pretend it won't fuck up everything for ALIEN LARVAE : The Novel : The Story : The Legend : The Epic : The Game
 //But seriously, someone's gonna have to look more in depth into this to get rid of useless shit

@@ -148,8 +148,8 @@
 		var/check_dir = get_dir(src, dest)
 
 		//Climb on it!
-		var/new_px = rand(-8,8) + cos(dir2angle(check_dir)) * 32
-		var/new_py = rand(-8,8) + sin(dir2angle(check_dir)) * 32
+		var/new_px = rand(-8,8) + cos(dir2angle(check_dir)) * WORLD_ICON_SIZE
+		var/new_py = rand(-8,8) + sin(dir2angle(check_dir)) * WORLD_ICON_SIZE
 
 		//Modify pixel_x and pixel_y to make it look like the cockroach is on the wall
 		animate(src, pixel_x = new_px, rand(5,15), 1, ELASTIC_EASING)

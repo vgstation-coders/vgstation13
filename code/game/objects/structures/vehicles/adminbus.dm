@@ -12,8 +12,8 @@
 	can_spacemove=1
 	layer = FLY_LAYER+1
 	plane = PLANE_EFFECTS
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	unacidable = 1
 	var/can_move=1
 	var/list/passengers = list()
@@ -36,7 +36,7 @@
 /obj/structure/bed/chair/vehicle/adminbus/New()
 	..()
 	var/turf/T = get_turf(src)
-	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = PLANE_EFFECTS)
+	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = PLANE_EFFECTS)
 	var/image/underbus = image(icon,"underbus",MOB_LAYER-1)
 	underbus.plane = PLANE_OBJ
 	overlays += underbus
@@ -429,8 +429,8 @@
 	desc = "Who knows what these chains can hold..."
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	density = 0
 	layer = 6.9
 	var/max_distance = 7
@@ -441,8 +441,8 @@
 	name = "admin claw"
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = "singulo_catcher"
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	layer = 7
 
 /obj/structure/hookshot/claw/proc/hook_throw(var/toward)
@@ -516,8 +516,8 @@
 	desc = "Admins are above all logic"
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	density = 0
 	var/obj/structure/singulo_chain/child = null
 

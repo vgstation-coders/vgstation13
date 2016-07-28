@@ -138,9 +138,9 @@
 			can_pull_tether = 1
 		else
 			return 0
-	glide_size = Ceiling(32 / move_delay * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
+	glide_size = Ceiling(WORLD_ICON_SIZE / move_delay * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
 	var/atom/oldloc = loc
-	if((bound_height != 32 || bound_width != 32) && (loc == newLoc))
+	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == newLoc))
 		. = ..()
 
 		update_dir()

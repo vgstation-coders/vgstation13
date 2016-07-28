@@ -43,8 +43,8 @@
 	opacity = 1
 	anchored = 1
 	mouse_opacity = 0
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 
 /obj/effect/explosion/New()
 	..()
@@ -76,8 +76,8 @@
 	opacity = 0
 	anchored = 1
 	mouse_opacity = 0
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 
 /obj/effect/small_explosion/New(turf/loc,var/ex_iconstate = "explosion_small", var/pX = 0, var/pY = 0)
 	..()

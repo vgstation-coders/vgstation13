@@ -320,8 +320,8 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 			if(!M || !M.client)
 				M.shakecamera = 0
 				return //somebody disconnected while being shaken
-			M.client.pixel_x = 32*rand(-strength, strength)
-			M.client.pixel_y = 32*rand(-strength, strength)
+			M.client.pixel_x = WORLD_ICON_SIZE*rand(-strength, strength)
+			M.client.pixel_y = WORLD_ICON_SIZE*rand(-strength, strength)
 			sleep(1)
 
 		M.shakecamera = 0

@@ -11,8 +11,8 @@
 	if(!start || !end) return 0
 	var/dy
 	var/dx
-	dy=(32*end.y+end.pixel_y)-(32*start.y+start.pixel_y)
-	dx=(32*end.x+end.pixel_x)-(32*start.x+start.pixel_x)
+	dy=(WORLD_ICON_SIZE*end.y+end.pixel_y)-(WORLD_ICON_SIZE*start.y+start.pixel_y)
+	dx=(WORLD_ICON_SIZE*end.x+end.pixel_x)-(WORLD_ICON_SIZE*start.x+start.pixel_x)
 	if(!dy)
 		return (dx>=0)?90:270
 	.=arctan(dx/dy)
@@ -701,7 +701,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.plane = PLANE_HUD
 			progbar.layer = 21
-			progbar.pixel_z = 32
+			progbar.pixel_z = WORLD_ICON_SIZE
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -745,7 +745,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	if(user && user.client && user.client.prefs.progress_bars && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.pixel_z = 32
+			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = PLANE_HUD
 			progbar.layer = 21
 			progbar.appearance_flags = RESET_COLOR
@@ -757,7 +757,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-				progbar.pixel_z = 32
+				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = PLANE_HUD
 				progbar.layer = 21
 				progbar.appearance_flags = RESET_COLOR

@@ -141,8 +141,8 @@ var/list/uristrune_cache = list()
 	I.SwapColor(rgb(0, 0, 0, 100), bc1)
 	I.SwapColor(rgb(0, 0, 0, 50), bc1)
 
-	for(var/x = 1, x <= 32, x++)
-		for(var/y = 1, y <= 32, y++)
+	for(var/x = 1, x <= WORLD_ICON_SIZE, x++)
+		for(var/y = 1, y <= WORLD_ICON_SIZE, y++)
 			var/p = I.GetPixel(x, y)
 
 			if(p == null)

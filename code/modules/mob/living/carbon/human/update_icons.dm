@@ -1066,8 +1066,8 @@ var/global/list/damage_icon_parts = list()
 		new_item_overlay.name = "[index]"
 		new_item_overlay.icon = t_inhand_state
 		new_item_overlay.icon_state = t_state
-		new_item_overlay.pixel_x = -1*(check_dimensions.Width() - 32)/2
-		new_item_overlay.pixel_y = -1*(check_dimensions.Height() - 32)/2
+		new_item_overlay.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
+		new_item_overlay.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
 		new_item_overlay.layer = O.layer
 
 		var/list/offsets = get_item_offset_by_index(index)

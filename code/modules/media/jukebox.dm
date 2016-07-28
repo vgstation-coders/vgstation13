@@ -723,8 +723,8 @@ var/global/list/loopModeNames=list(
 	luminosity = 0
 	layer = FLY_LAYER+1
 	plane = PLANE_EFFECTS
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 
 	var/datum/browser/popup = null
 	req_access = list()

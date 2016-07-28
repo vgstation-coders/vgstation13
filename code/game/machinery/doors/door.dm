@@ -314,11 +314,11 @@ var/list/all_doors = list()
 
 	if(width > 1)
 		if(dir in list(EAST, WEST))
-			bound_width = width * world.icon_size
-			bound_height = world.icon_size
+			bound_width = width * WORLD_ICON_SIZE
+			bound_height = WORLD_ICON_SIZE
 		else
-			bound_width = world.icon_size
-			bound_height = width * world.icon_size
+			bound_width = WORLD_ICON_SIZE
+			bound_height = width * WORLD_ICON_SIZE
 
 	update_nearby_tiles()
 
@@ -406,11 +406,11 @@ var/list/all_doors = list()
 	. = ..()
 	if(width > 1)
 		if(dir in list(EAST, WEST))
-			bound_width = width * world.icon_size
-			bound_height = world.icon_size
+			bound_width = width * WORLD_ICON_SIZE
+			bound_height = WORLD_ICON_SIZE
 		else
-			bound_width = world.icon_size
-			bound_height = width * world.icon_size
+			bound_width = WORLD_ICON_SIZE
+			bound_height = width * WORLD_ICON_SIZE
 
 	update_nearby_tiles()
 
