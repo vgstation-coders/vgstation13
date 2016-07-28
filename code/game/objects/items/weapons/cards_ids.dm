@@ -351,7 +351,7 @@
 						UpdateName()
 						to_chat(user, "Name changed to [new_name].")
 
-					if("Appearance") //what a snowflake fuck you
+					if("Appearance")
 						var/list/appearances = list(
 							"data",
 							"id",
