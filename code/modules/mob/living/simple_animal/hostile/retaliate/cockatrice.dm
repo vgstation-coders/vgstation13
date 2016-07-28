@@ -39,6 +39,8 @@
 	holder_type = null
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/cockatrice
 
+	var/egg_layer = 1
+
 /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 	name = "chickatrice"
 	desc = "A young cockatrice. Despite being smaller, it's still capable of petrifying anybody that touches it."
@@ -54,9 +56,13 @@
 	melee_damage_upper = 4
 	attacktext = "pecks"
 
+	egg_layer = 0
+
 /mob/living/simple_animal/hostile/retaliate/cockatrice/New()
 	..()
 	gender = pick(MALE, FEMALE)
+	if(egg_layer && (gender != FEMALE))
+		egg_layer = 0
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/sting(mob/living/L, instant = 0)
 	//Turn the mob into a statue forever
@@ -156,7 +162,7 @@
 			if(sting(pulledby))
 				pulledby.stop_pulling()
 
-	if(!stat && gender == FEMALE && prob(1))
+	if(!stat && egg_layer && prob(1))
 		var/statue_amount = 0//Gotta have at least 4 statues around
 		for(var/obj/structure/closet/statue/S in oview(5, src))
 			statue_amount++
@@ -172,7 +178,7 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6)
 		E.pixel_y = rand(-6,6)
-		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
+		if(animal_count[src.species_type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Cross(mob/living/L)

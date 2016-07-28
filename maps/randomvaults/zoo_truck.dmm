@@ -131,7 +131,7 @@
 "cA" = (/obj/machinery/light_construct{dir = 4},/obj/effect/glowshroom,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/zoo)
 "cB" = (/obj/item/weapon/light/tube/broken,/obj/effect/decal/cleanable/mucus,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/zoo)
 "cC" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/structure/disposaloutlet,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/zoo)
-"cD" = (/mob/living/simple_animal/hostile/monster/skrite{health = 100; melee_damage_lower = 15; melee_damage_upper = 35; name = "starving skrite"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/zoo)
+"cD" = (/mob/living/simple_animal/hostile/monster/skrite{health = 100; melee_damage_lower = 15; melee_damage_upper = 35; name = "starving skrite"; speak_chance = 0.1},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/zoo)
 "cE" = (/obj/item/stack/rods,/obj/structure/disposalpipe/trunk{dir = 1},/obj/structure/disposaloutlet,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/zoo)
 "cF" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/structure/disposaloutlet,/obj/effect/decal/cleanable/dirt,/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/humanoid/diona{health = 2; name = "Four Bears"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/zoo)
 "cG" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/zoo)
@@ -175,17 +175,16 @@
 "ds" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/reagent_containers/glass/bottle/ammonia,/turf/simulated/shuttle/plating,/area/vault/zoo)
 "dt" = (/obj/item/weapon/pickaxe/shovel/spade,/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/plating,/area/vault/zoo)
 "du" = (/obj/item/weapon/light/tube/broken,/obj/effect/glowshroom,/turf/simulated/shuttle/plating,/area/vault/zoo)
-"dv" = (/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area)
-"dw" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/shuttle/plating,/area)
-"dx" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/simulated/shuttle/plating,/area)
-"dy" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/shuttle/plating,/area)
+"dv" = (/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/vault/zoo)
+"dw" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/shuttle/plating,/area/vault/zoo)
+"dx" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/simulated/shuttle/plating,/area/vault/zoo)
+"dy" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/shuttle/plating,/area/vault/zoo)
 "dz" = (/obj/structure/girder,/turf/simulated/shuttle/plating,/area/vault/zoo)
 "dA" = (/obj/structure/flora/pottedplant/random,/obj/machinery/light_construct,/obj/item/weapon/light/tube/broken,/turf/simulated/shuttle/plating,/area/vault/zoo)
 "dB" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/chem_dispenser,/turf/simulated/shuttle/plating,/area/vault/zoo)
 "dC" = (/obj/machinery/chem_dispenser,/turf/simulated/shuttle/plating,/area/vault/zoo)
 "dD" = (/obj/structure/flora/pottedplant/random,/obj/machinery/light_construct,/turf/simulated/shuttle/plating,/area/vault/zoo)
-"dE" = (/turf/simulated/shuttle/wall{icon_state = "swall_s9"},/area)
-"dF" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area)
+"dE" = (/turf/simulated/shuttle/wall{icon_state = "swall_s9"},/area/vault/zoo)
 
 (1,1,1) = {"
 aaaaaaababababacadaeaeafagahababababaaaa
@@ -207,5 +206,5 @@ aaapbocYcZdacqdbdccddddedfbodgdgbodhboap
 aaapagagagagdibodjdkdlbDcZdmdnagagagagai
 aaapdodpdpdqapdrdjdsdtdubDdrapdodpdpdqap
 aadvdwdxdxdyapdzdAdBdCbodDdzapdwdxdxdydE
-aaaaaaaaaaaadvdFdFdFdFdFdFdFdEaaaaaaaaaa
+aaaaaaaaaaaadvagagagagagagagdEaaaaaaaaaa
 "}
