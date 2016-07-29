@@ -15,7 +15,7 @@
 	anchored = 1
 	opacity = 0
 	density = 0
-	layer = 3.5
+	layer = ABOVE_OBJ_LAYER
 
 /obj/structure/sign/ex_act(severity)
 	switch(severity)

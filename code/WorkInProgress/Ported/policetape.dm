@@ -132,7 +132,7 @@
 
 		var/atom/tape = new tape_type(turf)
 		tape.icon_state = "[icon_base]_door"
-		tape.layer = 3.2
+		tape.layer = ABOVE_DOOR_LAYER
 
 		to_chat(user, "<span class='notice'>You placed [src].</span>")
 

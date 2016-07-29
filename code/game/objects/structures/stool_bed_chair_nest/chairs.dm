@@ -42,11 +42,9 @@
 
 /obj/structure/bed/chair/proc/handle_layer()
 	if(dir == NORTH)
-		layer = FLY_LAYER
-		plane = PLANE_EFFECTS
+		plane = ABOVE_HUMAN_PLANE
 	else
-		layer = OBJ_LAYER
-		plane = PLANE_OBJ
+		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/proc/spin()
 	change_dir(turn(dir, 90))
@@ -139,8 +137,8 @@
 
 /obj/structure/bed/chair/comfy/New()
 	..()
-	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]_armrest", MOB_LAYER + 0.1)
-	buckle_overlay.plane = PLANE_MOB
+	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/bed/chair/comfy/lock_atom(var/atom/movable/AM)
 	..()
@@ -186,8 +184,8 @@
 
 /obj/structure/bed/chair/office/New()
 	..()
-	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]-overlay", MOB_LAYER + 0.1)
-	buckle_overlay.plane = PLANE_MOB
+	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]-overlay", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/bed/chair/office/lock_atom(var/atom/movable/AM)
 	. = ..()
@@ -209,8 +207,8 @@
 
 /obj/structure/bed/chair/office/handle_layer() // Fixes layer problem when and office chair is buckled and facing north
 	if(dir == NORTH && !locked_atoms.len)
-		layer = FLY_LAYER
-		plane = PLANE_EFFECTS
+		layer = CHAIR_ARMREST_LAYER
+		plane = ABOVE_HUMAN_PLANE
 	else
 		layer = OBJ_LAYER
 		plane = PLANE_OBJ
@@ -244,12 +242,12 @@
 
 /obj/structure/bed/chair/comfy/couch/New()
 
-	legs = image("icons/obj/objects.dmi", "[icon_state]_legs", MOB_LAYER - 0.1)		// since i dont want the legs colored they are a separate overlay
-	legs.plane = PLANE_MOB															//
+	legs = image("icons/obj/objects.dmi", "[icon_state]_legs", CHAIR_LEG_LAYER)		// since i dont want the legs colored they are a separate overlay
+	legs.plane = OBJ_PLANE															//
 	legs.appearance_flags = RESET_COLOR												//
 	overlays += legs
-	secondary_buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]_armrest_legs", MOB_LAYER + 0.2)		// since i dont want the legs colored they are a separate overlay
-	secondary_buckle_overlay.plane = PLANE_MOB															//
+	secondary_buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]_armrest_legs", CHAIR_ARMREST_LAYER)		// since i dont want the legs colored they are a separate overlay
+	secondary_buckle_overlay.plane = ABOVE_HUMAN_PLANE																//
 	secondary_buckle_overlay.appearance_flags = RESET_COLOR
 	..()
 	overlays += buckle_overlay
@@ -257,7 +255,7 @@
 
 /obj/structure/bed/chair/comfy/couch/turn/handle_layer() // makes sure mobs arent buried under certain chair sprites
 	layer = OBJ_LAYER
-	plane = PLANE_OBJ
+	plane = OBJ_PLANE
 
 
 

@@ -319,7 +319,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	reagents.handle_reactions()
 	//This ain't ready yet.
 	//overlays.len = 0
-	//overlays += image('icons/mob/mask.dmi', overlay_on, LIGHTING_LAYER+1)
+	//overlays += image('icons/mob/mask.dmi', overlay_on, ABOVE_LIGHTING_LAYER)
 	var/turf/T = get_turf(src)
 	T.visible_message(flavor_text)
 

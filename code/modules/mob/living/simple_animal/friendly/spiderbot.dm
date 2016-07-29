@@ -212,11 +212,11 @@
 
 	if (layer != TURF_LAYER+0.2)
 		layer = TURF_LAYER+0.2
-		plane = PLANE_TURF
+		plane = TURF_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
 	else
 		layer = MOB_LAYER
-		plane = PLANE_MOB
+		plane = MOB_PLANE
 		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
 
 //Cannibalized from the parrot mob. ~Zuhayr

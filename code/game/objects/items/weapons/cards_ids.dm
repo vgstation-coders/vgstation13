@@ -45,7 +45,6 @@
 	name = "Coordinates to Clown Planet"
 	icon_state = "data"
 	item_state = "card-id"
-	layer = 3
 	level = 2
 	desc = "This card contains coordinates to the fabled Clown Planet. Handle with care."
 	function = "teleporter"

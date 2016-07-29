@@ -201,7 +201,7 @@ var/global/obj/screen/clicker/catcher = new()
 		using.dir = SOUTHWEST
 		using.icon = 'icons/mob/screen1.dmi'
 		using.icon_state = "block"
-		using.layer = 19
+		using.layer = HUD_BASE_LAYER
 		src.adding += using
 		mymob:schematics_background = using
 
@@ -313,7 +313,7 @@ var/global/obj/screen/clicker/catcher = new()
 				A.screen_loc = "CENTER[x]:16,SOUTH+[y]:7"
 			else
 				A.screen_loc = "CENTER+[x]:16,SOUTH+[y]:7"
-			A.layer = 20
+			A.layer = HUD_ITEM_LAYER
 
 			x++
 			if(x == 4)

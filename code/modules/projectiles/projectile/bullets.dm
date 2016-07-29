@@ -118,7 +118,7 @@
 	damage_type = BRUTE
 	flag = "bullet"
 	kill_count = 100
-	layer = 13
+	layer = PROJECTILE_LAYER
 	damage = 40
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "spur_high"
@@ -197,7 +197,7 @@
 		var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,impact_icon)
 		impact.pixel_x = PixelX
 		impact.pixel_y = PixelY
-		impact.layer = 13
+		impact.layer = PROJECTILE_LAYER
 		T.overlays += impact
 		spawn(3)
 			T.overlays -= impact
@@ -217,7 +217,7 @@
 		if(loc)
 			var/turf/T = loc
 			var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,"spur_2")
-			impact.layer = 13
+			impact.layer = PROJECTILE_LAYER
 			T.overlays += impact
 			spawn(3)
 				T.overlays -= impact

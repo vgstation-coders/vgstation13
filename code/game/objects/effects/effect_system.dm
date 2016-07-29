@@ -684,8 +684,7 @@ steam.start() -- spawns the effect
 	opacity = 0
 	anchored = 1
 	density = 0
-	layer = OBJ_LAYER + 0.9
-	layer = PLANE_EFFECTS
+	layer = ABOVE_HUMAN_PLANE
 	var/amount = 3
 	var/expand = 1
 	animate_movement = 0

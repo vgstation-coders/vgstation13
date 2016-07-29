@@ -641,8 +641,7 @@
 				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
 					qdel(W)
 					continue
-				W.layer = initial(W.layer)
-				W.plane = initial(W.plane)
+				W.un_hud_layerise()
 				W.loc = C.loc
 				W.dropped(C)
 			var/mob/living/carbon/slime/new_mob = new /mob/living/carbon/slime(C.loc)

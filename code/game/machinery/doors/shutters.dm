@@ -8,7 +8,7 @@
 
 /obj/machinery/door/poddoor/shutters/New()
 	..()
-	layer = 3.1
+	layer = DOOR_LAYER
 
 /obj/machinery/door/poddoor/shutters/preopen
 	icon_state = "shutter0"

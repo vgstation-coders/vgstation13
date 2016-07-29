@@ -7,7 +7,7 @@ var/list/camera_names=list()
 	use_power = 2
 	idle_power_usage = 5
 	active_power_usage = 10
-	layer = 5
+	plane = ABOVE_HUMAN_PLANE
 
 	var/datum/wires/camera/wires = null // Wires datum
 	var/list/network = list("SS13")
@@ -438,7 +438,7 @@ var/list/camera_names=list()
 	use_power = 0
 	idle_power_usage = 0
 	active_power_usage = 0
-	layer = 2.1
+	layer = DECAL_LAYER
 
 /obj/machinery/camera/arena/New()
 	..()

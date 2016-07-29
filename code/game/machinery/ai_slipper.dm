@@ -2,7 +2,6 @@
 	name = "foam dispenser" //Doesn't have to be the AI's
 	icon = 'icons/obj/device.dmi'
 	icon_state = "motion3"
-	layer = 3
 	anchored = 1.0
 	var/uses = 20
 	var/disabled = 1

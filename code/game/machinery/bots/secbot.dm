@@ -4,7 +4,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "secbot0"
 	icon_initial = "secbot"
-	layer = 5.0
 	density = 0
 	anchored = 0
 	health = 25

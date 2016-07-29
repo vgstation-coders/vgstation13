@@ -558,8 +558,7 @@ var/global/list/damage_icon_parts = list()
 				if (thing)																		//
 					thing.loc = loc																//
 					//thing.dropped(src)														//
-					thing.layer = initial(thing.layer)
-					thing.plane = initial(thing.plane)
+					thing.un_hud_layerise()
 	if(update_icons)   update_icons()
 
 /mob/living/carbon/human/update_inv_wear_id(var/update_icons=1)

@@ -8,7 +8,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	pressure_resistance = 5*ONE_ATMOSPHERE
-	layer = 2.1
+	layer = DECAL_LAYER
 	explosion_resistance = 5
 	var/health = 10
 	var/destroyed = 0

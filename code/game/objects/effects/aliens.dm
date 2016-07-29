@@ -174,7 +174,7 @@
 
 	anchored = 1
 	density = 0
-	layer = 2
+	layer = DECAL_LAYER
 	var/health = 14
 	var/obj/effect/alien/weeds/node/linked_node = null
 	var/obj/machinery/door/jammin = null
@@ -192,7 +192,6 @@
 	icon_state = "weednode"
 	name = "purple sac"
 	desc = "Weird purple octopus-like thing."
-	layer = 3
 	luminosity = NODERANGE
 	var/node_range = NODERANGE
 	var/list/obj/effect/alien/weeds/connected_weeds

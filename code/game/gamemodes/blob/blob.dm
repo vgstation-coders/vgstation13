@@ -187,4 +187,3 @@ You must kill it all while minimizing the damage to the station."})
 			for(var/mob/camera/blob/B in player_list)
 				to_chat(B, "<span class='blob'>The beings intend to eliminate you with a final suicidal attack, you must stop them quickly or consume the station before this occurs!</span>")
 			if(!mixed) send_intercept(2)
-	return

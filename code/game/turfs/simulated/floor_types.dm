@@ -262,7 +262,7 @@
 /turf/simulated/floor/beach/water/New()
 	..()
 	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water5","layer"=MOB_LAYER+0.1)
-	water.plane = PLANE_MOB
+	water.plane = MOB_PLANE
 	overlays += water
 
 /turf/simulated/floor/grass

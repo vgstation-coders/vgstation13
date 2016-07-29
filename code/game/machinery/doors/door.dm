@@ -4,7 +4,6 @@
 #define HEADBUTT_PROBABILITY 40
 #define BRAINLOSS_FOR_HEADBUTT 60
 
-#define DOOR_LAYER		2.7
 #define DOOR_CLOSED_MOD	0.3 //how much the layer is increased when the door is closed
 
 var/list/all_doors = list()
@@ -198,7 +197,6 @@ var/list/all_doors = list()
 			flick("[prefix]door_closing", src)
 
 	sleep(animation_delay)
-	return
 
 /obj/machinery/door/update_icon()
 	if(!density)
@@ -207,41 +205,7 @@ var/list/all_doors = list()
 		icon_state = "[prefix]door_closed"
 
 	sleep(animation_delay_2)
-	return
 
-/*
-/obj/machinery/door/proc/open()
-	if (!density || operating || jammed)
-		return
-
-	operating = 1
-
-	door_animate("opening")
-
-	if (!istype(type, /obj/machinery/door/firedoor))
-		layer = 2.7
-	else
-		layer = 2.6
-
-	density = 0
-	update_icon()
-	opacity = 0
-
-	// TODO: analyze this proc
-	update_nearby_tiles()
-
-	operating = 0
-
-	// TODO: re-logic later
-	if (autoclose && normalspeed)
-		spawn(150)
-			autoclose()
-	else if (autoclose && !normalspeed)
-		spawn(5)
-			autoclose()
-
-	return
-*/
 
 /obj/machinery/door/proc/open()
 	if(!density)		return 1

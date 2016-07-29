@@ -38,8 +38,7 @@
 				if(istype(W, /obj/item/weapon/implant))
 					qdel(W)
 					continue
-				W.layer = initial(W.layer)
-				W.plane = initial(W.plane)
+				W.un_hud_layerise()
 				W.loc = M.loc
 				W.dropped(M)
 		// END TODO

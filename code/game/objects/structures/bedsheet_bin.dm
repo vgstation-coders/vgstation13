@@ -11,7 +11,6 @@ LINEN BINS
 	icon_state = "sheetwhite"
 	item_state = "bedsheet"
 	slot_flags = SLOT_BACK
-	layer = 4.0
 	throwforce = 1
 	throw_speed = 1
 	throw_range = 2
@@ -46,15 +45,6 @@ LINEN BINS
 //todo: finger prints?
 //todo: more cutting tools?
 //todo: sharp thing code/game/objects/objs.dm
-
-/obj/item/weapon/bedsheet/attack_self(mob/user as mob)
-	user.drop_item(src, force_drop = 1)
-	if(layer == initial(layer))
-		layer = MOB_LAYER + 0.1
-	else
-		layer = initial(layer)
-	add_fingerprint(user)
-	return
 
 
 /obj/item/weapon/bedsheet/blue

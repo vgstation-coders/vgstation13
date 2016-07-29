@@ -10,7 +10,7 @@
 /obj/structure/bed/chair/e_chair/New()
 	..()
 	var/image/over = image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir)
-	over.plane = PLANE_MOB
+	over.plane = MOB_PLANE
 	overlays += over
 	spark_system = new
 	spark_system.set_up(12, 0, src)
@@ -46,7 +46,7 @@
 /obj/structure/bed/chair/e_chair/rotate()
 	..()
 	overlays.len = 0
-	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir,plane = PLANE_MOB)	//there's probably a better way of handling this, but eh. -Pete
+	overlays += image('icons/obj/objects.dmi', src, "echair_over", MOB_LAYER + 1, dir,plane = MOB_PLANE)	//there's probably a better way of handling this, but eh. -Pete
 	return
 
 /obj/structure/bed/chair/e_chair/proc/shock()

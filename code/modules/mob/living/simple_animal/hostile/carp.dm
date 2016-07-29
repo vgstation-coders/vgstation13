@@ -150,7 +150,7 @@
 					friends.Add(user)
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2",MOB_LAYER+1)
-					heart.plane = PLANE_EFFECTS
+					heart.plane = EFFECTS_PLANE
 					flick_overlay(heart, list(user.client), 20)
 
 			if(F.reagents)

@@ -1394,7 +1394,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = locker
-				I.layer = initial(I.layer)
+				I.un_hud_layerise()
 				//I.dropped(M)
 
 		M.update_icons()
@@ -1472,8 +1472,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
-				I.layer = initial(I.layer)
-				I.plane = initial(I.plane)
+				I.un_hud_layerise()
 				//I.dropped(M)
 				I.loc = pack
 
@@ -1607,8 +1606,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
-				I.layer = initial(I.layer)
-				I.plane = initial(I.plane)
+				I.un_hud_layerise()
 				//I.dropped(M)
 
 		if(istype(M, /mob/living/carbon/human))
@@ -2869,7 +2867,7 @@
 					var/turf/U = pick(turflist)
 					var/obj/structure/closet/crate/secure/weapon/experimental/E = new(U)
 					to_chat(C, "<span class='danger'>A crate appears next to you. You think you can read \"[E.chosen_set]\" scribbled on it</span>")
-					U.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+					U.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 				message_admins("[key_name_admin(usr)] distributed experimental guns to the entire crew")
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2986,7 +2984,7 @@
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = PLANE_MOB)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = "Admin"
 				D.real_name = "Admin"
 				var/newname = ""

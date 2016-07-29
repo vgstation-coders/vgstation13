@@ -41,11 +41,11 @@ var/list/poddoors = list()
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	if(density)
-		layer = 3.3		//to override door.New() proc
+		layer = DOOR_LAYER		//to override door.New() proc
 	else
-		layer = initial(layer)
+		un_hud_layerise()
 	poddoors += src
-	return
+
 
 /obj/machinery/door/poddoor/Destroy()
 	poddoors -= src
@@ -84,7 +84,7 @@ var/list/poddoors = list()
 	src.icon_state = openicon
 	src.set_opacity(0)
 	sleep(10)
-	layer = initial(layer)
+	un_hud_layerise()
 	src.density = 0
 	update_nearby_tiles()
 
@@ -99,7 +99,7 @@ var/list/poddoors = list()
 	if (src.operating)
 		return
 	src.operating = 1
-	layer = 3.3
+	layer = DOOR_LAYER
 	flick(closingicon, src)
 	src.icon_state = closedicon
 	src.density = 1

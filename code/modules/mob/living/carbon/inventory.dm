@@ -34,7 +34,7 @@
 			if(dropped)
 				W.dropped(src)
 			if(W)
-				W.layer = initial(W.layer)
+				W.un_hud_layerise()
 
 	return
 
