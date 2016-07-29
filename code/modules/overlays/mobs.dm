@@ -1,8 +1,5 @@
 // Human Overlay objects for the new Overlays system.
 
-/obj/Overlays
-	plane = FLOAT_PLANE
-
 /obj/Overlays/fire_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - FIRE_LAYER)
 
