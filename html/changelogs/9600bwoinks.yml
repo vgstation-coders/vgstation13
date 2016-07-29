@@ -34,3 +34,4 @@ delete-after: True
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
 - tweak: "Trying to clone a husk now provides a more informative error message, rather than the generic 'mental interface failure'. This message also tells you if the dead guy can still rejoin their corpse, so you can try to clone a husk before attempting a head transplant and know you're not wasting your time on someone that already logged out."
+- spellcheck: "Updated the in-game 'Cloning techniques of the 26th Century' book that spawns in Genetics so that it's not outdated by several years."
