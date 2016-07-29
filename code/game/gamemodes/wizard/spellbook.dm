@@ -163,7 +163,8 @@
 				smoke = "Smoke", blind = "Blind", subjugation = "Subjugation", mindswap = "Mind Transfer", forcewall = "Forcewall", blink = "Blink", teleport = "Teleport", mutate = "Mutate",
 				etherealjaunt = "Ethereal Jaunt", knock = "Knock", horseman = "Curse of the Horseman", frenchcurse = "The French Curse", summonguns = "Summon Guns", staffchange = "Staff of Change",
 				mentalfocus = "Mental Focus", soulstone = "Six Soul Stone Shards and the spell Artificer", armor = "Mastercrafted Armor Set", staffanimate = "Staff of Animation", noclothes = "No Clothes",
-				fleshtostone = "Flesh to Stone", arsenath = "Butt-Bot's Revenge", timestop = "Time Stop", bundle = "Spellbook Bundle")
+				fleshtostone = "Flesh to Stone", arsenath = "Butt-Bot's Revenge", timestop = "Time Stop", bundle = "Spellbook Bundle", shoesnatch = "Shoe Snatching Charm", robesummon = "Summon Robes",\
+				)
 				var/already_knows = 0
 				for(var/spell/aspell in H.spell_list)
 					if(available_spells[href_list["spell_choice"]] == initial(aspell.name))

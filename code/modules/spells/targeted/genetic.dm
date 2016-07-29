@@ -34,14 +34,14 @@ code\game\\dna\genes\goon_powers.dm
 
 	charge_max = 300
 
-	spell_flags = 0
+	spell_flags = WAIT_FOR_CLICK
 	invocation = "STI KALY"
 	invocation_type = SpI_WHISPER
 	message = "<span class='danger'>Your eyes cry out in pain!</span>"
 	cooldown_min = 50
 
 	range = 7
-	max_targets = 0
+	max_targets = 1
 
 	amt_eye_blind = 10
 	amt_eye_blurry = 20
