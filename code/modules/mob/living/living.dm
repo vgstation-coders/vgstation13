@@ -1390,9 +1390,10 @@ default behaviour is:
 	visual determines whether the proc damages eyes (in the living/carbon/human proc). 1 for no damage
 	override_blindness_check = 1 means that it'll display a flash even if the mob is blind
 	affect_silicon = 0 means that the flash won't affect silicons at all.
+	forced = 1 means that it'll override the eyecheck proc in carbon.dm and show the flashing overlay anyway
 
 */
-/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, forced = 0, type = /obj/screen/fullscreen/flash)
 	if(override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)

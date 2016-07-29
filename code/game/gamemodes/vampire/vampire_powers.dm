@@ -242,30 +242,50 @@
 				M.current.verbs += /client/proc/vampire_glare
 		var/list/close_mobs = list()
 		var/list/dist_mobs = list()
-		for(var/mob/living/carbon/C in view(1))
-			if(!C.vampire_affected(M)) continue
+		for(var/mob/living/L in view(1))
+			if(!L.vampire_affected(M))
+				continue
 			//if(!M.current.vampire_can_reach(C, 1)) continue
-			if(istype(C)) close_mobs |= C // using |= prevents adding 'large bounded' mobs twice with how the loop works
-		for(var/mob/living/carbon/C in view(3))
-			if(!C.vampire_affected(M)) continue
-			if(istype(C)) dist_mobs |= C
+			if(istype(L)) close_mobs |= L // using |= prevents adding 'large bounded' mobs twice with how the loop works
+		for(var/mob/living/L in view(3))
+			if(!L.vampire_affected(M))
+				continue
+			if(istype(L)) dist_mobs |= L
 		dist_mobs -= close_mobs //So they don't get double affected.
-		for(var/mob/living/carbon/C in close_mobs)
-			C.Stun(8)
-			C.Weaken(8)
-			C.stuttering += 20
-			if(!C.blinded) C.blinded = 1
-			C.blinded += 5
-		for(var/mob/living/carbon/C in dist_mobs)
-			var/distance_value = max(0, abs((get_dist(C, M.current)-3)) + 1)
-			C.Stun(distance_value)
-			if(distance_value > 1)
-				C.Weaken(distance_value)
-			C.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
-			if(!C.blinded) C.blinded = 1
-			C.blinded += max(1, distance_value)
-		to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by [M.current.name]'s glare</span>")
-
+		for(var/mob/living/L in close_mobs)
+			L.flash_eyes(affect_silicon = 1, visual = 1, forced = 1)
+			if(!isrobot(L))
+				L.Stun(8)
+				L.Weaken(8)
+				L.stuttering += 20
+				if(!L.blinded)
+					L.blinded = 1
+				L.blinded += 5
+			else
+				var/mob/living/silicon/robot/R = L
+				R.spark_system.start()
+				R.Weaken(rand(5,10)) // same as getting flashed
+		for(var/mob/living/L in dist_mobs)
+			var/distance_value = max(0, abs((get_dist(L, M.current)-3)) + 1)
+			if(!isrobot(L))
+				L.Stun(distance_value)
+				L.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
+				if(!L.blinded)
+					L.blinded = 1
+				L.blinded += max(1, distance_value)
+				if(distance_value > 1)
+					L.flash_eyes(visual = 1, forced = 1)
+					L.Weaken(distance_value)
+			else
+				var/mob/living/silicon/robot/R = L
+				R.flash_eyes(affect_silicon = 1, visual = 1)
+				R.spark_system.start()
+				R.Weaken(distance_value + 1)
+		for(var/mob/L in (close_mobs + dist_mobs))
+			if(isrobot(L))
+				to_chat(L, "<span class='warning'>Your circuits have been overloaded by [M.current.name]'s glare!</span>")
+			else
+				to_chat(L, "<span class='warning'>You are blinded by [M.current.name]'s glare!</span>")
 
 /client/proc/vampire_shapeshift()
 	set category = "Vampire"
