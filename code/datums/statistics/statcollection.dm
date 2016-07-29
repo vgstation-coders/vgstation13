@@ -40,6 +40,7 @@
 	// Stat blobs
 	var/datum/stat_blob/cult/cult = new
 	var/datum/stat_blob/xeno/xeno = new
+	var/datum/stat_blob/blobmode/blobblob = new
 
 	var/gamemode = "UNSET"
 	var/mixed_gamemodes = null
@@ -215,7 +216,7 @@
 	statfile << "NUKED|[nuked]"
 
 	for(var/datum/stat/death_stat/D in death_stats)
-		statfile << "MOB_DEATH|[D.mob_typepath]|[D.special_role]|[num2text(D.time_of_death, 30)]|[D.last_attacked_by]|[D.death_x]|[D.death_y]|[D.death_z]|[D.key]|[D.realname]"
+		statfile << "MOB_DEATH|[D.mob_typepath]|[D.special_role]|[num2text(D.time_of_death, 30)]|[D.last_attacked_by]|[D.death_x]|[D.death_y]|[D.death_z]|[D.ckey]|[D.realname]"
 	for(var/datum/stat/explosion_stat/E in explosion_stats)
 		statfile << "EXPLOSION|[E.epicenter_x]|[E.epicenter_y]|[E.epicenter_z]|[E.devastation_range]|[E.heavy_impact_range]|[E.light_impact_range]|[E.max_range]"
 	for(var/datum/stat/uplink_purchase_stat/U in uplink_purchases)
@@ -231,6 +232,9 @@
 
 	xeno.doPostRoundChecks()
 	xeno.writeStats(statfile)
+
+	blobblob.doPostRoundChecks()
+	blobblob.writeStats(statfile)
 
 	antagCheck(statfile)
 
