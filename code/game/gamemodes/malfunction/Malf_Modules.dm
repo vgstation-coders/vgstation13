@@ -191,7 +191,7 @@ rcd light flash thingy on matter drain
 
 	ai_flags |= HIGHRESCAMS
 
-	eyeobj.addHear()
+	eyeobj.high_res = 1
 	src.verbs -= /mob/living/silicon/ai/proc/highrescameras
 
 

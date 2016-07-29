@@ -111,7 +111,6 @@ var/list/ai_list = list()
 
 	aiMulti = new(src)
 	aicamera = new/obj/item/device/camera/ai_camera(src)
-
 	if (istype(loc, /turf))
 		verbs.Add(/mob/living/silicon/ai/proc/ai_network_change, \
 		/mob/living/silicon/ai/proc/ai_statuschange, \

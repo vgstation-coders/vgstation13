@@ -346,9 +346,16 @@ var/global/obj/screen/fuckstat/FUCK = new
 // message is output to anyone who can see, e.g. "The [src] does something!"
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
-	if(world.time>resethearers) sethearing()
+	if(world.time>resethearers)
+		sethearing()
 	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
-		if(istype(hearer.attached, /mob))
+		if(istype(hearer.attached, /mob/camera/aiEye))
+			var/mob/camera/aiEye/eye = hearer.attached
+			if(eye.ai)
+				var/mob/living/silicon/ai/A = eye.ai
+				if(cameranet.checkCameraVis(src)) //check it's actually in view of a camera
+					A.show_message( message, 1, blind_message, 2)
+		else if(istype(hearer.attached, /mob))
 			var/mob/M = hearer.attached
 			if(M.see_invisible < invisibility || M == src)
 				continue
