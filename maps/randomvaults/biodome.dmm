@@ -72,7 +72,7 @@
 "bt" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/vault/biodome)
 "bu" = (/obj/machinery/vending/hydronutrients,/turf/simulated/floor,/area/vault/biodome)
 "bv" = (/obj/machinery/floodlight/on,/turf/simulated/floor,/area/vault/biodome)
-"bw" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc{dir = 1; pixel_y = 24; pixel_x = 0},/turf/simulated/floor,/area/vault/biodome)
+"bw" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc{dir = 1; pixel_y = 48; pixel_x = 0},/turf/simulated/floor,/area/vault/biodome)
 "bx" = (/obj/structure/flora/ausbushes/grassybush,/turf/simulated/floor/grass,/area/vault/biodome)
 "by" = (/obj/structure/flora/ausbushes/palebush,/turf/simulated/floor/grass,/area/vault/biodome)
 "bz" = (/obj/structure/window/reinforced{dir = 2},/turf/simulated/floor/grass,/area/vault/biodome)

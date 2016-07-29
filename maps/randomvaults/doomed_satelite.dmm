@@ -16,7 +16,7 @@
 "p" = (/obj/structure/bed/chair,/obj/item/weapon/dice,/turf/simulated/floor/plating,/area/vault/satelite)
 "q" = (/obj/machinery/vending/sovietsoda,/turf/simulated/floor/plating,/area/vault/satelite)
 "r" = (/obj/structure/table,/obj/item/weapon/paper,/obj/item/weapon/paper_bin,/turf/simulated/floor/plating,/area/vault/satelite)
-"s" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/beetsoup,/obj/item/weapon/coin/adamantine,/obj/item/weapon/coin/adamantine{pixel_x = -4; pixel_y = 2},/obj/item/weapon/coin/phazon{pixel_y = -7},/turf/simulated/floor/plating,/area/vault/satelite)
+"s" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/beetsoup,/obj/item/weapon/coin/adamantine,/obj/item/weapon/coin/adamantine{pixel_x = -8; pixel_y = 4},/obj/item/weapon/coin/phazon{pixel_y = -14},/turf/simulated/floor/plating,/area/vault/satelite)
 "t" = (/obj/structure/bed/chair{dir = 4},/obj/effect/landmark/corpse/russian,/turf/simulated/floor/plating,/area/vault/satelite)
 "u" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/harpoon,/turf/simulated/floor/plating,/area/vault/satelite)
 "v" = (/obj/effect/decal/cleanable/crayon/fuckyou,/obj/machinery/door/airlock/external,/turf/simulated/wall,/area/vault/satelite)
