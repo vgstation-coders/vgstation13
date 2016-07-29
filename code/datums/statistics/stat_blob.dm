@@ -38,5 +38,5 @@
 	var/spores_spawned = 0
 	var/res_generated = 0 // Note this does not take into consideration points that were wasted for going over the maximum possible points
 
-/datum/stat_blob/blobmode/writeStats()
+/datum/stat_blob/blobmode/writeStats(file)
 	file << "BLOBSTATS|[blob_wins]|[spawned_blob_players]|[spores_spawned]|[res_generated]"
