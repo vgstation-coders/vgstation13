@@ -98,7 +98,7 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-#define FONT_SIZE "6pt"
+#define FONT_SIZE "12pt"
 #define FONT_NAME "Comic Sans MS"
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
 	if(!proximity) return
