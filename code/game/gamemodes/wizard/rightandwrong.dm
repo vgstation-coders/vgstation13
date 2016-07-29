@@ -20,7 +20,7 @@
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
 		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
-		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","charge","wandnothing", "wanddeath", "wandresurrection", "wandpolymorph", "wandteleport", "wanddoor", "wandfireball", "staffchange", "staffhealing", "armor", "scrying")
+		var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","charge","wandnothing", "wanddeath", "wandresurrection", "wandpolymorph", "wandteleport", "wanddoor", "wandfireball", "staffchange", "staffhealing", "armor", "scrying")
 		if(!summon_type)
 			switch (randomizeguns)
 				if("taser")
@@ -92,8 +92,10 @@
 					new /obj/item/weapon/spellbook/oneuse/smoke(get_turf(H))
 				if("blind")
 					new /obj/item/weapon/spellbook/oneuse/blind(get_turf(H))
+				/*TEMP MINDSWAP REMOVAL
 				if("mindswap")
 					new /obj/item/weapon/spellbook/oneuse/mindswap(get_turf(H))
+				*/
 				if("forcewall")
 					new /obj/item/weapon/spellbook/oneuse/forcewall(get_turf(H))
 				if("knock")

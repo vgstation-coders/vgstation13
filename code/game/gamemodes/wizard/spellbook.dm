@@ -53,8 +53,6 @@
 			<I>This spell temporarly blinds a single person and does not require wizard garb.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=subjugation'>Subjugation</A> (30)<BR>
 			<I>This spell temporarily subjugates a target's mind and does not require wizard garb.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=mindswap'>Mind Transfer</A> (60)<BR>
-			<I>This spell allows the user to switch bodies with a target. Careful to not lose your memory in the process.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=forcewall'>Forcewall</A> (10)<BR>
 			<I>This spell creates an unbreakable wall that lasts for 30 seconds and does not need wizard garb.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=blink'>Blink</A> (2)<BR>
@@ -160,7 +158,7 @@
 				uses--
 
 				var/list/available_spells = list(magicmissile = "Magic Missile", fireball = "Fireball", lightning = "Lightning", disintegrate = "Disintegrate", disabletech = "Disable Tech",
-				smoke = "Smoke", blind = "Blind", subjugation = "Subjugation", mindswap = "Mind Transfer", forcewall = "Forcewall", blink = "Blink", teleport = "Teleport", mutate = "Mutate",
+				smoke = "Smoke", blind = "Blind", subjugation = "Subjugation", forcewall = "Forcewall", blink = "Blink", teleport = "Teleport", mutate = "Mutate",
 				etherealjaunt = "Ethereal Jaunt", knock = "Knock", horseman = "Curse of the Horseman", frenchcurse = "The French Curse", summonguns = "Summon Guns", staffchange = "Staff of Change",
 				mentalfocus = "Mental Focus", soulstone = "Six Soul Stone Shards and the spell Artificer", armor = "Mastercrafted Armor Set", staffanimate = "Staff of Animation", noclothes = "No Clothes",
 				fleshtostone = "Flesh to Stone", arsenath = "Butt-Bot's Revenge", timestop = "Time Stop", bundle = "Spellbook Bundle")
@@ -239,7 +237,8 @@
 							feedback_add_details("wizard_spell_learned","MS")
 							add_spell(new/spell/aoe_turf/fall,H)
 							temp = "You have learned time stop."
-						/*if("disintegrate")
+						/*
+						if("disintegrate")
 							if(!ticker.mode.rage)
 								feedback_add_details("wizard_spell_learned","DG") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 								add_spell(new/spell/targeted/disintegrate,H)
@@ -261,10 +260,12 @@
 							feedback_add_details("wizard_spell_learned","SJ") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 							add_spell(new/spell/targeted/subjugation,H)
 							temp = "You have learned subjugate."
+						/*TEMP MINDSWAP REMOVAL
 						if("mindswap")
 							feedback_add_details("wizard_spell_learned","MT") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 							add_spell(new/spell/targeted/mind_transfer,H)
 							temp = "You have learned mindswap."
+						*/
 						if("forcewall")
 							feedback_add_details("wizard_spell_learned","FW") //please do not change the abbreviation to keep data processing consistent. Add a unique id to any new spells
 							add_spell(new/spell/aoe_turf/conjure/forcewall,H)
@@ -806,6 +807,8 @@
 	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
 	possible_books -= /obj/item/weapon/spellbook/oneuse
 	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
+	/*TEMP MINDSWAP REMOVAL*/
+	possible_books -= /obj/item/weapon/spellbook/oneuse/mindswap
 	for(var/i =1; i <= 7; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)

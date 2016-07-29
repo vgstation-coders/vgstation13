@@ -42,7 +42,7 @@
 		//dat += "<I>Your apprentice is training to cast spells that will aid your survival. They know Forcewall and Charge and come with a Staff of Healing.</I><BR>"
 		dat += "<I>The school of healing has been closed for renovations, so you cannot find an apprentice specializing in this school. (Bug #99 on Redmine for more info)</I><BR>"
 		dat += "<A href='byond://?src=\ref[src];school=robeless'>Robeless</A><BR>"
-		dat += "<I>Your apprentice is training to cast spells without their robes. They know Knock and Mindswap.</I><BR>"
+		dat += "<I>Your apprentice is training to cast spells without their robes. They know Knock and Forcewall.</I><BR>"
 	user << browse(dat, "window=radio")
 	onclose(user, "radio")
 	return
@@ -93,8 +93,8 @@
 		*/
 		if("robeless")
 			M.add_spell(new /spell/aoe_turf/knock)
-			M.add_spell(new /spell/targeted/mind_transfer)
-			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned stealthy, robeless spells. You are able to cast knock and mindswap.")
+			M.add_spell(new /spell/aoe_turf/conjure/forcewall)
+			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned stealthy, robeless spells. You are able to cast knock and forcewall.")
 		if("clown")
 			M.add_spell(new /spell/targeted/equip_item/clowncurse)
 			M.add_spell(new /spell/targeted/shoesnatch)

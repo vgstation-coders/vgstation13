@@ -1,0 +1,5 @@
+author: Intigracy
+delete-after: True
+changes: 
+- rscdel: "Removed Mindswap from the spellbook until the multitude of issues it has is fixed."
+- tweak: "The robeless spell set that apprentices can pick now has forcewall instead of mindswap for the time being."
