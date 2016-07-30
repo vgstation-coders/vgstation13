@@ -56,7 +56,7 @@
 /obj/item/clothing/suit/storage/proc/orient_objs(tx, ty, mx, my)
 	var/cx = tx
 	var/cy = ty
-	src.boxes.screen_loc = text("[tx]:,[ty] to [mx],[my]")
+	src.boxes.screen_loc = text("[tx],[ty] to [mx],[my]")
 	for(var/obj/O in src.contents)
 		O.screen_loc = text("[cx],[cy]")
 		O.layer = 20
@@ -72,16 +72,16 @@
 /obj/item/clothing/suit/storage/proc/standard_orient_objs(var/rows,var/cols)
 	var/cx = 4
 	var/cy = 2+rows
-	src.boxes.screen_loc = text("4:16,2:16 to [4+cols]:16,[2+rows]:16")
+	src.boxes.screen_loc = text("4:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2] to [4+cols]:[WORLD_ICON_SIZE/2],[2+rows]:[WORLD_ICON_SIZE/2]")
 	for(var/obj/O in src.contents)
-		O.screen_loc = text("[cx]:16,[cy]:16")
+		O.screen_loc = text("[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]")
 		O.layer = 20
 		O.plane = PLANE_HUD
 		cx++
 		if (cx > (4+cols))
 			cx = 4
 			cy--
-	src.closer.screen_loc = text("[4+cols+1]:16,2:16")
+	src.closer.screen_loc = text("[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]")
 	return
 
 //This proc determins the size of the inventory to be displayed. Please touch it only if you know what you're doing.

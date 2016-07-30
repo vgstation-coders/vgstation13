@@ -202,7 +202,7 @@
 			return
 
 		var/display_rows = round((r.module.modules.len) / 8) +1 //+1 because round() returns floor of number
-		r.robot_modules_background.screen_loc = "CENTER-4:16,SOUTH+1:7 to CENTER+3:16,SOUTH+[display_rows]:7"
+		r.robot_modules_background.screen_loc = "CENTER-4:[WORLD_ICON_SIZE/2],SOUTH+1:[7*PIXEL_MULTIPLIER] to CENTER+3:[WORLD_ICON_SIZE/2],SOUTH+[display_rows]:[7*PIXEL_MULTIPLIER]"
 		r.client.screen += r.robot_modules_background
 
 		var/x = -4	//Start at CENTER-4,SOUTH+1
@@ -213,9 +213,9 @@
 				//Module is not currently active
 				r.client.screen += A
 				if(x < 0)
-					A.screen_loc = "CENTER[x]:16,SOUTH+[y]:7"
+					A.screen_loc = "CENTER[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
 				else
-					A.screen_loc = "CENTER+[x]:16,SOUTH+[y]:7"
+					A.screen_loc = "CENTER+[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
 				A.layer = 20
 				A.plane = PLANE_HUD
 

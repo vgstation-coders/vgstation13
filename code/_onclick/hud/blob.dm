@@ -136,7 +136,7 @@
 		S.icon = 'icons/mob/screen1_blob.dmi'
 		S.icon_state = ""
 		var/total_offset = -16 + (i * 20)
-		S.screen_loc = "[1 + round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE],NORTH:0"
+		S.screen_loc = "[1 + round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE],NORTH"
 		mymob.gui_icons.specialblobs[i] = S
 
 	for(var/i=1;i<=24;i++)

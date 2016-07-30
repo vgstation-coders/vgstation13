@@ -126,7 +126,7 @@
 /obj/item/weapon/storage/proc/orient_objs(tx, ty, mx, my)
 	var/cx = tx
 	var/cy = ty
-	src.boxes.screen_loc = "[tx]:,[ty] to [mx],[my]"
+	src.boxes.screen_loc = "[tx],[ty] to [mx],[my]"
 	for(var/obj/O in src.contents)
 		O.screen_loc = "[cx],[cy]"
 		O.layer = 20
@@ -142,12 +142,12 @@
 /obj/item/weapon/storage/proc/standard_orient_objs(var/rows, var/cols, var/list/obj/item/display_contents)
 	var/cx = 4
 	var/cy = 2+rows
-	src.boxes.screen_loc = "4:16,2:16 to [4+cols]:16,[2+rows]:16"
+	src.boxes.screen_loc = "4:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2] to [4+cols]:[WORLD_ICON_SIZE/2],[2+rows]:[WORLD_ICON_SIZE/2]"
 
 	if(display_contents_with_number)
 		for(var/datum/numbered_display/ND in display_contents)
 			ND.sample_object.mouse_opacity = 2
-			ND.sample_object.screen_loc = "[cx]:16,[cy]:16"
+			ND.sample_object.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
 			ND.sample_object.maptext = "<font color='white'>[(ND.number > 1)? "[ND.number]" : ""]</font>"
 			ND.sample_object.layer = 20
 			ND.sample_object.plane = PLANE_HUD
@@ -158,7 +158,7 @@
 	else
 		for(var/obj/O in contents)
 			O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
-			O.screen_loc = "[cx]:16,[cy]:16"
+			O.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
 			O.maptext = ""
 			O.layer = 20
 			O.plane = PLANE_HUD
@@ -166,7 +166,7 @@
 			if (cx > (4+cols))
 				cx = 4
 				cy--
-	src.closer.screen_loc = "[4+cols+1]:16,2:16"
+	src.closer.screen_loc = "[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]"
 	return
 
 /datum/numbered_display
