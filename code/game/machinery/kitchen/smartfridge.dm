@@ -299,18 +299,19 @@
 		for (var/O in item_quants)
 			if(item_quants[O] > 0)
 				var/N = item_quants[O]
+				var/escaped_name = url_encode(O) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
 
 				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
 					[N] </font>
-					<a href='byond://?src=\ref[src];vend=[O];amount=1'>Vend</A> "}
+					<a href='byond://?src=\ref[src];vend=[escaped_name];amount=1'>Vend</A> "}
 				if(N > 5)
-					dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=5'>x5</A>)"
+					dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=5'>x5</A>)"
 					if(N > 10)
-						dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=10'>x10</A>)"
+						dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=10'>x10</A>)"
 						if(N > 25)
-							dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=25'>x25</A>)"
+							dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=25'>x25</A>)"
 				if(N > 1)
-					dat += "(<a href='?src=\ref[src];vend=[O];amount=[N]'>All</A>)"
+					dat += "(<a href='?src=\ref[src];vend=[escaped_name];amount=[N]'>All</A>)"
 				dat += "<br>"
 
 		dat += "</TT>"
@@ -334,10 +335,9 @@
 	var/i = amount
 	for(var/obj/O in contents)
 		if(O.name == N)
-			O.loc = src.loc
+			O.forceMove(src.loc)
 			i--
 			if(i <= 0)
 				break
 
 	src.updateUsrDialog()
-	return
