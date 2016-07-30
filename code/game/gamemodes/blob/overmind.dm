@@ -111,6 +111,7 @@
 /mob/camera/blob/proc/add_points(var/points)
 	if(points != 0)
 		blob_points = Clamp(blob_points + points, 0, max_blob_points)
+		stat_collection.blobblob.res_generated += points
 
 	//Updating the HUD
 	if(hud_used)
