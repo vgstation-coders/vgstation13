@@ -1143,7 +1143,7 @@
 "vY" = (/obj/structure/table/reinforced,/obj/machinery/door/window{base_state = "right"; dir = 2; name = "Chemistry Desk"; req_access_txt = "33"},/obj/item/clothing/glasses/science,/obj/machinery/door/firedoor/border_only{layer = 2.5; name = "Firelock South"},/turf/simulated/floor/plating,/area/medical/medbay)
 "vZ" = (/turf/simulated/wall,/area/crew_quarters/heads{name = "\improper Job Assignment"})
 "wa" = (/obj/machinery/light/small{dir = 1},/obj/structure/closet,/turf/simulated/floor/plating,/area/hallway/primary/central)
-"wb" = (/obj/structure/device/piano,/turf/simulated/floor{icon_state = "bar"},/area/crew_quarters/bar)
+"wb" = (/obj/structure/piano,/turf/simulated/floor{icon_state = "bar"},/area/crew_quarters/bar)
 "wc" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/obj/machinery/light,/obj/effect/landmark/start{name = "Clown"},/turf/simulated/floor{icon_state = "bar"},/area/crew_quarters/bar)
 "wd" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/bed/chair{dir = 1},/turf/simulated/floor{icon_state = "bar"},/area/crew_quarters/bar)
 "we" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/alarm{dir = 1; icon_state = "alarm0"; pixel_y = -22},/turf/simulated/floor{icon_state = "bar"},/area/crew_quarters/bar)
