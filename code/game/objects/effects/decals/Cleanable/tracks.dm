@@ -204,7 +204,7 @@ var/global/list/image/fluidtrack_cache=list()
 		if(track.basecolor == "#FF0000"||track.basecolor == "#A10808") // no dirty dumb vox scum allowed
 			plane = NOIR_BLOOD_PLANE
 		else
-			plane = TURF_PLANE
+			plane = ABOVE_TURF_PLANE
 		track.fresh=0
 		stack[stack_idx]=track
 

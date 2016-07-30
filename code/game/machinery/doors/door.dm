@@ -4,8 +4,6 @@
 #define HEADBUTT_PROBABILITY 40
 #define BRAINLOSS_FOR_HEADBUTT 60
 
-#define DOOR_CLOSED_MOD	0.3 //how much the layer is increased when the door is closed
-
 var/list/all_doors = list()
 /obj/machinery/door
 	name = "door"
@@ -15,10 +13,10 @@ var/list/all_doors = list()
 	anchored = 1
 	opacity = 1
 	density = 1
-	layer = DOOR_LAYER
+	layer = OPEN_DOOR_LAYER
 	penetration_dampening = 10
-	var/base_layer = DOOR_LAYER
-
+	var/open_layer = OPEN_DOOR_LAYER
+	var/closed_layer = CLOSED_DOOR_LAYER
 	var/secondsElectrified = 0
 	var/visible = 1
 	var/operating = 0
@@ -117,16 +115,12 @@ var/list/all_doors = list()
 		playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 		door_animate("deny")
 
-	return
-
 /obj/machinery/door/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
 	attack_hand(user)
-	return
 
 /obj/machinery/door/attack_paw(mob/user as mob)
 	attack_hand(user)
-	return
 
 /obj/machinery/door/attack_hand(mob/user as mob)
 	if (prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
@@ -157,7 +151,6 @@ var/list/all_doors = list()
 
 	add_fingerprint(user)
 	attackby(null, user)
-	return
 
 
 /obj/machinery/door/attackby(obj/item/I as obj, mob/user as mob)
@@ -214,10 +207,10 @@ var/list/all_doors = list()
 	if(!operating)		operating = 1
 
 	door_animate("opening")
-	src.set_opacity(0)
+	set_opacity(0)
 	sleep(10)
-	src.layer = base_layer
-	src.density = 0
+	layer = open_layer
+	density = 0
 	explosion_resistance = 0
 	update_icon()
 	set_opacity(0)
@@ -241,7 +234,7 @@ var/list/all_doors = list()
 	operating = 1
 	door_animate("closing")
 
-	layer = base_layer + DOOR_CLOSED_MOD
+	layer = closed_layer
 
 	density = 1
 	update_icon()
@@ -267,12 +260,11 @@ var/list/all_doors = list()
 
 	if(density)
 		// above most items if closed
-		layer = base_layer + DOOR_CLOSED_MOD
+		layer = closed_layer
 
 		explosion_resistance = initial(explosion_resistance)
 	else
-		// under all objects if opened. 2.7 due to tables being at 2.6
-		layer = base_layer
+		layer = open_layer
 
 		explosion_resistance = 0
 

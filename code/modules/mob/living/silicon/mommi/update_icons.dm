@@ -39,10 +39,11 @@
 	if(plane == HIDING_MOB_PLANE)	// ie it's hiding
 		overlay_plane = FLOAT_PLANE
 		overlay_layer = FLOAT_LAYER
-	else
-		var/image/eyes = image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
-		eyes.plane = overlay_plane
-		overlays += eyes
+
+	var/image/eyes = image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
+	eyes.plane = overlay_plane
+	overlays += eyes
+
 	if(anchored)
 		overlays += image(icon,"[subtype]-park",overlay_layer)
 

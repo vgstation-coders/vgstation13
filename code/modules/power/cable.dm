@@ -36,6 +36,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	icon_state = "0-1"
 	var/d1 = 0								// cable direction 1 (see above)
 	var/d2 = 1								// cable direction 2 (see above)
+	plane = ABOVE_TURF_PLANE
 	layer = WIRE_LAYER
 	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"

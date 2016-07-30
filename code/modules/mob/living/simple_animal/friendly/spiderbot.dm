@@ -210,12 +210,10 @@
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Spiderbot"
 
-	if (layer != TURF_LAYER+0.2)
-		layer = TURF_LAYER+0.2
-		plane = TURF_PLANE
+	if (plane != HIDING_MOB_PLANE)
+		plane = HIDING_MOB_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
 	else
-		layer = MOB_LAYER
 		plane = MOB_PLANE
 		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
 
@@ -246,8 +244,6 @@
 	held_item.loc = src.loc
 	held_item = null
 	return 1
-
-	return
 
 /mob/living/simple_animal/spiderbot/verb_pickup()
 	return get_item()
@@ -282,7 +278,6 @@
 		return 0
 
 	to_chat(src, "<span class='warning'>There is nothing of interest to take.</span>")
-	return 0
 
 /mob/living/simple_animal/spiderbot/examine(mob/user)
 	..()

@@ -12,7 +12,8 @@ var/global/list/blood_list = list()
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mfloor1"
 	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
-	plane = NOIR_BLOOD_PLANE
+	plane = ABOVE_TURF_PLANE
+	layer = BLOOD_LAYER
 	appearance_flags = TILE_BOUND
 	var/base_icon = 'icons/effects/blood.dmi'
 
@@ -36,7 +37,7 @@ var/global/list/blood_list = list()
 	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
-		plane = TURF_PLANE
+		plane = ABOVE_TURF_PLANE
 	var/icon/blood = icon(base_icon,icon_state,dir)
 	blood.Blend(basecolor,ICON_MULTIPLY)
 
@@ -93,7 +94,7 @@ var/global/list/blood_list = list()
 	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
-		plane = TURF_PLANE
+		plane = ABOVE_TURF_PLANE
 	var/image/giblets = new(base_icon, "[icon_state]_flesh", dir)
 	if(!fleshcolor || fleshcolor == "rainbow")
 		fleshcolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"

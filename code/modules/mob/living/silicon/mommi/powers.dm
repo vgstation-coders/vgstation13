@@ -18,7 +18,7 @@
 	if(!R.canmove)
 		return
 
-	if (layer != HIDING_MOB_PLANE)
+	if (plane != HIDING_MOB_PLANE)
 		plane = HIDING_MOB_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
 		for(var/mob/O in oviewers(src, null))

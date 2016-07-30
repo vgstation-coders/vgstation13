@@ -89,6 +89,7 @@ What is the naming convention for planes or layers?
 	#define MOUSETRAP_LAYER 		12
 	#define FIREAXE_LOCKER_LAYER	13
 	#define BLOOD_LAYER				14
+	#define WEED_LAYER				15
 
 
 #define NOIR_BLOOD_PLANE 		-16		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
@@ -97,17 +98,19 @@ What is the naming convention for planes or layers?
 
 #define OBJ_PLANE 				-14			// For objects which appear below humans.
 
-	#define WEED_LAYER 				0
-	#define TABLE_LAYER				1
+	#define BELOW_TABLE_LAYER		0
+	#define TABLE_LAYER				0.5
+	#define OPEN_DOOR_LAYER			1
 	#define BELOW_OBJ_LAYER			2
 	// OBJ_LAYER 	 				3
 	#define ABOVE_OBJ_LAYER			4
 	#define ABOVE_WINDOW_LAYER		5
 	#define TURRET_LAYER			6
 	#define TURRET_COVER_LAYER		7
-	#define DOOR_LAYER  			8
-	#define ABOVE_DOOR_LAYER		9
-	#define CHAIR_LEG_LAYER			10
+	#define BELOW_CLOSED_DOOR_LAYER	8
+	#define CLOSED_DOOR_LAYER  		9
+	#define ABOVE_DOOR_LAYER		10
+	#define CHAIR_LEG_LAYER			11
 
 #define LYING_HUMAN_PLANE 		-13			// humans that are lying down
 

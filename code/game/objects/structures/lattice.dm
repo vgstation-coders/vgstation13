@@ -6,7 +6,7 @@
 	density = 0
 	anchored = 1.0
 	layer = LATTICE_LAYER
-	plane = TURF_PLANE
+	plane = ABOVE_TURF_PLANE
 
 	//	flags = CONDUCT
 
