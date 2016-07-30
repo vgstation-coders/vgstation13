@@ -49,7 +49,8 @@
 
 /datum/stat_blob/malf/doPostRoundChecks()
 	for(mob/living/silicon/robot/R in player_list)
-		borgs_at_roundend++ //TODO check lawset
+		if(!R.isUnconscious())
+			borgs_at_roundend++ //TODO check lawset
 
 /datum/stat_blob/malf/writeStats(file)
 	file << "MALFSTATS|[malf_wins]|[did_shunt]|[borgs_at_roundend]"
