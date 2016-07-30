@@ -1,3 +1,7 @@
+#define SPAWN_SHARDS_DISABLED 0
+#define SPAWN_SHARDS_WEAK 1
+#define SPAWN_SHARDS_STRONG 2
+
 /spell/targeted/shoesnatch
 
 	name = "Shoe Snatching Charm"
@@ -13,12 +17,12 @@
 	cooldown_min = 30
 	selection_type = "range"
 
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 4, Sp_POWER = 2)
 	compatible_mobs = list(/mob/living/carbon/human)
 
 	hud_state = "wiz_shoes"
 
-	var/spawn_shards = 0
+	var/spawn_shards = SPAWN_SHARDS_DISABLED
 
 /spell/targeted/shoesnatch/cast(list/targets, mob/user = user)
 	..()
@@ -32,17 +36,37 @@
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
 			user.put_in_active_hand(old_shoes)
 
-		if(spawn_shards)
-			for(var/D in alldirs)
-				var/obj/item/weapon/shard/S = new(get_turf(target))
-				step(S, D)
-				S.alpha = 0
-				animate(S, alpha = 255, time = 10)
+		switch(spawn_shards)
+			if(SPAWN_SHARDS_WEAK) //Spawn 4 shards if shoes were stolen
+				if(old_shoes)
+					summon_shards(get_turf(target), cardinal)
+			if(SPAWN_SHARDS_STRONG) //Spawn 8 shards always
+				summon_shards(get_turf(target), alldirs)
+
+/spell/targeted/shoesnatch/proc/summon_shards(turf/T, list/dirlist)
+	for(var/D in dirlist)
+		var/obj/item/weapon/shard/S = new(T)
+		step(S, D)
+		S.alpha = 0
+		animate(S, alpha = 255, time = 10)
 
 /spell/targeted/shoesnatch/empower_spell()
 	spell_levels[Sp_POWER]++
-	spawn_shards = 1
+	spawn_shards++
 
-	name = "Shoe Snatching Scourge"
-	desc = "This spell allows you to steal somebody's shoes right off of their feet and surround them with glass shards."
-	return "You have improved Shoe Snatching Charm into [name]. It will now summon 8 glass shards around the victim in addition to stealing their shoes."
+	var/upgrade_desc = "You have upgraded [name]."
+	switch(spawn_shards)
+		if(SPAWN_SHARDS_WEAK)
+			upgrade_desc = "You have upgraded [name] into Shoe Snatching Scourge. Whenever it successfully removes shoes from the victim, it will also surround them with 4 glass shards."
+			name = "Shoe Snatching Scourge"
+			desc = "This spell allows you to steal somebody's shoes right off of their feet. If you successfully steal the shoes, 4 glass shards will surround the victim."
+		if(SPAWN_SHARDS_STRONG)
+			upgrade_desc = "You have upgraded [name] into Super Shoe Snatching Scourge. The amount of summoned glass shards has been increased to 8, and they will always appear - even if the victim wasn't wearing any shoes."
+			name = "Super Shoe Snatching Scourge"
+			desc = "This spell allows you to steal somebody's shoes right off of their feet. In addition, 8 glass shards will surround the victim - even if they weren't wearing any shoes."
+
+	return upgrade_desc
+
+#undef SPAWN_SHARDS_DISABLED
+#undef SPAWN_SHARDS_WEAK
+#undef SPAWN_SHARDS_STRONG
