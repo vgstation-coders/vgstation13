@@ -43,12 +43,12 @@
 
 /datum/stat_blob/malf
 	var/malf_wins = 0
-	var/bought_modules = list()
+	var/list/bought_modules = list()
 	var/borgs_at_roundend = 0
 	var/did_shunt = 0
 
 /datum/stat_blob/malf/doPostRoundChecks()
-	for(mob/living/silicon/robot/R in player_list)
+	for(var/mob/living/silicon/robot/R in player_list)
 		if(!R.isUnconscious())
 			borgs_at_roundend++ //TODO check lawset
 
@@ -56,6 +56,6 @@
 	file << "MALFSTATS|[malf_wins]|[did_shunt]|[borgs_at_roundend]"
 	if(bought_modules.len)
 		var/modulestring = "MALFMODULES"
-		for(module in bought_modules)
+		for(var/module in bought_modules)
 			modulestring += "|[module]"
 		file << modulestring
