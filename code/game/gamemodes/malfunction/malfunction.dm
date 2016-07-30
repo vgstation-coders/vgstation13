@@ -124,6 +124,8 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	to_chat(world, {"<FONT size = 3><B>The AI has won!</B></FONT><br>
 <B>It has fully taken control of [station_name()]'s systems.</B>"})
 
+	stat_collection.malf.malf_wins = 1
+
 	to_nuke_or_not_to_nuke = 1
 	for(var/datum/mind/AI_mind in malf_ai)
 		to_chat(AI_mind.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
