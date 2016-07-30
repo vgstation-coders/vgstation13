@@ -232,6 +232,9 @@
 		user.put_in_active_hand(I)
 	else
 		to_chat(user, "You root around in the roots.")
+		
+/obj/structure/flora/pottedplant/attack_paw(mob/user)
+	return attack_hand(user)
 
 // /vg/
 /obj/structure/flora/pottedplant/random/New()

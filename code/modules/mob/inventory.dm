@@ -267,7 +267,7 @@
 /mob/proc/drop_all()
 	for (var/obj/item/I in get_all_slots())
 		drop_from_inventory(I)
-
+	drop_hands()
 
 //Drops the item in our hand - you can specify an item and a location to drop to
 
