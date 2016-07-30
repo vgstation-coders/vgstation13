@@ -373,6 +373,7 @@ rcd light flash thingy on matter drain
 			A.current_modules += new AM.type
 			temp = AM.description
 			src.processing_time -= AM.cost
+			stat_collection.malf.bought_modules += AM.module_name
 
 	src.use(usr)
 	return

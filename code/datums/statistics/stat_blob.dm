@@ -40,3 +40,21 @@
 
 /datum/stat_blob/blobmode/writeStats(file)
 	file << "BLOBSTATS|[blob_wins]|[spawned_blob_players]|[spores_spawned]|[res_generated]"
+
+/datum/stat_blob/malf
+	var/malf_wins = 0
+	var/bought_modules = list()
+	var/borgs_at_roundend = 0
+	var/did_shunt = 0
+
+/datum/stat_blob/malf/doPostRoundChecks()
+	for(mob/living/silicon/robot/R in player_list)
+		borgs_at_roundend++ //TODO check lawset
+
+/datum/stat_blob/malf/writeStats(file)
+	file << "MALFSTATS|[malf_wins]|[did_shunt]|[borgs_at_roundend]"
+	if(bought_modules.len)
+		var/modulestring = "MALFMODULES"
+		for(module in bought_modules)
+			modulestring += "|[module]"
+		file << modulestring
