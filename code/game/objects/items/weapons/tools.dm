@@ -269,7 +269,7 @@
 		user.u_equip(src,0)
 
 		src.master = F
-		un_hud_layerise()
+		reset_plane_and_layer()
 		user.u_equip(src,0)
 		if (user.client)
 			user.client.screen -= src

@@ -236,7 +236,7 @@
 	return
 
 /obj/item/proc/dropped(mob/user as mob)
-	un_hud_layerise()
+	reset_plane_and_layer()
 	if(wielded)
 		unwield(user)
 

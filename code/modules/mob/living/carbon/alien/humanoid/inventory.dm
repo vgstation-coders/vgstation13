@@ -76,7 +76,7 @@
 		if(dropped)
 			W.dropped(src)
 		if(W)
-			W.un_hud_layerise()
+			W.reset_plane_and_layer()
 	return 1
 
 //Literally copypasted /mob/proc/attack_ui(slot, hand_index) while replacing attack_hand with attack_alien

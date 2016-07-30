@@ -38,7 +38,7 @@
 				if(istype(W, /obj/item/weapon/implant))
 					qdel(W)
 					continue
-				W.un_hud_layerise()
+				W.reset_plane_and_layer()
 				W.loc = M.loc
 				W.dropped(M)
 		// END TODO

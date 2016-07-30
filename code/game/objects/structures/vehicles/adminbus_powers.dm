@@ -565,7 +565,7 @@
 				M.u_equip(I)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					I.dropped(M)
 					I.z = 2
 					I.y = 68
@@ -698,7 +698,7 @@
 			M.u_equip(I)
 			if(I)
 				I.loc = M.loc
-				I.un_hud_layerise()
+				I.reset_plane_and_layer()
 				I.dropped(M)
 				I.loc = pack
 

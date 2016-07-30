@@ -262,7 +262,7 @@
 							var/imageloc = rev.current
 							if(istype(rev.current.loc,/obj/mecha))
 								imageloc = rev.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
 							I.plane = REV_ANTAG_HUD_PLANE
 							head_rev.current.client.images += I
 					for(var/datum/mind/head_rev_1 in head_revolutionaries)
@@ -270,7 +270,7 @@
 							var/imageloc = head_rev_1.current
 							if(istype(head_rev_1.current.loc,/obj/mecha))
 								imageloc = head_rev_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
 							I.plane = REV_ANTAG_HUD_PLANE
 							head_rev.current.client.images += I
 
@@ -282,7 +282,7 @@
 							var/imageloc = head_rev.current
 							if(istype(head_rev.current.loc,/obj/mecha))
 								imageloc = head_rev.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
 							I.plane = REV_ANTAG_HUD_PLANE
 							rev.current.client.images += I
 					for(var/datum/mind/rev_1 in revolutionaries)
@@ -290,7 +290,7 @@
 							var/imageloc = rev_1.current
 							if(istype(rev_1.current.loc,/obj/mecha))
 								imageloc = rev_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
 							I.plane = REV_ANTAG_HUD_PLANE
 							rev.current.client.images += I
 
@@ -306,7 +306,7 @@
 					var/imageloc = rev_mind.current
 					if(istype(rev_mind.current.loc,/obj/mecha))
 						imageloc = rev_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
 					I.plane = REV_ANTAG_HUD_PLANE
 					head_rev_mind.current.client.images += I
 			if(rev_mind.current)
@@ -324,7 +324,7 @@
 					var/imageloc = rev_mind.current
 					if(istype(rev_mind.current.loc,/obj/mecha))
 						imageloc = rev_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
 					I.plane = REV_ANTAG_HUD_PLANE
 					rev_mind_1.current.client.images += I
 			if(rev_mind.current)
@@ -332,8 +332,8 @@
 					var/imageloc = rev_mind_1.current
 					if(istype(rev_mind_1.current.loc,/obj/mecha))
 						imageloc = rev_mind_1.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = ANTAG_HUD_LAYER)
-					J.plane = MOB_PLANE
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+					J.plane = REV_ANTAG_HUD_PLANE
 					rev_mind.current.client.images += J
 
 ///////////////////////////////////

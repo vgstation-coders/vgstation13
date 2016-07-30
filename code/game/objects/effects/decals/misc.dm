@@ -2,6 +2,7 @@
 /obj/effect/decal
 	//var/global/list/decals = list()
 	layer = DECAL_LAYER
+	plane = ABOVE_TURF_PLANE
 
 /obj/effect/decal/New()
 	..()
@@ -15,7 +16,7 @@
 	name = "arrow"
 	icon = 'icons/mob/screen1.dmi'
 	icon_state = "arrow"
-	plane = EFFECTS_PLANE
+	plane = LIGHTING_PLANE
 	layer = POINTER_LAYER
 	anchored = 1
 	mouse_opacity = 0

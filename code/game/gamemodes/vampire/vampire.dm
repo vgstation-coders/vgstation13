@@ -539,7 +539,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	if(ref in thralls)
 		if(vampire_mind.current)
 			if(vampire_mind.current.client)
-				var/I = image('icons/mob/mob.dmi', loc = vampire_mind.current, icon_state = "vampire")
+				var/image/I = image('icons/mob/mob.dmi', loc = vampire_mind.current, icon_state = "vampire")
 				I.plane = VAMP_ANTAG_HUD_PLANE
 				vampire_mind.current.client.images += I
 	for(var/headref in thralls)
@@ -548,17 +548,17 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			if(head)
 				if(head.current)
 					if(head.current.client)
-						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
+						var/image/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
 						I.plane = VAMP_ANTAG_HUD_PLANE
 						head.current.client.images += I
 				if(t_mind.current)
 					if(t_mind.current.client)
-						var/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "vampire")
+						var/image/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "vampire")
 						I.plane = VAMP_ANTAG_HUD_PLANE
 						t_mind.current.client.images += I
 				if(t_mind.current)
 					if(t_mind.current.client)
-						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
+						var/image/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
 						I.plane = VAMP_ANTAG_HUD_PLANE
 						t_mind.current.client.images += I
 

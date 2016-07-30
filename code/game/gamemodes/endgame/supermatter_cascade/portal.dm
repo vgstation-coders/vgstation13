@@ -10,7 +10,7 @@
 	announce=0
 	narnar=0
 
-	layer = SUPERMATTER_PORTAL_LAYER
+	layer = SUPER_PORTAL_LAYER
 
 	consume_range = 6
 

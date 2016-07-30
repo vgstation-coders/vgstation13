@@ -12,8 +12,7 @@
 	desc = "This is used to lie in, sleep in or strap on."
 	icon_state = "bed"
 	icon = 'icons/obj/stools-chairs-beds.dmi'
-	plane = ABOVE_TURF_PLANE
-	layer = BED_LAYER
+	layer = BELOW_OBJ_LAYER
 	anchored = 1
 	var/sheet_type = /obj/item/stack/sheet/metal
 	var/sheet_amt = 1

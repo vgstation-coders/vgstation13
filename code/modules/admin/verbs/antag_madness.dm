@@ -130,7 +130,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -188,7 +188,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -246,7 +246,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -329,7 +329,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -376,7 +376,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -433,7 +433,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -483,7 +483,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.un_hud_layerise()
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 

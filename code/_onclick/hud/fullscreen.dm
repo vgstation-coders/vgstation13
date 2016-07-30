@@ -55,6 +55,7 @@
 	icon_state = "default"
 	screen_loc = "CENTER-7,CENTER-7"
 	layer = FULLSCREEN_LAYER
+	plane = FULLSCREEN_PLANE
 	mouse_opacity = 0
 	var/severity = 0
 

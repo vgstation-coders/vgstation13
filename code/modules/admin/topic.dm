@@ -1394,7 +1394,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = locker
-				I.un_hud_layerise()
+				I.reset_plane_and_layer()
 				//I.dropped(M)
 
 		M.update_icons()
@@ -1472,7 +1472,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
-				I.un_hud_layerise()
+				I.reset_plane_and_layer()
 				//I.dropped(M)
 				I.loc = pack
 
@@ -1606,7 +1606,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
-				I.un_hud_layerise()
+				I.reset_plane_and_layer()
 				//I.dropped(M)
 
 		if(istype(M, /mob/living/carbon/human))

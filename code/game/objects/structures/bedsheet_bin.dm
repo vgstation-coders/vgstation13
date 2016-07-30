@@ -5,6 +5,8 @@ LINEN BINS
 */
 
 /obj/item/weapon/bedsheet
+	plane = ABOVE_OBJ_PLANE
+	layer = BLANKIES_LAYER
 	name = "bedsheet"
 	desc = "A surprisingly soft linen bedsheet."
 	icon = 'icons/obj/items.dmi'

@@ -41,7 +41,7 @@
 
 /spell/aoe_turf/fall/proc/buildimage()
 	aoe_underlay = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = DECAL_LAYER)
-	aoe_underlay.plane = OBJ_PLANE
+	aoe_underlay.plane = ABOVE_TURF_PLANE
 	aoe_underlay.transform /= 50
 	aoe_underlay.pixel_x = -304
 	aoe_underlay.pixel_y = -304
@@ -197,7 +197,7 @@
 		var/matrix/original
 		if(!fallimage)
 			fallimage = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = DECAL_LAYER)
-			fallimage.plane = OBJ_PLANE
+			fallimage.plane = ABOVE_TURF_PLANE
 			original = fallimage.transform
 			fallimage.transform /= 50
 			fallimage.mouse_opacity = 0

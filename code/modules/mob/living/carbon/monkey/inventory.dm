@@ -96,7 +96,7 @@
 			if(dropped)
 				W.dropped(src)
 			if(W)
-				W.un_hud_layerise()
+				W.reset_plane_and_layer()
 
 /mob/living/carbon/monkey/strip_time()
 	return MONKEY_STRIP_DELAY

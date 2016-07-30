@@ -375,7 +375,7 @@
 			usr.s_active.show_to(usr)
 	if(W.maptext)
 		W.maptext = ""
-	W.un_hud_layerise()
+	W.reset_plane_and_layer()
 	W.on_exit_storage(src)
 	update_icon()
 	W.mouse_opacity = initial(W.mouse_opacity)

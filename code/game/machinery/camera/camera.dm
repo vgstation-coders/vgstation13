@@ -439,6 +439,7 @@ var/list/camera_names=list()
 	idle_power_usage = 0
 	active_power_usage = 0
 	layer = DECAL_LAYER
+	plane = ABOVE_TURF_PLANE
 
 /obj/machinery/camera/arena/New()
 	..()

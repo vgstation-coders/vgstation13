@@ -11,7 +11,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	icon_state = "cell-off"
 	density = 1
 	anchored = 1.0
-	layer = UNDER_OBJ_LAYER
+	layer = BELOW_OBJ_LAYER
 	plane = OBJ_PLANE
 
 	var/on = 0

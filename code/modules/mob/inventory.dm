@@ -223,7 +223,7 @@
 		return 1
 	else
 		W.loc = get_turf(src)
-		W.un_hud_layerise()
+		W.reset_plane_and_layer()
 		W.dropped()
 		return 0
 
@@ -253,7 +253,7 @@
 		if(client)	client.screen -= W
 		u_equip(W,1)
 		if(!W) return 1 // self destroying objects (tk, grabs)
-		W.un_hud_layerise()
+		W.reset_plane_and_layer()
 		W.forceMove(loc)
 
 		//W.dropped(src)
@@ -310,7 +310,7 @@
 //TODO: phase out this proc
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?
 	W.loc = null
-	W.un_hud_layerise()
+	W.reset_plane_and_layer()
 	u_equip(W,0)
 	update_icons()
 
@@ -342,7 +342,7 @@
 			W.forceMove(loc)
 			W.dropped(src)
 		if(W)
-			W.un_hud_layerise()
+			W.reset_plane_and_layer()
 	return 1
 
 
@@ -352,7 +352,7 @@
 	if (src.client)
 		src.client.screen -= O
 	if(!O) return
-	O.un_hud_layerise()
+	O.reset_plane_and_layer()
 	O.screen_loc = null
 	return 1
 

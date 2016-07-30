@@ -32,19 +32,19 @@
 
 /obj/structure/bed/chair/vehicle/secway/handle_layer()
 	if(dir == WEST || dir == EAST || dir == SOUTH)
-		layer = FLY_LAYER
-		plane = PLANE_EFFECTS
+		layer = VEHICLE_LAYER
+		plane = ABOVE_HUMAN_PLANE
 	else
 		layer = OBJ_LAYER
-		plane = PLANE_OBJ
+		plane = OBJ_PLANE
 
 
 /obj/structure/bed/chair/vehicle/secway/Bump(var/atom/obstacle)
 	..()
-	
+
 	if(!occupant)
 		return
-	
+
 	if(clumsy_check)
 		if(istype(occupant, /mob/living))
 			var/mob/living/M = occupant
@@ -54,9 +54,9 @@
 	occupant.Stun(2)
 	playsound(get_turf(src), "sound/effects/meteorimpact.ogg", 25, 1)
 	occupant.visible_message("<span class='danger'>[occupant] crashes into \the [obstacle]!</span>", "<span class='danger'>You crash into \the [obstacle]!</span>")
-	
+
 	if(istype(obstacle, /mob/living))
 		var/mob/living/idiot = obstacle
 		idiot.Weaken(2)
 		idiot.Stun(2)
-	
+

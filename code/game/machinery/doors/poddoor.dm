@@ -43,7 +43,7 @@ var/list/poddoors = list()
 	if(density)
 		layer = DOOR_LAYER		//to override door.New() proc
 	else
-		un_hud_layerise()
+		reset_plane_and_layer()
 	poddoors += src
 
 
@@ -84,7 +84,7 @@ var/list/poddoors = list()
 	src.icon_state = openicon
 	src.set_opacity(0)
 	sleep(10)
-	un_hud_layerise()
+	reset_plane_and_layer()
 	src.density = 0
 	update_nearby_tiles()
 

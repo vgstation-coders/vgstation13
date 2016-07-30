@@ -309,7 +309,7 @@
 			if(dropped)
 				W.dropped(src)
 			if(W)
-				W.un_hud_layerise()
+				W.reset_plane_and_layer()
 	update_action_buttons()
 	return 1
 

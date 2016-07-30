@@ -211,7 +211,7 @@
 		plane = ABOVE_HUMAN_PLANE
 	else
 		layer = OBJ_LAYER
-		plane = PLANE_OBJ
+		plane = OBJ_PLANE
 
 
 

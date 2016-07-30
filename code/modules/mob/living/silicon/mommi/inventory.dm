@@ -67,7 +67,7 @@
 	src.u_equip(O,0)
 	if (src.client)
 		src.client.screen -= O
-	O.un_hud_layerise()
+	O.reset_plane_and_layer()
 	O.screen_loc = null
 	return 1
 

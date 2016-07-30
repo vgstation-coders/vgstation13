@@ -27,7 +27,7 @@
 	animate(AM) //Stop the animation
 	AM.pixel_y -= pixel_y_offset_max
 
-	owner.un_hud_layerise()
+	owner.reset_plane_and_layer()
 
 /obj/structure/popout_cake
 	name = "large cake"
