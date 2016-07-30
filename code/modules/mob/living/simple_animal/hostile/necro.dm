@@ -81,8 +81,9 @@
 
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
 	..()
-	if(Owner && Controller)
+	if(Owner)
 		faction = "\ref[Owner]"
+		friends.Add(Owner)
 		if(Controller)
 			mind = Controller
 			ckey = ckey(mind.key)
@@ -98,11 +99,9 @@
 		ticker.mode.update_necro_icons_added(Controller)
 		ticker.mode.update_all_necro_icons()
 		ticker.mode.risen.Add(Controller)
-	name += " ([rand(1,1000)])"
 
-/mob/living/simple_animal/hostile/necro/copy/ListTargets()
-	. = ..()
-	return . - creator
+	if(name == "zombie" || name == "skeleton")
+		name += " ([rand(1,1000)])"
 
 /mob/living/simple_animal/hostile/necro/zombie/leatherman
 	..()
