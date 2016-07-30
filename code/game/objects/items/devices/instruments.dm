@@ -4,7 +4,6 @@
 	var/datum/song/handheld/song
 	var/instrumentId = "generic"
 	var/instrumentExt = "ogg"
-	var/volume = 100
 
 /obj/item/device/instrument/New()
 	song = new(instrumentId, src)
@@ -52,7 +51,6 @@
 	icon = 'icons/obj/musician.dmi'
 	icon_state = "guitar"
 	item_state = "guitar"
-	volume = 150
 	force = 10
 	attack_verb = list("played metal on", "serenaded", "crashed", "smashed")
 	instrumentId = "guitar"
