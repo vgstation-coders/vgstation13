@@ -264,8 +264,6 @@
 						ghost << 'sound/effects/adminhelp.ogg'
 						to_chat(ghost, "<span class='interface'><b><font size = 3>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</b> \
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
-					else
-						ghost.canclone = M
 				break
 			break
 	return
@@ -292,6 +290,14 @@
 			C.update_icon()
 
 	return 1
+
+/obj/machinery/dna_scannernew/on_login(var/mob/M)
+	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
+		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
+		if(ghost && ghost.client)
+			ghost << 'sound/effects/adminhelp.ogg'
+			to_chat(ghost, "<span class='interface'><b><font size = 3>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</b> \
+				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[src];reentercorpse=1'>click here!</a>)</font></span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
@@ -320,7 +326,7 @@
 		if(3.0)
 			if (prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 					//Foreach goto(181)
 				//SN src = null

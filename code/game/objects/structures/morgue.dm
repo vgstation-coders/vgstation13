@@ -37,65 +37,87 @@
 		else
 			icon_state = "morgue1"
 
+/obj/structure/morgue/examine(mob/user)
+	..()
+	switch(icon_state)
+		if("morgue2")
+			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a catatonic corpse inside.</span>")
+		if("morgue3")
+			to_chat(user, "<span class='info'>\The [src]'s light display indicates there are items inside.</span>")
+		if("morgue4")
+			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is an active corpse inside.</span>")
+
 /obj/structure/morgue/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
-				ex_act(severity)
+			for(var/atom/movable/A in src)
+				A.forceMove(src.loc)
+				A.ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
-			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
-					ex_act(severity)
+			if(prob(50))
+				for(var/atom/movable/A in src)
+					A.forceMove(src.loc)
+					A.ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
-			if (prob(5))
-				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
-					ex_act(severity)
+			if(prob(5))
+				for(var/atom/movable/A in src)
+					A.forceMove(src.loc)
+					A.ex_act(severity)
 				qdel(src)
 				return
-	return
 
-/obj/structure/morgue/alter_health()
+/obj/structure/morgue/alter_health() //???????????????
 	return src.loc
 
 /obj/structure/morgue/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
 /obj/structure/morgue/attack_hand(mob/user as mob)
-	if (src.connected)
-		for(var/atom/movable/A as mob|obj in src.connected.loc)
-			if(istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
-				continue
-			if (!( A.anchored ))
-				A.loc = src
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		//src.connected = null
-		qdel(src.connected)
-		src.connected = null
+	if (connected)
+		close_up()
 	else
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		src.connected = new /obj/structure/m_tray( src.loc )
-		step(src.connected, src.dir)
-		src.connected.layer = OBJ_LAYER
-		var/turf/T = get_step(src, src.dir)
-		if (T.contents.Find(src.connected))
-			src.connected.connected = src
-			src.icon_state = "morgue0"
-			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.connected.loc
-			src.connected.icon_state = "morguet"
-			src.connected.dir = src.dir
-		else
-			qdel(src.connected)
-			src.connected = null
+		open_up()
 	src.add_fingerprint(user)
 	update()
+	return
+
+/obj/structure/morgue/proc/open_up()
+	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	connected = new /obj/structure/m_tray(loc)
+	connected.layer = OBJ_LAYER
+	step(connected, src.dir)
+	var/turf/T = get_step(src, src.dir)
+	if(T.contents.Find(connected))
+		src.connected.connected = src //like a dog chasing it's own tail
+		src.icon_state = "morgue0"
+		for(var/atom/movable/A as mob|obj in src)
+			A.forceMove(src.connected.loc)
+		connected.icon_state = "morguet"
+		connected.dir = src.dir
+	else
+		qdel(connected)
+		connected = null
+
+/obj/structure/morgue/proc/close_up()
+	if(!connected)
+		return
+	for(var/atom/movable/A as mob|obj in connected.loc)
+		if(istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
+			continue
+		if(!A.anchored)
+			A.forceMove(src)
+			if(ismob(A))
+				var/mob/M = A
+				if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
+					var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
+					if(ghost && ghost.client)
+						to_chat(ghost, "<span class='interface'><b><font size = 3>Your corpse has been placed into a morgue tray.</b></font> \
+							Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.")
+	qdel(connected)
 
 /obj/structure/morgue/attackby(P as obj, mob/user as mob)
 	if(iscrowbar(P)&&!contents.len)
@@ -111,37 +133,38 @@
 		else
 			dir=4
 	if (istype(P, /obj/item/weapon/pen))
-		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
+		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null) as text
 		if (user.get_active_hand() != P)
 			return
-		if (!Adjacent(user) || user.stat)
+		if (!Adjacent(user) || user.incapacitated())
 			return
 		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 		if (t)
-			src.name = text("Morgue- '[]'", t)
+			src.name = "morgue- '[t]'"
 		else
-			src.name = "Morgue"
+			src.name = initial(src.name)
 	src.add_fingerprint(user)
 
 /obj/structure/morgue/relaymove(mob/user as mob)
-	if (user.stat)
+	if (user.isUnconscious())
 		return
-	src.connected = new /obj/structure/m_tray( src.loc )
-	step(src.connected, EAST)
-	var/turf/T = get_step(src, EAST)
-	if (T.contents.Find(src.connected))
-		src.connected.connected = src
-		src.icon_state = "morgue0"
-		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.connected.loc
-			//Foreach goto(106)
-		src.connected.icon_state = "morguet"
-	else
-		//src.connected = null
-		qdel(src.connected)
+	open_up()
 
-/obj/structure/morgue/on_log()
+/obj/structure/morgue/on_login(var/mob/M)
 	update()
+	if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
+		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
+		if(ghost && ghost.client)
+			to_chat(ghost, "<span class='interface'><b><font size = 3>Your corpse has been placed into a morgue tray.</b></font> \
+				Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.")
+
+/obj/structure/morgue/on_logout(var/mob/M)
+	update()
+
+/obj/structure/morgue/Destroy()
+	. = ..()
+	if(connected)
+		qdel(connected) //references get cleared in the tray's Destroy()
 
 /*
  * Morgue tray
@@ -165,32 +188,26 @@
 	return src.attack_hand(user)
 
 /obj/structure/m_tray/attack_hand(mob/user as mob)
-	if (src.connected)
-		for(var/atom/movable/A as mob|obj in src.loc)
-			if(istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
-				continue
-			if (!( A.anchored ))
-				A.loc = src.connected
-			//Foreach goto(26)
-		src.connected.connected = null
-		src.connected.update()
-		add_fingerprint(user)
-		//SN src = null
-		qdel(src)
-		return
-	return
+	if(connected)
+		connected.close_up()
+	else
+		qdel(src) //this should not happen but if it does happen we should not be here
 
 /obj/structure/m_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
+	if (O.anchored || !Adjacent(user) || !Adjacent(O) || user.contents.Find(O))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
-	O.loc = src.loc
+	O.forceMove(src.loc)
 	if (user != O)
-		for(var/mob/B in viewers(user, 3))
-			if ((B.client && !( B.blinded )))
-				to_chat(B, text("<span class='warning'>[] stuffs [] into []!</span>", user, O, src))
+		visible_message("<span class='warning'>[user] stuffs [O] into [src]!</span>")
 
+/obj/structure/m_tray/Destroy()
+	. = ..()
+	if(connected)
+		connected.connected = null
+		connected.update()
+		connected = null
 
 /*
  * Crematorium

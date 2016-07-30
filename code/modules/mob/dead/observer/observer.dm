@@ -34,7 +34,6 @@
 	var/medHUD = 0
 	var/antagHUD = 0
 	var/atom/movable/following = null
-	var/mob/canclone = null
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
 
@@ -111,7 +110,6 @@
 	..()
 	following = null
 	ghostMulti = null
-	canclone = null
 	observers.Remove(src)
 
 /mob/dead/observer/hasFullAccess()

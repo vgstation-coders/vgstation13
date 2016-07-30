@@ -1,7 +1,7 @@
 /mob/Logout()
 	if (isobj(loc))
 		var/obj/location = loc
-		location.on_log()
+		location.on_logout(src)
 
 	if(!(flags & HEAR_ALWAYS))
 		for(var/mob/virtualhearer/VH in virtualhearers)
