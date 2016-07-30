@@ -41,6 +41,7 @@
 	var/datum/stat_blob/cult/cult = new
 	var/datum/stat_blob/xeno/xeno = new
 	var/datum/stat_blob/blobmode/blobblob = new
+	var/datum/stat_blob/malf/malf = new
 
 	var/gamemode = "UNSET"
 	var/mixed_gamemodes = null
@@ -235,6 +236,9 @@
 
 	blobblob.doPostRoundChecks()
 	blobblob.writeStats(statfile)
+
+	malf.doPostRoundChecks()
+	malf.writeStats(statfile)
 
 	antagCheck(statfile)
 
