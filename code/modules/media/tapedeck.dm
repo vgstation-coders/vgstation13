@@ -280,7 +280,7 @@
 	return attack_hand(usr)
 
 /obj/machinery/media/jukebox/process()
-	if(!playlist)
+	if(!playlist && config.media_base_url)
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		testing("[src] - Updating playlist from [url]...")
 		var/response = world.Export(url)
