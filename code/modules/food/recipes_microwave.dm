@@ -274,20 +274,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/human/kabob
 
-/datum/recipe/vampiresdelight
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/human
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/vampiresdelight
-
-/datum/recipe/revenge
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/human
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/revenge
-
 // Pastries ////////////////////////////////////////////////////
 
 /datum/recipe/eclair
@@ -1291,11 +1277,48 @@
 /datum/recipe/fruitsalad
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/berries,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
 		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/orange
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
+
+/datum/recipe/chickensalad
+	reagents = list (VINEGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
+		/obj/item/weapon/reagent_containers/food/snacks/boiledegg
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chickensalad
+
+/datum/recipe/grapesalad
+	reagents = list (SUGAR = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
+
+/datum/recipe/orzosalad
+	reagents = list (RICE = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
+		/obj/item/weapon/reagent_containers/food/snacks/mint
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/orzosalad
+
+/datum/recipe/mexicansalad
+	reagents = list (LIMEJUICE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/mexicansalad
 
 // Curry ///////////////////////////////////////////////////////
 
@@ -1399,12 +1422,12 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/queso
 
-/datum/recipe/guacemole
+/datum/recipe/guacamole
 	reagents = list(LIMEJUICE = 10, SODIUMCHLORIDE = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
 		)
-	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/guacemole
+	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole
 
 /datum/recipe/salsa
 	reagents = list(LIMEJUICE = 10)
@@ -1751,7 +1774,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/sundae
 
 /datum/recipe/icecreamsandwich
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/reagent_containers/food/snacks/sandwich)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
 	result = /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich
 
 /datum/recipe/potatosalad

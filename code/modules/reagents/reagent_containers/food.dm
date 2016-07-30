@@ -54,10 +54,10 @@
 	icon_state = "queso"
 	dip_message = "It's a flavor fiesta!"
 
-/obj/item/weapon/reagent_containers/food/dipping_sauce/guacemole
-	name = "guacemole"
+/obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole
+	name = "guacamole"
 	desc = "The original recipe calls for avocado, but this space-age substitute has supplanted the ancient style in popularity."
-	icon_state = "guacemole"
+	icon_state = "guacamole"
 	dip_message = "Taste the tang!"
 
 /obj/item/weapon/reagent_containers/food/dipping_sauce/salsa

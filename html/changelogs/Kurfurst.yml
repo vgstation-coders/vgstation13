@@ -1,0 +1,9 @@
+author: Kurfurst
+delete-after: True
+
+changes: 
+- rscadd: Added a recipe for the previously unobtainable Icecream Sandwich
+- rscadd: Added twentyfive general recipes, many of which involve mutated plants. Put that mutagen to work for the kitchen!
+- rscadd: Added dipping sauces and three recipes for them. They are queso, gaucemole, and salsa.
+- rscadd: Re-added the ancient mutant plant, Ghost Chili Pepper - dangerous for humans, but ghosts can eat it just fine.
+- rscadd: Added one recipe for Ghost Chili Pepper. You... wouldn't actually eat it, would you?
