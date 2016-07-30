@@ -13,6 +13,7 @@
 	if(client)
 		src.client.screen += new_spell_master
 	new_spell_master.spell_holder = src
+	spell_to_add.holder = src
 	new_spell_master.add_spell(spell_to_add)
 	if(spell_base)
 		new_spell_master.icon_state = spell_base
