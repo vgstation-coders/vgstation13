@@ -76,7 +76,7 @@
 			<A href='byond://?src=\ref[src];spell_choice=clowncurse'>The Clown Curse</A> (30)<BR>
 			<I>This spell turns an adjacent target into a miserable clown. This spell does not require robes to cast.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=shoesnatch'>Shoe Snatching Charm</A> (15)<BR>
-			<I>This spell will remove your victim's shoes and materialize them in your hands. This spell does not require robes to cast. Upgrading spell power causes the spell to summon glass shards around the victim.</I><BR>
+			<I>This spell will remove your victim's shoes and materialize them in your hands. This spell does not require robes to cast. Upgrading spell power causes the spell to summon glass shards around the victim, if they were wearing shoes.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=robesummon'>Summon Robes</A> (50)<BR>
 			<I>This spell will allow you to summon a new set of robes. Useful for stealthy wizards. This spell (quite obviously) does not require robes to cast. Upgrading spell power lets you summon a gem-encrusted hardsuit with an oxygen tank and a breath mask.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=fleshtostone'>Flesh to Stone</A> (60)<BR>
