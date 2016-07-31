@@ -257,7 +257,7 @@ hi
 /obj/item/weapon/reagent_containers/pill/fluff/listermed
 	name = "anti-depressant pill"
 	desc = "Used to deal with depression."
-	icon_state = "pill9"
+	icon_state = "pill10" //white round
 	New()
 		..()
 		reagents.add_reagent(STOXIN, 5)

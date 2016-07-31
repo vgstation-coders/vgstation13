@@ -30,17 +30,20 @@ var/global/list/alert_overlays_global = list()
 				T = get_turf(source)
 
 		var/list/rstats = new /list(stats.len)
-		if(T && istype(T) && T.zone)
-			var/datum/gas_mixture/environment = T.return_air()
-			for(var/i=1;i<=stats.len;i++)
-				rstats[i] = environment.vars[stats[i]]
-		else if(istype(T, /turf/simulated))
-			rstats = null // Exclude zone (wall, door, etc).
-		else if(istype(T, /turf))
-			// Should still work.  (/turf/return_air())
-			var/datum/gas_mixture/environment = T.return_air()
-			for(var/i=1;i<=stats.len;i++)
-				rstats[i] = environment.vars[stats[i]]
+		if(!source.Adjacent(T)) //Stop reading air contents through windows asshole
+			rstats = null
+		else
+			if(T && istype(T) && T.zone)
+				var/datum/gas_mixture/environment = T.return_air()
+				for(var/i=1;i<=stats.len;i++)
+					rstats[i] = environment.vars[stats[i]]
+			else if(istype(T, /turf/simulated))
+				rstats = null // Exclude zone (wall, door, etc).
+			else if(istype(T, /turf))
+				// Should still work.  (/turf/return_air())
+				var/datum/gas_mixture/environment = T.return_air()
+				for(var/i=1;i<=stats.len;i++)
+					rstats[i] = environment.vars[stats[i]]
 		temps[direction] = rstats
 	return temps
 
@@ -396,8 +399,21 @@ var/global/list/alert_overlays_global = list()
 	if(density)
 		var/changed = 0
 		lockdown=0
+
 		// Pressure alerts
-		pdiff = getOPressureDifferential(src.loc)
+		if(flags & ON_BORDER) //For border firelocks, we only need to check front and back, don't check the sides
+			var/turf/T1 = get_step(loc,dir)
+			var/turf/T2
+			if(locate(/obj/machinery/door/airlock) in get_turf(src)) //If this firelock is in the same tile as an airlock, we want to check the OTHER SIDE of the airlock, not the airlock turf itself.
+				T2 = get_step(loc,turn(dir, 180))
+			else
+				T2 = get_turf(src)
+
+			pdiff = getPressureDifferentialFromTurfList(list(T1, T2))
+
+		else
+			pdiff = getOPressureDifferential(src.loc)
+
 		if(pdiff >= FIREDOOR_MAX_PRESSURE_DIFF)
 			lockdown = 1
 			if(!pdiff_alert)

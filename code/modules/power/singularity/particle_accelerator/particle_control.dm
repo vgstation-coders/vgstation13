@@ -70,7 +70,7 @@
 
 /obj/machinery/particle_accelerator/control_box/update_icon()
 	if(active)
-		icon_state = "[reference]p1"
+		icon_state = "[reference]p[strength]"
 	else
 		if(stat & NOPOWER)
 			icon_state = "[reference]w"

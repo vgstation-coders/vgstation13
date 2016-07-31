@@ -40,6 +40,8 @@
 	// Stat blobs
 	var/datum/stat_blob/cult/cult = new
 	var/datum/stat_blob/xeno/xeno = new
+	var/datum/stat_blob/blobmode/blobblob = new
+	var/datum/stat_blob/malf/malf = new
 
 	var/gamemode = "UNSET"
 	var/mixed_gamemodes = null
@@ -221,7 +223,7 @@
 	for(var/datum/stat/uplink_purchase_stat/U in uplink_purchases)
 		statfile << "UPLINK_ITEM|[U.purchaser_key]|[U.purchaser_name]|[U.purchaser_is_traitor]|[U.bundle]|[U.itemtype]"
 	for(var/datum/stat/uplink_badass_bundle_stat/B in badass_bundles)
-		var/o 	= 		"BADASS_BUNDLE|[B.purchaser_key]|[B.purchaser_name]|[B.purchaser_is_traitor]"
+		var/o 	= 	"BADASS_BUNDLE|[B.purchaser_key]|[B.purchaser_name]|[B.purchaser_is_traitor]"
 		for(var/S in B.contains)
 			o += "|[S]"
 		statfile << "[o]"
@@ -231,6 +233,12 @@
 
 	xeno.doPostRoundChecks()
 	xeno.writeStats(statfile)
+
+	blobblob.doPostRoundChecks()
+	blobblob.writeStats(statfile)
+
+	malf.doPostRoundChecks()
+	malf.writeStats(statfile)
 
 	antagCheck(statfile)
 

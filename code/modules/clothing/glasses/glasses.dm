@@ -89,6 +89,21 @@
 
 	qdel(src)
 
+/obj/item/clothing/glasses/sunglasses/purple
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in purple."
+	name = "purple sunglasses"
+	icon_state = "sun_purple"
+
+/obj/item/clothing/glasses/sunglasses/star
+	name = "star-shaped sunglasses"
+	desc = "Novelty sunglasses, both lenses are in the shape of a star."
+	icon_state = "sun_star"
+
+/obj/item/clothing/glasses/sunglasses/rockstar
+	name = "red star-shaped sunglasses"
+	desc = "Novelty sunglasses with a fancy silver frame and two red-tinted star-shaped lenses. You should probably stomp on them and get a pair of normal ones."
+	icon_state = "sun_star_silver"
+
 /obj/item/clothing/glasses/virussunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
 	name = "sunglasses"

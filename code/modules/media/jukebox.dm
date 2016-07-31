@@ -17,6 +17,8 @@
 
 var/global/global_playlists = list()
 /proc/load_juke_playlists()
+	if(!config.media_base_url)
+		return
 	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		testing("Updating playlist from [url]...")
@@ -46,6 +48,8 @@ var/global/global_playlists = list()
 			global_playlists["[playlist_id]"] = playlist.Copy()
 
 /obj/machinery/media/jukebox/proc/retrieve_playlist(var/playlistid = playlist_id)
+	if(!config.media_base_url)
+		return
 	playlist_id = playlistid
 	if(global_playlists["[playlistid]"])
 		var/list/temp = global_playlists["[playlistid]"]
