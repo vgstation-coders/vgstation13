@@ -104,13 +104,15 @@ What is the naming convention for planes or layers?
 	#define BELOW_OBJ_LAYER			2
 	// OBJ_LAYER 	 				3
 	#define ABOVE_OBJ_LAYER			4
-	#define ABOVE_WINDOW_LAYER		5
-	#define TURRET_LAYER			6
-	#define TURRET_COVER_LAYER		7
-	#define BELOW_CLOSED_DOOR_LAYER	8
-	#define CLOSED_DOOR_LAYER  		9
-	#define ABOVE_DOOR_LAYER		10
-	#define CHAIR_LEG_LAYER			11
+	#define FULL_WINDOW_LAYER		5
+	#define SIDE_WINDOW_LAYER		6
+	#define ABOVE_WINDOW_LAYER		7
+	#define TURRET_LAYER			8
+	#define TURRET_COVER_LAYER		9
+	#define BELOW_CLOSED_DOOR_LAYER	10
+	#define CLOSED_DOOR_LAYER  		11
+	#define ABOVE_DOOR_LAYER		12
+	#define CHAIR_LEG_LAYER			13
 
 #define LYING_HUMAN_PLANE 		-13			// humans that are lying down
 
@@ -142,6 +144,11 @@ What is the naming convention for planes or layers?
 
 	#define VEHICLE_LAYER 			0
 	#define CHAIR_ARMREST_LAYER 	0
+	#define OPEN_CURTAIN_LAYER		1
+	// BELOW_OBJ_LAYER				2
+	// OBJ_LAYER 	 				3
+	// ABOVE_OBJ_LAYER				4
+	#define CLOSED_CURTAIN_LAYER	5
 
 #define BLOB_PLANE 				-3			// For Blobs, which are above humans.
 

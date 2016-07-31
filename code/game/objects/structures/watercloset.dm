@@ -278,7 +278,7 @@
 		returnToPool(mymist)
 
 	if(on)
-		var/image/water = image('icons/obj/watercloset.dmi', src, "water", MOB_LAYER + 1, dir)
+		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
 		water.plane = ABOVE_HUMAN_PLANE
 		overlays += water
 		if(watertemp == "freezing") //No mist if the water is really cold

@@ -43,9 +43,9 @@ var/list/poddoors = list()
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	if(density)
-		layer = open_layer
-	else
 		layer = closed_layer
+	else
+		layer = open_layer
 	poddoors += src
 
 

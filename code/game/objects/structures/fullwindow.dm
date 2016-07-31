@@ -10,7 +10,7 @@
 	icon_state = "window0" //Specifically for the map
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
-	layer = ABOVE_OBJ_LAYER
+	layer = FULL_WINDOW_LAYER
 
 	penetration_dampening = 1
 

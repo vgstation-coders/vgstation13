@@ -4,10 +4,10 @@
 	icon_state = "closed"
 	opacity = 1
 	density = 0
+	plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/curtain/open
 	icon_state = "open"
-	plane = ABOVE_HUMAN_PLANE
 	opacity = 0
 
 /obj/structure/curtain/bullet_act(obj/item/projectile/P, def_zone)
@@ -26,11 +26,10 @@
 	opacity = !opacity
 	if(opacity)
 		icon_state = "closed"
-		plane = ABOVE_HUMAN_PLANE
-
+		layer = CLOSED_CURTAIN_LAYER
 	else
 		icon_state = "open"
-		plane = OBJ_PLANE
+		layer = OPEN_CURTAIN_LAYER
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
 	if(iswirecutter(W))
