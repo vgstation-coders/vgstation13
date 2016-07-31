@@ -162,3 +162,13 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	build_path = /obj/item/device/t_scanner/advanced
 	category = "Engineering"
+
+/datum/design/experimental_welder
+	name = "Experimental Welder"
+	desc = "A plasma-based welder with a fuel breeder. Will refuel itself over time as long as it is not completely emptied."
+	id = "experimental_welder"
+	req_tech = list("engineering" = 4, "plasmatech" = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 300, MAT_GLASS = 120)
+	build_path = /obj/item/weapon/weldingtool/experimental/empty
+	category = "Engineering"
