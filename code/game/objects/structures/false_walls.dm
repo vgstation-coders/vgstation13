@@ -11,7 +11,7 @@
 * around us, then checks the difference.
 */
 /proc/getOPressureDifferential(var/turf/loc)
-	var/minp=16777216;
+	var/minp=16777216; //What is even the significance of this number?
 	var/maxp=0;
 	for(var/dir in cardinal)
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
@@ -25,6 +25,26 @@
 		if(cp<minp)minp=cp
 		if(cp>maxp)maxp=cp
 	return abs(minp-maxp)
+
+/**
+* Gets the highest and lowest pressures from the list of turfs provided
+* around us, then checks the difference.
+*/
+/proc/getPressureDifferentialFromTurfList(var/list/turf/simulated/turf_list)
+	var/minp=16777216; //What is even the significance of this number?
+	var/maxp=0;
+	for(var/turf/simulated/T in turf_list)
+		var/cp = 0
+		if(T.zone)
+			var/datum/gas_mixture/environment = T.return_air()
+			cp = environment.return_pressure()
+		else
+			if(istype(T,/turf/simulated))
+				continue
+		if(cp<minp)minp=cp
+		if(cp>maxp)maxp=cp
+	return abs(minp-maxp)
+
 
 // Checks pressure here vs. around us.
 /proc/performFalseWallPressureCheck(var/turf/loc)
