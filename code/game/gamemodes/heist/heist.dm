@@ -99,8 +99,8 @@
 		vox.generate_name()
 		//vox.languages = HUMAN // Removing language from chargen.
 		vox.flavor_text = ""
-		vox.default_language = all_languages["Vox-pidgin"]
-		vox.species.default_language = "Vox-pidgin"
+		vox.default_language = all_languages[LANGUAGE_VOX]
+		vox.species.default_language = LANGUAGE_VOX
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"

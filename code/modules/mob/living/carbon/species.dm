@@ -36,12 +36,12 @@ var/global/list/whitelisted_species = list("Human")
 	var/override_icon = null								// DMI for overriding the icon.  states: [lowertext(species.name)]_[gender][fat?"_fat":""]
 	var/eyes = "eyes_s"										// Icon for eyes.
 
-	var/primitive											// Lesser form, if any (ie. monkey for humans)
-	var/tail												// Name of tail image in species effects icon file.
-	var/language = "Galactic Common"								// Default racial language, if any.
-	var/default_language = "Galactic Common"						// Default language is used when 'say' is used without modifiers.
-	var/attack_verb = "punches"								// Empty hand hurt intent verb.
-	var/punch_damage = 0									// Extra empty hand attack damage.
+	var/primitive												// Lesser form, if any (ie. monkey for humans)
+	var/tail													// Name of tail image in species effects icon file.
+	var/list/known_languages = list(LANGUAGE_GALACTIC_COMMON)	// Languages that this species innately knows.
+	var/default_language = LANGUAGE_GALACTIC_COMMON				// Default language is used when 'say' is used without modifiers.
+	var/attack_verb = "punches"									// Empty hand hurt intent verb.
+	var/punch_damage = 0										// Extra empty hand attack damage.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
 	var/mutantrace											// Safeguard due to old code.
@@ -243,7 +243,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/human
 	name = "Human"
-	language = "Sol Common"
+	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
 
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
@@ -252,7 +252,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Manifested"
 	icobase = 'icons/mob/human_races/r_manifested.dmi'
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
-	language = "Sol Common"
+	known_languages = LANGUAGE_HUMAN
 	primitive = /mob/living/carbon/monkey
 
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
@@ -261,7 +261,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Unathi"
 	icobase = 'icons/mob/human_races/r_lizard.dmi'
 	deform = 'icons/mob/human_races/r_def_lizard.dmi'
-	language = "Sinta'unathi"
+	known_languages = list(LANGUAGE_UNATHI)
 	tail = "sogtail"
 	attack_verb = "scratches"
 	punch_damage = 5
@@ -288,7 +288,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Skellington"
 	icobase = 'icons/mob/human_races/r_skeleton.dmi'
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
-	language = "Clatter"
+	known_languages = list(LANGUAGE_CLATTER)
 	attack_verb = "punches"
 	has_sweat_glands = 0
 	flags = IS_WHITELISTED | HAS_LIPS | NO_BREATHE | NO_BLOOD | NO_SKIN
@@ -314,7 +314,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Skeletal Vox"
 	icobase = 'icons/mob/human_races/vox/r_voxboney.dmi'
 	deform = 'icons/mob/human_races/vox/r_voxboney.dmi' //Do bones deform noticeably?
-	language = "Vox-pidgin"
+	known_languages = list(LANGUAGE_VOX, LANGUAGE_CLATTER)
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
@@ -364,7 +364,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Tajaran"
 	icobase = 'icons/mob/human_races/r_tajaran.dmi'
 	deform = 'icons/mob/human_races/r_def_tajaran.dmi'
-	language = "Siik'tajr"
+	known_languages = list(LANGUAGE_SIIK_TAJR, LANGUAGE_MOUSE)
 	tail = "tajtail"
 	attack_verb = "scratches"
 	punch_damage = 2 //Claws add 3 damage without gloves, so the total is 5
@@ -438,7 +438,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Grey"
 	icobase = 'icons/mob/human_races/r_grey.dmi'
 	deform = 'icons/mob/human_races/r_def_grey.dmi'
-	language = "Grey"
+	known_languages = (LANGUAGE_GREY)
 	attack_verb = "punches"
 	darksight = 5 // BOOSTED from 2
 	eyes = "grey_eyes_s"
@@ -469,7 +469,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Muton"
 	icobase = 'icons/mob/human_races/r_muton.dmi'
 	deform = 'icons/mob/human_races/r_def_muton.dmi'
-	language = "Muton"
+	known_languages = ("Muton")
 	attack_verb = "punches"
 	darksight = 1
 	eyes = "eyes_s"
@@ -509,7 +509,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Skrell"
 	icobase = 'icons/mob/human_races/r_skrell.dmi'
 	deform = 'icons/mob/human_races/r_def_skrell.dmi'
-	language = "Skrellian"
+	known_languages = (LANGUAGE_SKRELLIAN)
 	primitive = /mob/living/carbon/monkey/skrell
 
 	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR
@@ -520,7 +520,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Vox"
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
-	language = "Vox-pidgin"
+	known_languages = (LANGUAGE_VOX)
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
@@ -702,7 +702,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Diona"
 	icobase = 'icons/mob/human_races/r_plant.dmi'
 	deform = 'icons/mob/human_races/r_def_plant.dmi'
-	language = "Rootspeak"
+	known_languages = (LANGUAGE_ROOTSPEAK)
 	attack_verb = "slashes"
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
@@ -732,7 +732,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Golem"
 	icobase = 'icons/mob/human_races/r_golem.dmi'
 	deform = 'icons/mob/human_races/r_def_golem.dmi'
-	language = "Golem"
+	known_languages = ("Golem")
 	attack_verb = "punches"
 	has_sweat_glands = 0
 	flags = HAS_LIPS | NO_BREATHE | NO_BLOOD | NO_SKIN | NO_PAIN | IS_BULKY

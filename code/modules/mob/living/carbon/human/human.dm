@@ -1308,8 +1308,8 @@
 		//if(src.species.language)	src.remove_language(species.language)
 		if(src.species.abilities)
 			src.verbs -= species.abilities
-		if(species.language)
-			remove_language(species.language)
+		for(var/L in species.known_languages)
+			remove_language(L)
 		species.clear_organs(src)
 
 	var/datum/species/S = all_species[new_species_name]
@@ -1317,8 +1317,8 @@
 	src.species = new S.type
 	src.species.myhuman = src
 
-	if(species.language)
-		add_language(species.language)
+	for(var/L in species.known_languages)
+		add_language(L)
 	if(species.default_language)
 		add_language(species.default_language)
 	if(src.species.abilities)

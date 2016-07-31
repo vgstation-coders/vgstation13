@@ -195,7 +195,7 @@
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-			M.add_language("Cult")
+			M.add_language(LANGUAGE_CULT)
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
 			stat_collection.cult.converted++
 			if(M.client)
@@ -648,7 +648,7 @@
 	to_chat(D, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 	to_chat(D, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 
-	D.add_language("Cult")
+	D.add_language(LANGUAGE_CULT)
 
 
 	var/mob/living/user = usr

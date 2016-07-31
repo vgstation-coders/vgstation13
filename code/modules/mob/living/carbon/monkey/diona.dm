@@ -17,7 +17,7 @@
 	canWearHats = 1
 	canWearClothes = 0
 	canWearGlasses = 0
-	languagetoadd = "Rootspeak"
+	languagetoadd = LANGUAGE_ROOTSPEAK
 
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
@@ -127,7 +127,7 @@
 /mob/living/carbon/monkey/diona/say_understands(var/mob/other,var/datum/language/speaking = null)
 	if(other) other = other.GetSource()
 	if (istype(other, /mob/living/carbon/human))
-		if(speaking && speaking.name == "Galactic Common")
+		if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 			if(donors.len >= 2) // They have sucked down some blood.
 				return 1
 	return ..()
@@ -166,8 +166,8 @@
 		to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
 	else if(donors.len == 4)
 		to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
-		add_language("Galactic Common")
-		default_language = all_languages["Galactic Common"]
+		add_language(LANGUAGE_GALACTIC_COMMON)
+		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	else if(donors.len == 3)
 		to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
 	else if(donors.len == 2)
