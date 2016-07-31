@@ -484,6 +484,8 @@
 	potency = 10
 	water_consumption = 3
 	nutrient_consumption = 0.25
+	biolum = 1
+	biolum_colour = "#00ff00"
 
 /datum/seed/berry/poison
 	name = "poisonberries"
