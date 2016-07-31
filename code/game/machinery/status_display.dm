@@ -46,7 +46,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 	var/spookymode=0 // Ghosts.
 
-	maptext_height = 52
+	maptext_height = 26*PIXEL_MULTIPLIER
 	maptext_width = WORLD_ICON_SIZE
 
 // new display

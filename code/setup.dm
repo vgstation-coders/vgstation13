@@ -1813,3 +1813,5 @@ var/proccalls = 1
 #define GRASP_LEFT_HAND 2
 
 #define BLOB_CORE_PROPORTION 20
+
+#define DEFAULT FONT SIZE 4

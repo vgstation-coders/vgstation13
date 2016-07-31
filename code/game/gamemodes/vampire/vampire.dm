@@ -720,7 +720,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			//hud_used.human_hud(hud_used.ui_style)
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> U:<font color='#33FF33' size='1'>[mind.vampire.bloodusable]</font><br> T:<font color='#FFFF00' size='1'>[mind.vampire.bloodtotal]</font></div>"
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'><font size = 4> U:<font color='#33FF33'>[mind.vampire.bloodusable]</font><br> T:<font color='#FFFF00'>[mind.vampire.bloodtotal]</font></font></div>"
 	handle_vampire_cloak()
 	handle_vampire_menace()
 	handle_vampire_smite()

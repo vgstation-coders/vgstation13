@@ -23,7 +23,7 @@
 	mymob.gui_icons.blob_coverLEFT.layer = 21
 	mymob.gui_icons.blob_coverLEFT.screen_loc = ui_blob_bgLEFT
 	mymob.gui_icons.blob_coverLEFT.maptext_x = 1
-	mymob.gui_icons.blob_coverLEFT.maptext_y = 126
+	mymob.gui_icons.blob_coverLEFT.maptext_y = 126*PIXEL_MULTIPLIER
 
 	mymob.gui_icons.blob_coverRIGHT = getFromPool(/obj/screen/specialblob)
 	mymob.gui_icons.blob_coverRIGHT.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
@@ -31,8 +31,8 @@
 	mymob.gui_icons.blob_coverRIGHT.name = "Health"
 	mymob.gui_icons.blob_coverRIGHT.layer = 21
 	mymob.gui_icons.blob_coverRIGHT.screen_loc = ui_blob_bgRIGHT
-	mymob.gui_icons.blob_coverRIGHT.maptext_x = 464
-	mymob.gui_icons.blob_coverRIGHT.maptext_y = 126
+	mymob.gui_icons.blob_coverRIGHT.maptext_x = 464*PIXEL_MULTIPLIER
+	mymob.gui_icons.blob_coverRIGHT.maptext_y = 126*PIXEL_MULTIPLIER
 
 	mymob.gui_icons.blob_powerbar = getFromPool(/obj/screen/specialblob)
 	mymob.gui_icons.blob_powerbar.icon = 'icons/mob/screen1_blob_bars.dmi'

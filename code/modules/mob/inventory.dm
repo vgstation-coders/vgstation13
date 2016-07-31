@@ -76,7 +76,7 @@
 	var/x_offset = -(index % 2) //Index is 1 -> one unit to the left
 	var/y_offset = round((index-1) / 2) //Two slots per row, then go higher. Rounded down
 
-	return "CENTER[x_offset ? x_offset : ""]:16,SOUTH[y_offset ? "+[y_offset]" : ""]:5"
+	return "CENTER[x_offset ? x_offset : ""]:[WORLD_ICON_SIZE/2],SOUTH[y_offset ? "+[y_offset]" : ""]:[5*PIXEL_MULTIPLIER]"
 
 	/*
 	switch(index)
