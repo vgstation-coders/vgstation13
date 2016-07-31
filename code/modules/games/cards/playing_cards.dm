@@ -1,5 +1,5 @@
-#define CARD_DISPLACE	9
-#define CARD_WIDTH		7 //width of the icon
+#define CARD_DISPLACE	18
+#define CARD_WIDTH		14 //width of the icon
 
 /*
  *	Taken from /tg/

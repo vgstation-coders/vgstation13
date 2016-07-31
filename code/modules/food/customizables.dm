@@ -164,10 +164,10 @@
 	if(src.fullyCustom || src.stackIngredients)
 		var/clicked_x = text2num(params2list(params)["icon-x"])
 		if (isnull(clicked_x))   I.pixel_x = 0
-		else if (clicked_x < 9)  I.pixel_x = -2 * PIXEL_MULTIPLIER //this looks pretty shitty
-		else if (clicked_x < 14) I.pixel_x = -1 * PIXEL_MULTIPLIER //but hey
-		else if (clicked_x < 19) I.pixel_x = 0  //it works
-		else if (clicked_x < 25) I.pixel_x = 1 * PIXEL_MULTIPLIER
+		else if (clicked_x < 9 * PIXEL_MULTIPLIER)  I.pixel_x = -2 * PIXEL_MULTIPLIER //this looks pretty shitty
+		else if (clicked_x < 14 * PIXEL_MULTIPLIER) I.pixel_x = -1 * PIXEL_MULTIPLIER //but hey
+		else if (clicked_x < 19 * PIXEL_MULTIPLIER) I.pixel_x = 0  //it works
+		else if (clicked_x < 25 * PIXEL_MULTIPLIER) I.pixel_x = 1 * PIXEL_MULTIPLIER
 		else 					 I.pixel_x = 2 * PIXEL_MULTIPLIER
 	return I
 

@@ -33,8 +33,8 @@ var/list/impact_master = list()
 	var/turf/starting = null // the projectile's starting turf
 	var/list/permutated = list() // we've passed through these atoms, don't try to hit them again
 
-	var/p_x = 16
-	var/p_y = 16 // the pixel location of the tile that the player clicked. Default is the center
+	var/p_x = WORLD_ICON_SIZE/2
+	var/p_y = WORLD_ICON_SIZE/2 // the pixel location of the tile that the player clicked. Default is the center
 
 	var/grillepasschance = 66
 	var/damage = 10

@@ -261,8 +261,8 @@
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
 		var/list/params_list = params2list(params)
 		if(O.loc == src.loc && params_list.len)
-			var/clamp_x = 16
-			var/clamp_y = 16
+			var/clamp_x = WORLD_ICON_SIZE/2
+			var/clamp_y = WORLD_ICON_SIZE/2
 			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
 			O.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
 			to_chat(user, "<span class='notice'>You hang \the [O.name] on the fridge.</span>")
