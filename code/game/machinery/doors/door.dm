@@ -99,6 +99,10 @@ var/list/all_doors = list()
 				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
+/obj/machinery/door/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
+	W.forceMove(get_step(W,W.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
+	open()
+
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit

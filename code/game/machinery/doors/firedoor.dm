@@ -189,6 +189,10 @@ var/global/list/alert_overlays_global = list()
 			attack_hand(M)
 	return 0
 
+/obj/machinery/door/firedoor/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
+	W.forceMove(get_step(W,W.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
+	open()
+
 
 /obj/machinery/door/firedoor/power_change()
 	if(powered(ENVIRON))
