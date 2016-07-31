@@ -3,6 +3,8 @@
 #define GAS 3
 #define FORMAT_DISPENSER_NAME 15
 
+#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
+
 /obj/machinery/chem_dispenser
 	name = "\improper Chem Dispenser"
 	density = 1
@@ -413,11 +415,13 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
-	var/pillamount = 10
+	var/last_pill_amt = 10
+	var/last_bottle_amt = 3
 	//var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
 
-	var/client/has_sprites = list()
+	var/global/list/pill_icon_cache
+
 	var/chem_board = /obj/item/weapon/circuitboard/chemmaster3000
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
@@ -454,6 +458,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	RefreshParts()
 	update_icon() //Needed to add the prongs cleanly
+
+	if (!pill_icon_cache)
+		generate_pill_icon_cache()
 
 /obj/machinery/chem_master/RefreshParts()
 	var/scancount = 0
@@ -650,8 +657,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
 			var/count = 1
-			if(href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", 10, pillamount) as num)
+			if(href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", "Amount:", last_pill_amt) as num)
 			count = min(max_pill_count, count)
+			last_pill_amt = count
 			if(!count)
 				return
 
@@ -694,8 +702,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			if(!condi)
 				var/count = 1
 				if(href_list["createbottle_multiple"])
-					count = isgoodnumber(input("Select the number of bottles to make.", 10, count) as num)
+					count = isgoodnumber(input("Select the number of bottles to make.", "Amount:", last_bottle_amt) as num)
 				count = Clamp(count, 1, 4)
+				last_bottle_amt = count
 				var/amount_per_bottle = reagents.total_volume > 0 ? reagents.total_volume/count : 0
 				amount_per_bottle = min(amount_per_bottle,max_bottle_size)
 
@@ -717,28 +726,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				reagents.trans_to(P, 50)
 				src.updateUsrDialog()
 				return 1
-
-		else if(href_list["change_pill"])
-			#define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
-			var/dat = list()
-			dat += "<table>"
-			for(var/i = 1 to MAX_PILL_SPRITE)
-				if(i%4 == 1)
-					dat += "<tr>"
-
-				dat += "<td><a href=\"?src=\ref[src]&pill_sprite=[i]\"><img src=\"pill[i].png\" /></a></td>"
-
-				if (i%4 == 0)
-					dat +="</tr>"
-
-			dat += "</table>"
-			dat = jointext(dat,"")
-			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
-			popup.set_content(dat)
-			popup.open()
-			onclose(usr, "[windowtype]")
-			//usr << browse(dat, "window=[windowtype]")
-			return 1
 
 		/*
 		else if(href_list["change_bottle"])
@@ -796,22 +783,19 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_master/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/chem_master/attack_hand(mob/user as mob)
 
+/obj/machinery/chem_master/proc/generate_pill_icon_cache()
+	pill_icon_cache = list()
+	for(var/i = 1 to MAX_PILL_SPRITE)
+		pill_icon_cache += "<img src='data:image/png;base64,[icon2base64(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))]'>"
+		//This is essentially just bicon(). Ideally we WOULD use just bicon(), but right now it's fucked up when used on icons because it goes by their \ref.
+
+/obj/machinery/chem_master/attack_hand(mob/user as mob)
 	. = ..()
 	if(.)
 		return
 
 	user.set_machine(src)
-	if(!(user.client in has_sprites))
-		spawn()
-			has_sprites += user.client
-			for(var/i = 1 to MAX_PILL_SPRITE)
-				usr << browse_rsc(icon('icons/obj/chemical.dmi', "pill" + num2text(i)), "pill[i].png")
-			/*
-			for(var/i = 1 to MAX_BOTTLE_SPRITE)
-				usr << browse_rsc(icon('icons/obj/chemical.dmi', "bottle" + num2text(i)), "bottle[i].png")
-			*/
 
 	var/dat = list()
 	if(!beaker)
@@ -857,10 +841,20 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			dat += "Buffer is empty.<BR>"
 		if(!condi)
-
 			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><a href=\"?src=\ref[src]&change_bottle=1\"><img src=\"bottle[bottlesprite].png\" /></a><BR>"}
-			dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"}
-			dat += {"<HR><BR><A href='?src=\ref[src];createpill=1'>Create single pill (50 units max)</A><BR>
+			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"}
+
+			dat += {"<div class="li" style="padding: 0px 0px 4px;"></div>"}
+			for(var/i = 1 to MAX_PILL_SPRITE)
+				dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" style="display: inline-block; padding:0px 4px 0px 4px; margin:0 2px 2px 0; [i == text2num(pillsprite) ? "background: #2f943c;" : ""]"> <!--Yes we are setting the style here because I suck at CSS and I have no shame-->
+							<div class="pillIcon">
+								[pill_icon_cache[i]]
+							</div>
+						</a>"}
+				if (i%10 == 0)
+					dat +="<br>"
+
+			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill (50 units max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills (50 units max each; [max_pill_count] max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
 					<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
@@ -868,7 +862,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 400, src)
+	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 500, src)
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "[windowtype]")
