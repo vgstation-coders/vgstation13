@@ -67,7 +67,6 @@
 		/obj/item/weapon/reagent_containers/pill/stox,
 		/obj/item/weapon/reagent_containers/pill/kelotane,
 		/obj/item/weapon/reagent_containers/pill/tramadol,
-		/obj/item/weapon/reagent_containers/pill/methylphenidate,
 		/obj/item/weapon/reagent_containers/pill/citalopram,
 		/obj/item/weapon/reagent_containers/pill/inaprovaline,
 		/obj/item/weapon/reagent_containers/pill/dexalin,
