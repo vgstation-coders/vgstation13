@@ -19,8 +19,8 @@
 	..()
 
 /obj/item/device/instrument/attack_self(mob/user as mob)
-	if(!ishuman(user) && !issilicon(user))
-		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
 	interact(user)
 
@@ -33,7 +33,12 @@
 
 	user.set_machine(src)
 	song.interact(user)
-
+	
+/obj/item/device/instrument/suicide_act(mob/user)
+	user.visible_message("<span class='danger'>[user] begins trying to play Faerie's Aire and Death Waltz with \the [src]! It looks like \he's trying to commit suicide.</span>")
+	playsound(loc, 'sound/effects/applause.ogg', 50, 1, -1)
+	return BRUTELOSS
+	
 /obj/item/device/instrument/violin
 	name = "space violin"
 	desc = "A wooden musical instrument with four strings and a bow. \"The devil went down to space, he was looking for an assistant to grief.\""
