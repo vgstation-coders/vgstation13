@@ -1,0 +1,7 @@
+author: Kurfurst
+delete-after: True
+
+changes: 
+- rscadd: Added a design for the experimental welder
+- bugfix: Fixed the fuel generation on the experimental welder
+- bugfix: Welders should update icons more reliably now
