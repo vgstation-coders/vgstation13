@@ -69,7 +69,7 @@
 	syllables = list("ss","ss","ss","ss","skak","seeki","resh","las","esi","kor","sh")
 
 /datum/language/tajaran
-	name = LANGUAGE_SIIK_TAJR
+	name = LANGUAGE_CATBEAST
 	desc = "An expressive language that combines yowls and chirps with posture, tail and ears. Native to the Tajaran."
 	speech_verb = "mrowls"
 	ask_verb = "mrowls"
@@ -201,7 +201,7 @@
 	syllables = list("CLICK", "CLACK")
 
 /datum/language/golem
-	name = "Golem"
+	name = LANGUAGE_GOLEM
 	desc = "A slow, guttural language produced by the grinding of a golem's joints against one another."
 	speech_verb = "grinds"
 	ask_verb = "groans"
@@ -254,7 +254,7 @@
 		"d'rekkathnor", "khari'd", "gual'te", "nikka", "nikt'o", "barada", "kla'atu", "barhah", "hra" ,"zar'garis")
 
 /datum/language/mouse
-	name = "Mouse"
+	name = LANGUAGE_MOUSE
 	desc = "Literally just squeaks"
 	speech_verb = "squeaks"
 	colour = "say_quote"

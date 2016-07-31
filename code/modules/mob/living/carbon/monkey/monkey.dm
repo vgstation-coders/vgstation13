@@ -56,7 +56,7 @@
 	icon_state = "tajkey1"
 	uni_append = list(0x0A0,0xE00) // 0A0E00
 	species_type = /mob/living/carbon/monkey/tajara
-	languagetoadd = LANGUAGE_SIIK_TAJR
+	languagetoadd = LANGUAGE_CATBEAST
 
 /mob/living/carbon/monkey/skrell
 	name = "neaera"
