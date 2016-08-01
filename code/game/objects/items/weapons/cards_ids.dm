@@ -369,6 +369,7 @@
 							"CE",
 							"clown",
 							"mime",
+							"trader",
 							"syndie",
 							"deathsquad",
 							"creed",
