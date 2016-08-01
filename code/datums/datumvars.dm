@@ -262,6 +262,9 @@
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
 
+	if (hasvar(D, "transform"))
+		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
+
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
 
 	body += "<option value>---</option>"
@@ -1021,4 +1024,19 @@ body
 
 		callatomproc(DAT)	//Yes it could be a datum, technically but eh
 
-	return
+	else if (href_list["edit_transform"])
+		if (!check_rights(R_DEBUG))
+			return
+
+		var/datum/DAT = locate(href_list["edit_transform"])
+		if (!hasvar(DAT, "transform"))
+			to_chat(src, "This object does not have a transform variable to edit!")
+			return
+
+		var/matrix/M = DAT.vars["transform"] // It's like using a colon but without the colon!
+
+		if (!istype(M))
+			to_chat(src, "Transform is not set to a /matrix.")
+			return
+
+		DAT.vars["transform"] = modify_matrix_menu(M)

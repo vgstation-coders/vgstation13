@@ -76,6 +76,10 @@
 		var_value = "[bicon(var_value)]"
 		default = "icon"
 
+	else if(ismatrix(var_value))
+		to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
+		default = "matrix"
+
 	else if(istype(var_value,/atom) || istype(var_value,/datum))
 		to_chat(usr, "Variable appears to be <b>TYPE</b>.")
 		default = "type"
@@ -117,7 +121,7 @@
 			to_chat(usr, "If a direction, direction is: [dir]")
 
 	var/class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-		"num","type","icon","file","edit referenced object","restore to default")
+		"num","type","icon","file","matrix", "edit referenced object","restore to default")
 
 	if(!class)
 		return
@@ -422,6 +426,49 @@
 						if ( istype(A , O.type) )
 							A.vars[variable] = O.vars[variable]
 
+			else
+				if(istype(O, /mob))
+					for(var/mob/M in mob_list)
+						if (M.type == O.type)
+							M.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /obj))
+					for(var/obj/A in world)
+						if (A.type == O.type)
+							A.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /turf))
+					var/count = 0
+					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
+						if (A.type == O.type)
+							A.vars[variable] = O.vars[variable]
+
+		if ("matrix")
+			var/matrix/new_value = modify_matrix_menu(O.vars[variable], verbose = FALSE)
+			if (!new_value)
+				return
+
+			O.vars[variable] = new_value
+			if(method)
+				if(istype(O, /mob))
+					for(var/mob/M in mob_list)
+						if ( istype(M , O.type) )
+							M.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /obj))
+					for(var/obj/A in world)
+						if ( istype(A , O.type) )
+							A.vars[variable] = O.vars[variable]
+
+				else if(istype(O, /turf))
+					var/count = 0
+					for(var/turf/A in turfs)
+						count++
+						if(!(count % 50000)) sleep(world.tick_lag)
+						if ( istype(A , O.type) )
+							A.vars[variable] = O.vars[variable]
 			else
 				if(istype(O, /mob))
 					for(var/mob/M in mob_list)
