@@ -471,26 +471,6 @@ var/list/number_units=list(
 			i++
 	//testing(" ([recursion]) out=list("+jointext(out,", ")+")")
 	return out
-	
-//Function from Byond's "TextHandling" Library, given a string turns it into a list separated by a given character
-/proc/dd_text2List(text, separator)
-	var/textlength      = lentext(text)
-	var/separatorlength = lentext(separator)
-	var/list/textList   = new /list()
-	var/searchPosition  = 1
-	var/findPosition    = 1
-	var/buggyText
-	while (1)															// Loop forever.
-		findPosition = findtextEx(text, separator, searchPosition, 0)
-		buggyText = copytext(text, searchPosition, findPosition)		// Everything from searchPosition to findPosition goes into a list element.
-		textList += "[buggyText]"										// Working around weird problem where "text" != "text" after this copytext().
 
-		searchPosition = findPosition + separatorlength					// Skip over separator.
-		if (findPosition == 0)											// Didn't find anything at end of string so stop here.
-			return textList
-		else
-			if (searchPosition > textlength)							// Found separator at very end of string.
-				textList += ""											// So add empty element.
-				return textList
 ///mob/verb/test_num2words(var/number as num)
 //	to_chat(usr, "\"[jointext(num2words(number), " ")]\"")

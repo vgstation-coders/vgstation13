@@ -84,10 +84,10 @@
 
 		for(var/line in lines)
 			//world << line
-			for(var/beat in dd_text2List(lowertext(line), ","))
+			for(var/beat in splittext(lowertext(line), ","))
 				//world << "beat: [beat]"
-				var/list/notes = dd_text2List(beat, "/")
-				for(var/note in dd_text2List(notes[1], "-"))
+				var/list/notes = splittext(beat, "/")
+				for(var/note in splittext(notes[1], "-"))
 					//world << "note: [note]"
 					if(!playing || shouldStopPlaying(user))//If the instrument is playing, or special case
 						playing = 0
