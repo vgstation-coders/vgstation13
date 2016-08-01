@@ -65,7 +65,7 @@ var/global/vox_tick = 1
 	C.UpdateName()
 	C.SetOwnerInfo(src)
 
-	C.icon_state = "traveler"
+	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
 	//C.registered_user = src
 	var/obj/item/weapon/storage/wallet/W = new(src)
