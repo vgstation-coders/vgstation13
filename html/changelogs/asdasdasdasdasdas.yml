@@ -34,4 +34,4 @@ delete-after: True
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
 - bugfix: "Firebirds now properly ignore airlock access always, not just for bolted or welded doors."
-- rscadd: "Firebirds now fly through firelocks (same behavior as airlocks)."
+- rscadd: "Firebirds now fly through firelocks (same behavior as airlocks). They will also harmlessly fly through mobs."

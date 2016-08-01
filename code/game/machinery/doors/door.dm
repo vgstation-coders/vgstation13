@@ -99,10 +99,6 @@ var/list/all_doors = list()
 				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
-/obj/machinery/door/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
-	W.forceMove(get_step(W,W.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
-	open()
-
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
@@ -296,9 +292,17 @@ var/list/all_doors = list()
 
 /obj/machinery/door/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group) return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return !opacity
+	if(istype(mover))
+		if(mover.checkpass(PASSGLASS))
+			return !opacity
+		if(mover.checkpass(PASSDOOR))
+			return 1
 	return !density
+
+/obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
+	if(istype(AM, /obj/structure/bed/chair/vehicle/wizmobile)) //Which is not 100% correct for things like windoors but it's close enough.
+		open()
+	return ..()
 
 /obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
