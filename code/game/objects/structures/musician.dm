@@ -193,7 +193,7 @@
 		while(lentext(t) > 3072)
 		//split into lines
 		spawn()
-			lines = dd_text2List(t, "\n")
+			lines = splittext(t, "\n")
 			if(copytext(lines[1],1,6) == "BPM: ")
 				tempo = sanitize_tempo(600 / text2num(copytext(lines[1],6)))
 				lines.Cut(1,2)
