@@ -1,7 +1,0 @@
-author: Unid
-
-delete-after: True
-
-changes: 
-- rscadd: Added some new sunglasses, fedoras and dunce caps.
-- rscadd: Added hat crates and glasses crates to cargo, both of them cost 50 credits and contain some ordinary hats and glasses (some of which are otherwise unobtainable).
