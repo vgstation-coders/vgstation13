@@ -352,7 +352,7 @@ var/global/num_vending_terminals = 1
 		var/obj/item/stack/sheet/cardboard/C = W
 		if(C.amount>=4)
 			C.use(4)
-			to_chat(user, "<span class='notice'>You slot some cardboard into the machine into [src].</span>")
+			to_chat(user, "<span class='notice'>You slot some cardboard into \the [src].</span>")
 			cardboard = 1
 			src.updateUsrDialog()
 	if(iswiretool(W))
