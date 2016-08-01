@@ -541,7 +541,6 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/lightlaser
 	name = "light laser"
-	icon_state = "light laser"
 	damage = 25
 
 
