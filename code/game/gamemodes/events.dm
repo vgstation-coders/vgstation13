@@ -205,7 +205,7 @@
 		spawncount--
 
 	spawn(rand(5000, 6000)) //Delayed announcements to keep the crew on their toes.
-		command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert",alert = 'sound/AI/aliens.ogg')
+		command_alert(/datum/command_alert/xenomorphs)
 
 
 /proc/high_radiation_event()
@@ -242,7 +242,7 @@
 			continue
 		M.apply_effect((rand(15,75)),IRRADIATE,0)
 	sleep(100)
-	command_alert("High levels of radiation detected near the station. Please report to the Med-bay if you feel strange.", "Anomaly Alert",alert='sound/AI/radiation.ogg')
+	command_alert(/datum/command_alert/radiation)
 
 
 //Changing this to affect the main station. Blame Urist. --Pete
@@ -282,7 +282,7 @@
 				temp_timer.releasetime = 1
 
 		sleep(150)
-		command_alert("Gr3y.T1d3 virus detected in [station_name()] imprisonment subroutines. Recommend station AI involvement.", "Security Alert")
+		command_alert(/datum/command_alert/graytide)
 	else
 		world.log << "ERROR: Could not initate grey-tide. Unable find prison or brig area."
 
@@ -292,11 +292,11 @@
 			new /mob/living/simple_animal/hostile/carp(C.loc)
 	//sleep(100)
 	spawn(rand(300, 600)) //Delayed announcements to keep the crew on their toes.
-		command_alert("Unknown biological entities have been detected near [station_name()], please stand-by.", "Lifesign Alert")
+		command_alert(/datum/command_alert/carp)
 
 /proc/lightsout(isEvent = 0, lightsoutAmount = 1,lightsoutRange = 25) //leave lightsoutAmount as 0 to break ALL lights
 	if(isEvent)
-		command_alert("An Electrical storm has been detected in your area, please repair potential electronic overloads.","Electrical Storm Alert")
+		command_alert(/datum/command_alert/electrical_storm)
 
 	if(lightsoutAmount)
 		var/list/epicentreList = list()

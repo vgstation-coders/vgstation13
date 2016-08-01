@@ -95,12 +95,10 @@
 
 	sleep(20) //Two seconds for warning to play
 
-	if(prob(70)) //Slighty off-scale
-		command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 600, meteor_delay + 600))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds.", \
-		"Space Weather Automated Announcements", alert = 'sound/AI/meteorround.ogg')
-	else //Oh boy
-		command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 1800, meteor_delay + 1800))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds.", \
-		"Space Weather Automated Announcements", alert = 'sound/AI/meteorround.ogg')
+	var/datum/command_alert/meteor_round/CA = new()
+	CA.meteor_delay = meteor_delay
+	CA.supply_delay = supply_delay
+	command_alert(CA)
 
 	message_admins("Meteor Storm announcement given. Meteors will arrive in approximately [round(meteor_delay/600)] minutes. Shuttle will take [10*meteor_shuttle_multiplier] minutes to arrive and supplies are about to be dispatched in the Bar.")
 

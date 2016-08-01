@@ -9,7 +9,7 @@
 
 
 /datum/event/brand_intelligence/announce()
-	command_alert("Rampant brand intelligence has been detected aboard [station_name()], please stand-by.", "Machine Learning Alert")
+	command_alert(/datum/command_alert/vending_machines)
 
 
 /datum/event/brand_intelligence/start()

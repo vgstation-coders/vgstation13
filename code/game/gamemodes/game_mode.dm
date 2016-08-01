@@ -226,7 +226,7 @@
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(intercepttext)
 
-	command_alert("Summary downloaded and printed out at all communications consoles.", "Enemy communication intercept.")
+	command_alert(/datum/command_alert/enemy_comms_interception)
 /*	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
 			M << sound('sound/AI/intercept.ogg')

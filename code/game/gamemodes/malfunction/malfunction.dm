@@ -183,7 +183,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	if (alert(usr, "Are you sure you wish to initiate the takeover? The station hostile runtime detection software is bound to alert everyone. You have hacked [ticker.mode:apcs] APCs.", "Takeover:", "Yes", "No") != "Yes")
 		return
 
-	command_alert("Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core.", "Anomaly Alert",alert='sound/AI/aimalf.ogg')
+	command_alert(/datum/command_alert/malf_announce)
 	set_security_level("delta")
 
 	ticker.mode:malf_mode_declared = 1

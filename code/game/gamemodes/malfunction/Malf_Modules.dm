@@ -218,20 +218,53 @@ rcd light flash thingy on matter drain
 		else to_chat(src, "Out of uses.")
 
 /datum/AI_Module/small/interhack
-	module_name = "Hack intercept"
+	module_name = "Fake Centcom Announcement"
 	mod_pick_name = "interhack"
-	description = "Hacks the status upgrade from Cent. Com, removing any information about malfunctioning electrical systems."
+	description = "Gain control of the station's automated announcement system, allowing you to create up to 3 fake Centcom announcements - completely undistinguishable from real ones."
 	cost = 15
-	one_time = 1
+	uses = 3
 
 	power_type = /mob/living/silicon/ai/proc/interhack
 
 /mob/living/silicon/ai/proc/interhack()
 	set category = "Malfunction"
-	set name = "Hack intercept"
+	set name = "Fake Announcement"
 
-	src.verbs -= /mob/living/silicon/ai/proc/interhack
-	ticker.mode:hack_intercept()
+	var/allowed = 0
+	var/datum/AI_Module/small/interhack/module_to_charge
+
+	for(var/datum/AI_Module/small/interhack/interhack in current_modules)
+		if(interhack.uses > 0)
+			module_to_charge = interhack
+			allowed = 1
+			break
+
+	if(!allowed)
+		to_chat(src, "Out of uses.")
+		return
+
+	//Create a list which looks like this
+	//list( "Alert 1" = /datum/command_alert_1, "Alert 5" = /datum/command_alert_5, ...)
+	//Then ask the AI to pick one announcement from the list
+
+	var/list/possible_announcements = typesof(/datum/command_alert)
+	for(var/A in possible_announcements)
+		var/datum/command_alert/CA = A
+		possible_announcements[initial(CA.name)] = A
+		possible_announcements.Remove(A)
+
+	var/chosen_announcement = input(usr, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
+	if(!chosen_announcement)
+		to_chat(src, "Selection cancelled.")
+		return
+	if(module_to_charge.uses <= 0)
+		to_chat(src, "ERROR: Out of uses.")
+		return
+
+	module_to_charge.uses--
+	command_alert(possible_announcements[chosen_announcement])
+	log_game("[key_name(usr)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
+	message_admins("[key_name(usr)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
 
 /datum/AI_Module/small/reactivate_camera
 	module_name = "Reactivate camera"
