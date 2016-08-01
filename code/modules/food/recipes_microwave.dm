@@ -1641,6 +1641,8 @@
 /datum/recipe/potentham
 	reagents = list(PLASMA = 10)
 	items = list(
+
+		/obj/item/weapon/reagent_containers/food/snacks/meat/box,
 		/obj/item/weapon/aiModule/core/asimov,
 		/obj/item/robot_parts/head,
 		/obj/item/weapon/handcuffs
