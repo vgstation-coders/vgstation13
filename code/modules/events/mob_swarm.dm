@@ -51,4 +51,4 @@
 
 
 /datum/event/mob_swarm/announce()
-    command_alert("Due to timespace anomalies of unknown origin, [station_name] is now host to several [mob_name]\s more than there were a moment ago.")
+    command_alert(new /datum/command_alert/mob_swarm(mob_name))

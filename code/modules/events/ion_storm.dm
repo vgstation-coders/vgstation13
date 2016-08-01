@@ -174,7 +174,7 @@
 	active = 0
 	spawn(rand(5000,8000))
 		if(prob(50))
-			command_alert("It has come to our attention that the station passed through an ion storm.  Please monitor all electronic equipment for malfunctions.", "Anomaly Alert")
+			command_alert(/datum/command_alert/ion_storm_large)
 
 /*
 /proc/IonStorm(botEmagChance = 10)

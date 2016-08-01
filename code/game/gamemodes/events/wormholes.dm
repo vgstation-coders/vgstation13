@@ -7,7 +7,7 @@
 
 		if(pick_turfs.len)
 			//All ready. Announce that bad juju is afoot.
-			command_alert("Space-time anomalies detected on the station. There is no additional data.", "Anomaly Alert",alert='sound/AI/spanomalies.ogg')
+			command_alert(/datum/command_alert/wormholes)
 			//prob(20) can be approximated to 1 wormhole every 5 turfs!
 			//admittedly less random but totally worth it >_<
 			var/event_duration = 3000	//~5 minutes in ticks

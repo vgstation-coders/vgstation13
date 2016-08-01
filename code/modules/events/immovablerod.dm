@@ -8,7 +8,7 @@
 	announceWhen = 100
 
 /datum/event/immovable_rod/announce()
-	command_alert("What the fuck was that?!", "General Alert")
+	command_alert(/datum/command_alert/immovable_rod)
 
 /datum/event/immovable_rod/start()
 	immovablerod()
