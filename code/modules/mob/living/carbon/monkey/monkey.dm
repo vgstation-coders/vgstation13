@@ -613,6 +613,6 @@
 
 /mob/living/carbon/monkey/reset_layer()
 	if(lying)
-		plane = HIDING_MOB_PLANE
+		plane = LYING_MOB_PLANE
 	else
 		plane = MOB_PLANE

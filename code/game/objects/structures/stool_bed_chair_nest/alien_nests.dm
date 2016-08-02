@@ -61,8 +61,8 @@
 			"<span class='notice'>You hear squelching...</span>")
 	lock_atom(M, /datum/locking_category/bed/nest)
 	src.add_fingerprint(user)
-	var/image/nest_covering = image(icon,"nest-covering",MOB_LAYER)
-	nest_covering.plane = MOB_PLANE
+	var/image/nest_covering = image(icon,"nest-covering")
+	nest_covering.plane = ABOVE_HUMAN_PLANE
 	overlays += nest_covering
 	stabilize()
 

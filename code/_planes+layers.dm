@@ -67,12 +67,12 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define BELOW_TURF_PLANE 		-19 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
+#define BELOW_TURF_PLANE 		-20 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
 	// todo: use this for asteroids to make them be faster
 
-#define TURF_PLANE 				-18			// For turfs.
+#define TURF_PLANE 				-19			// For turfs.
 
-#define ABOVE_TURF_PLANE 		-17			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
+#define ABOVE_TURF_PLANE 		-18			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define CATWALK_LAYER			0
 	#define DECAL_LAYER				1
@@ -92,11 +92,11 @@ What is the naming convention for planes or layers?
 	#define WEED_LAYER				15
 
 
-#define NOIR_BLOOD_PLANE 		-16		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
+#define NOIR_BLOOD_PLANE 		-17		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
 
-#define HIDING_MOB_PLANE 		-15			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
+#define HIDING_MOB_PLANE 		-16			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
 
-#define OBJ_PLANE 				-14			// For objects which appear below humans.
+#define OBJ_PLANE 				-15			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER		0
 	#define TABLE_LAYER				0.5
@@ -113,6 +113,8 @@ What is the naming convention for planes or layers?
 	#define CLOSED_DOOR_LAYER  		11
 	#define ABOVE_DOOR_LAYER		12
 	#define CHAIR_LEG_LAYER			13
+
+#define LYING_MOB_PLANE			-14			// other mobs that are lying down.
 
 #define LYING_HUMAN_PLANE 		-13			// humans that are lying down
 
