@@ -78,8 +78,10 @@
 	..()
 	eyeobj.ai = src
 	eyeobj.name = "[src.name] (AI Eye)" // Give it a name
+	if(ai_flags & HIGHRESCAMS)
+		eyeobj.high_res = 1
 	spawn(5)
-		eyeobj.loc = src.loc
+		eyeobj.loc = loc
 
 /mob/living/silicon/ai/Destroy()
 	eyeobj.ai = null

@@ -87,10 +87,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		master.show_message(rendered_message, 2)
 
 /obj/machinery/hologram/holopad/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
-	if(master && master.eyeobj && master.eyeobj.high_res) //prevent duplicate visible messages 
+	if(!master)
 		return
-	if(master)
-		master.show_message( message, 1, blind_message, 2)
+	if(master.eyeobj.high_res && cameranet.checkCameraVis(A)) //visible message is already being picked up by the cameras, avoids duplicate messages
+		return
+	master.show_message( message, 1, blind_message, 2) //otherwise it's being picked up by the holopad itself
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
 	hologram = new(T)//Spawn a blank effect at the location.
