@@ -62,7 +62,7 @@
 	lock_atom(M, /datum/locking_category/bed/nest)
 	src.add_fingerprint(user)
 	var/image/nest_covering = image(icon,"nest-covering")
-	nest_covering.plane = ABOVE_HUMAN_PLANE
+	nest_covering.plane = ABOVE_OBJ_PLANE
 	overlays += nest_covering
 	stabilize()
 

@@ -104,8 +104,8 @@ What is the naming convention for planes or layers?
 	#define BELOW_OBJ_LAYER			2
 	// OBJ_LAYER 	 				3
 	#define ABOVE_OBJ_LAYER			4
-	#define FULL_WINDOW_LAYER		5
-	#define SIDE_WINDOW_LAYER		6
+	#define SIDE_WINDOW_LAYER		5
+	#define FULL_WINDOW_LAYER		6
 	#define ABOVE_WINDOW_LAYER		7
 	#define TURRET_LAYER			8
 	#define TURRET_COVER_LAYER		9

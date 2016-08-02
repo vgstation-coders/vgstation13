@@ -14,7 +14,6 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "ash"
 	anchored = 1
-	layer = TURF_LAYER
 
 /obj/effect/decal/cleanable/ash/attack_hand(mob/user as mob)
 	user.visible_message("<span class='notice'>[user] wipes away \the [src].</span>")
@@ -53,7 +52,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
-	layer = OBJ_LAYER
+	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb1"
 
@@ -63,6 +62,7 @@
 	density = 0
 	anchored = 1
 	layer = OBJ_LAYER
+	plane = OBJ_PLANE
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "molten"
 
@@ -71,7 +71,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
-	layer = OBJ_LAYER
+	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb2"
 
