@@ -125,7 +125,7 @@
 		while(get_turf(src) != target_turf && num_turfs > 0)
 			if(!check_los()) //Something is looking at us now
 				break
-			if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
+			if(!next_turf.CrossCheck(src, next_turf)) //We can't pass through our planned path
 				break
 			for(var/obj/structure/window/W in next_turf)
 				W.Destroy(brokenup = 1)
@@ -147,7 +147,7 @@
 			for(var/obj/machinery/door/D in next_turf)
 				D.open()
 				sleep(5)
-			if(!next_turf.Cross(src, next_turf)) //Once we cleared everything we could, check one last time if we can pass
+			if(!next_turf.CrossCheck(src, next_turf)) //Once we cleared everything we could, check one last time if we can pass
 				break
 			forceMove(next_turf)
 			dir = get_dir(src, target)
@@ -176,7 +176,7 @@
 			while(get_turf(src) != target_turf && num_turfs > 0)
 				if(!check_los()) //Something is looking at us now
 					break
-				if(!next_turf.Cross(src, next_turf)) //We can't pass through our planned path
+				if(!next_turf.CrossCheck(src, next_turf)) //We can't pass through our planned path
 					break
 				for(var/obj/structure/window/W in next_turf)
 					W.Destroy(brokenup = 1)
@@ -198,7 +198,7 @@
 				for(var/obj/machinery/door/D in next_turf)
 					D.open()
 					sleep(5)
-				if(!next_turf.Cross(src, next_turf)) //Once we cleared everything we could, check one last time if we can pass
+				if(!next_turf.CrossCheck(src, next_turf)) //Once we cleared everything we could, check one last time if we can pass
 					break
 				forceMove(next_turf)
 				dir = get_dir(src, target_turf)

@@ -341,7 +341,7 @@ var/global/list/PDA_Manifest = list()
 	desc = "You can't resist."
 	// name = ""
 
-/obj/effect/stop/Uncross(atom/movable/mover)
+/obj/effect/stop/UncrossCheck(atom/movable/mover)
 	if(victim == mover)
 		return 0
 	return 1

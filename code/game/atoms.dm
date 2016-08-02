@@ -358,7 +358,7 @@ its easier to just keep the beam vertical.
 				qdel(X)
 				break
 			for(var/obj/O in TT)
-				if(!O.Cross(light))
+				if(!O.CrossCheck(light))
 					broken = 1
 					break
 				else if(O.density)

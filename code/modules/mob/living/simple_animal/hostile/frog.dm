@@ -80,7 +80,7 @@
 	update_spear()
 	..()
 
-/mob/living/simple_animal/hostile/frog/Cross(obj/item/weapon/spear/S)
+/mob/living/simple_animal/hostile/frog/CrossCheck(obj/item/weapon/spear/S)
 	.=..()
 
 	if(!locked_to && !throwing && !isDead() && istype(S) && S.throwing && isturf(S.loc))

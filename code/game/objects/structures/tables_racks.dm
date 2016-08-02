@@ -294,7 +294,7 @@
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
 
-/obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/table/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
@@ -343,7 +343,7 @@
 				return 1
 	return 1
 
-/obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
+/obj/structure/table/UncrossCheck(atom/movable/mover as mob|obj, target as turf)
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	if(flags & ON_BORDER)
@@ -711,7 +711,7 @@
 		del(src)
 		return
 
-/obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/rack/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1

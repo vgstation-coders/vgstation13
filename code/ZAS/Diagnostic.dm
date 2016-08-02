@@ -175,7 +175,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 
 		for(var/direction in cardinal)
 			var/turf/simulated/adjacent = get_step(current, direction)
-			if(!current.ZCross(adjacent))
+			if(!current.ZCrossCheck(adjacent))
 				continue
 			if(turfs.Find(adjacent))
 				current_adjacents += adjacent

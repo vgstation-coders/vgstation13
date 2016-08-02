@@ -1,7 +1,7 @@
-/atom/movable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/atom/movable/proc/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return (!density || !height || air_group)
 
-/turf/proc/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/turf/proc/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(!target) return 0
 
 	if(istype(mover)) // turf/Enter(...) will perform more advanced checks
@@ -12,16 +12,16 @@
 			return 0
 
 		for(var/obj/obstacle in src)
-			if(!obstacle.Cross(mover, target, height, air_group))
+			if(!obstacle.CrossCheck(mover, target, height, air_group))
 				return 0
 		if(target != src)
 			for(var/obj/obstacle in target)
-				if(!obstacle.Cross(mover, src, height, air_group))
+				if(!obstacle.CrossCheck(mover, src, height, air_group))
 					return 0
 
 		return 1
 
-//Basically another way of calling Cross(null, other, 0, 0) and Cross(null, other, 1.5, 1).
+//Basically another way of calling CrossCheck(null, other, 0, 0) and CrossCheck(null, other, 1.5, 1).
 //Returns:
 // 0 - Not blocked
 // AIR_BLOCKED - Blocked
@@ -33,7 +33,7 @@
 	#ifdef ZASDBG
 	ASSERT(isturf(other))
 	#endif
-	return !Cross(null, other, 0, 0) + 2*!Cross(null, other, 1.5, 1)
+	return !CrossCheck(null, other, 0, 0) + 2*!CrossCheck(null, other, 1.5, 1)
 
 /turf/c_airblock(turf/other)
 	#ifdef ZASDBG

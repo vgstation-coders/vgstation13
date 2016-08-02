@@ -427,7 +427,7 @@ var/global/mulebot_count = 0
 	if(get_dist(C, src) > 1 || load || !on)
 		return
 	for(var/obj/structure/plasticflaps/P in src.loc)//Takes flaps into account
-		if(!Cross(C,P))
+		if(!CrossCheck(C,P))
 			return
 	mode = 1
 
@@ -480,7 +480,7 @@ var/global/mulebot_count = 0
 	if(dirn)
 		var/turf/T = src.loc
 		T = get_step(T,dirn)
-		if(Cross(load,T))//Can't get off onto anything that wouldn't let you pass normally
+		if(CrossCheck(load,T))//Can't get off onto anything that wouldn't let you pass normally
 			step(load, dirn)
 		else
 			load.loc = src.loc//Drops you right there, so you shouldn't be able to get yourself stuck

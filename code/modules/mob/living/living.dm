@@ -1157,7 +1157,7 @@ default behaviour is:
 					continue
 				if(A.density)
 					if(A.flags&ON_BORDER)
-						dense = !A.Cross(src, src.loc)
+						dense = !A.CrossCheck(src, src.loc)
 					else
 						dense = 1
 				if(dense) break

@@ -435,13 +435,13 @@
 			continue
 		if(AM.density)
 			if(AM.flags&ON_BORDER)
-				if(!AM.Cross(user, src.loc))
+				if(!AM.CrossCheck(user, src.loc))
 					return 1
 			else
 				return 1
 	return 0
 
-/obj/machinery/photocopier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/photocopier/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
 	return (!mover.density || !density || mover.pass_flags)
