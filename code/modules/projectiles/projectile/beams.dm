@@ -88,7 +88,6 @@ var/list/beam_master = list()
 			reference = bresenham_step(dist_y,dist_x,dy,dx,lastposition,target_dir,reference)
 
 	cleanup(reference)
-	return
 
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
 	var/first = 1
@@ -135,6 +134,8 @@ var/list/beam_master = list()
 				I.transform = turn(I.transform, target_angle+45)
 				I.pixel_x = PixelX
 				I.pixel_y = PixelY
+				I.plane = EFFECTS_PLANE
+				I.layer = PROJECTILE_LAYER
 				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = I //And cache it!
 
 			//Finally add the overlay
@@ -157,6 +158,8 @@ var/list/beam_master = list()
 			//If the icon has not been added yet
 			if( !("[icon_state][target_dir]" in beam_master) )
 				var/image/I = image(icon,icon_state,10,target_dir) //Generate it.
+				I.plane = EFFECTS_PLANE
+				I.layer = PROJECTILE_LAYER
 				beam_master["[icon_state][target_dir]"] = I //And cache it!
 
 			//Finally add the overlay
@@ -498,7 +501,7 @@ var/list/beam_master = list()
 
 		//del(src)
 		returnToPool(src)
-	return
+
 /*cleanup(reference) //Waits .3 seconds then removes the overlay.
 //	to_chat(world, "setting invisibility")
 	sleep(50)
@@ -743,14 +746,13 @@ var/list/beam_master = list()
 						draw_ray(target)
 						Bump(original)
 
-	return
-
 /obj/item/projectile/beam/bison/bullet_die()
 	draw_ray(loc)
 	..()
 
 /obj/item/projectile/beam/bison/proc/draw_ray(var/turf/lastloc)
-	if(drawn) return
+	if(drawn)
+		return
 	drawn = 1
 	var/atom/curr = lastloc
 	if(!firer)
@@ -837,8 +839,6 @@ var/list/beam_master = list()
 		var/turf/TT = get_turf(X.loc)
 		if(TT == firer.loc)
 			continue
-
-	return
 
 /obj/item/projectile/beam/bison/Bump(atom/A as mob|obj|turf|area)
 	//Heat Rays go through mobs
