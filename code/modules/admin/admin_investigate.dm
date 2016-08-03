@@ -69,11 +69,11 @@ var/global/list/investigations=list(
 
 // Permits special snowflake formatting.
 /atom/proc/format_investigation_text(var/message)
-	return "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[src] ([formatLocation(get_turf(src))])</small> || [src] [message]<br />"
+	return "<small>[time_stamp()] \ref[src] ([formatJumpTo(get_turf(src))])</small> || [src] [message]<br />"
 
 // Permits special snowflake formatting.
 /mob/format_investigation_text(var/message)
-	return "<small>[time2text(world.timeofday,"hh:mm:ss")] \ref[src] ([formatLocation(get_turf(src))])</small> || [key_name(src)] [message]<br />"
+	return "<small>[time_stamp()] \ref[src] ([formatJumpTo(get_turf(src))])</small> || [key_name(src)] [message]<br />"
 
 // For non-atoms or very specific messages.
 /proc/minimal_investigation_log(var/subject, var/message, var/prefix)
@@ -81,7 +81,7 @@ var/global/list/investigations=list(
 	if(!I)
 		warning("SOME ASSHAT USED INVALID INVESTIGATION ID [subject]")
 		return
-	I.write("<small>[time2text(world.timeofday,"hh:mm:ss")][prefix]</small> || [message]<br />")
+	I.write("<small>[time_stamp()][prefix]</small> || [message]<br />")
 
 //ADMINVERBS
 /client/proc/investigate_show(var/subject in AVAILABLE_INVESTIGATIONS)

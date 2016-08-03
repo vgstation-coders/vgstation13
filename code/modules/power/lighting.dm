@@ -422,7 +422,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(blessed) return
 	src.add_hiddenprint(user)
 	src.flicker(1)
-	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)]")
+	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
 	return
 
 // ai attack - make lights flicker, because why not

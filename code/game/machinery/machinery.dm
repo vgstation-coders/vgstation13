@@ -405,9 +405,7 @@ Class Procs:
 	var/ghost_flags=0
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
-	if(canGhostRead(usr,src,ghost_flags))
-		if(!isAdminGhost(usr)) //probably the laziest fix late night coding has ever seen
-			investigation_log(I_GHOST, "|| was poltergeist-fucked by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
+	if(canGhostRead(usr,src,ghost_flags))	
 		return src.attack_ai(user)
 
 /obj/machinery/attack_paw(mob/user as mob)
