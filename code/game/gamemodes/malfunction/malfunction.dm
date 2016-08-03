@@ -261,7 +261,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	else if (!station_captured && !malf_dead && !station_was_nuked && crew_evacuated)
 		feedback_set_details("round_end_result","halfwin - evacuated")
 		completion_text += "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		completion_text += "<BR><B>The Corporation has lose [station_name()]! All survived personnel will be fired!</B>"
+		completion_text += "<BR><B>The Corporation has lost [station_name()]! All surviving personnel will be fired!</B>"
 
 	else if (!station_captured && !malf_dead && !station_was_nuked && !crew_evacuated)
 		feedback_set_details("round_end_result","nalfwin - interrupted")
