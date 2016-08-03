@@ -338,12 +338,14 @@
 ////////////////Glow//////////////////
 /mob/living/simple_animal/construct/proc/updateicon()
 	overlays = 0
-	var/overlay_layer = LIGHTING_LAYER + 1
-	if(layer != MOB_LAYER)
-		overlay_layer=TURF_LAYER+0.2
+	var/overlay_layer = ABOVE_LIGHTING_LAYER
+	var/overlay_plane = LIGHTING_PLANE
+	if(layer != MOB_LAYER) // ie it's hiding
+		overlay_layer = FLOAT_LAYER
+		overlay_plane = FLOAT_PLANE
 
 	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
-	glow.plane = PLANE_LIGHTING
+	glow.plane = overlay_plane
 	overlays += glow
 
 ////////////////Powers//////////////////

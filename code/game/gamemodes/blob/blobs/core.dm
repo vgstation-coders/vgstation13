@@ -11,11 +11,10 @@
 	var/last_resource_collection
 	var/point_rate = 2
 	var/mob/camera/blob/creator = null
-	layer = 7
+	layer = BLOB_CORE_LAYER
 	var/core_warning_delay = 0
 	var/previous_health = 200
 
-	layer_new = 7
 	icon_new = "core"
 	icon_classic = "blob_core"
 
@@ -192,12 +191,13 @@
 	if(blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
+			underlays.len = 0
 
-			overlays += image(icon,"roots", layer = 3)
+			underlays += image(icon,"roots")
 
 			if(!spawning)
 				for(var/obj/effect/blob/B in orange(src,1))
-					overlays += image(icon,"coreconnect",dir = get_dir(src,B), layer = layer+0.1)
+					overlays += image(icon,"coreconnect",dir = get_dir(src,B))
 			if(spawnend)
 				spawn(10)
 					update_icon()

@@ -13,7 +13,7 @@
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "window"
 	density = 1
-	layer = 3.2 //Just above airlocks //For some reason I guess
+	layer = SIDE_WINDOW_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1
 	var/health = 10 //This window is so bad blowing on it would break it, sucks for it

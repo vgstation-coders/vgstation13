@@ -149,8 +149,8 @@
 				if(!friends.Find(user))
 					friends.Add(user)
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
-					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2",MOB_LAYER+1)
-					heart.plane = PLANE_EFFECTS
+					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+					heart.plane = ABOVE_HUMAN_PLANE
 					flick_overlay(heart, list(user.client), 20)
 
 			if(F.reagents)
@@ -193,7 +193,6 @@
 
 /mob/living/simple_animal/hostile/carp/holocarp/Die()
 	qdel(src)
-	return
 
 #undef PHEROMONES_NO_EFFECT
 #undef PHEROMONES_NEUTRAL

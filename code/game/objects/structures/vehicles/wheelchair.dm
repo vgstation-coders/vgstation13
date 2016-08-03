@@ -18,7 +18,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
 	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
-	wheel_overlay = PLANE_MOB
+	wheel_overlay = MOB_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
 	if(occupant)
@@ -132,11 +132,9 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/handle_layer()
 	if(dir == NORTH)
-		layer = FLY_LAYER
-		plane = PLANE_EFFECTS
+		plane = ABOVE_HUMAN_PLANE
 	else
-		layer = OBJ_LAYER
-		plane = PLANE_OBJ
+		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/check_key(var/mob/user)
 	if(check_hands(user))

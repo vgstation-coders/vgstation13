@@ -8,6 +8,7 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/head/helmet/siren
 	name = "siren helmet"
@@ -18,6 +19,7 @@
 	light_color = LIGHT_COLOR_RED
 	action_button_name = "Activate Siren"
 	var/spamcheck = 0
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/head/helmet/siren/attack_self(mob/user)
 	if(spamcheck)

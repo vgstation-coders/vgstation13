@@ -51,8 +51,7 @@
 		if (client)
 			client.screen -= tool_state
 	tool_state = W
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	W.forceMove(src)
 
 	// Make crap we pick up active so there's less clicking and carpal. - N3X
@@ -68,8 +67,7 @@
 	src.u_equip(O,0)
 	if (src.client)
 		src.client.screen -= O
-	O.layer = initial(O.layer)
-	O.plane = initial(O.plane)
+	O.reset_plane_and_layer()
 	O.screen_loc = null
 	return 1
 
@@ -319,8 +317,7 @@
 			to_chat(src, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
 			return 0
 	// Set the item layer and update the MoMMI's icons
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	update_inv_head()
 	return 1
 

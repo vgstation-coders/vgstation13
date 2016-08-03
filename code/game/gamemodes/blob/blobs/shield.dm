@@ -5,10 +5,9 @@
 	health = 75
 	maxhealth = 75
 	fire_resist = 2
-	layer = 6.2
+	layer = BLOB_SHIELD_LAYER
 	spawning = 0
 
-	layer_new = 6.2
 	icon_new = "strong"
 	icon_classic = "blob_idle"
 
@@ -49,20 +48,13 @@
 	if(blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
+			underlays.len = 0
 
-			overlays += image(icon,"roots", layer = 3)
+			underlays += image(icon,"roots")
 
 			if(!spawning)
 				for(var/obj/effect/blob/B in orange(src,1))
-					overlays += image(icon,"strongconnect",dir = get_dir(src,B), layer = layer+0.1)
-					/*
-					if(B.spawning)
-						anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.2, offX = -16, offY = -16)
-						spawn(8)
-							update_icon()
-					else if(!B.dying)
-						overlays += image(icon,"strongconnect",dir = get_dir(src,B), layer = layer+0.2)
-					*/
+					overlays += image(icon,"strongconnect",dir = get_dir(src,B))
 			if(spawnend)
 				spawn(10)
 					update_icon()

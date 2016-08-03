@@ -738,7 +738,7 @@ body
 		switch(teleport_here_pref)
 			if("Flashy")
 				if(flashy_level > 0)
-					T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_EFFECTS)
+					T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 				if(flashy_level > 1)
 					for(var/mob/M in range(T,7))
 						shake_camera(M, 4, 1)

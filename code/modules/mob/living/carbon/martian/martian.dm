@@ -99,8 +99,7 @@
 			if(dropped)
 				W.dropped(src)
 			if(W)
-				W.layer = initial(W.layer)
-				W.plane = initial(W.plane)
+				W.reset_plane_and_layer()
 
 	return
 
@@ -114,8 +113,7 @@
 		head = W
 		update_inv_head(redraw_mob)
 
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
 	if(client) client.screen |= W

@@ -9,7 +9,6 @@
 	var/raised = 0
 	var/enabled = 1
 	anchored = 1
-	layer = 3
 	invisibility = INVISIBILITY_LEVEL_TWO
 	density = 1
 	var/faction = null //No shooting our buddies!
@@ -51,7 +50,7 @@
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "turretCover"
 	anchored = 1
-	layer = 3.5
+	layer = TURRET_COVER_LAYER
 	density = 0
 	var/obj/machinery/turret/host = null
 

@@ -81,7 +81,7 @@
 		var/obj/item/weapon/storage/box/B = resulting_item
 		for(var/obj/O in B.contents)
 			BAD.contains += O.type
-		BAD.purchaser_key = user.mind.key
+		BAD.purchaser_key = ckey(user.mind.key)
 		BAD.purchaser_name = user.mind.name
 		BAD.purchaser_is_traitor = was_traitor
 		badass_bundles += BAD
@@ -92,7 +92,7 @@
 		else
 			UP.itemtype = bundle.item
 		UP.bundle = bundle.type
-		UP.purchaser_key = user.mind.key
+		UP.purchaser_key = ckey(user.mind.key)
 		UP.purchaser_name = user.mind.name
 		UP.purchaser_is_traitor = was_traitor
 		uplink_purchases += UP
@@ -126,7 +126,7 @@
 	d.realname = M.name
 	if(M.mind)
 		if(M.mind.special_role && M.mind.special_role != "") d.special_role = M.mind.special_role
-		if(M.mind.key) d.key = M.mind.key
+		if(M.mind.key) d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name) d.realname = M.mind.name
 	stat_collection.death_stats += d
 

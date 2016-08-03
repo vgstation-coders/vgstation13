@@ -469,7 +469,7 @@
 				continue
 
 			var/prevLayer = target.layer
-			target.layer = 9
+			target.plane = EFFECTS_PLANE
 
 			for(var/i=0, i<duration, i++)
 				step(target, target.dir)

@@ -9,7 +9,7 @@
 	icon_state = "bush1"
 	density = 1
 	anchored = 1
-	layer = 3.2
+	layer = ABOVE_OBJ_LAYER
 	var/indestructable = 0
 	var/stump = 0
 

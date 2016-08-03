@@ -35,7 +35,6 @@ var/global/list/floorbot_targets=list()
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "floorbot0"
 	icon_initial = "floorbot"
-	layer = 5.0
 	density = 0
 	anchored = 0
 	health = 25

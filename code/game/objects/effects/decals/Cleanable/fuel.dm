@@ -2,7 +2,6 @@
 	//Liquid fuel is used for things that used to rely on volatile fuels or plasma being contained to a couple tiles.
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "fuel"
-	layer = TURF_LAYER+0.2
 	anchored = 1
 	amount = 1 //Basically moles.
 

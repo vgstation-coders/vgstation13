@@ -272,7 +272,7 @@
 			O.pixel_y += rand(-10, 10)
 			O.anchored = 1
 			O.density = 1
-			O.layer = 5
+			O.plane = ABOVE_HUMAN_PLANE
 			O.mouse_opacity = 0
 
 /turf/simulated/wall/proc/thermitemelt(var/mob/user)
@@ -285,7 +285,7 @@
 	O.icon_state = "2"
 	O.anchored = 1
 	O.density = 1
-	O.layer = 5
+	O.plane = ABOVE_HUMAN_PLANE
 
 	var/cultwall = 0
 	if(istype(src, /turf/simulated/wall/cult))
@@ -346,7 +346,7 @@
 
 /turf/simulated/wall/cultify()
 	ChangeTurf(/turf/simulated/wall/cult)
-	turf_animation('icons/effects/effects.dmi',"cultwall", 0, 0, MOB_LAYER-1, anim_plane = PLANE_TURF)
+	turf_animation('icons/effects/effects.dmi',"cultwall", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
 	return
 
 /turf/simulated/wall/attack_construct(mob/user as mob)

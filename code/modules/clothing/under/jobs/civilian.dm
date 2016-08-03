@@ -17,7 +17,7 @@
 	item_state = "caparmor"
 	_color = "captain"
 	flags = FPRINT  | ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 
 /obj/item/clothing/under/rank/cargo

@@ -180,8 +180,9 @@ rcd light flash thingy on matter drain
 /datum/AI_Module/large/highrescams
 	module_name = "High Resolution Cameras"
 	mod_pick_name = "High Res Cameras"
-	description = "Allows the AI to read papers and the lips of crewmembers from his cameras!"
+	description = "Allows the AI to better interpret the actions of the crew! Read papers and their lips from his cameras!"
 	cost = 10
+	one_time = 1
 
 	power_type = /mob/living/silicon/ai/proc/highrescameras
 
@@ -191,7 +192,7 @@ rcd light flash thingy on matter drain
 
 	ai_flags |= HIGHRESCAMS
 
-	eyeobj.addHear()
+	eyeobj.high_res = 1
 	src.verbs -= /mob/living/silicon/ai/proc/highrescameras
 
 

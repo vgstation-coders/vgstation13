@@ -4,7 +4,6 @@
 	density = 0
 	anchored = 1
 	w_type=NOT_RECYCLABLE
-	layer = 3
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "uglymine"
 	var/triggerproc = "explode" //name of the proc thats called when the mine is triggered

@@ -452,7 +452,7 @@ proc/move_mining_shuttle()
 	desc = "A resonating field that significantly damages anything inside of it when the field eventually ruptures."
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "shield1"
-	layer = 4.1
+	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
 	var/resonance_damage = 30
 	var/creator = null
@@ -839,7 +839,8 @@ proc/move_mining_shuttle()
 		else
 			for(M in L)
 				var/turf/T = get_turf(M)
-				var/image/I = image('icons/turf/walls.dmi', loc = T, icon_state = M.scan_state, layer = 18)
+				var/image/I = image('icons/turf/walls.dmi', loc = T, icon_state = M.scan_state, layer = UNDER_HUD_LAYER)
+				I.plane = HUD_PLANE
 				C.images += I
 				spawn(30)
 					if(C)

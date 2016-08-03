@@ -4,7 +4,7 @@
 	damage = 0
 	damage_type = BURN
 	nodamage = 1
-	layer = 13
+	layer = PROJECTILE_LAYER
 	flag = "energy"
 	fire_sound = 'sound/weapons/ion.ogg'
 
@@ -29,7 +29,7 @@
 	damage = 0
 	damage_type = BURN
 	nodamage = 1
-	layer = 13
+	layer = PROJECTILE_LAYER
 	flag = "energy"
 	var/temperature = 300
 	fire_sound = 'sound/weapons/pulse3.ogg'
@@ -253,7 +253,7 @@ obj/item/projectile/kinetic/New()
 	name = "kinetic explosion"
 	icon = 'icons/obj/projectiles.dmi'
 	icon_state = "kinetic_blast"
-	layer = 4.1
+	plane = ABOVE_HUMAN_PLANE
 
 /obj/item/effect/kinetic_blast/New()
 	..()

@@ -1,6 +1,5 @@
 /obj/effect/decal/warning_stripes
 	icon = 'icons/effects/warning_stripes.dmi'
-	layer = 2.1
 
 /obj/effect/decal/warning_stripes/New()
 	. = ..()
@@ -39,7 +38,6 @@
 
 	icon = 'icons/effects/warning_stripes.dmi'
 	icon_state = "maintguide"
-	layer = 2.45
 	anchored = 1  //Otherwise people move them using crates
 
 //Old parts of the station are not shielded against radiations, but don't blink because they lack power. Those big ass warnings should be enough to inform people.
