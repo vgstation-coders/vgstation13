@@ -242,6 +242,9 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/projectile_check()
 	return
+	
+//Override this to have source respond differently to visible_messages said by an atom A
+/atom/proc/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 
 /*
  *	atom/proc/search_contents_for(path,list/filter_path=null)
