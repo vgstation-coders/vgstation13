@@ -1681,11 +1681,9 @@
 
 /mob/living/carbon/human/reset_layer()
 	if(lying)
-		plane = PLANE_OBJ
-		layer = MOB_LAYER - 0.1 //so we move under bedsheets
+		plane = LYING_HUMAN_PLANE
 	else
-		layer = MOB_LAYER
-		plane = PLANE_MOB
+		plane = HUMAN_PLANE
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
 	if(new_amount > held_items.len)

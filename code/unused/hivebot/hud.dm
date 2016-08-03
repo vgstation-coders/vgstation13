@@ -112,7 +112,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "inv3"
 	using.screen_loc = ui_inv3
-	using.layer = 20
+	using.layer = HUD_ITEM_LAYER
 	src.adding += using
 	mymob:inv3 = using
 
@@ -125,7 +125,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = (mymob.a_intent == "hurt" ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
-	using.layer = 20
+	using.layer = HUD_ITEM_LAYER
 	src.adding += using
 	action_intent = using
 
@@ -135,7 +135,7 @@
 	using.icon_state = "s_arrow"
 	using.dir = WEST
 	using.screen_loc = ui_iarrowleft
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 	using = new src.h_type( src )
@@ -144,7 +144,7 @@
 	using.icon_state = "s_arrow"
 	using.dir = EAST
 	using.screen_loc = ui_iarrowright
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 //End of Intent
 
@@ -175,7 +175,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "panel"
 	using.screen_loc = ui_throw
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 //Store
@@ -225,7 +225,7 @@
 	mymob.flash.icon_state = "blank"
 	mymob.flash.name = "flash"
 	mymob.flash.screen_loc = "1,1 to 15,15"
-	mymob.flash.layer = 17
+	mymob.flash.layer = UNDER_HUD_LAYER
 
 	mymob.sleep = new /obj/screen( null )
 	mymob.sleep.icon = 'icons/mob/screen1_robot.dmi'

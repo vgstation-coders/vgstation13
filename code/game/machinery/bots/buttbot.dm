@@ -13,7 +13,6 @@ Here it is: Buttbot.
 	desc = "Somehow, this doesn't bode well with you."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "buttbot"
-	layer = 5.0
 	density = 0
 	anchored = 0
 	//weight = 1.0E7

@@ -18,7 +18,7 @@
 	icon_state = "table"
 	density = 1
 	anchored = 1.0
-	layer = 2.8
+	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
 	var/icon/clicked
@@ -493,7 +493,7 @@
 
 	dir = direction
 	if(dir != NORTH)
-		layer = 5
+		plane = ABOVE_HUMAN_PLANE
 	flipped = 1
 	flags |= ON_BORDER
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
@@ -509,8 +509,7 @@
 	verbs -=/obj/structure/table/proc/do_put
 	verbs +=/obj/structure/table/verb/do_flip
 
-	layer = initial(layer)
-	plane = initial(plane)
+	reset_plane_and_layer()
 	flipped = 0
 	flags &= ~ON_BORDER
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))

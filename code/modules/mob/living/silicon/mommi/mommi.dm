@@ -422,8 +422,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			if (client)
 				client.screen -= tool_state
 		tool_state = O
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		contents += O
 		inv_tool.icon_state = "inv1 +a"
 		module_active=tool_state

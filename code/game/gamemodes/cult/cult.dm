@@ -488,14 +488,16 @@
 					var/imageloc = cult_mind.current
 					if(istype(cult_mind.current.loc,/obj/mecha))
 						imageloc = cult_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
+					I.plane = CULT_ANTAG_HUD_PLANE
 					cultist.current.client.images += I
 			if(cult_mind.current)
 				if(cult_mind.current.client)
 					var/imageloc = cultist.current
 					if(istype(cultist.current.loc,/obj/mecha))
 						imageloc = cultist.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult", layer = 13)
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
+					J.plane = CULT_ANTAG_HUD_PLANE
 					cult_mind.current.client.images += J
 
 

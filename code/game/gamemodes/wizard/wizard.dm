@@ -378,7 +378,8 @@ Made a proc so this is not repeated 14 (or more) times.*/
 							var/imageloc = wizard_mind_1.current
 							if(istype(wizard_mind_1.current.loc,/obj/mecha))
 								imageloc = wizard_mind_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard")
+							I.plane = WIZ_ANTAG_HUD_PLANE
 							wizard_mind.current.client.images += I
 
 /datum/game_mode/proc/update_wizard_icons_added(datum/mind/wizard_mind)
@@ -388,7 +389,8 @@ Made a proc so this is not repeated 14 (or more) times.*/
 				var/imageloc = wizard_mind.current
 				if(istype(wizard_mind.current.loc,/obj/mecha))
 					imageloc = wizard_mind.current.loc
-				var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard", layer = 13)
+				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard")
+				I.plane = WIZ_ANTAG_HUD_PLANE
 				wizard_mind.current.client.images += I
 
 /datum/game_mode/proc/update_wizard_icons_removed(datum/mind/wizard_mind)

@@ -138,7 +138,6 @@
 				return
 		if(3.0)
 			return
-	return
 
 /turf/simulated/floor/engine/cult
 	name = "engraved floor"
@@ -261,8 +260,8 @@
 
 /turf/simulated/floor/beach/water/New()
 	..()
-	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water5","layer"=MOB_LAYER+0.1)
-	water.plane = PLANE_MOB
+	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water5")
+	water.plane = ABOVE_HUMAN_PLANE
 	overlays += water
 
 /turf/simulated/floor/grass

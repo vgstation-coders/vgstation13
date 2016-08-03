@@ -9,7 +9,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "medibot0"
 	icon_initial = "medibot"
-	layer = 5.0
 	density = 0
 	anchored = 0
 	health = 20

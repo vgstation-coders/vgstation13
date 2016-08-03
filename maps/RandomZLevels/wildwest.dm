@@ -107,7 +107,6 @@
 	desc = "What is that thing?"
 	density = 1
 	anchored = 1
-	layer = 3
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "blob"
 	var/triggerproc = "explode" //name of the proc thats called when the mine is triggered

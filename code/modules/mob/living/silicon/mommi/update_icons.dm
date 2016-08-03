@@ -34,14 +34,16 @@
 
 	// Add the MoMMI eyes
 	// Put our eyes just on top of the lighting, so it looks emissive in maint tunnels.
-	var/overlay_layer = LIGHTING_LAYER + 1
-	var/overlay_plane = PLANE_LIGHTING
-	if(layer != MOB_LAYER)
-		overlay_plane = PLANE_TURF
-		overlay_layer=TURF_LAYER+0.2
+	var/overlay_layer = ABOVE_LIGHTING_LAYER
+	var/overlay_plane = LIGHTING_PLANE
+	if(plane == HIDING_MOB_PLANE)	// ie it's hiding
+		overlay_plane = FLOAT_PLANE
+		overlay_layer = FLOAT_LAYER
+
 	var/image/eyes = image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
 	eyes.plane = overlay_plane
 	overlays += eyes
+
 	if(anchored)
 		overlays += image(icon,"[subtype]-park",overlay_layer)
 

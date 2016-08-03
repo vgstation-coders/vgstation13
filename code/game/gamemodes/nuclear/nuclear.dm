@@ -82,7 +82,8 @@
 							var/imageloc = synd_mind_1.current
 							if(istype(synd_mind_1.current.loc,/obj/mecha))
 								imageloc = synd_mind_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+							I.plane = SYNDIE_ANTAG_HUD_PLANE
 							synd_mind.current.client.images += I
 
 /datum/game_mode/proc/update_synd_icons_added(datum/mind/synd_mind)
@@ -95,14 +96,16 @@
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd.current.client.images += I
 			if(synd_mind.current)
 				if(synd_mind.current.client)
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd_mind.current.client.images += I
 
 		update_all_synd_icons()

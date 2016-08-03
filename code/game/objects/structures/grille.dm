@@ -8,7 +8,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	pressure_resistance = 5*ONE_ATMOSPHERE
-	layer = 2.9
+	layer = BELOW_OBJ_LAYER
 	explosion_resistance = 5
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0

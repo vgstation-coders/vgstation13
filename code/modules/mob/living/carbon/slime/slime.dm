@@ -5,9 +5,7 @@
 	icon_state = "grey baby slime"
 	pass_flags = PASSTABLE
 	speak_emote = list("hums")
-
-	layer = 5
-
+	layer = SLIME_LAYER
 	maxHealth = 150
 	health = 150
 	gender = NEUTER
@@ -1133,7 +1131,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
 	unacidable = 1
-	layer = TURF_LAYER
+	plane = ABOVE_TURF_PLANE
+	layer = RUNE_LAYER
 	var/list/mob/dead/observer/ghosts[0]
 
 	New()

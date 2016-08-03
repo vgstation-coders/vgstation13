@@ -5,7 +5,7 @@
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
 		nullblock = 1
-		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
 		return 1
 	else if(target.contents)
 		for(var/atom/A in target.contents)
@@ -18,7 +18,7 @@
 	c_animation.density = 0
 	c_animation.anchored = 1
 	c_animation.icon = 'icons/effects/effects.dmi'
-	c_animation.layer = 5
+	c_animation.plane = EFFECTS_LAYER
 	c_animation.master = src.loc
 	c_animation.icon_state = "[animation_icon]"
 	flick("cultification",c_animation)
@@ -613,7 +613,7 @@
 	"<span class='warning'>You hear liquid flowing.</span>")
 
 	animation = new(D.loc)
-	animation.layer = usr.layer + 1
+	animation.plane = EFFECTS_PLANE
 	animation.icon_state = "blank"
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = this_rune

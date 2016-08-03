@@ -1,7 +1,7 @@
 /turf
 	icon = 'icons/turf/floors.dmi'
 	level = 1.0
-	plane = PLANE_TURF
+	plane = TURF_PLANE
 
 	luminosity = 0
 

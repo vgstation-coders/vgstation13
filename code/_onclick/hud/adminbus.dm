@@ -3,7 +3,7 @@
 	mymob.gui_icons.adminbus_bg.icon = 'icons/adminbus/fullscreen.dmi'
 	mymob.gui_icons.adminbus_bg.icon_state = "HUD"
 	mymob.gui_icons.adminbus_bg.name = "HUD"
-	mymob.gui_icons.adminbus_bg.layer = 19
+	mymob.gui_icons.adminbus_bg.layer = HUD_BASE_LAYER
 	mymob.gui_icons.adminbus_bg.screen_loc = ui_adminbus_bg
 
 	mymob.gui_icons.adminbus_delete = getFromPool(/obj/screen/adminbus)

@@ -9,11 +9,11 @@ var/global/list/blood_list = list()
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mfloor1"
 	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
-	plane = PLANE_NOIR_BLOOD
+	plane = ABOVE_TURF_PLANE
+	layer = BLOOD_LAYER
 	appearance_flags = TILE_BOUND
 	var/base_icon = 'icons/effects/blood.dmi'
 
@@ -35,9 +35,9 @@ var/global/list/blood_list = list()
 	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
 	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
-		plane = PLANE_NOIR_BLOOD
+		plane = NOIR_BLOOD_PLANE
 	else
-		plane = PLANE_TURF
+		plane = ABOVE_TURF_PLANE
 	var/icon/blood = icon(base_icon,icon_state,dir)
 	blood.Blend(basecolor,ICON_MULTIPLY)
 
@@ -85,7 +85,6 @@ var/global/list/blood_list = list()
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "gibbl5"
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
@@ -93,9 +92,9 @@ var/global/list/blood_list = list()
 
 /obj/effect/decal/cleanable/blood/gibs/update_icon()
 	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
-		plane = PLANE_NOIR_BLOOD
+		plane = NOIR_BLOOD_PLANE
 	else
-		plane = PLANE_TURF
+		plane = ABOVE_TURF_PLANE
 	var/image/giblets = new(base_icon, "[icon_state]_flesh", dir)
 	if(!fleshcolor || fleshcolor == "rainbow")
 		fleshcolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
@@ -172,7 +171,6 @@ var/global/list/blood_list = list()
 	setGender(PLURAL)
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mucus"
 	random_icon_states = list("mucus")

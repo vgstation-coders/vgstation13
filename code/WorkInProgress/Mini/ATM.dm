@@ -21,7 +21,7 @@ log transactions
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 10
-	layer = 2.9//keep hiding those bills!
+	layer = BELOW_OBJ_LAYER
 	var/datum/money_account/authenticated_account
 	var/number_incorrect_tries = 0
 	var/previous_account_number = 0

@@ -49,7 +49,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	mineral_turfs -= src
 	return ..(N, tell_universe, 1, allow)
 
-/turf/unsimulated/mineral/initialize()
+/turf/unsimulated/mineral/initialize() 	// TODO: OPTIMISE THIS USING PLANES
 	spawn(1)
 		var/turf/T
 		if((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor)))

@@ -123,5 +123,6 @@
 	if(usr.isUnconscious())
 		return
 
-	layer = TURF_LAYER+0.2
+	plane = ABOVE_TURF_PLANE
+	layer = MOUSETRAP_LAYER
 	to_chat(usr, "<span class='notice'>You hide [src].</span>")

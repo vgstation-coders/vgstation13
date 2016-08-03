@@ -70,8 +70,8 @@ var/const/tk_maxrange = 15
 	flags = NOBLUDGEON
 	//item_state = null
 	w_class = W_CLASS_GIANT
-	layer = 20
-	plane = PLANE_HUD
+	layer = HUD_ITEM_LAYER
+	plane = HUD_PLANE
 	abstract = 1
 
 	var/last_throw = 0
@@ -88,7 +88,7 @@ var/const/tk_maxrange = 15
 
 	//stops TK grabs being equipped anywhere but into hands
 /obj/item/tk_grab/equipped(var/mob/user, var/slot, hand_index)
-	if(hand_index)	
+	if(hand_index)
 		return
 	qdel(src)
 
@@ -114,7 +114,7 @@ var/const/tk_maxrange = 15
 	var/d = get_dist(user, target)
 	if(focus)
 		d = max(d,get_dist(user,focus)) // whichever is further
-		
+
 	/*switch(d)
 		if(0)
 			;
@@ -128,11 +128,11 @@ var/const/tk_maxrange = 15
 		else
 			to_chat(user, "<span class='notice'>Your mind won't reach that far.</span>")
 			return*/
-			
+
 	if(d > tk_maxrange)
 		to_chat(user, "<span class='warning'>Your mind won't reach that far.</span>")
 		return
-		
+
 	if(!focus)
 		focus_object(target, user)
 		return
@@ -140,7 +140,7 @@ var/const/tk_maxrange = 15
 	if(target == focus)
 		target.attack_self_tk(user)
 		return // todo: something like attack_self not laden with assumptions inherent to attack_self
-		
+
 	if(!istype(target, /turf) && istype(focus,/obj/item) && target.Adjacent(focus))
 		var/obj/item/I = focus
 		var/isb = I.siemens_coefficient
@@ -179,7 +179,7 @@ var/const/tk_maxrange = 15
 	O.anchored = 1
 	O.density = 0
 	O.layer = FLY_LAYER
-	O.plane = PLANE_EFFECTS
+	O.plane = EFFECTS_PLANE
 	O.dir = pick(cardinal)
 	O.icon = 'icons/effects/effects.dmi'
 	O.icon_state = "nothing"

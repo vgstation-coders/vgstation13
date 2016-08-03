@@ -262,7 +262,7 @@ var/global/list/bombermangear = list()
 	icon_state = "explosion_core"
 	density = 0
 	anchored = 1
-	layer = LIGHTING_LAYER + 1
+	plane = EFFECTS_PLANE
 	var/destroy_environnement = 0
 	var/hurt_players = 0
 
@@ -311,7 +311,7 @@ obj/structure/bomberflame/Destroy()
 
 	for(var/obj/item/weapon/bomberman/dispenser in T)
 		dispenser.lost()
-		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
+		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = MOB_PLANE)
 
 	for(var/mob/living/L in T)
 		for(var/obj/item/weapon/bomberman/dispenser in L)
@@ -319,7 +319,7 @@ obj/structure/bomberflame/Destroy()
 			dispenser.loc = L.loc
 			//dispenser.dropped(C)
 			dispenser.lost()
-			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
+			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = MOB_PLANE)
 
 	if(hurt_players)
 		for(var/mob/living/L in T)

@@ -12,7 +12,7 @@
 	var/gain_peak = 632		// gain peak (nm)
 	var/gain_width = 35		// gain bandwidth (nm)
 	var/peak_output = 0.005	// max output 5 mW
-	layer = OBJ_LAYER + 0.1
+	layer = ABOVE_OBJ_LAYER
 
 	w_class = W_CLASS_LARGE
 	m_amt = 500

@@ -725,8 +725,7 @@ var/global/list/loopModeNames=list(
 	icon_state = ""
 	light_color = LIGHT_COLOR_BLUE
 	luminosity = 0
-	layer = FLY_LAYER+1
-	plane = PLANE_EFFECTS
+	plane = EFFECTS_PLANE
 	pixel_x = -32
 	pixel_y = -32
 

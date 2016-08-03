@@ -457,6 +457,8 @@
 	icon_state = "cjumper-green"
 
 /obj/item/clothing/suit/spaceblanket
+	plane = ABOVE_OBJ_PLANE
+	layer = BLANKIES_LAYER
 	w_class = W_CLASS_SMALL
 	icon_state = "shittyuglyawfulBADblanket"
 	name = "space blanket"
