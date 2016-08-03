@@ -58,7 +58,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	name = "Bluespace Gigabeacon"
 	desc = "A device that draws power from bluespace and creates a permanent tracking beacon."
 	level = 1		// underfloor
-	layer = 2.5
+	layer = BELOW_OBJ_LAYER
 	anchored = 1
 
 /obj/item/beacon/bluespace_beacon/New()

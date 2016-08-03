@@ -363,7 +363,6 @@
 	icon_state = "table"
 	density = 1
 	anchored = 1.0
-	layer = 2.8
 	throwpass = 1	//You can throw objects over this, despite it's density.
 
 /obj/structure/table/holotable/attack_paw(mob/user as mob)
@@ -415,7 +414,7 @@
 	icon_state = "rwindow"
 	desc = "A window."
 	density = 1
-	layer = 3.2//Just above doors
+	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1.0
 	flags = ON_BORDER

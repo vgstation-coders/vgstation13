@@ -3,7 +3,7 @@
 
 	var/w_type = NOT_RECYCLABLE  // Waste category for sorters. See setup.dm
 
-	layer = 3
+	plane = OBJ_PLANE
 
 	var/last_move = null //Direction in which this atom last moved
 	var/last_moved = 0   //world.time when this atom last moved

@@ -37,7 +37,7 @@
 
 	for(var/I in visible_items)
 		var/image/new_img = image(I, icon_state = visible_items[I], layer = MOB_LAYER)
-		new_img.plane = PLANE_MOB
+		new_img.plane = MOB_PLANE
 		overlays.Add(new_img)
 
 /mob/living/simple_animal/hostile/humanoid/Die()

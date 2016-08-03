@@ -6,7 +6,8 @@
 
 	//luminosity = 5
 	//light_color="#0066FF"
-	layer = LIGHTING_LAYER + 1
+	layer = SUPERMATTER_WALL_LAYER
+	plane = LIGHTING_PLANE
 
 	var/next_check=0
 	var/list/avail_dirs = list(NORTH,SOUTH,EAST,WEST)

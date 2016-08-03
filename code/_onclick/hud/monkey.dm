@@ -12,7 +12,6 @@
 	using.icon = ui_style
 	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
-	using.layer = 20
 	src.adding += using
 	action_intent = using
 
@@ -26,7 +25,7 @@
 	using.name = "help"
 	using.icon = ico
 	using.screen_loc = ui_acti
-	using.layer = 21
+	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	help_intent = using
 
@@ -37,7 +36,7 @@
 	using.name = "disarm"
 	using.icon = ico
 	using.screen_loc = ui_acti
-	using.layer = 21
+	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	disarm_intent = using
 
@@ -48,7 +47,7 @@
 	using.name = "grab"
 	using.icon = ico
 	using.screen_loc = ui_acti
-	using.layer = 21
+	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	grab_intent = using
 
@@ -59,7 +58,7 @@
 	using.name = "harm"
 	using.icon = ico
 	using.screen_loc = ui_acti
-	using.layer = 21
+	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	hurt_intent = using
 
@@ -71,7 +70,6 @@
 	using.icon = ui_style
 	using.icon_state = (mymob.m_intent == "run" ? "running" : "walking")
 	using.screen_loc = ui_movi
-	using.layer = 20
 	src.adding += using
 	move_intent = using
 
@@ -80,40 +78,10 @@
 	using.icon = ui_style
 	using.icon_state = "act_drop"
 	using.screen_loc = ui_drop_throw
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 	init_hand_icons(ui_style)
-
-	/*
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "r_hand"
-	inv_box.dir = WEST
-	inv_box.icon = ui_style
-	inv_box.icon_state = "hand_inactive"
-	if(mymob && mymob.active_hand == GRASP_RIGHT_HAND)
-		inv_box.icon_state = "hand_active"
-	inv_box.screen_loc = ui_rhand
-	inv_box.slot_id = null
-	inv_box.hand_index = GRASP_RIGHT_HAND
-	inv_box.layer = 19
-	src.r_hand_hud_object = inv_box
-	src.adding += inv_box
-
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "l_hand"
-	inv_box.dir = EAST
-	inv_box.icon = ui_style
-	inv_box.icon_state = "hand_inactive"
-	if(mymob && mymob.active_hand == GRASP_LEFT_HAND)
-		inv_box.icon_state = "hand_active"
-	inv_box.screen_loc = ui_lhand
-	inv_box.slot_id = null
-	inv_box.hand_index = GRASP_LEFT_HAND
-	inv_box.layer = 19
-	src.l_hand_hud_object = inv_box
-	src.adding += inv_box
-	*/
 
 	using = getFromPool(/obj/screen/inventory)
 	using.name = "hand"
@@ -121,7 +89,7 @@
 	using.icon = ui_style
 	using.icon_state = "hand1"
 	using.screen_loc = ui_swaphand1
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 	using = getFromPool(/obj/screen/inventory)
@@ -130,7 +98,7 @@
 	using.icon = ui_style
 	using.icon_state = "hand2"
 	using.screen_loc = ui_swaphand2
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 	using = getFromPool(/obj/screen)
@@ -138,7 +106,7 @@
 	using.icon = ui_style
 	using.icon_state = "act_resist"
 	using.screen_loc = ui_pull_resist
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 	if(MO.canWearClothes)
@@ -149,7 +117,7 @@
 		inv_box.slot_id = slot_w_uniform
 		inv_box.icon_state = "center"
 		inv_box.screen_loc = ui_monkey_uniform
-		inv_box.layer = 19
+		inv_box.layer = HUD_BASE_LAYER
 		src.adding += inv_box
 
 	if(MO.canWearHats)
@@ -159,7 +127,7 @@
 		inv_box.icon_state = "hair"
 		inv_box.screen_loc = ui_monkey_hat
 		inv_box.slot_id = slot_head
-		inv_box.layer = 19
+		inv_box.layer = HUD_BASE_LAYER
 		src.adding += inv_box
 
 	if(MO.canWearGlasses)
@@ -169,7 +137,7 @@
 		inv_box.icon_state = "glasses"
 		inv_box.screen_loc = ui_monkey_glasses
 		inv_box.slot_id = slot_glasses
-		inv_box.layer = 19
+		inv_box.layer = HUD_BASE_LAYER
 		src.adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
@@ -179,7 +147,7 @@
 	inv_box.icon_state = "equip"
 	inv_box.screen_loc = ui_monkey_mask
 	inv_box.slot_id = slot_wear_mask
-	inv_box.layer = 19
+	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
 	inv_box = getFromPool(/obj/screen/inventory)
@@ -189,7 +157,7 @@
 	inv_box.icon_state = "equip"
 	inv_box.screen_loc = ui_back
 	inv_box.slot_id = slot_back
-	inv_box.layer = 19
+	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
 	mymob.throw_icon = getFromPool(/obj/screen)
@@ -275,5 +243,3 @@
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
 	mymob.client.screen += src.adding + src.other
-
-	return

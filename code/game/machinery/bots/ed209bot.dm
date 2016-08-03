@@ -4,7 +4,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "ed2090"
 	icon_initial = "ed209"
-	layer = 5.0
 	density = 1
 	anchored = 0
 //	weight = 1.0E7

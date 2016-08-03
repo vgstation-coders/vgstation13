@@ -3,8 +3,7 @@
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive. Has to cooldown between each use."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "separator-AO1"
-	layer = MOB_LAYER+1 // Overhead
-	plane = PLANE_MOB
+	plane = ABOVE_HUMAN_PLANE
 	anchored = 1
 	density = 1
 	var/transform_dead = 0 //This variable doesn't seem to do anything

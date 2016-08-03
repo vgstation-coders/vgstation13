@@ -29,7 +29,7 @@
 	var/max_health = 100
 	var/destroyed = 0
 	var/inertia_dir = 0
-	plane = PLANE_MOB
+	plane = MOB_PLANE
 
 	var/can_spacemove = 0
 	var/ethereal = 0
@@ -240,11 +240,9 @@
 
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)
-		layer = FLY_LAYER
-		plane = PLANE_EFFECTS
+		plane = ABOVE_HUMAN_PLANE
 	else
-		layer = OBJ_LAYER
-		plane = PLANE_OBJ
+		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/vehicle/update_dir()
 	. = ..()

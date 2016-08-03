@@ -4,7 +4,9 @@ var/list/poddoors = list()
 	desc = "Why it no open!!!"
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "pdoor1"
-
+	layer = BELOW_TABLE_LAYER
+	open_layer = BELOW_TABLE_LAYER
+	closed_layer = ABOVE_DOOR_LAYER
 	explosion_resistance = 25//used by the old deprecated explosion_recursive.dm
 
 	explosion_block = 3
@@ -41,11 +43,11 @@ var/list/poddoors = list()
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	if(density)
-		layer = 3.3		//to override door.New() proc
+		layer = closed_layer
 	else
-		layer = initial(layer)
+		layer = open_layer
 	poddoors += src
-	return
+
 
 /obj/machinery/door/poddoor/Destroy()
 	poddoors -= src
@@ -84,7 +86,7 @@ var/list/poddoors = list()
 	src.icon_state = openicon
 	src.set_opacity(0)
 	sleep(10)
-	layer = initial(layer)
+	layer = open_layer
 	src.density = 0
 	update_nearby_tiles()
 
@@ -99,7 +101,7 @@ var/list/poddoors = list()
 	if (src.operating)
 		return
 	src.operating = 1
-	layer = 3.3
+	layer = closed_layer
 	flick(closingicon, src)
 	src.icon_state = closedicon
 	src.density = 1

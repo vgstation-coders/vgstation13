@@ -7,7 +7,6 @@
 	desc = "It's a g-g-g-g-ghooooost!" //jinkies!
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "ghost1"
-	layer = 8
 	stat = DEAD
 	density = 0
 	lockflags = 0 //Neither dense when locking or dense when locked to something
@@ -19,7 +18,8 @@
 	universal_understand = 1
 	universal_speak = 1
 	//languages = ALL
-	plane = PLANE_LIGHTING
+	plane = LIGHTING_PLANE
+	layer = GHOST_LAYER
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
 

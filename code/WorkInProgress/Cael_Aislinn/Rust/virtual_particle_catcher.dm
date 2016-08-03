@@ -4,7 +4,7 @@
 	icon = 'icons/effects/effects.dmi'
 	density = 0
 	anchored = 1
-	layer = 4
+	plane = ABOVE_HUMAN_PLANE
 	var/obj/effect/rust_em_field/parent
 	var/mysize = 0
 

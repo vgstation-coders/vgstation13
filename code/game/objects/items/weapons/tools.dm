@@ -269,7 +269,7 @@
 		user.u_equip(src,0)
 
 		src.master = F
-		src.layer = initial(src.layer)
+		reset_plane_and_layer()
 		user.u_equip(src,0)
 		if (user.client)
 			user.client.screen -= src
@@ -278,7 +278,6 @@
 		return
 
 	..()
-	return
 
 
 /obj/item/weapon/weldingtool/process()
@@ -343,12 +342,10 @@
 			if(isliving(O))
 				var/mob/living/L = O
 				L.IgniteMob()
-	return
 
 
 /obj/item/weapon/weldingtool/attack_self(mob/user as mob)
 	toggle()
-	return
 
 //Returns the amount of fuel in the welder
 /obj/item/weapon/weldingtool/proc/get_fuel()
@@ -490,7 +487,6 @@
 				user.disabilities |= NEARSIGHTED
 				spawn(100)
 					user.disabilities &= ~NEARSIGHTED
-	return
 
 /obj/item/weapon/weldingtool/empty
 	start_fueled = 0

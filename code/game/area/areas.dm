@@ -9,13 +9,12 @@
 	var/list/area_turfs
 	var/turret_protected = 0
 	var/list/turretTargets = list()
-
+	plane = BASE_PLANE
 	var/base_turf_type = null
 
 /area/New()
 	area_turfs = list()
 	icon_state = ""
-	layer = 10
 	uid = ++global_uid
 	if (x) // If we're actually located in the world
 		areas |= src

@@ -10,7 +10,7 @@
 	opacity = 0
 	anchored = 1
 	unacidable = 1
-	layer = 3.9
+	layer = ABOVE_DOOR_LAYER
 	infra_luminosity = 15
 	internal_gravity = 1 // Can move in 0-gravity
 	var/mob/living/carbon/occupant

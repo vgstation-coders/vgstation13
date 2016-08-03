@@ -2,7 +2,7 @@
 #define MOB_MINDBREAKER_HALLUCINATING 100
 
 /mob
-	plane = PLANE_MOB
+	plane = MOB_PLANE
 
 /obj/screen/fuckstat
 	name = "Toggle Stat"
@@ -398,7 +398,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
 			narsimage.mouse_opacity = 0
 		if(!narglow) //Create narglow
-			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", LIGHTING_LAYER + 2, 1)
+			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", NARSIE_GLOW, 1)
+			narglow.plane = LIGHTING_PLANE
 			narglow.mouse_opacity = 0
 /* Animating narsie works like shit thanks to fucking byond
 		if(!N.old_x || !N.old_y)
@@ -462,7 +463,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	var/turf/T_mob = get_turf(src)
 	if((R.z == T_mob.z) && (get_dist(R,T_mob) <= (R.consume_range+10)) && !(R in view(T_mob)))
 		if(!riftimage)
-			riftimage = image('icons/obj/rift.dmi',T_mob,"rift", LIGHTING_LAYER + 2, 1)
+			riftimage = image('icons/obj/rift.dmi',T_mob,"rift", SUPER_PORTAL_LAYER, 1)
+			riftimage.plane = LIGHTING_PLANE
 			riftimage.mouse_opacity = 0
 
 		var/new_x = 32 * (R.x - T_mob.x) + R.pixel_x

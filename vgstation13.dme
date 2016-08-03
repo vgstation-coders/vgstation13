@@ -10,7 +10,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
-#include "code\_planes.dm"
+#include "code\_planes+layers.dm"
 #include "code\global.dm"
 #include "code\hub.dm"
 #include "code\names.dm"

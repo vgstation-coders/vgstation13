@@ -1152,7 +1152,9 @@
 
 	overlays.len = 0
 	if(stat == 0 && cell != null)
-		overlays += image(icon,"eyes-[icon_state]", LIGHTING_LAYER + 1)
+		var/image/eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
+		eyes.plane = LIGHTING_PLANE
+		overlays += eyes
 
 	if(opened)
 		if(custom_sprite)//Custom borgs also have custom panels, heh

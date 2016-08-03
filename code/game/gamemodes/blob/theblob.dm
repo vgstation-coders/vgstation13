@@ -53,7 +53,7 @@ var/list/blob_looks
 	var/fire_resist = 1
 	pixel_x = -16
 	pixel_y = -16
-	layer = 6
+	plane = BLOB_PLANE
 	var/spawning = 2
 	var/dying = 0
 	var/mob/camera/blob/overmind = null
@@ -65,7 +65,6 @@ var/list/blob_looks
 
 	var/time_since_last_pulse
 
-	var/layer_new = 6
 	var/icon_new = "center"
 	var/icon_classic = "blob"
 
@@ -238,7 +237,7 @@ var/list/blob_looks
 					hurt_icon = "hurt_50"
 				else
 					hurt_icon = "hurt_25"
-			overlays += image(icon,hurt_icon, layer = layer+0.15)
+			overlays += image(icon,hurt_icon)
 
 /obj/effect/blob/proc/update_looks(var/right_now = 0)
 	switch(blob_looks[looks])
@@ -246,14 +245,14 @@ var/list/blob_looks
 			icon_state = icon_new
 			pixel_x = -16
 			pixel_y = -16
-			layer = layer_new
+			layer = initial(layer)
 			if(right_now)
 				spawning = 0
 		if(32)
 			icon_state = icon_classic
 			pixel_x = 0
 			pixel_y = 0
-			layer = 3
+			layer = OBJ_LAYER
 			overlays.len = 0
 
 	switch(looks)
@@ -415,8 +414,9 @@ var/list/blob_looks = list(
 	if(blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
+			underlays.len = 0
 
-			overlays += image(icon,"roots", layer = 3)
+			underlays += image(icon,"roots")
 
 			if(!spawning)
 				for(var/obj/effect/blob/B in orange(src,1))
@@ -430,11 +430,11 @@ var/list/blob_looks = list(
 						else
 
 							if(istype(B,/obj/effect/blob/core))
-								overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer)
+								overlays += image(icon,"connect",dir = get_dir(src,B))
 							else
 								var/num = rand(1,100)
 								num /= 10000
-								overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer+0.1-num)
+								overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer-num)
 
 			if(spawnend)
 				spawn(10)

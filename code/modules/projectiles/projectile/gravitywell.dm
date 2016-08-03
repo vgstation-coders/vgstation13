@@ -59,7 +59,7 @@
 	pixel_y = -64
 	unacidable = 1
 	density = 0
-	layer = 2.1
+	layer = DECAL_LAYER
 	anchored = 1
 	alpha = 255
 	mouse_opacity = 0
@@ -132,7 +132,8 @@
 	pixel_y = -64
 	unacidable = 1
 	density = 0
-	layer = 30
+	plane = EFFECTS_PLANE
+	layer = GRAVITYGRID_LAYER
 	anchored = 1
 	color = "green"
 	alpha = 0
@@ -148,7 +149,7 @@
 /obj/effect/overlay/gravitygrid/proc/LevelUp()
 	if(!GG)
 		GG = new(loc)
-		GG.layer = layer-1
+		GG.layer = layer-0.0001
 		GG.size = size+2
 		GG.alpha = 255
 		GG.transform *= size/5

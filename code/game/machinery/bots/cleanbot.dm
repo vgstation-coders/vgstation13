@@ -20,7 +20,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "cleanbot0"
 	icon_initial = "cleanbot"
-	layer = 5.0
 	density = 0
 	anchored = 0
 	//weight = 1.0E7

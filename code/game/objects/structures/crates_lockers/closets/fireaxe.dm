@@ -13,7 +13,9 @@
 	var/hitstaken = 0
 	var/smashed = 0
 	locked = 1
-	layer = TURF_LAYER + 0.1 //The sprite is fucking huge, so render it under all other mounted items so it doesn't cover any of them.
+	plane = ABOVE_TURF_PLANE
+	layer = FIREAXE_LOCKER_LAYER
+
 
 /obj/structure/closet/fireaxecabinet/empty
 	fireaxe = null

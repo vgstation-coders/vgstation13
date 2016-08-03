@@ -51,7 +51,6 @@
 	var/raised = 0
 	var/enabled = 1
 	anchored = 1
-	layer = 3
 	invisibility = 2
 	density = 1
 	var/health = 18
