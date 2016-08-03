@@ -465,6 +465,7 @@
 	heat_conductivity = 0 // Good luck losing heat in this!
 	slowdown = 10
 	var/bearpelt = 0
+	var/capebase = 0
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
 	..()
@@ -474,6 +475,17 @@
 		qdel(src)
 		var/obj/advanced = new /obj/item/clothing/suit/spaceblanket/advanced (src.loc)
 		user.put_in_hands(advanced)
+
+//SKILL CAPES
+/obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
+	..()
+	if(istype(W,/obj/item/trash/plate) && !capebase)
+		to_chat(user,"<space class='notice'>You add \the [W] to \the [src].</span")
+		qdel(W)
+		qdel(src)
+		var/obj/craftingcapestart = new /obj/item/clothing/back/skillcapebase (src.loc)
+		user.put_in_hands(craftingcapestart)
+
 
 /obj/item/clothing/suit/spaceblanket/advanced
 	name = "advanced space blanket"
