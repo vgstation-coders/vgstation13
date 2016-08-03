@@ -1,17 +1,17 @@
-var/global/list/syndicate_roboticist_cameras = list();
+var/global/list/syndicate_roboticist_cameras = list(); //list of all the cameras
 /obj/item/device/syndicate_cyborg_camera_bug
   name = "Cyborg Camera Bug"
-  desc = "A crafty device designed by the syndicate. It can be placed inside on a cyborg. It will infiltrate the cyborg's sensors and transmit those in a encrypted signal to a reciever."
+  desc = "A tiny weird looking device with a few wires sticking out and a small antenna."
   icon = 'icons/obj/device.dmi'
   icon_state = "implant_evil"
   w_class = W_CLASS_TINY
   item_state = ""
   throw_speed = 4
   throw_range = 20
-  flags = FPRINT  | NOBLUDGEON
-  var/frequency = "syndicate"
-  var/active = 0
-  var/mob/camera_target
+  flags = NOBLUDGEON | FPRINT
+  var/frequency = "syndicate" //in case someone wants to make a custom list of cameras
+  var/active = 0 // check if the camera is online
+  var/mob/camera_target //target that is stuck to
 
 /obj/item/device/syndicate_cyborg_camera_bug/afterattack(atom/target, mob/user, proximity_flag)
   if(istype(target, /mob/living/silicon/) && !istype(target, /mob/living/silicon/ai))
@@ -23,6 +23,9 @@ var/global/list/syndicate_roboticist_cameras = list();
     return 1
   if(!istype(target, /mob/living/silicon/))
     to_chat(user, "<span class='warning'>You can only apply this to cyborgs.</span>")
+    return 0
+  if(istype(target, /mob/living/silicon/ai))
+    to_chat(user, "<span class='warning'>You can not install this on an AI core.</span>")
     return 0
 
 /obj/item/device/syndicate_reciver
@@ -36,6 +39,9 @@ var/global/list/syndicate_roboticist_cameras = list();
 /obj/item/device/syndicate_reciver/attack_self(mob/user as mob)
   var/list/cameras = list()
   for(var/obj/item/device/syndicate_cyborg_camera_bug/camera in syndicate_roboticist_cameras)
+    if(camera.camera_target.isDead())
+      camera.active = 0
+      syndicate_roboticist_cameras -= camera
     if(camera.frequency == frequency)
       cameras += camera
   if(!cameras.len)
@@ -66,6 +72,9 @@ var/global/list/syndicate_roboticist_cameras = list();
 
 /obj/item/device/syndicate_reciver/check_eye(var/mob/user as mob)
   if ( src.loc != user || user.get_active_hand() != src || !user.canmove || user.blinded || !current || !current.active )
+    user.unset_machine()
+    user.reset_view(user)
+    src.current = null
     return null
   user.reset_view(current)
   return 1
