@@ -1,4 +1,6 @@
 var/global/list/syndicate_roboticist_cameras = list(); //list of all the cameras
+var/global/list/syndicate_roboticist_control_board = list(); //list of all control boards
+
 /obj/item/device/syndicate_cyborg_camera_bug
   name = "Cyborg Camera Bug"
   desc = "A tiny weird looking device with a few wires sticking out and a small antenna."
@@ -37,32 +39,43 @@ var/global/list/syndicate_roboticist_cameras = list(); //list of all the cameras
   var/frequency = "syndicate"
 
 /obj/item/device/syndicate_reciver/attack_self(mob/user as mob)
-  var/list/cameras = list()
+  var/list/devices = list()
   for(var/obj/item/device/syndicate_cyborg_camera_bug/camera in syndicate_roboticist_cameras)
     if(camera.camera_target.isDead())
       camera.active = 0
-      syndicate_roboticist_cameras -= camera
+      syndicate_roboticist_devices -= camera
     if(camera.frequency == frequency)
-      cameras += camera
-  if(!cameras.len)
+      devices += camera
+  for(var/obj/item/device/syndicate_cyborg_control_board/board in syndicate_roboticist_control_board)
+    if(board.cyborg.isDead())
+      board.active = 0
+      syndicate_roboticist_control_board -= board
+    if(board.frequency == frequency)
+      devices += board
+  if(!devices.len)
     to_chat(user, "<span class='warning'>No signals detected.</span>")
     return
 
-  var/list/friendly_cameras = new/list()
+  var/list/friendly_devices = new/list()
 
-  for (var/obj/item/device/syndicate_cyborg_camera_bug/camera in cameras)
-    friendly_cameras.Add(camera.camera_target.name)
-  var/target = input("Select a signal.", null) as null|anything in sortList(friendly_cameras)
+  for (var/obj/device in devices)
+    if(istype(device, obj/item/device/syndicate_cyborg_control_board/))
+      var/obj/item/device/syndicate_cyborg_control_board/board = device
+      friendly_devices.Add(board.cyborg.name + "(Control Board)")
+    if(istype(device, obj/item/device/syndicate_cyborg_camera_bug/))
+      var/obj/item/device/syndicate_cyborg_camera_bug/camera = device
+      friendly_devices.Add(camera.camera_target.name + "(Camera Bug)")
+  var/target = input("Select a signal.", null) as null|anything in sortList(friendly_devices)
   if (!target)
     user.unset_machine()
     user.reset_view(user)
     return
-  for(var/obj/item/device/syndicate_cyborg_camera_bug/camera in cameras)
-    if (camera.camera_target.name == target)
+  for(var/obj/item/device/syndicate_cyborg_camera_bug/camera in devices)
+    if (camera.camera_target.name + "(Camera Bug)" == target)
       target = camera
       break
   if(user.stat) return
-  if(target)
+  if(target && istype(target, obj/item/device/syndicate_cyborg_camera_bug/))
     user.client.eye = target
     user.set_machine(src)
     src.current = target
@@ -78,3 +91,17 @@ var/global/list/syndicate_roboticist_cameras = list(); //list of all the cameras
     return null
   user.reset_view(current)
   return 1
+
+//IMPORTANT
+// Check MMI.dm and BORER.dm for making borg controlling boards
+//IMPORTANT
+/obj/item/device/syndicate_cyborg_control_board
+  name = "Suspicious Looking Motherboard"
+  desc = "A suspiciously looking motherboard with red and black colors. It seems it has connectors shaped like a Man-Machine Interface and an antenna."
+  icon = 'icons/obj/device.dmi'
+  icon_state = "implant_evil"
+  w_class = W_CLASS_SMALL
+  flags = FPRINT
+  var/frequency = "syndicate" //in case someone wants to make a custom list of remote borgs
+  var/active = 0 // check if the board is online
+  var/mob/living/silicon/cyborg //robot that is under the control of this board
