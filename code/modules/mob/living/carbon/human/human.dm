@@ -1548,8 +1548,9 @@
 
 	return 1
 
-/mob/living/carbon/human/spook()
-	if(!client) return
+/mob/living/carbon/human/spook(mob/dead/observer/ghost)
+	if(!..(ghost, TRUE) || !client)
+		return
 	if(!hallucinating())
 		to_chat(src, "<i>[pick(boo_phrases)]</i>")
 	else

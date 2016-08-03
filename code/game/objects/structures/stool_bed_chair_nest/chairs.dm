@@ -5,7 +5,7 @@
 	sheet_amt = 1
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
-	var/overrideghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
+	var/noghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
 
 	lock_type = /datum/locking_category/chair
 
@@ -59,9 +59,15 @@
 	if(!usr || !isturf(usr.loc))
 		return
 
-	if((!config.ghost_interaction && !blessed) || overrideghostspin)
+	if((!config.ghost_interaction && can_spook()) || noghostspin)
 		if(usr.isUnconscious() || usr.restrained())
 			return
+
+	if(isobserver(usr))
+		var/mob/dead/observer/ghost = usr
+		if(ghost.lastchairspin <= world.time - 5) //do not spam this
+			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+		ghost.lastchairspin = world.time
 
 	spin()
 
@@ -236,7 +242,7 @@
 	desc = "Looks really comfy."
 	sheet_amt = 2
 	anchored = 1
-	overrideghostspin = 1
+	noghostspin = 1
 	var/image/legs
 	color = null
 

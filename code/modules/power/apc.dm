@@ -364,9 +364,9 @@
 			update_icon()
 			updating_icon = 0
 
-/obj/machinery/power/apc/spook()
+/obj/machinery/power/apc/spook(mob/dead/observer/ghost)
 	if(spooky) return // Fuck you we're already spooky
-	if(!..()) return //If blessed, return
+	if(!..(ghost, TRUE)) return //If blessed, return
 
 	spooky=1
 	update_icon()

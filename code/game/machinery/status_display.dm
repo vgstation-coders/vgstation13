@@ -259,8 +259,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 			if(supply_display)
 				mode = 4
 
-/obj/machinery/status_display/spook()
-	if(..())
+/obj/machinery/status_display/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
 		spookymode = 1
 
 #undef MODE_BLANK
@@ -414,8 +414,9 @@ var/global/list/status_display_images = list(
 		overlays.len = 0
 	overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
 
-/obj/machinery/ai_status_display/spook()
-	spookymode = 1
+/obj/machinery/ai_status_display/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
+		spookymode = 1
 
 #undef MODE_BLANK
 #undef MODE_EMOTION

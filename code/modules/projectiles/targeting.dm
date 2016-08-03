@@ -45,7 +45,7 @@
 /obj/item/weapon/gun/proc/PreFire(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0)
 	//Lets not spam it.
 	if(lock_time > world.time - 2) return
-	.
+	. //the rare and mystical rogue ".". nobody knows what this majestic beast does or why is it here. not even why it compiles is known for certain. legend says should it be touched, everything will probably break; but nobody dares try.
 	if(ismob(A) && isliving(A) && !(A in target))
 		Aim(A) 	//Clicked a mob, aim at them
 	else  		//Didn't click someone, check if there is anyone along that guntrace

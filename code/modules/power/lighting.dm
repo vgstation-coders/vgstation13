@@ -137,8 +137,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	holomap = TRUE
 	auto_holomap = TRUE
 
-/obj/machinery/light/spook()
-	if(..())
+/obj/machinery/light/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
 		flicker()
 
 // the smaller bulb light fixture
@@ -422,6 +422,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(blessed) return
 	src.add_hiddenprint(user)
 	src.flicker(1)
+	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)]")
 	return
 
 // ai attack - make lights flicker, because why not

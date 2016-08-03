@@ -766,10 +766,15 @@ its easier to just keep the beam vertical.
 		newarea = "[newarea.name]"
 
 //Called in /spell/aoe_turf/boo/cast() (code/modules/mob/dead/observer/spells.dm)
-/atom/proc/spook()
-	if(blessed)
+/atom/proc/spook(mob/dead/observer/ghost, var/log_this = FALSE)
+	if(!can_spook())
 		return 0
+	if(log_this)
+		investigation_log(I_GHOST, "|| was Boo!'d by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return 1
+
+/atom/proc/can_spook()
+	return !blessed
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
