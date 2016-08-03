@@ -422,10 +422,14 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 
 /obj/machinery/light/attack_ghost(mob/user)
+	return
+/*
+/obj/machinery/light/attack_ghost(mob/user)
 	if(blessed) return
 	src.add_hiddenprint(user)
 	src.flicker(1)
 	return
+*/
 
 // ai attack - make lights flicker, because why not
 /obj/machinery/light/attack_ai(mob/user)
