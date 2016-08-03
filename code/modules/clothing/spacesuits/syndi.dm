@@ -3,6 +3,7 @@
 	name = "red space helmet"
 	icon_state = "syndicate"
 	item_state = "syndicate"
+	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	desc = "Has a tag on it: Totally not property of a hostile corporation, honest!"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)

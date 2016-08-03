@@ -447,11 +447,24 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey // TODO
 
-	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
+	flags = IS_WHITELISTED | HAS_LIPS | CAN_BE_FAT
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")
+
+	//PLEASE IF YOU MAKE A NEW RACE, KEEP IN MIND PEOPLE WILL PROBABLY MAKE UNIFORM SPRITES.
+	uniform_icons = 'icons/mob/species/grey/uniform.dmi'
+//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+//	gloves_icons    = 'icons/mob/gloves.dmi'
+	glasses_icons   = 'icons/mob/species/grey/eyes.dmi'
+//	ears_icons      = 'icons/mob/ears.dmi'
+//	shoes_icons 	= 'icons/mob/shoes.dmi'
+	head_icons      = 'icons/mob/species/grey/head.dmi'
+//	belt_icons      = 'icons/mob/belt.dmi'
+	wear_suit_icons = 'icons/mob/species/grey/suit.dmi'
+	wear_mask_icons = 'icons/mob/species/grey/masks.dmi'
+//	back_icons      = 'icons/mob/back.dmi'
 
 	has_mutant_race = 0
 

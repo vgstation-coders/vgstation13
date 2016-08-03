@@ -45,6 +45,7 @@
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	action_button_name = "Toggle Meson Scanner"
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
 	eyeprot = 2
