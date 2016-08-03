@@ -89,6 +89,10 @@
 	src.attack_hand(user)
 
 /obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/G)
+	return
+
+/*
+/obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/G)
 	if(blessed)
 		to_chat(G, "Your hand goes right through the switch...Is that some holy water dripping from it?")
 		return 0
@@ -96,6 +100,7 @@
 		to_chat(G, "Your poltergeist abilities are still cooling down.")
 		return 0
 	return ..()
+*/
 
 /obj/machinery/light_switch/attack_hand(mob/user)
 	if(buildstage != 2) return
