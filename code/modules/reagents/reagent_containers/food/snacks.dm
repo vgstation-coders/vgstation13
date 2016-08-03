@@ -2861,7 +2861,7 @@
 /obj/item/pizzabox
 	name = "pizza box"
 	desc = "A box suited for pizzas."
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_container.dmi'
 	icon_state = "pizzabox1"
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
@@ -3254,7 +3254,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/cereal
 	name = "box of cereal"
 	desc = "A box of cereal."
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "cereal_box"
 	bitesize = 2
 	New()
@@ -3263,7 +3263,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 	name = "Deep Fried Foods Holder Obj"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "deepfried_holder_icon"
 	bitesize = 2
 	deepfried = 1

@@ -1437,8 +1437,74 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/salsa
 
+/datum/recipe/hummus
+	reagents = list(LEMONJUICE = 10, HONEY = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
+		)
+	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/hummus
+
 
 // Misc ////////////////////////////////////////////////////////
+
+/datum/recipe/chiliconcarne
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/,)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
+
+/datum/recipe/chilaquiles
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
+				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
+				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
+				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
+				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
+				/obj/item/weapon/reagent_containers/food/snacks/dipping_sauce/salsa)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chilaquiles
+
+/datum/recipe/quiche
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+				/obj/item/weapon/reagent_containers/food/snacks/egg,
+				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
+	result = /obj/item/weapon/reagent_containers/food/snacks/quiche
+
+/datum/recipe/minestrone
+	reagents = list(WATER = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
+				/obj/item/weapon/reagent_containers/food/snacks/spaghetti)
+	result = /obj/item/weapon/reagent_containers/food/snacks/minestrone
+
+/datum/recipe/gazpacho
+	reagents = list(VINEGAR = 10, SODIUMCHLORIDE = 2)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gazpacho
+
+/datum/recipe/bruschetta
+	reagents = list(SODIUMCHLORIDE = 2, FLOUR = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bruschetta
+
+/datum/recipe/pannacotta
+	reagents = list(MILKCREAM = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+				/obj/item/weapon/reagent_containers/food/snacks/gelatin,
+				/obj/item/weapon/reagent_containers/food/snacks/yogurt
+				)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pannacotta
+
+/datum/recipe/yogurt
+	reagents = list(MILKCREAM = 10, SUGAR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
+	result = /obj/item/weapon/reagent_containers/food/snacks/yogurt
+
+/datum/recipe/gelatin
+	reagents = list(WATER = 10)
+	items = list(/obj/item/stack/teeth)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gelatin
 
 /datum/recipe/ramen
 	reagents = list(FLOUR = 5)

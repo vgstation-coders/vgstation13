@@ -10,7 +10,7 @@
 	name = "condiment container"
 	desc = "Just your average condiment container."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "emptycondiment"
 	item_state = null
 	flags = FPRINT  | OPENCONTAINER
