@@ -52,3 +52,12 @@
 	new /obj/effect/forcefield/cult(get_turf(src))
 	qdel(src)
 	return
+
+/obj/effect/forcefield/invisible_wall
+	name = "invisible wall"
+	desc = "The nemesis of explorers since the dawn of times."
+	invisibility = 101
+
+//This is a system object, don't cultify it
+/obj/effect/forcefield/invisible_wall/cultify()
+	return
