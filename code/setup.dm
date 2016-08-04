@@ -1597,7 +1597,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GALACTIC_COMMON "Galactic Common"
 #define LANGUAGE_HUMAN "Sol Common"
 #define LANGUAGE_UNATHI "Sinta'unathi"
-#define LANGUAGE_SIIK_TAJR "Siik'tajr"
+#define LANGUAGE_CATBEAST "Siik'tajr"
 #define LANGUAGE_SKRELLIAN "Skrellian"
 #define LANGUAGE_ROOTSPEAK "Rootspeak"
 #define LANGUAGE_TRADEBAND "Tradeband"
@@ -1608,7 +1608,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MONKEY "Monkey"
 #define LANGUAGE_VOX "Vox-pidgin"
 #define LANGUAGE_CULT "Cult"
-#define LANGUAGE_MOUSE "Mouse" // This broke the code, so fuck it
+#define LANGUAGE_MOUSE "Mouse"
+#define LANGUAGE_GOLEM "Golem"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG

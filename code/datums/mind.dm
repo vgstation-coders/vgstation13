@@ -663,7 +663,7 @@
 						cult.memoize_cult_objectives(src)
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a cultist!</FONT></span>")
 					to_chat(current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
-					current.remove_language("Cult")
+					current.remove_language(LANGUAGE_CULT)
 					memory = ""
 					log_admin("[key_name_admin(usr)] has de-cult'ed [current].")
 			if("cultist")
@@ -676,7 +676,7 @@
 					var/wikiroute = role_wiki[ROLE_CULTIST]
 					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 					to_chat(current, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-					current.add_language("Cult")
+					current.add_language(LANGUAGE_CULT)
 					var/datum/game_mode/cult/cult = ticker.mode
 					if (istype(cult))
 						cult.memoize_cult_objectives(src)
@@ -1183,7 +1183,7 @@ proc/clear_memory(var/silent = 1)
 		to_chat(current, "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 		to_chat(current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 		to_chat(current, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-		current.add_language("Cult")
+		current.add_language(LANGUAGE_CULT)
 		var/datum/game_mode/cult/cult = ticker.mode
 		if (istype(cult))
 			cult.memoize_cult_objectives(src)
