@@ -123,7 +123,7 @@
 	If none of the above, play dead
 	*/
 	if(!stat)
-		if(stance = HOSTILE_STANCE_IDLE) //Not doing anything at the time
+		if(stance == HOSTILE_STANCE_IDLE) //Not doing anything at the time
 			var/list/can_see = view(src, vision_range)
 			if(!busy)
 				if(can_evolve && times_eaten > 0)//Can we evolve, and have we fed
@@ -133,9 +133,10 @@
 					if(C.stat == DEAD)
 						Goto(C, move_to_delay)
 						busy = MOVING_TO_TARGET
+						//to_chat(world, "DEBUG - [src] is going to [C]")
 						GiveUp(C) //If we're not there in 10 seconds, give up
 
-						if(C.Adjacent(src) && busy != EATING) //Once we've finally caught up
+						if(C.Adjacent(src) && busy != EATING  && (health < maxHealth || maxHealth < health_cap)) //Once we've finally caught up
 							busy = EATING
 							eat(C)
 		else
@@ -154,12 +155,16 @@
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
 	visible_message("<span class='notice'>\the [src] starts to take a bite out of \the [target].</span>")
+	//to_chat(world, "DEBUG - [src] is now about to eat [target]")
 	spawn(50)
+		//to_chat(world, "DEBUG - [src] did it, the madman")
 		var/damage = rand(melee_damage_lower, melee_damage_upper)
 		target.adjustBruteLoss(damage)
 		health += (damage/2)
 		if(maxHealth < health_cap)
 			maxHealth += 5 //A well fed zombie is a scary zombie
+		times_eaten += 1
+		busy = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
 	if(!can_evolve) //How did you get here if not?
@@ -184,6 +189,7 @@
 			evolve(/mob/living/simple_animal/hostile/necro/zombie/crimson)
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
+	//to_chat(world, "DEBUG - [src] is attempting to evolve")
 	if(istype(evolve_to, /mob/living/simple_animal/hostile/necro))
 		var/mob/living/evolution = new evolve_to(src.loc,,)
 		evolution.name = name //We want to keep the name
@@ -225,13 +231,14 @@
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
 		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
 			var/obj/item/weapon/storage/bible/bible = W
-			visible_message("<span class='notice'>/The [user] begins whacking at [src] repeatedly with a bible for some reason.</span>")
+			visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.")
 			to_chat (user, "<span class='notice'>You attempt to invoke the power of [bible.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
 			if(user.mind && (user.mind.assigned_role == "Chaplain"))
 				chaplain = 1 //Indeed we are
-			spawn(5) //So there's a nice delay
+
+			spawn(25) //So there's a nice delay
 			if(!chaplain)
 				if(prob(5)) //Let's be generous, they'll only get one regen for this
 					to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
@@ -250,6 +257,8 @@
 				else
 					if(turf_on.blessed) //The chaplain's spilt some of his holy water
 						holy_modifier += 1
+
+				//to_chat(world, "DEBUG - Holy modifier is [holy_modifier]")
 				if(prob(15*holy_modifier)) //Gotta have faith
 					to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
 					unzombify()
@@ -257,14 +266,18 @@
 					to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
-	host.loc = get_turf(src)
-	if(!host.mind) //This is assuming that, somehow, the host lost their soul, and it ended up in the zombie
-		mind.transfer_to(host)
-	host.resurrect() //It's a miracle!
-	host.revive()
-	visible_message("<span class='notice'>[src]'s eyes regain focus, the smell of decay vanishing, [host] has come back to their senses!.</span>")
-	host = null
-	qdel(src)
+	if(host)
+		host.loc = get_turf(src)
+		if(!host.mind && src.mind) //This is assuming that, somehow, the host lost their soul, and it ended up in the zombie
+			mind.transfer_to(host)
+		host.resurrect() //It's a miracle!
+		host.revive()
+		visible_message("<span class='notice'>\The [src]'s eyes regain focus, the smell of decay vanishing, [host] has come back to their senses!.</span>")
+		host = null
+		qdel(src)
+	else
+		visible_message("<span class='notice'>\The [src] grumbles for a moment, then begins to decay at an accelerated rate, seems there was nobody left to save.</span>")
+		dust()
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting
 	icon_living = "zombie_rotten"
@@ -288,6 +301,7 @@
 	if(target.health < -150) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
+			to_chat(world, "[target] zombified by [src]")
 			zombify(target)
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
