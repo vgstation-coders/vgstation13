@@ -93,7 +93,8 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   return 1
 
 //IMPORTANT
-// Check MMI.dm and BORER.dm for making borg controlling boards
+// Check MMI.dm, ROBOT_PARTS.dm and BORER.dm for making borg controlling boards
+// Check https://github.com/ComicIronic/vgstation13.git Neural branch.
 //IMPORTANT
 /obj/item/device/syndicate_cyborg_control_board
   name = "Suspicious Looking Motherboard"
@@ -105,3 +106,5 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/frequency = "syndicate" //in case someone wants to make a custom list of remote borgs
   var/active = 0 // check if the board is online
   var/mob/living/silicon/cyborg //robot that is under the control of this board
+
+// /obj/item/device/syndicate_cyborg_control_board/attackby(var/obj/item/O as obj, var/mob/user as mob)
