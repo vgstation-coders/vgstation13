@@ -357,18 +357,24 @@
 	if(on)
 		var/fireintensity = min(Floor((cell.charge-1)/(cell.maxcharge/4))+1,4)
 		if(cell.charge > 150)
-			src.overlays += image(icon,"fireplace_glow",LIGHTING_LAYER + 1)
+			var/image/glow_image1 = image(icon,"fireplace_glow",ABOVE_LIGHTING_LAYER)
+			glow_image1.plane = LIGHTING_PLANE
+			overlays += glow_image1
+		var/glow_level
 		switch(cell.charge)
 			if(15 to 149)
-				src.overlays += image(icon,"fireplace_fire0",LIGHTING_LAYER + 1)
+				glow_level = 0
 			if(150 to 249)
-				src.overlays += image(icon,"fireplace_fire1",LIGHTING_LAYER + 1)
+				glow_level = 1
 			if(250 to 499)
-				src.overlays += image(icon,"fireplace_fire2",LIGHTING_LAYER + 1)
+				glow_level = 2
 			if(500 to 749)
-				src.overlays += image(icon,"fireplace_fire3",LIGHTING_LAYER + 1)
+				glow_level = 3
 			if(750 to INFINITY)
-				src.overlays += image(icon,"fireplace_fire4",LIGHTING_LAYER + 1)
+				glow_level = 4
+		var/image/glow_image2 = image(icon,"fireplace_fire[glow_level]",ABOVE_LIGHTING_LAYER)
+		glow_image2.plane = LIGHTING_PLANE
+		overlays += glow_image2
 		light_r = max(1.1,cell.charge/100)
 		set_temperature = 15 + 5*fireintensity
 	set_light(on ? light_r : 0, light_power_on)

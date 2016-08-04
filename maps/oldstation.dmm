@@ -695,7 +695,7 @@
 "ns" = (/obj/machinery/portable_atmospherics/scrubber,/turf/simulated/floor,/area/derelict/arrival)
 "nt" = (/obj/machinery/portable_atmospherics/scrubber,/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor,/area/derelict/arrival)
 "nu" = (/turf/simulated/shuttle/wall{tag = "icon-swall_s5"; icon_state = "swall_s5"; dir = 2},/area)
-"nv" = (/turf/simulated/shuttle/floor{icon_state = "floor3"},/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall_f10"; layer = 2; tag = "icon-swall_f10"},/area)
+"nv" = (/turf/simulated/shuttle/floor{icon_state = "floor3"},/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall_f10"; tag = "icon-swall_f10"},/area)
 "nw" = (/obj/structure/closet/wardrobe,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area)
 "nx" = (/obj/machinery/door/window/southleft{req_access_txt = "19"},/turf/simulated/floor,/area/crew_quarters)
 "ny" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"; tag = ""},/turf/simulated/floor,/area/derelict/storage/equipment)

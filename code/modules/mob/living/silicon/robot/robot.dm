@@ -153,7 +153,7 @@
 	add_language(LANGUAGE_CLATTER, 0)
 	add_language(LANGUAGE_MONKEY, 0)
 	add_language(LANGUAGE_UNATHI, 0)
-	add_language(LANGUAGE_SIIK_TAJR, 0)
+	add_language(LANGUAGE_CATBEAST, 0)
 	add_language(LANGUAGE_SKRELLIAN, 0)
 	add_language(LANGUAGE_GUTTER, 0)
 	add_language(LANGUAGE_MONKEY, 0)
@@ -1152,7 +1152,9 @@
 
 	overlays.len = 0
 	if(stat == 0 && cell != null)
-		overlays += image(icon,"eyes-[icon_state]", LIGHTING_LAYER + 1)
+		var/image/eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
+		eyes.plane = LIGHTING_PLANE
+		overlays += eyes
 
 	if(opened)
 		if(custom_sprite)//Custom borgs also have custom panels, heh

@@ -29,14 +29,14 @@ What are the archived variables for?
 	plmaster.icon = 'icons/effects/tile_effects.dmi'
 	plmaster.icon_state = "plasma"
 	plmaster.layer = FLY_LAYER
-	plmaster.plane = PLANE_EFFECTS
+	plmaster.plane = EFFECTS_PLANE
 	plmaster.mouse_opacity = 0
 
 	slmaster = new /obj/effect/overlay()
 	slmaster.icon = 'icons/effects/tile_effects.dmi'
 	slmaster.icon_state = "sleeping_agent"
 	slmaster.layer = FLY_LAYER
-	slmaster.plane = PLANE_EFFECTS
+	slmaster.plane = EFFECTS_PLANE
 	slmaster.mouse_opacity = 0
 	return 1
 

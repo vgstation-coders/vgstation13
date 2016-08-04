@@ -26,7 +26,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Space"
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "unknown"
-	layer = 10
 	mouse_opacity = 0
 	luminosity = 0
 	var/lightswitch = 1

@@ -21,7 +21,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/obj/machinery/power/rust_core/owned_core
 	var/list/dormant_reactant_quantities = new
 
-	layer = 3.1
+	layer = ABOVE_OBJ_LAYER
 
 	var/energy = 0
 	var/mega_energy = 0

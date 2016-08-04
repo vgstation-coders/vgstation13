@@ -8,7 +8,7 @@
 
 /obj/machinery/door/poddoor/shutters/New()
 	..()
-	layer = 3.1
+	layer = ABOVE_DOOR_LAYER
 
 /obj/machinery/door/poddoor/shutters/preopen
 	icon_state = "shutter0"
@@ -28,8 +28,6 @@
 			density = 0
 			set_opacity(0)
 			operating = 0
-			return
-	return
 
 /obj/machinery/door/poddoor/shutters/open()
 	if(operating == 1) //doors can still open when emag-disabled
@@ -68,4 +66,3 @@
 
 	sleep(10)
 	operating = 0
-	return

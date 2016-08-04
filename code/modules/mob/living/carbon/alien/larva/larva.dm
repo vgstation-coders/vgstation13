@@ -295,5 +295,4 @@
 
 /mob/living/carbon/alien/larva/reset_layer()
 	if(stat == DEAD)
-		layer = MOB_LAYER //unhide
-		plane = PLANE_MOB
+		plane = MOB_PLANE

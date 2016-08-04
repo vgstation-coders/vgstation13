@@ -67,7 +67,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			return
 
 	var/turf/T = get_turf(M)
-	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 
 	feedback_add_details("admin_verb","AM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -106,7 +106,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		return
 
 	var/turf/T = get_turf(M)
-	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 
 	to_chat(M, "<span class='danger'>You get the feeling that you're not the only one who remembered his true origin. Will they be your allies or your foes? That is for you to decide.</span>")
 
@@ -130,8 +130,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -189,8 +188,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -221,7 +219,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			to_chat(M, "<span class='sinister'>You remember the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-			M.add_language("Cult")
+			M.add_language(LANGUAGE_CULT)
 			var/datum/game_mode/cult/cult = ticker.mode
 			if (istype(cult))
 				cult.memoize_cult_objectives(M.mind)
@@ -248,8 +246,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -332,8 +329,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -380,7 +376,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -437,8 +433,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 
@@ -488,8 +483,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.u_equip(I,1)
 				if(I)
 					I.loc = M.loc
-					I.layer = initial(I.layer)
-					I.plane = initial(I.plane)
+					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.loc = pack
 

@@ -37,6 +37,9 @@ var/const/HOLOPAD_MODE = 0
 	var/last_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 5 // Change to change how far the AI can move away from the holopad before deactivating.
 	flags = HEAR
+	plane = ABOVE_TURF_PLANE
+	layer = ABOVE_TILE_LAYER
+
 
 /obj/machinery/hologram/holopad/attack_hand(var/mob/living/carbon/human/user) //Carn: Hologram requests.
 	if(!istype(user))
@@ -86,13 +89,19 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Holopad received, <span class='message'>[rendered_message]</span></span></i>"
 		master.show_message(rendered_message, 2)
 
+/obj/machinery/hologram/holopad/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
+	if(!master)
+		return
+	if(master.eyeobj.high_res && cameranet.checkCameraVis(A)) //visible message is already being picked up by the cameras, avoids duplicate messages
+		return
+	master.show_message( message, 1, blind_message, 2) //otherwise it's being picked up by the holopad itself
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
 	hologram = new(T)//Spawn a blank effect at the location.
 	hologram.icon = A.holo_icon
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	hologram.layer = FLY_LAYER//Above all the other objects/mobs. Or the vast majority of them.
-	hologram.plane = PLANE_EFFECTS
+	hologram.plane = ABOVE_HUMAN_PLANE
 	hologram.anchored = 1//So space wind cannot drag it.
 	hologram.name = "[A.name] (Hologram)"//If someone decides to right click.
 	hologram.set_light(2)	//hologram lighting

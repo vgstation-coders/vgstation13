@@ -1308,8 +1308,8 @@
 		//if(src.species.language)	src.remove_language(species.language)
 		if(src.species.abilities)
 			src.verbs -= species.abilities
-		if(species.language)
-			remove_language(species.language)
+		for(var/L in species.known_languages)
+			remove_language(L)
 		species.clear_organs(src)
 
 	var/datum/species/S = all_species[new_species_name]
@@ -1317,8 +1317,8 @@
 	src.species = new S.type
 	src.species.myhuman = src
 
-	if(species.language)
-		add_language(species.language)
+	for(var/L in species.known_languages)
+		add_language(L)
 	if(species.default_language)
 		add_language(species.default_language)
 	if(src.species.abilities)
@@ -1681,11 +1681,9 @@
 
 /mob/living/carbon/human/reset_layer()
 	if(lying)
-		plane = PLANE_OBJ
-		layer = MOB_LAYER - 0.1 //so we move under bedsheets
+		plane = LYING_HUMAN_PLANE
 	else
-		layer = MOB_LAYER
-		plane = PLANE_MOB
+		plane = HUMAN_PLANE
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
 	if(new_amount > held_items.len)

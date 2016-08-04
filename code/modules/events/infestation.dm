@@ -108,7 +108,7 @@
 			new spawn_type(picked)
 
 /datum/event/infestation/announce()
-	command_alert("Bioscans indicate that [vermstring] have been breeding in [locstring]. Clear them out, before this starts to affect productivity.", "Vermin infestation")
+	command_alert(new /datum/command_alert/vermin(vermstring, locstring))
 
 #undef LOC_KITCHEN
 #undef LOC_ATMOS

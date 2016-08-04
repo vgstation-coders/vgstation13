@@ -203,7 +203,8 @@
 	if(ismob(stuck_to))
 		stuck_to.overlays -= self_overlay
 		self_overlay.icon_state = "stickybomb_flick"
-		self_overlay.layer = 13
+		self_overlay.layer = PROJECTILE_LAYER
+		self_overlay.plane = EFFECTS_PLANE
 		stuck_to.overlays += self_overlay
 	alpha = 255
 	spawn(3)

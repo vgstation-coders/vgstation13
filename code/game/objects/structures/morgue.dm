@@ -96,7 +96,6 @@
 			src.connected = null
 	src.add_fingerprint(user)
 	update()
-	return
 
 /obj/structure/morgue/attackby(P as obj, mob/user as mob)
 	if(iscrowbar(P)&&!contents.len)
@@ -123,14 +122,12 @@
 		else
 			src.name = "Morgue"
 	src.add_fingerprint(user)
-	return
 
 /obj/structure/morgue/relaymove(mob/user as mob)
 	if (user.stat)
 		return
 	src.connected = new /obj/structure/m_tray( src.loc )
 	step(src.connected, EAST)
-	src.connected.layer = OBJ_LAYER
 	var/turf/T = get_step(src, EAST)
 	if (T.contents.Find(src.connected))
 		src.connected.connected = src
@@ -142,7 +139,6 @@
 	else
 		//src.connected = null
 		qdel(src.connected)
-	return
 
 /obj/structure/morgue/on_log()
 	update()
@@ -156,7 +152,6 @@
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "morguet"
 	density = 1
-	layer = 2.0
 	var/obj/structure/morgue/connected = null
 	anchored = 1.0
 
@@ -195,7 +190,6 @@
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
 				to_chat(B, text("<span class='warning'>[] stuffs [] into []!</span>", user, O, src))
-	return
 
 
 /*
@@ -231,22 +225,18 @@
 				A.loc = src.loc
 				ex_act(severity)
 			qdel(src)
-			return
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
 					A.loc = src.loc
 					ex_act(severity)
 				qdel(src)
-				return
 		if(3.0)
 			if (prob(5))
 				for(var/atom/movable/A as mob|obj in src)
 					A.loc = src.loc
 					ex_act(severity)
 				qdel(src)
-				return
-	return
 
 /obj/structure/crematorium/alter_health()
 	return src.loc
@@ -302,7 +292,6 @@
 		else
 			src.name = "Crematorium"
 	src.add_fingerprint(user)
-	return
 
 /obj/structure/crematorium/relaymove(mob/user as mob)
 	if (user.stat || locked)
@@ -321,7 +310,6 @@
 	else
 		qdel(src.connected)
 		src.connected = null
-	return
 
 /obj/structure/crematorium/proc/cremate(mob/user)
 //	for(var/obj/machinery/crema_switch/O in src) //trying to figure a way to call the switch, too drunk to sort it out atm
@@ -378,7 +366,6 @@
 		update()
 		locked = 0
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
-	return
 
 
 /*
@@ -390,7 +377,6 @@
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "cremat"
 	density = 1
-	layer = 2.0
 	var/obj/structure/crematorium/connected = null
 	anchored = 1.0
 
@@ -408,14 +394,11 @@
 		for(var/atom/movable/A as mob|obj in src.loc)
 			if (!( A.anchored ))
 				A.loc = src.connected
-			//Foreach goto(26)
 		src.connected.connected = null
 		src.connected.update()
 		add_fingerprint(user)
 		//SN src = null
 		qdel(src)
-		return
-	return
 
 /obj/structure/c_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
@@ -427,8 +410,6 @@
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
 				to_chat(B, text("<span class='warning'>[] stuffs [] into []!</span>", user, O, src))
-			//Foreach goto(99)
-	return
 
 /obj/machinery/crema_switch/attack_hand(mob/user as mob)
 	if (allowed(user))
@@ -437,4 +418,3 @@
 				C.cremate(user)
 	else
 		to_chat(user, "<SPAN CLASS='alert'>Access denied.</SPAN>")
-	return

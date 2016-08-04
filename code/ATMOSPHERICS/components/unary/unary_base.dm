@@ -1,7 +1,7 @@
 /obj/machinery/atmospherics/unary
 	dir = SOUTH
 	initialize_directions = SOUTH
-	layer = 2.45 // Cable says we're at 2.45, so we're at 2.45.  (old: TURF_LAYER+0.1)
+	layer = UNARY_PIPE_LAYER
 
 	var/datum/gas_mixture/air_contents
 	var/obj/machinery/atmospherics/node

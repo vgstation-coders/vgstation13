@@ -319,7 +319,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	reagents.handle_reactions()
 	//This ain't ready yet.
 	//overlays.len = 0
-	//overlays += image('icons/mob/mask.dmi', overlay_on, LIGHTING_LAYER+1)
+	//overlays += image('icons/mob/mask.dmi', overlay_on, ABOVE_LIGHTING_LAYER)
 	var/turf/T = get_turf(src)
 	T.visible_message(flavor_text)
 
@@ -409,7 +409,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 20
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
 	name = "Cohiba Robusto Cigar"
@@ -437,7 +437,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "cigar butt"
 	desc = "A manky old cigar butt."
 	icon_state = "cigarbutt"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /*
 //I'll light my cigar with an energy sword if I want to, thanks
@@ -459,6 +459,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "bluntlit"
 	type_butt = /obj/item/weapon/cigbutt/bluntbutt
 	item_state = "blunt"
+	species_fit = list(GREY_SHAPED)
 	attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
 	chem_volume = 50 //It's a fat blunt, a really fat blunt
@@ -517,6 +518,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon_state = "pipe"
 	item_state = "pipe"
 	overlay_on = "pipelit"
+	species_fit = list(GREY_SHAPED)
 	smoketime = 100
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")

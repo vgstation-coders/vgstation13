@@ -167,8 +167,7 @@
 
 	W.forceMove(src)
 	held_items[index] = W
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	W.pixel_x = initial(W.pixel_x)
 	W.pixel_y = initial(W.pixel_y)
 	W.equipped(src, null, index)
@@ -224,7 +223,7 @@
 		return 1
 	else
 		W.loc = get_turf(src)
-		W.layer = initial(W.layer)
+		W.reset_plane_and_layer()
 		W.dropped()
 		return 0
 
@@ -254,20 +253,18 @@
 		if(client)	client.screen -= W
 		u_equip(W,1)
 		if(!W) return 1 // self destroying objects (tk, grabs)
-		W.layer = initial(W.layer)
-		W.plane = initial(W.plane)
+		W.reset_plane_and_layer()
 		W.forceMove(loc)
 
 		//W.dropped(src)
 		//update_icons() // Redundant as u_equip will handle updating the specific overlay
 		return 1
-	return 0
 
 // Drops all and only equipped items, including items in hand
 /mob/proc/drop_all()
 	for (var/obj/item/I in get_all_slots())
 		drop_from_inventory(I)
-
+	drop_hands()
 
 //Drops the item in our hand - you can specify an item and a location to drop to
 
@@ -313,11 +310,9 @@
 //TODO: phase out this proc
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?
 	W.loc = null
-	W.layer = initial(W.layer)
-	W.plane = initial(W.plane)
+	W.reset_plane_and_layer()
 	u_equip(W,0)
 	update_icons()
-	return
 
 
 /mob/proc/u_equip(var/obj/item/W as obj, dropped = 1)
@@ -347,8 +342,7 @@
 			W.forceMove(loc)
 			W.dropped(src)
 		if(W)
-			W.layer = initial(W.layer)
-			W.plane = initial(W.plane)
+			W.reset_plane_and_layer()
 	return 1
 
 
@@ -358,8 +352,7 @@
 	if (src.client)
 		src.client.screen -= O
 	if(!O) return
-	O.layer = initial(O.layer)
-	O.plane = initial(O.plane)
+	O.reset_plane_and_layer()
 	O.screen_loc = null
 	return 1
 
@@ -462,8 +455,7 @@
 					equipped = 1
 
 	if(equipped)
-		W.layer = 20
-		W.plane = PLANE_HUD
+		W.hud_layerise()
 		if(src.back && W.loc != src.back)
 			W.loc = src
 	else

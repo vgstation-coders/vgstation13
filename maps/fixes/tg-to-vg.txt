@@ -87,7 +87,7 @@ TYPE: /obj/structure/table/glass > /obj/structure/table
 TYPE: /obj/structure/closet/wardrobe/white/medical > /obj/structure/closet/wardrobe/medic_white
 TYPE: /obj/structure/bodycontainer/morgue > /obj/structure/morgue
 TYPE: /obj/structure/janitorialcart > /obj/structure/stool/bed/chair/vehicle/janicart
-TYPE: /obj/structure/piano > /obj/structure/device/piano
+TYPE: /obj/structure/piano > /obj/structure/piano
 TYPE: /obj/structure/closet/secure_closet/security/sec > /obj/structure/closet/secure_closet/security
 TYPE: /obj/structure/closet/secure_closet/atmospherics > /obj/structure/closet/secure_closet/engineering_atmos
 TYPE: /obj/structure/bodycontainer/crematorium > /obj/structure/crematorium

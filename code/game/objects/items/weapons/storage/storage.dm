@@ -129,8 +129,7 @@
 	src.boxes.screen_loc = "[tx],[ty] to [mx],[my]"
 	for(var/obj/O in src.contents)
 		O.screen_loc = "[cx],[cy]"
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		cx++
 		if (cx > mx)
 			cx = tx
@@ -149,8 +148,7 @@
 			ND.sample_object.mouse_opacity = 2
 			ND.sample_object.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
 			ND.sample_object.maptext = "<font color='white' size = '4'>[(ND.number > 1)? "[ND.number]" : ""]</font>"
-			ND.sample_object.layer = 20
-			ND.sample_object.plane = PLANE_HUD
+			ND.sample_object.hud_layerise()
 			cx++
 			if (cx > (4+cols))
 				cx = 4
@@ -160,8 +158,7 @@
 			O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
 			O.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
 			O.maptext = ""
-			O.layer = 20
-			O.plane = PLANE_HUD
+			O.hud_layerise()
 			cx++
 			if (cx > (4+cols))
 				cx = 4
@@ -378,8 +375,7 @@
 			usr.s_active.show_to(usr)
 	if(W.maptext)
 		W.maptext = ""
-	W.layer = initial(W.layer)
-	W.plane = initial(W.plane)
+	W.reset_plane_and_layer()
 	W.on_exit_storage(src)
 	update_icon()
 	W.mouse_opacity = initial(W.mouse_opacity)
@@ -519,11 +515,11 @@
 	src.boxes.master = src
 	src.boxes.icon_state = "block"
 	src.boxes.screen_loc = "7,7 to 10,8"
-	src.boxes.layer = 19
+	src.boxes.layer = HUD_BASE_LAYER
 	src.closer = getFromPool(/obj/screen/close)
 	src.closer.master = src
 	src.closer.icon_state = "x"
-	src.closer.layer = 20
+	src.closer.layer = HUD_ITEM_LAYER
 	orient2hud()
 
 /obj/item/weapon/storage/emp_act(severity)

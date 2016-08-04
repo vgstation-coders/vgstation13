@@ -9,7 +9,7 @@
 	anchored = 1
 	opacity = 0
 	density = 0
-	layer = 5
+	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE
 	//mouse_opacity = 2
 

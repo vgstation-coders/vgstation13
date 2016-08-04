@@ -1394,7 +1394,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = locker
-				I.layer = initial(I.layer)
+				I.reset_plane_and_layer()
 				//I.dropped(M)
 
 		M.update_icons()
@@ -1472,8 +1472,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
-				I.layer = initial(I.layer)
-				I.plane = initial(I.plane)
+				I.reset_plane_and_layer()
 				//I.dropped(M)
 				I.loc = pack
 
@@ -1607,8 +1606,7 @@
 			M.u_equip(I,1)
 			if(I)
 				I.loc = M.loc
-				I.layer = initial(I.layer)
-				I.plane = initial(I.plane)
+				I.reset_plane_and_layer()
 				//I.dropped(M)
 
 		if(istype(M, /mob/living/carbon/human))
@@ -2360,11 +2358,11 @@
 				if(gravity_is_on)
 					log_admin("[key_name(usr)] toggled gravity on.", 1)
 					message_admins("<span class='notice'>[key_name_admin(usr)] toggled gravity on.</span>", 1)
-					command_alert("Gravity generators are again functioning within normal parameters. Sorry for any inconvenience.")
+					command_alert(/datum/command_alert/gravity_enabled)
 				else
 					log_admin("[key_name(usr)] toggled gravity off.", 1)
 					message_admins("<span class='notice'>[key_name_admin(usr)] toggled gravity off.</span>", 1)
-					command_alert("Feedback surge detected in mass-distributions systems. Artifical gravity has been disabled whilst the system reinitializes. Further failures may result in a gravitational collapse and formation of blackholes. Have a nice day.")
+					command_alert(/datum/command_alert/gravity_disabled)
 			if("wave")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Meteor")
@@ -2660,8 +2658,7 @@
 			if("gravanomalies")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","GA")
-				command_alert("Gravitational anomalies detected on the station. There is no additional data.", "Anomaly Alert")
-				world << sound('sound/AI/granomalies.ogg')
+				command_alert(/datum/command_alert/wormholes)
 				var/turf/T = pick(blobstart)
 				var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 				spawn(rand(100, 600))
@@ -2870,7 +2867,7 @@
 					var/turf/U = pick(turflist)
 					var/obj/structure/closet/crate/secure/weapon/experimental/E = new(U)
 					to_chat(C, "<span class='danger'>A crate appears next to you. You think you can read \"[E.chosen_set]\" scribbled on it</span>")
-					U.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_MOB)
+					U.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 				message_admins("[key_name_admin(usr)] distributed experimental guns to the entire crew")
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2888,7 +2885,7 @@
 					if(W.z == 1 && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
 						W.req_access = list()
 				message_admins("[key_name_admin(usr)] activated Egalitarian Station mode")
-				command_alert("Centcomm airlock control override activated. Please take this time to get acquainted with your coworkers.")
+				command_alert(/datum/command_alert/eagles)
 			if("dorf")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","DF")
@@ -2903,7 +2900,7 @@
 				message_admins("[key_name_admin(usr)] triggered an ion storm")
 				var/show_log = alert(usr, "Show ion message?", "Message", "Yes", "No")
 				if(show_log == "Yes")
-					command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert",alert='sound/AI/ionstorm.ogg')
+					command_alert(/datum/command_alert/ion_storm)
 			if("spacevines")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","K")
@@ -2987,7 +2984,7 @@
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = PLANE_MOB)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = "Admin"
 				D.real_name = "Admin"
 				var/newname = ""
@@ -3017,14 +3014,14 @@
 					log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 					return
 				if(choice == "Lifesigns") //MUH ALIUMS
-					command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert",alert='sound/AI/aliens.ogg')
+					command_alert(/datum/command_alert/xenomorphs)
 					message_admins("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Lifesign Alert.")
 					return
 				if(choice == "Malfunction") //BLOW EVERYTHING
 					var/salertchoice = input("Do you wish to include the Hostile Runtimes warning to have an authentic Malfunction Takeover Alert ?", "Nanotrasen Alert Level Monitor") in list("Yes", "No")
 					if(salertchoice == "Yes")
-						command_alert("Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core.", "Anomaly Alert",alert='sound/AI/aimalf.ogg')
+						command_alert(/datum/command_alert/malf_announce)
 					to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
 
 					to_chat(world, "<font color='red'>[config.alert_desc_delta]</font>")
@@ -3033,17 +3030,17 @@
 					log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
 					return
 				if(choice == "Ion")
-					command_alert("Ion storm detected near the station. Please check all AI-controlled equipment for errors.", "Anomaly Alert",alert='sound/AI/ionstorm.ogg')
+					command_alert(/datum/command_alert/ion_storm)
 					message_admins("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Ion Alert.")
 					return
 				if(choice == "Meteor Wave")
-					command_alert("A meteor storm has been detected on collision course with the station. Seek shelter within the core of the station immediately.", "Meteor Alert",alert='sound/AI/meteors.ogg')
+					command_alert(/datum/command_alert/meteor_wave)
 					message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
 					return
 				if(choice == "Carp Migration")
-					command_alert("Unknown biological entities have been detected near [station_name()], please stand-by.", "Lifesign Alert")
+					command_alert(/datum/command_alert/carp)
 					message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
 					return

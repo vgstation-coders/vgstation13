@@ -13,8 +13,6 @@
 		if(3.0)
 			if(prob(20))
 				new/obj/effect/decal/cleanable/soot(src)
-			return
-	return
 
 /turf/unsimulated/floor/attack_paw(user as mob)
 	return src.attack_hand(user)
@@ -23,8 +21,8 @@
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
-		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = PLANE_OBJ)
-	return
+		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
+
 
 /turf/unsimulated/floor/grass
 	icon_state = "grass1"

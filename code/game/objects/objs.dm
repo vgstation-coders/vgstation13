@@ -26,7 +26,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/holomap = FALSE // Whether we should be on the holomap.
 	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
-	plane = PLANE_OBJ
+	plane = OBJ_PLANE
 
 /obj/New()
 	..()
@@ -308,7 +308,7 @@ a {
 
 /obj/proc/wrenchAnchor(var/mob/user) //proc to wrench an object that can be secured
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored)
+		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return -1
 	if(!anchored)

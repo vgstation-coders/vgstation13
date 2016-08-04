@@ -103,7 +103,7 @@
 
 /obj/structure/closet/crate/meteor_panic/New()
 
-	new /obj/item/device/violin(src) //My tune will go on
+	new /obj/item/device/instrument/violin(src) //My tune will go on
 	new /obj/item/weapon/phone(src)
 	new /obj/item/weapon/storage/fancy/flares(src)
 	new /obj/item/weapon/storage/fancy/flares(src)

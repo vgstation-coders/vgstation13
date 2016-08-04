@@ -381,7 +381,6 @@ var/global/list/narsie_list = list()
 ////////////////Glow//////////////////
 /obj/machinery/singularity/narsie/proc/updateicon()
 	overlays = 0
-	var/overlay_layer = LIGHTING_LAYER+1
 	overlays += image(icon,"glow-[icon_state]",overlay_layer)
 */
 

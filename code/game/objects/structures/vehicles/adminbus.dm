@@ -10,8 +10,7 @@
 	icon = 'icons/obj/bus.dmi'
 	icon_state = "adminbus"
 	can_spacemove=1
-	layer = FLY_LAYER+1
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 	unacidable = 1
@@ -36,9 +35,9 @@
 /obj/structure/bed/chair/vehicle/adminbus/New()
 	..()
 	var/turf/T = get_turf(src)
-	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = PLANE_EFFECTS)
+	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = EFFECTS_PLANE)
 	var/image/underbus = image(icon,"underbus",MOB_LAYER-1)
-	underbus.plane = PLANE_OBJ
+	underbus.plane = OBJ_PLANE
 	overlays += underbus
 	overlays += image(icon,"ad")
 	src.dir = EAST
@@ -47,7 +46,7 @@
 	update_lightsource()
 	warp = new/obj/structure/teleportwarp(src.loc)
 	busjuke = new/obj/machinery/media/jukebox/superjuke/adminbus(src.loc)
-	busjuke.plane = PLANE_EFFECTS
+	busjuke.plane = ABOVE_HUMAN_PLANE
 	busjuke.dir = EAST
 
 //Don't want the layer to change.
@@ -432,7 +431,8 @@
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 	density = 0
-	layer = 6.9
+	plane = EFFECTS_PLANE
+	layer = ABOVE_SINGULO_LAYER
 	var/max_distance = 7
 	var/obj/structure/bed/chair/vehicle/adminbus/abus = null
 	var/dropped = 0
@@ -443,7 +443,7 @@
 	icon_state = "singulo_catcher"
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
-	layer = 7
+	layer = ABOVE_SINGULO_LAYER+0.1
 
 /obj/structure/hookshot/claw/proc/hook_throw(var/toward)
 	max_distance--
@@ -589,8 +589,6 @@
 	icon_state = ""
 	pixel_x = -WORLD_ICON_SIZE*2
 	pixel_y = -WORLD_ICON_SIZE*2
-	layer = MOB_LAYER-1
-	plane = PLANE_OBJ
 	anchored = 1
 	density = 0
 	mouse_opacity = 0

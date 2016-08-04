@@ -7,7 +7,7 @@
 	body_parts_covered = HEAD|EARS|EYES
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/luchador/treat_mask_speech(var/datum/speech/speech)
 	var/message=speech.message
@@ -37,11 +37,11 @@
 	desc = "Worn by robust fighters who uphold justice and fight honorably."
 	icon_state = "luchador"
 	item_state = "luchador"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/luchador/rudos
 	name = "Rudos Mask"
 	desc = "Worn by robust fighters who are willing to do anything to win."
 	icon_state = "luchar"
 	item_state = "luchar"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)

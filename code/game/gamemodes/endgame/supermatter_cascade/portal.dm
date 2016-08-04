@@ -10,7 +10,7 @@
 	announce=0
 	narnar=0
 
-	layer = LIGHTING_LAYER + 2 // ITS SO BRIGHT
+	layer = SUPER_PORTAL_LAYER
 
 	consume_range = 6
 
@@ -59,7 +59,7 @@
 				continue
 
 			if (dist > consume_range && canPull(AM))
-				
+
 				if (101 == AM.invisibility)
 					continue
 

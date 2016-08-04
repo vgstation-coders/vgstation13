@@ -56,8 +56,6 @@ var/global/list/alert_overlays_global = list()
 #define FIREDOOR_ALERT_COLD     2
 // Not used #define FIREDOOR_ALERT_LOWPRESS 4
 
-#define FIREDOOR_CLOSED_MOD	0.8
-
 /obj/machinery/door/firedoor
 	name = "\improper Emergency Shutter"
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
@@ -66,8 +64,9 @@ var/global/list/alert_overlays_global = list()
 	req_one_access = list(access_atmospherics, access_engine_equip)
 	opacity = 0
 	density = 0
-	layer = DOOR_LAYER - 0.2
-	base_layer = DOOR_LAYER - 0.2
+	layer = BELOW_TABLE_LAYER
+	open_layer = BELOW_TABLE_LAYER
+	closed_layer = ABOVE_DOOR_LAYER
 
 	dir = 2
 
@@ -318,7 +317,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
-	layer = base_layer
+	layer = open_layer
 	var/area/A = get_area_master(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
@@ -355,7 +354,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
-	layer = base_layer + FIREDOOR_CLOSED_MOD
+	layer = closed_layer
 
 /obj/machinery/door/firedoor/door_animate(animation)
 	switch(animation)
@@ -363,7 +362,6 @@ var/global/list/alert_overlays_global = list()
 			flick("door_opening", src)
 		if("closing")
 			flick("door_closing", src)
-	return
 
 
 /obj/machinery/door/firedoor/update_icon()

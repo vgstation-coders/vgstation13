@@ -328,7 +328,7 @@
 		chain_img = image(icon,src,"chain",MOB_LAYER-0.1,get_dir(src,extremity_A))
 	if(extremity_B && (loc != extremity_B.loc))
 		chain_img = image(icon,src,"chain",MOB_LAYER-0.1,get_dir(src,extremity_B))
-	chain_img.plane = PLANE_OBJ
+	chain_img.plane = OBJ_PLANE
 	overlays += chain_img
 
 /obj/effect/overlay/chain/proc/update_overlays(var/obj/effect/overlay/chain/C)

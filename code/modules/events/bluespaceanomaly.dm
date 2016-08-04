@@ -34,7 +34,7 @@
 
 
 /datum/event/bluespace_anomaly/announce()
-	command_alert("Bluespace anomaly detected in the vicinity of [station_name()]. [impact_area.name] has been affected.", "Anomaly Alert")
+	command_alert(new /datum/command_alert/bluespace_anomaly(impact_area.name))
 
 
 /datum/event/bluespace_anomaly/start()
@@ -83,7 +83,8 @@
 							blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
 							blueeffect.icon = 'icons/effects/effects.dmi'
 							blueeffect.icon_state = "shieldsparkles"
-							blueeffect.layer = 17
+							blueeffect.plane = HUD_PLANE
+							blueeffect.layer = UNDER_HUD_LAYER
 							blueeffect.mouse_opacity = 0
 							M.client.screen += blueeffect
 							sleep(20)

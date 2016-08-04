@@ -28,7 +28,7 @@
 			if(user.drop_item(W, src.loc))
 				density = 0
 				W.density = 1
-				W.layer = 3.1
+				W.layer = ABOVE_OBJ_LAYER
 				pinned_target = W
 				to_chat(user, "You slide the target into the stake.")
 		return

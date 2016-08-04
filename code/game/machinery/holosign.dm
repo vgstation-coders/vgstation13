@@ -7,7 +7,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	desc = "Small wall-mounted holographic projector"
 	icon = 'icons/obj/holosign.dmi'
 	icon_state = "sign_off"
-	layer = 4
+	layer = ABOVE_DOOR_LAYER
 
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0

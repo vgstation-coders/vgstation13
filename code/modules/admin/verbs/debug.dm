@@ -441,7 +441,7 @@ Pressure: [env.return_pressure()]"}
 				M.mind.special_role = "Cultist"
 				ticker.mode.cult += M.mind
 				to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-				M.add_language("Cult")
+				M.add_language(LANGUAGE_CULT)
 			to_chat(src, "Made [M] a cultist.")
 */
 

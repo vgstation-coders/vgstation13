@@ -56,7 +56,7 @@
 	icon_state = "tajkey1"
 	uni_append = list(0x0A0,0xE00) // 0A0E00
 	species_type = /mob/living/carbon/monkey/tajara
-	languagetoadd = "Siik'tajr"
+	languagetoadd = LANGUAGE_CATBEAST
 
 /mob/living/carbon/monkey/skrell
 	name = "neaera"
@@ -65,7 +65,7 @@
 	icon_state = "skrellkey1"
 	uni_append = list(0x01C,0xC92) // 01CC92
 	species_type = /mob/living/carbon/monkey/skrell
-	languagetoadd = "Skrellian"
+	languagetoadd = LANGUAGE_SKRELLIAN
 
 /mob/living/carbon/monkey/unathi
 	name = "stok"
@@ -75,7 +75,7 @@
 	uni_append = list(0x044,0xC5D) // 044C5D
 	canWearClothes = 0
 	species_type = /mob/living/carbon/monkey/unathi
-	languagetoadd = "Sinta'unathi"
+	languagetoadd = LANGUAGE_UNATHI
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -613,8 +613,6 @@
 
 /mob/living/carbon/monkey/reset_layer()
 	if(lying)
-		plane = PLANE_OBJ
-		layer = MOB_LAYER - 0.1 //so we move under bedsheets
+		plane = LYING_MOB_PLANE
 	else
-		plane = PLANE_MOB
-		layer = MOB_LAYER
+		plane = MOB_PLANE

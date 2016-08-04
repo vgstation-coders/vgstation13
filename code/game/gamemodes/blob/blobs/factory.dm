@@ -9,9 +9,8 @@
 	var/max_spores = 2
 	var/spore_delay = 50
 	spawning = 0
-	layer = 6.6
+	layer = BLOB_FACTORY_LAYER
 
-	layer_new = 6.6
 	icon_new = "factory"
 	icon_classic = "blob_factory"
 
@@ -62,12 +61,13 @@
 	if(blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
+			underlays.len = 0
 
-			overlays += image(icon,"roots", layer = 3)
+			underlays += image(icon,"roots")
 
 			if(!spawning)
 				for(var/obj/effect/blob/B in orange(src,1))
-					overlays += image(icon,"factoryconnect",dir = get_dir(src,B), layer = layer+0.1)
+					overlays += image(icon,"factoryconnect",dir = get_dir(src,B))
 			if(spawnend)
 				spawn(10)
 					update_icon()
@@ -97,7 +97,8 @@
 	max_co2 = 0
 	minbodytemp = 0
 	maxbodytemp = 360
-	layer = 7.2
+	plane = BLOB_PLANE
+	layer = BLOB_SPORE_LAYER
 
 /mob/living/simple_animal/hostile/blobspore/New(loc, var/obj/effect/blob/factory/linked_node)
 	if(istype(linked_node))

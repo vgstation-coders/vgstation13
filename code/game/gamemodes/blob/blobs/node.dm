@@ -6,10 +6,9 @@
 	maxhealth = 100
 	fire_resist = 2
 	custom_process=1
-	layer = 6.8
+	layer = BLOB_NODE_LAYER
 	spawning = 0
 
-	layer_new = 6.8
 	icon_new = "node"
 	icon_classic = "blob_node"
 
@@ -63,12 +62,13 @@
 	if(blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
+			underlays.len = 0
 
-			overlays += image(icon,"roots", layer = 3)
+			underlays += image(icon,"roots")
 
 			if(!spawning)
 				for(var/obj/effect/blob/B in orange(src,1))
-					overlays += image(icon,"nodeconnect",dir = get_dir(src,B), layer = layer+0.1)
+					overlays += image(icon,"nodeconnect",dir = get_dir(src,B))
 			if(spawnend)
 				spawn(10)
 					update_icon()

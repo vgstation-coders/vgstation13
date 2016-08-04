@@ -5,7 +5,7 @@
 	damage_type = BURN
 	flag = "laser"
 	kill_count = 100
-	layer = 13
+	layer = PROJECTILE_LAYER
 	damage = 30
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "ricochet_head"
@@ -358,7 +358,7 @@
 	density = 0
 	unacidable = 1
 	anchored = 1
-	layer = 12
+	layer = BELOW_PROJECTILE_LAYER
 
 /obj/structure/ricochet_trail/New()
 	. = ..()
@@ -373,7 +373,7 @@
 	density = 0
 	unacidable = 1
 	anchored = 1
-	layer = 14
+	layer = ABOVE_PROJECTILE_LAYER
 
 /obj/structure/ricochet_bump/New()
 	. = ..()

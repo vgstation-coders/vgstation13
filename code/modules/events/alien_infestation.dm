@@ -16,7 +16,7 @@
 
 /datum/event/alien_infestation/announce()
 	if(successSpawn)
-		command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert",alert='sound/AI/aliens.ogg')
+		command_alert(/datum/command_alert/xenomorphs)
 
 
 /datum/event/alien_infestation/start()

@@ -17,7 +17,7 @@
 
 // To ensure that if output file syntax is changed, we will still be able to process
 // new and old files
-#define STAT_OUTPUT_VERSION "1.0"
+#define STAT_OUTPUT_VERSION "1.1"
 #define STAT_OUTPUT_DIR "data/statfiles/"
 
 /datum/stat_collector
@@ -81,7 +81,7 @@
 		var/obj/item/weapon/storage/box/B = resulting_item
 		for(var/obj/O in B.contents)
 			BAD.contains += O.type
-		BAD.purchaser_key = user.mind.key
+		BAD.purchaser_key = ckey(user.mind.key)
 		BAD.purchaser_name = user.mind.name
 		BAD.purchaser_is_traitor = was_traitor
 		badass_bundles += BAD
@@ -92,7 +92,7 @@
 		else
 			UP.itemtype = bundle.item
 		UP.bundle = bundle.type
-		UP.purchaser_key = user.mind.key
+		UP.purchaser_key = ckey(user.mind.key)
 		UP.purchaser_name = user.mind.name
 		UP.purchaser_is_traitor = was_traitor
 		uplink_purchases += UP
@@ -126,7 +126,7 @@
 	d.realname = M.name
 	if(M.mind)
 		if(M.mind.special_role && M.mind.special_role != "") d.special_role = M.mind.special_role
-		if(M.mind.key) d.key = M.mind.key
+		if(M.mind.key) d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name) d.realname = M.mind.name
 	stat_collection.death_stats += d
 
@@ -183,7 +183,9 @@
 
 // This guy writes the first line(s) of the stat file! Woo!
 /datum/stat_collector/proc/Write_Header(statfile)
-	statfile << "STATLOG_START|[STAT_OUTPUT_VERSION]|[map.nameLong]|[num2text(round_start_time, 30)]|[num2text(world.realtime, 30)]"
+	var/start_timestamp = time2text(round_start_time, "YYYY.MM.DD.hh.mm.ss")
+	var/end_timestamp = time2text(world.realtime, "YYYY.MM.DD.hh.mm.ss")
+	statfile << "STATLOG_START|[STAT_OUTPUT_VERSION]|[map.nameLong]|[start_timestamp]|[end_timestamp]"
 	statfile << "MASTERMODE|[master_mode]" // sekrit, or whatever else was decided as the 'actual' mode on round start.
 	if(istype(ticker.mode, /datum/game_mode/mixed))
 		var/datum/game_mode/mixed/mixy = ticker.mode

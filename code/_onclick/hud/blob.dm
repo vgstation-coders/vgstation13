@@ -4,7 +4,7 @@
 	mymob.gui_icons.blob_bgLEFT.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
 	mymob.gui_icons.blob_bgLEFT.icon_state = "backgroundLEFT"
 	mymob.gui_icons.blob_bgLEFT.name = "Blob HUD"
-	mymob.gui_icons.blob_bgLEFT.layer = 19
+	mymob.gui_icons.blob_bgLEFT.layer = HUD_BASE_LAYER
 	mymob.gui_icons.blob_bgLEFT.screen_loc = ui_blob_bgLEFT
 	mymob.gui_icons.blob_bgLEFT.mouse_opacity = 0
 
@@ -12,7 +12,7 @@
 	mymob.gui_icons.blob_bgRIGHT.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
 	mymob.gui_icons.blob_bgRIGHT.icon_state = "backgroundRIGHT"
 	mymob.gui_icons.blob_bgRIGHT.name = "Blob HUD"
-	mymob.gui_icons.blob_bgRIGHT.layer = 19
+	mymob.gui_icons.blob_bgRIGHT.layer = HUD_BASE_LAYER
 	mymob.gui_icons.blob_bgRIGHT.screen_loc = ui_blob_bgRIGHT
 	mymob.gui_icons.blob_bgRIGHT.mouse_opacity = 0
 
@@ -20,7 +20,7 @@
 	mymob.gui_icons.blob_coverLEFT.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
 	mymob.gui_icons.blob_coverLEFT.icon_state = "coverLEFT"
 	mymob.gui_icons.blob_coverLEFT.name = "Points"
-	mymob.gui_icons.blob_coverLEFT.layer = 21
+	mymob.gui_icons.blob_coverLEFT.layer = HUD_ABOVE_ITEM_LAYER
 	mymob.gui_icons.blob_coverLEFT.screen_loc = ui_blob_bgLEFT
 	mymob.gui_icons.blob_coverLEFT.maptext_x = 1
 	mymob.gui_icons.blob_coverLEFT.maptext_y = 126*PIXEL_MULTIPLIER
@@ -29,7 +29,7 @@
 	mymob.gui_icons.blob_coverRIGHT.icon = 'icons/mob/screen1_blob_fullscreen.dmi'
 	mymob.gui_icons.blob_coverRIGHT.icon_state = "coverRIGHT"
 	mymob.gui_icons.blob_coverRIGHT.name = "Health"
-	mymob.gui_icons.blob_coverRIGHT.layer = 21
+	mymob.gui_icons.blob_coverRIGHT.layer = HUD_ABOVE_ITEM_LAYER
 	mymob.gui_icons.blob_coverRIGHT.screen_loc = ui_blob_bgRIGHT
 	mymob.gui_icons.blob_coverRIGHT.maptext_x = 464*PIXEL_MULTIPLIER
 	mymob.gui_icons.blob_coverRIGHT.maptext_y = 126*PIXEL_MULTIPLIER
@@ -38,14 +38,12 @@
 	mymob.gui_icons.blob_powerbar.icon = 'icons/mob/screen1_blob_bars.dmi'
 	mymob.gui_icons.blob_powerbar.icon_state = "points"
 	mymob.gui_icons.blob_powerbar.name = "Points"
-	mymob.gui_icons.blob_powerbar.layer = 20
 	mymob.gui_icons.blob_powerbar.screen_loc = ui_blob_powerbar
 
 	mymob.gui_icons.blob_healthbar = getFromPool(/obj/screen/specialblob)
 	mymob.gui_icons.blob_healthbar.icon = 'icons/mob/screen1_blob_bars.dmi'
 	mymob.gui_icons.blob_healthbar.icon_state = "health"
 	mymob.gui_icons.blob_healthbar.name = "Health"
-	mymob.gui_icons.blob_healthbar.layer = 20
 	mymob.gui_icons.blob_healthbar.screen_loc = ui_blob_healthbar
 
 	mymob.gui_icons.blob_spawnblob = getFromPool(/obj/screen/specialblob)

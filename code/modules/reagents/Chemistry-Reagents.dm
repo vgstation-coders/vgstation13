@@ -641,8 +641,7 @@
 				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
 					qdel(W)
 					continue
-				W.layer = initial(W.layer)
-				W.plane = initial(W.plane)
+				W.reset_plane_and_layer()
 				W.loc = C.loc
 				W.dropped(C)
 			var/mob/living/carbon/slime/new_mob = new /mob/living/carbon/slime(C.loc)
@@ -2023,7 +2022,7 @@
 	description = "Heals eye damage"
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	
+
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 
 	if(..()) return 1

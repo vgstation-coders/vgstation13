@@ -22,7 +22,7 @@
 "v" = (/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/ioufort)
 "w" = (/obj/machinery/light{dir = 4},/mob/living/simple_animal/hostile/retaliate/clown,/turf/simulated/floor{dir = 9; icon_state = "purplefull"},/area/vault/ioufort)
 "x" = (/obj/structure/closet/crate,/obj/machinery/light,/obj/item/weapon/gun/energy/laser/redtag,/turf/simulated/floor/plating,/area/vault/ioufort)
-"y" = (/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibup1"; layer = 3.1},/obj/structure/closet/crate{icon_state = "crateopen"; layer = 2.99; opened = 1},/obj/machinery/light{dir = 8},/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/ioufort)
+"y" = (/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibup1"},/obj/structure/closet/crate{icon_state = "crateopen"; opened = 1},/obj/machinery/light{dir = 8},/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/ioufort)
 "z" = (/obj/effect/decal/cleanable/blood/gibs{icon_state = "gib3"},/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/vault/ioufort)
 "A" = (/obj/machinery/door/airlock/vault,/turf/simulated/floor/plating,/area/vault/ioufort)
 "B" = (/mob/living/simple_animal/corgi,/turf/simulated/floor{icon_state = "purple"; dir = 5},/area/vault/ioufort)

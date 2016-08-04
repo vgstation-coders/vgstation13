@@ -11,7 +11,6 @@
 	name = "Electromagnetic Generator"
 	desc = "A device that uses station power to create points of magnetic energy."
 	level = 1		// underfloor
-	layer = 2.5
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 50

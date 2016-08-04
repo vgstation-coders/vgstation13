@@ -6,12 +6,12 @@
 	anchored      = TRUE
 	ignoreinvert  = TRUE
 
-	icon          = LIGHTING_ICON
-	color         = LIGHTING_BASE_MATRIX
-	plane         = PLANE_LIGHTING
-	mouse_opacity = 0
-	layer         = LIGHTING_LAYER
-	invisibility  = INVISIBILITY_LIGHTING
+	icon             = LIGHTING_ICON
+	color            = LIGHTING_BASE_MATRIX
+	plane            = LIGHTING_PLANE
+	mouse_opacity    = 0
+	layer            = LIGHTING_LAYER
+	invisibility     = INVISIBILITY_LIGHTING
 
 	blend_mode    = BLEND_MULTIPLY
 

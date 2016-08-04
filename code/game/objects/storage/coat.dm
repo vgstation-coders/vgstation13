@@ -59,8 +59,7 @@
 	src.boxes.screen_loc = text("[tx],[ty] to [mx],[my]")
 	for(var/obj/O in src.contents)
 		O.screen_loc = text("[cx],[cy]")
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		cx++
 		if (cx > mx)
 			cx = tx
@@ -75,8 +74,7 @@
 	src.boxes.screen_loc = text("4:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2] to [4+cols]:[WORLD_ICON_SIZE/2],[2+rows]:[WORLD_ICON_SIZE/2]")
 	for(var/obj/O in src.contents)
 		O.screen_loc = text("[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]")
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		cx++
 		if (cx > (4+cols))
 			cx = 4
@@ -206,11 +204,11 @@
 	boxes.master = src
 	boxes.icon_state = "block"
 	boxes.screen_loc = "7,7 to 10,8"
-	boxes.layer = 19
+	boxes.layer = HUD_BASE_LAYER
 	closer = getFromPool(/obj/screen/close)
 	closer.master = src
 	closer.icon_state = "x"
-	closer.layer = 20
+	closer.layer = HUD_ITEM_LAYER
 	orient2hud()
 
 /obj/item/clothing/suit/emp_act(severity)

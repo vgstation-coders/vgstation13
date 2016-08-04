@@ -8,7 +8,7 @@
 
 /obj/structure/snow
 	name = "snow"
-	layer = 2.5//above the plating and the vents, bellow most items and structures
+	layer = BELOW_OBJ_LAYER
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 	alpha = 230
@@ -469,7 +469,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	density = 0
 	anchored = 1
 	layer = FLY_LAYER
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/obj/flora/deadtrees.dmi'
 	icon_state = "tree_1"
 

@@ -3,7 +3,7 @@
 	opacity = 0
 
 	anchored = 1
-	layer = 3.9
+	layer = ABOVE_DOOR_LAYER
 
 	icon = 'icons/48x48/pod_construction.dmi'
 	icon_state = "pod_1"

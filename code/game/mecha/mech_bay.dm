@@ -7,7 +7,8 @@
 	var/obj/mecha/recharging_mecha = null
 	var/capacitor_max = 0 //How much can be stored
 	var/capacitor_stored = 0 //How much is presently stored
-	layer = TURF_LAYER + 0.1 //Just above the floor
+	layer = ABOVE_TILE_LAYER
+	plane = ABOVE_TURF_PLANE
 	anchored = 1
 	density = 0
 

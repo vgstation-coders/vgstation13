@@ -5,7 +5,7 @@
 	density = 1
 
 	layer = FLY_LAYER
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/obj/flora/deadtrees.dmi'
 	icon_state = "tree_1"
 
@@ -204,7 +204,7 @@
 	icon = 'icons/obj/plants.dmi'
 	icon_state = "plant-26"
 	layer = FLY_LAYER
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/flora/pottedplant/Destroy()
 	for(var/I in contents)
@@ -232,6 +232,9 @@
 		user.put_in_active_hand(I)
 	else
 		to_chat(user, "You root around in the roots.")
+		
+/obj/structure/flora/pottedplant/attack_paw(mob/user)
+	return attack_hand(user)
 
 // /vg/
 /obj/structure/flora/pottedplant/random/New()

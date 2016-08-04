@@ -13,7 +13,7 @@
 	safe_oxygen_min = 0
 	var/eggsleft
 	var/eggcost = 250
-	languagetoadd = "Vox-pidgin"
+	languagetoadd = LANGUAGE_VOX
 
 /mob/living/carbon/monkey/vox/attack_hand(mob/living/carbon/human/M as mob)
 

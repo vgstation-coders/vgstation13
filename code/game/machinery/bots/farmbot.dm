@@ -31,7 +31,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "farmbot0"
 	icon_initial = "farmbot"
-	layer = 5.0
 	density = 1
 	anchored = 0
 	health = 50
@@ -542,7 +541,6 @@
 	var/obj/item/weapon/farmbot_arm_assembly/A = new /obj/item/weapon/farmbot_arm_assembly
 
 	A.loc = src.loc
-	A.layer = 20
 	to_chat(user, "You add the robot arm to the [src]")
 	src.loc = A //Place the water tank into the assembly, it will be needed for the finished bot
 

@@ -11,7 +11,7 @@
 	icon_state = "spiderling"
 	icon_living = "spiderling"
 
-	layer = 2.7
+	layer = HIDING_MOB_PLANE
 	density = 0
 
 	var/amount_grown = 0

@@ -32,7 +32,7 @@ var/global/num_vending_terminals = 1
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "empty"
 	var/obj/structure/vendomatpack/pack = null
-	layer = 2.9
+	layer = BELOW_OBJ_LAYER
 	anchored = 1
 	density = 1
 	var/health = 100
@@ -352,7 +352,7 @@ var/global/num_vending_terminals = 1
 		var/obj/item/stack/sheet/cardboard/C = W
 		if(C.amount>=4)
 			C.use(4)
-			to_chat(user, "<span class='notice'>You slot some cardboard into the machine into [src].</span>")
+			to_chat(user, "<span class='notice'>You slot some cardboard into \the [src].</span>")
 			cardboard = 1
 			src.updateUsrDialog()
 	if(iswiretool(W))
@@ -2109,11 +2109,11 @@ var/global/num_vending_terminals = 1
 		src.build_inventory(contraband, 1)
 		emagged = 1
 		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+		dangerlay.plane = LIGHTING_PLANE
 		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
-	return
 
 //NaziVend++
 /obj/machinery/vending/nazivend/DANGERMODE
@@ -2139,7 +2139,8 @@ var/global/num_vending_terminals = 1
 	..()
 	emagged = 1
 	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+	dangerlay.plane = LIGHTING_PLANE
 	overlays_vending[2] = dangerlay
 	update_icon()
 
@@ -2182,7 +2183,8 @@ var/global/num_vending_terminals = 1
 		src.build_inventory(contraband, 1)
 		emagged = 1
 		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+		dangerlay.plane = LIGHTING_PLANE
 		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
@@ -2215,7 +2217,8 @@ var/global/num_vending_terminals = 1
 	..()
 	emagged = 1
 	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+	dangerlay.plane = LIGHTING_PLANE
 	overlays_vending[2] = dangerlay
 	update_icon()
 

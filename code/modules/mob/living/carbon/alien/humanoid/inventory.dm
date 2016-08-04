@@ -22,8 +22,7 @@
 			to_chat(usr, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
 			return
 
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
 	if(client) client.screen |= W
@@ -77,8 +76,7 @@
 		if(dropped)
 			W.dropped(src)
 		if(W)
-			W.layer = initial(W.layer)
-			W.plane = initial(W.plane)
+			W.reset_plane_and_layer()
 	return 1
 
 //Literally copypasted /mob/proc/attack_ui(slot, hand_index) while replacing attack_hand with attack_alien

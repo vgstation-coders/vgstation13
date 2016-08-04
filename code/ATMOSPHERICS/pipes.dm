@@ -17,7 +17,7 @@
 	var/datum/pipeline/parent
 	var/volume = 0
 	force = 20
-	layer = 2.4 //under wires with their 2.44
+	layer = PIPE_LAYER
 	use_power = 0
 	var/alert_pressure = 80*ONE_ATMOSPHERE
 	var/baseicon=""
@@ -446,7 +446,7 @@
 	var/obj/machinery/atmospherics/node2
 	var/obj/machinery/atmospherics/node3
 	level = 1
-	layer = 2.4 //under wires with their 2.44
+	layer = PIPE_LAYER
 	var/global/image/manifold_centre = image('icons/obj/pipes.dmi',"manifold_centre")
 
 /obj/machinery/atmospherics/pipe/manifold/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
@@ -670,7 +670,7 @@
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
 	level = 1
-	layer = 2.4 //under wires with their 2.44
+	layer = PIPE_LAYER
 	baseicon="manifold4w"
 	var/global/image/manifold4w_centre = image('icons/obj/pipes.dmi',"manifold4w_centre")
 

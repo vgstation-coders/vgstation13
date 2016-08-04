@@ -130,7 +130,7 @@
 	icon_state = "barricade_full"
 	health = 150
 	sheetamount = 3
-	layer = 3.21 //Just above windows (for window barricades) and other barricades
+	layer = ABOVE_WINDOW_LAYER
 
 //Basically the barricade version of full windows, and inherits the former rather than the later
 /obj/structure/window/barricade/full/New(loc)

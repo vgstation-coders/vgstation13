@@ -2,7 +2,6 @@ var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
 /atom
-	layer = 2
 
 	var/ghost_read  = 1 // All ghosts can read
 	var/ghost_write = 0 // Only aghosts can write
@@ -243,6 +242,9 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/projectile_check()
 	return
+	
+//Override this to have source respond differently to visible_messages said by an atom A
+/atom/proc/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 
 /*
  *	atom/proc/search_contents_for(path,list/filter_path=null)

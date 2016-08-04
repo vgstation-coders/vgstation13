@@ -40,8 +40,7 @@ turf/unsimulated/wall/splashscreen
 	name = "Space Station 13"
 	icon = null
 	icon_state = null
-	layer = FLY_LAYER
-	plane = PLANE_EFFECTS
+	plane = EFFECTS_PLANE
 	canSmoothWith = null
 
 	New()
@@ -66,7 +65,7 @@ turf/unsimulated/wall/splashscreen
 
 /turf/unsimulated/wall/cultify()
 	ChangeTurf(/turf/unsimulated/wall/cult)
-	turf_animation('icons/effects/effects.dmi',"cultwall",0,0,MOB_LAYER-1, anim_plane = PLANE_TURF)
+	turf_animation('icons/effects/effects.dmi',"cultwall",0,0,MOB_LAYER-1, anim_plane = TURF_PLANE)
 	return
 
 /turf/unsimulated/wall/cult/cultify()

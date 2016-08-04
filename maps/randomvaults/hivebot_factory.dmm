@@ -20,7 +20,7 @@
 "at" = (/turf/simulated/wall/r_wall,/area/vault/factory)
 "au" = (/obj/item/robot_parts/robot_component/camera,/obj/structure/window/barricade{dir = 4},/turf/unsimulated/floor,/area)
 "av" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor/plating,/area/vault/factory)
-"aw" = (/obj/structure/window/barricade{dir = 8},/obj/structure/sign/securearea{desc = "A warning sign which reads 'VACUUM'"; icon_state = "space"; layer = 4; name = "VACUUM"; pixel_x = -64; pixel_y = -64},/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/plating,/area/vault/factory)
+"aw" = (/obj/structure/window/barricade{dir = 8},/obj/structure/sign/securearea{desc = "A warning sign which reads 'VACUUM'"; icon_state = "space"; name = "VACUUM"; pixel_x = -64; pixel_y = -64},/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/plating,/area/vault/factory)
 "ax" = (/obj/structure/window/barricade{dir = 4},/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/plating,/area/vault/factory)
 "ay" = (/obj/structure/window/barricade{dir = 8},/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
 "az" = (/obj/effect/gibspawner/robot,/obj/item/weapon/wirecutters,/turf/simulated/floor/plating,/area/vault/factory)

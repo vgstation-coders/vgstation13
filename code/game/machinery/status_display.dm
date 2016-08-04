@@ -48,6 +48,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 	maptext_height = 26*PIXEL_MULTIPLIER
 	maptext_width = WORLD_ICON_SIZE
+	layer = ABOVE_WINDOW_LAYER
 
 // new display
 // register for radio system

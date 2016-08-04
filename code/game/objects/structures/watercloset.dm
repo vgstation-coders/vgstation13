@@ -208,8 +208,7 @@
 	name = "mist"
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "mist"
-	layer = MOB_LAYER + 1
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 	anchored = 1
 	mouse_opacity = 0
 
@@ -279,8 +278,8 @@
 		returnToPool(mymist)
 
 	if(on)
-		var/image/water = image('icons/obj/watercloset.dmi', src, "water", MOB_LAYER + 1, dir)
-		water.plane = PLANE_EFFECTS
+		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
+		water.plane = ABOVE_HUMAN_PLANE
 		overlays += water
 		if(watertemp == "freezing") //No mist if the water is really cold
 			return

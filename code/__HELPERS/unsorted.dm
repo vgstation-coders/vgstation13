@@ -699,8 +699,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	if(user && user.client && user.client.prefs.progress_bars)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.plane = PLANE_HUD
-			progbar.layer = 21
+			progbar.plane = HUD_PLANE
+			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.pixel_z = WORLD_ICON_SIZE
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
@@ -746,8 +746,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.pixel_z = WORLD_ICON_SIZE
-			progbar.plane = PLANE_HUD
-			progbar.layer = 21
+			progbar.plane = HUD_PLANE
+			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
@@ -758,8 +758,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 				progbar.pixel_z = WORLD_ICON_SIZE
-				progbar.plane = PLANE_HUD
-				progbar.layer = 21
+				progbar.plane = HUD_PLANE
+				progbar.layer = HUD_ABOVE_ITEM_LAYER
 				progbar.appearance_flags = RESET_COLOR
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"

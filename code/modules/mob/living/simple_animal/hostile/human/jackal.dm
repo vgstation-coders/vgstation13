@@ -101,7 +101,9 @@
 /mob/living/simple_animal/hostile/humanoid/jackal/firebreather/pyromaniac/New()
 	..()
 
-	overlays.Add(image(icon = icon, icon_state = "pyromaniac_eyes", layer = LIGHTING_LAYER + 1))
+	var/image/pyromaniac_eyes = image(icon = icon, icon_state = "pyromaniac_eyes", layer = ABOVE_LIGHTING_LAYER)
+	pyromaniac_eyes.plane = LIGHTING_PLANE
+	overlays += pyromaniac_eyes
 
 /mob/living/simple_animal/hostile/humanoid/jackal/firebreather/pyromaniac/Shoot()
 	var/old_target = src.target

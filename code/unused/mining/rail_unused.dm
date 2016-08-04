@@ -228,7 +228,7 @@ for (var/client/C)
 
 	load.loc = src.loc
 	load.pixel_y -= 9
-	load.layer = initial(load.layer)
+	load.reset_plane_and_layer()
 	if(ismob(load))
 		var/mob/M = load
 		if(M.client)
@@ -247,7 +247,7 @@ for (var/client/C)
 
 	for(var/atom/movable/AM in src)
 		AM.loc = src.loc
-		AM.layer = initial(AM.layer)
+		AM.reset_plane_and_layer()
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))
 			var/mob/M = AM

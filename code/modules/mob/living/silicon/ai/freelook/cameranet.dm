@@ -125,9 +125,9 @@ var/datum/cameranet/cameranet = new()
 						chunk.cameras |= c
 					chunk.hasChanged()
 
-// Will check if a mob is on a viewable turf. Returns 1 if it is, otherwise returns 0.
+// Will check if an atom is on a viewable turf. Returns 1 if it is, otherwise returns 0.
 
-/datum/cameranet/proc/checkCameraVis(mob/living/target as mob)
+/datum/cameranet/proc/checkCameraVis(atom/target as obj|mob|turf)
 
 
 	// 0xf = 15

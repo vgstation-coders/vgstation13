@@ -14,7 +14,7 @@
 	w_class = W_CLASS_MEDIUM
 	throw_range = 5
 	throw_speed = 1
-	layer = 3.9
+	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps", "baps", "whaps")
 

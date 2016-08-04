@@ -29,7 +29,8 @@
 	var/max_health = 100
 	var/destroyed = 0
 	var/inertia_dir = 0
-	plane = PLANE_MOB
+	plane = ABOVE_HUMAN_PLANE
+	layer = VEHICLE_LAYER
 
 	var/can_spacemove = 0
 	var/ethereal = 0
@@ -89,7 +90,6 @@
 		return 1
 	if(mykey)
 		return user.is_holding_item(mykey)
-	return 0
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated()  || destroyed)
@@ -140,7 +140,6 @@
 	if(istype(src.loc, /turf/space) && (!src.Process_Spacemove(0, user)))
 		var/turf/space/S = src.loc
 		S.Entered(src)*/
-	return 0
 
 /obj/structure/bed/chair/vehicle/proc/Process_Spacemove(var/check_drift = 0, mob/user)
 
@@ -240,11 +239,11 @@
 
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)
-		layer = FLY_LAYER
-		plane = PLANE_EFFECTS
+		plane = ABOVE_HUMAN_PLANE
+		layer = VEHICLE_LAYER
 	else
-		layer = OBJ_LAYER
-		plane = PLANE_OBJ
+		plane = OBJ_PLANE
+		layer = ABOVE_OBJ_LAYER
 
 /obj/structure/bed/chair/vehicle/update_dir()
 	. = ..()
