@@ -30,7 +30,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	supernatural = 1
+	mob_species_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/hostile/creature/cult/CanAttack(var/atom/the_target)
 	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS

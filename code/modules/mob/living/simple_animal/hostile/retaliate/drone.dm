@@ -29,6 +29,7 @@
 	meat_type = null
 
 	flying = 1
+	mob_species_flags = MOB_ROBOTIC
 
 	var/datum/effect/effect/system/trail/ion_trail
 	var/hostile_time = 0

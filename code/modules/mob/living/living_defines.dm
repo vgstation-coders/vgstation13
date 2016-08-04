@@ -64,6 +64,7 @@
 	var/is_ventcrawling = 0
 
 	var/species_type
+	var/mob_species_flags
 	var/holder_type = /obj/item/weapon/holder/animal	//When picked up, put us into a holder of this type. Dionae use /obj/item/weapon/holder/diona, others - the default one
 														//Set to null to prevent people from picking this mob up!
 	//

@@ -10,18 +10,27 @@
 	var/intialFire = 0	//it's a little sloppy I know but it was this or the GODMODE flag. Lesser of two evils.
 	var/intialBrute = 0
 	var/intialOxy = 0
-	var/timer = 80 // time in seconds = 2.5(timer) - 50, this makes 150 seconds = 2.5m
+	var/timer = 80 // time in seconds = 2.5(timer) - 50, this makes 150 seconds = 2.5m. Set to -1 to make the statue last forever
+
+/obj/structure/closet/statue/eternal
+	timer = -1 //forever
 
 /obj/structure/closet/statue/New(loc, var/mob/living/L)
 
-	if(ishuman(L) || ismonkey(L) || iscorgi(L))
+	if(istype(L))
 		if(L.locked_to)
 			L.locked_to = 0
 			L.anchored = 0
 		if(L.client)
 			L.client.perspective = EYE_PERSPECTIVE
 			L.client.eye = src
-		L.loc = src
+
+		for(var/obj/item/I in L.held_items)
+			L.drop_item(I)
+
+		if(L.locked_to)
+			L.unlock_from()
+		L.forceMove(src)
 		L.sdisabilities |= MUTE
 		L.delayNextAttack(timer)
 		L.click_delayer.setDelay(timer)
@@ -30,19 +39,37 @@
 		intialFire = L.getFireLoss()
 		intialBrute = L.getBruteLoss()
 		intialOxy = L.getOxyLoss()
+
+		appearance = L.appearance
+		dir = L.dir
+
 		if(ishuman(L))
 			name = "statue of [L.name]"
-			if(L.gender == "female")
-				icon_state = "human_female"
 		else if(ismonkey(L))
 			name = "statue of [L.name]"
-			icon_state = "monkey"
 		else if(iscorgi(L))
 			name = "statue of [L.name]"
-			icon_state = "corgi"
 			desc = "If it takes forever, I will wait for you..."
+		else
+			name = "statue of [L.name]"
+
+		density = L.density
+
+		//Monsters with animated icons look bad as statues!
+		var/icon/static_icon = icon(L.icon)
+		var/icon/original = icon(L.icon, L.icon_state, frame = 1)
+		var/new_iconstate = "[L.icon_state]\ref[L]" //to avoid conflict with other icon states eh
+		static_icon.Insert(original, new_iconstate)
+
+		icon = static_icon
+		icon_state = new_iconstate
+
+		animate(src, color = grayscale, 30)
 
 		processing_objects.Add(src)
+
+		if(timer < 0) //No timer - the guy's going to be in there forever, might as well kill him
+			L.stat = DEAD
 
 	if(health == 0) //meaning if the statue didn't find a valid target
 		qdel(src)
@@ -51,13 +78,16 @@
 	..()
 
 /obj/structure/closet/statue/process()
-	timer--
+	if(timer > 0)
+		timer--
+
 	for(var/mob/living/M in src) //Go-go gadget stasis field
 		M.setToxLoss(intialTox)
 		M.adjustFireLoss(intialFire - M.getFireLoss())
 		M.adjustBruteLoss(intialBrute - M.getBruteLoss())
 		M.setOxyLoss(intialOxy)
-	if (timer <= 0)
+
+	if (timer == 0)
 		dump_contents()
 		processing_objects.Remove(src)
 		qdel(src)

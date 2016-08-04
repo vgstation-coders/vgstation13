@@ -31,6 +31,8 @@
 	faction = "mummy"
 	corpse = null
 
+	mob_species_flags = MOB_SUPERNATURAL
+
 /mob/living/simple_animal/hostile/humanoid/jackal/Die()
 	visible_message("<span class='danger'>\The [src] crumbles to dust!</span>")
 

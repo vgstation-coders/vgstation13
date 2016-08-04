@@ -127,22 +127,10 @@
 	delayNextAttack(10)
 	if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 		return
-	var/mob/living/carbon/ML = A
-	var/dam_zone = ran_zone(pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
-	var/armor = ML.run_armor_check(dam_zone, "melee")
-	if(prob(75))
-		ML.apply_damage(rand(1,3), BRUTE, dam_zone, armor)
-		for(var/mob/O in viewers(ML, null))
-			O.show_message("<span class='danger'>[name] has bit [ML]!</span>", 1)
-		if(armor >= 2) return
-		if(ismonkey(ML))
-			for(var/datum/disease/D in viruses)
-				if(istype(D, /datum/disease/jungle_fever))
-					ML.contract_disease(D,1,0)
-	else
-		for(var/mob/O in viewers(ML, null))
-			O.show_message("<span class='danger'>[src] has attempted to bite [ML]!</span>", 1)
 
+	var/mob/living/ML = A
+	if(istype(ML))
+		ML.attack_paw(src)
 /*
 	Aliens
 	Defaults to same as monkey in most places

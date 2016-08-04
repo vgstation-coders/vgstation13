@@ -31,9 +31,8 @@
 	minbodytemp = 0
 	speed = 4
 
-	supernatural = 1
-
 	faction = "faithless"
+	mob_species_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/hostile/faithless/Process_Spacemove(var/check_drift = 0)
 	return 1

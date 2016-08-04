@@ -32,3 +32,4 @@
 	minbodytemp = 0
 	speed = 4
 
+	mob_species_flags = MOB_CONSTRUCT

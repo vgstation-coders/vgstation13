@@ -93,6 +93,9 @@
 		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened hit to your [zone_normal_name].")
 		if(armor < 2)
 			apply_damage(O.throwforce*(speed/5), dtype, zone, armor, O.is_sharp(), O)
+		if(istype(AM, /obj/item))
+			var/obj/item/I = AM
+			I.applied_damage(I.throwforce * (speed/5), zone, armor)
 
 		// Begin BS12 momentum-transfer code.
 

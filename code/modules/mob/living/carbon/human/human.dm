@@ -243,7 +243,7 @@
 		add_logs(M, src, "attacked", admin=0)
 
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		var/dam_zone = pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+		var/dam_zone = pick(organs_by_name)
 
 		if(M.zone_sel && M.zone_sel.selecting)
 			dam_zone = M.zone_sel.selecting
@@ -252,8 +252,9 @@
 			return
 
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-		var/armor = run_armor_check(affecting, "melee") //Armor check
+		var/armor = run_armor_check(affecting, "melee", modifier = M.armor_modifier) //Armor check
 
+		M.applied_damage(src, damage, affecting, armor)
 		apply_damage(damage, M.melee_damage_type, affecting, armor)
 		src.visible_message("<span class='danger'>[M] [M.attacktext] [src] in \the [affecting.display_name]!</span>")
 

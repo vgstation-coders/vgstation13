@@ -1,0 +1,32 @@
+################################
+# Example Changelog File
+#
+# Note: This file, and files beginning with ".", and files that don't end in ".yml" will not be read.  If you change this file, you will look really dumb.
+#
+# Your changelog will be merged with a master changelog. (New stuff added only, and only on the date entry for the day it was merged.)
+# When it is, any changes listed below will disappear.
+#
+# Valid Prefixes: 
+#   bugfix
+#   wip (For works in progress)
+#   tweak
+#   soundadd
+#   sounddel
+#   rscdel (general deleting of nice things)
+#   rscadd (general adding of nice things)
+#   imageadd
+#   imagedel
+#   spellcheck (typo fixes)
+#   experiment
+#   tgs (TG-ported fixes?)
+#################################
+
+# Your name.
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: A mysterious spaceship transporting wild animals can spawn somewhere in space.
+- rscadd: "Added cockatrices - extremely dangerous chicken-like beasts. Any living being that touches them will immediately start turning to stone. They can lay eggs. Young cockatrices are called chickatrices, and are just as dangerous as adults."
+- rscadd: Statues (created by cockatrices and the Flesh to Stone spell) are now prettier and have an animation when created

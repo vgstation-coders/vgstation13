@@ -31,6 +31,8 @@
 	heat_damage_per_tick = 5
 	bodytemperature = 270
 
+	mob_species_flags = MOB_CONSTRUCT
+
 	var/obj/item/hat = null
 	var/obj/item/carrot = null
 

@@ -1382,7 +1382,18 @@ default behaviour is:
 /mob/proc/CheckSlip()
 	return 0
 
+/mob/living/proc/turn_into_statue(forever = 0, force)
+	if(!force)
+		if(mob_species_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL))
+			return 0
 
+	spawn()
+		if(forever)
+			new /obj/structure/closet/statue/eternal(get_turf(src), src)
+		else
+			new /obj/structure/closet/statue(get_turf(src), src)
+
+	return 1
 
 /*
 	How this proc that I took from /tg/ works:

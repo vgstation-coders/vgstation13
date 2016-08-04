@@ -74,9 +74,15 @@ emp_act
 	if(!body_part_flags)
 		return 0
 	for(var/obj/item/clothing/C in get_clothing_items())
-		if(!C) continue
-		if(C.body_parts_covered & body_part_flags)
+		if(!C || !C.body_parts_covered) continue
+
+		//Subtract every clothing item's coverage until nothing is left
+		//If anything remains, the specified body parts aren't covered
+		body_part_flags &= ~C.body_parts_covered
+		if(!body_part_flags)
 			return 1
+		//if(C.body_parts_covered & body_part_flags)
+		//	return 1
 	return 0
 
 /mob/living/carbon/human/proc/get_body_part_coverage(var/body_part_flags=0)
@@ -201,7 +207,7 @@ emp_act
 		visible_message("<span class='danger'>[user] attacks [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
 
-	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
+	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", modifier = I.armor_modifier)
 	if(armor >= 2)	return 1 //We still connected
 	if(!I.force)	return 1
 
@@ -225,6 +231,7 @@ emp_act
 					knock_out_teeth(user)
 
 	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), I)
+	I.applied_damage(src, affecting, armor)
 
 	var/bloody = 0
 	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))

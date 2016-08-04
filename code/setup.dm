@@ -1813,4 +1813,13 @@ var/proccalls = 1
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
 
+
 #define BLOB_CORE_PROPORTION 20
+
+//Mob species flags (simple stuff mostly for simple_animals)
+#define MOB_UNDEAD  1 //zombies, ghosts, skeletons
+#define MOB_ROBOTIC 2 //robots
+#define MOB_CONSTRUCT 4 //golems, animated armor, ...
+#define MOB_SWARM 8 //swarm of mobs!
+#define MOB_HOLOGRAPHIC 16 //holocarps
+#define MOB_SUPERNATURAL 32

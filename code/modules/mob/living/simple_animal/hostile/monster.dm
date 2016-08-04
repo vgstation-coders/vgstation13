@@ -83,6 +83,7 @@
 	move_to_delay = 5
 	can_butcher = 0
 	attack_sound = 'sound/weapons/hivehand_empty.ogg'
+	mob_species_flags = MOB_ROBOTIC | MOB_UNDEAD
 
 	var/emp_damage = 0
 	var/nanobot_chance = 40

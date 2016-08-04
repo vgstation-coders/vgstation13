@@ -55,6 +55,16 @@
 		if(user)
 			user.update_inv_hands()
 
+/obj/item/weapon/holder/kick_act(mob/user)
+	..()
+
+	if(stored_mob)
+		stored_mob.kick_act(user)
+
+/obj/item/weapon/holder/bite_act(mob/user)
+	if(stored_mob)
+		stored_mob.bite_act(user)
+
 //
 
 /obj/item/weapon/holder/diona
@@ -158,3 +168,12 @@
 /obj/item/weapon/holder/animal/slime/attack_self(mob/user)
 	..()
 	unfreeze()
+/*
+/obj/item/weapon/holder/animal/cockatrice
+	name = "cockatrice holder"
+	desc = "The rubber chicken"
+	item_state = "cockatrice"
+
+	armor_modifier = 100
+	force = 1
+*/

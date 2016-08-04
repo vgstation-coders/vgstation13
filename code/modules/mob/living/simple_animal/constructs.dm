@@ -25,13 +25,13 @@
 	minbodytemp = 0
 	show_stat_health = 0
 	faction = "cult"
-	supernatural = 1
 	flying = 1
 	treadmill_speed = 0 //It floats!
 	var/nullblock = 0
 
 	mob_swap_flags = HUMAN|SIMPLE_ANIMAL|SLIME|MONKEY
 	mob_push_flags = ALLMOBS
+	mob_species_flags = MOB_CONSTRUCT|MOB_SUPERNATURAL
 
 	meat_type = /obj/item/weapon/ectoplasm
 

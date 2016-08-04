@@ -31,6 +31,13 @@
 	size = SIZE_BIG
 	meat_type = null
 
+	mob_species_flags = MOB_ROBOTIC
+
+/mob/living/simple_animal/hostile/hivebot/turn_into_statue(forever, force)
+	if(!force)
+		return
+	.=..()
+
 /mob/living/simple_animal/hostile/hivebot/range
 	name = "Ranged Hivebot"
 	desc = "A smallish robot, this one has a gun!"

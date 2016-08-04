@@ -26,6 +26,7 @@
 
 	size = SIZE_SMALL
 	meat_type = null
+	mob_species_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/hostile/viscerator/Life()
 	..()

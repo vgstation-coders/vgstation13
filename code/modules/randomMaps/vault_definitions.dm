@@ -44,6 +44,11 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/clown_base
 	file_path = "maps/randomvaults/clown_base.dmm"
 
+/datum/map_element/vault/zoo
+	name = "animal shipment"
+	desc = "Six brave dionaea on a cargo shuttle filled with animals exotic and mundane, including a breeding pair of cockatrices. What could go wrong?"
+	file_path = "maps/randomvaults/zoo_truck.dmm"
+
 /datum/map_element/vault/rust
 	file_path = "maps/randomvaults/rust.dmm"
 
