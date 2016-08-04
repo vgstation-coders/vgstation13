@@ -13,6 +13,8 @@
 	attack_verb = list("bashed", "battered", "judged", "whacked")
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 2
+	var/canstage = 1
+	var/stage = 0
 
 /obj/item/weapon/gavelhammer/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] has sentenced \himself to death with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -39,3 +41,23 @@
 			cooldown = world.time
 		return 1
 	return ..()
+
+/obj/item/weapon/gavelhammer/attackby(obj/item/W,mob/user)
+	..()
+	if(!canstage)
+		to_chat(user, "<span class = 'warning'>\The [W] won't fit on \the [src].</span>")
+		return
+	if(istype(W,/obj/item/weapon/chisel) && !stage)
+		stage = 1
+		to_chat(user,"<span class='notice'>You add \the [W] to \the [src].</span>")
+		qdel(W)
+		icon_state = "gavelhammer_1"
+	if(istype(W,/obj/item/stack/cable_coil) && stage == 1)
+		var/obj/item/stack/cable_coil/C = W
+		if(C.amount <= 4)
+			return
+		C.use(5)
+		to_chat(user,"<span class='notice'>You finish crafting the sigil.</span>")
+		var/obj/craftingsigil = new /obj/item/clothing/back/craftingsigil
+		qdel(src)
+		user.put_in_hands(craftingsigil)
