@@ -519,7 +519,7 @@
 "jY" = (/obj/machinery/turretcover,/turf/unsimulated/desert,/area/awaymission/desert{dynamic_lighting = 1; luminosity = 1; name = "Desert"})
 "jZ" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor{dir = 2; icon_state = "carpet"},/area/awaymission/labs/militarydivision)
 "ka" = (/obj/structure/table,/obj/machinery/microwave{pixel_x = -2; pixel_y = 8},/turf/simulated/floor{tag = "icon-cafeteria (NORTHEAST)"; icon_state = "cafeteria"; dir = 5},/area/awaymission/labs/militarydivision)
-"kb" = (/obj/item/device/violin,/turf/simulated/floor,/area/awaymission/labs/militarydivision)
+"kb" = (/obj/item/device/instrument/violin,/turf/simulated/floor,/area/awaymission/labs/militarydivision)
 "kc" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light,/turf/simulated/floor{temperature = 393.15},/area/awaymission/labs/researchdivision)
 "kd" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "delivery"; name = "floor"; temperature = 393.15},/area/awaymission/labs/researchdivision)
 "ke" = (/obj/machinery/bot/mulebot,/turf/simulated/floor{temperature = 393.15},/area/awaymission/labs/researchdivision)
