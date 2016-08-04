@@ -475,7 +475,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/M = E/(SPEED_OF_LIGHT_SQ)
 	return M
 
-/proc/key_name(var/whom, var/include_link = null, var/include_name = 1)
+/proc/key_name(var/whom, var/include_link = null, var/include_name = TRUE, var/more_info = FALSE)
 	var/mob/M
 	var/client/C
 	var/key
@@ -518,11 +518,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		else if(M.name)
 			. += "/([M.name])"
 
-	return .
+	if(more_info && M)
+		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
 
 /proc/key_name_admin(var/whom, var/include_name = 1)
 	return key_name(whom, 1, include_name)
 
+/proc/key_name_and_info(var/whom)
+	return key_name(whom, more_info = TRUE)
 
 // Registers the on-close verb for a browse window (client/verb/.windowclose)
 // this will be called when the close-button of a window is pressed.
