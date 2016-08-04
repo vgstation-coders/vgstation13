@@ -3,7 +3,7 @@ author: Unid
 delete-after: True
 
 changes: 
-- rscadd: You can now upgrade spell power of Summon Robes. Upgrading it makes the spell summon a gem encrusted hardsuit.
-- rscadd: You can now upgrade spell power of Shoe Snatching Charm. Upgrading it makes the spell summon 4 glass shards around the victim whenever it successfully removes shoes (meaning no glass is summoned if the victim had no shoes).
+- rscadd: You can now upgrade spell power of Summon Robes. Upgrading it makes the spell summon a gem encrusted hardsuit with internals.
+- rscadd: You can now upgrade spell power of Shoe Snatching Charm. Upgrading it makes the spell summon 4 glass shards when cast on somebody who isn't wearing shoes (glass won't be spawned if the victim is wearing shoes).
 - rscadd: You can now upgrade spell power of Fireball. Upgrading it makes fireball targettable, shooting it wherever you click.
 - tweak: Several spells are now controlled by clicking on the spell and then on the target, instead of choosing a target randomly or bringing up a menu. Among these spells are Arse Nath, Clown/Mime/Horse curses, Blind, Shoe Snatching Charm, Subjugate and Controlled Fireball.

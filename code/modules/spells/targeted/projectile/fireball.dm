@@ -25,11 +25,7 @@
 	var/ex_light = 2
 	var/ex_flash = 5
 
-	level_max = list(Sp_TOTAL = 7, Sp_SPEED = 4, Sp_POWER = 1)
-
-	var/list/explosion_by_power = list( //Explosion stats corresponding to the spell's power level. Level 1 explosion is the first list (-1,1,2), level 2 is the second, ...
-		list(-1, 1, 2, 5)
-	)
+	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 
 	hud_state = "wiz_fireball"
 
@@ -41,16 +37,9 @@
 
 /spell/targeted/projectile/dumbfire/fireball/empower_spell()
 	spell_levels[Sp_POWER]++
-	var/power_level = min(spell_levels[Sp_POWER], 3)
-	var/list/new_explosion_stats = explosion_by_power[power_level]
-
-	ex_severe = new_explosion_stats[1]
-	ex_heavy = new_explosion_stats[2]
-	ex_light = new_explosion_stats[3]
-	ex_flash = new_explosion_stats[4]
 
 	var/explosion_description = ""
-	switch(power_level)
+	switch(spell_levels[Sp_POWER])
 		if(0)
 			name = "Fireball"
 			explosion_description = "It will now create a small explosion."
@@ -59,6 +48,8 @@
 			explosion_description = "The fireball will no longer only fly in the direction you're facing. Now you're able to shoot it wherever you want."
 			spell_flags |= WAIT_FOR_CLICK
 			dumbfire = 0
+		else
+			return
 
 	return "You have improved Fireball into [name]. [explosion_description]"
 

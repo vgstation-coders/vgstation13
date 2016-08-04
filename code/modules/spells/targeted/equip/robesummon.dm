@@ -1,3 +1,8 @@
+#define ROBES_BLUE "blue"
+#define ROBES_RED "red"
+#define ROBES_MARISA "marisa"
+#define ROBES_SUIT "suit"
+
 /spell/targeted/equip_item/robesummon
 	name = "Summon Robes"
 	desc = "A spell which will summon you a new set of robes."
@@ -19,28 +24,28 @@
 
 	hud_state = "wiz_robesummon"
 
-	var/list/valid_outfits = list("blue", "red", "marisa")
+	var/list/valid_outfits = list(ROBES_BLUE, ROBES_RED, ROBES_MARISA)
 
 
 /spell/targeted/equip_item/robesummon/cast(list/targets, mob/user = usr)
 	switch(pick(valid_outfits))
 
-		if ("blue")
+		if (ROBES_BLUE)
 			equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard,
 									"[slot_wear_suit]" = /obj/item/clothing/suit/wizrobe,
 									"[slot_shoes]" = /obj/item/clothing/shoes/sandal)
 
-		if ("red")
+		if (ROBES_RED)
 			equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard/red,
 									"[slot_wear_suit]" = /obj/item/clothing/suit/wizrobe/red,
 									"[slot_shoes]" = /obj/item/clothing/shoes/sandal)
 
-		if("marisa")
+		if(ROBES_MARISA)
 			equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard/marisa,
 									"[slot_wear_suit]" = /obj/item/clothing/suit/wizrobe/marisa,
 									"[slot_shoes]" = /obj/item/clothing/shoes/sandal/marisa)
 
-		if("suit")
+		if(ROBES_SUIT)
 			equipped_summons = list("[slot_head]" = /obj/item/clothing/head/helmet/space/rig/wizard,
 									"[slot_wear_suit]" = /obj/item/clothing/suit/space/rig/wizard,
 									"[slot_shoes]" = /obj/item/clothing/shoes/sandal,
@@ -53,11 +58,16 @@
 	..()
 
 /spell/targeted/equip_item/robesummon/empower_spell()
-	if(!valid_outfits.Find("suit"))
-		valid_outfits = list("suit")
+	if(!valid_outfits.Find(ROBES_SUIT))
+		valid_outfits = list(ROBES_SUIT)
 		spell_levels[Sp_POWER]++
 
 	name = "Summon Hardsuit"
 	desc = "A spell which will summon you a wizard hardsuit."
 	delete_old = 1
 	return "You have improved Summon Robes into [name]. It will now summon a gem-encrusted hardsuit with internals."
+
+#undef ROBES_BLUE
+#undef ROBES_RED
+#undef ROBES_MARISA
+#undef ROBES_SUIT

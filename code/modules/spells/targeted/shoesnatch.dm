@@ -32,8 +32,10 @@
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
 			user.put_in_active_hand(old_shoes)
 
-			if(spawn_shards)
-				summon_shards(get_turf(target), cardinal)
+		else if(spawn_shards) //Spawn shards if the target isn't wearing shoes
+			to_chat("<span class='danger'>You conjure several glass shards around \the [target].</span>")
+			target.show_message("<span class='danger'>You are surrounded by glass shards!</span>", MESSAGE_SEE)
+			summon_shards(get_turf(target), cardinal)
 
 /spell/targeted/shoesnatch/proc/summon_shards(turf/T, list/dirlist)
 	for(var/D in dirlist)
@@ -44,10 +46,10 @@
 
 /spell/targeted/shoesnatch/empower_spell()
 	spell_levels[Sp_POWER]++
-	spawn_shards++
+	spawn_shards = 1
 
-	var/upgrade_desc = "You have upgraded [name] into Shoe Snatching Scourge. Whenever it successfully removes shoes from the victim, it will also surround them with 4 glass shards."
+	var/upgrade_desc = "You have upgraded [name] into Shoe Snatching Scourge. When cast on somebody who isn't wearing any shoes, it will summon 4 glass shards around them."
 	name = "Shoe Snatching Scourge"
-	desc = "This spell allows you to steal somebody's shoes right off of their feet. If you successfully steal the shoes, 4 glass shards will surround the victim."
+	desc = "This spell allows you to steal somebody's shoes right off of their feet. If they aren't wearing any shoes, 4 glass shards will be conjured around them."
 
 	return upgrade_desc
