@@ -9,7 +9,7 @@
 	desc = "A radio beacon used for bot navigation."
 	level = 1		// underfloor
 	plane = ABOVE_TURF_PLANE
-	layer = NAV_BEACON_LAYER
+	layer = ABOVE_TILE_LAYER
 	anchored = 1
 
 	var/locked = 1		// true if controls are locked
