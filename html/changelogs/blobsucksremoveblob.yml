@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+- tweak: "Removed the blob conglomerate event from being able to randomly happen, made the blob storm event less likely to happen."
