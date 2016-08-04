@@ -59,11 +59,14 @@ var/global/vox_tick = 1
 	equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
 
 	var/obj/item/weapon/card/id/syndicate/C = new(src)
-	C.name = "[real_name]'s Legitimate Human ID Card"
-	C.icon_state = "id"
-	C.access = list(access_syndicate)
-	C.assignment = "Trader"
+	//C.name = "[real_name]'s Legitimate Human ID Card"
 	C.registered_name = real_name
+	C.assignment = "Trader"
+	C.UpdateName()
+	C.SetOwnerInfo(src)
+
+	C.icon_state = "trader"
+	C.access = list(access_syndicate, access_trade)
 	//C.registered_user = src
 	var/obj/item/weapon/storage/wallet/W = new(src)
 	W.handle_item_insertion(C)
