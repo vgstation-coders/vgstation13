@@ -726,8 +726,8 @@ var/global/list/loopModeNames=list(
 	light_color = LIGHT_COLOR_BLUE
 	luminosity = 0
 	plane = EFFECTS_PLANE
-	pixel_x = -WORLD_ICON_SIZE
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_x = -32
+	pixel_y = -32
 
 	var/datum/browser/popup = null
 	req_access = list()

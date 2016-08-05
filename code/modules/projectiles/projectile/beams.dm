@@ -332,69 +332,69 @@ var/list/beam_master = list()
 	I.Turn(Angle+45)
 	Istart.Turn(Angle+45)
 	Iend.Turn(Angle+45)
-	var/DX=(WORLD_ICON_SIZE*curr.x+curr.pixel_x)-(WORLD_ICON_SIZE*firer.x+firer.pixel_x)
-	var/DY=(WORLD_ICON_SIZE*curr.y+curr.pixel_y)-(WORLD_ICON_SIZE*firer.y+firer.pixel_y)
+	var/DX=(32*curr.x+curr.pixel_x)-(32*firer.x+firer.pixel_x)
+	var/DY=(32*curr.y+curr.pixel_y)-(32*firer.y+firer.pixel_y)
 	var/N=0
 	var/length=round(sqrt((DX)**2+(DY)**2))
 	var/count = 0
 	var/turf/T = get_turf(src)
 	var/list/ouroverlays = list()
 
-	spawn() for(N,N<length,N+=WORLD_ICON_SIZE)
+	spawn() for(N,N<length,N+=32)
 		if(count >= kill_count)
 			break
 		count++
 		var/obj/effect/overlay/beam/persist/X=getFromPool(/obj/effect/overlay/beam/persist,T)
 		X.BeamSource=src
 		ouroverlays += X
-		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
+		if((N+64>length) && (N+32<=length))
 			X.icon=Iend
 		else if(N==0)
 			X.icon=Istart
-		else if(N+WORLD_ICON_SIZE>length)
+		else if(N+32>length)
 			X.icon=null
 		else
 			X.icon=I
 
-		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE/2)
-		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+		var/Pixel_x=round(sin(Angle)+32*sin(Angle)*(N+16)/32)
+		var/Pixel_y=round(cos(Angle)+32*cos(Angle)*(N+16)/32)
 		if(DX==0) Pixel_x=0
 		if(DY==0) Pixel_y=0
-		if(Pixel_x>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
+		if(Pixel_x>32)
+			for(var/a=0, a<=Pixel_x,a+=32)
 				X.x++
-				Pixel_x-=WORLD_ICON_SIZE
-		if(Pixel_x<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
+				Pixel_x-=32
+		if(Pixel_x<-32)
+			for(var/a=0, a>=Pixel_x,a-=32)
 				X.x--
-				Pixel_x+=WORLD_ICON_SIZE
-		if(Pixel_y>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
+				Pixel_x+=32
+		if(Pixel_y>32)
+			for(var/a=0, a<=Pixel_y,a+=32)
 				X.y++
-				Pixel_y-=WORLD_ICON_SIZE
-		if(Pixel_y<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
+				Pixel_y-=32
+		if(Pixel_y<-32)
+			for(var/a=0, a>=Pixel_y,a-=32)
 				X.y--
-				Pixel_y+=WORLD_ICON_SIZE
+				Pixel_y+=32
 
 		//Now that we've calculated the total offset in pixels, we move each beam parts to their closest corresponding turfs
 		var/x_increm = 0
 		var/y_increm = 0
 
-		while(Pixel_x >= WORLD_ICON_SIZE || Pixel_x <= -WORLD_ICON_SIZE)
+		while(Pixel_x >= 32 || Pixel_x <= -32)
 			if(Pixel_x > 0)
-				Pixel_x -= WORLD_ICON_SIZE
+				Pixel_x -= 32
 				x_increm++
 			else
-				Pixel_x += WORLD_ICON_SIZE
+				Pixel_x += 32
 				x_increm--
 
-		while(Pixel_y >= WORLD_ICON_SIZE || Pixel_y <= -WORLD_ICON_SIZE)
+		while(Pixel_y >= 32 || Pixel_y <= -32)
 			if(Pixel_y > 0)
-				Pixel_y -= WORLD_ICON_SIZE
+				Pixel_y -= 32
 				y_increm++
 			else
-				Pixel_y += WORLD_ICON_SIZE
+				Pixel_y += 32
 				y_increm--
 
 		X.x += x_increm
@@ -764,8 +764,8 @@ var/list/beam_master = list()
 	I.Turn(Angle+45)
 	Istart.Turn(Angle+45)
 	Iend.Turn(Angle+45)
-	var/DX=(WORLD_ICON_SIZE*curr.x+curr.pixel_x)-(WORLD_ICON_SIZE*firer.x+firer.pixel_x)
-	var/DY=(WORLD_ICON_SIZE*curr.y+curr.pixel_y)-(WORLD_ICON_SIZE*firer.y+firer.pixel_y)
+	var/DX=(32*curr.x+curr.pixel_x)-(32*firer.x+firer.pixel_x)
+	var/DY=(32*curr.y+curr.pixel_y)-(32*firer.y+firer.pixel_y)
 	var/N=0
 	var/length=round(sqrt((DX)**2+(DY)**2))
 	var/count = 0
@@ -774,62 +774,62 @@ var/list/beam_master = list()
 	var/increment = timer_total/max(1,round(length/32))
 	var/current_timer = 5
 
-	for(N,N<(length+16),N+=WORLD_ICON_SIZE)
+	for(N,N<(length+16),N+=32)
 		if(count >= kill_count)
 			break
 		count++
 		var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,T,current_timer,1)
 		X.BeamSource=src
 		current_timer += increment
-		if((N+64>(length+16)) && (N+WORLD_ICON_SIZE<=(length+16)))
+		if((N+64>(length+16)) && (N+32<=(length+16)))
 			X.icon=Iend
 		else if(N==0)
 			X.icon=Istart
-		else if(N+WORLD_ICON_SIZE>(length+16))
+		else if(N+32>(length+16))
 			X.icon=null
 		else
 			X.icon=I
 
 
-		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
-		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+		var/Pixel_x=round(sin(Angle)+32*sin(Angle)*(N+16)/32)
+		var/Pixel_y=round(cos(Angle)+32*cos(Angle)*(N+16)/32)
 		if(DX==0) Pixel_x=0
 		if(DY==0) Pixel_y=0
-		if(Pixel_x>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
+		if(Pixel_x>32)
+			for(var/a=0, a<=Pixel_x,a+=32)
 				X.x++
-				Pixel_x-=WORLD_ICON_SIZE
-		if(Pixel_x<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
+				Pixel_x-=32
+		if(Pixel_x<-32)
+			for(var/a=0, a>=Pixel_x,a-=32)
 				X.x--
-				Pixel_x+=WORLD_ICON_SIZE
-		if(Pixel_y>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
+				Pixel_x+=32
+		if(Pixel_y>32)
+			for(var/a=0, a<=Pixel_y,a+=32)
 				X.y++
-				Pixel_y-=WORLD_ICON_SIZE
-		if(Pixel_y<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
+				Pixel_y-=32
+		if(Pixel_y<-32)
+			for(var/a=0, a>=Pixel_y,a-=32)
 				X.y--
-				Pixel_y+=WORLD_ICON_SIZE
+				Pixel_y+=32
 
 		//Now that we've calculated the total offset in pixels, we move each beam parts to their closest corresponding turfs
 		var/x_increm = 0
 		var/y_increm = 0
 
-		while(Pixel_x >= WORLD_ICON_SIZE || Pixel_x <= -WORLD_ICON_SIZE)
+		while(Pixel_x >= 32 || Pixel_x <= -32)
 			if(Pixel_x > 0)
-				Pixel_x -= WORLD_ICON_SIZE
+				Pixel_x -= 32
 				x_increm++
 			else
-				Pixel_x += WORLD_ICON_SIZE
+				Pixel_x += 32
 				x_increm--
 
-		while(Pixel_y >= WORLD_ICON_SIZE || Pixel_y <= -WORLD_ICON_SIZE)
+		while(Pixel_y >= 32 || Pixel_y <= -32)
 			if(Pixel_y > 0)
-				Pixel_y -= WORLD_ICON_SIZE
+				Pixel_y -= 32
 				y_increm++
 			else
-				Pixel_y += WORLD_ICON_SIZE
+				Pixel_y += 32
 				y_increm--
 
 		X.x += x_increm

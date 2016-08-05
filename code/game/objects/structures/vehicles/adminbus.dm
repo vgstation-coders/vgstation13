@@ -11,8 +11,8 @@
 	icon_state = "adminbus"
 	can_spacemove=1
 	plane = ABOVE_HUMAN_PLANE
-	pixel_x = -WORLD_ICON_SIZE
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_x = -32
+	pixel_y = -32
 	unacidable = 1
 	var/can_move=1
 	var/list/passengers = list()
@@ -35,7 +35,7 @@
 /obj/structure/bed/chair/vehicle/adminbus/New()
 	..()
 	var/turf/T = get_turf(src)
-	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = EFFECTS_PLANE)
+	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = EFFECTS_PLANE)
 	var/image/underbus = image(icon,"underbus",MOB_LAYER-1)
 	underbus.plane = OBJ_PLANE
 	overlays += underbus
@@ -58,31 +58,31 @@
 		if(iscorgi(occupant))//Hail Ian
 			switch(dir)
 				if(SOUTH)
-					occupant.pixel_x = 6 * PIXEL_MULTIPLIER
-					occupant.pixel_y = -4 * PIXEL_MULTIPLIER
+					occupant.pixel_x = 6
+					occupant.pixel_y = -4
 				if(WEST)
-					occupant.pixel_x = -16 * PIXEL_MULTIPLIER
-					occupant.pixel_y = 9 * PIXEL_MULTIPLIER
+					occupant.pixel_x = -16
+					occupant.pixel_y = 9
 				if(NORTH)
 					occupant.pixel_x = 0
 					occupant.pixel_y = 0
 				if(EAST)
-					occupant.pixel_x = 16 * PIXEL_MULTIPLIER
-					occupant.pixel_y = 9 * PIXEL_MULTIPLIER
+					occupant.pixel_x = 16
+					occupant.pixel_y = 9
 		else
 			switch(dir)
 				if(SOUTH)
-					occupant.pixel_x = 7 * PIXEL_MULTIPLIER
-					occupant.pixel_y = -12 * PIXEL_MULTIPLIER
+					occupant.pixel_x = 7
+					occupant.pixel_y = -12
 				if(WEST)
-					occupant.pixel_x = -25 * PIXEL_MULTIPLIER
-					occupant.pixel_y = 1 * PIXEL_MULTIPLIER
+					occupant.pixel_x = -25
+					occupant.pixel_y = 1
 				if(NORTH)
 					occupant.pixel_x = 0
 					occupant.pixel_y = 0
 				if(EAST)
-					occupant.pixel_x = 25 * PIXEL_MULTIPLIER
-					occupant.pixel_y = 1 * PIXEL_MULTIPLIER
+					occupant.pixel_x = 25
+					occupant.pixel_y = 1
 
 	for(var/i=1;i<=passengers.len;i++)
 		var/atom/A = passengers[i]
@@ -92,59 +92,59 @@
 				if(1,5,9,13)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = -6 * PIXEL_MULTIPLIER
+							L.pixel_x = -6
 							L.pixel_y = 0
 						if(WEST)
-							L.pixel_x = -13 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = -13
+							L.pixel_y = 4
 						if(NORTH)
-							L.pixel_x = -6 * PIXEL_MULTIPLIER
+							L.pixel_x = -6
 							L.pixel_y = 0
 						if(EAST)
-							L.pixel_x = 12 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = 12
+							L.pixel_y = 4
 				if(2,6,10,14)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = 6 * PIXEL_MULTIPLIER
+							L.pixel_x = 6
 							L.pixel_y = 0
 						if(WEST)
-							L.pixel_x = -1 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = -1
+							L.pixel_y = 4
 						if(NORTH)
-							L.pixel_x = 6 * PIXEL_MULTIPLIER
+							L.pixel_x = 6
 							L.pixel_y = 0
 						if(EAST)
-							L.pixel_x = 1 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = 1
+							L.pixel_y = 4
 				if(3,7,11,15)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = -3 * PIXEL_MULTIPLIER
-							L.pixel_y = 8 * PIXEL_MULTIPLIER
+							L.pixel_x = -3
+							L.pixel_y = 8
 						if(WEST)
-							L.pixel_x = 11 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = 11
+							L.pixel_y = 4
 						if(NORTH)
-							L.pixel_x = -3 * PIXEL_MULTIPLIER
-							L.pixel_y = 8 * PIXEL_MULTIPLIER
+							L.pixel_x = -3
+							L.pixel_y = 8
 						if(EAST)
-							L.pixel_x = -11 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = -11
+							L.pixel_y = 4
 				if(4,8,12,16)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = 7 * PIXEL_MULTIPLIER
-							L.pixel_y = -12 * PIXEL_MULTIPLIER
+							L.pixel_x = 7
+							L.pixel_y = -12
 						if(WEST)
-							L.pixel_x = 22 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = 22
+							L.pixel_y = 4
 						if(NORTH)
-							L.pixel_x = -3 * PIXEL_MULTIPLIER
-							L.pixel_y = 8 * PIXEL_MULTIPLIER
+							L.pixel_x = -3
+							L.pixel_y = 8
 						if(EAST)
-							L.pixel_x = -22 * PIXEL_MULTIPLIER
-							L.pixel_y = 4 * PIXEL_MULTIPLIER
+							L.pixel_x = -22
+							L.pixel_y = 4
 			L.dir = dir
 
 /obj/structure/bed/chair/vehicle/adminbus/Move()
@@ -428,8 +428,8 @@
 	desc = "Who knows what these chains can hold..."
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
-	pixel_x = -WORLD_ICON_SIZE
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_x = -32
+	pixel_y = -32
 	density = 0
 	plane = EFFECTS_PLANE
 	layer = ABOVE_SINGULO_LAYER
@@ -441,8 +441,8 @@
 	name = "admin claw"
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = "singulo_catcher"
-	pixel_x = -WORLD_ICON_SIZE
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_x = -32
+	pixel_y = -32
 	layer = ABOVE_SINGULO_LAYER+0.1
 
 /obj/structure/hookshot/claw/proc/hook_throw(var/toward)
@@ -516,8 +516,8 @@
 	desc = "Admins are above all logic"
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
-	pixel_x = -WORLD_ICON_SIZE
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_x = -32
+	pixel_y = -32
 	density = 0
 	var/obj/structure/singulo_chain/child = null
 
@@ -587,8 +587,8 @@
 	desc = "The bus is about to jump..."
 	icon = 'icons/effects/160x160.dmi'
 	icon_state = ""
-	pixel_x = -WORLD_ICON_SIZE*2
-	pixel_y = -WORLD_ICON_SIZE*2
+	pixel_x = -64
+	pixel_y = -64
 	anchored = 1
 	density = 0
 	mouse_opacity = 0

@@ -11,8 +11,8 @@
 	if(!start || !end) return 0
 	var/dy
 	var/dx
-	dy=(WORLD_ICON_SIZE*end.y+end.pixel_y)-(WORLD_ICON_SIZE*start.y+start.pixel_y)
-	dx=(WORLD_ICON_SIZE*end.x+end.pixel_x)-(WORLD_ICON_SIZE*start.x+start.pixel_x)
+	dy=(32*end.y+end.pixel_y)-(32*start.y+start.pixel_y)
+	dx=(32*end.x+end.pixel_x)-(32*start.x+start.pixel_x)
 	if(!dy)
 		return (dx>=0)?90:270
 	.=arctan(dx/dy)
@@ -701,7 +701,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.pixel_z = WORLD_ICON_SIZE
+			progbar.pixel_z = 32
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -745,7 +745,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	if(user && user.client && user.client.prefs.progress_bars && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.pixel_z = WORLD_ICON_SIZE
+			progbar.pixel_z = 32
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR
@@ -757,7 +757,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-				progbar.pixel_z = WORLD_ICON_SIZE
+				progbar.pixel_z = 32
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
 				progbar.appearance_flags = RESET_COLOR
@@ -1205,16 +1205,16 @@ var/list/WALLITEMS = list(
 				//Some stuff doesn't use dir properly, so we need to check pixel instead
 				switch(dir)
 					if(SOUTH)
-						if(O.pixel_y > 10*PIXEL_MULTIPLIER)
+						if(O.pixel_y > 10)
 							return 1
 					if(NORTH)
-						if(O.pixel_y < -10*PIXEL_MULTIPLIER)
+						if(O.pixel_y < -10)
 							return 1
 					if(WEST)
-						if(O.pixel_x > 10*PIXEL_MULTIPLIER)
+						if(O.pixel_x > 10)
 							return 1
 					if(EAST)
-						if(O.pixel_x < -10*PIXEL_MULTIPLIER)
+						if(O.pixel_x < -10)
 							return 1
 
 
@@ -1222,7 +1222,7 @@ var/list/WALLITEMS = list(
 	for(var/obj/O in get_step(loc, dir))
 		for(var/item in WALLITEMS)
 			if(istype(O, text2path(item)))
-				if(abs(O.pixel_x) <= 10*PIXEL_MULTIPLIER && abs(O.pixel_y) <=10*PIXEL_MULTIPLIER)
+				if(abs(O.pixel_x) <= 10 && abs(O.pixel_y) <=10)
 					return 1
 	return 0
 

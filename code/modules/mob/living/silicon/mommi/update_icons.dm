@@ -55,19 +55,19 @@
 			// Sad note: only the hat's overall position can be modified, and we cannot change the hat's position per each direction separately
 			// The hats are currently centered on the MoMMIs
 			if("mommi")
-				I.pixel_y = -8 * PIXEL_MULTIPLIER
+				I.pixel_y = -8
 			if("hovermommi")
-				I.pixel_y = -5 * PIXEL_MULTIPLIER
+				I.pixel_y = -5
 			if("keeper")
-				I.pixel_y = -7 * PIXEL_MULTIPLIER
+				I.pixel_y = -7
 			if("repairbot")
-				I.pixel_y = -14 * PIXEL_MULTIPLIER
+				I.pixel_y = -14
 			if("replicator")
-				I.pixel_y = -10 * PIXEL_MULTIPLIER
+				I.pixel_y = -10
 			if("mommiprime")
-				I.pixel_y = -7 * PIXEL_MULTIPLIER
+				I.pixel_y = -7
 			if("scout")
-				I.pixel_y = -15 * PIXEL_MULTIPLIER
+				I.pixel_y = -15
 		// Add the adjusted hat to our overlays
 		overlays += I
 

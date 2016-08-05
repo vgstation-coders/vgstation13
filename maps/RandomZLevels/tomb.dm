@@ -109,9 +109,9 @@
 
 	var/mob/living/simple_animal/hostile/viscerator/flying_skull/FS = new(get_turf(src))
 	FS.pixel_x = src.pixel_x
-	FS.pixel_y = src.pixel_y - 4 * PIXEL_MULTIPLIER //The skull item sprite is slightly lower
+	FS.pixel_y = src.pixel_y - 4 //The skull item sprite is slightly lower
 
-	animate(FS, pixel_y = src.pixel_y + 8 * PIXEL_MULTIPLIER, time = 7, easing = SINE_EASING)
+	animate(FS, pixel_y = src.pixel_y + 8, time = 7, easing = SINE_EASING)
 	qdel(src)
 
 /obj/effect/landmark/corpse/mummy/rafid

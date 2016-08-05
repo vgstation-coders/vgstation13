@@ -183,8 +183,8 @@
 
 /obj/effect/decal/cleanable/clay_fragments/New()
 	..()
-	pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
-	pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
+	pixel_x = rand (-3,3)
+	pixel_y = rand (-3,3)
 
 /obj/effect/decal/cleanable/soot
 	name = "soot"

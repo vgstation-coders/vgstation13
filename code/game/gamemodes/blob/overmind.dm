@@ -78,10 +78,10 @@
 	if(blob_core && hud_used)
 		var/matrix/M = matrix()
 		M.Scale(1,blob_core.health/blob_core.maxhealth)
-		var/total_offset = (60 + (100*(blob_core.health/blob_core.maxhealth))) * PIXEL_MULTIPLIER
+		var/total_offset = 60 + (100*(blob_core.health/blob_core.maxhealth))
 		hud_used.mymob.gui_icons.blob_healthbar.transform = M
-		hud_used.mymob.gui_icons.blob_healthbar.screen_loc = "EAST:[14*PIXEL_MULTIPLIER],CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-		hud_used.mymob.gui_icons.blob_coverRIGHT.maptext = "<font size = 4>[blob_core.health]"
+		hud_used.mymob.gui_icons.blob_healthbar.screen_loc = "EAST:14,CENTER-[8-round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_coverRIGHT.maptext = "[blob_core.health]"
 
 		var/severity = 0
 		switch(round(blob_core.health))
@@ -117,11 +117,11 @@
 	if(hud_used)
 		var/matrix/M = matrix()
 		M.Scale(1,blob_points/max_blob_points)
-		var/total_offset = (60 + (100*(blob_points/max_blob_points))) * PIXEL_MULTIPLIER
+		var/total_offset = 60 + (100*(blob_points/max_blob_points))
 		hud_used.mymob.gui_icons.blob_powerbar.transform = M
-		hud_used.mymob.gui_icons.blob_powerbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-		hud_used.mymob.gui_icons.blob_coverLEFT.maptext = "<font size = 4>[blob_points]"
-		hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 4*PIXEL_MULTIPLIER
+		hud_used.mymob.gui_icons.blob_powerbar.screen_loc = "WEST:0,CENTER-[8-round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_coverLEFT.maptext = "[blob_points]"
+		hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 4
 		if(blob_points >= 100)
 			hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 1
 

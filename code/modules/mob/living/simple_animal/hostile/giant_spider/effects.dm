@@ -86,8 +86,8 @@
 	var/amount_grown = 0
 	New()
 		..()
-		pixel_x = rand(3,-3) * PIXEL_MULTIPLIER
-		pixel_y = rand(3,-3) * PIXEL_MULTIPLIER
+		pixel_x = rand(3,-3)
+		pixel_y = rand(3,-3)
 		processing_objects.Add(src)
 	Destroy()
 		processing_objects.Remove(src)
