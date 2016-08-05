@@ -84,11 +84,11 @@
 
 /obj/item/clothing/accessory/storage/bandolier
 	name = "bandolier"
-	desc = "A bandolier designed to hold up to eight shotgun shells."
+	desc = "A bandolier designed with eight pouches for diffrent ammunition types."
 	icon_state = "bandolier"
 	_color = "bandolier"
 	slots = 8
-	can_only_hold = list("/obj/item/ammo_casing/shotgun")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
 
 /obj/item/clothing/accessory/storage/knifeharness
 	name = "decorated harness"
