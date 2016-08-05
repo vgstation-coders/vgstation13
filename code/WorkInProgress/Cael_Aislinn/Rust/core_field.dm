@@ -275,24 +275,24 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 			size = 3
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "emfield_s3"
-			pixel_x = -32 * PIXEL_MULTIPLIER
-			pixel_y = -32 * PIXEL_MULTIPLIER
+			pixel_x = -32
+			pixel_y = -32
 			//
 			changed = 3
 		if(5)
 			size = 5
 			icon = 'icons/effects/160x160.dmi'
 			icon_state = "emfield_s5"
-			pixel_x = -64 * PIXEL_MULTIPLIER
-			pixel_y = -64 * PIXEL_MULTIPLIER
+			pixel_x = -64
+			pixel_y = -64
 			//
 			changed = 5
 		if(7)
 			size = 7
 			icon = 'icons/effects/224x224.dmi'
 			icon_state = "emfield_s7"
-			pixel_x = -96 * PIXEL_MULTIPLIER
-			pixel_y = -96 * PIXEL_MULTIPLIER
+			pixel_x = -96
+			pixel_y = -96
 			//
 			changed = 7
 

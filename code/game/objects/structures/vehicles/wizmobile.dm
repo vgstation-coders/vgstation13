@@ -48,16 +48,16 @@
 	switch(dir)
 		if(SOUTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 7
 		if(WEST)
-			occupant.pixel_x = 3 * PIXEL_MULTIPLIER// 13
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+			occupant.pixel_x = 3 // 13
+			occupant.pixel_y = 7
 		if(NORTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 4
 		if(EAST)
-			occupant.pixel_x = -3 * PIXEL_MULTIPLIER// -13
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+			occupant.pixel_x = -3 // -13
+			occupant.pixel_y = 7
 
 /obj/structure/bed/chair/vehicle/wizmobile/handle_layer()
 	return

@@ -39,19 +39,19 @@
 	return
 
 /obj/structure/closet/walllocker/emerglocker/north
-	pixel_y = WORLD_ICON_SIZE
+	pixel_y = 32
 	dir = SOUTH
 
 /obj/structure/closet/walllocker/emerglocker/south
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_y = -32
 	dir = NORTH
 
 /obj/structure/closet/walllocker/emerglocker/west
-	pixel_x = -WORLD_ICON_SIZE
+	pixel_x = -32
 	dir = WEST
 
 /obj/structure/closet/walllocker/emerglocker/east
-	pixel_x = WORLD_ICON_SIZE
+	pixel_x = 32
 	dir = EAST
 
 /obj/structure/closet/walllocker/defiblocker
@@ -110,17 +110,17 @@
 		icon_state = icon_opened
 
 /obj/structure/closet/walllocker/defiblocker/north
-	pixel_y = WORLD_ICON_SIZE
+	pixel_y = 32
 	dir = SOUTH
 
 /obj/structure/closet/walllocker/defiblocker/south
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_y = -32
 	dir = NORTH
 
 /obj/structure/closet/walllocker/defiblocker/west
-	pixel_x = -WORLD_ICON_SIZE
+	pixel_x = -32
 	dir = WEST
 
 /obj/structure/closet/walllocker/defiblocker/east
-	pixel_x = WORLD_ICON_SIZE
+	pixel_x = 32
 	dir = EAST

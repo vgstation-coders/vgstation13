@@ -243,8 +243,8 @@
 
 /obj/item/stack/sheet/snow/New(var/loc, var/amount=null)
 	recipes = snow_recipes
-	pixel_x = rand(-13,13) * PIXEL_MULTIPLIER
-	pixel_y = rand(-13,13) * PIXEL_MULTIPLIER
+	pixel_x = rand(-13,13)
+	pixel_y = rand(-13,13)
 
 	spawn_loc = src.loc
 
@@ -391,8 +391,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	var/growth = 0
 	var/growthlevel = 20
 
-	pixel_x = 16 * PIXEL_MULTIPLIER
-	pixel_y = 21 * PIXEL_MULTIPLIER
+	pixel_x = 16
+	pixel_y = 21
 
 /obj/structure/snow_flora/sappling/New()
 	..()
@@ -475,7 +475,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 	var/axe_hits = 0
 
-	pixel_y = 21 * PIXEL_MULTIPLIER//regular dead trees appear slightly to the north east, so we can justify that they don't block players.
+	pixel_y = 21//regular dead trees appear slightly to the north east, so we can justify that they don't block players.
 
 /obj/structure/snow_flora/tree/New()
 	..()
@@ -523,8 +523,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	icon_state = "pine_1"
 	density = 1
 
-	pixel_x = -16 * PIXEL_MULTIPLIER
-	pixel_y = 0 * PIXEL_MULTIPLIER
+	pixel_x = -16
+	pixel_y = 0
 
 /obj/structure/snow_flora/tree/pine/New()
 	..()

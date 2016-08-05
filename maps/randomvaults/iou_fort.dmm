@@ -14,7 +14,7 @@
 "n" = (/turf/simulated/floor,/area/vault/ioufort)
 "o" = (/obj/machinery/light,/turf/simulated/floor,/area/vault/ioufort)
 "p" = (/obj/structure/sign/securearea,/turf/simulated/wall/r_wall,/area/vault/ioufort)
-"q" = (/obj/structure/sign/poster{dir = 8; icon_state = "poster6"; pixel_x = 0; pixel_y = 60},/turf/simulated/floor{dir = 6; icon_state = "purple"},/area/vault/ioufort)
+"q" = (/obj/structure/sign/poster{dir = 8; icon_state = "poster6"; pixel_x = 0; pixel_y = 30},/turf/simulated/floor{dir = 6; icon_state = "purple"},/area/vault/ioufort)
 "r" = (/mob/living/simple_animal/corgi,/turf/simulated/floor{icon_state = "yellow"; dir = 10},/area/vault/ioufort)
 "s" = (/turf/simulated/floor/plating,/area/vault/ioufort)
 "t" = (/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibmid1"},/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/vault/ioufort)

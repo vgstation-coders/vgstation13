@@ -107,4 +107,4 @@
 #undef ALIEN_NEST_LOCKED_Y_OFFSET
 
 /datum/locking_category/bed/nest
-	pixel_y_offset = 6 * PIXEL_MULTIPLIER
+	pixel_y_offset = 6

@@ -1,4 +1,4 @@
-
+//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
 
 /* Tools!
  * Note: Multitools are /obj/item/device
@@ -123,7 +123,7 @@
 			item_state = "screwdriver_yellow"
 
 	if (prob(75))
-		src.pixel_y = rand(0, 16) * PIXEL_MULTIPLIER
+		src.pixel_y = rand(0, 16)
 
 /obj/item/weapon/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))	return ..()

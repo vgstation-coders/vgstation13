@@ -29,13 +29,13 @@
 	switch(dir)
 		if(SOUTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 7
 		if(WEST)
-			occupant.pixel_x = 4 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+			occupant.pixel_x = 4
+			occupant.pixel_y = 7
 		if(NORTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 4
 		if(EAST)
-			occupant.pixel_x = -4 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+			occupant.pixel_x = -4
+			occupant.pixel_y = 7
