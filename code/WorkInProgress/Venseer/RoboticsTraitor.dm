@@ -124,7 +124,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       return
 
     //Code below creates a robot without a mind. A robot in standby mode
-    var/mob/living/silicon/robot/robot = new /mob/living/silicon/robot(get_turf(T), unfinished = 1)
+    var/mob/living/silicon/robot/robot = new /mob/living/silicon/robot(get_turf(object), unfinished = 1)
     robot.invisibility = 0
     robot.custom_name = created_name
     robot.updatename("Default")
