@@ -140,6 +140,26 @@ var/list/ai_list = list()
 	..()
 	return
 
+
+/mob/living/silicon/ai/verb/med_hud()
+	set category = "AI Commands"
+	set name = "Set medHUD"
+	if(stat || aiRestorePowerRoutine) return
+	sensor_mode = MED_HUD
+	regular_hud_updates()
+/mob/living/silicon/ai/verb/sec_hud()
+	set category = "AI Commands"
+	set name = "Set secHUD"
+	if(stat || aiRestorePowerRoutine) return
+	sensor_mode = SEC_HUD
+	regular_hud_updates()
+/mob/living/silicon/ai/verb/reset_huds()
+	set category = "AI Commands"
+	set name = "clear HUDS"
+	if(stat || aiRestorePowerRoutine) return
+	sensor_mode = 0
+	regular_hud_updates()
+	
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
 	set name = "Radio Configuration"
