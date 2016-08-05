@@ -147,7 +147,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/update_mob()
 	if(occupant)
 		occupant.pixel_x = 0
-		occupant.pixel_y = 3 * PIXEL_MULTIPLIER
+		occupant.pixel_y = 3
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
 	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
@@ -174,7 +174,7 @@
 	var/i = 0
 	for(var/mob/living/L in locked_atoms)
 		L.pixel_x = 0
-		L.pixel_y = 3 * PIXEL_MULTIPLIER + (i * 6 * PIXEL_MULTIPLIER) //Stack people on top of each other!
+		L.pixel_y = 3 + (i*6) //Stack people on top of each other!
 
 		i++
 

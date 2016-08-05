@@ -45,8 +45,8 @@ var/global/list/available_paintings = list(
 
 /obj/item/mounted/frame/painting/New()
 	..()
-	pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
-	pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
+	pixel_x = rand(-6,6)
+	pixel_y = rand(-6,6)
 
 	if(!paint)
 		paint = pick(available_paintings)
@@ -153,13 +153,13 @@ var/global/list/available_paintings = list(
 
 	var/pDir = get_dir(user,on_wall)
 	if(pDir & NORTH)
-		P.pixel_y = WORLD_ICON_SIZE
+		P.pixel_y = 32
 	if(pDir & SOUTH)
-		P.pixel_y = -WORLD_ICON_SIZE
+		P.pixel_y = -32
 	if(pDir & EAST)
-		P.pixel_x = WORLD_ICON_SIZE
+		P.pixel_x = 32
 	if(pDir & WEST)
-		P.pixel_x = -WORLD_ICON_SIZE
+		P.pixel_x = -32
 
 	playsound(on_wall, 'sound/items/Deconstruct.ogg', 25, 1)
 

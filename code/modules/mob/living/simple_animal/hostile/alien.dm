@@ -340,7 +340,7 @@ var/list/nest_locations = list()
 	move_to_delay = 4
 	maxHealth = 400
 	health = 400
-	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_x = -16
 
 /obj/item/projectile/neurotox
 	damage = 30

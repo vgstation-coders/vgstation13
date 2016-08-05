@@ -18,17 +18,17 @@
 
 /datum/context_click/remote_control/four_button/return_clicked_id(x_pos, y_pos)
 	switch(y_pos)
-		if(8 to 24)
+		if(4 to 12)
 			switch(x_pos)
-				if(16 to 32)
+				if(8 to 16)
 					return "4B1"
-				if(33 to 50)
+				if(17 to 25)
 					return "4B2"
-		if(26 to 42)
+		if(13 to 21)
 			switch(x_pos)
-				if(16 to 32)
+				if(8 to 16)
 					return "4B4"
-				if(33 to 50)
+				if(17 to 25)
 					return "4B3"
 
 /datum/context_click/remote_control/four_button/get_icon_type(button_id)
@@ -39,12 +39,12 @@
 	var/y_dis = 0
 	switch(button_id)
 		if("4B1", "4B4")
-			x_dis = -10
+			x_dis = -5
 		if("4B2", "4B3")
-			x_dis = 8
+			x_dis = 4
 
 	switch(button_id)
 		if("4B1", "4B2")
-			y_dis = -18
+			y_dis = -9
 
 	return list("pixel_x" = x_dis, "pixel_y" = y_dis)

@@ -28,8 +28,8 @@
 /obj/item/weapon/paper_pack/New()
 	..()
 	amount = 20
-	pixel_x = rand(-5, 3) * PIXEL_MULTIPLIER
-	pixel_y = rand(-3, 5) * PIXEL_MULTIPLIER
+	pixel_x = rand(-5, 3)
+	pixel_y = rand(-3, 5)
 	update_icon()
 
 /obj/item/weapon/paper_pack/attack_self()

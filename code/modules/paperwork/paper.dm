@@ -34,8 +34,8 @@
 
 /obj/item/weapon/paper/New()
 	..()
-	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
-	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8, 8)
+	pixel_x = rand(-9, 9)
 	spawn(2)
 		update_icon()
 		updateinfolinks()
@@ -299,8 +299,8 @@
 		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
 
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-		stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
-		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
+		stampoverlay.pixel_x = rand(-2, 2)
+		stampoverlay.pixel_y = rand(-3, 2)
 		stampoverlay.icon_state = "paper_[P.icon_state]"
 
 		if(!stamped)

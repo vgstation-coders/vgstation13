@@ -58,10 +58,10 @@
 		if(!hud_used.vampire_blood_display)
 			hud_used.changeling_hud()
 			//hud_used.human_hud(hud_used.ui_style)
-		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
-		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
+		hud_used.vampire_blood_display.maptext_width = 64
+		hud_used.vampire_blood_display.maptext_height = 32
 		var/C = round(mind.changeling.chem_charges)
-		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'><font size = 4> C:<font color='#EAB67B'>[C]</font><br> G:<font color='#FF2828'>[mind.changeling.absorbedcount]</font></font></div>"
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> C:<font color='#EAB67B' size='1'>[C]</font><br> G:<font color='#FF2828' size='1'>[mind.changeling.absorbedcount]</font></div>"
 	return
 
 //Used to dump the languages from the changeling datum into the actual mob.

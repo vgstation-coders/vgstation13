@@ -65,8 +65,8 @@
 
 /obj/item/weapon/winter_gift/New()
 	..()
-	pixel_x = rand(-10,10) * PIXEL_MULTIPLIER
-	pixel_y = rand(-10,10) * PIXEL_MULTIPLIER
+	pixel_x = rand(-10,10)
+	pixel_y = rand(-10,10)
 
 /obj/item/weapon/winter_gift/ex_act()
 	qdel(src)

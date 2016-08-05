@@ -51,8 +51,8 @@
 	return ..()
 
 /obj/item/weapon/p_folded/throw_at(var/atom/A, throw_range, throw_speed)
-	pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
-	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-7, 7)
+	pixel_x = rand(-8, 8)
 	..()
 
 /obj/item/weapon/p_folded/verb/unfold()
