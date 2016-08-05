@@ -128,9 +128,9 @@
 
 	if(src.tdir & 3)
 		pixel_x = 0
-		pixel_y = (src.tdir == 1 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
+		pixel_y = (src.tdir == 1 ? 24 : -24)
 	else
-		pixel_x = (src.tdir == 4 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
+		pixel_x = (src.tdir == 4 ? 24 : -24)
 		pixel_y = 0
 
 	if (building==0)

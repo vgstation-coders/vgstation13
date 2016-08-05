@@ -22,8 +22,8 @@
 			spawned = pick(to_spawn)
 			spawned = new spawned(loc)
 			if(jiggle)
-				spawned.pixel_x = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
-				spawned.pixel_y = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
+				spawned.pixel_x = rand(-jiggle, jiggle)
+				spawned.pixel_y = rand(-jiggle, jiggle)
 
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////

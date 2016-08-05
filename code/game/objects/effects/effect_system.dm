@@ -229,8 +229,8 @@ steam.start() -- spawns the effect
 
 	//Remove this bit to use the old smoke
 	icon = 'icons/effects/96x96.dmi'
-	pixel_x = -WORLD_ICON_SIZE
-	pixel_y = -WORLD_ICON_SIZE
+	pixel_x = -32
+	pixel_y = -32
 
 /obj/effect/effect/smoke/New()
 	. = ..()

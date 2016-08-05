@@ -110,8 +110,8 @@
 
 /obj/item/stickybomb/New()
 	..()
-	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
-	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_x = rand(-10.0, 10)
+	pixel_y = rand(-10.0, 10)
 
 /obj/item/stickybomb/Destroy()
 	if(fired_from)
@@ -141,21 +141,21 @@
 /obj/item/stickybomb/proc/stick_to(var/atom/A as mob|obj|turf, var/side = null)
 	stuck_to = A
 	loc = A
-	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
-	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_x = rand(-10, 10)
+	pixel_y = rand(-10, 10)
 	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
 
 	if(isturf(A))
 		anchored = 1
 		switch(side)
 			if(NORTH)
-				pixel_y = WORLD_ICON_SIZE/2
+				pixel_y = 16
 			if(SOUTH)
-				pixel_y = -WORLD_ICON_SIZE/2
+				pixel_y = -16
 			if(EAST)
-				pixel_x = WORLD_ICON_SIZE/2
+				pixel_x = 16
 			if(WEST)
-				pixel_x = -WORLD_ICON_SIZE/2
+				pixel_x = -16
 		sleep(50)
 		if(stuck_to == A)
 			flick("stickybomb_flick",src)
@@ -211,7 +211,7 @@
 		if(ismob(stuck_to))
 			stuck_to.overlays -= self_overlay
 
-		T.turf_animation('icons/effects/96x96.dmi',"explosion_sticky",pixel_x-WORLD_ICON_SIZE, pixel_y-WORLD_ICON_SIZE, 13)
+		T.turf_animation('icons/effects/96x96.dmi',"explosion_sticky",pixel_x-32, pixel_y-32, 13)
 		playsound(T, "explosion_small", 75, 1)
 
 		for(var/mob/living/L in range(T,3))

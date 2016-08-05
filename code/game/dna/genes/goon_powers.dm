@@ -473,8 +473,8 @@
 
 			for(var/i=0, i<duration, i++)
 				step(target, target.dir)
-				if(i < 5) target.pixel_y += 8 * PIXEL_MULTIPLIER
-				else target.pixel_y -= 8 * PIXEL_MULTIPLIER
+				if(i < 5) target.pixel_y += 8
+				else target.pixel_y -= 8
 				sleep(1)
 			target.pixel_y = 0
 
@@ -496,8 +496,8 @@
 			var/wiggle = 6
 			while(wiggle > 0)
 				wiggle--
-				container.pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
-				container.pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
+				container.pixel_x = rand(-3,3)
+				container.pixel_y = rand(-3,3)
 				sleep(1)
 			container.pixel_x = 0
 			container.pixel_y = 0

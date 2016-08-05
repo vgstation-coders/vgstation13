@@ -18,13 +18,13 @@
 	machine_flags |= MULTITOOL_MENU
 	switch(w_dir)
 		if(NORTH)
-			pixel_y = 25 * PIXEL_MULTIPLIER
+			pixel_y = 25
 		if(SOUTH)
-			pixel_y = -25 * PIXEL_MULTIPLIER
+			pixel_y = -25
 		if(EAST)
-			pixel_x = 25 * PIXEL_MULTIPLIER
+			pixel_x = 25
 		if(WEST)
-			pixel_x = -25 * PIXEL_MULTIPLIER
+			pixel_x = -25
 
 /obj/machinery/ignition_switch
 	name = "ignition switch"

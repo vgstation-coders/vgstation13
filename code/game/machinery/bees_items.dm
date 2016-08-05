@@ -101,8 +101,8 @@
 
 /obj/item/beezeez/New()
 	. = ..()
-	pixel_x = rand(-5.0, 5) * PIXEL_MULTIPLIER
-	pixel_y = rand(-5.0, 5) * PIXEL_MULTIPLIER
+	pixel_x = rand(-5.0, 5)
+	pixel_y = rand(-5.0, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb
 	name = "honeycomb"

@@ -208,13 +208,13 @@
 	if(A)
 		switch(get_dir(src,A))
 			if(NORTH)
-				impact.pixel_y = WORLD_ICON_SIZE/2
+				impact.pixel_y = 16
 			if(SOUTH)
-				impact.pixel_y = -WORLD_ICON_SIZE/2
+				impact.pixel_y = -16
 			if(EAST)
-				impact.pixel_x = WORLD_ICON_SIZE/2
+				impact.pixel_x = 16
 			if(WEST)
-				impact.pixel_x = -WORLD_ICON_SIZE/2
+				impact.pixel_x = -16
 	impact.icon_state = "ricochet_hit"
 	playsound(impact, 'sound/weapons/pierce.ogg', 30, 1)
 
