@@ -262,7 +262,7 @@
 "fb" = (/turf/simulated/floor,/area/awaymission/northblock)
 "fc" = (/obj/machinery/light/small,/turf/simulated/floor/airless{icon_state = "floorscorched1"},/area/awaymission/northblock)
 "fd" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/turf/simulated/floor/airless{icon_state = "floorscorched2"},/area/awaymission/northblock)
-"fe" = (/obj/structure/table,/obj/item/weapon/stock_parts/capacitor,/obj/item/weapon/stock_parts/capacitor{pixel_x = -6},/obj/item/weapon/stock_parts/scanning_module{pixel_x = 6; pixel_y = 6},/obj/item/weapon/stock_parts/scanning_module{pixel_y = -6; step_y = 0},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
+"fe" = (/obj/structure/table,/obj/item/weapon/stock_parts/capacitor,/obj/item/weapon/stock_parts/capacitor{pixel_x = -6},/obj/item/weapon/stock_parts/scanning_module{pixel_x = 6; pixel_y = 6},/obj/item/weapon/stock_parts/scanning_module{pixel_y = -6},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "ff" = (/obj/structure/bed/chair{dir = 1},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "fg" = (/obj/structure/table,/obj/item/weapon/stock_parts/manipulator,/obj/item/weapon/stock_parts/manipulator{pixel_x = -6; pixel_y = 6},/obj/item/weapon/stock_parts/micro_laser{pixel_x = -6; pixel_y = -6},/obj/item/weapon/stock_parts/micro_laser{pixel_x = 6; pixel_y = 6},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "fh" = (/obj/machinery/computer/crew,/turf/simulated/floor{dir = 4; icon_state = "bluecorner"},/area/awaymission/northblock)
