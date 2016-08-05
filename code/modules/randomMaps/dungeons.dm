@@ -68,12 +68,3 @@ proc/load_dungeon(dungeon_type)
 	existing_dungeons.Add(ME)
 
 	return result
-
-/datum/map_element/test_dungeon
-	file_path = "maps/randomvaults/dungeons/50x1.dmm"
-
-/datum/map_element/test_dungeon/clown_balls
-	file_path = "maps/randomvaults/dungeons/50x3_clown.dmm"
-
-/datum/map_element/test_dungeon/big_balls
-	file_path = "maps/randomvaults/dungeons/30x30.dmm"
