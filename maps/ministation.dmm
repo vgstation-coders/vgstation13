@@ -1978,7 +1978,7 @@
 "Mb" = (/turf/unsimulated/wall/fakeglass{icon_state = "fakewindows"; dir = 9},/area/syndicate_mothership)
 "Mc" = (/turf/unsimulated/wall/fakeglass{icon_state = "fakewindows2"; dir = 8},/area/syndicate_mothership)
 "Md" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/mushroompizzaslice,/turf/unsimulated/floor{icon_state = "bar"; dir = 2},/area/syndicate_mothership)
-"Me" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer{pixel_x = 10; pixel_y = -4; step_x = 0},/turf/unsimulated/floor{icon_state = "bar"; dir = 2},/area/syndicate_mothership)
+"Me" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer{pixel_x = 10; pixel_y = -4},/turf/unsimulated/floor{icon_state = "bar"; dir = 2},/area/syndicate_mothership)
 "Mf" = (/turf/unsimulated/floor{tag = "icon-podhatch (WEST)"; icon_state = "podhatch"; dir = 8},/area/syndicate_mothership)
 "Mg" = (/turf/unsimulated/floor{icon_state = "red"; dir = 10},/area/tdome/tdomeobserve)
 "Mh" = (/turf/unsimulated/floor{icon_state = "red"; dir = 2},/area/tdome/tdomeobserve)
