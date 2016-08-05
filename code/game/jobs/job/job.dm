@@ -91,8 +91,9 @@
 	return max(0, minimal_player_age - C.player_age)
 
 /datum/job/proc/introduce(mob/M, job_title)
-	if(!job_title) job_title = src.title
-
+	if(!job_title)
+		job_title = title
+	log_admin("([M.ckey]/[M]) started the game as a [job_title].")
 	to_chat(M, "<B>You are the [job_title].</B>")
 	to_chat(M, "<b>As the [job_title] you answer directly to [src.supervisors]. Special circumstances may change this.</b>")
 
