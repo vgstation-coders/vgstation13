@@ -60,6 +60,7 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/oldarmory.dmm"
 
 /datum/map_element/vault/spacepond
+	require_dungeons = 1
 	file_path = "maps/randomvaults/spacepond.dmm"
 
 /datum/map_element/vault/spacepond/initialize(list/objects)
