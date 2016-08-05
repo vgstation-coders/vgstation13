@@ -342,7 +342,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	..(message, blind_message, drugged_message, blind_drugged_message)
 
 /mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
-	if(see_invisible < invisibility || src == A)
+	if(see_invisible < A.invisibility || src == A)
 		return
 	var/hallucination = hallucinating()
 	var/msg = message
