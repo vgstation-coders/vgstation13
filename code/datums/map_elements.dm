@@ -11,21 +11,25 @@ var/list/datum/map_element/map_elements = list()
 
 	var/turf/location //A random turf from the map element. Used for jumping to
 
+	var/width //Width of the map element, in turfs
+	var/height //Height of the map element, in turfs
+
 /datum/map_element/proc/pre_load() //Called before loading the element
 	return
 
 /datum/map_element/proc/initialize(list/objects) //Called after loading the element. The "objects" list contains all spawned atoms
 	map_elements.Add(src)
 
-	if(objects.len)
+	if(!location && objects.len)
 		location = locate(/turf) in objects
 
 /datum/map_element/proc/load(x, y, z)
 	var/file = file(file_path)
 	if(isfile(file))
 		pre_load()
-		var/list/L = maploader.load_map(file, z, x, y)
+		var/list/L = maploader.load_map(file, z, x, y, src)
 		initialize(L)
+		to_chat(world, "Loaded a vault with the dimensions [width]x[height]")
 		return 1
 
 	return 0

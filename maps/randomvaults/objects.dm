@@ -32,6 +32,8 @@
 
 /area/vault/spacepond
 
+/area/vault/spacepond/wine_cellar
+
 /area/vault/ioufort
 
 /area/vault/hive_shuttle
@@ -183,3 +185,13 @@
 	icon_state = "duey0"
 	icon_initial = "duey"
 	Max_Fertilizers = 50
+
+/obj/structure/ladder/spacepond/ground
+	name = "wine cellar"
+	id = "spacepond"
+	height = 1
+
+/obj/structure/ladder/spacepond/winecellar
+	name = "space cabin"
+	id = "spacepond"
+	height = 0
