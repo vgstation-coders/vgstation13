@@ -29,7 +29,6 @@ var/list/datum/map_element/map_elements = list()
 		pre_load()
 		var/list/L = maploader.load_map(file, z, x, y, src)
 		initialize(L)
-		to_chat(world, "Loaded a vault with the dimensions [width]x[height]")
 		return 1
 
 	return 0
