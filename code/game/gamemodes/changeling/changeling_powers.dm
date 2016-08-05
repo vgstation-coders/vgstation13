@@ -4,6 +4,10 @@
 	if(!mind.changeling)	mind.changeling = new /datum/changeling(gender)
 	verbs += /datum/changeling/proc/EvolutionMenu
 
+	var/obj/item/verbs/changeling/verb_holder = locate() in src
+	if(!verb_holder)
+		verb_holder = new /obj/item/verbs/changeling(src)
+
 	var/lesser_form = !ishuman(src)
 
 	if(!powerinstances.len)
@@ -20,7 +24,7 @@
 		if(P.isVerb)
 			if(lesser_form && !P.allowduringlesserform)	continue
 			if(!(P in src.verbs))
-				src.verbs += P.verbpath
+				verb_holder.verbs += P.verbpath
 
 	mind.changeling.absorbed_dna |= dna
 	var/mob/living/carbon/human/H = src
@@ -30,6 +34,23 @@
 		mind.changeling.absorbed_languages |= language
 	updateChangelingHUD()
 	return 1
+
+/mob/proc/add_changeling_verb(path)
+	var/obj/item/verbs/changeling/verb_holder = locate() in src
+	if(!verb_holder)
+		verb_holder = new(src)
+
+	verb_holder.verbs |= path
+
+/mob/proc/remove_changeling_verb(path)
+	var/obj/item/verbs/changeling/verb_holder = locate() in src
+	if(!verb_holder)
+		return
+	if(!path)
+		returnToPool(verb_holder)
+		return
+
+	verb_holder.verbs -= path
 
 /mob/proc/updateChangelingHUD()
 	if(hud_used)
@@ -56,13 +77,18 @@
 
 	return
 
-//Used to switch species based on the changeling datum.
-/mob/proc/changeling_change_species()
-
-
+/obj/item/verbs/changeling/proc/changeling_change_species()
 	set category = "Changeling"
 	set name = "Change Species (5)"
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_change_species()
+
+//Used to switch species based on the changeling datum.
+/mob/proc/changeling_change_species()
 	var/mob/living/carbon/human/H = src
 	if(!istype(H))
 		to_chat(src, "<span class='warning'>We may only use this power while in humanoid form.</span>")
@@ -97,11 +123,18 @@
 
 	return 1
 
-/mob/proc/changeling_horror_form()
+/obj/item/verbs/changeling/proc/changeling_horror_form()
 	set category = "Changeling"
 	set name = "Horror Form (30)"
 	set desc = "This costly evolution allows us to transform into an all-consuming abomination. We are extremely strong, to the point that we can force airlocks open and devour humans whole, and immune to stuns."
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_horror_form()
+
+/mob/proc/changeling_horror_form()
 	if(!istype(src, /mob/living/carbon/human))
 		to_chat(usr, "<span class='warning'>We must be in human form before activating Horror Form.</span>")
 		return
@@ -145,9 +178,16 @@
 //removes our changeling verbs
 /mob/proc/remove_changeling_powers()
 	if(!mind || !mind.changeling)	return
+
+	var/obj/item/verbs/changeling/verb_holder = locate() in src
+	if(!verb_holder)
+		return
+
 	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
 		if(P.isVerb)
-			verbs -= P.verbpath
+			verb_holder.verbs -= P.verbpath
+
+	returnToPool(verb_holder)
 
 
 //Helper proc. Does all the checks and stuff for us to avoid copypasta
@@ -186,13 +226,19 @@
 
 	return changeling
 
+/obj/item/verbs/changeling/proc/changeling_absorb_dna()
+	set category = "Changeling"
+	set name = "Absorb DNA"
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_absorb_dna()
 
 //Absorbs the victim's DNA making them uncloneable. Requires a strong grip on the victim.
 //Doesn't cost anything as it's the most basic ability.
 /mob/proc/changeling_absorb_dna()
-	set category = "Changeling"
-	set name = "Absorb DNA"
-
 	var/datum/changeling/changeling = changeling_power(0,0,100)
 	if(!changeling)	return
 
@@ -311,12 +357,18 @@
 	T.Drain()
 	return 1
 
-
-//Change our DNA to that of somebody we've absorbed.
-/mob/proc/changeling_transform()
+/obj/item/verbs/changeling/proc/changeling_transform()
 	set category = "Changeling"
 	set name = "Transform (5)"
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_transform()
+
+//Change our DNA to that of somebody we've absorbed.
+/mob/proc/changeling_transform()
 	var/datum/changeling/changeling = changeling_power(5,1,0, deny_horror=1)
 	if(!changeling)	return
 
@@ -343,19 +395,26 @@
 	if(istype(H) && oldspecies != dna.species)
 		H.set_species(H.dna.species, 0)
 	domutcheck(src, null)
-
-	src.verbs -= /mob/proc/changeling_transform
-	spawn(10)	src.verbs += /mob/proc/changeling_transform
-
 	feedback_add_details("changeling_powers","TR")
+
+	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_transform)
+	spawn(10)
+		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_transform)
+
 	return 1
 
-
-//Transform into a monkey. 	//TODO replace with monkeyize proc
-/mob/proc/changeling_lesser_form()
+/obj/item/verbs/changeling/proc/changeling_lesser_form()
 	set category = "Changeling"
 	set name = "Lesser Form (1)"
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_lesser_form()
+
+//Transform into a monkey. 	//TODO replace with monkeyize proc
+/mob/proc/changeling_lesser_form()
 	var/datum/changeling/changeling = changeling_power(1,0,0, deny_horror=1)
 	if(!changeling)	return
 
@@ -393,6 +452,7 @@
 	C.dna = null
 	C.transferImplantsTo(O)
 	C.transferBorers(O)
+	C.remove_changeling_verb() //remove the verb holder
 
 	for(var/obj/item/W in C)
 		C.drop_from_inventory(W)
@@ -410,19 +470,25 @@
 	O.a_intent = I_HURT
 	C.mind.transfer_to(O)
 	O.make_changeling(1)
-	O.verbs += /mob/proc/changeling_lesser_transform
+	O.add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_lesser_transform)
 	O.changeling_update_languages(O.mind.changeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
 	qdel(C)
 	C =  null
 	return 1
 
-
-//Transform into a human
-/mob/proc/changeling_lesser_transform()
+/obj/item/verbs/changeling/proc/changeling_lesser_transform()
 	set category = "Changeling"
 	set name = "Transform (1)"
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_lesser_transform()
+
+//Transform into a human
+/mob/proc/changeling_lesser_transform()
 	var/datum/changeling/changeling = changeling_power(1,1,0, deny_horror=1)
 	if(!changeling)	return
 
@@ -469,6 +535,7 @@
 	O.dna = C.dna.Clone()
 	C.dna = null
 	O.real_name = chosen_dna.real_name
+	C.remove_changeling_verb()
 
 	for(var/obj/item/W in src)
 		C.drop_from_inventory(W)
@@ -516,10 +583,17 @@
 			yes = 1
 	to_chat(usr, "[yes ? "<span class='good'>" : "<span class='bad'>"] You are [yes ? "" : "not "]in the living mob list</span>")
 
-/mob/proc/changeling_returntolife()
+/obj/item/verbs/changeling/proc/changeling_returntolife()
 	set category = "Changeling"
 	set name = "Return To Life (20)"
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_returntolife()
+
+/mob/proc/changeling_returntolife()
 	var/datum/changeling/changeling = changeling_power(20,1,100,DEAD)
 	if(!changeling)	return
 
@@ -537,17 +611,26 @@
 		C.update_canmove()
 		C.make_changeling()
 	regenerate_icons()
-	src.verbs -= /mob/proc/changeling_returntolife
+	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
 	feedback_add_details("changeling_powers","RJ")
 
-/mob/proc/changeling_fakedeath()
+/obj/item/verbs/changeling/proc/changeling_fakedeath()
 	set category = "Changeling"
 	set name = "Regenerative Stasis (20)"
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_fakedeath()
+
+/mob/proc/changeling_fakedeath()
+	/*
 	// BYOND bug where verbs don't update if you're not on a turf, as such you'll be permanently stuck in regen statis until you get moved to a turf.
 	if(!isturf(loc))
 		to_chat(src, "<span class='warning'>((Due to a BYOND bug, it is not possible to come out of regenerative statis if you are not on a turf (walls, floors...)))</span>")
 		return
+	*/ //Fixed with the introduction of the changeling verb holder
 
 	var/datum/changeling/changeling = changeling_power(20,1,100,DEAD)
 	if(!changeling)	return
@@ -570,34 +653,50 @@
 
 	spawn(rand(800,1200))
 		to_chat(src, "<span class='warning'>We are now ready to regenerate.</span>")
-		src.verbs += /mob/proc/changeling_returntolife
+		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
+
 	feedback_add_details("changeling_powers","FD")
 	return 1
 
+/obj/item/verbs/changeling/proc/changeling_boost_range()
+	set category = "Changeling"
+	set name = "Ranged Sting (10)"
+	set desc = "Your next sting ability can be used against targets 2 squares away."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_boost_range()
 
 //Boosts the range of your next sting attack by 1
 /mob/proc/changeling_boost_range()
-	set category = "Changeling"
-	set name = "Ranged Sting (10)"
-	set desc="Your next sting ability can be used against targets 2 squares away."
-
 	var/datum/changeling/changeling = changeling_power(10,0,100)
 	if(!changeling)	return 0
 	changeling.chem_charges -= 10
 	to_chat(src, "<span class='notice'>Your throat adjusts to launch the sting.</span>")
 	changeling.sting_range = 2
-	src.verbs -= /mob/proc/changeling_boost_range
-	spawn(5)	src.verbs += /mob/proc/changeling_boost_range
+
+	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_boost_range)
+	spawn(5)
+		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_boost_range)
+
 	feedback_add_details("changeling_powers","RS")
 	return 1
 
+/obj/item/verbs/changeling/proc/changeling_unstun()
+	set category = "Changeling"
+	set name = "Epinephrine Sacs (45)"
+	set desc = "Removes all stuns."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_unstun()
 
 //Recover from stuns.
 /mob/proc/changeling_unstun()
-	set category = "Changeling"
-	set name = "Epinephrine Sacs (45)"
-	set desc = "Removes all stuns"
-
 	var/datum/changeling/changeling = changeling_power(45,0,100,UNCONSCIOUS)
 	if(!changeling)	return 0
 	changeling.chem_charges -= 45
@@ -614,8 +713,9 @@
 	C.lying = 0
 	C.update_canmove()
 
-	src.verbs -= /mob/proc/changeling_unstun
-	spawn(5)	src.verbs += /mob/proc/changeling_unstun
+	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_unstun)
+	spawn(5)
+		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_unstun)
 	feedback_add_details("changeling_powers","UNS")
 	return 1
 
@@ -630,13 +730,19 @@
 	src.mind.changeling.chem_storage += 25
 	return 1
 
+/obj/item/verbs/changeling/proc/changeling_digitalcamo()
+	set category = "Changeling"
+	set name = "Toggle Digital Camouflage"
+	set desc = "The AI can no longer track us, but we will look different if examined. Has a constant cost while active."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_digitalcamo()
 
 //Prevents AIs tracking you but makes you easily detectable to the human-eye.
 /mob/proc/changeling_digitalcamo()
-	set category = "Changeling"
-	set name = "Toggle Digital Camoflague"
-	set desc = "The AI can no longer track us, but we will look different if examined.  Has a constant cost while active."
-
 	var/datum/changeling/changeling = changeling_power()
 	if(!changeling)	return 0
 
@@ -650,18 +756,26 @@
 			C.mind.changeling.chem_charges = max(C.mind.changeling.chem_charges - 1, 0)
 			sleep(40)
 
-	src.verbs -= /mob/proc/changeling_digitalcamo
-	spawn(5)	src.verbs += /mob/proc/changeling_digitalcamo
+	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_digitalcamo)
+	spawn(5)
+		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_digitalcamo)
 	feedback_add_details("changeling_powers","CAM")
 	return 1
 
 
-//Starts healing you every second for 10 seconds. Can be used whilst unconscious.
-/mob/proc/changeling_rapidregen()
+/obj/item/verbs/changeling/proc/changeling_rapidregen()
 	set category = "Changeling"
 	set name = "Rapid Regeneration (30)"
-	set desc = "Begins rapidly regenerating.  Does not effect stuns or chemicals."
+	set desc = "We start rapidly regenerating over the course of 10 seconds. Stuns and chemicals are not affected, but we can use this while unconscious."
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_rapidregen()
+
+//Starts healing you every second for 10 seconds. Can be used whilst unconscious.
+/mob/proc/changeling_rapidregen()
 	var/datum/changeling/changeling = changeling_power(30,0,100,UNCONSCIOUS)
 	if(!changeling)	return 0
 	src.mind.changeling.chem_charges -= 30
@@ -676,8 +790,9 @@
 				C.adjustFireLoss(-10)
 				sleep(10)
 
-	src.verbs -= /mob/proc/changeling_rapidregen
-	spawn(5)	src.verbs += /mob/proc/changeling_rapidregen
+	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_rapidregen)
+	spawn(5)
+		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_rapidregen)
 	feedback_add_details("changeling_powers","RR")
 	return 1
 
@@ -685,11 +800,18 @@
 
 var/list/datum/dna/hivemind_bank = list()
 
-/mob/proc/changeling_hiveupload()
+/obj/item/verbs/changeling/proc/changeling_hiveupload()
 	set category = "Changeling"
 	set name = "Hive Channel (10)"
-	set desc = "Allows you to channel DNA in the airwaves to allow other changelings to absorb it."
+	set desc = "Lets us to channel DNA in the airwaves, allowing other changelings to absorb it."
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_hiveupload()
+
+/mob/proc/changeling_hiveupload()
 	var/datum/changeling/changeling = changeling_power(10,1)
 	if(!changeling)	return
 
@@ -715,11 +837,18 @@ var/list/datum/dna/hivemind_bank = list()
 	feedback_add_details("changeling_powers","HU")
 	return 1
 
-/mob/proc/changeling_hivedownload()
+/obj/item/verbs/changeling/proc/changeling_hivedownload()
 	set category = "Changeling"
 	set name = "Hive Absorb (20)"
-	set desc = "Allows you to absorb DNA that is being channeled in the airwaves."
+	set desc = "Allows us to absorb DNA that is being channeled in the airwaves."
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_hivedownload()
+
+/mob/proc/changeling_hivedownload()
 	var/datum/changeling/changeling = changeling_power(20,1)
 	if(!changeling)	return
 
@@ -746,12 +875,18 @@ var/list/datum/dna/hivemind_bank = list()
 
 // Fake Voice
 
-/mob/proc/changeling_mimicvoice()
+/obj/item/verbs/changeling/proc/changeling_mimicvoice()
 	set category = "Changeling"
 	set name = "Mimic Voice"
 	set desc = "Shape our vocal glands to form a voice of someone we choose. We cannot regenerate chemicals when mimicing."
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
 
+	M.changeling_mimicvoice()
+
+/mob/proc/changeling_mimicvoice()
 	if(!usr)
 		return
 	var/mob/user = usr
@@ -810,168 +945,249 @@ var/list/datum/dna/hivemind_bank = list()
 
 	changeling.chem_charges -= required_chems
 	changeling.sting_range = 1
-	src.verbs -= verb_path
-	spawn(10)	src.verbs += verb_path
+	remove_changeling_verb(verb_path)
+	spawn(10)
+		add_changeling_verb(verb_path)
 
 	to_chat(src, "<span class='notice'>We stealthily sting [T].</span>")
 	if(!T.mind || !T.mind.changeling)	return T	//T will be affected by the sting
 	to_chat(T, "<span class='warning'>You feel a tiny prick.</span>")
 	return
 
-
-/mob/proc/changeling_lsdsting()
+/obj/item/verbs/changeling/proc/changeling_lsdsting()
 	set category = "Changeling"
 	set name = "Hallucination Sting (15)"
-	set desc = "Causes terror in the target."
+	set desc = "After roughly 45 seconds, the victim will start hallucinating."
+	set waitfor = 0
 
-	var/mob/living/carbon/T = changeling_sting(15,/mob/proc/changeling_lsdsting)
-	if(!T)	return 0
-	spawn(rand(300,600))
-		if(T)	T.hallucination += 400
-	feedback_add_details("changeling_powers","HS")
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(15, /obj/item/verbs/changeling/proc/changeling_lsdsting)
+	if(!target)
+		return
+
+	feedback_add_details("changeling_powers", "HS")
+
+	sleep(rand(300,600))
+	if(target)
+		target.hallucination += 400
+
 	return 1
 
-/mob/proc/changeling_silence_sting()
+/obj/item/verbs/changeling/proc/changeling_silence_sting()
 	set category = "Changeling"
-	set name = "Silence sting (10)"
-	set desc="Sting target"
+	set name = "Hallucination Sting (15)"
+	set desc = "Makes our victim silent and unable to cry for help."
 
-	var/mob/living/carbon/T = changeling_sting(10,/mob/proc/changeling_silence_sting)
-	if(!T)	return 0
-	T.silent += 30
-	feedback_add_details("changeling_powers","SS")
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(15, /obj/item/verbs/changeling/proc/changeling_silence_sting)
+	if(!target)
+		return
+
+	feedback_add_details("changeling_powers", "SS")
+	target.silent += 30
+
 	return 1
 
-/mob/proc/changeling_blind_sting()
+/obj/item/verbs/changeling/proc/changeling_blind_sting()
 	set category = "Changeling"
-	set name = "Blind sting (20)"
-	set desc="Sting target"
+	set name = "Blind Sting (20)"
+	set desc = "Makes our victim blind for 30 seconds."
 
-	var/mob/living/carbon/T = changeling_sting(20,/mob/proc/changeling_blind_sting)
-	if(!T)	return 0
-	to_chat(T, "<span class='danger'>Your eyes burn horrificly!</span>")
-	T.disabilities |= NEARSIGHTED
-	spawn(300)	T.disabilities &= ~NEARSIGHTED
-	T.eye_blind = 10
-	T.eye_blurry = 20
-	feedback_add_details("changeling_powers","BS")
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(20, /obj/item/verbs/changeling/proc/changeling_blind_sting)
+	if(!target)
+		return
+
+	if(target.disabilities & NEARSIGHTED)
+		to_chat(target, "<span class='userdanger'>Your eyes burn terribly!</span>")
+		return
+
+	to_chat(target, "<span class='userdanger'>Your eyes burn terribly and you lose the ability to see!</span>")
+	target.disabilities |= NEARSIGHTED
+	spawn(300)
+		target.disabilities &= ~NEARSIGHTED
+
+	target.eye_blind = 10
+	target.eye_blurry = 20
+	feedback_add_details("changeling_powers", "BS")
+
 	return 1
 
-/mob/proc/changeling_deaf_sting()
+/obj/item/verbs/changeling/proc/changeling_deaf_sting()
 	set category = "Changeling"
-	set name = "Deaf sting (5)"
-	set desc="Sting target:"
+	set name = "Deaf Sting (5)"
+	set desc = "Makes our victim deaf for 30 seconds."
 
-	var/mob/living/carbon/T = changeling_sting(5,/mob/proc/changeling_deaf_sting)
-	if(!T)	return 0
-	to_chat(T, "<span class='danger'>Your ears pop and begin ringing loudly!</span>")
-	T.sdisabilities |= DEAF
-	spawn(300)	T.sdisabilities &= ~DEAF
-	feedback_add_details("changeling_powers","DS")
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(5, /obj/item/verbs/changeling/proc/changeling_deaf_sting)
+	if(!target)
+		return
+
+	if(target.disabilities & DEAF)
+		to_chat(target, "<span class='info'>You feel a weird sensation in your ears.</span>")
+		return
+
+	to_chat(target, "<span class='userdanger'>Your ears pop and begin ringing loudly!</span>")
+	target.disabilities |= DEAF
+	spawn(300)
+		target.disabilities &= ~DEAF
+
+	feedback_add_details("changeling_powers", "DS")
 	return 1
 
-/mob/proc/changeling_paralysis_sting()
+/obj/item/verbs/changeling/proc/changeling_paralysis_sting()
 	set category = "Changeling"
-	set name = "Paralysis sting (30)"
-	set desc="Sting target"
+	set name = "Paralysis Sting (20)"
+	set desc = "Makes our victim temporarily paralyzed below the neck. They'll still be able to talk and yell for help."
 
-	var/mob/living/carbon/T = changeling_sting(30,/mob/proc/changeling_paralysis_sting)
-	if(!T)	return 0
-	to_chat(T, "<span class='danger'>Your muscles begin to painfully tighten.</span>")
-	T.Weaken(20)
-	feedback_add_details("changeling_powers","PS")
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(30, /obj/item/verbs/changeling/proc/changeling_paralysis_sting)
+	if(!target)
+		return
+
+	to_chat(target, "<span class='userdanger'>Your muscles begin to painfully tighten.</span>")
+	target.Weaken(20)
+	feedback_add_details("changeling_powers", "PS")
 	return 1
 
-/mob/proc/changeling_transformation_sting()
+/obj/item/verbs/changeling/proc/changeling_transformation_sting()
 	set category = "Changeling"
-	set name = "Transformation sting (40)"
-	set desc="Sting target"
+	set name = "Transformation Sting (40)"
+	set desc = "Injects our victim with some of our absorbed DNA, turning them into somebody else."
 
-	var/datum/changeling/changeling = changeling_power(40)
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/datum/changeling/changeling = M.changeling_power(40)
 	if(!changeling)	return 0
-
-
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
-	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names
+	var/S = input(M, "Select the target DNA: ", "Target DNA", null) as null|anything in names
 	if(!S)	return
 
 	var/datum/dna/chosen_dna = changeling.GetDNA(S)
 	if(!chosen_dna)
 		return
 
-	var/mob/living/carbon/T = changeling_sting(40,/mob/proc/changeling_transformation_sting)
-	if(!T)	return 0
-	if((M_HUSK in T.mutations) || (!ishuman(T) && !ismonkey(T)))
+	var/mob/living/carbon/target = M.changeling_sting(40, /obj/item/verbs/changeling/proc/changeling_transformation_sting)
+	if(!target)
+		return
+	if((M_HUSK in target.mutations) || (!ishuman(target) && !ismonkey(target)))
 		to_chat(src, "<span class='warning'>Our sting appears ineffective against its DNA.</span>")
 		return 0
-	T.visible_message("<span class='warning'>[T] transforms!</span>")
-	T.dna = chosen_dna.Clone()
-	T.real_name = chosen_dna.real_name
-	T.UpdateAppearance()
-	domutcheck(T, null)
+	target.visible_message("<span class='warning'>[target] transforms!</span>")
+	target.dna = chosen_dna.Clone()
+	target.real_name = chosen_dna.real_name
+	target.UpdateAppearance()
+	domutcheck(target, null)
 	feedback_add_details("changeling_powers","TS")
+
 	return 1
 
-/mob/proc/changeling_unfat_sting()
+/obj/item/verbs/changeling/proc/changeling_unfat_sting()
 	set category = "Changeling"
-	set name = "Unfat sting"
+	set name = "Unfat Sting"
 	set desc = "A rapid weightloss plan that actually works!"
 
-	var/mob/living/carbon/T = changeling_sting(0,/mob/proc/changeling_unfat_sting)
-	if(!T)	return 0
-	if(T.overeatduration>100)
-		to_chat(T, "<span class='danger'>You feel a small prick as your stomach churns violently. You begin to feel skinnier.</span>")
-		T.overeatduration = 0
-		T.nutrition = max(T.nutrition - 200,0)
-		feedback_add_details("changeling_powers","US")
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting)
+	if(!target)
+		return
+
+	if(target.overeatduration > 100)
+		to_chat(target, "<span class='danger'>You feel a tiny prick as your stomach churns violently. You begin to feel skinnier.</span>")
+		target.overeatduration = 0
+		target.nutrition = max(target.nutrition - 200, 0)
+	else
+		to_chat(target, "<span class='notice'>You feel a tiny prick. Nothing happens.</span>")
+
+	feedback_add_details("changeling_powers", "US")
 	return 1
 
-/mob/proc/changeling_DEATHsting()
+/obj/item/verbs/changeling/proc/changeling_DEATHsting()
 	set category = "Changeling"
 	set name = "Death Sting (40)"
 	set desc = "Causes spasms onto death."
 
-	var/mob/living/carbon/T = changeling_sting(40,/mob/proc/changeling_DEATHsting)
-	if(!T)	return 0
-	to_chat(T, "<span class='danger'>You feel a small prick and your chest becomes tight.</span>")
-	T.silent = 10
-	T.Paralyse(10)
-	T.Jitter(1000)
-	if(T.reagents)	T.reagents.add_reagent(CYANIDE, 20)
-	feedback_add_details("changeling_powers","DTHS")
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(40, /obj/item/verbs/changeling/proc/changeling_DEATHsting)
+	if(!target)
+		return
+
+	to_chat(target, "<span class='userdanger'>You feel a tiny prick. Your chest starts tightening.</span>")
+	target.silent = 10
+	target.Paralyse(10)
+	target.Jitter(1000)
+	if(target.reagents)
+		target.reagents.add_reagent(CYANIDE, 20)
+
+	feedback_add_details("changeling_powers", "DTHS")
 	return 1
 
-/mob/proc/changeling_extract_dna_sting()
+/obj/item/verbs/changeling/proc/changeling_extract_dna_sting()
 	set category = "Changeling"
 	set name = "Extract DNA Sting (40)"
-	set desc="Stealthily sting a target to extract their DNA."
+	set desc = "We stealthily sting a target and extract their DNA."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
 
 	var/datum/changeling/changeling = null
-	if(src.mind && src.mind.changeling)
-		changeling = src.mind.changeling
+	if(M.mind && M.mind.changeling)
+		changeling = M.mind.changeling
 	if(!changeling)
 		return 0
 
-	var/mob/living/carbon/human/T = changeling_sting(40, /mob/proc/changeling_extract_dna_sting)
-	if(!T)	return 0
+	var/mob/living/carbon/human/target = M.changeling_sting(40, /obj/item/verbs/changeling/proc/changeling_extract_dna_sting)
+	if(!istype(target))
+		return
 
-	T.dna.real_name = T.real_name
-	changeling.absorbed_dna |= T.dna
-	if(T.species && !(T.species.name in changeling.absorbed_species))
-		changeling.absorbed_species += T.species.name
+	target.dna.real_name = target.real_name
+	changeling.absorbed_dna |= target.dna
+	if(target.species && !(changeling.absorbed_species.Find(target.species.name)))
+		changeling.absorbed_species += target.species.name
 
-	feedback_add_details("changeling_powers","ED")
+	feedback_add_details("changeling_powers", "ED")
 	return 1
 
-/mob/proc/changeling_armblade()
+/obj/item/verbs/changeling/proc/changeling_armblade()
 	set category = "Changeling"
 	set name = "Generate Arm Blade (20)"
-	set desc="Transform one of our arms into a deadly blade."
+	set desc = "Transform one of our arms into a deadly blade."
 
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	M.changeling_armblade()
+
+/mob/proc/changeling_armblade()
 	if(!istype(src, /mob/living/carbon/human))
 		return
 	var/mob/living/carbon/human/H = src

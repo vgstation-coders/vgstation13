@@ -1,0 +1,6 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- bugfix: "Fixed changelings being unable to regenerate while in a locker/pipe/other container."
