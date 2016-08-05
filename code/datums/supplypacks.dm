@@ -545,6 +545,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 //////SECURITY//////
 
+/datum/supply_packs/secway
+	name = "Secway crate"
+	contains = list(/obj/structure/bed/chair/vehicle/secway,
+					/obj/item/key/security)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Secway crate"
+	access = access_security
+	group = "Security"
+
 /datum/supply_packs/specialops
 	name = "Special Ops supplies"
 	contains = list(/obj/item/weapon/storage/box/emps,
