@@ -44,8 +44,8 @@
 		nutrition -= eggcost
 		eggsleft--
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/vox/E = new(get_turf(src))
-		E.pixel_x = rand(-6,6)
-		E.pixel_y = rand(-6,6)
+		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(prob(25))
 			processing_objects.Add(E)
 

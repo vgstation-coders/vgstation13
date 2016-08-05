@@ -56,9 +56,9 @@
 			if (user.loc != loc)
 				break
 			sleep(3)
-			animate(user, pixel_y = pixel_y - 2, time = 3)
+			animate(user, pixel_y = pixel_y - 2 * PIXEL_MULTIPLIER, time = 3)
 			sleep(3)
-			animate(user, pixel_y = pixel_y - 4, time = 3)
+			animate(user, pixel_y = pixel_y - 4 * PIXEL_MULTIPLIER, time = 3)
 			sleep(3)
 			playsound(user, 'sound/effects/spring.ogg', 60, 1)
 
@@ -92,19 +92,19 @@
 		overlays += W
 		var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
 		user.visible_message("<B>[user] is [bragmessage]!</B>")
-		user.pixel_y = 5
+		user.pixel_y = 5 * PIXEL_MULTIPLIER
 		for(var/reps = 1 to 6)
 			if (user.loc != loc)
 				break
 
 			for (var/innerReps = max(reps, 1), innerReps > 0, innerReps--)
 				sleep(3)
-				animate(user, pixel_y = (user.pixel_y == 3) ? 5 : 3, time = 3)
+				animate(user, pixel_y = (user.pixel_y == 3 * PIXEL_MULTIPLIER) ? 5 * PIXEL_MULTIPLIER: 3 * PIXEL_MULTIPLIER, time = 3)
 
 			playsound(user, 'sound/effects/spring.ogg', 60, 1)
 
 		sleep(3)
-		animate(user, pixel_y = pixel_y + 2, time = 3)
+		animate(user, pixel_y = pixel_y + 2 * PIXEL_MULTIPLIER, time = 3)
 		sleep(3)
 		playsound(user, 'sound/machines/click.ogg', 60, 1)
 		in_use = 0

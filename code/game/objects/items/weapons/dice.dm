@@ -319,8 +319,8 @@
 	set_sides(usr)
 
 /datum/context_click/digi_die/return_clicked_id(x_pos, y_pos)
-	if(23 <= x_pos && x_pos <= 26) //yellow bit
-		if(23 <= y_pos && y_pos <= 26)
+	if(46 <= x_pos && x_pos <= 52) //yellow bit
+		if(46 <= y_pos && y_pos <= 52)
 			return 1
 
 /datum/context_click/digi_die/action(obj/item/used_item, mob/user, params)

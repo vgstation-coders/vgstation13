@@ -108,7 +108,7 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 			<script type=\"text/javascript\">\
 			var mapname = \"[map.nameShort]\"; \
 			var z = [z]; \
-			var tile_size = [world.icon_size]; \
+			var tile_size = [WORLD_ICON_SIZE]; \
 			var maxx = [world.maxx]; \
 			var maxy = [world.maxy];</script>\
 			<script type=\"text/javascript\" src=\"crewmonitor.js\"></script>")

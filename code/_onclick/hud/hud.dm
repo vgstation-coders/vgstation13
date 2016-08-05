@@ -292,7 +292,7 @@ var/global/obj/screen/clicker/catcher = new()
 			R.closer.master = R
 			R.closer.transform *= 0.8
 		var/display_rows = round((override.len) / 8) +1 //+1 because round() returns floor of number
-		L.schematics_background.screen_loc = "CENTER-4:16,SOUTH+1:7 to CENTER+3:16,SOUTH+[display_rows]:7"
+		L.schematics_background.screen_loc = "CENTER-4:[WORLD_ICON_SIZE/2],SOUTH+1:[7*PIXEL_MULTIPLIER] to CENTER+3:[WORLD_ICON_SIZE/2],SOUTH+[display_rows]:[7*PIXEL_MULTIPLIER]"
 		L.client.screen += L.schematics_background
 
 		var/x = -4	//Start at CENTER-4,SOUTH+1
@@ -310,16 +310,16 @@ var/global/obj/screen/clicker/catcher = new()
 			//Module is not currently active
 			L.client.screen += A
 			if(x < 0)
-				A.screen_loc = "CENTER[x]:16,SOUTH+[y]:7"
+				A.screen_loc = "CENTER[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
 			else
-				A.screen_loc = "CENTER+[x]:16,SOUTH+[y]:7"
+				A.screen_loc = "CENTER+[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
 			A.layer = HUD_ITEM_LAYER
 
 			x++
 			if(x == 4)
 				x = -4
 				y++
-		R.closer.screen_loc = "CENTER[x < 0 ? "" : "+"][x]:16,SOUTH+[y]:7"
+		R.closer.screen_loc = "CENTER[x < 0 ? "" : "+"][x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
 		L.client.screen += R.closer
 
 	else

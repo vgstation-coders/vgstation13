@@ -197,4 +197,4 @@
 	vampire_blood_display = getFromPool(/obj/screen)
 	vampire_blood_display.name = "Alien Plasma"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "14:28,9:15"
+	vampire_blood_display.screen_loc = "14:[28*PIXEL_MULTIPLIER],9:[15*PIXEL_MULTIPLIER]"

@@ -661,13 +661,13 @@
 			if(wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
 				user.say("QUID 'ITCH")
-				animate(user, pixel_y = pixel_y + 10 , time = 10, loop = 1, easing = SINE_EASING)
+				animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 10, loop = 1, easing = SINE_EASING)
 			else
-				animate(user, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+				animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 1, loop = 1)
 				animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 				animate(user)
 				if(user.lying)//aka. if they have just been stunned
-					user.pixel_y -= 6
+					user.pixel_y -= 6 * PIXEL_MULTIPLIER
 		else
 			if(wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")

@@ -1013,8 +1013,8 @@
 			var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
 
 			var/image/con = image(icon(src.icon,"manifoldl_con",src.dir))
-			con.pixel_x = layer_diff * PIPING_LAYER_P_X
-			con.pixel_y = layer_diff * PIPING_LAYER_P_Y
+			con.pixel_x = layer_diff * PIPING_LAYER_P_X * PIXEL_MULTIPLIER
+			con.pixel_y = layer_diff * PIPING_LAYER_P_Y * PIXEL_MULTIPLIER
 
 			overlays += con
 
@@ -1197,8 +1197,8 @@
 		var/layer_diff = piping_layer - PIPING_LAYER_DEFAULT
 
 		var/image/con = image(icon(src.icon,"layer_con",turn(src.dir,180)))
-		con.pixel_x = layer_diff * PIPING_LAYER_P_X
-		con.pixel_y = layer_diff * PIPING_LAYER_P_Y
+		con.pixel_x = layer_diff * PIPING_LAYER_P_X * PIXEL_MULTIPLIER
+		con.pixel_y = layer_diff * PIPING_LAYER_P_Y * PIXEL_MULTIPLIER
 
 		overlays += con
 	if(!mid_node && !layer_node)

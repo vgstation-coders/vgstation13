@@ -11,8 +11,8 @@
 
 /obj/item/bluespace_crystal/New()
 	..()
-	pixel_x = rand(-5, 5)
-	pixel_y = rand(-5, 5)
+	pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/bluespace_crystal/attack_self(var/mob/user)
 	var/datum/zLevel/L = get_z_level(src)

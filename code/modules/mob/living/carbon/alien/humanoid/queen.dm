@@ -86,7 +86,7 @@
 /mob/living/carbon/alien/humanoid/queen/large
 	icon = 'icons/mob/giantmobs.dmi'
 	icon_state = "queen_s"
-	pixel_x = -16
+	pixel_x = -16 * PIXEL_MULTIPLIER
 
 /mob/living/carbon/alien/humanoid/queen/large/update_icons()
 	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again

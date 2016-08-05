@@ -268,8 +268,8 @@
 			O.name = "Wallrot"
 			O.desc = "Ick..."
 			O.icon = 'icons/effects/wallrot.dmi'
-			O.pixel_x += rand(-10, 10)
-			O.pixel_y += rand(-10, 10)
+			O.pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
+			O.pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER
 			O.anchored = 1
 			O.density = 1
 			O.plane = ABOVE_HUMAN_PLANE

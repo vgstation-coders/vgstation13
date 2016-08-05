@@ -20,8 +20,8 @@
 	update_icon()
 
 /obj/item/ammo_casing/update_icon()
-	pixel_x = rand(-10.0, 10)
-	pixel_y = rand(-10.0, 10)
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 	dir = pick(cardinal)
 	name = "[BB ? "" : "spent "][initial(name)]"
 	icon_state = "[initial(icon_state)][BB ? "-live" : ""]"

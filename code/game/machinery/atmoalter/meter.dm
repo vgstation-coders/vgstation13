@@ -32,8 +32,8 @@
 
 /obj/machinery/meter/proc/setAttachLayer(var/new_layer)
 	target_layer = new_layer
-	src.pixel_x = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
-	src.pixel_y = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
+	src.pixel_x = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X * PIXEL_MULTIPLIER
+	src.pixel_y = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y * PIXEL_MULTIPLIER
 
 /obj/machinery/meter/process()
 	if(!target)

@@ -204,8 +204,8 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 /obj/item/pipe/proc/setPipingLayer(new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = new_layer
 	if(pipe_type != PIPE_LAYER_MANIFOLD && pipe_type != PIPE_LAYER_ADAPTER)
-		pixel_x = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
-		pixel_y = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
+		pixel_x = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X * PIXEL_MULTIPLIER
+		pixel_y = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y * PIXEL_MULTIPLIER
 		layer = initial(layer) + ((piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE)
 
 //update the name and icon of the pipe item depending on the type
@@ -559,8 +559,8 @@ var/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION)
 
 /obj/item/pipe_meter/proc/setAttachLayer(var/new_layer = PIPING_LAYER_DEFAULT)
 	layer_to_make = new_layer
-	src.pixel_x = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
-	src.pixel_y = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
+	src.pixel_x = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X * PIXEL_MULTIPLIER
+	src.pixel_y = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y * PIXEL_MULTIPLIER
 
 /obj/item/pipe_gsensor
 	name = "gas sensor"

@@ -25,8 +25,8 @@
 /obj/structure/closet/fireaxecabinet/New(loc, var/ndir)
 	..()
 	if(ndir)
-		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 32 : -32) //Stolen from one of several near-identical other things
-		pixel_y = (ndir & 3)? (ndir == 1 ? 32 : -32) : 0 //Stolen from one of several near-identical other things
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) //Stolen from one of several near-identical other things
+		pixel_y = (ndir & 3)? (ndir == 1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : 0 //Stolen from one of several near-identical other things
 		dir = ndir
 	update_icon()
 

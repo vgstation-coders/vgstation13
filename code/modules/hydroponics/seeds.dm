@@ -15,8 +15,8 @@
 		sleep(30)
 	update_seed()
 	..()
-	pixel_x = rand(-3,3)
-	pixel_y = rand(-3,3)
+	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
+	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()

@@ -1331,8 +1331,8 @@ var/global/num_vending_terminals = 1
 	// offset 32 pixels in direction of dir
 	// this allows the NanoMed to be embedded in a wall, yet still inside an area
 	dir = ndir
-	pixel_x = (dir & 3)? 0 : (dir == 4 ? 30 : -30)
-	pixel_y = (dir & 3)? (dir ==1 ? 30 : -30) : 0
+	pixel_x = (dir & 3)? 0 : (dir == 4 ? 30 * PIXEL_MULTIPLIER: -30 * PIXEL_MULTIPLIER)
+	pixel_y = (dir & 3)? (dir ==1 ? 30 * PIXEL_MULTIPLIER: -30 * PIXEL_MULTIPLIER) : 0
 
 /obj/machinery/wallmed_frame/update_icon()
 	icon_state = "wallmed_frame[build]"

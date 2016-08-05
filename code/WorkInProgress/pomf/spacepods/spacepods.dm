@@ -35,8 +35,8 @@
 		pod_overlays = new/list(2)
 		pod_overlays[DAMAGE] = image(icon, icon_state="pod_damage")
 		pod_overlays[FIRE] = image(icon, icon_state="pod_fire")
-	bound_width = 64
-	bound_height = 64
+	bound_width = 2*WORLD_ICON_SIZE
+	bound_height = 2*WORLD_ICON_SIZE
 	dir = EAST
 	battery = new /obj/item/weapon/cell/high()
 	add_cabin()
