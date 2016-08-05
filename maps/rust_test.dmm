@@ -3,7 +3,7 @@
 "ac" = (/obj/effect/landmark/start{name = "Station Engineer"},/turf/simulated/floor,/area/engine/control)
 "ad" = (/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/engine/control)
 "ae" = (/obj/machinery/power/apc{cell_type = 15000; dir = 1; name = "Engineering APC"; pixel_x = 0; pixel_y = 0},/obj/structure/cable{d1 = 0; d2 = 2; icon_state = "0-2"},/turf/simulated/floor,/area/engine/control)
-"af" = (/obj/machinery/door_control{id = 1; step_y = 32},/turf/simulated/floor,/area/engine/control)
+"af" = (/obj/machinery/door_control{id = 1},/turf/simulated/floor,/area/engine/control)
 "ag" = (/obj/machinery/power/monitor,/turf/simulated/floor,/area/engine/control)
 "ah" = (/obj/effect/landmark/start{name = "Station Engineer"},/obj/machinery/light{dir = 4},/turf/simulated/floor,/area/engine/control)
 "ai" = (/turf/simulated/floor,/area/engine/control)
