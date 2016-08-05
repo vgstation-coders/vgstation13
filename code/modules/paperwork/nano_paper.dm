@@ -16,8 +16,8 @@
 
 /obj/item/weapon/paper/nano/New()
 	..()
-	pixel_y = rand(-8, 8)
-	pixel_x = rand(-9, 9)
+	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 	spawn(2)
 		update_icon()
 		updateinfolinks()

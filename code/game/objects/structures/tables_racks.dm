@@ -740,14 +740,14 @@
 		if(W.loc == src.loc)
 			switch(offset_step)
 				if(1)
-					W.pixel_x = -3
-					W.pixel_y = 3
+					W.pixel_x = -3 * PIXEL_MULTIPLIER
+					W.pixel_y = 3 * PIXEL_MULTIPLIER
 				if(2)
 					W.pixel_x = 0
 					W.pixel_y = 0
 				if(3)
-					W.pixel_x = 3
-					W.pixel_y = -3
+					W.pixel_x = 3 * PIXEL_MULTIPLIER
+					W.pixel_y = -3 * PIXEL_MULTIPLIER
 					offset_step = 0
 			offset_step++
 	return 1

@@ -683,8 +683,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				if(!name)
 					name = "[reagents.get_master_reagent_name()] ([amount_per_pill] units)"
 				P.name = "[name] pill"
-				P.pixel_x = rand(-7, 7) //Random position
-				P.pixel_y = rand(-7, 7)
+				P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//Random position
+				P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 				P.icon_state = "pill"+pillsprite
 				reagents.trans_to(P,amount_per_pill)
 				if(src.loaded_pill_bottle)
@@ -715,8 +715,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				while(count--)
 					var/obj/item/weapon/reagent_containers/glass/bottle/P = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc,max_bottle_size)
 					P.name = "[name] bottle"
-					P.pixel_x = rand(-7, 7) //random position
-					P.pixel_y = rand(-7, 7)
+					P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
+					P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 					//P.icon_state = "bottle"+bottlesprite
 					reagents.trans_to(P,amount_per_bottle)
 				src.updateUsrDialog()
@@ -885,8 +885,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	overlays.len = 0
 
 	if(beaker)
-		beaker.pixel_x = -9 //Move it far to the left
-		beaker.pixel_y = 5 //Move it up
+		beaker.pixel_x = -9 * PIXEL_MULTIPLIER//Move it far to the left
+		beaker.pixel_y = 5 * PIXEL_MULTIPLIER//Move it up
 		beaker.update_icon() //Forcefully update the beaker
 		overlays += beaker //Set it as an overlay
 

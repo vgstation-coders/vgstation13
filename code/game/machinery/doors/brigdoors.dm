@@ -26,8 +26,8 @@
 	New()
 		..()
 
-		pixel_x = ((src.dir & 3)? (0) : (src.dir == 4 ? 32 : -32))
-		pixel_y = ((src.dir & 3)? (src.dir ==1 ? 32 : -32) : (0))
+		pixel_x = ((src.dir & 3)? (0) : (src.dir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE))
+		pixel_y = ((src.dir & 3)? (src.dir ==1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : (0))
 
 		spawn(20)
 			for(var/obj/machinery/door/window/brigdoor/M in all_doors)
@@ -252,8 +252,8 @@
 			if(char == " ")
 				continue
 			var/image/ID = image('icons/obj/status_display.dmi', icon_state=char)
-			ID.pixel_x = -(d-1)*5 + px
-			ID.pixel_y = py
+			ID.pixel_x = (-(d-1)*5 + px) * PIXEL_MULTIPLIER
+			ID.pixel_y = py * PIXEL_MULTIPLIER
 			I.overlays += ID
 		return I
 
@@ -262,39 +262,39 @@
 	name = "Cell 1"
 	id_tag = "Cell 1"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_2
 	name = "Cell 2"
 	id_tag = "Cell 2"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_3
 	name = "Cell 3"
 	id_tag = "Cell 3"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_4
 	name = "Cell 4"
 	id_tag = "Cell 4"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_5
 	name = "Cell 5"
 	id_tag = "Cell 5"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_6
 	name = "Cell 6"
 	id_tag = "Cell 6"
 	dir = 4
-	pixel_x = 32
+	pixel_x = WORLD_ICON_SIZE

@@ -652,7 +652,7 @@
 			if(!AM.can_shuttle_move(src))
 				continue
 
-			if(AM.bound_width > world.icon_size || AM.bound_height > world.icon_size) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
+			if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
 				AM.loc = null //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
 
 				spawn()

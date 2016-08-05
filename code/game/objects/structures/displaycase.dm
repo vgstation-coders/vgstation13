@@ -173,8 +173,8 @@
 		var/icon/occupant_icon=getFlatIcon(occupant)
 		occupant_icon.Scale(19,19)
 		occupant_overlay = image(occupant_icon)
-		occupant_overlay.pixel_x=8
-		occupant_overlay.pixel_y=8
+		occupant_overlay.pixel_x= 8 * PIXEL_MULTIPLIER
+		occupant_overlay.pixel_y= 8 * PIXEL_MULTIPLIER
 		if(locked)
 			occupant_overlay.alpha=128//ChangeOpacity(0.5)
 		//underlays += occupant_overlay

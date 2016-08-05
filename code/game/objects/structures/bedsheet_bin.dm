@@ -38,8 +38,8 @@ LINEN BINS
 			var/turf/location = get_turf(src)
 			for(var/x=0; x<=8; x++)
 				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)
-				S.pixel_x = rand(-5.0, 5)
-				S.pixel_y = rand(-5.0, 5)
+				S.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+				S.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 			qdel(src)
 
 //todo: hold one if possible?

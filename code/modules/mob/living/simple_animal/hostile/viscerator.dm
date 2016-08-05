@@ -30,7 +30,7 @@
 /mob/living/simple_animal/hostile/viscerator/Life()
 	..()
 	if(stat == CONSCIOUS)
-		animate(src, pixel_x = rand(-12,12), pixel_y = rand(-12,12), time = 15, easing = SINE_EASING)
+		animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 15, easing = SINE_EASING)
 
 /mob/living/simple_animal/hostile/viscerator/Die()
 	..()

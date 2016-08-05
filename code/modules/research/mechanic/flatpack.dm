@@ -52,7 +52,7 @@
 		for(var/i = 1 to stacked.len)
 			var/image/stack_image = stacked[stacked[i]] //because it's an assoc list
 			overlays -= stack_image
-			stack_image.pixel_y = 4*i
+			stack_image.pixel_y = 4*i * PIXEL_MULTIPLIER
 			overlays += stack_image
 
 /obj/structure/closet/crate/flatpack/attackby(var/atom/A, mob/user)
@@ -163,7 +163,7 @@
 
 	stacked.Add(list("\ref[flatpack]" = flatimage))
 
-	flatimage.pixel_y = stacked.len * FLATPACK_HEIGHT //the height of the icon
+	flatimage.pixel_y = stacked.len * FLATPACK_HEIGHT * PIXEL_MULTIPLIER //the height of the icon
 	overlays += flatimage
 
 	if(flatpack.stacked.len) //if it's got stacks of its own

@@ -1,9 +1,12 @@
+#define WORLD_ICON_SIZE 64
+#define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
 /world
 	mob = /mob/new_player
 	turf = /turf/space
 	view = "15x15"
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
+	icon_size = WORLD_ICON_SIZE
 #define RECOMMENDED_VERSION 510
 
 

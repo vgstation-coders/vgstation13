@@ -39,9 +39,9 @@
 	if(snap2grid) //Discard Pixel Values
 		screen_loc = "[screen_loc_X[1]],[screen_loc_Y[1]]"
 
-	else //Normalise Pixel Values (So the object drops at the center of the mouse, not 16 pixels off)
-		var/pix_X = text2num(screen_loc_X[2]) - 16
-		var/pix_Y = text2num(screen_loc_Y[2]) - 16
+	else //Normalise Pixel Values (So the object drops at the center of the mouse, not WORLD_ICON_SIZE/2 pixels off)
+		var/pix_X = text2num(screen_loc_X[2]) - WORLD_ICON_SIZE/2
+		var/pix_Y = text2num(screen_loc_Y[2]) - WORLD_ICON_SIZE/2
 		screen_loc = "[screen_loc_X[1]]:[pix_X],[screen_loc_Y[1]]:[pix_Y]"
 
 /obj/screen/movable/proc/get_view_size()
@@ -115,8 +115,8 @@
 	var/obj/screen/movable/M = new()
 	M.name = "Movable UI Object"
 	M.icon_state = "block"
-	M.maptext = "Movable"
-	M.maptext_width = 64
+	M.maptext = "<font size = 4>Movable"
+	M.maptext_width = WORLD_ICON_SIZE*2
 
 	var/screen_l = input(usr,"Where on the screen? (Formatted as 'X,Y' e.g: '1,1' for bottom left)","Spawn Movable UI Object") as text
 	if(!screen_l)
@@ -134,8 +134,8 @@
 	var/obj/screen/movable/snap/S = new()
 	S.name = "Snap UI Object"
 	S.icon_state = "block"
-	S.maptext = "Snap"
-	S.maptext_width = 64
+	S.maptext = "<font size = 4>Snap"
+	S.maptext_width = WORLD_ICON_SIZE*2
 
 	var/screen_l = input(usr,"Where on the screen? (Formatted as 'X,Y' e.g: '1,1' for bottom left)","Spawn Snap UI Object") as text
 	if(!screen_l)

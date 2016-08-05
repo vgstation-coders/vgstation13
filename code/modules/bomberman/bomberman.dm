@@ -923,8 +923,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		pencil.y = y+h
 		T = pencil.loc
-		T.maptext = name
-		T.maptext_width = 256
+		T.maptext = "<font size = 4>name"
+		T.maptext_width = 256*PIXEL_MULTIPLIER
 		//T.maptext_y = 20
 
 		qdel(pencil)	//RIP sweet prince
@@ -1425,9 +1425,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		var/second = currentcount%10
 		var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
 		var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
-		I1.pixel_x += 10
-		I2.pixel_x += 17
-		I1.pixel_y -= 11
-		I2.pixel_y -= 11
+		I1.pixel_x += 10 * PIXEL_MULTIPLIER
+		I2.pixel_x += 17 * PIXEL_MULTIPLIER
+		I1.pixel_y -= 11 * PIXEL_MULTIPLIER
+		I2.pixel_y -= 11 * PIXEL_MULTIPLIER
 		overlays += I1
 		overlays += I2

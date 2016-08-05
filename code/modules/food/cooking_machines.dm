@@ -458,7 +458,7 @@ var/global/ingredientLimit = 10
 	var/foodname = "rotisserie [src.ingredient.name]"
 	src.active = 1
 	src.icon_state = src.icon_state_on
-	src.ingredient.pixel_y += 5
+	src.ingredient.pixel_y += 5 * PIXEL_MULTIPLIER
 	src.ingredient.loc = src.loc
 	src.ingredient.mouse_opacity = 0
 	if (cook_after(src.cookTime/3, 14))
@@ -510,7 +510,7 @@ var/global/ingredientLimit = 10
 	machine_flags = null
 
 /obj/machinery/cooking/grill/spit/cook()
-	src.ingredient.pixel_y += 7
+	src.ingredient.pixel_y += 7 * PIXEL_MULTIPLIER
 	..()
 /obj/machinery/cooking/grill/spit/makeFood()
 	src.ingredient.name = "rotisserie [src.ingredient.name]"

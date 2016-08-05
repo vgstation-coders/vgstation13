@@ -16,11 +16,11 @@
 
 /datum/context_click/remote_control/three_button/return_clicked_id(x_pos, y_pos)
 	switch(y_pos)
-		if(6 to 12)
+		if(12 to 24)
 			return "3B1"
-		if(13 to 19)
+		if(25 to 39)
 			return "3B2"
-		if(20 to 26)
+		if(40 to 52)
 			return "3B3"
 
 /datum/context_click/remote_control/three_button/get_icon_type(button_id)
@@ -30,9 +30,9 @@
 	var/y_dis = 0
 	switch(button_id)
 		if("3B1")
-			y_dis = -7
+			y_dis = -14
 		if("3B2")
 			y_dis = 0
 		if("3B3")
-			y_dis = 7
+			y_dis = 14
 	return list("pixel_x" = 0, "pixel_y" = y_dis)

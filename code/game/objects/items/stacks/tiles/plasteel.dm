@@ -19,8 +19,8 @@
 
 /obj/item/stack/tile/plasteel/New(var/loc, var/amount=null)
 	. = ..()
-	pixel_x = rand(1, 14)
-	pixel_y = rand(1, 14)
+	pixel_x = rand(1, 14) * PIXEL_MULTIPLIER
+	pixel_y = rand(1, 14) * PIXEL_MULTIPLIER
 
 /*
 /obj/item/stack/tile/plasteel/attack_self(mob/user as mob)

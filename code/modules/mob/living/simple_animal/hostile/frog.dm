@@ -146,8 +146,8 @@
 
 	to_chat(victim, "<span class='danger'>\The [src] climbs on top of you!</span>")
 
-	pixel_x = rand(-8,8)
-	pixel_y = rand(-8,8)
+	pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8,8) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/hostile/frog/AttackingTarget()
 	.=..()

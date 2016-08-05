@@ -26,8 +26,8 @@
 				if(2 to 3)
 					say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS")]")
 
-			var/x_offset_change = rand(-2,2)
-			var/y_offset_change = rand(-1,1)
+			var/x_offset_change = rand(-2,2) * PIXEL_MULTIPLIER
+			var/y_offset_change = rand(-1,1) * PIXEL_MULTIPLIER
 
 			animate(src, pixel_x = (pixel_x + x_offset_change), pixel_y = (pixel_y + y_offset_change), time = 1)
 			animate(pixel_x = (pixel_x - x_offset_change), pixel_y = (pixel_y - y_offset_change), time = 1)

@@ -1,8 +1,9 @@
 /*
  * This file handles all parallax-related business once the parallax itself is initialized with the rest of the HUD
  */
-#define PARALLAX_IMAGE_WIDTH 15
+#define PARALLAX_IMAGE_WIDTH 8
 #define PARALLAX_IMAGE_TILES (PARALLAX_IMAGE_WIDTH**2)
+#define GRID_WIDTH 3
 
 var/list/parallax_on_clients = list()
 
@@ -133,22 +134,19 @@ var/list/parallax_on_clients = list()
 
 	C.previous_turf = posobj
 
-	var/maxoffset = 480 //480 = (15 tiles * 32 icon_size * 3 grid size / 2) - (15 tiles * 32 icon size / 2) for centering
-	var/minoffset = -960 //960 = (15 tiles * 32 icon_size * 3 grid size / 2) + (15 tiles * 32 icon size / 2) for centering
-
 	for(var/obj/screen/parallax/bgobj in C.parallax_movable)
 		var/accumulated_offset_x = bgobj.base_offset_x - round(offsetx * bgobj.parallax_speed * C.prefs.parallax_speed)
 		var/accumulated_offset_y = bgobj.base_offset_y - round(offsety * bgobj.parallax_speed * C.prefs.parallax_speed)
 
-		if(accumulated_offset_x > maxoffset)
-			accumulated_offset_x -= 1440 //3x3 grid, 15 tiles * 32 icon_size * 3 grid size
-		if(accumulated_offset_x < minoffset)
-			accumulated_offset_x += 1440
+		if(accumulated_offset_x > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
+			accumulated_offset_x -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH //3x3 grid, 15 tiles * 64 icon_size * 3 grid size
+		if(accumulated_offset_x < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
+			accumulated_offset_x += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
 
-		if(accumulated_offset_y > maxoffset)
-			accumulated_offset_y -= 1440
-		if(accumulated_offset_y < minoffset)
-			accumulated_offset_y += 1440
+		if(accumulated_offset_y > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
+			accumulated_offset_y -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
+		if(accumulated_offset_y < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
+			accumulated_offset_y += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
 
 		bgobj.screen_loc = "CENTER:[accumulated_offset_x],CENTER:[accumulated_offset_y]"
 
@@ -166,14 +164,14 @@ var/list/parallax_on_clients = list()
 	var/list/pixel_y = list()
 	var/index = 1
 	for(var/i = 0 to (PARALLAX_IMAGE_TILES-1))
-		for(var/j = 1 to 9)
+		for(var/j = 1 to GRID_WIDTH**2)
 			plane1 += rand(1,26)
 			plane2 += rand(1,26)
 			plane3 += rand(1,26)
-		pixel_x += world.icon_size * (i%PARALLAX_IMAGE_WIDTH)
-		pixel_y += world.icon_size * round(i/PARALLAX_IMAGE_WIDTH)
+		pixel_x += WORLD_ICON_SIZE * (i%PARALLAX_IMAGE_WIDTH)
+		pixel_y += WORLD_ICON_SIZE * round(i/PARALLAX_IMAGE_WIDTH)
 
-	for(var/i in 0 to 8)
+	for(var/i in 0 to ((GRID_WIDTH**2)-1))
 		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 
 		var/list/L = list()
@@ -190,7 +188,7 @@ var/list/parallax_on_clients = list()
 		parallax_icon[index] = parallax_layer
 		index++
 
-	for(var/i in 0 to 8)
+	for(var/i in 0 to ((GRID_WIDTH**2)-1))
 		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 
 		var/list/L = list()
@@ -207,7 +205,7 @@ var/list/parallax_on_clients = list()
 		parallax_icon[index] = parallax_layer
 		index++
 
-	for(var/i in 0 to 8)
+	for(var/i in 0 to ((GRID_WIDTH**2)-1))
 		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
 		var/list/L = list()
 		for(var/j in 1 to PARALLAX_IMAGE_TILES)
@@ -233,19 +231,21 @@ var/list/parallax_on_clients = list()
 	4	5	6
 	7	8	9
 	*/
-	base_offset_x = -PARALLAX_IMAGE_WIDTH*world.icon_size/2
-	base_offset_y = -PARALLAX_IMAGE_WIDTH*world.icon_size/2
 
+	base_offset_x = -PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE/2
+	base_offset_y = -PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE/2
+
+//TODO: switch to grid size defines... somehow
 	switch(i)
-		if(1,4,7)
-			base_offset_x -= world.icon_size*PARALLAX_IMAGE_WIDTH
-		if(3,6,9)
-			base_offset_x += world.icon_size*PARALLAX_IMAGE_WIDTH
+		if(1,4,7) //1 mod grid_size
+			base_offset_x -= WORLD_ICON_SIZE*PARALLAX_IMAGE_WIDTH
+		if(3,6,9) //0 mod grid_size
+			base_offset_x += WORLD_ICON_SIZE*PARALLAX_IMAGE_WIDTH
 	switch(i)
-		if(1,2,3)
-			base_offset_y += world.icon_size*PARALLAX_IMAGE_WIDTH
-		if(7,8,9)
-			base_offset_y -= world.icon_size*PARALLAX_IMAGE_WIDTH
+		if(1,2,3) //round(i/grid_size) = 0
+			base_offset_y += WORLD_ICON_SIZE*PARALLAX_IMAGE_WIDTH
+		if(7,8,9) //round(i/grid_size) = 2
+			base_offset_y -= WORLD_ICON_SIZE*PARALLAX_IMAGE_WIDTH
 
 	screen_loc = "CENTER:[base_offset_x],CENTER:[base_offset_y]"
 

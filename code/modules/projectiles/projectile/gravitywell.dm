@@ -55,8 +55,8 @@
 	name = "gravity well"
 	icon = 'icons/effects/160x160.dmi'
 	icon_state = "gravitywell_shadow"
-	pixel_x = -64
-	pixel_y = -64
+	pixel_x = -64 * PIXEL_MULTIPLIER
+	pixel_y = -64 * PIXEL_MULTIPLIER
 	unacidable = 1
 	density = 0
 	layer = DECAL_LAYER
@@ -128,8 +128,8 @@
 	name = "gravity well"
 	icon = 'icons/effects/160x160.dmi'
 	icon_state = "gravitywell_white"
-	pixel_x = -64
-	pixel_y = -64
+	pixel_x = -64 * PIXEL_MULTIPLIER
+	pixel_y = -64 * PIXEL_MULTIPLIER
 	unacidable = 1
 	density = 0
 	plane = EFFECTS_PLANE

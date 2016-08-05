@@ -176,8 +176,8 @@
 
 /mob/living/simple_animal/chick/New()
 	..()
-	pixel_x = rand(-6, 6)
-	pixel_y = rand(0, 10)
+	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
+	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chick/Life()
 	if(timestopped) return 0 //under effects of time magick
@@ -224,8 +224,8 @@
 	icon_living = "chicken_[body_color]"
 	icon_dead = "chicken_[body_color]_dead"
 	..() //call this after icons to generate the proper static overlays
-	pixel_x = rand(-6, 6)
-	pixel_y = rand(0, 10)
+	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
+	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
@@ -255,8 +255,8 @@
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		eggsleft--
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/E = new(get_turf(src))
-		E.pixel_x = rand(-6,6)
-		E.pixel_y = rand(-6,6)
+		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 

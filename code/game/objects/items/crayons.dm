@@ -98,7 +98,7 @@ var/global/list/all_graffitis = list(
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-#define FONT_SIZE "6pt"
+#define FONT_SIZE "12pt"
 #define FONT_NAME "Comic Sans MS"
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
 	if(!proximity) return
@@ -189,8 +189,8 @@ var/global/list/all_graffitis = list(
 
 				var/angle = dir2angle_t(get_dir(C, target))
 
-				C.pixel_x = 32 * cos(angle)
-				C.pixel_y = 32 * sin(angle) //Offset the graffiti to make it appear on the wall
+				C.pixel_x = WORLD_ICON_SIZE * cos(angle)
+				C.pixel_y = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
 				C.on_wall = target
 
 			to_chat(user, "You finish drawing.")
