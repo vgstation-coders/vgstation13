@@ -69,7 +69,7 @@
 	return
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR) || mover.checkpass(PASSGLASS)))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		if(air_group) return 0
@@ -83,7 +83,7 @@
 
 
 /obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && (mover.checkpass(PASSDOOR) || mover.checkpass(PASSGLASS)))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(flags & ON_BORDER) //but it will always be on border tho
 		if(target) //Are we doing a manual check to see

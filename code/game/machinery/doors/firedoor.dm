@@ -470,7 +470,7 @@ var/global/list/alert_overlays_global = list()
 	flags = ON_BORDER
 
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR) || mover.checkpass(PASSGLASS)))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
@@ -482,7 +482,7 @@ var/global/list/alert_overlays_global = list()
 
 
 /obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && (mover.checkpass(PASSDOOR) || mover.checkpass(PASSGLASS)))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
