@@ -14,6 +14,11 @@
 	spawn(3)
 		handle_layer()
 
+/obj/structure/bed/chair/can_spook()
+	. = ..()
+	if(.)
+		return !noghostspin
+
 /obj/structure/bed/chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
@@ -59,7 +64,7 @@
 	if(!usr || !isturf(usr.loc))
 		return
 
-	if((!config.ghost_interaction && can_spook()) || noghostspin)
+	if(!config.ghost_interaction || !can_spook())
 		if(usr.isUnconscious() || usr.restrained())
 			return
 
