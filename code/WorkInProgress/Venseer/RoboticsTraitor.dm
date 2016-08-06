@@ -48,6 +48,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/frequency = "syndicate" //in case someone wants to make a custom list of remote borgs
   var/active = 0 // check if the board is online
   var/mob/living/silicon/cyborg //robot that is under the control of this board
+  var/inUse
 
 /obj/item/device/syndicate_cyborg_control_board/afterattack(atom/target, mob/user as mob, proximity_flag)
   if(!istype(target, /obj/item/robot_parts/robot_suit))
@@ -71,6 +72,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       var/datum/robot_component/cell_component = robot.components["power cell"]
       cell_component.wrapped = robot.cell
       cell_component.installed = 1
+    robot.mmi = src
     src.cyborg = robot //set the robot to the board
     src.active = 1 //set the board as active
     syndicate_roboticist_control_board += src //add board on list
@@ -111,7 +113,8 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     return
   else
     var/mob/living/carbon/user = src.user_body
-    if ( src.loc != user || user.canmove == 0 || (user.active_hand != 1 && user.active_hand != 2) || user.held_items.Find(src) == 0 || user.blinded || !current_board || !current_board.active || current_board.cyborg.isDead() || user.monkeyizing && user)
+    if ( src.loc != user || user.canmove == 0 || (user.active_hand != 1 && user.active_hand != 2) || user.held_items.Find(src) == 0 || user.blinded || !src.current_board || !src.current_board.active || src.current_board.cyborg.isDead() || user.monkeyizing && user)
+      src.current_board.inUse = null
       user.ckey = src.user_ckey
       src.user_body = null
       src.user_ckey = null
@@ -168,10 +171,15 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     user.set_machine(src) //>without this client.eye resets every moment
     src.current_camera = target // add current selected camera to TV for reference
   if(target && istype(target, /obj/item/device/syndicate_cyborg_control_board/))
+    var/obj/item/device/syndicate_cyborg_control_board/target_board = target
+    if(target_board.inUse)
+      to_chat(user, "<span class='warning'>This signal is already in use.</span>")
+      return
     active = 1
+    target_board.inUse = 1
     user_ckey = user.client.ckey
     user_body = user.client.mob //set user body to machine
-    src.current_board = target
+    src.current_board = target_board
     user.client.mob = src.current_board.cyborg  // control the robot
   if(!target)
     user.unset_machine() // clean machine from user, rest of cleaning is done by the game
