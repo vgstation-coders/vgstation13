@@ -180,7 +180,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     user_ckey = user.client.ckey
     user_body = user.client.mob //set user body to machine
     src.current_board = target_board
-    user.client.mob = src.current_board.cyborg  // control the robot
+    src.current_board.cyborg.ckey = user.client.ckey // control the robot
   if(!target)
     user.unset_machine() // clean machine from user, rest of cleaning is done by the game
     return
