@@ -41,11 +41,11 @@
 	..()
 	switch(icon_state)
 		if("morgue2")
-			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a catatonic corpse inside.</span>")
+			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is an unrecoverable corpse inside.</span>")
 		if("morgue3")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there are items inside.</span>")
 		if("morgue4")
-			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is an active corpse inside.</span>")
+			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a potential clone candidate inside.</span>")
 
 /obj/structure/morgue/ex_act(severity)
 	switch(severity)
@@ -115,8 +115,8 @@
 				if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
 					var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
 					if(ghost && ghost.client)
-						to_chat(ghost, "<span class='interface'><b><font size = 3>Your corpse has been placed into a morgue tray.</b></font> \
-							Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.")
+						to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
+							Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 	qdel(connected)
 
 /obj/structure/morgue/attackby(P as obj, mob/user as mob)
@@ -155,8 +155,8 @@
 	if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
 		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
 		if(ghost && ghost.client)
-			to_chat(ghost, "<span class='interface'><b><font size = 3>Your corpse has been placed into a morgue tray.</b></font> \
-				Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.")
+			to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
+				Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 
 /obj/structure/morgue/on_logout(var/mob/M)
 	update()
@@ -194,7 +194,7 @@
 		qdel(src) //this should not happen but if it does happen we should not be here
 
 /obj/structure/m_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if (O.anchored || !Adjacent(user) || !Adjacent(O) || user.contents.Find(O))
+	if (!istype(O) || O.anchored || !Adjacent(user) || !Adjacent(O) || user.contents.Find(O))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
