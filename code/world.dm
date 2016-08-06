@@ -1,4 +1,4 @@
-#define WORLD_ICON_SIZE 64
+#define WORLD_ICON_SIZE 32
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
 /world
 	mob = /mob/new_player
