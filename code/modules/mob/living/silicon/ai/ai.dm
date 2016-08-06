@@ -36,6 +36,7 @@ var/list/ai_list = list()
 	var/obj/item/device/multitool/aiMulti = null
 	var/custom_sprite = 0 //For our custom sprites
 	var/obj/item/device/camera/ai_camera/aicamera = null
+	var/sensor_augs = list("Security", "Medical", "Disable")
 //Hud stuff
 
 	//MALFUNCTION
@@ -355,7 +356,22 @@ var/list/ai_list = list()
 			to_chat(src, "Wireless control is disabled!")
 			return
 	recall_shuttle(src)
-
+	
+/mob/living/silicon/ai/proc/sensor_mode()
+	var/sensor_type = input("Please select sensor type.", "Sensor Integration", null) as null|anything in sensor_augs
+	if(sensor_type)
+		switch(sensor_type)
+			if ("Security")
+				sensor_mode = SEC_HUD
+				to_chat(src, "<span class='notice'>Security records overlay enabled.</span>")
+			if ("Medical")
+				sensor_mode = MED_HUD
+				to_chat(src, "<span class='notice'>Life signs monitor overlay enabled.</span>")
+			if ("Disable")
+				sensor_mode = 0
+				to_chat(src, "<span class='notice'>Sensor augmentations disabled.</span>")
+		regular_hud_updates()
+				
 /mob/living/silicon/ai/check_eye(var/mob/user as mob)
 	if (!current)
 		return null
