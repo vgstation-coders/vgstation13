@@ -43,6 +43,7 @@
 #define MOVING_TO_TARGET 2
 #define EATING 3
 #define OPENING_DOOR 4
+//#define SMASHING_LIGHT 5
 
 /mob/living/simple_animal/hostile/necro/zombie //Boring ol default zombie
 	name = "zombie"
@@ -90,6 +91,19 @@
 	var/busy //If the zombie is busy, and what it's busy doing
 	var/break_doors = 1 //If 1, they can attempt to open doors. If 2, they break the door down entirely
 	var/health_cap = 250 //Maximum possible health it can have. Because screw having a 1000 health mob
+
+/*	wanted_objects = list(
+		/obj/machinery/light,        // Bust out lights
+	)
+	search_objects = 1
+
+/mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
+	if(istype(the_target,/obj/machinery/light))
+		var/obj/machinery/light/L = the_target
+		// Not empty or broken
+		return L.status != 1 && L.status != 2
+	return ..(the_target)*/ //Too buggy, gets caught on terrain way too much
+
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
 	..()
 	if(Owner)
@@ -119,8 +133,8 @@
 	/*TODO
 	First, check if the zombie can potentially evolve
 	Have the zombie move to a corpse and start chewing at it
-	If neither of these things are applicable, break down some doors
-	If none of the above, play dead
+	If neither of these things are applicable, break some lights to set the mood
+	Otherwise, start wandering and bust down some doors to find more food
 	*/
 	if(!stat)
 		if(stance == HOSTILE_STANCE_IDLE) //Not doing anything at the time
@@ -129,22 +143,40 @@
 				if(can_evolve && times_eaten > 0)//Can we evolve, and have we fed
 					busy = EVOLVING
 					check_evolve()
-				for(var/mob/living/carbon/human/C in can_see) //If not, let's chow down on a corpse
-					if(C.stat == DEAD)
-						Goto(C, move_to_delay)
-						busy = MOVING_TO_TARGET
-						//to_chat(world, "DEBUG - [src] is going to [C]")
-						GiveUp(C) //If we're not there in 10 seconds, give up
+				if((health < maxHealth) || (maxHealth < health_cap)) //Is there something to eat in range?
+					for(var/mob/living/carbon/human/C in can_see) //If so, chow down
+						if(C.stat == DEAD && !busy && check_edibility(C))
+							Goto(C, move_to_delay)
+							busy = MOVING_TO_TARGET
+							give_up(C) //If we're not there in 10 seconds, give up
 
-						if(C.Adjacent(src) && busy != EATING  && (health < maxHealth || maxHealth < health_cap)) //Once we've finally caught up
-							busy = EATING
-							eat(C)
+							if(C.Adjacent(src) && busy != EATING) //Once we've finally caught up
+								busy = EATING
+								eat(C)
+				if(!busy)//So we don't try to eat and open doors
+					/*for(var/obj/machinery/light/L in can_see)
+						if(L.status != 1 && L.status !=2)
+							Goto(L, move_to_delay)
+							busy = MOVING_TO_TARGET
+							if(L.Adjacent(src) && busy != SMASHING_LIGHT)
+								L.attack_animal(src)*/
+
+					for(var/obj/machinery/door/D in can_see)//Else, let's open some doors and see what's around
+						if(can_open_door(D) && !busy)
+							Goto(D, move_to_delay)
+							busy = MOVING_TO_TARGET
+							give_up(D)
+
+							if(D.Adjacent(src) && busy != OPENING_DOOR)
+								busy = OPENING_DOOR
+								force_door(D)
+
 		else
 			busy = 0
-			stop_automated_movement = 1
+			stop_automated_movement = 0
 
 
-/mob/living/simple_animal/hostile/necro/zombie/proc/GiveUp(var/C)
+/mob/living/simple_animal/hostile/necro/zombie/proc/give_up(var/C)
 	spawn(100)
 		if(busy == MOVING_TO_TARGET)
 			if(target == C && get_dist(src,target) > 1)
@@ -152,12 +184,65 @@
 			busy = 0
 			stop_automated_movement = 0
 
+/mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D)
+	if(istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window))
+		return 0
+
+	// Don't fuck with doors that are doing something
+	if(D.operating>0)
+		return 0
+
+	// Don't open opened doors.
+	if(!D.density)
+		return 0
+
+	// Can't open bolted/welded doors
+	if(istype(D,/obj/machinery/door/airlock))
+		var/obj/machinery/door/airlock/A=D
+		if(A.locked || A.welded || A.jammed)
+			if(istype(src, /mob/living/simple_animal/hostile/necro/zombie/crimson))
+				return 1
+			else
+				return 0
+
+	return 1
+
+/mob/living/simple_animal/hostile/necro/zombie/proc/force_door(var/obj/machinery/door/D)
+	stop_automated_movement = 1
+	D.visible_message("<span class='warning'>\The [D]'s motors whine as something attempts to brute force their way through it!</span>")
+	playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
+	D.shake(1, 8)
+	stop_automated_movement = 1
+	spawn(100) //Roughly 10 seconds for people on the other side of the door to run the heck away
+		if(can_open_door(D))//Let's see if nobody quickly bolted it
+			if(istype (src, /mob/living/simple_animal/hostile/necro/zombie/crimson)) //Guaranteed
+				D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
+				if(istype(D, /obj/machinery/door/airlock/))
+					var/obj/machinery/door/airlock/A = D
+					A.locked = 0
+					A.welded = 0
+					A.jammed = 0
+				D.open(1)
+			else
+				if(prob(15))
+					D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
+					D.open(1)
+		busy = 0
+		stop_automated_movement = 0
+
+/mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
+	if(isjusthuman(target)) //Humans are always edible
+		return 1
+	if(target.health > -400) //So they're not caught eating the same dumb bird all day
+		return 1
+
+	return 0
+
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
 	visible_message("<span class='notice'>\the [src] starts to take a bite out of \the [target].</span>")
-	//to_chat(world, "DEBUG - [src] is now about to eat [target]")
 	spawn(50)
-		//to_chat(world, "DEBUG - [src] did it, the madman")
+		playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
 		var/damage = rand(melee_damage_lower, melee_damage_upper)
 		target.adjustBruteLoss(damage)
 		health += (damage/2)
@@ -188,8 +273,9 @@
 		else if(times_revived > times_eaten+1) //Died at least twice
 			evolve(/mob/living/simple_animal/hostile/necro/zombie/crimson)
 
+	busy = 0
+
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
-	//to_chat(world, "DEBUG - [src] is attempting to evolve")
 	if(istype(evolve_to, /mob/living/simple_animal/hostile/necro))
 		var/mob/living/evolution = new evolve_to(src.loc,,)
 		evolution.name = name //We want to keep the name
@@ -210,6 +296,7 @@
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
 	icon_living = "zombie_turned"
 	icon_dead = "zombie_turned_dead"
+	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
 	maxHealth = 50
 	health = 50
 	can_evolve = 1
@@ -258,7 +345,6 @@
 					if(turf_on.blessed) //The chaplain's spilt some of his holy water
 						holy_modifier += 1
 
-				//to_chat(world, "DEBUG - Holy modifier is [holy_modifier]")
 				if(prob(15*holy_modifier)) //Gotta have faith
 					to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
 					unzombify()
@@ -283,6 +369,7 @@
 	icon_living = "zombie_rotten"
 	icon_state = "zombie_rotten"
 	icon_dead = "zombie_rotten_dead"
+	desc = "A reanimated corpse that looks like it has seen better days. Whoever this was is long gone."
 	maxHealth = 100
 	health = 100
 	can_evolve = 1
@@ -291,6 +378,7 @@
 	icon_living = "zombie" //The original
 	icon_state = "zombie"
 	icon_dead = "zombie_dead"
+	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttenous"
 	maxHealth = 150
 	health = 150
 	can_evolve = 0
@@ -298,10 +386,9 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()
-	if(target.health < -150) //Gotta be a bit chewed on
+	if(target.health < -150  && isjusthuman(target)) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
-			to_chat(world, "[target] zombified by [src]")
 			zombify(target)
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
@@ -336,4 +423,5 @@
 
 #undef EVOLVING
 #undef MOVING_TO_TARGET
-#undef MOVING_TO_DOOR
+#undef EATING
+#undef OPENING_DOOR
