@@ -352,6 +352,7 @@
 		if(character.mind.role_alt_title)
 			rank = character.mind.role_alt_title
 		var/datum/speech/speech = announcement_intercom.create_speech("[character.real_name],[rank ? " [rank]," : " visitor," ] has arrived on the station.", transmitter=announcement_intercom)
+		speech.speaker = character
 		speech.name = "Arrivals Announcement Computer"
 		speech.job = "Automated Announcement"
 		speech.as_name = "Arrivals Announcement Computer"
