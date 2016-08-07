@@ -45,7 +45,7 @@ obj/structure/windoor_assembly/Destroy()
 /obj/structure/windoor_assembly/update_icon()
 	icon_state = "[facing]_[secure]windoor_assembly[state]"
 
-/obj/structure/windoor_assembly/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/windoor_assembly/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
@@ -54,7 +54,7 @@ obj/structure/windoor_assembly/Destroy()
 	else
 		return 1
 
-/obj/structure/windoor_assembly/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
+/obj/structure/windoor_assembly/UncrossCheck(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(flags & ON_BORDER)

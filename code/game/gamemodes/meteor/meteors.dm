@@ -160,7 +160,7 @@
 
 //We don't want meteors to bump into eachother and explode, so they pass through eachother
 //Reflection on bumping would be better, but I would reckon I'm not sure on how to achieve it
-/obj/item/projectile/meteor/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/item/projectile/meteor/CrossCheck(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
 	if(istype(mover, /obj/item/projectile/meteor))
 		return 1 //Just move through it, no questions asked

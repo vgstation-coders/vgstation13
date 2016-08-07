@@ -419,7 +419,7 @@
 	anchored = 1.0
 	flags = ON_BORDER
 
-/obj/structure/holowindow/Uncross(var/atom/movable/mover, var/turf/target)
+/obj/structure/holowindow/UncrossCheck(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(flags & ON_BORDER)
@@ -431,7 +431,7 @@
 			return !density
 	return 1
 
-/obj/structure/holowindow/Cross(atom/movable/mover, turf/target, height = 0)
+/obj/structure/holowindow/CrossCheck(atom/movable/mover, turf/target, height = 0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
@@ -527,7 +527,7 @@
 			visible_message("<span class='notice'>[user] dunks [W] into the [src]!</span>")
 			return
 
-/obj/structure/holohoop/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/holohoop/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))

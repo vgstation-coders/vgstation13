@@ -189,7 +189,7 @@
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+	if(!in_T.CrossCheck(mover, in_T) || !in_T.Enter(mover) || !out_T.CrossCheck(mover, out_T) || !out_T.Enter(mover))
 		return
 
 	var/obj/item/stack/stack

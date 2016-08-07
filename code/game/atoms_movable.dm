@@ -288,6 +288,31 @@
 		return 1
 	return 0
 
+/atom/movable/Cross(atom/movable/mover, turf/target, var/ignoreborder = 1)
+	if(flags & ON_BORDER && ignoreborder)
+		return 1
+	if(CrossCheck(mover, target))
+		return 1
+	if(!density || loc.contents[1] == src || !isturf(loc))
+		return 0
+	if(ismob(src))
+		to_chat(world, "[src]")
+	var/contentsholder = loc.contents - src
+	loc.contents = contentsholder
+
+
+/atom/movable/Uncross(atom/movable/mover, turf/target)
+	if(UncrossCheck(mover, target))
+		return 1
+	if(!density || loc.contents[1] == src || !isturf(loc))
+		return 0
+	var/turf/locholder = loc
+	loc = null
+	locholder.contents = list(src) + locholder.contents
+
+/atom/movable/proc/UncrossCheck(atom/movable/mover, turf/target) //CrossCheck base definition is in ZAS/Atom.dm
+	return 1
+
 // Previously known as HasEntered()
 // This is automatically called when something enters your square
 /atom/movable/Crossed(atom/movable/AM)

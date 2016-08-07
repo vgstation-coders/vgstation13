@@ -17,7 +17,7 @@ Important Functions:
 
 air_master.mark_for_update(turf)
 	When stuff happens, call this. It works on everything. You basically don't need to worry about any other
-	functions besides Cross().
+	functions besides CrossCheck().
 
 Notes for people who used ZAS before:
 	There is no connected_zones anymore.

@@ -94,7 +94,7 @@
 	else
 		..() //Weapon checks for weapons without brute or burn damage type and grab check
 
-/obj/structure/window/barricade/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/window/barricade/CrossCheck(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
 	if(air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS
@@ -138,11 +138,11 @@
 	..(loc)
 	flags &= ~ON_BORDER
 
-/obj/structure/window/barricade/full/Uncross(atom/movable/O as mob|obj, target as turf)
+/obj/structure/window/barricade/full/UncrossCheck(atom/movable/O as mob|obj, target as turf)
 
 	return 1
 
-/obj/structure/window/barricade/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+/obj/structure/window/barricade/full/CrossCheck(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
 	if(air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS

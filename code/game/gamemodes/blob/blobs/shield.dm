@@ -26,7 +26,7 @@
 /obj/effect/blob/shield/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
 
-/obj/effect/blob/shield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/effect/blob/shield/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSBLOB))	return 1
 	if(mover)
 		mover.Bump(src) //Only automatic for dense objects

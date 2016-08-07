@@ -40,5 +40,5 @@
 		invisibility = 101
 		density = 0
 
-/obj/effect/energy_field/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/effect/energy_field/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return !density

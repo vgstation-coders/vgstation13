@@ -212,7 +212,7 @@
 		sleep(2)
 		new /obj/machinery/power/supermatter/shard(src)
 
-/obj/structure/closet/crate/secure/large/reinforced/shard/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/structure/closet/crate/secure/large/reinforced/shard/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/machinery/power/supermatter))
 		return 1
 	. = ..()

@@ -120,6 +120,10 @@
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if(!mover)
 		return 1
+	for(var/atom/movable/AM in src)
+		if(AM.flags & ON_BORDER)
+			if(!AM.Cross(mover, src, 0))
+				return 0
 	. = ..()
 	if(.)
 		return !density //Nothing found to block so return success!

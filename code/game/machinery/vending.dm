@@ -152,7 +152,7 @@ var/global/num_vending_terminals = 1
 		coinbox.forceMove(get_turf(src))
 	..()
 
-/obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/machinery/vending/CrossCheck(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSMACHINE))
 		return 1
 	return ..()
