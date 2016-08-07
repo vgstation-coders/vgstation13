@@ -85,10 +85,11 @@ What is the naming convention for planes or layers?
 	#define WIRE_TERMINAL_LAYER		8
 	#define ABOVE_TILE_LAYER		9
 	#define UNARY_PIPE_LAYER		10
-	#define MOUSETRAP_LAYER 		11
-	#define FIREAXE_LOCKER_LAYER	12
-	#define BLOOD_LAYER				13
-	#define WEED_LAYER				14
+	#define BINARY_PIPE_LAYER		11
+	#define MOUSETRAP_LAYER 		12
+	#define FIREAXE_LOCKER_LAYER	13
+	#define BLOOD_LAYER				14
+	#define WEED_LAYER				15
 
 
 #define NOIR_BLOOD_PLANE 		-17		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
