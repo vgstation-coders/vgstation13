@@ -1,6 +1,6 @@
 //Floorbot assemblies
 /obj/item/weapon/toolbox_tiles
-	desc = "It's a toolbox with tiles sticking out the top"
+	desc = "It's a toolbox with tiles sticking out the top."
 	name = "tiles and toolbox"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "toolbox_tiles"
@@ -13,7 +13,7 @@
 	var/created_name = "Floorbot"
 
 /obj/item/weapon/toolbox_tiles_sensor
-	desc = "It's a toolbox with tiles sticking out the top and a sensor attached"
+	desc = "It's a toolbox with tiles sticking out the top and a sensor attached."
 	name = "tiles, toolbox and sensor arrangement"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "toolbox_tiles_sensor"
@@ -705,14 +705,11 @@ var/global/list/floorbot_targets=list()
 
 
 /obj/item/weapon/storage/toolbox/mechanical/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob)
-	if(!istype(T, /obj/item/stack/tile/plasteel))
-		. = ..()
-		return
-	if(src.contents.len >= 1)
-		to_chat(user, "<span class='notice'>They wont fit in as there is already stuff inside.</span>")
-		return
-	if(user.s_active)
-		user.s_active.close(user)
+	if(!istype(T, /obj/item/stack/tile/plasteel) || src.contents.len >= 1) //Only do this if the thing is empty
+		return ..()
+	/*if(user.s_active)
+		user.s_active.close(user)*/
+	user.remove_from_mob(T)
 	qdel(T)
 	T = null
 	var/obj/item/weapon/toolbox_tiles/B = new /obj/item/weapon/toolbox_tiles
