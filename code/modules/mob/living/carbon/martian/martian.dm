@@ -78,8 +78,9 @@
 /mob/living/carbon/martian/get_visible_id()
 	var/id = null
 	for(var/obj/item/I in held_items)
-		if(!id)
-			id = I.GetID()
+		id = I.GetID()
+		if(id)
+			break
 	return id
 	
 /mob/living/carbon/martian/can_wield()

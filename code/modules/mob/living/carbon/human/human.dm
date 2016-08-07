@@ -1433,10 +1433,11 @@
 	var/id = null
 	if(wear_id)
 		id = wear_id.GetID()
-	for(var/obj/item/I in held_items)
-		if(!id)
+	if(!id)
+		for(var/obj/item/I in held_items)
 			id = I.GetID()
-
+			if(id)
+				break
 	return id
 	
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
