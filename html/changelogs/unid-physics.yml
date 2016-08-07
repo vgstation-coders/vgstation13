@@ -1,0 +1,7 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: All objects are now subject to space drift, including vehicles. This means crates, lockers and janicarts will now fly off into space, instead of immediately stopping moving.
+- rscadd: Kicking something while in zero gravity will propel you in the opposite direction.

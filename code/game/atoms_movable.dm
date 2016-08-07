@@ -42,6 +42,7 @@
 
 	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
 	var/internal_gravity = 0
+	var/inertia_dir = null
 
 /atom/movable/New()
 	. = ..()
@@ -150,24 +151,24 @@
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
 		else //Diagonal move, split it into cardinal moves
-			if (Dir & 1)
-				if (Dir & 4)
+			if (Dir & NORTH)
+				if (Dir & EAST) //Northeast
 					if (step(src, NORTH))
 						. = step(src, EAST)
 					else if (step(src, EAST))
 						. = step(src, NORTH)
-				else if (Dir & 8)
+				else if (Dir & WEST) //Northwest
 					if (step(src, NORTH))
 						. = step(src, WEST)
 					else if (step(src, WEST))
 						. = step(src, NORTH)
-			else if (Dir & 2)
-				if (Dir & 4)
+			else if (Dir & SOUTH)
+				if (Dir & EAST) //Southeast
 					if (step(src, SOUTH))
 						. = step(src, EAST)
 					else if (step(src, EAST))
 						. = step(src, SOUTH)
-				else if (Dir & 8)
+				else if (Dir & WEST) //Southwest
 					if (step(src, SOUTH))
 						. = step(src, WEST)
 					else if (step(src, WEST))
@@ -195,7 +196,7 @@
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
-	last_move = Dir
+	last_move = (Dir || get_dir(oldloc, newLoc)) //If direction isn't specified, calculate it ourselves
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
@@ -443,7 +444,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				src.Move(step, dy)
 				. = hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
@@ -457,7 +458,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				src.Move(step, dx)
 				. = hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
@@ -479,7 +480,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				src.Move(step, dx)
 				. = hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
@@ -493,7 +494,7 @@
 					. = 0
 					break
 
-				src.Move(step)
+				src.Move(step, dy)
 				. = hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
@@ -575,3 +576,67 @@
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)
 	return 1
+
+/atom/movable/proc/Process_Spacemove(check_drift)
+	var/dense_object = 0
+	for(var/turf/turf in oview(1,src))
+		if(!turf.has_gravity(src))
+			continue
+
+		dense_object++
+		break
+
+	if(!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
+		dense_object++
+	if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
+		dense_object++
+	if(!dense_object && (locate(/obj/effect/blob) in oview(1, src)))
+		dense_object++
+
+	//Lastly attempt to locate any dense objects we could push off of
+	//TODO: If we implement objects drifing in space this needs to really push them
+	//Due to a few issues only anchored and dense objects will now work.
+	if(!dense_object)
+		for(var/obj/O in oview(1, src))
+			if((O) && (O.density) && (O.anchored))
+				dense_object++
+				break
+
+	//Nothing to push off of so end here
+	if(!dense_object)
+		return 0
+
+	//If not then we can reset inertia and move
+	inertia_dir = 0
+	return 1
+
+//INERTIA
+
+
+/atom/movable/proc/apply_inertia(direction)
+	if(isturf(loc))
+		var/turf/T = loc
+		if(!T.has_gravity())
+			src.inertia_dir = direction
+			step(src, src.inertia_dir)
+			return 1
+	else if(istype(loc, /atom/movable))
+		var/atom/movable/AM = loc
+		return AM.apply_inertia(direction)
+
+/atom/movable/proc/process_inertia(turf/start)
+	set waitfor = 0
+	if(Process_Spacemove(1))
+		inertia_dir  = 0
+		return
+
+	sleep(5)
+
+	if(can_apply_inertia() && (src.loc == start))
+		if(!inertia_dir)
+			inertia_dir = last_move
+
+		step(src, inertia_dir)
+
+/atom/movable/proc/can_apply_inertia()
+	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))

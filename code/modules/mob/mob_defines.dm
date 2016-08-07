@@ -171,8 +171,6 @@
 
 	var/coughedtime = null
 
-	var/inertia_dir = 0
-
 	var/job = null//Living
 
 	var/datum/dna/dna = null//Carbon
