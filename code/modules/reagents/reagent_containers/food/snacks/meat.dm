@@ -4,7 +4,7 @@
 	name = "meat"
 	desc = "A slab of meat."
 	icon_state = "meat"
-	food_flags = FOOD_MEAT
+	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 	New()
@@ -17,9 +17,6 @@
 	if(poisonsacs)
 		qdel(poisonsacs)
 		poisonsacs = null
-
-/obj/item/weapon/reagent_containers/food/snacks/meat/attack(mob/living/M, mob/user, def_zone, eat_override = 0)
-	..(M,user,def_zone, "eat_override" = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal //This meat spawns when an animal is butchered, and its name is set to '[animal.species_name] meat' (like "cat meat")
 	var/animal_name = "animal"
