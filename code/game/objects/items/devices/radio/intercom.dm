@@ -15,18 +15,9 @@
 	holomap = TRUE
 	auto_holomap = TRUE
 
-
-/obj/item/device/radio/intercom/universe
-	var/mob/living/who_dis
-
 /obj/item/device/radio/intercom/universe/New()
 	tag = "UNIVERSE"
 	return ..()
-
-/obj/item/device/radio/intercom/universe/GetSource()
-	if(who_dis)
-		return who_dis
-	..()
 
 /obj/item/device/radio/intercom/New(turf/loc, var/ndir = 0, var/building = 3)
 	..()
