@@ -1,2 +1,3 @@
 author: DrCelt
-changes: []
+changes: 
+- rscadd: As a ghost, you can now follow arrival announcement computers to jump to the player who just joined
