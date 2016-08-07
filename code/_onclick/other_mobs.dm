@@ -14,14 +14,16 @@
 		return
 
 	if(a_intent == "hurt" && A.loc != src)
-
+		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 		switch(attack_type) //Special attacks - kicks, bites
 			if(ATTACK_KICK)
 				if(can_kick(A))
 
 					delayNextAttack(10)
 
-					if(!A.kick_act(src)) //kick_act returns 1 if the kick failed or couldn't be done
+					special_attack_result = A.kick_act(src)
+					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
+						after_special_attack(A, attack_type, special_attack_result)
 						return
 
 					delayNextAttack(-10) //This is only called when the kick fails
@@ -33,7 +35,9 @@
 
 					delayNextAttack(10)
 
-					if(!A.bite_act(src)) //bite_act returns 1 if the bite failed or couldn't be done
+					special_attack_result = A.bite_act(src)
+					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
+						after_special_attack(A, attack_type, special_attack_result)
 						return
 
 					delayNextAttack(-10) //This is only called when the bite fails

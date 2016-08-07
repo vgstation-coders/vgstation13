@@ -47,7 +47,7 @@
 		owner = L
 
 /mob/living/simple_animal/hostile/scarybat/Process_Spacemove(var/check_drift = 0)
-	return ..()	//No drifting in space for space carp!	//original comments do not steal
+	return 1
 
 /mob/living/simple_animal/hostile/scarybat/CanAttack(var/atom/the_target)
 	if(the_target == owner)

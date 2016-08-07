@@ -52,12 +52,6 @@
 		return 1
 	return BUILD_FAILURE
 
-// Ported from unstable r355
-
-/turf/space/Entered(atom/movable/A as mob|obj)
-	..()
-	inertial_drift(A)
-
 /turf/space/proc/Sandbox_Spacemove(atom/movable/A as mob|obj)
 	var/cur_x
 	var/cur_y
@@ -183,3 +177,6 @@
 
 /turf/space/void/New()
 	return
+
+/turf/space/has_gravity()
+	return 0

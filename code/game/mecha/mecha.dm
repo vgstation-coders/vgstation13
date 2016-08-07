@@ -112,6 +112,9 @@
 	..()
 	return
 
+/obj/mecha/can_apply_inertia()
+	return 1 //No anchored check - so that mechas can fly off into space
+
 /obj/mecha/is_airtight()
 	return !use_internal_tank
 ////////////////////////
