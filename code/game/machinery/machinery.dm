@@ -405,7 +405,7 @@ Class Procs:
 	var/ghost_flags=0
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
-	if(canGhostRead(usr,src,ghost_flags))
+	if(canGhostRead(usr,src,ghost_flags))	
 		return src.attack_ai(user)
 
 /obj/machinery/attack_paw(mob/user as mob)
@@ -570,7 +570,7 @@ Class Procs:
 		else
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
-		
+
 	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
 		return togglePanelOpen(O, user)
 
@@ -599,7 +599,7 @@ Class Procs:
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
 		return exchange_parts(user, O)
-		
+
 /obj/machinery/proc/wirejack(var/mob/living/silicon/pai/P)
 	if(!(machine_flags & WIREJACK))
 		return 0
@@ -649,10 +649,10 @@ Class Procs:
 
 /obj/machinery/proc/check_rebuild()
 	return
-	
+
 /obj/machinery/wrenchable()
 	return (machine_flags & WRENCHMOVE)
-	
+
 /obj/machinery/can_wrench_shuttle()
 	return (machine_flags & SHUTTLEWRENCH)
 
@@ -688,7 +688,7 @@ Class Procs:
 			W.play_rped_sound()
 		return 1
 	return 0
-	
+
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
 	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
