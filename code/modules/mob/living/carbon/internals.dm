@@ -20,6 +20,9 @@
 
 // Set internals on or off.
 /mob/living/carbon/proc/toggle_internals(var/mob/living/user, var/obj/item/weapon/tank/T)
+	if(user.incapacitated())
+		return
+	
 	if(internal)
 		internal.add_fingerprint(user)
 		internal = null
