@@ -306,7 +306,9 @@
 				return 1
 	return 0
 
-/mob/living/silicon/spook()
+/mob/living/silicon/spook(mob/dead/observer/ghost)
+	if(!..(ghost, TRUE) || !client)
+		return
 	to_chat(src, "<i>[pick(boo_phrases_silicon)]</i>")
 
 /mob/living/silicon/bite_act(mob/living/carbon/human/H)
