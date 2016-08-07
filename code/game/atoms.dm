@@ -194,6 +194,9 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/Bumped(AM as mob|obj)
 	return
 
+/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
+	return Bumped(W)
+
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
 // false if closed
