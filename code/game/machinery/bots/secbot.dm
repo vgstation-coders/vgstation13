@@ -721,14 +721,14 @@ Auto Patrol: []"},
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
 			threatcount += 2
 
-		if(!perp.wear_id)
+		if(!perp.get_visible_id())
 			if(idcheck)
 				threatcount += 4
 			else
 				threatcount += 2
 
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+		if(perp.get_visible_id() && istype(perp.get_visible_id(), /obj/item/weapon/card/id/syndicate))
 			threatcount -= 2
 
 	if(src.check_records)

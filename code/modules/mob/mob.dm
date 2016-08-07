@@ -1664,7 +1664,10 @@ var/list/slot_equipment_priority = list( \
 // Mobs tell access what access levels it has.
 /mob/proc/GetAccess()
 	return list()
-
+	
+/mob/proc/get_visible_id()
+	return 0
+	
 // Skip over all the complex list checks.
 /mob/proc/hasFullAccess()
 	return 0

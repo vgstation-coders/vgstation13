@@ -1428,6 +1428,16 @@
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
 	return ACL
+	
+/mob/living/carbon/human/get_visible_id()
+	var/id = null
+	for(var/obj/item/I in held_items)
+		if(!id)
+			id = I.GetID()
+	if(wear_id && !id)
+		id = wear_id.GetID()
+	return id
+	
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!

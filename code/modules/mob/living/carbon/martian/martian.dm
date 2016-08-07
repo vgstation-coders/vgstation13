@@ -75,6 +75,13 @@
 
 	return ACL
 
+/mob/living/carbon/martian/get_visible_id()
+	var/id = null
+	for(var/obj/item/I in held_items)
+		if(!id)
+			id = I.GetID()
+	return id
+	
 /mob/living/carbon/martian/can_wield()
 	return 1
 
