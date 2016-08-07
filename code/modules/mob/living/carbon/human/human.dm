@@ -1431,11 +1431,12 @@
 	
 /mob/living/carbon/human/get_visible_id()
 	var/id = null
+	if(wear_id)
+		id = wear_id.GetID()
 	for(var/obj/item/I in held_items)
 		if(!id)
 			id = I.GetID()
-	if(wear_id && !id)
-		id = wear_id.GetID()
+
 	return id
 	
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)

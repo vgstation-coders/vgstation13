@@ -734,8 +734,8 @@ Auto Patrol: []"},
 	if(src.check_records)
 		for (var/datum/data/record/E in data_core.general)
 			var/perpname = perp.name
-			if(perp.wear_id)
-				var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
+			if(perp.get_visible_id())
+				var/obj/item/weapon/card/id/id = perp.get_visible_id()
 				if(id)
 					perpname = id.registered_name
 
