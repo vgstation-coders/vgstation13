@@ -182,11 +182,9 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		visible_message("<span class='danger'>\the [AM] crashes into \the [src]!!</span>")
-		explode()
-	return ..()
+/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
+	visible_message("<span class='danger'>\the [W] crashes into \the [src]!</span>")
+	explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
 	if (reagents.total_volume > 500)
@@ -340,4 +338,3 @@
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
-
