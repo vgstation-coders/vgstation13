@@ -296,7 +296,7 @@ var/global/list/whitelisted_species = list("Human")
 	chem_flags = NO_DRINK | NO_EAT | NO_INJECT
 
 	default_mutations=list(SKELETON)
-	brute_mod = 5.0
+	brute_mod = 2.0
 
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
