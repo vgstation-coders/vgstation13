@@ -466,6 +466,8 @@
 		return 5
 
 /obj/item/weapon/tray/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(isrobot(user) && !isMoMMI(user))
+		return
 	if(istype(W, /obj/item/weapon/kitchen/rollingpin)) //shield bash
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
