@@ -90,7 +90,8 @@
 	overlays.Cut()
 	if(occupant)
 		overlays += data_huds
-	else(data_huds.Cut())
+	else
+		data_huds.Cut()
 
 /obj/mecha/New()
 	..()

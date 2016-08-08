@@ -20,20 +20,20 @@ var/list/visible_matrix   = list(1,0,0,0,
 								 0,0,0,1)
 
 
-/obj/screen/plane_master/data_hud/New(var/hud_plane)
+/obj/screen/plane_master/data_hud/New(var/hud_plane,var/visible)
 	plane = hud_plane
+	if(visible)
+		color = visible_matrix
+	else
+		color = invisible_matrix
 
 /obj/screen/plane_master/data_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
 	appearance_flags = 0
 	alpha = 0
 
-/obj/screen/plane_master/data_dummy/New(var/hud_plane,var/visible)
+/obj/screen/plane_master/data_dummy/New(var/hud_plane)
 	plane = hud_plane
-	/*if(visible)
-		color = visible_matrix
-	else
-		color = invisible_matrix */
 
 /datum/data_hud
 	var/name
@@ -84,7 +84,7 @@ var/list/visible_matrix   = list(1,0,0,0,
 		user.update_icon()
 
 /datum/data_hud/proc/remove_hud(var/mob/user)
-	users.overlays -= user.data_huds[name]
+	user.overlays -= user.data_huds[name]
 	user.data_huds[name] = null
 
 /datum/data_hud/proc/to_add(var/mob/user)

@@ -15,10 +15,6 @@
 /datum/data_hud/antag/to_add(var/mob/user)
 	return hud_image
 
-/datum/data_hud/antag/remove_hud(var/mob/user)
-	..()
-	user.overlays -= user.overlays[name]
-
 /datum/data_hud/antag/can_be_seen_by(var/mob/user)
 	..()
 	if(is_antag_type(user))
