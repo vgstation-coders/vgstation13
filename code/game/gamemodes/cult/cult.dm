@@ -150,7 +150,7 @@
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
 		grant_runeword(cult_mind.current)
-		cult_mind.toggle_see_hud.toggle_see_hud(cult_hud,HUD_ON)
+		cult_mind.current.toggle_see_hud(cult_hud,HUD_ON)
 		cult_mind.special_role = "Cultist"
 		var/wikiroute = role_wiki[ROLE_CULTIST]
 		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=\ref[cult_mind.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
