@@ -214,7 +214,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		if("cult")
 			if(iscult(M))	return 0
 			ticker.mode.cult += M.mind
-			M.toggle_hud(cult_hud,HUD_ON)
+			M.toggle_see_hud(cult_hud,HUD_ON)
 			M.mind.special_role = "Cultist"
 			to_chat(M, "<span class='sinister'>You remember the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
@@ -472,7 +472,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			ticker.mode.wizards += M.mind
 			M.mind.special_role = "Wizard"
 			M.mind.assigned_role = "MODE"
-			M.toggle_hud(wiz_hud,HUD_ON)
+			M.toggle_see_hud(wiz_hud,HUD_ON)
 			ticker.mode.forge_wizard_objectives(M.mind)
 			ticker.mode.greet_wizard(M.mind)
 

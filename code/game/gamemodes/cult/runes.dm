@@ -638,7 +638,7 @@
 	else
 		ticker.mode.cult += D.mind
 
-	D.toggle_hud(cult_hud,HUD_ON)
+	D.toggle_see_hud(cult_hud,HUD_ON)
 	D.canmove = 1
 	animation.master = null
 	qdel(animation)
@@ -1367,28 +1367,28 @@
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now a Juggernaut. Though slow, your shell can withstand extreme punishment, create temporary walls and even deflect energy weapons, and rip apart enemies and walls alike.</B>")
-								C.toggle_hud(cult_hud,HUD_ON)
+								C.toggle_see_hud(cult_hud,HUD_ON)
 							if("Wraith")
 								var/mob/living/simple_animal/construct/wraith/C = new /mob/living/simple_animal/construct/wraith (get_turf(src.loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are a now Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls.</B>")
-								C.toggle_hud(cult_hud,HUD_ON)
+								C.toggle_see_hud(cult_hud,HUD_ON)
 							if("Artificer")
 								var/mob/living/simple_animal/construct/builder/C = new /mob/living/simple_animal/construct/builder (get_turf(src.loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now an Artificer. You are incredibly weak and fragile, but you are able to construct new floors and walls, to break some walls apart, to repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>")
-								C.toggle_hud(cult_hud,HUD_ON)
+								C.toggle_see_hud(cult_hud,HUD_ON)
 							if("Harvester")
 								var/mob/living/simple_animal/construct/harvester/C = new /mob/living/simple_animal/construct/harvester (get_turf(src.loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now an Harvester. You are as fast and powerful as Wraiths, but twice as durable.<br>No living (or dead) creature can hide from your eyes, and no door or wall shall place itself between you and your victims.<br>Your role consists of neutralizing any non-cultist living being in the area and transport them to Nar-Sie. To do so, place yourself above an incapacited target and use your \"Harvest\" spell.")
-								C.toggle_hud(cult_hud,HUD_ON)
+								C.toggle_see_hud(cult_hud,HUD_ON)
 					else
 						var/list/construct_types = list("Artificer", "Wraith", "Juggernaut")
 						construct_class = input("Please choose which type of construct you wish [M] to become.", "Construct Transformation") in construct_types
@@ -1399,21 +1399,21 @@
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now a Juggernaut. Though slow, your shell can withstand extreme punishment, create temporary walls and even deflect energy weapons, and rip apart enemies and walls alike.</B>")
-								C.toggle_hud(cult_hud,HUD_ON)
+								C.toggle_see_hud(cult_hud,HUD_ON)
 							if("Wraith")
 								var/mob/living/simple_animal/construct/wraith/C = new /mob/living/simple_animal/construct/wraith (get_turf(src.loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are a now Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls.</B>")
-								C.toggle_hud(cult_hud,HUD_ON)
+								C.toggle_see_hud(cult_hud,HUD_ON)
 							if("Artificer")
 								var/mob/living/simple_animal/construct/builder/C = new /mob/living/simple_animal/construct/builder (get_turf(src.loc))
 								M.mind.transfer_to(C)
 								qdel(M)
 								M = null
 								to_chat(C, "<B>You are now an Artificer. You are incredibly weak and fragile, but you are able to construct new floors and walls, to break some walls apart, to repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>")
-								C.toggle_hud(cult_hud,HUD_ON)
+								C.toggle_see_hud(cult_hud,HUD_ON)
 				qdel(src)
 				return
 			else

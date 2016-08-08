@@ -44,7 +44,7 @@
 
 /mob/living/carbon/human/Destroy()
 	if(mind && species && (species.name == "Manifested") && (mind in ticker.mode.cult))//manifested ghosts are removed from the cult once their bodies are destroyed
-		toggle_hud(cult_hud,HUD_OFF)
+		toggle_see_hud(cult_hud,HUD_OFF)
 		ticker.mode.cult -= mind
 
 	species = null

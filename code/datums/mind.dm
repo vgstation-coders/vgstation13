@@ -591,7 +591,7 @@
 			if("headrev")
 				if(src in ticker.mode.revolutionaries)
 					ticker.mode.revolutionaries -= src
-					current.toggle_hud(rev_hud,HUD_ON)
+					current.toggle_see_hud(rev_hud,HUD_ON)
 					to_chat(current, "<span class='danger'><FONT size = 3>You have proved your devotion to revoltion! Yea are a head revolutionary now!</FONT></span>")
 				else if(!(src in ticker.mode.head_revolutionaries))
 					to_chat(current, "<span class='notice'>You are a member of the revolutionaries' leadership now!</span>")
@@ -611,7 +611,7 @@
 				ticker.mode.head_revolutionaries += src
 				special_role = "Head Revolutionary"
 				log_admin("[key_name_admin(usr)] has head-rev'ed [current].")
-				current.toggle_hud(rev_hud,HUD_ON)
+				current.toggle_see_hud(rev_hud,HUD_ON)
 
 			if("autoobjectives")
 				ticker.mode.forge_revolutionary_objectives(src)
@@ -653,7 +653,7 @@
 			if("clear")
 				if(src in ticker.mode.cult)
 					ticker.mode.cult -= src
-					current.toggle_hud(cult_hud,HUD_OFF)
+					current.toggle_see_hud(cult_hud,HUD_OFF)
 					special_role = null
 					var/datum/game_mode/cult/cult = ticker.mode
 					if (istype(cult))
@@ -676,7 +676,7 @@
 					var/datum/game_mode/cult/cult = ticker.mode
 					if (istype(cult))
 						cult.memoize_cult_objectives(src)
-					current.toggle_hud(cult_hud,HUD_ON)
+					current.toggle_see_hud(cult_hud,HUD_ON)
 					log_admin("[key_name_admin(usr)] has cult'ed [current].")
 			if("tome")
 				var/mob/living/carbon/human/H = current
@@ -707,7 +707,7 @@
 					special_role = null
 					current.spellremove(current, config.feature_object_spell_system? "object":"verb")
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a wizard!</FONT></span>")
-					current.toggle_hud(wiz_hud,HUD_OFF)
+					current.toggle_see_hud(wiz_hud,HUD_OFF)
 					log_admin("[key_name_admin(usr)] has de-wizard'ed [current].")
 			if("wizard")
 				if(!(src in ticker.mode.wizards))
@@ -717,7 +717,7 @@
 					to_chat(current, "<span class='danger'>You are the Space Wizard!</span>")
 					var/wikiroute = role_wiki[ROLE_WIZARD]
 					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-					current.toggle_hud(wiz_hud,HUD_ON)
+					current.toggle_see_hud(wiz_hud,HUD_ON)
 					log_admin("[key_name_admin(usr)] has wizard'ed [current].")
 			if("lair")
 				current.loc = pick(wizardstart)
@@ -1166,7 +1166,7 @@ proc/clear_memory(var/silent = 1)
 		ticker.mode.wizards += src
 		special_role = "Wizard"
 		assigned_role = "MODE"
-		current.toggle_hud(wiz_hud,HUD_ON)
+		current.toggle_see_hud(wiz_hud,HUD_ON)
 		if(!wizardstart.len)
 			current.loc = pick(latejoin)
 			to_chat(current, "HOT INSERTION, GO GO GO")
@@ -1183,7 +1183,7 @@ proc/clear_memory(var/silent = 1)
 /datum/mind/proc/make_Cultist()
 	if(!(src in ticker.mode.cult))
 		ticker.mode.cult += src
-		current.toggle_hud(cult_hud,HUD_ON)
+		current.toggle_see_hud(cult_hud,HUD_ON)
 		special_role = "Cultist"
 		to_chat(current, "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 		to_chat(current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
@@ -1229,7 +1229,7 @@ proc/clear_memory(var/silent = 1)
 				objectives += rev_obj
 			ticker.mode.greet_revolutionary(src,0)
 	ticker.mode.head_revolutionaries += src
-	current.toggle_hud(rev_hud,HUD_ON)
+	current.toggle_see_hud(rev_hud,HUD_ON)
 	special_role = "Head Revolutionary"
 
 	ticker.mode.forge_revolutionary_objectives(src)

@@ -217,7 +217,7 @@
 
 		if(M in ticker.mode.cult)
 			ticker.mode.cult -= M
-			M.current.toggle_hud(cult_hud,HUD_OFF)
+			M.current.toggle_see_hud(cult_hud,HUD_OFF)
 			M.special_role = null
 			var/datum/game_mode/cult/cult = ticker.mode
 			if (istype(cult))
@@ -232,7 +232,7 @@
 			M.special_role = null
 			M.current.spellremove(M.current, config.feature_object_spell_system? "object":"verb")
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Your powers ebb and you feel weak. You are no longer a wizard.</FONT></span>")
-			M.current.toggle_hud(wiz_hud,HUD_OFF)
+			M.current.toggle_see_hud(wiz_hud,HUD_OFF)
 
 		if(M in ticker.mode.changelings)
 			ticker.mode.changelings -= M
