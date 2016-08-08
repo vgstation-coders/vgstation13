@@ -16,6 +16,7 @@
 	var/times_used = 0 //Number of times it's been used.
 	var/broken = 0     //Is the flash burnt out?
 	var/last_used = 0 //last world.time it was used.
+	var/limited_conversions = 0 // for revsquad
 
 /obj/item/device/flash/proc/clown_check(var/mob/user)
 	if(user && (M_CLUMSY in user.mutations) && prob(50))
@@ -90,19 +91,27 @@
 					if(Subject.stat != DEAD)
 						Subject.mind_initialize() // give them a mind datum if they don't have one
 
-						var/result = ticker.mode.add_revolutionary(Subject.mind)
+						var/is_revsquad = istype(ticker.mode, /datum/game_mode/rev_squad)
+						if(!is_revsquad || (is_revsquad && limited_conversions))
+							var/result = ticker.mode.add_revolutionary(Subject.mind)
 
-						if(result == 1)
-							log_admin("[key_name(user)] has converted [key_name(Subject)] to the revolution at [formatLocation(Subject.loc)]")
-							Subject.mind.has_been_rev = TRUE
-						else if(result == -1 || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
-							to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash!</span>")
-						else if(result == -2) // rev jobbanned
-							to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
-						else if(result == -3) // loyalty implanted
-							to_chat(user, "<span class=\"warning\">Something seems to be blocking the flash!</span>")
-					else
-						to_chat(user, "<span class=\"warning\">This mind is so vacant that it is not susceptible to influence!</span>")
+							if(result == 1)
+								log_admin("[key_name(user)] has converted [key_name(Subject)] to the revolution at [formatLocation(Subject.loc)]")
+								Subject.mind.has_been_rev = TRUE
+								if(is_revsquad)
+									limited_conversions--
+									if(limited_conversions <= 0)
+										to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
+										src.broken = 1
+										icon_state = flashburnt
+							else if(result == -1 || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
+								to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash!</span>")
+							else if(result == -2) // rev jobbanned
+								to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
+							else if(result == -3) // loyalty implanted
+								to_chat(user, "<span class=\"warning\">Something seems to be blocking the flash!</span>")
+						else
+							to_chat(user, "<span class=\"warning\">This mind is so vacant that it is not susceptible to influence!</span>")
 		else
 			flashfail = TRUE
 	else if(issilicon(M))
@@ -232,3 +241,7 @@
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
+
+/obj/item/device/flash/revsquad/New(var/uses = 1)
+	..()
+	limited_conversions = uses
