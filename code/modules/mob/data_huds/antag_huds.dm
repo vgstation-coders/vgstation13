@@ -68,6 +68,14 @@ var/global/syndie_hud = new /datum/data_hud/antag/syndie()
 /datum/data_hud/antag/rev
 	name = "rev"
 	plane = REV_ANTAG_HUD_PLANE
+	icon_state = "rev"
+	var/image/headrev_image
+
+/datum/data_hud/antag/rev/New()
+	..()
+	headrev_image = image('icons/mob/mob.dmi', icon_state = "rev_head")
+	headrev_image.plane = plane
+
 
 /datum/data_hud/antag/rev/is_antag_type(var/mob/living/user)
 	if(!..())
@@ -77,9 +85,7 @@ var/global/syndie_hud = new /datum/data_hud/antag/syndie()
 
 /datum/data_hud/antag/rev/to_add(var/mob/user)
 	if(isrevhead(user))
-		icon_state = "rev_head"
-	else
-		icon_state = "rev"
+		return headrev_image
 	..()
 
 

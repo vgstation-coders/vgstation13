@@ -6,26 +6,12 @@
 #define SEE_IN_MECH		1
 #define IS_ANTAG_HUD	2
 
-var/list/invisible_matrix = list(1,0,0,0,
-								 0,1,0,0,
-								 0,0,1,0,
-								 0,0,0,0,
-								 0,0,0,0)
-
-
-var/list/visible_matrix   = list(1,0,0,0,
-								 0,1,0,0,
-								 0,0,1,0,
-								 0,0,0,0,
-								 0,0,0,1)
-
-
 /obj/screen/plane_master/data_hud/New(var/hud_plane,var/visible)
 	plane = hud_plane
 	if(visible)
-		color = visible_matrix
+		alpha = 255
 	else
-		color = invisible_matrix
+		alpha = 0
 
 /obj/screen/plane_master/data_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
