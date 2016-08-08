@@ -141,3 +141,167 @@
       to_chat(mob, "<span class = 'warning'>Your [T] has [T.limited_conversions] uses for conversions, and not all of your comrades have one like it. Use it wisely.</span>")
 		mob.update_icons()
 		return 1
+
+/datum/game_mode/revolution/proc/check_rev_victory()
+	for(var/datum/mind/rev_mind in head_revolutionaries)
+		for(var/datum/objective/objective in rev_mind.objectives)
+			if(!(objective.check_completion()))
+				return 0
+
+		return 1
+
+/datum/game_mode/revolution/proc/check_heads_victory()
+	for(var/datum/mind/rev_mind in head_revolutionaries)
+		var/turf/T = get_turf(rev_mind.current)
+		if((rev_mind) && (rev_mind.current) && (rev_mind.current.stat != 2) && T && (T.z == 1))
+			if(ishuman(rev_mind.current))
+				return 0
+	return 1
+
+
+/datum/game_mode/revsquad/check_win()
+	if(check_rev_victory())
+		finished = 1
+	else if(check_heads_victory())
+		finished = 2
+	return
+
+///////////////////////////////
+//Checks if the round is over//
+///////////////////////////////
+/datum/game_mode/revsquad/check_finished()
+	if(config.continous_rounds)
+		if(finished != 0)
+			if(emergency_shuttle)
+				emergency_shuttle.always_fake_recall = 0
+		return ..()
+	if(finished != 0)
+		return 1
+	else
+		return 0
+
+/datum/game_mode/revsquad/declare_completion()
+	if(finished == 1)
+		feedback_set_details("round_end_result","win - heads killed")
+		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff were killed or abandoned the station! The revolutionaries win!</FONT></span>"
+	else if(finished == 2)
+		feedback_set_details("round_end_result","loss - rev heads killed")
+		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff managed to stop the revolution!</FONT></span>"
+	..()
+	return 1
+
+/datum/game_mode/proc/auto_declare_completion_revolution()
+	var/list/targets = list()
+	var/text = ""
+	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
+		var/icon/logo1 = icon('icons/mob/mob.dmi', "rev_head-logo")
+		end_icons += logo1
+		var/tempstate = end_icons.len
+		text += {"<img src="logo_[tempstate].png"> <FONT size = 2><B>The revolutionary squad members were:</B></FONT> <img src="logo_[tempstate].png">"}
+
+		for(var/datum/mind/headrev in head_revolutionaries)
+			if(headrev.current)
+				var/icon/flat = getFlatIcon(headrev.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("}
+				if(headrev.current.stat == DEAD)
+					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
+				else if(headrev.current.z != 1)
+					text += "fled the station"
+				else
+					text += "survived the revolution"
+				if(headrev.current.real_name != headrev.name)
+					text += " as [headrev.current.real_name]"
+			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("}
+				text += "body destroyed"
+			text += ")"
+			if(headrev.total_TC)
+				if(headrev.spent_TC)
+					text += "<br><span class='sinister'>TC Remaining: [headrev.total_TC - headrev.spent_TC]/[headrev.total_TC] - The tools used by the Head Revolutionary were:"
+					for(var/entry in headrev.uplink_items_bought)
+						text += "<br>[entry]"
+					text += "</span>"
+				else
+					text += "<br><span class='sinister'>The Head Revolutionary was a smooth operator this round (did not purchase any uplink items)</span>"
+
+			for(var/datum/objective/mutiny/objective in headrev.objectives)
+				targets |= objective.target
+
+
+	if(revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
+		var/icon/logo2 = icon('icons/mob/mob.dmi', "rev-logo")
+		end_icons += logo2
+		var/tempstate = end_icons.len
+		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The recruited revolutionaries were:</B></FONT> <img src="logo_[tempstate].png">"}
+
+		for(var/datum/mind/rev in revolutionaries)
+			if(rev.current)
+				var/icon/flat = getFlatIcon(rev.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[rev.key]</b> was <b>[rev.name]</b> ("}
+				if(rev.current.stat == DEAD)
+					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
+				else if(rev.current.z != 1)
+					text += "fled the station"
+				else
+					text += "survived the revolution"
+				if(rev.current.real_name != rev.name)
+					text += " as [rev.current.real_name]"
+			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[rev.key]</b> was <b>[rev.name]</b> ("}
+				text += "body destroyed"
+			text += ")"
+
+
+
+	if( head_revolutionaries.len || revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution) )
+		var/icon/logo3 = icon('icons/mob/mob.dmi', "nano-logo")
+		end_icons += logo3
+		var/tempstate = end_icons.len
+		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The heads of staff were:</B></FONT> <img src="logo_[tempstate].png">"}
+
+		var/list/heads = get_all_heads()
+		for(var/datum/mind/head in heads)
+			var/target = (head in targets)
+			if(target)
+				text += "<font color='red'>"
+			if(head.current)
+				var/icon/flat = getFlatIcon(head.current, SOUTH, 1, 1)
+				end_icons += flat
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[head.key]</b> was <b>[head.name]</b> ("}
+				if(head.current.stat == DEAD)
+					text += "died"
+					flat.Turn(90)
+					end_icons[tempstate] = flat
+				else if(head.current.z != 1)
+					text += "fled the station"
+				else
+					text += "survived the revolution"
+				if(head.current.real_name != head.name)
+					text += " as [head.current.real_name]"
+			else
+				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
+				end_icons += sprotch
+				tempstate = end_icons.len
+				text += {"<br><img src="logo_[tempstate].png"> <b>[head.key]</b> was <b>[head.name]</b> ("}
+				text += "body destroyed"
+			text += ")"
+			if(target)
+				text += "</font>"
+
+		text += "<BR><HR>"
+	return text
