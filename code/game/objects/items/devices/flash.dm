@@ -91,7 +91,7 @@
 					if(Subject.stat != DEAD)
 						Subject.mind_initialize() // give them a mind datum if they don't have one
 
-						var/is_revsquad = istype(ticker.mode, /datum/game_mode/rev_squad)
+						var/is_revsquad = istype(ticker.mode, /datum/game_mode/revsquad)
 						if(!is_revsquad || (is_revsquad && limited_conversions))
 							var/result = ticker.mode.add_revolutionary(Subject.mind)
 
@@ -103,7 +103,7 @@
 									if(limited_conversions <= 0)
 										to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 										src.broken = 1
-										icon_state = flashburnt
+										icon_state = "flashburnt"
 							else if(result == -1 || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
 								to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash!</span>")
 							else if(result == -2) // rev jobbanned
@@ -241,6 +241,8 @@
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
+
+/obj/item/device/flash/revsquad
 
 /obj/item/device/flash/revsquad/New(var/uses = 1)
 	..()

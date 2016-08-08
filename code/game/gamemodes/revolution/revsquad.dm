@@ -1,29 +1,22 @@
-/datum/game_mode/rev_squad
-  name = "Revolution Squad"
-  config_tag = "revsquad"
-  restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
-  desc = "A variant of revolution, with an emphasis on a small group with co-ordinated efforts instead of greytiding"
+//A variant of revolution, with an emphasis on a small group with co-ordinated efforts instead of greytiding
 
-  required_players = 4
-  required_players_secret = 25
-  required_enemies = 3
-  recommended_enemies = 3
-  var/finished = 0
-  var/checkwin_counter = 0
-  var/max_headrevs = 3
-  var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-  var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
+#define REVSQUAD_FLASH_USES 1 // Number of times a specially spawned flash can convert normal crew members.
+/datum/game_mode/revsquad
+	name = "Revolution Squad"
+	config_tag = "revsquad"
+	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
 
-  var/possible_items = list(/obj/item/weapon/card/emag,
-                            /obj/item/clothing/gloves/yellow,
-                            /obj/item/weapon/gun/projectile/automatic,
-                            /obj/item/device/flash/revsquad,
-                            /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
-                            )
-  var/flash_uses = 1 // Number of times a specially spawned flash can convert normal crew members.
+	required_players = 4
+	required_players_secret = 25
+	required_enemies = 3
+	recommended_enemies = 3
+	var/finished = 0
+	var/checkwin_counter = 0
+	var/max_squaddies = 3
+	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
+	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
-
-/datum/game_mode/rev_squad/announce()
+/datum/game_mode/revsquad/announce()
 	to_chat(world, "<B>The current game mode is - Revolution Squad!</B>")
 	to_chat(world, "<B>Some crewmembers are members of an organized group attempting to assassinate the heads of this station!<BR>\nRevolutionaries - Kill the Captain, HoP, HoS, CE, RD and CMO. \nPersonnel - Protect the heads of staff. Kill the revolutionaries.</B>")
 
@@ -45,7 +38,7 @@
 			if(player.assigned_role == job)
 				possible_revs -= player
 
-	for (var/i=1 to max_headrevs)
+	for (var/i=1 to max_squaddies)
 		if (possible_revs.len==0)
 			break
 		var/datum/mind/lenin = pick(possible_revs)
@@ -61,7 +54,7 @@
 	message_admins("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
 	return 1
 
-/datum/game_mode/revolution/post_setup()
+/datum/game_mode/revsquad/post_setup()
 	var/list/heads = get_living_heads()
 
 	for(var/datum/mind/rev_mind in head_revolutionaries)
@@ -101,19 +94,27 @@
 		rev_mind.special_role = "Revolutionary Squad Member"
 		obj_count++
 
-  to_chat(rev_mind.current, "<br/><b>Your fellow revolutionaries are:</b>")
-  rev_mind.store_memory("<br/><b>Your fellow revolutionaries are:</b>")
-  for(var/datum/mind/M in head_revolutionaries)
-    rev_mind.store_memory("[M.assigned_role] the [assigned_job.title]")
-    to_chat(rev_mind.current, "[M.assigned_role] the [assigned_job.title]")
+	to_chat(rev_mind.current, "<br/><b>Your fellow revolutionaries are:</b>")
+	rev_mind.store_memory("<br/><b>Your fellow revolutionaries are:</b>")
+	for(var/datum/mind/M in head_revolutionaries)
+		rev_mind.store_memory("[M.assigned_role] the [M.assigned_job.title]")
+		to_chat(rev_mind.current, "[M.assigned_role] the [M.assigned_job.title]")
 
-/datum/game_mode/revsquad/proc/get_squaddie_item(/mob/living/carbon/human/mob)
-  var/obj/item/requisitioned = pick(possible_items)
-  if(istype(requisitioned, /obj/item/device/flash/revsquad))
-    requsitioned = new requsitioned(mob, uses = flash_uses)
-  else
-    requisitioned = new requisitioned(mob)
-  return requisitioned
+/datum/game_mode/proc/get_revsquad_item(var/mob/living/carbon/human/M)
+	var/possible_items = list(/obj/item/weapon/card/emag,
+														/obj/item/clothing/gloves/yellow,
+														/obj/item/weapon/gun/projectile/automatic,
+														/obj/item/device/flash/revsquad,
+														/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
+														)
+
+	var/obj/item/requisitioned = pick(possible_items)
+	if(istype(requisitioned, /obj/item/device/flash/revsquad))
+		var/obj/item/device/flash/revsquad/FR = new(M, uses = REVSQUAD_FLASH_USES)
+		requisitioned = FR
+	else
+		requisitioned = new requisitioned(M)
+	return requisitioned
 
 /datum/game_mode/proc/equip_revsquad(mob/living/carbon/human/mob)
 	if(!istype(mob))
@@ -124,7 +125,7 @@
 			to_chat(mob, "Your training has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself.")
 			mob.mutations.Remove(M_CLUMSY)
 
-  var/obj/item/T = get_squaddie_item(mob)
+	var/obj/item/T = get_revsquad_item(mob)
 
 	var/list/slots = list (
 		"backpack" = slot_in_backpack,
@@ -137,12 +138,13 @@
 		to_chat(mob, "The Syndicate were unfortunately unable to get you any special equipment.")
 	else
 		to_chat(mob, "The [T] in your [where] will help you to persuade the crew to join your cause.")
-    if(istype(T, /obj/item/weapon/flash/revsquad))
-      to_chat(mob, "<span class = 'warning'>Your [T] has [T.limited_conversions] uses for conversions, and not all of your comrades have one like it. Use it wisely.</span>")
+		if(istype(T, /obj/item/device/flash/revsquad))
+			var/obj/item/device/flash/revsquad/FR = T
+			to_chat(mob, "<span class = 'warning'>Your [FR] has [FR.limited_conversions] uses for conversions, and not all of your comrades have one like it. Use it wisely.</span>")
 		mob.update_icons()
 		return 1
 
-/datum/game_mode/revolution/proc/check_rev_victory()
+/datum/game_mode/revsquad/proc/check_rev_victory()
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		for(var/datum/objective/objective in rev_mind.objectives)
 			if(!(objective.check_completion()))
@@ -150,7 +152,7 @@
 
 		return 1
 
-/datum/game_mode/revolution/proc/check_heads_victory()
+/datum/game_mode/revsquad/proc/check_heads_victory()
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		var/turf/T = get_turf(rev_mind.current)
 		if((rev_mind) && (rev_mind.current) && (rev_mind.current.stat != 2) && T && (T.z == 1))
@@ -190,7 +192,7 @@
 	..()
 	return 1
 
-/datum/game_mode/proc/auto_declare_completion_revolution()
+/datum/game_mode/proc/auto_declare_completion_revsquad()
 	var/list/targets = list()
 	var/text = ""
 	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
