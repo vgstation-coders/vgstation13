@@ -3,7 +3,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 
 //TODO LIST
 //*Make my own sprites
-//Check blungeon bug on camera_bug
+//*Make a log-off robot verb
 
 
 /obj/item/device/syndicate_cyborg_camera_bug
@@ -76,7 +76,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     src.cyborg = robot //set the robot to the board
     src.active = 1 //set the board as active
     syndicate_roboticist_control_board += src //add board on list
-    feedback_inc("cyborg_birth",1)
+    //feedback_inc("cyborg_birth",1) // I don't know what this does yet
     qdel(robot_suit)
     //Setup Cyborg
     robot.scrambledcodes = 1
@@ -107,7 +107,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 
 /obj/item/device/syndicate_reciever/Destroy()
   processing_objects.Remove(src)
-
+//verify if the user got stunned/cuffed/pushed or whatever can make him from drop/stop using the remote.
 /obj/item/device/syndicate_reciever/process()
   if(src.active == 0 || !(src.current_board))
     return
