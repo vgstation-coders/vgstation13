@@ -4,7 +4,6 @@
 // Just make sure the converter is a head before you call it!
 // To remove a rev (from brainwashing or w/e), call ticker.mode:remove_revolutionary(_THE_PLAYERS_MIND_),
 // this will also check they're not a head, so it can just be called freely
-// If the rev icons start going wrong for some reason, ticker.mode:update_all_rev_icons() can be called to correct them.
 // If the game somtimes isn't registering a win properly, then ticker.mode.check_win() isn't being called somewhere.
 
 #define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
@@ -104,7 +103,7 @@
 	//	equip_traitor(rev_mind.current, 1) //changing how revs get assigned their uplink so they can get PDA uplinks. --NEO
 	//	Removing revolutionary uplinks.	-Pete
 		equip_revolutionary(rev_mind.current)
-		update_rev_icons_added(rev_mind)
+		rev_mind.current.toggle_see_hud(rev_hud,HUD_ON)
 
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		greet_revolutionary(rev_mind)
@@ -218,7 +217,7 @@
 	revolutionaries += rev_mind
 	to_chat(rev_mind.current, "<span class='warning'><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>")
 	rev_mind.special_role = "Revolutionary"
-	update_rev_icons_added(rev_mind)
+	rev_mind.current.toggle_see_hud(rev_hud,HUD_ON)
 
 	return 1
 //////////////////////////////////////////////////////////////////////////////
@@ -235,7 +234,7 @@
 		else
 			to_chat(rev_mind.current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</FONT></span>")
 
-		update_rev_icons_removed(rev_mind)
+		rev_mind.current.toggle_see_hud(rev_hud,HUD_OFF)
 		for(var/mob/living/M in view(rev_mind.current))
 			if(beingborged)
 				to_chat(M, "The frame beeps contentedly, purging the hostile memory engram from the MMI before initalizing it.")
@@ -244,145 +243,10 @@
 				to_chat(M, "[rev_mind.current] looks like they just remembered their real allegiance!")
 		log_admin("[rev_mind.current] ([ckey(rev_mind.current.key)] has been deconverted from the revolution")
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//Keeps track of players having the correct icons////////////////////////////////////////////////
-//CURRENTLY CONTAINS BUGS:///////////////////////////////////////////////////////////////////////
-//-PLAYERS THAT HAVE BEEN REVS FOR AWHILE OBTAIN THE BLUE ICON WHILE STILL NOT BEING A REV HEAD//
-// -Possibly caused by cloning of a standard rev/////////////////////////////////////////////////
-//-UNCONFIRMED: DECONVERTED REVS NOT LOSING THEIR ICON properLY//////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////
-/datum/game_mode/proc/update_all_rev_icons()
-	spawn(0)
-		for(var/datum/mind/head_rev_mind in head_revolutionaries)
-			if(head_rev_mind.current)
-				if(head_rev_mind.current.client)
-					for(var/image/I in head_rev_mind.current.client.images)
-						if(I.icon_state == "rev" || I.icon_state == "rev_head")
-							//del(I)
-							head_rev_mind.current.client.images -= I
-
-		for(var/datum/mind/rev_mind in revolutionaries)
-			if(rev_mind.current)
-				if(rev_mind.current.client)
-					for(var/image/I in rev_mind.current.client.images)
-						if(I.icon_state == "rev" || I.icon_state == "rev_head")
-							//del(I)
-							rev_mind.current.client.images -= I
-
-		for(var/datum/mind/head_rev in head_revolutionaries)
-			if(head_rev.current)
-				if(head_rev.current.client)
-					for(var/datum/mind/rev in revolutionaries)
-						if(rev.current)
-							var/imageloc = rev.current
-							if(istype(rev.current.loc,/obj/mecha))
-								imageloc = rev.current.loc
-							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
-							I.plane = REV_ANTAG_HUD_PLANE
-							head_rev.current.client.images += I
-					for(var/datum/mind/head_rev_1 in head_revolutionaries)
-						if(head_rev_1.current)
-							var/imageloc = head_rev_1.current
-							if(istype(head_rev_1.current.loc,/obj/mecha))
-								imageloc = head_rev_1.current.loc
-							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
-							I.plane = REV_ANTAG_HUD_PLANE
-							head_rev.current.client.images += I
-
-		for(var/datum/mind/rev in revolutionaries)
-			if(rev.current)
-				if(rev.current.client)
-					for(var/datum/mind/head_rev in head_revolutionaries)
-						if(head_rev.current)
-							var/imageloc = head_rev.current
-							if(istype(head_rev.current.loc,/obj/mecha))
-								imageloc = head_rev.current.loc
-							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
-							I.plane = REV_ANTAG_HUD_PLANE
-							rev.current.client.images += I
-					for(var/datum/mind/rev_1 in revolutionaries)
-						if(rev_1.current)
-							var/imageloc = rev_1.current
-							if(istype(rev_1.current.loc,/obj/mecha))
-								imageloc = rev_1.current.loc
-							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
-							I.plane = REV_ANTAG_HUD_PLANE
-							rev.current.client.images += I
-
-////////////////////////////////////////////////////
-//Keeps track of converted revs icons///////////////
-//Refer to above bugs. They may apply here as well//
-////////////////////////////////////////////////////
-/datum/game_mode/proc/update_rev_icons_added(datum/mind/rev_mind)
-	spawn(0)
-		for(var/datum/mind/head_rev_mind in head_revolutionaries)
-			if(head_rev_mind.current)
-				if(head_rev_mind.current.client)
-					var/imageloc = rev_mind.current
-					if(istype(rev_mind.current.loc,/obj/mecha))
-						imageloc = rev_mind.current.loc
-					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
-					I.plane = REV_ANTAG_HUD_PLANE
-					head_rev_mind.current.client.images += I
-			if(rev_mind.current)
-				if(rev_mind.current.client)
-					var/imageloc = head_rev_mind.current
-					if(istype(head_rev_mind.current.loc,/obj/mecha))
-						imageloc = head_rev_mind.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
-					J.plane = REV_ANTAG_HUD_PLANE
-					rev_mind.current.client.images += J
-
-		for(var/datum/mind/rev_mind_1 in revolutionaries)
-			if(rev_mind_1.current)
-				if(rev_mind_1.current.client)
-					var/imageloc = rev_mind.current
-					if(istype(rev_mind.current.loc,/obj/mecha))
-						imageloc = rev_mind.current.loc
-					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
-					I.plane = REV_ANTAG_HUD_PLANE
-					rev_mind_1.current.client.images += I
-			if(rev_mind.current)
-				if(rev_mind.current.client)
-					var/imageloc = rev_mind_1.current
-					if(istype(rev_mind_1.current.loc,/obj/mecha))
-						imageloc = rev_mind_1.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
-					J.plane = REV_ANTAG_HUD_PLANE
-					rev_mind.current.client.images += J
-
-///////////////////////////////////
-//Keeps track of deconverted revs//
-///////////////////////////////////
-/datum/game_mode/proc/update_rev_icons_removed(datum/mind/rev_mind)
-	spawn(0)
-		for(var/datum/mind/head_rev_mind in head_revolutionaries)
-			if(head_rev_mind.current)
-				if(head_rev_mind.current.client)
-					for(var/image/I in head_rev_mind.current.client.images)
-						if((I.icon_state == "rev" || I.icon_state == "rev_head") && ((I.loc == rev_mind.current) || (I.loc == rev_mind.current.loc)))
-							//del(I)
-							head_rev_mind.current.client.images -= I
-
-		for(var/datum/mind/rev_mind_1 in revolutionaries)
-			if(rev_mind_1.current)
-				if(rev_mind_1.current.client)
-					for(var/image/I in rev_mind_1.current.client.images)
-						if((I.icon_state == "rev" || I.icon_state == "rev_head") && ((I.loc == rev_mind.current) || (I.loc == rev_mind.current.loc)))
-							//del(I)
-							rev_mind_1.current.client.images -= I
-
-		if(rev_mind.current)
-			if(rev_mind.current.client)
-				for(var/image/I in rev_mind.current.client.images)
-					if(I.icon_state == "rev" || I.icon_state == "rev_head")
-						//del(I)
-						rev_mind.current.client.images -= I
-
-//////////////////////////
+///////////////////////////
 //Checks for rev victory//
 //////////////////////////
+
 /datum/game_mode/revolution/proc/check_rev_victory()
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		for(var/datum/objective/objective in rev_mind.objectives)

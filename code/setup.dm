@@ -1454,6 +1454,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VISIBLE 1
 #define HEARABLE 2
 
+//hud data datum
+#define HUD_ON 			1
+#define HUD_OFF			0
 
 // /vg/ - Pipeline processing (enables exploding pipes and whatnot)
 // COMMENT OUT TO DISABLE

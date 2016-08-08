@@ -84,6 +84,11 @@
 						/obj/item/device/mmi,
 						/obj/item/mecha_parts/mecha_tracking,
 						/obj/item/device/radio/electropack)
+	var/list/data_huds = list()
+
+/obj/mecha/update_icon()
+	overlays.Cut()
+	overlays += data_huds
 
 /obj/mecha/New()
 	..()
@@ -104,7 +109,6 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
-	return
 
 /obj/mecha/Destroy()
 	src.go_out()
@@ -1106,17 +1110,7 @@
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
 
-		// -- Mode/mind specific stuff goes here
-		if(H.mind)
-			if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
-				ticker.mode.update_all_rev_icons()
-			if(H.mind in ticker.mode.syndicates)
-				ticker.mode.update_all_synd_icons()
-			if (H.mind in ticker.mode.cult)
-				ticker.mode.update_all_cult_icons()
-			if(H.mind in ticker.mode.wizards)
-				ticker.mode.update_all_wizard_icons()
-		// -- End mode specific stuff
+		H.handle_data_hud(update_all = 1)
 
 		return 1
 	else
@@ -1283,23 +1277,10 @@
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject
 
-		// -- Mode/mind specific stuff goes here
-		if(src.occupant.mind)
-			if((src.occupant.mind in ticker.mode:revolutionaries) || (src.occupant.mind in ticker.mode:head_revolutionaries))
-				ticker.mode.update_all_rev_icons()
-			if(src.occupant.mind in ticker.mode.syndicates)
-				ticker.mode.update_all_synd_icons()
-			if (src.occupant.mind in ticker.mode.cult)
-				ticker.mode.update_all_cult_icons()
-			if(src.occupant.mind in ticker.mode.wizards)
-				ticker.mode.update_all_wizard_icons()
-		// -- End mode specific stuff
-
 		src.occupant = null
 		src.icon_state = src.reset_icon()+"-open"
 		src.dir = dir_in
-
-	return
+		update_icon()
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
 	spark_system.start()

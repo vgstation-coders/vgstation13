@@ -163,18 +163,18 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 		switch(ticker.mode.name)
 			if ("revolution")
 				if (podman.mind in ticker.mode:revolutionaries)
-					ticker.mode:add_revolutionary(podman.mind)
-					ticker.mode:update_all_rev_icons() //So the icon actually appears
+					ticker.mode.add_revolutionary(podman.mind)
+					ticker.mode.update_all_rev_icons() //So the icon actually appears
 				if (podman.mind in ticker.mode:head_revolutionaries)
-					ticker.mode:update_all_rev_icons()
+					ticker.mode.update_all_rev_icons()
 			if ("nuclear emergency")
 				if (podman.mind in ticker.mode:syndicates)
-					ticker.mode:update_all_synd_icons()
+					ticker.mode.update_all_synd_icons()
 			if ("cult")
 				if (podman.mind in ticker.mode:cult)
-					ticker.mode:add_cultist(podman.mind)
+					ticker.mode.add_cultist(podman.mind)
 					podman.add_language(LANGUAGE_CULT)
-					ticker.mode:update_all_cult_icons() //So the icon actually appears
+					ticker.mode.update_all_cult_icons() //So the icon actually appears
 		// -- End mode specific stuff
 
 
