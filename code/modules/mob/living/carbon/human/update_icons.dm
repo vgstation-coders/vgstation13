@@ -106,6 +106,7 @@ Please contact me on #coderbus IRC. ~Carn x
 	update_hud()		//TODO: remove the need for this
 	update_overlays_standing()
 	update_transform()
+	update_data_hud()
 
 /mob/living/carbon/human/proc/update_overlays_standing()
 	if(species && species.override_icon)

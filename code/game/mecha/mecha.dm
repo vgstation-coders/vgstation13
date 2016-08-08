@@ -88,7 +88,9 @@
 
 /obj/mecha/update_icon()
 	overlays.Cut()
-	overlays += data_huds
+	if(occupant)
+		overlays += data_huds
+	else(data_huds.Cut())
 
 /obj/mecha/New()
 	..()

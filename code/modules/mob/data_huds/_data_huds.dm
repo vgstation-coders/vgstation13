@@ -20,27 +20,49 @@ var/list/visible_matrix   = list(1,0,0,0,
 								 0,0,0,1)
 
 
-/obj/screen/plane_master/data_hud
-	var/visibility
-
-/obj/screen/plane_master/data_hud/New(var/hud_plane,var/visible)
+/obj/screen/plane_master/data_hud/New(var/hud_plane)
 	plane = hud_plane
-	change_visibility(visible)
 
-/obj/screen/plane_master/data_hud/proc/change_visibility(var/visible)
-	if(visible)
+/obj/screen/plane_master/data_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	appearance_flags = 0
+	alpha = 0
+
+/obj/screen/plane_master/data_dummy/New(var/hud_plane,var/visible)
+	plane = hud_plane
+	/*if(visible)
 		color = visible_matrix
-		visibility = HUD_ON
 	else
-		color = invisible_matrix
-		visibility = HUD_OFF
-
-var/global/list/active_data_huds
+		color = invisible_matrix */
 
 /datum/data_hud
 	var/name
 	var/plane
 	var/flags
+	var/obj/screen/plane_master/data_hud/visible
+	var/obj/screen/plane_master/data_hud/invisible
+	var/obj/screen/plane_master/data_dummy/dummy
+
+/datum/data_hud/New()
+	visible = new /obj/screen/plane_master/data_hud(plane,CAN_SEE)
+	invisible = new /obj/screen/plane_master/data_hud(plane,CANT_SEE)
+	dummy = new /obj/screen/plane_master/data_dummy(plane)
+	if(!name || master_controller.active_data_huds[name])
+		qdel(src)
+	else
+		master_controller.active_data_huds[name] = src
+
+/datum/data_hud/proc/update_invisibility(var/client/C)
+	var/S = C.screen
+	if(!C || !S)
+		return
+
+	if(can_be_seen_by(src))
+		S -= invisible
+		S |= visible
+	else
+		S |= invisible
+		S -= visible
 
 /datum/data_hud/proc/update_hud(var/mob/user)
 	if(!check(user))
@@ -54,21 +76,16 @@ var/global/list/active_data_huds
 
 	var/obj/mecha/mech = user.loc
 	if(istype(mech) && (flags & SEE_IN_MECH))
+		mech.overlays += data_hud
 		mech.data_huds[name] = data_hud
-		mech.update_icon()
 	else
 		user.data_huds[name] = data_hud
+		user.overlays += data_hud
 		user.update_icon()
 
 /datum/data_hud/proc/remove_hud(var/mob/user)
+	users.overlays -= user.data_huds[name]
 	user.data_huds[name] = null
-	user.update_icon()
-
-/datum/data_hud/New()
-	if(!name || active_data_huds[name])
-		qdel(src)
-	else
-		active_data_huds[name] = src
 
 /datum/data_hud/proc/to_add(var/mob/user)
 	return
@@ -80,7 +97,7 @@ var/global/list/active_data_huds
 	return
 
 /mob/proc/toggle_see_hud(var/datum/data_hud/data_hud,var/visibility)
-	data_hud.remove_hud(src)
+	data_hud.update_hud(src)
 	toggle_hud(data_hud,visibility)
 
 /mob/proc/toggle_hud(var/datum/data_hud/data_hud,var/visibility)
@@ -89,14 +106,7 @@ var/global/list/active_data_huds
 	if(!client)
 		return
 
-	for(var/obj/screen/plane_master/data_hud/hud in client.images)
-		if(hud.plane == data_hud.plane)
-			if(visibility = hud.visibility)
-				return // that's not how toggling works.
-			client.images -= hud
-			hud.change_visibility(visibility)
-			client.images += hud
-			return // no, this is not a trailing return, don't remove this.
+	data_hud.update_invisibility(client)
 
 /mob/proc/handle_data_huds_on_login()
 	if(!src)
@@ -104,14 +114,17 @@ var/global/list/active_data_huds
 	if(!client)
 		return
 
-	for(var/datum/data_hud/data_hud in active_data_huds)
-		var/visibility_plane_master
-		visibility_plane_master = new /obj/screen/plane_master/data_hud(data_hud.plane,data_hud.can_be_seen_by(src))
-		client.images += visibility_plane_master
+	for(var/D in master_controller.active_data_huds)
+		if(istype(master_controller.active_data_huds[D],/datum/data_hud))
+			var/datum/data_hud/dhud = master_controller.active_data_huds[D]
+			dhud.update_invisibility(client)
+			client.screen |= dhud.dummy
 
 /mob/proc/handle_data_hud(var/datum/data_hud/data_hud,var/update_all)
 	if(update_all)
-		for(var/datum/data_hud/dhud in active_data_huds)
-			dhud.update_hud(src)
+		for(var/D in master_controller.active_data_huds)
+			if(istype(master_controller.active_data_huds[D],/datum/data_hud))
+				var/datum/data_hud/dhud = master_controller.active_data_huds[D]
+				dhud.update_hud(src)
 	else if(data_hud.check(src))
 		data_hud.update_hud(src)

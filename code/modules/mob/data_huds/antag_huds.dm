@@ -8,15 +8,16 @@
 	hud_image = image('icons/mob/mob.dmi', icon_state = "[icon_state]")
 	hud_image.plane = plane
 
-/datum/data_hud/antag/proc/is_antag_type(var/mob/user)
-	return
+/datum/data_hud/antag/proc/is_antag_type(var/mob/living/user)
+	if(istype(user))
+		return 1
 
 /datum/data_hud/antag/to_add(var/mob/user)
 	return hud_image
 
 /datum/data_hud/antag/remove_hud(var/mob/user)
 	..()
-	user.overlays -= hud_image
+	user.overlays -= user.overlays[name]
 
 /datum/data_hud/antag/can_be_seen_by(var/mob/user)
 	..()
@@ -33,7 +34,7 @@
 	plane = CULT_ANTAG_HUD_PLANE
 	icon_state = "cult"
 
-/datum/data_hud/antag/cult/is_antag_type(var/mob/user)
+/datum/data_hud/antag/cult/is_antag_type(var/mob/living/user)
 	return iscultist(user)
 
 var/global/cult_hud = new /datum/data_hud/antag/cult()
@@ -45,7 +46,9 @@ var/global/cult_hud = new /datum/data_hud/antag/cult()
 	plane = WIZ_ANTAG_HUD_PLANE
 	icon_state = "wizard"
 
-/datum/data_hud/antag/wiz/is_antag_type(var/mob/user)
+/datum/data_hud/antag/wiz/is_antag_type(var/mob/living/user)
+	if(!..())
+		return
 	return iswizard(user)
 
 var/global/wiz_hud = new /datum/data_hud/antag/wiz()
@@ -57,7 +60,9 @@ var/global/wiz_hud = new /datum/data_hud/antag/wiz()
 	plane = SYNDIE_ANTAG_HUD_PLANE
 	icon_state = "synd"
 
-/datum/data_hud/antag/syndie/is_antag_type(var/mob/user)
+/datum/data_hud/antag/syndie/is_antag_type(var/mob/living/user)
+	if(!..())
+		return
 	return isnukeop(user)
 
 var/global/syndie_hud = new /datum/data_hud/antag/syndie()
@@ -68,7 +73,9 @@ var/global/syndie_hud = new /datum/data_hud/antag/syndie()
 	name = "rev"
 	plane = REV_ANTAG_HUD_PLANE
 
-/datum/data_hud/antag/rev/is_antag_type(var/mob/user)
+/datum/data_hud/antag/rev/is_antag_type(var/mob/living/user)
+	if(!..())
+		return
 	if(isrev(user) || isrevhead(user))
 		return HUD_ON
 
@@ -78,5 +85,6 @@ var/global/syndie_hud = new /datum/data_hud/antag/syndie()
 	else
 		icon_state = "rev"
 	..()
+
 
 var/global/rev_hud = new /datum/data_hud/antag/rev()

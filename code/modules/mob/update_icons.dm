@@ -10,6 +10,10 @@
 /mob/proc/update_hud()
 	return
 
+/mob/proc/update_data_hud()
+	for(var/datum/data_hud/dhud in data_huds)
+		dhud.update_hud(src)
+
 /mob/proc/update_inv_handcuffed()
 	return
 
