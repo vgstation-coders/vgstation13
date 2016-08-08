@@ -1,3 +1,3 @@
-/datum/hud/glasses
+/datum/data_hud/glasses
 	var/obj/clothing/glasses
 

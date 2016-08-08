@@ -37,12 +37,12 @@ var/list/visible_matrix   = list(1,0,0,0,
 
 var/global/list/active_data_huds
 
-/datum/hud
+/datum/data_hud
 	var/name
 	var/plane
 	var/flags
 
-/datum/hud/proc/update_hud(var/mob/user)
+/datum/data_hud/proc/update_hud(var/mob/user)
 	if(!check(user))
 		remove_hud(user)
 		return
@@ -60,30 +60,30 @@ var/global/list/active_data_huds
 		user.data_huds[name] = data_hud
 		user.update_icon()
 
-/datum/hud/proc/remove_hud(var/mob/user)
+/datum/data_hud/proc/remove_hud(var/mob/user)
 	user.data_huds[name] = null
 	user.update_icon()
 
-/datum/hud/New()
+/datum/data_hud/New()
 	if(!name || active_data_huds[name])
 		qdel(src)
 	else
 		active_data_huds[name] = src
 
-/datum/hud/proc/to_add(var/mob/user)
+/datum/data_hud/proc/to_add(var/mob/user)
 	return
 
-/datum/hud/proc/check(var/mob/user)
+/datum/data_hud/proc/check(var/mob/user)
 	return
 
-/datum/hud/proc/can_be_seen_by(var/mob/user)
+/datum/data_hud/proc/can_be_seen_by(var/mob/user)
 	return
 
-/mob/proc/toggle_see_hud(var/datum/hud/data_hud,var/visibility)
+/mob/proc/toggle_see_hud(var/datum/data_hud/data_hud,var/visibility)
 	data_hud.remove_hud(src)
 	toggle_hud(data_hud,visibility)
 
-/mob/proc/toggle_hud(var/datum/hud/data_hud,var/visibility)
+/mob/proc/toggle_hud(var/datum/data_hud/data_hud,var/visibility)
 	if(!src)
 		return
 	if(!client)
@@ -104,14 +104,14 @@ var/global/list/active_data_huds
 	if(!client)
 		return
 
-	for(var/datum/hud/data_hud in active_data_huds)
+	for(var/datum/data_hud/data_hud in active_data_huds)
 		var/visibility_plane_master
 		visibility_plane_master = new /obj/screen/plane_master/data_hud(data_hud.plane,data_hud.can_be_seen_by(src))
 		client.images += visibility_plane_master
 
-/mob/proc/handle_data_hud(var/datum/hud/data_hud,var/update_all)
+/mob/proc/handle_data_hud(var/datum/data_hud/data_hud,var/update_all)
 	if(update_all)
-		for(var/datum/hud/dhud in active_data_huds)
+		for(var/datum/data_hud/dhud in active_data_huds)
 			dhud.update_hud(src)
 	else if(data_hud.check(src))
 		data_hud.update_hud(src)
