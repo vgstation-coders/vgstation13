@@ -66,7 +66,7 @@
 #define ui_kick_bite "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 #define ui_acti "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 #define ui_movi "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_zonesel "EAST-1:28,SOUTH:5" //Used as compile time value, converted to 64p
+#define ui_zonesel "EAST-1:28,SOUTH:5" //Used as compile time value
 #define ui_acti_alt "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]" //alternative intent switcher for when the interface is hidden (F12)
 
 #define ui_borg_pull "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
