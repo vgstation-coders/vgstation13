@@ -66,7 +66,7 @@
 #define ui_kick_bite "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 #define ui_acti "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 #define ui_movi "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_zonesel "EAST-1:56,SOUTH:10" //Used as compile time value, converted to 64p
+#define ui_zonesel "EAST-1:28,SOUTH:5" //Used as compile time value, converted to 64p
 #define ui_acti_alt "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]" //alternative intent switcher for when the interface is hidden (F12)
 
 #define ui_borg_pull "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
@@ -74,10 +74,10 @@
 #define ui_borg_panel "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
 
 //Gun buttons
-#define ui_gun1 "EAST-2:52,SOUTH+2:14" //Used as compile time value, converted to 64p
-#define ui_gun2 "EAST-1:56, SOUTH+3:14" //Used as compile time value, converted to 64p
-#define ui_gun3 "EAST-2:52,SOUTH+3:14" //Used as compile time value, converted to 64p
-#define ui_gun_select "EAST-1:56,SOUTH+2:14" //Used as compile time value, converted to 64p
+#define ui_gun1 "EAST-2:26,SOUTH+2:7" //Used as compile time value
+#define ui_gun2 "EAST-1:28, SOUTH+3:7" //Used as compile time value
+#define ui_gun3 "EAST-2:26,SOUTH+3:7" //Used as compile time value
+#define ui_gun_select "EAST-1:28,SOUTH+2:7" //Used as compile time value
 
 //Upper-middle right (damage indicators)
 #define ui_toxin "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-2:[27*PIXEL_MULTIPLIER]"
@@ -103,8 +103,8 @@
 #define ui_construct_fire "EAST-1:[16*PIXEL_MULTIPLIER],CENTER+1:[13*PIXEL_MULTIPLIER]" //above health, slightly to the left
 #define ui_construct_pull "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[10*PIXEL_MULTIPLIER]" //above the zone_sel icon
 
-#define ui_spell_master "EAST-1:32,NORTH-1:32" //Used as compile time value, converted to 64p
-#define ui_genetic_master "EAST-1:32,NORTH-3:32" //Used as compile time value, converted to 64p
+#define ui_spell_master "EAST-1:16,NORTH-1:16" //Used as compile time value
+#define ui_genetic_master "EAST-1:16,NORTH-3:16" //Used as compile time value
 
 //Pop-up inventory
 #define ui_shoes "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
