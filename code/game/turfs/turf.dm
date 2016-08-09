@@ -2,7 +2,7 @@
 	icon = 'icons/turf/floors.dmi'
 	level = 1.0
 	plane = TURF_PLANE
-	layer = TURF_LAYER_SINCE_LUMMOX_FUCKED_EVERYTHING_UP
+	layer = TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	luminosity = 0
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
