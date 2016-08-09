@@ -1044,6 +1044,7 @@ var/global/list/damage_icon_parts = list()
 		obj_overlays["[HAND_LAYER]-[index]"] = O
 	else
 		overlays.Remove(O)
+		O.overlays.len = 0
 
 	var/obj/item/I = get_held_item_by_index(index)
 
