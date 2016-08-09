@@ -156,6 +156,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       src.user_body = null
       src.user_ckey = null
       src.active = 0
+      src.current_board = null
       return
     else
       return
@@ -256,6 +257,8 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/obj/item/device/syndicate_cyborg_control_board/board = src.mmi
   var/obj/item/device/syndicate_reciever/syndie_controller = board.controller
   syndie_controller.user_body.ckey = syndie_controller.user_ckey
+  syndie_controller.active = 0
+  syndie_controller.current_board = null
   board.controller = null
   board.inUse = 0
 
