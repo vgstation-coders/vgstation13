@@ -3,9 +3,37 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 
 //TODO LIST
 //*Make my own sprites
-//*Make a log-off robot verb
+//*Remove sparks on hit @ borgs
 
 
+/*
+* Description: This .dm adds the following robotics traitor items: cyborg camera bugs, cyborg control boards and the syndicate reciever
+* Cyborg Camera Bugs: You can attach them to any silicon lifeform (AI, Cyborgs, pAI). It will allow you to see the user's screen almost one to one.
+* If the user has some kind of special vision (security hud for exemple), you will not have access to that.
+* Cyborg Control Boards: To use, you install this instead of a MMI when making a robot. It will create a cyborg as normal, but without a player to control it.
+* With the syndicate reciever, you can control the cyborg like any other player would, selecting a module, able to change your name, communicate with the AI.
+* At the same time, you are linked to the cyborg consoles. So they can lock you down, and self-destruct you
+* Syndicate Reciever: Imagine a controller with a screen and a keyboard, you can see the borgs you put the cameras on, or control your own borg.
+*
+* Other things:
+* Syndieborg: Just a borg that has the Cyborg Control Board. I made this so I could overwrite the login message, it doesn't make sense to have the player recieve the
+* law messages any time he connects to the borg. So it now displays a message about how to log off from the borg.
+* Frequency: Every object in this list has a frequency. You can make your own frequency by editing the variables. They all default to 'syndicate'.
+* What it means is, only boards on the syndicate frequency can communicate with syndicate recievers. You can have your own 'network', if you could say so.
+* Active: Just a 0 or 1 flag to state if the object (Camera or Control board) is online. Setting it to 0 will not instantly disconnect the player from the camera or borg though.
+* It is just a flag for when making the list. It updates when the mob with the camera, or board, dies.
+* Logoff Procedure: A small procedure made for the syndieborgs. It disconnects the player from the borg, allowing them to simply come back to their original body. Nice and easy.
+* 'Fuck Up Procs': It's the verifiers when the user, who is controlling or watching the camera, gets fucked up
+* (controller removed from his hands, downed, pushed, stunned, monkified, or anything that can disable him). It stops the user from viewing the camera,
+* or controlling the borg as soon as the code allowed me to. You still get a small grace moment (around a second) when dealing with the control boards because the process() method
+* has a timeout before it is called again.
+* Global Lists: Two lists, one for cameras, other for boards. Easy to understand. They just contain all active cameras/boards. When a borg dies, it is removed from there.
+* Attack Message Supression: Just overwritten methods to remove the "YOU FUCKING ATTACK THE TARGET WITH YOUR SECRET CAMERA".
+*/
+
+/*
+    START CAMERA BUGS SECTION
+*/
 /obj/item/device/syndicate_cyborg_camera_bug
   name = "Cyborg Camera Bug"
   desc = "A tiny weird looking device with a few wires sticking out and a small antenna."
@@ -37,7 +65,14 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     camera_target = target
     syndicate_roboticist_cameras += src
     return
+/*
+    END CAMERA BUGS SECTION
+*/
 
+
+/*
+    START CONTROL BOARD SECTION
+*/
 /obj/item/device/syndicate_cyborg_control_board
   name = "Suspicious Looking Circuit Board"
   desc = "A suspiciously looking circuit board with red and black colors. It seems it has connectors shaped like a Man-Machine Interface and an antenna."
@@ -49,6 +84,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/active = 0 // check if the board is online
   var/mob/living/silicon/cyborg //robot that is under the control of this board
   var/inUse
+  var/controller = null
 
 /obj/item/device/syndicate_cyborg_control_board/afterattack(atom/target, mob/user as mob, proximity_flag)
   if(!istype(target, /obj/item/robot_parts/robot_suit))
@@ -61,7 +97,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       return
 
     //Code below creates a robot without a mind. A robot in standby mode
-    var/mob/living/silicon/robot/robot = new /mob/living/silicon/robot(get_turf(target), unfinished = 1)
+    var/mob/living/silicon/robot/syndiebot/robot = new /mob/living/silicon/robot/syndiebot(get_turf(target), unfinished = 1)
     robot.invisibility = 0
     robot.custom_name = robot_suit.created_name
     robot.updatename("Default")
@@ -73,22 +109,27 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       cell_component.wrapped = robot.cell
       cell_component.installed = 1
     robot.mmi = src
+    robot.verbs += /mob/living/silicon/robot/syndiebot/proc/Exit_robot
     src.cyborg = robot //set the robot to the board
     src.active = 1 //set the board as active
     syndicate_roboticist_control_board += src //add board on list
-    //feedback_inc("cyborg_birth",1) // I don't know what this does yet
+    feedback_inc("cyborg_birth",1)
     qdel(robot_suit)
     //Setup Cyborg
-    robot.scrambledcodes = 1
     robot.emagged = 1
-    robot.connected_ai = null
-    robot.laws = null
     //End setup
     user.drop_item(src, robot)
 
   else
     to_chat(user, "<span class='notice'>This robot does not seem to be done. You need all parts to inser the remote control body.</span>")
 
+/*
+    END CONTROL BOARD SECTION
+*/
+
+/*
+    START RECIEVER SECTION
+*/
 /obj/item/device/syndicate_reciever
   name = "Remote Cyborg Reciver"
   desc = "A weird looking device, with two thumbsticks, a set of buttons, a screen and a speaker."
@@ -99,7 +140,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/obj/item/device/syndicate_cyborg_control_board/current_board
   var/frequency = "syndicate"
   var/user_ckey = ""
-  var/user_body
+  var/mob/living/carbon/user_body
   var/active = 0
 
 /obj/item/device/syndicate_reciever/New()
@@ -115,6 +156,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     var/mob/living/carbon/user = src.user_body
     if ( src.loc != user || user.canmove == 0 || (user.active_hand != 1 && user.active_hand != 2) || user.held_items.Find(src) == 0 || user.blinded || !src.current_board || !src.current_board.active || src.current_board.cyborg.isDead() || user.monkeyizing && user)
       src.current_board.inUse = null
+      src.current_board.controller = null
       user.ckey = src.user_ckey
       src.user_body = null
       src.user_ckey = null
@@ -177,6 +219,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       return
     active = 1
     target_board.inUse = 1
+    target_board.controller = src
     user_ckey = user.client.ckey
     user_body = user.client.mob //set user body to machine
     src.current_board = target_board
@@ -196,17 +239,43 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   user.reset_view(current_camera)
   return 1
 
+/*
+    END RECIEVER SECTION
+*/
+
+/*
+    START CYBORG OVERWRITTE SECTION
+*/
+/mob/living/silicon/robot/syndiebot
+
+/mob/living/silicon/robot/syndiebot/Login()
+  regenerate_icons()
+  to_chat(src, "<b>You can disconnect from the borg by using the logoff function on the Robot Commands tab.</b>")
+  return
+
+/mob/living/silicon/robot/syndiebot/proc/Exit_robot()
+  set category = "Robot Commands"
+  set name = "Logoff"
+  var/obj/item/device/syndicate_cyborg_control_board/board = src.mmi
+  var/obj/item/device/syndicate_reciever/syndie_controller = board.controller
+  syndie_controller.user_body.ckey = syndie_controller.user_ckey
+  board.controller = null
+  board.inUse = 0
+
+/*
+    END CYBORG OVERWRITTE SECTION
+*/
 
 //START REMOVE ATTACK MESSAGES//
 /obj/item/device/syndicate_cyborg_camera_bug/attack(mob/M as mob, mob/user as mob, def_zone)
   return
 
 /obj/item/device/syndicate_cyborg_camera_bug/attackby(obj/item/I as obj, mob/user as mob)
-	return
+  return
 
 /obj/item/device/syndicate_cyborg_control_board/attack(mob/M as mob, mob/user as mob, def_zone)
   return
 
 /obj/item/device/syndicate_cyborg_control_board/attackby(obj/item/I as obj, mob/user as mob)
-	return
+  return
 //END REMOVE ATTACK MESSAGES//
