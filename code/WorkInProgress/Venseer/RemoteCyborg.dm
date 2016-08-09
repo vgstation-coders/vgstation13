@@ -1,7 +1,3 @@
-//TODO LIST
-//* Make my own sprites
-//* Remove Sparks On Hit of Camera
-
 /*
 * MODULE: Syndicate R.C. (Syndicate Remote Cyborg)
 * Description: This .dm adds the following robotics traitor items: cyborg camera bugs, cyborg control boards and the syndicate reciever
@@ -26,6 +22,10 @@
 * has a timeout before it is called again.
 * Global Lists: Two lists, one for cameras, other for boards. Easy to understand. They just contain all active cameras/boards. When a borg dies, it is removed from there.
 * Attack Message Supression: Just overwritten methods to remove the "YOU FUCKING ATTACK THE TARGET WITH YOUR SECRET CAMERA".
+*
+* Stuff in other .DMs
+* Added in robot.dm, line: 926 a verification about the camera, so it will not cause sparks. If removing this module, please, mind those lines.
+*
 */
 
 var/global/list/rc_cameras = list();
@@ -37,8 +37,8 @@ var/global/list/rc_control_boards = list();
 /obj/item/device/syndicate_remote_cyborg_camera
   name = "R.C. Camera"
   desc = "A tiny camera with a small antenna sticking to its side. It is able to transmit a signal to anything that can accept it. Seems to blend well with complex machinery."
-  icon = 'icons/obj/device.dmi'
-  icon_state = "implant_evil"
+  icon = 'icons/obj/RemoteCyborg.dmi'
+  icon_state = "flashing_camera"
   w_class = W_CLASS_TINY
   item_state = ""
   throw_speed = 4
@@ -76,8 +76,8 @@ var/global/list/rc_control_boards = list();
 /obj/item/device/syndicate_remote_cyborg_control_board
   name = "R.C. Circuit Board"
   desc = "A off-putting looking board. Instead of standard green and yellow, it is black with red circuits, there is a small antenna on the side."
-  icon = 'icons/obj/device.dmi'
-  icon_state = "implant_evil"
+  icon = 'icons/obj/RemoteCyborg.dmi'
+  icon_state = "syndie_board_01"
   w_class = W_CLASS_SMALL
   flags = FPRINT | NOBLUDGEON
   var/frequency = "syndicate"
@@ -112,7 +112,6 @@ var/global/list/rc_control_boards = list();
     src.cyborg = robot
     src.active = 1
     rc_control_boards += src
-    feedback_inc("cyborg_birth",1)
     qdel(robot_suit)
     robot.emagged = 1
     user.drop_item(src, robot)
