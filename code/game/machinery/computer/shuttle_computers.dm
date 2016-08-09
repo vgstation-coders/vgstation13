@@ -5,19 +5,22 @@
 	icon = 'icons/obj/cloning.dmi'
 	icon_state = "datadisk0"
 
-	var/obj/structure/docking_port/destination/destination //Docking port linked to this disk.
+	var/obj/docking_port/destination/destination //Docking port linked to this disk.
 	//If this variable contains a path like (/obj/structure/docking_port/destination/my_dungeon), the disk will find a destination docking port of that type and automatically link to it
 	//See example below
 
-	var/header = "ERROR" //Name of the disk, for example ""
+	var/header = "SDC Data Disk" //Name of the disk, shown on the console. SDC stands Shuttle Destination Coordinates
 
 	var/list/allowed_shuttles = list() //List of allowed shuttles. Accepts paths (for example /datum/shuttle/arrival). If empty, all shuttles are allowed
 
 //Example:
 /obj/item/weapon/disk/shuttle_coords/station_arrivals
-	destination = /obj/structure/docking_port/destination/transport/station
+	destination = /obj/docking_port/destination/transport/station
 	header = "station arrivals"
-	allowed_shuttles = list(/datum/shuttle/research, /datum/shuttle/mining)
+
+/obj/item/weapon/disk/shuttle_coords/vault
+	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research)
+
 //This disk will link to station's arrivals when spawned
 
 /obj/item/weapon/disk/shuttle_coords/New()
@@ -27,6 +30,8 @@
 		spawn()
 			destination = locate(destination) in all_docking_ports
 			destination.disk_references.Add(src)
+	else
+		header = "ERROR"
 
 /obj/item/weapon/disk/shuttle_coords/Destroy()
 	destination = null
@@ -99,6 +104,12 @@
 
 	return "[span_s][name][span_e]"
 
+/obj/machinery/computer/shuttle_control/attackby(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
+	if(istype(SC))
+		insert_disk(SC, user)
+
+	return ..()
+
 /obj/machinery/computer/shuttle_control/attack_hand(mob/user as mob)
 	if(..(user))
 		return
@@ -157,11 +168,11 @@
 				if((!disk.allowed_shuttles.len) || (is_type_in_list(shuttle, disk.allowed_shuttles)))
 					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
 				else //Shuttle not allowed to use disk
-					dat += " | <b>ERROR: Unable to read coordinates from disk (invalid decryption key)</b>"
+					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"
 
 			dat += " |<BR>"
 			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
-			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>[disk ? "External disk found: [disk.header]" : "Insert disk"]</a></div>"
+			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
 	else //No shuttle
 		dat = "<h1>NO SHUTTLE LINKED</h1><br>"
 		dat += "<a href='?src=\ref[src];link_to_shuttle=1'>Link to a shuttle</a>"
@@ -370,15 +381,31 @@
 					to_chat(usr, "<span class='info'>\The [src] rejects \the [D].</span>")
 				return
 
-			if(usr.drop_item(D, src))
-				disk = D
-				to_chat(usr, "<span class='info'>You insert \the [D] into \the [src].</span>")
-				src.updateUsrDialog()
+			insert_disk(D, usr)
 		else
 			disk.forceMove(get_turf(src))
+			usr.put_in_hands(disk)
 			to_chat(usr, "<span class='info'>You eject \the [disk] from \the [src].</span>")
+			if(disk.destination == selected_port)
+				selected_port = null
 			disk = null
 			src.updateUsrDialog()
+
+/obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
+	if(!shuttle)
+		to_chat(usr, "<span class='info'>\The [src] is unresponsive.</span>")
+		return
+
+	if(!istype(SC))
+		if(istype(SC, /obj/item/weapon/disk)) //It's a disk, but not a compactible one
+			to_chat(usr, "<span class='info'>The disk is rejected by \the [src].</span>")
+
+		return
+
+	if(user.drop_item(SC, src))
+		disk = SC
+		to_chat(usr, "<span class='info'>You insert \the [SC] into \the [src].</span>")
+		src.updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")
