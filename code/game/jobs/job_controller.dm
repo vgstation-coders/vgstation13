@@ -256,6 +256,9 @@ var/global/datum/controller/occupations/job_master
 					Debug("DO player not old enough, Player: [player], Job:[job.title]")
 					continue
 
+				if(job.title in command_positions)
+					continue
+
 				// If the player wants that job on this level, then try give it to him.
 				if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
 
