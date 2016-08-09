@@ -150,7 +150,7 @@
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
 		grant_runeword(cult_mind.current)
-		cult_mind.current.toggle_see_hud(cult_hud,HUD_ON)
+		cult_hud.update_mob(cult_mind.current)
 		cult_mind.special_role = "Cultist"
 		var/wikiroute = role_wiki[ROLE_CULTIST]
 		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=\ref[cult_mind.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
@@ -425,7 +425,7 @@
 		if(mixed)
 			ticker.mode.cult += cult_mind
 
-		cult_mind.current.toggle_see_hud(cult_hud,HUD_ON)
+		cult_hud.update_mob(cult_mind.current)
 		if(name == "cult")
 			var/datum/game_mode/cult/C = src
 			C.check_numbers()
@@ -440,7 +440,7 @@
 
 /datum/game_mode/proc/remove_cultist(var/datum/mind/cult_mind, var/show_message = 1, var/log=1)
 	if(cult_mind in cult)
-		cult_mind.current.toggle_see_hud(cult_hud,HUD_OFF)
+		cult_hud.update_mob(cult_mind.current)
 		cult -= cult_mind
 		to_chat(cult_mind.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
 		to_chat(cult_mind.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")

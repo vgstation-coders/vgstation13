@@ -571,27 +571,27 @@
 					ticker.mode.head_revolutionaries -= src
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a head revolutionary!</FONT></span>")
 					special_role = null
-				current.toggle_see_hud(rev_hud,HUD_OFF)
+				rev_hud.update_mob(current)
 				log_admin("[key_name_admin(usr)] has de-rev'ed [current].")
 
 			if("rev")
 				if(src in ticker.mode.head_revolutionaries)
 					ticker.mode.head_revolutionaries -= src
 					to_chat(current, "<span class='danger'><FONT size = 3>Revolution has been disappointed of your leader traits! You are a regular revolutionary now!</FONT></span>")
-					current.toggle_see_hud(rev_hud,HUD_OFF)
+					rev_hud.update_mob(current)
 				else if(!(src in ticker.mode.revolutionaries))
 					to_chat(current, "<span class='warning'><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>")
 				else
 					return
 				ticker.mode.revolutionaries += src
 				special_role = "Revolutionary"
-				current.toggle_see_hud(rev_hud,HUD_ON)
+				rev_hud.update_mob(current)
 				log_admin("[key_name(usr)] has rev'ed [current].")
 
 			if("headrev")
 				if(src in ticker.mode.revolutionaries)
 					ticker.mode.revolutionaries -= src
-					current.toggle_see_hud(rev_hud,HUD_ON)
+					rev_hud.update_mob(current)
 					to_chat(current, "<span class='danger'><FONT size = 3>You have proved your devotion to revoltion! Yea are a head revolutionary now!</FONT></span>")
 				else if(!(src in ticker.mode.head_revolutionaries))
 					to_chat(current, "<span class='notice'>You are a member of the revolutionaries' leadership now!</span>")
@@ -611,7 +611,7 @@
 				ticker.mode.head_revolutionaries += src
 				special_role = "Head Revolutionary"
 				log_admin("[key_name_admin(usr)] has head-rev'ed [current].")
-				current.toggle_see_hud(rev_hud,HUD_ON)
+				rev_hud.update_mob(current)
 
 			if("autoobjectives")
 				ticker.mode.forge_revolutionary_objectives(src)
@@ -653,7 +653,7 @@
 			if("clear")
 				if(src in ticker.mode.cult)
 					ticker.mode.cult -= src
-					current.toggle_see_hud(cult_hud,HUD_OFF)
+					cult_hud.update_mob(current)
 					special_role = null
 					var/datum/game_mode/cult/cult = ticker.mode
 					if (istype(cult))
@@ -676,7 +676,7 @@
 					var/datum/game_mode/cult/cult = ticker.mode
 					if (istype(cult))
 						cult.memoize_cult_objectives(src)
-					current.toggle_see_hud(cult_hud,HUD_ON)
+					cult_hud.update_mob(current)
 					log_admin("[key_name_admin(usr)] has cult'ed [current].")
 			if("tome")
 				var/mob/living/carbon/human/H = current
@@ -707,7 +707,7 @@
 					special_role = null
 					current.spellremove(current, config.feature_object_spell_system? "object":"verb")
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a wizard!</FONT></span>")
-					current.toggle_see_hud(wiz_hud,HUD_OFF)
+					wiz_hud.update_mob(current)
 					log_admin("[key_name_admin(usr)] has de-wizard'ed [current].")
 			if("wizard")
 				if(!(src in ticker.mode.wizards))
@@ -717,7 +717,7 @@
 					to_chat(current, "<span class='danger'>You are the Space Wizard!</span>")
 					var/wikiroute = role_wiki[ROLE_WIZARD]
 					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-					current.toggle_see_hud(wiz_hud,HUD_ON)
+					wiz_hud.update_mob(current)
 					log_admin("[key_name_admin(usr)] has wizard'ed [current].")
 			if("lair")
 				current.loc = pick(wizardstart)
@@ -784,7 +784,7 @@
 						objectives-=O
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a syndicate operative!</FONT></span>")
 					log_admin("[key_name_admin(usr)] has de-nuke op'ed [current].")
-					current.toggle_see_hud(syndie_hud,HUD_OFF)
+					syndie_hud.update_mob(current)
 			if("nuclear")
 				if(!(src in ticker.mode.syndicates))
 					ticker.mode.syndicates += src
@@ -799,7 +799,7 @@
 					ticker.mode.forge_syndicate_objectives(src)
 					ticker.mode.greet_syndicate(src)
 					log_admin("[key_name_admin(usr)] has nuke op'ed [current].")
-					current.toggle_see_hud(syndie_hud,HUD_ON)
+					syndie_hud.update_mob(current)
 			if("lair")
 				current.loc = get_turf(locate("landmark*Syndicate-Spawn"))
 			if("dressup")
@@ -1166,7 +1166,7 @@ proc/clear_memory(var/silent = 1)
 		ticker.mode.wizards += src
 		special_role = "Wizard"
 		assigned_role = "MODE"
-		current.toggle_see_hud(wiz_hud,HUD_ON)
+		wiz_hud.update_mob(current)
 		if(!wizardstart.len)
 			current.loc = pick(latejoin)
 			to_chat(current, "HOT INSERTION, GO GO GO")
@@ -1183,7 +1183,7 @@ proc/clear_memory(var/silent = 1)
 /datum/mind/proc/make_Cultist()
 	if(!(src in ticker.mode.cult))
 		ticker.mode.cult += src
-		current.toggle_see_hud(cult_hud,HUD_ON)
+		cult_hud.update_mob(current)
 		special_role = "Cultist"
 		to_chat(current, "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 		to_chat(current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
@@ -1229,7 +1229,7 @@ proc/clear_memory(var/silent = 1)
 				objectives += rev_obj
 			ticker.mode.greet_revolutionary(src,0)
 	ticker.mode.head_revolutionaries += src
-	current.toggle_see_hud(rev_hud,HUD_ON)
+	rev_hud.update_mob(current)
 	special_role = "Head Revolutionary"
 
 	ticker.mode.forge_revolutionary_objectives(src)

@@ -39,6 +39,8 @@ What is the naming convention for planes or layers?
 	Also, as it's a define, it is standard practice to use capital letters for the variable so people know this.
 
 */
+#define EVEN_LOWER_LAYER -999
+#define REALLY_LOW_LAYER -998
 
 
 
@@ -67,14 +69,14 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define BELOW_TURF_PLANE 		-20 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
+#define BELOW_TURF_PLANE 		-41 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
 	// todo: use this for asteroids to make them be faster
 
-#define TURF_PLANE 				-19			// For turfs.
+#define TURF_PLANE 				-40			// For turfs.
 
 	#define TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD	-999
 
-#define ABOVE_TURF_PLANE 		-18			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
+#define ABOVE_TURF_PLANE 		-39			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define CATWALK_LAYER			0
 	#define DECAL_LAYER				1
@@ -94,11 +96,11 @@ What is the naming convention for planes or layers?
 	#define WEED_LAYER				15
 
 
-#define NOIR_BLOOD_PLANE 		-17		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
+#define NOIR_BLOOD_PLANE 		-38		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
 
-#define HIDING_MOB_PLANE 		-16			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
+#define HIDING_MOB_PLANE 		-37			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
 
-#define OBJ_PLANE 				-15			// For objects which appear below humans.
+#define OBJ_PLANE 				-36			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER		0
 	#define TABLE_LAYER				0.5
@@ -116,26 +118,28 @@ What is the naming convention for planes or layers?
 	#define ABOVE_DOOR_LAYER		12
 	#define CHAIR_LEG_LAYER			13
 
-#define LYING_MOB_PLANE			-14			// other mobs that are lying down.
+#define LYING_MOB_PLANE			-35			// other mobs that are lying down.
 
-#define LYING_HUMAN_PLANE 		-13			// humans that are lying down
+#define LYING_HUMAN_PLANE 		-34			// humans that are lying down
 
-#define ABOVE_OBJ_PLANE			-12			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
+#define ABOVE_OBJ_PLANE			-33			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
 	#define BLANKIES_LAYER			0
 
-#define HUMAN_PLANE 			-11			// For Humans that are standing up.
+#define HUMAN_PLANE 			-32			// For Humans that are standing up.
 
 // TODO: STOP HUD PLANES BEING CLIENT IMAGES, INSTEAD MAKING THEM CONTROLLED BY PLANESMASTERS
 
-#define VAMP_ANTAG_HUD_PLANE	-10
+#define VAMP_ANTAG_HUD_PLANE	-11
 
-#define CULT_ANTAG_HUD_PLANE	-9
+#define CULT_ANTAG_HUD_PLANE	-10
 
-#define SYNDIE_ANTAG_HUD_PLANE 	-8
+#define SYNDIE_ANTAG_HUD_PLANE 	-9
 
-#define REV_ANTAG_HUD_PLANE		-7
+#define REV_ANTAG_HUD_PLANE		-8
 
-#define WIZ_ANTAG_HUD_PLANE 	-6
+#define WIZ_ANTAG_HUD_PLANE 	-7
+
+#define DUMMY_HUD_PLANE			-6
 
 // SERIOUSLY THAT'D BE KINDA COOL - I THINK THAT THE UPDATE PROCS FOR THESE ARE PRETTY HAZARDLY CODED AND THIS'D BE SUPER SIMPLE, CLIENTSIDED AND EFFICIENT.
 

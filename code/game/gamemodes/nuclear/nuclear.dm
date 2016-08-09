@@ -221,7 +221,7 @@
 	E.imp_in = synd_mob
 	E.implanted = 1
 	synd_mob.update_icons()
-	synd_mob.toggle_see_hud(syndie_hud,HUD_ON)
+	syndie_hud.update_mob(synd_mob)
 	return 1
 
 

@@ -1,12 +1,12 @@
 /datum/data_hud/antag
-	var/icon_state
 	var/image/hud_image
 	flags = SEE_IN_MECH|IS_ANTAG_HUD
 
 /datum/data_hud/antag/New()
 	..()
-	hud_image = image('icons/mob/mob.dmi', icon_state = "[icon_state]")
+	hud_image = image('icons/mob/mob.dmi', icon_state = "[name]")
 	hud_image.plane = plane
+	hud_image.layer = EVEN_LOWER_LAYER
 
 /datum/data_hud/antag/proc/is_antag_type(var/mob/living/user)
 	if(istype(user))
@@ -28,52 +28,49 @@
 /datum/data_hud/antag/cult
 	name = "cult"
 	plane = CULT_ANTAG_HUD_PLANE
-	icon_state = "cult"
 
 /datum/data_hud/antag/cult/is_antag_type(var/mob/living/user)
 	return iscultist(user)
 
-var/global/cult_hud = new /datum/data_hud/antag/cult()
+var/global/datum/data_hud/antag/cult/cult_hud = new /datum/data_hud/antag/cult()
 
 // WIZARDS
 
 /datum/data_hud/antag/wiz
-	name = "wiz"
+	name = "wizard"
 	plane = WIZ_ANTAG_HUD_PLANE
-	icon_state = "wizard"
 
 /datum/data_hud/antag/wiz/is_antag_type(var/mob/living/user)
 	if(!..())
 		return
 	return iswizard(user)
 
-var/global/wiz_hud = new /datum/data_hud/antag/wiz()
+var/global/datum/data_hud/antag/wiz/wiz_hud = new /datum/data_hud/antag/wiz()
 
 // SYNDIES
 
 /datum/data_hud/antag/syndie
-	name = "syndie"
+	name = "synd"
 	plane = SYNDIE_ANTAG_HUD_PLANE
-	icon_state = "synd"
 
 /datum/data_hud/antag/syndie/is_antag_type(var/mob/living/user)
 	if(!..())
 		return
 	return isnukeop(user)
 
-var/global/syndie_hud = new /datum/data_hud/antag/syndie()
+var/global/datum/data_hud/antag/syndie/syndie_hud = new /datum/data_hud/antag/syndie()
 
 // REVS
 
 /datum/data_hud/antag/rev
 	name = "rev"
 	plane = REV_ANTAG_HUD_PLANE
-	icon_state = "rev"
 	var/image/headrev_image
 
 /datum/data_hud/antag/rev/New()
 	..()
 	headrev_image = image('icons/mob/mob.dmi', icon_state = "rev_head")
+	headrev_image.layer = EVEN_LOWER_LAYER
 	headrev_image.plane = plane
 
 
@@ -89,4 +86,4 @@ var/global/syndie_hud = new /datum/data_hud/antag/syndie()
 	..()
 
 
-var/global/rev_hud = new /datum/data_hud/antag/rev()
+var/global/datum/data_hud/antag/rev/rev_hud = new /datum/data_hud/antag/rev()

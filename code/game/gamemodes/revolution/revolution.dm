@@ -103,7 +103,7 @@
 	//	equip_traitor(rev_mind.current, 1) //changing how revs get assigned their uplink so they can get PDA uplinks. --NEO
 	//	Removing revolutionary uplinks.	-Pete
 		equip_revolutionary(rev_mind.current)
-		rev_mind.current.toggle_see_hud(rev_hud,HUD_ON)
+		rev_hud.update_mob(rev_mind.current)
 
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		greet_revolutionary(rev_mind)
@@ -217,7 +217,7 @@
 	revolutionaries += rev_mind
 	to_chat(rev_mind.current, "<span class='warning'><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>")
 	rev_mind.special_role = "Revolutionary"
-	rev_mind.current.toggle_see_hud(rev_hud,HUD_ON)
+	rev_hud.update_mob(rev_mind.current)
 
 	return 1
 //////////////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@
 		else
 			to_chat(rev_mind.current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</FONT></span>")
 
-		rev_mind.current.toggle_see_hud(rev_hud,HUD_OFF)
+		rev_hud.update_mob(rev_mind.current)
 		for(var/mob/living/M in view(rev_mind.current))
 			if(beingborged)
 				to_chat(M, "The frame beeps contentedly, purging the hostile memory engram from the MMI before initalizing it.")

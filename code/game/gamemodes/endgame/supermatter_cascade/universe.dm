@@ -206,18 +206,18 @@
 		if(M in ticker.mode.revolutionaries)
 			ticker.mode.revolutionaries -= M
 			to_chat(M, "<span class='danger'><FONT size = 3>The massive pulse of energy clears your mind.  You are no longer a revolutionary.</FONT></span>")
-			M.current.toggle_see_hud(rev_hud,HUD_OFF)
+			rev_hud.update_mob(M.current)
 			M.special_role = null
 
 		if(M in ticker.mode.head_revolutionaries)
 			ticker.mode.head_revolutionaries -= M
 			to_chat(M.current, "<span class='danger'><FONT size = 3>The massive pulse of energy clears your mind.  You are no longer a head revolutionary.</FONT></span>")
-			M.current.toggle_see_hud(rev_hud,HUD_OFF)
+			rev_hud.update_mob(M.current)
 			M.special_role = null
 
 		if(M in ticker.mode.cult)
 			ticker.mode.cult -= M
-			M.current.toggle_see_hud(cult_hud,HUD_OFF)
+			cult_hud.update_mob(M)
 			M.special_role = null
 			var/datum/game_mode/cult/cult = ticker.mode
 			if (istype(cult))
@@ -232,7 +232,7 @@
 			M.special_role = null
 			M.current.spellremove(M.current, config.feature_object_spell_system? "object":"verb")
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Your powers ebb and you feel weak. You are no longer a wizard.</FONT></span>")
-			M.current.toggle_see_hud(wiz_hud,HUD_OFF)
+			wiz_hud.update_mob(M.current)
 
 		if(M in ticker.mode.changelings)
 			ticker.mode.changelings -= M
@@ -259,7 +259,7 @@
 			//for (var/datum/objective/nuclear/O in objectives)
 			//	objectives-=O
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Your masters are likely dead or dying. You are no longer a syndicate operative.</FONT></span>")
-			M.current.toggle_see_hud(syndie_hud,HUD_OFF)
+			syndie_hud.update_mob(M.current)
 
 		if(M in ticker.mode.traitors)
 			ticker.mode.traitors -= M

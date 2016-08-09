@@ -1113,7 +1113,7 @@
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
 
-		H.handle_data_hud(update_all = 1)
+		H.update_data_huds()
 
 		return 1
 	else

@@ -168,7 +168,7 @@
 	var/mob/living/silicon/robot/R = new /mob/living/silicon/robot/syndicate(T)
 	R.key = C.key
 	ticker.mode.syndicates += R.mind
-	R.toggle_see_hud(syndie_hud,HUD_ON)
+	syndie_hud.update_mob(R)
 	R.mind.special_role = "syndicate"
 	R.faction = "syndicate"
 */

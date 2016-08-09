@@ -71,7 +71,7 @@
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
 
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
-	M.current.handle_data_hud(update_all = 1)
+	M.current.update_data_huds()
 
 /proc/ClearRoles(var/datum/mind/M)
 	ticker.mode.remove_revolutionary(M)

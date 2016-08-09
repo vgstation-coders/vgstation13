@@ -74,7 +74,7 @@
 		equip_wizard(wizard.current)
 		name_wizard(wizard.current)
 		greet_wizard(wizard)
-		wizard.current.toggle_see_hud(wiz_hud,HUD_ON)
+		wiz_hud.update_mob(wizard.current.)
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
 			if(!mixed) send_intercept()
