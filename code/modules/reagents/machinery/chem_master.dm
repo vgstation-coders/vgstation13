@@ -505,3 +505,5 @@
 	condi = 1
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
+
+#undef MAX_PILL_SPRITE
