@@ -1,13 +1,15 @@
 //TODO LIST
-//*Make my own sprites
+//* Make my own sprites
+//* Remove Sparks On Hit of Camera
 
 /*
+* MODULE: Syndicate R.C. (Syndicate Remote Cyborg)
 * Description: This .dm adds the following robotics traitor items: cyborg camera bugs, cyborg control boards and the syndicate reciever
 * Cyborg Camera Bugs: You can attach them to any silicon lifeform (AI, Cyborgs, pAI). It will allow you to see the user's screen almost one to one.
 * If the user has some kind of special vision (security hud for exemple), you will not have access to that.
 * Cyborg Control Boards: To use, you install this instead of a MMI when making a robot. It will create a cyborg as normal, but without a player to control it.
 * With the syndicate reciever, you can control the cyborg like any other player would, selecting a module, able to change your name, communicate with the AI.
-* At the same time, you are linked to the cyborg consoles. So they can lock you down, and self-destruct you
+* At the same time, you are linked to the cyborg consoles. So they can lock you down, and self-destruct the robot
 * Syndicate Reciever: Imagine a controller with a screen and a keyboard, you can see the borgs you put the cameras on, or control your own borg.
 *
 * Other things:
@@ -26,13 +28,13 @@
 * Attack Message Supression: Just overwritten methods to remove the "YOU FUCKING ATTACK THE TARGET WITH YOUR SECRET CAMERA".
 */
 
-var/global/list/syndicate_roboticist_cameras = list(); //list of all the cameras
-var/global/list/syndicate_roboticist_control_board = list(); //list of all control boards
+var/global/list/rc_cameras = list();
+var/global/list/rc_control_boards = list();
 
 /*
-    START CAMERA BUGS SECTION
+    START REMOTE CYBORG CAMERA SECTION
 */
-/obj/item/device/syndicate_cyborg_camera_bug
+/obj/item/device/syndicate_remote_cyborg_camera
   name = "R.C. Camera"
   desc = "A tiny camera with a small antenna sticking to its side. It is able to transmit a signal to anything that can accept it. Seems to blend well with complex machinery."
   icon = 'icons/obj/device.dmi'
@@ -46,7 +48,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/active = 0
   var/mob/camera_target
 
-/obj/item/device/syndicate_cyborg_camera_bug/afterattack(atom/target, mob/user, proximity_flag)
+/obj/item/device/syndicate_remote_cyborg_camera/afterattack(atom/target, mob/user, proximity_flag)
   if (proximity_flag != 1)
     to_chat(user, "<span class='warning'>You are too far away to use this.</span>")
     return
@@ -61,17 +63,17 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     to_chat(user, "<span class='notice'>You install \the [src] on \the [target.name]'s surface.</span>")
     active = 1
     camera_target = target
-    syndicate_roboticist_cameras += src
+    rc_cameras += src
     return
 /*
-    END CAMERA BUGS SECTION
+    END REMOTE CYBORG CAMERA SECTION
 */
 
 
 /*
     START CONTROL BOARD SECTION
 */
-/obj/item/device/syndicate_cyborg_control_board
+/obj/item/device/syndicate_remote_cyborg_control_board
   name = "R.C. Circuit Board"
   desc = "A off-putting looking board. Instead of standard green and yellow, it is black with red circuits, there is a small antenna on the side."
   icon = 'icons/obj/device.dmi'
@@ -84,7 +86,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/inUse
   var/controller = null
 
-/obj/item/device/syndicate_cyborg_control_board/afterattack(atom/target, mob/user as mob, proximity_flag)
+/obj/item/device/syndicate_remote_cyborg_control_board/afterattack(atom/target, mob/user as mob, proximity_flag)
   if(!istype(target, /obj/item/robot_parts/robot_suit))
     return
   var/obj/item/robot_parts/robot_suit/robot_suit = target
@@ -94,7 +96,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       to_chat(user, "<span class='warning'>You can't put the motherboard in, the frame has to be standing on the ground to be perfectly precise.</span>")
       return
 
-    var/mob/living/silicon/robot/mind_control_robot/robot = new /mob/living/silicon/robot/mind_control_robot(get_turf(target), unfinished = 1)
+    var/mob/living/silicon/robot/remote_control_robot/robot = new /mob/living/silicon/robot/remote_control_robot(get_turf(target), unfinished = 1)
     robot.invisibility = 0
     robot.custom_name = robot_suit.created_name
     robot.updatename("Default")
@@ -106,10 +108,10 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       cell_component.wrapped = robot.cell
       cell_component.installed = 1
     robot.mmi = src
-    robot.verbs += /mob/living/silicon/robot/mind_control_robot/proc/Exit_robot
+    robot.verbs += /mob/living/silicon/robot/remote_control_robot/proc/Exit_robot
     src.cyborg = robot
     src.active = 1
-    syndicate_roboticist_control_board += src
+    rc_control_boards += src
     feedback_inc("cyborg_birth",1)
     qdel(robot_suit)
     robot.emagged = 1
@@ -131,8 +133,8 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   icon_state = "handtv"
   flags = FPRINT
   w_class = W_CLASS_TINY
-  var/obj/item/device/syndicate_cyborg_camera_bug/current_camera
-  var/obj/item/device/syndicate_cyborg_control_board/current_board
+  var/obj/item/device/syndicate_remote_cyborg_camera/current_camera
+  var/obj/item/device/syndicate_remote_cyborg_control_board/current_board
   var/frequency = "syndicate"
   var/user_ckey = ""
   var/mob/living/carbon/user_body
@@ -164,16 +166,16 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 
 /obj/item/device/syndicate_reciever/attack_self(mob/user as mob)
   var/list/devices = list()
-  for(var/obj/item/device/syndicate_cyborg_camera_bug/camera in syndicate_roboticist_cameras)
+  for(var/obj/item/device/syndicate_remote_cyborg_camera/camera in rc_cameras)
     if(camera.camera_target.isDead())
       camera.active = 0
-      syndicate_roboticist_cameras -= camera
+      rc_cameras -= camera
     if(camera.frequency == frequency && camera.active == 1)
       devices += camera
-  for(var/obj/item/device/syndicate_cyborg_control_board/board in syndicate_roboticist_control_board)
+  for(var/obj/item/device/syndicate_remote_cyborg_control_board/board in rc_control_boards)
     if(board.cyborg.isDead())
       board.active = 0
-      syndicate_roboticist_control_board -= board
+      rc_control_boards -= board
     if(board.frequency == frequency && board.active == 1)
       devices += board
   if(!devices.len)
@@ -183,33 +185,33 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   var/list/friendly_devices = new/list()
 
   for (var/obj/device in devices)
-    if(istype(device, /obj/item/device/syndicate_cyborg_control_board/))
-      var/obj/item/device/syndicate_cyborg_control_board/controlboard = device
+    if(istype(device, /obj/item/device/syndicate_remote_cyborg_control_board/))
+      var/obj/item/device/syndicate_remote_cyborg_control_board/controlboard = device
       friendly_devices.Add(controlboard.cyborg.name + " (Control Board)")
-    if(istype(device, /obj/item/device/syndicate_cyborg_camera_bug/))
-      var/obj/item/device/syndicate_cyborg_camera_bug/camerabug = device
+    if(istype(device, /obj/item/device/syndicate_remote_cyborg_camera/))
+      var/obj/item/device/syndicate_remote_cyborg_camera/camerabug = device
       friendly_devices.Add(camerabug.camera_target.name + " (Camera)")
   var/target = input("Select a signal.", null) as null|anything in sortList(friendly_devices)
   if (!target)
     user.unset_machine()
     user.reset_view(user)
     return
-  for(var/obj/item/device/syndicate_cyborg_camera_bug/camera in devices)
+  for(var/obj/item/device/syndicate_remote_cyborg_camera/camera in devices)
     if (camera.camera_target.name + " (Camera)" == target && !camera.camera_target.isDead())
       target = camera
       break
-  for(var/obj/item/device/syndicate_cyborg_control_board/board in devices)
+  for(var/obj/item/device/syndicate_remote_cyborg_control_board/board in devices)
     if (board.cyborg.name + " (Control Board)" == target && !board.cyborg.isDead())
       target = board
       break
   if(user.stat) return
-  if(target && istype(target, /obj/item/device/syndicate_cyborg_camera_bug/))
+  if(target && istype(target, /obj/item/device/syndicate_remote_cyborg_camera/))
     active = 1
     user.client.eye = target
     user.set_machine(src)
     src.current_camera = target
-  if(target && istype(target, /obj/item/device/syndicate_cyborg_control_board/))
-    var/obj/item/device/syndicate_cyborg_control_board/target_board = target
+  if(target && istype(target, /obj/item/device/syndicate_remote_cyborg_control_board/))
+    var/obj/item/device/syndicate_remote_cyborg_control_board/target_board = target
     if(target_board.inUse)
       to_chat(user, "<span class='warning'>This signal is already in use.</span>")
       return
@@ -220,6 +222,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     user_body = user.client.mob
     src.current_board = target_board
     src.current_board.cyborg.ckey = user.client.ckey
+    return
   if(!target)
     user.unset_machine()
     return
@@ -241,41 +244,42 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 /*
     START CYBORG OVERWRITTE SECTION
 */
-/mob/living/silicon/robot/mind_control_robot
+/mob/living/silicon/robot/remote_control_robot
 
-/mob/living/silicon/robot/mind_control_robot/show_laws()
+/mob/living/silicon/robot/remote_control_robot/show_laws()
   return
 
-/mob/living/silicon/robot/mind_control_robot/Login()
+/mob/living/silicon/robot/remote_control_robot/Login()
   ..()
   to_chat(src, "<b>You can disconnect from the borg by using the R.C. Logoff function on the Robot Commands tab.</b>")
   return
 
-/mob/living/silicon/robot/mind_control_robot/proc/Exit_robot()
+/mob/living/silicon/robot/remote_control_robot/proc/Exit_robot()
   set category = "Robot Commands"
   set name = "R.C. Logoff"
-  var/obj/item/device/syndicate_cyborg_control_board/board = src.mmi
+  var/obj/item/device/syndicate_remote_cyborg_control_board/board = src.mmi
   var/obj/item/device/syndicate_reciever/syndie_controller = board.controller
   syndie_controller.user_body.ckey = syndie_controller.user_ckey
   syndie_controller.active = 0
   syndie_controller.current_board = null
   board.controller = null
   board.inUse = 0
+  return
 
 /*
     END CYBORG OVERWRITTE SECTION
 */
 
 //START REMOVE ATTACK MESSAGES//
-/obj/item/device/syndicate_cyborg_camera_bug/attack(mob/M as mob, mob/user as mob, def_zone)
+/obj/item/device/syndicate_remote_cyborg_camera/attack(mob/M as mob, mob/user as mob, def_zone)
   return
 
-/obj/item/device/syndicate_cyborg_camera_bug/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/device/syndicate_remote_cyborg_camera/attackby(obj/item/I as obj, mob/user as mob)
   return
 
-/obj/item/device/syndicate_cyborg_control_board/attack(mob/M as mob, mob/user as mob, def_zone)
+/obj/item/device/syndicate_remote_cyborg_control_board/attack(mob/M as mob, mob/user as mob, def_zone)
   return
 
-/obj/item/device/syndicate_cyborg_control_board/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/device/syndicate_remote_cyborg_control_board/attackby(obj/item/I as obj, mob/user as mob)
   return
 //END REMOVE ATTACK MESSAGES//
