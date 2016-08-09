@@ -33,8 +33,8 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     START CAMERA BUGS SECTION
 */
 /obj/item/device/syndicate_cyborg_camera_bug
-  name = "Cyborg Camera Bug"
-  desc = "A tiny weird looking device with a few wires sticking out and a small antenna."
+  name = "R.C. Camera"
+  desc = "A tiny camera with a small antenna sticking to its side. It is able to transmit a signal to anything that can accept it. Seems to blend well with complex machinery."
   icon = 'icons/obj/device.dmi'
   icon_state = "implant_evil"
   w_class = W_CLASS_TINY
@@ -72,8 +72,8 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     START CONTROL BOARD SECTION
 */
 /obj/item/device/syndicate_cyborg_control_board
-  name = "Suspicious Looking Circuit Board"
-  desc = "A suspiciously looking circuit board with red and black colors. It seems it has connectors shaped like a Man-Machine Interface and an antenna."
+  name = "R.C. Circuit Board"
+  desc = "A off-putting looking board. Instead of standard green and yellow, it is black with red circuits, there is a small antenna on the side."
   icon = 'icons/obj/device.dmi'
   icon_state = "implant_evil"
   w_class = W_CLASS_SMALL
@@ -126,8 +126,8 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     START RECIEVER SECTION
 */
 /obj/item/device/syndicate_reciever
-  name = "Remote Cyborg Reciver"
-  desc = "A weird looking device, with two thumbsticks, a set of buttons, a screen and a speaker."
+  name = "R.C. Reciever"
+  desc = "A Remote Cyborg Reciever."
   icon_state = "handtv"
   flags = FPRINT
   w_class = W_CLASS_TINY
@@ -248,12 +248,12 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 
 /mob/living/silicon/robot/mind_control_robot/Login()
   ..()
-  to_chat(src, "<b>You can disconnect from the borg by using the logoff function on the Robot Commands tab.</b>")
+  to_chat(src, "<b>You can disconnect from the borg by using the R.C. Logoff function on the Robot Commands tab.</b>")
   return
 
 /mob/living/silicon/robot/mind_control_robot/proc/Exit_robot()
   set category = "Robot Commands"
-  set name = "Logoff"
+  set name = "R.C. Logoff"
   var/obj/item/device/syndicate_cyborg_control_board/board = src.mmi
   var/obj/item/device/syndicate_reciever/syndie_controller = board.controller
   syndie_controller.user_body.ckey = syndie_controller.user_ckey
