@@ -1,4 +1,5 @@
 //Docking port disks
+//Insert into a shuttle computer to unlock a new destination
 /obj/item/weapon/disk/shuttle_coords
 	name = "shuttle destination disk"
 	desc = "A small disk containing encrypted coordinates and tracking data."
