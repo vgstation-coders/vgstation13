@@ -29,7 +29,8 @@
 	if(ispath(destination))
 		spawn()
 			destination = locate(destination) in all_docking_ports
-			destination.disk_references.Add(src)
+			if(destination)
+				destination.disk_references.Add(src)
 	else
 		header = "ERROR"
 
