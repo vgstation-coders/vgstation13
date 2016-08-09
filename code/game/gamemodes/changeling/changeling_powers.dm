@@ -978,7 +978,7 @@ var/list/datum/dna/hivemind_bank = list()
 
 /obj/item/verbs/changeling/proc/changeling_silence_sting()
 	set category = "Changeling"
-	set name = "Hallucination Sting (15)"
+	set name = "Silence Sting (15)"
 	set desc = "Makes our victim silent and unable to cry for help."
 
 	var/mob/M = loc
