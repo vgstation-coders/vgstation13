@@ -1221,6 +1221,10 @@ var/list/admin_verbs_mod = list(
 			y_coord = Clamp(y_coord, 1, world.maxy)
 
 		if(ML_LOAD_TO_Z2)
+			if(!dungeon_area)
+				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
+				return
+
 			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically).")
 			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)")
 			load_dungeon(ME)
