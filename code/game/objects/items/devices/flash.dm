@@ -110,8 +110,8 @@
 								to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
 							else if(result == -3) // loyalty implanted
 								to_chat(user, "<span class=\"warning\">Something seems to be blocking the flash!</span>")
-						else
-							to_chat(user, "<span class=\"warning\">This mind is so vacant that it is not susceptible to influence!</span>")
+					else
+						to_chat(user, "<span class=\"warning\">This mind is so vacant that it is not susceptible to influence!</span>")
 		else
 			flashfail = TRUE
 	else if(issilicon(M))

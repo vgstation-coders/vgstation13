@@ -1,6 +1,9 @@
 //A variant of revolution, with an emphasis on a small group with co-ordinated efforts instead of greytiding
 
 #define REVSQUAD_FLASH_USES 1 // Number of times a specially spawned flash can convert normal crew members.
+
+#define REVSQUAD_VICTORY_REVS 1
+#define REVSQUAD_VICTORY_HEADS 2
 /datum/game_mode/revsquad
 	name = "Revolution Squad"
 	config_tag = "revsquad"
@@ -12,7 +15,6 @@
 	recommended_enemies = 3
 	var/finished = 0
 	var/checkwin_counter = 0
-	var/max_squaddies = 3
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
@@ -37,8 +39,8 @@
 		for(var/job in restricted_jobs)//Removing heads and such from the list
 			if(player.assigned_role == job)
 				possible_revs -= player
-
-	for (var/i=1 to max_squaddies)
+	// Depending how this mode performs, might need to change this to have a minimum number of revs as required and a maximum as recommended.
+	for (var/i=1 to required_enemies)
 		if (possible_revs.len==0)
 			break
 		var/datum/mind/lenin = pick(possible_revs)
@@ -105,7 +107,8 @@
 														/obj/item/clothing/gloves/yellow,
 														/obj/item/weapon/gun/projectile/automatic,
 														/obj/item/device/flash/revsquad,
-														/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
+														/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff,
+														/obj/item/weapon/grenade/iedcasing/preassembled
 														)
 
 	var/obj/item/requisitioned = pick(possible_items)
@@ -155,7 +158,7 @@
 /datum/game_mode/revsquad/proc/check_heads_victory()
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		var/turf/T = get_turf(rev_mind.current)
-		if((rev_mind) && (rev_mind.current) && (rev_mind.current.stat != 2) && T && (T.z == 1))
+		if((rev_mind) && (rev_mind.current) && (rev_mind.current.isDead()) && T && (T.z == map.zMainStation))
 			if(ishuman(rev_mind.current))
 				return 0
 	return 1
@@ -163,9 +166,9 @@
 
 /datum/game_mode/revsquad/check_win()
 	if(check_rev_victory())
-		finished = 1
+		finished = REVSQUAD_VICTORY_REVS
 	else if(check_heads_victory())
-		finished = 2
+		finished = REVSQUAD_VICTORY_HEADS
 	return
 
 ///////////////////////////////
@@ -183,10 +186,10 @@
 		return 0
 
 /datum/game_mode/revsquad/declare_completion()
-	if(finished == 1)
+	if(finished == REVSQUAD_VICTORY_REVS)
 		feedback_set_details("round_end_result","win - heads killed")
 		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff were killed or abandoned the station! The revolutionaries win!</FONT></span>"
-	else if(finished == 2)
+	else if(finished == REVSQUAD_VICTORY_HEADS)
 		feedback_set_details("round_end_result","loss - rev heads killed")
 		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff managed to stop the revolution!</FONT></span>"
 	..()
@@ -207,7 +210,7 @@
 				end_icons += flat
 				tempstate = end_icons.len
 				text += {"<br><img src="logo_[tempstate].png"> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("}
-				if(headrev.current.stat == DEAD)
+				if(headrev.current.isDead())
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
@@ -249,7 +252,7 @@
 				end_icons += flat
 				tempstate = end_icons.len
 				text += {"<br><img src="logo_[tempstate].png"> <b>[rev.key]</b> was <b>[rev.name]</b> ("}
-				if(rev.current.stat == DEAD)
+				if(rev.current.isDead())
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
@@ -285,7 +288,7 @@
 				end_icons += flat
 				tempstate = end_icons.len
 				text += {"<br><img src="logo_[tempstate].png"> <b>[head.key]</b> was <b>[head.name]</b> ("}
-				if(head.current.stat == DEAD)
+				if(head.current.isDead())
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
