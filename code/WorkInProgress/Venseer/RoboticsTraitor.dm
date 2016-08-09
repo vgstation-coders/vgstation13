@@ -1,10 +1,5 @@
-var/global/list/syndicate_roboticist_cameras = list(); //list of all the cameras
-var/global/list/syndicate_roboticist_control_board = list(); //list of all control boards
-
 //TODO LIST
 //*Make my own sprites
-//*Remove sparks on hit @ borgs
-
 
 /*
 * Description: This .dm adds the following robotics traitor items: cyborg camera bugs, cyborg control boards and the syndicate reciever
@@ -29,12 +24,10 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 * has a timeout before it is called again.
 * Global Lists: Two lists, one for cameras, other for boards. Easy to understand. They just contain all active cameras/boards. When a borg dies, it is removed from there.
 * Attack Message Supression: Just overwritten methods to remove the "YOU FUCKING ATTACK THE TARGET WITH YOUR SECRET CAMERA".
-*
-* Other Changes:
-* login.dm (mob\living\silicon\robot)
-* - added if(!istype(src,/mob/living/silicon/robot/mind_control_robot/)) show_laws(0)
-* Had do to this to avoid getting the law messages on a remote controlled borg. Pay attention to this in case you are altering anything related ot this.
 */
+
+var/global/list/syndicate_roboticist_cameras = list(); //list of all the cameras
+var/global/list/syndicate_roboticist_control_board = list(); //list of all control boards
 
 /*
     START CAMERA BUGS SECTION
