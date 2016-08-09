@@ -10,6 +10,7 @@
 	var/turret_protected = 0
 	var/list/turretTargets = list()
 	plane = BASE_PLANE
+	layer = AREA_LAYER_SINCE_LUMMOX_FUCKED_EVERYTHING_UP
 	var/base_turf_type = null
 
 /area/New()
