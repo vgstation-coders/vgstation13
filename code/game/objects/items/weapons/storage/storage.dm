@@ -147,7 +147,7 @@
 		for(var/datum/numbered_display/ND in display_contents)
 			ND.sample_object.mouse_opacity = 2
 			ND.sample_object.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
-			ND.sample_object.maptext = "<font color='white' size = '4'>[(ND.number > 1)? "[ND.number]" : ""]</font>"
+			ND.sample_object.maptext = "<font color='white'>[(ND.number > 1)? "[ND.number]" : ""]</font>"
 			ND.sample_object.hud_layerise()
 			cx++
 			if (cx > (4+cols))
