@@ -54,7 +54,7 @@ var/list/all_doors = list()
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
 	forceinvertredraw = 1
 
-/obj/machinery/door/AltClick()
+/obj/machinery/door/AltClick() //So you can't table people through shutters.
 	if(ishuman(usr))
 		if(density)
 			return
