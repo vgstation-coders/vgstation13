@@ -22,7 +22,7 @@
 	density = 1
 	nick = "honkin' ride" //For fucks sake, well then
 	flags = OPENCONTAINER
-	overrideghostspin = 0
+	noghostspin = 0
 
 	max_health = 100 //Bananium sheets increases maximum health by 20
 	var/activated = 0 //Honk to activate, it stays active while you sit in it, and will deactivate when you unbuckle

@@ -145,8 +145,8 @@
 	usr.visible_message("<span class='notice'>[usr] toggles \the [lantern] hanging on \the [src] [lantern.on ? "on":"off"].</span>", \
 						"<span class='notice'>You toggle \the [lantern] hanging on \the [src] [lantern.on ? "on":"off"].</span>")
 
-/obj/structure/hanging_lantern/spook()
-	if(..())
+/obj/structure/hanging_lantern/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
 		flicker()
 
 /obj/structure/hanging_lantern/Destroy()

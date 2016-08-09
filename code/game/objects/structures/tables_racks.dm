@@ -311,10 +311,8 @@
 			return 1
 	return 0
 
-/obj/structure/table/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		destroy()
-	return ..()
+/obj/structure/table/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+	destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
@@ -716,10 +714,8 @@
 		return 1
 	return !density
 
-/obj/structure/rack/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		destroy()
-	return ..()
+/obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+	destroy()
 
 /obj/structure/rack/MouseDrop_T(obj/O as obj, mob/user as mob)
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))

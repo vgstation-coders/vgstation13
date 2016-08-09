@@ -491,7 +491,7 @@
 					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
 					I.plane = CULT_ANTAG_HUD_PLANE
 					cultist.current.client.images += I
-			if(cult_mind.current)
+			if(cult_mind.current && cultist.current)
 				if(cult_mind.current.client)
 					var/imageloc = cultist.current
 					if(istype(cultist.current.loc,/obj/mecha))

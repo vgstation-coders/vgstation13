@@ -1,6 +1,9 @@
 /mob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0)) return 1
 
+	if(istype(mover) && mover.checkpass(PASSMOB))
+		return 1
+
 	if(ismob(mover))
 		var/mob/moving_mob = mover
 
@@ -287,7 +290,8 @@
 	//	if(!mob.Process_Spacemove(0))	return 0
 
 	// If we're in space or our area has no gravity...
-	if(istype(mob.loc, /turf/space) || (mob.areaMaster && mob.areaMaster.has_gravity == 0))
+	var/turf/turf_loc = mob.loc
+	if(istype(turf_loc) && !turf_loc.has_gravity())
 		var/can_move_without_gravity = 0
 
 		// Here, we check to see if the object we're in doesn't need gravity to send relaymove().
@@ -503,61 +507,22 @@
 ///Called by /client/Move()
 ///For moving in space
 ///Return 1 for movement 0 for none
-/mob/proc/Process_Spacemove(var/check_drift = 0,var/ignore_slip = 0)
+/mob/Process_Spacemove(var/check_drift = 0,var/ignore_slip = 0)
 	//First check to see if we can do things
 	if(restrained())
 		return 0
+	if(flying)
+		inertia_dir = 0
+		return 1
 
-	/*
-	if(istype(src,/mob/living/carbon))
-		if(src.l_hand && src.r_hand)
+	if(..())
+		//Check to see if we slipped
+		if(!ignore_slip && on_foot() && prob(Process_Spaceslipping(5)))
+			to_chat(src, "<span class='notice'><B>You slipped!</B></span>")
+			src.inertia_dir = src.last_move
+			step(src, src.inertia_dir)
 			return 0
-	*/
-
-	var/dense_object = 0
-	for(var/turf/turf in oview(1,src))
-		if(istype(turf,/turf/space))
-			continue
-
-		var/mob/living/carbon/human/H = src
-		if(istype(turf,/turf/simulated/floor) && (src.areaMaster && src.areaMaster.has_gravity == 0) && !(istype(H) && istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP)))
-			continue
-
-		dense_object++
-		break
-
-	if(!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
-		dense_object++
-	if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
-		dense_object++
-	if(!dense_object && (locate(/obj/effect/blob) in oview(1, src)))
-		dense_object++
-
-	//Lastly attempt to locate any dense objects we could push off of
-	//TODO: If we implement objects drifing in space this needs to really push them
-	//Due to a few issues only anchored and dense objects will now work.
-	if(!dense_object)
-		for(var/obj/O in oview(1, src))
-			if((O) && (O.density) && (O.anchored))
-				dense_object++
-				break
-
-	//Nothing to push off of so end here
-	if(!dense_object)
-		return 0
-
-
-
-	//Check to see if we slipped
-	if(!ignore_slip && prob(Process_Spaceslipping(5)))
-		to_chat(src, "<span class='notice'><B>You slipped!</B></span>")
-		src.inertia_dir = src.last_move
-		step(src, src.inertia_dir)
-		return 0
-	//If not then we can reset inertia and move
-	inertia_dir = 0
-	return 1
-
+		return 1
 
 /mob/proc/Process_Spaceslipping(var/prob_slip = 5)
 	//Setup slipage

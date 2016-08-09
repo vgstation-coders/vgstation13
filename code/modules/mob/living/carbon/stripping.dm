@@ -269,6 +269,9 @@
 
 // Set internals on or off.
 /mob/living/carbon/proc/set_internals(var/mob/living/user)
+	if(user.incapacitated())
+		return
+	
 	if(!has_breathing_mask())
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 		return

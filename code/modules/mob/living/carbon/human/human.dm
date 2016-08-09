@@ -1548,8 +1548,9 @@
 
 	return 1
 
-/mob/living/carbon/human/spook()
-	if(!client) return
+/mob/living/carbon/human/spook(mob/dead/observer/ghost)
+	if(!..(ghost, TRUE) || !client)
+		return
 	if(!hallucinating())
 		to_chat(src, "<i>[pick(boo_phrases)]</i>")
 	else
@@ -1633,6 +1634,12 @@
 		return 1
 
 	return 0
+
+/mob/living/carbon/human/proc/after_special_attack(atom/target, attack_type, attack_result)
+	switch(attack_type)
+		if(ATTACK_KICK)
+			if(attack_result != SPECIAL_ATTACK_FAILED) //The kick landed successfully
+				apply_inertia(get_dir(target, src))
 
 /mob/living/carbon/human/proc/get_footprint_type()
 	var/obj/item/clothing/shoes/S = shoes //Why isn't shoes just typecast in the first place?

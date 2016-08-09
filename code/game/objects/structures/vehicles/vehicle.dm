@@ -21,14 +21,14 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
-	overrideghostspin = 1 //You guys are no fun
+	noghostspin = 1 //You guys are no fun
 	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 
 	var/empstun = 0
 	var/health = 100
 	var/max_health = 100
 	var/destroyed = 0
-	var/inertia_dir = 0
+
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
 
@@ -49,6 +49,9 @@
 
 /obj/structure/bed/chair/vehicle/proc/delayNextMove(var/delay, var/additive=0)
 	move_delayer.delayNext(delay,additive)
+
+/obj/structure/bed/chair/vehicle/can_apply_inertia()
+	return 1 //No anchored check - so that vehicles can fly off into space
 
 /obj/structure/bed/chair/vehicle/New()
 	..()
@@ -106,8 +109,8 @@
 		return 0
 
 	//If we're in space or our area has no gravity...
-	if(istype(get_turf(src), /turf/space) || (areaMaster && areaMaster.has_gravity == 0))
-
+	var/turf/T = loc
+	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
 			return 0
@@ -120,7 +123,6 @@
 			var/datum/chain/tether_datum = user.tether.chain_datum
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
-	var/turf/T = loc
 
 	step(src, direction)
 	delayNextMove(getMovementDelay())
@@ -140,79 +142,6 @@
 	if(istype(src.loc, /turf/space) && (!src.Process_Spacemove(0, user)))
 		var/turf/space/S = src.loc
 		S.Entered(src)*/
-
-/obj/structure/bed/chair/vehicle/proc/Process_Spacemove(var/check_drift = 0, mob/user)
-
-	if(can_spacemove && occupant)
-		return 1
-
-	var/dense_object = 0
-	if(!user)
-		for(var/turf/turf in oview(1, src))
-
-			if(istype(turf, /turf/space))
-				continue
-
-			if(istype(turf, /turf/simulated/floor) && (src.areaMaster && src.areaMaster.has_gravity == 0)) //No gravity
-				continue
-
-			dense_object++
-			break
-
-		if(!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
-			dense_object++
-
-		if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
-			dense_object++
-
-		//Lastly attempt to locate any dense objects we could push off of
-		//TODO: If we implement objects drifing in space this needs to really push them
-		//Due to a few issues only anchored and dense objects will now work.
-		if(!dense_object)
-			for(var/obj/O in oview(1, src))
-				if((O) && (O.density) && (O.anchored))
-					dense_object++
-					break
-	else
-		for(var/turf/turf in oview(1, user))
-
-			if(istype(turf, /turf/space))
-				continue
-
-			if(istype(turf, /turf/simulated/floor) && (src.areaMaster && src.areaMaster.has_gravity == 0)) //No gravity
-				continue
-
-			dense_object++
-			break
-
-		if(!dense_object && (locate(/obj/structure/lattice) in oview(1, user)))
-			dense_object++
-
-		if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
-			dense_object++
-
-		//Lastly attempt to locate any dense objects we could push off of
-		//TODO: If we implement objects drifing in space this needs to really push them
-		//Due to a few issues only anchored and dense objects will now work.
-		if(!dense_object)
-			for(var/obj/O in oview(1, user))
-				if((O) && (O.density) && (O.anchored))
-					dense_object++
-					break
-
-	//Nothing to push off of so end here
-	if(!dense_object)
-		return 0
-
-	//Check to see if we slipped
-	if(prob(5))
-		to_chat(src, "<span class='bnotice'>You slipped!</span>")
-		src.inertia_dir = src.last_move
-		step(src, src.inertia_dir)
-		return 0
-	//If not then we can reset inertia and move
-	inertia_dir = 0
-	return 1
 
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
 	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || destroyed || occupant)

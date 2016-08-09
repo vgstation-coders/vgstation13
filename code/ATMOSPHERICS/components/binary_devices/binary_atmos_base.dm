@@ -13,6 +13,7 @@
 	var/datum/pipe_network/network2
 
 	var/activity_log = ""
+	layer = BINARY_PIPE_LAYER
 
 /obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
 	activity_log += ..()
