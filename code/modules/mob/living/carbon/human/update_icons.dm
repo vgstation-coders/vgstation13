@@ -1038,15 +1038,12 @@ var/global/list/damage_icon_parts = list()
 	if(update_icons)   update_icons()
 
 /mob/living/carbon/human/update_inv_hand(index, var/update_icons = 1)
-	var/obj/Overlays/hand_layer/O = obj_overlays[HAND_LAYER]
-	overlays.Remove(O)
-
-	var/obj/Overlays/new_item_overlay
-
-	for(var/obj/Overlays/OV in O.hands_overlays) //Go through all item overlays and remove those with the same index
-		if(OV.name == "[index]")
-			O.overlays.Remove(OV)
-			new_item_overlay = OV
+	var/obj/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
+	if(!O) //theoretically, should only be done once per hand
+		O = getFromPool(/obj/Overlays/hand_layer)
+		obj_overlays["[HAND_LAYER]-[index]"] = O
+	else
+		overlays.Remove(O)
 
 	var/obj/item/I = get_held_item_by_index(index)
 
@@ -1056,35 +1053,27 @@ var/global/list/damage_icon_parts = list()
 		var/icon/check_dimensions = new(t_inhand_state)
 		if(!t_state)	t_state = I.icon_state
 
-		if(!new_item_overlay)
-			new_item_overlay = new()
-
-			if(!istype(O.hands_overlays, /list)) O.hands_overlays = list()
-			O.hands_overlays.Add(new_item_overlay)
-
-		new_item_overlay.name = "[index]"
-		new_item_overlay.icon = t_inhand_state
-		new_item_overlay.icon_state = t_state
-		new_item_overlay.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
-		new_item_overlay.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
-		new_item_overlay.layer = O.layer
+		O.name = "[index]"
+		O.icon = t_inhand_state
+		O.icon_state = t_state
+		O.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
+		O.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
+		O.layer = O.layer
 
 		var/list/offsets = get_item_offset_by_index(index)
 
-		new_item_overlay.pixel_x += offsets["x"]
-		new_item_overlay.pixel_y += offsets["y"]
+		O.pixel_x += offsets["x"]
+		O.pixel_y += offsets["y"]
 
 		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[index]"])
 			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[index]"]
-			new_item_overlay.overlays.Add(dyn_overlay)
+			O.overlays.Add(dyn_overlay)
 		I.screen_loc = get_held_item_ui_location(index)
 
-		O.overlays.Add(new_item_overlay)
-
-		if(handcuffed)
+		if(handcuffed) //why is this here AUGH
 			drop_item(I)
 
-	overlays.Add(O)
+		overlays.Add(O)
 
 	if(update_icons)
 		update_icons()
