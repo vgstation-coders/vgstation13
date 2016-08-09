@@ -29,6 +29,11 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 * has a timeout before it is called again.
 * Global Lists: Two lists, one for cameras, other for boards. Easy to understand. They just contain all active cameras/boards. When a borg dies, it is removed from there.
 * Attack Message Supression: Just overwritten methods to remove the "YOU FUCKING ATTACK THE TARGET WITH YOUR SECRET CAMERA".
+*
+* Other Changes:
+* login.dm (mob\living\silicon\robot)
+* - added if(!istype(src,/mob/living/silicon/robot/mind_control_robot/)) show_laws(0)
+* Had do to this to avoid getting the law messages on a remote controlled borg. Pay attention to this in case you are altering anything related ot this.
 */
 
 /*
@@ -44,9 +49,9 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   throw_speed = 4
   throw_range = 20
   flags = NOBLUDGEON | FPRINT
-  var/frequency = "syndicate" //in case someone wants to make a custom list of cameras
-  var/active = 0 // check if the camera is online
-  var/mob/camera_target //target that is stuck to
+  var/frequency = "syndicate"
+  var/active = 0
+  var/mob/camera_target
 
 /obj/item/device/syndicate_cyborg_camera_bug/afterattack(atom/target, mob/user, proximity_flag)
   if (proximity_flag != 1)
@@ -80,9 +85,9 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
   icon_state = "implant_evil"
   w_class = W_CLASS_SMALL
   flags = FPRINT | NOBLUDGEON
-  var/frequency = "syndicate" //in case someone wants to make a custom list of remote borgs
-  var/active = 0 // check if the board is online
-  var/mob/living/silicon/cyborg //robot that is under the control of this board
+  var/frequency = "syndicate"
+  var/active = 0
+  var/mob/living/silicon/cyborg
   var/inUse
   var/controller = null
 
@@ -91,13 +96,12 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     return
   var/obj/item/robot_parts/robot_suit/robot_suit = target
   var/turf/T = get_turf(robot_suit)
-  if(robot_suit.check_completion()) //if robot suit is completed
+  if(robot_suit.check_completion())
     if(!istype(T,/turf))
       to_chat(user, "<span class='warning'>You can't put the motherboard in, the frame has to be standing on the ground to be perfectly precise.</span>")
       return
 
-    //Code below creates a robot without a mind. A robot in standby mode
-    var/mob/living/silicon/robot/syndiebot/robot = new /mob/living/silicon/robot/syndiebot(get_turf(target), unfinished = 1)
+    var/mob/living/silicon/robot/mind_control_robot/robot = new /mob/living/silicon/robot/mind_control_robot(get_turf(target), unfinished = 1)
     robot.invisibility = 0
     robot.custom_name = robot_suit.created_name
     robot.updatename("Default")
@@ -109,15 +113,13 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
       cell_component.wrapped = robot.cell
       cell_component.installed = 1
     robot.mmi = src
-    robot.verbs += /mob/living/silicon/robot/syndiebot/proc/Exit_robot
-    src.cyborg = robot //set the robot to the board
-    src.active = 1 //set the board as active
-    syndicate_roboticist_control_board += src //add board on list
+    robot.verbs += /mob/living/silicon/robot/mind_control_robot/proc/Exit_robot
+    src.cyborg = robot
+    src.active = 1
+    syndicate_roboticist_control_board += src
     feedback_inc("cyborg_birth",1)
     qdel(robot_suit)
-    //Setup Cyborg
     robot.emagged = 1
-    //End setup
     user.drop_item(src, robot)
 
   else
@@ -148,7 +150,7 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 
 /obj/item/device/syndicate_reciever/Destroy()
   processing_objects.Remove(src)
-//verify if the user got stunned/cuffed/pushed or whatever can make him from drop/stop using the remote.
+
 /obj/item/device/syndicate_reciever/process()
   if(src.active == 0 || !(src.current_board))
     return
@@ -193,25 +195,25 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     if(istype(device, /obj/item/device/syndicate_cyborg_camera_bug/))
       var/obj/item/device/syndicate_cyborg_camera_bug/camerabug = device
       friendly_devices.Add(camerabug.camera_target.name + " (Camera)")
-  var/target = input("Select a signal.", null) as null|anything in sortList(friendly_devices) //give list of devices
-  if (!target) // if not chosen, cancel the the remote view in cameras, code below cleans machine from user and reset it view back to character
+  var/target = input("Select a signal.", null) as null|anything in sortList(friendly_devices)
+  if (!target)
     user.unset_machine()
     user.reset_view(user)
     return
   for(var/obj/item/device/syndicate_cyborg_camera_bug/camera in devices)
     if (camera.camera_target.name + " (Camera)" == target && !camera.camera_target.isDead())
-      target = camera // Set target as selected camera
+      target = camera
       break
   for(var/obj/item/device/syndicate_cyborg_control_board/board in devices)
     if (board.cyborg.name + " (Control Board)" == target && !board.cyborg.isDead())
-      target = board // Set target as selected board
+      target = board
       break
   if(user.stat) return
   if(target && istype(target, /obj/item/device/syndicate_cyborg_camera_bug/))
     active = 1
-    user.client.eye = target  // set user's eyes to the camera
-    user.set_machine(src) //>without this client.eye resets every moment
-    src.current_camera = target // add current selected camera to TV for reference
+    user.client.eye = target
+    user.set_machine(src)
+    src.current_camera = target
   if(target && istype(target, /obj/item/device/syndicate_cyborg_control_board/))
     var/obj/item/device/syndicate_cyborg_control_board/target_board = target
     if(target_board.inUse)
@@ -221,20 +223,19 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
     target_board.inUse = 1
     target_board.controller = src
     user_ckey = user.client.ckey
-    user_body = user.client.mob //set user body to machine
+    user_body = user.client.mob
     src.current_board = target_board
-    src.current_board.cyborg.ckey = user.client.ckey // control the robot
+    src.current_board.cyborg.ckey = user.client.ckey
   if(!target)
-    user.unset_machine() // clean machine from user, rest of cleaning is done by the game
+    user.unset_machine()
     return
 
-//check if the user is fucked up or the camera target ended up dead
 /obj/item/device/syndicate_reciever/check_eye(var/mob/user as mob)
   if ( src.loc != user || user.get_active_hand() != src || !user.canmove || user.blinded || !current_camera || !current_camera.active || current_camera.camera_target.isDead())
     src.active = 0
-    user.unset_machine() //clean machine for user
-    user.reset_view(user) // reset view back to character
-    src.current_camera = null // clean source so TV won't work atuomatically on changing hands
+    user.unset_machine()
+    user.reset_view(user)
+    src.current_camera = null
     return null
   user.reset_view(current_camera)
   return 1
@@ -246,14 +247,17 @@ var/global/list/syndicate_roboticist_control_board = list(); //list of all contr
 /*
     START CYBORG OVERWRITTE SECTION
 */
-/mob/living/silicon/robot/syndiebot
+/mob/living/silicon/robot/mind_control_robot
 
-/mob/living/silicon/robot/syndiebot/Login()
-  regenerate_icons()
+/mob/living/silicon/robot/mind_control_robot/show_laws()
+  return
+
+/mob/living/silicon/robot/mind_control_robot/Login()
+  ..()
   to_chat(src, "<b>You can disconnect from the borg by using the logoff function on the Robot Commands tab.</b>")
   return
 
-/mob/living/silicon/robot/syndiebot/proc/Exit_robot()
+/mob/living/silicon/robot/mind_control_robot/proc/Exit_robot()
   set category = "Robot Commands"
   set name = "Logoff"
   var/obj/item/device/syndicate_cyborg_control_board/board = src.mmi
