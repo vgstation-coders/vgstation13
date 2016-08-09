@@ -47,7 +47,7 @@
 	if(!S || !S.len)
 		return
 
-	if(can_be_seen_by(src))
+	if(can_be_seen_by(C.mob))
 		S -= invisible
 		S |= visible
 	else
@@ -69,11 +69,11 @@
 	if(flags & SEE_IN_MECH)
 		if(istype(user.loc,/obj/mecha))
 			var/obj/mecha/mech = user.loc
-			mech.overlays += data_hud
+			mech.underlays += data_hud
 			mech.data_huds[name] = data_hud
 			return
 
-	user.overlays += data_hud
+	user.underlays += data_hud
 	user.data_huds[name] = data_hud
 
 //	var/image/dhud = image(loc = imageloc)
@@ -92,7 +92,7 @@
 	if(!user)
 		return
 	if(user.data_huds[name])
-		user.overlays -= user.data_huds[name]
+		user.underlays -= user.data_huds[name]
 		user.data_huds -= name
 
 		//var/image/dhud = user.data_huds[name]
@@ -136,7 +136,7 @@
 
 /datum/data_hud/dummy/New()
 	..()
-	dummy_image = image('icons/mob/mob.dmi', icon_state = "empty")
+	dummy_image = image('icons/mob/mob.dmi', icon_state = "white")
 	dummy_image.alpha = 0
 	dummy_image.layer = REALLY_LOW_LAYER
 	dummy_image.plane = plane

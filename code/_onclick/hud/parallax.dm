@@ -22,6 +22,7 @@ var/list/parallax_on_clients = list()
 	var/parallax_speed = 0
 
 /obj/screen/plane_master
+	mouse_opacity = 0
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER,CENTER"
 	globalscreen = 1

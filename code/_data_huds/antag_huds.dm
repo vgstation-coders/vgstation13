@@ -4,7 +4,7 @@
 
 /datum/data_hud/antag/New()
 	..()
-	hud_image = image('icons/mob/mob.dmi', icon_state = "[name]")
+	hud_image = image('icons/mob/mob.dmi', icon_state = name)
 	hud_image.plane = plane
 	hud_image.layer = EVEN_LOWER_LAYER
 
@@ -68,10 +68,10 @@ var/global/datum/data_hud/antag/syndie/syndie_hud = new /datum/data_hud/antag/sy
 	var/image/headrev_image
 
 /datum/data_hud/antag/rev/New()
-	..()
 	headrev_image = image('icons/mob/mob.dmi', icon_state = "rev_head")
 	headrev_image.layer = EVEN_LOWER_LAYER
 	headrev_image.plane = plane
+	..()
 
 
 /datum/data_hud/antag/rev/is_antag_type(var/mob/living/user)
@@ -83,7 +83,7 @@ var/global/datum/data_hud/antag/syndie/syndie_hud = new /datum/data_hud/antag/sy
 /datum/data_hud/antag/rev/to_add(var/mob/user)
 	if(isrevhead(user))
 		return headrev_image
-	..()
+	else return ..()
 
 
 var/global/datum/data_hud/antag/rev/rev_hud = new /datum/data_hud/antag/rev()

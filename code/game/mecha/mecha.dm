@@ -87,9 +87,9 @@
 	var/list/data_huds = list()
 
 /obj/mecha/update_icon()
-	overlays.Cut()
+	underlays.Cut()
 	if(occupant)
-		overlays += data_huds
+		underlays += data_huds
 	else
 		data_huds.Cut()
 
