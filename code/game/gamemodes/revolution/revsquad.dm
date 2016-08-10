@@ -148,6 +148,7 @@
 			var/obj/item/device/flash/revsquad/FR = T
 			to_chat(mob, "<span class = 'warning'>Your [FR] has [FR.limited_conversions] uses for conversions, and not all of your comrades have one like it. Use it wisely.</span>")
 		mob.update_icons()
+		stat_collection.revsquad.revsquad_items += T.name
 		return 1
 
 /datum/game_mode/revsquad/proc/check_rev_victory()
@@ -192,6 +193,7 @@
 	if(finished == REVSQUAD_VICTORY_REVS)
 		feedback_set_details("round_end_result","win - heads killed")
 		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff were killed or abandoned the station! The revolutionaries win!</FONT></span>"
+		stat_collection.revsquad.revsquad_won = 1
 	else if(finished == REVSQUAD_VICTORY_HEADS)
 		feedback_set_details("round_end_result","loss - rev heads killed")
 		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff managed to stop the revolution!</FONT></span>"
