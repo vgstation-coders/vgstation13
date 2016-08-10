@@ -34,3 +34,4 @@ delete-after: True
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
 - tweak: "To prevent abuse, you may no longer holster weapons while they are in attack 'cooldown' (same behavior as trying to put it in a container). Quickdraw not affected."
+- rscadd: "Differentiated knife holster and handgun holster verb names so they can be used separately via the Object tab."

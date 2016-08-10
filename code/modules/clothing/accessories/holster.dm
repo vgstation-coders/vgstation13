@@ -5,6 +5,7 @@
 	origin_tech = "combat=2"
 	var/obj/item/holstered = null
 	accessory_exclusion = HOLSTER
+	var/holster_verb_name = "Holster"
 
 /obj/item/clothing/accessory/holster/proc/can_holster(obj/item/weapon/gun/W)
 	return
@@ -100,10 +101,12 @@
 
 /obj/item/clothing/accessory/holster/on_attached(obj/item/clothing/under/S)
 	..()
-	attached_to.verbs += /obj/item/clothing/accessory/holster/verb/holster_verb
+	//We're making a new verb, see http://www.byond.com/forum/?post=238593
+	attached_to.verbs += new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
 
 /obj/item/clothing/accessory/holster/on_removed(mob/user as mob)
-	attached_to.verbs -= /obj/item/clothing/accessory/holster/verb/holster_verb
+	//Yes, we're calling "new" when removing a verb. I blame verbs entirely for this shit. See: http://www.byond.com/forum/?post=80230
+	attached_to.verbs -= new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
 	..()
 
 //
@@ -112,6 +115,7 @@
 /obj/item/clothing/accessory/holster/handgun
 	name = "shoulder holster"
 	desc = "A handgun holster. Perfect for concealed carry."
+	holster_verb_name = "Holster (Handgun)"
 
 /obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/weapon/gun/W)
 	if(!istype(W))
@@ -143,6 +147,7 @@
 /obj/item/clothing/accessory/holster/knife
 	name = "knife holster"
 	desc = "A holster that takes knives. The possibilities are endless."
+	holster_verb_name = "Holster (Knife)"
 
 /obj/item/clothing/accessory/holster/knife/can_holster(obj/item/weapon/W)
 	if(!istype(W))
