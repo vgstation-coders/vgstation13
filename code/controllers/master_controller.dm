@@ -142,12 +142,12 @@ datum/controller/game_controller/proc/buildcamlist()
 	if(!istype(cameranet) || !istype(cameranet.cameras) || !cameranet.cameras.len)
 		world.log << "cameranet has not been initialized before us, finding cameras manually."
 		for(var/obj/machinery/camera/C in world) //can't use machines list because cameras are removed from it.
-			if(C.z == 1 || C.z == 5)
+			if(C.z == map.zMainStation || C.z == 5)
 				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
 				ourlist += C
 	else
 		for(var/obj/machinery/camera/C in cameranet.cameras) //can't use machines list because cameras are removed from it.
-			if(C.z == 1 || C.z == 5)
+			if(C.z == map.zMainStation || C.z == 5)
 				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
 				ourlist += C
 	for(var/key in adv_camera.camerasbyzlevel)

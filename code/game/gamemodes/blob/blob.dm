@@ -100,7 +100,7 @@ You must kill it all while minimizing the damage to the station."})
 			if(directory[ckey(blob.key)])
 				blob_client = directory[ckey(blob.key)]
 				location = get_turf(C)
-				if(location.z != 1 || istype(location, /turf/space))
+				if(location.z != map.zMainStation || istype(location, /turf/space))
 					location = null
 				qdel(C)
 

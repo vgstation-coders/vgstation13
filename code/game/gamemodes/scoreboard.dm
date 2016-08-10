@@ -113,7 +113,7 @@
 				score["disc"] = 0
 			if(location in bad_zone3)
 				score["disc"] = 0
-			if(A.loc.z != 1)
+			if(A.loc.z != map.zMainStation)
 				score["disc"] = 0
 
 		if(score["nuked"])

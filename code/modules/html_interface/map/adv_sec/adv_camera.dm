@@ -128,7 +128,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 						continue
 					if(pos.z != zz)
 						camerasbyzlevel["[zz]"] -= C //bad zlevel
-						if(pos.z == 1 || pos.z == 5)
+						if(pos.z == map.zMainStation || pos.z == 5)
 							camerasbyzlevel["[zz]"] |= C //try to fix the zlevel list.
 						continue
 					ID="\ref[C]"
@@ -149,7 +149,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 				var/turf/pos = get_turf(single)
 				if(pos.z != zz)
 					camerasbyzlevel["[zz]"] -= single //bad zlevel
-					if(pos.z == 1 || pos.z == 5)
+					if(pos.z == map.zMainStation || pos.z == 5)
 						camerasbyzlevel["[zz]"] |= single //try to fix the zlevel list
 					else adding = 2 //Set to remove
 				ID="\ref[single]"

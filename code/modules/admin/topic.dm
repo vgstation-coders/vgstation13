@@ -2777,7 +2777,7 @@
 				for(var/turf/simulated/floor/F in turfs)
 					count++
 					if(!(count % 50000)) sleep(world.tick_lag)
-					if(F.z == 1)
+					if(F.z == map.zMainStation)
 						F.name = "lava"
 						F.desc = "The floor is LAVA!"
 						F.overlays += image(icon = F.icon, icon_state = "lava")
@@ -2803,7 +2803,7 @@
 						sleep(10)
 
 					for(var/turf/simulated/floor/F in lavaturfs) // Reset everything.
-						if(F.z == 1)
+						if(F.z == map.zMainStation)
 							F.name = initial(F.name)
 							F.desc = initial(F.desc)
 							F.overlays.len = 0
@@ -2882,7 +2882,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","EgL")
 				for(var/obj/machinery/door/airlock/W in all_doors)
-					if(W.z == 1 && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+					if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
 						W.req_access = list()
 				message_admins("[key_name_admin(usr)] activated Egalitarian Station mode")
 				command_alert(/datum/command_alert/eagles)

@@ -57,7 +57,7 @@
 			var/list/turfs = new
 			var/turf/picked
 			for(var/turf/simulated/floor/T in world)
-				if(T.z == 1)
+				if(T.z == map.zMainStation)
 					turfs += T
 			for(var/turf/simulated/floor/T in turfs)
 				if(prob(20))
@@ -151,7 +151,7 @@
 		var/turf/T = get_turf(H)
 		if(!T)
 			continue
-		if(T.z != 1)
+		if(T.z != map.zMainStation)
 			continue
 		for(var/datum/disease/D in H.viruses)
 			foundAlready = 1
@@ -185,7 +185,7 @@
 //	world << sound('sound/AI/aliens.ogg')
 	var/list/vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
-		if(temp_vent.loc.z == 1 && !temp_vent.welded && temp_vent.network && temp_vent.canSpawnMice)
+		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network && temp_vent.canSpawnMice)
 			if(temp_vent.network.normal_members.len > 50) // Stops Aliens getting stuck in small networks. See: Security, Virology
 				vents += temp_vent
 
@@ -212,7 +212,7 @@
 
 /* // Haha, this is way too laggy. I'll keep the prison break though.
 	for(var/obj/machinery/light/L in world)
-		if(L.z != 1) continue
+		if(L.z != map.zMainStation) continue
 		L.flicker(50)
 
 	sleep(100)
@@ -221,7 +221,7 @@
 		var/turf/T = get_turf(H)
 		if(!T)
 			continue
-		if(T.z != 1)
+		if(T.z != map.zMainStation)
 			continue
 		if(istype(H,/mob/living/carbon/human))
 			H.apply_effect((rand(15,75)),IRRADIATE,0)
@@ -238,7 +238,7 @@
 		var/turf/T = get_turf(M)
 		if(!T)
 			continue
-		if(T.z != 1)
+		if(T.z != map.zMainStation)
 			continue
 		M.apply_effect((rand(15,75)),IRRADIATE,0)
 	sleep(100)
