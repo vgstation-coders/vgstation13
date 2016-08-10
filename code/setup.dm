@@ -907,11 +907,6 @@ SEE_PIXELS	256
 #define PULSE_FAST		4	//90-120 bpm
 #define PULSE_2FAST		5	//>120 bpm
 #define PULSE_THREADY	6	//occurs during hypovolemic shock
-//feel free to add shit to lists below
-var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE)	//increase heart rate
-var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN)					//decrease heart rate
-var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
-var/list/cheartstopper = list(/*"potassium_chloride"*/) //this stops the heart when overdose is met -- c = conditional
 
 //proc/get_pulse methods
 #define GETPULSE_HAND	0	//less accurate (hand)
