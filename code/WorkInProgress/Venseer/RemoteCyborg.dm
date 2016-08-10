@@ -23,8 +23,11 @@
 * Global Lists: Two lists, one for cameras, other for boards. Easy to understand. They just contain all active cameras/boards. When a borg dies, it is removed from there.
 * Attack Message Supression: Just overwritten methods to remove the "YOU FUCKING ATTACK THE TARGET WITH YOUR SECRET CAMERA".
 *
-* Stuff in other .DMs
-* Added in robot.dm, line: 926 a verification about the camera, so it will not cause sparks. If removing this module, please, mind those lines.
+* Stuff in other .DMs (If removing this module, please, mind these notes)
+* Added in robot.dm, attackby():
+* A verification about the camera, so it will not cause sparks
+* uplink_item.dm:
+* Added the box of items on the uplink_item.dm so the roboticist can pick the bundle to build a remote cyborg
 *
 */
 
@@ -282,3 +285,20 @@ var/global/list/rc_control_boards = list();
 /obj/item/device/syndicate_remote_cyborg_control_board/attackby(obj/item/I as obj, mob/user as mob)
   return
 //END REMOVE ATTACK MESSAGES//
+
+/*
+    START BOX
+*/
+/obj/item/weapon/storage/box/remotecontrolkit
+
+/obj/item/weapon/storage/box/remotecontrolkit/New()
+	..()
+	contents = list()
+  new /obj/item/device/syndicate_remote_cyborg_control_board/(src)
+	new /obj/item/device/syndicate_reciever(src)
+  for(var/i = 1 to 2)
+    new /obj/item/device/syndicate_remote_cyborg_camera(src)
+
+/*
+    END BOX
+*/
