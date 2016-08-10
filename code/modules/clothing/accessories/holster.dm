@@ -18,6 +18,9 @@
 		to_chat(user, "<span class='warning'>\The [I] won't fit in the [src]!</span>")
 		return
 
+	if(user.attack_delayer.blocked())
+		return
+
 	if(user.drop_item(I, src))
 		holstered = I
 		holstered.add_fingerprint(user)
@@ -51,15 +54,16 @@
 		return
 
 	var/obj/item/clothing/accessory/holster/H = null
-	if (istype(src, /obj/item/clothing/accessory/holster))
+	if(istype(src, /obj/item/clothing/accessory/holster))
 		H = src
-	else if (istype(src, /obj/item/clothing/))
+	else if(istype(src, /obj/item/clothing/))
 		var/obj/item/clothing/S = src
 		if (S.accessories.len)
 			H = locate() in S.accessories
 
-	if (!H)
+	if(!H)
 		to_chat(usr, "<span class='warning'>Something is very wrong.</span>")
+		return
 
 	if(!H.holstered)
 		var/obj/item/W = usr.get_active_hand()
@@ -105,6 +109,10 @@
 //
 // Handguns
 //
+/obj/item/clothing/accessory/holster/handgun
+	name = "shoulder holster"
+	desc = "A handgun holster. Perfect for concealed carry."
+
 /obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/weapon/gun/W)
 	if(!istype(W))
 		return
@@ -117,10 +125,6 @@
 	else
 		user.visible_message("<span class='notice'>[user] draws \the [holstered], pointing it at the ground.</span>", \
 		"<span class='notice'>You draw \the [holstered], pointing it at the ground.</span>")
-
-/obj/item/clothing/accessory/holster/handgun
-	name = "shoulder holster"
-	desc = "A handgun holster. Perfect for concealed carry."
 
 /obj/item/clothing/accessory/holster/handgun/wornout
 	desc = "A worn-out handgun holster. Perfect for concealed carry."
@@ -136,6 +140,10 @@
 //
 // Knives
 //
+/obj/item/clothing/accessory/holster/knife
+	name = "knife holster"
+	desc = "A holster that takes knives. The possibilities are endless."
+
 /obj/item/clothing/accessory/holster/knife/can_holster(obj/item/weapon/W)
 	if(!istype(W))
 		return
@@ -152,7 +160,6 @@
 	"<span class='warning'>You draw your [holstered.name]!</span>")
 
 /obj/item/clothing/accessory/holster/knife/boot
-	name = "knife holster"
 	desc = "A knife holster that can be attached to any pair of boots."
 	item_state = "bootknife"
 	icon_state = "bootknife"
