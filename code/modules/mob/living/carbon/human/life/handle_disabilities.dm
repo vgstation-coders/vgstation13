@@ -93,4 +93,4 @@
 		if(getBrainLoss() >= 50)
 			if(10 <= rn && rn <= 12) if(canmove)
 				to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
-				emote("collapse")
+				Weaken(3)
