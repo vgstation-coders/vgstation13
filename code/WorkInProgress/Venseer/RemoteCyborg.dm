@@ -1,18 +1,18 @@
 /*
 * MODULE: Syndicate R.C. (Syndicate Remote Cyborg)
-* Description: This .dm adds the following robotics traitor items: cyborg camera bugs, cyborg control boards and the syndicate reciever
+* Description: This .dm adds the following robotics traitor items: cyborg camera bugs, cyborg control boards and the syndicate remote controller
 * Cyborg Camera Bugs: You can attach them to any silicon lifeform (AI, Cyborgs, pAI). It will allow you to see the user's screen almost one to one.
 * If the user has some kind of special vision (security hud for exemple), you will not have access to that.
 * Cyborg Control Boards: To use, you install this instead of a MMI when making a robot. It will create a cyborg as normal, but without a player to control it.
-* With the syndicate reciever, you can control the cyborg like any other player would, selecting a module, able to change your name, communicate with the AI.
+* With the syndicate controller, you can control the cyborg like any other player would, selecting a module, able to change your name, communicate with the AI.
 * At the same time, you are linked to the cyborg consoles. So they can lock you down, and self-destruct the robot
-* Syndicate Reciever: Imagine a controller with a screen and a keyboard, you can see the borgs you put the cameras on, or control your own borg.
+* Syndicate Controller: Imagine a controller with a screen and a keyboard, you can see the borgs you put the cameras on, or control your own borg.
 *
 * Other things:
 * Syndieborg: Just a borg that has the Cyborg Control Board. I made this so I could overwrite the login message, it doesn't make sense to have the player recieve the
 * law messages any time he connects to the borg. So it now displays a message about how to log off from the borg.
 * Frequency: Every object in this list has a frequency. You can make your own frequency by editing the variables. They all default to 'syndicate'.
-* What it means is, only boards on the syndicate frequency can communicate with syndicate recievers. You can have your own 'network', if you could say so.
+* What it means is, only boards on the syndicate frequency can communicate with syndicate controllers. You can have your own 'network', if you could say so.
 * Active: Just a 0 or 1 flag to state if the object (Camera or Control board) is online. Setting it to 0 will not instantly disconnect the player from the camera or borg though.
 * It is just a flag for when making the list. It updates when the mob with the camera, or board, dies.
 * Logoff Procedure: A small procedure made for the syndieborgs. It disconnects the player from the borg, allowing them to simply come back to their original body. Nice and easy.
@@ -127,11 +127,11 @@ var/global/list/rc_control_boards = list();
 */
 
 /*
-    START RECIEVER SECTION
+    START CONTROLLER SECTION
 */
-/obj/item/device/syndicate_reciever
-  name = "R.C. Reciever"
-  desc = "A Remote Cyborg Reciever."
+/obj/item/device/syndicate_controller
+  name = "R.C. Controller"
+  desc = "A Remote Cyborg Controller."
   icon_state = "handtv"
   flags = FPRINT
   w_class = W_CLASS_TINY
@@ -142,13 +142,13 @@ var/global/list/rc_control_boards = list();
   var/mob/living/carbon/user_body
   var/active = 0
 
-/obj/item/device/syndicate_reciever/New()
+/obj/item/device/syndicate_controller/New()
   processing_objects.Add(src)
 
-/obj/item/device/syndicate_reciever/Destroy()
+/obj/item/device/syndicate_controller/Destroy()
   processing_objects.Remove(src)
 
-/obj/item/device/syndicate_reciever/process()
+/obj/item/device/syndicate_controller/process()
   if(src.active == 0 || !(src.current_board))
     return
   else
@@ -166,7 +166,7 @@ var/global/list/rc_control_boards = list();
       return
 
 
-/obj/item/device/syndicate_reciever/attack_self(mob/user as mob)
+/obj/item/device/syndicate_controller/attack_self(mob/user as mob)
   var/list/devices = list()
   for(var/obj/item/device/syndicate_remote_cyborg_camera/camera in rc_cameras)
     if(camera.camera_target.isDead())
@@ -229,7 +229,7 @@ var/global/list/rc_control_boards = list();
     user.unset_machine()
     return
 
-/obj/item/device/syndicate_reciever/check_eye(var/mob/user as mob)
+/obj/item/device/syndicate_controller/check_eye(var/mob/user as mob)
   if ( src.loc != user || user.get_active_hand() != src || !user.canmove || user.blinded || !current_camera || !current_camera.active || current_camera.camera_target.isDead())
     src.active = 0
     user.unset_machine()
@@ -240,7 +240,7 @@ var/global/list/rc_control_boards = list();
   return 1
 
 /*
-    END RECIEVER SECTION
+    END CONTROLLER SECTION
 */
 
 /*
@@ -260,7 +260,7 @@ var/global/list/rc_control_boards = list();
   set category = "Robot Commands"
   set name = "R.C. Logoff"
   var/obj/item/device/syndicate_remote_cyborg_control_board/board = src.mmi
-  var/obj/item/device/syndicate_reciever/syndie_controller = board.controller
+  var/obj/item/device/syndicate_controller/syndie_controller = board.controller
   syndie_controller.user_body.ckey = syndie_controller.user_ckey
   syndie_controller.active = 0
   syndie_controller.current_board = null
@@ -295,7 +295,7 @@ var/global/list/rc_control_boards = list();
 	..()
 	contents = list()
   new /obj/item/device/syndicate_remote_cyborg_control_board/(src)
-	new /obj/item/device/syndicate_reciever(src)
+	new /obj/item/device/syndicate_controller(src)
   for(var/i = 1 to 2)
     new /obj/item/device/syndicate_remote_cyborg_camera(src)
 
