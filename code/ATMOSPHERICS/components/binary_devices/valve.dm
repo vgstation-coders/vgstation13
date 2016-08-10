@@ -81,9 +81,6 @@
 /obj/machinery/atmospherics/binary/valve/attack_ai(mob/user as mob)
 	return
 
-/obj/machinery/atmospherics/binary/valve/attack_paw(mob/user as mob)
-	return attack_hand(user)
-
 /obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")

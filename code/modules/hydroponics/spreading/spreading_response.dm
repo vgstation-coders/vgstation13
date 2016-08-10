@@ -86,7 +86,7 @@
 		victim.adjustBruteLoss(damage)
 		return
 	else
-		var/datum/organ/external/affecting = victim.get_organ(pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,LIMB_LEFT_ARM, LIMB_RIGHT_ARM,LIMB_HEAD,LIMB_CHEST,LIMB_GROIN))
+		var/datum/organ/external/affecting = victim.get_organ(pick(victim.organs_by_name))
 		if(affecting && affecting.is_existing() && affecting.is_organic())
 			victim.apply_damage(damage, BRUTE, affecting)
 			if(affecting.parent)

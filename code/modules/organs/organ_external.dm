@@ -898,6 +898,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/proc/can_use_advanced_tools()
 	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_PEG|ORGAN_CUT_AWAY))
 
+/datum/organ/external/proc/can_grasp()
+	return (can_grasp && grasp_id)
+
 /datum/organ/external/proc/process_grasp(var/obj/item/c_hand, var/hand_name)
 	if(!c_hand)
 		return
