@@ -17,6 +17,16 @@
 	var/checkwin_counter = 0
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
+	var/list/possible_items = list(/obj/item/weapon/card/emag,
+								   /obj/item/clothing/gloves/yellow,
+								   /obj/item/weapon/gun/projectile/automatic,
+								   /obj/item/device/flash/revsquad,
+								   /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff,
+								   /obj/item/weapon/grenade/iedcasing/preassembled,
+								   /obj/item/weapon/gun/projectile/pistol,
+								   /obj/item/gun_part/silencer,
+								   /obj/item/clothing/suit/armor/vest
+								  )
 
 /datum/game_mode/revsquad/announce()
 	to_chat(world, "<B>The current game mode is - Revolution Squad!</B>")
@@ -87,7 +97,7 @@
 		checkwin_counter = 0
 	return 0
 
-/datum/game_mode/proc/greet_revsquad(var/datum/mind/rev_mind, var/you_are=1)
+/datum/game_mode/revsquad/proc/greet_revsquad(var/datum/mind/rev_mind, var/you_are=1)
 	var/obj_count = 1
 	if (you_are)
 		to_chat(rev_mind.current, "<span class='notice'>You are a member of the organized revolutionary organization that has infiltrated this station!</span>")
@@ -102,15 +112,7 @@
 		rev_mind.store_memory("[M.assigned_role] the [M.assigned_job.title]")
 		to_chat(rev_mind.current, "[M.assigned_role] the [M.assigned_job.title]")
 
-/datum/game_mode/proc/get_revsquad_item(var/mob/living/carbon/human/M)
-	var/possible_items = list(/obj/item/weapon/card/emag,
-														/obj/item/clothing/gloves/yellow,
-														/obj/item/weapon/gun/projectile/automatic,
-														/obj/item/device/flash/revsquad,
-														/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff,
-														/obj/item/weapon/grenade/iedcasing/preassembled
-														)
-
+/datum/game_mode/revsquad/proc/get_revsquad_item(var/mob/living/carbon/human/M)
 	var/obj/item/requisitioned = pick(possible_items)
 	if(istype(requisitioned, /obj/item/device/flash/revsquad))
 		var/obj/item/device/flash/revsquad/FR = new(M, uses = REVSQUAD_FLASH_USES)
@@ -119,7 +121,8 @@
 		requisitioned = new requisitioned(M)
 	return requisitioned
 
-/datum/game_mode/proc/equip_revsquad(mob/living/carbon/human/mob)
+// Since it's part of the revsquad type, this will not currently work with make antags. Which is fine because this is a variant on rev.
+/datum/game_mode/revsquad/proc/equip_revsquad(mob/living/carbon/human/mob)
 	if(!istype(mob))
 		return
 
@@ -227,14 +230,6 @@
 				text += {"<br><img src="logo_[tempstate].png"> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("}
 				text += "body destroyed"
 			text += ")"
-			if(headrev.total_TC)
-				if(headrev.spent_TC)
-					text += "<br><span class='sinister'>TC Remaining: [headrev.total_TC - headrev.spent_TC]/[headrev.total_TC] - The tools used by the Head Revolutionary were:"
-					for(var/entry in headrev.uplink_items_bought)
-						text += "<br>[entry]"
-					text += "</span>"
-				else
-					text += "<br><span class='sinister'>The Head Revolutionary was a smooth operator this round (did not purchase any uplink items)</span>"
 
 			for(var/datum/objective/mutiny/objective in headrev.objectives)
 				targets |= objective.target
