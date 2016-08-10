@@ -99,18 +99,18 @@
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
-	var/turf/turff = get_turf(src)
+	if(!istype(universe,/datum/universal_state/supermatter_cascade))
+		var/turf/turff = get_turf(src)
+		new /turf/unsimulated/wall/supermatter(turff)
+		SetUniversalState(/datum/universal_state/supermatter_cascade)
+		explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+		empulse(turff, 100, 200, 1)
 	qdel(src)
-	new /turf/unsimulated/wall/supermatter(turff)
-	SetUniversalState(/datum/universal_state/supermatter_cascade)
-	explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-	empulse(turff, 100, 200, 1)
 
 /obj/machinery/power/supermatter/shard/explode()
 	explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 	empulse(get_turf(src), 100, 200, 1)
 	qdel(src)
-	return
 
 /obj/machinery/power/supermatter/ex_act(severity)
 	switch(severity)
@@ -329,7 +329,6 @@
 		power += Proj.damage * config_bullet_energy
 	else
 		damage += Proj.damage * config_bullet_energy
-	return 0
 
 
 /obj/machinery/power/supermatter/attack_paw(mob/user as mob)
@@ -376,7 +375,6 @@
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, src) <= 15) // Better than using orange() every process
 			R.receive_pulse(power)
-	return
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	. = ..()
