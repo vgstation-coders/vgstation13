@@ -303,7 +303,7 @@
 				text += "body destroyed"
 			text += ")"
 			if(target)
-				text += "</font>"
+				text += "</span>"
 
-		text += "<BR><HR>"
+		text += "<br /><hr>"
 	return text

@@ -102,16 +102,16 @@
 									limited_conversions--
 									if(limited_conversions <= 0)
 										to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
-										src.broken = 1
+										broken = 1
 										icon_state = "flashburnt"
-							else if(result == -1 || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
-								to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash!</span>")
-							else if(result == -2) // rev jobbanned
-								to_chat(user, "<span class=\"warning\">This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
-							else if(result == -3) // loyalty implanted
-								to_chat(user, "<span class=\"warning\">Something seems to be blocking the flash!</span>")
+							else if(result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
+								to_chat(user, "<span class='warning'>This mind seems resistant to the flash!</span>")
+							else if(result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned
+								to_chat(user, "<span class='warning'>This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
+							else if(result == ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED) // loyalty implanted
+								to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
 					else
-						to_chat(user, "<span class=\"warning\">This mind is so vacant that it is not susceptible to influence!</span>")
+						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
 		else
 			flashfail = TRUE
 	else if(issilicon(M))
@@ -134,11 +134,11 @@
 		M.flash_eyes(affect_silicon = 1)
 
 		if(!issilicon(M))
-			user.visible_message("<span class=\"disarm\">[user] blinds [M] with the flash!</span>")
+			user.visible_message("<span class='disarm'>[user] blinds [M] with the flash!</span>")
 		else
-			user.visible_message("<span class=\"warning\">[user] overloads [M]'s sensors with the flash!</span>")
+			user.visible_message("<span class='warning'>[user] overloads [M]'s sensors with the flash!</span>")
 	else
-		user.visible_message("<span class=\"notice\">[user] fails to blind [M] with the flash!</span>")
+		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	if(!user || !clown_check(user)) 	return
@@ -241,8 +241,6 @@
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
-
-/obj/item/device/flash/revsquad
 
 /obj/item/device/flash/revsquad/New(var/uses = 1)
 	..()
