@@ -120,7 +120,7 @@ var/global/list/rc_control_boards = list();
     user.drop_item(src, robot)
 
   else
-    to_chat(user, "<span class='notice'>This robot does not seem to be done. You need all parts to inser the remote control body.</span>")
+    to_chat(user, "<span class='notice'>This robot does not seem to be done. You need all parts to insert the remote control body.</span>")
 
 /*
     END CONTROL BOARD SECTION
