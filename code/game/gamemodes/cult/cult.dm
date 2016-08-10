@@ -155,7 +155,7 @@
 		var/wikiroute = role_wiki[ROLE_CULTIST]
 		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=\ref[cult_mind.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		to_chat(cult_mind.current, "<span class='sinister'>You can now speak and understand the forgotten tongue of Nar-Sie.</span>")
-		cult_mind.current.add_language("Cult")
+		cult_mind.current.add_language(LANGUAGE_CULT)
 		//memoize_cult_objectives(cult_mind)
 
 
@@ -444,7 +444,7 @@
 		cult -= cult_mind
 		to_chat(cult_mind.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
 		to_chat(cult_mind.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
-		cult_mind.current.remove_language("Cult")
+		cult_mind.current.remove_language(LANGUAGE_CULT)
 		cult_mind.memory = ""
 
 		if(mixed)
@@ -491,7 +491,7 @@
 					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
 					I.plane = CULT_ANTAG_HUD_PLANE
 					cultist.current.client.images += I
-			if(cult_mind.current)
+			if(cult_mind.current && cultist.current)
 				if(cult_mind.current.client)
 					var/imageloc = cultist.current
 					if(istype(cultist.current.loc,/obj/mecha))

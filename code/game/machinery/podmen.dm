@@ -47,8 +47,8 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 			if(!source.client && source.mind)
 				var/mob/dead/observer/O = get_ghost_from_mind(source.mind)
 				if(O && O.client && config.revival_pod_plants)
-					to_chat(O, "<span class='interface'><b><font size = 3>Your blood has been placed into a replica pod seed. Return to your body if you want to be returned to life as a pod person!</b> \)
-						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[O];reentercorpse=1'>click here!</a>)</font></span>"
+					to_chat(O, "<span class='interface big'><span class='bold'>Your blood has been placed into a replica pod seed. Return to your body if you want to be returned to life as a pod person!</span> \)
+						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[O];reentercorpse=1'>click here!</a>)</span>"
 					break
 		else
 			to_chat(user, "Nothing happens.")
@@ -173,7 +173,7 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 			if ("cult")
 				if (podman.mind in ticker.mode:cult)
 					ticker.mode:add_cultist(podman.mind)
-					podman.add_language("Cult")
+					podman.add_language(LANGUAGE_CULT)
 					ticker.mode:update_all_cult_icons() //So the icon actually appears
 		// -- End mode specific stuff
 

@@ -409,7 +409,7 @@
 	if(M_NOCLONE in subject.mutations) //We cannot clone this guy because he's a husk, but maybe we can give a more informative message.
 		if(subject.client)
 			scantemp = "Error: Unable to locate valid genetic data. However, mental interface initialized successfully."
-			to_chat(subject, "<span class='interface'><b><font size = 3>Someone is trying to clone your corpse.</b></font> \
+			to_chat(subject, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
 				You cannot be cloned as your body has been husked. However, your brain may still be used. Your ghost has been displayed as active and inside your body.</span>")
 			return
 		else
@@ -417,8 +417,8 @@
 			if(ghost && ghost.client && ghost.can_reenter_corpse)
 				scantemp = "Error: Unable to locate valid genetic data. Additionally, subject's brain is not responding to scanning stimuli."
 				ghost << 'sound/effects/adminhelp.ogg'
-				to_chat(ghost, "<span class='interface'><b><font size = 3>Someone is trying to clone your corpse.</b></font> \
-					You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body! (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
+				to_chat(ghost, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
+					You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body! (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				return
 			else
 				scantemp = "Error: Unable to locate valid genetic data. Additionally, mental interface failed to initialize."
@@ -430,8 +430,8 @@
 		if(ghost && ghost.client && ghost.can_reenter_corpse) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
 			scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
 			ghost << 'sound/effects/adminhelp.ogg'
-			to_chat(ghost, "<span class='interface'><b><font size = 3>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</b> \
-				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
+			to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
+				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 			return
 		else //No ghost matching this corpse. Guy probably either logged out or was revived by out-of-body means.
 			scantemp = "Error: Mental interface failure."

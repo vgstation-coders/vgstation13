@@ -224,7 +224,7 @@
 				cult.memoize_cult_objectives(M)
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Nar-Sie loses interest in this plane. You are no longer a cultist.</FONT></span>")
 			to_chat(M.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
-			M.current.remove_language("Cult")
+			M.current.remove_language(LANGUAGE_CULT)
 			M.memory = ""
 
 		if(M in ticker.mode.wizards)

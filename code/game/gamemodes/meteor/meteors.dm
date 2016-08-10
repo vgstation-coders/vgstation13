@@ -352,8 +352,8 @@
 	name = "Blob"
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteorblob"
-	pixel_x = -16
-	pixel_y = -16
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -16 * PIXEL_MULTIPLIER
 
 /obj/item/projectile/meteor/blob/Bump(atom/A)
 	if(!loc)

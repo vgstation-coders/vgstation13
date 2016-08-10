@@ -270,11 +270,11 @@ var/list/all_doors = list()
 
 	if(width > 1)
 		if(dir in list(EAST, WEST))
-			bound_width = width * world.icon_size
-			bound_height = world.icon_size
+			bound_width = width * WORLD_ICON_SIZE
+			bound_height = WORLD_ICON_SIZE
 		else
-			bound_width = world.icon_size
-			bound_height = width * world.icon_size
+			bound_width = WORLD_ICON_SIZE
+			bound_height = width * WORLD_ICON_SIZE
 
 	update_nearby_tiles()
 
@@ -292,9 +292,17 @@ var/list/all_doors = list()
 
 /obj/machinery/door/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group) return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return !opacity
+	if(istype(mover))
+		if(mover.checkpass(PASSGLASS))
+			return !opacity
+		if(mover.checkpass(PASSDOOR))
+			return 1
 	return !density
+
+/obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
+	if(istype(AM, /obj/structure/bed/chair/vehicle/wizmobile)) //Which is not 100% correct for things like windoors but it's close enough.
+		open()
+	return ..()
 
 /obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
@@ -362,11 +370,11 @@ var/list/all_doors = list()
 	. = ..()
 	if(width > 1)
 		if(dir in list(EAST, WEST))
-			bound_width = width * world.icon_size
-			bound_height = world.icon_size
+			bound_width = width * WORLD_ICON_SIZE
+			bound_height = WORLD_ICON_SIZE
 		else
-			bound_width = world.icon_size
-			bound_height = width * world.icon_size
+			bound_width = WORLD_ICON_SIZE
+			bound_height = width * WORLD_ICON_SIZE
 
 	update_nearby_tiles()
 

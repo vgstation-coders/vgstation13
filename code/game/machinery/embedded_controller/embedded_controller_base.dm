@@ -23,8 +23,8 @@
 		//src.tdir = dir		// to fix Vars bug
 		//dir = SOUTH
 
-		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 : -24)
-		pixel_y = (dir & 3)? (dir ==1 ? 24 : -24) : 0
+		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
+		pixel_y = (dir & 3)? (dir ==1 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER) : 0
 
 		build=0
 		stat |= MAINT

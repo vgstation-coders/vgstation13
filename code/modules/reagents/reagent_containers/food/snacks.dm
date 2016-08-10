@@ -37,7 +37,7 @@
 	..()
 
 //Proc for effects that trigger on eating that aren't directly tied to the reagents.
-/obj/item/weapon/reagent_containers/food/snacks/proc/On_Consume(var/mob/user, var/datum/reagents/reagentreference)
+/obj/item/weapon/reagent_containers/food/snacks/proc/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
 		return
 	if(reagents)
@@ -48,6 +48,7 @@
 		score["foodeaten"]++ //For post-round score
 
 		//Drop our item before we delete it, to clear any references of ourselves in people's hands or whatever.
+		var/old_loc = loc
 		if(loc == user)
 			user.drop_from_inventory(src)
 		else if(ismob(loc))
@@ -56,23 +57,38 @@
 
 		if(trash) //Do we have somehing defined as trash for our snack item ?
 			//Note : This makes sense in some way, or at least this works, just don't mess with it
+
+			//If trash is a path (like /obj/item/banana_peel), create a new object
+			//If trash is an object, use the object
+
+			//If the food item was in somebody's hands when it was eaten, put the trash item into their hands
+			//Otherwise, put the trash item in the same place where the food item was
 			if(ispath(trash, /obj/item))
-				var/obj/item/TrashItem = new trash(user)
-				user.put_in_hands(TrashItem)
+				var/obj/item/TrashItem = new trash(old_loc)
+
+				if(ismob(old_loc))
+					var/mob/M = old_loc
+					M.put_in_hands(TrashItem)
+
 			else if(istype(trash, /obj/item))
-				user.put_in_hands(trash)
+				if(ismob(old_loc))
+					var/mob/M = old_loc
+					M.put_in_hands(trash)
+				else
+					var/obj/item/I = trash
+					I.forceMove(old_loc)
 
 		qdel(src) //Remove the item, we consumed it
 
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_self(mob/user)
-
-	attack(user, user) //This is painful, but it works, I guess
-	return
+	if(can_consume(user, user))
+		consume(user, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/bite_act(mob/user) //nom nom
-	attack_self(user)
+	if(can_consume(user, user))
+		consume(user, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/New()
 
@@ -91,23 +107,11 @@
 	if(istype(M, /mob/living/carbon)) //Avoid messing with simple mobs
 		var/mob/living/carbon/target = M //First definition to avoid colons
 		if(target == user)	//If you're eating it yourself
-			//In that case, target is the user, but we'll still ask "target" to do things
-			if(!target.hasmouth)
-				to_chat(user, "<span class='warning'>You have no mouth to eat with</span>")//Good luck figuring out how that would happen
+			if(!can_consume(M, user))
+				return 0
 
-				return 0
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25) //This reminds me how unlogical mob nutrition is
-			if(wrapped)
-				to_chat(target, "<span class='warning'>You can't eat wrapped food!</span>")
-				return 0
-			if (!eat_override && ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.chem_flags & NO_EAT)
-					user.drop_from_inventory(src)
-					src.forceMove(get_turf(H))
-					playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
-					H.visible_message("<span class='warning'>As [M] attempts to eat \the [src] it falls through and onto the ground as if untouched.</span>", "<span class='notice'>As you attempt to eat \the [src] it falls through your body and onto the ground as if untouched.</span>")
-					return 0
+
 			if(fullness <= 50)
 				target.visible_message("<span class='notice'>[target] hungrily [eatverb]s some of \the [src] and gobbles it down!</span>", \
 				"<span class='notice'>You hungrily [eatverb] some of \the [src] and gobble it down!</span>")
@@ -120,64 +124,108 @@
 			else if(fullness > 350 && fullness < 550)
 				target.visible_message("<span class='notice'>[target] unwillingly [eatverb]s some of \the [src].</span>", \
 				"<span class='notice'>You unwillingly [eatverb] some of \the [src].</span>")
-			else if(fullness > (550 * (1 + M.overeatduration / 2000)))	// The more you eat - the more you can eat
-				to_chat(target, "<span class='notice'>You cannot force any more of \the [src] to go down your throat.</span>")
-				return 0
+
 		else //Feeding someone else, target is eating, user is feeding
-			if(target.hasmouth)
-				var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25)
-				if(wrapped)
-					to_chat(user, "<span class='warning'>The food is wrapped, you can't feed it to [target] like that!</span>")
-					return 0
-				if(fullness <= (550 * (1 + M.overeatduration / 1000))) //The mob will accept
-					target.visible_message("<span class='danger'>[user] attempts to feed [target] \the [src].</span>", \
-					"<span class='userdanger'>[user] attempts to feed you \the [src].</span>")
-				else //The mob is overfed and will refuse
-					target.visible_message("<span class='danger'>[user] cannot force anymore of \the [src] down [target]'s throat!</span>", \
-					"<span class='userdanger'>[user] cannot force anymore of \the [src] down your throat!</span>")
-					return 0
 
-				if(!do_mob(user, target))
-					return
-				if (ishuman(M))
-					var/mob/living/carbon/human/H = M
-					if(H.species.chem_flags & NO_EAT)
-						user.drop_from_inventory(src)
-						src.forceMove(get_turf(H))
-						H.visible_message("<span class='warning'>As [user] attempts to feed [M] \the [src] it falls through and onto the ground as if untouched.</span>", "<span class='notice'>As [user] attempts to feed you \the [src] it falls through your body and onto the ground as if untouched.</span>")
-						return 0
+			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25)
 
-				add_logs(user, target, "fed", object="[reagentlist(src)]")
-				target.visible_message("<span class='danger'>[user] feeds [target] \the [src].</span>", \
-				"<span class='userdanger'>[user] feeds you \the [src].</span>")
+			if(fullness <= (550 * (1 + M.overeatduration / 1000))) //The mob will accept
+				target.visible_message("<span class='danger'>[user] attempts to feed [target] \the [src].</span>", \
+				"<span class='userdanger'>[user] attempts to feed you \the [src].</span>")
+			else //The mob is overfed and will refuse
+				target.visible_message("<span class='danger'>[user] cannot force anymore of \the [src] down [target]'s throat!</span>", \
+				"<span class='userdanger'>[user] cannot force anymore of \the [src] down your throat!</span>")
+				return 0
 
-			else
-				to_chat(user, "<span class='warning'>[target] doesn't seem to have a mouth. Awkward!</span>")
+			if(!do_mob(user, target))
 				return
 
-		var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
-		if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
-			playsound(target.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
-			if(reagentreference.total_volume)
-				reagentreference.reaction(target, INGEST)
-				spawn() //WHY IS THIS SPAWN() HERE
-					if(gcDestroyed)
-						return
-					if(reagentreference.total_volume > bitesize)
-						/*
-						 * I totally cannot understand what this code supposed to do.
-						 * Right now every snack consumes in 2 bites, my popcorn does not work right, so I simplify it. -- rastaf0
-						var/temp_bitesize =  max(reagents.total_volume /2, bitesize)
-						reagents.trans_to(target, temp_bitesize)
-						*/
-						reagentreference.trans_to(target, bitesize)
-					else
-						reagentreference.trans_to(target, reagentreference.total_volume)
-					bitecount++
-					On_Consume(target, reagentreference)
-			return 1
+			if(!can_consume(target, user))
+				return
+
+			add_logs(user, target, "fed", object="[reagentlist(src)]")
+			target.visible_message("<span class='danger'>[user] feeds [target] \the [src].</span>", \
+			"<span class='userdanger'>[user] feeds you \the [src].</span>")
+
+		return consume(target)
 
 	return 0
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0)
+	if(!istype(eater))
+		return
+	if(!eatverb)
+		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
+
+	if(messages)
+		var/fullness = eater.nutrition + (eater.reagents.get_reagent_amount(NUTRIMENT) * 25)
+		if(fullness <= 50)
+			eater.visible_message("<span class='notice'>[eater] hungrily [eatverb]s some of \the [src] and gobbles it down!</span>", \
+			"<span class='notice'>You hungrily [eatverb] some of \the [src] and gobble it down!</span>")
+		else if(fullness > 50 && fullness < 150)
+			eater.visible_message("<span class='notice'>[eater] hungrily [eatverb]s \the [src].</span>", \
+			"<span class='notice'>You hungrily [eatverb] \the [src].</span>")
+		else if(fullness > 150 && fullness < 350)
+			eater.visible_message("<span class='notice'>[eater] [eatverb]s \the [src].</span>", \
+			"<span class='notice'>You [eatverb] \the [src].</span>")
+		else if(fullness > 350 && fullness < 550)
+			eater.visible_message("<span class='notice'>[eater] unwillingly [eatverb]s some of \the [src].</span>", \
+			"<span class='notice'>You unwillingly [eatverb] some of \the [src].</span>")
+
+	var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
+	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
+		playsound(get_turf(eater), 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if(reagentreference.total_volume)
+			reagentreference.reaction(eater, INGEST)
+			spawn() //WHY IS THIS SPAWN() HERE
+				if(gcDestroyed)
+					return
+				if(reagentreference.total_volume > bitesize)
+					/*
+					 * I totally cannot understand what this code supposed to do.
+					 * Right now every snack consumes in 2 bites, my popcorn does not work right, so I simplify it. -- rastaf0
+					var/temp_bitesize =  max(reagents.total_volume /2, bitesize)
+					reagents.trans_to(target, temp_bitesize)
+					*/
+					reagentreference.trans_to(eater, bitesize)
+				else
+					reagentreference.trans_to(eater, reagentreference.total_volume)
+				bitecount++
+				after_consume(eater, reagentreference)
+		return 1
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/can_consume(mob/living/carbon/eater, mob/user)
+	if(!istype(eater))
+		return
+	if(!eater.hasmouth)
+		return
+	if(!reagents.total_volume)	//Are we done eating (determined by the amount of reagents left, here 0)
+		//This is mostly caused either by "persistent" food items or spamming
+		to_chat(user, "<span class='notice'>There's nothing left of \the [src].</span>")
+		qdel(src)
+		return
+	if(wrapped)
+		to_chat(user, "<span class='notice'>\The [src] is still wrapped.</span>")
+		return
+
+	var/fullness = eater.nutrition + (eater.reagents.get_reagent_amount(NUTRIMENT) * 25) //This reminds me how unlogical mob nutrition is
+
+	if(fullness > (550 * (1 + eater.overeatduration / 2000)))	// The more you eat - the more you can eat
+		to_chat(user, "<span class='notice'>You cannot force any more of \the [src] to go down [(user==eater) ? "your" : "\the [eater]'s"] throat.</span>")
+		return
+
+	if(ishuman(eater))
+		var/mob/living/carbon/human/H = eater
+		if((H.species.chem_flags & NO_EAT) && !(src.food_flags & FOOD_SKELETON_FRIENDLY))
+			if(ismob(loc))
+				var/mob/M = loc
+				M.drop_from_inventory(src)
+			src.forceMove(get_turf(H))
+			H.visible_message("<span class='warning'>\The [src] falls through \the [eater] and onto the ground, completely untouched.</span>",\
+			"<span class='notice'>As [user] attempts to feed you \the [src], \he falls through your body and onto the ground, completely untouched.</span>")
+			return
+
+	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
@@ -1130,7 +1178,7 @@
 		reagents.add_reagent(NUTRIMENT, 2)
 		bitesize = 0.1 //this snack is supposed to be eating during looooong time. And this it not dinner food! --rastaf0
 
-/obj/item/weapon/reagent_containers/food/snacks/popcorn/On_Consume()
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/after_consume()
 	if(prob(unpopped))	//lol ...what's the point? << AINT SO POINTLESS NO MORE
 		to_chat(usr, "<span class='warning'>You bite down on an un-popped kernel, and it hurts your teeth!</span>")
 		unpopped = max(0, unpopped-1)
@@ -1588,7 +1636,7 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 4)
 		baconbeacon = new /obj/item/beacon/bacon(src)
-	On_Consume()
+	after_consume()
 		if(!reagents.total_volume)
 			baconbeacon.loc = usr
 			baconbeacon.digest_delay()
@@ -1619,7 +1667,7 @@
 	if(wrapped)
 		Unwrap(user)
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/On_Consume(var/mob/M)
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/after_consume(var/mob/M)
 
 	to_chat(M, "<span class = 'warning'>Something inside of you suddently expands!</span>")
 
@@ -2824,7 +2872,7 @@
 
 		if( pizza )
 			var/image/pizzaimg = image("food.dmi", icon_state = pizza.icon_state)
-			pizzaimg.pixel_y = -3
+			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
 			overlays += pizzaimg
 
 		return
@@ -2841,7 +2889,7 @@
 
 		if( doimgtag )
 			var/image/tagimg = image("food.dmi", icon_state = "pizzabox_tag")
-			tagimg.pixel_y = boxes.len * 3
+			tagimg.pixel_y = boxes.len * 3 * PIXEL_MULTIPLIER
 			overlays += tagimg
 
 	icon_state = "pizzabox[boxes.len+1]"

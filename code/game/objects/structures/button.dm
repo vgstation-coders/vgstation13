@@ -106,6 +106,6 @@ var/list/hidden_doors = list()
 		T.ChangeTurf(floor_typepath)
 
 		if(fade_animation)
-			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1)
 
 		opened = 1

@@ -171,7 +171,7 @@
 	vampire_blood_display = getFromPool(/obj/screen)
 	vampire_blood_display.name = "Vampire Blood"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "EAST-1:28,CENTER+2:15"
+	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
 
 	mymob.client.screen += list(vampire_blood_display)
 
@@ -179,6 +179,6 @@
 	vampire_blood_display = getFromPool(/obj/screen)
 	vampire_blood_display.name = "Changeling Chems"
 	vampire_blood_display.icon_state = "dark128"
-	vampire_blood_display.screen_loc = "EAST-1:28,CENTER+2:15"
+	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
 
 	mymob.client.screen += list(vampire_blood_display)

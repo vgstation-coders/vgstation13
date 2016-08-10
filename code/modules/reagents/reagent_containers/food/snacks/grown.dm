@@ -16,8 +16,8 @@
 		if(!isnull(newpotency))
 			potency = newpotency
 		..()
-		src.pixel_x = rand(-5.0, 5)
-		src.pixel_y = rand(-5.0, 5)
+		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+		src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
@@ -150,7 +150,7 @@
 				if(H.species && !(H.species.flags & NO_PAIN))
 					H.drop_item(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/On_Consume(var/mob/living/carbon/human/H)
+/obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
 	if(seed.thorny && istype(H))
 		var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 		if(affecting)
@@ -205,10 +205,18 @@
 		return 0
 	if(!seed.chems || !seed.chems.len)
 		return 0
+
+	var/list/thingsweinjected = list()
 	var/injecting = Clamp(1, 3, potency/10)
+
 	for(var/rid in seed.chems) //Only transfer reagents that the plant naturally produces, no injecting chloral into your nettles.
 		reagents.trans_id_to(H,rid,injecting)
+		thingsweinjected += "[injecting]u of [rid]"
 		. = 1
+
+	if(. && fingerprintshidden && fingerprintshidden.len)
+		H.investigation_log(I_CHEMS, "was stung by \a [src], transfering [english_list(thingsweinjected)] - all touchers: [english_list(src.fingerprintshidden)]")
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_fruit_teleport(atom/hit_atom, mob/M, var/potency)	//Does this need logging?
 	var/datum/zLevel/L = get_z_level(src)

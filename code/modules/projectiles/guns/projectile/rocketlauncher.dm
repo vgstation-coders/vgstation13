@@ -116,5 +116,5 @@
 
 /obj/item/ammo_casing/rocket_rpg/nikita/New()
 	..()
-	pixel_x = rand(-10.0, 10)
-	pixel_y = rand(-10.0, 10)
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER

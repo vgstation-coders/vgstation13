@@ -175,14 +175,13 @@
 				sleep(3)
 				B.Move(get_step(user,movementdirection), movementdirection)
 
-		if(locate(/obj) in src)
-			for(var/obj/thing in src)
-				thing.loc = get_turf(src)
-				thing.throw_at(target,10,thing.throw_speed*3)
-				user.visible_message(
-					"<span class='danger'>[user] fires [src] and launches [thing] at [target]!</span>",
-					"<span class='danger'>You fire [src] and launch [thing] at [target]!</span>")
-				break
+		for(var/obj/thing in src)
+			thing.forceMove(get_turf(src))
+			thing.throw_at(target,10,thing.throw_speed*3)
+			user.visible_message(
+				"<span class='danger'>[user] fires [src] and launches [thing] at [target]!</span>",
+				"<span class='danger'>You fire [src] and launch [thing] at [target]!</span>")
+			break
 
 		var/turf/T = get_turf(target)
 		var/turf/T1 = get_step(T,turn(direction, 90))
@@ -227,9 +226,7 @@
 					if(W.loc == my_target) break
 					sleep(2)
 
-		if((istype(user.loc, /turf/space)) || (user.areaMaster.has_gravity == 0))
-			user.inertia_dir = get_dir(target, user)
-			step(user, user.inertia_dir)
+		user.apply_inertia(get_dir(target, user))
 	else
 		return ..()
 	return
@@ -324,9 +321,7 @@
 					if(W.loc == my_target) break
 					sleep(2)
 
-		if((istype(user.loc, /turf/space)) || (user.areaMaster.has_gravity == 0))
-			user.inertia_dir = get_dir(target, user)
-			step(user, user.inertia_dir)
+		user.apply_inertia(get_dir(target, user))
 	else
 		return ..()
 	return

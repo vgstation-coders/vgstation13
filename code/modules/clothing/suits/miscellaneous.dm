@@ -412,11 +412,11 @@
 		return ..()
 	if((src == H.wear_suit) && H.flying)
 		H.flying = 0
-		animate(H, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+		animate(H, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(H, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(H)
 		if(H.lying)//aka. if they have just been stunned
-			H.pixel_y -= 6
+			H.pixel_y -= 6 * PIXEL_MULTIPLIER
 	..()
 
 /obj/item/clothing/suit/clownpiece/flying/equipped(var/mob/user, var/slot)
@@ -424,16 +424,16 @@
 	if(!istype(H)) return
 	if((slot == slot_wear_suit) && !user.flying)
 		user.flying = 1
-		animate(user, pixel_y = pixel_y + 10 , time = 10, loop = 1, easing = SINE_EASING)
+		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
 
 /obj/item/clothing/suit/clownpiece/flying/dropped(mob/user as mob)
 	if(user.flying)
 		user.flying = 0
-		animate(user, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(user)
 		if(user.lying)//aka. if they have just been stunned
-			user.pixel_y -= 6
+			user.pixel_y -= 6 * PIXEL_MULTIPLIER
 	..()
 
 

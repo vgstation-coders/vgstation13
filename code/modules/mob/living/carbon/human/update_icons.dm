@@ -186,7 +186,7 @@ var/global/list/damage_icon_parts = list()
 
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.flags & CAN_BE_FAT)
-	var/hulk = (M_HULK in src.mutations) && species.name == "Horror" // Part of the species.
+	var/hulk = (M_HULK in src.mutations) && species.name != "Horror" // Part of the species.
 	var/skeleton = (SKELETON in src.mutations)
 
 	var/g = "m"
@@ -1065,8 +1065,8 @@ var/global/list/damage_icon_parts = list()
 		new_item_overlay.name = "[index]"
 		new_item_overlay.icon = t_inhand_state
 		new_item_overlay.icon_state = t_state
-		new_item_overlay.pixel_x = -1*(check_dimensions.Width() - 32)/2
-		new_item_overlay.pixel_y = -1*(check_dimensions.Height() - 32)/2
+		new_item_overlay.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
+		new_item_overlay.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
 		new_item_overlay.layer = O.layer
 
 		var/list/offsets = get_item_offset_by_index(index)

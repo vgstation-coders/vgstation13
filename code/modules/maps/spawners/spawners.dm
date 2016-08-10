@@ -22,8 +22,8 @@
 			spawned = pick(to_spawn)
 			spawned = new spawned(loc)
 			if(jiggle)
-				spawned.pixel_x = rand(-jiggle, jiggle)
-				spawned.pixel_y = rand(-jiggle, jiggle)
+				spawned.pixel_x = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
+				spawned.pixel_y = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
 
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////
@@ -201,7 +201,7 @@
 		/obj/machinery/vending/robotics,
 		/obj/machinery/vending/sovietsoda,
 		/obj/structure/AIcore,
-		/obj/structure/device/piano,
+		/obj/structure/piano,
 		/obj/structure/displaycase_frame,
 		/obj/structure/particle_accelerator/fuel_chamber,
 		/obj/structure/reagent_dispensers/fueltank,

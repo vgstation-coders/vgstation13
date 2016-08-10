@@ -28,8 +28,8 @@
 		var/icon_type = controller.get_icon_type(button_id)
 		var/list/pixel_dis = controller.get_pixel_displacement(button_id)
 		button_icon.icon_state = "[base_state][icon_type]"
-		button_icon.pixel_x = pixel_dis["pixel_x"]
-		button_icon.pixel_y = pixel_dis["pixel_y"]
+		button_icon.pixel_x = pixel_dis["pixel_x"] * PIXEL_MULTIPLIER
+		button_icon.pixel_y = pixel_dis["pixel_y"] * PIXEL_MULTIPLIER
 		holder.overlays += button_icon
 	else
 		button_icon.icon_state = base_state

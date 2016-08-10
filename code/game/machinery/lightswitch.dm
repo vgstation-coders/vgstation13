@@ -20,8 +20,8 @@
 	if(buildstage)
 		on = areaMaster.lightswitch
 	else
-		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 : -28)
-		pixel_y = (ndir & 3)? (ndir ==1 ? 28 : -28) : 0
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
+		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
 
@@ -88,13 +88,14 @@
 /obj/machinery/light_switch/attack_paw(mob/user)
 	src.attack_hand(user)
 
-/obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/G)
+/obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/ghost)
 	if(blessed)
-		to_chat(G, "Your hand goes right through the switch...Is that some holy water dripping from it?")
+		to_chat(ghost, "Your hand goes right through the switch...Is that some holy water dripping from it?")
 		return 0
-	if(!G.can_poltergeist())
-		to_chat(G, "Your poltergeist abilities are still cooling down.")
+	if(!ghost.can_poltergeist())
+		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
 		return 0
+	investigation_log(I_GHOST, "|| was switched [on ? "off" : "on"] by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return ..()
 
 /obj/machinery/light_switch/attack_hand(mob/user)

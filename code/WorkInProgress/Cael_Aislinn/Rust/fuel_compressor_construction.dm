@@ -36,8 +36,8 @@
 		icon_state = "fuel_compressor1"
 
 	//20% easier to read than apc code
-	pixel_x = (dir & 3)? 0 : (dir == 4 ? 32 : -32)
-	pixel_y = (dir & 3)? (dir ==1 ? 32 : -32) : 0
+	pixel_x = (dir & 3)? 0 : (dir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE)
+	pixel_y = (dir & 3)? (dir ==1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : 0
 
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/W, mob/user)
 

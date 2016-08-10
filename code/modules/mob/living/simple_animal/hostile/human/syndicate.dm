@@ -78,7 +78,7 @@
 	speed = 0
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/space/Process_Spacemove(var/check_drift = 0)
-	return
+	return 1
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged
 	ranged = 1
@@ -98,7 +98,7 @@
 	projectiletype = /obj/item/projectile/beam
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/laser)
-	
+
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space
 	icon_state = "syndicaterangedpsace"
 	icon_living = "syndicaterangedpsace"
@@ -116,4 +116,4 @@
 	speed = 0
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space/Process_Spacemove(var/check_drift = 0)
-	return
+	return 1

@@ -5,7 +5,7 @@
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
 		nullblock = 1
-		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
+		T.turf_animation('icons/effects/96x96.dmi',"nullding",-WORLD_ICON_SIZE,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
 		return 1
 	else if(target.contents)
 		for(var/atom/A in target.contents)
@@ -195,7 +195,7 @@
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-			M.add_language("Cult")
+			M.add_language(LANGUAGE_CULT)
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
 			stat_collection.cult.converted++
 			if(M.client)
@@ -648,7 +648,7 @@
 	to_chat(D, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 	to_chat(D, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 
-	D.add_language("Cult")
+	D.add_language(LANGUAGE_CULT)
 
 
 	var/mob/living/user = usr
@@ -1299,10 +1299,14 @@
 	if(!istype(src,/obj/effect/rune))
 		usr.whisper("Sa tatha najin")
 		if(ishuman(user))
+			var/mob/living/carbon/human/P = user
 			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr]...</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
-			if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+			if(isplasmaman(P))
+				P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
+				P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
+			else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(user), slot_wear_suit)
 			else
@@ -1327,10 +1331,14 @@
 		for(var/mob/living/M in src.loc)
 			if(iscultist(M))
 				if(ishuman(M))
+					var/mob/living/carbon/human/P = user
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 					var/datum/game_mode/cult/mode_ticker = ticker.mode
-					if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+					if(isplasmaman(P))
+						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
+						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
+					else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
 					else

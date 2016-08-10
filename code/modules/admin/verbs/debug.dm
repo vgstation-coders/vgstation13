@@ -441,7 +441,7 @@ Pressure: [env.return_pressure()]"}
 				M.mind.special_role = "Cultist"
 				ticker.mode.cult += M.mind
 				to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-				M.add_language("Cult")
+				M.add_language(LANGUAGE_CULT)
 			to_chat(src, "Made [M] a cultist.")
 */
 
@@ -1135,8 +1135,8 @@ Pressure: [env.return_pressure()]"}
 			S.current_size = 7
 			S.icon = 'icons/effects/224x224.dmi'
 			S.icon_state = "singularity_s7"
-			S.pixel_x = -96
-			S.pixel_y = -96
+			S.pixel_x = -96 * PIXEL_MULTIPLIER
+			S.pixel_y = -96 * PIXEL_MULTIPLIER
 			S.grav_pull = 0
 			S.dissipate = 0
 			S.consume_range = 0 //Can't be too sure

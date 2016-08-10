@@ -185,7 +185,7 @@
 "dC" = (/obj/structure/grille,/turf/unsimulated/floor,/area/jungle/crash_ship_source)
 "dD" = (/obj/structure/grille{density = 0; icon_state = "brokengrille"},/turf/unsimulated/floor,/area/jungle/crash_ship_source)
 "dE" = (/obj/structure/grille,/obj/structure/window/reinforced,/turf/unsimulated/floor,/area/jungle/crash_ship_source)
-"dF" = (/turf/unsimulated/jungle/path,/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall_f10"; layer = 2; tag = "icon-swall_f10"},/area/jungle/crash_ship_source)
+"dF" = (/turf/unsimulated/jungle/path,/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall_f10"; tag = "icon-swall_f10"},/area/jungle/crash_ship_source)
 "dG" = (/turf/simulated/shuttle/wall{tag = "icon-swall3"; icon_state = "swall3"; dir = 2},/area/jungle/crash_ship_source)
 "dH" = (/obj/effect/landmark/loot_spawn/low,/turf/unsimulated/floor,/area/jungle/crash_ship_source)
 "dI" = (/turf/unsimulated/floor,/area/jungle/crash_ship_source)

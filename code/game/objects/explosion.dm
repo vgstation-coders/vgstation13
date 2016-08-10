@@ -110,7 +110,7 @@ var/explosion_shake_message_cooldown = 0
 			E.set_up(epicenter)
 			E.start()
 		else
-			epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-32, -32, 13)
+			epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 
 		var/x0 = epicenter.x
 		var/y0 = epicenter.y

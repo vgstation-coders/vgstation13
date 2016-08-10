@@ -194,9 +194,8 @@
 				B.Move(get_step(user,movementdirection), movementdirection)
 				sleep(3)
 				B.Move(get_step(user,movementdirection), movementdirection)
-		if((istype(user.loc, /turf/space)) || (user.areaMaster.has_gravity == 0))
-			user.inertia_dir = get_dir(target, user)
-			step(user, user.inertia_dir)
+
+		user.apply_inertia(get_dir(target, user))
 
 	if(silenced)
 		if(fire_sound)

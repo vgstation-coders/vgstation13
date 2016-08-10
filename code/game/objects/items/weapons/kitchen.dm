@@ -31,7 +31,7 @@
 	. = ..()
 
 	if (prob(60))
-		src.pixel_y = rand(0, 4)
+		src.pixel_y = rand(0, 4) * PIXEL_MULTIPLIER
 
 /*
  * Spoons
@@ -78,9 +78,14 @@
 		if(M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 		else
-			user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
+			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
+			if(do_mob(user, M))
+				if(!loaded_food)
+					return
+
+				user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
 		reagents.reaction(M, INGEST)
-		reagents.trans_to(M.reagents, reagents.total_volume)
+		reagents.trans_to(M.reagents, reagents.total_volume, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		overlays -= loaded_food
 		del(loaded_food)
 		loaded_food_name = null
@@ -113,15 +118,15 @@
 		var/icon/food_to_load = getFlatIcon(snack)
 		food_to_load.Scale(16,16)
 		loaded_food = image(food_to_load)
-		loaded_food.pixel_x = 8 + src.pixel_x
-		loaded_food.pixel_y = 15 + src.pixel_y
+		loaded_food.pixel_x = 8 * PIXEL_MULTIPLIER + src.pixel_x
+		loaded_food.pixel_y = 15 * PIXEL_MULTIPLIER + src.pixel_y
 		src.overlays += loaded_food
 		if(snack.reagents.total_volume > snack.bitesize)
 			snack.reagents.trans_to(src, snack.bitesize)
 		else
 			snack.reagents.trans_to(src, snack.reagents.total_volume)
 			snack.bitecount++
-			snack.On_Consume(user)
+			snack.after_consume(user)
 	return 1
 
 /obj/item/weapon/kitchen/utensil/fork/plastic
@@ -466,6 +471,8 @@
 		return 5
 
 /obj/item/weapon/tray/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(isrobot(user) && !isMoMMI(user))
+		return
 	if(istype(W, /obj/item/weapon/kitchen/rollingpin)) //shield bash
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
@@ -502,13 +509,13 @@
 		overlays += image
 	else
 		..()
-/obj/item/weapon/tray/proc/calc_carry() 
+/obj/item/weapon/tray/proc/calc_carry()
 	// calculate the weight of the items on the tray
 	. = 0 // value to return
 
 	for(var/obj/item/I in carrying)
 		. += I.get_trayweight() || INFINITY
-/* previous functionality of trays, 
+/* previous functionality of trays,
 /obj/item/weapon/tray/prepickup(mob/user)
 	..()
 

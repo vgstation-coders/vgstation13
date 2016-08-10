@@ -441,7 +441,7 @@ var/global/mulebot_count = 0
 	C.loc = src
 	load = C
 
-	C.pixel_y += 9
+	C.pixel_y += 9 * PIXEL_MULTIPLIER
 	if(C.layer < layer)
 		C.layer = layer + 0.1
 	overlays += C
@@ -466,7 +466,7 @@ var/global/mulebot_count = 0
 	overlays.len = 0
 
 	load.loc = src.loc
-	load.pixel_y -= 9
+	load.pixel_y -= 9 * PIXEL_MULTIPLIER
 	load.layer = initial(load.layer)
 	if(ismob(load))
 		var/mob/M = load

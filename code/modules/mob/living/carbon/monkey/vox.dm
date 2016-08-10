@@ -13,7 +13,7 @@
 	safe_oxygen_min = 0
 	var/eggsleft
 	var/eggcost = 250
-	languagetoadd = "Vox-pidgin"
+	languagetoadd = LANGUAGE_VOX
 
 /mob/living/carbon/monkey/vox/attack_hand(mob/living/carbon/human/M as mob)
 
@@ -44,8 +44,8 @@
 		nutrition -= eggcost
 		eggsleft--
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/vox/E = new(get_turf(src))
-		E.pixel_x = rand(-6,6)
-		E.pixel_y = rand(-6,6)
+		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(prob(25))
 			processing_objects.Add(E)
 

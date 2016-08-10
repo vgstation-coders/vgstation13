@@ -150,7 +150,7 @@
 	if(src.fullyCustom)
 		var/icon/C = getFlatIcon(S, S.dir, 0)
 		I = image(C)
-		I.pixel_y = 12-empty_Y_space(C)
+		I.pixel_y = 12 * PIXEL_MULTIPLIER-empty_Y_space(C)
 	else
 		I = src.filling
 		if(istype(S) && S.filling_color != "#FFFFFF")
@@ -158,17 +158,17 @@
 		else
 			I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
 		if(src.stackIngredients)
-			I.pixel_y = src.ingredients.len*2
+			I.pixel_y = src.ingredients.len * 2 * PIXEL_MULTIPLIER
 		else
 			src.overlays.len = 0
 	if(src.fullyCustom || src.stackIngredients)
 		var/clicked_x = text2num(params2list(params)["icon-x"])
 		if (isnull(clicked_x))   I.pixel_x = 0
-		else if (clicked_x < 9)  I.pixel_x = -2 //this looks pretty shitty
-		else if (clicked_x < 14) I.pixel_x = -1 //but hey
-		else if (clicked_x < 19) I.pixel_x = 0  //it works
-		else if (clicked_x < 25) I.pixel_x = 1
-		else 					 I.pixel_x = 2
+		else if (clicked_x < 9 * PIXEL_MULTIPLIER)  I.pixel_x = -2 * PIXEL_MULTIPLIER //this looks pretty shitty
+		else if (clicked_x < 14 * PIXEL_MULTIPLIER) I.pixel_x = -1 * PIXEL_MULTIPLIER //but hey
+		else if (clicked_x < 19 * PIXEL_MULTIPLIER) I.pixel_x = 0  //it works
+		else if (clicked_x < 25 * PIXEL_MULTIPLIER) I.pixel_x = 1 * PIXEL_MULTIPLIER
+		else 					 I.pixel_x = 2 * PIXEL_MULTIPLIER
 	return I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()
@@ -208,7 +208,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/drawTopping()
 	var/image/I = src.topping
-	I.pixel_y = (src.ingredients.len+1)*2
+	I.pixel_y = (src.ingredients.len+1)*2 * PIXEL_MULTIPLIER
 	src.overlays += I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger

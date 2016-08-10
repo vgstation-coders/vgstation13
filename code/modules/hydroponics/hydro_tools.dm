@@ -375,8 +375,8 @@
 /obj/item/weapon/reagent_containers/glass/fertilizer/New()
 	..()
 
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 	if(fertilizer)
 		reagents.add_reagent(fertilizer,10)

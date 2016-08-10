@@ -57,6 +57,7 @@
 	S.Crossed()
 
 	qdel(src)
+	return SPECIAL_ATTACK_FAILED
 
 /obj/item/clothing/glasses/regular/hipster
 	name = "Prescription Glasses"
@@ -88,6 +89,7 @@
 	S.Crossed()
 
 	qdel(src)
+	return SPECIAL_ATTACK_FAILED
 
 /obj/item/clothing/glasses/sunglasses/purple
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in purple."

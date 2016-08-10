@@ -6,7 +6,7 @@
 	if(issilicon(other))
 		return 1
 
-	if(speaking && speaking.name == "Galactic Common")
+	if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 		if(dexterity_check())
 			return 1
 

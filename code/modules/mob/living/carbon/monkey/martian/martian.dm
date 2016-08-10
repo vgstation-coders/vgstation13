@@ -58,7 +58,7 @@
 		var/t_state = I.item_state
 		var/t_inhand_states = I.inhand_states[get_direction_by_index(index)]
 		if(!t_state)	t_state = I.icon_state
-		overlays_standing[10 + index]	= image("icon" = t_inhand_states, "icon_state" = t_state, "pixel_x" = pixelx, "pixel_y" = pixely)
+		overlays_standing[10 + index]	= image(icon = t_inhand_states, icon_state = t_state, pixel_x = pixelx, pixel_y = pixely)
 		I.screen_loc = get_held_item_ui_location(index)
 		if (handcuffed)
 			drop_item(I)

@@ -51,8 +51,8 @@ var/list/blob_looks
 	var/health_timestamp = 0
 	var/brute_resist = 4
 	var/fire_resist = 1
-	pixel_x = -16
-	pixel_y = -16
+	pixel_x = -WORLD_ICON_SIZE/2
+	pixel_y = -WORLD_ICON_SIZE/2
 	plane = BLOB_PLANE
 	var/spawning = 2
 	var/dying = 0
@@ -243,8 +243,8 @@ var/list/blob_looks
 	switch(blob_looks[looks])
 		if(64)
 			icon_state = icon_new
-			pixel_x = -16
-			pixel_y = -16
+			pixel_x = -WORLD_ICON_SIZE/2
+			pixel_y = -WORLD_ICON_SIZE/2
 			layer = initial(layer)
 			if(right_now)
 				spawning = 0
@@ -421,20 +421,17 @@ var/list/blob_looks = list(
 			if(!spawning)
 				for(var/obj/effect/blob/B in orange(src,1))
 					if(B.spawning == 1)
-						anim(target = loc, a_icon = icon, flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.1, offX = -16, offY = -16)
+						anim(target = loc, a_icon = icon, flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer, offX = -16, offY = -16,plane = plane)
 						spawn(8)
 							update_icon()
 					else if(!B.dying && !B.spawning)
 						if(spawnend)
-							anim(target = loc, a_icon = icon, flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer+0.1, offX = -16, offY = -16)
+							anim(target = loc, a_icon = icon, flick_anim = "connect_spawn", sleeptime = 15, direction = get_dir(src,B), lay = layer, offX = -16, offY = -16,plane = plane)
 						else
-
 							if(istype(B,/obj/effect/blob/core))
 								overlays += image(icon,"connect",dir = get_dir(src,B))
 							else
-								var/num = rand(1,100)
-								num /= 10000
-								overlays += image(icon,"connect",dir = get_dir(src,B), layer = layer-num)
+								overlays += image(icon,"connect",dir = get_dir(src,B))
 
 			if(spawnend)
 				spawn(10)
@@ -444,6 +441,3 @@ var/list/blob_looks = list(
 	else
 		if(health <= 15)
 			icon_state = "blob_damaged"
-			return
-
-

@@ -128,9 +128,9 @@
 
 	if(src.tdir & 3)
 		pixel_x = 0
-		pixel_y = (src.tdir == 1 ? 24 : -24)
+		pixel_y = (src.tdir == 1 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
 	else
-		pixel_x = (src.tdir == 4 ? 24 : -24)
+		pixel_x = (src.tdir == 4 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
 		pixel_y = 0
 
 	if (building==0)
@@ -364,9 +364,9 @@
 			update_icon()
 			updating_icon = 0
 
-/obj/machinery/power/apc/spook()
+/obj/machinery/power/apc/spook(mob/dead/observer/ghost)
 	if(spooky) return // Fuck you we're already spooky
-	if(!..()) return //If blessed, return
+	if(!..(ghost, TRUE)) return //If blessed, return
 
 	spooky=1
 	update_icon()

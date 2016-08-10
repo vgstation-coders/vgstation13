@@ -352,16 +352,7 @@
 		src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
 			drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
 
-		if((istype(src.loc, /turf/space)) || (src.areaMaster && (src.areaMaster.has_gravity == 0)))
-			var/mob/space_obj=src
-			// If we're being held, make the guy holding us move.
-			if(istype(loc,/obj/item/weapon/holder))
-				var/obj/item/weapon/holder/Ho=loc
-				// Who holds the holder?
-				if(ismob(Ho.loc))
-					space_obj=Ho.loc
-			space_obj.inertia_dir = get_dir(target, src)
-			step(space_obj, inertia_dir)
+		src.apply_inertia(get_dir(target, src))
 
 
 /*

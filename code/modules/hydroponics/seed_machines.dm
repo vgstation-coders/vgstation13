@@ -10,8 +10,8 @@
 
 /obj/item/weapon/disk/botany/New()
 	..()
-	pixel_x = rand(-5,5)
-	pixel_y = rand(-5,5)
+	pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
+	pixel_y = rand(-5,5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/disk/botany/attack_self(var/mob/user as mob)
 	if(genes.len)

@@ -342,7 +342,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	..(message, blind_message, drugged_message, blind_drugged_message)
 
 /mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
-	if(see_invisible < invisibility || src == A)
+	if(see_invisible < A.invisibility || src == A)
 		return
 	var/hallucination = hallucinating()
 	var/msg = message
@@ -440,8 +440,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 			animate(narglow, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8)
 */
 		//Else if no dir is given, simply send them the image of narsie
-		var/new_x = 32 * (N.x - src.x) + N.pixel_x
-		var/new_y = 32 * (N.y - src.y) + N.pixel_y
+		var/new_x = WORLD_ICON_SIZE * (N.x - src.x) + N.pixel_x
+		var/new_y = WORLD_ICON_SIZE * (N.y - src.y) + N.pixel_y
 		narsimage.pixel_x = new_x
 		narsimage.pixel_y = new_y
 		narglow.pixel_x = new_x
@@ -464,8 +464,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 			riftimage.plane = LIGHTING_PLANE
 			riftimage.mouse_opacity = 0
 
-		var/new_x = 32 * (R.x - T_mob.x) + R.pixel_x
-		var/new_y = 32 * (R.y - T_mob.y) + R.pixel_y
+		var/new_x = WORLD_ICON_SIZE * (R.x - T_mob.x) + R.pixel_x
+		var/new_y = WORLD_ICON_SIZE * (R.y - T_mob.y) + R.pixel_y
 		riftimage.pixel_x = new_x
 		riftimage.pixel_y = new_y
 		riftimage.loc = T_mob

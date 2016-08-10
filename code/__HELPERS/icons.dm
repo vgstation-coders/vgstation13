@@ -62,10 +62,10 @@ proc
 			letter = lowertext(letter)
 
 	var/image/text_image = new(loc = A)
-	text_image.maptext = "<font size = 4><b>[letter]</b></font>"
+	text_image.maptext = "<font size = 8><b>[letter]</b></font>"
 	text_image.color = AverageColor(atom_icon)
-	text_image.pixel_x = 6
-	text_image.pixel_y = 5
+	text_image.pixel_x = 6*PIXEL_MULTIPLIER
+	text_image.pixel_y = 5*PIXEL_MULTIPLIER
 	del(atom_icon)
 	return text_image
 

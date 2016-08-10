@@ -1,9 +1,12 @@
+#define WORLD_ICON_SIZE 32
+#define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
 /world
 	mob = /mob/new_player
 	turf = /turf/space
 	view = "15x15"
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
+	icon_size = WORLD_ICON_SIZE
 #define RECOMMENDED_VERSION 510
 
 
@@ -36,6 +39,7 @@ var/savefile/panicfile
 	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, filename="data/logs/[date_string] atmos.htm", persist=TRUE)
 	investigations[I_CHEMS] = new /datum/log_controller(I_CHEMS, filename="data/logs/[date_string] chemistry.htm", persist=TRUE)
 	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
+	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
 
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")

@@ -11,8 +11,8 @@
 	if(!start || !end) return 0
 	var/dy
 	var/dx
-	dy=(32*end.y+end.pixel_y)-(32*start.y+start.pixel_y)
-	dx=(32*end.x+end.pixel_x)-(32*start.x+start.pixel_x)
+	dy=(WORLD_ICON_SIZE*end.y+end.pixel_y)-(WORLD_ICON_SIZE*start.y+start.pixel_y)
+	dx=(WORLD_ICON_SIZE*end.x+end.pixel_x)-(WORLD_ICON_SIZE*start.x+start.pixel_x)
 	if(!dy)
 		return (dx>=0)?90:270
 	.=arctan(dx/dy)
@@ -475,7 +475,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/M = E/(SPEED_OF_LIGHT_SQ)
 	return M
 
-/proc/key_name(var/whom, var/include_link = null, var/include_name = 1)
+/proc/key_name(var/whom, var/include_link = null, var/include_name = TRUE, var/more_info = FALSE)
 	var/mob/M
 	var/client/C
 	var/key
@@ -518,11 +518,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		else if(M.name)
 			. += "/([M.name])"
 
-	return .
+	if(more_info && M)
+		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
 
 /proc/key_name_admin(var/whom, var/include_name = 1)
 	return key_name(whom, 1, include_name)
 
+/proc/key_name_and_info(var/whom)
+	return key_name(whom, more_info = TRUE)
 
 // Registers the on-close verb for a browse window (client/verb/.windowclose)
 // this will be called when the close-button of a window is pressed.
@@ -701,7 +704,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.pixel_z = 32
+			progbar.pixel_z = WORLD_ICON_SIZE
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -745,7 +748,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	if(user && user.client && user.client.prefs.progress_bars && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.pixel_z = 32
+			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR
@@ -757,7 +760,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-				progbar.pixel_z = 32
+				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
 				progbar.appearance_flags = RESET_COLOR
@@ -1205,16 +1208,16 @@ var/list/WALLITEMS = list(
 				//Some stuff doesn't use dir properly, so we need to check pixel instead
 				switch(dir)
 					if(SOUTH)
-						if(O.pixel_y > 10)
+						if(O.pixel_y > 10*PIXEL_MULTIPLIER)
 							return 1
 					if(NORTH)
-						if(O.pixel_y < -10)
+						if(O.pixel_y < -10*PIXEL_MULTIPLIER)
 							return 1
 					if(WEST)
-						if(O.pixel_x > 10)
+						if(O.pixel_x > 10*PIXEL_MULTIPLIER)
 							return 1
 					if(EAST)
-						if(O.pixel_x < -10)
+						if(O.pixel_x < -10*PIXEL_MULTIPLIER)
 							return 1
 
 
@@ -1222,7 +1225,7 @@ var/list/WALLITEMS = list(
 	for(var/obj/O in get_step(loc, dir))
 		for(var/item in WALLITEMS)
 			if(istype(O, text2path(item)))
-				if(abs(O.pixel_x) <= 10 && abs(O.pixel_y) <=10)
+				if(abs(O.pixel_x) <= 10*PIXEL_MULTIPLIER && abs(O.pixel_y) <=10*PIXEL_MULTIPLIER)
 					return 1
 	return 0
 

@@ -158,5 +158,5 @@ proc/getScanDesign(var/obj/O)
 
 /obj/item/weapon/disk/design_disk/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER

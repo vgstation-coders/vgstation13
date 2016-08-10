@@ -93,8 +93,8 @@
 
 /obj/item/ammo_casing_gatling/New()
 	..()
-	pixel_x = rand(-10.0, 10)
-	pixel_y = rand(-10.0, 10)
+	pixel_x = rand(-10.0, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10.0, 10) * PIXEL_MULTIPLIER
 	dir = pick(cardinal)
 
 /obj/item/weapon/gun/gatling/beegun

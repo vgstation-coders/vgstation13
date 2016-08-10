@@ -137,22 +137,22 @@
 					if(C)
 						temp = amplitude * sin(0.008 * saved_dizz * world.time)
 						pixel_x_diff += temp
-						C.pixel_x += temp
+						C.pixel_x += temp * PIXEL_MULTIPLIER
 						temp = amplitude * cos(0.008 * saved_dizz * world.time)
 						pixel_y_diff += temp
-						C.pixel_y += temp
+						C.pixel_y += temp * PIXEL_MULTIPLIER
 						sleep(3)
 						if(C)
 							temp = amplitude * sin(0.008 * saved_dizz * world.time)
 							pixel_x_diff += temp
-							C.pixel_x += temp
+							C.pixel_x += temp * PIXEL_MULTIPLIER
 							temp = amplitude * cos(0.008 * saved_dizz * world.time)
 							pixel_y_diff += temp
-							C.pixel_y += temp
+							C.pixel_y += temp * PIXEL_MULTIPLIER
 						sleep(3)
 						if(C)
-							C.pixel_x -= pixel_x_diff
-							C.pixel_y -= pixel_y_diff
+							C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
+							C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
 				src = oldsrc
 			if(!wasdizzy)
 				dizziness = 0
@@ -160,28 +160,28 @@
 		//Jitteryness
 		if(jitteriness)
 			var/amplitude = min(8, (jitteriness/70) + 1)
-			var/pixel_x_diff = rand(-amplitude, amplitude)
-			var/pixel_y_diff = rand(-amplitude, amplitude)
+			var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			spawn()
 				animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 				animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 
-				pixel_x_diff = rand(-amplitude, amplitude)
-				pixel_y_diff = rand(-amplitude, amplitude)
+				pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+				pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 				animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 				animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 
-				pixel_x_diff = rand(-amplitude, amplitude)
-				pixel_y_diff = rand(-amplitude, amplitude)
+				pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+				pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 				animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 				animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 		//Flying
 		if(flying)
 			spawn()
-				animate(src, pixel_y = pixel_y + 5 , time = 10, loop = 1, easing = SINE_EASING)
+				animate(src, pixel_y = pixel_y + 5 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
 			spawn(10)
 				if(flying)
-					animate(src, pixel_y = pixel_y - 5, time = 10, loop = 1, easing = SINE_EASING)
+					animate(src, pixel_y = pixel_y - 5 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
 
 		//Other
 		if(stunned)

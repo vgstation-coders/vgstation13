@@ -127,8 +127,8 @@
 
 /obj/item/energy_magazine/New()
 	..()
-	pixel_x = rand(-10.0, 10)
-	pixel_y = rand(-10.0, 10)
+	pixel_x = rand(-10.0, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10.0, 10) * PIXEL_MULTIPLIER
 	update_icon()
 
 /obj/item/energy_magazine/examine(mob/user)
@@ -166,5 +166,5 @@
 
 /obj/item/osipr_core/New()
 	..()
-	pixel_x = rand(-10.0, 10)
-	pixel_y = rand(-10.0, 10)
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER

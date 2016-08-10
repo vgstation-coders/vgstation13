@@ -27,8 +27,8 @@
 /obj/item/weapon/rocksliver/New()
 	. = ..()
 	icon_state = "sliver[rand(1,3)]"
-	pixel_x = rand(-8, 8)
-	pixel_y = rand(-8, 0)
+	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Geosample datum

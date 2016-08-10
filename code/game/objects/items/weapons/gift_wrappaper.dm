@@ -65,8 +65,8 @@
 
 /obj/item/weapon/winter_gift/New()
 	..()
-	pixel_x = rand(-10,10)
-	pixel_y = rand(-10,10)
+	pixel_x = rand(-10,10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10,10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/winter_gift/ex_act()
 	qdel(src)
@@ -145,7 +145,7 @@
 		/obj/item/clothing/mask/cigarette/blunt/deus,
 		/obj/item/clothing/mask/cigarette/blunt/cruciatus,
 		/obj/item/device/paicard,
-		/obj/item/device/violin,
+		/obj/item/device/instrument/violin,
 		/obj/item/weapon/storage/belt/utility/complete,
 		/obj/item/clothing/accessory/tie/horrible,
 		/obj/item/device/maracas,

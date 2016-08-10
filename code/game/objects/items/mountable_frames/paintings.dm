@@ -45,8 +45,8 @@ var/global/list/available_paintings = list(
 
 /obj/item/mounted/frame/painting/New()
 	..()
-	pixel_x = rand(-6,6)
-	pixel_y = rand(-6,6)
+	pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+	pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 	if(!paint)
 		paint = pick(available_paintings)
@@ -153,13 +153,13 @@ var/global/list/available_paintings = list(
 
 	var/pDir = get_dir(user,on_wall)
 	if(pDir & NORTH)
-		P.pixel_y = 32
+		P.pixel_y = WORLD_ICON_SIZE
 	if(pDir & SOUTH)
-		P.pixel_y = -32
+		P.pixel_y = -WORLD_ICON_SIZE
 	if(pDir & EAST)
-		P.pixel_x = 32
+		P.pixel_x = WORLD_ICON_SIZE
 	if(pDir & WEST)
-		P.pixel_x = -32
+		P.pixel_x = -WORLD_ICON_SIZE
 
 	playsound(on_wall, 'sound/items/Deconstruct.ogg', 25, 1)
 
@@ -293,6 +293,7 @@ var/global/list/available_paintings = list(
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+	return SPECIAL_ATTACK_FAILED
 
 
 /obj/structure/painting/cultify()

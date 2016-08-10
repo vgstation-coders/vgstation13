@@ -29,8 +29,8 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_MIN	1
 #define PIPING_LAYER_MAX	5
 
-#define PIPING_LAYER_P_X		5 //each positive increment of piping_layer changes the pixel_x by this amount
-#define PIPING_LAYER_P_Y		-5 //same, but negative because they form a diagonal
+#define PIPING_LAYER_P_X		5*PIXEL_MULTIPLIER //each positive increment of piping_layer changes the pixel_x by this amount
+#define PIPING_LAYER_P_Y		-5*PIXEL_MULTIPLIER //same, but negative because they form a diagonal
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
 
 #define PI 3.1415
@@ -606,8 +606,11 @@ var/MAX_EXPLOSION_RANGE = 14
 #define PASSTABLE	1
 #define PASSGLASS	2
 #define PASSGRILLE	4
-#define PASSBLOB	8
-#define PASSMACHINE	16//computers, vending machines, rnd machines
+#define PASSMOB		8
+#define PASSBLOB	16
+#define PASSMACHINE	32 //computers, vending machines, rnd machines
+#define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
+
 
 /*
 	These defines are used specifically with the atom/movable/languages bitmask.
@@ -1472,6 +1475,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_ATMOS    "atmos"
 #define I_CHEMS	   "chems"
 #define I_WIRES    "wires"
+#define I_GHOST    "poltergeist"
 
 // delayNext() flags.
 #define DELAY_MOVE    1
@@ -1597,7 +1601,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GALACTIC_COMMON "Galactic Common"
 #define LANGUAGE_HUMAN "Sol Common"
 #define LANGUAGE_UNATHI "Sinta'unathi"
-#define LANGUAGE_SIIK_TAJR "Siik'tajr"
+#define LANGUAGE_CATBEAST "Siik'tajr"
 #define LANGUAGE_SKRELLIAN "Skrellian"
 #define LANGUAGE_ROOTSPEAK "Rootspeak"
 #define LANGUAGE_TRADEBAND "Tradeband"
@@ -1608,7 +1612,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MONKEY "Monkey"
 #define LANGUAGE_VOX "Vox-pidgin"
 #define LANGUAGE_CULT "Cult"
-#define LANGUAGE_MOUSE "Mouse" // This broke the code, so fuck it
+#define LANGUAGE_MOUSE "Mouse"
+#define LANGUAGE_GOLEM "Golem"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1679,6 +1684,7 @@ var/proccalls = 1
 #define FOOD_ANIMAL	2
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
+#define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
 
 /*
  *
@@ -1789,6 +1795,11 @@ var/proccalls = 1
 #define ATTACK_BITE 1
 #define ATTACK_KICK 2
 
+//Special attack returns (for procs like kick_act and bite_act)
+#define SPECIAL_ATTACK_SUCCESS 0
+#define SPECIAL_ATTACK_CANCEL 1 //Default return for the procs; cancel the special attack and perform a normal click instead
+#define SPECIAL_ATTACK_FAILED 2
+
 // Defines for the map writer, moved here for reasons.
 #define DMM_IGNORE_AREAS 1
 #define DMM_IGNORE_TURFS 2
@@ -1813,3 +1824,5 @@ var/proccalls = 1
 #define GRASP_LEFT_HAND 2
 
 #define BLOB_CORE_PROPORTION 20
+
+#define DEFAULT FONT SIZE 4

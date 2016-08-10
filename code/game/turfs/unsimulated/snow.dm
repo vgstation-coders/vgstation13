@@ -74,8 +74,8 @@
 
 	for(var/i = 0; i < extract_amount, i++)
 		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(user.loc)
-		snowball.pixel_x = rand(-16, 16) //Would be wise to move this into snowball New() down the line
-		snowball.pixel_y = rand(-16, 16)
+		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
+		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
 
 		if(pick_up)
 			user.put_in_hands(snowball)
@@ -158,24 +158,24 @@
 			snow2.alpha = 255
 			switch(direction)
 				if(1)
-					snow1.pixel_y = 32
+					snow1.pixel_y = WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_y = 32
+					snow2.pixel_y = WORLD_ICON_SIZE
 					overlays += snow2
 				if(2)
-					snow1.pixel_y = -32
+					snow1.pixel_y = -WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_y = -32
+					snow2.pixel_y = -WORLD_ICON_SIZE
 					overlays += snow2
 				if(4)
-					snow1.pixel_x = 32
+					snow1.pixel_x = WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_x = 32
+					snow2.pixel_x = WORLD_ICON_SIZE
 					overlays += snow2
 				if(8)
-					snow1.pixel_x = -32
+					snow1.pixel_x = -WORLD_ICON_SIZE
 					overlays += snow1
-					snow2.pixel_x = -32
+					snow2.pixel_x = -WORLD_ICON_SIZE
 					overlays += snow2
 			snow1.alpha = 64
 			snow2.alpha = 64

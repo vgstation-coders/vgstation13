@@ -81,11 +81,6 @@
 	//Can we act
 	if(restrained())	return 0
 
-	//Are we flying?
-	if(flying)
-		inertia_dir = 0
-		return 1
-
 	//Do we have a working jetpack
 	if(istype(back, /obj/item/weapon/tank/jetpack))
 		var/obj/item/weapon/tank/jetpack/J = back
@@ -96,8 +91,7 @@
 //			return 1
 
 	//If no working jetpack then use the other checks
-	if(..())	return 1
-	return 0
+	return ..()
 
 
 /mob/living/carbon/human/Process_Spaceslipping(var/prob_slip = 5)

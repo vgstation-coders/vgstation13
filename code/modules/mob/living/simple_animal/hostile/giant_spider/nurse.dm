@@ -172,7 +172,7 @@
 	icon_state = "spider_queen1"
 	icon_living = "spider_queen1"
 	icon_dead = "spider_queen_dead"
-	pixel_x = -16
+	pixel_x = -16 * PIXEL_MULTIPLIER
 	maxHealth = 500
 	health = 500
 	melee_damage_lower = 30
