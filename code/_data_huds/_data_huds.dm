@@ -6,6 +6,7 @@
 #define SEE_IN_MECH		1
 #define IS_ANTAG_HUD	2
 
+
 /obj/screen/plane_master/data_hud/New(var/hud_plane,var/visible)
 	plane = hud_plane
 	if(visible)
