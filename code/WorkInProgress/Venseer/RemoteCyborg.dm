@@ -292,10 +292,10 @@ var/global/list/rc_control_boards = list();
 /obj/item/weapon/storage/box/remotecontrolkit
 
 /obj/item/weapon/storage/box/remotecontrolkit/New()
-	..()
-	contents = list()
+  ..()
+  contents = list()
   new /obj/item/device/syndicate_remote_cyborg_control_board/(src)
-	new /obj/item/device/syndicate_controller(src)
+  new /obj/item/device/syndicate_controller(src)
   for(var/i = 1 to 2)
     new /obj/item/device/syndicate_remote_cyborg_camera(src)
 
