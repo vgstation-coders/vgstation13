@@ -358,12 +358,20 @@ a {
 	return 0
 
 /**
- * If a mob logouts/logins in side of an object you can use this proc.
+ * Called when a mob inside this obj's contents logs out.
  */
-/obj/proc/on_log()
-	if (isobj(loc))
+/obj/proc/on_logout(var/mob/M)
+	if(isobj(loc))
 		var/obj/location = loc
-		location.on_log()
+		location.on_logout(M)
+
+/**
+ * Called when a mob inside this obj's contents logs in.
+ */
+/obj/proc/on_login(var/mob/M)
+	if(isobj(loc))
+		var/obj/location = loc
+		location.on_login(M)
 
 // Dummy to give items special techlist for the purposes of the Device Analyser, in case you'd ever need them to give them different tech levels depending on special checks.
 /obj/proc/give_tech_list()

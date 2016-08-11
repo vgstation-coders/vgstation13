@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+- tweak: "Interacting with floodlights as a ghost now shares the cooldown for interacting with lightswitches."

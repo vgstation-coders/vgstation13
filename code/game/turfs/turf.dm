@@ -2,7 +2,7 @@
 	icon = 'icons/turf/floors.dmi'
 	level = 1.0
 	plane = TURF_PLANE
-
+	layer = TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	luminosity = 0
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
@@ -130,16 +130,12 @@
 		return
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
-	if(ismob(A))
-		if(A.areaMaster && A.areaMaster.has_gravity == 0)
-			inertial_drift(A)
-	/*
-		if(A.flags & NOGRAV)
-			inertial_drift(A)
-	*/
 
-		else if(!istype(src, /turf/space))
-			A:inertia_dir = 0
+	if(!src.has_gravity())
+		inertial_drift(A)
+	else
+		A.inertia_dir = 0
+
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
@@ -257,43 +253,10 @@
 
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
 	if(!(A.last_move))	return
-	if(istype(A, /obj/spacepod) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
-		var/obj/spacepod/SP = A
-		if(SP.Process_Spacemove(1))
-			SP.inertia_dir = 0
-			return
-		spawn(5)
-			if((SP && (SP.loc == src)))
-				if(SP.inertia_dir)
-					SP.Move(get_step(SP, SP.inertia_dir), SP.inertia_dir)
-					return
-	if(istype(A, /obj/structure/bed/chair/vehicle/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
-		var/obj/structure/bed/chair/vehicle/JC = A //A bomb!
-		if(JC.Process_Spacemove(1))
-			JC.inertia_dir = 0
-			return
-		spawn(5)
-			if((JC && (JC.loc == src)))
-				if(JC.inertia_dir)
-					step(JC, JC.inertia_dir)
-					return
-				JC.inertia_dir = JC.last_move
-				step(JC, JC.inertia_dir)
-	if((istype(A, /mob/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1)))
-		var/mob/M = A
-		if(M.Process_Spacemove(1))
-			M.inertia_dir  = 0
-			return
-		spawn(5)
-			if((M && !(M.anchored) && !(M.pulledby) && (M.loc == src)))
-				var/mob/living/carbon/carbons = M
-				if(istype(carbons))
-					carbons.update_minimap() //Should this even be here, oh well whatever
-				if(M.inertia_dir)
-					step(M, M.inertia_dir)
-					return
-				M.inertia_dir = M.last_move
-				step(M, M.inertia_dir)
+
+	if(src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy - 1))
+		A.process_inertia(src)
+
 	return
 
 /turf/proc/levelupdate()
@@ -705,3 +668,13 @@
 // Return high values to make movement slower
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
+
+/turf/proc/has_gravity(mob/M)
+	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough
+		return 1
+
+	var/area/A = loc
+	if(istype(A))
+		return A.has_gravity
+
+	return 1

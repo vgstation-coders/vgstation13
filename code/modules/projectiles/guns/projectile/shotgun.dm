@@ -138,3 +138,11 @@
 			if(istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
 				H.update_inv_hands()
+
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
+	name = "sawn-off shotgun"
+	desc = "Omar's coming!"
+	icon_state = "sawnshotgun"
+	item_state = "sawnshotgun"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT

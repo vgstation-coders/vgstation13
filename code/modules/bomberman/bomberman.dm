@@ -923,7 +923,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		pencil.y = y+h
 		T = pencil.loc
-		T.maptext = "<font size = 4>name"
+		T.maptext = "name"
 		T.maptext_width = 256*PIXEL_MULTIPLIER
 		//T.maptext_y = 20
 

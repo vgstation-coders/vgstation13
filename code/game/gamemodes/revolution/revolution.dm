@@ -7,6 +7,12 @@
 // If the rev icons start going wrong for some reason, ticker.mode:update_all_rev_icons() can be called to correct them.
 // If the game somtimes isn't registering a win properly, then ticker.mode.check_win() isn't being called somewhere.
 
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
+#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
+#define ADD_REVOLUTIONARY_FAIL_IS_REV -4
+
+
 /datum/game_mode
 	var/list/datum/mind/head_revolutionaries = list()
 	var/list/datum/mind/revolutionaries = list()
@@ -27,6 +33,7 @@
 	var/finished = 0
 	var/checkwin_counter = 0
 	var/max_headrevs = 3
+	var/minimum_heads = 3
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 ///////////////////////////
@@ -64,9 +71,9 @@
 		possible_headrevs -= lenin
 		head_revolutionaries += lenin
 
-	if((head_revolutionaries.len==0)||(!head_check))
-		log_admin("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
-		message_admins("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
+	if(head_revolutionaries.len==0|| head_check < minimum_heads)
+		log_admin("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+		message_admins("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
 		return 0
 
 	log_admin("Starting a round of revolution with [head_revolutionaries.len] head revolutionaries and [head_check] heads of staff.")
@@ -185,19 +192,19 @@
 ///////////////////////////////////////////////////
 /datum/game_mode/proc/add_revolutionary(datum/mind/rev_mind)
 	if(rev_mind.assigned_role in command_positions)
-		return -1
+		return ADD_REVOLUTIONARY_FAIL_IS_COMMAND
 
 	var/mob/living/carbon/human/H = rev_mind.current
 
 	if(jobban_isbanned(H, "revolutionary"))
-		return -2
+		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
 
 	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
 		if(L.imp_in == H) // a check if it's actually implanted
-			return -3
+			return ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED
 
 	if((rev_mind in revolutionaries) || (rev_mind in head_revolutionaries))
-		return -4
+		return ADD_REVOLUTIONARY_FAIL_IS_REV
 
 	revolutionaries += rev_mind
 	to_chat(rev_mind.current, "<span class='warning'><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>")

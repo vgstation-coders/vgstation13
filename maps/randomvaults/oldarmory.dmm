@@ -65,7 +65,7 @@
 "bm" = (/obj/machinery/door/airlock{name = "Dormitory"},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "bn" = (/obj/machinery/vending/cigarette,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "bo" = (/obj/structure/mirror,/turf/simulated/wall,/area/vault/oldarmory)
-"bp" = (/obj/structure/sink{dir = 8; pixel_x = -22},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/oldarmory)
+"bp" = (/obj/structure/sink{dir = 8; pixel_x = -11},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/oldarmory)
 "bq" = (/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/oldarmory)
 "br" = (/obj/machinery/door/airlock{locked = 1; name = "Toilet"},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/oldarmory)
 "bs" = (/obj/structure/toilet{dir = 8},/obj/machinery/light/small{dir = 1},/mob/living/simple_animal/hostile/humanoid/syndicate/melee,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/oldarmory)

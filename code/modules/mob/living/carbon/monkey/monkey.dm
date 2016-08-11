@@ -572,7 +572,14 @@
 		ACL |= I.GetAccess()
 	return ACL
 
-
+/mob/living/carbon/monkey/get_visible_id()
+	var/id = null
+	for(var/obj/item/I in held_items)
+		id = I.GetID()
+		if(id)
+			break
+	return id
+	
 /mob/living/carbon/monkey/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!

@@ -13,8 +13,7 @@
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 8
-	move_to_delay = 3
+	speed = 3
 	maxHealth = 50
 	health = 50
 
@@ -52,8 +51,7 @@
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 2
-	move_to_delay = 6
+	speed = 6
 	maxHealth = 100
 	health = 100
 	canRegenerate = 1

@@ -606,8 +606,11 @@ var/MAX_EXPLOSION_RANGE = 14
 #define PASSTABLE	1
 #define PASSGLASS	2
 #define PASSGRILLE	4
-#define PASSBLOB	8
-#define PASSMACHINE	16//computers, vending machines, rnd machines
+#define PASSMOB		8
+#define PASSBLOB	16
+#define PASSMACHINE	32 //computers, vending machines, rnd machines
+#define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
+
 
 /*
 	These defines are used specifically with the atom/movable/languages bitmask.
@@ -1681,6 +1684,7 @@ var/proccalls = 1
 #define FOOD_ANIMAL	2
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
+#define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
 
 /*
  *
@@ -1790,6 +1794,11 @@ var/proccalls = 1
 #define NORMAL_ATTACK 0
 #define ATTACK_BITE 1
 #define ATTACK_KICK 2
+
+//Special attack returns (for procs like kick_act and bite_act)
+#define SPECIAL_ATTACK_SUCCESS 0
+#define SPECIAL_ATTACK_CANCEL 1 //Default return for the procs; cancel the special attack and perform a normal click instead
+#define SPECIAL_ATTACK_FAILED 2
 
 // Defines for the map writer, moved here for reasons.
 #define DMM_IGNORE_AREAS 1

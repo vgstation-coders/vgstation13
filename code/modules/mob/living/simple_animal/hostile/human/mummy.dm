@@ -22,8 +22,7 @@
 	health = 70
 	maxHealth = 70
 
-	move_to_delay = 20
-	speed = 4
+	speed = 20
 
 	melee_damage_lower = 3
 	melee_damage_upper = 6
@@ -171,8 +170,7 @@
 
 	ranged = 1
 
-	move_to_delay = 15 //Faster than normal mummies
-	speed = 2
+	speed = 15 //Faster than normal mummies
 
 	ranged_message = "invokes a powerful curse"
 	stat_attack = 0 //Only attack living dudes

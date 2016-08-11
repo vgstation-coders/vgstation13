@@ -61,7 +61,7 @@
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		var/C = round(mind.changeling.chem_charges)
-		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'><font size = 4> C:<font color='#EAB67B'>[C]</font><br> G:<font color='#FF2828'>[mind.changeling.absorbedcount]</font></font></div>"
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>C:<font color='#EAB67B'>[C]</font><br> G:<font color='#FF2828'>[mind.changeling.absorbedcount]</font></div>"
 	return
 
 //Used to dump the languages from the changeling datum into the actual mob.
@@ -978,7 +978,7 @@ var/list/datum/dna/hivemind_bank = list()
 
 /obj/item/verbs/changeling/proc/changeling_silence_sting()
 	set category = "Changeling"
-	set name = "Hallucination Sting (15)"
+	set name = "Silence Sting (15)"
 	set desc = "Makes our victim silent and unable to cry for help."
 
 	var/mob/M = loc

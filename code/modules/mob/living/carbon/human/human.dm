@@ -150,7 +150,7 @@
 	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/Overlays/head_layer)
 	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/Overlays/handcuff_layer)
 	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/Overlays/legcuff_layer)
-	obj_overlays[HAND_LAYER]		= getFromPool(/obj/Overlays/hand_layer)
+	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/Overlays/hand_layer) //moved to human/update_inv_hand()
 	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/Overlays/tail_layer)
 	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/Overlays/targeted_layer)
 
@@ -1428,6 +1428,18 @@
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
 	return ACL
+	
+/mob/living/carbon/human/get_visible_id()
+	var/id = null
+	if(wear_id)
+		id = wear_id.GetID()
+	if(!id)
+		for(var/obj/item/I in held_items)
+			id = I.GetID()
+			if(id)
+				break
+	return id
+	
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!
@@ -1634,6 +1646,12 @@
 		return 1
 
 	return 0
+
+/mob/living/carbon/human/proc/after_special_attack(atom/target, attack_type, attack_result)
+	switch(attack_type)
+		if(ATTACK_KICK)
+			if(attack_result != SPECIAL_ATTACK_FAILED) //The kick landed successfully
+				apply_inertia(get_dir(target, src))
 
 /mob/living/carbon/human/proc/get_footprint_type()
 	var/obj/item/clothing/shoes/S = shoes //Why isn't shoes just typecast in the first place?

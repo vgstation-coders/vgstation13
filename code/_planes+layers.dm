@@ -72,6 +72,8 @@ What is the naming convention for planes or layers?
 
 #define TURF_PLANE 				-19			// For turfs.
 
+	#define TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD	-999
+
 #define ABOVE_TURF_PLANE 		-18			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define CATWALK_LAYER			0
@@ -182,6 +184,7 @@ What is the naming convention for planes or layers?
 	#define NARSIE_GLOW 			7
 
 #define BASE_PLANE 				0		// Not for anything, but this is the default.
+	#define AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD 999
 
 #define STATIC_PLANE 			1		// For AI's static.
 

@@ -720,24 +720,23 @@ Auto Patrol: []"},
 
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
 			threatcount += 2
-
-		if(!perp.wear_id)
+		var/visible_id = perp.get_visible_id()
+		if(!visible_id)
 			if(idcheck)
 				threatcount += 4
 			else
 				threatcount += 2
 
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+		if(istype(visible_id, /obj/item/weapon/card/id/syndicate))
 			threatcount -= 2
 
 	if(src.check_records)
 		for (var/datum/data/record/E in data_core.general)
 			var/perpname = perp.name
-			if(perp.wear_id)
-				var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
-				if(id)
-					perpname = id.registered_name
+			var/obj/item/weapon/card/id/id = perp.get_visible_id()
+			if(id)
+				perpname = id.registered_name
 
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)

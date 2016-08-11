@@ -9,21 +9,20 @@
 
  // Default shit.
 /datum/universal_state
-	// Just for reference, for now.
-	// Might eventually add an observatory job.
- 	var/name = "Normal"
- 	var/desc = "Nothing seems awry."
+	//Just for reference, for now.
+	//Might eventually add an observatory job.
+	var/name = "Normal"
+	var/desc = "Nothing seems awry."
 
- 	// Sets world.turf, replaces all turfs of type /turf/space.
- 	var/space_type         = /turf/space
+	//Sets world.turf, replaces all turfs of type /turf/space.
+	var/space_type =         /turf/space
 
- 	// Replaces all turfs of type /turf/space/transit
- 	var/transit_space_type = /turf/space/transit
+	//Replaces all turfs of type /turf/space/transit
+	var/transit_space_type = /turf/space/transit
 
- 	// Chance of a floor or wall getting damaged [0-100]
- 	// Simulates stuff getting broken due to molecular bonds decaying.
- 	var/decay_rate = 0
-
+	//Chance of a floor or wall getting damaged [0-100]
+	//Simulates stuff getting broken due to molecular bonds decaying.
+	var/decay_rate = 0
 
 // Actually decay the turf.
 /datum/universal_state/proc/DecayTurf(var/turf/T)
@@ -49,10 +48,6 @@
 	if(decay_rate && prob(decay_rate))
 		DecayTurf(T)
 
-// In the event you just need something called every tick, here it is
-/datum/universal_state/proc/process()
-	return 0
-
 // Apply changes when exiting state
 /datum/universal_state/proc/OnExit()
  	// Does nothing by default
@@ -68,7 +63,7 @@
 /datum/universal_state/proc/OverlayAndAmbientSet()
 	return
 
-/proc/SetUniversalState(var/newstate,var/on_exit=1, var/on_enter=1)
+/proc/SetUniversalState(var/newstate, var/on_exit = 1, var/on_enter = 1)
 	if(on_exit)
 		universe.OnExit()
 	universe = new newstate

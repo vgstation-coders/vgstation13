@@ -153,9 +153,9 @@ var/const/INGEST = 2
 		minimal_investigation_log(I_CHEMS, "[whodunnit ? "[key_name(whodunnit)]" : "(N/A, last user processed: [usr.ckey])"] \
 		transferred [english_list(logged_message)] from \a [my_atom] \ref[my_atom] to \a [R.my_atom] \ref[R.my_atom].", prefix=" ([T.x],[T.y],[T.z])")
 		if(adminwarn_message.len)
-			message_admins("[whodunnit ? "[whodunnit] ([whodunnit.ckey]) (<A HREF='?_src_=holder;adminplayeropts=\ref[whodunnit]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[whodunnit]'>?</A>)" : "(unknown whodunnit, last whodunnit processed: [usr.ckey])"]\
+			message_admins("[whodunnit ? "[key_name_and_info(whodunnit)] " : "(unknown whodunnit, last whodunnit processed: [usr.ckey])"]\
 			has transferred [english_list(adminwarn_message)] from \a [my_atom] (<A HREF='?_src_=vars;Vars=\ref[my_atom]'>VV</A>) to \a [R.my_atom] (<A HREF='?_src_=vars;Vars=\ref[R.my_atom]'>VV</A>).\
-			[whodunnit ? " (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[whodunnit.x];Y=[whodunnit.y];Z=[whodunnit.z]'>JMP</a>)" : ""]")
+			[whodunnit ? " [formatJumpTo(whodunnit)]" : ""]")
 
 	return amount
 
@@ -455,7 +455,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	total_volume = 0
 	amount_cache.len = 0
 	for(var/datum/reagent/R in reagent_list)
-		if(R.volume < 0.1)
+		if(R.volume < R.custom_metabolism/2) //Used to be 0.1, changing this to custom_metabolism/2 to alter balance as little as possible since the default metabolism is 0.2
 			del_reagent(R.id,update_totals=0)
 		else
 			total_volume += R.volume

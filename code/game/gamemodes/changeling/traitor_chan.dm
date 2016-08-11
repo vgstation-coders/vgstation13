@@ -43,9 +43,6 @@
 			for(var/datum/mind/P in modePlayer)
 				ticker.mode.modePlayer -= P
 				ticker.mode.changelings -= P
-		else
-			ticker.mode.modePlayer += traitors
-			ticker.mode.traitors += traitors
 		return .
 	else
 		return 0
