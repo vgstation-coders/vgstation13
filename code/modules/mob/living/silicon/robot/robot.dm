@@ -369,11 +369,11 @@
 	if(modtype == "Medical" || modtype == "Security" || modtype == "Combat")
 		status_flags &= ~CANPUSH
 
+	var/picked  = pick(module_sprites)
+	icon_state = module_sprites[picked]
+		
 	if(!forced_module)
 		choose_icon(6, module_sprites)
-	else
-		var/picked  = pick(module_sprites)
-		icon_state = module_sprites[picked]
 
 	base_icon = icon_state
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
@@ -1483,13 +1483,10 @@
 	else
 		triesleft--
 
-	lockcharge = 1  //Locks borg until it select an icon to avoid secborgs running around with a standard sprite
-
 	var/icontype = input("Select an icon! [triesleft>0 ? "You have [triesleft] more chances." : "This is your last try."]", "Robot", null, null) as null|anything in module_sprites
 
 	if(icontype)
 		icon_state = module_sprites[icontype]
-		lockcharge = null
 	else
 		triesleft++
 		return
