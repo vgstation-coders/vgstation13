@@ -65,9 +65,20 @@
 		on = 1
 		set_light(brightness_on)
 
-	user.visible_message("<span class='notice'>[user] turns \the [src] [on ? "on":"off"]</span>", \
-	"<span class='notice'>You turn \the [src] [on ? "on":"off"]</span>")
+	user.visible_message("<span class='notice'>[user] turns \the [src] [on ? "on":"off"].</span>", \
+	"<span class='notice'>You turn \the [src] [on ? "on":"off"].</span>")
+
 	update_icon()
+
+/obj/machinery/floodlight/attack_ghost(var/mob/dead/observer/ghost)
+	if(blessed)
+		to_chat(ghost, "Your hand goes right through \the [src]...Is that some holy water dripping from it?")
+		return 0
+	if(!ghost.can_poltergeist())
+		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
+		return 0
+	investigation_log(I_GHOST, "|| was switched [on ? "off" : "on"] by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+	return ..()
 
 /obj/machinery/floodlight/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
