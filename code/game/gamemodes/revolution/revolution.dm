@@ -33,6 +33,7 @@
 	var/finished = 0
 	var/checkwin_counter = 0
 	var/max_headrevs = 3
+	var/minimum_heads = 3
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 ///////////////////////////
@@ -70,9 +71,9 @@
 		possible_headrevs -= lenin
 		head_revolutionaries += lenin
 
-	if((head_revolutionaries.len==0)||(!head_check))
-		log_admin("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
-		message_admins("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
+	if(head_revolutionaries.len==0|| head_check < minimum_heads)
+		log_admin("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+		message_admins("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
 		return 0
 
 	log_admin("Starting a round of revolution with [head_revolutionaries.len] head revolutionaries and [head_check] heads of staff.")
