@@ -10,7 +10,7 @@
 	var/list/connections = list() //Assembly associated with the list of assemblies it's connected to
 
 	var/lock_ejection = 0 //If 1, prevent ejecting assemblies
-	var/require_parts_for_import = 1 //If 1, importing doesn't take nearby parts (instead, required parts are generated out of thin air)
+	var/require_parts_for_import = 1 //If 0, importing doesn't take nearby parts. Instead, required parts are generated out of thin air
 
 /obj/item/device/assembly_frame/admin
 	name = "turbo assembly frame"
