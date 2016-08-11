@@ -103,3 +103,15 @@
 	..()
 	if(assembled == 3)
 		to_chat(user, "<span class='info'>You can't tell when it will explode!</span>")//Stops you from checking the time to detonation unlike regular grenades
+
+/obj/item/weapon/grenade/iedcasing/preassembled
+    name = "improvised explosive"
+    desc = "A weak, improvised explosive."
+    assembled = 2
+    active = 0
+
+/obj/item/weapon/grenade/iedcasing/preassembled/New()
+    ..()
+    det_time = rand(30,80)
+    overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
+    overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_wired")

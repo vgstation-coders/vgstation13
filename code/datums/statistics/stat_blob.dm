@@ -59,3 +59,20 @@
 		for(var/module in bought_modules)
 			modulestring += "|[module]"
 		file << modulestring
+
+/datum/stat_blob/revsquad
+	var/revsquad_won = 0
+	var/list/revsquad_items = list()
+	var/headcount = 0
+
+/datum/stat_blob/revsquad/doPostRoundChecks()
+	var/list/heads = ticker.mode.get_all_heads()
+	headcount = heads.len
+
+/datum/stat_blob/revsquad/writeStats(file)
+	file << "REVSQUADSTATS|[revsquad_won]|[headcount]"
+	if(revsquad_items.len)
+		var/itemsline = "REVSQUADITEMS"
+		for(var/i in revsquad_items)
+			itemsline += "|[i]"
+		file << itemsline
