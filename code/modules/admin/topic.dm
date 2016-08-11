@@ -2454,7 +2454,7 @@
 				feedback_add_details("admin_secrets_fun_used","DP")
 				var/A = locate(/area/shuttle_prison)
 				for(var/atom/movable/AM as mob|obj in A)
-					AM.z = 2
+					AM.z = map.zCentcomm
 					AM.Move()
 				*/
 				message_admins("<span class='notice'>[key_name_admin(usr)] sent the prison shuttle back.</span>", 1)
