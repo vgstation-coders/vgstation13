@@ -202,9 +202,6 @@ var/list/rc_control_boards = list()
       break
   if(user.incapacitated()) return
   if(target && istype(target, /obj/item/device/syndicate_remote_cyborg_camera/))
-    if(target.camera_target.z != user.z)
-      to_chat(user, "<span class='warning'>This signal is too weak.</span>")
-      return
     active = 1
     user.client.eye = target
     user.set_machine(src)
@@ -213,9 +210,6 @@ var/list/rc_control_boards = list()
     var/obj/item/device/syndicate_remote_cyborg_control_board/target_board = target
     if(target_board.inUse)
       to_chat(user, "<span class='warning'>This signal is already in use.</span>")
-      return
-    if(target.cyborg.z != user.z)
-      to_chat(user, "<span class='warning'>This signal is too weak.</span>")
       return
     active = 1
     target_board.inUse = 1
