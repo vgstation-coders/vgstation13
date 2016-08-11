@@ -1448,7 +1448,10 @@
 // Misc ////////////////////////////////////////////////////////
 
 /datum/recipe/chiliconcarne
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/,)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
+				/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
+				/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
 
 /datum/recipe/chilaquiles
@@ -1458,7 +1461,7 @@
 				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
 				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-				/obj/item/weapon/reagent_containers/food/snacks/dipping_sauce/salsa)
+				/obj/item/weapon/reagent_containers/food/dipping_sauce/salsa)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chilaquiles
 
 /datum/recipe/quiche

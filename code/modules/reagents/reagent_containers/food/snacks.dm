@@ -4381,7 +4381,7 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent(NUTRIMENT,3)
+		reagents.add_reagent(NUTRIMENT,5)
 
 /obj/item/weapon/reagent_containers/food/snacks/midnightsnack
 	name = "midnight snack"
@@ -4421,24 +4421,6 @@
 		..()
 		reagents.add_reagent(NUTRIMENT,4)
 
-/obj/item/weapon/reagent_containers/food/snacks/vampiresdelight
-	name = "vampire's delight"
-	desc = "One, two, three, four, five. Five stars, ah ha ha ha!"
-	icon_state = "vampiresdelight"
-	bitesize = 2
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT,1)
-
-/obj/item/weapon/reagent_containers/food/snacks/revenge
-	name = "revenge"
-	desc = "Best served cold."
-	icon_state = "revenge"
-	bitesize = 2
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT,1)
-
 /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
 	name = "spicy cold noodles"
 	desc = "A noodle dish in the style popular in Space China."
@@ -4446,7 +4428,7 @@
 	bitesize = 2
 	New()
 		..()
-		reagents.add_reagent(NUTRIMENT,4)
+		reagents.add_reagent(NUTRIMENT,5)
 
 /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
 	name = "chinese cold salad"
@@ -4495,6 +4477,45 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
+	name = "chili con carne"
+	desc = "This dish became exceedingly rare after Space Texas seceeded from our plane of reality."
+	icon_state = "chiliconcarne"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,10)
+		reagents.add_reagent(CAPSAICIN,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/chilaquiles
+	name = "chilaquiles"
+	desc = "The salsa-equivalent of nachos."
+	icon_state = "chiliconcarne"
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+
+/obj/item/weapon/reagent_containers/food/snacks/quiche
+	name = "quiche"
+	desc = "The queechay has a long history of being mispronounced. Just a taste makes you feel more cerebral and cultured!"
+	icon_state = "quiche"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(METHYLIN,5)
+
+/obj/item/weapon/reagent_containers/food/snacks/minestrone
+	name = "minestrone"
+	desc = "It's a me, minestrone."
+	icon_state = "minestrone"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(IMIDAZOLINE,2)
 
 /obj/item/weapon/reagent_containers/food/snacks/poissoncru
 	name = "poisson cru"
