@@ -352,18 +352,14 @@
 		(src in ticker.mode.syndicates))           && \
 		istype(current,/mob/living/carbon/human)      )
 
-		text = "Uplink: <a href='?src=\ref[src];common=uplink'>give</a>"
 		var/obj/item/device/uplink/hidden/suplink = find_syndicate_uplink()
 		var/crystals
-		if (suplink)
+		text = "<b>Uplink: </b>"
+		if (!suplink)
+			text += "<a href='?src=\ref[src];common=uplink'>Give uplink</a><br>"
+		else
 			crystals = suplink.uses
-		if (suplink)
-			text += "|<a href='?src=\ref[src];common=takeuplink'>take</a>"
-			if (usr.client.holder.rights & R_FUN)
-				text += ", <a href='?src=\ref[src];common=crystals'>[crystals]</a> crystals"
-			else
-				text += ", [crystals] crystals"
-		text += "." //hiel grammar
+			text += "<a href='?src=\ref[src];common=takeuplink'>Take uplink</a><br><a href='?src=\ref[src];common=crystals'>[crystals] telecrystals</a><br>"
 		out += text
 
 	/** ERT ***/
@@ -990,23 +986,35 @@
 				for(var/obj/item/W in current)
 					current.drop_from_inventory(W)
 			if("takeuplink")
-				take_uplink()
-				memory = null//Remove any memory they may have had.
+				var/obj/item/device/uplink/hidden/tuplink = find_syndicate_uplink()
+				if(tuplink)
+					take_uplink()
+					log_admin("[key_name(usr)] took away [key_name(current)]'s uplink.")
+					message_admins("<span class='notice'>[key_name_admin(usr)] took away [key_name(current)]'s uplink.</span>")
+					memory = null//Remove any memory they may have had.
 			if("crystals")
-				if (usr.client.holder.rights & R_FUN)
-					var/obj/item/device/uplink/hidden/suplink = find_syndicate_uplink()
+				if(check_rights(R_FUN))
+					var/obj/item/device/uplink/hidden/cuplink = find_syndicate_uplink()
 					var/crystals
-					if (suplink)
-						crystals = suplink.uses
+					if (cuplink)
+						crystals = cuplink.uses
 					crystals = input("Amount of telecrystals for [key]","Syndicate uplink", crystals) as null|num
 					if (!isnull(crystals))
-						if (suplink)
-							var/diff = crystals - suplink.uses
-							suplink.uses = crystals
+						if (cuplink)
+							var/diff = crystals - cuplink.uses
+							cuplink.uses = crystals
 							total_TC += diff
+							log_admin("[key_name(usr)] changed the remaining TC for [key_name(current)]'s uplink to [crystals] telecrystals.")
+							message_admins("<span class='notice'>[key_name_admin(usr)] changed the remaining TC for [key_name(current)]'s uplink to [crystals] telecrystals.</span>")
 			if("uplink")
-				if (!ticker.mode.equip_traitor(current, !(src in ticker.mode.traitors)))
+				var/obj/item/device/uplink/hidden/guplink = find_syndicate_uplink()
+				if(guplink)
+					to_chat(usr, "<span class='warning'>[key_name(current)] already has an uplink in [guplink.loc.name].</span>")
+				else if (!ticker.mode.equip_traitor(current, !(src in ticker.mode.traitors)))
 					to_chat(usr, "<span class='warning'>Equipping a syndicate failed!</span>")
+				else
+					log_admin("[key_name(usr)] gave [key_name(current)] an uplink with 10 telecrystals.")
+					message_admins("<span class='notice'>[key_name(usr)] gave [key_name(current)] an uplink with 10 telecrystals.</span>")
 
 	else if (href_list["obj_announce"])
 		var/obj_count = 1
