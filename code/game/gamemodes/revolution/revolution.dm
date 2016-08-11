@@ -33,7 +33,7 @@
 	var/finished = 0
 	var/checkwin_counter = 0
 	var/max_headrevs = 3
-	var/minimum_heads = 3
+	var/minimum_heads = 2
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 ///////////////////////////
