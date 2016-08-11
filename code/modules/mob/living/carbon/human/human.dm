@@ -150,7 +150,7 @@
 	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/Overlays/head_layer)
 	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/Overlays/handcuff_layer)
 	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/Overlays/legcuff_layer)
-	obj_overlays[HAND_LAYER]		= getFromPool(/obj/Overlays/hand_layer)
+	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/Overlays/hand_layer) //moved to human/update_inv_hand()
 	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/Overlays/tail_layer)
 	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/Overlays/targeted_layer)
 
