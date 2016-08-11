@@ -115,7 +115,6 @@ var/list/rc_control_boards = list()
     active = 1
     rc_control_boards += src
     qdel(robot_suit)
-    robot.emagged = 1
     user.drop_item(src, robot)
 
   else
@@ -151,8 +150,8 @@ var/list/rc_control_boards = list()
   if(active == 0 || !current_board)
     return
   else
-    var/mob/living/carbon/user = src.user_body
-    if ( !user || user.isDead() || loc != user || user.held_items.Find(src) == 0 || user.blinded || !current_board || !current_board.active || current_board.cyborg.isDead() || user.monkeyizing )
+    var/mob/living/carbon/user = user_body
+    if ( !user || user.isDead() || loc != user || user.held_items.Find(src) == 0 || user.blinded || !current_board || !current_board.active || current_board.cyborg.isDead() || user.monkeyizing || user.z != current_board.cyborg.z)
       current_board.inUse = null
       current_board.controller = null
       user.ckey = user_ckey
@@ -167,13 +166,13 @@ var/list/rc_control_boards = list()
     if(camera.camera_target.isDead())
       camera.active = 0
       rc_cameras -= camera
-    if(camera.frequency == frequency && camera.active == 1)
+    if(camera.frequency == frequency && camera.active == 1 && camera.camera_target.z == user.z)
       devices += camera
   for(var/obj/item/device/syndicate_remote_cyborg_control_board/board in rc_control_boards)
     if(board.cyborg.isDead())
       board.active = 0
       rc_control_boards -= board
-    if(board.frequency == frequency && board.active == 1)
+    if(board.frequency == frequency && board.active == 1  && board.cyborg.z == user.z)
       devices += board
   if(!devices.len)
     to_chat(user, "<span class='warning'>No signals detected.</span>")
@@ -203,6 +202,9 @@ var/list/rc_control_boards = list()
       break
   if(user.incapacitated()) return
   if(target && istype(target, /obj/item/device/syndicate_remote_cyborg_camera/))
+    if(target.camera_target.z != user.z)
+      to_chat(user, "<span class='warning'>This signal is too weak.</span>")
+      return
     active = 1
     user.client.eye = target
     user.set_machine(src)
@@ -211,6 +213,9 @@ var/list/rc_control_boards = list()
     var/obj/item/device/syndicate_remote_cyborg_control_board/target_board = target
     if(target_board.inUse)
       to_chat(user, "<span class='warning'>This signal is already in use.</span>")
+      return
+    if(target.cyborg.z != user.z)
+      to_chat(user, "<span class='warning'>This signal is too weak.</span>")
       return
     active = 1
     target_board.inUse = 1
@@ -223,7 +228,7 @@ var/list/rc_control_boards = list()
     user.unset_machine()
 
 /obj/item/device/syndicate_controller/check_eye(var/mob/user)
-  if ( loc != user || user.get_active_hand() != src || !user.canmove || user.blinded || !current_camera || !current_camera.active || current_camera.camera_target.isDead())
+  if ( loc != user || user.get_active_hand() != src || !user.canmove || user.blinded || !current_camera || !current_camera.active || current_camera.camera_target.isDead() || current_camera.camera_target.z != user.z)
     active = 0
     user.unset_machine()
     user.reset_view(user)
