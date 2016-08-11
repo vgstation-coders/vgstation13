@@ -7,6 +7,12 @@
 // If the rev icons start going wrong for some reason, ticker.mode:update_all_rev_icons() can be called to correct them.
 // If the game somtimes isn't registering a win properly, then ticker.mode.check_win() isn't being called somewhere.
 
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -1
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+
+
 /datum/game_mode
 	var/list/datum/mind/head_revolutionaries = list()
 	var/list/datum/mind/revolutionaries = list()
@@ -381,7 +387,7 @@
 /datum/game_mode/revolution/proc/check_heads_victory()
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		var/turf/T = get_turf(rev_mind.current)
-		if((rev_mind) && (rev_mind.current) && (rev_mind.current.stat != 2) && T && (T.z == map.zMainStation))
+		if((rev_mind) && (rev_mind.current) && (rev_mind.current.stat != 2) && T && (T.z == 1))
 			if(ishuman(rev_mind.current))
 				return 0
 	return 1
@@ -418,7 +424,7 @@
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
-				else if(headrev.current.z != map.zMainStation)
+				else if(headrev.current.z != 1)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
@@ -460,7 +466,7 @@
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
-				else if(rev.current.z != map.zMainStation)
+				else if(rev.current.z != 1)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
@@ -496,7 +502,7 @@
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
-				else if(head.current.z != map.zMainStation)
+				else if(head.current.z != 1)
 					text += "fled the station"
 				else
 					text += "survived the revolution"

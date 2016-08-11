@@ -90,7 +90,7 @@ proc/process_ghost_teleport_locs()
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 		var/turf/picked = safepick(get_area_turfs(AR.type))
-		if (picked && (picked.z == map.zMainStation || picked.z == 5 || picked.z == 3))
+		if (picked && (picked.z == map.zMainStation || picked.z == map.zAsteroid || picked.z == map.zTCommSat))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 

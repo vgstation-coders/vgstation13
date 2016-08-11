@@ -268,7 +268,7 @@
 		var/turf/bombturf = get_turf(src)
 		var/area/A = get_area(bombturf)
 		var/notify_admins = 0
-		if(z != 5)//Only annoy the admins ingame if we're triggered off the mining zlevel
+		if(z != map.zAsteroid)//Only annoy the admins ingame if we're triggered off the mining zlevel
 			notify_admins = 1
 		if(notify_admins)
 			if(triggered_by_explosive)

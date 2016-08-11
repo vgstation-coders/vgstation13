@@ -993,7 +993,7 @@
 		return 0
 	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
 //		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
-		if(temp_turf.z != 2)
+		if(temp_turf.z != map.zCentcomm)
 			to_chat(src, "The mind of [M] is too faint...")//Prevent "The mind of Admin is too faint..."
 
 

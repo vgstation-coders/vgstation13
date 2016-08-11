@@ -57,7 +57,7 @@
 		var/turf/T = get_turf(M)
 		if(!T)
 			continue
-		if(T.z == 2)
+		if(T.z == map.zCentcomm)
 			continue
 		if(T.z > 6)
 			continue

@@ -38,7 +38,7 @@
 	for(var/obj/effect/rune/R in rune_list)
 		if(R == src)
 			continue
-		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["self"] && R.word3 == key && R.z != 2)
+		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["self"] && R.word3 == key && R.z != map.zCentcomm)
 			index++
 			allrunesloc.len = index
 			allrunesloc[index] = R.loc

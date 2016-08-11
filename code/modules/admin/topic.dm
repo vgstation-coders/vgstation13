@@ -1779,7 +1779,7 @@
 						foo += text("<B>Is an AI</B> | ")
 					else
 						foo += text("<A HREF='?src=\ref[];makeai=\ref[]'>Make AI</A> | ", src, M)
-					if(M.z != 2)
+					if(M.z != map.zCentcomm)
 						foo += text("<A HREF='?src=\ref[];sendtoprison=\ref[]'>Prison</A> | ", src, M)
 						foo += text("<A HREF='?src=\ref[];sendtomaze=\ref[]'>Maze</A> | ", src, M)
 					else

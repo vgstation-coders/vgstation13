@@ -376,7 +376,7 @@ Class Procs:
 			return 1
 		var/turf/T = get_turf(usr)
 		if(!isAI(usr) && T.z != z)
-			if(usr.z != 2)
+			if(usr.z != map.zCentcomm)
 				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
 				return 1
 		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
