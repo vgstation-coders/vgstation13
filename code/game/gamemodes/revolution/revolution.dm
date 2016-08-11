@@ -73,7 +73,9 @@
 
 	if(head_revolutionaries.len==0|| head_check < minimum_heads)
 		log_admin("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+		log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
 		message_admins("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+		message_admins("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
 		return 0
 
 	log_admin("Starting a round of revolution with [head_revolutionaries.len] head revolutionaries and [head_check] heads of staff.")
