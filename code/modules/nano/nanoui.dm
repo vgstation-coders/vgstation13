@@ -512,7 +512,7 @@ nanoui is used to open and update nano browser uis
 		var/newz = input("Choose Z-Level to view.","Z-Levels",1) as null|anything in listed_zlevels
 		if(!newz || isnull(newz))
 			return 0
-		if(newz in listed_zlevels)
+		if(! (newz in listed_zlevels))
 			to_chat(usr, "<span class='danger'>Unable to establish a connection</span>")
 			return 0
 		if(newz != map_z_level)
