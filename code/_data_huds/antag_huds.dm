@@ -17,8 +17,7 @@
 		leader_hud_image.layer = EVEN_LOWER_LAYER
 
 /datum/data_hud/antag/proc/is_antag_type(var/mob/living/user)
-	if(istype(user))
-		return HUD_ON
+	return istype(user)
 
 /datum/data_hud/antag/proc/is_leader(var/mob/user)
 	return
@@ -64,8 +63,7 @@ var/global/datum/data_hud/antag/cult/cult_hud = new /datum/data_hud/antag/cult()
 /datum/data_hud/antag/wiz/is_antag_type(var/mob/living/user)
 	if(!..())
 		return
-	if(iswizard(user)||isapprentice(user))
-		return HUD_ON
+	return (iswizard(user)||isapprentice(user))
 
 /datum/data_hud/antag/wiz/is_leader(var/mob/user)
 	return iswizard(user)
@@ -97,12 +95,10 @@ var/global/datum/data_hud/antag/syndie/syndie_hud = new /datum/data_hud/antag/sy
 /datum/data_hud/antag/rev/is_antag_type(var/mob/living/user)
 	if(!..())
 		return
-	if(isrev(user) || isrevhead(user))
-		return HUD_ON
+	return (isrev(user) || isrevhead(user))
 
 /datum/data_hud/antag/rev/is_leader(var/mob/user)
-	if(isrevhead(user))
-		return HUD_ON
+	return isrevhead(user)
 
 var/global/datum/data_hud/antag/rev/rev_hud = new /datum/data_hud/antag/rev()
 

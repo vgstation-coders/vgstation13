@@ -390,6 +390,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		M.has_enabled_antagHUD = 1
 	if(M.antagHUD)
 		M.antagHUD = 0
+		update_data_huds()
 		to_chat(src, "<span class='notice'><B>AntagHUD Disabled</B></span>")
 	else
 		M.antagHUD = 1
