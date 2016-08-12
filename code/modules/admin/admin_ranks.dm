@@ -33,6 +33,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 				if("server")					rights |= R_SERVER
 				if("debug")						rights |= R_DEBUG
 				if("permissions","rights")		rights |= R_PERMISSIONS
+				if("polling", "poll")			rights |= R_POLLING
 				if("possess")					rights |= R_POSSESS
 				if("stealth")					rights |= R_STEALTH
 				if("rejuv","rejuvinate")		rights |= R_REJUVINATE
