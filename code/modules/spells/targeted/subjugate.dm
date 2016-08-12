@@ -15,5 +15,6 @@
 	amt_stuttering = 86
 
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	spell_flags = WAIT_FOR_CLICK
 
 	hud_state = "wiz_subj"

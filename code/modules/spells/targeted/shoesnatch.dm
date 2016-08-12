@@ -1,7 +1,7 @@
 /spell/targeted/shoesnatch
 
 	name = "Shoe Snatching Charm"
-	desc = "This spell will allow you to steal somebodies shoes right off of their feet!"
+	desc = "This spell allows you to steal somebody's shoes right off of their feet!"
 	school = "evocation"
 	charge_type = Sp_RECHARGE
 	charge_max = 150
@@ -9,13 +9,16 @@
 	invocation_type = SpI_SHOUT
 	range = 7
 	max_targets = 1
+	spell_flags = WAIT_FOR_CLICK
 	cooldown_min = 30
 	selection_type = "range"
 
+	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 	compatible_mobs = list(/mob/living/carbon/human)
 
 	hud_state = "wiz_shoes"
 
+	var/spawn_shards = 0
 
 /spell/targeted/shoesnatch/cast(list/targets, mob/user = user)
 	..()
@@ -28,3 +31,25 @@
 			target.visible_message(	"<span class='danger'>[target]'s shoes suddenly vanish!</span>", \
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
 			user.put_in_active_hand(old_shoes)
+
+		else if(spawn_shards) //Spawn shards if the target isn't wearing shoes
+			to_chat("<span class='danger'>You conjure several glass shards around \the [target].</span>")
+			target.show_message("<span class='danger'>You are surrounded by glass shards!</span>", MESSAGE_SEE)
+			summon_shards(get_turf(target), cardinal)
+
+/spell/targeted/shoesnatch/proc/summon_shards(turf/T, list/dirlist)
+	for(var/D in dirlist)
+		var/obj/item/weapon/shard/S = new(T)
+		step(S, D)
+		S.alpha = 0
+		animate(S, alpha = 255, time = 10)
+
+/spell/targeted/shoesnatch/empower_spell()
+	spell_levels[Sp_POWER]++
+	spawn_shards = 1
+
+	var/upgrade_desc = "You have upgraded [name] into Shoe Snatching Scourge. When cast on somebody who isn't wearing any shoes, it will summon 4 glass shards around them."
+	name = "Shoe Snatching Scourge"
+	desc = "This spell allows you to steal somebody's shoes right off of their feet. If they aren't wearing any shoes, 4 glass shards will be conjured around them."
+
+	return upgrade_desc
