@@ -76,7 +76,7 @@
 		log_admin("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
 		log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
 		message_admins("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
-		message_admins("Number of headrevs: [head_revolutionaries.len] Heads of Staff: [get_all_heads]")
+		message_admins("Number of headrevs: [head_revolutionaries.len] Heads of Staff: [get_assigned_head_roles()]")
 		return 0
 	else if (head_revolutionaries.len==0 || head_check < 1)
 		log_admin("Failed to setup a round of revolution while secret forced mode: there was not at least one head. Headcount: [head_check]")
