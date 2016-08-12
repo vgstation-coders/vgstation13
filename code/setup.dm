@@ -1108,9 +1108,10 @@ SEE_PIXELS	256
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
 
-
-//Please don't edit these values without speaking to Errorage first	~Carn
 //Admin Permissions
+//Please don't edit these values without speaking to [current /vg/ host here] first
+//Currently at the limit for rank bitflags, if any are needed to be added in the future then consider replacement of R_MOD as we don't use it at time of writing, or merge R_STEALTH into R_ADMIN.
+
 #define R_BUILDMODE		1
 #define R_ADMIN			2
 #define R_BAN			4
@@ -1126,8 +1127,9 @@ SEE_PIXELS	256
 #define R_SPAWN			4096
 #define R_MOD			8192
 #define R_ADMINBUS		16384
+#define R_POLLING		32768
 
-#define R_MAXPERMISSION 16384 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
+#define R_MAXPERMISSION 32768 //This holds the maximum value for a permission. It is used in iteration, so keep it updated.
 
 #define R_HOST			65535
 
