@@ -51,6 +51,7 @@
 #include "code\_data_huds\_data_huds.dm"
 #include "code\_data_huds\antag_huds.dm"
 #include "code\_data_huds\glasses_hud.dm"
+#include "code\_data_huds\private_huds.dm"
 #include "code\_hooks\area.dm"
 #include "code\_hooks\events.dm"
 #include "code\_hooks\hooks.dm"

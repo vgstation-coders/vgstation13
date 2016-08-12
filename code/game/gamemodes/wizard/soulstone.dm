@@ -297,8 +297,7 @@
 	necromancers = ticker.mode:necromancer[ref]
 	necromancers.Add(shadeMob.mind)
 	ticker.mode:necromancer[ref] = necromancers
-	ticker.mode.update_necro_icons_added(user.mind)
-	ticker.mode.update_necro_icons_added(shadeMob.mind)
+	user.mind.create_priv_hud(NECRO_HUD,shadeMob)
 	ticker.mode.risen.Add(shadeMob.mind)
 
 	//Pretty particles
@@ -362,7 +361,7 @@
 			var/mob/living/simple_animal/construct/Z
 			if(A)
 				var/construct_class = alert(U, "Please choose which type of construct you wish to create.",,"Juggernaut","Wraith","Artificer")
-				ticker.mode.update_necro_icons_removed(A.mind)
+				A.mind.remove_priv_hud(NECRO_HUD)
 				switch(construct_class)
 					if("Juggernaut")
 						Z = new /mob/living/simple_animal/construct/armoured (get_turf(T.loc))
@@ -415,14 +414,13 @@
 						ticker.mode:necromancer[ref] = list()
 					necromancers = ticker.mode:necromancer[ref]
 					necromancers.Add(Z.mind)
+					U.mind.create_priv_hud(NECRO_HUD,Z)
 					ticker.mode:necromancer[ref] = necromancers
-					ticker.mode.update_necro_icons_added(U.mind)
-					ticker.mode.update_necro_icons_added(Z.mind)
 					ticker.mode.risen.Add(Z.mind)
 				name = "Soul Stone Shard"
 			else
 				to_chat(U, "<span class='warning'><b>Creation failed!</b>: The soul stone is empty! Go kill someone!</span>")
-	ticker.mode.update_all_necro_icons()
+
 	if(deleteafter)
 		for(var/atom/A in src)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 			qdel(A)

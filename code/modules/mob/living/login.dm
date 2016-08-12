@@ -10,17 +10,5 @@
 		remove_ventcrawl()
 		add_ventcrawl(loc)
 
-	//Round specific stuff like hud updates
-	if(ticker && ticker.mode)
-		switch(ticker.mode.name)
-			if("sandbox")
-				CanBuild()
-		var/ref = "\ref[mind]"
-		if(ref in ticker.mode.implanter)
-			ticker.mode.update_traitor_icons_added(mind)
-		if(mind in ticker.mode.implanted)
-			ticker.mode.update_traitor_icons_added(mind)
-		if((ref in ticker.mode.thralls) || (mind in ticker.mode.enthralled))
-			ticker.mode.update_vampire_icons_added(mind)
-		return
-	return .
+	if(ticker && ticker.mode && istype(ticker,/datum/game_mode/sandbox))
+		CanBuild()

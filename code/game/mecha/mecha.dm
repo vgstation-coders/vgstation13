@@ -1116,8 +1116,6 @@
 		H.update_data_huds()
 
 		return 1
-	else
-		return 0
 
 /obj/mecha/proc/mmi_move_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
 	if(!mmi_as_oc.brainmob || !mmi_as_oc.brainmob.client)

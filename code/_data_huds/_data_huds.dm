@@ -55,9 +55,12 @@
 		S |= invisible
 		S -= visible
 
-/datum/data_hud/proc/update_hud(var/mob/user)
-	remove_hud(user)
+/datum/data_hud/proc/update_mob(var/mob/user)
+	if(!user)
+		return
+
 	if(!check(user))
+		remove_hud(user)
 		return
 
 	var/image/data_hud = to_add(user)
@@ -65,27 +68,15 @@
 	if(!data_hud || !istype(data_hud))
 		return
 
-	//var/imageloc = user
-
 	if(flags & SEE_IN_MECH)
 		if(istype(user.loc,/obj/mecha))
 			var/obj/mecha/mech = user.loc
-			mech.underlays += data_hud
+			mech.underlays |= data_hud
 			mech.data_huds[name] = data_hud
-			return
+	else
+		user.underlays |= data_hud
+		user.data_huds[name] = data_hud
 
-	user.underlays += data_hud
-	user.data_huds[name] = data_hud
-
-//	var/image/dhud = image(loc = imageloc)
-//	dhud.appearance = data_hud.appearance
-//	user.data_huds[name]
-
-
-/datum/data_hud/proc/update_mob(var/mob/user)
-	if(!user)
-		return
-	update_hud(user)
 	if(user.client)
 		update_invisibility(user.client)
 
@@ -95,11 +86,6 @@
 	if(user.data_huds[name])
 		user.underlays -= user.data_huds[name]
 		user.data_huds -= name
-
-		//var/image/dhud = user.data_huds[name]
-		//dhud.loc = null
-		//user.data_huds[name] = null
-		//qdel(dhud)
 
 /datum/data_hud/proc/to_add(var/mob/user)
 	return
@@ -127,28 +113,4 @@
 	for(var/D in master_controller.active_data_huds)
 		if(istype(master_controller.active_data_huds[D],/datum/data_hud))
 			var/datum/data_hud/dhud = master_controller.active_data_huds[D]
-			dhud.update_hud(src)
-
-/datum/data_hud/dummy	// prevents people from right clicking mobs to see things they shouldn't.
-	name = "dummy"
-	plane = DUMMY_HUD_PLANE
-	var/image/dummy_image
-	flags = SEE_IN_MECH
-
-/datum/data_hud/dummy/New()
-	..()
-	dummy_image = image('icons/mob/mob.dmi', icon_state = "white")
-	dummy_image.alpha = 0
-	dummy_image.layer = REALLY_LOW_LAYER
-	dummy_image.plane = plane
-
-/datum/data_hud/dummy/check(var/mob/user)
-	return ismob(user)
-
-/datum/data_hud/dummy/to_add(var/mob/user)
-	return dummy_image
-
-/datum/data_hud/dummy/can_be_seen_by(var/mob/user)
-	return
-
-var/global/datum/data_hud/dummy/dummy_hud = new /datum/data_hud/dummy()
+			dhud.update_mob(src)

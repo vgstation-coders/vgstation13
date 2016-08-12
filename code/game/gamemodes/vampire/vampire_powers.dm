@@ -375,7 +375,7 @@
 		else
 			alphas["vampire_cloak"] = round((255 * 0.80))
 
-/mob/proc/can_suck(mob/living/carbon/target) 
+/mob/proc/can_suck(mob/living/carbon/target)
 	if(lying || incapacitated())
 		to_chat(src, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return 0
@@ -393,7 +393,7 @@
 			else
 				to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 	return 1
-	
+
 /mob/proc/can_enthrall(mob/living/carbon/C)
 	var/enthrall_safe = 0
 	if(restrained())
@@ -445,8 +445,7 @@
 	H.mind.special_role = "VampThrall"
 	to_chat(H, "<span class='sinister'>You have been Enthralled by [src.name]. Follow their every command.</span>")
 	to_chat(src, "<span class='warning'>You have successfully Enthralled [H.name]. <i>If they refuse to do as you say just adminhelp.</i></span>")
-	ticker.mode.update_vampire_icons_added(H.mind)
-	ticker.mode.update_vampire_icons_added(src.mind)
+	mind.create_priv_hud(VAMP_HUD,H)
 	log_admin("[ckey(src.key)] has mind-slaved [ckey(H.key)].")
 	message_admins("[ckey(src.key)] has mind-slaved [ckey(H.key)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[H.x];Y=[H.y];Z=[H.z]'>JMP</A>).")
 

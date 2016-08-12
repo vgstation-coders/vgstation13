@@ -70,10 +70,8 @@
 	//fix scrying raging mages issue.
 	var/isScrying = 0
 	var/list/heard_before = list()
-	var/
-
 	var/nospells = 0 //Can't cast spells.
-
+	var/list/dhuds = list()
 
 /datum/mind/New(var/key)
 	src.key = key

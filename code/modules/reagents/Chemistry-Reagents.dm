@@ -787,7 +787,7 @@
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
 				H.mind.vampire.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 		if(H.mind && H.mind.special_role == "VampThrall")
-			ticker.mode.remove_vampire_mind(H.mind, H.mind)
+			H.mind.remove_priv_hud(VAMP_HUD)
 			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 
