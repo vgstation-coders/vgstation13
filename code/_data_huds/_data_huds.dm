@@ -3,6 +3,7 @@
 #define CAN_SEE			1
 #define CANT_SEE		0
 
+// flags for data huds
 #define SEE_IN_MECH		1
 #define IS_ANTAG_HUD	2
 #define IGNORE_BASE_NEW	4

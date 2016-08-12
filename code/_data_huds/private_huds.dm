@@ -3,7 +3,7 @@
 		var/priv_hud = master_controller.active_data_huds["private_hud[i]"]
 		if(priv_hud)
 			var/datum/data_hud/antag/private/potential_slot = priv_hud
-			if(!(potential_slot.minds.len))
+			if(!(potential_slot.minds.len||potential_slot.leader))
 				return potential_slot
 
 /datum/mind/proc/get_private_hud(var/hud_type)
@@ -20,6 +20,9 @@
 	var/datum/data_hud/antag/private/phud = get_private_hud(hud_type)
 	dhuds += phud
 	phud.leader = src
+	phud.minds += src
+	phud.minds += follower.mind
+	phud.update_mob(current)
 	phud.update_mob(follower)
 	follower.mind.dhuds += phud
 
@@ -35,10 +38,6 @@
 	var/list/minds = list()
 	flags = SEE_IN_MECH|IS_ANTAG_HUD|IGNORE_BASE_NEW
 
-/datum/data_hud/antag/private/update_mob(var/mob/user)
-	minds |= user.mind
-	..()
-
 /datum/data_hud/antag/private/is_leader(var/mob/user)
 	if(user.mind == leader)
 		return HUD_ON
@@ -46,7 +45,8 @@
 /datum/data_hud/antag/private/is_antag_type(var/mob/user)
 	if(!..())
 		return
-	return minds[user.mind]
+	if(user.mind in minds)
+		return HUD_ON
 
 /datum/data_hud/antag/private/New(var/datum/data_hud/antag/private/old_hud,var/number = 0)
 	if(number)

@@ -18,7 +18,7 @@
 
 /datum/data_hud/antag/proc/is_antag_type(var/mob/living/user)
 	if(istype(user))
-		return 1
+		return HUD_ON
 
 /datum/data_hud/antag/proc/is_leader(var/mob/user)
 	return
@@ -33,6 +33,10 @@
 	..()
 	if(is_antag_type(user))
 		return CAN_SEE
+	if(istype(user,/mob/dead/observer))
+		var/mob/dead/observer/ghost = user
+		if(ghost.antagHUD)
+			return CAN_SEE
 
 /datum/data_hud/antag/check(var/mob/user)
 	return is_antag_type(user)
@@ -60,7 +64,8 @@ var/global/datum/data_hud/antag/cult/cult_hud = new /datum/data_hud/antag/cult()
 /datum/data_hud/antag/wiz/is_antag_type(var/mob/living/user)
 	if(!..())
 		return
-	return (iswizard(user)||isapprentice(user))
+	if(iswizard(user)||isapprentice(user))
+		return HUD_ON
 
 /datum/data_hud/antag/wiz/is_leader(var/mob/user)
 	return iswizard(user)
