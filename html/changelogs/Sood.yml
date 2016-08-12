@@ -1,7 +1,2 @@
 author: Sood
-changes:
-  - rscadd: "Adds a new gamemode, Revolutionary Squad, which is a variant on revolution with an emphasis on a small, organized group of underequipped revolutionaries trying to kill the heads instead of a large group of gretiders."
-  - tweak:  "Revsquad members only sometimes spawn with a flash capable of converting crew members, and it always has limited uses. They cannot use a standard flash to convert."
-  - tweak: "Adds the sawn-off shotgun as a defined type, which means it might get picked as random loot in places where guns are picked."
-  - tweak: "Adds pre-assembled IED as a defined type, similar to above."
-  - tweak: "Both revolution and revsquad requires at least 3 heads of staff to start."
+changes: []
