@@ -5,6 +5,7 @@
 
 #define SEE_IN_MECH		1
 #define IS_ANTAG_HUD	2
+#define IGNORE_BASE_NEW	4
 
 
 /obj/screen/plane_master/data_hud/New(var/hud_plane,var/visible)
@@ -31,6 +32,8 @@
 	var/obj/screen/plane_master/data_dummy/dummy
 
 /datum/data_hud/New()
+	if(flags & IGNORE_BASE_NEW)
+		return
 	if(!name || master_controller.active_data_huds[name])
 		qdel(src)
 	else
@@ -73,9 +76,9 @@
 			var/obj/mecha/mech = user.loc
 			mech.underlays |= data_hud
 			mech.data_huds[name] = data_hud
-	else
-		user.underlays |= data_hud
-		user.data_huds[name] = data_hud
+
+	user.underlays |= data_hud
+	user.data_huds[name] = data_hud
 
 	if(user.client)
 		update_invisibility(user.client)

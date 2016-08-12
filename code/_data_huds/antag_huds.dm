@@ -7,9 +7,10 @@
 
 /datum/data_hud/antag/New()
 	..()
-	hud_image = image('icons/mob/mob.dmi', icon_state = icon_state)
-	hud_image.plane = plane
-	hud_image.layer = EVEN_LOWER_LAYER
+	if(icon_state)
+		hud_image = image('icons/mob/mob.dmi', icon_state = icon_state)
+		hud_image.plane = plane
+		hud_image.layer = EVEN_LOWER_LAYER
 	if(leader_icon_state)
 		leader_hud_image = image('icons/mob/mob.dmi', icon_state = leader_icon_state)
 		leader_hud_image.plane = plane
@@ -52,12 +53,16 @@ var/global/datum/data_hud/antag/cult/cult_hud = new /datum/data_hud/antag/cult()
 
 /datum/data_hud/antag/wiz
 	name = "wizard"
-	icon_state = "wizard"
+	icon_state = "dunce"
+	leader_icon_state = "wizard"
 	plane = WIZ_ANTAG_HUD_PLANE
 
 /datum/data_hud/antag/wiz/is_antag_type(var/mob/living/user)
 	if(!..())
 		return
+	return (iswizard(user)||isapprentice(user))
+
+/datum/data_hud/antag/wiz/is_leader(var/mob/user)
 	return iswizard(user)
 
 var/global/datum/data_hud/antag/wiz/wiz_hud = new /datum/data_hud/antag/wiz()
@@ -107,7 +112,7 @@ var/global/datum/data_hud/antag/rev/rev_hud = new /datum/data_hud/antag/rev()
 	hud_image.alpha = 0
 	hud_image.layer = REALLY_LOW_LAYER
 
-/datum/data_hud/dummy/antag/check(var/mob/user)
+/datum/data_hud/antag/dummy/check(var/mob/user)
 	return ismob(user)
 
-var/global/datum/data_hud/dummy/antag/dummy_hud = new /datum/data_hud/antag/dummy()
+var/global/datum/data_hud/antag/dummy/dummy_hud = new /datum/data_hud/antag/dummy()

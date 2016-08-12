@@ -129,7 +129,7 @@
 	M.mind.objectives += new_objective
 	ticker.mode.traitors += M.mind
 	M.mind.special_role = "apprentice"
-
+	wiz_hud.update_mob(M)
 	M.make_all_robot_parts_organic()
 
 /obj/item/weapon/antag_spawner/contract/equip_antag(mob/target as mob)

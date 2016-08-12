@@ -12,14 +12,14 @@
 			return dhud
 	var/slot = find_private_hud_slot()
 	if(slot)
-		return new hud_type(slot,hud_type)
+		return new hud_type(slot)
 	else
 		error("RAN OUT OF PRIVATE HUD SLOTS, PANIC.")
 
 /datum/mind/proc/create_priv_hud(var/hud_type,var/mob/follower)
 	var/datum/data_hud/antag/private/phud = get_private_hud(hud_type)
 	dhuds += phud
-	phud.leader = current
+	phud.leader = src
 	phud.update_mob(follower)
 	follower.mind.dhuds += phud
 
@@ -33,7 +33,7 @@
 /datum/data_hud/antag/private
 	var/datum/mind/leader
 	var/list/minds = list()
-	flags = SEE_IN_MECH|IS_ANTAG_HUD
+	flags = SEE_IN_MECH|IS_ANTAG_HUD|IGNORE_BASE_NEW
 
 /datum/data_hud/antag/private/update_mob(var/mob/user)
 	minds |= user.mind
@@ -51,10 +51,15 @@
 /datum/data_hud/antag/private/New(var/datum/data_hud/antag/private/old_hud,var/number = 0)
 	if(number)
 		name = "private_hud[number]"
+		plane = number
+		flags &= ~IGNORE_BASE_NEW
+		..()
 	if(old_hud)
+		..()
 		master_controller.active_data_huds[old_hud.name] = src
 		visible = old_hud.visible
 		invisible = old_hud.invisible
+		plane = old_hud.plane
 		dummy = old_hud.dummy
 
 /datum/data_hud/antag/private/remove_hud(var/mob/user)
