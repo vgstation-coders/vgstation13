@@ -65,7 +65,11 @@ datum/controller/game_controller/New()
 
 	if(!syndicate_code_phrase)		syndicate_code_phrase	= generate_code_phrase()
 	if(!syndicate_code_response)	syndicate_code_response	= generate_code_phrase()
-	/*if(!emergency_shuttle)			emergency_shuttle = new /datum/shuttle_controller/emergency_shuttle()*/
+
+	for(var/i = CUSTOM_HUD_PLANE_START to CUSTOM_HUD_PLANE_END)
+		master_controller.active_data_huds["private_hud[i]"] = new /datum/data_hud/antag/private(number = i)
+
+/*if(!emergency_shuttle)			emergency_shuttle = new /datum/shuttle_controller/emergency_shuttle()*/
 /*
 	if(global.garbageCollector)
 		garbageCollector = global.garbageCollector

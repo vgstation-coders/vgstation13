@@ -107,7 +107,7 @@
 			var/datum/data_hud/dhud = master_controller.active_data_huds[D]
 			dhud.update_invisibility(client)
 			client.screen |= dhud.dummy
-	dummy_hud.update_hud(src)
+	dummy_hud.update_mob(src)
 
 /mob/proc/update_data_huds()
 	for(var/D in master_controller.active_data_huds)

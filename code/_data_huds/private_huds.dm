@@ -1,6 +1,3 @@
-for(var/i = CUSTOM_HUD_PLANE_START to CUSTOM_HUD_PLANE_END)
-	master_controller.active_data_huds["private_hud[i]"] = new /datum/data_hud/antag/private(number = i)
-
 /proc/find_private_hud_slot()
 	for(var/i = CUSTOM_HUD_PLANE_START to CUSTOM_HUD_PLANE_END)
 		var/priv_hud = master_controller.active_data_huds["private_hud[i]"]
