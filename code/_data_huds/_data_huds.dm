@@ -90,6 +90,8 @@
 	if(user.data_huds[name])
 		user.underlays -= user.data_huds[name]
 		user.data_huds -= name
+	if(user.client)
+		update_invisibility(user.client)
 
 /datum/data_hud/proc/to_add(var/mob/user)
 	return

@@ -20,8 +20,7 @@
 	var/datum/data_hud/antag/private/phud = get_private_hud(hud_type)
 	dhuds += phud
 	phud.leader = src
-	phud.minds += src
-	phud.minds += follower.mind
+	phud.minds += list(src,follower.mind)
 	phud.update_mob(current)
 	phud.update_mob(follower)
 	follower.mind.dhuds += phud
@@ -55,12 +54,12 @@
 		flags &= ~IGNORE_BASE_NEW
 		..()
 	if(old_hud)
-		..()
 		master_controller.active_data_huds[old_hud.name] = src
 		visible = old_hud.visible
 		invisible = old_hud.invisible
 		plane = old_hud.plane
 		dummy = old_hud.dummy
+		..()
 
 /datum/data_hud/antag/private/remove_hud(var/mob/user)
 	minds -= user.mind
