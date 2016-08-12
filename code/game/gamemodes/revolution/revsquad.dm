@@ -58,11 +58,16 @@
 		possible_revs -= lenin
 		head_revolutionaries += lenin
 
-	if(revolutionaries.len==0 || head_check < minimum_heads)
+	// If an admin forces this mode, we set the minimum head count to 1, otherwise check minimum heads
+	if((head_revolutionaries.len==0 || head_check < minimum_heads) && (master_mode=="secret" && force_secret_mode == "secret"))
 		log_admin("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 		log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
 		message_admins("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 		message_admins("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
+		return 0
+	else if (head_revolutionaries.len==0 || head_check < 1)
+		log_admin("Failed to set-up a secret-forced round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
+		message_admins("Failed to set-up a secret-forced round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 		return 0
 
 	log_admin("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
