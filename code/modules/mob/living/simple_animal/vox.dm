@@ -13,7 +13,7 @@
 	melee_damage_lower = 30
 	melee_damage_upper = 40
 	attacktext = "slammed its enormous claws into"
-	speed = -1
+	speed = 2
 	environment_smash = 2 // WALLS
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	status_flags = 0
