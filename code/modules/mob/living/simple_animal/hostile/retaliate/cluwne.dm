@@ -327,7 +327,7 @@
 	health = 100
 	size = 1
 
-	speed = -1
+	speed = 2
 	turns_per_move = 1
 
 	melee_damage_type = "BRAIN"
