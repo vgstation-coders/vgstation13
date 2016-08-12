@@ -37,7 +37,8 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) - 5*lasercount
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
@@ -117,7 +118,8 @@
 	onclose(user, "freezer")
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	else
 		usr.set_machine(src)
 		if (href_list["start"])
@@ -203,7 +205,8 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) + 5*lasercount
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
@@ -282,7 +285,8 @@
 	onclose(user, "heater")
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	else
 		usr.set_machine(src)
 		if (href_list["start"])

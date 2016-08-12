@@ -42,9 +42,11 @@
 		explode()
 		return 0
 
-	if(maxcharge < amount)	return 0
+	if(maxcharge < amount)
+		return 0
 	var/power_used = min(maxcharge-charge,amount)
-	if(crit_fail)	return 0
+	if(crit_fail)
+		return 0
 	if(!prob(reliability))
 		minor_fault++
 		if(prob(minor_fault))

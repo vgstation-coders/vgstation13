@@ -43,8 +43,10 @@
 	var/scancount = 0
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module)) scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+			scancount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
 	mutatechance = initial(mutatechance) + scancount
 	growthrate = initial(growthrate) + lasercount
 
@@ -82,9 +84,11 @@
 					src.updateUsrDialog()
 
 /obj/machinery/disease2/incubator/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
-	if(usr) usr.set_machine(src)
+	if(usr)
+		usr.set_machine(src)
 
 	if (href_list["ejectchem"])
 		if(beaker)

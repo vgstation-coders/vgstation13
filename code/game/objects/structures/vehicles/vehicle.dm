@@ -240,7 +240,8 @@
 		HealthCheck()
 
 /obj/structure/bed/chair/vehicle/proc/HealthCheck()
-	if(health > max_health) health = max_health
+	if(health > max_health)
+		health = max_health
 	if(health <= 0 && !destroyed)
 		die()
 

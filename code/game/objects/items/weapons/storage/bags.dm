@@ -214,7 +214,8 @@
 // Modified handle_item_insertion.  Would prefer not to, but...
 	handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S)) return 0
+		if(!istype(S))
+			return 0
 
 		var/amount
 		var/inserted = 0
@@ -296,7 +297,8 @@
 // Instead of removing
 	remove_from_storage(obj/item/W as obj, atom/new_location)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S)) return 0
+		if(!istype(S))
+			return 0
 
 		//I would prefer to drop a new stack, but the item/attack_hand code
 		// that calls this can't recieve a different object than you clicked on.

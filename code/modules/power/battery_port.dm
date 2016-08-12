@@ -53,7 +53,8 @@
 
 /obj/machinery/power/battery_port/update_icon()
 	overlays.len = 0
-	if(stat & BROKEN)	return
+	if(stat & BROKEN)
+		return
 
 	if(connected && connected.charging)
 		overlays += image('icons/obj/power.dmi', "bp-c")

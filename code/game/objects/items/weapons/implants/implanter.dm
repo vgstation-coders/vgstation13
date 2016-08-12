@@ -122,7 +122,8 @@
 	if(!istype(M))
 		return
 	var/obj/item/weapon/implant/compressed/c = imp
-	if (!c)	return
+	if (!c)
+		return
 	if (c.scanned == null)
 		to_chat(user, "Please scan an object with the implanter first.")
 		return

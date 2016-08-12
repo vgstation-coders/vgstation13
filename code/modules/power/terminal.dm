@@ -20,7 +20,8 @@
 /obj/machinery/power/terminal/New()
 	..()
 	var/turf/T = src.loc
-	if(level==1) hide(T.intact)
+	if(level==1)
+		hide(T.intact)
 	return
 
 

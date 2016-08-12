@@ -44,7 +44,8 @@ var/soft_dels = 0
 	var/remainingCollectionPerTick = GC_COLLECTIONS_PER_TICK
 	var/remainingForceDelPerTick = GC_FORCE_DEL_PER_TICK
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT
-	if(narsie_cometh) return //don't even fucking bother, its over.
+	if(narsie_cometh)
+		return //don't even fucking bother, its over.
 	while(queue.len && --remainingCollectionPerTick >= 0)
 		var/refID = queue[1]
 		var/destroyedAtTime = queue[refID]
@@ -183,7 +184,8 @@ var/soft_dels = 0
 		things += thing
 	testing("Collected list of things in search for references to a [type]. ([things.len] Thing\s)")
 	for(var/datum/thing in things)
-		if(!usr.client.running_find_references) return
+		if(!usr.client.running_find_references)
+			return
 		for(var/varname in thing.vars)
 			var/variable = thing.vars[varname]
 			if(variable == src)

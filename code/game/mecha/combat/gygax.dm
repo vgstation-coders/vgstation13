@@ -79,7 +79,8 @@
 	return
 
 /obj/mecha/combat/gygax/dyndomove(direction)
-	if(!..()) return
+	if(!..())
+		return
 	if(overload)
 		health--
 		if(health < initial(health) - initial(health)/3)

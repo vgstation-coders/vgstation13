@@ -22,7 +22,8 @@
 	var/tmp/last_print = 0 //When was the last printing, works as a cooldown to prevent paperspam
 
 /obj/item/device/analyzer/plant_analyzer/afterattack(obj/target, mob/user, flag)
-	if(!flag) return
+	if(!flag)
+		return
 
 	var/datum/seed/grown_seed
 	var/datum/reagents/grown_reagents
@@ -220,7 +221,8 @@
 	set category = "Object"
 	set src in usr
 
-	if (!usr || usr.isUnconscious() || usr.restrained() || !Adjacent(usr)) return
+	if (!usr || usr.isUnconscious() || usr.restrained() || !Adjacent(usr))
+		return
 	print_report(usr)
 
 /obj/item/device/analyzer/plant_analyzer/Topic(href, href_list)
@@ -441,7 +443,8 @@
 	attack_verb = list("chops", "slices", "cuts", "reaps")
 
 /obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor))
 		for(var/obj/effect/plantsegment/B in range(user,1))
 			B.take_damage(src)

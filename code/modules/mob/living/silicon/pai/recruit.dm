@@ -21,8 +21,10 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 	Topic(href, href_list[])
 		if("signup" in href_list)
 			var/mob/dead/observer/O = locate(href_list["signup"])
-			if(!O) return
-			if(!check_recruit(O)) return
+			if(!O)
+				return
+			if(!check_recruit(O))
+				return
 			recruitWindow(O)
 			return
 
@@ -206,11 +208,13 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 
 	proc/question(var/client/C)
 		spawn(0)
-			if(!C)	return
+			if(!C)
+				return
 			asked.Add(C.key)
 			asked[C.key] = world.time
 			var/response = alert(C, "Someone is requesting a pAI personality. Would you like to play as a personal AI?", "pAI Request", "Yes", "No", "Never for this round")
-			if(!C)	return		//handle logouts that happen whilst the alert is waiting for a response.
+			if(!C)
+				return		//handle logouts that happen whilst the alert is waiting for a response.
 			if(response == "Yes")
 				recruitWindow(C.mob)
 			else if (response == "Never for this round")

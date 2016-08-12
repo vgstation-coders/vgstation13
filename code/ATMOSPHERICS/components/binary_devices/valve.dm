@@ -35,7 +35,8 @@
 /obj/machinery/atmospherics/binary/valve/proc/open()
 
 
-	if(open) return 0
+	if(open)
+		return 0
 
 	open = 1
 	update_icon()

@@ -140,8 +140,10 @@ var/global/list/hasbeendiona = list() // Stores ckeys and a timestamp for ghost 
 /obj/item/seeds/replicapod/proc/transfer_personality(var/client/player, var/ghost = 0)
 
 
-	if(!player) return 0
-	if(ghost) hasbeendiona[player.key] = world.time
+	if(!player)
+		return 0
+	if(ghost)
+		hasbeendiona[player.key] = world.time
 	//found_player = 1
 
 	var/mob/living/carbon/monkey/diona/podman = new(parent.loc)

@@ -1,6 +1,8 @@
 /mob/living/carbon/alien/humanoid/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
-	if(!slot) return
-	if(!istype(W)) return
+	if(!slot)
+		return
+	if(!istype(W))
+		return
 
 	if(src.is_holding_item(W))
 		src.u_equip(W)
@@ -25,7 +27,8 @@
 	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
-	if(client) client.screen |= W
+	if(client)
+		client.screen |= W
 
 // Return the item currently in the slot ID
 /mob/living/carbon/alien/humanoid/get_item_by_slot(slot_id)
@@ -42,7 +45,8 @@
 
 //unequip
 /mob/living/carbon/alien/humanoid/u_equip(obj/item/W as obj, dropped = 1)
-	if(!W) return 0
+	if(!W)
+		return 0
 	var/success = 0
 	var/index = is_holding_item(W)
 	if(index)

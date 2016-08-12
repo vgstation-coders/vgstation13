@@ -68,8 +68,10 @@
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/injest(mob/M as mob)
-	if(!reagents) return
-	if(!M) return
+	if(!reagents)
+		return
+	if(!M)
+		return
 	if (!src.is_empty())
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M, reagents.total_volume)
@@ -253,8 +255,10 @@
 	flags = FPRINT | NOREACT
 
 /obj/item/weapon/reagent_containers/pill/time_release/injest(mob/M as mob)
-	if(!reagents) return
-	if(!M) return
+	if(!reagents)
+		return
+	if(!M)
+		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
 	forceMove(M)
 	spawn(timer*30)

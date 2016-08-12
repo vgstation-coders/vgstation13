@@ -342,7 +342,8 @@
 	if(istype(atarget, /mob/living) && damage == 200)
 		var/mob/living/M = atarget
 		M.gib()
-	else ..()
+	else
+		..()
 
 /obj/item/projectile/bullet/APS/OnFired()
 	..()

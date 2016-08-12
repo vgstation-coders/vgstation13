@@ -21,7 +21,8 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You sh
 	if(.)
 		if(species && !(species.can_be_hypothermic))
 			return NO_HYPOTHERMIA
-		else return .
+		else
+			return .
 
 /mob/living/silicon/undergoing_hypothermia()
 	return NO_HYPOTHERMIA
@@ -64,7 +65,8 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You sh
 			if(prob(15) && !is_vessel_dilated())
 				if(prob(75))
 					to_chat(src,"<b>[pick(coldwarning_light)]</b>")
-				else to_chat(src,"<span class='danger'>[pick(coldwarning_hard)]</span>")
+				else
+					to_chat(src,"<span class='danger'>[pick(coldwarning_hard)]</span>")
 			if(prob(25)) // shivering
 				jitteriness = min(jitteriness + 15,30)
 		if(MODERATE_HYPOTHERMIA) // drowsy and not shivering + slowed down
@@ -76,7 +78,8 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You sh
 			if(prob(15) && !is_vessel_dilated())
 				if(prob(25))
 					to_chat(src,"<b>[pick(coldwarning_light)]</b>")
-				else to_chat(src,"<span class='danger'>[pick(coldwarning_hard)]</span>")
+				else
+					to_chat(src,"<span class='danger'>[pick(coldwarning_hard)]</span>")
 			burn_calories(0.2)
 			if(prob(2) && get_active_hand())
 				to_chat(src, "<span class='warning'>You lose your grip of \the [get_active_hand()], and it slides out of your hand!</span>")

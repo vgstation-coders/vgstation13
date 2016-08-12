@@ -25,7 +25,8 @@
 		for(var/mob/M in get_area(src))
 			if(istype(M, mob_type))
 				pop++
-			else pop-- //It's harder with an audience, you understand bb
+			else
+				pop-- //It's harder with an audience, you understand bb
 		if(pop in pop_min to pop_max) //When enough simple animals...
 			if(prob(breed_chance)) //Love each other very much...
 				new mob_type(loc) //Babby formed!!

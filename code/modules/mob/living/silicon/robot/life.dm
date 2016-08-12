@@ -1,7 +1,8 @@
 /mob/living/silicon/robot/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if (src.monkeyizing)
 		return
@@ -104,13 +105,15 @@
 		src.blinded = 1
 		src.stat = 2
 
-	if (src.stuttering) src.stuttering--
+	if (src.stuttering)
+		src.stuttering--
 
 	if (src.eye_blind)
 		src.eye_blind--
 		src.blinded = 1
 
-	if (src.ear_deaf > 0) src.ear_deaf--
+	if (src.ear_deaf > 0)
+		src.ear_deaf--
 	if (src.ear_damage < 25)
 		src.ear_damage -= 0.05
 		src.ear_damage = max(src.ear_damage, 0)
@@ -365,6 +368,8 @@
 //Robots on fire
 
 /mob/living/silicon/robot/update_canmove()
-	if(paralysis || stunned || weakened || locked_to || lockcharge) canmove = 0
-	else canmove = 1
+	if(paralysis || stunned || weakened || locked_to || lockcharge)
+		canmove = 0
+	else
+		canmove = 1
 	return canmove

@@ -19,14 +19,17 @@ var/global/list/html_machines = new/list() //for checking when we should update 
 				key += "("
 				var/first = 1
 				for (var/a in item.args)
-					if (!first) key += ","
+					if (!first)
+						key += ","
 					key += "[a]"
 					first = 0
 				key += ")"
 
 			if (!(key in L))
-				if (item.args) call(item.ref, item.procname)(arglist(item.args))
-				else           call(item.ref, item.procname)()
+				if (item.args)
+					call(item.ref, item.procname)(arglist(item.args))
+				else
+					call(item.ref, item.procname)()
 
 				L.Add(key)
 

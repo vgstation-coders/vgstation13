@@ -85,7 +85,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		detach()
 
 /obj/machinery/chem_dispenser/proc/recharge()
-	if(stat & (BROKEN|NOPOWER)) return
+	if(stat & (BROKEN|NOPOWER))
+		return
 	var/oldenergy = energy
 	energy = min(energy + rechargerate, max_energy)
 	if(energy != oldenergy)
@@ -141,9 +142,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
   * @return nothing
   */
 /obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(stat & (BROKEN|NOPOWER)) return
-	if((user.stat && !isobserver(user)) || user.restrained()) return
-	if(!chemical_reagents_list || !chemical_reagents_list.len) return
+	if(stat & (BROKEN|NOPOWER))
+		return
+	if((user.stat && !isobserver(user)) || user.restrained())
+		return
+	if(!chemical_reagents_list || !chemical_reagents_list.len)
+		return
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["amount"] = amount
@@ -188,7 +192,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(..())
 		return
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	if(stat & (NOPOWER|BROKEN))
 		return 0 // don't update UIs attached to this object

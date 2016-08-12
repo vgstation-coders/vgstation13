@@ -191,7 +191,8 @@
 
 	var/list/candidates = get_active_candidates(ROLE_ALIEN,buffer=ALIEN_SELECT_AFK_BUFFER, poll=1)
 
-	if(prob(40)) spawncount++ //sometimes, have two larvae spawn instead of one
+	if(prob(40))
+		spawncount++ //sometimes, have two larvae spawn instead of one
 	while((spawncount >= 1) && vents.len && candidates.len)
 
 		var/obj/vent = pick(vents)
@@ -212,7 +213,8 @@
 
 /* // Haha, this is way too laggy. I'll keep the prison break though.
 	for(var/obj/machinery/light/L in world)
-		if(L.z != map.zMainStation) continue
+		if(L.z != map.zMainStation)
+			continue
 		L.flicker(50)
 
 	sleep(100)

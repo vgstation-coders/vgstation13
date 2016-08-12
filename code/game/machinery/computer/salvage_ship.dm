@@ -20,10 +20,13 @@
 	icon_state = "syndishuttle"
 
 /obj/machinery/computer/salvage_ship/proc/salvage_move_to(area/destination as area)
-	if(moving)	return
-	if(lastMove + SALVAGE_SHIP_COOLDOWN > world.time)	return
+	if(moving)
+		return
+	if(lastMove + SALVAGE_SHIP_COOLDOWN > world.time)
+		return
 	var/area/dest_location = locate(destination)
-	if(curr_location == dest_location)	return
+	if(curr_location == dest_location)
+		return
 
 	moving = 1
 	lastMove = world.time
@@ -82,7 +85,8 @@
 	return
 
 /obj/machinery/computer/salvage_ship/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	usr.set_machine(src)
 

@@ -1,5 +1,6 @@
 /mob/living/silicon/decoy/death(gibbed)
-	if(stat == DEAD)	return
+	if(stat == DEAD)
+		return
 	stat = DEAD
 	icon_state = "ai-crash"
 	spawn(10)

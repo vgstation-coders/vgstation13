@@ -135,7 +135,8 @@
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	if(health > -100)
 
@@ -263,7 +264,8 @@
 	return
 
 /mob/living/carbon/alien/larva/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 
 	return 0
 

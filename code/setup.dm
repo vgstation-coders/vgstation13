@@ -1635,7 +1635,8 @@ var/proccalls = 1
 /proc/write_panic(a)
 	set background = 1
 	panicfile["[proccalls]"] << a
-	if(++proccalls > 200) proccalls = 1
+	if(++proccalls > 200)
+		proccalls = 1
 
 #else
 	#define writepanic(a) null << a

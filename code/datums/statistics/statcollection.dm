@@ -116,7 +116,8 @@
 
 /datum/stat_collector/proc/add_death_stat(var/mob/M)
 	//if(istype(M, /mob/living/carbon/human)) return 0
-	if(ticker.current_state != 3) return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
+	if(ticker.current_state != 3)
+		return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
 	d.last_attacked_by = M.LAssailant
@@ -126,9 +127,12 @@
 	d.mob_typepath = M.type
 	d.realname = M.name
 	if(M.mind)
-		if(M.mind.special_role && M.mind.special_role != "") d.special_role = M.mind.special_role
-		if(M.mind.key) d.key = ckey(M.mind.key) // To prevent newlines in keys
-		if(M.mind.name) d.realname = M.mind.name
+		if(M.mind.special_role && M.mind.special_role != "")
+			d.special_role = M.mind.special_role
+		if(M.mind.key)
+			d.key = ckey(M.mind.key) // To prevent newlines in keys
+		if(M.mind.name)
+			d.realname = M.mind.name
 	stat_collection.death_stats += d
 
 /datum/stat/explosion_stat
@@ -194,7 +198,8 @@
 		for(var/datum/game_mode/GM in mixy.modes)
 			T += "|[GM.name]"
 		statfile << T
-	else statfile << "GAMEMODE|[ticker.mode.name]"
+	else
+		statfile << "GAMEMODE|[ticker.mode.name]"
 
 /datum/stat_collector/proc/Write_Footer(statfile)
 	statfile << "WRITE_COMPLETE" // because I'd like to know if a write was interrupted and therefore invalid

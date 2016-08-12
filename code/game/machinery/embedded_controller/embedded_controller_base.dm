@@ -121,7 +121,8 @@
 	return 0
 
 /obj/machinery/embedded_controller/receive_signal(datum/signal/signal, receive_method, receive_param)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
 	if(program)
 		program.receive_signal(signal, receive_method, receive_param)
@@ -136,7 +137,8 @@
 
 
 /obj/machinery/embedded_controller/attack_ai(mob/user as mob)
-	if(build<2) return 1
+	if(build<2)
+		return 1
 	src.ui_interact(user)
 
 /obj/machinery/embedded_controller/attack_paw(mob/user as mob)
@@ -147,7 +149,8 @@
 	if(!user.dexterity_check())
 		to_chat(user, "You do not have the dexterity to use this.")
 		return
-	if(build<2) return 1
+	if(build<2)
+		return 1
 	src.ui_interact(user)
 
 /obj/machinery/embedded_controller/ui_interact()

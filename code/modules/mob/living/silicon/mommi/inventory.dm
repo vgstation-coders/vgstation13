@@ -231,7 +231,8 @@
 /mob/living/silicon/robot/mommi/select_module(var/module)
 	if(!(module in INV_SLOT_TOOL))
 		return
-	if(!module_active(module)) return
+	if(!module_active(module))
+		return
 
 	if(INV_SLOT_TOOL)
 		if(module_active != tool_state)
@@ -271,8 +272,10 @@
 // Returns a 0 or 1 based on whether or not the equipping worked
 /mob/living/silicon/robot/mommi/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
 	// If the parameters were given incorrectly, return an error
-	if(!slot) return 0
-	if(!istype(W)) return 0
+	if(!slot)
+		return 0
+	if(!istype(W))
+		return 0
 
 	// If this item does not equip to this slot type, return
 	if( !(W.slot_flags & SLOT_HEAD) )

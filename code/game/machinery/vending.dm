@@ -130,7 +130,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator)) manipcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
 	shoot_chance = manipcount * 3
 
 /obj/machinery/vending/Destroy()
@@ -247,9 +248,11 @@ var/global/num_vending_terminals = 1
 		if(1.0)
 			malfunction()
 		if(2.0)
-			if(prob(50)) malfunction()
+			if(prob(50))
+				malfunction()
 		if(3.0)
-			if(prob(25)) malfunction()
+			if(prob(25))
+				malfunction()
 
 /obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
 	for(var/typepath in productlist)
@@ -415,7 +418,8 @@ var/global/num_vending_terminals = 1
 //H.wear_id
 
 /obj/machinery/vending/scan_card(var/obj/item/weapon/card/I)
-	if(!currently_vending) return
+	if(!currently_vending)
+		return
 	if (istype(I, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = I
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")

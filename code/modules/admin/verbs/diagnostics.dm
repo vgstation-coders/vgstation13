@@ -83,7 +83,8 @@
 /client/proc/fix_next_move()
 	set category = "Debug"
 	set name = "Unfreeze Everyone"
-	if(!usr.client.holder) return
+	if(!usr.client.holder)
+		return
 
 	_fix_delayers("move")
 	_fix_delayers("click")
@@ -137,7 +138,8 @@
 	set name = "Reload Admins"
 	set category = "Debug"
 
-	if(!check_rights(R_SERVER))	return
+	if(!check_rights(R_SERVER))
+		return
 
 	message_admins("[usr] manually reloaded admins")
 	load_admins()

@@ -38,7 +38,8 @@
 	return 1
 
 /obj/machinery/computer/emp_act(severity)
-	if(prob(20/severity)) set_broken()
+	if(prob(20/severity))
+		set_broken()
 	..()
 
 
@@ -102,7 +103,8 @@
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-		if(!CC) CC = new circuit( A )
+		if(!CC)
+			CC = new circuit( A )
 		else
 			CC.loc = A
 		A.circuit = CC

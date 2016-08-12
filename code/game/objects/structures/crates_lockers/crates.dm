@@ -119,7 +119,8 @@
 
 	return_air()
 		var/datum/gas_mixture/gas = (..())
-		if(!gas)	return null
+		if(!gas)
+			return null
 		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
 		newgas.oxygen = gas.oxygen
 		newgas.carbon_dioxide = gas.carbon_dioxide
@@ -127,7 +128,8 @@
 		newgas.toxins = gas.toxins
 		newgas.volume = gas.volume
 		newgas.temperature = gas.temperature
-		if(newgas.temperature <= target_temp)	return
+		if(newgas.temperature <= target_temp)
+			return
 
 		if((newgas.temperature - cooling_power) > target_temp)
 			newgas.temperature -= cooling_power
@@ -362,8 +364,10 @@
 	new /obj/item/clothing/head/radiation(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted)) return 1
-	if(istype(mover, /obj/structure/closet/crate)) return 0
+	if(air_group || (height==0 || wall_mounted))
+		return 1
+	if(istype(mover, /obj/structure/closet/crate))
+		return 0
 	return (!density)
 
 /obj/structure/closet/crate/open()

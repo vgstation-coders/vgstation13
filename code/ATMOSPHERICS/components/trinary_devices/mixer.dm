@@ -62,7 +62,8 @@ obj/machinery/atmospherics/trinary/mixer/process()
 	var/air2_moles = air2.total_moles()
 
 	if((air1_moles < transfer_moles1) || (air2_moles < transfer_moles2))
-		if(!transfer_moles1 || !transfer_moles2) return
+		if(!transfer_moles1 || !transfer_moles2)
+			return
 		var/ratio = min(air1_moles/transfer_moles1, air2_moles/transfer_moles2)
 
 		transfer_moles1 *= ratio
@@ -121,7 +122,8 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 	return
 
 obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
-	if(..()) return
+	if(..())
+		return
 	if(href_list["power"])
 		on = !on
 	if(href_list["set_press"])

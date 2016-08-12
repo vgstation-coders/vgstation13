@@ -215,7 +215,8 @@ obj/item/projectile/kinetic/New()
 */
 
 /obj/item/projectile/kinetic/on_hit(var/atom/target, var/blocked = 0)
-	if(!loc) return
+	if(!loc)
+		return
 	var/turf/target_turf = get_turf(target)
 	//testing("Hit [target.type], on [target_turf.type].")
 	if(istype(target_turf, /turf/unsimulated/mineral))
@@ -225,7 +226,8 @@ obj/item/projectile/kinetic/New()
 	..(target,blocked)
 
 /obj/item/projectile/kinetic/Bump(atom/A as mob|obj|turf|area)
-	if(!loc) return
+	if(!loc)
+		return
 	if(A == firer)
 		loc = A.loc
 		return
@@ -268,7 +270,8 @@ obj/item/projectile/kinetic/New()
 
 
 /obj/item/projectile/stickybomb/Bump(atom/A as mob|obj|turf|area)
-	if(bumped)	return 0
+	if(bumped)
+		return 0
 	bumped = 1
 
 	if(A)
@@ -352,6 +355,7 @@ obj/item/projectile/kinetic/New()
 		return
 
 	var/turf/T = get_turf(src)
-	if(!T) return
+	if(!T)
+		return
 
 	new /obj/effect/fire_blast(T, fire_damage, stepped_range, 1, pressure, temperature)

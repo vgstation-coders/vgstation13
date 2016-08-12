@@ -103,18 +103,23 @@ vs_control
 		//var/which = input(user,"Choose a setting:") in L
 		var/dat = ""
 		for(var/ch in L)
-			if(findtextEx(ch,"_RANDOM") || findtextEx(ch,"_DESC") || findtextEx(ch,"_METHOD") || findtextEx(ch,"_NAME")) continue
+			if(findtextEx(ch,"_RANDOM") || findtextEx(ch,"_DESC") || findtextEx(ch,"_METHOD") || findtextEx(ch,"_NAME"))
+				continue
 			var/vw
 			var/vw_desc = "No Description."
 			var/vw_name = ch
 			if(ch in plc.settings)
 				vw = plc.vars[ch]
-				if("[ch]_DESC" in plc.vars) vw_desc = plc.vars["[ch]_DESC"]
-				if("[ch]_NAME" in plc.vars) vw_name = plc.vars["[ch]_NAME"]
+				if("[ch]_DESC" in plc.vars)
+					vw_desc = plc.vars["[ch]_DESC"]
+				if("[ch]_NAME" in plc.vars)
+					vw_name = plc.vars["[ch]_NAME"]
 			else
 				vw = vars[ch]
-				if("[ch]_DESC" in vars) vw_desc = vars["[ch]_DESC"]
-				if("[ch]_NAME" in vars) vw_name = vars["[ch]_NAME"]
+				if("[ch]_DESC" in vars)
+					vw_desc = vars["[ch]_DESC"]
+				if("[ch]_NAME" in vars)
+					vw_name = vars["[ch]_NAME"]
 			dat += "<b>[vw_name] = [vw]</b> <A href='?src=\ref[src];changevar=[ch]'>\[Change\]</A><br>"
 			dat += "<i>[vw_desc]</i><br><br>"
 		user << browse(dat,"window=settings")

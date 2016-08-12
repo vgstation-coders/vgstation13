@@ -59,11 +59,13 @@ emp_act
 	return siemens_coefficient
 
 /mob/living/carbon/human/proc/checkarmor(var/datum/organ/external/def_zone, var/type)
-	if(!type)	return 0
+	if(!type)
+		return 0
 	var/protection = 0
 	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
 	for(var/bp in body_parts)
-		if(!bp)	continue
+		if(!bp)
+			continue
 		if(bp && istype(bp ,/obj/item/clothing))
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
@@ -74,7 +76,8 @@ emp_act
 	if(!body_part_flags)
 		return 0
 	for(var/obj/item/clothing/C in get_clothing_items())
-		if(!C) continue
+		if(!C)
+			continue
 		if(C.body_parts_covered & body_part_flags)
 			return 1
 	return 0
@@ -83,7 +86,8 @@ emp_act
 	if(!body_part_flags)
 		return null
 	for(var/obj/item/clothing/C in get_clothing_items())
-		if(!C) continue
+		if(!C)
+			continue
 		 //Check if this piece of clothing contains ALL of the flags we want to check.
 		if((C.body_parts_covered & body_part_flags) == body_part_flags)
 			return C
@@ -94,7 +98,8 @@ emp_act
 	var/body_coverage = FULL_BODY | FULL_HEAD
 
 	for(var/obj/item/clothing/C in get_clothing_items())
-		if(!C) continue
+		if(!C)
+			continue
 		body_coverage &= ~(C.body_parts_covered)
 	return body_coverage
 
@@ -122,13 +127,16 @@ emp_act
 		return
 
 	for(var/obj/O in src)
-		if(!O)	continue
+		if(!O)
+			continue
 		O.emp_act(severity)
 	for(var/datum/organ/external/O  in organs)
-		if(O.status & ORGAN_DESTROYED)	continue
+		if(O.status & ORGAN_DESTROYED)
+			continue
 		O.emp_act(severity)
 		for(var/datum/organ/internal/I  in O.internal_organs)
-			if(I.robotic == 0)	continue
+			if(I.robotic == 0)
+				continue
 			I.emp_act(severity)
 	..()
 
@@ -202,8 +210,10 @@ emp_act
 			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
 
 	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
-	if(armor >= 2)	return 1 //We still connected
-	if(!I.force)	return 1
+	if(armor >= 2)
+		return 1 //We still connected
+	if(!I.force)
+		return 1
 
 	//Knocking teeth out!
 	var/knock_teeth = 0
@@ -273,7 +283,8 @@ emp_act
 /mob/living/carbon/human/proc/knock_out_teeth(mob/user)
 	var/mob/living/L = user
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
-	if(!istype(T) || T.amount == 0) return
+	if(!istype(T) || T.amount == 0)
+		return
 
 	var/amount = rand(1,3)
 	if(user)
@@ -415,7 +426,8 @@ emp_act
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
 			if(LIMB_LEFT_ARM)
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
-	if(update)	UpdateDamageIcon()
+	if(update)
+		UpdateDamageIcon()
 
 
 /mob/living/carbon/human/blob_act()

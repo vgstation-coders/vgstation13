@@ -229,8 +229,10 @@
 					screen = 0
 
 			if("editcode")
-				if(editingcode == usr) return
-				if(usr in viewingcode) return
+				if(editingcode == usr)
+					return
+				if(usr in viewingcode)
+					return
 
 				if(!editingcode)
 					lasteditor = usr

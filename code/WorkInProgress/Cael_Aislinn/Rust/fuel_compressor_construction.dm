@@ -138,7 +138,8 @@
 		to_chat(user, "You start welding the compressor frame...")
 		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 		if(do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user)) return
+			if(!src || !WT.remove_fuel(3, user))
+				return
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
 			user.visible_message(\
 				"<span class='warning'>[src] has been cut away from the wall by [user.name].</span>",\

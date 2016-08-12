@@ -91,7 +91,8 @@
 			return 1
 
 /obj/item/clothing/proc/remove_accessory(mob/user, var/obj/item/clothing/accessory/accessory)
-	if(!accessory || !(accessory in accessories)) return
+	if(!accessory || !(accessory in accessories))
+		return
 
 	accessory.on_removed(user)
 	accessories.Remove(accessory)
@@ -104,9 +105,11 @@
 	set name = "Remove Accessory"
 	set category = "Object"
 	set src in usr
-	if(usr.incapacitated()) return
+	if(usr.incapacitated())
+		return
 
-	if(!accessories.len) return
+	if(!accessories.len)
+		return
 	var/obj/item/clothing/accessory/A
 	if(accessories.len > 1)
 		A = input("Select an accessory to remove from [src]") as anything in accessories
@@ -128,7 +131,8 @@
 /obj/item/clothing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 
 	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
-	if(!.) return //Default return value is 0 - don't check for species
+	if(!.)
+		return //Default return value is 0 - don't check for species
 
 	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
@@ -140,7 +144,8 @@
 			exclusive = 1
 
 		var/datum/species/base_species = H.species
-		if(!base_species) return
+		if(!base_species)
+			return
 
 		var/base_species_can_wear = 1 //If the body's main species can wear this
 
@@ -207,7 +212,8 @@
 	slot_flags = SLOT_EARS
 
 /obj/item/clothing/ears/attack_hand(mob/user as mob)
-	if (!user) return
+	if (!user)
+		return
 
 	if (src.loc != user || !istype(user,/mob/living/carbon/human))
 		..()
@@ -488,7 +494,8 @@ BLIND     // can't see anything
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
-	if(user.incapacitated()) return
+	if(user.incapacitated())
+		return
 	if(has_sensor >= 2)
 		to_chat(user, "<span class='warning'>The controls are locked.</span>")
 		return 0

@@ -73,7 +73,8 @@
 		..()
 
 /obj/item/weapon/gun/stickybomb/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	if(loaded.len)
 		var/obj/item/stickybomb/B = pick(loaded)
 		loaded -= B

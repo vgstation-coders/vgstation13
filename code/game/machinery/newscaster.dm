@@ -607,7 +607,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			src.updateUsrDialog()
 
 		else if(href_list["upload_photo"])
-			if(!isAI(usr)) return
+			if(!isAI(usr))
+				return
 			if(photo)
 				EjectPhoto()
 				src.updateUsrDialog()
@@ -981,7 +982,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		photo = P
 
 /obj/machinery/newscaster/proc/EjectPhoto(mob/user as mob)
-	if(!photo) return
+	if(!photo)
+		return
 	if(istype(photo,/obj/item/weapon/photo))
 		var/obj/item/weapon/photo/P = photo
 		P.loc = src.loc

@@ -19,7 +19,8 @@
 			c.drop_item()
 			I.loc = src
 			for(var/mob/M in viewers(src))
-				if(M == user)	continue
+				if(M == user)
+					continue
 				M.show_message("<span class='notice'>[user.name] inserts the [dish.name] in the [src.name].</span>", 1)
 
 

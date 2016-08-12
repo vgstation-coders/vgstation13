@@ -109,7 +109,8 @@
 		recharge_ticks = config.emag_recharge_ticks
 
 /obj/item/weapon/card/emag/process()
-	if(loc && loc:timestopped) return
+	if(loc && loc:timestopped)
+		return
 	if(energy < max_energy)
 		// Specified number of ticks has passed?  Add charge.
 		if(nticks >= recharge_ticks)
@@ -162,7 +163,8 @@
 
 /obj/item/weapon/card/emag/afterattack(atom/target, mob/user, proximity)
 	var/atom/A = target
-	if(!proximity) return
+	if(!proximity)
+		return
 	A.emag_act(user)
 
 /obj/item/weapon/card/id
@@ -241,7 +243,8 @@
 	name = "[src.registered_name]'s ID Card ([src.assignment])"
 
 /obj/item/weapon/card/id/proc/SetOwnerInfo(var/mob/living/carbon/human/H)
-	if(!H || !H.dna) return
+	if(!H || !H.dna)
+		return
 
 	blood_type = H.dna.b_type
 	dna_hash = H.dna.unique_enzymes
@@ -335,7 +338,8 @@
 		registered_user = user
 	else if(!registered_user || registered_user == user)
 
-		if(!registered_user) registered_user = user  //
+		if(!registered_user)
+			registered_user = user  //
 
 		switch(alert(user,"Would you like to display \the [src] or edit it?","Choose.","Show","Edit"))
 			if("Show")
@@ -344,7 +348,8 @@
 				switch(input(user,"What would you like to edit on \the [src]?") in list("Name","Appearance","Occupation","Money account","Blood type","DNA hash","Fingerprint hash","Reset card"))
 					if("Name")
 						var/new_name = reject_bad_name(input(user,"What name would you like to put on this card?","Agent card name", ishuman(user) ? user.real_name : user.name))
-						if(!Adjacent(user)) return
+						if(!Adjacent(user))
+							return
 
 						src.registered_name = new_name
 						UpdateName()
@@ -387,14 +392,16 @@
 
 					if("Occupation")
 						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Agent card occupation", "Assistant", MAX_MESSAGE_LEN))
-						if(!Adjacent(user)) return
+						if(!Adjacent(user))
+							return
 						src.assignment = new_job
 						to_chat(user, "Occupation changed to [new_job].")
 						UpdateName()
 
 					if("Money account")
 						var/new_account = input(user,"What money account would you like to link to this card?","Agent card account",11111) as num
-						if(!Adjacent(user)) return
+						if(!Adjacent(user))
+							return
 						associated_account_number = new_account
 						to_chat(user, "Linked money account changed to [new_account].")
 
@@ -407,7 +414,8 @@
 								default = H.dna.b_type
 
 						var/new_blood_type = sanitize(input(user,"What blood type would you like to be written on this card?","Agent card blood type",default) as text)
-						if(!Adjacent(user)) return
+						if(!Adjacent(user))
+							return
 						src.blood_type = new_blood_type
 						to_chat(user, "Blood type changed to [new_blood_type].")
 
@@ -420,7 +428,8 @@
 								default = H.dna.unique_enzymes
 
 						var/new_dna_hash = sanitize(input(user,"What DNA hash would you like to be written on this card?","Agent card DNA hash",default) as text)
-						if(!Adjacent(user)) return
+						if(!Adjacent(user))
+							return
 						src.dna_hash = new_dna_hash
 						to_chat(user, "DNA hash changed to [new_dna_hash].")
 
@@ -433,7 +442,8 @@
 								default = md5(H.dna.uni_identity)
 
 						var/new_fingerprint_hash = sanitize(input(user,"What fingerprint hash would you like to be written on this card?","Agent card fingerprint hash",default) as text)
-						if(!Adjacent(user)) return
+						if(!Adjacent(user))
+							return
 						src.fingerprint_hash = new_fingerprint_hash
 						to_chat(user, "Fingerprint hash changed to [new_fingerprint_hash].")
 

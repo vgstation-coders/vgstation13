@@ -10,7 +10,8 @@
 /mob/living/carbon/slime/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 
 	if (src.monkeyizing)
@@ -54,19 +55,23 @@
 
 
 //	to_chat(world, "AI proc started.")
-	if(AIproc || stat == DEAD || client) return
+	if(AIproc || stat == DEAD || client)
+		return
 
 	var/hungry = 0
 	var/starving = 0
 	if(istype(src, /mob/living/carbon/slime/adult))
 		switch(nutrition)
-			if(400 to 1100) hungry = 1
+			if(400 to 1100)
+				hungry = 1
 			if(0 to 399)
 				starving = 1
 	else
 		switch(nutrition)
-			if(150 to 900) hungry = 1
-			if(0 to 149) starving = 1
+			if(150 to 900)
+				hungry = 1
+			if(0 to 149)
+				starving = 1
 	AIproc = 1
 //	to_chat(world, "AIproc [AIproc] && stat != 2 [stat] && (attacked > 0 [attacked] || starving [starving] || hungry [hungry] || Victim [Victim] || Target [Target]")
 	while(AIproc && stat != 2 && (attacked > 0 || starving || hungry || Victim))
@@ -146,7 +151,8 @@
 					break
 
 		var/sleeptime = movement_delay()
-		if(sleeptime <= 0) sleeptime = 1
+		if(sleeptime <= 0)
+			sleeptime = 1
 
 		sleep(sleeptime + 2) // this is about as fast as a player slime can go
 
@@ -237,7 +243,8 @@
 /mob/living/carbon/slime/proc/handle_chemicals_in_body()
 
 
-	if(reagents) reagents.metabolize(src)
+	if(reagents)
+		reagents.metabolize(src)
 
 
 	src.updatehealth()
@@ -264,9 +271,11 @@
 		// if(src.health <= 20 && prob(1)) spawn(0) emote("gasp")
 
 		//if(!src.rejuv) src.oxyloss++
-		if(!src.reagents.has_reagent(INAPROVALINE)) src.adjustOxyLoss(10)
+		if(!src.reagents.has_reagent(INAPROVALINE))
+			src.adjustOxyLoss(10)
 
-		if(src.stat != DEAD)	src.stat = UNCONSCIOUS
+		if(src.stat != DEAD)
+			src.stat = UNCONSCIOUS
 
 	if(prob(30))	//I think this is meant to allow slimes to starve to death -Deity Link
 		adjustOxyLoss(-1)
@@ -300,13 +309,15 @@
 			src.lying = 0
 			src.stat = 0
 
-	if (src.stuttering) src.stuttering = 0
+	if (src.stuttering)
+		src.stuttering = 0
 
 	if (src.eye_blind)
 		src.eye_blind = 0
 		src.blinded = 1
 
-	if (src.ear_deaf > 0) src.ear_deaf = 0
+	if (src.ear_deaf > 0)
+		src.ear_deaf = 0
 	if (src.ear_damage < 25)
 		src.ear_damage = 0
 
@@ -330,8 +341,10 @@
 
 
 	if(prob(20))
-		if(istype(src, /mob/living/carbon/slime/adult)) burn_calories(rand(4,6))
-		else burn_calories(rand(2,3))
+		if(istype(src, /mob/living/carbon/slime/adult))
+			burn_calories(rand(4,6))
+		else
+			burn_calories(rand(2,3))
 
 	if(nutrition <= 0)
 		nutrition = 0
@@ -342,11 +355,13 @@
 	else
 		if(istype(src, /mob/living/carbon/slime/adult))
 			if(nutrition >= 1000)
-				if(prob(40)) amount_grown++
+				if(prob(40))
+					amount_grown++
 
 		else
 			if(nutrition >= 800)
-				if(prob(40)) amount_grown++
+				if(prob(40))
+					amount_grown++
 
 	if(amount_grown >= 10 && !Victim && !Target)
 		if(istype(src, /mob/living/carbon/slime/adult))
@@ -363,7 +378,8 @@
 					M.Friends = Friends
 					M.tame = tame
 					M.Discipline = Discipline
-					if(i != 1) step_away(M,src)
+					if(i != 1)
+						step_away(M,src)
 					feedback_add_details("slime_babies_born","slimebirth_[replacetext(M.colour," ","_")]")
 				qdel(src)
 
@@ -385,7 +401,8 @@
 	else
 		canmove = 1
 
-	if(attacked > 50) attacked = 50
+	if(attacked > 50)
+		attacked = 50
 
 	if(attacked > 0)
 		if(prob(85))
@@ -398,7 +415,8 @@
 
 	if(!client)
 
-		if(!canmove) return
+		if(!canmove)
+			return
 
 		// DO AI STUFF HERE
 
@@ -406,13 +424,15 @@
 			if(attacked <= 0)
 				Target = null
 
-		if(Victim) return // if it's eating someone already, continue eating!
+		if(Victim)
+			return // if it's eating someone already, continue eating!
 
 
 		if(prob(1))
 			emote(pick("bounce","sway","light","vibrate","jiggle"))
 
-		if(AIproc && SStun) return
+		if(AIproc && SStun)
+			return
 
 
 		var/hungry = 0 // determines if the slime is hungry
@@ -420,17 +440,22 @@
 		if(istype(src, /mob/living/carbon/slime/adult)) // 1200 max nutrition
 			switch(nutrition)
 				if(601 to 900)
-					if(prob(25)) hungry = 1//Ensures they continue eating, but aren't as aggressive at the same time
-				if(301 to 600) hungry = 1
+					if(prob(25))
+						hungry = 1//Ensures they continue eating, but aren't as aggressive at the same time
+				if(301 to 600)
+					hungry = 1
 				if(0 to 300)
 					starving = 1
 
 		else
 			switch(nutrition)			// 1000 max nutrition
 				if(501 to 700)
-					if(prob(25)) hungry = 1
-				if(201 to 500) hungry = 1
-				if(0 to 200) starving = 1
+					if(prob(25))
+						hungry = 1
+				if(201 to 500)
+					hungry = 1
+				if(0 to 200)
+					starving = 1
 
 
 		if(starving && !client) // if a slime is starving, it starts losing its friends

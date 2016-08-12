@@ -21,12 +21,16 @@ var/global/datum/controller/occupations/job_master
 		return 0
 	for(var/J in all_jobs)
 		var/datum/job/job = new J()
-		if(!job)	continue
-		if(job.faction != faction)	continue
+		if(!job)
+			continue
+		if(job.faction != faction)
+			continue
 
 		if(job.must_be_map_enabled)
-			if(!map) continue
-			if(!map.enabled_jobs.Find(job.type)) continue
+			if(!map)
+				continue
+			if(!map.enabled_jobs.Find(job.type))
+				continue
 
 		occupations += job
 
@@ -35,16 +39,20 @@ var/global/datum/controller/occupations/job_master
 
 
 /datum/controller/occupations/proc/Debug(var/text)
-	if(!Debug2)	return 0
+	if(!Debug2)
+		return 0
 	job_debug.Add(text)
 	return 1
 
 
 /datum/controller/occupations/proc/GetJob(var/rank)
-	if(!rank)	return null
+	if(!rank)
+		return null
 	for(var/datum/job/J in occupations)
-		if(!J)	continue
-		if(J.title == rank)	return J
+		if(!J)
+			continue
+		if(J.title == rank)
+			return J
 	return null
 
 /datum/controller/occupations/proc/GetPlayerAltTitle(mob/new_player/player, rank)
@@ -54,9 +62,12 @@ var/global/datum/controller/occupations/job_master
 	Debug("Running AR, Player: [player], Rank: [rank], LJ: [latejoin]")
 	if(player && player.mind && rank)
 		var/datum/job/job = GetJob(rank)
-		if(!job)	return 0
-		if(jobban_isbanned(player, rank))	return 0
-		if(!job.player_old_enough(player.client)) return 0
+		if(!job)
+			return 0
+		if(jobban_isbanned(player, rank))
+			return 0
+		if(!job.player_old_enough(player.client))
+			return 0
 		var/position_limit = job.total_positions
 		if(!latejoin)
 			position_limit = job.spawn_positions
@@ -137,9 +148,11 @@ var/global/datum/controller/occupations/job_master
 	for(var/level = 1 to 3)
 		for(var/command_position in command_positions)
 			var/datum/job/job = GetJob(command_position)
-			if(!job)	continue
+			if(!job)
+				continue
 			var/list/candidates = FindOccupationCandidates(job, level)
-			if(!candidates.len)	continue
+			if(!candidates.len)
+				continue
 			var/mob/new_player/candidate = pick(candidates)
 			if(AssignRole(candidate, command_position))
 				return 1
@@ -150,9 +163,11 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/CheckHeadPositions(var/level)
 	for(var/command_position in command_positions)
 		var/datum/job/job = GetJob(command_position)
-		if(!job)	continue
+		if(!job)
+			continue
 		var/list/candidates = FindOccupationCandidates(job, level)
-		if(!candidates.len)	continue
+		if(!candidates.len)
+			continue
 		var/mob/new_player/candidate = pick(candidates)
 		AssignRole(candidate, command_position)
 	return
@@ -161,8 +176,10 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/FillAIPosition()
 	var/ai_selected = 0
 	var/datum/job/job = GetJob("AI")
-	if(!job)	return 0
-	if((job.title == "AI") && (config) && (!config.allow_ai))	return 0
+	if(!job)
+		return 0
+	if((job.title == "AI") && (config) && (!config.allow_ai))
+		return 0
 
 	for(var/i = job.total_positions, i > 0, i--)
 		for(var/level = 1 to 3)
@@ -180,11 +197,13 @@ var/global/datum/controller/occupations/job_master
 		if((ticker.mode.name == "AI malfunction")&&(!ai_selected))
 			unassigned = shuffle(unassigned)
 			for(var/mob/new_player/player in unassigned)
-				if(jobban_isbanned(player, "AI"))	continue
+				if(jobban_isbanned(player, "AI"))
+					continue
 				if(AssignRole(player, "AI"))
 					ai_selected++
 					break
-		if(ai_selected)	return 1
+		if(ai_selected)
+			return 1
 		return 0
 
 
@@ -207,9 +226,11 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind && !player.mind.assigned_role)
 			unassigned += player
-			if(player.client.prefs.randomslot) player.client.prefs.random_character_sqlite(player, player.ckey)
+			if(player.client.prefs.randomslot)
+				player.client.prefs.random_character_sqlite(player, player.ckey)
 	Debug("DO, Len: [unassigned.len]")
-	if(unassigned.len == 0)	return 0
+	if(unassigned.len == 0)
+		return 0
 
 	//Shuffle players and jobs
 	unassigned = shuffle(unassigned)
@@ -342,7 +363,8 @@ var/global/datum/controller/occupations/job_master
 
 
 /datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
-	if(!H)	return 0
+	if(!H)
+		return 0
 	var/datum/job/job = GetJob(rank)
 	if(job)
 		job.equip(H)
@@ -354,8 +376,10 @@ var/global/datum/controller/occupations/job_master
 	if(!joined_late)
 		var/obj/S = null
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
-			if(sloc.name != rank)	continue
-			if(locate(/mob/living) in sloc.loc)	continue
+			if(sloc.name != rank)
+				continue
+			if(locate(/mob/living) in sloc.loc)
+				continue
 			S = sloc
 			break
 		if(!S)
@@ -471,7 +495,8 @@ var/global/datum/controller/occupations/job_master
 
 
 /datum/controller/occupations/proc/spawnId(var/mob/living/carbon/human/H, rank, title, wallet_funds=0)
-	if(!H)	return 0
+	if(!H)
+		return 0
 	var/obj/item/weapon/card/id/C = null
 
 	var/datum/job/job = null
@@ -544,7 +569,8 @@ var/global/datum/controller/occupations/job_master
 
 		if(name && value)
 			var/datum/job/J = GetJob(name)
-			if(!J)	continue
+			if(!J)
+				continue
 			J.total_positions = text2num(value)
 			J.spawn_positions = text2num(value)
 			if(name == "AI" || name == "Cyborg" || name == "Mobile MMI" || name == "Trader")//I dont like this here but it will do for now
@@ -578,7 +604,8 @@ var/global/datum/controller/occupations/job_master
 				level2++
 			else if(player.client.prefs.GetJobDepartment(job, 3) & job.flag)
 				level3++
-			else level4++ //not selected
+			else
+				level4++ //not selected
 
 		tmp_str += "HIGH=[level1]|MEDIUM=[level2]|LOW=[level3]|NEVER=[level4]|BANNED=[level5]|YOUNG=[level6]|-"
 		feedback_add_details("job_preferences",tmp_str)

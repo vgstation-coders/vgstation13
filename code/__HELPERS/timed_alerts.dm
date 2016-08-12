@@ -1,7 +1,8 @@
 /client/var/timed_alert/timed_alert
 
 /client/proc/timed_alert(time = 300,target,message,title,button1,button2,button3)
-	if(timed_alert) return ""
+	if(timed_alert)
+		return ""
 
 	timed_alert = new(target,message,title,button1,button2,button3)
 	sleep(time)

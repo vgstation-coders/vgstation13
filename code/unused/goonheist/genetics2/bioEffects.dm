@@ -74,7 +74,8 @@
 	OnLife()
 		owner.radiation = max(owner.radiation, 20)
 		for(var/mob/living/L in range(1, owner))
-			if(L == owner) continue
+			if(L == owner)
+				continue
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
 			L.radiation += 5
 		return

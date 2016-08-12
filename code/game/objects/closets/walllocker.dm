@@ -68,7 +68,8 @@
 	defib = new /obj/item/weapon/melee/defibrillator(src)
 
 /obj/structure/closet/walllocker/defiblocker/attack_hand(mob/user as mob)
-	if(istype(user, /mob/living/silicon/ai)) return
+	if(istype(user, /mob/living/silicon/ai))
+		return
 	if(istype(user, /mob/living/silicon/robot))
 		if(!defib)
 			to_chat(usr, "<span class='notice'>It's empty.</span>")

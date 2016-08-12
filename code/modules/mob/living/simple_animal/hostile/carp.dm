@@ -62,7 +62,8 @@
 
 /mob/living/simple_animal/hostile/carp/give_birth()
 	spawn(rand(100,200))
-		if(!src) return
+		if(!src)
+			return
 
 		src.death(0)
 
@@ -87,7 +88,8 @@
 		emote("nashes at [.]")
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
-	if(!target) return
+	if(!target)
+		return
 
 	if(pheromones_act == PHEROMONES_FOLLOW && target.reagents && target.reagents.has_reagent(CARPPHEROMONES))
 		return	//This might be a bit hacky. The purpose of this is to prevent carps who are attracted to pheromones from attacking
@@ -130,7 +132,8 @@
 	if(isliving(target))
 		var/mob/living/L = target
 
-		if(!L.meat_type) return
+		if(!L.meat_type)
+			return
 
 		increase_growth_stage(1)
 
@@ -166,7 +169,8 @@
 	return 1
 
 /mob/living/simple_animal/hostile/carp/baby/proc/increase_growth_stage(by = 1)
-	if(growth_stage >= req_growth_to_grow_up) return
+	if(growth_stage >= req_growth_to_grow_up)
+		return
 
 	growth_stage += by
 

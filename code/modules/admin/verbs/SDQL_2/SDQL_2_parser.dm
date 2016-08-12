@@ -215,7 +215,7 @@
 
 	node += "call"
 	node["call"] = func
-	
+
 	if(tokenl(i) != "on")
 		return i
 

@@ -34,7 +34,8 @@
 /obj/machinery/processor/RefreshParts()
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator)) manipcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
 	time_coeff = 2/manipcount
 
 /datum/food_processor_process

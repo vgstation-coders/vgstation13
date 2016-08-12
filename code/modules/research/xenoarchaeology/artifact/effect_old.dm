@@ -22,13 +22,19 @@
 
 /datum/artifact_effect/proc/GetRangeString(var/range)
 	switch(effectmode)
-		if("aura") return "Constant Short-Range Energy Field"
+		if("aura")
+			return "Constant Short-Range Energy Field"
 		if("pulse")
-			if(aurarange > 7) return "Long Range Energy Pulses"
-			else return "Medium Range Energy Pulses"
-		if("worldpulse") return "Extreme Range Energy Pulses"
-		if("contact") return "Requires contact with subject"
-		else return "Unknown Range"
+			if(aurarange > 7)
+				return "Long Range Energy Pulses"
+			else
+				return "Medium Range Energy Pulses"
+		if("worldpulse")
+			return "Extreme Range Energy Pulses"
+		if("contact")
+			return "Requires contact with subject"
+		else
+			return "Unknown Range"
 
 /datum/artifact_effect/proc/HaltEffect()
 	for(var/obj/effect/energy_field/F in created_field)
@@ -62,8 +68,10 @@
 
 					var/mob/living/carbon/human/H = user
 					for(var/datum/organ/external/affecting in H.organs)
-						if(!affecting)    continue
-						if(!istype(affecting, /datum/organ/external))    continue
+						if(!affecting)
+							continue
+						if(!istype(affecting, /datum/organ/external))
+							continue
 						affecting.heal_damage(25, 25)    //fixes getting hit after ingestion, killing you when game updates organ health
 						//user:heal_organ_damage(25, 25)
 						//

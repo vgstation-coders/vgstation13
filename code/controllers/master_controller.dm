@@ -62,8 +62,10 @@ datum/controller/game_controller/New()
 //		to_chat(world, "<span class='danger'>Job setup complete in </span>")
 		log_startup_progress("Job setup complete in [stop_watch(watch)]s.")
 
-	if(!syndicate_code_phrase)		syndicate_code_phrase	= generate_code_phrase()
-	if(!syndicate_code_response)	syndicate_code_response	= generate_code_phrase()
+	if(!syndicate_code_phrase)
+		syndicate_code_phrase	= generate_code_phrase()
+	if(!syndicate_code_response)
+		syndicate_code_response	= generate_code_phrase()
 	/*if(!emergency_shuttle)			emergency_shuttle = new /datum/shuttle_controller/emergency_shuttle()*/
 /*
 	if(global.garbageCollector)
@@ -489,7 +491,8 @@ datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 	var/msg = "## DEBUG: [time2text(world.timeofday)] MC restarted. Reports:\n"
 	for(var/varname in master_controller.vars)
 		switch(varname)
-			if("tag","type","parent_type","vars")	continue
+			if("tag","type","parent_type","vars")
+				continue
 			else
 				var/varval = master_controller.vars[varname]
 				if(istype(varval,/datum))

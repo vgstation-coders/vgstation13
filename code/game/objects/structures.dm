@@ -40,5 +40,6 @@ obj/structure/ex_act(severity)
 			spawn()
 				sleep(3)
 				for(var/i = 2 to strength)
-					if(!Move(get_step(loc, kick_dir))) break
+					if(!Move(get_step(loc, kick_dir)))
+						break
 					sleep(3)

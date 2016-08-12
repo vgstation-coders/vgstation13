@@ -24,12 +24,16 @@
 
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/heads/ce(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
@@ -63,12 +67,16 @@
 
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_eng(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		switch(H.mind.role_alt_title)
 			if("Station Engineer")
 				H.equip_or_collect(new /obj/item/clothing/under/rank/engineer(H), slot_w_uniform)
@@ -109,12 +117,16 @@
 
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_eng(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/atmospheric_technician(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)
@@ -144,12 +156,16 @@
 
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_engsci(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/mechanic(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)

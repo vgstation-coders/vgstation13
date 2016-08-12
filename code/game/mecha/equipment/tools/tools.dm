@@ -29,8 +29,10 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/action(atom/target)
-	if(!action_checks(target)) return
-	if(!istype(chassis, /obj/mecha/working/ripley)) return
+	if(!action_checks(target))
+		return
+	if(!istype(chassis, /obj/mecha/working/ripley))
+		return
 	var/obj/mecha/working/ripley/R = chassis
 
 	if(istype(target,/obj/machinery/power/supermatter))
@@ -94,10 +96,12 @@
 
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target
-		if(M.stat == DEAD) return
+		if(M.stat == DEAD)
+			return
 		if(chassis.occupant.a_intent == I_HURT)
 			M.take_overall_damage(dam_force)
-			if(!M) return //we killed some sort of simple animal and the corpse was deleted.
+			if(!M)
+				return //we killed some sort of simple animal and the corpse was deleted.
 			M.adjustOxyLoss(round(dam_force/2))
 			M.updatehealth()
 			occupant_message("<span class='warning'>You squeeze [target] with [src.name]. Something cracks.</span>")
@@ -124,10 +128,12 @@
 	var/dig_walls = 0 //probably a better way to do this through bitflags but I don't really know how
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/action(atom/target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	if(isobj(target))
 		var/obj/target_obj = target
-		if(!target_obj.vars.Find("unacidable") || target_obj.unacidable) return
+		if(!target_obj.vars.Find("unacidable") || target_obj.unacidable)
+			return
 	set_ready_state(0)
 	chassis.visible_message("<font color='red'><b>[chassis] starts to drill [target]!</b></font>", "You hear a drill.")
 	occupant_message("<font color='red'><b>You start to drill [target]!</b></font>")
@@ -249,7 +255,8 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/action(atom/target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 
 	if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
 		set_ready_state(0)
@@ -282,7 +289,8 @@
 		set_ready_state(1)
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target
-		if(M.stat == DEAD) return
+		if(M.stat == DEAD)
+			return
 		if(chassis.occupant.a_intent == I_HURT)
 			set_ready_state(0)
 			M.apply_damage(dam_force, BRUTE)
@@ -314,7 +322,8 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/action(atom/target) //copypasted from extinguisher. TODO: Rewrite from scratch.
-	if(!action_checks(target) || get_dist(chassis, target)>5) return
+	if(!action_checks(target) || get_dist(chassis, target)>5)
+		return
 	set_ready_state(0)
 	if(do_after_cooldown(target))
 		if(istype(target, /obj/structure/reagent_dispensers/watertank) && get_dist(chassis,target) <= 1)
@@ -473,7 +482,8 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/get_equip_info()
-	if(!chassis) return
+	if(!chassis)
+		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] \[<a href=\"?src=\ref[src];toggle=1\">Toggle</a>\]"
 
 
@@ -505,7 +515,8 @@
 		disabled = 0
 	if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock))
 		target = get_turf(target)
-	if(!action_checks(target) || disabled || get_dist(chassis, target)>3) return
+	if(!action_checks(target) || disabled || get_dist(chassis, target)>3)
+		return
 	playsound(chassis, 'sound/machines/click.ogg', 50, 1)
 	//meh
 	switch(mode)
@@ -514,7 +525,8 @@
 				occupant_message("Deconstructing [target]...")
 				set_ready_state(0)
 				if(do_after_cooldown(target))
-					if(disabled) return
+					if(disabled)
+						return
 					chassis.spark_system.start()
 					target:ChangeTurf(/turf/simulated/floor/plating)
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -523,7 +535,8 @@
 				occupant_message("Deconstructing [target]...")
 				set_ready_state(0)
 				if(do_after_cooldown(target))
-					if(disabled) return
+					if(disabled)
+						return
 					chassis.spark_system.start()
 					target:ChangeTurf(get_base_turf(target.z))
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -532,7 +545,8 @@
 				occupant_message("Deconstructing [target]...")
 				set_ready_state(0)
 				if(do_after_cooldown(target))
-					if(disabled) return
+					if(disabled)
+						return
 					chassis.spark_system.start()
 					qdel(target)
 					target = null
@@ -543,7 +557,8 @@
 				occupant_message("Building Floor...")
 				set_ready_state(0)
 				if(do_after_cooldown(target))
-					if(disabled) return
+					if(disabled)
+						return
 					target:ChangeTurf(/turf/simulated/floor/plating/airless)
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 					chassis.spark_system.start()
@@ -552,7 +567,8 @@
 				occupant_message("Building Wall...")
 				set_ready_state(0)
 				if(do_after_cooldown(target))
-					if(disabled) return
+					if(disabled)
+						return
 					target:ChangeTurf(/turf/simulated/wall)
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 					chassis.spark_system.start()
@@ -562,7 +578,8 @@
 				occupant_message("Building Airlock...")
 				set_ready_state(0)
 				if(do_after_cooldown(target))
-					if(disabled) return
+					if(disabled)
+						return
 					chassis.spark_system.start()
 					var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
 					T.autoclose = 1
@@ -600,7 +617,8 @@
 	range = RANGED
 
 /obj/item/mecha_parts/mecha_equipment/teleporter/action(atom/target)
-	if(!action_checks(target) || src.loc.z == map.zCentcomm) return
+	if(!action_checks(target) || src.loc.z == map.zCentcomm)
+		return
 	var/turf/T = get_turf(target)
 	if(T)
 		set_ready_state(0)
@@ -620,10 +638,12 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/wormhole_generator/action(atom/target)
-	if(!action_checks(target) || src.loc.z == map.zCentcomm) return
+	if(!action_checks(target) || src.loc.z == map.zCentcomm)
+		return
 	var/list/theareas = list()
 	for(var/area/AR in orange(100, chassis))
-		if(AR in theareas) continue
+		if(AR in theareas)
+			continue
 		theareas += AR
 	if(!theareas.len)
 		return
@@ -681,7 +701,8 @@
 
 	switch(mode)
 		if(1)
-			if(!action_checks(target) && !locked) return
+			if(!action_checks(target) && !locked)
+				return
 			if(!locked)
 				if(!istype(target) || target.anchored)
 					occupant_message("Unable to lock on [target]")
@@ -703,14 +724,16 @@
 					occupant_message("Lock on [locked] disengaged.")
 					send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 		if(2)
-			if(!action_checks(target)) return
+			if(!action_checks(target))
+				return
 			var/list/atoms = list()
 			if(isturf(target))
 				atoms = range(target,3)
 			else
 				atoms = orange(target,3)
 			for(var/atom/movable/A in atoms)
-				if(A.anchored) continue
+				if(A.anchored)
+					continue
 				spawn(0)
 					var/iter = 5-get_dist(A,target)
 					for(var/i=0 to iter)
@@ -761,7 +784,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/get_equip_info()
-	if(!chassis) return
+	if(!chassis)
+		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -813,7 +837,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/get_equip_info()
-	if(!chassis) return
+	if(!chassis)
+		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
@@ -890,7 +915,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/get_equip_info()
-	if(!chassis) return
+	if(!chassis)
+		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_repairs=1'>[pr_repair_droid.active()?"Dea":"A"]ctivate</a>"
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/Topic(href, href_list)
@@ -1008,7 +1034,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/get_equip_info()
-	if(!chassis) return
+	if(!chassis)
+		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
 
 /*	proc/dynusepower(amount)
@@ -1238,8 +1265,10 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp/action(atom/target)
 	//this whole thing is seriously fucking stupid and should be a child of the clamp
-	if(!action_checks(target)) return
-	if(!cargo_holder) return
+	if(!action_checks(target))
+		return
+	if(!cargo_holder)
+		return
 	if(istype(target,/obj))
 		var/obj/O = target
 		if(!O.anchored)
@@ -1267,7 +1296,8 @@
 
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target
-		if(M.stat>1) return
+		if(M.stat>1)
+			return
 		if(chassis.occupant.a_intent == I_HURT)
 			chassis.occupant_message("<span class='warning'>You obliterate [target] with [src.name], leaving blood and guts everywhere.</span>")
 			chassis.visible_message("<span class='warning'>[chassis] destroys [target] in an unholy fury.</span>")

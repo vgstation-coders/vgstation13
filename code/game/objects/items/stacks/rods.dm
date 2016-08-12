@@ -81,7 +81,8 @@
 /obj/item/stack/rods/attack_self(mob/user as mob)
 	src.add_fingerprint(user)
 
-	if(!istype(user.loc, /turf)) return 0
+	if(!istype(user.loc, /turf))
+		return 0
 
 	if(locate(/obj/structure/grille, user.loc))
 		for(var/obj/structure/grille/G in user.loc)

@@ -141,7 +141,8 @@
 	return replacetext(replacetext(text,"\proper ",""),"\improper ","")
 
 /proc/onclosed(mob/user, windowid, var/atom/ref=null)
-	if(!user.client) return
+	if(!user.client)
+		return
 	var/param = "null"
 	if(ref)
 		param = "\ref[ref]"

@@ -122,7 +122,8 @@
 			colouring_delay = (pipeline_members.len)/2
 			O.color = selected_color
 			pipe_to_colour.mass_colouration(selected_color)
-		else return "That pipe network is simply too big to paint!"
+		else
+			return "That pipe network is simply too big to paint!"
 	else
 		O.color = selected_color
 		O.update_icon()

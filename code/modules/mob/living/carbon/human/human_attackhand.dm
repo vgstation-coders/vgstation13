@@ -131,7 +131,8 @@
 				returnToPool(G)
 
 				var/throw_dir = M.dir
-				if(M.loc != src.loc) throw_dir = get_dir(M, src)
+				if(M.loc != src.loc)
+					throw_dir = get_dir(M, src)
 
 				var/turf/T = get_edge_target_turf(get_turf(src), throw_dir)
 				var/throw_strength = 3 * M.get_strength()
@@ -197,7 +198,8 @@
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
 
-			if(M_HULK in M.mutations)			damage += 5
+			if(M_HULK in M.mutations)
+				damage += 5
 
 			playsound(loc, "punch", 25, 1, -1)
 
@@ -289,11 +291,13 @@
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
 
-			if(M_HULK in M.mutations)							damage += 5
+			if(M_HULK in M.mutations)
+				damage += 5
 
 			var/knockout = damage
 
-			if((M_CLAWS in M.mutations) && !istype(M.gloves))	damage += 3 //Claws mutation + no gloves (doesn't affect weaken chance)
+			if((M_CLAWS in M.mutations) && !istype(M.gloves))
+				damage += 3 //Claws mutation + no gloves (doesn't affect weaken chance)
 
 			if(istype(M.gloves)) //Attacker has gloves
 				var/obj/item/clothing/gloves/G = M.gloves
@@ -331,7 +335,8 @@
 				var/mob/living/carbon/human/H = M
 				if(H.zone_sel && H.zone_sel.selecting == "mouth")
 					var/chance = 0.5 * damage
-					if(M_HULK in H.mutations) chance += 50
+					if(M_HULK in H.mutations)
+						chance += 50
 					if(prob(chance))
 						knock_out_teeth(H)
 

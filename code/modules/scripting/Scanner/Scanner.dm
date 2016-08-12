@@ -212,7 +212,8 @@
 
 	while(options.symbols.Find(buf + char))
 		buf += char
-		if(++codepos > length(code)) break
+		if(++codepos > length(code))
+			break
 		char = copytext(code, codepos, codepos + 1)
 
 	codepos-- //allow main Scan() proc to read the next character

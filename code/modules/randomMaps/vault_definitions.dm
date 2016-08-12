@@ -15,7 +15,8 @@ var/list/existing_vaults = list()
 	existing_vaults.Add(src)
 
 	var/zlevel_base_turf_type = get_base_turf(location.z)
-	if(!zlevel_base_turf_type) zlevel_base_turf_type = /turf/space
+	if(!zlevel_base_turf_type)
+		zlevel_base_turf_type = /turf/space
 
 	for(var/turf/new_turf in objects)
 		if(new_turf.type == base_turf_type) //New turf is vault's base turf

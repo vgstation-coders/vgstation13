@@ -183,7 +183,8 @@ For the main html chat area
 // exporting it as text, and then parsing the base64 from that.
 // (This relies on byond automatically storing icons in savefiles as base64)
 /proc/icon2base64(var/icon/icon, var/iconKey = "misc")
-	if (!isicon(icon)) return 0
+	if (!isicon(icon))
+		return 0
 
 	iconCache[iconKey] << icon
 	var/iconData = iconCache.ExportText(iconKey)
@@ -228,7 +229,8 @@ For the main html chat area
 
 	//Otherwise, we're good to throw it at the user
 	else if (istext(message))
-		if (istext(target)) return
+		if (istext(target))
+			return
 
 		//Some macros remain in the string even after parsing and fuck up the eventual output
 		if (findtext(message, "\improper"))

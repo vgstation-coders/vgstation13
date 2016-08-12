@@ -137,7 +137,8 @@
 
 /obj/machinery/atmoalter/siphs/scrubbers/process()
 	/*
-	if(stat & NOPOWER) return
+	if(stat & NOPOWER)
+		return
 
 	if(src.gas.temperature >= 3000)
 		src.melt()
@@ -154,7 +155,8 @@
 			T = null
 		switch(src.t_status)
 			if(1.0)
-				if( !portable() ) use_power(50, ENVIRON)
+				if( !portable() )
+					use_power(50, ENVIRON)
 				if (src.holding)
 					var/t1 = src.gas.total_moles()
 					var/t2 = t1
@@ -171,7 +173,8 @@
 							t = t2
 						src.gas.turf_add(T, t)
 			if(2.0)
-				if( !portable() ) use_power(50, ENVIRON)
+				if( !portable() )
+					use_power(50, ENVIRON)
 				if (src.holding)
 					var/t1 = src.gas.total_moles()
 					var/t2 = src.maximum - t1
@@ -188,14 +191,16 @@
 							t = t2
 						src.gas.turf_take(T, t)
 			if(4.0)
-				if( !portable() ) use_power(50, ENVIRON)
+				if( !portable() )
+					use_power(50, ENVIRON)
 				if (T)
 					if (T.firelevel > 900000.0)
 						src.f_time = world.time + 400
 					else
 						if (world.time > src.f_time)
 							src.gas.extract_toxs(T)
-							if( !portable() ) use_power(150, ENVIRON)
+							if( !portable() )
+								use_power(150, ENVIRON)
 							var/contain = src.gas.total_moles()
 							if (contain > 1.3E8)
 								src.gas.turf_add(T, 1.3E8 - contain)
@@ -296,7 +301,8 @@
 	/*
 //	var/dbg = (suffix=="d") && Debug
 
-	if(stat & NOPOWER) return
+	if(stat & NOPOWER)
+		return
 
 	if (src.t_status != 3)
 		var/turf/T = src.loc
@@ -307,7 +313,8 @@
 			T = null
 		switch(src.t_status)
 			if(1.0)
-				if( !portable() ) use_power(50, ENVIRON)
+				if( !portable() )
+					use_power(50, ENVIRON)
 				if (src.holding)
 					var/t1 = src.gas.total_moles()
 					var/t2 = t1
@@ -324,7 +331,8 @@
 							t = t2
 						src.gas.turf_add(T, t)
 			if(2.0)
-				if( !portable() ) use_power(50, ENVIRON)
+				if( !portable() )
+					use_power(50, ENVIRON)
 				if (src.holding)
 					var/t1 = src.gas.total_moles()
 					var/t2 = src.maximum - t1
@@ -382,7 +390,8 @@
 
 /obj/machinery/atmoalter/siphs/attack_hand(var/mob/user as mob)
 
-	if(stat & NOPOWER) return
+	if(stat & NOPOWER)
+		return
 
 	if(src.portable() && istype(user, /mob/living/silicon/ai)) //AI can't use portable siphons
 		return
@@ -417,7 +426,8 @@
 	return
 
 /obj/machinery/atmoalter/siphs/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	if (usr.stat || usr.restrained())
 		return

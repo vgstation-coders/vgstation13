@@ -65,7 +65,8 @@ var/global/sent_syndicate_strike_team = 0
 
 //Spawns commandos and equips them.
 	for(var/obj/effect/landmark/L in landmarks_list)
-		if(syndicate_commando_number<=0)	break
+		if(syndicate_commando_number<=0)
+			break
 		if (L.name == "Syndicate-Commando")
 			syndicate_leader_selected = syndicate_commando_number == 1?1:0
 

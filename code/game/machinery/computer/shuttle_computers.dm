@@ -31,7 +31,8 @@
 	return say(message)
 
 /obj/machinery/computer/shuttle_control/proc/get_doc_href(var/obj/docking_port/D, var/bonus_parameters=null)
-	if(!D) return "ERROR"
+	if(!D)
+		return "ERROR"
 	var/name = capitalize(D.areaname)
 	var/span_s = "<a href='?src=\ref[src];select=\ref[D][bonus_parameters]'>"
 	var/span_e = "</a>"
@@ -133,7 +134,8 @@
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 	if(href_list["move"])
-		if(!shuttle) return
+		if(!shuttle)
+			return
 		if(!allowed(usr))
 			to_chat(usr, "<font color='red'>Access denied.</font>")
 			return
@@ -153,8 +155,10 @@
 		selected_port = null
 		src.updateUsrDialog()
 	if(href_list["link_to_port"])
-		if(!shuttle) return
-		if(!shuttle.linked_area) return
+		if(!shuttle)
+			return
+		if(!shuttle.linked_area)
+			return
 		if(!allowed(usr))
 			to_chat(usr, "<font color='red'>Access denied.</font>")
 			return
@@ -167,7 +171,8 @@
 			ports[name] = S
 
 		var/choice = input("Select a docking port to link this shuttle to","Shuttle maintenance") in ports
-		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr)) return
+		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
+			return
 		var/obj/docking_port/shuttle/S = ports[choice]
 
 		if(S)
@@ -203,14 +208,16 @@
 			L[name] = S
 
 		var/choice = input(usr,"Select a shuttle to link this computer to", "Shuttle control console") in L as text|null
-		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr)) return
+		if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
+			return
 		if(L[choice] && istype(L[choice],/datum/shuttle))
 			var/datum/shuttle/S = L[choice]
 
 			if(S.can_link_to_computer == LINK_PASSWORD_ONLY)
 				var/password_attempt = input(usr,"Please input [capitalize(S.name)]'s interface password:", "Shuttle control console", 00000) as num
 
-				if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr)) return
+				if(!Adjacent(usr) && !isAdminGhost(usr) && !isAI(usr))
+					return
 				if(S.password == password_attempt)
 					shuttle = L[choice]
 				else

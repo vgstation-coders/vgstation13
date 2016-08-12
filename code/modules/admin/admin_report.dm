@@ -39,8 +39,10 @@ proc/make_report(body, author, okey, cid)
 	Reports["reports"]   >> reports
 	Reports["lastID"] >> lastID
 
-	if(!reports) 	reports = list()
-	if(!lastID) 	lastID = 0
+	if(!reports)
+		reports = list()
+	if(!lastID)
+		lastID = 0
 
 	var/datum/admin_report/created = new()
 	created.ID 		= ++lastID
@@ -63,19 +65,22 @@ proc/load_reports()
 
 	Reports["reports"] >> reports
 
-	if(!reports) reports = list()
+	if(!reports)
+		reports = list()
 
 	return reports
 
 // check if there are any unhandled reports
 client/proc/unhandled_reports()
-	if(!src.holder) return 0
+	if(!src.holder)
+		return 0
 	var/list/reports = load_reports()
 
 	for(var/datum/admin_report/N in reports)
 		if(N.done)
 			continue
-		else return 1
+		else
+			return 1
 
 	return 0
 
@@ -93,7 +98,8 @@ client/proc/is_reported()
 client/proc/display_admin_reports()
 	set category = "Admin"
 	set name = "Display Admin Reports"
-	if(!src.holder) return
+	if(!src.holder)
+		return
 
 	var/list/reports = load_reports()
 
@@ -128,7 +134,8 @@ client/proc/Report(mob/M as mob in mob_list)
 		CID = M.client.computer_id
 
 	var/body = input(src.mob, "Describe in detail what you're reporting [M] for", "Report") as null|text
-	if(!body) return
+	if(!body)
+		return
 
 
 	make_report(body, key, M.key, CID)
@@ -173,7 +180,8 @@ client/proc/edit_report(ID as num)
 	to_chat(if(!found) src, "<b>* An error occured, sorry.</b>")
 
 	var/body = input(src.mob, "Enter a body for the news", "Body") as null|message
-	if(!body) return
+	if(!body)
+		return
 
 	found.body = body
 

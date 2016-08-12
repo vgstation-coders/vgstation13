@@ -52,7 +52,8 @@
 			say("[listening ? "Now" : "No longer"] recording input.")
 
 /obj/item/device/assembly/voice/attack_self(mob/user)
-	if(!user)	return 0
+	if(!user)
+		return 0
 	activate()
 	return 1
 
@@ -64,7 +65,8 @@
 	listening = 0
 
 /obj/item/device/assembly/voice/say()
-	if(muted) return //Don't say anything if muted
+	if(muted)
+		return //Don't say anything if muted
 
 	. = ..()
 

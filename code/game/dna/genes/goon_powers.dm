@@ -473,8 +473,10 @@
 
 			for(var/i=0, i<duration, i++)
 				step(target, target.dir)
-				if(i < 5) target.pixel_y += 8 * PIXEL_MULTIPLIER
-				else target.pixel_y -= 8 * PIXEL_MULTIPLIER
+				if(i < 5)
+					target.pixel_y += 8 * PIXEL_MULTIPLIER
+				else
+					target.pixel_y -= 8 * PIXEL_MULTIPLIER
 				sleep(1)
 			target.pixel_y = 0
 

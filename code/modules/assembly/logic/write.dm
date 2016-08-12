@@ -53,7 +53,8 @@
 	var/list/device_pool = list() //List of all connected assemblies, to make life easier
 
 /obj/item/device/assembly/read_write/activate()
-	if(!..()) return 0
+	if(!..())
+		return 0
 
 	//First read values
 	if(READ && READ_value)
@@ -92,39 +93,49 @@
 	onclose(user, "circuit4")
 
 /obj/item/device/assembly/read_write/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 
 	if(href_list["set_num_value"])
 		var/choice = input(usr, "Select a new numeric value to be stored in \the [src].", "\The [src]") as null|num
 
-		if(isnull(choice)) return
-		if(..()) return
+		if(isnull(choice))
+			return
+		if(..())
+			return
 
 		stored_num = choice
 	if(href_list["set_txt_value"])
 		var/choice = stripped_input(usr, "Select a new string value to be stored in \the [src].", "\The [src]", max_length = MAX_TEXT_VALUE_LEN) as null|text
 
-		if(isnull(choice)) return
-		if(..()) return
+		if(isnull(choice))
+			return
+		if(..())
+			return
 
 		stored_txt = choice
 
 	if(href_list["set_read"])
 		var/choice = input(usr, "Select a new READ assembly for \the [src].", "\The [src]") as null|anything in (device_pool + "Nothing")
 
-		if(isnull(choice)) return
-		if(..()) return
+		if(isnull(choice))
+			return
+		if(..())
+			return
 
 		var/obj/item/device/assembly/A = choice
 		var/new_value = input(usr, "Select which of \the [A]'s values will be read.", "\The [src]") as null|anything in A.accessible_values
 
-		if(isnull(new_value)) return
-		if(..()) return
+		if(isnull(new_value))
+			return
+		if(..())
+			return
 		if(choice == "Nothing")
 			READ = null
 			to_chat(usr, "<span class='info'>\The [src] will no longer read anything.</span>")
 		else
-			if(!device_pool.Find(choice)) return
+			if(!device_pool.Find(choice))
+				return
 
 			READ = choice
 			READ_value = new_value
@@ -134,8 +145,10 @@
 	if(href_list["set_write"])
 		var/choice = input(usr, "Select a new WRITE assembly for \the [src].", "\The [src]") as null|anything in (device_pool + "Nothing")
 
-		if(isnull(choice)) return
-		if(..()) return
+		if(isnull(choice))
+			return
+		if(..())
+			return
 		if(choice == "Nothing")
 			WRITE = null
 			to_chat(usr, "<span class='info'>\The [src] will no longer write to anything.</span>")
@@ -143,10 +156,13 @@
 			var/obj/item/device/assembly/A = choice
 			var/new_value = input(usr, "Select which of \the [A]'s values will be written to.", "\The [src]") as null|anything in A.accessible_values
 
-			if(isnull(new_value)) return
-			if(..()) return
+			if(isnull(new_value))
+				return
+			if(..())
+				return
 
-			if(!device_pool.Find(choice)) return
+			if(!device_pool.Find(choice))
+				return
 
 			WRITE = choice
 			WRITE_value = new_value

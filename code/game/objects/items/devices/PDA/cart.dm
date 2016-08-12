@@ -253,7 +253,8 @@
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/status_signal = getFromPool(/datum/signal)
 	status_signal.source = src

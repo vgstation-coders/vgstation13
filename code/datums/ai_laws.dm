@@ -9,7 +9,8 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //Add, comment out, or adjust weights to modify law selection
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
-	if(!base_law_type) base_law_type = pick(
+	if(!base_law_type)
+		base_law_type = pick(
 		40;/datum/ai_laws/asimov,
 		20;/datum/ai_laws/corporate,
 		20;/datum/ai_laws/nanotrasen,

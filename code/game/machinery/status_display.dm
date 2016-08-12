@@ -75,8 +75,10 @@ var/global/list/status_displays = list() //This list contains both normal status
 	update()
 
 /obj/machinery/status_display/attack_ai(mob/user)
-	if(spookymode)	return
-	if(user.stat)	return
+	if(spookymode)
+		return
+	if(user.stat)
+		return
 
 	if(isAI(user)) //This allows AIs to load any image into the status displays
 		//Some fluff
@@ -356,8 +358,10 @@ var/global/list/status_display_images = list(
 	status_displays -= src
 
 /obj/machinery/ai_status_display/attack_ai(mob/user)
-	if(spookymode)	return
-	if(user.stat)	return
+	if(spookymode)
+		return
+	if(user.stat)
+		return
 
 	if(isAI(user)) //This allows AIs to load any image into the status displays
 		var/mob/living/silicon/ai/A = user

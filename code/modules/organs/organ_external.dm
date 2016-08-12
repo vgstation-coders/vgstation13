@@ -110,11 +110,12 @@
 
 	//High brute damage or sharp objects may damage internal organs
 	if(internal_organs != null)
-		if((sharp && brute >= 5) || brute >= 10) if(prob(5))
-			//Damage an internal organ
-			var/datum/organ/internal/I = pick(internal_organs)
-			I.take_damage(brute / 2)
-			brute -= brute / 2
+		if((sharp && brute >= 5) || brute >= 10)
+			if(prob(5))
+				//Damage an internal organ
+				var/datum/organ/internal/I = pick(internal_organs)
+				I.take_damage(brute / 2)
+				brute -= brute / 2
 
 	if(is_broken() && prob(40) && brute)
 		owner.emote("scream", , , 1) //Getting hit on broken and unsplinted limbs hurts
@@ -964,7 +965,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_LEFT_HAND
 
 /datum/organ/external/l_arm/generate_dropped_organ(current_organ)
-	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(status & ORGAN_PEG)
+		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
 	if(!current_organ)
 		if(status & ORGAN_ROBOT)
 			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
@@ -1249,7 +1251,8 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 /obj/item/weapon/organ/update_icon(mob/living/carbon/human/H)
 	..()
 
-	if(!H && !species) return
+	if(!H && !species)
+		return
 
 	var/icon/base
 	if(H)

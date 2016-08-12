@@ -179,7 +179,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
-	else step_towards(src, S)
+	else
+		step_towards(src, S)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"

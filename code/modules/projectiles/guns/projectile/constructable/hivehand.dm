@@ -93,7 +93,8 @@
 		click_empty(user)
 		return
 
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 
 	var/obj/item/projectile/bullet/stinger/S = new(null)
 	in_chamber = S

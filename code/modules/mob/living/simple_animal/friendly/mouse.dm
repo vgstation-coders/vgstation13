@@ -30,7 +30,8 @@
 	holder_type = /obj/item/weapon/holder/animal/mouse
 
 /mob/living/simple_animal/mouse/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 	if(!stat && prob(speak_chance))
 		for(var/mob/M in view())

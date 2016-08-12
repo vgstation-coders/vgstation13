@@ -225,7 +225,8 @@
 		OnDeath()
 
 /obj/item/projectile/ricochet/Bump(atom/A as mob|obj|turf|area)
-	if(bumped)	return 0
+	if(bumped)
+		return 0
 	bumped = 1
 
 	if(A)

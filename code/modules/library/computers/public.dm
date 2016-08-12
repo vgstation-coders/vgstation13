@@ -2,7 +2,8 @@
 	name = "visitor computer"
 
 /obj/machinery/computer/library/public/attack_hand(var/mob/user as mob)
-	if(..()) return
+	if(..())
+		return
 	interact(user)
 
 /obj/machinery/computer/library/public/interact(var/mob/user)

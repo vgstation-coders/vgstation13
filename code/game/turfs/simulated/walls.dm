@@ -213,7 +213,8 @@
 			playsound(src, 'sound/items/Welder.ogg', 100, 1)
 
 			if(do_after(user, src, 100))
-				if(!istype(src)) return
+				if(!istype(src))
+					return
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
 				"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \

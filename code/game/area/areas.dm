@@ -61,7 +61,8 @@
 	return A.contents
 
 /area/proc/poweralert(var/state, var/obj/source as obj)
-	if (suspend_alert) return
+	if (suspend_alert)
+		return
 	if (state != poweralm)
 		poweralm = state
 		if(istype(source))	//Only report power alarms on the z-level where the source is located.
@@ -168,7 +169,8 @@
 		OpenFirelocks()
 
 /area/proc/CloseFirelocks()
-	if(doors_down) return
+	if(doors_down)
+		return
 	doors_down=1
 	for(var/obj/machinery/door/firedoor/D in all_doors)
 		if(!D.blocked)
@@ -179,7 +181,8 @@
 					D.close()
 
 /area/proc/OpenFirelocks()
-	if(!doors_down) return
+	if(!doors_down)
+		return
 	doors_down=0
 	for(var/obj/machinery/door/firedoor/D in all_doors)
 		if(!D.blocked)
@@ -232,7 +235,8 @@
 		UpdateFirelocks()
 
 /area/proc/radiation_alert()
-	if(isspace(src)) return
+	if(isspace(src))
+		return
 
 	if(!radalert)
 		radalert = 1
@@ -240,7 +244,8 @@
 	return
 
 /area/proc/reset_radiation_alert()
-	if(isspace(src)) return
+	if(isspace(src))
+		return
 
 	if(radalert)
 		radalert = 0
@@ -248,7 +253,8 @@
 	return
 
 /area/proc/readyalert()
-	if(isspace(src)) return
+	if(isspace(src))
+		return
 
 	if(!eject)
 		eject = 1
@@ -262,7 +268,8 @@
 	return
 
 /area/proc/partyalert()
-	if(isspace(src)) return
+	if(isspace(src))
+		return
 
 	if (!( party ))
 		party = 1
@@ -486,7 +493,8 @@
 
 /area/proc/get_shuttle()
 	for(var/datum/shuttle/S in shuttles)
-		if(S.linked_area == src) return S
+		if(S.linked_area == src)
+			return S
 	return null
 
 /area/proc/displace_contents()
@@ -512,7 +520,8 @@
 //Returns nothing
 /area/proc/add_turfs(var/list/L)
 	for(var/turf/T in L)
-		if(T in L) continue
+		if(T in L)
+			continue
 		var/area/old_area = get_area(T)
 
 		L += T
@@ -532,7 +541,8 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 	//       Movement based on lower left corner. Tiles that do not fit
 	//		 into the new area will not be moved.
 
-	if(!A || !src) return 0
+	if(!A || !src)
+		return 0
 
 	var/list/turfs_src = get_area_turfs(src.type)
 	var/list/turfs_trg = get_area_turfs(A.type)
@@ -540,15 +550,19 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 	var/src_min_x = 0
 	var/src_min_y = 0
 	for (var/turf/T in turfs_src)
-		if(T.x < src_min_x || !src_min_x) src_min_x	= T.x
-		if(T.y < src_min_y || !src_min_y) src_min_y	= T.y
+		if(T.x < src_min_x || !src_min_x)
+			src_min_x	= T.x
+		if(T.y < src_min_y || !src_min_y)
+			src_min_y	= T.y
 
 	var/trg_min_x = 0
 	var/trg_min_y = 0
 
 	for (var/turf/T in turfs_trg)
-		if(T.x < trg_min_x || !trg_min_x) trg_min_x	= T.x
-		if(T.y < trg_min_y || !trg_min_y) trg_min_y	= T.y
+		if(T.x < trg_min_x || !trg_min_x)
+			trg_min_x	= T.x
+		if(T.y < trg_min_y || !trg_min_y)
+			trg_min_y	= T.y
 
 	var/list/refined_src = new/list()
 	for(var/turf/T in turfs_src)
@@ -586,7 +600,8 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 
 					var/turf/X = B.ChangeTurf(T.type, allow = 1)
 					for(var/key in T.vars)
-						if(key in ignored_keys) continue
+						if(key in ignored_keys)
+							continue
 						if(istype(T.vars[key],/list))
 							var/list/L = T.vars[key]
 							X.vars[key] = L.Copy()
@@ -595,7 +610,8 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 					if(ispath(prevtype,/turf/space))//including the transit hyperspace turfs
 						/*if(ispath(AA.type, /area/syndicate_station/start) || ispath(AA.type, /area/syndicate_station/transit))//that's the snowflake to pay when people map their ships over the snow.
 							X.underlays += undlay
-						else */if(T.underlays.len)
+						else
+							*/if(T.underlays.len)
 							X.underlays = T.underlays
 						else
 							X.underlays += undlay
@@ -650,7 +666,8 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 							qdel(O) // prevents multiple shuttle corners from stacking
 							O = null
 							continue
-						if(!istype(O,/obj)) continue
+						if(!istype(O,/obj))
+							continue
 						O.forceMove(X)
 					for(var/mob/M in T)
 						if(!M.can_shuttle_move())

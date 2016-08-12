@@ -5,7 +5,8 @@
 /mob/proc/vampire_power(required_blood=0, max_stat=0)
 
 
-	if(!src.mind)		return 0
+	if(!src.mind)
+		return 0
 	if(!ishuman(src))
 		to_chat(src, "<span class='warning'>You are in too weak of a form to do this!</span>")
 		return 0
@@ -43,7 +44,8 @@
 
 /mob/proc/vampire_affected(datum/mind/M)
 	//Other vampires aren't affected
-	if(mind && mind.vampire) return 0
+	if(mind && mind.vampire)
+		return 0
 	//Vampires who have reached their full potential can affect nearly everything
 	if(M && M.vampire && (VAMP_MATURE in M.vampire.powers))
 		return 1
@@ -53,28 +55,37 @@
 	return 1
 
 /mob/proc/vampire_can_reach(mob/M as mob, active_range = 1)
-	if(M.loc == src.loc) return 1 //target and source are in the same thing
-	if(!isturf(src.loc) || !isturf(M.loc)) return 0 //One is inside, the other is outside something.
+	if(M.loc == src.loc)
+		return 1 //target and source are in the same thing
+	if(!isturf(src.loc) || !isturf(M.loc))
+		return 0 //One is inside, the other is outside something.
 	if(Adjacent(M))//if(AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, active_range)) //If a path exists, good!
 		return 1
 	return 0
 
 /mob/proc/vampire_active(required_blood=0, max_stat=0, active_range=1)
 	var/pass = vampire_power(required_blood, max_stat)
-	if(!pass)								return
+	if(!pass)
+		return
 	var/datum/vampire/vampire = mind.vampire
-	if(!vampire) return
+	if(!vampire)
+		return
 	var/list/victims = list()
 	for(var/mob/living/carbon/C in view(active_range))
 		victims += C
 	victims -= mind.current
-	if(!victims.len) return
+	if(!victims.len)
+		return
 	var/mob/living/carbon/T = input(src, "Victim?") as null|anything in victims
 
-	if(!T) return
-	if(!(T in view(active_range))) return
-	if(!vampire_can_reach(T, active_range)) return
-	if(!vampire_power(required_blood, max_stat)) return
+	if(!T)
+		return
+	if(!(T in view(active_range)))
+		return
+	if(!vampire_can_reach(T, active_range))
+		return
+	if(!vampire_power(required_blood, max_stat))
+		return
 	return T
 
 /client/proc/vampire_rejuvinate()
@@ -82,7 +93,8 @@
 	set name = "Rejuvenate "
 	set desc= "Flush your system with spare blood to remove any incapacitating effects."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 	if(M.current.vampire_power(0, 1))
 		M.current.weakened = 0
 		M.current.stunned = 0
@@ -107,7 +119,8 @@
 	set name = "Return To Life"
 	set desc= "Instantly return to un-life."
 	var/datum/mind/M = usr.mind
-	if(!M)	return
+	if(!M)
+		return
 	if(M.current.on_fire || M.vampire.smitecounter)
 		to_chat(M.current, "span class='warning'>Your corpse has been sanctified!</span>")
 		return
@@ -126,7 +139,8 @@
 	set name = "Cheat Death"
 	set desc= "Instantly return to un-life."
 	var/datum/mind/M = usr.mind
-	if(!M)	return
+	if(!M)
+		return
 
 	if(M.current.vampire_power(0, 3))
 		if(!M.current.stat)
@@ -151,10 +165,12 @@
 	set name = "Hypnotise (10)"
 	set desc= "A piercing stare that incapacitates your victim for a good length of time."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 
 	var/mob/living/carbon/C = M.current.vampire_active(10, 0, 1)
-	if(!C) return
+	if(!C)
+		return
 
 	if(!C in view(1))
 		to_chat(M, "<span class='warning'>You're not close enough to [C.name] to stare into \his eyes.</span>")
@@ -185,10 +201,12 @@
 	set name = "Diseased Touch (50)"
 	set desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shutsdown their major organs resulting in a quick painful death."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 
 	var/mob/living/carbon/C = M.current.vampire_active(50, 0, 1)
-	if(!C) return
+	if(!C)
+		return
 	if(!M.current.vampire_can_reach(C, 1))
 		to_chat(M.current, "<span class='danger'>You cannot touch [C.name] from where you are standing!</span>")
 		return
@@ -226,7 +244,8 @@
 	set desc= "A scary glare that incapacitates people for a short while around you."
 
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 	if(M.current.vampire_power(0, 1))
 		if(istype(M.current:glasses, /obj/item/clothing/glasses/sunglasses/blindfold))
 			to_chat(M.current, "<span class='warning'>You're blindfolded!</span>")
@@ -243,18 +262,23 @@
 		var/list/close_mobs = list()
 		var/list/dist_mobs = list()
 		for(var/mob/living/carbon/C in view(1))
-			if(!C.vampire_affected(M)) continue
+			if(!C.vampire_affected(M))
+				continue
 			//if(!M.current.vampire_can_reach(C, 1)) continue
-			if(istype(C)) close_mobs |= C // using |= prevents adding 'large bounded' mobs twice with how the loop works
+			if(istype(C))
+				close_mobs |= C // using |= prevents adding 'large bounded' mobs twice with how the loop works
 		for(var/mob/living/carbon/C in view(3))
-			if(!C.vampire_affected(M)) continue
-			if(istype(C)) dist_mobs |= C
+			if(!C.vampire_affected(M))
+				continue
+			if(istype(C))
+				dist_mobs |= C
 		dist_mobs -= close_mobs //So they don't get double affected.
 		for(var/mob/living/carbon/C in close_mobs)
 			C.Stun(8)
 			C.Weaken(8)
 			C.stuttering += 20
-			if(!C.blinded) C.blinded = 1
+			if(!C.blinded)
+				C.blinded = 1
 			C.blinded += 5
 		for(var/mob/living/carbon/C in dist_mobs)
 			var/distance_value = max(0, abs((get_dist(C, M.current)-3)) + 1)
@@ -262,7 +286,8 @@
 			if(distance_value > 1)
 				C.Weaken(distance_value)
 			C.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
-			if(!C.blinded) C.blinded = 1
+			if(!C.blinded)
+				C.blinded = 1
 			C.blinded += max(1, distance_value)
 		to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by [M.current.name]'s glare</span>")
 
@@ -272,7 +297,8 @@
 	set name = "Shapeshift"
 	set desc = "Changes your name and appearance and has a cooldown of 3 minutes."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 	if(M.current.vampire_power(0, 0))
 		M.current.visible_message("<span class='sinister'>[M.current.name] transforms!</span>")
 		M.current.client.prefs.real_name = M.current.generate_name() //random_name(M.current.gender)
@@ -288,15 +314,19 @@
 	set name = "Chiroptean Screech (30)"
 	set desc = "An extremely loud shriek that stuns nearby humans and breaks windows as well."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 	if(M.current.vampire_power(30, 0))
 		M.current.visible_message("<span class='warning'>[M.current.name] lets out an ear piercing shriek!</span>", "<span class='warning'>You let out a loud shriek.</span>", "<span class='warning'>You hear a loud painful shriek!</span>")
 		for(var/mob/living/carbon/C in hearers(4, M.current))
-			if(C == M.current) continue
+			if(C == M.current)
+				continue
 			if(ishuman(C))
 				var/mob/living/carbon/human/H = C
-				if(H.earprot()) continue
-			if(!C.vampire_affected(M)) continue
+				if(H.earprot())
+					continue
+			if(!C.vampire_affected(M))
+				continue
 			to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 			C.Weaken(8)
 			C.ear_deaf = 20
@@ -346,7 +376,8 @@
 	set name = "Cloak of Darkness (toggle)"
 	set desc = "Toggles whether you are currently cloaking yourself in darkness."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 	if(M.current.vampire_power(0, 0))
 		M.vampire.iscloaking = !M.vampire.iscloaking
 		to_chat(M.current, "<span class='notice'>You will now be [M.vampire.iscloaking ? "hidden" : "seen"] in darkness.</span>")
@@ -455,7 +486,8 @@
 	set name = "Summon Bats (75)"
 	set desc = "You summon a pair of space bats who attack nearby targets until they or their target is dead."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 	if(M.current.vampire_power(75, 0))
 		var/list/turf/locs = new
 		var/number = 0
@@ -488,7 +520,8 @@
 	set desc = "You become ethereal and can travel through walls for a short time, while leaving a scary bat behind."
 	var/duration = 5 SECONDS
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 
 	if(M.current.vampire_power(30, 0))
 		M.current.verbs -= /client/proc/vampire_jaunt
@@ -506,7 +539,8 @@
 	set desc = "Vanish into the shadows."
 
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 
 	// Teleport radii
 	var/inner_tele_radius = 0
@@ -516,16 +550,23 @@
 	var/max_lum = 1
 
 	if(M.current.vampire_power(20, 0))
-		if (M.current.locked_to) M.current.unlock_from()
+		if (M.current.locked_to)
+			M.current.unlock_from()
 		spawn(0)
 			var/list/turfs = new/list()
 			for(var/turf/T in range(usr,outer_tele_radius))
-				if(T in range(usr,inner_tele_radius)) continue
-				if(istype(T,/turf/space)) continue
-				if(T.density) continue
-				if(T.x>world.maxx-outer_tele_radius || T.x<outer_tele_radius)	continue	//putting them at the edge is dumb
-				if(T.y>world.maxy-outer_tele_radius || T.y<outer_tele_radius)	continue
-				if((T.get_lumcount() * 10) > max_lum) continue
+				if(T in range(usr,inner_tele_radius))
+					continue
+				if(istype(T,/turf/space))
+					continue
+				if(T.density)
+					continue
+				if(T.x>world.maxx-outer_tele_radius || T.x<outer_tele_radius)
+					continue	//putting them at the edge is dumb
+				if(T.y>world.maxy-outer_tele_radius || T.y<outer_tele_radius)
+					continue
+				if((T.get_lumcount() * 10) > max_lum)
+					continue
 				turfs += T
 
 			if(!turfs.len)
@@ -552,7 +593,8 @@
 	set name = "Shadowy Menace (toggle)"
 	set desc = "Terrify anyone who looks at you in the dark."
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 
 	if(M.current.vampire_power(0, 0))
 		M.vampire.ismenacing = !M.vampire.ismenacing
@@ -574,8 +616,10 @@
 		return 0
 
 	for(var/mob/living/carbon/C in oview(6))
-		if(prob(35))	continue //to prevent fearspam
-		if(!C.vampire_affected(mind.current))	continue
+		if(prob(35))
+			continue //to prevent fearspam
+		if(!C.vampire_affected(mind.current))
+			continue
 		C.stuttering += 20
 		C.Jitter(20)
 		C.Dizzy(20)
@@ -587,7 +631,8 @@
 	set desc = "Acquire a fabulous, yet fearsome cape."
 
 	var/datum/mind/M = usr.mind
-	if(!M) return
+	if(!M)
+		return
 
 	if(M.current.vampire_power(0, 0))
 		var/obj/item/clothing/suit/storage/draculacoat/D = new /obj/item/clothing/suit/storage/draculacoat(M.current.loc, M.current)

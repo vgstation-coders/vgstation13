@@ -1,7 +1,8 @@
 /client/proc/play_sound(var/sound/S as sound)
 	set category = "Fun"
 	set name = "Play Global Sound"
-	if(!check_rights(R_SOUNDS))	return
+	if(!check_rights(R_SOUNDS))
+		return
 
 	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = 777)
 	uploaded_sound.status = SOUND_STREAM | SOUND_UPDATE
@@ -15,7 +16,8 @@
 	log_admin("[key_name(src)] played sound [S]")
 	message_admins("[key_name_admin(src)] played sound [S]", 1)
 	for(var/mob/M in player_list)
-		if(!M.client) continue
+		if(!M.client)
+			continue
 		if(M.client.prefs.toggles & SOUND_MIDI)
 			M << uploaded_sound
 
@@ -25,8 +27,10 @@
 /client/proc/play_local_sound(var/sound/S as sound)
 	set category = "Fun"
 	set name = "Play Local Sound"
-	if(!check_rights(R_SOUNDS))	return
-	if(!istype(S)) S = sound(S)
+	if(!check_rights(R_SOUNDS))
+		return
+	if(!istype(S))
+		S = sound(S)
 
 	var/prompt = alert(src, "Are you sure you want to play this sound?","Are you sure?","Yes","Cancel")
 	if(prompt == "Cancel")

@@ -321,7 +321,8 @@ hi
 
 /obj/item/weapon/reagent_containers/hypospray/fluff/asher_spock_1/examine(mob/user as mob)
 	..()
-	if(user.ckey != "nerezza") return //Only the owner knows how to examine the contents.
+	if(user.ckey != "nerezza")
+		return //Only the owner knows how to examine the contents.
 	if(reagents && reagents.reagent_list.len)
 		for(var/datum/reagent/R in reagents.reagent_list)
 			to_chat(usr, "<span class='notice'>You examine the penlight closely and see that it has [R.volume] units of [R.name] stored.</span>")

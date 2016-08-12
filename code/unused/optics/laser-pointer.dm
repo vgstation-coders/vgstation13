@@ -45,7 +45,8 @@
 		set src in view(1)
 		turn_off()
 		dir = turn(dir, -90)
-		if(on) turn_on()
+		if(on)
+			turn_on()
 
 	Move(var/atom/newloc,var/newdir)
 		. = ..(newloc,newdir)

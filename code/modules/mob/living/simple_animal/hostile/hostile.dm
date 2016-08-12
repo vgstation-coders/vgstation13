@@ -35,7 +35,8 @@
 	friends = list()
 
 /mob/living/simple_animal/hostile/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. = ..()
 	//Cooldowns
 	if(ranged)

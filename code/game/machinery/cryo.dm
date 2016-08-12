@@ -52,7 +52,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		node.build_network()
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
-	if(node) return
+	if(node)
+		return
 	for(var/cdir in cardinal)
 		node = findConnecting(cdir)
 		if(node)
@@ -276,7 +277,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return 0 // don't update UIs attached to this object
 
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 
 	if(href_list["switchOn"])
@@ -398,7 +400,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			if(istype(guy) && guy.species && guy.species.breath_type != "oxygen")
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
 			if(air_contents.oxygen > 2)
-				if(occupant.getOxyLoss()) occupant.adjustOxyLoss(-1)
+				if(occupant.getOxyLoss())
+					occupant.adjustOxyLoss(-1)
 			else
 				occupant.adjustOxyLoss(-1)
 			//severe damage should heal waaay slower without proper chemicals

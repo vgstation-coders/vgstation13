@@ -63,11 +63,13 @@
 
 
 /obj/item/device/assembly/infra/process()//Old code
-	if(1) return PROCESS_KILL
+	if(1)
+		return PROCESS_KILL
 	if(!on && beam)
 		qdel(beam)
 		return
-	if(beam || !secured) return
+	if(beam || !secured)
+		return
 	var/turf/T = null
 	if(isturf(loc))
 		T = get_turf(src)
@@ -101,14 +103,16 @@
 
 
 /obj/item/device/assembly/infra/holder_movement()
-	if(!holder)	return 0
+	if(!holder)
+		return 0
 //		dir = holder.dir
 	qdel(beam)
 	return 1
 
 
 /obj/item/device/assembly/infra/proc/trigger_beam()
-	if((!secured)||(!on)||(cooldown > 0))	return 0
+	if((!secured)||(!on)||(cooldown > 0))
+		return 0
 	pulse(0)
 	if(!holder)
 		visible_message("[bicon(src)] *beep* *beep*")
@@ -119,7 +123,8 @@
 
 
 /obj/item/device/assembly/infra/interact(mob/user as mob)//TODO: change this this to the wire control panel
-	if(!secured)	return
+	if(!secured)
+		return
 	user.set_machine(src)
 	var/dat = text("<TT><B>Infrared Laser</B>\n<B>Status</B>: []<BR>\n<B>Visibility</B>: []<BR>\n</TT>", (on ? text("<A href='?src=\ref[];state=0'>On</A>", src) : text("<A href='?src=\ref[];state=1'>Off</A>", src)), (src.visible ? text("<A href='?src=\ref[];visible=0'>Visible</A>", src) : text("<A href='?src=\ref[];visible=1'>Invisible</A>", src)))
 
@@ -201,6 +206,7 @@
 
 /obj/effect/beam/infrared/spawn_child()
 	var/obj/effect/beam/infrared/B = ..()
-	if(!B) return null
+	if(!B)
+		return null
 	B.visible=visible
 	return B

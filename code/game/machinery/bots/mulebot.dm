@@ -490,7 +490,8 @@ var/global/mulebot_count = 0
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		if(AM == cell || AM == botcard) continue
+		if(AM == cell || AM == botcard)
+			continue
 
 		AM.loc = src.loc
 		AM.layer = initial(AM.layer)
@@ -530,7 +531,8 @@ var/global/mulebot_count = 0
 			if(3)
 				process_bot()
 
-	if(refresh) updateDialog()
+	if(refresh)
+		updateDialog()
 
 /obj/machinery/bot/mulebot/proc/process_bot()
 //	to_chat(if(mode) world, "Mode: [mode]")
@@ -574,7 +576,8 @@ var/global/mulebot_count = 0
 						bloodiness--
 
 					var/moved = step_towards(src, next)	// attempt to move
-					if(cell) cell.use(1)
+					if(cell)
+						cell.use(1)
 					if(moved)	// successful move
 //						to_chat(world, "Successful move.")
 						blockcount = 0
@@ -854,7 +857,8 @@ var/global/mulebot_count = 0
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 
 

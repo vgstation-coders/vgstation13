@@ -218,8 +218,10 @@
 //If you want to bypass it, set destination_port to something and call pre_flight()
 //Alternatively, call move_to_dock(destination)
 /datum/shuttle/proc/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
-	if(!D) return 0 //no docking port
-	if(!linked_port) return 0 //no shuttle port
+	if(!D)
+		return 0 //no docking port
+	if(!linked_port)
+		return 0 //no shuttle port
 
 	if(destination_port)
 		if(broadcast)
@@ -306,7 +308,8 @@
 	return 1
 
 /datum/shuttle/proc/pre_flight()
-	if(!destination_port) return
+	if(!destination_port)
+		return
 
 	if(transit_port && get_transit_delay())
 		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)))
@@ -321,8 +324,10 @@
 
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
 /datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0) //A direct proc with no bullshit
-	if(!D) return
-	if(!linked_port) return
+	if(!D)
+		return
+	if(!linked_port)
+		return
 
 	//List of all shuttles docked to this shuttle. They will be moved together with their parent.
 	//In the list, shuttles are associated with the docking port they are docked to
@@ -339,7 +344,8 @@
 		if(dock.docked_with && !(dock.docked_with == linked_port))
 			//Get the docking port that's docked to it, and then its shuttle
 			var/obj/docking_port/shuttle/S = dock.docked_with
-			if(!S || !S.linked_shuttle) continue
+			if(!S || !S.linked_shuttle)
+				continue
 
 			docked_shuttles |= S.linked_shuttle
 			docked_shuttles[S.linked_shuttle]=dock
@@ -376,9 +382,11 @@
 		//****Move shuttles docked to us**
 		if(docked_shuttles.len)
 			for(var/datum/shuttle/S in docked_shuttles)
-				if(S in moved_shuttles) continue
+				if(S in moved_shuttles)
+					continue
 				var/obj/docking_port/destination/our_moved_dock = docked_shuttles[S]
-				if(!our_moved_dock) continue
+				if(!our_moved_dock)
+					continue
 
 				moved_shuttles |= S
 				S.move_to_dock(our_moved_dock, ignore_innacuracy = 1)
@@ -406,7 +414,8 @@
 //Shakes cameras for mobs
 /datum/shuttle/proc/after_flight()
 	for(var/atom/movable/AM in linked_area)
-		if(AM.anchored) continue
+		if(AM.anchored)
+			continue
 
 		if(istype(AM,/mob/living))
 			var/mob/living/M = AM
@@ -432,14 +441,18 @@
 
 //Like (input() in shuttles), but better
 /proc/select_shuttle_from_all(var/mob/user, var/message = "Select a shuttle", var/title = "Shuttle selection", var/list/omit_shuttles = null, var/show_lockdown = 0, var/show_cooldown = 0)
-	if(!user) return
+	if(!user)
+		return
 
 	var/list/shuttle_list = list()
 	for(var/datum/shuttle/S in shuttles)
 		if(omit_shuttles)
-			if(S.type in omit_shuttles) continue
-			if(S in omit_shuttles) continue
-			if(S.name in omit_shuttles) continue
+			if(S.type in omit_shuttles)
+				continue
+			if(S in omit_shuttles)
+				continue
+			if(S.name in omit_shuttles)
+				continue
 		var/name = S.name
 		if(show_lockdown && S.lockdown)
 			name = "[name] (LOCKDOWN)"
@@ -457,12 +470,15 @@
 /datum/shuttle/proc/move(var/mob/user) //a very simple proc which selects a random area and sends the shuttle there
 	var/list/possible_locations = list()
 	for(var/obj/docking_port/destination/S in src.docking_ports)
-		if(S == current_port) continue
-		if(S.docked_with) continue
+		if(S == current_port)
+			continue
+		if(S.docked_with)
+			continue
 
 		possible_locations += S
 
-	if(!possible_locations.len) return
+	if(!possible_locations.len)
+		return
 	var/obj/docking_port/destination/target = pick(possible_locations)
 
 	travel_to(target,,user)
@@ -470,8 +486,10 @@
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad
 /datum/shuttle/proc/move_area_to(var/turf/our_center, var/turf/new_center, var/rotate = 0)
-	if(!our_center) return
-	if(!new_center) return
+	if(!our_center)
+		return
+	if(!new_center)
+		return
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
 
@@ -575,7 +593,8 @@
 				AM.forceMove(displace_to)
 
 		var/area/old_area = get_area(new_turf)
-		if(!old_area) old_area = space
+		if(!old_area)
+			old_area = space
 
 		//Get the turf's image before it's gone!
 		var/image/undlay
@@ -603,7 +622,8 @@
 		//****Move all variables from the old turf over to the new turf****
 
 		for(var/key in old_turf.vars)
-			if(key in ignored_keys) continue
+			if(key in ignored_keys)
+				continue
 			//ignored_keys: code/game/area/areas.dm, 526 (above the move_contents_to proc)
 			//as of 06/08/2015: list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group","contents","air","light","areaMaster","underlays","lighting_overlay")
 			if(istype(old_turf.vars[key],/list))
@@ -678,7 +698,8 @@
 		var/replacing_turf_type = old_turf.get_underlying_turf()
 		var/obj/docking_port/destination/D = linked_port.docked_with
 
-		if(D && istype(D)) replacing_turf_type = D.base_turf_type
+		if(D && istype(D))
+			replacing_turf_type = D.base_turf_type
 
 		old_turf.ChangeTurf(replacing_turf_type, allow = 1)
 
@@ -789,7 +810,8 @@
 	var/list/images = list()
 	for(var/datum/coords/C in new_coords)
 		var/turf/T = locate(C.x_pos,C.y_pos,centered_at.z)
-		if(!T) continue
+		if(!T)
+			continue
 
 		var/image/I = image('icons/turf/areas.dmi', icon_state="bluenew")
 		I.loc = T

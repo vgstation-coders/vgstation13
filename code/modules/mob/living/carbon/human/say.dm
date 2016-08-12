@@ -41,7 +41,8 @@
 			for(var/i=1, ((i <= D.stage) && (i <= temp_message.len)), i++) //Loop for each stage of the disease or until we run out of words
 				if(prob(3 * D.stage)) //Stage 1: 3% Stage 2: 6% Stage 3: 9% Stage 4: 12%
 					var/H = pick(pick_list)
-					if(findtext(temp_message[H], "*") || findtext(temp_message[H], ";") || findtext(temp_message[H], ":")) continue
+					if(findtext(temp_message[H], "*") || findtext(temp_message[H], ";") || findtext(temp_message[H], ":"))
+						continue
 					temp_message[H] = "HONK"
 					pick_list -= H //Make sure that you dont HONK the same word twice
 				speech.message = jointext(temp_message, " ")
@@ -88,8 +89,10 @@
 /mob/living/carbon/human/binarycheck()
 	if(ears)
 		var/obj/item/device/radio/headset/dongle = ears
-		if(!istype(dongle)) return 0
-		if(dongle.translate_binary) return 1
+		if(!istype(dongle))
+			return 0
+		if(dongle.translate_binary)
+			return 1
 
 /mob/living/carbon/human/radio(var/datum/speech/speech, var/message_mode)
 	. = ..()
@@ -160,7 +163,8 @@
 				winset(client, "input", "text=[null]")
 
 /mob/living/carbon/human/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(other) other = other.GetSource()
+	if(other)
+		other = other.GetSource()
 	if(has_brain_worms()) //Brain worms translate everything. Even mice and alien speak.
 		return 1
 

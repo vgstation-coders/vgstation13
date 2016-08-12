@@ -32,7 +32,8 @@
 		update_icon()
 		to_chat(user, "<span class='notice'>You add the cables to the [src]. It now contains [loaded.amount].</span>")
 	else if(isscrewdriver(W))
-		if(!loaded) return
+		if(!loaded)
+			return
 		to_chat(user, "<span class='notice'>You loosen the securing screws on the side, allowing you to lower the guiding edge and retrieve the wires.</span>")
 		while(loaded.amount>30) //There are only two kinds of situations: "nodiff" (60,90), or "diff" (31-59, 61-89)
 			var/diff = loaded.amount % 30
@@ -112,7 +113,8 @@
 				last = null
 				return
 			loaded.cable_join(last,user)
-			if(is_empty(user)) return //If we've run out, display message and exit
+			if(is_empty(user))
+				return //If we've run out, display message and exit
 		else
 			last = null
 	last = loaded.turf_place(get_turf(src.loc),user,turn(user.dir,180))

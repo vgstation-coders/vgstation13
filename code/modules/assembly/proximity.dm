@@ -41,7 +41,8 @@
 		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/prox_sensor/activate()
-	if(!..())	return 0//Cooldown check
+	if(!..())
+		return 0//Cooldown check
 	timing = !timing
 	update_icon()
 	return 0
@@ -71,7 +72,8 @@
 	var/turf/mainloc = get_turf(src)
 //	if(scanning && cooldown <= 0)
 //		mainloc.visible_message("[bicon(src)] *boop* *boop*", "*boop* *boop*")
-	if((!holder && !secured)||(!scanning)||(cooldown > 0))	return 0
+	if((!holder && !secured)||(!scanning)||(cooldown > 0))
+		return 0
 	pulse(0)
 	if(!holder)
 		mainloc.visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
@@ -102,7 +104,8 @@
 	return
 
 /obj/item/device/assembly/prox_sensor/proc/toggle_scan()
-	if(!secured)	return 0
+	if(!secured)
+		return 0
 	scanning = !scanning
 	update_icon()
 	return

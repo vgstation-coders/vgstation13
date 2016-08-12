@@ -177,9 +177,12 @@ move an amendment</a> to the drawing.</p>
 	if(alert(usr,"Are you sure you want to erase \"[areadeleted]\" from the blueprints?","Blueprint Editing","Yes","No") != "Yes")
 		return
 	else
-		if(!Adjacent(user)) return
-		if(!(areadeleted == get_area())) return //if the blueprints are no longer in the area, return
-		if(!istype(areadeleted)) return //to make sure AGAIN that the area we're deleting is blueprint
+		if(!Adjacent(user))
+			return
+		if(!(areadeleted == get_area()))
+			return //if the blueprints are no longer in the area, return
+		if(!istype(areadeleted))
+			return //to make sure AGAIN that the area we're deleting is blueprint
 
 	var/list/C = areadeleted.contents.Copy() //because areadeleted.contents is slow
 	for(var/turf/T in C)
@@ -232,11 +235,13 @@ move an amendment</a> to the drawing.</p>
 			for (var/obj/structure/window/W in T)
 				if(dir == W.dir || (W.is_fulltile()))
 					skip = 1; break
-			if (skip) continue
+			if (skip)
+				continue
 			for(var/obj/machinery/door/window/D in T)
 				if(dir == D.dir)
 					skip = 1; break
-			if (skip) continue
+			if (skip)
+				continue
 
 			var/turf/NT = get_step(T,dir)
 			if (!isturf(NT) || (NT in found) || (NT in pending))

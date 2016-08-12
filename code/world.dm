@@ -231,7 +231,8 @@ var/savefile/panicfile
 			n++
 		s["players"] = n
 
-		if(revdata)	s["revision"] = revdata.revision
+		if(revdata)
+			s["revision"] = revdata.revision
 		s["admins"] = admins
 
 		return list2params(s)
@@ -507,7 +508,8 @@ proc/establish_old_db_connection()
 	var/count = 0
 	for(var/Z = 1 to world.maxz)
 		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000)) sleep(world.tick_lag)
+			if(!(count % 50000))
+				sleep(world.tick_lag)
 			count++
 			T.initialize()
 			turfs[count] = T

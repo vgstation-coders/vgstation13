@@ -28,7 +28,8 @@
 	var/throwdir = null
 
 	for(var/mob/M in hearers(1, src))
-		if(M == firer) continue
+		if(M == firer)
+			continue
 		if(M.loc != src.loc)
 			throwdir = get_dir(src,target)
 			if(prob(75))

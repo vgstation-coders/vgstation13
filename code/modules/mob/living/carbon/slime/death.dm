@@ -1,5 +1,6 @@
 /mob/living/carbon/slime/death(gibbed)
-	if(stat == DEAD)	return
+	if(stat == DEAD)
+		return
 	stat = DEAD
 	icon_state = "[colour] baby slime dead"
 

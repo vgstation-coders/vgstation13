@@ -561,7 +561,8 @@
 			return
 		visible_message("[user] starts putting [G.affecting.name] into the Suit Storage Unit.")
 		if(do_after(user, src, 20))
-			if(!G || !G.affecting) return //derpcheck
+			if(!G || !G.affecting)
+				return //derpcheck
 			var/mob/M = G.affecting
 			if (M.client)
 				M.client.perspective = EYE_PERSPECTIVE

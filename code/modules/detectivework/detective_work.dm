@@ -11,7 +11,8 @@ atom/proc/add_fibers(mob/living/carbon/human/M)
 	else if(M.bloody_hands)
 		if(add_blood(M.bloody_hands_mob))
 			M.bloody_hands--
-	if(!suit_fibers) suit_fibers = list()
+	if(!suit_fibers)
+		suit_fibers = list()
 	var/fibertext
 	var/item_multiplier = istype(src,/obj/item)?1.2:1
 	if(M.wear_suit)
@@ -46,7 +47,8 @@ atom/proc/add_fibers(mob/living/carbon/human/M)
 		if(prob(20*item_multiplier) && !(fibertext in suit_fibers))
 			//world.log << "Added fibertext: [fibertext]"
 			suit_fibers += "Material from a pair of [M.gloves.name]."
-	if(!suit_fibers.len) del suit_fibers
+	if(!suit_fibers.len)
+		del suit_fibers
 
 var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(print) proc, and means about 80% of
 								//the print must be there for it to be complete.  (Prints are 32 digits)
@@ -102,7 +104,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 		isai = 1
 	if(temp)
 		dat += "<tt>[temp]</tt><br><br>"
-		if(canclear) dat += "<a href='?src=\ref[src];operation=clear'>{Clear Screen}</a>"
+		if(canclear)
+			dat += "<a href='?src=\ref[src];operation=clear'>{Clear Screen}</a>"
 	else
 		if(!authenticated)
 			dat += "<a href='?src=\ref[src];operation=login'>{Log In}</a>"
@@ -114,12 +117,16 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					dat += {"Scan Object: {[scanning.name]}<br>
 						<a href='?src=\ref[src];operation=cancel'>{Cancel Scan}</a> {Print}<br>"}
 				else
-					if(isai) dat += "Scan Object: {[scanning.name]}<br>"
-					else dat += "Scan Object: <a href='?src=\ref[src];operation=eject'>{[scanning.name]}</a><br>"
+					if(isai)
+						dat += "Scan Object: {[scanning.name]}<br>"
+					else
+						dat += "Scan Object: <a href='?src=\ref[src];operation=eject'>{[scanning.name]}</a><br>"
 					dat += "<a href='?src=\ref[src];operation=scan'>{Scan}</a> <a href='?src=\ref[src];operation=print'>{Print}</a><br>"
 			else
-				if(isai) dat += "{No Object Inserted}<br>"
-				else dat += "<a href='?src=\ref[src];operation=insert'>{No Object Inserted}</a><br>"
+				if(isai)
+					dat += "{No Object Inserted}<br>"
+				else
+					dat += "<a href='?src=\ref[src];operation=insert'>{No Object Inserted}</a><br>"
 				dat += "{Scan} <a href='?src=\ref[src];operation=print'>{Print}</a><br>"
 
 			dat += {"<a href='?src=\ref[src];operation=database'>{Access Database}</a><br><br>
@@ -165,7 +172,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 					I.overlays -= scanning
 					I.icon_state = "evidenceobj"
 				else
-					if(M.drop_item(I, src)) scanning = I
+					if(M.drop_item(I, src))
+						scanning = I
 			else
 				to_chat(usr, "Invalid Object Rejected.")
 		if("card")  //Processing a fingerprint card.

@@ -134,7 +134,8 @@
 	if(drug_activation_messages.len)
 		msg2 = pick(drug_activation_messages)
 
-	if(msg2) msg2="<span class='notice'>[msg2]</span>" //Workaround to prevent simple_message from considering "<span class='notice'></span>" an actual message
+	if(msg2)
+		msg2="<span class='notice'>[msg2]</span>" //Workaround to prevent simple_message from considering "<span class='notice'></span>" an actual message
 	M.simple_message("<span class='notice'>[msg1]</span>", msg2 )
 
 /datum/dna/gene/basic/can_deactivate(var/mob/M, var/flags)
@@ -153,6 +154,7 @@
 		if(drug_deactivation_messages.len)
 			msg2 = pick(drug_deactivation_messages)
 
-		if(msg2) msg2="<span class='notice'>[msg2]</span>" //Workaround to prevent simple_message from considering "<span class='notice'></span>" an actual message
+		if(msg2)
+			msg2="<span class='notice'>[msg2]</span>" //Workaround to prevent simple_message from considering "<span class='notice'></span>" an actual message
 		M.simple_message("<span class='notice'>[msg1]</span>", msg2 )
 		return 1

@@ -1,6 +1,7 @@
 /mob/living/carbon/human/emote(var/act,var/m_type=1,var/message = null, var/auto)
 	var/param = null
-	if(timestopped) return //under effects of time magick
+	if(timestopped)
+		return //under effects of time magick
 	if (findtext(act, "-", 1, null))
 		var/t1 = findtext(act, "-", 1, null)
 		param = copytext(act, t1 + 1, length(act) + 1)
@@ -699,7 +700,8 @@
 							playsound(location, 'sound/effects/superfart.ogg', 50, 0)
 							if(!wearing_suit)
 								for(var/mob/living/V in view(src,aoe_range))
-									if(!airborne_can_reach(location,get_turf(V),aoe_range)) continue
+									if(!airborne_can_reach(location,get_turf(V),aoe_range))
+										continue
 									shake_camera(V,10,5)
 									if (V == src)
 										continue

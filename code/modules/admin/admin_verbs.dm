@@ -308,21 +308,36 @@ var/list/admin_verbs_mod = list(
 /client/proc/add_admin_verbs()
 	if(holder)
 		verbs += admin_verbs_default
-		if(holder.rights & R_BUILDMODE)		verbs += /client/proc/togglebuildmodeself
-		if(holder.rights & R_ADMIN)			verbs += admin_verbs_admin
-		if(holder.rights & R_BAN)			verbs += admin_verbs_ban
-		if(holder.rights & R_FUN)			verbs += admin_verbs_fun
-		if(holder.rights & R_SERVER)		verbs += admin_verbs_server
-		if(holder.rights & R_DEBUG)			verbs += admin_verbs_debug
-		if(holder.rights & R_POSSESS)		verbs += admin_verbs_possess
-		if(holder.rights & R_PERMISSIONS)	verbs += admin_verbs_permissions
-		if(holder.rights & R_POLLING)		verbs += admin_verbs_polling
-		if(holder.rights & R_STEALTH)		verbs += /client/proc/stealth
-		if(holder.rights & R_REJUVINATE)	verbs += admin_verbs_rejuv
-		if(holder.rights & R_SOUNDS)		verbs += admin_verbs_sounds
-		if(holder.rights & R_SPAWN)			verbs += admin_verbs_spawn
-		if(holder.rights & R_MOD)			verbs += admin_verbs_mod
-		if(holder.rights & R_ADMINBUS)		verbs += /client/proc/secrets
+		if(holder.rights & R_BUILDMODE)
+			verbs += /client/proc/togglebuildmodeself
+		if(holder.rights & R_ADMIN)
+			verbs += admin_verbs_admin
+		if(holder.rights & R_BAN)
+			verbs += admin_verbs_ban
+		if(holder.rights & R_FUN)
+			verbs += admin_verbs_fun
+		if(holder.rights & R_SERVER)
+			verbs += admin_verbs_server
+		if(holder.rights & R_DEBUG)
+			verbs += admin_verbs_debug
+		if(holder.rights & R_POSSESS)
+			verbs += admin_verbs_possess
+		if(holder.rights & R_PERMISSIONS)
+			verbs += admin_verbs_permissions
+		if(holder.rights & R_POLLING)
+			verbs += admin_verbs_polling
+		if(holder.rights & R_STEALTH)
+			verbs += /client/proc/stealth
+		if(holder.rights & R_REJUVINATE)
+			verbs += admin_verbs_rejuv
+		if(holder.rights & R_SOUNDS)
+			verbs += admin_verbs_sounds
+		if(holder.rights & R_SPAWN)
+			verbs += admin_verbs_spawn
+		if(holder.rights & R_MOD)
+			verbs += admin_verbs_mod
+		if(holder.rights & R_ADMINBUS)
+			verbs += /client/proc/secrets
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(
@@ -403,7 +418,8 @@ var/list/admin_verbs_mod = list(
 /client/proc/admin_ghost()
 	set category = "Admin"
 	set name = "Aghost"
-	if(!holder)	return
+	if(!holder)
+		return
 	if(istype(mob,/mob/dead/observer))
 		//re-enter
 		var/mob/dead/observer/ghost = mob
@@ -415,7 +431,8 @@ var/list/admin_verbs_mod = list(
 	else
 		//ghostize
 		var/mob/body = mob
-		if(body.mind) body.mind.isScrying = 1
+		if(body.mind)
+			body.mind.isScrying = 1
 		body.ghostize(1)
 
 		if(body && !body.key)
@@ -507,7 +524,8 @@ var/list/admin_verbs_mod = list(
 /client/proc/colorooc()
 	set category = "Fun"
 	set name = "OOC Text Color"
-	if(!holder)	return
+	if(!holder)
+		return
 	var/new_ooccolor = input(src, "Please select your OOC colour.", "OOC colour") as color|null
 	if(new_ooccolor)
 		prefs.ooccolor = new_ooccolor
@@ -523,7 +541,8 @@ var/list/admin_verbs_mod = list(
 			holder.fakekey = null
 		else
 			var/new_key = ckeyEx(input("Enter your desired display name.", "Fake Key", key) as text|null)
-			if(!new_key)	return
+			if(!new_key)
+				return
 			if(length(new_key) >= 26)
 				new_key = copytext(new_key, 1, 26)
 			holder.fakekey = new_key
@@ -536,15 +555,19 @@ var/list/admin_verbs_mod = list(
 
 /client/proc/warn(warned_ckey)
 	var/reason = "Autobanning due to too many formal warnings"
-	if(!check_rights(R_ADMIN))	return
+	if(!check_rights(R_ADMIN))
+		return
 
-	if(!warned_ckey || !istext(warned_ckey))	return
+	if(!warned_ckey || !istext(warned_ckey))
+		return
 
 
 	var/datum/preferences/D
 	var/client/C = directory[warned_ckey]
-	if(C)	D = C.prefs
-	else	D = preferences_datums[warned_ckey]
+	if(C)
+		D = C.prefs
+	else
+		D = preferences_datums[warned_ckey]
 
 	if(!D)
 		to_chat(src, "<font color='red'>Error: warn(): No such ckey found.</font>")
@@ -581,17 +604,21 @@ var/list/admin_verbs_mod = list(
 	feedback_add_details("admin_verb","WARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/unwarn(warned_ckey)
-	if(!check_rights(R_ADMIN))	return
+	if(!check_rights(R_ADMIN))
+		return
 
-	if(!warned_ckey || !istext(warned_ckey))	return
+	if(!warned_ckey || !istext(warned_ckey))
+		return
 	/*if(warned_ckey in admin_datums)
 		to_chat(usr, "<font color='red'>Error: warn(): You can't warn admins.</font>")
 		return*/
 
 	var/datum/preferences/D
 	var/client/C = directory[warned_ckey]
-	if(C)	D = C.prefs
-	else	D = preferences_datums[warned_ckey]
+	if(C)
+		D = C.prefs
+	else
+		D = preferences_datums[warned_ckey]
 
 	if(!D)
 		to_chat(src, "<font color='red'>Error: unwarn(): No such ckey found.</font>")
@@ -674,7 +701,8 @@ var/list/admin_verbs_mod = list(
 	set desc = "Gives a spell to a mob."
 
 	var/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spells
-	if(!S) return
+	if(!S)
+		return
 	T.add_spell(new S)
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
@@ -685,7 +713,8 @@ var/list/admin_verbs_mod = list(
 	set name = "Give Disease"
 	set desc = "Gives a Disease to a mob."
 	var/datum/disease/D = input("Choose the disease to give to that guy", "ACHOO") as null|anything in diseases
-	if(!D) return
+	if(!D)
+		return
 	T.contract_disease(new D, 1)
 	feedback_add_details("admin_verb","GD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
@@ -772,7 +801,8 @@ var/list/admin_verbs_mod = list(
 /client/proc/toggle_log_hrefs()
 	set name = "Toggle href logging"
 	set category = "Server"
-	if(!holder)	return
+	if(!holder)
+		return
 	if(config)
 		if(config.log_hrefs)
 			config.log_hrefs = 0
@@ -803,7 +833,8 @@ var/list/admin_verbs_mod = list(
 	set name = "Edit Appearance"
 	set category = "Fun"
 
-	if(!check_rights(R_FUN))	return
+	if(!check_rights(R_FUN))
+		return
 
 	if(!istype(M, /mob/living/carbon/human))
 		to_chat(usr, "<span class='warning'>You can only do this to humans!</span>")
@@ -956,10 +987,12 @@ var/list/admin_verbs_mod = list(
 		while(query.NextRow())
 			var/dckey = query.item[1]
 			var/rank = query.item[2]
-			if(rank == "Removed")	continue	//This person was de-adminned. They are only in the admin list for archive purposes.
+			if(rank == "Removed")
+				continue	//This person was de-adminned. They are only in the admin list for archive purposes.
 
 			var/rights = query.item[4]
-			if(istext(rights))	rights = text2num(rights)
+			if(istext(rights))
+				rights = text2num(rights)
 			D = new /datum/admins(rank, rights, dckey)
 
 			//find the client for a ckey if they are connected and associate them with the new admin datum
@@ -974,7 +1007,8 @@ var/list/admin_verbs_mod = list(
 	set name = "Give Achievement"
 	set category = "Fun"
 
-	if(!check_rights(R_FUN))	return
+	if(!check_rights(R_FUN))
+		return
 
 	var/achoice = "Cancel"
 
@@ -983,17 +1017,21 @@ var/list/admin_verbs_mod = list(
 		return
 
 	var/mob/winner = input("Who's a winner?", "Achievement Winner", null) as null|anything in player_list
-	if(!winner)	return
+	if(!winner)
+		return
 
 	var/name = input("What will you call your achievement?", "Achievement Winner", "New Achievement", null) as null|text
-	if(!name) return
+	if(!name)
+		return
 
 	var/desc = input("What description will you give it?", "Achievement Description", "You Win", null) as null|text
-	if(!desc) return
+	if(!desc)
+		return
 
 	if(istype(winner, /mob/living))
 		achoice = alert("Give our winner his own trophy?","Achievement Trophy", "Confirm", "Cancel")
-		if(achoice == "Cancel") return
+		if(achoice == "Cancel")
+			return
 
 	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Last Question", "No!","Yes!")
 
@@ -1101,7 +1139,8 @@ var/list/admin_verbs_mod = list(
 	set desc = "Sends a fax to all fax machines."
 
 	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
-	if(!sent)	return
+	if(!sent)
+		return
 
 	var/sentname = input(src, "Pick a title for the report", "Title") as text|null
 
@@ -1123,7 +1162,8 @@ var/list/admin_verbs_mod = list(
 	switch(mission_to_load)
 		if("Choose a /datum/map_element object")
 			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
-			if(!new_map_element) return
+			if(!new_map_element)
+				return
 
 			ME = new new_map_element
 			log_admin("[key_name(src)] is trying to load [ME.file_path].")
@@ -1133,7 +1173,8 @@ var/list/admin_verbs_mod = list(
 			ME = new /datum/map_element
 			log_admin("[key_name(src)] is trying to load an external map file.")
 			var/new_file_path = input(usr, "Select a .dmm file.    WARNING: Very large map files WILL crash the server. Loading them is punishable by death.", "Map element loading") as null|file
-			if(!new_file_path) return
+			if(!new_file_path)
+				return
 
 			log_admin("[key_name(src)] has selected [new_file_path] for loading.")
 			ME.file_path = new_file_path
@@ -1156,13 +1197,16 @@ var/list/admin_verbs_mod = list(
 
 		if("Input coordinates")
 			x_coord = input(usr, "Input the X coordinate: ", "Map element loading") as null|num
-			if(x_coord == null) return
+			if(x_coord == null)
+				return
 
 			y_coord = input(usr, "Input the Y coordinate (X = [x_coord]): ", "Map element loading") as null|num
-			if(y_coord == null) return
+			if(y_coord == null)
+				return
 
 			z_coord = input(usr, "Input the Z coordinate. If it's higher than [world.maxz], a new Z-level will be created (X = [x_coord], Y = [y_coord]): ", "Map element loading") as null|num
-			if(z_coord == null) return
+			if(z_coord == null)
+				return
 
 			x_coord = Clamp(x_coord, 1, world.maxx)
 			y_coord = Clamp(y_coord, 1, world.maxy)
@@ -1201,7 +1245,8 @@ var/list/admin_verbs_mod = list(
 		to_chat(src, "<b>[(AM.name ? AM.name : AM.file_path)]</b> - <span class='info'>[(AM.desc ? AM.desc : "No description")]</span>")
 
 	var/choice = input(src, "Select an away mission to load. See chat for descriptions!", "AWAY MISSIONS") as null|anything in choices
-	if(!choice) return
+	if(!choice)
+		return
 
 	log_admin("[key_name(src)] is loading an away mission: [choice]")
 	message_admins("[key_name_admin(src)] is loading an away mission: [choice]", 1)
@@ -1211,7 +1256,8 @@ var/list/admin_verbs_mod = list(
 	var/override = 0
 	if(existing_away_missions.len)
 		var/continue_loading = alert(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway? If there are more than two away mission gateways, the station gateway will be able to teleport its users to both of them.", "AWAY MISSIONS", "Yes", "No")
-		if(!continue_loading) return
+		if(!continue_loading)
+			return
 
 		if(continue_loading == "Yes")
 			override = 1
@@ -1226,14 +1272,16 @@ var/list/admin_verbs_mod = list(
 	set desc = "Sends a message as voice to all players"
 	set popup_menu = 0
 
-	if(!check_rights(R_DEBUG)) return 0
+	if(!check_rights(R_DEBUG))
+		return 0
 
 	var/msg
 	if (args && args.len > 0)
 		msg = args[1]
 
 	msg = input(src, "Sends a message as voice to all players", "Dectalk", msg) as null|message
-	if (!msg) return 0
+	if (!msg)
+		return 0
 
 	var/audio = dectalk(msg)
 	if (audio && audio["audio"])

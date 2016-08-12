@@ -149,47 +149,57 @@
 
 			// a  .. z
 			if(97 to 122)			//Lowercase Letters
-				if(last_char_group<2)		t_out += ascii2text(ascii_char-32)	//Force uppercase first character
-				else						t_out += ascii2text(ascii_char)
+				if(last_char_group<2)
+					t_out += ascii2text(ascii_char-32)	//Force uppercase first character
+				else
+					t_out += ascii2text(ascii_char)
 				number_of_alphanumeric++
 				last_char_group = 4
 
 			// 0  .. 9
 			if(48 to 57)			//Numbers
-				if(!last_char_group)		continue	//suppress at start of string
-				if(!allow_numbers)			continue
+				if(!last_char_group)
+					continue	//suppress at start of string
+				if(!allow_numbers)
+					continue
 				t_out += ascii2text(ascii_char)
 				number_of_alphanumeric++
 				last_char_group = 3
 
 			// '  -  .
 			if(39,45,46)			//Common name punctuation
-				if(!last_char_group) continue
+				if(!last_char_group)
+					continue
 				t_out += ascii2text(ascii_char)
 				last_char_group = 2
 
 			// ~   |   @  :  #  $  %  &  *  +
 			if(126,124,64,58,35,36,37,38,42,43)			//Other symbols that we'll allow (mainly for AI)
-				if(!last_char_group)		continue	//suppress at start of string
-				if(!allow_numbers)			continue
+				if(!last_char_group)
+					continue	//suppress at start of string
+				if(!allow_numbers)
+					continue
 				t_out += ascii2text(ascii_char)
 				last_char_group = 2
 
 			//Space
 			if(32)
-				if(last_char_group <= 1)	continue	//suppress double-spaces and spaces at start of string
+				if(last_char_group <= 1)
+					continue	//suppress double-spaces and spaces at start of string
 				t_out += ascii2text(ascii_char)
 				last_char_group = 1
 			else
 				return
 
-	if(number_of_alphanumeric < 2)	return		//protects against tiny names like "A" and also names like "' ' ' ' ' ' ' '"
+	if(number_of_alphanumeric < 2)
+		return		//protects against tiny names like "A" and also names like "' ' ' ' ' ' ' '"
 
 	if(last_char_group == 1)
 		t_out = copytext(t_out,1,length(t_out))	//removes the last character (in this case a space)
 
 	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
-		if(cmptext(t_out,bad_name))	return	//(not case sensitive)
+		if(cmptext(t_out,bad_name))
+			return	//(not case sensitive)
 
 	return t_out
 
@@ -367,8 +377,10 @@ proc/checkhtml(var/t)
 
 var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
 /proc/format_watts(var/number)
-	if(number<0) return "-[format_watts(number)]"
-	if(number==0) return "0 W"
+	if(number<0)
+		return "-[format_watts(number)]"
+	if(number==0)
+		return "0 W"
 
 	var/i=1
 	while (round(number/1000) >= 1)

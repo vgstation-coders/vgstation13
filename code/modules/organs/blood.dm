@@ -188,7 +188,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 //Gets blood from mob to the container, preserving all data in it.
 /mob/living/carbon/proc/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
 	var/datum/reagent/B = (container ? get_blood(container.reagents) : null)
-	if(!B) B = new /datum/reagent/blood
+	if(!B)
+		B = new /datum/reagent/blood
 	B.holder = (container? container.reagents : null)
 	B.volume += amount
 
@@ -280,20 +281,25 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	return res
 
 proc/blood_incompatible(donor,receiver)
-	if(!donor || !receiver) return 0
+	if(!donor || !receiver)
+		return 0
 	var
 		donor_antigen = copytext(donor,1,lentext(donor))
 		receiver_antigen = copytext(receiver,1,lentext(receiver))
 		donor_rh = (findtext(donor,"+")>0)
 		receiver_rh = (findtext(receiver,"+")>0)
-	if(donor_rh && !receiver_rh) return 1
+	if(donor_rh && !receiver_rh)
+		return 1
 	switch(receiver_antigen)
 		if("A")
-			if(donor_antigen != "A" && donor_antigen != "O") return 1
+			if(donor_antigen != "A" && donor_antigen != "O")
+				return 1
 		if("B")
-			if(donor_antigen != "B" && donor_antigen != "O") return 1
+			if(donor_antigen != "B" && donor_antigen != "O")
+				return 1
 		if("O")
-			if(donor_antigen != "O") return 1
+			if(donor_antigen != "O")
+				return 1
 		//AB is a universal receiver.
 	return 0
 

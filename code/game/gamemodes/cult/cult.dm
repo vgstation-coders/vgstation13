@@ -9,8 +9,10 @@
 	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.cult)
 
 /proc/is_convertable_to_cult(datum/mind/mind)
-	if(!istype(mind))	return 0
-	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))	return 0
+	if(!istype(mind))
+		return 0
+	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))
+		return 0
 	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
 		if(L && (L.imp_in == mind.current))//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
 			return 0
@@ -269,7 +271,8 @@
 
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
-			if(!mixed) send_intercept()
+			if(!mixed)
+				send_intercept()
 		..()
 
 /datum/game_mode/cult/proc/pick_objective()

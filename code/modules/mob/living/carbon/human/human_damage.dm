@@ -93,15 +93,18 @@
 	hud_updateflag |= 1 << HEALTH_HUD
 
 /mob/living/carbon/human/Stun(amount)
-	if(M_HULK in mutations)	return
+	if(M_HULK in mutations)
+		return
 	..()
 
 /mob/living/carbon/human/Weaken(amount)
-	if(M_HULK in mutations)	return
+	if(M_HULK in mutations)
+		return
 	..()
 
 /mob/living/carbon/human/Paralyse(amount)
-	if(M_HULK in mutations)	return
+	if(M_HULK in mutations)
+		return
 	..()
 
 /mob/living/carbon/human/adjustCloneLoss(var/amount)
@@ -160,7 +163,8 @@
 //It automatically updates health status
 /mob/living/carbon/human/heal_organ_damage(var/brute, var/burn)
 	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
-	if(!parts.len)	return
+	if(!parts.len)
+		return
 	var/datum/organ/external/picked = pick(parts)
 	if(picked.heal_damage(brute,burn))
 		UpdateDamageIcon()
@@ -176,7 +180,8 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 //It automatically updates health status
 /mob/living/carbon/human/take_organ_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0)
 	var/list/datum/organ/external/parts = get_damageable_organs()
-	if(!parts.len)	return
+	if(!parts.len)
+		return
 	var/datum/organ/external/picked = pick(parts)
 	if(picked.take_damage(brute,burn,sharp,edge))
 		UpdateDamageIcon()
@@ -205,7 +210,8 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 	updatehealth()
 	hud_updateflag |= 1 << HEALTH_HUD
 	//speech_problem_flag = 1
-	if(update)	UpdateDamageIcon()
+	if(update)
+		UpdateDamageIcon()
 
 // damage MANY external organs, in random order
 /mob/living/carbon/human/take_overall_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/used_weapon = null)
@@ -214,7 +220,8 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 	if(species && species.brute_mod)
 		brute = brute*species.brute_mod
 
-	if(status_flags & GODMODE)	return	//godmode
+	if(status_flags & GODMODE)
+		return	//godmode
 	var/list/datum/organ/external/parts = get_damageable_organs()
 	var/update = 0
 	while(parts.len && (brute>0 || burn>0) )
@@ -230,7 +237,8 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 		parts -= picked
 	updatehealth()
 	hud_updateflag |= 1 << HEALTH_HUD
-	if(update)	UpdateDamageIcon()
+	if(update)
+		UpdateDamageIcon()
 
 
 ////////////////////////////////////////////
@@ -263,7 +271,8 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/proc/get_organ(var/zone)
-	if(!zone)	zone = LIMB_CHEST
+	if(!zone)
+		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
 		zone = LIMB_HEAD
 	return organs_by_name[zone]
@@ -275,15 +284,18 @@ This function restores all organs.
 		..(damage, damagetype, def_zone, blocked)
 		return 1
 
-	if(blocked >= 2)	return 0
+	if(blocked >= 2)
+		return 0
 
 	var/datum/organ/external/organ = null
 	if(isorgan(def_zone))
 		organ = def_zone
 	else
-		if(!def_zone)	def_zone = ran_zone(def_zone)
+		if(!def_zone)
+			def_zone = ran_zone(def_zone)
 		organ = get_organ(check_zone(def_zone))
-	if(!organ)	return 0
+	if(!organ)
+		return 0
 
 	if(blocked)
 		damage = (damage/(blocked+1))
@@ -305,7 +317,8 @@ This function restores all organs.
 	hud_updateflag |= 1 << HEALTH_HUD
 
 	//Embedded projectile code.
-	if(!organ) return
+	if(!organ)
+		return
 /*/vg/ EDIT
 	if(istype(used_weapon,/obj/item/weapon))
 		var/obj/item/weapon/W = used_weapon  //Sharp objects will always embed if they do enough damage.

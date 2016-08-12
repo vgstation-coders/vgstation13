@@ -62,9 +62,11 @@
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_CONVEYORS)
 
 /obj/machinery/conveyor/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
-	if(id_tag != signal.data["tag"] || !signal.data["command"]) return
+	if(id_tag != signal.data["tag"] || !signal.data["command"])
+		return
 	switch(signal.data["command"])
 		if("forward")
 			operating = 1
@@ -123,14 +125,22 @@
 /proc/conveyor_directions(var/dir, var/reverse = 0)
 	var/list/dirs = list()
 	switch(dir)
-		if(NORTH) dirs = list(NORTH, SOUTH)
-		if(SOUTH) dirs = list(SOUTH, NORTH)
-		if(EAST)  dirs = list(EAST, WEST)
-		if(WEST)  dirs = list(WEST, EAST)
-		if(NORTHEAST) dirs = list(EAST, SOUTH)
-		if(NORTHWEST) dirs = list(SOUTH, WEST)
-		if(SOUTHEAST) dirs = list(NORTH, EAST)
-		if(SOUTHWEST) dirs = list(WEST, NORTH)
+		if(NORTH)
+			dirs = list(NORTH, SOUTH)
+		if(SOUTH)
+			dirs = list(SOUTH, NORTH)
+		if(EAST)
+			dirs = list(EAST, WEST)
+		if(WEST)
+			dirs = list(WEST, EAST)
+		if(NORTHEAST)
+			dirs = list(EAST, SOUTH)
+		if(NORTHWEST)
+			dirs = list(SOUTH, WEST)
+		if(SOUTHEAST)
+			dirs = list(NORTH, EAST)
+		if(SOUTHWEST)
+			dirs = list(WEST, NORTH)
 	if(reverse)
 		dirs.Swap(1,2)
 	return dirs
@@ -233,7 +243,8 @@
 
 /obj/machinery/conveyor/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	. = ..()
-	if(.) return .
+	if(.)
+		return .
 	if("setdir" in href_list)
 		operating=0
 		dir=text2num(href_list["setdir"])
@@ -338,10 +349,13 @@
 	convdir = -1
 
 /obj/machinery/conveyor_switch/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption) return
-	if(src == signal.source) return
+	if(!signal || signal.encryption)
+		return
+	if(src == signal.source)
+		return
 
-	if(id_tag != signal.data["tag"] || !signal.data["command"]) return
+	if(id_tag != signal.data["tag"] || !signal.data["command"])
+		return
 	if(!convdir)
 		switch(signal.data["command"])
 			if("forward")
@@ -478,7 +492,8 @@
 
 /obj/machinery/conveyor_switch/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	. = ..()
-	if(.) return
+	if(.)
+		return
 	if("setconvdir" in href_list)
 		convdir = text2num(href_list["setconvdir"])
 		updateConfig()

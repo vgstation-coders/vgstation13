@@ -148,7 +148,8 @@
 /obj/structure/displaycase/blob_act()
 	if (prob(75))
 		getFromPool(/obj/item/weapon/shard, loc)
-		if(occupant) dump()
+		if(occupant)
+			dump()
 		qdel(src)
 
 /obj/structure/displaycase/proc/healthcheck()

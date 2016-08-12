@@ -147,8 +147,10 @@
 			return
 
 
-		if(iscultist(M)) return
-		if(!ishuman(M) && !isrobot(M)) return
+		if(iscultist(M))
+			return
+		if(!ishuman(M) && !isrobot(M))
+			return
 
 		M.monkeyizing = 1
 		M.canmove = 0

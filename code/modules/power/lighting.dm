@@ -407,12 +407,14 @@ var/global/list/obj/machinery/light/alllights = list()
 	return areaMaster.lightswitch && areaMaster.power_light
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
-	if(flickering) return
+	if(flickering)
+		return
 	flickering = 1
 	spawn(0)
 		if(on && status == LIGHT_OK)
 			for(var/i = 0; i < amount; i++)
-				if(status != LIGHT_OK) break
+				if(status != LIGHT_OK)
+					break
 				on = !on
 				update(0)
 				sleep(rand(5, 15))
@@ -423,7 +425,8 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 
 /obj/machinery/light/attack_ghost(mob/user)
-	if(blessed) return
+	if(blessed)
+		return
 	src.add_hiddenprint(user)
 	src.flicker(1)
 	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
@@ -457,7 +460,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	return
 
 /obj/machinery/light/attack_animal(mob/living/simple_animal/M)
-	if(M.melee_damage_upper == 0)	return
+	if(M.melee_damage_upper == 0)
+		return
 	if(status == LIGHT_EMPTY||status == LIGHT_BROKEN)
 		to_chat(M, "<span class='warning'>That object is useless to you.</span>")
 		return
@@ -473,7 +477,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(isobserver(user))
 		return
 
-	if(!Adjacent(user)) return
+	if(!Adjacent(user))
+		return
 
 	add_fingerprint(user)
 

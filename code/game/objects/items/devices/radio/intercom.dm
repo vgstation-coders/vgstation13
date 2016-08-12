@@ -85,7 +85,8 @@
 					update_icon()
 					processing_objects.Remove(src)
 				return 1
-			else return ..()
+			else
+				return ..()
 		if(2)
 			if(isscrewdriver(W))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

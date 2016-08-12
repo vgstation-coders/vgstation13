@@ -42,7 +42,8 @@ var/global/list/tv_monitors = list()
 	if (src.z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
-	if(stat & (NOPOWER|BROKEN))	return
+	if(stat & (NOPOWER|BROKEN))
+		return
 
 	if(!isAI(user))
 		user.set_machine(src)

@@ -236,8 +236,10 @@
 
 
 /obj/item/toy/crossbow/afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
-	if(!isturf(target.loc) || target == user) return
-	if(flag) return
+	if(!isturf(target.loc) || target == user)
+		return
+	if(flag)
+		return
 
 	if (locate (/obj/structure/table, src.loc))
 		return
@@ -251,12 +253,15 @@
 
 		for(var/i=0, i<6, i++)
 			if (D)
-				if(D.loc == trg) break
+				if(D.loc == trg)
+					break
 				step_towards(D,trg)
 
 				for(var/mob/living/M in D.loc)
-					if(!istype(M,/mob/living)) continue
-					if(M == user) continue
+					if(!istype(M,/mob/living))
+						continue
+					if(M == user)
+						continue
 					for(var/mob/O in viewers(world.view, D))
 						O.show_message(text("<span class = 'danger'>[] was hit by the foam dart!</span>", M), 1)
 					new /obj/item/toy/ammo/crossbow(M.loc)
@@ -265,7 +270,8 @@
 					return
 
 				for(var/atom/A in D.loc)
-					if(A == user) continue
+					if(A == user)
+						continue
 					if(A.density)
 						new /obj/item/toy/ammo/crossbow(A.loc)
 						qdel(D)
@@ -303,7 +309,8 @@
 		src.bullets--
 	else if (M.lying && src.bullets == 0)
 		for(var/mob/O in viewers(M, null))
-			if (O.client)	O.show_message(text("<span class = 'danger'><B>[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</B></span>", user, M), 1, "<span class = 'danger'>You hear someone fall</span>", 2)
+			if (O.client)
+				O.show_message(text("<span class = 'danger'><B>[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</B></span>", user, M), 1, "<span class = 'danger'>You hear someone fall</span>", 2)
 		user.Weaken(5)
 	return
 

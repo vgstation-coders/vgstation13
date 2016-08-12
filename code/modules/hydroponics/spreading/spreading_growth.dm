@@ -29,7 +29,8 @@
 		neighbor.neighbors -= T
 
 /obj/effect/plantsegment/process()
-	if(timestopped) return 0
+	if(timestopped)
+		return 0
 
 	// Something is very wrong, kill ourselves.
 	if(!seed)
@@ -53,7 +54,8 @@
 	if(health < max_health)
 		health = min(max_health, health + rand(3,5))
 
-	if(prob(80)) age++
+	if(prob(80))
+		age++
 
 	if(!harvest && prob(3) && age > mature_time + seed.production)
 		harvest = 1
@@ -113,7 +115,8 @@
 
 /obj/effect/plantsegment/proc/die_off()
 	if(seed && harvest)
-		if(harvest && prob(10)) seed.harvest(src)
+		if(harvest && prob(10))
+			seed.harvest(src)
 	// This turf is clear now, let our buddies know.
 	for(var/turf/simulated/check_turf in get_cardinal_neighbors())
 		if(!istype(check_turf))

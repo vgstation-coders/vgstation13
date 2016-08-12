@@ -208,7 +208,8 @@ Runs a function block or a proc with the arguments specified in the script.
 
 	else if(istype(stmt.object))				//A method of an object exposed as a variable is being called, stmt.object is a /node/identifier
 		var/O = GetVariable(stmt.object.id_name)	//Gets a reference to the object which is the target of the function call.
-		if(!O) return							//Error already thrown in GetVariable()
+		if(!O)
+			return							//Error already thrown in GetVariable()
 		def = Eval(O)
 
 	if(!def)
@@ -216,7 +217,8 @@ Runs a function block or a proc with the arguments specified in the script.
 
 	cur_recursion++ // add recursion
 	if(istype(def))
-		if(curFunction) functions.Push(curFunction)
+		if(curFunction)
+			functions.Push(curFunction)
 		var/datum/scope/S = CreateScope(def.block)
 
 		for(var/i = 1 to def.parameters.len)
@@ -365,13 +367,18 @@ S     - The scope the variable resides in. If it is null, a scope with the varia
 */
 
 /datum/n_Interpreter/proc/AssignVariable(name, datum/node/expression/value, var/datum/scope/S = null)
-	if(!S) S = GetVariableScope(name)
-	if(!S) S = curScope
-	if(!S) S = globalScope
+	if(!S)
+		S = GetVariableScope(name)
+	if(!S)
+		S = curScope
+	if(!S)
+		S = globalScope
 
 	ASSERT(istype(S))
-	if(istext(value) || isnum(value) || isnull(value))	value = new/datum/node/expression/value/literal(value)
-	else if(!istype(value) && isobject(value))			value = new/datum/node/expression/value/reference(value)
+	if(istext(value) || isnum(value) || isnull(value))
+		value = new/datum/node/expression/value/literal(value)
+	else if(!istype(value) && isobject(value))
+		value = new/datum/node/expression/value/reference(value)
 	//TODO: check for invalid name
 	S.variables["[name]"] = value
 

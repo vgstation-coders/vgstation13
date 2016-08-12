@@ -61,7 +61,8 @@
 					var filter_text = document.getElementById('filter');
 					var filter = filter_text.value.toLowerCase();
 
-					if(event.keyCode == 13){	//Enter / return
+					if(event.keyCode == 13)
+						{	//Enter / return
 						var vars_ol = document.getElementById('vars');
 						var lis = vars_ol.getElementsByTagName("li");
 						for ( var i = 0; i < lis.length; ++i )
@@ -71,7 +72,8 @@
 								if ( li.style.backgroundColor == "#ffee88" )
 								{
 									alist = lis\[i\].getElementsByTagName("a")
-									if(alist.length > 0){
+									if(alist.length > 0)
+										{
 										location.href=alist\[0\].href;
 									}
 								}
@@ -80,7 +82,8 @@
 						return
 					}
 
-					if(event.keyCode == 38){	//Up arrow
+					if(event.keyCode == 38)
+						{	//Up arrow
 						var vars_ol = document.getElementById('vars');
 						var lis = vars_ol.getElementsByTagName("li");
 						for ( var i = 0; i < lis.length; ++i )
@@ -89,7 +92,8 @@
 								var li = lis\[i\];
 								if ( li.style.backgroundColor == "#ffee88" )
 								{
-									if( (i-1) >= 0){
+									if( (i-1) >= 0)
+										{
 										var li_new = lis\[i-1\];
 										li.style.backgroundColor = "white";
 										li_new.style.backgroundColor = "#ffee88";
@@ -101,7 +105,8 @@
 						return
 					}
 
-					if(event.keyCode == 40){	//Down arrow
+					if(event.keyCode == 40)
+						{	//Down arrow
 						var vars_ol = document.getElementById('vars');
 						var lis = vars_ol.getElementsByTagName("li");
 						for ( var i = 0; i < lis.length; ++i )
@@ -110,7 +115,8 @@
 								var li = lis\[i\];
 								if ( li.style.backgroundColor == "#ffee88" )
 								{
-									if( (i+1) < lis.length){
+									if( (i+1) < lis.length)
+										{
 										var li_new = lis\[i+1\];
 										li.style.backgroundColor = "white";
 										li_new.style.backgroundColor = "#ffee88";
@@ -123,12 +129,14 @@
 					}
 
 					//This part here resets everything to how it was at the start so the filter is applied to the complete list. Screw efficiency, it's client-side anyway and it only looks through 200 or so variables at maximum anyway (mobs).
-					if(complete_list != null && complete_list != ""){
+					if(complete_list != null && complete_list != "")
+						{
 						var vars_ol1 = document.getElementById("vars");
 						vars_ol1.innerHTML = complete_list
 					}
 
-					if(filter.value == ""){
+					if(filter.value == "")
+						{
 						return;
 					}else{
 						var vars_ol = document.getElementById('vars');
@@ -150,7 +158,8 @@
 					for ( var j = 0; j < lis_new.length; ++j )
 					{
 						var li1 = lis\[j\];
-						if (j == 0){
+						if (j == 0)
+							{
 							li1.style.backgroundColor = "#ffee88";
 						}else{
 							li1.style.backgroundColor = "white";
@@ -169,7 +178,8 @@
 
 				function loadPage(list) {
 
-					if(list.options\[list.selectedIndex\].value == ""){
+					if(list.options\[list.selectedIndex\].value == "")
+						{
 						return;
 					}
 
@@ -752,7 +762,8 @@ body
 				animate(A, alpha = 255, time = stealthy_level)
 
 	else if(href_list["teleport_to"])
-		if(!check_rights(0))	return
+		if(!check_rights(0))
+			return
 
 		var/mob/user = usr
 		if(!istype(user))
@@ -794,8 +805,10 @@ body
 			return
 
 		switch(href_list["rotatedir"])
-			if("right")	A.dir = turn(A.dir, -45)
-			if("left")	A.dir = turn(A.dir, 45)
+			if("right")
+				A.dir = turn(A.dir, -45)
+			if("left")
+				A.dir = turn(A.dir, 45)
 		href_list["datumrefresh"] = href_list["rotatedatum"]
 
 	else if(href_list["makemonkey"])
@@ -922,7 +935,8 @@ body
 			to_chat(usr, "Failed! Something went wrong.")
 
 	else if(href_list["addlanguage"])
-		if(!check_rights(R_SPAWN))	return
+		if(!check_rights(R_SPAWN))
+			return
 
 		var/mob/H = locate(href_list["addlanguage"])
 		if(!istype(H))
@@ -944,7 +958,8 @@ body
 			to_chat(usr, "Mob already knows that language.")
 
 	else if(href_list["remlanguage"])
-		if(!check_rights(R_SPAWN))	return
+		if(!check_rights(R_SPAWN))
+			return
 
 		var/mob/H = locate(href_list["remlanguage"])
 		if(!istype(H))
@@ -970,7 +985,8 @@ body
 			to_chat(usr, "Mob doesn't know that language.")
 
 	else if(href_list["regenerateicons"])
-		if(!check_rights(0))	return
+		if(!check_rights(0))
+			return
 
 		var/mob/M = locate(href_list["regenerateicons"])
 		if(!ismob(M))
@@ -979,10 +995,12 @@ body
 		M.regenerate_icons()
 
 	else if(href_list["adjustDamage"] && href_list["mobToDamage"])
-		if(!check_rights(R_DEBUG|R_ADMIN|R_FUN))	return
+		if(!check_rights(R_DEBUG|R_ADMIN|R_FUN))
+			return
 
 		var/mob/living/L = locate(href_list["mobToDamage"])
-		if(!istype(L)) return
+		if(!istype(L))
+			return
 
 		var/Text = href_list["adjustDamage"]
 
@@ -993,12 +1011,18 @@ body
 			return
 
 		switch(Text)
-			if("brute")	L.adjustBruteLoss(amount)
-			if("fire")	L.adjustFireLoss(amount)
-			if("toxin")	L.adjustToxLoss(amount)
-			if("oxygen")L.adjustOxyLoss(amount)
-			if("brain")	L.adjustBrainLoss(amount)
-			if("clone")	L.adjustCloneLoss(amount)
+			if("brute")
+				L.adjustBruteLoss(amount)
+			if("fire")
+				L.adjustFireLoss(amount)
+			if("toxin")
+				L.adjustToxLoss(amount)
+			if("oxygen")
+				L.adjustOxyLoss(amount)
+			if("brain")
+				L.adjustBrainLoss(amount)
+			if("clone")
+				L.adjustCloneLoss(amount)
 			else
 				to_chat(usr, "You caused an error. DEBUG: Text:[Text] Mob:[L]")
 				return

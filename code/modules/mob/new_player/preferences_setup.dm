@@ -144,7 +144,8 @@ datum/preferences
 		preview_icon = null
 
 		var/g = "m"
-		if(gender == FEMALE)	g = "f"
+		if(gender == FEMALE)
+			g = "f"
 
 		var/icon/icobase
 		var/datum/species/current_species = all_species[species]
@@ -177,7 +178,8 @@ datum/preferences
 				organ_data[name] = null
 
 		for(var/name in organ_data)
-			if(organ_data[name] == "amputated") continue
+			if(organ_data[name] == "amputated")
+				continue
 
 			var/o_icobase=icobase
 			if(organ_data[name] == "peg")

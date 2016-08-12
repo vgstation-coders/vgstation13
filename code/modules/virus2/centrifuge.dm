@@ -42,7 +42,8 @@
 
 	var/mob/living/carbon/C = user
 	if(!sample)
-		if(!C.drop_item(I, src)) return 1
+		if(!C.drop_item(I, src))
+			return 1
 
 		sample = I
 

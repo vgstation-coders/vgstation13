@@ -40,7 +40,8 @@
 		return
 
 	var/mob/living/our_mob = G.affecting
-	if(!istype(our_mob)) return
+	if(!istype(our_mob))
+		return
 
 	if(occupant)
 		to_chat(user, "<span class='warning'>[occupant.name] is already hanging from \the [src], finish collecting its meat first!</span>")

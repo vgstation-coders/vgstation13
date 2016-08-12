@@ -10,7 +10,8 @@ mob/verb/Convert(filename as file)
 
 proc/d2sm_prepmap(filename)
 	var/txt = file2text(filename)
-	if(!txt) return
+	if(!txt)
+		return
 	var/i,j
 	i=findText(txt,ascii2text(13))	// eliminate carriage returns
 	while(i)
@@ -75,17 +76,22 @@ proc/dmp2swapmap(filename)
 				to_chat(world, "Corrupt map file [filename]: Type list following \"[code]\" has only 1 item")
 				return
 			txt=k?copytext(txt,k+1):null
-			if(L[L.len] == "[world.area]") L[L.len]=0
+			if(L[L.len] == "[world.area]")
+				L[L.len]=0
 			else
-				if(!areas) areas=list()
+				if(!areas)
+					areas=list()
 				i=areas.Find(L[L.len])
-				if(i) L[L.len]=i
+				if(i)
+					L[L.len]=i
 				else
 					areas+=L[L.len]
 					L[L.len]=areas.len
 			var/codetrans=d2sm_ConvertType(L[L.len-1],"\t\t\t\t")
-			if(L[L.len]) codetrans+="\t\t\t\tAREA = [L[L.len]]\n"
-			if(L.len>2) codetrans+=d2sm_Contents(L,L.len-2,"\t\t\t\t")
+			if(L[L.len])
+				codetrans+="\t\t\t\tAREA = [L[L.len]]\n"
+			if(L.len>2)
+				codetrans+=d2sm_Contents(L,L.len-2,"\t\t\t\t")
 			codes[code]=copytext(codetrans,1,length(codetrans))
 		else if(text2ascii(txt)==40)
 			mode=40
@@ -120,7 +126,8 @@ proc/dmp2swapmap(filename)
 			var/_x=0,_y=0
 			for(i=1,,++_y)
 				j=findText(mtxt,"\n",i+1)
-				if(!j) break
+				if(!j)
+					break
 				_x=max(_x,(j-i-1)/codelen)
 				i=j
 			X=max(X,_x)
@@ -153,8 +160,10 @@ proc/dmp2swapmap(filename)
 		// skip all non-data sections
 		if(text2ascii(txt)!=40)
 			i=findText(txt,"\n")
-			if(i) txt=copytext(txt,i+1)
-			else txt=null
+			if(i)
+				txt=copytext(txt,i+1)
+			else
+				txt=null
 			continue
 		i=d2sm_MatchBrace(txt,1,40)
 		var/list/coords=d2sm_ParseCommaList(copytext(txt,2,i))
@@ -164,7 +173,8 @@ proc/dmp2swapmap(filename)
 		var/_x=0,_y=0
 		for(i=1,,++_y)
 			j=findText(mtxt,"\n",i+1)
-			if(!j) break
+			if(!j)
+				break
 			_x=max(_x,(j-i-1)/codelen)
 			i=j
 		// print out this z-level now
@@ -191,7 +201,8 @@ proc/d2sm_ParseCommaList(txt)
 	var/list/L=new
 	var/i,ch
 	for(i=1,i<=length(txt),++i)
-		if(text2ascii(txt,i)>32) break
+		if(text2ascii(txt,i)>32)
+			break
 	for(,i<=length(txt),++i)
 		ch=text2ascii(txt,i)
 		if(ch==44)
@@ -201,27 +212,35 @@ proc/d2sm_ParseCommaList(txt)
 			i=0;continue
 		if(ch==40 || ch==91 || ch==123)
 			i=d2sm_MatchBrace(txt,i,ch)
-			if(!i) return "No matching brace found for [ascii2text(ch)]"
-	if(i>1) L+=copytext(txt,1,i)
+			if(!i)
+				return "No matching brace found for [ascii2text(ch)]"
+	if(i>1)
+		L+=copytext(txt,1,i)
 	return L
 
 proc/d2sm_MatchBrace(txt, i, which)
-	if(which==40) ++which
-	else which+=2
+	if(which==40)
+		++which
+	else
+		which+=2
 	var/j,ch
 	for(j=i+1,j<=length(txt),++j)
 		ch=text2ascii(txt,j)
-		if(ch==which) return j
+		if(ch==which)
+			return j
 		if(ch==40 || ch==91 || ch==123)
 			j=d2sm_MatchBrace(txt,j,ch)
-			if(!j) return 0
+			if(!j)
+				return 0
 
 proc/d2sm_ConvertType(tt,tabs="")
 	var/i=findText(tt,"{")
-	if(!i) return "[tabs]type = [tt]\n"
+	if(!i)
+		return "[tabs]type = [tt]\n"
 	.="[tabs]type = [copytext(tt,1,i)]\n"
 	var/list/L=d2sm_ParseCommaList(copytext(tt,i+1,d2sm_MatchBrace(tt,i,123)))
-	if(istext(L)) return
+	if(istext(L))
+		return
 	for(var/pair in L)
 		.="[.][tabs][pair]\n"
 

@@ -107,7 +107,8 @@
 	for(var/obj/item/I in hold)
 		if(istype(I,/obj/item/weapon/hatchet/unathiknife))
 			count++
-	if(count>2) count = 2
+	if(count>2)
+		count = 2
 	item_state = "unathiharness[count]"
 	icon_state = item_state
 	_color = item_state

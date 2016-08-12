@@ -99,7 +99,8 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_hand(mob/user)
-	if(buildstage != 2) return
+	if(buildstage != 2)
+		return
 	on = !on
 
 	areaMaster.lightswitch = on

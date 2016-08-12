@@ -152,7 +152,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			D.linked_console = src
 			D.update_icon()
 	for(var/obj/machinery/r_n_d/D in linked_machines)
-		if(linked_lathe && linked_destroy && linked_imprinter) break // stop if we have all of our linked
+		if(linked_lathe && linked_destroy && linked_imprinter)
+			break // stop if we have all of our linked
 		switch(D.type)
 			if(/obj/machinery/r_n_d/fabricator/protolathe)
 				if(!linked_lathe)
@@ -251,7 +252,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			griefProtection() //Update centcomm too
 
 	else if(href_list["hax"]) // aww shit
-		if(!usr.client.holder) return
+		if(!usr.client.holder)
+			return
 		screen = 0.0
 		spawn(50)
 			Maximize()
@@ -317,7 +319,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
 			else
 				var/choice = input("Proceeding will destroy loaded item.") in list("Proceed", "Cancel")
-				if(choice == "Cancel" || !linked_destroy) return
+				if(choice == "Cancel" || !linked_destroy)
+					return
 				linked_destroy.busy = 1
 				screen = 0.1
 				updateUsrDialog()
@@ -403,7 +406,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		sync = !sync
 
 	else if(href_list["build"]) //Causes the Protolathe to build something.
-		if (!autorefresh) updateAfter = 0 //STOP
+		if (!autorefresh)
+			updateAfter = 0 //STOP
 		if(linked_lathe)
 			var/datum/design/being_built = null
 			for(var/datum/design/D in files.known_designs)
@@ -419,7 +423,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				var/n
 				if (href_list["customamt"])
 					n = round(input("Queue how many? (Maximum [RESEARCH_MAX_Q_LEN - linked_lathe.queue.len])", "Protolathe Queue") as num|null)
-					if (!linked_lathe) return //in case the 'lathe gets unlinked or destroyed or someshit while the popup is open
+					if (!linked_lathe)
+						return //in case the 'lathe gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
 				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_lathe.queue.len)
@@ -430,7 +435,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					linked_lathe.stopped=0
 
 	else if(href_list["imprint"]) //Causes the Circuit Imprinter to build something.
-		if (!autorefresh) updateAfter = 0 //STOP
+		if (!autorefresh)
+			updateAfter = 0 //STOP
 		if(linked_imprinter)
 			var/datum/design/being_built = null
 
@@ -450,7 +456,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				var/n
 				if (href_list["customamt"])
 					n = round(input("Queue how many? (Maximum [RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len])", "Circuit Imprinter Queue") as num|null)
-					if (!linked_imprinter) return //in case the imprinter gets unlinked or destroyed or someshit while the popup is open
+					if (!linked_imprinter)
+						return //in case the imprinter gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
 				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len)
@@ -534,7 +541,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			to_chat(usr, "Unauthorized Access.")
 			return
 		var/desired_num_sheets = text2num(href_list["imprinter_ejectsheet_amt"])
-		if (desired_num_sheets <= 0) return
+		if (desired_num_sheets <= 0)
+			return
 		var/matID=href_list["imprinter_ejectsheet"]
 		var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 		if(!istype(M))
@@ -607,7 +615,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(href_list["toggleAutoRefresh"]) //STOP
 		autorefresh = !autorefresh
 
-	if (updateAfter) updateUsrDialog()
+	if (updateAfter)
+		updateUsrDialog()
 	return
 
 /obj/machinery/computer/rdconsole/proc/protolathe_header()
@@ -661,9 +670,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	switch(screen)
 
 		//////////////////////R&D CONSOLE SCREENS//////////////////
-		if(0.0) dat += "Updating Database...."
+		if(0.0)
+			dat += "Updating Database...."
 
-		if(0.1) dat += "Processing and Updating Database..."
+		if(0.1)
+			dat += "Processing and Updating Database..."
 
 		if(0.2)
 
@@ -679,13 +690,20 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += {"Main Menu:<BR><BR>
 				<A href='?src=\ref[src];menu=1.1'>Current Research Levels</A><BR>"}
-			if(t_disk) dat += "<A href='?src=\ref[src];menu=1.2'>Disk Operations</A><BR>"
-			else if(d_disk) dat += "<A href='?src=\ref[src];menu=1.4'>Disk Operations</A><BR>"
-			else dat += "(Please Insert Disk)<BR>"
-			if(linked_destroy != null) dat += "<A href='?src=\ref[src];menu=2.2'>Destructive Analyzer Menu</A><BR>"
-			if(linked_lathe != null) dat += "<A href='?src=\ref[src];menu=3.1'>Protolathe Construction Menu</A><BR>"
-			if(linked_imprinter != null) dat += "<A href='?src=\ref[src];menu=4.1'>Circuit Construction Menu</A><BR>"
-			if(user.client.holder) dat += "<A href='?src=\ref[src];hax=1'>MAXIMUM SCIENCE</A><BR>"
+			if(t_disk)
+				dat += "<A href='?src=\ref[src];menu=1.2'>Disk Operations</A><BR>"
+			else if(d_disk)
+				dat += "<A href='?src=\ref[src];menu=1.4'>Disk Operations</A><BR>"
+			else
+				dat += "(Please Insert Disk)<BR>"
+			if(linked_destroy != null)
+				dat += "<A href='?src=\ref[src];menu=2.2'>Destructive Analyzer Menu</A><BR>"
+			if(linked_lathe != null)
+				dat += "<A href='?src=\ref[src];menu=3.1'>Protolathe Construction Menu</A><BR>"
+			if(linked_imprinter != null)
+				dat += "<A href='?src=\ref[src];menu=4.1'>Circuit Construction Menu</A><BR>"
+			if(user.client.holder)
+				dat += "<A href='?src=\ref[src];hax=1'>MAXIMUM SCIENCE</A><BR>"
 			dat += "<A href='?src=\ref[src];menu=1.6'>Settings</A>"
 
 		if(1.1) //Research viewer
@@ -738,13 +756,18 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += {"Name: [d_disk.blueprint.name]<BR>
 					Level: [Clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
 				switch(d_disk.blueprint.build_type)
-					if(IMPRINTER) dat += "Lathe Type: Circuit Imprinter<BR>"
-					if(PROTOLATHE) dat += "Lathe Type: Proto-lathe<BR>"
-					if(AUTOLATHE) dat += "Lathe Type: Auto-lathe<BR>"
+					if(IMPRINTER)
+						dat += "Lathe Type: Circuit Imprinter<BR>"
+					if(PROTOLATHE)
+						dat += "Lathe Type: Proto-lathe<BR>"
+					if(AUTOLATHE)
+						dat += "Lathe Type: Auto-lathe<BR>"
 				dat += "Required Materials:<BR>"
 				for(var/M in d_disk.blueprint.materials)
-					if(copytext(M, 1, 2) == "$") dat += "* [copytext(M, 2)] x [d_disk.blueprint.materials[M]]<BR>"
-					else dat += "* [M] x [d_disk.blueprint.materials[M]]<BR>"
+					if(copytext(M, 1, 2) == "$")
+						dat += "* [copytext(M, 2)] x [d_disk.blueprint.materials[M]]<BR>"
+					else
+						dat += "* [M] x [d_disk.blueprint.materials[M]]<BR>"
 
 				dat += {"<HR>Operations:
 					<A href='?src=\ref[src];updt_design=1'>Upload to Database</A> ||

@@ -10,7 +10,8 @@
 	attack_hand(mob/user as mob)
 		switch(alert("Travel back to ss13?",,"Yes","No"))
 			if("Yes")
-				if(user.z != src.z)	return
+				if(user.z != src.z)
+					return
 				user.loc.loc.Exited(user)
 				user.loc = pick(latejoin)
 			if("No")
@@ -369,7 +370,8 @@ var/global/list/PDA_Manifest = list()
 			if(L.client)
 				L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
 			if(L.mind != owner)
-				if(!L.stat) L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+				if(!L.stat)
+					L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 				//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
 				//L.update_canmove()
 				if(!(L in ourspell.affected))

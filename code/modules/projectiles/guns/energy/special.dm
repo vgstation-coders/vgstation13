@@ -65,9 +65,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/staff/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(200)
 	return 1
 
@@ -75,7 +77,8 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	return
 
 /obj/item/weapon/gun/energy/staff/process_chambered()
-	if(!..()) return 0
+	if(!..())
+		return 0
 	var/obj/item/projectile/change/P=in_chamber
 	if(P && istype(P))
 		P.changetype=changetype
@@ -235,9 +238,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/floragun/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(100)
 	update_icon()
 	return 1
@@ -326,9 +331,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/meteorgun/process()
 	charge_tick++
-	if(charge_tick < recharge_time) return 0
+	if(charge_tick < recharge_time)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(100)
 
 /obj/item/weapon/gun/energy/meteorgun/update_icon()
@@ -422,10 +429,12 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
-	if(charge_tick < 3) return 0
+	if(charge_tick < 3)
+		return 0
 	charge_tick = 0
 
-	if(!power_supply) return 0 //sanity
+	if(!power_supply)
+		return 0 //sanity
 	if(isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
 		if(R && R.cell)
@@ -464,9 +473,11 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/radgun/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(100)
 	update_icon()
 	return 1
@@ -505,7 +516,8 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	power_supply.charge = 0
 
 /obj/item/weapon/gun/energy/bison/attack_self(mob/user as mob)
-	if(pumping || !power_supply)	return
+	if(pumping || !power_supply)
+		return
 	pumping = 1
 	power_supply.charge = min(power_supply.charge + 200,power_supply.maxcharge)
 	if(power_supply.charge >= power_supply.maxcharge)
@@ -634,9 +646,11 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/polarstar/spur/process()
 	charge_tick++
-	if(charge_tick < 2) return 0
+	if(charge_tick < 2)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(100)
 	levelChange()
 	return 1

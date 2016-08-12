@@ -27,7 +27,8 @@
 		set desc = "Click to rename your gun. If you're the detective."
 
 		var/mob/M = usr
-		if(!M.mind)	return 0
+		if(!M.mind)
+			return 0
 		if(!M.mind.assigned_role == "Detective")
 			to_chat(M, "<span class='notice'>You don't feel cool enough to name this gun, chump.</span>")
 			return 0
@@ -112,7 +113,8 @@
 
 /obj/item/weapon/gun/projectile/russian/attackby(var/obj/item/A as obj, mob/user as mob)
 
-	if(!A) return
+	if(!A)
+		return
 
 	var/num_loaded = 0
 	if(istype(A, /obj/item/ammo_casing)) //loading rounds one by one

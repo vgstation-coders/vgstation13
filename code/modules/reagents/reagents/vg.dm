@@ -14,7 +14,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#333333" // rgb: 200, 16, 64
 
 /datum/reagent/charcoal/on_mob_life(var/mob/living/M as mob)
-	if(!M) M = holder.my_atom
+	if(!M)
+		M = holder.my_atom
 
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H=M

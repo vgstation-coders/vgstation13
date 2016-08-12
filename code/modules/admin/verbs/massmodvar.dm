@@ -5,7 +5,8 @@
 
 	var/method = 0	//0 means strict type detection while 1 means this type and all subtypes (IE: /obj/item with this set to 1 will set it to ALL itms)
 
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT))
+		return
 
 	if(A && A.type)
 		if(typesof(A.type))
@@ -24,7 +25,8 @@
 
 
 /client/proc/massmodify_variables(var/atom/O, var/var_name = "", var/method = 0)
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT))
+		return
 
 	var/list/locked = list("vars", "key", "ckey", "client")
 
@@ -47,13 +49,15 @@
 	else
 		variable = var_name
 
-	if(!variable)	return
+	if(!variable)
+		return
 	var/default
 	var/var_value = O.vars[variable]
 	var/dir
 
 	if(variable == "holder" || (variable in locked))
-		if(!check_rights(R_DEBUG))	return
+		if(!check_rights(R_DEBUG))
+			return
 
 	if(isnull(var_value))
 		to_chat(usr, "Unable to determine variable type.")
@@ -168,7 +172,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 
@@ -177,7 +182,8 @@
 
 		if("text")
 			var/new_value = input("Enter new text:","Text",O.vars[variable]) as text|null
-			if(new_value == null) return
+			if(new_value == null)
+				return
 
 			if(variable == "light_color")
 				O.set_light(l_color = new_value)
@@ -205,7 +211,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							if(variable == "light_color")
 								A.set_light(l_color = new_value)
@@ -232,7 +239,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if (A.type == O.type)
 							if(variable == "light_color")
 								A.set_light(l_color = new_value)
@@ -242,7 +250,8 @@
 		if("num")
 			var/new_value = input("Enter new number:","Num",\
 					O.vars[variable]) as num|null
-			if(new_value == null) return
+			if(new_value == null)
+				return
 
 			if(variable=="light_range")
 				O.set_light(new_value)
@@ -276,7 +285,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							if(variable=="light_range")
 								A.set_light(new_value)
@@ -310,7 +320,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if (A.type == O.type)
 							if(variable=="light_range")
 								A.set_light(new_value)
@@ -322,7 +333,8 @@
 		if("type")
 			var/new_value
 			new_value = input("Enter type:","Type",O.vars[variable]) as null|anything in typesof(/obj,/mob,/area,/turf)
-			if(new_value == null) return
+			if(new_value == null)
+				return
 			O.vars[variable] = new_value
 			if(method)
 				if(istype(O, /mob))
@@ -339,7 +351,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							A.vars[variable] = O.vars[variable]
 			else
@@ -357,13 +370,15 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 
 		if("file")
 			var/new_value = input("Pick file:","File",O.vars[variable]) as null|file
-			if(new_value == null) return
+			if(new_value == null)
+				return
 			O.vars[variable] = new_value
 
 			if(method)
@@ -381,7 +396,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							A.vars[variable] = O.vars[variable]
 			else
@@ -399,13 +415,15 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 
 		if("icon")
 			var/new_value = input("Pick icon:","Icon",O.vars[variable]) as null|icon
-			if(new_value == null) return
+			if(new_value == null)
+				return
 			O.vars[variable] = new_value
 			if(method)
 				if(istype(O, /mob))
@@ -422,7 +440,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if ( istype(A , O.type) )
 							A.vars[variable] = O.vars[variable]
 
@@ -441,7 +460,8 @@
 					var/count = 0
 					for(var/turf/A in turfs)
 						count++
-						if(!(count % 50000)) sleep(world.tick_lag)
+						if(!(count % 50000))
+							sleep(world.tick_lag)
 						if (A.type == O.type)
 							A.vars[variable] = O.vars[variable]
 

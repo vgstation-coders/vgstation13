@@ -68,10 +68,12 @@
 
 	if(possible_vampires.len>0)
 		for(var/i = 0, i < vampire_amount, i++)
-			if(!possible_vampires.len) break
+			if(!possible_vampires.len)
+				break
 			var/datum/mind/vampire = pick(possible_vampires)
 			possible_vampires -= vampire
-			if(vampire.special_role) continue
+			if(vampire.special_role)
+				continue
 			vampires += vampire
 			modePlayer += vampires
 		log_admin("Starting a round of vampire with [vampires.len] vampires.")
@@ -93,7 +95,8 @@
 		greet_vampire(vampire)
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
-			if(!mixed) send_intercept()
+			if(!mixed)
+				send_intercept()
 		..()
 	return
 
@@ -259,7 +262,8 @@
 	return
 
 /datum/game_mode/proc/grant_vampire_powers(mob/living/carbon/vampire_mob)
-	if(!istype(vampire_mob))	return
+	if(!istype(vampire_mob))
+		return
 	vampire_mob.make_vampire()
 
 /datum/game_mode/proc/greet_vampire(var/datum/mind/vampire, var/you_are=1)
@@ -299,7 +303,8 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	gender = gend
 
 /mob/living/proc/make_vampire()
-	if(!mind) return
+	if(!mind)
+		return
 	if(!mind.vampire)
 		mind.vampire = new /datum/vampire(gender)
 		mind.vampire.owner = src
@@ -351,7 +356,8 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			verbs -= handler
 
 /datum/vampire/proc/OnLife()
-	if(!owner) return
+	if(!owner)
+		return
 	if(!owner.druggy)
 		owner.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
@@ -415,8 +421,10 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	return 1
 
 /mob/proc/check_vampire_upgrade(datum/mind/v)
-	if(!v) return
-	if(!v.vampire) return
+	if(!v)
+		return
+	if(!v.vampire)
+		return
 	var/datum/vampire/vamp = v.vampire
 	var/list/old_powers = vamp.powers.Copy()
 

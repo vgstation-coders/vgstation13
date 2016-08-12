@@ -316,7 +316,8 @@
 
 /obj/effect/beam/emitter/spawn_child()
 	var/obj/effect/beam/emitter/beam = ..()
-	if(!beam) return null
+	if(!beam)
+		return null
 	beam.power = power
 	return beam
 

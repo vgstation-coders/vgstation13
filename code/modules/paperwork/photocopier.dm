@@ -80,7 +80,8 @@
 			spawn()
 				copying = 1
 				for(var/i = 0, i < copies, i++)
-					if(!copying) break
+					if(!copying)
+						break
 					if(toner > 0)
 						var/obj/item/weapon/paper/paper_type = copy.type
 						var/obj/item/weapon/paper/c = new paper_type(loc)
@@ -106,7 +107,8 @@
 			spawn()
 				copying = 1
 				for(var/i = 0, i < copies, i++)
-					if(!copying) break
+					if(!copying)
+						break
 					if(toner >= 5)  //Was set to = 0, but if there was say 3 toner left and this ran, you would get -2 which would be weird for ink
 						var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
 						var/icon/I = icon(photocopy.icon, photocopy.icon_state)
@@ -143,7 +145,8 @@
 			spawn()
 				copying = 1
 				for(var/i = 0, i < copies, i++)
-					if(!copying) break
+					if(!copying)
+						break
 					var/icon/temp_img
 					if(ishuman(ass) && (ass.get_item_by_slot(slot_w_uniform) || ass.get_item_by_slot(slot_wear_suit)))
 						to_chat(usr, "<span class='notice'>You feel kind of silly copying [ass == usr ? "your" : ass][ass == usr ? "" : "\'s"] ass with [ass == usr ? "your" : "their"] clothes on.</span>")
@@ -221,7 +224,8 @@
 				to_chat(usr, "<span class='warning'>Must wait for current print job to finish.</span>")
 				return
 			copying = 0
-		if(!istype(usr,/mob/living/silicon/ai)) return
+		if(!istype(usr,/mob/living/silicon/ai))
+			return
 		if(toner >= 5)
 			var/list/nametemp = list()
 			var/find
@@ -302,7 +306,8 @@
 		var/obj/item/weapon/grab/G = O
 		if(ismob(G.affecting) && G.affecting != ass)
 			var/mob/GM = G.affecting
-			if(GM.locked_to) return
+			if(GM.locked_to)
+				return
 			visible_message("<span class='warning'>[usr] drags [GM.name] onto the photocopier!</span>")
 			GM.forceMove(get_turf(src))
 			ass = GM
@@ -380,8 +385,10 @@
 	if(target == user && !(user.incapacitated()))
 		visible_message("<span class='warning'>[usr] jumps onto the photocopier!</span>")
 	else if(target != user && !user.incapacitated())
-		if(target.anchored) return
-		if(!ishuman(user) && !ismonkey(user)) return
+		if(target.anchored)
+			return
+		if(!ishuman(user) && !ismonkey(user))
+			return
 		visible_message("<span class='warning'>[usr] drags [target.name] onto the photocopier!</span>")
 	target.forceMove(get_turf(src))
 	ass = target
@@ -442,6 +449,7 @@
 	return 0
 
 /obj/machinery/photocopier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	return (!mover.density || !density || mover.pass_flags)

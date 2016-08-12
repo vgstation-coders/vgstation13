@@ -18,9 +18,11 @@
 	//Get our potential maps
 	//testing("starting in [root]")
 	for(var/potential in flist(root))
-		if(copytext(potential,-1,0 != "/")) continue // Not a directory, ignore it.
+		if(copytext(potential,-1,0 != "/"))
+			continue // Not a directory, ignore it.
 		//testing("Inside [root + potential]")
-		if(!recursion_limit) break
+		if(!recursion_limit)
+			break
 		//our current working directory
 		var/path = root + potential
 		//The DMB that has the map we want.
@@ -34,9 +36,12 @@
 			if(copytext(binaries,-15,0 == "playercount.txt"))
 				var/list/lines = file2list(path+binaries)
 				for(var/line in lines)
-					if(findtext(line,"max")) max = text2num(copytext(line,5,0))
-					else if(findtext(line,"min")) min = text2num(copytext(line,5,0))
-					else warning("Our file had excessive lines, skipping.")
+					if(findtext(line,"max"))
+						max = text2num(copytext(line,5,0))
+					else if(findtext(line,"min"))
+						min = text2num(copytext(line,5,0))
+					else
+						warning("Our file had excessive lines, skipping.")
 				if(!isnull(min) && !isnull(max))
 					if((min != -1) && clients.len < min)
 						skipping = 1

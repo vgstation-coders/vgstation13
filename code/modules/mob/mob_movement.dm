@@ -1,5 +1,6 @@
 /mob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	if(istype(mover) && mover.checkpass(PASSMOB))
 		return 1
@@ -237,7 +238,8 @@
 	if(mob && mob.control_object)
 		if(mob.control_object.density)
 			step(mob.control_object,direct)
-			if(!mob.control_object)	return
+			if(!mob.control_object)
+				return
 			mob.control_object.dir = direct
 		else
 			mob.control_object.loc = get_step(mob.control_object,direct)
@@ -404,16 +406,19 @@
 			grabbing += G.affecting
 
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
-			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))	del(G)
+			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))
+				del(G)
 			if(G.state == GRAB_AGGRESSIVE)
 				mob.delayNextMove(10)
-				if(!prob(25))	return 1
+				if(!prob(25))
+					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s grip!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s hug!</span>")
 				returnToPool(G)
 			if(G.state == GRAB_NECK)
 				mob.delayNextMove(10)
-				if(!prob(5))	return 1
+				if(!prob(5))
+					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s headlock!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s passionate hug!</span>")
 				returnToPool(G)
@@ -480,7 +485,8 @@
 					for(var/turf/T in getline(mobloc, mob.loc))
 						anim(T,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 						limit--
-						if(limit<=0)	break
+						if(limit<=0)
+							break
 			else
 				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
 				mob.forceEnter(get_step(mob, direct))

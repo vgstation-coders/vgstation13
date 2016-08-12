@@ -25,7 +25,8 @@
 /obj/item/weapon/bee_net/afterattack(atom/A as mob|obj|turf|area, mob/living/user)
 	if(get_dist(A,user) > 1)
 		return
-	if(istype(A,/obj/machinery/apiary))	return
+	if(istype(A,/obj/machinery/apiary))
+		return
 	var/turf/T = get_turf(A)
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)

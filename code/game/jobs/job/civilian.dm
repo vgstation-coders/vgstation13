@@ -15,11 +15,15 @@
 	pdatype=/obj/item/device/pda/bar
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_service(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/suit/armor/vest(H), slot_wear_suit)
@@ -65,7 +69,8 @@
 	pdatype=/obj/item/device/pda/chef
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_service(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/chef(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/suit/chef(H), slot_wear_suit)
@@ -97,12 +102,16 @@
 	pdatype=/obj/item/device/pda/botanist
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_service(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_hyd(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_hyd(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		switch(H.mind.role_alt_title)
 			if("Hydroponicist")
 				H.equip_or_collect(new /obj/item/clothing/under/rank/hydroponics(H), slot_w_uniform)
@@ -144,7 +153,8 @@
 	pdatype=/obj/item/device/pda/quartermaster
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/cargo(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
@@ -177,7 +187,8 @@
 	pdatype=/obj/item/device/pda/cargo
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_cargo(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/cargotech(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
@@ -208,12 +219,16 @@
 	pdatype=/obj/item/device/pda/shaftminer
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_mining(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/miner(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/shaftminer(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
@@ -246,7 +261,8 @@
 	pdatype=/obj/item/device/pda/clown
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/weapon/storage/backpack/clown(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		//H.equip_or_collect(new /obj/item/device/pda/clown(H), slot_belt)
@@ -290,9 +306,12 @@
 	pdatype=/obj/item/device/pda/mime
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
-		if(H.backbag == 2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-		if(H.backbag == 3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(!H)
+			return 0
+		if(H.backbag == 2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+		if(H.backbag == 3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/mime(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/mime(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/mime(H), slot_belt)
@@ -332,7 +351,8 @@
 /spell/targeted/oathbreak/cast(list/targets)
 	for(var/mob/living/carbon/human/M in targets)
 		var/response = alert(M, "Are you -sure- you want to break your oath of silence?\n(This removes your ability to create invisible walls and cannot be undone!)","Are you sure you want to break your oath?","Yes","No")
-		if(response != "Yes")	return
+		if(response != "Yes")
+			return
 		M.miming=0
 		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in M.spell_list)
 			M.remove_spell(spell)
@@ -358,7 +378,8 @@
 	pdatype=/obj/item/device/pda/janitor
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/clothing/under/rank/janitor(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/janitor(H), slot_belt)
@@ -389,7 +410,8 @@
 	pdatype=/obj/item/device/pda/librarian
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/clothing/under/suit_jacket/red(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/librarian(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
@@ -421,11 +443,15 @@
 	pdatype=/obj/item/device/pda/lawyer
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		if (H.mind.role_alt_title)
 			switch(H.mind.role_alt_title)
 				if("Lawyer")

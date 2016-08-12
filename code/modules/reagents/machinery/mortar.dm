@@ -89,7 +89,8 @@
 
 /obj/item/weapon/reagent_containers/glass/mortar/attack_hand(mob/user as mob)
 	add_fingerprint(user)
-	if(user.get_inactive_hand() != src) return ..()
+	if(user.get_inactive_hand() != src)
+		return ..()
 	if(crushable)
 		crushable.forceMove(user.loc)
 		user.put_in_active_hand(crushable)

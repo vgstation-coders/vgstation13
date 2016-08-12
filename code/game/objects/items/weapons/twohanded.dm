@@ -32,7 +32,8 @@
 	return wielding.unwield(user)
 
 /obj/item/offhand/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag) return
+	if(!proximity_flag)
+		return
 	if(istype(target, /obj/item/weapon/storage)) //we place automatically
 		return
 	if(wielding)
@@ -81,7 +82,8 @@
 		return (BRUTELOSS)
 
 /obj/item/weapon/fireaxe/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	..()
 	if(A && wielded && (istype(A,/obj/structure/window))) //destroys windows and grilles in one hit
 		user.delayNextAttack(8)
@@ -248,7 +250,8 @@
 	item_state = "[base_state][wielded ? 1 : 0]"
 
 	force = base_force
-	if(wielded) force += 8
+	if(wielded)
+		force += 8
 
 	if(user)
 		user.update_inv_hands()

@@ -141,7 +141,8 @@
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
-	if(!user || !clown_check(user)) 	return
+	if(!user || !clown_check(user))
+		return
 	if(broken)
 		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
 		return
@@ -162,7 +163,8 @@
 			user.show_message("<span class='warning'>*click* *click*</span>", 2)
 			return
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
-	if(harm_labeled >= min_harm_label)	return //Act as if the flash was activated except the useful part.
+	if(harm_labeled >= min_harm_label)
+		return //Act as if the flash was activated except the useful part.
 	flick("flash2", src)
 	if(user && isrobot(user))
 		spawn(0)
@@ -197,7 +199,8 @@
 	return
 
 /obj/item/device/flash/emp_act(severity)
-	if(broken)	return
+	if(broken)
+		return
 	flash_recharge()
 	switch(times_used)
 		if(0 to 5)

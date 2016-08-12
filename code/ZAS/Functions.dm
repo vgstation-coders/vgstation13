@@ -157,8 +157,10 @@ proc/ZConnect(turf/simulated/A,turf/simulated/B)
 		return
 
 	//Make some preliminary checks to see if the connection is valid.
-	if(!A.zone || !B.zone) return
-	if(A.zone == B.zone) return
+	if(!A.zone || !B.zone)
+		return
+	if(A.zone == B.zone)
+		return
 
 	if(A.CanPass(null,B,0,1))
 		return ZMerge(A.zone,B.zone)

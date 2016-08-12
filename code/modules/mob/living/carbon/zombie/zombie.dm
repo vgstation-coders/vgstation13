@@ -76,19 +76,23 @@
 
 	proc/set_attack()
 		state = 1
-		if(path_idle.len) path_idle = new/list()
+		if(path_idle.len)
+			path_idle = new/list()
 		trg_idle = null
 
 	proc/set_idle()
 		state = 2
-		if (path_target.len) path_target = new/list()
+		if (path_target.len)
+			path_target = new/list()
 		target = null
 		frustration = 0
 
 	proc/set_null()
 		state = 0
-		if (path_target.len) path_target = new/list()
-		if (path_idle.len) path_idle = new/list()
+		if (path_target.len)
+			path_target = new/list()
+		if (path_idle.len)
+			path_idle = new/list()
 		target = null
 		trg_idle = null
 		frustration = 0
@@ -118,7 +122,8 @@
 
 
 		else if (!target)
-			if (path_target.len) path_target = new/list()
+			if (path_target.len)
+				path_target = new/list()
 
 			var/last_health = INFINITY
 
@@ -153,7 +158,8 @@
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
-						if(T.organs["head"]) affecting = T.organs["head"]
+						if(T.organs["head"])
+							affecting = T.organs["head"]
 						affecting.take_damage(rand(1,7), 0)
 						playsound(get_turf(src), 'sound/items/eatfood.ogg', 50, 1)
 						if(prob(25))
@@ -191,7 +197,8 @@
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
-						if(T.organs["head"]) affecting = T.organs["head"]
+						if(T.organs["head"])
+							affecting = T.organs["head"]
 						affecting.take_damage(rand(1,7), 0)
 						if(prob(12.5))
 							target.contract_disease(new/datum/disease/z_virus)
@@ -248,9 +255,12 @@
 						step_towards(src,next)
 						quick_move = 1
 
-			if (get_dist(src, src.target) >= distance) src.frustration++
-			else src.frustration--
-			if(frustration >= 35) set_null()
+			if (get_dist(src, src.target) >= distance)
+				src.frustration++
+			else
+				src.frustration--
+			if(frustration >= 35)
+				set_null()
 
 		if(prob(3) && !src.stat == 2)
 			if(prob(50))
@@ -279,7 +289,8 @@
 		//set background = 1
 		var/quick_move = 0
 
-		if(state != 2 || src.stat == 2 || target) return
+		if(state != 2 || src.stat == 2 || target)
+			return
 
 		step_rand(src)
 
@@ -491,7 +502,8 @@ datum/reagent/zed
 			O.show_message(text("<span class='notice'>[] has been stabbed with [] by [].</span>", M, src, user), 1)
 //		to_chat(user, "<span class='warning'>You stab [M] with the pen.</span>")
 //		to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
-		if(M.reagents) reagents.trans_to(M, 10)
+		if(M.reagents)
+			reagents.trans_to(M, 10)
 		icon_state = "zed_0"
 	return
 
@@ -537,7 +549,8 @@ datum/reagent/zed
 //			to_chat(src, "<span class='warning'>Wrong game mode!</span>")
 //			return
 
-	if(usr) message_admins("[key_name_admin(usr)] has spawned a zombie", 1)
+	if(usr)
+		message_admins("[key_name_admin(usr)] has spawned a zombie", 1)
 	biohazard_alert(7)
 	var/list/t = list()
 	for(var/obj/landmark/zspawn/O in landmarks_list)

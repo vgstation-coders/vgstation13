@@ -140,7 +140,8 @@
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj as mob|obj|turf|area in range(1))
-			if(objects > loopsanity)	break
+			if(objects > loopsanity)
+				break
 			objects++
 			spawn( 0 )
 				if ((A && Obj) && Obj.flags & PROXMOVE)
@@ -154,7 +155,8 @@
 
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
 		// if(ticker.mode.name == "nuclear emergency")	return
-		if(A.z > 6) return
+		if(A.z > 6)
+			return
 		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
 
 			var/list/contents_brought = list()
@@ -252,7 +254,8 @@
 	return 0
 
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
-	if(!(A.last_move))	return
+	if(!(A.last_move))
+		return
 
 	if(src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy - 1))
 		A.process_inertia(src)
@@ -327,7 +330,8 @@
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
-	if(connections) connections.erase_all()
+	if(connections)
+		connections.erase_all()
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.
@@ -335,7 +339,8 @@
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
 		env = S.air //Get the air before the change
-		if(S.zone) S.zone.rebuild()
+		if(S.zone)
+			S.zone.rebuild()
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
@@ -484,7 +489,8 @@
 /turf/proc/kill_creatures(mob/U = null)//Will kill people/creatures and damage mechs./N
 //Useful to batch-add creatures to the list.
 	for(var/mob/living/M in src)
-		if(M==U)	continue//Will not harm U. Since null != M, can be excluded to kill everyone.
+		if(M==U)
+			continue//Will not harm U. Since null != M, can be excluded to kill everyone.
 		spawn(0)
 			M.gib()
 	for(var/obj/mecha/M in src)//Mecha are not gibbed but are damaged.
@@ -589,7 +595,8 @@
 //  possible. It results in more efficient (CPU-wise) pathing
 //  for bots and anything else that only moves in cardinal dirs.
 /turf/proc/Distance_cardinal(turf/T)
-	if(!src || !T) return 0
+	if(!src || !T)
+		return 0
 	return abs(src.x - T.x) + abs(src.y - T.y)
 
 ////////////////////////////////////////////////////

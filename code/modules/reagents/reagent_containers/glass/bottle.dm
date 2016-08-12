@@ -67,12 +67,18 @@
 
 		var/percent = round((reagents.total_volume / volume) * 100)
 		switch(percent) //Percentages are pretty fucked so here comes the decimal rollercoaster with halfway rounding
-			if(0 to 24)		filling.icon_state = "[icon_state]5"
-			if(25 to 41) 	filling.icon_state = "[icon_state]10"
-			if(42 to 58)	filling.icon_state = "[icon_state]15"
-			if(59 to 74)	filling.icon_state = "[icon_state]20"
-			if(75 to 91)	filling.icon_state = "[icon_state]25"
-			if(92 to INFINITY)	filling.icon_state = "[icon_state]30"
+			if(0 to 24)
+				filling.icon_state = "[icon_state]5"
+			if(25 to 41)
+				filling.icon_state = "[icon_state]10"
+			if(42 to 58)
+				filling.icon_state = "[icon_state]15"
+			if(59 to 74)
+				filling.icon_state = "[icon_state]20"
+			if(75 to 91)
+				filling.icon_state = "[icon_state]25"
+			if(92 to INFINITY)
+				filling.icon_state = "[icon_state]30"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += filling

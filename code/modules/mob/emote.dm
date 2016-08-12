@@ -7,7 +7,8 @@
 		return
 
 	var/muzzled = istype(src.wear_mask, /obj/item/clothing/mask/muzzle)
-	if(m_type == 2 && muzzled) return
+	if(m_type == 2 && muzzled)
+		return
 
 	var/input
 	if(!message)

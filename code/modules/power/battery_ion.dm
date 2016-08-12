@@ -76,7 +76,8 @@
 	return -1
 
 /obj/machinery/power/battery/portable/update_icon()
-	if(stat & BROKEN)	return
+	if(stat & BROKEN)
+		return
 
 	..()
 

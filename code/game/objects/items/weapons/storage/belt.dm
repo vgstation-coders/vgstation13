@@ -10,7 +10,8 @@
 
 
 /obj/item/weapon/storage/belt/proc/can_use()
-	if(!ismob(loc)) return 0
+	if(!ismob(loc))
+		return 0
 	var/mob/M = loc
 	if(src in M.get_equipped_items())
 		return 1

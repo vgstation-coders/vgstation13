@@ -71,7 +71,8 @@
 		stage = 1
 	else if(istype(W,/obj/item/stack/cable_coil/) && !beakers.len)
 		var/obj/item/stack/cable_coil/coil = W
-		if(coil.amount < 2) return
+		if(coil.amount < 2)
+			return
 		coil.use(2)
 		var/obj/item/weapon/electrolyzer/E = new /obj/item/weapon/electrolyzer
 		to_chat(user, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
@@ -158,7 +159,8 @@
 	..()
 
 /obj/item/weapon/grenade/chem_grenade/activate(mob/user as mob)
-	if(active) return
+	if(active)
+		return
 
 	if(detonator)
 		if(!isigniter(detonator.a_left))
@@ -183,12 +185,14 @@
 		icon_state = initial(icon_state) + (primed?"_primed":"_active")
 
 /obj/item/weapon/grenade/chem_grenade/prime()
-	if(!stage || stage<2) return
+	if(!stage || stage<2)
+		return
 
 	//if(prob(reliability))
 	var/has_reagents = 0
 	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
-		if(G.reagents.total_volume) has_reagents = 1
+		if(G.reagents.total_volume)
+			has_reagents = 1
 
 	active = 0
 	if(!has_reagents)
@@ -246,7 +250,8 @@
 		steam.start()
 
 		for(var/atom/A in view(affected_area, get_turf(src)))
-			if( A == src ) continue
+			if( A == src )
+				continue
 			src.reagents.reaction(A, 1, 10)
 
 	invisibility = INVISIBILITY_MAXIMUM //Why am i doing this?

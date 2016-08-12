@@ -91,7 +91,8 @@
 	if(src.corpseuniform)
 		var/list/L = src.corpseuniform
 
-		if(istype(L)) src.corpseuniform = pick(L)
+		if(istype(L))
+			src.corpseuniform = pick(L)
 
 		var/obj/item/clothing/under/U = new src.corpseuniform(M)
 
@@ -103,68 +104,79 @@
 	if(src.corpsesuit)
 		var/list/L = src.corpsesuit
 
-		if(istype(L)) src.corpsesuit = pick(L)
+		if(istype(L))
+			src.corpsesuit = pick(L)
 		M.equip_to_slot_or_del(new src.corpsesuit(M), slot_wear_suit)
 
 	if(src.corpseshoes)
 		var/list/L = src.corpseshoes
 
-		if(istype(L)) src.corpseshoes = pick(L)
+		if(istype(L))
+			src.corpseshoes = pick(L)
 		M.equip_to_slot_or_del(new src.corpseshoes(M), slot_shoes)
 
 	if(src.corpsegloves)
 		var/list/L = src.corpsegloves
 
-		if(istype(L)) src.corpsegloves = pick(L)
+		if(istype(L))
+			src.corpsegloves = pick(L)
 		M.equip_to_slot_or_del(new src.corpsegloves(M), slot_gloves)
 
 	if(src.corpseradio)
 		var/list/L = src.corpseradio
 
-		if(istype(L)) src.corpseradio = pick(L)
+		if(istype(L))
+			src.corpseradio = pick(L)
 		M.equip_to_slot_or_del(new src.corpseradio(M), slot_ears)
 
 	if(src.corpseglasses)
 		var/list/L = src.corpseglasses
 
-		if(istype(L)) src.corpseglasses = pick(L)
+		if(istype(L))
+			src.corpseglasses = pick(L)
 		M.equip_to_slot_or_del(new src.corpseglasses(M), slot_glasses)
 
 	if(src.corpsemask)
 		var/list/L = src.corpsemask
 
-		if(istype(L)) src.corpsemask = pick(L)
+		if(istype(L))
+			src.corpsemask = pick(L)
 		M.equip_to_slot_or_del(new src.corpsemask(M), slot_wear_mask)
 
 	if(src.corpsehelmet)
 		var/list/L = src.corpsehelmet
 
-		if(istype(L)) src.corpsehelmet = pick(L)
+		if(istype(L))
+			src.corpsehelmet = pick(L)
 
 		M.equip_to_slot_or_del(new src.corpsehelmet(M), slot_head)
 
 	if(src.corpsebelt)
 		var/list/L = src.corpsebelt
 
-		if(istype(L)) src.corpsebelt = pick(L)
+		if(istype(L))
+			src.corpsebelt = pick(L)
 		M.equip_to_slot_or_del(new src.corpsebelt(M), slot_belt)
 
 	if(src.corpsepocket1)
 		var/list/L = src.corpsepocket1
 
-		if(istype(L)) src.corpsepocket1 = pick(L)
+		if(istype(L))
+			src.corpsepocket1 = pick(L)
 		M.equip_to_slot_or_del(new src.corpsepocket1(M), slot_r_store)
 
 	if(src.corpsepocket2)
 		var/list/L = src.corpsepocket2
 
-		if(istype(L)) src.corpsepocket2 = pick(L)
+		if(istype(L))
+			src.corpsepocket2 = pick(L)
 		M.equip_to_slot_or_del(new src.corpsepocket2(M), slot_l_store)
 
 	if(src.corpseback)
 		var/list/L = src.corpseback
 
-		if(istype(L)) src.corpseback = pick(L)
+		if(istype(L))
+			src.corpseback = pick(L)
 
 		M.equip_to_slot_or_del(new src.corpseback(M), slot_back)
 

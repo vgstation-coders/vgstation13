@@ -138,7 +138,8 @@
 				owner.add_cancer() //Add a new cancerous growth
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
-	if(!owner) return
+	if(!owner)
+		return
 	if(src.robotic == 2)
 		src.damage += (amount * 0.8)
 	else
@@ -216,7 +217,8 @@
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
 
 
-	if(!removed_type) return 0
+	if(!removed_type)
+		return 0
 
 	var/obj/item/organ/removed_organ = new removed_type(get_turf(user))
 

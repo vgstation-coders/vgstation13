@@ -55,7 +55,8 @@
 	return 0
 
 /obj/item/weapon/gun/hookshot/flesh/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(check_tether())
 		if(istype(chain_datum.extremity_B,/mob/living/carbon))
 			if(parent_borer)
@@ -344,7 +345,8 @@
 		sleep(sleeptime)
 
 /obj/item/projectile/hookshot/flesh/Bump(atom/A as mob|obj|turf|area)
-	if(bumped)	return 0
+	if(bumped)
+		return 0
 	bumped = 1
 
 	var/obj/item/weapon/gun/hookshot/flesh/hookshot = shot_from

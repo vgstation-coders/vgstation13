@@ -33,7 +33,8 @@ LINEN BINS
 	if(cut_time)
 		to_chat(user, "<span  class='notice'>You begin cutting the [src].</span>")
 		if(do_after(user, src, cut_time))
-			if(!src) return
+			if(!src)
+				return
 			to_chat(user, "<span  class='notice'>You have cut the [src] into rags.</span>")
 			var/turf/location = get_turf(src)
 			for(var/x=0; x<=8; x++)
@@ -143,8 +144,10 @@ LINEN BINS
 
 /obj/structure/bedsheetbin/update_icon()
 	switch(amount)
-		if(0)				icon_state = "linenbin-empty"
-		if(1 to amount / 2)	icon_state = "linenbin-half"
+		if(0)
+			icon_state = "linenbin-empty"
+		if(1 to amount / 2)
+			icon_state = "linenbin-half"
 		else				icon_state = "linenbin-full"
 
 

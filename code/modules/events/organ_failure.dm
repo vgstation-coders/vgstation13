@@ -13,12 +13,14 @@ datum/event/organ_failure/start()
 	for(var/mob/living/carbon/human/G in player_list)
 		if(G.mind && G.mind.current && G.mind.current.stat != DEAD)
 			candidates += G
-	if(!candidates.len)	return
+	if(!candidates.len)
+		return
 	candidates = shuffle(candidates)//Incorporating Donkie's list shuffle
 
 	while(severity > 0 && candidates.len)
 		var/mob/living/carbon/human/C = candidates[1]
-		if(!C) continue
+		if(!C)
+			continue
 		// Bruise one of their organs
 		var/organ_name = pick(C.internal_organs_by_name)
 		var/datum/organ/internal/I = C.internal_organs_by_name[organ_name]

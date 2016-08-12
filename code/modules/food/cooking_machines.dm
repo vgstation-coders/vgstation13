@@ -22,22 +22,32 @@ var/global/ingredientLimit = 10
 	set category = "Debug"
 
 	. = (alert("Deep Fried Everything?",,"Yes","No")=="Yes")
-	if(.)	deepFriedEverything = 1
-	else	deepFriedEverything = 0
+	if(.)
+		deepFriedEverything = 1
+	else
+		deepFriedEverything = 0
 	. = (alert("Food Nesting?",,"Yes","No")=="Yes")
-	if(.)	foodNesting = 1
-	else	foodNesting = 0
+	if(.)
+		foodNesting = 1
+	else
+		foodNesting = 0
 	. = (alert("Enable recursive food? (WARNING: May cause server instability!)",,"Yes","No")=="Yes")
-	if(.)	recursiveFood = 1
-	else	recursiveFood = 0
+	if(.)
+		recursiveFood = 1
+	else
+		recursiveFood = 0
 	. = (input("Deep Fried Nutriment? (1 to 50)"))
 	. = text2num(.)
-	if(isnum(.) && (. in 1 to 50)) deepFriedNutriment = . //This is absolutely terrible
-	else to_chat(usr, "That wasn't a valid number.")
+	if(isnum(.) && (. in 1 to 50))
+		deepFriedNutriment = . //This is absolutely terrible
+	else
+		to_chat(usr, "That wasn't a valid number.")
 	. = (input("Ingredient Limit? (1 to 100)"))
 	. = text2num(.)
-	if(isnum(.) && (. in 1 to 100)) ingredientLimit = .
-	else to_chat(usr, "That wasn't a valid number.")
+	if(isnum(.) && (. in 1 to 100))
+		ingredientLimit = .
+	else
+		to_chat(usr, "That wasn't a valid number.")
 	log_admin("[key_name(usr)] set deepFriedEverything to [deepFriedEverything].")
 	log_admin("[key_name(usr)] set foodNesting to [foodNesting].")
 	log_admin("[key_name(usr)] set deepFriedNutriment to [deepFriedNutriment]")
@@ -130,10 +140,14 @@ var/global/ingredientLimit = 10
 					user.put_in_hands(src.ingredient)
 					to_chat(user, "<span class='notice'>You remove \the [src.ingredient.name] from \the [src.name].</span>")
 					src.ingredient = null
-				else to_chat(user, "You are too far away from [src.name].")
-			else src.active = 0
-		else to_chat(user, "You leave \the [src.name] alone.")
-	else . = ..()
+				else
+					to_chat(user, "You are too far away from [src.name].")
+			else
+				src.active = 0
+		else
+			to_chat(user, "You leave \the [src.name] alone.")
+	else
+		. = ..()
 
 /obj/machinery/cooking/attackby(obj/item/I,mob/user)
 	if(src.active)
@@ -166,16 +180,24 @@ var/global/ingredientLimit = 10
 
 //Returns "valid" or the reason for denial.
 /obj/machinery/cooking/proc/validateIngredient(var/obj/item/I)
-	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab)) . = "It won't fit."
-	else if(istype(I,/obj/item/weapon/disk/nuclear)) . = "It's the fucking nuke disk!"
-	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable)) . = "It would be a straining topological exercise."
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything) . = "valid"
-	else if(istype(I,/obj/item/weapon/reagent_containers)) . = "transto"
+	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab))
+		. = "It won't fit."
+	else if(istype(I,/obj/item/weapon/disk/nuclear))
+		. = "It's the fucking nuke disk!"
+	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+		. = "It would be a straining topological exercise."
+	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything)
+		. = "valid"
+	else if(istype(I,/obj/item/weapon/reagent_containers))
+		. = "transto"
 	else if(istype(I,/obj/item/organ))
 		var/obj/item/organ/organ = I
-		if(organ.robotic) . = "That's a prosthetic. It wouldn't taste very good."
-		else . = "valid"
-	else . = "It's not edible food."
+		if(organ.robotic)
+			. = "That's a prosthetic. It wouldn't taste very good."
+		else
+			. = "valid"
+	else
+		. = "It's not edible food."
 	return
 
 /obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user)
@@ -183,7 +205,8 @@ var/global/ingredientLimit = 10
 	if(. == "transto")
 		return
 	if(. == "valid")
-		if(src.foodChoices) . = src.foodChoices[(input("Select production.") in src.foodChoices)]
+		if(src.foodChoices)
+			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
 		if (!Adjacent(user) || user.stat || user.get_active_hand() != I)
 			return 0
 
@@ -192,7 +215,8 @@ var/global/ingredientLimit = 10
 			spawn() src.cook(.)
 			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
 			return 1
-	else to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
+	else
+		to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
 	return 0
 
 /obj/machinery/cooking/proc/transfer_reagents_to_food(var/obj/item/I)
@@ -299,8 +323,10 @@ var/global/ingredientLimit = 10
 	cookSound = 'sound/machines/juicer.ogg'
 
 /obj/machinery/cooking/still/validateIngredient(var/obj/item/I)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown)) . = "valid"
-	else . = "It ain't grown food!"
+	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
+		. = "valid"
+	else
+		. = "It ain't grown food!"
 	return
 
 /obj/machinery/cooking/still/getFoodChoices()
@@ -318,7 +344,8 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/cerealmaker/validateIngredient(var/obj/item/I)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
-		if(findtext(I.name,"cereal")) . = "It's already cereal."
+		if(findtext(I.name,"cereal"))
+			. = "It's already cereal."
 	return
 
 /obj/machinery/cooking/cerealmaker/makeFood()
@@ -390,8 +417,10 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/deepfryer/validateIngredient(var/obj/item/I)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
-		if(findtext(I.name,"fried")) . = "It's already deep-fried."
-		else if(findtext(I.name,"grilled")) . = "It's already grilled."
+		if(findtext(I.name,"fried"))
+			. = "It's already deep-fried."
+		else if(findtext(I.name,"grilled"))
+			. = "It's already grilled."
 	return
 
 /obj/machinery/cooking/deepfryer/flush_reagents()
@@ -449,9 +478,12 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/grill/validateIngredient(var/obj/item/I)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
-		if(findtext(I.name,"fried")) . = "It's already deep-fried."
-		else if(findtext(I.name,"rotisserie")) . = "It's already rotisseried"
-		else if(findtext(I.name,"grilled")) . = "It's already grilled."
+		if(findtext(I.name,"fried"))
+			. = "It's already deep-fried."
+		else if(findtext(I.name,"rotisserie"))
+			. = "It's already rotisseried"
+		else if(findtext(I.name,"grilled"))
+			. = "It's already grilled."
 	return
 
 /obj/machinery/cooking/grill/cook()
@@ -525,7 +557,8 @@ var/global/ingredientLimit = 10
 			src.ingredient = null
 		new /obj/item/stack/sheet/wood(user.loc)
 		qdel(src)
-	else ..()
+	else
+		..()
 
 /obj/machinery/cooking/grill/spit/validateIngredient()
 	. = ..()

@@ -25,9 +25,12 @@ var/global/list/all_docking_ports = list()
 	undock()
 
 	for(var/datum/shuttle/S in shuttles) //Go through every existing shuttle and remove references
-		if(src == S.current_port) S.current_port = null
-		if(src == S.transit_port) S.transit_port = null
-		if(src == S.destination_port) S.destination_port = null
+		if(src == S.current_port)
+			S.current_port = null
+		if(src == S.transit_port)
+			S.transit_port = null
+		if(src == S.destination_port)
+			S.destination_port = null
 
 //just in case
 /obj/docking_port/singularity_pull()
@@ -96,7 +99,8 @@ var/global/list/all_docking_ports = list()
 
 /obj/docking_port/shuttle/unlink_from_shuttle(var/datum/shuttle/S)
 	.=..()
-	if(!S) S = linked_shuttle
+	if(!S)
+		S = linked_shuttle
 
 	if(linked_shuttle == S)
 		linked_shuttle = null
@@ -157,7 +161,8 @@ var/global/list/all_docking_ports = list()
 
 //SILLY PROC
 /proc/select_port_from_list(var/mob/user, var/message="Select a docking port", var/title="Admin abuse", var/list/list) //like input
-	if(!list || !user) return
+	if(!list || !user)
+		return
 
 	var/list/choices = list("Cancel")
 	for(var/obj/docking_port/destination/D in list)
@@ -168,5 +173,6 @@ var/global/list/all_docking_ports = list()
 	var/choice = input(user,message,title) in choices as text|null
 
 	var/obj/docking_port/destination/D = choices[choice]
-	if(istype(D)) return D
+	if(istype(D))
+		return D
 	return 0

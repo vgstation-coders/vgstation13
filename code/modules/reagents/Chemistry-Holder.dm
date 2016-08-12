@@ -55,10 +55,13 @@ var/const/INGEST = 2
 	current_list_element = rand(1,reagent_list.len)
 
 	while(total_transfered != amount)
-		if(total_transfered >= amount) break
-		if(is_empty() || !reagent_list.len) break
+		if(total_transfered >= amount)
+			break
+		if(is_empty() || !reagent_list.len)
+			break
 
-		if(current_list_element > reagent_list.len) current_list_element = 1
+		if(current_list_element > reagent_list.len)
+			current_list_element = 1
 		var/datum/reagent/current_reagent = reagent_list[current_list_element]
 
 		src.remove_reagent(current_reagent.id, 1)
@@ -259,7 +262,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return amount
 
 /*
-	if (!target) return
+	if (!target)
+		return
 	var/total_transfered = 0
 	var/current_list_element = 1
 	var/datum/reagents/R = target.reagents
@@ -269,11 +273,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	current_list_element = rand(1,reagent_list.len) //Eh, bandaid fix.
 
 	while(total_transfered != amount)
-		if(total_transfered >= amount) break //Better safe than sorry.
-		if(total_volume <= 0 || !reagent_list.len) break
-		if(R.total_volume >= R.maximum_volume) break
+		if(total_transfered >= amount)
+			break //Better safe than sorry.
+		if(total_volume <= 0 || !reagent_list.len)
+			break
+		if(R.total_volume >= R.maximum_volume)
+			break
 
-		if(current_list_element > reagent_list.len) current_list_element = 1
+		if(current_list_element > reagent_list.len)
+			current_list_element = 1
 		var/datum/reagent/current_reagent = reagent_list[current_list_element]
 		if(preserve_data)
 			trans_data = current_reagent.data
@@ -318,8 +326,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	update_total()
 
 /datum/reagents/proc/handle_reactions()
-	if(!my_atom) return //sanity check
-	if(my_atom.flags & NOREACT) return //Yup, no reactions here. No siree.
+	if(!my_atom)
+		return //sanity check
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
 
 	var/reaction_occured = 0
 	do
@@ -349,11 +359,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				var/list/multipliers = new/list()
 
 				for(var/B in C.required_reagents)
-					if(!has_reagent(B, C.required_reagents[B]))	break
+					if(!has_reagent(B, C.required_reagents[B]))
+						break
 					total_matching_reagents++
 					multipliers += round(get_reagent_amount(B) / C.required_reagents[B])
 				for(var/B in C.required_catalysts)
-					if(!has_reagent(B, C.required_catalysts[B]))	break
+					if(!has_reagent(B, C.required_catalysts[B]))
+						break
 					total_matching_catalysts++
 
 				if(!C.required_container)
@@ -502,7 +514,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null)
 	if(!my_atom)
 		return 0
-	if(!isnum(amount)) return 1
+	if(!isnum(amount))
+		return 1
 	update_total()
 	if(total_volume + amount > maximum_volume)
 		amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldn't happen. Will happen.
@@ -568,11 +581,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 /datum/reagents/proc/remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 
-	if(!isnum(amount)) return 1
+	if(!isnum(amount))
+		return 1
 
 	for (var/datum/reagent/R in reagent_list)
 		if (R.id == reagent)
-			if(!R.on_removal(amount)) return 0 //handled and reagent says fuck no
+			if(!R.on_removal(amount))
+				return 0 //handled and reagent says fuck no
 			R.volume -= amount
 			update_total()
 			if(!safety)//So it does not handle reactions when it need not to
@@ -617,7 +632,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/get_reagents()
 	var/res = ""
 	for(var/datum/reagent/A in reagent_list)
-		if (res != "") res += ","
+		if (res != "")
+			res += ","
 		res += A.name
 
 	return res
@@ -633,7 +649,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return english_list(stuff, "no reagents")
 
 /datum/reagents/proc/remove_all_type(var/reagent_type, var/amount, var/strict = 0, var/safety = 1) // Removes all reagent of X type. @strict set to 1 determines whether the childs of the type are included.
-	if(!isnum(amount)) return 1
+	if(!isnum(amount))
+		return 1
 
 	var/has_removed_reagent = 0
 

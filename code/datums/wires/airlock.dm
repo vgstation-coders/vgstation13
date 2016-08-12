@@ -194,8 +194,10 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			//tries to open the door without ID
 			//will succeed only if the ID wire is cut or the door requires no access
 			if(!A.requiresID() || A.check_access(null))
-				if(A.density)	A.open()
-				else		A.close()
+				if(A.density)
+					A.open()
+				else
+					A.close()
 		if(AIRLOCK_WIRE_SAFETY)
 			A.safe = !A.safe
 			if(!A.density)

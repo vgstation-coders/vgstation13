@@ -13,9 +13,11 @@
 /mob/living/carbon/monkey/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
-	if (monkeyizing)	return
+	if (monkeyizing)
+		return
 	if (update_muts)
 		update_muts=0
 		domutcheck(src,null,MUTCHK_FORCED)
@@ -202,7 +204,8 @@
 	return 0
 
 /mob/living/carbon/monkey/proc/handle_virus_updates()
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	if(bodytemperature > 406)
 		for(var/datum/disease/D in viruses)
 			D.cure()
@@ -219,7 +222,8 @@
 		else
 			V.activate(src)
 		// activate may have deleted the virus
-		if(!V) continue
+		if(!V)
+			continue
 
 		// check if we're immune
 		if(V.antigen & src.antibodies)
@@ -232,9 +236,11 @@
 		return
 
 	if(reagents)
-		if(reagents.has_reagent(LEXORIN)) return
+		if(reagents.has_reagent(LEXORIN))
+			return
 
-	if(!loc) return //probably ought to make a proper fix for this, but :effort: --NeoFite
+	if(!loc)
+		return //probably ought to make a proper fix for this, but :effort: --NeoFite
 
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/datum/gas_mixture/breath
@@ -491,7 +497,8 @@
 	return
 
 /mob/living/carbon/monkey/proc/handle_temperature_damage(body_part, exposed_temperature, exposed_intensity)
-	if(status_flags & GODMODE) return
+	if(status_flags & GODMODE)
+		return
 	var/discomfort = min( abs(exposed_temperature - bodytemperature)*(exposed_intensity)/2000000, 1.0)
 	//adjustFireLoss(2.5*discomfort)
 
@@ -522,7 +529,8 @@
 			adjustToxLoss(-1)
 			adjustOxyLoss(-1)
 	burn_calories(HUNGER_FACTOR,1)
-	if(reagents) reagents.metabolize(src,alien)
+	if(reagents)
+		reagents.metabolize(src,alien)
 
 	if (drowsyness > 0)
 		drowsyness = max(0, drowsyness - 1)
@@ -673,9 +681,12 @@
 	update_pull_icon()
 
 
-	if (toxin)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-	if (oxygen) oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-	if (fire) fire.icon_state = "fire[fire_alert ? 2 : 0]"
+	if (toxin)
+		toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
+	if (oxygen)
+		oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
+	if (fire)
+		fire.icon_state = "fire[fire_alert ? 2 : 0]"
 	//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 	//blame the person who coded them. Temporary fix added.
 

@@ -65,12 +65,16 @@
 					src.updateUsrDialog()
 
 	Topic(href, href_list)
-		if(stat & BROKEN) return
-		if(usr.stat || usr.restrained()) return
-		if(!in_range(src, usr)) return
+		if(stat & BROKEN)
+			return
+		if(usr.stat || usr.restrained())
+			return
+		if(!in_range(src, usr))
+			return
 
 		usr.machine = src
-		if(!dish) return
+		if(!dish)
+			return
 
 		if (href_list["power"])
 			on = !on

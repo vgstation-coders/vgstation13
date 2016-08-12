@@ -73,7 +73,8 @@ var/global/list/mixed_allowed = list(
 																			/datum/game_mode/blob,
 																			)
 		while(modes.len < 3)
-			if(!possible.len) break
+			if(!possible.len)
+				break
 			var/ourmode = pick(possible)
 			possible -= ourmode
 			var/datum/game_mode/M = new ourmode
@@ -98,7 +99,8 @@ var/global/list/mixed_allowed = list(
 	for(var/datum/game_mode/M in modes)
 		spawn() M.post_setup()
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 
 /datum/game_mode/mixed/check_finished()
 	for(var/datum/game_mode/M in modes)

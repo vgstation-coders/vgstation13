@@ -12,9 +12,12 @@
 				if(!L)
 					src.adjustToxLoss(1)
 			switch(src.species.type)
-				if(/datum/species/diona)	alien = IS_DIONA
-				if(/datum/species/vox)	alien = IS_VOX
-				if(/datum/species/plasmaman)	alien = IS_PLASMA
+				if(/datum/species/diona)
+					alien = IS_DIONA
+				if(/datum/species/vox)
+					alien = IS_VOX
+				if(/datum/species/plasmaman)
+					alien = IS_PLASMA
 		reagents.metabolize(src,alien)
 
 	var/total_plasmaloss = 0

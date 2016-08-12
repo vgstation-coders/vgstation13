@@ -31,8 +31,10 @@
 	var/scancount = 0
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module)) scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+			scancount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
 	minimum_growth = initial(minimum_growth) - (scancount * 3)
 	process_time = initial(process_time) - lasercount
 
@@ -42,7 +44,8 @@
 		var/mob/living/carbon/c = user
 		var/obj/item/weapon/virusdish/D = I
 
-		if(!c.drop_item(D, src)) return 1
+		if(!c.drop_item(D, src))
+			return 1
 
 		if(!D.analysed)
 			if(!dish)
@@ -98,7 +101,8 @@
 /obj/machinery/disease2/diseaseanalyser/Topic(href, href_list)
 	if(..())
 		return 1
-	if(usr) usr.set_machine(src)
+	if(usr)
+		usr.set_machine(src)
 	if(href_list["eject"])
 		for(var/obj/item/weapon/virusdish/O in src.contents)
 			if("[O.virus2.uniqueID]" == href_list["name"])

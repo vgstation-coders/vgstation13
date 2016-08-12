@@ -69,7 +69,8 @@ var/list/forbidden_varedit_object_types = list(
 		if("marked datum")
 			var_value = holder.marked_datum
 
-	if(!var_value) return
+	if(!var_value)
+		return
 
 	return var_value
 
@@ -119,7 +120,8 @@ var/list/forbidden_varedit_object_types = list(
 		if("marked datum")
 			var_value = holder.marked_datum
 
-	if(!var_value) return
+	if(!var_value)
+		return
 
 	switch(alert("Would you like to associate a var with the list entry?",,"Yes","No"))
 		if("Yes")
@@ -129,7 +131,8 @@ var/list/forbidden_varedit_object_types = list(
 			L += var_value
 
 /client/proc/mod_list(var/list/L)
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT))
+		return
 
 	if(!istype(L,/list))
 		if(alert("Make a new list?", "Not a List.", "Yes", "No") == "No")
@@ -153,7 +156,8 @@ var/list/forbidden_varedit_object_types = list(
 	var/dir
 
 	if(variable in lockedvars)
-		if(!check_rights(R_DEBUG))	return
+		if(!check_rights(R_DEBUG))
+			return
 
 	if(isnull(variable))
 		to_chat(usr, "Unable to determine variable type.")
@@ -320,7 +324,8 @@ var/list/forbidden_varedit_object_types = list(
 
 
 /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT))
+		return
 
 	if(holder && !(holder.rights & (R_PERMISSIONS)))
 		for(var/p in forbidden_varedit_object_types)
@@ -338,7 +343,8 @@ var/list/forbidden_varedit_object_types = list(
 			return
 
 		if(param_var_name == "holder" || param_var_name in lockedvars)
-			if(!check_rights(R_DEBUG))	return
+			if(!check_rights(R_DEBUG))
+				return
 
 		variable = param_var_name
 
@@ -396,11 +402,13 @@ var/list/forbidden_varedit_object_types = list(
 		names = sortList(names)
 
 		variable = input("Which var?","Var") as null|anything in names
-		if(!variable)	return
+		if(!variable)
+			return
 		var_value = O.vars[variable]
 
 		if(param_var_name == "holder" || variable in lockedvars)
-			if(!check_rights(R_DEBUG))	return
+			if(!check_rights(R_DEBUG))
+				return
 
 	if(!autodetect_class)
 
@@ -506,27 +514,32 @@ var/list/forbidden_varedit_object_types = list(
 		if("text")
 			if(variable == "light_color")
 				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
-				if(var_new==null) return
+				if(var_new==null)
+					return
 				O.set_light(l_color = var_new)
 			else
 				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
-				if(var_new==null) return
+				if(var_new==null)
+					return
 				O.vars[variable] = var_new
 
 		if("num")
 			if(variable=="light_range")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null) return
+				if(var_new == null)
+					return
 				O.set_light(var_new)
 
 			else if(variable=="light_power")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null) return
+				if(var_new == null)
+					return
 				O.set_light(l_power = var_new)
 
 			else if(variable=="stat")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null) return
+				if(var_new == null)
+					return
 				if((O.vars[variable] == 2) && (var_new < 2))//Bringing the dead back to life
 					if(ismob(O))
 						var/mob/M = O
@@ -537,32 +550,38 @@ var/list/forbidden_varedit_object_types = list(
 				O.vars[variable] = var_new
 			else
 				var/var_new =  input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new==null) return
+				if(var_new==null)
+					return
 				O.vars[variable] = var_new
 
 		if("type")
 			var/var_new = input("Enter type:","Type",O.vars[variable]) as null|anything in typesof(/obj,/mob,/area,/turf)
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("reference")
 			var/var_new = input("Select reference:","Reference",O.vars[variable]) as null|mob|obj|turf|area in world
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("mob reference")
 			var/var_new = input("Select reference:","Reference",O.vars[variable]) as null|mob in world
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("file")
 			var/var_new = input("Pick file:","File",O.vars[variable]) as null|file
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("icon")
 			var/var_new = input("Pick icon:","Icon",O.vars[variable]) as null|icon
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("marked datum")

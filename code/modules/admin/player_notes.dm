@@ -10,7 +10,8 @@ datum/admins/proc/notes_show(var/ckey)
 
 datum/admins/proc/notes_gethtml(var/ckey)
 	var/savefile/notesfile = new(NOTESFILE)
-	if(!notesfile)	return "<font color='red'>Error: Cannot access [NOTESFILE]</font>"
+	if(!notesfile)
+		return "<font color='red'>Error: Cannot access [NOTESFILE]</font>"
 	if(ckey)
 		. = "<b>Notes for <a href='?src=\ref[src];notes=show'>[ckey]</a>:</b> <a href='?src=\ref[src];notes=add;ckey=[ckey]'>\[+\]</a> <a href='?src=\ref[src];notes=remove;ckey=[ckey]'>\[-\]</a><br>"
 		notesfile.cd = "/[ckey]"
@@ -34,14 +35,17 @@ datum/admins/proc/notes_gethtml(var/ckey)
 /proc/notes_add(var/ckey, var/note)
 	if(!ckey)
 		ckey = ckey(input(usr,"Who would you like to add notes for?","Enter a ckey",null) as text|null)
-		if(!ckey)	return
+		if(!ckey)
+			return
 
 	if(!note)
 		note = html_encode(input(usr,"Enter your note:","Enter some text",null) as message|null)
-		if(!note)	return
+		if(!note)
+			return
 
 	var/savefile/notesfile = new(NOTESFILE)
-	if(!notesfile)	return
+	if(!notesfile)
+		return
 	notesfile.cd = "/[ckey]"
 	notesfile.eof = 1		//move to the end of the buffer
 	to_chat(notesfile, "[time2text(world.realtime,"DD-MMM-YYYY")] | [note][(usr && usr.ckey)?" ~[usr.ckey]":""]")
@@ -50,17 +54,20 @@ datum/admins/proc/notes_gethtml(var/ckey)
 //handles removing entries from the buffer, or removing the entire directory if no start_index is given
 /proc/notes_remove(var/ckey, var/start_index, var/end_index)
 	var/savefile/notesfile = new(NOTESFILE)
-	if(!notesfile)	return
+	if(!notesfile)
+		return
 
 	if(!ckey)
 		notesfile.cd = "/"
 		ckey = ckey(input(usr,"Who would you like to remove notes for?","Enter a ckey",null) as null|anything in notesfile.dir)
-		if(!ckey)	return
+		if(!ckey)
+			return
 
 	if(start_index)
 		notesfile.cd = "/[ckey]"
 		var/list/noteslist = list()
-		if(!end_index)	end_index = start_index
+		if(!end_index)
+			end_index = start_index
 		var/index = 0
 		while( !notesfile.eof )
 			index++
@@ -93,7 +100,8 @@ datum/admins/proc/notes_gethtml(var/ckey)
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
 	var/list/infos
 	info >> infos
-	if(!infos) infos = list()
+	if(!infos)
+		infos = list()
 
 	//Overly complex timestamp creation
 	var/modifyer = "th"
@@ -132,8 +140,10 @@ datum/admins/proc/notes_gethtml(var/ckey)
 	var/savefile/note_list = new("data/player_notes.sav")
 	var/list/note_keys
 	note_list >> note_keys
-	if(!note_keys) note_keys = list()
-	if(!note_keys.Find(key)) note_keys += key
+	if(!note_keys)
+		note_keys = list()
+	if(!note_keys.Find(key))
+		note_keys += key
 	note_list << note_keys
 	del note_list
 
@@ -142,7 +152,8 @@ datum/admins/proc/notes_gethtml(var/ckey)
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
 	var/list/infos
 	info >> infos
-	if(!infos || infos.len < index) return
+	if(!infos || infos.len < index)
+		return
 
 	var/datum/player_info/item = infos[index]
 	infos.Remove(item)

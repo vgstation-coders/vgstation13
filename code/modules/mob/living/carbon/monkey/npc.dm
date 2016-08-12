@@ -53,7 +53,8 @@ mob/living/carbon/monkey/proc/npc_act()
 				hiding_behind = null
 				hid_behind = 0
 
-			if(loc == prevloc) dir = get_dir(src, npc_fleeing)
+			if(loc == prevloc)
+				dir = get_dir(src, npc_fleeing)
 		else
 			if(prob(33) && canmove && isturf(loc))
 				step(src, pick(cardinal))
@@ -74,7 +75,8 @@ mob/living/carbon/monkey/react_to_attack(mob/M)
 		fleeing_duration += 30
 		return
 
-	if(!hostiles.Find(M)) hostiles += M
+	if(!hostiles.Find(M))
+		hostiles += M
 
 	spawn(5)
 		switch(rand(1,3))

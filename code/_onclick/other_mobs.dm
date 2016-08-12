@@ -71,7 +71,8 @@
 	return
 
 /mob/living/carbon/human/RangedAttack(var/atom/A)
-	if(!gloves && !mutations.len) return
+	if(!gloves && !mutations.len)
+		return
 	if(gloves)
 		var/obj/item/clothing/gloves/G = gloves
 		if(istype(G) && G.Touch(A, src, 0)) // for magic gloves
@@ -127,7 +128,8 @@
 	things considerably
 */
 /mob/living/carbon/monkey/RestrainedClickOn(var/atom/A)
-	if(a_intent != I_HURT || !ismob(A)) return
+	if(a_intent != I_HURT || !ismob(A))
+		return
 	delayNextAttack(10)
 	if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 		return
@@ -138,7 +140,8 @@
 		ML.apply_damage(rand(1,3), BRUTE, dam_zone, armor)
 		for(var/mob/O in viewers(ML, null))
 			O.show_message("<span class='danger'>[name] has bit [ML]!</span>", 1)
-		if(armor >= 2) return
+		if(armor >= 2)
+			return
 		if(ismonkey(ML))
 			for(var/datum/disease/D in viruses)
 				if(istype(D, /datum/disease/jungle_fever))

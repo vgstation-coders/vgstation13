@@ -34,7 +34,8 @@
 	..()
 
 /obj/item/weapon/gun/portalgun/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	in_chamber = new/obj/item/projectile/portalgun(src)
 	var/obj/item/projectile/portalgun/P = in_chamber
 	P.icon_state = "portalgun[setting]"

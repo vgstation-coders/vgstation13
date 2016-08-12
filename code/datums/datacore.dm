@@ -22,7 +22,8 @@
 
 	for(var/datum/job/J in all_jobs)
 		var/list/alttitles = get_alternate_titles(J.title)
-		if(!J)	continue
+		if(!J)
+			continue
 		if(assignment in alttitles)
 			real_title = J.title
 			break
@@ -141,7 +142,8 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 	preview_icon.Blend(temp, ICON_OVERLAY)
 
 	for(var/datum/organ/external/E in H.organs)
-		if(E.status & ORGAN_CUT_AWAY || E.status & ORGAN_DESTROYED) continue
+		if(E.status & ORGAN_CUT_AWAY || E.status & ORGAN_DESTROYED)
+			continue
 		var/o_icobase=icobase
 		if(E.status & ORGAN_PEG)
 			o_icobase='icons/mob/human_races/o_peg.dmi'

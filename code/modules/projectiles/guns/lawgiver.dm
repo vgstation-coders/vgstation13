@@ -304,8 +304,10 @@
 		switch(firing_mode)
 			if(STUN)
 				if(L.stuncharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.stuncharge -= 20
 					return 1
@@ -313,8 +315,10 @@
 					return 0
 			if(LASER)
 				if(L.lasercharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.lasercharge -= 20
 					return 1
@@ -322,8 +326,10 @@
 					return 0
 			if(RAPID)
 				if(L.rapid_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.rapid_ammo_count -= 1
 					return 1
@@ -331,8 +337,10 @@
 					return 0
 			if(FLARE)
 				if(L.flare_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.flare_ammo_count -= 1
 					return 1
@@ -340,8 +348,10 @@
 					return 0
 			if(RICOCHET)
 				if(L.ricochet_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.ricochet_ammo_count -= 1
 					return 1
@@ -357,36 +367,46 @@
 		switch(firing_mode)
 			if(STUN)
 				if(L.stuncharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(LASER)
 				if(L.lasercharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(RAPID)
 				if(L.rapid_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(FLARE)
 				if(L.flare_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(RICOCHET)
 				if(L.ricochet_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
@@ -425,12 +445,14 @@
 		return 0
 
 /obj/item/weapon/gun/lawgiver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(istype(A, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))	return//Shouldnt flag take care of this?
+	if(istype(A, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
+		return//Shouldnt flag take care of this?
 
 	if(dna_profile)
 		if(dna_profile != user.dna.unique_enzymes)

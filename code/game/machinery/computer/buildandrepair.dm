@@ -325,7 +325,8 @@
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if(do_after(user, src, 10) && state == 0)
-					if(!src || !WT.isOn()) return
+					if(!src || !WT.isOn())
+						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
 					M.amount = 5
@@ -343,7 +344,8 @@
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
 				var/obj/item/weapon/circuitboard/B = P
 				if(B.board_type == COMPUTER)
-					if(!user.drop_item(B, src)) return
+					if(!user.drop_item(B, src))
+						return
 
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You place the circuit board inside the frame.</span>")
@@ -422,10 +424,14 @@
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/B = new src.circuit.build_path ( src.loc )
-				if(circuit.powernet) B:powernet = circuit.powernet
-				if(circuit.id_tag) B:id_tag = circuit.id_tag
-				if(circuit.records) B:records = circuit.records
-				if(circuit.frequency) B:frequency = circuit.frequency
+				if(circuit.powernet)
+					B:powernet = circuit.powernet
+				if(circuit.id_tag)
+					B:id_tag = circuit.id_tag
+				if(circuit.records)
+					B:records = circuit.records
+				if(circuit.frequency)
+					B:frequency = circuit.frequency
 				if(istype(circuit,/obj/item/weapon/circuitboard/supplycomp))
 					var/obj/machinery/computer/supplycomp/SC = B
 					var/obj/item/weapon/circuitboard/supplycomp/C = circuit

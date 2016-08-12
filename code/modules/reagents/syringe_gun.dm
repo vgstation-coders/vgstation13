@@ -38,7 +38,8 @@
 		return 1 // Avoid calling the syringe's afterattack()
 
 /obj/item/weapon/gun/syringe/afterattack(obj/target, mob/user , flag)
-	if(/*!isturf(target.loc) || */target == user) return
+	if(/*!isturf(target.loc) || */target == user)
+		return
 	..()
 
 /obj/item/weapon/gun/syringe/can_fire()
@@ -83,14 +84,18 @@
 		playsound(user.loc, 'sound/items/syringeproj.ogg', 50, 1)
 		log_attack("[user.name] ([user.ckey]) fired \the [src] at [target] [ismob(target) ? "([target:ckey])" : ""] ([target.x],[target.y],[target.z])" )
 		for(var/i=0, i<6, i++)
-			if(!D) break
-			if(D.loc == trg) break
+			if(!D)
+				break
+			if(D.loc == trg)
+				break
 			step_towards(D,trg)
 
 			if(D)
 				for(var/mob/living/carbon/M in D.loc)
-					if(!istype(M,/mob/living/carbon)) continue
-					if(M == user) continue
+					if(!istype(M,/mob/living/carbon))
+						continue
+					if(M == user)
+						continue
 					var/blocked = 0
 					if(ishuman(M))
 						var/mob/living/carbon/human/H = M
@@ -132,12 +137,15 @@
 					break
 			if(D)
 				for(var/atom/A in D.loc)
-					if(A == user) continue
-					if(A.density) qdel(D)
+					if(A == user)
+						continue
+					if(A.density)
+						qdel(D)
 
 			sleep(1)
 
-		if (D) spawn(10) qdel(D)
+		if (D)
+			spawn(10) qdel(D)
 
 		return
 

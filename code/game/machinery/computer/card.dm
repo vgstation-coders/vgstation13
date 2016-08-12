@@ -78,7 +78,8 @@
 	set name = "Eject ID Card"
 	set src in oview(1)
 
-	if(!usr || usr.isUnconscious() || usr.lying)	return
+	if(!usr || usr.isUnconscious() || usr.lying)
+		return
 
 	if(!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
@@ -124,8 +125,10 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/card/attack_hand(mob/user as mob)
-	if(..()) return
-	if(stat & (NOPOWER|BROKEN)) return
+	if(..())
+		return
+	if(stat & (NOPOWER|BROKEN))
+		return
 	ui_interact(user)
 
 /obj/machinery/computer/card/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null)
@@ -199,7 +202,8 @@
 	if(..())
 		return 1
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	switch(href_list["choice"])
 		if ("modify")

@@ -71,7 +71,8 @@
 		A.randomize_appearance_for(new_human)
 		new_human.generate_name()
 		new_human.languages |= S.languages
-		if(S.default_language) new_human.default_language = S.default_language
+		if(S.default_language)
+			new_human.default_language = S.default_language
 		if(S.mind)
 			S.mind.transfer_to(new_human)
 		else

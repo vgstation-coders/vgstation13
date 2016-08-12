@@ -74,7 +74,8 @@
 
 	if (istype(W, /obj/item/weapon/gun/projectile/flamethrower))
 		var/obj/item/weapon/gun/projectile/flamethrower/F = W
-		if ((!F.status)||(F.ptank))	return
+		if ((!F.status)||(F.ptank))
+			return
 		src.master = F
 		F.ptank = src
 		user.before_take_item(src)

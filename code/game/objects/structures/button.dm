@@ -84,7 +84,8 @@ var/list/hidden_doors = list()
 /obj/effect/hidden_door/proc/steal_appearance()
 	var/turf/T = get_turf(src)
 
-	if(!T) return
+	if(!T)
+		return
 	door_appearance["name"] = T.name
 	door_appearance["icon_state"] = T.icon_state
 	door_typepath = T.type

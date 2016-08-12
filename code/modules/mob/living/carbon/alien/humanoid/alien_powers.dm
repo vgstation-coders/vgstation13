@@ -16,7 +16,8 @@ Doesn't work on other aliens/AI.*/
 	else if(Y && (!isturf(src.loc) || istype(src.loc, /turf/space)))
 		to_chat(src, "<span class='alien'>Bad place for a garden!</span>")
 		return 0
-	else	return 1
+	else
+		return 1
 
 /mob/living/carbon/alien/humanoid/verb/plant()
 	set name = "Plant Weeds (50)"
@@ -165,7 +166,8 @@ Doesn't work on other aliens/AI.*/
 
 	if(powerc(75))
 		var/choice = input("Choose what you wish to shape.","Resin building") as null|anything in list("resin door","resin wall","resin membrane","resin nest") //would do it through typesof but then the player choice would have the type path and we don't want the internal workings to be exposed ICly - Urist
-		if(!choice || !powerc(75))	return
+		if(!choice || !powerc(75))
+			return
 		adjustToxLoss(-75)
 		visible_message("<span class='alien'>\The [src] vomits up a thick purple substance and shapes it into some form of resin structure!</span>", "<span class='alien'>You shape a [choice]</span>")
 		switch(choice)

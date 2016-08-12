@@ -37,11 +37,13 @@
 				//get our enter and exit locations
 				var/turf/simulated/floor/enter = pick_turfs[i]
 				pick_turfs -= enter							//remove it from pickable turfs list
-				if( !enter || !istype(enter) )	continue	//sanity
+				if( !enter || !istype(enter) )
+					continue	//sanity
 
 				var/turf/simulated/floor/exit = pick(pick_turfs)
 				pick_turfs -= exit
-				if( !exit || !istype(exit) )	continue	//sanity
+				if( !exit || !istype(exit) )
+					continue	//sanity
 
 				create_wormhole(enter,exit)
 

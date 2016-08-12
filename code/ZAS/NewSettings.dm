@@ -258,7 +258,8 @@ var/global/ZAS_Settings/zas_settings = new
 
 /ZAS_Settings/proc/Load()
 	for(var/t in file2list("config/ZAS.txt"))
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)

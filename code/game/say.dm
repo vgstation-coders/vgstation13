@@ -2,7 +2,8 @@ var/global/nextDecTalkDelay = 5 //seconds
 var/global/lastDecTalkUse = 0
 
 /proc/dectalk(msg)
-	if(!msg) return 0
+	if(!msg)
+		return 0
 	if (world.timeofday > (lastDecTalkUse + (nextDecTalkDelay * 10)))
 		lastDecTalkUse = world.timeofday
 		msg = copytext(msg, 1, 2000)
@@ -312,7 +313,8 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	..("job", "faketrack", "source", "radio")
 
 proc/handle_render(var/mob,var/message,var/speaker)
-	if(istype(mob, /mob/new_player)) return //One extra layer of sanity
+	if(istype(mob, /mob/new_player))
+		return //One extra layer of sanity
 	if(istype(mob,/mob/dead/observer))
 		var/reference = "<a href='?src=\ref[mob];follow=\ref[speaker]'>(Follow)</a> "
 		message = reference+message
@@ -334,7 +336,8 @@ var/global/resethearers = 0
 
 // Returns a list of hearers in range of R from source. Used in saycode.
 /proc/get_hearers_in_view(var/R, var/atom/source)
-	if(world.time>resethearers) sethearing()
+	if(world.time>resethearers)
+		sethearing()
 
 	var/turf/T = get_turf(source)
 	. = new/list()
@@ -349,7 +352,8 @@ var/global/resethearers = 0
  * Returns a list of mobs who can hear any of the radios given in @radios.
  */
 /proc/get_mobs_in_radio_ranges(list/obj/item/device/radio/radios)
-	if(world.time>resethearers) sethearing()
+	if(world.time>resethearers)
+		sethearing()
 
 	. = new/list()
 

@@ -36,7 +36,8 @@ var/global/dmm_suite/preloader/_preloader = null
 	///////////////////////////////////////////////////////////////////////////////////////
 	var/list/grid_models = list()
 	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
-	if(!key_len) key_len = 1
+	if(!key_len)
+		key_len = 1
 
 	//proceed line by line
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)

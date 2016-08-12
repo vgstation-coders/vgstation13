@@ -243,7 +243,8 @@
 			var/new_type = pick(possible_spawns)
 			if(new_type == /obj/item/stack/sheet/metal)
 				new_item = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-			else new_item = new new_type(get_turf(src))
+			else
+				new_item = new new_type(get_turf(src))
 			new_item:amount = rand(5,45)
 		if(15)
 			if(prob(75))
@@ -292,7 +293,8 @@
 			new_item = new new_type(src.loc)
 			apply_prefix = 0
 
-			if(istype(new_item, /obj/item/weapon/claymore)) new_item.force = 10
+			if(istype(new_item, /obj/item/weapon/claymore))
+				new_item.force = 10
 
 			item_type = new_item.name
 		if(20)
@@ -590,6 +592,7 @@
 	else if(talkative)
 		listening_to_players = 1
 		if(prob(25))
-			if(!heard_words) heard_words = list()
+			if(!heard_words)
+				heard_words = list()
 			speaking_to_players = 1
 			processing_objects.Add(src)

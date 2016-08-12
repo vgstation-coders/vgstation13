@@ -1,11 +1,13 @@
 var/oocban_keylist[0]
 
 /proc/ooc_unban(mob/M)
-	if(!M) return 0
+	if(!M)
+		return 0
 	return oocban_keylist.Remove("[M.ckey]")
 
 /proc/ooc_ban(mob/M)
-	if(!M) return 0
+	if(!M)
+		return 0
 	return oocban_keylist.Add("[M.ckey]")
 
 /proc/oocban_loadbanfile()

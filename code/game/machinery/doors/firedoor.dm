@@ -489,7 +489,8 @@ var/global/list/alert_overlays_global = list()
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 

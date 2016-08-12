@@ -29,7 +29,8 @@
 /obj/item/alien_embryo/Topic(href,href_list)
 	if("signup" in href_list)
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O) return
+		if(!O)
+			return
 		volunteer(O)
 
 
@@ -66,7 +67,8 @@
 	..()
 
 /obj/item/alien_embryo/process()
-	if(!affected_mob)	return
+	if(!affected_mob)
+		return
 	if(loc != affected_mob)
 		affected_mob.status_flags &= ~(XENO_HOST)
 		processing_objects.Remove(src)

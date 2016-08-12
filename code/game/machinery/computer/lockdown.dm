@@ -111,7 +111,8 @@
 		onclose(user, "lockdown")
 
 	Topic(href, href_list)
-		if(..()) return 1
+		if(..())
+			return 1
 
 		if( href_list["close"] )
 			usr << browse(null, "window=lockdown")

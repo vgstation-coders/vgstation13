@@ -379,12 +379,14 @@ var/const/MAX_SAVE_SLOTS = 8
 				}
 
 			function mouseUp(event,levelup,leveldown,rank){
-				if(event.button == 0){
+				if(event.button == 0)
+					{
 					//alert("left click " + levelup + " " + rank);
 					setJobPrefRedirect(1, rank);
 					return false;
 					}
-				if(event.button == 2){
+				if(event.button == 2)
+					{
 					//alert("right click " + leveldown + " " + rank);
 					setJobPrefRedirect(0, rank);
 					return false;
@@ -407,7 +409,8 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	//The job before the current job. I only use this to get the previous jobs color when I'm filling in blank rows.
 	var/datum/job/lastJob
-	if (!job_master)		return
+	if (!job_master)
+		return
 	for(var/datum/job/job in job_master.occupations)
 		index += 1
 		if((index >= limit) || (job.title in splitJobs))
@@ -527,7 +530,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	return
 
 /datum/preferences/proc/ShowChoices(mob/user)
-	if(!user || !user.client)	return
+	if(!user || !user.client)
+		return
 	update_preview_icon()
 	var/preview_front = fcopy_rsc(preview_icon_front)
 	var/preview_side = fcopy_rsc(preview_icon_side)
@@ -724,7 +728,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	job_engsec_low = 0
 
 /datum/preferences/proc/GetJobDepartment(var/datum/job/job, var/level)
-	if(!job || !level)	return 0
+	if(!job || !level)
+		return 0
 	switch(job.department_flag)
 		if(CIVILIAN)
 			switch(level)
@@ -753,7 +758,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	return 0
 
 /datum/preferences/proc/SetJobDepartment(var/datum/job/job, var/level)
-	if(!job || !level)	return 0
+	if(!job || !level)
+		return 0
 	switch(level)
 		if(1)//Only one of these should ever be active at once so clear them all here
 			job_civilian_high = 0
@@ -1312,7 +1318,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						)
 
 					var/limb_name = input(user, "Which limb do you want to change?") as null|anything in limb_input
-					if(!limb_name) return
+					if(!limb_name)
+						return
 
 					var/limb = null
 					var/second_limb = null // if you try to change the arm, the hand should also change
@@ -1351,7 +1358,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							valid_limb_states += "Hook Prosthesis"
 
 					var/new_state = input(user, "What state do you wish the limb to be in?") as null|anything in valid_limb_states
-					if(!new_state) return
+					if(!new_state)
+						return
 
 					switch(new_state)
 						if("Normal")
@@ -1376,7 +1384,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("organs")
 					var/organ_name = input(user, "Which internal function do you want to change?") as null|anything in list("Heart", "Eyes", "Lungs", "Liver", "Kidneys")
-					if(!organ_name) return
+					if(!organ_name)
+						return
 
 					var/organ = null
 					switch(organ_name)
@@ -1392,7 +1401,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							organ = "kidneys"
 
 					var/new_state = input(user, "What state do you wish the organ to be in?") as null|anything in list("Normal","Assisted","Mechanical")
-					if(!new_state) return
+					if(!new_state)
+						return
 
 					switch(new_state)
 						if("Normal")
@@ -1404,7 +1414,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("skin_style")
 					var/skin_style_name = input(user, "Select a new skin style") as null|anything in list("default1", "default2", "default3")
-					if(!skin_style_name) return
+					if(!skin_style_name)
+						return
 
 		else
 			switch(href_list["preference"])
@@ -1432,12 +1443,14 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("UIcolor")
 					var/UI_style_color_new = input(user, "Choose your UI colour, dark colours are not recommended!") as color|null
-					if(!UI_style_color_new) return
+					if(!UI_style_color_new)
+						return
 					UI_style_color = UI_style_color_new
 
 				if("UIalpha")
 					var/UI_style_alpha_new = input(user, "Select a new alpha(transparency) parameter for UI, between 50 and 255") as num
-					if(!UI_style_alpha_new | !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50)) return
+					if(!UI_style_alpha_new | !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50))
+						return
 					UI_style_alpha = UI_style_alpha_new
 
 				if("parallax")
@@ -1591,7 +1604,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			I.mechassist()
 		else if(status == "mechanical")
 			I.mechanize()
-		else continue
+		else
+			continue
 	var/datum/species/chosen_species = all_species[species]
 	if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.flags & CAN_BE_FAT) )
 		character.mutations += M_FAT

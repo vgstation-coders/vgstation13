@@ -53,7 +53,8 @@
 			playsound(get_turf(src),'sound/items/defib.ogg',50,1)
 			user.Weaken(5)
 			var/mob/living/carbon/human/H = user
-			if(ishuman(user)) H.apply_damage(20, BURN)
+			if(ishuman(user))
+				H.apply_damage(20, BURN)
 			charges--
 			update_icon()
 		else
@@ -159,7 +160,8 @@
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
 		var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
-		if(prob(25)) heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
+		if(prob(25))
+			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")

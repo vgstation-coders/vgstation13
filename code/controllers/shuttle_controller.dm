@@ -38,7 +38,8 @@ datum/shuttle_controller
 	// otherwise if outgoing, switch to incoming
 
 datum/shuttle_controller/proc/incall(coeff = 1)
-	if(shutdown) return
+	if(shutdown)
+		return
 	if((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
 		return
 	if(endtime)
@@ -56,7 +57,8 @@ datum/shuttle_controller/proc/incall(coeff = 1)
 				A.readyalert()
 
 datum/shuttle_controller/proc/shuttlealert(var/X)
-	if(shutdown) return
+	if(shutdown)
+		return
 	alert = X
 
 
@@ -67,8 +69,10 @@ datum/shuttle_controller/proc/force_shutdown()
 
 
 datum/shuttle_controller/proc/recall()
-	if(shutdown) return
-	if(!can_recall)	return
+	if(shutdown)
+		return
+	if(!can_recall)
+		return
 	if(direction == 1)
 		var/timeleft = timeleft()
 		if(alert == 0)

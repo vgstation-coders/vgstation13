@@ -221,7 +221,8 @@
 	if(..())
 		return
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	if(href_list["remove_tosearch"])
 		var/datum/design/design = research_queue[text2num(href_list["remove_tosearch"])]

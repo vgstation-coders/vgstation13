@@ -372,7 +372,8 @@
 
 
 /obj/machinery/r_n_d/fabricator/proc/convert_designs()
-	if(!files) return
+	if(!files)
+		return
 	var/i = 0
 	for(var/datum/design/D in files.known_designs)
 		if(D.build_type & src.build_number)
@@ -385,7 +386,8 @@
 	return i
 
 /obj/machinery/r_n_d/fabricator/proc/update_tech()
-	if(!files) return
+	if(!files)
+		return
 	var/output
 	for(var/datum/tech/T in files.known_tech)
 		if(T && T.level > 1)
@@ -530,7 +532,8 @@
 	if(..()) // critical exploit prevention, do not remove unless you replace it -walter0o
 		return
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
 
@@ -591,7 +594,8 @@
 	if(href_list["screen"])
 		var/prevscreen=screen
 		screen = text2num(href_list["screen"])
-		if(prevscreen==screen) return 0
+		if(prevscreen==screen)
+			return 0
 		ui_interact(usr)
 		return 1
 
@@ -678,7 +682,8 @@
 			var/obj/item/stack/sheet/mats
 			if(material.sheettype == /obj/item/stack/sheet/metal)
 				mats = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-			else mats = new material.sheettype(src)
+			else
+				mats = new material.sheettype(src)
 			if(to_spawn > mats.max_amount)
 				mats.amount = mats.max_amount
 				to_spawn -= mats.max_amount

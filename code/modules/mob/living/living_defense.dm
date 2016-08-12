@@ -242,7 +242,8 @@
 		set_light(src.light_range + 3)
 		update_fire()
 		return 1
-	else return 0
+	else
+		return 0
 
 /mob/living/proc/ExtinguishMob()
 	if(on_fire)

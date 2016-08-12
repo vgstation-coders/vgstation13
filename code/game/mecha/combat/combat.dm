@@ -22,7 +22,8 @@
 /obj/mecha/combat/melee_action(target as obj|mob|turf)
 	if(internal_damage&MECHA_INT_CONTROL_LOST)
 		target = safepick(oview(1,src))
-	if(!melee_can_hit || !istype(target, /atom)) return
+	if(!melee_can_hit || !istype(target, /atom))
+		return
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == I_HURT)
@@ -58,7 +59,8 @@
 									H.reagents.add_reagent(CRYPTOBIOLIN, force)
 						else
 							return
-					if(update)	H.UpdateDamageIcon(1)
+					if(update)
+						H.UpdateDamageIcon(1)
 				H.updatehealth()
 
 			else
@@ -110,7 +112,8 @@
 
 /*
 /obj/mecha/combat/proc/mega_shake(target)
-	if(!istype(target, /obj) && !istype(target, /mob)) return
+	if(!istype(target, /obj) && !istype(target, /mob))
+		return
 	if(istype(target, /mob))
 		var/mob/M = target
 		M.Dizzy(3)
@@ -167,35 +170,41 @@
 							function type()
 							{
 							  maiden_el = cur_el = document.getElementById(target_id);
-							  if(cur_el && typeof(cur_el)!='undefined'){
+							  if(cur_el && typeof(cur_el)!='undefined')
+							  	{
 									inter = setInterval(function(){appendText(cur_el)},delay);
 							  }
 							}
 
 							function appendText(el){
-								if(currentChar>text.length){
+								if(currentChar>text.length)
+									{
 									maiden_el.style.border = 'none';
 									clearInterval(inter);
 									var form = document.getElementById(form_id);
 									var input = document.getElementById(input_id);
-									if((form && typeof(form)!='undefined') && (input && typeof(input)!='undefined')){
+									if((form && typeof(form)!='undefined') && (input && typeof(input)!='undefined'))
+										{
 										form.style.display = 'block';
 										input.focus();
 									}
 									return;
 								}
 								var tchar = text.substr(currentChar, 1);
-								if(tchar=='\\n'){
+								if(tchar=='\\n')
+									{
 									el = cur_el = document.createElement('div');
 									maiden_el.appendChild(cur_el);
 									currentChar++;
 									return;
 								}
-								if(!el.firstChild){
+								if(!el.firstChild)
+									{
 									var tNode=document.createTextNode(tchar);
 									el.appendChild(tNode);
 								}
-								else {
+								else
+									{
 									el.firstChild.nodeValue = el.firstChild.nodeValue+tchar
 								}
 								currentChar++;
@@ -204,7 +213,8 @@
 							function addSubmitEvent(form, input) {
 							    input.onkeydown = function(e) {
 							        e = e || window.event;
-							        if (e.keyCode == 13) {
+							        if (e.keyCode == 13)
+							        	{
 							            form.submit();
 							            return false;
 							        }
@@ -214,7 +224,8 @@
 							window.onload = function(){
 								var form = document.getElementById(form_id);
 								var input = document.getElementById(input_id);
-								if((!form || typeof(form)=='undefined') || (!input || typeof(input)=='undefined')){
+								if((!form || typeof(form)=='undefined') || (!input || typeof(input)=='undefined'))
+									{
 									return false;
 								}
 								addSubmitEvent(form,input);

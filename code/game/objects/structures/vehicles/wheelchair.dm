@@ -65,7 +65,8 @@
 
 	//Wheelchair's speed depends on the resulting value
 	var/mob/living/carbon/M = user
-	if(!M) return 0
+	if(!M)
+		return 0
 
 	//Speed is determined by availability of hands
 	//Initial score is amount of hands * 2
@@ -96,14 +97,16 @@
 	if(ishuman(M)) //Human check - 0 to 4
 		var/mob/living/carbon/human/H = user
 
-		if(H.l_hand == null) left_hand_exists++ //Check to see if left hand is holding anything
+		if(H.l_hand == null)
+			left_hand_exists++ //Check to see if left hand is holding anything
 		var/datum/organ/external/left_hand = H.get_organ(LIMB_LEFT_HAND)
 		if(!left_hand)
 			left_hand_exists = 0
 		else if(left_hand.status & ORGAN_DESTROYED)
 			left_hand_exists = 0
 
-		if(H.r_hand == null) right_hand_exists++
+		if(H.r_hand == null)
+			right_hand_exists++
 		var/datum/organ/external/right_hand = H.get_organ(LIMB_RIGHT_HAND)
 		if(!right_hand)
 			right_hand_exists = 0
@@ -111,17 +114,20 @@
 			right_hand_exists = 0
 	else if( ismonkey(M) || isalien(M) ) //Monkey and alien check - 0 to 2
 		left_hand_exists = 0
-		if(user.l_hand == null) left_hand_exists++
+		if(user.l_hand == null)
+			left_hand_exists++
 
 		right_hand_exists = 0
-		if(user.r_hand == null) right_hand_exists++
+		if(user.r_hand == null)
+			right_hand_exists++
 
 	return ( left_hand_exists + right_hand_exists )*/
 
 /obj/structure/bed/chair/vehicle/wheelchair/getMovementDelay()
 	//Speed is determined by amount of usable hands and whether they're carrying something
 	var/hands = check_hands(occupant) //See check_hands() proc above
-	if(hands <= 0) return 0
+	if(hands <= 0)
+		return 0
 	return movement_delay * (4 / hands)
 
 /obj/structure/bed/chair/vehicle/wheelchair/relaymove(var/mob/user, direction)
@@ -233,7 +239,8 @@
 		if(user.drop_item(W,src))
 			internal_battery = W
 			user.visible_message("<span class='notice'>[user] inserts \the [W] into the \the [src].</span>", "<span class='notice'>You insert \the [W] into \the [src].</span>", "You hear something being slid into place.")
-	else ..()
+	else
+		..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate
 	nick = "medical malpractice"

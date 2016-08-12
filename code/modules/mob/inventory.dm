@@ -37,12 +37,14 @@
 
 //Returns the thing in our active hand
 /mob/proc/get_held_item_by_index(index)
-	if(!is_valid_hand_index(index)) return null
+	if(!is_valid_hand_index(index))
+		return null
 
 	return held_items[index]
 
 /mob/proc/find_held_item_by_type(type) //Returns the list index
-	if(!held_items.len) return 0
+	if(!held_items.len)
+		return 0
 
 	for(var/i = 1 to held_items.len)
 		if(istype(held_items[i], type))
@@ -71,7 +73,8 @@
 	return get_held_item_by_index(active_hand)
 
 /mob/proc/get_held_item_ui_location(index)
-	if(!is_valid_hand_index(index)) return
+	if(!is_valid_hand_index(index))
+		return
 
 	var/x_offset = -(index % 2) //Index is 1 -> one unit to the left
 	var/y_offset = round((index-1) / 2) //Two slots per row, then go higher. Rounded down
@@ -80,10 +83,14 @@
 
 	/*
 	switch(index)
-		if(1) return "CENTER-1:16,SOUTH:5"
-		if(2)return "CENTER:16,SOUTH:5"
-		if(3) return "CENTER-1:16,SOUTH+1:5"
-		if(4) return "CENTER:16,SOUTH+1:5"
+		if(1)
+			return "CENTER-1:16,SOUTH:5"
+		if(2)
+			return "CENTER:16,SOUTH:5"
+		if(3)
+			return "CENTER-1:16,SOUTH+1:5"
+		if(4)
+			return "CENTER:16,SOUTH+1:5"
 	*/
 
 /mob/proc/get_direction_by_index(index)
@@ -93,19 +100,24 @@
 		return "left_hand"
 
 /mob/proc/get_index_limb_name(var/index)
-	if(!index) index = active_hand
+	if(!index)
+		index = active_hand
 
 	switch(index)
-		if(GRASP_LEFT_HAND) return "left hand"
-		if(GRASP_RIGHT_HAND) return "right hand"
-		else return "hand"
+		if(GRASP_LEFT_HAND)
+			return "left hand"
+		if(GRASP_RIGHT_HAND)
+			return "right hand"
+		else
+			return "hand"
 
 /mob/proc/get_item_offset_by_index(index) //Return a list with x and y offsets depending on index. Example: list("x"=5, "y"=4)
 	return list()
 
 // Get the organ of the active hand
 /mob/proc/get_active_hand_organ()
-	if(!istype(src, /mob/living/carbon)) return
+	if(!istype(src, /mob/living/carbon))
+		return
 	if (hasorgans(src))
 		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
 		return temp
@@ -133,7 +145,8 @@
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
-	if(!hud_used) return
+	if(!hud_used)
+		return
 
 	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
@@ -146,7 +159,8 @@
 /mob/proc/activate_hand(var/selhand)
 	active_hand = selhand
 
-	if(!hud_used) return
+	if(!hud_used)
+		return
 
 	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
@@ -172,8 +186,10 @@
 	W.pixel_y = initial(W.pixel_y)
 	W.equipped(src, null, index)
 
-	if(client)	client.screen |= W
-	if(pulling == W) stop_pulling()
+	if(client)
+		client.screen |= W
+	if(pulling == W)
+		stop_pulling()
 
 	update_inv_hand(index)
 	W.pickup(src)
@@ -216,7 +232,8 @@
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
 /mob/proc/put_in_hands(var/obj/item/W)
-	if(!W)		return 0
+	if(!W)
+		return 0
 	if(put_in_active_hand(W))
 		return 1
 	else if(put_in_inactive_hand(W))
@@ -250,9 +267,11 @@
 
 /mob/proc/drop_from_inventory(var/obj/item/W) //I'm fairly sure the entirety of this proc is redundant and can be replaced by just u_equip(W,1)
 	if(W)
-		if(client)	client.screen -= W
+		if(client)
+			client.screen -= W
 		u_equip(W,1)
-		if(!W) return 1 // self destroying objects (tk, grabs)
+		if(!W)
+			return 1 // self destroying objects (tk, grabs)
 		W.reset_plane_and_layer()
 		W.forceMove(loc)
 
@@ -316,7 +335,8 @@
 
 
 /mob/proc/u_equip(var/obj/item/W as obj, dropped = 1)
-	if(!W) return 0
+	if(!W)
+		return 0
 	var/success = 0
 
 	var/index = is_holding_item(W)
@@ -351,7 +371,8 @@
 	src.u_equip(O,1)
 	if (src.client)
 		src.client.screen -= O
-	if(!O) return
+	if(!O)
+		return
 	O.reset_plane_and_layer()
 	O.screen_loc = null
 	return 1

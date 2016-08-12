@@ -87,7 +87,8 @@
  * This is effectly the exact same code as ..().
  * The only difference is the source != current check, which also does the same thing.
 /mob/living/silicon/ai/send_speech(var/datum/speech/speech, var/message_range, var/bubble_type)
-	if(isnull(message_range)) message_range = 7
+	if(isnull(message_range))
+		message_range = 7
 	if(source != current)
 		return ..()
 

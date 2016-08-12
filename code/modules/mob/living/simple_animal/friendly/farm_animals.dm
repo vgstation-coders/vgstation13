@@ -30,7 +30,8 @@
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. = ..()
 	if(.)
 		//chance to go crazy and start wacking stuff
@@ -128,7 +129,8 @@
 		..()
 
 /mob/living/simple_animal/cow/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. = ..()
 	if(stat == CONSCIOUS)
 		if(udder && prob(5))
@@ -180,7 +182,8 @@
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chick/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. =..()
 	if(!.)
 		return
@@ -247,7 +250,8 @@
 		..()
 
 /mob/living/simple_animal/chicken/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. =..()
 	if(!.)
 		return
@@ -312,8 +316,10 @@
 /mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
 	if(ishuman(A))
 		var/mob/living/carbon/human/H = A
-		if(isvox(H)) return 0 //Won't attack Vox
-	else ..()
+		if(isvox(H))
+			return 0 //Won't attack Vox
+	else
+		..()
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
 	. = ..()
@@ -336,4 +342,5 @@
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name].</span>","<span class='notice'>You feed [O] to [name].</span>")
 			qdel(O)
 			fat += rand(15,25)
-	else ..()
+	else
+		..()

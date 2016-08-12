@@ -213,8 +213,10 @@ var/global/floorIsLava = 0
 	var/f = 1
 	for(var/k in all_languages)
 		var/datum/language/L = all_languages[k]
-		if(!f) body += " | "
-		else f = 0
+		if(!f)
+			body += " | "
+		else
+			f = 0
 		if(L in M.languages)
 			body += "<a href='?src=\ref[src];toglang=\ref[M];lang=[html_encode(k)]' style='color:#006600'>[k]</a>"
 		else
@@ -324,8 +326,10 @@ var/global/floorIsLava = 0
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
 	var/list/infos
 	info >> infos
-	if(!infos || !infos.len) return 0
-	else return 1
+	if(!infos || !infos.len)
+		return 0
+	else
+		return 1
 
 /proc/exportnotes(var/key as text)
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
@@ -640,7 +644,8 @@ var/global/floorIsLava = 0
 
 
 /datum/admins/proc/Jobbans()
-	if(!check_rights(R_BAN))	return
+	if(!check_rights(R_BAN))
+		return
 
 	var/dat = "<B>Job Bans!</B><HR><table>"
 	for(var/t in jobban_keylist)
@@ -652,7 +657,8 @@ var/global/floorIsLava = 0
 	usr << browse(dat, "window=ban;size=400x400")
 
 /datum/admins/proc/Game()
-	if(!check_rights(0))	return
+	if(!check_rights(0))
+		return
 
 	var/dat = {"
 		<center><B>Game Panel</B></center><hr>\n
@@ -691,7 +697,8 @@ var/global/floorIsLava = 0
 	return
 
 /datum/admins/proc/Secrets()
-	if(!check_rights(0))	return
+	if(!check_rights(0))
+		return
 
 	var/dat = "<B>The first rule of adminbuse is: you don't talk about the adminbuse.</B><HR>"
 
@@ -1045,7 +1052,8 @@ var/global/floorIsLava = 0
 	set desc="Delay the game start/end"
 	set name="Delay"
 
-	if(!check_rights(R_ADMIN))	return
+	if(!check_rights(R_ADMIN))
+		return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
 		if(ticker.delay_end == 2)
 			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
@@ -1103,7 +1111,8 @@ var/global/floorIsLava = 0
 	set desc="Reboots the server post haste"
 	set name="Immediate Reboot"
 
-	if(!usr.client.holder)	return
+	if(!usr.client.holder)
+		return
 	if( alert("Reboot server?",,"Yes","No") == "No")
 		return
 	to_chat(world, "<span class='warning'><b>Rebooting world!</b> <span class='notice'>Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>")
@@ -1210,7 +1219,8 @@ var/global/floorIsLava = 0
 	set desc = "(atom path) Spawn an atom"
 	set name = "Spawn"
 
-	if(!check_rights(R_SPAWN))	return
+	if(!check_rights(R_SPAWN))
+		return
 
 	var/list/matches = new()
 

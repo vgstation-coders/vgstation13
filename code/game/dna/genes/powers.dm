@@ -284,7 +284,8 @@
 		return 0
 
 	OnMobLife(var/mob/living/carbon/human/M)
-		if(!istype(M)) return
+		if(!istype(M))
+			return
 		if(M.health <= 25 && M_HULK in M.mutations)
 			M.mutations.Remove(M_HULK)
 			M.dna.SetSEState(HULKBLOCK,0)

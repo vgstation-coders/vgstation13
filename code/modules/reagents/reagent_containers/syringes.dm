@@ -71,7 +71,8 @@
 	if(proximity_flag == 0) // not adjacent
 		return
 
-	if(!target.reagents) return
+	if(!target.reagents)
+		return
 
 	if(mode == SYRINGE_BROKEN)
 		to_chat(user, "<span class='warning'>\The [src] is broken!</span>")

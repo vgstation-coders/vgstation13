@@ -57,7 +57,8 @@
 		return
 
 /obj/machinery/hydroponics/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
@@ -541,13 +542,19 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 				if(S.reagents.has_reagent(MUTAGEN, 5))
 					switch(rand(100))
-						if (91  to 100)	plantdies()
-						if (81  to 90)  mutatespecie()
-						if (66	to 80)	hardmutate()
-						if (41  to 65)  mutate()
+						if (91  to 100)
+							plantdies()
+						if (81  to 90)
+							mutatespecie()
+						if (66	to 80)
+							hardmutate()
+						if (41  to 65)
+							mutate()
 						to_chat(if (21  to 41)  user, "The plants don't seem to react...")
-						if (11	to 20)  mutateweed()
-						if (1   to 10)  mutatepest()
+						if (11	to 20)
+							mutateweed()
+						if (1   to 10)
+							mutatepest()
 									to_chat(else 			user, "Nothing happens...")
 
 				// Antitoxin binds shit pretty well. So the tox goes significantly down
@@ -656,13 +663,19 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 					toxic += round(S.reagents.get_reagent_amount(RADIUM)*2)
 				if(S.reagents.has_reagent(RADIUM, 10))
 					switch(rand(100))
-						if (91  to 100)	plantdies()
-						if (81  to 90)  mutatespecie()
-						if (66	to 80)	hardmutate()
-						if (41  to 65)  mutate()
+						if (91  to 100)
+							plantdies()
+						if (81  to 90)
+							mutatespecie()
+						if (66	to 80)
+							hardmutate()
+						if (41  to 65)
+							mutate()
 						to_chat(if (21  to 41)  user, "The plants don't seem to react...")
-						if (11	to 20)  mutateweed()
-						if (1   to 10)  mutatepest()
+						if (11	to 20)
+							mutateweed()
+						if (1   to 10)
+							mutatepest()
 									to_chat(else 			user, "Nothing happens...")
 
 				// The best stuff there is. For testing/debugging.
@@ -674,9 +687,12 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 					weedlevel -= rand(1,5)
 				if(S.reagents.has_reagent(ADMINORDRAZINE, 5))
 					switch(rand(100))
-						if (66  to 100)  mutatespecie()
-						if (33	to 65)  mutateweed()
-						if (1   to 32)  mutatepest()
+						if (66  to 100)
+							mutatespecie()
+						if (33	to 65)
+							mutateweed()
+						if (1   to 32)
+							mutatepest()
 									to_chat(else 			user, "Nothing happens...")
 
 				S.reagents.clear_reagents()
@@ -883,7 +899,8 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 	while ( t_amount < (yield * parent.yieldmod ))
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/t_prod = new produce(user.loc, potency) // User gets a consumable
-		if(!t_prod)	return
+		if(!t_prod)
+			return
 		t_prod.seed = mypath
 		t_prod.species = species
 		t_prod.lifespan = lifespan

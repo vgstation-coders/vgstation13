@@ -87,7 +87,8 @@ Pipelines + Other Objects -> Pipe network
 	alpha = invisibility ? 128 : 255
 	if (!update_icon_ready)
 		update_icon_ready = 1
-	else underlays.Cut()
+	else
+		underlays.Cut()
 	var/list/missing_nodes = list()
 	for(var/direction in cardinal)
 		if(direction & initialize_directions)
@@ -110,7 +111,8 @@ Pipelines + Other Objects -> Pipe network
 				nodecon.color = default_colour
 			else if(connected_node.default_colour && connected_node.default_colour != "#B4B4B4")
 				nodecon.color = connected_node.default_colour
-			else nodecon.color = "#B4B4B4"
+			else
+				nodecon.color = "#B4B4B4"
 			underlays += nodecon
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))
 			connected_node.update_icon(1)
@@ -118,7 +120,8 @@ Pipelines + Other Objects -> Pipe network
 		var/image/nodeex = node_ex["[missing_dir]"]
 		if(!color)
 			nodeex.color = default_colour ? default_colour : "#B4B4B4"
-		else nodeex.color = null
+		else
+			nodeex.color = null
 		underlays += nodeex
 
 
@@ -167,7 +170,8 @@ Pipelines + Other Objects -> Pipe network
 				else
 					error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([node_id]): [node_type]")
 					return
-			if(!found) continue
+			if(!found)
+				continue
 			var/node_var="node[node_id]"
 			if(!(node_var in vars))
 				testing("[node_var] not in vars.")
@@ -180,7 +184,8 @@ Pipelines + Other Objects -> Pipe network
 // Re-enabled for debugging.
 /obj/machinery/atmospherics/process()
 
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. = build_network()
 	//testing("[src] called parent process to build_network()")
 
@@ -243,7 +248,8 @@ Pipelines + Other Objects -> Pipe network
 		if(istype(W, /obj/item/weapon/wrench/socket) && istype(src, /obj/machinery/atmospherics/pipe))
 			to_chat(user, "<span class='warning'>You begin to open the pressure release valve on the pipe...</span>")
 			if(do_after(user, src, 50))
-				if(!loc) return
+				if(!loc)
+					return
 				playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
 				user.visible_message("[user] vents \the [src].",
 									"You have vented \the [src].",

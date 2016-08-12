@@ -25,7 +25,8 @@
 
 	New()
 		..()
-		if (empty) return
+		if (empty)
+			return
 
 		icon_state = pick("ointment","firefirstaid")
 
@@ -44,7 +45,8 @@
 
 	New()
 		..()
-		if (empty) return
+		if (empty)
+			return
 		new /obj/item/stack/medical/bruise_pack(src)
 		new /obj/item/stack/medical/bruise_pack(src)
 		new /obj/item/clothing/suit/spaceblanket(src)
@@ -62,7 +64,8 @@
 
 	New()
 		..()
-		if (empty) return
+		if (empty)
+			return
 
 		icon_state = pick("antitoxin","antitoxfirstaid","antitoxfirstaid2","antitoxfirstaid3")
 
@@ -83,7 +86,8 @@
 
 	New()
 		..()
-		if (empty) return
+		if (empty)
+			return
 		new /obj/item/weapon/reagent_containers/pill/dexalin( src )
 		new /obj/item/weapon/reagent_containers/pill/dexalin( src )
 		new /obj/item/weapon/reagent_containers/pill/dexalin( src )
@@ -101,7 +105,8 @@
 
 /obj/item/weapon/storage/firstaid/adv/New()
 	..()
-	if (empty) return
+	if (empty)
+		return
 	new /obj/item/weapon/reagent_containers/hypospray/autoinjector( src )
 	new /obj/item/stack/medical/advanced/bruise_pack(src)
 	new /obj/item/stack/medical/advanced/bruise_pack(src)
@@ -162,7 +167,8 @@
 	return ..()
 
 /obj/item/weapon/storage/pill_bottle/attackby(var/obj/item/I, var/mob/user)
-	if(!I) return
+	if(!I)
+		return
 	if(!melted)
 		if(I.is_hot())
 			to_chat(user, "You slightly melt the plastic on the side of \the [src] with \the [I].")

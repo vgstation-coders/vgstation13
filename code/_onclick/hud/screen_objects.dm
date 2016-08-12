@@ -278,7 +278,8 @@
 	return locate(X, Y, origin.z)
 
 /obj/screen/Click(location, control, params)
-	if(!usr)	return 1
+	if(!usr)
+		return 1
 
 	switch(name)
 		if("toggle")

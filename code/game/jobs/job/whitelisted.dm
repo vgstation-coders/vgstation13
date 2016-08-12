@@ -26,14 +26,18 @@
 	no_headset = 1
 
 /datum/job/trader/equip(var/mob/living/carbon/human/H)
-	if(!H)	return 0
+	if(!H)
+		return 0
 	H.equip_or_collect(new /obj/item/clothing/under/vox/vox_robes(H), slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/shoes/magboots/vox(H), slot_shoes)
 
 	switch(H.backbag) //BS12 EDIT
-		if(2) H.equip_or_collect(new/obj/item/weapon/storage/backpack(H), slot_back)
-		if(3) H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-		if(4) H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(2)
+			H.equip_or_collect(new/obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel(H), slot_back)
 
 	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
@@ -47,7 +51,8 @@
 	return 1
 
 /datum/job/trader/introduce(mob/M, job_title)
-	if(!job_title) job_title = src.title
+	if(!job_title)
+		job_title = src.title
 
 	to_chat(M, "<B>You are a [job_title].</B>")
 

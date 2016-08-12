@@ -15,7 +15,8 @@
 			choices += C
 
 	var/mob/living/carbon/M = input(src,"Who do you wish to feed on?") in null|choices
-	if(!M) return
+	if(!M)
+		return
 	if(M in view(1, src))
 
 		if(!istype(src, /mob/living/carbon/brain))
@@ -145,19 +146,23 @@
 				if(prob(85))
 					rabid() // UUUNNBGHHHH GONNA EAT JUUUUUU
 
-			if(client) to_chat(src, "<i>This subject does not have a strong enough life energy anymore...</i>")
+			if(client)
+				to_chat(src, "<i>This subject does not have a strong enough life energy anymore...</i>")
 		else
 			M.update_canmove()
 
-			if(client) to_chat(src, "<i>I have stopped feeding...</i>")
+			if(client)
+				to_chat(src, "<i>I have stopped feeding...</i>")
 	else
-		if(client) to_chat(src, "<i>I have stopped feeding...</i>")
+		if(client)
+			to_chat(src, "<i>I have stopped feeding...</i>")
 
 	Victim = null
 
 /mob/living/carbon/slime/proc/Feedstop()
 	if(Victim)
-		if(Victim.client) to_chat(Victim, "[src] has let go of your head!")
+		if(Victim.client)
+			to_chat(Victim, "[src] has let go of your head!")
 		Victim = null
 
 /mob/living/carbon/slime/proc/UpdateFeed(var/mob/M)
@@ -226,7 +231,8 @@
 				var/mob/living/carbon/slime/M = new newslime(loc)
 				M.nutrition = new_nutrition
 				M.powerlevel = new_powerlevel
-				if(i != 1) step_away(M,src)
+				if(i != 1)
+					step_away(M,src)
 				babies += M
 				feedback_add_details("slime_babies_born","slimebirth_[replacetext(M.colour," ","_")]")
 
@@ -257,7 +263,8 @@
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Object"
-	if(Victim)	return
+	if(Victim)
+		return
 	var/pipe = start_ventcrawl()
 	if(pipe && !Victim)
 		handle_ventcrawl(pipe)

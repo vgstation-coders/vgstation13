@@ -94,13 +94,15 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	return "The trigger assembly looks broken!"
 
 /obj/item/device/assembly/proc/send_pulses_to_list(var/list/L) //Send pulse to all assemblies in list.
-	if(!L || !L.len) return
+	if(!L || !L.len)
+		return
 
 	for(var/obj/item/device/assembly/A in L)
 		A.pulsed()
 
 /obj/item/device/assembly/proc/get_value(var/value) //Get the assembly's value (to be used with various circuits). value = an element from the accessible_values list!
-	if(!accessible_values.Find(value)) return
+	if(!accessible_values.Find(value))
+		return
 
 	var/list/L = params2list(accessible_values[value])
 
@@ -121,7 +123,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 /obj/item/device/assembly/proc/write_to_value(var/value, var/new_value) //Attempt to write to assembly's value. This handles value's type (num/text), whether writing is possible, etc.
 	set waitfor = 0
 
-	if(!accessible_values.Find(value)) return
+	if(!accessible_values.Find(value))
+		return
 
 	var/list/L = params2list(accessible_values[value])
 
@@ -195,7 +198,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 /obj/item/device/assembly/process_cooldown()
 	cooldown--
-	if(cooldown <= 0)	return 0
+	if(cooldown <= 0)
+		return 0
 	spawn(10)
 		process_cooldown()
 	return 1
@@ -243,7 +247,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 
 /obj/item/device/assembly/activate()
-	if(!secured || (cooldown > 0))	return 0
+	if(!secured || (cooldown > 0))
+		return 0
 	cooldown = 2
 	spawn(10)
 		process_cooldown()
@@ -294,7 +299,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 			to_chat(user, "<span class='info'>\The [src] can be attached!</span>")
 
 /obj/item/device/assembly/attack_self(mob/user as mob)
-	if(!user)	return 0
+	if(!user)
+		return 0
 	user.set_machine(src)
 	interact(user)
 	return 1
@@ -327,15 +333,18 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 	Process_cooldown()
 		cooldown--
-		if(cooldown <= 0)	return 0
+		if(cooldown <= 0)
+			return 0
 		spawn(10)
 			Process_cooldown()
 		return 1
 
 
 	Attach_Holder(var/obj/H, var/mob/user)
-		if(!H)	return 0
-		if(!H.IsAssemblyHolder())	return 0
+		if(!H)
+			return 0
+		if(!H.IsAssemblyHolder())
+			return 0
 		//Remember to have it set its loc somewhere in here
 
 

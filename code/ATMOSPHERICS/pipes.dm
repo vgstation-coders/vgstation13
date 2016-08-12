@@ -273,7 +273,8 @@
 				else
 					error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([node_id]): [node_type]")
 					return
-			if(!found) continue
+			if(!found)
+				continue
 
 			var/obj/machinery/atmospherics/unary/vent/burstpipe/BP = new burst_type(T, setdir=direction)
 			BP.color=src.color

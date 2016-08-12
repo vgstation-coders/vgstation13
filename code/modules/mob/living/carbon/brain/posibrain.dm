@@ -56,9 +56,11 @@
 
 /obj/item/device/mmi/posibrain/proc/question(var/client/C)
 	spawn(0)
-		if(!C)	return
+		if(!C)
+			return
 		var/response = alert(C, "Someone is requesting a personality for \a [src]. Would you like to play as one?", "[src] request", "Yes", "No", "Never for this round")
-		if(!C || brainmob.key || 0 == searching)	return		//handle logouts that happen whilst the alert is waiting for a response, and responses issued after a brain has been located.
+		if(!C || brainmob.key || 0 == searching)
+			return		//handle logouts that happen whilst the alert is waiting for a response, and responses issued after a brain has been located.
 		if(response == "Yes")
 			transfer_personality(C.mob)
 
@@ -85,7 +87,8 @@
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
 
-	if(src.brainmob && src.brainmob.key) return
+	if(src.brainmob && src.brainmob.key)
+		return
 
 	src.searching = 0
 	icon_state = "posibrain"
@@ -97,7 +100,8 @@
 /obj/item/device/mmi/posibrain/Topic(href,href_list)
 	if("signup" in href_list)
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O) return
+		if(!O)
+			return
 		volunteer(O)
 
 /obj/item/device/mmi/posibrain/proc/volunteer(var/mob/dead/observer/O)

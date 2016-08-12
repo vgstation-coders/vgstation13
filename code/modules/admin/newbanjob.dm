@@ -2,7 +2,8 @@ var/savefile/Banlistjob
 
 
 /proc/_jobban_isbanned(var/client/clientvar, var/rank)
-	if(!clientvar) return 1
+	if(!clientvar)
+		return 1
 	ClearTempbansjob()
 	var/id = clientvar.computer_id
 	var/key = clientvar.ckey
@@ -26,7 +27,8 @@ var/savefile/Banlistjob
 	Banlistjob = new("data/job_fullnew.bdb")
 	log_admin("Loading Banlistjob")
 
-	if (!length(Banlistjob.dir)) log_admin("Banlistjob is empty.")
+	if (!length(Banlistjob.dir))
+		log_admin("Banlistjob is empty.")
 
 	if (!Banlistjob.dir.Find("base"))
 		log_admin("Banlistjob missing base dir.")
@@ -50,8 +52,10 @@ var/savefile/Banlistjob
 		//	message_admins("Invalid Ban.")
 		//	continue
 
-		if (!Banlistjob["temp"]) continue
-		if (CMinutes >= Banlistjob["minutes"]) RemoveBanjob(A)
+		if (!Banlistjob["temp"])
+			continue
+		if (CMinutes >= Banlistjob["minutes"])
+			RemoveBanjob(A)
 
 	return 1
 
@@ -171,7 +175,8 @@ var/savefile/Banlistjob
 	Banlistjob["rank"] >> rank
 	Banlistjob.cd = "/base"
 
-	if (!Banlistjob.dir.Remove(foldername)) return 0
+	if (!Banlistjob.dir.Remove(foldername))
+		return 0
 
 	if(!usr)
 		log_admin("Banjob Expired: [key]")

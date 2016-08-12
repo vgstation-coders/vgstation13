@@ -107,7 +107,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
-	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
+	if(animation)
+		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
 /mob/living/simple_animal/New()
@@ -137,7 +138,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	Move(dest)
 
 /mob/living/simple_animal/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 
 	//Health
@@ -333,7 +335,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return "says, [text]";
 
 /mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto)
-	if(timestopped) return //under effects of time magick
+	if(timestopped)
+		return //under effects of time magick
 	if(stat)
 		return
 	if(act == "scream")
@@ -361,7 +364,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		updatehealth()
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)	return
+	if(!Proj)
+		return
 	// FUCK mice. - N3X
 	if(ismouse(src) && (Proj.stun+Proj.weaken+Proj.paralyze+Proj.agony)>5)
 		var/mob/living/simple_animal/mouse/M=src
@@ -479,7 +483,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		to_chat(M, "You cannot attack people before the game has started.")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	visible_message("<span class='danger'>[M.name] glomps [src]!</span>")
 	add_logs(M, src, "glomped on", 0)
@@ -717,13 +722,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	src.faction = from.faction
 
 /mob/living/simple_animal/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(other) other = other.GetSource()
+	if(other)
+		other = other.GetSource()
 	if(issilicon(other))
 		return 1
 	return ..()
 
 /mob/living/simple_animal/proc/reagent_act(id, method, volume)
-	if(isDead()) return
+	if(isDead())
+		return
 
 	switch(id)
 		if(SACID)

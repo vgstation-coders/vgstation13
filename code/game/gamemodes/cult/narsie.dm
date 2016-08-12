@@ -102,14 +102,16 @@ var/global/list/narsie_list = list()
 
 
 /obj/machinery/singularity/narsie/large/Bump(atom/A)
-	if(!narnar) return
+	if(!narnar)
+		return
 	if(isturf(A))
 		narsiewall(A)
 	else if(istype(A, /obj/structure/cult))
 		qdel(A)
 
 /obj/machinery/singularity/narsie/large/Bumped(atom/A)
-	if(!narnar) return
+	if(!narnar)
+		return
 	if(isturf(A))
 		narsiewall(A)
 	else if(istype(A, /obj/structure/cult))

@@ -10,7 +10,8 @@
 	set name = "Show Plant Genes"
 	set desc = "Prints the round's plant gene masks."
 
-	if(!holder)	return
+	if(!holder)
+		return
 
 	if(!plant_controller || !plant_controller.gene_tag_masks)
 		to_chat(usr, "Gene masks not set.")

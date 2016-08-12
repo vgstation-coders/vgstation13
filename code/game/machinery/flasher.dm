@@ -80,11 +80,13 @@ var/list/obj/machinery/flasher/flashers = list()
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
 	src.last_flash = world.time
 	use_power(1000)
-	if(harm_labeled >= min_harm_label)	return //Still "flashes," so power is used and the noise is made, etc., but it doesn't actually flash anyone.
+	if(harm_labeled >= min_harm_label)
+		return //Still "flashes," so power is used and the noise is made, etc., but it doesn't actually flash anyone.
 	flick("[base_state]_flash", src)
 
 	for (var/mob/O in viewers(src, null))
-		if(isobserver(O)) continue
+		if(isobserver(O))
+			continue
 		if (get_dist(src, O) > src.range)
 			continue
 

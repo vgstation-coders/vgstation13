@@ -107,7 +107,8 @@ obj/machinery/atmospherics/trinary/Destroy()
 	..()
 
 obj/machinery/atmospherics/trinary/initialize()
-	if(node1 && node2 && node3) return
+	if(node1 && node2 && node3)
+		return
 
 	//mirrored pipes face the same way and have their nodes in the same place
 	//The 1 and 3 nodes are reversed, however.

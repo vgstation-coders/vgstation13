@@ -483,7 +483,8 @@
 	return
 
 /obj/machinery/cloning/clonepod/emp_act(severity)
-	if(prob(100/severity)) malfunction()
+	if(prob(100/severity))
+		malfunction()
 	..()
 
 /obj/machinery/cloning/clonepod/ex_act(severity)

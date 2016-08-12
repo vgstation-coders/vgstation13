@@ -107,8 +107,10 @@ datum/hSB
 				hsbpanel += "- <a href=\"?\ref[src];hsb=hsbobj\">Spawn Object</a><br><br>"
 			usr << browse(hsbpanel, "window=hsbpanel")
 	Topic(href, href_list)
-		if(!(src.owner == usr.ckey)) return
-		if(!usr) return //I guess this is possible if they log out or die with the panel open? It happened.
+		if(!(src.owner == usr.ckey))
+			return
+		if(!usr)
+			return //I guess this is possible if they log out or die with the panel open? It happened.
 		if(href_list["hsb"])
 			switch(href_list["hsb"])
 				if("revive")
@@ -116,7 +118,8 @@ datum/hSB
 						var/mob/living/M = usr
 						M.revive()
 				if("hsbtobj")
-					if(!admin) return
+					if(!admin)
+						return
 					if(hsboxspawn)
 						to_chat(world, "<b>Sandbox:  [usr.key] has disabled object spawning!</b>")
 						hsboxspawn = 0

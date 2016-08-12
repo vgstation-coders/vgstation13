@@ -1,7 +1,9 @@
 //Restores our verbs. It will only restore verbs allowed during lesser (monkey) form if we are not human
 /mob/proc/make_changeling()
-	if(!mind)				return
-	if(!mind.changeling)	mind.changeling = new /datum/changeling(gender)
+	if(!mind)
+		return
+	if(!mind.changeling)
+		mind.changeling = new /datum/changeling(gender)
 	verbs += /datum/changeling/proc/EvolutionMenu
 
 	var/obj/item/verbs/changeling/verb_holder = locate() in src
@@ -22,7 +24,8 @@
 
 	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
 		if(P.isVerb)
-			if(lesser_form && !P.allowduringlesserform)	continue
+			if(lesser_form && !P.allowduringlesserform)
+				continue
 			if(!(P in src.verbs))
 				verb_holder.verbs += P.verbpath
 
@@ -54,7 +57,8 @@
 
 /mob/proc/updateChangelingHUD()
 	if(hud_used)
-		if(!mind.changeling) return
+		if(!mind.changeling)
+			return
 		if(!hud_used.vampire_blood_display)
 			hud_used.changeling_hud()
 			//hud_used.human_hud(hud_used.ui_style)
@@ -95,14 +99,16 @@
 		return
 
 	var/datum/changeling/changeling = changeling_power(5,1,0)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	if(changeling.absorbed_species.len < 2)
 		to_chat(src, "<span class='warning'>We do not know of any other species genomes to use.</span>")
 		return
 
 	var/S = input("Select the target species: ", "Target Species", null) as null|anything in changeling.absorbed_species
-	if(!S)	return
+	if(!S)
+		return
 
 	domutcheck(src, null)
 
@@ -140,7 +146,8 @@
 		return
 
 	var/datum/changeling/changeling = changeling_power(0,0,100)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/mob/living/carbon/human/H = src
 
@@ -177,7 +184,8 @@
 
 //removes our changeling verbs
 /mob/proc/remove_changeling_powers()
-	if(!mind || !mind.changeling)	return
+	if(!mind || !mind.changeling)
+		return
 
 	var/obj/item/verbs/changeling/verb_holder = locate() in src
 	if(!verb_holder)
@@ -193,10 +201,13 @@
 //Helper proc. Does all the checks and stuff for us to avoid copypasta
 /mob/proc/changeling_power(var/required_chems=0, var/required_dna=0, var/max_genetic_damage=100, var/max_stat=0, var/deny_horror=0)
 
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
-	if(!src.mind)		return
-	if(!iscarbon(src))	return
+	if(!src.mind)
+		return
+	if(!iscarbon(src))
+		return
 
 	var/datum/changeling/changeling = src.mind.changeling
 	if(!changeling)
@@ -240,7 +251,8 @@
 //Doesn't cost anything as it's the most basic ability.
 /mob/proc/changeling_absorb_dna()
 	var/datum/changeling/changeling = changeling_power(0,0,100)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/obj/item/weapon/grab/G = src.get_active_hand()
 	if(!istype(G))
@@ -307,7 +319,8 @@
 		for(var/datum/reagent/blood/B in thechangeling.vessel.reagent_list)
 			B.volume = min(BLOOD_VOLUME_MAX, avail_blood + B.volume)
 
-	if(src.nutrition < 400) src.nutrition = min((src.nutrition + T.nutrition), 400)
+	if(src.nutrition < 400)
+		src.nutrition = min((src.nutrition + T.nutrition), 400)
 	changeling.chem_charges += 10
 	changeling.geneticpoints += 2
 
@@ -370,14 +383,16 @@
 //Change our DNA to that of somebody we've absorbed.
 /mob/proc/changeling_transform()
 	var/datum/changeling/changeling = changeling_power(5,1,0, deny_horror=1)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
 	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names
-	if(!S)	return
+	if(!S)
+		return
 
 	var/datum/dna/chosen_dna = changeling.GetDNA(S)
 	if(!chosen_dna)
@@ -416,7 +431,8 @@
 //Transform into a monkey. 	//TODO replace with monkeyize proc
 /mob/proc/changeling_lesser_form()
 	var/datum/changeling/changeling = changeling_power(1,0,0, deny_horror=1)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/mob/living/carbon/human/C = src
 
@@ -490,14 +506,16 @@
 //Transform into a human
 /mob/proc/changeling_lesser_transform()
 	var/datum/changeling/changeling = changeling_power(1,1,0, deny_horror=1)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
 	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names
-	if(!S)	return
+	if(!S)
+		return
 
 	var/datum/dna/chosen_dna = changeling.GetDNA(S)
 	if(!chosen_dna)
@@ -595,7 +613,8 @@
 
 /mob/proc/changeling_returntolife()
 	var/datum/changeling/changeling = changeling_power(20,1,100,DEAD)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/mob/living/carbon/C = src
 	if(changeling_power(20,1,100,DEAD))
@@ -633,7 +652,8 @@
 	*/ //Fixed with the introduction of the changeling verb holder
 
 	var/datum/changeling/changeling = changeling_power(20,1,100,DEAD)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/mob/living/carbon/C = src
 	if(C.suiciding)
@@ -672,7 +692,8 @@
 //Boosts the range of your next sting attack by 1
 /mob/proc/changeling_boost_range()
 	var/datum/changeling/changeling = changeling_power(10,0,100)
-	if(!changeling)	return 0
+	if(!changeling)
+		return 0
 	changeling.chem_charges -= 10
 	to_chat(src, "<span class='notice'>Your throat adjusts to launch the sting.</span>")
 	changeling.sting_range = 2
@@ -698,7 +719,8 @@
 //Recover from stuns.
 /mob/proc/changeling_unstun()
 	var/datum/changeling/changeling = changeling_power(45,0,100,UNCONSCIOUS)
-	if(!changeling)	return 0
+	if(!changeling)
+		return 0
 	changeling.chem_charges -= 45
 
 	var/mob/living/carbon/human/C = src
@@ -744,11 +766,14 @@
 //Prevents AIs tracking you but makes you easily detectable to the human-eye.
 /mob/proc/changeling_digitalcamo()
 	var/datum/changeling/changeling = changeling_power()
-	if(!changeling)	return 0
+	if(!changeling)
+		return 0
 
 	var/mob/living/carbon/human/C = src
-	if(C.digitalcamo)	to_chat(C, "<span class='notice'>We return to normal.</span>")
-	else				to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
+	if(C.digitalcamo)
+		to_chat(C, "<span class='notice'>We return to normal.</span>")
+	else
+		to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
 	C.digitalcamo = !C.digitalcamo
 
 	spawn(0)
@@ -777,7 +802,8 @@
 //Starts healing you every second for 10 seconds. Can be used whilst unconscious.
 /mob/proc/changeling_rapidregen()
 	var/datum/changeling/changeling = changeling_power(30,0,100,UNCONSCIOUS)
-	if(!changeling)	return 0
+	if(!changeling)
+		return 0
 	src.mind.changeling.chem_charges -= 30
 
 	var/mob/living/carbon/human/C = src
@@ -813,7 +839,8 @@ var/list/datum/dna/hivemind_bank = list()
 
 /mob/proc/changeling_hiveupload()
 	var/datum/changeling/changeling = changeling_power(10,1)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
@@ -825,7 +852,8 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	var/S = input("Select a DNA to channel: ", "Channel DNA", null) as null|anything in names
-	if(!S)	return
+	if(!S)
+		return
 
 	var/datum/dna/chosen_dna = changeling.GetDNA(S)
 	if(!chosen_dna)
@@ -850,7 +878,8 @@ var/list/datum/dna/hivemind_bank = list()
 
 /mob/proc/changeling_hivedownload()
 	var/datum/changeling/changeling = changeling_power(20,1)
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in hivemind_bank)
@@ -862,7 +891,8 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	var/S = input("Select a DNA absorb from the air: ", "Absorb DNA", null) as null|anything in names
-	if(!S)	return
+	if(!S)
+		return
 	var/datum/dna/chosen_dna = names[S]
 	if(!chosen_dna)
 		return
@@ -891,7 +921,8 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 	var/mob/user = usr
 	var/datum/changeling/changeling = changeling_power()
-	if(!changeling)	return
+	if(!changeling)
+		return
 
 	if(changeling.mimicing)
 		changeling.mimicing = ""
@@ -920,8 +951,10 @@ var/list/datum/dna/hivemind_bank = list()
 	//////////
 
 /mob/proc/sting_can_reach(mob/M as mob, sting_range = 1)
-	if(M.loc == src.loc) return 1 //target and source are in the same thing
-	if(!isturf(src.loc) || !isturf(M.loc)) return 0 //One is inside, the other is outside something.
+	if(M.loc == src.loc)
+		return 1 //target and source are in the same thing
+	if(!isturf(src.loc) || !isturf(M.loc))
+		return 0 //One is inside, the other is outside something.
 	if(sting_range < 2)
 		return Adjacent(M)
 	if(AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range)) //If a path exists, good!
@@ -931,17 +964,22 @@ var/list/datum/dna/hivemind_bank = list()
 //Handles the general sting code to reduce on copypasta (seeming as somebody decided to make SO MANY dumb abilities)
 /mob/proc/changeling_sting(var/required_chems=0, var/verb_path)
 	var/datum/changeling/changeling = changeling_power(required_chems)
-	if(!changeling)								return
+	if(!changeling)
+		return
 
 	var/list/victims = list()
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
 		victims += C
 	var/mob/living/carbon/T = input(src, "Who will we sting?") as null|anything in victims
 
-	if(!T) return
-	if(!(T in view(changeling.sting_range))) return
-	if(!sting_can_reach(T, changeling.sting_range)) return
-	if(!changeling_power(required_chems)) return
+	if(!T)
+		return
+	if(!(T in view(changeling.sting_range)))
+		return
+	if(!sting_can_reach(T, changeling.sting_range))
+		return
+	if(!changeling_power(required_chems))
+		return
 
 	changeling.chem_charges -= required_chems
 	changeling.sting_range = 1
@@ -950,7 +988,8 @@ var/list/datum/dna/hivemind_bank = list()
 		add_changeling_verb(verb_path)
 
 	to_chat(src, "<span class='notice'>We stealthily sting [T].</span>")
-	if(!T.mind || !T.mind.changeling)	return T	//T will be affected by the sting
+	if(!T.mind || !T.mind.changeling)
+		return T	//T will be affected by the sting
 	to_chat(T, "<span class='warning'>You feel a tiny prick.</span>")
 	return
 
@@ -1075,14 +1114,16 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	var/datum/changeling/changeling = M.changeling_power(40)
-	if(!changeling)	return 0
+	if(!changeling)
+		return 0
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
 	var/S = input(M, "Select the target DNA: ", "Target DNA", null) as null|anything in names
-	if(!S)	return
+	if(!S)
+		return
 
 	var/datum/dna/chosen_dna = changeling.GetDNA(S)
 	if(!chosen_dna)

@@ -78,7 +78,8 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	return
 
 /datum/disease/proc/has_cure()//check if affected_mob has required reagents.
-	if((!cure_id && !cure_list) || !curable) return 0
+	if((!cure_id && !cure_list) || !curable)
+		return 0
 	var/result = 1
 	if(!cure_list || cure_list == cure_id) //if no cure_list or cure list is the same as cure_id, just check _id
 		if(istype(cure_id, /list)) //if cure_id is a list, check inside of it

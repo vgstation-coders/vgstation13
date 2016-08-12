@@ -212,7 +212,8 @@ var/list/camera_names=list()
 			s.use(1)
 			assembly.upgrades += new /obj/item/stack/sheet/mineral/plasma
 		else
-			if(!user.drop_item(W, src)) return
+			if(!user.drop_item(W, src))
+				return
 			assembly.upgrades += W
 		to_chat(user, "You attach the [W] into the camera's inner circuits.")
 		update_upgrades()
@@ -265,9 +266,12 @@ var/list/camera_names=list()
 			info = P.notehtml
 		to_chat(U, "You hold \a [itemname] up to the camera ...")
 		for(var/mob/living/silicon/ai/O in living_mob_list)
-			if(!O.client) continue
-			if(U.name == "Unknown") to_chat( O, "<span class='name'>[U]</span> holds \a [itemname] up to one of your cameras ...")
-			else to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds \a [itemname] up to one of your cameras ...")
+			if(!O.client)
+				continue
+			if(U.name == "Unknown")
+				to_chat( O, "<span class='name'>[U]</span> holds \a [itemname] up to one of your cameras ...")
+			else
+				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds \a [itemname] up to one of your cameras ...")
 
 			O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
 		for(var/mob/O in player_list)

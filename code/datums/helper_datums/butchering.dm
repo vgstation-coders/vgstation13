@@ -41,8 +41,10 @@
 	stored_in_organ = LIMB_HEAD //Cutting a LIMB_HEAD off will transfer teeth to the head object
 
 /datum/butchering_product/teeth/desc_modifier(mob/parent, mob/user)
-	if(amount == initial_amount) return
-	if(!isliving(parent)) return
+	if(amount == initial_amount)
+		return
+	if(!isliving(parent))
+		return
 
 	var/mob/living/L = parent
 
@@ -57,8 +59,10 @@
 			return //If his mouth is covered, we can't see his teeth
 
 	var/pronoun = "Its"
-	if(L.gender == MALE) pronoun = "His"
-	if(L.gender == FEMALE) pronoun = "Her"
+	if(L.gender == MALE)
+		pronoun = "His"
+	if(L.gender == FEMALE)
+		pronoun = "Her"
 
 	if(amount == 0)
 		return "[pronoun] teeth are gone. "
@@ -70,7 +74,8 @@
 
 #define ALL_TEETH -1
 /datum/butchering_product/teeth/spawn_result(location, mob/parent, drop_amount = ALL_TEETH)
-	if(amount <= 0) return
+	if(amount <= 0)
+		return
 
 	var/obj/item/stack/teeth/T = new(location)
 	T.update_name(parent) //Change name of the teeth - from the default "teeth" to "corgi teeth", for example
@@ -113,8 +118,10 @@
 /datum/butchering_product/skin/desc_modifier(mob/parent)
 	if(!amount)
 		var/pronoun = "It"
-		if(parent.gender == MALE) pronoun = "He"
-		if(parent.gender == FEMALE) pronoun = "She"
+		if(parent.gender == MALE)
+			pronoun = "He"
+		if(parent.gender == FEMALE)
+			pronoun = "She"
 		return "[pronoun] has been skinned. "
 
 /datum/butchering_product/skin/cat

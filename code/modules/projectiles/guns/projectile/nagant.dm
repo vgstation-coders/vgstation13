@@ -25,7 +25,8 @@
 		return 0
 
 /obj/item/weapon/gun/projectile/nagant/attack_self(mob/living/user as mob)
-	if(recentpump)	return
+	if(recentpump)
+		return
 	pump(user)
 	recentpump = 1
 	spawn(10)
@@ -87,7 +88,8 @@
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/gun/projectile/nagant/obrez/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(current_shell && current_shell.BB)
 		//explosion(src.loc,-1,1,2)
 		var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()

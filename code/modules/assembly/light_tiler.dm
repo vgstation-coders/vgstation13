@@ -42,7 +42,8 @@
 	var/highlighting_connected_floors = 0
 
 /obj/item/device/assembly/light_tile_control/activate()
-	if(!..()) return 0
+	if(!..())
+		return 0
 
 	change_floors()
 
@@ -52,7 +53,8 @@
 		return
 
 	var/turf/simulated/floor/T = A
-	if(!istype(T)) return
+	if(!istype(T))
+		return
 	if(!istype(T.floor_tile, /obj/item/stack/tile/light))
 		to_chat(user, "<span class='notice'>\The [src] is only compactible with light tiles.</span>")
 		return
@@ -90,7 +92,8 @@
 	onclose(user, "\ref[src]")
 
 /obj/item/device/assembly/light_tile_control/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	if(href_list["show_connections"]) //Highlight all connected floors for 10 seconds
 		if(last_used + cooldown_max > world.time)
@@ -98,7 +101,8 @@
 			return
 
 		var/mob/user = usr
-		if(!user || !user.client) return
+		if(!user || !user.client)
+			return
 
 		for(var/turf/T in connected_floors)
 			highlight_turf(T, user)
@@ -198,7 +202,8 @@
 		highlight_turf(T, usr)
 
 /obj/item/device/assembly/light_tile_control/proc/del_turf_from_memory(turf/T)
-	if(!connected_floors.Remove(T)) return //Don't do the next part if the turf isn't in connected_floors
+	if(!connected_floors.Remove(T))
+		return //Don't do the next part if the turf isn't in connected_floors
 
 	if(usr && highlighting_connected_floors)
 		for(var/image/I in image_overlays)

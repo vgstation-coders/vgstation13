@@ -97,7 +97,8 @@
 	//	t += " | <a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
 	t += "</div>"
 	switch(screen)
-		if(JUKEBOX_SCREEN_MAIN)     t += ScreenMain(user)
+		if(JUKEBOX_SCREEN_MAIN)
+			t += ScreenMain(user)
 		//if(JUKEBOX_SCREEN_SETTINGS) t += ScreenSettings(user)
 
 	user.set_machine(src)
@@ -221,7 +222,8 @@
 		to_chat(usr, "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>")
 		return
 
-	if(..()) return 1
+	if(..())
+		return 1
 
 	if (href_list["power"])
 		playing=!playing

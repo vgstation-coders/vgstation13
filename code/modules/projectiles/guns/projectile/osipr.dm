@@ -37,16 +37,19 @@
 	to_chat(user, "<span class='info'>Has [energy_balls] dark energy core\s remaining.</span>")
 
 /obj/item/weapon/gun/osipr/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	switch(mode)
 		if(OSIPR_PRIMARY_FIRE)
-			if(!magazine || !magazine.bullets) return 0
+			if(!magazine || !magazine.bullets)
+				return 0
 			magazine.bullets--
 			update_icon()
 			in_chamber = new magazine.bullet_type()
 			return 1
 		if(OSIPR_SECONDARY_FIRE)
-			if(!energy_balls) return 0
+			if(!energy_balls)
+				return 0
 			energy_balls--
 			in_chamber = new/obj/item/projectile/energy/osipr()
 			return 1

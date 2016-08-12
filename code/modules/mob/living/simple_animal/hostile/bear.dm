@@ -85,7 +85,8 @@
 
 
 /mob/living/simple_animal/hostile/bear/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. =..()
 	if(!.)
 		return

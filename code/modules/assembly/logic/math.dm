@@ -50,24 +50,39 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	var/last_written_value = values.len //Index of the value that is written last in the interface. Default of values.len means that ALL values are written. Setting it to 1 will cause only the first value to be shown
 
 	switch(operation)
-		if("AVERAGE")	dat += "AVERAGE of "
-		if("MIN")		dat += "SMALLEST VALUE from "
-		if("MAX")		dat += "LARGEST VALUE from "
+		if("AVERAGE")
+			dat += "AVERAGE of "
+		if("MIN")
+			dat += "SMALLEST VALUE from "
+		if("MAX")
+			dat += "LARGEST VALUE from "
 
-		if("SIN")		dat += "SIN of "
-		if("COS")		dat += "COS of "
-		if("ASIN")		dat += "ARCSIN of "
-		if("ACOS")		dat += "ARCCOS of "
-		if("TG")		dat += "TANGENT of "
-		if("COTG")		dat += "COTANGENT of "
+		if("SIN")
+			dat += "SIN of "
+		if("COS")
+			dat += "COS of "
+		if("ASIN")
+			dat += "ARCSIN of "
+		if("ACOS")
+			dat += "ARCCOS of "
+		if("TG")
+			dat += "TANGENT of "
+		if("COTG")
+			dat += "COTANGENT of "
 
-		if("ADD")		operation_sign = "+"
-		if("SUBTRACT")	operation_sign = "-"
-		if("MULTIPLY")	operation_sign = "*"
-		if("DIVIDE")	operation_sign = "/"
-		if("POWER")		operation_sign = "^"
+		if("ADD")
+			operation_sign = "+"
+		if("SUBTRACT")
+			operation_sign = "-"
+		if("MULTIPLY")
+			operation_sign = "*"
+		if("DIVIDE")
+			operation_sign = "/"
+		if("POWER")
+			operation_sign = "^"
 
-		if("MOD")		operation_sign = "MOD"
+		if("MOD")
+			operation_sign = "MOD"
 
 	if(operation in list("SIN","COS","ASIN","ACOS","TG","COTG"))
 		last_written_value = 1 //Only the first value is processed when using the functions above
@@ -101,7 +116,8 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	return
 
 /obj/item/device/assembly/math/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 
 	if(href_list["output_value"])
 		to_chat(usr, "<span class='info'>Result: [get_value(VALUE_RESULT)]</span>")
@@ -111,8 +127,10 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 		spawn()
 			var/choice = input(usr, "Please enter the constant's value:", "\The [src]") as null|num
 
-			if(isnull(choice)) return
-			if(..()) return
+			if(isnull(choice))
+				return
+			if(..())
+				return
 
 			values += choice
 			to_chat(usr, "<span class='info'>Added new constant value <b>[choice]</b> to \the [src].</span>")
@@ -124,8 +142,10 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 		spawn()
 			var/choice = input(usr, "Current operation is [operation]. Please select a new operation:", "\The [src]") as null|anything in math_circuit_operations_list
 
-			if(isnull(choice)) return
-			if(..()) return
+			if(isnull(choice))
+				return
+			if(..())
+				return
 
 			to_chat(usr, "<span class='info'>Changed operation from [operation] to [choice].</span>")
 			operation = choice
@@ -136,7 +156,8 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	if(href_list["change_value"])
 		var/id = text2num(href_list["change_value"])
 
-		if(id > values.len) return
+		if(id > values.len)
+			return
 
 		var/changed_value = values[id]
 
@@ -145,9 +166,12 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 			spawn()
 				var/choice = input(usr, "Please enter the constant ([changed_value])'s new value. Leave blank to delete the constant from \the [src]'s memory.", "\The [src]", changed_value) as null|num
 
-				if(id > values.len) return
-				if(values[id] != changed_value) return
-				if(..()) return
+				if(id > values.len)
+					return
+				if(values[id] != changed_value)
+					return
+				if(..())
+					return
 
 				if(isnull(choice)) //Not number
 					to_chat(usr, "<span class='info'>Removed the constant [values[id]].")
@@ -165,9 +189,12 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 				var/choice = input(usr, "Please select which of \the [changed_value]'s values is used in calculations (current: [values[changed_value]]).", "\The [src]") as null|anything in AS.accessible_values
 
-				if(isnull(choice)) return
-				if(!values.Find(changed_value)) return
-				if(..()) return
+				if(isnull(choice))
+					return
+				if(!values.Find(changed_value))
+					return
+				if(..())
+					return
 
 				to_chat(usr, "<span class='info'>Changed \the [changed_value]'s used value to [choice].</span>")
 				values[changed_value] = choice
@@ -175,7 +202,8 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 				attack_self(usr)
 
 /obj/item/device/assembly/math/get_value(value)
-	if(!values.len) return 0
+	if(!values.len)
+		return 0
 
 	if(value == VALUE_RESULT)
 		if(values.len == 1)

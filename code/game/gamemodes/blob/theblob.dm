@@ -131,8 +131,10 @@ var/list/blob_looks
 	return PROJREACT_BLOB
 
 /obj/effect/blob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0))	return 1
-	if(istype(mover) && mover.checkpass(PASSBLOB))	return 1
+	if(air_group || (height==0))
+		return 1
+	if(istype(mover) && mover.checkpass(PASSBLOB))
+		return 1
 	mover.Bump(src) //Only automatic for dense objects
 	return 0
 
@@ -315,7 +317,8 @@ var/list/blob_looks = list(
 	var/list/dirs = cardinal.Copy()
 	dirs.Remove(origin_dir)//Dont pulse the guy who pulsed us
 	for(var/i in 1 to 4)
-		if(!dirs.len)	break
+		if(!dirs.len)
+			break
 		var/dirn = pick_n_take(dirs)
 		var/turf/T = get_step(src, dirn)
 		var/obj/effect/blob/B = locate() in T
@@ -341,10 +344,13 @@ var/list/blob_looks = list(
 		for(var/i in 1 to 4)
 			var/dirn = pick_n_take(dirs)
 			T = get_step(src, dirn)
-			if(!(locate(/obj/effect/blob) in T))	break
-			else	T = null
+			if(!(locate(/obj/effect/blob) in T))
+				break
+			else
+				T = null
 
-	if(!T)	return 0
+	if(!T)
+		return 0
 	var/obj/effect/blob/normal/B = new(src.loc, newlook = looks)
 	B.density = 1
 

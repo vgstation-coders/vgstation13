@@ -23,7 +23,8 @@ var/global/list/whitelisted_species = list("Human")
 	for(. in (typesof(/datum/species)-/datum/species))
 		S = new .
 		all_species[S.name] = S
-		if(S.flags & IS_WHITELISTED) whitelisted_species += S.name
+		if(S.flags & IS_WHITELISTED)
+			whitelisted_species += S.name
 	return
 
 ////////////////////////////////////////////////////////////////
@@ -233,8 +234,10 @@ var/global/list/whitelisted_species = list("Human")
 
 // Used for species-specific names (Vox, etc)
 /datum/species/proc/makeName(var/gender,var/mob/living/carbon/C=null)
-	if(gender==FEMALE)	return capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
-	else				return capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+	if(gender==FEMALE)
+		return capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+	else
+		return capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 
 /datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	return
@@ -695,7 +698,8 @@ var/global/list/whitelisted_species = list("Human")
 	return capitalize(newname)
 
 /datum/species/vox/handle_post_spawn(var/mob/living/carbon/human/H)
-	if(myhuman != H) return
+	if(myhuman != H)
+		return
 	updatespeciescolor(H)
 	H.update_icon()
 

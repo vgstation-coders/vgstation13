@@ -94,7 +94,8 @@
 			obj_count++
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 
 /datum/game_mode/rp_revolution/send_intercept()
 	var/intercepttext = "<FONT size = 3><B>Cent. Com. Update</B> Requested staus information:</FONT><HR>"
@@ -222,7 +223,8 @@
 			var/turf/revloc = rev_mind.current.loc
 			if(!istype(revloc.loc,/area/security/brig) && !rev_mind.current.handcuffed)
 				return 0
-		else if(RPREV_REQUIRE_REVS_ALIVE) return 0
+		else if(RPREV_REQUIRE_REVS_ALIVE)
+			return 0
 	return 1
 
 /datum/game_mode/rp_revolution/declare_completion()

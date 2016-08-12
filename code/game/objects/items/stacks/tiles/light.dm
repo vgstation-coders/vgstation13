@@ -65,7 +65,8 @@ var/global/list/lightfloor_colors = list(
 		var/list/choice_list = list(LIGHTFLOOR_OPTION_CUSTOM) + lightfloor_colors
 
 		var/choice = input(user,"Select a colour to set [src] to.","[src]") in choice_list
-		if(!Adjacent(user)) return
+		if(!Adjacent(user))
+			return
 
 		var/new_color
 		if(choice == LIGHTFLOOR_OPTION_CUSTOM)

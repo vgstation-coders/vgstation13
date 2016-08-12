@@ -27,7 +27,8 @@
 		var/list/newpacks[0]
 		for(var/mtype in typesof(/datum/migration)-list(/datum/migration))
 			var/datum/migration/M = new mtype(src)
-			if(M.package == "" || M.name == "" || M.dbms != id) continue
+			if(M.package == "" || M.name == "" || M.dbms != id)
+				continue
 			if(!(M.package in newpacks))
 				newpacks[M.package]=list()
 			var/list/pack = newpacks[M.package]

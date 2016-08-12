@@ -30,7 +30,8 @@ var/global/list/cable_list = list() //Index for all cables, so that powernets do
 			break
 		if(istype(power_machines[i], /obj/machinery))
 			var/obj/machinery/M = power_machines[i]
-			if(M.timestopped) continue
+			if(M.timestopped)
+				continue
 			if(!M.gcDestroyed)
 				#ifdef PROFILE_MACHINES
 				var/time_start = world.timeofday

@@ -16,14 +16,22 @@
 
 /obj/machinery/rail_track/intersections/attack_hand(user as mob)
 	switch (dir)
-		if (1) dir = 5
-		if (5) dir = 4
-		if (4) dir = 9
-		if (9) dir = 2
-		if (2) dir = 10
-		if (10) dir = 8
-		if (8) dir = 6
-		if (6) dir = 1
+		if (1)
+			dir = 5
+		if (5)
+			dir = 4
+		if (4)
+			dir = 9
+		if (9)
+			dir = 2
+		if (2)
+			dir = 10
+		if (10)
+			dir = 8
+		if (8)
+			dir = 6
+		if (6)
+			dir = 1
 	return
 
 /obj/machinery/rail_track/intersections/NSE
@@ -33,10 +41,14 @@
 
 /obj/machinery/rail_track/intersections/NSE/attack_hand(user as mob)
 	switch (dir)
-		if (1) dir = 5
-		if (2) dir = 5
-		if (5) dir = 9
-		if (9) dir = 2
+		if (1)
+			dir = 5
+		if (2)
+			dir = 5
+		if (5)
+			dir = 9
+		if (9)
+			dir = 2
 	return
 
 /obj/machinery/rail_track/intersections/SEW
@@ -46,10 +58,14 @@
 
 /obj/machinery/rail_track/intersections/SEW/attack_hand(user as mob)
 	switch (dir)
-		if (8) dir = 6
-		if (4) dir = 6
-		if (6) dir = 5
-		if (5) dir = 8
+		if (8)
+			dir = 6
+		if (4)
+			dir = 6
+		if (6)
+			dir = 5
+		if (5)
+			dir = 8
 	return
 
 /obj/machinery/rail_track/intersections/NSW
@@ -59,10 +75,14 @@
 
 /obj/machinery/rail_track/intersections/NSW/attack_hand(user as mob)
 	switch (dir)
-		if (1) dir = 10
-		if (2) dir = 10
-		if (10) dir = 6
-		if (6) dir = 2
+		if (1)
+			dir = 10
+		if (2)
+			dir = 10
+		if (10)
+			dir = 6
+		if (6)
+			dir = 2
 	return
 
 /obj/machinery/rail_track/intersections/NEW
@@ -72,10 +92,14 @@
 
 /obj/machinery/rail_track/intersections/NEW/attack_hand(user as mob)
 	switch (dir)
-		if (4) dir = 9
-		if (8) dir = 9
-		if (9) dir = 10
-		if (10) dir = 8
+		if (4)
+			dir = 9
+		if (8)
+			dir = 9
+		if (9)
+			dir = 10
+		if (10)
+			dir = 8
 	return
 
 /**********************Rail switch**************************/
@@ -106,52 +130,84 @@
 				switch (T.dir)
 					if(1)
 						switch(C.direction)
-							if("N") C.direction = "S"
-							if("S") C.direction = "N"
-							if("E") C.direction = "S"
-							if("W") C.direction = "S"
+							if("N")
+								C.direction = "S"
+							if("S")
+								C.direction = "N"
+							if("E")
+								C.direction = "S"
+							if("W")
+								C.direction = "S"
 					if(2)
 						switch(C.direction)
-							if("N") C.direction = "S"
-							if("S") C.direction = "N"
-							if("E") C.direction = "S"
-							if("W") C.direction = "S"
+							if("N")
+								C.direction = "S"
+							if("S")
+								C.direction = "N"
+							if("E")
+								C.direction = "S"
+							if("W")
+								C.direction = "S"
 					if(4)
 						switch(C.direction)
-							if("N") C.direction = "E"
-							if("S") C.direction = "E"
-							if("E") C.direction = "W"
-							if("W") C.direction = "E"
+							if("N")
+								C.direction = "E"
+							if("S")
+								C.direction = "E"
+							if("E")
+								C.direction = "W"
+							if("W")
+								C.direction = "E"
 					if(8)
 						switch(C.direction)
-							if("N") C.direction = "E"
-							if("S") C.direction = "E"
-							if("E") C.direction = "W"
-							if("W") C.direction = "E"
+							if("N")
+								C.direction = "E"
+							if("S")
+								C.direction = "E"
+							if("E")
+								C.direction = "W"
+							if("W")
+								C.direction = "E"
 					if(5)
 						switch(C.direction)
-							if("N") C.direction = "S"
-							if("S") C.direction = "E"
-							if("E") C.direction = "S"
-							if("W") C.direction = "S"
+							if("N")
+								C.direction = "S"
+							if("S")
+								C.direction = "E"
+							if("E")
+								C.direction = "S"
+							if("W")
+								C.direction = "S"
 					if(6)
 						switch(C.direction)
-							if("N") C.direction = "S"
-							if("S") C.direction = "W"
-							if("E") C.direction = "S"
-							if("W") C.direction = "S"
+							if("N")
+								C.direction = "S"
+							if("S")
+								C.direction = "W"
+							if("E")
+								C.direction = "S"
+							if("W")
+								C.direction = "S"
 					if(9)
 						switch(C.direction)
-							if("N") C.direction = "E"
-							if("S") C.direction = "E"
-							if("E") C.direction = "N"
-							if("W") C.direction = "E"
+							if("N")
+								C.direction = "E"
+							if("S")
+								C.direction = "E"
+							if("E")
+								C.direction = "N"
+							if("W")
+								C.direction = "E"
 					if(10)
 						switch(C.direction)
-							if("N") C.direction = "W"
-							if("S") C.direction = "W"
-							if("E") C.direction = "W"
-							if("W") C.direction = "N"
+							if("N")
+								C.direction = "W"
+							if("S")
+								C.direction = "W"
+							if("E")
+								C.direction = "W"
+							if("W")
+								C.direction = "N"
 	return
 
 /**********************Rail car**************************/

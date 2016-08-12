@@ -22,7 +22,7 @@ var/const/Represents a special statement in the code triggered by a keyword.
 /datum/n_Keyword/New(inline = 0)
 	src.inline = inline
 	return ..()
-	
+
 /*
 	Proc: Parse
 	Called when the parser finds a keyword in the code.
@@ -62,7 +62,8 @@ var/const/Represents a special statement in the code triggered by a keyword.
 	var/datum/node/statement/IfStatement/stmt = new
 	parser.NextToken()  //skip 'if' token
 	stmt.cond = parser.ParseParenExpression()
-	if(!parser.CheckToken(")", /datum/token/symbol))
+	if(!parser.CheckToken(")", /datum/token/symbol)
+		)
 		return KW_FAIL
 
 	if(!parser.CheckToken("{", /datum/token/symbol, skip=0)) //Token needs to be preserved for parse loop, so skip=0
@@ -89,7 +90,8 @@ var/const/Represents a special statement in the code triggered by a keyword.
 	var/datum/node/statement/IfStatement/ElseIf/stmt = new
 	parser.NextToken()  //skip 'if' token
 	stmt.cond = parser.ParseParenExpression()
-	if(!parser.CheckToken(")", /datum/token/symbol))
+	if(!parser.CheckToken(")", /datum/token/symbol)
+		)
 		return KW_FAIL
 
 	if(!parser.CheckToken("{", /datum/token/symbol, skip = 0)) //Token needs to be preserved for parse loop, so skip=0
@@ -126,7 +128,8 @@ var/const/Represents a special statement in the code triggered by a keyword.
 	var/datum/node/statement/WhileLoop/stmt = new
 	parser.NextToken()  //skip 'while' token
 	stmt.cond = parser.ParseParenExpression()
-	if(!parser.CheckToken(")", /datum/token/symbol))
+	if(!parser.CheckToken(")", /datum/token/symbol)
+		)
 		return KW_FAIL
 
 	if(!parser.CheckToken("{", /datum/token/symbol, skip=0))

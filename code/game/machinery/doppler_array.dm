@@ -116,15 +116,21 @@ var/list/doppler_arrays = list()
 
 	if(dx > dy)
 		distance = dx
-		if(x0 > x)	direct = EAST
-		else		direct = WEST
+		if(x0 > x)
+			direct = EAST
+		else
+			direct = WEST
 	else
 		distance = dy
-		if(y0 > y)	direct = NORTH
-		else		direct = SOUTH
+		if(y0 > y)
+			direct = NORTH
+		else
+			direct = SOUTH
 
-	if(distance > 100)		return
-	if(!(direct & dir))	return
+	if(distance > 100)
+		return
+	if(!(direct & dir))
+		return
 	*/
 
 	var/message = "Explosive disturbance detected - Epicenter at: grid ([x0-WORLD_X_OFFSET[z0]],[y0-WORLD_Y_OFFSET[z0]], [z0]). [cap ? "\[Theoretical Results\] " : ""]Epicenter radius: [devastation_range]. Outer radius: [heavy_impact_range]. Shockwave radius: [light_impact_range]. Temporal displacement of tachyons: [took] second\s.  Data logged."
