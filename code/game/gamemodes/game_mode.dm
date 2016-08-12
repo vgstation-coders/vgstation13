@@ -361,6 +361,13 @@
 			heads += player.mind
 	return heads
 
+/datum/game_mode/proc/get_assigned_head_roles()
+	var/list/roles = list()
+	for(var/mob/player in mob_list)
+		if(player.mind && (player.mind.assigned_role in command_positions))
+			roles += player.mind.assigned_role
+	return roles
+
 /*/datum/game_mode/New()
 	newscaster_announcements = pick(newscaster_standard_feeds)*/
 
