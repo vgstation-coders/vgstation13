@@ -86,7 +86,7 @@
 
 	..()
 
-	explosion(T, -1, 0, 2)
+	explosion(T, -1, 1, 2)
 
 /obj/effect/landmark/corpse/skellington
 	name = "skellington"
