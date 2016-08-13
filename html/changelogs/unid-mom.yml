@@ -1,7 +1,0 @@
-author: Unid
-
-delete-after: True
-
-changes: 
-- tweak: "Player-controlled simple animals now move at the same speed as NPC simple animals."
-- tweak: "Ranged attacks of simple animals (such as goliath tentacles, hivelord summons and spider queen web) can now be used by players."

@@ -11,6 +11,7 @@
 	max_targets = 1
 	cooldown_min = 30 //30 deciseconds reduction per rank
 	selection_type = "range"
+	spell_flags = WAIT_FOR_CLICK
 
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 

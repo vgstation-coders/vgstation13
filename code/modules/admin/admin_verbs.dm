@@ -206,13 +206,14 @@ var/list/admin_verbs_possess = list(
 	/proc/release
 	)
 var/list/admin_verbs_permissions = list(
-	/client/proc/edit_admin_permissions,
-	/client/proc/create_poll
+	/client/proc/edit_admin_permissions
 	)
 var/list/admin_verbs_rejuv = list(
 	/client/proc/respawn_character
 	)
-
+var/list/admin_verbs_polling = list(
+	/client/proc/create_poll
+	)
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
 	/client/proc/set_ooc,
@@ -315,6 +316,7 @@ var/list/admin_verbs_mod = list(
 		if(holder.rights & R_DEBUG)			verbs += admin_verbs_debug
 		if(holder.rights & R_POSSESS)		verbs += admin_verbs_possess
 		if(holder.rights & R_PERMISSIONS)	verbs += admin_verbs_permissions
+		if(holder.rights & R_POLLING)		verbs += admin_verbs_polling
 		if(holder.rights & R_STEALTH)		verbs += /client/proc/stealth
 		if(holder.rights & R_REJUVINATE)	verbs += admin_verbs_rejuv
 		if(holder.rights & R_SOUNDS)		verbs += admin_verbs_sounds
@@ -1223,7 +1225,7 @@ var/list/admin_verbs_mod = list(
 	set category = "Special Verbs"
 	set desc = "Sends a message as voice to all players"
 	set popup_menu = 0
-	
+
 	if(!check_rights(R_DEBUG)) return 0
 
 	var/msg

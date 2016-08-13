@@ -33,7 +33,7 @@
 	var/finished = 0
 	var/checkwin_counter = 0
 	var/max_headrevs = 3
-	var/minimum_heads = 3
+	var/minimum_heads = 2
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 ///////////////////////////
@@ -71,9 +71,18 @@
 		possible_headrevs -= lenin
 		head_revolutionaries += lenin
 
-	if(head_revolutionaries.len==0|| head_check < minimum_heads)
-		log_admin("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
-		message_admins("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+	// If an admin forces this mode, we set the minimum head count to 1, otherwise check minimum heads
+	if(master_mode=="secret" && secret_force_mode=="secret")
+		if(head_revolutionaries.len==0 || head_check < minimum_heads)
+			log_admin("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+			log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
+			message_admins("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+			message_admins("Number of headrevs: [head_revolutionaries.len] Heads of Staff: [get_assigned_head_roles()]")
+			return 0
+			
+	else if (head_revolutionaries.len==0 || head_check < 1)
+		log_admin("Failed to setup a round of revolution while secret forced mode: there was not at least one head. Headcount: [head_check]")
+		message_admins("Failed to setup a round of revolution while secret forced mode: there was not at least one head. Headcount: [head_check]")
 		return 0
 
 	log_admin("Starting a round of revolution with [head_revolutionaries.len] head revolutionaries and [head_check] heads of staff.")
