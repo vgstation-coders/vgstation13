@@ -97,6 +97,7 @@
 	cant_drop = 1
 	gun_flags = 0
 	silenced = 1
+	fire_sound = null
 	load_method = 2
 	var/obj/item/clothing/gloves/white/advanced/linked_gloves = null
 	
