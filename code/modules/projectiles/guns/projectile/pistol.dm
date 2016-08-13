@@ -87,11 +87,10 @@
 	return
 
 /obj/item/weapon/gun/projectile/handgun //mime fingergun 
-	name = "hand gun"
+	name = "hand-gun"
 	desc = "This is a stickup!"
-	icon = 'icons/obj/clothing/gloves.dmi'
-	icon_state = "white"
-	item_state = "white"
+	icon_state = "handgun"
+	inhand_states = null
 	ammo_type = "/obj/item/ammo_casing/invisible"
 	mag_type = "/obj/item/ammo_storage/magazine/invisible"
 	cant_drop = 1
@@ -101,15 +100,22 @@
 	load_method = 2
 	var/obj/item/clothing/gloves/white/advanced/linked_gloves = null
 	
+/obj/item/weapon/gun/projectile/handgun/Destroy()
+	if(linked_gloves)
+		linked_gloves.current_gun = null
+	..()
+	
 /obj/item/weapon/gun/projectile/handgun/RemoveMag(var/mob/user)
-	to_chat(user, "<span class = 'warning'> Try as you might, you can't seem to find a magazine on \the [src]!</span>")
+	to_chat(user, "<span class = 'warning'>Try as you might, you can't seem to find a magazine on \the [src]!</span>")
 
 /obj/item/weapon/gun/projectile/handgun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(..())
-		user.emote("me",1,"pretends to fire a gun at [target]!")
+		if(silenced)
+			user.emote("me",1,"pretends to fire a gun at [target]!")
+		else
+			user.say(pick("BANG!", "BOOM!", "PEW!", "KAPOW!"))
+		
 		if (!getAmmo()) //drop the guns after firing both shots
-			to_chat(user, "<span class = 'warning'> You wave your hands in an effort to cool them off! </span>")
-			linked_gloves.current_gun = null
-			linked_gloves = null
-			qdel(src)
+			to_chat(user, "<span class = 'warning'>You wave your hands in an effort to cool them off! </span>")
+			Destroy()
 			
