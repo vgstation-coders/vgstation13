@@ -85,9 +85,17 @@
 
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse
-	var/can_evolve = 0 //Set to 0 if we don't want it to evolve
+	var/can_evolve = FALSE //False if we don't want it to evolve
 	var/busy //If the zombie is busy, and what it's busy doing
-	var/break_doors = 0 //If 1, they can attempt to open doors. If 2, they break the door down entirely
+
+
+#define CANT 0
+#define CAN 1
+#define CANPLUS 2
+
+
+
+	var/break_doors = CANT //If CAN, they can attempt to open doors. If CANPLUS, they break the door down entirely
 	var/health_cap = 250 //Maximum possible health it can have. Because screw having a 1000 health mob
 
 /*	wanted_objects = list(
@@ -143,7 +151,7 @@
 					check_evolve()
 				if((health < maxHealth) || (maxHealth < health_cap)) //Is there something to eat in range?
 					for(var/mob/living/carbon/human/C in can_see) //If so, chow down
-						if(C.stat == DEAD && !busy && check_edibility(C))
+						if(C.isDead() && !busy && check_edibility(C))
 							Goto(C, speed)
 							busy = MOVING_TO_TARGET
 							give_up(C) //If we're not there in 10 seconds, give up
@@ -151,7 +159,7 @@
 							if(C.Adjacent(src) && busy != EATING) //Once we've finally caught up
 								busy = EATING
 								eat(C)
-				if(!busy && break_doors)//So we don't try to eat and open doors
+				if(!busy && break_doors != CANT)//So we don't try to eat and open doors
 					/*for(var/obj/machinery/light/L in can_see)
 						if(L.status != 1 && L.status !=2)
 							Goto(L, speed)
@@ -177,7 +185,7 @@
 /mob/living/simple_animal/hostile/necro/zombie/proc/give_up(var/C)
 	spawn(100)
 		if(busy == MOVING_TO_TARGET)
-			if(target == C && get_dist(src,target) > 1)
+			if(target == C && !Adjacent(target))
 				target = null
 			busy = 0
 			stop_automated_movement = 0
@@ -198,7 +206,7 @@
 	if(istype(D,/obj/machinery/door/airlock))
 		var/obj/machinery/door/airlock/A=D
 		if(A.locked || A.welded || A.jammed)
-			if(break_doors == 2)
+			if(break_doors == CANPLUS)
 				return 1
 			else
 				return 0
@@ -206,14 +214,22 @@
 	return 1
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/force_door(var/obj/machinery/door/D)
+	var/time_mult = 1
+	if(istype(D, /obj/machinery/door/airlock/))
+		var/obj/machinery/door/airlock/A = D
+		if(A.locked)
+			time_mult += 1
+		if(A.welded)
+			time_mult += 1
+		if(A.jammed)
+			time_mult += 1
 	stop_automated_movement = 1
 	D.visible_message("<span class='warning'>\The [D]'s motors whine as something attempts to brute force their way through it!</span>")
 	playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
 	D.shake(1, 8)
-	stop_automated_movement = 1
-	spawn(100) //Roughly 10 seconds for people on the other side of the door to run the heck away
+	if(do_after(src, D, 100*time_mult, needhand = FALSE)) //Roughly 10 seconds for people on the other side of the door to run the heck away
 		if(can_open_door(D))//Let's see if nobody quickly bolted it
-			if(istype (src, /mob/living/simple_animal/hostile/necro/zombie/crimson)) //Guaranteed
+			if(break_doors = CANPLUS) //Guaranteed
 				D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
 				if(istype(D, /obj/machinery/door/airlock/))
 					var/obj/machinery/door/airlock/A = D
@@ -225,8 +241,8 @@
 				if(prob(15))
 					D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
 					D.open(1)
-		busy = 0
-		stop_automated_movement = 0
+	busy = 0
+	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
 	if(isjusthuman(target)) //Humans are always edible
@@ -238,8 +254,9 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
-	visible_message("<span class='notice'>\the [src] starts to take a bite out of \the [target].</span>")
-	spawn(50)
+	visible_message("<span class='notice'>\The [src] starts to take a bite out of \the [target].</span>")
+	stop_automated_movement = 1
+	if(do_after(src, target, 50, needhand = FALSE))
 		playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
 		var/damage = rand(melee_damage_lower, melee_damage_upper)
 		target.adjustBruteLoss(damage)
@@ -247,7 +264,8 @@
 		if(maxHealth < health_cap)
 			maxHealth += 5 //A well fed zombie is a scary zombie
 		times_eaten += 1
-		busy = 0
+	stop_automated_movement = 0
+	busy = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
 	if(!can_evolve) //How did you get here if not?
@@ -298,7 +316,7 @@
 	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
 	maxHealth = 50
 	health = 50
-	can_evolve = 1
+	can_evolve = TRUE
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/drop_host()
@@ -322,33 +340,33 @@
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
 			if(user.mind && (user.mind.assigned_role == "Chaplain"))
-				chaplain = 1 //Indeed we are
+				chaplain = TRUE //Indeed we are
 
-			spawn(25) //So there's a nice delay
-			if(!chaplain)
-				if(prob(5)) //Let's be generous, they'll only get one regen for this
-					to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
-					unzombify()
-				else
-					to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
+			if(do_after(user, src, 25)) //So there's a nice delay
+				if(!chaplain)
+					if(prob(5)) //Let's be generous, they'll only get one regen for this
+						to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
+						unzombify()
+					else
+						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
 
-			else if(chaplain)
-				var/holy_modifier = 1 //How much the potential for reconversion works
-				if(user.reagents.reagent_list.len)
-					if(WHISKEY in user.reagents.reagent_list || HOLYWATER in user.reagents.reagent_list) //Take a swig, then get to work
-						holy_modifier += 1
-				var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
-				if(turf_on.holy) //We're in the chapel
-					holy_modifier += 2
-				else
-					if(turf_on.blessed) //The chaplain's spilt some of his holy water
-						holy_modifier += 1
+				else if(chaplain)
+					var/holy_modifier = 1 //How much the potential for reconversion works
+					if(user.reagents.reagent_list.len)
+						if(user.reagents.has_reagent(WHISKEY) || user.reagents.has_reagent(HOLYWATER)) //Take a swig, then get to work
+							holy_modifier += 1
+					var/turf/turf_on = get_turf(src) //See if the dead guy's on holy ground
+					if(turf_on.holy) //We're in the chapel
+						holy_modifier += 2
+					else
+						if(turf_on.blessed) //The chaplain's spilt some of his holy water
+							holy_modifier += 1
 
-				if(prob(15*holy_modifier)) //Gotta have faith
-					to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
-					unzombify()
-				else
-					to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
+					if(prob(15*holy_modifier)) //Gotta have faith
+						to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
+						unzombify()
+					else
+						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
 	if(host)
@@ -372,7 +390,7 @@
 	maxHealth = 100
 	health = 100
 	can_evolve = 1
-	break_doors = 1
+	break_doors = CAN
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid
 	icon_living = "zombie" //The original
@@ -383,7 +401,7 @@
 	health = 150
 	can_evolve = 0
 	var/zombify_chance = 25 //Down with hardcoding
-	break_doors = 1
+	break_doors = CAN
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()
@@ -411,7 +429,7 @@
 
 	attacktext = "slashes"
 	attack_sound = "sound/weapons/bloodyslice.ogg"
-	break_doors = 2
+	break_doors = CANPLUS
 
 /mob/living/simple_animal/hostile/necro/zombie/leatherman
 	..()
@@ -427,3 +445,6 @@
 #undef MOVING_TO_TARGET
 #undef EATING
 #undef OPENING_DOOR
+#undef CAN
+#undef CANT
+#undef CANPLUS
