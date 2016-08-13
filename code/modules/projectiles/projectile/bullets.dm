@@ -732,3 +732,9 @@
 			spawn()
 				B.process()
 	..()
+	
+/obj/item/projectile/bullet/invisible
+	name = "invisible bullet"
+	icon_state = null
+	damage = 25
+	fire_sound = null
