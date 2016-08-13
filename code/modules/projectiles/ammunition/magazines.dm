@@ -161,6 +161,6 @@
 	flare_ammo_type = "/obj/item/ammo_casing/a75"
 	
 /obj/item/ammo_storage/magazine/invisible
-	desc = "fluff"
+	desc = "Reading how many shots you had left just got a lot more difficult."
 	ammo_type = "/obj/item/ammo_casing/invisible"
 	max_ammo = 2
