@@ -1,7 +1,7 @@
 /spell/aoe_turf/conjure/forcewall
 	name = "Forcewall"
 	desc = "Create a wall of pure energy at your location."
-	summon_type = list(/obj/effect/forcefield)
+	summon_type = list(/obj/effect/forcefield/wizard)
 	duration = 300
 	charge_max = 100
 	spell_flags = 0
@@ -41,7 +41,10 @@
 		for(var/mob/M in T)
 			Proj.on_hit(M,M.bullet_act(Proj, def_zone))
 	return
-
+	
+/obj/effect/forcefield/wizard
+	alpha = 255
+	
 /obj/effect/forcefield/mime
 	icon_state = "empty"
 	name = "invisible wall"
