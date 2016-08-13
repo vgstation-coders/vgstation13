@@ -144,7 +144,7 @@
 				if((health < maxHealth) || (maxHealth < health_cap)) //Is there something to eat in range?
 					for(var/mob/living/carbon/human/C in can_see) //If so, chow down
 						if(C.stat == DEAD && !busy && check_edibility(C))
-							Goto(C, move_to_delay)
+							Goto(C, speed)
 							busy = MOVING_TO_TARGET
 							give_up(C) //If we're not there in 10 seconds, give up
 
@@ -154,14 +154,14 @@
 				if(!busy && break_doors)//So we don't try to eat and open doors
 					/*for(var/obj/machinery/light/L in can_see)
 						if(L.status != 1 && L.status !=2)
-							Goto(L, move_to_delay)
+							Goto(L, speed)
 							busy = MOVING_TO_TARGET
 							if(L.Adjacent(src) && busy != SMASHING_LIGHT)
 								L.attack_animal(src)*/
 
 					for(var/obj/machinery/door/D in can_see)//Else, let's open some doors and see what's around
 						if(can_open_door(D) && !busy)
-							Goto(D, move_to_delay)
+							Goto(D, speed)
 							busy = MOVING_TO_TARGET
 							give_up(D)
 
