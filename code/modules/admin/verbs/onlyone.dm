@@ -162,8 +162,8 @@
 
 	H.revive() //Fully heal all converted mobs...
 	H.status_flags |= (INVULNERABLE | GODMODE) //...and make them invincible. This invincibility is removed in event_setup_end(), after a delay.
-	H.nospells = 1 //Also no casting. Also removed in event_setup_end() after a delay.
-
+	if(H.mind) //Golly gee I sure hope they have a mind or else they might be able to prematurely fuck people up
+		H.mind.nospells = 1
 	ticker.mode.wizards += H
 	H.mind.special_role = "Wizard"
 
@@ -217,5 +217,6 @@
 	sleep(200) //Twenty seconds.
 	for(var/mob/M in converted_mobs)
 		M.status_flags &= ~(INVULNERABLE | GODMODE)
-		M.nospells = 0
+		if(M.mind)
+			M.mind.nospells = 0
 		to_chat(M, "<span class='warning'>Invincibility period over. Let the battle begin!</span>")

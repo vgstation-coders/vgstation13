@@ -259,7 +259,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/cast_check(skipcharge = 0,mob/user = usr) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
 
 
-	if(user.nospells)
+	if(user.mind && user.mind.nospells)
 		to_chat(user, "<span class='warning'>Your power is suppressed!</span>")
 		return 0
 

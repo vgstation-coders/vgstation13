@@ -71,6 +71,8 @@
 	var/isScrying = 0
 	var/list/heard_before = list()
 
+	var/nospells = 0 //Can't cast spells.
+
 
 /datum/mind/New(var/key)
 	src.key = key
