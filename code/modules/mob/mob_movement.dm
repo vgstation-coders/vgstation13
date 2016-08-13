@@ -493,6 +493,7 @@
 				mob.dir = direct
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
+			INVOKE_EVENT(mob.on_moved,list("dir"=direct))
 			mob.delayNextMove(2)
 			return 1
 	// Crossed is always a bit iffy
