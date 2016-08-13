@@ -126,6 +126,7 @@
 		if(teleatom.Move(destturf))
 			playSpecials(destturf,effectout,soundout)
 
+	teleatom.reset_inertia() //Prevent things from drifting immediately after getting teleported to space
 	destarea.Entered(teleatom)
 
 	return 1

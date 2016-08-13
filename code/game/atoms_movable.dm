@@ -197,6 +197,8 @@
 			tether_datum.Delete_Chain()
 
 	last_move = (Dir || get_dir(oldloc, newLoc)) //If direction isn't specified, calculate it ourselves
+	set_inertia(last_move)
+
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
@@ -624,6 +626,9 @@
 		var/atom/movable/AM = loc
 		return AM.apply_inertia(direction)
 
+/atom/movable/proc/set_inertia(direction)
+	inertia_dir = direction
+
 /atom/movable/proc/process_inertia(turf/start)
 	set waitfor = 0
 	if(Process_Spacemove(1))
@@ -634,9 +639,12 @@
 
 	if(can_apply_inertia() && (src.loc == start))
 		if(!inertia_dir)
-			inertia_dir = last_move
+			return //inertia_dir = last_move
 
 		step(src, inertia_dir)
+
+/atom/movable/proc/reset_inertia()
+	inertia_dir = 0
 
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
