@@ -119,6 +119,8 @@
 		P.override_target_Y += Ychange
 		P.reflected = 1//you can now get hit by the projectile you just fired. Careful with portals!
 
+	teleatom.reset_inertia() //Prevent things from drifting immediately after getting teleported to space
+
 	if(force_teleport)
 		teleatom.forceMove(destturf,1)
 		playSpecials(destturf,effectout,soundout)
