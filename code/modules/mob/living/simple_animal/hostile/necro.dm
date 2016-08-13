@@ -134,7 +134,7 @@
 	If neither of these things are applicable, break some lights to set the mood
 	Otherwise, start wandering and bust down some doors to find more food
 	*/
-	if(!stat)
+	if(!isUnconscious())
 		if(stance == HOSTILE_STANCE_IDLE) //Not doing anything at the time
 			var/list/can_see = view(src, vision_range)
 			if(!busy)
@@ -274,10 +274,11 @@
 	busy = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
-	if(istype(evolve_to, /mob/living/simple_animal/hostile/necro))
+	if(ispath(evolve_to, /mob/living/simple_animal/hostile/necro))
 		var/mob/living/evolution = new evolve_to(src.loc,,)
 		evolution.name = name //We want to keep the name
-		mind.transfer_to(evolution) //Just in the offchance we have a player in control
+		if(mind)
+			mind.transfer_to(evolution) //Just in the offchance we have a player in control
 		qdel(src)
 	else
 		//Now, how did you get here when this is supposed to be the zombie evolution tree?
