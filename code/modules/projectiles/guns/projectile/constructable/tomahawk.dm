@@ -291,7 +291,7 @@
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=2"
+	origin_tech = MATERIALS + "=1;" + ENGINEERING + "=2"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	var/current_blunt = null
 	var/blunt_name = null

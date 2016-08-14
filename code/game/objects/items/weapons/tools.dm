@@ -45,7 +45,7 @@
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = MATERIALS + "=1;" + ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
 /obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
@@ -176,7 +176,7 @@
 	starting_materials = list(MAT_IRON = 80)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = MATERIALS + "=1;" + ENGINEERING + "=1"
 	attack_verb = list("pinches", "nips at")
 
 /obj/item/weapon/wirecutters/New()
@@ -222,7 +222,7 @@
 	melt_temperature = MELTPOINT_PLASTIC
 
 	//R&D tech level
-	origin_tech = "engineering=1"
+	origin_tech = ENGINEERING + "=1"
 
 	//Welding tool specific stuff
 	var/welding = 0 	//Whether or not the welding tool is off(0), on(1) or currently welding(2)
@@ -495,7 +495,7 @@
 	name = "Industrial Welding Tool"
 	max_fuel = 40
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 60)
-	origin_tech = "engineering=2"
+	origin_tech = ENGINEERING + "=2"
 
 /obj/item/weapon/weldingtool/largetank/empty
 	start_fueled = 0
@@ -505,7 +505,7 @@
 	max_fuel = 80
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
-	origin_tech = "engineering=3"
+	origin_tech = ENGINEERING + "=3"
 
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
@@ -515,7 +515,7 @@
 	max_fuel = 40
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
-	origin_tech = "engineering=4;plasmatech=3"
+	origin_tech = ENGINEERING + "=4;" + PLASMATECH + "=3"
 	icon_state = "ewelder"
 	var/last_gen = 0
 
@@ -548,7 +548,7 @@
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "engineering=1"
+	origin_tech = ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
 	suicide_act(mob/user)
@@ -599,7 +599,7 @@
 	siemens_coefficient = 1
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_MISC
-	origin_tech = "combat=2"
+	origin_tech = COMBAT + "=2"
 	var/open = 0
 
 	New()
@@ -634,7 +634,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "engineering=1"
+	origin_tech = ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
 
 /obj/item/weapon/solder/New()

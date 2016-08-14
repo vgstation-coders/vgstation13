@@ -14,7 +14,7 @@
 	item_state = "electronic"
 	starting_materials = null
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=2;engineering=4;materials=5;programming=3"
+	origin_tech = MAGNETS + "=2;" + ENGINEERING + "=4;" + MATERIALS + "=5;" + PROGRAMMING + "=3"
 	var/emagged = 0 //So we can emag it for "improved" functionality
 	var/working = 0 //Busy check to make sure the user doesn't try to multi-task (this causes serious problems)
 

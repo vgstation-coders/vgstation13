@@ -225,7 +225,7 @@
 	name = "\improper Exosuit-Mounted Diamond Drill"
 	desc = "This is an upgraded version of the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
 	icon_state = "mecha_diamond_drill"
-	origin_tech = "materials=4;engineering=3"
+	origin_tech = MATERIALS + "=4;" + ENGINEERING + "=3"
 	equip_cooldown = 15
 	force = 15
 	dig_walls = 1
@@ -302,7 +302,7 @@
 	name = "\improper Exosuit-Mounted Foam Extinguisher"
 	desc = "A fire extinguisher module for an exosuit. (Can be attached to: Firefighting exosuits)"
 	icon_state = "mecha_exting"
-	origin_tech = "materials=1;engineering=2"
+	origin_tech = MATERIALS + "=1;" + ENGINEERING + "=2"
 	equip_cooldown = 15
 	energy_drain = 0
 	range = MELEE|RANGED
@@ -392,7 +392,7 @@
 	name = "\improper Exosuit-Mounted Jetpack"
 	desc = "Using directed ion bursts and cunning solar wind reflection technique, this device enables controlled space flight."
 	icon_state = "mecha_jetpack"
-	origin_tech = "materials=5;engineering=5;magnets=4"
+	origin_tech = MATERIALS + "=5;" + ENGINEERING + "=5;" + MAGNETS + "=4"
 	equip_cooldown = 5
 	energy_drain = 75
 	var/wait = 0
@@ -491,7 +491,7 @@
 	name = "\improper Exosuit-Mounted RCD"
 	desc = "An exosuit-mounted Rapid Construction Device. (Can be attached to: Any exosuit)"
 	icon_state = "mecha_rcd"
-	origin_tech = "materials=4;bluespace=3;magnets=4;powerstorage=4"
+	origin_tech = MATERIALS + "=4;" + BLUESPACE + "=3;" + MAGNETS + "=4;" + POWERSTORAGE + "=4"
 	equip_cooldown = 10
 	energy_drain = 250
 	range = MELEE|RANGED
@@ -594,7 +594,7 @@
 	name = "\improper Exosuit-Mounted Teleporter"
 	desc = "An exosuit module that allows exosuits to teleport to any position in view."
 	icon_state = "mecha_teleport"
-	origin_tech = "bluespace=10"
+	origin_tech = BLUESPACE + "=10"
 	equip_cooldown = 150
 	energy_drain = 1000
 	range = RANGED
@@ -613,7 +613,7 @@
 	name = "\improper Wormhole Generator"
 	desc = "An exosuit module that allows generating of small quasi-stable wormholes."
 	icon_state = "mecha_wholegen"
-	origin_tech = "bluespace=3"
+	origin_tech = BLUESPACE + "=3"
 	equip_cooldown = 50
 	energy_drain = 300
 	range = RANGED
@@ -660,7 +660,7 @@
 	name = "\improper Gravitational Catapult"
 	desc = "An exosuit mounted Gravitational Catapult."
 	icon_state = "mecha_teleport"
-	origin_tech = "bluespace=2;magnets=3"
+	origin_tech = BLUESPACE + "=2;" + MAGNETS + "=3"
 	equip_cooldown = 10
 	energy_drain = 100
 	range = MELEE|RANGED
@@ -736,7 +736,7 @@
 	name = "\improper Armor Booster Module (Close Combat Weaponry)"
 	desc = "Boosts exosuit armor against armed melee attacks. Requires energy to operate."
 	icon_state = "mecha_abooster_ccw"
-	origin_tech = "materials=3"
+	origin_tech = MATERIALS + "=3"
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
@@ -786,7 +786,7 @@
 	name = "\improper Armor Booster Module (Ranged Weaponry)"
 	desc = "Boosts exosuit armor against ranged attacks. Completely blocks taser shots. Requires energy to operate."
 	icon_state = "mecha_abooster_proj"
-	origin_tech = "materials=4"
+	origin_tech = MATERIALS + "=4"
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
@@ -857,7 +857,7 @@
 	name = "\improper Repair Droid Module"
 	desc = "Automated repair droid. Scans exosuit for damage and repairs it. Can fix almost all types of external or internal damage."
 	icon_state = "repair_droid"
-	origin_tech = "magnets=3;programming=3"
+	origin_tech = MAGNETS + "=3;" + PROGRAMMING + "=3"
 	equip_cooldown = 20
 	energy_drain = 100
 	range = 0
@@ -942,7 +942,7 @@
 	name = "\improper Energy Relay Module"
 	desc = "Wirelessly drains energy from any available power channel in area. The performance index is quite low."
 	icon_state = "tesla"
-	origin_tech = "magnets=4;syndicate=2"
+	origin_tech = MAGNETS + "=4;" + SYNDICATE + "=2"
 	equip_cooldown = 10
 	energy_drain = 0
 	range = 0
@@ -1050,7 +1050,7 @@
 	name = "\improper Plasma Converter Module"
 	desc = "Generates power using solid plasma as fuel. Pollutes the environment."
 	icon_state = "tesla"
-	origin_tech = "plasmatech=2;powerstorage=2;engineering=1"
+	origin_tech = PLASMATECH + "=2;" + POWERSTORAGE + "=2;" + ENGINEERING + "=1"
 	equip_cooldown = 10
 	energy_drain = 0
 	range = MELEE
@@ -1187,7 +1187,7 @@
 	name = "\improper ExoNuclear Reactor"
 	desc = "Generates power using uranium. Pollutes the environment."
 	icon_state = "tesla"
-	origin_tech = "powerstorage=3;engineering=3"
+	origin_tech = POWERSTORAGE + "=3;" + ENGINEERING + "=3"
 	max_fuel = 50000
 	fuel_per_cycle_idle = 10
 	fuel_per_cycle_active = 30

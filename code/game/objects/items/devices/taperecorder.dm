@@ -3,7 +3,7 @@
 	name = "universal recorder"
 	icon_state = "taperecorderidle"
 	item_state = "analyzer"
-	origin_tech = "magnets=1;programming=1"
+	origin_tech = MAGNETS + "=1;" + PROGRAMMING + "=1"
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 60, MAT_GLASS = 30)
 	w_type = RECYK_ELECTRONIC

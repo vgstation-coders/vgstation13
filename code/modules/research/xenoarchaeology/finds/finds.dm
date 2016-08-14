@@ -31,7 +31,7 @@
 	var/obj/item/weapon/inside
 	var/method = 0// 0 = fire, 1 = brush, 2 = pick
 	var/datum/geosample/geologic_data
-	origin_tech = "materials=5"
+	origin_tech = MATERIALS + "=5"
 
 /obj/item/weapon/strangerock/New(loc, var/inside_item_type = 0)
 	..()

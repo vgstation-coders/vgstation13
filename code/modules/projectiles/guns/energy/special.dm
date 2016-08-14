@@ -5,7 +5,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/ion.ogg'
-	origin_tech = "combat=2;magnets=4"
+	origin_tech = COMBAT + "=2;" + MAGNETS + "=4"
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -27,7 +27,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/pulse3.ogg'
-	origin_tech = "combat=5;materials=4;powerstorage=3"
+	origin_tech = COMBAT + "=5;" + MATERIALS + "=4;" + POWERSTORAGE + "=3"
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/declone"
 
@@ -216,7 +216,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	fire_sound = 'sound/effects/stealthoff.ogg'
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/floramut"
-	origin_tech = "materials=2;biotech=3;powerstorage=3"
+	origin_tech = MATERIALS + "=2;" + BIOTECH + "=3;" + POWERSTORAGE + "=3"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	modifystate = "floramut"
 	var/charge_tick = 0
@@ -477,7 +477,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "ricochet"
 	item_state = null
-	origin_tech = "materials=3;powerstorage=3;combat=3"
+	origin_tech = MATERIALS + "=3;" + POWERSTORAGE + "=3;" + COMBAT + "=3"
 	slot_flags = SLOT_BELT
 	projectile_type = "/obj/item/projectile/ricochet"
 	charge_cost = 100
@@ -490,7 +490,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "bison"
 	item_state = null
-	origin_tech = "materials=3;powerstorage=3;combat=3"
+	origin_tech = MATERIALS + "=3;" + POWERSTORAGE + "=3;" + COMBAT + "=3"
 	slot_flags = SLOT_BELT
 	projectile_type = "/obj/item/projectile/beam/bison"
 	charge_cost = 100
@@ -541,7 +541,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	item_state = null
 	slot_flags = SLOT_BELT
 	fire_delay = 1
-	origin_tech = "materials=4;powerstorage=3;combat=3"
+	origin_tech = MATERIALS + "=4;" + POWERSTORAGE + "=3;" + COMBAT + "=3"
 	projectile_type = "/obj/item/projectile/spur/polarstar"
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell"
@@ -618,7 +618,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	desc = "A masterpiece crafted by the legendary gunsmith of a far-away planet."
 	icon_state = "spur"
 	item_state = null
-	origin_tech = "materials=5;powerstorage=4;combat=5"
+	origin_tech = MATERIALS + "=5;" + POWERSTORAGE + "=4;" + COMBAT + "=5"
 	fire_delay = 0
 	projectile_type = "/obj/item/projectile/spur"
 	var/charge_tick = 0

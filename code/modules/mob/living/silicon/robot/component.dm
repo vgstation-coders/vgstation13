@@ -174,7 +174,7 @@
 	throw_range = 10
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=3;engineering=3"
+	origin_tech = MAGNETS + "=3;" + ENGINEERING + "=3"
 	var/mode = 1;
 
 /obj/item/device/robotanalyzer/attack(mob/living/M as mob, mob/living/user as mob)

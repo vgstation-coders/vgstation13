@@ -413,14 +413,14 @@
 		return
 
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
-	//Every second under the shower adjusts body temperature by 0.5°C. Water conducts heat pretty efficiently in real life too
-	if(watertemp == "freezing cold") //Down to 0°C, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
+	//Every second under the shower adjusts body temperature by 0.5ï¿½C. Water conducts heat pretty efficiently in real life too
+	if(watertemp == "freezing cold") //Down to 0ï¿½C, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
 		C.bodytemperature = max(T0C, C.bodytemperature - 0.5)
 		return
-	if(watertemp == "searing hot") //Up to 60°c, upper limit for common water boilers
+	if(watertemp == "searing hot") //Up to 60ï¿½c, upper limit for common water boilers
 		C.bodytemperature = min(T0C + 60, C.bodytemperature + 0.5)
 		return
-	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5°C. Actual showers tend to average at 40°C, but it's the future
+	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5ï¿½C. Actual showers tend to average at 40ï¿½C, but it's the future
 		if(C.bodytemperature > T0C + 37.5) //Cooling down
 			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 0.5)
 			return

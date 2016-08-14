@@ -59,7 +59,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/Gunshot.ogg'
-	origin_tech = "combat=3;materials=3;powerstorage=2"
+	origin_tech = COMBAT + "=3;" + MATERIALS + "=3;" + POWERSTORAGE + "=2"
 	charge_cost = 125
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell"
@@ -74,7 +74,7 @@
 	item_state = "crossbow"
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "combat=2;magnets=2;syndicate=5"
+	origin_tech = COMBAT + "=2;" + MAGNETS + "=2;" + SYNDICATE + "=5"
 	silenced = 1
 	fire_sound = 'sound/weapons/ebow.ogg'
 	projectile_type = "/obj/item/projectile/energy/bolt"

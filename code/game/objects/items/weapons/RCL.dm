@@ -15,7 +15,7 @@
 	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	origin_tech = "engineering=2;materials=4"
+	origin_tech = ENGINEERING + "=2;" + MATERIALS + "=4"
 	var/max_amount = 90
 	var/active = 0
 	var/obj/structure/cable/last = null

@@ -4,7 +4,7 @@
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "posibrain"
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "engineering=4;materials=4;bluespace=2;programming=4"
+	origin_tech = ENGINEERING + "=4;" + MATERIALS + "=4;" + BLUESPACE + "=2;" + PROGRAMMING + "=4"
 
 	var/searching = 0
 	var/askDelay = 10 * 60 * 1

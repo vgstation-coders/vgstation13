@@ -2,7 +2,7 @@
 	name = "Floral Somatoray"
 	desc = "A tool that discharges controlled radiation which induces mutation in plant cells. Harmless to other organic life."
 	id = "flora_gun"
-	req_tech = list("materials" = 2, "biotech" = 3, "powerstorage" = 3)
+	req_tech = list(MATERIALS = 2, BIOTECH = 3, POWERSTORAGE = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500, MAT_URANIUM = 500)
 	category = "Misc"
@@ -14,7 +14,7 @@
 	id = "janicart_upgrade"
 	build_type = PROTOLATHE | MECHFAB
 	build_path = /obj/item/mecha_parts/janicart_upgrade
-	req_tech = list("engineering" = 1, "materials" = 1)
+	req_tech = list(ENGINEERING = 1, MATERIALS = 1)
 	materials = list(MAT_IRON=10000)
 	category = "Misc"
 
@@ -24,6 +24,6 @@
 	id = "chempack"
 	build_type = PROTOLATHE
 	build_path = /obj/item/weapon/reagent_containers/chempack
-	req_tech = list("engineering" = 5, "materials" = 3, "bluespace" = 3)
+	req_tech = list(ENGINEERING = 5, MATERIALS = 3, BLUESPACE = 3)
 	materials = list(MAT_GLASS = 8000, MAT_IRON=2000)
 	category = "Misc"

@@ -3,7 +3,7 @@
 	desc = "A large metal box with a frame inside, designed to store and link tiny assemblies like timers and signalers. There is a display with an interface for connecting assemblies together."
 
 	icon_state = "assembly_box"
-	origin_tech = "programming=3;engineering=3;magnets=3"
+	origin_tech = PROGRAMMING + "=3;" + ENGINEERING + "=3;" + MAGNETS + "=3"
 
 	var/list/obj/item/device/assembly/assemblies = list()
 

@@ -14,7 +14,7 @@
 	starting_materials = list(MAT_IRON = 750)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "powerstorage=3;syndicate=5"
+	origin_tech = POWERSTORAGE + "=3;" + SYNDICATE + "=5"
 	var/drain_rate = 600000		// amount of power to drain per tick
 	var/power_drained = 0 		// has drained this much power
 	var/max_power = 1e8		// maximum power that can be drained before exploding

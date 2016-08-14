@@ -113,7 +113,7 @@
 	icon_state = "beaker"
 	item_state = "beaker"
 	starting_materials = list(MAT_GLASS = 500)
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
 	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
@@ -225,7 +225,7 @@
 	starting_materials = list(MAT_GLASS = 500)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER | NOREACT
-	origin_tech = "bluespace=3;materials=4"
+	origin_tech = BLUESPACE + "=3;" + MATERIALS + "=4"
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -233,7 +233,7 @@
 	icon_state = "beakernoreactlarge"
 	starting_materials = list(MAT_GLASS = 1500)
 	volume = 100
-	origin_tech = "bluespace=4;materials=6"
+	origin_tech = BLUESPACE + "=4;" + MATERIALS + "=6"
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace
 	name = "bluespace beaker"
@@ -244,7 +244,7 @@
 	w_type = RECYK_GLASS
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
-	origin_tech = "bluespace=2;materials=3"
+	origin_tech = BLUESPACE + "=2;" + MATERIALS + "=3"
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
@@ -253,7 +253,7 @@
 	starting_materials = list(MAT_GLASS = 5000)
 	volume = 300
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,150,200,300)
-	origin_tech = "bluespace=3;materials=5"
+	origin_tech = BLUESPACE + "=3;" + MATERIALS + "=5"
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial
 	name = "vial"

@@ -12,7 +12,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	caliber = list("7.62x55" = 1)
-	origin_tech = "combat=4;materials=2"
+	origin_tech = COMBAT + "=4;" + MATERIALS + "=2"
 	ammo_type ="/obj/item/ammo_casing/a762x55"
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0

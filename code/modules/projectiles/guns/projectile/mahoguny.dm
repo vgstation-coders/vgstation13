@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "mahoguny"
 	item_state = "mahoguny"
-	origin_tech = "combat=5;biotech=6"
+	origin_tech = COMBAT + "=5;" + BIOTECH + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	recoil = 1
 	slot_flags = SLOT_BELT

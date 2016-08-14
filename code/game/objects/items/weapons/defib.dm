@@ -11,7 +11,7 @@
 	w_class = W_CLASS_MEDIUM
 	force = 5
 	throwforce = 5
-	origin_tech = "biotech=3"
+	origin_tech = BIOTECH + "=3"
 
 	var/datum/effect/effect/system/spark_spread/sparks = new
 	var/charges = 10

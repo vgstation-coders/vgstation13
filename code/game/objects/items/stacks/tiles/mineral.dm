@@ -135,7 +135,7 @@
 	throw_speed = 1
 	throw_range = 2
 	max_amount = 60
-	origin_tech = "materials=9"
+	origin_tech = MATERIALS + "=9"
 
 	material = "phazon"
 

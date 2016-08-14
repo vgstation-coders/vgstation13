@@ -10,7 +10,7 @@
 	icon_state = "lawgiver"
 	item_state = "lawgiver"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	origin_tech = "combat=5;materials=5;engineering=5"
+	origin_tech = COMBAT + "=5;" + MATERIALS + "=5;" + ENGINEERING + "=5"
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL

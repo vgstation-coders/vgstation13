@@ -51,7 +51,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	origin_tech = "magnets=3;materials=2"
+	origin_tech = MAGNETS + "=3;" + MATERIALS + "=2"
 
 	var/obj/item/weapon/storage/box/lights/supply = null //Takes bulbs from here to replace
 	var/obj/item/weapon/storage/box/lights/waste = null //Places replaced bulbs here

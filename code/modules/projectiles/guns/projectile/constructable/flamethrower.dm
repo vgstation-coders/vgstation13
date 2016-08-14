@@ -15,7 +15,7 @@
 	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "combat=1;plasmatech=1"
+	origin_tech = COMBAT + "=1;" + PLASMATECH + "=1"
 	ejectshell = 0
 	caliber = null
 	ammo_type = null

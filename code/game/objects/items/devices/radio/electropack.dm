@@ -3,7 +3,7 @@
 	desc = "Dance my monkeys! DANCE!!!"
 	icon_state = "electropack0"
 	item_state = "electropack"
-	origin_tech = "materials=1;powerstorage=2"
+	origin_tech = MATERIALS + "=1;" + POWERSTORAGE + "=2"
 	frequency = 1449
 	flags = FPRINT
 	siemens_coefficient = 1

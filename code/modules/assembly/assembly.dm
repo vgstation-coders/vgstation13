@@ -20,7 +20,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	throwforce = 2
 	throw_speed = 3
 	throw_range = 10
-	origin_tech = "magnets=1"
+	origin_tech = MAGNETS + "=1"
 
 	var/show_status = 1 //in order to prevent the signaler button in signaler.dm from saying "... is ready!" when examined
 	var/secured = 1

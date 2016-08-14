@@ -9,7 +9,7 @@ var/list/SPS_list = list()
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	origin_tech = "bluespace=2;magnets=2"
+	origin_tech = BLUESPACE + "=2;" + MAGNETS + "=2"
 	var/gpstag = "COM0"
 	var/emped = 0
 

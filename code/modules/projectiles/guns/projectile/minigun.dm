@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "minigun"
 	item_state = "minigun0"
-	origin_tech = "materials=4;combat=6"
+	origin_tech = MATERIALS + "=4;" + COMBAT + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	slot_flags = null
@@ -102,7 +102,7 @@
 	desc = "The apocalypse hasn't even begun!"//I'm not even sorry
 	icon_state = "beegun"
 	item_state = "beegun0"
-	origin_tech = "materials=4;combat=6;biotech=5"
+	origin_tech = MATERIALS + "=4;" + COMBAT + "=6;" + BIOTECH + "=5"
 	recoil = 0
 
 /obj/item/weapon/gun/gatling/beegun/update_wield(mob/user)

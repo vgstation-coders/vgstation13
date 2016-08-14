@@ -800,7 +800,7 @@
 	name = "Shaker"
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 
@@ -808,7 +808,7 @@
 	name = "Thermos"
 	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
 	icon_state = "shaker"
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 
@@ -821,7 +821,7 @@
 	name = "Captain's Flask"
 	desc = "A metal flask belonging to the captain."
 	icon_state = "flask"
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	volume = 60
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/detflask

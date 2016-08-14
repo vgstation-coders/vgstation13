@@ -12,7 +12,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=1;engineering=1;bluespace=1"
+	origin_tech = MATERIALS + "=1;" + ENGINEERING + "=1;" + BLUESPACE + "=1"
 	attack_verb = list("strikes", "hits", "bashes")
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/loaded_crystal = null

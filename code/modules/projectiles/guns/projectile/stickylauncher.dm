@@ -7,7 +7,7 @@
 	icon_state = "stickybomb"
 	item_state = null
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=3;combat=4;programming=3"
+	origin_tech = MATERIALS + "=3;" + COMBAT + "=4;" + PROGRAMMING + "=3"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	flags = FPRINT

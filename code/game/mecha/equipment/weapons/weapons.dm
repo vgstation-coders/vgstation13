@@ -1,7 +1,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon
 	name = "mecha weapon"
 	range = RANGED
-	origin_tech = "materials=3;combat=3"
+	origin_tech = MATERIALS + "=3;" + COMBAT + "=3"
 	var/projectile
 	var/fire_sound
 
@@ -73,7 +73,7 @@
 	name = "eZ-13 MK2 heavy pulse rifle"
 	icon_state = "mecha_pulse"
 	energy_drain = 120
-	origin_tech = "materials=3;combat=6;powerstorage=4"
+	origin_tech = MATERIALS + "=3;" + COMBAT + "=6;" + POWERSTORAGE + "=4"
 	projectile = /obj/item/projectile/beam/pulse/heavy
 	fire_sound = 'sound/weapons/marauder.ogg'
 

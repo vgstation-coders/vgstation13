@@ -34,7 +34,7 @@
 	throw_speed = 4
 	throw_range = 20
 	m_amt = 100
-	origin_tech = "magnets=2;syndicate=3"*/
+	origin_tech = MAGNETS + "=2;" + SYNDICATE + "=3"*/
 
 /obj/item/weapon/rsp
 	name = "\improper Rapid-Seed-Producer (RSP)"
@@ -112,7 +112,7 @@
 	name = "cane"
 	desc = "A cane used by a true gentlemen. Or a clown."
 	icon = 'icons/obj/weapons.dmi'
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	icon_state = "cane"
 	item_state = "stick"
 	flags = FPRINT
@@ -166,7 +166,7 @@
 	siemens_coefficient = 1
 	throwforce = 0
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	var/breakouttime = 300	//Deciseconds = 30s = 0.5 minute
 
 /obj/item/weapon/legcuffs/bolas
@@ -181,7 +181,7 @@
 	throwforce = 2
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_METAL
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	attack_verb = list("lashes", "bludgeons", "whips")
 	force = 4
 	breakouttime = 50 //10 seconds
@@ -499,7 +499,7 @@
 	throwforce = 15
 	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_METAL
-	origin_tech = "combat=5"
+	origin_tech = COMBAT + "=5"
 	attack_verb = list("rams", "bludgeons")
 	force = 15
 	throw_speed = 1
@@ -626,7 +626,7 @@
 	starting_materials = list(MAT_IRON = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature=MELTPOINT_SILICON
-	origin_tech = "magnets=1"
+	origin_tech = MAGNETS + "=1"
 
 /obj/item/weapon/staff
 	name = "wizards staff"
@@ -819,7 +819,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	origin_tech = "biotech=2"
+	origin_tech = BIOTECH + "=2"
 
 /*
 /obj/item/weapon/cigarpacket
@@ -847,7 +847,7 @@
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "capacitor"
 	desc = "A debug item for research."
-	origin_tech = "materials=8;programming=8;magnets=8;powerstorage=8;bluespace=8;combat=8;biotech=8;syndicate=8"
+	origin_tech = MATERIALS + "=8;" + PROGRAMMING + "=8;" + MAGNETS + "=8;" + POWERSTORAGE + "=8;" + BLUESPACE + "=8;" + COMBAT + "=8;" + BIOTECH + "=8;" + SYNDICATE + "=8"
 */
 
 /obj/item/weapon/ectoplasm

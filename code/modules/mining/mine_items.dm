@@ -192,7 +192,7 @@ proc/move_mining_shuttle()
 	starting_materials = list(MAT_IRON = 3750) //one sheet, but where can you make them?
 	w_type = RECYK_METAL
 	var/digspeed = 40 //moving the delay to an item var so R&D can make improved picks. --NEO
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = MATERIALS + "=1;" + ENGINEERING + "=1"
 	attack_verb = list("hits", "pierces", "slices", "attacks")
 	var/drill_sound = 'sound/weapons/Genhit.ogg'
 	var/drill_verb = "picking"
@@ -211,7 +211,7 @@ proc/move_mining_shuttle()
 	icon_state = "spickaxe"
 	item_state = "spickaxe"
 	digspeed = 30
-	origin_tech = "materials=3"
+	origin_tech = MATERIALS + "=3"
 	desc = "This makes no metallurgic sense."
 
 /obj/item/weapon/pickaxe/jackhammer
@@ -219,7 +219,7 @@ proc/move_mining_shuttle()
 	icon_state = "jackhammer"
 	item_state = "jackhammer"
 	digspeed = 20 //faster than drill, but cannot dig
-	origin_tech = "materials=3;powerstorage=2;engineering=2"
+	origin_tech = MATERIALS + "=3;" + POWERSTORAGE + "=2;" + ENGINEERING + "=2"
 	desc = "Cracks rocks with sonic blasts, perfect for killing cave lizards."
 	drill_verb = "hammering"
 
@@ -228,7 +228,7 @@ proc/move_mining_shuttle()
 	icon_state = "gpickaxe"
 	item_state = "gpickaxe"
 	digspeed = 20
-	origin_tech = "materials=4"
+	origin_tech = MATERIALS + "=4"
 	desc = "This makes no metallurgic sense."
 
 /obj/item/weapon/pickaxe/plasmacutter
@@ -240,7 +240,7 @@ proc/move_mining_shuttle()
 	heat_production = 3800
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
-	origin_tech = "materials=4;plasmatech=3;engineering=3"
+	origin_tech = MATERIALS + "=4;" + PLASMATECH + "=3;" + ENGINEERING + "=3"
 	desc = "A rock cutter that uses bursts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
@@ -255,7 +255,7 @@ proc/move_mining_shuttle()
 	item_state = "dpickaxe"
 	digspeed = 10
 	sharpness = 1.2
-	origin_tech = "materials=6;engineering=4"
+	origin_tech = MATERIALS + "=6;" + ENGINEERING + "=4"
 	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
 
 /obj/item/weapon/pickaxe/drill
@@ -263,7 +263,7 @@ proc/move_mining_shuttle()
 	icon_state = "handdrill"
 	item_state = "jackhammer"
 	digspeed = 30
-	origin_tech = "materials=2;powerstorage=3;engineering=2"
+	origin_tech = MATERIALS + "=2;" + POWERSTORAGE + "=3;" + ENGINEERING + "=2"
 	desc = "Yours is the drill that will pierce through the rock walls."
 	drill_verb = "drilling"
 
@@ -274,7 +274,7 @@ proc/move_mining_shuttle()
 	icon_state = "diamonddrill"
 	item_state = "jackhammer"
 	digspeed = 5 //Digs through walls, girders, and can dig up sand
-	origin_tech = "materials=6;powerstorage=4;engineering=5"
+	origin_tech = MATERIALS + "=6;" + POWERSTORAGE + "=4;" + ENGINEERING + "=5"
 	desc = "Yours is the drill that will pierce the heavens!"
 
 	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
@@ -298,7 +298,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_MEDIUM
 	sharpness = 0.5
 	w_type = RECYK_MISC
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = MATERIALS + "=1;" + ENGINEERING + "=1"
 	attack_verb = list("bashes", "bludgeons", "thrashes", "whacks")
 
 
@@ -341,7 +341,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
-	origin_tech = "bluespace=2"
+	origin_tech = BLUESPACE + "=2"
 
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)

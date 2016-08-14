@@ -11,7 +11,7 @@
  */
 /obj/item/stack
 	gender = PLURAL
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	var/list/datum/stack_recipe/recipes
 	var/singular_name
 	var/irregular_plural //"Teeth", for example. Without this, you'd see "There are 30 tooths in the stack."

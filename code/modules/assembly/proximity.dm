@@ -11,7 +11,7 @@
 	icon_state = "prox"
 	starting_materials = list(MAT_IRON = 800, MAT_GLASS = 200)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = MAGNETS + "=1"
 
 	wires = WIRE_PULSE | WIRE_RECEIVE
 

@@ -7,7 +7,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	var/flush = null
-	origin_tech = "programming=4;materials=4"
+	origin_tech = PROGRAMMING + "=4;" + MATERIALS + "=4"
 
 
 /obj/item/device/aicard/attack(mob/living/silicon/ai/M as mob, mob/user as mob)

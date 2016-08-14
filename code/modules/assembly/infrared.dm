@@ -8,7 +8,7 @@
 	icon_state = "infrared"
 	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 500)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=2"
+	origin_tech = MAGNETS + "=2"
 
 	wires = WIRE_PULSE
 
