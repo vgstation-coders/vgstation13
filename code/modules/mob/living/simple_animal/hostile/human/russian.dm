@@ -15,6 +15,9 @@
 
 	faction = "russian"
 
+/mob/living/simple_animal/hostile/humanoid/russian/Aggro()
+	say("сука блять")
+	return ..()
 
 /mob/living/simple_animal/hostile/humanoid/russian/ranged
 	icon_state = "russianranged"
