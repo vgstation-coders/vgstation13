@@ -223,6 +223,22 @@ var/global/list/image/fluidtrack_cache=list()
 	coming_state = "claw1"
 	going_state  = "claw2"
 
+/obj/effect/decal/cleanable/blood/tracks/footprints/magboots
+	coming_state = "magboots1"
+	going_state  = "magboots2"
+
+/obj/effect/decal/cleanable/blood/tracks/footprints/boots
+	coming_state = "boots1"
+	going_state  = "boots2"
+
+/obj/effect/decal/cleanable/blood/tracks/footprints/clown //Fun Fact: This footprint is way longer than the regular one and thus is spaced differently, making it the only evenly-spaced footprint type.
+	coming_state = "clown1"
+	going_state  = "clown2"
+
+/obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
+	coming_state = "catbeast1"
+	going_state  = "catbeast2"
+
 /obj/effect/decal/cleanable/blood/tracks/wheels
 	name = "wet tracks"
 	desc = "Whoops..."
