@@ -736,5 +736,12 @@
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
 	icon_state = null
-	damage = 20
+	damage = 25
 	fire_sound = null
+	
+/obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
+	if (..(target, blocked))
+		var/mob/living/L = target
+		L.silent = 5
+		return 1
+	return 0

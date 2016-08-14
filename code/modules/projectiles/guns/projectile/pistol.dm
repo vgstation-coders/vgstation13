@@ -90,20 +90,15 @@
 	name = "hand-gun"
 	desc = "This is a stickup!"
 	icon_state = "handgun"
-	inhand_states = null
+	inhand_states = list("left_hand" = null, "right_hand" = null)
 	ammo_type = "/obj/item/ammo_casing/invisible"
 	mag_type = "/obj/item/ammo_storage/magazine/invisible"
-	cant_drop = 1
+	cant_drop = TRUE
 	gun_flags = 0
-	silenced = 1
+	silenced = TRUE
 	fire_sound = null
-	load_method = 2
-	var/obj/item/clothing/gloves/white/advanced/linked_gloves = null
+	load_method = MAGAZINE
 	
-/obj/item/weapon/gun/projectile/handgun/Destroy()
-	if(linked_gloves)
-		linked_gloves.current_gun = null
-	..()
 	
 /obj/item/weapon/gun/projectile/handgun/RemoveMag(var/mob/user)
 	to_chat(user, "<span class = 'warning'>Try as you might, you can't seem to find a magazine on \the [src]!</span>")
@@ -117,5 +112,5 @@
 		
 		if (!getAmmo()) //drop the guns after firing both shots
 			to_chat(user, "<span class = 'warning'>You wave your hands in an effort to cool them off! </span>")
-			Destroy()
+			qdel(src)
 			
