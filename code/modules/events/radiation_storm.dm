@@ -27,7 +27,7 @@
 		command_alert(/datum/command_alert/radiation_storm)
 
 		for(var/area/A in areas)
-			if(A.z != 1 || is_safe_zone(A))
+			if(A.z != map.zMainStation || is_safe_zone(A))
 				continue
 			var/area/ma = get_area_master(A)
 			ma.radiation_alert()
@@ -50,7 +50,7 @@
 				var/turf/T = get_turf(H)
 				if(!T)
 					continue
-				if(T.z != 1 || is_safe_zone(T.loc))
+				if(T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 
 				var/applied_rads = (H.apply_effect(irradiationThisBurst,IRRADIATE,0) > (irradiationThisBurst/4))
@@ -69,7 +69,7 @@
 		command_alert(/datum/command_alert/radiation_storm/end)
 
 		for(var/area/A in areas)
-			if(A.z != 1 || is_safe_zone(A))
+			if(A.z != map.zMainStation || is_safe_zone(A))
 				continue
 			var/area/ma = get_area_master(A)
 			ma.reset_radiation_alert()

@@ -168,7 +168,7 @@
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
 			for(var/obj/item/weapon/disk/nuclear in contents_brought)
-				locked_to_current_z = 1
+				locked_to_current_z = map.zMainStation
 				break
 
 			//Check if it's a mob pulling an object
@@ -186,7 +186,7 @@
 			for(var/mob/living/silicon/robot/mommi in contents_brought)
 				if(mommi.locked_to_z != 0)
 					if(src.z == mommi.locked_to_z)
-						locked_to_current_z = 1
+						locked_to_current_z = map.zMainStation
 					else
 						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
 						move_to_z = mommi.locked_to_z

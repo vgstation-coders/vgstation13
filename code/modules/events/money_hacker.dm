@@ -10,7 +10,7 @@
 /datum/event/money_hacker/setup()
 	if(all_money_accounts.len)
 		for(var/obj/machinery/account_database/DB in account_DBs)
-			if( DB.z == 1 && !(DB.stat&NOPOWER) && DB.activated )
+			if( DB.z == map.zMainStation && !(DB.stat&NOPOWER) && DB.activated )
 				affected_db = DB
 				break
 	if(affected_db)

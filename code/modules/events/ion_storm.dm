@@ -301,21 +301,21 @@
 	spawn(0)
 		to_chat(world, "Started processing APCs")
 		for (var/obj/machinery/power/apc/APC in world)
-			if(APC.z == 1)
+			if(APC.z == map.zMainStation)
 				APC.ion_act()
 				apcnum++
 		to_chat(world, "Finished processing APCs. Processed: [apcnum]")
 	spawn(0)
 		to_chat(world, "Started processing SMES")
 		for (var/obj/machinery/power/smes/SMES in world)
-			if(SMES.z == 1)
+			if(SMES.z == map.zMainStation)
 				SMES.ion_act()
 				smesnum++
 		to_chat(world, "Finished processing SMES. Processed: [smesnum]")
 	spawn(0)
 		to_chat(world, "Started processing AIRLOCKS")
 		for (var/obj/machinery/door/airlock/D in world)
-			if(D.z == 1)
+			if(D.z == map.zMainStation)
 				//if(length(D.req_access) > 0 && !(12 in D.req_access)) //not counting general access and maintenance airlocks
 				airlocknum++
 				spawn(0)
@@ -324,7 +324,7 @@
 	spawn(0)
 		to_chat(world, "Started processing FIREDOORS")
 		for (var/obj/machinery/door/firedoor/D in world)
-			if(D.z == 1)
+			if(D.z == map.zMainStation)
 				firedoornum++;
 				spawn(0)
 					D.ion_act()

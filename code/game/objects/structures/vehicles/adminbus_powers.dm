@@ -567,7 +567,7 @@
 					I.loc = M.loc
 					I.reset_plane_and_layer()
 					I.dropped(M)
-					I.z = 2
+					I.z = map.zCentcomm
 					I.y = 68
 					I.x = (thunderdomefightercount % 15) + 121
 

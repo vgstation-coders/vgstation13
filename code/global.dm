@@ -181,7 +181,7 @@ var/CHARGELEVEL = 0.001 // Cap for how fast cells charge, as a percentage-per-ti
 var/list/WORLD_X_OFFSET = list()
 var/list/WORLD_Y_OFFSET = list()
 
-var/shuttle_z = 2	//default
+var/shuttle_z = map.zCentcomm	//default
 var/airtunnel_start = 68 // default
 var/airtunnel_stop = 68 // default
 var/airtunnel_bottom = 72 // default

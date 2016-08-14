@@ -30,7 +30,7 @@ Message ends."}
 			var/nukecode = "ERROR"
 			for(var/obj/machinery/nuclearbomb/bomb in machines)
 				if(bomb && bomb.r_code)
-					if(bomb.z == 1)
+					if(bomb.z == map.zMainStation)
 						nukecode = bomb.r_code
 			interceptname = "Directive 7-12"
 			intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
@@ -72,7 +72,7 @@ Message ends."}
 
 	proc/count()
 		for(var/turf/T in turfs)
-			if(T.z != 1)
+			if(T.z != map.zMainStation)
 				continue
 
 			if(istype(T,/turf/simulated/floor))
@@ -94,7 +94,7 @@ Message ends."}
 					src.r_wall += 1
 
 		for(var/obj/O in world)
-			if(O.z != 1)
+			if(O.z != map.zMainStation)
 				continue
 
 			if(istype(O, /obj/structure/window))

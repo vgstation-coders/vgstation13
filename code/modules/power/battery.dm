@@ -259,7 +259,7 @@ var/global/list/battery_online =	list(
 	return 1
 
 /obj/machinery/power/battery/proc/ion_act()
-	if(src.z == 1)
+	if(src.z == map.zMainStation)
 		if(prob(1)) //explosion
 			message_admins("<span class='warning'>SMES explosion in [get_area(src)]</span>")
 			src.visible_message("<span class='warning'>\The [src] is making strange noises!</span>",

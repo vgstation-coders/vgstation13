@@ -75,7 +75,7 @@ proc/process_teleport_locs()
 		if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station)) continue
 		if(teleportlocs.Find(AR.name)) continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
-		if (picked && picked.z == 1)
+		if (picked && picked.z == map.zMainStation)
 			teleportlocs += AR.name
 			teleportlocs[AR.name] = AR
 
@@ -90,7 +90,7 @@ proc/process_ghost_teleport_locs()
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 		var/turf/picked = safepick(get_area_turfs(AR.type))
-		if (picked && (picked.z == 1 || picked.z == 5 || picked.z == 3))
+		if (picked && (picked.z == map.zMainStation || picked.z == map.zAsteroid || picked.z == map.zTCommSat))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 
