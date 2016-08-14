@@ -4,7 +4,7 @@
 	name = "Mounted Jail Cell"
 	desc = "Mounted Jail Cell, capable of holding up to two prisoners for a limited time. (Can be attached to Gygax)"
 	icon_state = "mecha_jail"
-	origin_tech = "biotech=2;combat=4"
+	origin_tech = Tc_BIOTECH + "=2;" + Tc_COMBAT + "=4"
 	energy_drain = 20
 	range = MELEE
 	reliability = 1000

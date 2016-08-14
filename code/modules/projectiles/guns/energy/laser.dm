@@ -7,7 +7,7 @@
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "combat=3;magnets=2"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2"
 	projectile_type = "/obj/item/projectile/beam"
 
 /obj/item/weapon/gun/energy/laser/practice
@@ -156,7 +156,7 @@ obj/item/weapon/gun/energy/laser/retro
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
-	origin_tech = "combat=4;materials=3;powerstorage=3"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_POWERSTORAGE + "=3"
 	projectile_type = "/obj/item/projectile/beam/heavylaser"
 
 	fire_delay = 2
@@ -194,7 +194,7 @@ obj/item/weapon/gun/energy/laser/retro
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/laser3.ogg'
-	origin_tech = "combat=5;materials=3;magnets=2;syndicate=2"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
 	projectile_type = "/obj/item/projectile/beam/xray"
 	charge_cost = 50
 
@@ -206,7 +206,7 @@ obj/item/weapon/gun/energy/laser/retro
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/elecfire.ogg'
-	origin_tech = "combat=5;materials=3;magnets=2"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2"
 	projectile_type = /obj/item/projectile/energy/plasma
 	charge_cost = 50
 
@@ -263,7 +263,7 @@ obj/item/weapon/gun/energy/laser/retro
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	desc = "Standard issue weapon of the Imperial Guard."
 	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
-	origin_tech = "magnets=2"
+	origin_tech = Tc_MAGNETS + "=2"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	clumsy_check = 0
 	var/charge_tick = 0
@@ -303,7 +303,7 @@ obj/item/weapon/gun/energy/laser/retro
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	desc = "Standard issue weapon of the Imperial Guard."
 	projectile_type = "/obj/item/projectile/beam/lasertag/red"
-	origin_tech = "magnets=2"
+	origin_tech = Tc_MAGNETS + "=2"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	clumsy_check = 0
 	var/charge_tick = 0

@@ -2,7 +2,7 @@
 	name = "Circuit Design(Destructive Analyzer)"
 	desc = "The circuit board for a destructive analyzer."
 	id = "destructive_analyzer"
-	req_tech = list("programming" = 2, "magnets" = 2, "engineering" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_MAGNETS = 2, Tc_ENGINEERING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -12,7 +12,7 @@
 	name = "Circuit Design(Protolathe)"
 	desc = "The circuit board for a protolathe."
 	id = "protolathe"
-	req_tech = list("programming" = 2, "engineering" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -22,7 +22,7 @@
 	name = "Circuit Design(Circuit Imprinter)"
 	desc = "The circuit board for a circuit imprinter."
 	id = "circuit_imprinter"
-	req_tech = list("programming" = 2, "engineering" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -32,7 +32,7 @@
 	name = "Circuit Design(Autolathe)"
 	desc = "The circuit board for a autolathe."
 	id = "autolathe"
-	req_tech = list("programming" = 2, "engineering" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -42,7 +42,7 @@
 	name = "Circuit Design(R&D Server)"
 	desc = "The circuit board for an R&D Server"
 	id = "rdserver"
-	req_tech = list("programming" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -52,7 +52,7 @@
 	name = "Circuit Design(Exosuit Fabricator)"
 	desc = "The circuit board for an Exosuit Fabricator"
 	id = "mechfab"
-	req_tech = list("programming" = 3, "engineering" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -62,7 +62,7 @@
 	name = "Circuit Design (Monkey Recycler)"
 	desc = "Allows for the construction of circuit boards used to build a Monkey Recycler."
 	id = "monkey"
-	req_tech = list("programming" = 3,"engineering" = 2,"biotech" = 3,"powerstorage" = 2)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 3, Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -72,7 +72,7 @@
 	name = "Circuit Design (Mech Bay Power Port)"
 	desc = "Allows for the construction of circuit boards used to build a mech bay power connector port."
 	id = "mechapowerport"
-	req_tech = list("engineering" = 2, "powerstorage" = 3)
+	req_tech = list(Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -82,7 +82,7 @@
 	name = "Circuit Design (Recharge Station)"
 	desc = "Allows for the construction of circuit boards used to build a mech bay recharge station."
 	id = "mechapowerfloor"
-	req_tech = list("materials" = 2, "powerstorage" = 3)
+	req_tech = list(Tc_MATERIALS = 2, Tc_POWERSTORAGE = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -92,7 +92,7 @@
 	name = "Circuit Design (Fourier Transform Spectroscope)"
 	desc = "Allows for the construction of circuit boards used in Xenoarcheology."
 	id = "fourier"
-	req_tech = list("programming" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"

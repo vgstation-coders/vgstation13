@@ -9,7 +9,7 @@
 
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "engineering=1"
+	origin_tech = Tc_ENGINEERING + "=1"
 
 	flags = FPRINT
 	siemens_coefficient = 1

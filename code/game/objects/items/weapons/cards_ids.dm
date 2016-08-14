@@ -58,7 +58,7 @@
 	name = "cryptographic sequencer"
 	icon_state = "emag"
 	item_state = "card-id"
-	origin_tech = "magnets=2;syndicate=2"
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
 
 	/**
 	 * Number of uses left.  -1 = infinite
@@ -306,7 +306,7 @@
 /obj/item/weapon/card/id/syndicate
 	name = "agent card"
 	access = list(access_maint_tunnels, access_syndicate, access_external_airlocks)
-	origin_tech = "syndicate=3"
+	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
 
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)

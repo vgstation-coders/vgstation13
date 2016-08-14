@@ -138,7 +138,7 @@
 	icon_state = "secure"
 	item_state = "sec-case"
 	desc = "A large briefcase with a digital locking system."
-	origin_tech = "materials=2;magnets=2;programming=1"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=1"
 	flags = FPRINT
 	force = 8.0
 	throw_speed = 1

@@ -3,7 +3,7 @@
 	desc = "A strange-looking revolver. Its construction appears somewhat slapdash."
 	icon_state = "roulette_revolver"
 	item_state = "gun"
-	origin_tech = "combat=4;materials=4"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=4"
 	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL

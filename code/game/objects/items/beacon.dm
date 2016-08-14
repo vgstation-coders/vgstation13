@@ -8,7 +8,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	item_state = "signaler"
 	var/code = "electronic"
 	var/frequency = 1459
-	origin_tech = "bluespace=1"
+	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
 
 /obj/item/beacon/New()
@@ -43,7 +43,7 @@ var/global/list/obj/item/beacon/beacons = list()
 /obj/item/beacon/syndicate
 	name = "suspicious beacon"
 	desc = "A label on it reads: <i>Activate to have a singularity beacon teleported to your location</i>."
-	origin_tech = "bluespace=1;syndicate=7"
+	origin_tech = Tc_BLUESPACE + "=1;" + Tc_SYNDICATE + "=7"
 
 /obj/item/beacon/syndicate/attack_self(mob/user as mob)
 	if(user)

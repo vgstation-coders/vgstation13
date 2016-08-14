@@ -3,7 +3,7 @@
 	desc = "Allows for the construction of LBX AC 10."
 	id = "mech_scattershot"
 	build_type = MECHFAB
-	req_tech = list("combat" = 4)
+	req_tech = list(Tc_COMBAT = 4)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -14,7 +14,7 @@
 	desc = "Allows for the construction of Ultra AC 2."
 	id = "mech_lmg"
 	build_type = MECHFAB
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -25,7 +25,7 @@
 	desc = "Allows for the construction of PBT \"Pacifier\" mounted taser."
 	id = "mech_taser"
 	build_type = MECHFAB
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/taser
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -36,7 +36,7 @@
 	desc = "Allows for the construction of HoNkER BlAsT 5000."
 	id = "mech_honker"
 	build_type = MECHFAB
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/honker
 	category = "Exosuit_Weapons"
 	materials = list(MAT_IRON=20000,MAT_CLOWN=10000)
@@ -46,7 +46,7 @@
 	desc = "Allows for the construction of Mousetrap Mortar."
 	id = "mech_mousetrap"
 	build_type = MECHFAB
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar
 	category = "Exosuit_Weapons"
 	materials = list(MAT_IRON=20000,MAT_CLOWN=5000)
@@ -56,7 +56,7 @@
 	desc = "Allows for the construction of Banana Mortar."
 	id = "mech_banana"
 	build_type = MECHFAB
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	category = "Exosuit_Weapons"
 	materials = list(MAT_IRON=20000,MAT_CLOWN=5000)
@@ -66,7 +66,7 @@
 	desc = "Allows for the construction of Rapid-Fire Cream Pie Mortar."
 	id = "mech_creampie"
 	build_type = MECHFAB
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar
 	category = "Exosuit_Weapons"
 	materials = list(MAT_IRON=20000,MAT_CLOWN=5000)
@@ -76,7 +76,7 @@
 	desc = "Allows for the construction of PCMK-6 Bolas Launcher."
 	id = "mech_bolas"
 	build_type = MECHFAB
-	req_tech = list("combat" = 3)
+	req_tech = list(Tc_COMBAT = 3)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -87,7 +87,7 @@
 	desc = "Allows for the construction of CH-PS Laser."
 	id = "mech_laser"
 	build_type = MECHFAB
-	req_tech = list("combat" = 3, "magnets" = 3)
+	req_tech = list(Tc_COMBAT = 3, Tc_MAGNETS = 3)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -98,7 +98,7 @@
 	desc = "Allows for the construction of CH-LC Laser Cannon."
 	id = "mech_laser_heavy"
 	build_type = MECHFAB
-	req_tech = list("combat" = 4, "magnets" = 4)
+	req_tech = list(Tc_COMBAT = 4, Tc_MAGNETS = 4)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/heavy
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -109,7 +109,7 @@
 	desc = "Allows for the construction of SGL-6 Grenade Launcher."
 	id = "mech_grenade_launcher"
 	build_type = MECHFAB
-	req_tech = list("combat" = 3)
+	req_tech = list(Tc_COMBAT = 3)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -120,7 +120,7 @@
 	desc = "A weapon that violates the Geneva Convention at 6 rounds per minute"
 	id = "clusterbang_launcher"
 	build_type = MECHFAB
-	req_tech = list("combat"= 5, "materials" = 5, "syndicate" = 3)
+	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 5, Tc_SYNDICATE = 3)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited
 	category = "Exosuit_Weapons"
 	locked = 1

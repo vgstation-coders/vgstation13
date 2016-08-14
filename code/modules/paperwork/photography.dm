@@ -16,7 +16,7 @@
 	icon_state = "film"
 	item_state = "electropack"
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1;programming=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_PROGRAMMING + "=1"
 
 
 /*
@@ -106,7 +106,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=1;programming=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_PROGRAMMING + "=1"
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
 	min_harm_label = 3

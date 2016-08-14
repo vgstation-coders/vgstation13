@@ -4,7 +4,7 @@
 	icon_state = "mousetrap"
 	starting_materials = list(MAT_IRON = 100)
 	w_type = RECYK_METAL
-	origin_tech = "combat=1"
+	origin_tech = Tc_COMBAT + "=1"
 	var/armed = 0
 	wires = WIRE_PULSE
 

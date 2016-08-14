@@ -2,7 +2,7 @@
 	name = "Roll of gauze"
 	desc = "Some sterile gauze to wrap around bloody stumps."
 	id = "bruise_pack"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
 	category = "Medical"
@@ -12,7 +12,7 @@
 	name = "Ointment"
 	desc = "Used to treat those nasty burns."
 	id = "ointment"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
 	category = "Medical"
@@ -22,7 +22,7 @@
 	name = "Advanced trauma kit"
 	desc = "Used to treat those nasty burns."
 	id = "adv_bruise_pack"
-	req_tech = list("biotech" = 2)
+	req_tech = list(Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 600, MAT_GLASS = 250)
 	category = "Medical"
@@ -32,7 +32,7 @@
 	name = "Advanced burn kit"
 	desc = "Used to treat those nasty burns."
 	id = "adv_ointment"
-	req_tech = list("biotech" = 2)
+	req_tech = list(Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 600, MAT_GLASS = 250)
 	category = "Medical"
@@ -42,7 +42,7 @@
 	name = "Mass-Spectrometer"
 	desc = "A device for analyzing chemicals in the blood."
 	id = "mass_spectrometer"
-	req_tech = list("biotech" = 2, "magnets" = 2)
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	reliability_base = 76
@@ -53,7 +53,7 @@
 	name = "Advanced Mass-Spectrometer"
 	desc = "A device for analyzing chemicals in the blood and their quantities."
 	id = "adv_mass_spectrometer"
-	req_tech = list("biotech" = 2, "magnets" = 4)
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	reliability_base = 74
@@ -64,7 +64,7 @@
 	name = "Defibrillator"
 	desc = "A handheld emergency defibrillator, used to bring people back from the brink of death or put them there."
 	id = "defibrillator"
-	req_tech = list("magnets" = 3, "materials" = 4, "biotech" = 4)
+	req_tech = list(Tc_MAGNETS = 3, Tc_MATERIALS = 4, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 9000, MAT_SILVER = 250, MAT_GLASS = 10000)
 	category = "Medical"
@@ -74,7 +74,7 @@
 	name = "Health Analyzer"
 	desc = "A hand-held body scanner able to distinguish vital signs of the subject."
 	id = "healthanalyzer"
-	req_tech = list("magnets" = 2, "biotech" = 2)
+	req_tech = list(Tc_MAGNETS = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
 	category = "Medical"
@@ -84,7 +84,7 @@
 	name = "Laser Scalpel"
 	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
 	id = "laserscalpel1"
-	req_tech = list("materials" = 3, "engineering" = 2, "biotech" = 2)
+	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
 	category = "Medical"
@@ -94,7 +94,7 @@
 	name = "High Precision Laser Scalpel"
 	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
 	id = "laserscalpel2"
-	req_tech = list("materials" = 4, "engineering" = 3, "biotech" = 4)
+	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 500)
 	category = "Medical"
@@ -104,7 +104,7 @@
 	name = "Surgical Incision Manager"
 	desc = "A true extension of the surgeon's body, this marvel instantly cuts the organ, clamp any bleeding, and retract the skin, allowing for the immediate commencement of therapeutic steps."
 	id = "incisionmanager"
-	req_tech = list("materials" = 5, "engineering" = 4, "biotech" = 5)
+	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250, MAT_SILVER = 500)
 	category = "Medical"
@@ -114,7 +114,7 @@
 	name = "Health Scanner HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their health status."
 	id = "health_hud"
-	req_tech = list("biotech" = 2, "magnets" = 3)
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	category = "Medical"
@@ -124,7 +124,7 @@
 	name = "Chemical Mask"
 	desc = "A rather sinister mask designed for connection to a chemical pack, providing the pack's safeties are disabled."
 	id = "chemmask"
-	req_tech = list("biotech" = 5, "materials" = 5, "engineering" = 5, "combat" = 5, "syndicate" = 5)
+	req_tech = list(Tc_BIOTECH = 5, Tc_MATERIALS = 5, Tc_ENGINEERING = 5, Tc_COMBAT = 5, Tc_SYNDICATE = 5)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_SILVER = 100)
 	category = "Medical"
@@ -134,7 +134,7 @@
 	name = "Antibody Scanner"
 	desc = "Used to scan living beings for antibodies in their blood."
 	id = "antibody_scanner"
-	req_tech = list("magnets" = 2, "biotech" = 2)
+	req_tech = list(Tc_MAGNETS = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
 	category = "Medical"
@@ -144,7 +144,7 @@
 	name = "Surgeon's Switchtool"
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
 	id = "switchtool"
-	req_tech = list("materials" = 5, "bluespace" = 3, "biotech" = 3)
+	req_tech = list(Tc_MATERIALS = 5, Tc_BLUESPACE = 3, Tc_BIOTECH = 3)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
 	category = "Medical"

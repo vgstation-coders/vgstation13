@@ -9,13 +9,13 @@
 	item_state = "paper"
 	throw_speed = 4
 	throw_range = 20
-	origin_tech = "bluespace=4"
+	origin_tech = Tc_BLUESPACE + "=4"
 	mech_flags = MECH_SCAN_FAIL // Because why should the crew be able to make scrolls out of nothing
 
 /obj/item/weapon/teleportation_scroll/apprentice
 	name = "lesser scroll of teleportation"
 	uses = 1
-	origin_tech = "bluespace=2"
+	origin_tech = Tc_BLUESPACE + "=2"
 
 
 

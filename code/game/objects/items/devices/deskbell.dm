@@ -18,7 +18,7 @@
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 	anchored = 1
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 
 	var/frequency = 1457
 	var/code = 0	//since no remote signaling device can set its code to 0, deskbells spawned manually(like those existing at round start) won't trigger any signaler (but they'll still trigger the PDA ringer app)
@@ -108,7 +108,7 @@
 /obj/item/device/deskbell/signaler
 	desc = "When calling on the radio isn't working anymore."
 	icon_state = "deskbell_2alt"
-	origin_tech = "materials=1;magnets=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=1"
 
 	var/datum/radio_frequency/radio_connection
 

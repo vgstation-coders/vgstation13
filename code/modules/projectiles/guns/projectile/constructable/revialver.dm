@@ -10,7 +10,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=1;medical=1;combat=1;engineering=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1;" + Tc_COMBAT + "=1;" + Tc_ENGINEERING + "=1"
 	ejectshell = 0
 	caliber = null
 	ammo_type = null

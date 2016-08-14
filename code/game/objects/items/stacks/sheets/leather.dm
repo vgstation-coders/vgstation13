@@ -107,7 +107,7 @@
 	singular_name = "leather piece"
 	icon = 'icons/obj/butchering_products.dmi'
 	icon_state = "sheet-leather"
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 
 
 

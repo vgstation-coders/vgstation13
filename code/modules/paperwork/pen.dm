@@ -202,7 +202,7 @@ var/paperwork_library
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "pen"
 	item_state = "pen"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	sharpness = 0.5
 	flags = FPRINT
 	slot_flags = SLOT_BELT | SLOT_EARS
@@ -275,7 +275,7 @@ var/paperwork_library
 	desc = "It's a black ink pen with a sharp point and a carefully engraved \"Waffle Co.\""
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=2;syndicate=5"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
 
 /obj/item/weapon/pen/sleepypen/New()
@@ -298,7 +298,7 @@ var/paperwork_library
  /obj/item/weapon/pen/paralysis
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=2;syndicate=5"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
 
 /obj/item/weapon/pen/paralysis/attack(mob/M as mob, mob/user as mob)

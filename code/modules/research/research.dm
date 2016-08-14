@@ -274,19 +274,19 @@ datum/tech/explosives
 	name = "Explosives Research"
 	desc = "The creation and application of explosive materials."
 	id = "explosives"
-	req_tech = list("materials" = 3)
+	req_tech = list(Tc_MATERIALS = 3)
 
 datum/tech/generators
 	name = "Power Generation Technology"
 	desc = "Research into more powerful and more reliable sources."
 	id = "generators"
-	req_tech = list("powerstorage" = 2)
+	req_tech = list(Tc_POWERSTORAGE = 2)
 
 datum/tech/robotics
 	name = "Robotics Technology"
 	desc = "The development of advanced automated, autonomous machines."
 	id = "robotics"
-	req_tech = list("materials" = 3, "programming" = 3)
+	req_tech = list(Tc_MATERIALS = 3, Tc_PROGRAMMING = 3)
 */
 
 

@@ -24,7 +24,7 @@
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 400)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 /obj/item/weapon/locator/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -138,7 +138,7 @@ Frequency:
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 10000, MAT_GOLD = 500, MAT_PHAZON = 50)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1;bluespace=3"
+	origin_tech = Tc_MAGNETS + "=1;" + Tc_BLUESPACE + "=3"
 	var/list/portals = list()
 	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached..
 	var/recharging = 0

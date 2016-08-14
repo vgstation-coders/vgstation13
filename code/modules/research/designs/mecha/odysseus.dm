@@ -2,7 +2,7 @@
 	name = "Exosuit Structure (Odysseus chassis)"
 	desc = "Used to build a Odysseus chassis."
 	id = "odysseus_chassis"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/chassis/odysseus
 	category = "Odysseus"
@@ -12,7 +12,7 @@
 	name = "Exosuit Structure (Odysseus torso)"
 	desc = "Used to build a Odysseus torso."
 	id = "odysseus_torso"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/odysseus_torso
 	category = "Odysseus"
@@ -22,7 +22,7 @@
 	name = "Exosuit Structure (Odysseus left arm)"
 	desc = "Used to build a Odysseus left arm."
 	id = "odysseus_larm"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/odysseus_left_arm
 	category = "Odysseus"
@@ -32,7 +32,7 @@
 	name = "Exosuit Structure (Odysseus right arm)"
 	desc = "Used to build a Odysseus right arm."
 	id = "odysseus_rarm"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/odysseus_right_arm
 	category = "Odysseus"
@@ -42,7 +42,7 @@
 	name = "Exosuit Structure (Odysseus left leg)"
 	desc = "Used to build a Odysseus left leg."
 	id = "odysseus_lleg"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/odysseus_left_leg
 	category = "Odysseus"
@@ -52,7 +52,7 @@
 	name = "Exosuit Structure (Odysseus right leg)"
 	desc = "Used to build a Odysseus right leg."
 	id = "odysseus_rleg"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/odysseus_right_leg
 	category = "Odysseus"
@@ -62,7 +62,7 @@
 	name = "Exosuit Structure (Odysseus head)"
 	desc = "Used to build a Odysseus head."
 	id = "odysseus_head"
-	req_tech = list("biotech" = 1)
+	req_tech = list(Tc_BIOTECH = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/odysseus_head
 	category = "Odysseus"

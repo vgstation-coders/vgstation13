@@ -4,7 +4,7 @@
 	name = "Circuit Design (Cryo)"
 	desc = "Allows for the construction of circuit boards used to build a Cryo Cell."
 	id = "cryo"
-	req_tech = list("programming" = 4, "biotech" = 3, "engineering" = 3)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_BIOTECH = 3, Tc_ENGINEERING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -14,7 +14,7 @@
 	name = "Circuit Design (Chemistry Dispenser)"
 	desc = "Allows for the construction of circuit boards used to build a Chemistry Dispenser."
 	id = "chem_dispenser"
-	req_tech = list("programming" = 3, "biotech" = 5, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BIOTECH = 5, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -24,7 +24,7 @@
 	name = "Circuit Design (DNA Machine)"
 	desc = "Allows for the construction of circuit boards used to build a new DNA scanning console."
 	id = "scan_console"
-	req_tech = list("programming" = 2, "biotech" = 3)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -34,7 +34,7 @@
 	name = "Circuit Design (Defib Recharger)"
 	desc = "Allows for the construction of circuit boards used to build Defib Rechargers"
 	id="defib_recharger"
-	req_tech = list("powerstorage" = 2, "engineering" = 2, "programming" = 3, "biotech" = 4)
+	req_tech = list(Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 3, Tc_BIOTECH = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -54,7 +54,7 @@
 	name = "Circuit Design (Clone Pod)"
 	desc = "Allows for the construction of circuit boards used to build a Cloning Pod."
 	id = "clonepod"
-	req_tech = list("programming" = 3, "biotech" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BIOTECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -64,7 +64,7 @@
 	name = "Circuit Design (Cloning Scanner)"
 	desc = "Allows for the construction of circuit boards used to build a Cloning Scanner."
 	id = "clonescanner"
-	req_tech = list("programming" = 3, "biotech" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BIOTECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -74,7 +74,7 @@
 	name = "Circuit Design (Body Scanner)"
 	desc = "Allows for the construction of circuit boards used to build a body scanner."
 	id = "bodyscanner"
-	req_tech = list("biotech" = 2)
+	req_tech = list(Tc_BIOTECH = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	build_path = /obj/item/weapon/circuitboard/fullbodyscanner
@@ -83,7 +83,7 @@
 	name = "Circuit Design (Sleeper)"
 	desc = "Allows for the construction of circuit boards used to build a sleeper."
 	id = "sleeper"
-	req_tech = list("biotech" = 2)
+	req_tech = list(Tc_BIOTECH = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	build_path = /obj/item/weapon/circuitboard/sleeper
@@ -92,7 +92,7 @@
 	name = "Circuit Design (Bioprinter)"
 	desc = "Allows for the construction of Bioprinter equipment."
 	id = "s-bioprinter"
-	req_tech = list("programming" = 3, "engineering" = 2, "biotech" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -104,7 +104,7 @@
 	name = "Circuit Design (Pathogenic Incubator)"
 	desc = "Allows for the construction of circuit boards used to build a pathogenic incubator."
 	id = "incubator"
-	req_tech = list("materials" = 4, "biotech" = 5, "magnets" = 3)
+	req_tech = list(Tc_MATERIALS = 4, Tc_BIOTECH = 5, Tc_MAGNETS = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -114,7 +114,7 @@
 	name = "Circuit Design (Disease Analyser)"
 	desc = "Allows for the construction of circuit boards used to build a disease analyzer."
 	id = "diseaseanalyser"
-	req_tech = list("engineering" = 3, "biotech" = 3, "programming" = 3)
+	req_tech = list(Tc_ENGINEERING = 3, Tc_BIOTECH = 3, Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -124,7 +124,7 @@
 	name = "Circuit Design (Disease Splicer)"
 	desc = "Allows for the construction of circuit boards used to build a disease splicer."
 	id = "splicer"
-	req_tech = list("programming" = 3, "biotech" = 4)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BIOTECH = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -134,7 +134,7 @@
 	name = "Circuit Design (Isolation Centrifuge)"
 	desc = "Allows for the construction of circuit boards used to build an isolation centrifuge."
 	id = "centrifuge"
-	req_tech = list("programming" = 3, "biotech" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BIOTECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"

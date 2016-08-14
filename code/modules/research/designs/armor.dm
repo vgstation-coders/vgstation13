@@ -2,7 +2,7 @@
 	name = "Squaddie Armor"
 	desc = "A set of armor good against ballistics and laser weaponry.."
 	id = "xcomsquaddiearmor"
-	req_tech = list("materials" = 3)
+	req_tech = list(Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	category = "Armor"
@@ -12,7 +12,7 @@
 	name = "Original Armor"
 	desc = "A set of armor good against ballistics and laser weaponry.."
 	id = "xcomoriginalarmor"
-	req_tech = list("materials" = 3)
+	req_tech = list(Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	category = "Armor"
@@ -23,7 +23,7 @@
 	name = "Security HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their ID status."
 	id = "security_hud"
-	req_tech = list("magnets" = 3, "combat" = 2)
+	req_tech = list(Tc_MAGNETS = 3, Tc_COMBAT = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	build_path = /obj/item/clothing/glasses/hud/security
@@ -35,7 +35,7 @@
 	name = "HUDSunglasses"
 	desc = "Sunglasses with a heads-up display that scans the humans in view and provides accurate data about their ID status."
 	id = "sechud_sunglass"
-	req_tech = list("magnets" = 3, "combat" = 2)
+	req_tech = list(Tc_MAGNETS = 3, Tc_COMBAT = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	category = "Armor"
@@ -47,7 +47,7 @@
 	name = "Ablative Armor Vest"
 	desc = "A vest that excels in protecting the wearer against energy projectiles."
 	id = "ablative vest"
-	req_tech = list("combat" = 4, "materials" = 5)
+	req_tech = list(Tc_COMBAT = 4, Tc_MATERIALS = 5)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1500, MAT_GLASS = 2500, MAT_DIAMOND = 3750, MAT_SILVER = 1000, MAT_URANIUM = 500)
 	category = "Armor"
@@ -59,7 +59,7 @@
 	name = "Advanced EOD Suit"
 	desc = "An advanced EOD suit that affords great protection at the cost of mobility."
 	id = "advanced eod suit"
-	req_tech = list("combat" = 5, "materials" = 5, "biotech" = 2)
+	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 5, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 2500, MAT_GOLD = 3750, MAT_SILVER = 1000)
 	category = "Armor"
@@ -69,7 +69,7 @@
 	name = "Advanced EOD Helmet"
 	desc = "An advanced EOD helmet that affords great protection at the cost of mobility."
 	id = "advanced eod helmet"
-	req_tech = list("combat" = 5, "materials" = 5, "biotech" = 2)
+	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 5, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 3750, MAT_GLASS = 2500, MAT_GOLD = 3750, MAT_SILVER = 1000)
 	category = "Armor"
@@ -79,7 +79,7 @@
 	name = "Reactive Teleport Armor"
 	desc = "Someone seperated our Research Director from his own head!"
 	id = "reactive_teleport_armor"
-	req_tech = list("bluespace" = 4, "materials" = 5)
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MATERIALS = 5)
 	build_type = PROTOLATHE
 	materials = list(MAT_DIAMOND = 2000, MAT_IRON = 3000, MAT_URANIUM = 3750)
 	category = "Armor"

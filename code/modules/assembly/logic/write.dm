@@ -27,7 +27,7 @@
 	starting_materials = list(MAT_IRON = 130, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
 
-	origin_tech = "programming=1"
+	origin_tech = Tc_PROGRAMMING + "=1"
 
 	wires = WIRE_RECEIVE
 

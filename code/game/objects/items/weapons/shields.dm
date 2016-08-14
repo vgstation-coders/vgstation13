@@ -16,7 +16,7 @@
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 7500)
 	melt_temperature = MELTPOINT_GLASS
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	attack_verb = list("shoves", "bashes")
 	var/cooldown = 0 //shield bash cooldown. based on world.time
 
@@ -94,7 +94,7 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=4;magnets=3;syndicate=4"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("shoves", "bashes")
 	var/active = 0
 
@@ -143,7 +143,7 @@
 	throw_speed = 2
 	throw_range = 10
 	w_class = W_CLASS_SMALL
-	origin_tech = "magnets=3;syndicate=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 
 
 /obj/item/weapon/cloaking_device/attack_self(mob/user as mob)

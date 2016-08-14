@@ -2,7 +2,7 @@
 	name = "flashbang"
 	icon_state = "flashbang"
 	item_state = "flashbang"
-	origin_tech = "materials=2;combat=1"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	var/banglet = 0
 
 /obj/item/weapon/grenade/flashbang/prime()

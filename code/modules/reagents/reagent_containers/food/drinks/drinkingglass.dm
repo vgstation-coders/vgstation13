@@ -383,7 +383,7 @@
 				if(AMASEC)
 					icon_state = "amasecglass"
 					name = "\improper Amasec"
-					desc = "Always handy before COMBAT!!!"
+					desc = "Always handy before Tc_COMBAT!!!"
 				if(NEUROTOXIN)
 					icon_state = "neurotoxinglass"
 					name = "\improper Neurotoxin"

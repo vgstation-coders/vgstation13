@@ -7,7 +7,7 @@
 	opacity = 0
 	density = 0
 	anchored = 0.0
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	var/darts = 5
 	w_class = W_CLASS_SMALL
 

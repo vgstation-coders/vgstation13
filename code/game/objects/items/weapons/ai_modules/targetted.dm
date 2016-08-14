@@ -60,7 +60,7 @@
 /******************** Safeguard ********************/
 
 /obj/item/weapon/aiModule/targetted/safeguard
-	origin_tech = "programming=3;materials=4"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 
 	modname  = "SafeGuard"
 	law      = "Safeguard <name>.  Individuals that threaten <name> are not human and are a threat to humans."
@@ -73,7 +73,7 @@
 /******************** OneHuman ********************/
 
 /obj/item/weapon/aiModule/targetted/oneHuman
-	origin_tech = "programming=3;materials=6" //made with diamonds!
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6" //made with diamonds!
 
 	// Recycling
 	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)

@@ -8,7 +8,7 @@
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"
 	icon_state = "9x19p"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	max_ammo = 8
 	sprite_modulo = 8
@@ -20,7 +20,7 @@
 /obj/item/ammo_storage/magazine/a12mm
 	name = "magazine (12mm)"
 	icon_state = "12mm"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	max_ammo = 20
 	multiple_sprites = 1
@@ -33,7 +33,7 @@
 /obj/item/ammo_storage/magazine/smg9mm
 	name = "magazine (9mm)"
 	icon_state = "smg9mm"
-	origin_tech = "combat=3"
+	origin_tech = Tc_COMBAT + "=3"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	max_ammo = 18
 	sprite_modulo = 3
@@ -45,7 +45,7 @@
 /obj/item/ammo_storage/magazine/a50
 	name = "magazine (.50)"
 	icon_state = "50ae"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a50"
 	max_ammo = 7
 	multiple_sprites = 1
@@ -68,7 +68,7 @@
 /obj/item/ammo_storage/magazine/a762
 	name = "magazine (a762)"
 	icon_state = "a762"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
 	max_ammo = 50
 	multiple_sprites = 1
@@ -80,7 +80,7 @@
 /obj/item/ammo_storage/magazine/c45
 	name = "magazine (.45)"
 	icon_state = "45"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	max_ammo = 8
 	multiple_sprites = 1
@@ -92,7 +92,7 @@
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	max_ammo = 16
 	multiple_sprites = 1
@@ -106,7 +106,7 @@
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types."
 	icon_state = "lawgiver"
 	item_state = "syringe_kit"
-	origin_tech = "combat=2;bluespace=5"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_BLUESPACE + "=5"
 	ammo_type = null
 	max_ammo = 0
 	multiple_sprites = 1

@@ -8,7 +8,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	origin_tech = "bluespace=4;materials=4"
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=4"
 
 /obj/item/device/soulstone/Destroy()
 	eject_shade()

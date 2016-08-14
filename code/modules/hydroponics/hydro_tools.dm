@@ -410,7 +410,7 @@
 	throw_speed = 4
 	throw_range = 4
 	sharpness = 1.2
-	origin_tech = "materials=2;combat=1"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 
 /obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -437,7 +437,7 @@
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	slot_flags = SLOT_BACK
-	origin_tech = "materials=2;combat=2"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=2"
 	attack_verb = list("chops", "slices", "cuts", "reaps")
 
 /obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)

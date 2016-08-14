@@ -17,7 +17,7 @@
 	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	var/cuffing_sound = 'sound/weapons/handcuffs.ogg'
 	var/breakouttime = 2 MINUTES
 

@@ -25,7 +25,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 75)
 	w_type = RECYK_ELECTRONIC
 
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 
 	connection_text = "connected to"
 

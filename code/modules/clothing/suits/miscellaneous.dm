@@ -15,7 +15,7 @@
 	icon_state = "bluetag"
 	item_state = "bluetag"
 	blood_overlay_type = "armor"
-	origin_tech = "materials=1;magnets=2"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/laser/bluetag)
 	siemens_coefficient = 3.0
@@ -26,7 +26,7 @@
 	icon_state = "redtag"
 	item_state = "redtag"
 	blood_overlay_type = "armor"
-	origin_tech = "materials=1;magnets=2"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/laser/redtag)
 	siemens_coefficient = 3.0
@@ -175,7 +175,7 @@
 	desc = "A suit that completely restrains the wearer."
 	icon_state = "straight_jacket"
 	item_state = "straight_jacket"
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
 /obj/item/clothing/suit/ianshirt

@@ -58,7 +58,7 @@
 // Departmental Mining Surprises! -- Dorf Fort
 //**************************************************************
 /obj/item/toy/gooncode
-	origin_tech = "materials=10;plasmatech=5;syndicate=3;programming=10;bluespace=5;power=5"
+	origin_tech = MATERIALS + "=10;" + PLASMATECH + "=5;" + SYNDICATE + "=3;" + PROGRAMMING + "=10;" + BLUESPACE + "=5;" + POWERSTORAGE + "=5"
 
 
 

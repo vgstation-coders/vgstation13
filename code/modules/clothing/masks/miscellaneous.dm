@@ -7,7 +7,7 @@
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	species_fit = list(VOX_SHAPED)
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
 
 //Monkeys can not take the muzzle off of themself! Call PETA!

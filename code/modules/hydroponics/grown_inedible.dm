@@ -58,7 +58,7 @@
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
 /obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -142,7 +142,7 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 1
 	throw_range = 3
-	origin_tech = "combat=1"
+	origin_tech = Tc_COMBAT + "=1"
 
 /obj/item/weapon/grown/nettle/New()
 	..()
@@ -188,7 +188,7 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 1
 	throw_range = 3
-	origin_tech = "combat=3"
+	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("stings, pricks")
 
 /obj/item/weapon/grown/deathnettle/New()

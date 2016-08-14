@@ -439,7 +439,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 		message = "Contact has been lost with a combat drone wing operating out of the NMV Icarus. If any are sighted in the area, approach with caution."
 	else
 		message = "Unidentified hackers have targeted a combat drone wing deployed from the NMV Icarus. If any are sighted in the area, approach with caution."
-	
+
 	..()
 
 /datum/command_alert/drones_recovered

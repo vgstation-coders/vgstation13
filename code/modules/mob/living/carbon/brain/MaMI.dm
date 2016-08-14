@@ -1,7 +1,7 @@
 /obj/item/organ/brain/mami
 	name = "Machine-Man Interface"
 	desc = "A complex socket-system of electrodes and neurons intended to give silicon-based minds control of organic tissue."
-	origin_tech = "biotech=4;programming=4"
+	origin_tech = Tc_BIOTECH + "=4;" + Tc_PROGRAMMING + "=4"
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mami_empty"
 	var/obj/item/device/mmi/posibrain/posibrain = null

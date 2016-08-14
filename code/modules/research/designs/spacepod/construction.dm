@@ -2,7 +2,7 @@
 	name = "Circuit Design (Space Pod Mainboard)"
 	desc = "Allows for the construction of a Space Pod mainboard."
 	id = "spacepod_main"
-	req_tech = list("programming" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
@@ -13,7 +13,7 @@
 	desc = "Allows for the construction of a spacepod core system, made up of the engine and life support systems."
 	id = "podcore"
 	build_type = PODFAB
-	req_tech = list("materials" = 4, "engineering" = 3, "plasmatech" = 3, "bluespace" = 2)
+	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_PLASMATECH = 3, Tc_BLUESPACE = 2)
 	build_path = /obj/item/pod_parts/core
 	category = "Pod_Parts"
 	materials = list(MAT_IRON=5000,MAT_URANIUM=1000,MAT_PLASMA=5000)
@@ -25,7 +25,7 @@
 	desc = "Allows for the construction of spacepod armor. This is the civilian version."
 	id = "podarmor_civ"
 	build_type = PODFAB
-	req_tech = list("materials" = 3, "plasmatech" = 3)
+	req_tech = list(Tc_MATERIALS = 3, Tc_PLASMATECH = 3)
 	build_path = /obj/item/pod_parts/armor
 	category = "Pod_Armor"
 	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PLASMA=10000)
@@ -37,7 +37,7 @@
 	desc = "Allows for the construction of spacepod frames. This is the fore port component."
 	id = "podframefp"
 	build_type = PODFAB
-	req_tech = list("materials" = 3, "engineering" = 2)
+	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2)
 	build_path = /obj/item/pod_parts/pod_frame/fore_port
 	category = "Pod_Frame"
 	materials = list(MAT_IRON=15000,MAT_GLASS=5000)
@@ -47,7 +47,7 @@
 	desc = "Allows for the construction of spacepod frames. This is the aft port component."
 	id = "podframeap"
 	build_type = PODFAB
-	req_tech = list("materials" = 3, "engineering" = 2)
+	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2)
 	build_path = /obj/item/pod_parts/pod_frame/aft_port
 	category = "Pod_Frame"
 	materials = list(MAT_IRON=15000,MAT_GLASS=5000)
@@ -57,7 +57,7 @@
 	desc = "Allows for the construction of spacepod frames. This is the fore starboard component."
 	id = "podframefs"
 	build_type = PODFAB
-	req_tech = list("materials" = 3, "engineering" = 2)
+	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2)
 	build_path = /obj/item/pod_parts/pod_frame/fore_starboard
 	category = "Pod_Frame"
 	materials = list(MAT_IRON=15000,MAT_GLASS=5000)
@@ -67,7 +67,7 @@
 	desc = "Allows for the construction of spacepod frames. This is the aft starboard component."
 	id = "podframeas"
 	build_type = PODFAB
-	req_tech = list("materials" = 3, "engineering" = 2)
+	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2)
 	build_path = /obj/item/pod_parts/pod_frame/aft_starboard
 	category = "Pod_Frame"
 	materials = list(MAT_IRON=15000,MAT_GLASS=5000)

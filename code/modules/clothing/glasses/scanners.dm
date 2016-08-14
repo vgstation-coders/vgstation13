@@ -40,7 +40,7 @@
 	name = "optical meson scanner"
 	desc = "Used for seeing walls, floors, and stuff through anything."
 	icon_state = "meson"
-	origin_tech = "magnets=2;engineering=2"
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2"
 	vision_flags = SEE_TURFS
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
@@ -71,7 +71,7 @@
 	name = "optical material scanner"
 	desc = "Allows one to see the original layout of the pipe and cable network."
 	icon_state = "material"
-	origin_tech = "magnets=3;engineering=3"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 	action_button_name = "Toggle Material Scanner"
 	// vision_flags = SEE_OBJS
 

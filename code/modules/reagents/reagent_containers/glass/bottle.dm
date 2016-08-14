@@ -14,7 +14,7 @@
 	starting_materials = list(MAT_GLASS = 1000)
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 
 /obj/item/weapon/reagent_containers/glass/bottle/New(loc,altvol=30)
 	volume = altvol
@@ -294,7 +294,7 @@
 		var/datum/disease/F = new /datum/disease/fake_gbs(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 20, data)
-		
+
 /obj/item/weapon/reagent_containers/glass/bottle/chickenpox
 	name = "Chickenpox culture bottle"
 	desc = "A small bottle. Contains activated chickenpox in a vox-blood medium."
@@ -305,7 +305,7 @@
 		var/datum/disease/F = new /datum/disease2/effect/chickenpox(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 20, data)
-		
+
 /*
 /obj/item/weapon/reagent_containers/glass/bottle/rhumba_beat
 	name = "Rhumba Beat culture bottle"

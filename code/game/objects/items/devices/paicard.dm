@@ -6,7 +6,7 @@
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 	var/looking_for_personality = 0
 	var/mob/living/silicon/pai/pai
 

@@ -4,7 +4,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "borer egg-growing"
 	bitesize = 12
-	origin_tech = "biotech=4"
+	origin_tech = Tc_BIOTECH + "=4"
 	mech_flags = MECH_SCAN_FAIL
 	var/grown = 0
 	var/hatching = 0 // So we don't spam ghosts.

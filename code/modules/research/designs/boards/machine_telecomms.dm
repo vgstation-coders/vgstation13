@@ -2,7 +2,7 @@
 	name = "Circuit Design (Subspace Receiver)"
 	desc = "Allows for the construction of Subspace Receiver equipment."
 	id = "s-receiver"
-	req_tech = list("programming" = 4, "engineering" = 3, "bluespace" = 2)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 3, Tc_BLUESPACE = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -12,7 +12,7 @@
 	name = "Circuit Design (Bus Mainframe)"
 	desc = "Allows for the construction of Telecommunications Bus Mainframes."
 	id = "s-bus"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -22,7 +22,7 @@
 	name = "Circuit Design (Hub Mainframe)"
 	desc = "Allows for the construction of Telecommunications Hub Mainframes."
 	id = "s-hub"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -32,7 +32,7 @@
 	name = "Circuit Design (Relay Mainframe)"
 	desc = "Allows for the construction of Telecommunications Relay Mainframes."
 	id = "s-relay"
-	req_tech = list("programming" = 3, "engineering" = 4, "bluespace" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 4, Tc_BLUESPACE = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -42,7 +42,7 @@
 	name = "Circuit Design (Processor Unit)"
 	desc = "Allows for the construction of Telecommunications Processor equipment."
 	id = "s-processor"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -52,7 +52,7 @@
 	name = "Circuit Design (Server Mainframe)"
 	desc = "Allows for the construction of Telecommunications Servers."
 	id = "s-server"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -62,7 +62,7 @@
 	name = "Circuit Design (Subspace Broadcaster)"
 	desc = "Allows for the construction of Subspace Broadcasting equipment."
 	id = "s-broadcaster"
-	req_tech = list("programming" = 4, "engineering" = 4, "bluespace" = 2)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4, Tc_BLUESPACE = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"

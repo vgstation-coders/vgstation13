@@ -29,7 +29,7 @@
 	return -1
 
 /obj/item/device/radio/headset/syndicate
-	origin_tech = "syndicate=3"
+	origin_tech = Tc_SYNDICATE + "=3"
 /obj/item/device/radio/headset/syndicate/New()
 	..()
 	qdel(keyslot1)
@@ -38,7 +38,7 @@
 	recalculateChannels()
 
 /obj/item/device/radio/headset/binary
-	origin_tech = "syndicate=3"
+	origin_tech = Tc_SYNDICATE + "=3"
 /obj/item/device/radio/headset/binary/New()
 	..()
 	qdel(keyslot1)

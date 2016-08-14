@@ -15,7 +15,7 @@
 	w_type = RECYK_METAL
 	w_class = W_CLASS_LARGE
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "combat=1"
+	origin_tech = Tc_COMBAT + "=1"
 	attack_verb = list("robusts", "batters", "staves in")
 	fits_max_w_class = W_CLASS_MEDIUM
 	storage_slots = 14
@@ -98,7 +98,7 @@
 	name = "suspicious looking toolbox"
 	icon_state = "syndicate"
 	item_state = "toolbox_syndi"
-	origin_tech = "combat=1;syndicate=1"
+	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
 	force = 15.0
 
 /obj/item/weapon/storage/toolbox/syndicate/New()

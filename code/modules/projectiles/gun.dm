@@ -14,7 +14,7 @@
 	throw_speed = 4
 	throw_range = 5
 	force = 5.0
-	origin_tech = "combat=1"
+	origin_tech = Tc_COMBAT + "=1"
 	attack_verb = list("strikes", "hits", "bashes")
 	mech_flags = MECH_SCAN_ILLEGAL
 	min_harm_label = 20

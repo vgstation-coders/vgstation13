@@ -2,7 +2,7 @@
 	name = "holster"
 	icon_state = "holster"
 	_color = "holster"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	var/obj/item/holstered = null
 	accessory_exclusion = HOLSTER
 

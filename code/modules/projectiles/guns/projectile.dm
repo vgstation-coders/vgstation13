@@ -7,7 +7,7 @@
 	name = "revolver"
 	icon_state = "revolver"
 	caliber = list("357" = 1)
-	origin_tech = "combat=2;materials=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL

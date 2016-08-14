@@ -6,7 +6,7 @@
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "bluespace_crystal"
 	w_class = W_CLASS_TINY
-	origin_tech = "bluespace=4;materials=3"
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=3"
 	var/blink_range = 8 // The teleport range when crushed/thrown at someone.
 
 /obj/item/bluespace_crystal/New()
@@ -42,7 +42,7 @@
 /obj/item/bluespace_crystal/artificial
 	name = "artificial bluespace crystal"
 	desc = "An artificially made bluespace crystal, it looks delicate."
-	origin_tech = "bluespace=2"
+	origin_tech = Tc_BLUESPACE + "=2"
 	blink_range = 4 // Not as good as the organic stuff!
 
 /obj/item/bluespace_crystal/flawless //Specifically for use with the subspace tunneler

@@ -7,7 +7,7 @@ var/global/list/atmos_controllers = list()
 	name = "Circuit Design (Central Atmosherics Computer)"
 	desc = "Allows for the construction of circuit boards used to build an Atmos Control Console."
 	id = "atmoscontrol"
-	req_tech = list("programming" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"

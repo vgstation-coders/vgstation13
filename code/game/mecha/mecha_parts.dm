@@ -9,7 +9,7 @@
 	w_class = W_CLASS_GIANT
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = "programming=2;materials=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
 
 /obj/item/mecha_parts/chassis
@@ -40,31 +40,31 @@
 	name="Ripley Torso"
 	desc="A torso part of Ripley APLU. Contains power unit, processing core and life support systems."
 	icon_state = "ripley_harness"
-	origin_tech = "programming=2;materials=2;biotech=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/ripley_left_arm
 	name="Ripley Left Arm"
 	desc="A Ripley APLU left arm. Data and power sockets are compatible with most exosuit tools."
 	icon_state = "ripley_l_arm"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/ripley_right_arm
 	name="Ripley Right Arm"
 	desc="A Ripley APLU right arm. Data and power sockets are compatible with most exosuit tools."
 	icon_state = "ripley_r_arm"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/ripley_left_leg
 	name="Ripley Left Leg"
 	desc="A Ripley APLU left leg. Contains somewhat complex servodrives and balance maintaining systems."
 	icon_state = "ripley_l_leg"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/ripley_right_leg
 	name="Ripley Right Leg"
 	desc="A Ripley APLU right leg. Contains somewhat complex servodrives and balance maintaining systems."
 	icon_state = "ripley_r_leg"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 ///////// Gygax
 
@@ -79,40 +79,40 @@
 	name="Gygax Torso"
 	desc="A torso part of Gygax. Contains power unit, processing core and life support systems. Has an additional equipment slot."
 	icon_state = "gygax_harness"
-	origin_tech = "programming=2;materials=2;biotech=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/gygax_head
 	name="Gygax Head"
 	desc="A Gygax head. Houses advanced surveilance and targeting sensors."
 	icon_state = "gygax_head"
-	origin_tech = "programming=2;materials=2;magnets=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/gygax_left_arm
 	name="Gygax Left Arm"
 	desc="A Gygax left arm. Data and power sockets are compatible with most exosuit tools and weapons."
 	icon_state = "gygax_l_arm"
-	origin_tech = "programming=2;materials=2;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/gygax_right_arm
 	name="Gygax Right Arm"
 	desc="A Gygax right arm. Data and power sockets are compatible with most exosuit tools and weapons."
 	icon_state = "gygax_r_arm"
-	origin_tech = "programming=2;materials=2;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/gygax_left_leg
 	name="Gygax Left Leg"
 	icon_state = "gygax_l_leg"
-	origin_tech = "programming=2;materials=2;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/gygax_right_leg
 	name="Gygax Right Leg"
 	icon_state = "gygax_r_leg"
-	origin_tech = "programming=2;materials=2;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/gygax_armour
 	name="Gygax Armour Plates"
 	icon_state = "gygax_armour"
-	origin_tech = "materials=6;combat=4;engineering=5"
+	origin_tech = Tc_MATERIALS + "=6;" + Tc_COMBAT + "=4;" + Tc_ENGINEERING + "=5"
 
 
 //////////// Durand
@@ -127,37 +127,37 @@
 /obj/item/mecha_parts/part/durand_torso
 	name="Durand Torso"
 	icon_state = "durand_harness"
-	origin_tech = "programming=2;materials=3;biotech=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=3;" + Tc_BIOTECH + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/durand_head
 	name="Durand Head"
 	icon_state = "durand_head"
-	origin_tech = "programming=2;materials=3;magnets=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/durand_left_arm
 	name="Durand Left Arm"
 	icon_state = "durand_l_arm"
-	origin_tech = "programming=2;materials=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/durand_right_arm
 	name="Durand Right Arm"
 	icon_state = "durand_r_arm"
-	origin_tech = "programming=2;materials=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/durand_left_leg
 	name="Durand Left Leg"
 	icon_state = "durand_l_leg"
-	origin_tech = "programming=2;materials=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/durand_right_leg
 	name="Durand Right Leg"
 	icon_state = "durand_r_leg"
-	origin_tech = "programming=2;materials=3;engineering=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 
 /obj/item/mecha_parts/part/durand_armour
 	name="Durand Armour Plates"
 	icon_state = "durand_armour"
-	origin_tech = "materials=5;combat=4;engineering=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=4;" + Tc_ENGINEERING + "=5"
 
 
 
@@ -229,7 +229,7 @@
 
 /obj/item/mecha_parts/chassis/phazon
 	name = "Phazon Chassis"
-	origin_tech = "materials=7"
+	origin_tech = Tc_MATERIALS + "=7"
 
 	New()
 		..()
@@ -238,37 +238,37 @@
 /obj/item/mecha_parts/part/phazon_torso
 	name="Phazon Torso"
 	icon_state = "phazon_harness"
-	origin_tech = "programming=5;materials=9;bluespace=10;powerstorage=6"
+	origin_tech = Tc_PROGRAMMING + "=5;" + Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=10;" + Tc_POWERSTORAGE + "=6"
 
 /obj/item/mecha_parts/part/phazon_head
 	name="Phazon Head"
 	icon_state = "phazon_head"
-	origin_tech = "programming=5;materials=9;magnets=6"
+	origin_tech = Tc_PROGRAMMING + "=5;" + Tc_MATERIALS + "=9;" + Tc_MAGNETS + "=6"
 
 /obj/item/mecha_parts/part/phazon_left_arm
 	name="Phazon Left Arm"
 	icon_state = "phazon_l_arm"
-	origin_tech = "materials=9;bluespace=6;magnets=2"
+	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=6;" + Tc_MAGNETS + "=2"
 
 /obj/item/mecha_parts/part/phazon_right_arm
 	name="Phazon Right Arm"
 	icon_state = "phazon_r_arm"
-	origin_tech = "materials=9;bluespace=6;magnets=2"
+	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=6;" + Tc_MAGNETS + "=2"
 
 /obj/item/mecha_parts/part/phazon_left_leg
 	name="Phazon Left Leg"
 	icon_state = "phazon_l_leg"
-	origin_tech = "materials=9;bluespace=6;magnets=3"
+	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=6;" + Tc_MAGNETS + "=3"
 
 /obj/item/mecha_parts/part/phazon_right_leg
 	name="Phazon Right Leg"
 	icon_state = "phazon_r_leg"
-	origin_tech = "materials=9;bluespace=6;magnets=3"
+	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=6;" + Tc_MAGNETS + "=3"
 
 /obj/item/mecha_parts/part/phazon_phase_array
 	name="Phase Array"
 	icon_state = "phazon_phase_array"
-	origin_tech = "materials=9;bluespace=10;magnets=3"
+	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=10;" + Tc_MAGNETS + "=3"
 
 ///////// Odysseus
 
@@ -283,42 +283,42 @@
 /obj/item/mecha_parts/part/odysseus_head
 	name="Odysseus Head"
 	icon_state = "odysseus_head"
-	origin_tech = "programming=3;materials=2"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=2"
 
 /obj/item/mecha_parts/part/odysseus_torso
 	name="Odysseus Torso"
 	desc="A torso part of Odysseus. Contains power unit, processing core and life support systems."
 	icon_state = "odysseus_torso"
-	origin_tech = "programming=2;materials=2;biotech=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/odysseus_left_arm
 	name="Odysseus Left Arm"
 	desc="An Odysseus left arm. Data and power sockets are compatible with most exosuit tools."
 	icon_state = "odysseus_l_arm"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/odysseus_right_arm
 	name="Odysseus Right Arm"
 	desc="An Odysseus right arm. Data and power sockets are compatible with most exosuit tools."
 	icon_state = "odysseus_r_arm"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/odysseus_left_leg
 	name="Odysseus Left Leg"
 	desc="An Odysseus left leg. Contains somewhat complex servodrives and balance maintaining systems."
 	icon_state = "odysseus_l_leg"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 /obj/item/mecha_parts/part/odysseus_right_leg
 	name="Odysseus Right Leg"
 	desc="A Odysseus right leg. Contains somewhat complex servodrives and balance maintaining systems."
 	icon_state = "odysseus_r_leg"
-	origin_tech = "programming=2;materials=2;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
 /*/obj/item/mecha_parts/part/odysseus_armour
 	name="Odysseus Carapace"
 	icon_state = "odysseus_armour"
-	origin_tech = "materials=3;engineering=3"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 	construction_time = 200
 	materials = list(MAT_IRON=15000)*/
 
@@ -340,7 +340,7 @@
 	throw_range = 15
 
 	ripley
-		origin_tech = "programming=3"
+		origin_tech = Tc_PROGRAMMING + "=3"
 
 	ripley/peripherals
 		name = "Circuit board (Ripley Peripherals Control module)"
@@ -351,7 +351,7 @@
 		icon_state = "mainboard"
 
 	gygax
-		origin_tech = "programming=4"
+		origin_tech = Tc_PROGRAMMING + "=4"
 
 	gygax/peripherals
 		name = "Circuit board (Gygax Peripherals Control module)"
@@ -360,14 +360,14 @@
 	gygax/targeting
 		name = "Circuit board (Gygax Weapon Control and Targeting module)"
 		icon_state = "mcontroller"
-		origin_tech = "programming=4;combat=4"
+		origin_tech = Tc_PROGRAMMING + "=4;" + Tc_COMBAT + "=4"
 
 	gygax/main
 		name = "Circuit board (Gygax Central Control module)"
 		icon_state = "mainboard"
 
 	durand
-		origin_tech = "programming=4"
+		origin_tech = Tc_PROGRAMMING + "=4"
 
 	durand/peripherals
 		name = "Circuit board (Durand Peripherals Control module)"
@@ -376,14 +376,14 @@
 	durand/targeting
 		name = "Circuit board (Durand Weapon Control and Targeting module)"
 		icon_state = "mcontroller"
-		origin_tech = "programming=4;combat=4"
+		origin_tech = Tc_PROGRAMMING + "=4;" + Tc_COMBAT + "=4"
 
 	durand/main
 		name = "Circuit board (Durand Central Control module)"
 		icon_state = "mainboard"
 
 	honker
-		origin_tech = "programming=4"
+		origin_tech = Tc_PROGRAMMING + "=4"
 
 	honker/peripherals
 		name = "Circuit board (H.O.N.K Peripherals Control module)"
@@ -398,7 +398,7 @@
 		icon_state = "mainboard"
 
 	odysseus
-		origin_tech = "programming=3"
+		origin_tech = Tc_PROGRAMMING + "=3"
 
 	odysseus/peripherals
 		name = "Circuit board (Odysseus Peripherals Control module)"
@@ -409,7 +409,7 @@
 		icon_state = "mainboard"
 
 	phazon
-		origin_tech = "materials=9;bluespace=10"
+		origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=10"
 
 	phazon/peripherals
 		name = "Circuit board (Phazon Peripherals Control module)"

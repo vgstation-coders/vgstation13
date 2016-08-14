@@ -29,7 +29,7 @@
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = "combat=3"
+	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 
 
@@ -49,7 +49,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
-	origin_tech = "magnets=3;syndicate=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
@@ -126,7 +126,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
-	origin_tech = "magnets=3;syndicate=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 

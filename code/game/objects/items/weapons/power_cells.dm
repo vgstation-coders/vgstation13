@@ -4,7 +4,7 @@
 	icon = 'icons/obj/power.dmi'
 	icon_state = "cell"
 	item_state = "cell"
-	origin_tech = "powerstorage=1"
+	origin_tech = Tc_POWERSTORAGE + "=1"
 	flags = FPRINT
 	force = 5.0
 	throwforce = 5.0
@@ -26,7 +26,7 @@
 /obj/item/weapon/cell/crap
 	name = "\improper Nanotrasen brand rechargeable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
-	origin_tech = "powerstorage=0"
+	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 500
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 
@@ -36,7 +36,7 @@
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
-	origin_tech = "powerstorage=0"
+	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 
@@ -47,7 +47,7 @@
 
 /obj/item/weapon/cell/miningborg
 	name = "\improper Mining borg rechargeable D battery"
-	origin_tech = "powerstorage=0"
+	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 
@@ -59,7 +59,7 @@
 
 /obj/item/weapon/cell/high
 	name = "high-capacity power cell"
-	origin_tech = "powerstorage=2"
+	origin_tech = Tc_POWERSTORAGE + "=2"
 	icon_state = "hcell"
 	maxcharge = 10000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 60)
@@ -70,7 +70,7 @@
 
 /obj/item/weapon/cell/super
 	name = "super-capacity power cell"
-	origin_tech = "powerstorage=5"
+	origin_tech = Tc_POWERSTORAGE + "=5"
 	icon_state = "scell"
 	maxcharge = 20000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 70)
@@ -80,7 +80,7 @@
 
 /obj/item/weapon/cell/hyper
 	name = "hyper-capacity power cell"
-	origin_tech = "powerstorage=6"
+	origin_tech = Tc_POWERSTORAGE + "=6"
 	icon_state = "hpcell"
 	maxcharge = 30000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
@@ -101,7 +101,7 @@
 /obj/item/weapon/cell/potato
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
-	origin_tech = "powerstorage=1"
+	origin_tech = Tc_POWERSTORAGE + "=1"
 	icon = 'icons/obj/power.dmi' //'icons/obj/harvest.dmi'
 	icon_state = "potato_cell" //"potato_battery"
 	charge = 100
@@ -114,7 +114,7 @@
 /obj/item/weapon/cell/slime
 	name = "charged slime core"
 	desc = "A yellow slime core infused with plasma, it crackles with power."
-	origin_tech = "powerstorage=2;biotech=4"
+	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_BIOTECH + "=4"
 	icon = 'icons/mob/slimes.dmi' //'icons/obj/harvest.dmi'
 	icon_state = "yellow slime extract" //"potato_battery"
 	maxcharge = 30000

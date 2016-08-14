@@ -63,7 +63,7 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "nymph"
 	slot_flags = SLOT_HEAD
-	origin_tech = "magnets=3;biotech=5"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_BIOTECH + "=5"
 
 /obj/item/weapon/holder/diona/New(loc, mob/M)
 	..()

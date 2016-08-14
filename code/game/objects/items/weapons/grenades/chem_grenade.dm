@@ -267,7 +267,7 @@
 	desc = "An oversized grenade that affects a larger area."
 	icon_state = "large_grenade"
 	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract)
-	origin_tech = "combat=3;materials=3"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3"
 	affected_area = 4
 
 obj/item/weapon/grenade/chem_grenade/exgrenade
@@ -275,7 +275,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	desc = "A specially designed large grenade that can hold three containers."
 	icon_state = "ex_grenade"
 	allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/slime_extract)
-	origin_tech = "combat=4;materials=3;engineering=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2"
 	affected_area = 4
 
 obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)

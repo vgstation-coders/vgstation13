@@ -14,7 +14,7 @@
 	icon_state = "light_tiler"
 	starting_materials = list(MAT_IRON = 1500, MAT_GLASS = 200)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=2;programming=2"
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2"
 
 	wires = WIRE_RECEIVE
 

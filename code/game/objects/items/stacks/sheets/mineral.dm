@@ -37,7 +37,7 @@ Mineral Sheets
 	icon_state = "sheet-sandstone"
 	throw_speed = 4
 	throw_range = 5
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	sheettype = "sandstone"
 	melt_temperature = MELTPOINT_GLASS
 	recyck_mat = MAT_GLASS
@@ -79,7 +79,7 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 	throwforce = 5
 	w_class = W_CLASS_MEDIUM
 	throw_range = 3
-	origin_tech = "materials=6"
+	origin_tech = Tc_MATERIALS + "=6"
 	perunit = 1750
 	sheettype = "diamond"
 	melt_temperature = 3820 // In a vacuum, but fuck dat
@@ -106,7 +106,7 @@ var/global/list/datum/stack_recipe/diamond_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 2000
 	sheettype = "uranium"
 	melt_temperature = 1132+T0C
@@ -133,7 +133,7 @@ var/global/list/datum/stack_recipe/uranium_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "plasmatech=2;materials=2"
+	origin_tech = Tc_PLASMATECH + "=2;" + Tc_MATERIALS + "=2"
 	perunit = 2000
 	sheettype = "plasma"
 	melt_temperature = MELTPOINT_STEEL + 500
@@ -158,7 +158,7 @@ var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=3"
+	origin_tech = Tc_MATERIALS + "=3"
 	perunit = 2000
 	melt_temperature = MELTPOINT_PLASTIC
 	sheettype = "plastic"
@@ -205,7 +205,7 @@ var/global/list/datum/stack_recipe/plastic_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=4"
+	origin_tech = Tc_MATERIALS + "=4"
 	perunit = 2000
 	melt_temperature = 1064+T0C
 	sheettype = "gold"
@@ -239,7 +239,7 @@ var/global/list/datum/stack_recipe/phazon_recipes = list( \
 	throwforce = 15.0
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = "materials=9"
+	origin_tech = Tc_MATERIALS + "=9"
 	recyck_mat = MAT_PHAZON
 
 /obj/item/stack/sheet/mineral/phazon/New(var/loc, var/amount=null)
@@ -258,7 +258,7 @@ var/global/list/datum/stack_recipe/phazon_recipes = list( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=3"
+	origin_tech = Tc_MATERIALS + "=3"
 	perunit = 2000
 	sheettype = "silver"
 	recyck_mat = MAT_SILVER
@@ -284,7 +284,7 @@ var/global/list/datum/stack_recipe/silver_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=4"
+	origin_tech = Tc_MATERIALS + "=4"
 	perunit = 2000
 	sheettype = "clown"
 	recyck_mat = MAT_CLOWN
@@ -309,7 +309,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=4"
+	origin_tech = Tc_MATERIALS + "=4"
 	perunit = 2000
 
 /*
@@ -323,7 +323,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=4"
+	origin_tech = Tc_MATERIALS + "=4"
 	perunit = 2000
 
 /*
@@ -335,7 +335,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 /obj/item/stack/sheet/mineral/char
@@ -346,7 +346,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -358,7 +358,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -370,7 +370,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -382,7 +382,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -394,7 +394,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -406,7 +406,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -418,7 +418,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -430,7 +430,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -442,7 +442,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -454,7 +454,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -466,7 +466,7 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 
 
@@ -478,6 +478,6 @@ var/global/list/datum/stack_recipe/clown_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = "materials=5"
+	origin_tech = Tc_MATERIALS + "=5"
 	perunit = 3750
 */

@@ -4,7 +4,7 @@
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "delivery"
 	item_state = "flashbang"
-	origin_tech = "materials=3;magnets=4"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4"
 	var/banglet = 0
 	var/spawner_type = null // must be an object path
 	var/deliveryamt = 1 // amount of type to deliver
@@ -45,7 +45,7 @@
 	name = "manhack delivery grenade"
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
 	deliveryamt = 5
-	origin_tech = "materials=3;magnets=4;syndicate=4"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 
 /obj/item/weapon/grenade/spawnergrenade/manhacks/handle_faction(var/mob/living/spawned, var/mob/living/L)
 	if(!spawned || !L)
@@ -58,7 +58,7 @@
 	name = "viscerator grenade"
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
 	deliveryamt = 2
-	origin_tech = "materials=3;magnets=4;syndicate=4"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 	mob_faction = "syndicate"
 
 /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate/handle_faction(var/mob/living/spawned, var/mob/living/L)
@@ -72,14 +72,14 @@
 	name = "carp delivery grenade"
 	spawner_type = /mob/living/simple_animal/hostile/carp
 	deliveryamt = 5
-	origin_tech = "materials=3;magnets=4;syndicate=4"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 
 /obj/item/weapon/grenade/spawnergrenade/beenade
 	name = "bee-nade"
 	icon_state = "beenade"
 	spawner_type = /mob/living/simple_animal/bee
 	deliveryamt = 15
-	origin_tech = "materials=3;magnets=4;biotech=4"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
 
 
 /obj/item/weapon/grenade/spawnergrenade/beenade/postPrime(var/list/spawned_atoms)

@@ -2,7 +2,7 @@
 	name = "Intellicard AI Transportation System"
 	desc = "Allows for the construction of an intellicard."
 	id = "intellicard"
-	req_tech = list("programming" = 4, "materials" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_GLASS = 1000, MAT_GOLD = 200)
 	category = "Data"
@@ -12,7 +12,7 @@
 	name = "Personal Artificial Intelligence Card"
 	desc = "Allows for the construction of a pAI Card"
 	id = "paicard"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_GLASS = 500, MAT_IRON = 500)
 	category = "Data"
@@ -22,7 +22,7 @@
 	name = "Nano Paper Dispenser"
 	desc = "A machine to create Nano Paper"
 	id = "np_dispenser"
-	req_tech = list("programming" = 2, "materials" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_MATERIALS = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000, MAT_GOLD = 500)
 	category = "Data"
@@ -32,7 +32,7 @@
 	name = "Design Storage Disk"
 	desc = "Produce additional disks for storing device designs."
 	id = "design_disk"
-	req_tech = list("programming" = 1)
+	req_tech = list(Tc_PROGRAMMING = 1)
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 	category = "Data"
@@ -42,7 +42,7 @@
 	name = "Technology Data Storage Disk"
 	desc = "Produce additional disks for storing technology data."
 	id = "tech_disk"
-	req_tech = list("programming" = 1)
+	req_tech = list(Tc_PROGRAMMING = 1)
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 	category = "Data"

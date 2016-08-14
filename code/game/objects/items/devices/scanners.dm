@@ -18,7 +18,7 @@ REAGENT SCANNER
 	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	origin_tech = "magnets=1;engineering=1"
+	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 
 	var/on = 0
 	var/base_state = "t-ray"
@@ -79,7 +79,7 @@ REAGENT SCANNER
 	name = "\improper P-ray scanner"
 	desc = "A petahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible. Has a significantly better range than t-ray scanners."
 	icon_state = "p-ray0"
-	origin_tech = "magnets=3;engineering=3"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 
 	base_state = "p-ray"
 	ray_range = 3
@@ -98,7 +98,7 @@ REAGENT SCANNER
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	origin_tech = "magnets=1;biotech=1"
+	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
 	var/last_reading = null
 	var/mode = 1
 
@@ -290,7 +290,7 @@ Subject's pulse: ??? BPM"})
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	origin_tech = "magnets=1;engineering=1"
+	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 
 /obj/item/device/analyzer/attack_self(mob/user as mob)
 
@@ -365,7 +365,7 @@ Subject's pulse: ??? BPM"})
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=2;biotech=2"
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
 
 /obj/item/device/mass_spectrometer/New()
@@ -438,7 +438,7 @@ Subject's pulse: ??? BPM"})
 	name = "advanced mass-spectrometer"
 	icon_state = "adv_spectrometer"
 	details = 1
-	origin_tech = "magnets=4;biotech=2"
+	origin_tech = Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=2"
 
 /obj/item/device/reagent_scanner
 	name = "reagent scanner"
@@ -454,7 +454,7 @@ Subject's pulse: ??? BPM"})
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=2;biotech=2"
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
 	var/recent_fail = 0
 
@@ -484,4 +484,4 @@ Subject's pulse: ??? BPM"})
 	name = "advanced reagent scanner"
 	icon_state = "adv_spectrometer"
 	details = 1
-	origin_tech = "magnets=4;biotech=2"
+	origin_tech = Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=2"

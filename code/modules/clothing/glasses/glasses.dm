@@ -11,14 +11,14 @@
 	desc = "nothing"
 	icon_state = "purple"
 	item_state = "glasses"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
 	desc = "You can totally see in the dark now!."
 	icon_state = "night"
 	item_state = "glasses"
-	origin_tech = "magnets=2"
+	origin_tech = Tc_MAGNETS + "=2"
 	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 	see_in_dark = 8
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -76,7 +76,7 @@
 	name = "sunglasses"
 	icon_state = "sun"
 	item_state = "sunglasses"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -111,7 +111,7 @@
 	name = "sunglasses"
 	icon_state = "sun"
 	item_state = "sunglasses"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	darkness_view = -1
 	species_fit = list(VOX_SHAPED)
 
@@ -120,7 +120,7 @@
 	desc = "Protects the eyes from welders, approved by the mad scientist association."
 	icon_state = "welding-g"
 	item_state = "welding-g"
-	origin_tech = "engineering=1;materials=2"
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_MATERIALS + "=2"
 	action_button_name = "Toggle Welding Goggles"
 	var/up = 0
 	eyeprot = 3
@@ -160,7 +160,7 @@
 	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles.."
 	icon_state = "rwelding-g"
 	item_state = "rwelding-g"
-	origin_tech = "engineering=3;materials=3"
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=3"
 
 /obj/item/clothing/glasses/sunglasses/blindfold
 	name = "blindfold"
@@ -202,7 +202,7 @@
 	desc = "Thermals in the shape of glasses."
 	icon_state = "thermal"
 	item_state = "glasses"
-	origin_tech = "magnets=3"
+	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	invisa_view = 2
@@ -224,7 +224,7 @@
 	name = "Optical Meson Scanner"
 	desc = "Used for seeing walls, floors, and stuff through anything."
 	icon_state = "meson"
-	origin_tech = "magnets=3;syndicate=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/glasses/thermal/monocle

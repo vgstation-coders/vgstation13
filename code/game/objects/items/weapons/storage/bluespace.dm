@@ -6,7 +6,7 @@
 /obj/item/weapon/storage/backpack/holding
 	name = "Bag of Holding"
 	desc = "A backpack that opens into a localized pocket of Blue Space."
-	origin_tech = "bluespace=4"
+	origin_tech = Tc_BLUESPACE + "=4"
 	item_state = "holdingpack"
 	icon_state = "holdingpack"
 	fits_max_w_class = W_CLASS_LARGE

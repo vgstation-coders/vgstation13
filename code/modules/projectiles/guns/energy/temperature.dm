@@ -10,7 +10,7 @@
 	var/temperature = 300
 	var/target_temperature = 300
 	charge_cost = 90
-	origin_tech = "combat=3;materials=4;powerstorage=3;magnets=2"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=4;" + Tc_POWERSTORAGE + "=3;" + Tc_MAGNETS + "=2"
 
 	projectile_type = "/obj/item/projectile/temp"
 	cell_type = "/obj/item/weapon/cell/temperaturegun"

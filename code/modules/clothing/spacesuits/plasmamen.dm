@@ -53,7 +53,7 @@
 	else	set_light(0)
 	user.update_inv_head()
 
-// ENGINEERING
+// Tc_ENGINEERING
 /obj/item/clothing/suit/space/plasmaman/assistant
 	name = "plasmaman assistant suit"
 	icon_state = "plasmamanAssistant_suit"

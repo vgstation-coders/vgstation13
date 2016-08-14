@@ -18,7 +18,7 @@
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 15
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 
 	icon = 'icons/obj/module.dmi'
 	icon_state = "planning frame"

@@ -87,7 +87,7 @@
 	var/voice = "Unknown"
 	var/vchange = 1//This didn't do anything before. It now checks if the mask has special functions/N
 	canstage = 0
-	origin_tech = "syndicate=4"
+	origin_tech = Tc_SYNDICATE + "=4"
 	action_button_name = "Toggle Mask"
 	species_fit = list(VOX_SHAPED)
 	var/list/clothing_choices = list()

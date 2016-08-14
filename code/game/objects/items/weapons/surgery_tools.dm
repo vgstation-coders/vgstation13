@@ -23,7 +23,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -36,7 +36,7 @@
 	item_state = "incisionmanager"
 	force = 7.5
 	surgery_speed = 0.5
-	origin_tech = "materials=5;biotech=5;engineering=4"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 
 /obj/item/weapon/retractor/manager/New()
 	..()
@@ -156,7 +156,7 @@ LOOK FOR SURGERY.DM*/
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "pinches")
 
 
@@ -299,7 +299,7 @@ LOOK FOR SURGERY.DM*/
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("burns")
 
 
@@ -400,7 +400,7 @@ LOOK FOR SURGERY.DM*/
 	siemens_coefficient = 1
 	force = 15.0
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("drills")
 
 
@@ -429,7 +429,7 @@ LOOK FOR SURGERY.DM*/
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	w_type = RECYK_METAL
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
@@ -729,7 +729,7 @@ LOOK FOR SURGERY.DM*/
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
 
 
@@ -913,7 +913,7 @@ LOOK FOR SURGERY.DM*/
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1;biotech=3"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
 
 /obj/item/weapon/bonesetter

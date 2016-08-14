@@ -3,7 +3,7 @@
 	desc = "Mounted Sleeper. (Can be attached to: Medical Exosuits)"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "sleeper_0"
-	origin_tech = "programming=2;biotech=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=3"
 	energy_drain = 20
 	range = MELEE
 	reliability = 1000
@@ -401,7 +401,7 @@
 	var/datum/global_iterator/mech_synth/synth
 	range = MELEE|RANGED
 	equip_cooldown = 10
-	origin_tech = "materials=3;biotech=4;magnets=4;programming=3"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_BIOTECH + "=4;" + Tc_MAGNETS + "=4;" + Tc_PROGRAMMING + "=3"
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/New()
 	..()

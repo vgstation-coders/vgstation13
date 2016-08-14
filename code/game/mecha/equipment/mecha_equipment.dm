@@ -7,7 +7,7 @@
 	icon = 'icons/mecha/mecha_equipment.dmi'
 	icon_state = "mecha_equip"
 	force = 5
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	var/equip_cooldown = 0
 	var/equip_ready = 1
 	var/energy_drain = 0

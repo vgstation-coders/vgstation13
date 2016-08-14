@@ -2,7 +2,7 @@
 	name = "Basic Power Cell"
 	desc = "A basic power cell that holds 1000 units of energy"
 	id = "basic_cell"
-	req_tech = list("powerstorage" = 1)
+	req_tech = list(Tc_POWERSTORAGE = 1)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 50)
 	build_path = /obj/item/weapon/cell
@@ -12,7 +12,7 @@
 	name = "High-Capacity Power Cell"
 	desc = "A power cell that holds 10000 units of energy"
 	id = "high_cell"
-	req_tech = list("powerstorage" = 2)
+	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 60)
 	build_path = /obj/item/weapon/cell/high
@@ -22,7 +22,7 @@
 	name = "Super-Capacity Power Cell"
 	desc = "A power cell that holds 20000 units of energy"
 	id = "super_cell"
-	req_tech = list("powerstorage" = 3, "materials" = 2)
+	req_tech = list(Tc_POWERSTORAGE = 3, Tc_MATERIALS = 2)
 	reliability_base = 75
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 70)
@@ -33,7 +33,7 @@
 	name = "Hyper-Capacity Power Cell"
 	desc = "A power cell that holds 30000 units of energy"
 	id = "hyper_cell"
-	req_tech = list("powerstorage" = 5, "materials" = 4)
+	req_tech = list(Tc_POWERSTORAGE = 5, Tc_MATERIALS = 4)
 	reliability_base = 70
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 150, MAT_SILVER = 150, MAT_GLASS = 70)
@@ -44,7 +44,7 @@
 	name = "Light Replacer"
 	desc = "A device to automatically replace lights. Refill with working lightbulbs."
 	id = "light_replacer"
-	req_tech = list("magnets" = 3, "materials" = 4)
+	req_tech = list(Tc_MAGNETS = 3, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1500, MAT_SILVER = 150, MAT_GLASS = 3000)
 	category = "Engineering"
@@ -54,7 +54,7 @@
 	name = "Superior Welding Goggles"
 	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles."
 	id = "superior_welding_goggles"
-	req_tech = list("materials" = 3, "engineering" = 3)
+	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1500)
 	category = "Engineering"
@@ -64,7 +64,7 @@
 	name = "Night Vision Goggles"
 	desc = "You can totally see in the dark now!."
 	id = "night_vision_goggles"
-	req_tech = list("materials" = 5, "engineering" = 4)
+	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 700, MAT_GLASS = 2000, MAT_GOLD = 100)
 	category = "Engineering"
@@ -74,7 +74,7 @@
 	name = "Device Analyser"
 	desc = "A device for scanning other devices. Meta."
 	id = "deviceanalyser"
-	req_tech = list("magnets"=3, "engineering"=4, "materials"=4, "programming"=3)
+	req_tech = list(Tc_MAGNETS = 3, Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
 	category = "Engineering"
@@ -86,7 +86,7 @@
 	name = "Rapid Machinery Component Exchanger"
 	desc = "A device that allows to quickly replace machinery components, useful for upgrading."
 	id = "componentexchanger"
-	req_tech = list("engineering"=4, "materials"=4, "programming"=2)
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
 	category = "Engineering"
@@ -97,7 +97,7 @@
 	name = "Rapid Part Exchange Device"
 	desc = "Special mechanical module made to store, sort, and apply standard machine parts."
 	id = "rped"
-	req_tech = list("engineering" = 4, "materials" = 4, "programming" = 2)
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
@@ -107,7 +107,7 @@
 	name = "Material Synthesizer"
 	desc = "A device capable of producing very little rare material with a whole lot of investment."
 	id = "mat_synth"
-	req_tech = list("engineering" = 4, "materials" = 5, "powerstorage" = 3)
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 5, Tc_POWERSTORAGE = 3)
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 3000, MAT_GLASS = 1500, MAT_DIAMOND = 1000, MAT_URANIUM = 3000)
 	category = "Engineering"
@@ -117,7 +117,7 @@
 	name = "Advanced Silicate Sprayer"
 	desc = "An advanced tool to repair and reinforce windows."
 	id = "adv_silicate_sprayer"
-	req_tech = list("engineering" = 3, "materials" = 2)
+	req_tech = list(Tc_ENGINEERING = 3, Tc_MATERIALS = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 700, MAT_GLASS = 50, MAT_SILVER = 50)
 	build_path = /obj/item/device/silicate_sprayer/advanced/empty
@@ -127,7 +127,7 @@
 	name = "Assembly Frame"
 	desc = "A frame used to store and connect assemblies together."
 	id = "assembly_frame"
-	req_tech = list("engineering" = 4, "powerstorage" = 3, "programming" = 3, "magnets" = 3)
+	req_tech = list(Tc_ENGINEERING = 4, Tc_POWERSTORAGE = 3, Tc_PROGRAMMING = 3, Tc_MAGNETS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 6000, MAT_GLASS = 3500, MAT_PLASTIC = 1000)
 	category = "Engineering"
@@ -137,7 +137,7 @@
 	name = "Light Tile Remote"
 	desc = "A device used to remotely configure light tiles."
 	id = "lt_remote"
-	req_tech = list("programming" = 2, "magnets" = 3)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_MAGNETS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1500, MAT_GLASS = 200)
 	build_path = /obj/item/device/assembly/light_tile_control
@@ -147,7 +147,7 @@
 	name = "T-Ray Scanner"
 	desc = "A terahertz ray device used to pick up the faintest traces of energy, used to detect the invisible."
 	id = "tray_scanner"
-	req_tech = list("engineering" = 1, "magnets" = 1)
+	req_tech = list(Tc_ENGINEERING = 1, Tc_MAGNETS = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	build_path = /obj/item/device/t_scanner
@@ -157,7 +157,7 @@
 	name = "P-Ray Scanner"
 	desc = "A petahertz ray device used to pick up the faintest traces of energy, used to detect the invisible."
 	id = "pray_scanner"
-	req_tech = list("engineering" = 3, "magnets" = 3)
+	req_tech = list(Tc_ENGINEERING = 3, Tc_MAGNETS = 3)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	build_path = /obj/item/device/t_scanner/advanced

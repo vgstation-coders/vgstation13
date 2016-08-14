@@ -26,7 +26,7 @@
 	icon_state = "baton"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	item_state = "classic_baton"
-	origin_tech = "combat=3"
+	origin_tech = Tc_COMBAT + "=3"
 	mech_flags = MECH_SCAN_FAIL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
@@ -81,7 +81,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "telebaton_0"
 	item_state = "telebaton_0"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL

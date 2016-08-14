@@ -9,7 +9,7 @@
 	force = 10
 	throwforce = 7
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	attack_verb = list("beats")
 	var/stunforce = 10
 	var/status = 0

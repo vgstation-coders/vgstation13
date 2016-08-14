@@ -20,7 +20,7 @@
 /obj/item/weapon/circuitboard/ecb
 	board_type= EMBEDDED_CONTROLLER
 	icon_state = "mainboard"
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 
 	name = "Embedded Controller Board (Base)"
 	build_path = /obj/machinery/embedded_controller

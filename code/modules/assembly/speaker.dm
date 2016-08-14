@@ -8,7 +8,7 @@
 	item_state = "speaker"
 	starting_materials = list(MAT_IRON = 800, MAT_GLASS = 100)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 	var/message = "Thank you for using NanoSpeaker!"
 

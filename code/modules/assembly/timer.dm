@@ -8,7 +8,7 @@
 	icon_state = "timer"
 	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 	wires = WIRE_PULSE | WIRE_RECEIVE
 
