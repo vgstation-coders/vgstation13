@@ -1,3 +1,5 @@
+#define VALUE_GENERATED_NUMBER "Generated number"
+#define VALUE_UPPER_LIMIT "Maximum generated value or amount of pulsed assemblies"
 //////////////////////////Random number generator circuit////////////////////////
 // * When pulsed, randomly picks n assemblies connected to it and sends a pulse to them. Also generates a random number from 0 to n.
 
@@ -19,8 +21,9 @@
 	var/output_number = 1 //How many assemblies are randomly chosen
 	var/last_value = 0
 
-	accessible_values = list("Generated number" = "last_value;number",\
-		"Upper limit" = "output_number;number")
+	accessible_values = list(\
+		VALUE_GENERATED_NUMBER = "last_value;"+VT_NUMBER,\
+		VALUE_UPPER_LIMIT = "output_number;"+VT_NUMBER)
 
 /obj/item/device/assembly/randomizer/activate() //Simple stuff - when pulsed, emit a pulse. The assembly frame will handle the next part
 	if(!..()) return 0
@@ -49,3 +52,6 @@
 		A.pulsed()
 
 		if(!AS.len) break
+
+#undef VALUE_GENERATED_NUMBER
+#undef VALUE_UPPER_LIMIT

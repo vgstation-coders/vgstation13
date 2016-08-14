@@ -1,3 +1,7 @@
+#define VALUE_REMAINING_TIME "Remaining time"
+#define VALUE_DEFAULT_TIME "Default time"
+#define VALUE_TIMING "Timing"
+
 /obj/item/device/assembly/timer
 	name = "timer"
 	desc = "Used to time things. Works well with contraptions which have to count down. Tick tock."
@@ -15,9 +19,10 @@
 
 	var/default_time = 10
 
-	accessible_values = list("Remaining time" = "time;number",\
-		"Default time" = "default_time;number",\
-		"Timing" = "timing;number")
+	accessible_values = list(\
+		VALUE_REMAINING_TIME = "time;"+VT_NUMBER,\
+		VALUE_DEFAULT_TIME = "default_time;"+VT_NUMBER,\
+		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/timer/activate()
 	if(!..())	return 0//Cooldown check
@@ -114,3 +119,7 @@
 		attack_self(usr)
 
 	return
+
+#undef VALUE_REMAINING_TIME
+#undef VALUE_DEFAULT_TIME
+#undef VALUE_TIMING

@@ -1,3 +1,9 @@
+#define VALUE_SCANNING "Scanning"
+#define VALUE_SCAN_RANGE "Scan range"
+#define VALUE_REMAINING_TIME "Remaining time"
+#define VALUE_DEFAULT_TIME "Default time"
+#define VALUE_TIMING "Timing"
+
 /var/global/list/prox_sensor_ignored_types = list \
 (
 	/obj/effect/beam
@@ -27,11 +33,12 @@
 
 	var/range = 2
 
-	accessible_values = list("Scanning" = "scanning;number",\
-		"Scan range" = "range;number;1;5",\
-		"Remaining time" = "time;number",\
-		"Default time" = "default_time;number",\
-		"Timing" = "timing;number")
+	accessible_values = list(\
+		VALUE_SCANNING = "scanning;"+VT_NUMBER,\
+		VALUE_SCAN_RANGE = "range;"+VT_NUMBER+";1;5",\
+		VALUE_REMAINING_TIME = "time;"+VT_NUMBER,\
+		VALUE_DEFAULT_TIME = "default_time;"+VT_NUMBER,\
+		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/prox_sensor/activate()
 	if(!..())	return 0//Cooldown check
@@ -176,3 +183,9 @@
 		attack_self(usr)
 
 	return
+
+#undef VALUE_SCANNING
+#undef VALUE_SCAN_RANGE
+#undef VALUE_REMAINING_TIME
+#undef VALUE_DEFAULT_TIME
+#undef VALUE_TIMING

@@ -96,6 +96,23 @@
 	..()
 	qdel(src)
 
+/obj/item/Topic(href, href_list)
+	.=..()
+	if(href_list["close"])
+		return
+
+	if(usr.incapacitated())
+		return 1
+	if (!usr.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 1
+	if (!in_range(src, usr))
+		return 1
+
+	src.add_fingerprint(usr)
+	src.add_hiddenprint(usr)
+	return 0
+
 /obj/item/proc/restock() //used for borg recharging
 	return
 

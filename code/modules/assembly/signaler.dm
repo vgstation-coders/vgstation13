@@ -1,3 +1,6 @@
+#define VALUE_CODE "Code (1 to 100)"
+#define VALUE_FREQUENCY "Frequency (whole numbers such as 1457)"
+
 /obj/item/device/assembly/signaler
 	name = "remote signaling device"
 	short_name = "signaler"
@@ -19,8 +22,9 @@
 	var/datum/radio_frequency/radio_connection
 	var/deadman = 0
 
-	accessible_values = list("Code (1 to 100)" = "code;number;1;100",\
-		"Frequency" = "frequency;number")
+	accessible_values = list(\
+		VALUE_CODE = "code;"+VT_NUMBER+";1;100",\
+		VALUE_FREQUENCY = "frequency;"+VT_NUMBER)
 
 /obj/item/device/assembly/signaler/New()
 	..()

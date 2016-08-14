@@ -1,3 +1,7 @@
+#define VALUE_RECORDING "Recording activation message"
+#define VALUE_ACTIVATION_MESSAGE "Activation message"
+#define VALUE_MUTED "Muted"
+
 /obj/item/device/assembly/voice
 	name = "voice analyzer"
 	desc = "A small electronic device able to record a voice sample, and send a signal when that sample is repeated."
@@ -11,9 +15,10 @@
 	var/recorded = "" //the activation message
 	var/muted = 0 //If 1, the voice analyzer won't say ANYTHING ever
 
-	accessible_values = list("Recording activation message" = "listening;number",\
-		"Activation message" = "recorded;text",\
-		"Muted" = "muted;num")
+	accessible_values = list(\
+		VALUE_RECORDING = "listening;"+VT_NUMBER,\
+		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_NUMBER,\
+		VALUE_MUTED = "muted;"+VT_NUMBER)
 
 /obj/item/device/assembly/voice/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!speech.speaker || speech.speaker == src)
@@ -23,7 +28,7 @@
 		listening = 0
 		say("Activation message is '[html_encode(speech.message)]'.")
 	else
-		if(findtext(speech.message, recorded))
+		if(!recorded || findtext(speech.message, recorded))
 			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 25, 1)
 			else
@@ -62,3 +67,7 @@
 	if(muted) return //Don't say anything if muted
 
 	. = ..()
+
+#undef VALUE_RECORDING
+#undef VALUE_ACTIVATION_MESSAGE
+#undef VALUE_MUTED
