@@ -616,7 +616,7 @@ var/list/forbidden_varedit_object_types = list(
 			else
 				var/list/newnumbers = list()
 				for (var/number in numbers)
-					number = text2num(number)
+					number = text2num(number) || 0
 					newnumbers += number
 
 				M = matrix(newnumbers[1], newnumbers[2], newnumbers[3], newnumbers[4], newnumbers[5], newnumbers[6])
