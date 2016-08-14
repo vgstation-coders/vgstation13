@@ -364,6 +364,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(world.time>resethearers)
 		sethearing()
 	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
+		if(!hearer.attached)
+			continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
