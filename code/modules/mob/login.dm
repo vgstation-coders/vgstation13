@@ -91,3 +91,4 @@
 		client.updating_colour = 0
 		bad_changing_colour_ckeys["[client.ckey]"] = 0
 	update_colour()
+	handle_data_huds_on_login()

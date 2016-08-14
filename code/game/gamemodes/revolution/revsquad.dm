@@ -88,7 +88,7 @@
 			rev_mind.objectives += rev_obj
 
 		equip_revsquad(rev_mind.current)
-		update_rev_icons_added(rev_mind)
+		rev_hud.update_mob(rev_mind.current)
 
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		greet_revsquad(rev_mind)

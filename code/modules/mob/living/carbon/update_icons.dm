@@ -4,6 +4,7 @@
  * Right now just handles lying down, but could handle other cases later.
  * IMPORTANT: Multiple animate() calls do not stack well, so try to do them all at once if you can.
  */
+
 /mob/living/carbon/update_transform()
 	if(lying != lying_prev)
 		var/matrix/final_transform = matrix()

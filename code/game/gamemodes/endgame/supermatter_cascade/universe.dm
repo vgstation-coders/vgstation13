@@ -206,18 +206,18 @@
 		if(M in ticker.mode.revolutionaries)
 			ticker.mode.revolutionaries -= M
 			to_chat(M, "<span class='danger'><FONT size = 3>The massive pulse of energy clears your mind.  You are no longer a revolutionary.</FONT></span>")
-			ticker.mode.update_rev_icons_removed(M)
+			rev_hud.update_mob(M.current)
 			M.special_role = null
 
 		if(M in ticker.mode.head_revolutionaries)
 			ticker.mode.head_revolutionaries -= M
 			to_chat(M.current, "<span class='danger'><FONT size = 3>The massive pulse of energy clears your mind.  You are no longer a head revolutionary.</FONT></span>")
-			ticker.mode.update_rev_icons_removed(M)
+			rev_hud.update_mob(M.current)
 			M.special_role = null
 
 		if(M in ticker.mode.cult)
 			ticker.mode.cult -= M
-			ticker.mode.update_cult_icons_removed(M)
+			cult_hud.update_mob(M)
 			M.special_role = null
 			var/datum/game_mode/cult/cult = ticker.mode
 			if (istype(cult))
@@ -232,7 +232,7 @@
 			M.special_role = null
 			M.current.spellremove(M.current, config.feature_object_spell_system? "object":"verb")
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Your powers ebb and you feel weak. You are no longer a wizard.</FONT></span>")
-			ticker.mode.update_wizard_icons_removed(M)
+			wiz_hud.update_mob(M.current)
 
 		if(M in ticker.mode.changelings)
 			ticker.mode.changelings -= M
@@ -255,11 +255,11 @@
 
 		if(M in ticker.mode.syndicates)
 			ticker.mode.syndicates -= M
-			ticker.mode.update_synd_icons_removed(M)
 			M.special_role = null
 			//for (var/datum/objective/nuclear/O in objectives)
 			//	objectives-=O
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Your masters are likely dead or dying. You are no longer a syndicate operative.</FONT></span>")
+			syndie_hud.update_mob(M.current)
 
 		if(M in ticker.mode.traitors)
 			ticker.mode.traitors -= M

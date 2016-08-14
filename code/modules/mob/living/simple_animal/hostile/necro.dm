@@ -92,9 +92,7 @@
 		necromancers = ticker.mode:necromancer[ref]
 		necromancers.Add(Controller)
 		ticker.mode:necromancer[ref] = necromancers
-		ticker.mode.update_necro_icons_added(Owner.mind)
-		ticker.mode.update_necro_icons_added(Controller)
-		ticker.mode.update_all_necro_icons()
+		Owner.mind.create_priv_hud(NECRO_HUD,Controller.current)
 		ticker.mode.risen.Add(Controller)
 	name += " ([rand(1,1000)])"
 

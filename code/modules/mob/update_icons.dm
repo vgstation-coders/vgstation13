@@ -10,6 +10,9 @@
 /mob/proc/update_hud()
 	return
 
+/mob/proc/update_data_hud()
+	overlays |= data_huds
+
 /mob/proc/update_inv_handcuffed()
 	return
 

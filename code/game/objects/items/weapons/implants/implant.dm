@@ -345,10 +345,10 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	H.mind.objectives += p
 	for(var/datum/objective/objective in H.mind.objectives)
 		to_chat(H, "<B>Objective #1</B>: [objective.explanation_text]")
-	ticker.mode.update_traitor_icons_added(H.mind)
-	ticker.mode.update_traitor_icons_added(user.mind)
+	user.mind.create_priv_hud(GREYTIDE_HUD,H)
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
+
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin"
 	desc = "Removes all stuns and knockdowns."

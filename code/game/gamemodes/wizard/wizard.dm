@@ -74,8 +74,7 @@
 		equip_wizard(wizard.current)
 		name_wizard(wizard.current)
 		greet_wizard(wizard)
-		update_wizard_icons_added(wizard)
-	update_all_wizard_icons()
+		wiz_hud.update_mob(wizard.current.)
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
 			if(!mixed) send_intercept()
@@ -360,52 +359,3 @@ Made a proc so this is not repeated 14 (or more) times.*/
 		return 0
 	return 1
 */
-
-/datum/game_mode/proc/update_all_wizard_icons()
-	spawn(0)
-		for(var/datum/mind/wizard_mind in wizards)
-			if(wizard_mind.current)
-				if(wizard_mind.current.client)
-					for(var/image/I in wizard_mind.current.client.images)
-						if(I.icon_state == "wizard")
-							wizard_mind.current.client.images -= I
-
-		for(var/datum/mind/wizard_mind in wizards)
-			if(wizard_mind.current)
-				if(wizard_mind.current.client)
-					for(var/datum/mind/wizard_mind_1 in wizards)
-						if(wizard_mind_1.current)
-							var/imageloc = wizard_mind_1.current
-							if(istype(wizard_mind_1.current.loc,/obj/mecha))
-								imageloc = wizard_mind_1.current.loc
-							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard")
-							I.plane = WIZ_ANTAG_HUD_PLANE
-							wizard_mind.current.client.images += I
-
-/datum/game_mode/proc/update_wizard_icons_added(datum/mind/wizard_mind)
-	spawn(0)
-		if(wizard_mind.current)
-			if(wizard_mind.current.client)
-				var/imageloc = wizard_mind.current
-				if(istype(wizard_mind.current.loc,/obj/mecha))
-					imageloc = wizard_mind.current.loc
-				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "wizard")
-				I.plane = WIZ_ANTAG_HUD_PLANE
-				wizard_mind.current.client.images += I
-
-/datum/game_mode/proc/update_wizard_icons_removed(datum/mind/wizard_mind)
-	spawn(0)
-		for(var/datum/mind/wizard in wizards)
-			if(wizard.current)
-				if(wizard.current.client)
-					for(var/image/I in wizard.current.client.images)
-						if(I.icon_state == "wizard" && ((I.loc == wizard_mind.current) || (I.loc == wizard_mind.current.loc)))
-							//del(I)
-							wizard.current.client.images -= I
-
-		if(wizard_mind.current)
-			if(wizard_mind.current.client)
-				for(var/image/I in wizard_mind.current.client.images)
-					if(I.icon_state == "wizard")
-						//del(I)
-						wizard_mind.current.client.images -= I

@@ -533,62 +533,6 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 					verbs += /client/proc/vampire_undeath
 					verbs += /client/proc/vampire_spawncape
 
-//prepare for copypaste
-/datum/game_mode/proc/update_vampire_icons_added(datum/mind/vampire_mind)
-	var/ref = "\ref[vampire_mind]"
-	if(ref in thralls)
-		if(vampire_mind.current)
-			if(vampire_mind.current.client)
-				var/image/I = image('icons/mob/mob.dmi', loc = vampire_mind.current, icon_state = "vampire")
-				I.plane = VAMP_ANTAG_HUD_PLANE
-				vampire_mind.current.client.images += I
-	for(var/headref in thralls)
-		for(var/datum/mind/t_mind in thralls[headref])
-			var/datum/mind/head = locate(headref)
-			if(head)
-				if(head.current)
-					if(head.current.client)
-						var/image/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
-						I.plane = VAMP_ANTAG_HUD_PLANE
-						head.current.client.images += I
-				if(t_mind.current)
-					if(t_mind.current.client)
-						var/image/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "vampire")
-						I.plane = VAMP_ANTAG_HUD_PLANE
-						t_mind.current.client.images += I
-				if(t_mind.current)
-					if(t_mind.current.client)
-						var/image/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
-						I.plane = VAMP_ANTAG_HUD_PLANE
-						t_mind.current.client.images += I
-
-/datum/game_mode/proc/update_vampire_icons_removed(datum/mind/vampire_mind)
-	for(var/headref in thralls)
-		var/datum/mind/head = locate(headref)
-		for(var/datum/mind/t_mind in thralls[headref])
-			if(t_mind.current)
-				if(t_mind.current.client)
-					for(var/image/I in t_mind.current.client.images)
-						if((I.icon_state == "vampthrall" || I.icon_state == "vampire") && I.loc == vampire_mind.current)
-							//world.log << "deleting [vampire_mind] overlay"
-							//del(I)
-							t_mind.current.client.images -= I
-		if(head)
-			//world.log << "found [head.name]"
-			if(head.current)
-				if(head.current.client)
-					for(var/image/I in head.current.client.images)
-						if((I.icon_state == "vampthrall" || I.icon_state == "vampire") && I.loc == vampire_mind.current)
-							//world.log << "deleting [vampire_mind] overlay"
-							//del(I)
-							head.current.client.images -= I
-	if(vampire_mind.current)
-		if(vampire_mind.current.client)
-			for(var/image/I in vampire_mind.current.client.images)
-				if(I.icon_state == "vampthrall" || I.icon_state == "vampire")
-					//del(I)
-					vampire_mind.current.client.images -= I
-
 /datum/game_mode/proc/remove_vampire_mind(datum/mind/vampire_mind, datum/mind/head)
 	//var/list/removal
 	if(!istype(head))
@@ -598,7 +542,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		thralls[ref] -= vampire_mind
 	enthralled -= vampire_mind
 	vampire_mind.special_role = null
-	update_vampire_icons_removed(vampire_mind)
+	vampire_mind.remove_priv_hud(VAMP_HUD)
 	vampire_mind.current.unsubLife(src)
 //	to_chat(world, "Removed [vampire_mind.current.name] from vampire shit")
 	to_chat(vampire_mind.current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</FONT></span>")

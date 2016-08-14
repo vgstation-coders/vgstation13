@@ -62,75 +62,6 @@
 /datum/game_mode/nuclear/pre_setup()
 	return 1
 
-
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-/datum/game_mode/proc/update_all_synd_icons()
-	spawn(0)
-		for(var/datum/mind/synd_mind in syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/image/I in synd_mind.current.client.images)
-						if(I.icon_state == "synd")
-							synd_mind.current.client.images -= I
-
-		for(var/datum/mind/synd_mind in syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/datum/mind/synd_mind_1 in syndicates)
-						if(synd_mind_1.current)
-							var/imageloc = synd_mind_1.current
-							if(istype(synd_mind_1.current.loc,/obj/mecha))
-								imageloc = synd_mind_1.current.loc
-							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
-							I.plane = SYNDIE_ANTAG_HUD_PLANE
-							synd_mind.current.client.images += I
-
-/datum/game_mode/proc/update_synd_icons_added(datum/mind/synd_mind)
-	if(!synd_mind)
-		return 0
-	spawn(0)
-		for(var/datum/mind/synd in syndicates)
-			if(synd.current)
-				if(synd.current.client)
-					var/imageloc = synd_mind.current
-					if(istype(synd_mind.current.loc,/obj/mecha))
-						imageloc = synd_mind.current.loc
-					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
-					I.plane = SYNDIE_ANTAG_HUD_PLANE
-					synd.current.client.images += I
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					var/imageloc = synd_mind.current
-					if(istype(synd_mind.current.loc,/obj/mecha))
-						imageloc = synd_mind.current.loc
-					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
-					I.plane = SYNDIE_ANTAG_HUD_PLANE
-					synd_mind.current.client.images += I
-
-		update_all_synd_icons()
-
-/datum/game_mode/proc/update_synd_icons_removed(datum/mind/synd_mind)
-	spawn(0)
-		for(var/datum/mind/synd in syndicates)
-			if(synd.current)
-				if(synd.current.client)
-					for(var/image/I in synd.current.client.images)
-						if(I.icon_state == "synd" && ((I.loc == synd_mind.current) || (I.loc == synd_mind.current.loc)))
-							//del(I)
-							synd.current.client.images -= I
-
-		if(synd_mind.current)
-			if(synd_mind.current.client)
-				for(var/image/I in synd_mind.current.client.images)
-					if(I.icon_state == "synd")
-						//del(I)
-						synd_mind.current.client.images -= I
-		update_all_synd_icons()
-
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-
 /datum/game_mode/nuclear/post_setup()
 
 	var/list/turf/synd_spawn = list()
@@ -166,9 +97,6 @@
 			synd_mind.current.real_name = "[syndicate_name()] Operative #[agent_number]"
 			agent_number++
 		spawnpos++
-		update_synd_icons_added(synd_mind)
-
-	update_all_synd_icons()
 
 	if(uplinklocker)
 		var/obj/structure/closet/C = new /obj/structure/closet/syndicate/nuclear(uplinklocker.loc)
@@ -293,6 +221,7 @@
 	E.imp_in = synd_mob
 	E.implanted = 1
 	synd_mob.update_icons()
+	syndie_hud.update_mob(synd_mob)
 	return 1
 
 

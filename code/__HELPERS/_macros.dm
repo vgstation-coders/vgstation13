@@ -157,6 +157,8 @@
 
 #define iswizard(H) (H.mind in ticker.mode.wizards)
 
+#define isapprentice(H) (H.mind && H.mind.special_role == "apprentice")
+
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
 
 #define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)

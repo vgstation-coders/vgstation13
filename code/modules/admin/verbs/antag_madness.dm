@@ -214,7 +214,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		if("cult")
 			if(iscult(M))	return 0
 			ticker.mode.cult += M.mind
-			ticker.mode.update_cult_icons_added(M.mind)
+			cult_hud.update_mob(M)
 			M.mind.special_role = "Cultist"
 			to_chat(M, "<span class='sinister'>You remember the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
@@ -317,7 +317,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		if("rev")
 			if(isrevhead(M))	return 0
 			ticker.mode.head_revolutionaries += M.mind
-			ticker.mode.update_rev_icons_added(M.mind)
+			rev_hud.update_mob(M)
 			M.mind.special_role = "Head Revolutionary"
 			ticker.mode.forge_revolutionary_objectives(M.mind)
 			ticker.mode.greet_revolutionary(M.mind,0)
@@ -361,7 +361,6 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		if("nuke")
 			if(isnukeop(M))	return 0
 			ticker.mode.syndicates += M.mind
-			ticker.mode.update_synd_icons_added(M.mind)
 			M.real_name = "[syndicate_name()] Operative"
 			M.mind.special_role = "Syndicate"
 			M.mind.assigned_role = "MODE"
@@ -399,6 +398,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 			M.equip_to_slot_or_del(new /obj/item/device/codebreaker, slot_in_backpack)
 			to_chat(M, "You have been provided with a code breaker to decipher the nuke's code, it has been placed in your backpack.")
+			syndie_hud.update_mob(M)
 			return 1
 
 
@@ -472,7 +472,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			ticker.mode.wizards += M.mind
 			M.mind.special_role = "Wizard"
 			M.mind.assigned_role = "MODE"
-			ticker.mode.update_wizard_icons_added(M.mind)
+			wiz_hud.update_mob(M)
 			ticker.mode.forge_wizard_objectives(M.mind)
 			ticker.mode.greet_wizard(M.mind)
 
@@ -548,8 +548,6 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			to_chat(M, "In your pockets you will find a teleport scroll.It has twice as many uses as normal teleport scrolls.")
 
 			M.regenerate_icons()
-
-			ticker.mode.update_all_wizard_icons()
 
 			M.equip_to_slot_or_del(pack, slot_in_backpack)
 			to_chat(M, "Your previous belongings have been stored in your backpack.")

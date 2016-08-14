@@ -150,7 +150,7 @@
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
 		grant_runeword(cult_mind.current)
-		update_cult_icons_added(cult_mind)
+		cult_hud.update_mob(cult_mind.current)
 		cult_mind.special_role = "Cultist"
 		var/wikiroute = role_wiki[ROLE_CULTIST]
 		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=\ref[cult_mind.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
@@ -425,7 +425,7 @@
 		if(mixed)
 			ticker.mode.cult += cult_mind
 
-		update_cult_icons_added(cult_mind)
+		cult_hud.update_mob(cult_mind.current)
 		if(name == "cult")
 			var/datum/game_mode/cult/C = src
 			C.check_numbers()
@@ -440,7 +440,7 @@
 
 /datum/game_mode/proc/remove_cultist(var/datum/mind/cult_mind, var/show_message = 1, var/log=1)
 	if(cult_mind in cult)
-		update_cult_icons_removed(cult_mind)
+		cult_hud.update_mob(cult_mind.current)
 		cult -= cult_mind
 		to_chat(cult_mind.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
 		to_chat(cult_mind.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
@@ -456,66 +456,6 @@
 		if(log)
 			log_admin("[cult_mind.current] ([ckey(cult_mind.current.key)] has been deconverted from the cult")
 			stat_collection.cult.deconverted++
-
-/datum/game_mode/proc/update_all_cult_icons()
-	spawn(0)
-		for(var/datum/mind/cultist in cult)
-			if(cultist.current)
-				if(cultist.current.client)
-					for(var/image/I in cultist.current.client.images)
-						if(I.icon_state == "cult")
-							cultist.current.client.images -= I
-
-		for(var/datum/mind/cultist in cult)
-			if(cultist.current)
-				if(cultist.current.client)
-					for(var/datum/mind/cultist_1 in cult)
-						if(cultist_1.current)
-							var/imageloc = cultist_1.current
-							if(istype(cultist_1.current.loc,/obj/mecha))
-								imageloc = cultist_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
-							cultist.current.client.images += I
-
-
-/datum/game_mode/proc/update_cult_icons_added(datum/mind/cult_mind)
-	if(!cult_mind)
-		return 0
-	spawn(0)
-		for(var/datum/mind/cultist in cult)
-			if(cultist.current)
-				if(cultist.current.client)
-					var/imageloc = cult_mind.current
-					if(istype(cult_mind.current.loc,/obj/mecha))
-						imageloc = cult_mind.current.loc
-					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
-					I.plane = CULT_ANTAG_HUD_PLANE
-					cultist.current.client.images += I
-			if(cult_mind.current && cultist.current)
-				if(cult_mind.current.client)
-					var/imageloc = cultist.current
-					if(istype(cultist.current.loc,/obj/mecha))
-						imageloc = cultist.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
-					J.plane = CULT_ANTAG_HUD_PLANE
-					cult_mind.current.client.images += J
-
-
-/datum/game_mode/proc/update_cult_icons_removed(datum/mind/cult_mind)
-	spawn(0)
-		for(var/datum/mind/cultist in cult)
-			if(cultist.current)
-				if(cultist.current.client)
-					for(var/image/I in cultist.current.client.images)
-						if(I.icon_state == "cult" && ((I.loc == cult_mind.current) || (I.loc == cult_mind.current.loc)))
-							cultist.current.client.images -= I
-
-		if(cult_mind.current)
-			if(cult_mind.current.client)
-				for(var/image/I in cult_mind.current.client.images)
-					if(I.icon_state == "cult")
-						cult_mind.current.client.images -= I
-
 
 /datum/game_mode/cult/proc/get_unconvertables()
 	var/list/ucs = list()

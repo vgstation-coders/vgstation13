@@ -2,7 +2,6 @@
 	var/server_name = null				// server name (for world name / status)
 	var/server_suffix = 0				// generate numeric suffix based on server port
 	var/world_style_config = world_style
-
 	var/nudge_script_path = "nudge.py"  // where the nudge.py script is located
 
 	var/log_ooc = 0						// log OOC channel
@@ -231,10 +230,10 @@
 			switch (name)
 				if ("resource_urls")
 					config.resource_urls = splittext(value, " ")
-					
-				if("tts_server")	
+
+				if("tts_server")
 					config.tts_server = value
-					
+
 				if ("admin_legacy_system")
 					config.admin_legacy_system = 1
 
