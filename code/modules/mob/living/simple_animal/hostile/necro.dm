@@ -229,7 +229,7 @@
 	D.shake(1, 8)
 	if(do_after(src, D, 100*time_mult, needhand = FALSE)) //Roughly 10 seconds for people on the other side of the door to run the heck away
 		if(can_open_door(D))//Let's see if nobody quickly bolted it
-			if(break_doors = CANPLUS) //Guaranteed
+			if(break_doors == CANPLUS) //Guaranteed
 				D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
 				if(istype(D, /obj/machinery/door/airlock/))
 					var/obj/machinery/door/airlock/A = D
