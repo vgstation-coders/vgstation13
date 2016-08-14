@@ -33,7 +33,7 @@
 	opacity = 0
 	density = 1
 	unacidable = 1
-	alpha = 0
+	invisibility = 100
 
 /obj/effect/forcefield/bullet_act(var/obj/item/projectile/Proj, var/def_zone)
 	var/turf/T = get_turf(src.loc)
@@ -43,13 +43,13 @@
 	return
 	
 /obj/effect/forcefield/wizard
-	alpha = 255
+	invisibility = 0
 	
 /obj/effect/forcefield/mime
 	icon_state = "empty"
 	name = "invisible wall"
 	desc = "You have a bad feeling about this."
-	alpha = 255
+	invisibility = 0
 
 /obj/effect/forcefield/cultify()
 	new /obj/effect/forcefield/cult(get_turf(src))
