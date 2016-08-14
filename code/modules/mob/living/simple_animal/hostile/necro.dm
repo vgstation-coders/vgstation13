@@ -1,5 +1,6 @@
 /mob/living/simple_animal/hostile/necro
 	var/mob/creator
+	var/unique_name = 0
 /mob/living/simple_animal/hostile/necro/skeleton
 	name = "skeleton"
 	desc = "Truly the ride never ends."
@@ -97,7 +98,6 @@
 
 	var/break_doors = CANT //If CAN, they can attempt to open doors. If CANPLUS, they break the door down entirely
 	var/health_cap = 250 //Maximum possible health it can have. Because screw having a 1000 health mob
-
 /*	wanted_objects = list(
 		/obj/machinery/light,        // Bust out lights
 	)
@@ -131,7 +131,7 @@
 		ticker.mode.update_all_necro_icons()
 		ticker.mode.risen.Add(Controller)
 
-	if(name == "zombie" || name == "skeleton")
+	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
 
 /mob/living/simple_animal/hostile/necro/zombie/Life()
@@ -149,6 +149,7 @@
 				if(can_evolve)//Can we evolve, and have we fed
 					busy = EVOLVING
 					check_evolve()
+					busy = 0
 				if((health < maxHealth) || (maxHealth < health_cap)) //Is there something to eat in range?
 					for(var/mob/living/carbon/human/C in can_see) //If so, chow down
 						if(C.isDead() && !busy && check_edibility(C))
@@ -279,17 +280,10 @@
 			Putrid													Crimson
 	Eaten too much, died too little								Eaten too little, died too much
 	*/
-	if(istype(src, /mob/living/simple_animal/hostile/necro/zombie/turned))
-		if(times_revived > 0 || times_eaten > 0)
-			evolve(/mob/living/simple_animal/hostile/necro/zombie/rotting)
-
+/*	if(istype(src, /mob/living/simple_animal/hostile/necro/zombie/turned))
 	else if (istype(src, /mob/living/simple_animal/hostile/necro/zombie/rotting))
-		if(times_eaten > (1+times_revived)*2) //Have to have eaten at least twice and more than double that of times died
-			evolve(/mob/living/simple_animal/hostile/necro/zombie/putrid)
-		else if(times_revived > times_eaten+1) //Died at least twice
-			evolve(/mob/living/simple_animal/hostile/necro/zombie/crimson)
+		*/
 
-	busy = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
 	if(ispath(evolve_to, /mob/living/simple_animal/hostile/necro))
@@ -318,6 +312,11 @@
 	health = 50
 	can_evolve = TRUE
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+
+/mob/living/simple_animal/hostile/necro/zombie/turned/check_evolve()
+	..()
+	if(times_revived > 0 || times_eaten > 0)
+		evolve(/mob/living/simple_animal/hostile/necro/zombie/rotting)
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/drop_host()
 	qdel(host) //Bye bye
@@ -392,6 +391,13 @@
 	can_evolve = 1
 	break_doors = CAN
 
+/mob/living/simple_animal/hostile/necro/zombie/rotting/check_evolve()
+	..()
+	if(times_eaten > (1+times_revived)*2) //Have to have eaten at least twice and more than double that of times died
+		evolve(/mob/living/simple_animal/hostile/necro/zombie/putrid)
+	else if(times_revived > times_eaten+1) //Died at least twice
+		evolve(/mob/living/simple_animal/hostile/necro/zombie/crimson)
+
 /mob/living/simple_animal/hostile/necro/zombie/putrid
 	icon_living = "zombie" //The original
 	icon_state = "zombie"
@@ -419,6 +425,7 @@
 	target.loc = null
 
 /mob/living/simple_animal/hostile/necro/zombie/crimson
+	name = "crimson skull"
 	icon_state = "zombie_crimson"
 	icon_living = "zombie_crimson"
 	icon_dead = "zombie_crimson_dead"
@@ -440,6 +447,7 @@
 	icon_living = "zombie_leather"
 	desc = "Fuck you!"
 	can_evolve = 0
+	unique_name = 1
 
 #undef EVOLVING
 #undef MOVING_TO_TARGET
