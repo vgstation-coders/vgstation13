@@ -16,7 +16,7 @@
 	faction = "russian"
 
 /mob/living/simple_animal/hostile/humanoid/russian/Aggro()
-	say("сука блять")
+	say(pick("сука блять", "иди нахуй"))
 	return ..()
 
 /mob/living/simple_animal/hostile/humanoid/russian/ranged
