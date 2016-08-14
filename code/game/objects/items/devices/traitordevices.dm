@@ -25,7 +25,7 @@ effective or pretty fucking useless.
 	flags = FPRINT
 	siemens_coefficient = 1
 	item_state = "electronic"
-	origin_tech = MAGNETS + "=3;" + COMBAT + "=3;" + SYNDICATE + "=3"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_COMBAT + "=3;" + Tc_SYNDICATE + "=3"
 
 	var/times_used = 0 //Number of times it's been used.
 	var/max_uses = 2

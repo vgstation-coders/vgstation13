@@ -169,7 +169,7 @@
 	icon_state = "pcollector"
 	name = "Pill Collector"
 	item_state = "pcollector"
-	origin_tech = BIOTECH + "=2;" + MATERIALS + "=1"
+	origin_tech = Tc_BIOTECH + "=2;" + Tc_MATERIALS + "=1"
 	storage_slots = 50; //the number of plant pieces it can carry.
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY

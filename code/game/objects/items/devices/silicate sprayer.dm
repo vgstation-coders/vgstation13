@@ -16,7 +16,7 @@
 
 	w_class = W_CLASS_SMALL
 
-	origin_tech = ENGINEERING + "=2"
+	origin_tech = Tc_ENGINEERING + "=2"
 
 	var/start_filled = TRUE
 	var/max_silicate = 50
@@ -110,7 +110,7 @@
 	max_silicate = 100
 	silicate_per_state = 10
 
-	origin_tech = MATERIALS + "=3;" + ENGINEERING + "=4"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=4"
 
 	var/mode = MODE_REPAIR
 

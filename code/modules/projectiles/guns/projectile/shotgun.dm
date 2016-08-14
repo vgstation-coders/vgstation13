@@ -12,7 +12,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	caliber = list("shotgun" = 1, "flare" = 1) //flare shells are still shells
-	origin_tech = COMBAT + "=4;" + MATERIALS + "=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
@@ -65,7 +65,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 8
-	origin_tech = COMBAT + "=5;" + MATERIALS + "=2"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 
 //this is largely hacky and bad :(	-Pete
@@ -82,7 +82,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	caliber = list("shotgun" = 1, "flare" = 1)
-	origin_tech = COMBAT + "=3;" + MATERIALS + "=1"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()

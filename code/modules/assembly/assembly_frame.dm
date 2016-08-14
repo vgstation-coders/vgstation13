@@ -3,7 +3,7 @@
 	desc = "A large metal box with a frame inside, designed to store and link tiny assemblies like timers and signalers. There is a display with an interface for connecting assemblies together."
 
 	icon_state = "assembly_box"
-	origin_tech = PROGRAMMING + "=3;" + ENGINEERING + "=3;" + MAGNETS + "=3"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=3"
 
 	var/list/obj/item/device/assembly/assemblies = list()
 
@@ -426,7 +426,7 @@
 //This is not a problem as long as from_text() is called with use_parts = 1, as those assemblies are unobtainable and thus the construction will fail elsewhere.
 //However, this means that the ability to call, in any way, from_text() with use_parts = 0 should be restricted to admins and *maybe* trusted players unless extra checks are added.
 /obj/item/device/assembly_frame/proc/get_req_parts(list/data_list)
-	
+
 	if(!assembly_short_name_to_type.len) //Populate the list the first time someone calls this proc
 		for(var/assembly_path in typesof(/obj/item/device/assembly))
 			var/obj/item/device/assembly/assembly_type = assembly_path//So I can use the undocumented behavior of initial() to retrieve the value without initializing the object.

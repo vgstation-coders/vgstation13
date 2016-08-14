@@ -24,7 +24,7 @@
 	throw_range = 5
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = MATERIALS + "=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("attacks", "stabs", "pokes")
 
 /obj/item/weapon/kitchen/utensil/New()
@@ -190,7 +190,7 @@
 	starting_materials = list(MAT_IRON = 12000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = MATERIALS + "=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
@@ -242,7 +242,7 @@
 	starting_materials = list(MAT_IRON = 12000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = MATERIALS + "=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("cleaves", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver

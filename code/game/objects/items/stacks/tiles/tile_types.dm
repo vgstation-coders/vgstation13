@@ -50,7 +50,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
-	origin_tech = BIOTECH + "=1"
+	origin_tech = Tc_BIOTECH + "=1"
 
 	material = "grass"
 

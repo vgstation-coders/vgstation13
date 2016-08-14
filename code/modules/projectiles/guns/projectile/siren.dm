@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "siren"
 	item_state = "siren"
-	origin_tech = COMBAT + "=5"
+	origin_tech = Tc_COMBAT + "=5"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	recoil = 1
 	slot_flags = SLOT_BELT

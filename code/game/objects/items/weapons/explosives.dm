@@ -9,7 +9,7 @@
 	item_state = "plasticx"
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
-	origin_tech = SYNDICATE + "=2"
+	origin_tech = Tc_SYNDICATE + "=2"
 	var/datum/wires/explosive/plastic/wires = null
 	var/timer = 10
 	var/atom/target = null

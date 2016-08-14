@@ -167,7 +167,7 @@ var/global/list/logged_sprayed_reagents = list(SACID, PACID, LUBE, FUEL)
 	throwforce = 3
 	w_class = W_CLASS_MEDIUM
 	volume = 600
-	origin_tech = COMBAT + "=3;" + MATERIALS + "=3;" + ENGINEERING + "=3;" + SYNDICATE + "=5"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3;" + Tc_SYNDICATE + "=5"
 
 	delay_spraying = FALSE
 

@@ -4,7 +4,7 @@
 	icon_state = "detective"
 	max_shells = 6
 	caliber = list("38" = 1, "357" = 1)
-	origin_tech = COMBAT + "=2;" + MATERIALS + "=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c38"
 	var/perfect = 0
 
@@ -87,7 +87,7 @@
 	name = "mateba"
 	desc = "When you absolutely, positively need a 10mm hole in the other guy. Uses .357 ammo."	//>10mm hole >.357
 	icon_state = "mateba"
-	origin_tech = COMBAT + "=2;" + MATERIALS + "=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 
 
 // A gun to play Russian Roulette!
@@ -98,7 +98,7 @@
 	name = "russian revolver"
 	desc = "A Russian made revolver. Uses .357 ammo. It has six slots for ammo."
 	max_shells = 6
-	origin_tech = COMBAT + "=2;" + MATERIALS + "=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	fire_delay = 1
 
 /obj/item/weapon/gun/projectile/russian/New()

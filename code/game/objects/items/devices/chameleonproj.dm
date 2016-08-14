@@ -9,7 +9,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
-	origin_tech = SYNDICATE + "=4;" + MAGNETS + "=4"
+	origin_tech = Tc_SYNDICATE + "=4;" + Tc_MAGNETS + "=4"
 	var/cham_proj_scan = 1 //Scanning function starts on
 	var/can_use = 1
 	var/obj/effect/dummy/chameleon/active_dummy = null

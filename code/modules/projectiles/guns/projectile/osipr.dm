@@ -9,7 +9,7 @@
 	icon_state = "osipr"
 	item_state = "osipr"
 	slot_flags = SLOT_BELT
-	origin_tech = MATERIALS + "=5;" + COMBAT + "=5;" + MAGNETS + "=4;" + POWERSTORAGE + "=3"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=5;" + Tc_MAGNETS + "=4;" + Tc_POWERSTORAGE + "=3"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	fire_delay = 0

@@ -10,7 +10,7 @@
 	slot_flags = SLOT_BELT
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 20
-	origin_tech = MATERIALS + "=3;" + ENGINEERING + "=3"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 
 	var/obj/item/weapon/tank/tank = null                // Tank of gas for use in firing the cannon.
 	var/obj/item/weapon/storage/tank_container = new()  // Something to hold the tank item so we don't accidentally fire it.

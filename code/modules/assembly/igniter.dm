@@ -4,7 +4,7 @@
 	icon_state = "igniter"
 	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = MAGNETS + "=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 	secured = 1
 	wires = WIRE_RECEIVE

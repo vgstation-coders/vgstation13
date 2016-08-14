@@ -110,7 +110,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT | TWOHANDABLE
-	origin_tech = MAGNETS + "=3;" + SYNDICATE + "=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/dualsaber/update_wield(mob/user)
@@ -154,7 +154,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT | TWOHANDABLE
-	origin_tech = MAGNETS + "=3;" + SYNDICATE + "=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/dualsaber/bananabunch/update_wield(mob/user)
@@ -208,7 +208,7 @@
 	sharpness = 2
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
-	origin_tech = MAGNETS + "=4;" + COMBAT + "=5"
+	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
 
 /obj/item/weapon/katana/hfrequency/update_wield(mob/user)
 	..()

@@ -197,7 +197,7 @@
 	singular_name = "glass sheet"
 	icon_state = "sheet-glass"
 	starting_materials = list(MAT_GLASS = 3750)
-	origin_tech = MATERIALS + "=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	rglass = /obj/item/stack/sheet/glass/rglass
 
 /obj/item/stack/sheet/glass/glass/cyborg
@@ -233,7 +233,7 @@
 	created_window = /obj/structure/window/reinforced
 	full_window = /obj/structure/window/full/reinforced
 	windoor = /obj/structure/windoor_assembly/
-	origin_tech = MATERIALS + "=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	reinforced = 1
 	glass_quality = 1
 	shealth = 10
@@ -252,7 +252,7 @@
 	icon_state = "sheet-plasmaglass"
 	sname = "plasma"
 	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
-	origin_tech = MATERIALS + "=3;" + PLASMATECH + "=2"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_PLASMATECH + "=2"
 	created_window = /obj/structure/window/plasma
 	full_window = /obj/structure/window/full/plasma
 	rglass = /obj/item/stack/sheet/glass/plasmarglass
@@ -273,7 +273,7 @@
 	sname = "plasma_ref"
 	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
 	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
-	origin_tech = MATERIALS + "=4;" + PLASMATECH + "=2"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
 	created_window = /obj/structure/window/reinforced/plasma
 	full_window = /obj/structure/window/full/reinforced/plasma
 	windoor = /obj/structure/windoor_assembly/plasma

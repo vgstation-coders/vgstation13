@@ -32,7 +32,7 @@
 	slot_flags = SLOT_BACK
 	throwforce = 3
 	w_class = W_CLASS_LARGE
-	origin_tech = BLUESPACE + "=3;" + MATERIALS + "=3;" + ENGINEERING + "=5"
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=5"
 	var/safety = 0
 	var/primed = 0
 	var/stage = 0

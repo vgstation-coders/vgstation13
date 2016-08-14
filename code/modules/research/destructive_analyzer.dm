@@ -111,4 +111,4 @@ Note: Must be placed within 3 tiles of the R&D Console
 	icon_state = "d20"
 	g_amt = 5000
 	m_amt = 5000
-	origin_tech = MATERIALS + "=5;" + PLASMATECH + "=5;" + SYNDICATE + "=5;" + PROGRAMMING + "=9"*/
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_PLASMATECH + "=5;" + Tc_SYNDICATE + "=5;" + Tc_PROGRAMMING + "=9"*/
