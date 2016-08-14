@@ -583,7 +583,7 @@ var/list/forbidden_varedit_object_types = list(
 	if (verbose)
 		to_chat(src, "Current matrix: a: [M.a], b: [M.b], c: [M.c], d: [M.d], e: [M.e], f: [M.f].")
 
-	var/input = input("Which action do you want to apply to this matrix?") as null|anything in list("Scale", "Translate", "Turn")
+	var/input = input("Which action do you want to apply to this matrix?") as null|anything in list("Scale", "Translate", "Turn", "Manual","Reset")
 	if (!input)
 		return
 
@@ -604,6 +604,22 @@ var/list/forbidden_varedit_object_types = list(
 			var/angle = input("Angle (clockwise)") as num
 
 			M.Turn(angle)
+
+		if ("Reset")
+			M = matrix()
+
+		if ("Manual")
+			var/list/numbers = splittext(input("Enter the matrix components as a comma separated list.") as text|null, ",")
+			if (!numbers || numbers.len != 6)
+				to_chat(src, "Cancelled or not enough arguments provided.")
+
+			else
+				var/list/newnumbers = list()
+				for (var/number in numbers)
+					number = text2num(number)
+					newnumbers += number
+
+				M = matrix(newnumbers[1], newnumbers[2], newnumbers[3], newnumbers[4], newnumbers[5], newnumbers[6])
 
 	if (verbose)
 		to_chat(src, "New matrix: a: [M.a], b: [M.b], c: [M.c], d: [M.d], e: [M.e], f: [M.f].")
