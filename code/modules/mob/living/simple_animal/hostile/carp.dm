@@ -137,7 +137,7 @@
 /mob/living/simple_animal/hostile/carp/baby/attackby(obj/W, mob/user)
 	..()
 
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks))
+	if(!isDead() && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
 		if((F.food_flags & FOOD_MEAT) && (growth_stage < req_growth_to_grow_up)) //Any meaty dish goes!
