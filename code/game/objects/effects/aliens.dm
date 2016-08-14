@@ -360,7 +360,8 @@
 	density = 0
 	opacity = 0
 	anchored = 1
-
+	layer = ABOVE_DOOR_LAYER
+	
 	var/atom/target
 	var/ticks = 0
 	var/target_strength = 0
