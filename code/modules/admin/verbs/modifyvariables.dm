@@ -367,6 +367,10 @@ var/list/forbidden_varedit_object_types = list(
 				var_value = "[bicon(var_value)]"
 				class = "icon"
 
+			else if(ismatrix(var_value))
+				to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
+				class = "matrix"
+
 			else if(istype(var_value,/atom) || istype(var_value,/datum))
 				to_chat(usr, "Variable appears to be <b>TYPE</b>.")
 				class = "type"
@@ -423,6 +427,10 @@ var/list/forbidden_varedit_object_types = list(
 			var_value = "[bicon(var_value)]"
 			default = "icon"
 
+		else if(ismatrix(var_value))
+			to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
+			default = "matrix"
+
 		else if(istype(var_value,/atom) || istype(var_value,/datum))
 			to_chat(usr, "Variable appears to be <b>TYPE</b>.")
 			default = "type"
@@ -465,10 +473,10 @@ var/list/forbidden_varedit_object_types = list(
 
 		if(src.holder && src.holder.marked_datum)
 			class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-				"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
+				"num","type","reference","mob reference", "icon","file","list","matrix","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
 		else
 			class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-				"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default")
+				"num","type","reference","mob reference", "icon","file","list","matrix","edit referenced object","restore to default")
 
 		if(!class)
 			return
@@ -560,7 +568,60 @@ var/list/forbidden_varedit_object_types = list(
 		if("marked datum")
 			O.vars[variable] = holder.marked_datum
 
+		if("matrix")
+			var/matrix/var_new = modify_matrix_menu(O.vars[variable])
+			if (!var_new)
+				return
+
+			O.vars[variable] = var_new
+
 	world.log << "### VarEdit by [src]: [O.type] [variable]=[html_encode("[O.vars[variable]]")]"
 	log_admin("[key_name(src)] modified [original_name]'s [variable] to [O.vars[variable]]")
 	message_admins("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1)
 
+/client/proc/modify_matrix_menu(var/matrix/M = matrix(), var/verbose = TRUE)
+	if (verbose)
+		to_chat(src, "Current matrix: a: [M.a], b: [M.b], c: [M.c], d: [M.d], e: [M.e], f: [M.f].")
+
+	var/input = input("Which action do you want to apply to this matrix?") as null|anything in list("Scale", "Translate", "Turn", "Manual","Reset")
+	if (!input)
+		return
+
+	switch (input)
+		if ("Scale")
+			var/x = input("X scale") as num
+			var/y = input("Y scale") as num
+
+			M.Scale(x, y)
+
+		if ("Translate")
+			var/x = input("X amount") as num
+			var/y = input("Y amount") as num
+
+			M.Translate(x, y)
+
+		if ("Turn")
+			var/angle = input("Angle (clockwise)") as num
+
+			M.Turn(angle)
+
+		if ("Reset")
+			M = matrix()
+
+		if ("Manual")
+			var/list/numbers = splittext(input("Enter the matrix components as a comma separated list.") as text|null, ",")
+			if (!numbers || numbers.len != 6)
+				to_chat(src, "Cancelled or not enough arguments provided.")
+
+			else
+				var/list/newnumbers = list()
+				for (var/number in numbers)
+					number = text2num(number) || 0
+					newnumbers += number
+
+				M = matrix(newnumbers[1], newnumbers[2], newnumbers[3], newnumbers[4], newnumbers[5], newnumbers[6])
+
+	if (verbose)
+		to_chat(src, "New matrix: a: [M.a], b: [M.b], c: [M.c], d: [M.d], e: [M.e], f: [M.f].")
+
+	return M
