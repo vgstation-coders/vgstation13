@@ -241,6 +241,7 @@
 	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
 
 /obj/structure/falserwall/New()
+	relativewall()
 	relativewall_neighbours()
 	..()
 
