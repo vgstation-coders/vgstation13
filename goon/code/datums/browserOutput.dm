@@ -5,6 +5,7 @@ For the main html chat area
 /var/list/chatResources = list(
 	"code/modules/html_interface/jquery.min.js",
 	"goon/browserassets/js/json2.min.js",
+	"goon/browserassets/js/jquery.mark.min.js",
 	"goon/browserassets/js/browserOutput.js",
 	"goon/browserassets/css/fonts/fontawesome-webfont.eot",
 	"goon/browserassets/css/fonts/fontawesome-webfont.svg",
