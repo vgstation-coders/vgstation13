@@ -73,3 +73,18 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 /spell/aoe_turf/conjure/proc/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	qdel(animation)
 	animation = null
+
+/spell/aoe_turf/conjure/choice
+	var/input_message = "What would you like to spawn?"
+	var/input_title = "Spawn Object"
+
+//Summoned type should be formatted an associated list of "Choice name" = Choicepath
+
+/spell/aoe_turf/conjure/choice/cast(list/targets, mob/user)
+	var/choice = input(input_message, input_title) as null|anything in summon_type
+	if(!choice)
+		return
+	var/list/all_summons = summon_type
+	summon_type = list(summon_type[choice])
+	..()
+	summon_type = all_summons

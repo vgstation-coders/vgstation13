@@ -22,7 +22,6 @@
 	if(src.name == "alien drone")
 		src.name = text("alien drone ([rand(1, 1000)])")
 	src.real_name = src.name
-	verbs.Add(/mob/living/carbon/alien/humanoid/proc/resin,/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]

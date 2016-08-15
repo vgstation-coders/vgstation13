@@ -40,7 +40,9 @@ Aoe turf spells have two useful flags: IGNOREDENSE and IGNORESPACE. These are ex
 		invocation(user, targets)
 		take_charge(user, skipcharge)
 
-		before_cast(targets)
+		targets = before_cast(targets)
+		if(!targets.len)
+			return
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
 		if(prob(critfailchance))
 			critfail(targets, user)

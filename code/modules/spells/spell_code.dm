@@ -17,7 +17,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
-	var/holder_var_amount = 20 //same. The amount adjusted with the mob's var when the spell is used
+	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
 	var/datum/special_var_holder //if a holder var is stored on a different object or a datum
 
 	var/spell_flags = NEEDSCLOTHES
@@ -118,10 +118,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!cast_check(skipcharge, user))
 		return //Prevent queueing of spells by opening several choose target windows.
 	if(targets && targets.len)
+		targets = before_cast(targets) //applies any overlays and effects
+		if(!targets.len) //before cast has rechecked what we can target
+			return
 		invocation(user, targets)
 		take_charge(user, skipcharge)
 
-		before_cast(targets) //applies any overlays and effects
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -166,7 +168,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
 	if(cast_check(1, holder) && is_valid_target(A))
-		before_cast(target)
+		target = before_cast(target) //applies any overlays and effects
+		if(!target.len) //before cast has rechecked what we can target
+			return
 		if(prob(critfailchance))
 			critfail(target, holder)
 		else
@@ -184,12 +188,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow
 	return
 
-/spell/proc/adjust_var(mob/living/target = usr, type, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
-	var/variable = target.vars[type]
+/spell/proc/adjust_var(mob/living/target = usr, varname, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
+	var/variable = target.vars[varname]
 	if(!isnum(variable) && !isnull(variable))
-		world.log << "Spell [type] of user [usr] adjusting non-numeric value on [target], aborting"
+		world.log << "Spell [varname] of user [usr] adjusting non-numeric value on [target], aborting"
 		return
-	switch(type)
+	switch(varname)
 		if("bruteloss")
 			target.adjustBruteLoss(amount)
 		if("fireloss")
@@ -205,8 +209,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if("paralysis")
 			target.AdjustParalysis(amount)
 		else
-			target.vars[type] += amount //I bear no responsibility for the runtimes that'll happen if you try to adjust non-numeric or even non-existant vars
-	return
+			target.vars[varname] -= amount //I bear no responsibility for the runtimes that'll happen if you try to adjust non-numeric or even non-existant vars
 
 ///////////////////////////
 /////CASTING WRAPPERS//////
@@ -214,9 +217,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/before_cast(list/targets)
 	var/valid_targets[0]
+	var/list/options = view_or_range(range,usr,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
-		if(!(target in view_or_range(range,usr,selection_type)))
+		if(!(target in options))
 			continue
 
 		valid_targets += target
@@ -323,44 +327,38 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/check_charge(var/skipcharge, mob/user)
 	if(!skipcharge)
-		switch(charge_type)
-			if(Sp_RECHARGE)
-				if(charge_counter < charge_max)
+		if(charge_type & Sp_RECHARGE)
+			if(charge_counter < charge_max)
+				to_chat(user, still_recharging_msg)
+				return 0
+		if(charge_type & Sp_CHARGES)
+			if(!charge_counter)
+				to_chat(user, "<span class='notice'>[name] has no charges left.</span>")
+				return 0
+		if(charge_type & Sp_HOLDVAR)
+			if(special_var_holder)
+				if(special_var_holder.vars[holder_var_type] < holder_var_amount)
 					to_chat(user, still_recharging_msg)
 					return 0
-			if(Sp_CHARGES)
-				if(!charge_counter)
-					to_chat(user, "<span class='notice'>[name] has no charges left.</span>")
+			else
+				if(user.vars[holder_var_type] < holder_var_amount)
+					to_chat(user, still_recharging_msg)
 					return 0
-			if(Sp_HOLDVAR)
-				if(special_var_holder)
-					if(special_var_holder.vars[type] < holder_var_amount)
-						to_chat(user, still_recharging_msg)
-						return 0
-				else
-					if(user.vars[type] < holder_var_amount)
-						to_chat(user, still_recharging_msg)
-						return 0
 	return 1
 
 /spell/proc/take_charge(mob/user = user, var/skipcharge)
 	if(!skipcharge)
-		switch(charge_type)
-			if(Sp_RECHARGE)
-				charge_counter = 0 //doesn't start recharging until the targets selecting ends
-				src.process()
-				return 1
-			if(Sp_CHARGES)
-				charge_counter-- //returns the charge if the targets selecting fails
-				return 1
-			if(Sp_HOLDVAR)
-				if(special_var_holder)
-					adjust_var(special_var_holder, holder_var_type, holder_var_amount)
-				else
-					adjust_var(user, holder_var_type, holder_var_amount)
-				return 1
-		return 0
-	return 1
+		if(charge_type & Sp_RECHARGE)
+			charge_counter = 0 //doesn't start recharging until the targets selecting ends
+			src.process()
+		if(charge_type & Sp_CHARGES)
+			charge_counter-- //returns the charge if the targets selecting fails
+		if(charge_type & Sp_HOLDVAR)
+			if(special_var_holder)
+				adjust_var(special_var_holder, holder_var_type, holder_var_amount)
+			else
+				adjust_var(user, holder_var_type, holder_var_amount)
+
 
 /spell/proc/invocation(mob/user = usr, var/list/targets) //spelling the spell out and setting it on recharge/reducing charges amount
 

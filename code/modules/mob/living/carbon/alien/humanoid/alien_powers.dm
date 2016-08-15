@@ -22,6 +22,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Plant Weeds"
 	desc = "Plants some alien weeds"
 	panel = "Alien"
+	hud_state = "alienweeds"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "storedPlasma"
@@ -34,10 +35,11 @@ Doesn't work on other aliens/AI.*/
 
 	summon_type = list(/obj/effect/alien/weeds/node)
 
-/spell/aoe_turf/conjure/alienweeds/cast(var/list/targets, mob/user)
-	..()
-//	user.adjustToxLoss(-50)
-
+/spell/aoe_turf/conjure/alienegg/before_cast(list/targets)
+	if(locate(/obj/effect/alien/egg) in targets[1])
+		to_chat(src, "<span class='warning'>There's already a weed here.</span>")
+		return 0
+	return targets
 
 /*
 /mob/living/carbon/alien/humanoid/verb/ActivateHuggers()
@@ -57,6 +59,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Whisper"
 	desc = "Whisper to someone"
 	panel = "Alien"
+	hud_state = "alienwhisper"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "storedPlasma"
@@ -94,12 +97,12 @@ Doesn't work on other aliens/AI.*/
 		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Alien Whisper: [storedmessage]")
 		to_chat(M, "<span class='alien'>You hear a strange, alien voice in your head... <em>[storedmessage]</span></em>")
 		to_chat(src, "<span class='alien'>You said: [storedmessage] to [M]</span>")
-//	user.adjustToxLoss(-10)
 
 /spell/targeted/alientransferplasma
 	name = "Transfer Plasma"
 	desc = "Transfer your plasma to another alien"
 	panel = "Alien"
+	hud_state = "alientransfer"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "storedPlasma"
@@ -107,24 +110,20 @@ Doesn't work on other aliens/AI.*/
 	range = 2
 	compatible_mobs = list(/mob/living/carbon/alien)
 
-
 //Does it take charge before casting? How to transfer to new alien
 /spell/targeted/alientransferplasma/cast(var/list/targets, mob/user)
 	var/mob/living/carbon/alien/M = targets[1]
-	var/amount = input("Amount:", "Transfer Plasma to [M]") as num
+	var/amount = input(user, "Amount:", "Transfer Plasma to [M]") as num
 	if(amount)
 		amount = abs(round(amount))
 		holder_var_amount = amount
 		if(check_charge(user = user))
-			M.adjustToxLoss(amount)
-//			user.adjustToxLoss(-amount)
 			take_charge(user = user)
 			to_chat(M, "<span class='alien'>\The [src] has transfered [amount] plasma to you.</span>")
 			to_chat(src, "<span class='alien'>You have trasferred [amount] plasma to [M]</span>")
 		else
 			to_chat(src, "<span class='alien'>You need to be closer.</span>")
 	holder_var_amount = 0
-	return
 
 
 /mob/living/carbon/alien/humanoid/proc/corrosive_acid(O as obj|turf in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
@@ -154,65 +153,79 @@ Doesn't work on other aliens/AI.*/
 			else // Not a type we can acid.
 				return
 
-			adjustToxLoss(-200)
 			new /obj/effect/alien/acid(get_turf(O), O)
 			visible_message("<span class='alien'>\The [src] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
 		else
 			to_chat(src, "<span class='alien'>Target is too far away.</span>")
-	return
 
+/spell/targeted/alienneurotoxin
+	name = "Spit Neurotoxin"
+	desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
+	panel = "Alien"
+	hud_state = "alienneurotoxin"
 
-/mob/living/carbon/alien/humanoid/proc/neurotoxin(mob/target as mob in oview())
-	set name = "Spit Neurotoxin (50)"
-	set desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
-	set category = "Alien"
-	if(neurotoxin_cooldown)
-		to_chat(src, "<span class='alien'>You aren't ready to spit more neurotoxin yet.")
+	charge_type = Sp_HOLDVAR|Sp_RECHARGE
+	holder_var_type = "storedPlasma"
+	holder_var_amount = 50
+	charge_max = 50
+
+	range = 7
+	spell_flags = WAIT_FOR_CLICK
+
+/spell/targeted/alienneurotoxin/is_valid_target(var/target)
+	if(!(spell_flags & INCLUDEUSER) && target == usr)
+		return 0
+	if(get_dist(usr, target) > range)
+		return 0
+	if(isalien(target))
+		to_chat(src, "<span class='alien'>Your allies are not valid targets.</span>")
+		return 0
+	return istype(target, /mob/living)
+
+/spell/targeted/alienneurotoxinproc/cast(list/targets, mob/user)
+	var/mob/living/target = targets[1]
+	playsound(get_turf(src), 'sound/weapons/pierce.ogg', 30, 1)
+	user.visible_message("<span class='alien'>\The [src] spits neurotoxin at [target] !</span>", "<span class='alien'>You spit neurotoxin at [target] !</span>")
+
+	var/turf/T = get_turf(src)
+	var/turf/U = get_turf(target)
+
+	if(!U || !T)
 		return
-	if(powerc(50))
-		if(isalien(target))
-			to_chat(src, "<span class='alien'>Your allies are not valid targets.</span>")
-			return
-		adjustToxLoss(-50)
-		playsound(get_turf(src), 'sound/weapons/pierce.ogg', 30, 1)
-		visible_message("<span class='alien'>\The [src] spits neurotoxin at [target] !</span>", "<span class='alien'>You spit neurotoxin at [target] !</span>")
-		//I'm not motivated enough to revise this. Prjectile code in general needs update.
-		var/turf/T = get_turf(src)
-		var/turf/U = get_turf(target)
+	if(U == T)
+		usr.bullet_act(new /obj/item/projectile/energy/neurotoxin(usr.loc)/*, get_organ_target()*/)
+		return
 
-		if(!U || !T)
-			return
-		while(U && !istype(U,/turf))
-			U = U.loc
-		if(!istype(T, /turf))
-			return
-		if (U == T)
-			usr.bullet_act(new /obj/item/projectile/energy/neurotoxin(usr.loc), get_organ_target())
-			return
-		if(!istype(U, /turf))
-			return
+	var/obj/item/projectile/energy/neurotoxin/A = new /obj/item/projectile/energy/neurotoxin(usr.loc)
+	A.original = target
+	A.target = U
+	A.current = T
+	A.starting = T
+	A.yo = U.y - T.y
+	A.xo = U.x - T.x
+	spawn()
+		A.OnFired()
+		A.process()
 
-		var/obj/item/projectile/energy/neurotoxin/A = new /obj/item/projectile/energy/neurotoxin(usr.loc)
-		A.original = target
-		A.target = U
-		A.current = T
-		A.starting = T
-		A.yo = U.y - T.y
-		A.xo = U.x - T.x
-		spawn()
-			A.OnFired()
-			A.process()
-		neurotoxin_cooldown = 1
-		spawn(50)
-			neurotoxin_cooldown = 0
+/spell/aoe_turf/conjure/choice/alienresin
+	name = "Secrete Resin"
+	desc = "Secrete tough malleable resin."
+	panel = "Alien"
+	hud_state = "alienresin"
 
-	return
+	charge_type = Sp_HOLDVAR
+	holder_var_type = "storedPlasma"
+	holder_var_amount = 75
 
-/mob/living/carbon/alien/humanoid/proc/resin() // -- TLE
-	set name = "Secrete Resin (75)"
-	set desc = "Secrete tough malleable resin."
-	set category = "Alien"
+	spell_flags = IGNORESPACE
 
+	invocation = "<span class='alien'>The alien vomits up a thick purple substance and shapes it into some form of resin structure!</span>"
+	invocation_type = SpI_VISIBLEMESSAGE
+	summon_type = list("Resin Door" = /obj/machinery/door/mineral/resin,"Resin Wall" = /obj/effect/alien/resin/wall,"Resin Membrane" = /obj/effect/alien/resin/membrane,"Resin Nest" = /obj/structure/bed/nest)
+
+//		visible_message("<span class='alien'>\The [src] vomits up a thick purple substance and shapes it into some form of resin structure!</span>", "<span class='alien'>You shape a [choice]</span>")
+
+<<<<<<< 35d066db50378c75da88d77804ee180b538a9acd
 	if(powerc(75))
 		var/choice = input("Choose what you wish to shape.","Resin building") as null|anything in list("resin door","resin wall","resin membrane","resin nest") //would do it through typesof but then the player choice would have the type path and we don't want the internal workings to be exposed ICly - Urist
 		if(!choice || !powerc(75))
@@ -229,6 +242,8 @@ Doesn't work on other aliens/AI.*/
 			if("resin nest")
 				new /obj/structure/bed/nest(loc)
 	return
+=======
+>>>>>>> 0c7a437f4298db926e05db6d7fb76efdbace8fd9
 
 /mob/living/carbon/alien/humanoid/verb/regurgitate()
 	set name = "Regurgitate"

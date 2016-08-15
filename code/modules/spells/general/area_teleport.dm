@@ -19,8 +19,8 @@
 
 	hud_state = "wiz_tele"
 
-/spell/area_teleport/before_cast()
-	return
+/spell/area_teleport/before_cast(list/targets)
+	return targets
 
 /spell/area_teleport/choose_targets()
 	var/A = null

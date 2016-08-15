@@ -1242,9 +1242,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define Sp_TOTAL	"total"
 
 //casting costs
-#define Sp_RECHARGE	"recharge"
-#define Sp_CHARGES	"charges"
-#define Sp_HOLDVAR	"holdervar"
+#define Sp_RECHARGE	1
+#define Sp_CHARGES	2
+#define Sp_HOLDVAR	4
 
 ///////WIZ END/////////
 

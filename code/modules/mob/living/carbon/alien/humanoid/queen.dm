@@ -31,7 +31,6 @@
 			break
 
 	real_name = src.name
-	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid,/mob/living/carbon/alien/humanoid/proc/neurotoxin,/mob/living/carbon/alien/humanoid/proc/resin)
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
@@ -62,26 +61,32 @@
 			else
 				src.healths.icon_state = "health6"
 
+/spell/aoe_turf/conjure/alienegg
+	name = "Lay Egg"
+	desc = "Lay an egg to produce huggers to impregnate prey with."
+	panel = "Alien"
+	hud_state = "alienegg"
 
-//Queen verbs
-/mob/living/carbon/alien/humanoid/queen/verb/lay_egg()
+	charge_type = Sp_HOLDVAR
+	holder_var_type = "storedPlasma"
+	holder_var_amount = 75
 
+	spell_flags = IGNORESPACE
 
-	set name = "Lay Egg (75)"
-	set desc = "Lay an egg to produce huggers to impregnate prey with."
-	set category = "Alien"
+	invocation = "<span class='alien'>The alien has laid an egg!</span>"
+	invocation_type = SpI_VISIBLEMESSAGE
 
-	if(locate(/obj/effect/alien/egg) in get_turf(src))
+	summon_type = list(/obj/effect/alien/egg)
+
+/spell/aoe_turf/conjure/alienegg/before_cast(list/targets)
+	if(locate(/obj/effect/alien/egg) in targets[1])
 		to_chat(src, "<span class='warning'>There's already an egg here.</span>")
-		return
+		return 0
+	return targets
 
-	if(powerc(75, 1))//Can't plant eggs on spess tiles. That's silly.
-		adjustToxLoss(-75)
-		visible_message("<span class='alien'>[src] has laid an egg!</span>")
-		stat_collection.xeno.eggs_laid++
-		new /obj/effect/alien/egg(loc)
-	return
-
+/spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
+	..()
+	stat_collection.xeno.eggs_laid++
 
 /mob/living/carbon/alien/humanoid/queen/large
 	icon = 'icons/mob/giantmobs.dmi'
