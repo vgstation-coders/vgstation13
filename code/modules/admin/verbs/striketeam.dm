@@ -59,7 +59,8 @@ var/global/sent_strike_team = 0
 
 //Spawns commandos and equips them.
 	for(var/obj/effect/landmark/L in landmarks_list)
-		if(commando_number<=0)	break
+		if(commando_number<=0)
+			break
 		if (L.name == "Commando")
 			leader_selected = commando_number == 1?1:0
 

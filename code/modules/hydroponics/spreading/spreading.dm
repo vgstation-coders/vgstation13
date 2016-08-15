@@ -86,15 +86,23 @@
 
 /obj/effect/plantsegment/examine(mob/user)
 	..()
-	if(!seed) return
+	if(!seed)
+		return
 	var/traits = ""
-	if(seed.carnivorous == 2) traits += "<span class='alert'>It's quivering viciously.</span> "
-	if(seed.stinging) traits += "<span class='alert'>It's covered in tiny stingers.</span> "
-	if(seed.thorny) traits += "<span class='alert'>It's covered in sharp thorns.</span> "
-	if(seed.ligneous) traits += "It's a tough and hard vine that can't be easily cut. "
-	if(seed.hematophage) traits += "It's roots are blood red... "
-	if(src.harvest) traits += "It has some [seed.seed_name]s ready to grab."
-	if(traits) to_chat(user, traits)
+	if(seed.carnivorous == 2)
+		traits += "<span class='alert'>It's quivering viciously.</span> "
+	if(seed.stinging)
+		traits += "<span class='alert'>It's covered in tiny stingers.</span> "
+	if(seed.thorny)
+		traits += "<span class='alert'>It's covered in sharp thorns.</span> "
+	if(seed.ligneous)
+		traits += "It's a tough and hard vine that can't be easily cut. "
+	if(seed.hematophage)
+		traits += "It's roots are blood red... "
+	if(src.harvest)
+		traits += "It has some [seed.seed_name]s ready to grab."
+	if(traits)
+		to_chat(user, traits)
 
 /obj/effect/plantsegment/update_icon()
 	var/arbitrary_measurement_of_how_lush_I_am_right_now // a post-mortem dedication to Comic
@@ -128,10 +136,12 @@
 			src.opacity = 0
 		if(3)
 			icon_state = "Hvy[rand(1,3)]"
-			if(!limited_growth) src.opacity = 1
+			if(!limited_growth)
+				src.opacity = 1
 		if(4)
 			icon_state = "Hvst[rand(1,3)]"
-			if(!limited_growth) src.opacity = 1
+			if(!limited_growth)
+				src.opacity = 1
 
 	// Apply colour and light from seed datum.
 	if(seed.biolum && seed.biolum_colour && is_mature())
@@ -173,7 +183,8 @@
 		user.delayNextAttack(10)
 
 /obj/effect/plantsegment/proc/take_damage(var/obj/item/weapon/W)
-	if(!W.force) return 0
+	if(!W.force)
+		return 0
 	var/dmg = W.force
 	if(W.is_hot() || (W.is_sharp() && !seed.ligneous))
 		dmg = dmg*4

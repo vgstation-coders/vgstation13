@@ -14,7 +14,8 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
-	if(control_disabled || stat) return
+	if(control_disabled || stat)
+		return
 
 	if(ismob(A))
 		ai_actual_track(A)

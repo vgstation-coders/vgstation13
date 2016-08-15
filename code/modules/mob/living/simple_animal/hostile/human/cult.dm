@@ -62,7 +62,8 @@
 
 /mob/living/simple_animal/hostile/humanoid/cult/priest/Shoot()
 	var/mob/living/L = target
-	if(L.isUnconscious()) return
+	if(L.isUnconscious())
+		return
 
 	switch(rand(0,2))
 		if(0) //damage
@@ -72,7 +73,8 @@
 			L.adjustBruteLoss(dmg)
 		if(1) //deaf
 			var/mob/living/carbon/human/H = L
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 
 			H.ear_damage += rand(1, 3)
 

@@ -107,7 +107,8 @@ In short:
 	var/count = 0
 	for(var/turf/T in turfs)
 		count++
-		if(!(count % 50000)) sleep(world.tick_lag)
+		if(!(count % 50000))
+			sleep(world.tick_lag)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else

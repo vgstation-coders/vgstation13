@@ -21,9 +21,12 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(stat & (BROKEN|NOPOWER)) return
-	if((user.stat && !isobserver(user)) || user.restrained()) return
-	if(!chemical_reagents_list || !chemical_reagents_list.len) return
+	if(stat & (BROKEN|NOPOWER))
+		return
+	if((user.stat && !isobserver(user)) || user.restrained())
+		return
+	if(!chemical_reagents_list || !chemical_reagents_list.len)
+		return
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["isBeakerLoaded"] = beaker ? 1 : 0

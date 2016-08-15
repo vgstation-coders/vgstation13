@@ -12,7 +12,8 @@
 	var/stomp_attack_power = 20
 
 /obj/item/clothing/shoes/magboots/on_kick(mob/living/carbon/human/user, mob/living/victim)
-	if(!stomp_attack_power) return
+	if(!stomp_attack_power)
+		return
 
 	var/turf/T = get_turf(src)
 	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
@@ -22,8 +23,10 @@
 		toggle()
 
 		if(do_after(user, src, 3 SECONDS))
-			if(magpulse) return //Magboots enabled
-			if(!victim.lying || (victim.loc != T)) return //Victim moved
+			if(magpulse)
+				return //Magboots enabled
+			if(!victim.lying || (victim.loc != T))
+				return //Victim moved
 			if(locate(/obj/structure/table) in T) //Can't curbstomp on a table
 				to_chat(user, "<span class='info'>There is a table in the way!</span>")
 				return

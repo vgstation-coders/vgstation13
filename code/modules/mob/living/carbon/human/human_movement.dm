@@ -1,7 +1,9 @@
 /mob/living/carbon/human/movement_delay()
-	if(istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
+	if(istype(loc, /turf/space))
+		return -1 // It's hard to be slowed down in space by... anything
 
-	if(flying) return -1
+	if(flying)
+		return -1
 
 	var/tally = 0
 
@@ -25,15 +27,19 @@
 
 	//(/vg/ EDIT disabling for now) handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
 
-	if(reagents.has_reagent(NUKA_COLA)) tally -= 10
+	if(reagents.has_reagent(NUKA_COLA))
+		tally -= 10
 
-	if((M_RUN in mutations)) tally -= 10
+	if((M_RUN in mutations))
+		tally -= 10
 
 	var/health_deficiency = (100 - health - halloss)
-	if(health_deficiency >= 40) tally += (health_deficiency / 25)
+	if(health_deficiency >= 40)
+		tally += (health_deficiency / 25)
 
 	var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
-	if (hungry >= 70) tally += hungry/50
+	if (hungry >= 70)
+		tally += hungry/50
 
 	if(wear_suit)
 		tally += wear_suit.slowdown
@@ -54,7 +60,8 @@
 		else if(E.status & ORGAN_BROKEN)
 			tally += 1.5
 
-	if(shock_stage >= 50) tally += 3
+	if(shock_stage >= 50)
+		tally += 3
 
 	if(M_FAT in src.mutations)
 		tally += 1.5
@@ -79,7 +86,8 @@
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act
-	if(restrained())	return 0
+	if(restrained())
+		return 0
 
 	//Do we have a working jetpack
 	if(istype(back, /obj/item/weapon/tank/jetpack))
@@ -124,7 +132,8 @@
 		return 0*/
 
 	if(.)
-		if (old_z != src.z) crewmonitor.queueUpdate(old_z)
+		if (old_z != src.z)
+			crewmonitor.queueUpdate(old_z)
 		crewmonitor.queueUpdate(src.z)
 
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))

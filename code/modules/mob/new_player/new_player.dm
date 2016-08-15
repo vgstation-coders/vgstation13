@@ -27,8 +27,10 @@
 	output += {"<hr>
 		<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
-		if(!ready)	output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
-		else	output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
+		if(!ready)
+			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
+		else
+			output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
 
 	else
 		ready = 0 // prevent setup character issues
@@ -89,7 +91,8 @@
 			for(var/mob/new_player/player in player_list)
 				stat("[player.key]", (player.ready)?("(Playing)"):(null))
 				totalPlayers++
-				if(player.ready)totalPlayersReady++
+				if(player.ready)
+					totalPlayersReady++
 
 /mob/new_player/Topic(href, href_list[])
 	//var/timestart = world.timeofday
@@ -97,7 +100,8 @@
 	if(usr != src)
 		return 0
 
-	if(!client)	return 0
+	if(!client)
+		return 0
 
 	if(href_list["show_preferences"])
 		if(!client.prefs.saveloaded)
@@ -129,7 +133,8 @@
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 			return
 		if(alert(src,"Are you sure you wish to observe? You will not be able to play this round!","Player Setup","Yes","No") == "Yes")
-			if(!client)	return 1
+			if(!client)
+				return 1
 			sleep(1)
 			var/mob/dead/observer/observer = new()
 
@@ -252,10 +257,14 @@
 
 /mob/new_player/proc/IsJobAvailable(rank)
 	var/datum/job/job = job_master.GetJob(rank)
-	if(!job)	return 0
-	if((job.current_positions >= job.total_positions) && job.total_positions != -1)	return 0
-	if(jobban_isbanned(src,rank))	return 0
-	if(!job.player_old_enough(src.client))	return 0
+	if(!job)
+		return 0
+	if((job.current_positions >= job.total_positions) && job.total_positions != -1)
+		return 0
+	if(jobban_isbanned(src,rank))
+		return 0
+	if(!job.player_old_enough(src.client))
+		return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")
@@ -300,7 +309,8 @@
 	job_master.AssignRole(src, rank, 1)
 
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
-	if(character.client.prefs.randomslot) character.client.prefs.random_character_sqlite(character, character.ckey)
+	if(character.client.prefs.randomslot)
+		character.client.prefs.random_character_sqlite(character, character.ckey)
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
 

@@ -22,8 +22,10 @@
 		else
 			if(istype(T,/turf/simulated))
 				continue
-		if(cp<minp)minp=cp
-		if(cp>maxp)maxp=cp
+		if(cp<minp)
+			minp=cp
+		if(cp>maxp)
+			maxp=cp
 	return abs(minp-maxp)
 
 /**
@@ -41,8 +43,10 @@
 		else
 			if(istype(T,/turf/simulated))
 				continue
-		if(cp<minp)minp=cp
-		if(cp>maxp)maxp=cp
+		if(cp<minp)
+			minp=cp
+		if(cp>maxp)
+			maxp=cp
 	return abs(minp-maxp)
 
 

@@ -15,7 +15,8 @@
 
 /obj/item/clothing/monkeyclothes/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
-	if(!.) return //Well if it already can't be equipped, we've got nothing else to do here folks, time to call it quits
+	if(!.)
+		return //Well if it already can't be equipped, we've got nothing else to do here folks, time to call it quits
 
 	if(!ismonkey(M))
 		if(!disable_warning)

@@ -9,12 +9,14 @@
 	standard 0 if fail
 */
 /mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null)
-	if(!damage || (blocked >= 2))	return 0
+	if(!damage || (blocked >= 2))
+		return 0
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage/(blocked+1))
 		if(BURN)
-			if(M_RESIST_HEAT in mutations)	damage = 0
+			if(M_RESIST_HEAT in mutations)
+				damage = 0
 			adjustFireLoss(damage/(blocked+1))
 		if(TOX)
 			adjustToxLoss(damage/(blocked+1))
@@ -29,19 +31,27 @@
 
 
 /mob/living/proc/apply_damages(var/brute = 0, var/burn = 0, var/tox = 0, var/oxy = 0, var/clone = 0, var/halloss = 0, var/def_zone = null, var/blocked = 0)
-	if(blocked >= 2)	return 0
-	if(brute)	apply_damage(brute, BRUTE, def_zone, blocked)
-	if(burn)	apply_damage(burn, BURN, def_zone, blocked)
-	if(tox)		apply_damage(tox, TOX, def_zone, blocked)
-	if(oxy)		apply_damage(oxy, OXY, def_zone, blocked)
-	if(clone)	apply_damage(clone, CLONE, def_zone, blocked)
-	if(halloss) apply_damage(halloss, HALLOSS, def_zone, blocked)
+	if(blocked >= 2)
+		return 0
+	if(brute)
+		apply_damage(brute, BRUTE, def_zone, blocked)
+	if(burn)
+		apply_damage(burn, BURN, def_zone, blocked)
+	if(tox)
+		apply_damage(tox, TOX, def_zone, blocked)
+	if(oxy)
+		apply_damage(oxy, OXY, def_zone, blocked)
+	if(clone)
+		apply_damage(clone, CLONE, def_zone, blocked)
+	if(halloss)
+		apply_damage(halloss, HALLOSS, def_zone, blocked)
 	return 1
 
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
-	if(!effect || (blocked >= 2))	return 0
+	if(!effect || (blocked >= 2))
+		return 0
 	var/altered = 0
 	switch(effecttype)
 		if(STUN)
@@ -74,15 +84,24 @@
 
 
 /mob/living/proc/apply_effects(var/stun = 0, var/weaken = 0, var/paralyze = 0, var/irradiate = 0, var/stutter = 0, var/eyeblur = 0, var/drowsy = 0, var/agony = 0, var/blocked = 0)
-	if(blocked >= 2)	return 0
-	if(stun)		apply_effect(stun, STUN, blocked)
-	if(weaken)		apply_effect(weaken, WEAKEN, blocked)
-	if(paralyze)	apply_effect(paralyze, PARALYZE, blocked)
-	if(irradiate)	apply_effect(irradiate, IRRADIATE, blocked)
-	if(stutter)		apply_effect(stutter, STUTTER, blocked)
-	if(eyeblur)		apply_effect(eyeblur, EYE_BLUR, blocked)
-	if(drowsy)		apply_effect(drowsy, DROWSY, blocked)
-	if(agony)		apply_effect(agony, AGONY, blocked)
+	if(blocked >= 2)
+		return 0
+	if(stun)
+		apply_effect(stun, STUN, blocked)
+	if(weaken)
+		apply_effect(weaken, WEAKEN, blocked)
+	if(paralyze)
+		apply_effect(paralyze, PARALYZE, blocked)
+	if(irradiate)
+		apply_effect(irradiate, IRRADIATE, blocked)
+	if(stutter)
+		apply_effect(stutter, STUTTER, blocked)
+	if(eyeblur)
+		apply_effect(eyeblur, EYE_BLUR, blocked)
+	if(drowsy)
+		apply_effect(drowsy, DROWSY, blocked)
+	if(agony)
+		apply_effect(agony, AGONY, blocked)
 	return 1
 
 /mob/living/ashify()

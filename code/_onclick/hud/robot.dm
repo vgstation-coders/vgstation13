@@ -169,7 +169,8 @@
 	return
 
 /datum/hud/proc/toggle_show_robot_modules()
-	if(!isrobot(mymob)) return
+	if(!isrobot(mymob))
+		return
 
 	var/mob/living/silicon/robot/r = mymob
 
@@ -177,7 +178,8 @@
 	update_robot_modules_display()
 
 /datum/hud/proc/update_robot_modules_display()
-	if(!isrobot(mymob) || !mymob.client) return
+	if(!isrobot(mymob) || !mymob.client)
+		return
 
 	var/mob/living/silicon/robot/r = mymob
 

@@ -137,7 +137,8 @@
 				if(prob(50))
 					new /mob/living/simple_animal/hostile/bear(C.loc)
 	var/turf/simulated/TS = get_turf(src)
-	if(!istype(TS))    return
+	if(!istype(TS))
+		return
 	env = TS.return_air()
 	for(var/obj/machinery/alarm/A in get_turf(src))
 		A.stat |= FROZEN
@@ -152,14 +153,17 @@
 
 /obj/structure/snow/cosmic/proc/update_env_air()
 	var/turf/simulated/TS = get_turf(src)
-	if(!istype(TS))	return
+	if(!istype(TS))
+		return
 	env = TS.return_air()
 
 /obj/structure/snow/cosmic/proc/spread()
 	while(src && !src.gcDestroyed)
-		if(snow_tiles >= COSMICFREEZE_END)	return
+		if(snow_tiles >= COSMICFREEZE_END)
+			return
 		update_env_air()
-		if(!env)    return
+		if(!env)
+			return
 		else if(env.temperature > MELTPOINT_SNOW)//above 30?C, the snow melts away)
 			src.snowMelt()
 			return
@@ -167,7 +171,8 @@
 			for(var/i in cardinal)
 				var/turf/T = get_step(src,i)
 				var/datum/gas_mixture/env2 = T.return_air()
-				if(env2.temperature >= MELTPOINT_SNOW)	continue
+				if(env2.temperature >= MELTPOINT_SNOW)
+					continue
 				if(src.canSpreadTo(T))
 					new/obj/structure/snow/cosmic(T)
 
@@ -176,7 +181,8 @@
 
 /obj/structure/snow/cosmic/proc/snowMelt()
 	var/turf/simulated/TS = get_turf(src)
-	if(!istype(TS))    return
+	if(!istype(TS))
+		return
 	TS.wet(300)
 	snow_tiles--
 	qdel(src)
@@ -188,26 +194,33 @@
 //maybe push the delay to something like 50 (or find a way to cut
 //out some of these checks)
 /obj/structure/snow/cosmic/proc/canSpreadTo(turf/T)
-	if(is_type_in_list(T,block_spread_turf)) return 0
-	if(T.density) return 0
+	if(is_type_in_list(T,block_spread_turf))
+		return 0
+	if(T.density)
+		return 0
 
 	for(var/blockingA in block_spread_obj)
-		if(locate(blockingA) in T) return 0
+		if(locate(blockingA) in T)
+			return 0
 
 	for(var/blockingB in block_spread_density)
 		var/obj/BB = (locate(blockingB) in T)
-		if(BB && BB.density) return 0
+		if(BB && BB.density)
+			return 0
 
 	for(var/obj/structure/window/WA in get_turf(src))
-		if(WA.dir & get_dir(get_turf(src),T)) return 0
+		if(WA.dir & get_dir(get_turf(src),T))
+			return 0
 
 	for(var/obj/machinery/door/window/WB in get_turf(src))
 		if((WB.dir & get_dir(get_turf(src),T)) && WB.density)
 			return 0
 
 	for(var/obj/structure/window/WA in T)
-		if(WA.is_fulltile()) return 0
-		if(WA.dir & get_dir(T,get_turf(src))) return 0
+		if(WA.is_fulltile())
+			return 0
+		if(WA.dir & get_dir(T,get_turf(src)))
+			return 0
 
 	for(var/obj/machinery/door/window/WB in T)
 		if((WB.dir & get_dir(T,get_turf(src))) && WB.density)
@@ -217,7 +230,8 @@
 
 /obj/structure/snow/cosmic/proc/chill()
 	while(src && !src.gcDestroyed)
-		if(snow_tiles >= COSMICFREEZE_END)	return
+		if(snow_tiles >= COSMICFREEZE_END)
+			return
 		if(env.temperature > COSMICSNOW_MINIMALTEMP)//the snow will slowly lower the temperature until -40?C.
 			env.temperature -= (0.01 * snow_amount)
 		if(env.temperature < COSMICSNOW_MINIMALTEMP+1)//snow that reached its minimal temperature stops its reaction. should considerably reduce the lag.
@@ -294,7 +308,8 @@
 			S.Retaliate()
 		if(S.bodytemperature >= COSMICSNOW_MINIMALTEMP)
 			S.bodytemperature -= 2
-	else	..()
+	else
+		..()
 
 var/global/list/datum/stack_recipe/snow_recipes = list (
 	new/datum/stack_recipe("snowman", /mob/living/simple_animal/hostile/retaliate/snowman, 10, time = 50, one_per_turf = 0, on_floor = 1),
@@ -584,7 +599,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		for(var/atom/A in T)
 			if(A.density)
 				blocked = 1
-		if(blocked)	continue
+		if(blocked)
+			continue
 
 		for(var/i=1,i<=rand(1,3),i++)
 			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(T,5)

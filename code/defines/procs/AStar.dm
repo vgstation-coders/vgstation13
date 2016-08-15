@@ -252,7 +252,8 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 /proc/LinkBlockedWithAccess(turf/A, turf/B, obj/item/weapon/card/id/ID)
 
 
-	if(A == null || B == null) return 1
+	if(A == null || B == null)
+		return 1
 	var/adir = get_dir(A,B)
 	var/rdir = get_dir(B,A)
 	if(adir & (adir-1))	//	diagonal
@@ -282,9 +283,12 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 // Checks doors against access with given ID
 /proc/DirBlockedWithAccess(turf/loc,var/dir,var/obj/item/weapon/card/id/ID)
 	for(var/obj/structure/window/D in loc)
-		if(!D.density)			continue
-		if(D.dir == SOUTHWEST)	return 1 //full-tile window
-		if(D.dir == dir)		return 1 //matching border window
+		if(!D.density)
+			continue
+		if(D.dir == SOUTHWEST)
+			return 1 //full-tile window
+		if(D.dir == dir)
+			return 1 //matching border window
 
 	for(var/obj/machinery/door/D in loc)
 		if(!D.CanAStarPass(ID,dir))
@@ -309,8 +313,10 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 
 		return 1
 
-	if(DirBlocked(A,adir)) return 1
-	if(DirBlocked(B,rdir)) return 1
+	if(DirBlocked(A,adir))
+		return 1
+	if(DirBlocked(B,rdir))
+		return 1
 
 	for(var/obj/O in B)
 		if(O.density && !istype(O, /obj/machinery/door) && !(O.flags & ON_BORDER))
@@ -322,14 +328,18 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 // Checks if doors are open
 /proc/DirBlocked(turf/loc,var/dir)
 	for(var/obj/structure/window/D in loc)
-		if(!D.density)			continue
-		if(D.dir == SOUTHWEST)	return 1 //full-tile window
-		if(D.dir == dir)		return 1 //matching border window
+		if(!D.density)
+			continue
+		if(D.dir == SOUTHWEST)
+			return 1 //full-tile window
+		if(D.dir == dir)
+			return 1 //matching border window
 
 	for(var/obj/machinery/door/D in loc)
 		if(!D.density)//if the door is open
 			continue
-		else return 1	// if closed, it's a real, air blocking door
+		else
+			return 1	// if closed, it's a real, air blocking door
 	return 0
 
 /////////////////////////////////////////////////////////////////////////

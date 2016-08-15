@@ -24,8 +24,10 @@
 	..()
 
 /obj/machinery/shield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(!height || air_group) return 0
-	else return ..()
+	if(!height || air_group)
+		return 0
+	else
+		return ..()
 
 //Looks like copy/pasted code... I doubt 'need_rebuild' is even used here - Nodrak
 /obj/machinery/shield/proc/update_nearby_tiles()
@@ -40,7 +42,8 @@
 	return 1
 
 /obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(!istype(W)) return
+	if(!istype(W))
+		return
 
 	//Calculate damage
 	var/aforce = W.force
@@ -160,7 +163,8 @@
 
 
 /obj/machinery/shieldgen/proc/shields_up()
-	if(active) return 0 //If it's already turned on, how did this get called?
+	if(active)
+		return 0 //If it's already turned on, how did this get called?
 
 	src.active = 1
 	update_icon()
@@ -171,7 +175,8 @@
 				deployed_shields += new /obj/machinery/shield(target_tile)
 
 /obj/machinery/shieldgen/proc/shields_down()
-	if(!active) return 0 //If it's already off, how did this get called?
+	if(!active)
+		return 0 //If it's already off, how did this get called?
 
 	src.active = 0
 	update_icon()
@@ -270,7 +275,8 @@
 		to_chat(user, "<span class='notice'>You begin to replace the wires.</span>")
 		//if(do_after(user, src, min(60, round( ((maxhealth/health)*10)+(malfunction*10) ))) //Take longer to repair heavier damage
 		if(do_after(user, src, 30))
-			if(!src || !coil) return
+			if(!src || !coil)
+				return
 			coil.use(1)
 			health = max_health
 			malfunction = 0
@@ -333,7 +339,8 @@
 		return
 	var/obj/structure/cable/C = T.get_cable_node()
 	var/datum/powernet/PN
-	if(C)	PN = C.powernet		// find the powernet of the connected cable
+	if(C)
+		PN = C.powernet		// find the powernet of the connected cable
 
 	if(!PN)
 		power = 0
@@ -598,7 +605,8 @@
 				G.storedpower -= 20
 
 /obj/machinery/shieldwall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	if(!mover)
 		return

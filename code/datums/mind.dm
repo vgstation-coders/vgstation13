@@ -297,7 +297,8 @@
 		else if (istype(current, /mob/living/carbon/monkey))
 			var/found = 0
 			for(var/datum/disease/D in current.viruses)
-				if(istype(D, /datum/disease/jungle_fever)) found = 1
+				if(istype(D, /datum/disease/jungle_fever))
+					found = 1
 
 			if(found)
 				text += "<a href='?src=\ref[src];monkey=healthy'>healthy</a>|<b>INFECTED</b>|<a href='?src=\ref[src];monkey=human'>human</a>|other"
@@ -409,16 +410,19 @@
 	usr << browse(out, "window=edit_memory[src]")
 
 /datum/mind/Topic(href, href_list)
-	if(!check_rights(R_ADMIN))	return
+	if(!check_rights(R_ADMIN))
+		return
 
 	if (href_list["role_edit"])
 		var/new_role = input("Select new role", "Assigned role", assigned_role) as null|anything in get_all_jobs()
-		if (!new_role) return
+		if (!new_role)
+			return
 		assigned_role = new_role
 
 	else if (href_list["memory_edit"])
 		var/new_memo = copytext(sanitize(input("Write new memory", "Memory", memory) as null|message),1,MAX_MESSAGE_LEN)
-		if (isnull(new_memo)) return
+		if (isnull(new_memo))
+			return
 		memory = new_memo
 
 	else if (href_list["obj_edit"] || href_list["obj_add"])
@@ -428,7 +432,8 @@
 
 		if (href_list["obj_edit"])
 			objective = locate(href_list["obj_edit"])
-			if (!objective) return
+			if (!objective)
+				return
 			objective_pos = objectives.Find(objective)
 
 			//Text strings are easy to manipulate. Revised for simplicity.
@@ -438,7 +443,8 @@
 				def_value = "custom"
 
 		var/new_obj_type = input("Select objective type:", "Objective type", def_value) as null|anything in list("assassinate", "blood", "debrain", "protect", "prevent", "harm", "brig", "hijack", "escape", "survive", "steal", "download", "nuclear", "capture", "absorb", "custom")
-		if (!new_obj_type) return
+		if (!new_obj_type)
+			return
 
 		var/datum/objective/new_objective = null
 
@@ -460,7 +466,8 @@
 					def_target = objective:target.current
 
 				var/new_target = input("Select target:", "Objective target", def_target) as null|anything in possible_targets
-				if (!new_target) return
+				if (!new_target)
+					return
 
 				var/objective_path = text2path("/datum/objective/[new_obj_type]")
 				if (new_target == "Free objective")
@@ -533,12 +540,14 @@
 
 			if ("custom")
 				var/expl = copytext(sanitize(input("Custom objective:", "Objective", objective ? objective.explanation_text : "") as text|null),1,MAX_MESSAGE_LEN)
-				if (!expl) return
+				if (!expl)
+					return
 				new_objective = new /datum/objective
 				new_objective.owner = src
 				new_objective.explanation_text = expl
 
-		if (!new_objective) return
+		if (!new_objective)
+			return
 
 		if (objective)
 			objectives -= objective
@@ -550,13 +559,15 @@
 
 	else if (href_list["obj_delete"])
 		var/datum/objective/objective = locate(href_list["obj_delete"])
-		if(!istype(objective))	return
+		if(!istype(objective))
+			return
 		objectives -= objective
 		log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
 
 	else if(href_list["obj_completed"])
 		var/datum/objective/objective = locate(href_list["obj_completed"])
-		if(!istype(objective))	return
+		if(!istype(objective))
+			return
 		objective.completed = !objective.completed
 		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.completed ? "completed" : "incomplete"]")
 
@@ -1066,11 +1077,13 @@ proc/clear_memory(var/silent = 1)
 	for (var/t in L)
 		if (istype(t, /obj/item/device/pda))
 			var/obj/item/device/pda/P = t
-			if (P.uplink) del(P.uplink)
+			if (P.uplink)
+				del(P.uplink)
 			P.uplink = null
 		else if (istype(t, /obj/item/device/radio))
 			var/obj/item/device/radio/R = t
-			if (R.traitorradio) del(R.traitorradio)
+			if (R.traitorradio)
+				del(R.traitorradio)
 			R.traitorradio = null
 			R.traitor_frequency = 0.0
 		else if (istype(t, /obj/item/weapon/SWF_uplink) || istype(t, /obj/item/weapon/syndicate_uplink))
@@ -1310,13 +1323,15 @@ proc/clear_memory(var/silent = 1)
 			ticker.minds += mind
 		else
 			world.log << "## DEBUG: mind_initialize(): No ticker ready yet! Please inform Carn"
-	if(!mind.name)	mind.name = real_name
+	if(!mind.name)
+		mind.name = real_name
 	mind.current = src
 
 //HUMAN
 /mob/living/carbon/human/mind_initialize()
 	..()
-	if(!mind.assigned_role)	mind.assigned_role = "Assistant"	//defualt
+	if(!mind.assigned_role)
+		mind.assigned_role = "Assistant"	//defualt
 
 //MONKEY
 /mob/living/carbon/monkey/mind_initialize()

@@ -70,7 +70,8 @@
 /obj/machinery/atmospherics/trinary/tvalve/proc/go_to_side()
 
 
-	if(state) return 0
+	if(state)
+		return 0
 
 	state = 1
 	update_icon()

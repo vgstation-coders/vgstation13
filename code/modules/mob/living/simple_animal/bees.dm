@@ -85,12 +85,14 @@
 		panic_attack(M)
 
 /mob/living/simple_animal/bee/kick_act(mob/living/carbon/human/H)
-	if(prob(10)) ..()
+	if(prob(10))
+		..()
 
 	panic_attack(H)
 
 /mob/living/simple_animal/bee/bite_act(mob/living/carbon/human/H)
-	if(prob(10)) ..()
+	if(prob(10))
+		..()
 
 	panic_attack(H)
 
@@ -126,7 +128,8 @@
 	target = pick(neabyMobs)
 
 /mob/living/simple_animal/bee/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 	if(stat != DEAD) //If we're alive, see if we can be calmed down.

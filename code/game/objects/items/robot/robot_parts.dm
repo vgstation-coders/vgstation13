@@ -128,31 +128,36 @@
 			user.put_in_inactive_hand(B)
 		qdel(src)
 	if(istype(W, /obj/item/robot_parts/l_leg))
-		if(src.l_leg)	return
+		if(src.l_leg)
+			return
 		if(user.drop_item(W, src))
 			src.l_leg = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/r_leg))
-		if(src.r_leg)	return
+		if(src.r_leg)
+			return
 		if(user.drop_item(W, src))
 			src.r_leg = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/l_arm))
-		if(src.l_arm)	return
+		if(src.l_arm)
+			return
 		if(user.drop_item(W, src))
 			src.l_arm = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/r_arm))
-		if(src.r_arm)	return
+		if(src.r_arm)
+			return
 		if(user.drop_item(W, src))
 			src.r_arm = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/chest))
-		if(src.chest)	return
+		if(src.chest)
+			return
 		if(W:wires && W:cell)
 			if(user.drop_item(W, src))
 				src.chest = W
@@ -163,7 +168,8 @@
 			to_chat(user, "<span class='notice'>You need to attach a cell to it first!</span>")
 
 	if(istype(W, /obj/item/robot_parts/head))
-		if(src.head)	return
+		if(src.head)
+			return
 		if(W:flash2 && W:flash1)
 			if(user.drop_item(W, src))
 				src.head = W
@@ -209,7 +215,8 @@
 						L.loc = T
 						M.contents -= L
 
-			if(!O)	return
+			if(!O)
+				return
 
 			O.mmi = W
 			O.invisibility = 0

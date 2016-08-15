@@ -239,7 +239,8 @@ proc/virus2_lesser_infection()
 	for(var/mob/living/carbon/human/G in player_list)
 		if(G.client && G.stat != DEAD)
 			candidates += G
-	if(!candidates.len)	return
+	if(!candidates.len)
+		return
 
 	candidates = shuffle(candidates)
 
@@ -251,7 +252,8 @@ proc/virus2_greater_infection()
 	for(var/mob/living/carbon/human/G in player_list)
 		if(G.client && G.stat != DEAD)
 			candidates += G
-	if(!candidates.len)	return
+	if(!candidates.len)
+		return
 
 	candidates = shuffle(candidates)
 

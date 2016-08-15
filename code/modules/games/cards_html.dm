@@ -22,8 +22,10 @@
 	var/datum/playingcard/card
 
 	for (var/suit in list("spades", "clubs", "diamonds", "hearts"))
-		if (suit == "spades" || suit == "clubs") color = "black_"
-		else                                     color = "red_"
+		if (suit == "spades" || suit == "clubs")
+			color = "black_"
+		else
+			color = "red_"
 
 		for (var/number in list("ace", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"))
 			card               = new()
@@ -62,7 +64,8 @@
 		O = null
 
 		user.show_message("You place your cards on the bottom of the deck.")
-	else return ..()
+	else
+		return ..()
 
 /obj/item/weapon/deck/attack_self(var/mob/user as mob)
 	user.delayNextAttack(5)
@@ -79,14 +82,19 @@
 	user.visible_message("\The [user] shuffles [src].")
 
 /obj/item/weapon/deck/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
-	if(flag)	return //It's adjacent, is the user, or is on the user's person
+	if(flag)
+		return //It's adjacent, is the user, or is on the user's person
 
-	if (istype(A, /mob/living)) src.dealTo(A, user)
-	else return ..()
+	if (istype(A, /mob/living))
+		src.dealTo(A, user)
+	else
+		return ..()
 
 /obj/item/weapon/deck/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
-	if (istype(M)) src.dealTo(M, user)
-	else return ..()
+	if (istype(M))
+		src.dealTo(M, user)
+	else
+		return ..()
 
 /obj/item/weapon/deck/proc/dealTo(mob/living/target, mob/living/source)
 	if (!src.cards.len)
@@ -144,14 +152,16 @@
 
 		qdel(src)
 		return
-	else return ..()
+	else
+		return ..()
 
 /obj/item/weapon/hand/verb/discard(datum/playingcard/card in cards)
 	set category = "Object"
 	set name     = "Discard"
 	set desc     = "Place a card from your hand in front of you."
 
-	if (!card)   return
+	if (!card)
+		return
 
 	var/obj/item/weapon/hand/H = new(src.loc)
 
@@ -196,11 +206,14 @@
 			usr.show_message("The [card.name].")
 
 /obj/item/weapon/hand/proc/update_conceal()
-	if (src.concealed) src.hi.updateContent("headbar", "You are currently concealing your hand. <a href=\"byond://?src=\ref[hi]&action=toggle_conceal\">Reveal your hand.</a>")
-	else               src.hi.updateContent("headbar", "You are currently revealing your hand. <a href=\"byond://?src=\ref[hi]&action=toggle_conceal\">Conceal your hand.</a>")
+	if (src.concealed)
+		src.hi.updateContent("headbar", "You are currently concealing your hand. <a href=\"byond://?src=\ref[hi]&action=toggle_conceal\">Reveal your hand.</a>")
+	else
+		src.hi.updateContent("headbar", "You are currently revealing your hand. <a href=\"byond://?src=\ref[hi]&action=toggle_conceal\">Conceal your hand.</a>")
 
 /obj/item/weapon/hand/update_icon()
-	if (!cards.len) qdel (src)
+	if (!cards.len)
+		qdel (src)
 	else if(cards.len > 1)
 		name = "hand of cards"
 		desc = "Some playing cards."

@@ -14,7 +14,8 @@
 
 /datum/event/brand_intelligence/start()
 	for(var/obj/machinery/vending/V in machines)
-		if(V.z != map.zMainStation)	continue
+		if(V.z != map.zMainStation)
+			continue
 		vendingMachines.Add(V)
 
 	if(!vendingMachines.len)

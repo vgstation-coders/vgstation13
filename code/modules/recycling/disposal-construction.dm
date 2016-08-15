@@ -227,7 +227,8 @@
 					playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 					to_chat(user, "Welding the [nicetype] in place.")
 					if(do_after(user, src, 20))
-						if(!src || !W.isOn()) return
+						if(!src || !W.isOn())
+							return
 						to_chat(user, "The [nicetype] has been welded in place!")
 						update() // TODO: Make this neat
 						if(ispipe) // Pipe

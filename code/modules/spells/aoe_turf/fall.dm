@@ -67,7 +67,8 @@
 		return
 	var/list/targets = choose_targets(user)
 	if(targets && targets.len)
-		if(prob(the_world_chance)) invocation = "ZA WARUDO"
+		if(prob(the_world_chance))
+			invocation = "ZA WARUDO"
 		invocation(user, targets)
 		take_charge(user, skipcharge)
 
@@ -111,7 +112,8 @@
 			if(isliving(everything))
 //				to_chat(world, "[everything] is living")
 				var/mob/living/L = everything
-				if(L == holder) continue
+				if(L == holder)
+					continue
 //				to_chat(world, "[everything] is not holder")
 //				to_chat(world, "paralyzing [everything]")
 				affected += L
@@ -175,7 +177,8 @@
 		returnToPool(S)
 		oureffects -= S
 	for(var/atom/everything in affected)
-		if(!istype(everything)) continue
+		if(!istype(everything))
+			continue
 		everything.appearance = everything.tempoverlay
 		everything.tempoverlay = null
 		everything.ignoreinvert = initial(everything.ignoreinvert)
@@ -212,7 +215,8 @@
 
 /proc/invertcolor(atom/A)
 //	to_chat(world, "invert color start")
-	if(A.ignoreinvert) return
+	if(A.ignoreinvert)
+		return
 	A.tempoverlay = A.appearance
 	A.color=	  list(-1,0,0,
 						0,-1,0,

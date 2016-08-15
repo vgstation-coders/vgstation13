@@ -167,9 +167,11 @@
 		src.updateSelfDialog()
 
 /obj/item/device/pda2/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption || !src.owner) return
+	if(!signal || signal.encryption || !src.owner)
+		return
 
-	if(signal.data["tag"] && signal.data["tag"] != "\ref[src]") return
+	if(signal.data["tag"] && signal.data["tag"] != "\ref[src]")
+		return
 
 	if(src.host_program)
 		src.host_program.receive_signal(signal)

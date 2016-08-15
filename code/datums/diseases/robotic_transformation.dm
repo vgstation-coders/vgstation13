@@ -59,7 +59,8 @@
 			affected_mob.adjustToxLoss(10)
 			affected_mob.updatehealth()
 			if(prob(40)) //So everyone can feel like robot Seth Brundle
-				if(src.gibbed != 0) return 0
+				if(src.gibbed != 0)
+					return 0
 				gibs(affected_mob)
 				gibbed = 1
 				var/mob/living/carbon/human/H = affected_mob

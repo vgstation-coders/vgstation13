@@ -346,7 +346,8 @@ About the new airlock wires panel:
 
 
 /obj/machinery/door/airlock/bump_open(mob/living/user as mob) //Airlocks now zap you when you 'bump' them open when they're electrified. --NeoFite
-	if(!istype(user)) return
+	if(!istype(user))
+		return
 	if(!issilicon(usr))
 		if(src.isElectrified())
 			if(!src.justzap)
@@ -492,14 +493,16 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/door_animate(var/animation)
 	switch(animation)
 		if("opening")
-			if(overlays) overlays.len = 0
+			if(overlays)
+				overlays.len = 0
 			if(panel_open)
 				spawn(2) // The only work around that works. Downside is that the door will be gone for a millisecond.
 					flick("o_door_opening", src)  //can not use flick due to BYOND bug updating overlays right before flicking
 			else
 				flick("door_opening", src)
 		if("closing")
-			if(overlays) overlays.len = 0
+			if(overlays)
+				overlays.len = 0
 			if(panel_open)
 				flick("o_door_closing", src)
 			else
@@ -682,7 +685,8 @@ About the new airlock wires panel:
 	// If you add an if(..()) check you must first remove the var/nowindow parameter.
 	// Otherwise it will runtime with this kind of error: null.Topic()
 	var/turf/T = get_turf(usr)
-	if(!isAI(usr) && T.z != z) return 1
+	if(!isAI(usr) && T.z != z)
+		return 1
 	if(!nowindow)
 		..()
 	if(!isAdminGhost(usr))
@@ -1080,14 +1084,17 @@ About the new airlock wires panel:
 				update_icon()
 	else if (ismultitool(I))
 		if (!operating)
-			if(panel_open) wires.Interact(user)
-			else update_multitool_menu(user)
+			if(panel_open)
+				wires.Interact(user)
+			else
+				update_multitool_menu(user)
 		attack_hand(user)
 	else if (iswiretool(I))
 		if (!operating && panel_open)
 			wires.Interact(user)
 	else if(iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe) )
-		if(src.busy) return
+		if(src.busy)
+			return
 		src.busy = 1
 		var/beingcrowbarred = null
 		if(iscrowbar(I) )

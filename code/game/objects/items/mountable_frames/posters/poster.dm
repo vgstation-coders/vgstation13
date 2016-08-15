@@ -32,7 +32,8 @@
 	playsound(D.loc, 'sound/items/poster_being_created.ogg', 100, 1)
 
 
-	if(!D)	return
+	if(!D)
+		return
 
 	if(do_after(user, on_wall, 17))//Let's check if everything is still there
 		to_chat(user, "<span class='notice'>You place the poster!</span>")

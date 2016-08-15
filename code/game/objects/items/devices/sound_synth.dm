@@ -40,7 +40,8 @@
 	set category = "Object"
 	set name = "Select Sound Playback"
 	var/thesoundthatwewant = input("Pick a sound:", null) as null|anything in sound_list
-	if(!thesoundthatwewant) return
+	if(!thesoundthatwewant)
+		return
 	to_chat(usr, "Sound playback set to: [thesoundthatwewant]!")
 	var/list/assblast = params2list(sound_list[thesoundthatwewant])
 	selected_sound = assblast["selected_sound"]

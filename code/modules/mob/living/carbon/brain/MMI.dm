@@ -66,7 +66,8 @@ obj/item/device/mmi/Destroy()
 		icon = null
 		invisibility = 101
 		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(get_turf(loc))
-		if(!M)	return
+		if(!M)
+			return
 		M.invisibility = 0
 		//M.custom_name = created_name
 		M.Namepick()

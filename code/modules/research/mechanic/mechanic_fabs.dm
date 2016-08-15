@@ -101,7 +101,8 @@
 				if(src.AddMechanicDesign(RB.stored_design, user))
 					overlays += image(icon = icon, icon_state = "[base_state]-bp")
 					to_chat(user, "<span class='notice'>You successfully load \the [RB.name] into \the [src].</span>")
-					if(RB.delete_on_use)	qdel(RB) //we delete if the thing is set to delete. Always set to 1 right now
+					if(RB.delete_on_use)
+						qdel(RB) //we delete if the thing is set to delete. Always set to 1 right now
 					spawn(10)
 						overlays -= image(icon = icon, icon_state = "[base_state]-bp")
 		return 1

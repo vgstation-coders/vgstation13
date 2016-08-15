@@ -43,7 +43,8 @@
 		// Non diagonal case
 		if(T0.x == x || T0.y == y)
 			// Window snowflake code
-			if(neighbor.flags & ON_BORDER && neighbor.dir == get_dir(T0, src)) return 1
+			if(neighbor.flags & ON_BORDER && neighbor.dir == get_dir(T0, src))
+				return 1
 			// Check for border blockages
 			if(T0.ClickCross(get_dir(T0,src), border_only = 1) && src.ClickCross(get_dir(src,T0), border_only = 1, target_atom = target))
 				return 1
@@ -74,8 +75,10 @@
 	* In the case of a multiple-tile object, all valid locations are checked for adjacency.
 */
 /atom/movable/Adjacent(var/atom/neighbor)
-	if(neighbor == loc) return 1
-	if(!isturf(loc)) return 0
+	if(neighbor == loc)
+		return 1
+	if(!isturf(loc))
+		return 0
 	if(locs.len > 1)
 		for(var/turf/T in locs)
 			if(T.Adjacent(neighbor, src))
@@ -88,7 +91,8 @@
 
 // This is necessary for storage items not on your person.
 /obj/item/Adjacent(var/atom/neighbor, var/recurse = 1)
-	if(neighbor == loc) return 1
+	if(neighbor == loc)
+		return 1
 	if(istype(loc,/obj/item))
 		if(recurse > 0)
 			return loc.Adjacent(neighbor,recurse - 1)
@@ -121,7 +125,8 @@
 */
 /turf/proc/ClickCross(var/target_dir, var/border_only, var/atom/target_atom = null)
 	for(var/obj/O in src)
-		if( !O.density || O == target_atom || O.throwpass) continue // throwpass is used for anything you can click through
+		if( !O.density || O == target_atom || O.throwpass)
+			continue // throwpass is used for anything you can click through
 
 		if( O.flags&ON_BORDER) // windows have throwpass but are on border, check them first
 			if( O.dir & target_dir || O.dir&(O.dir-1) ) // full tile windows are just diagonals mechanically

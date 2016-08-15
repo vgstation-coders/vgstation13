@@ -1,7 +1,8 @@
 /mob/living/carbon/brain/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 
@@ -92,7 +93,8 @@
 		return //TODO: DEFERRED
 
 	proc/handle_temperature_damage(body_part, exposed_temperature, exposed_intensity)
-		if(status_flags & GODMODE) return
+		if(status_flags & GODMODE)
+			return
 
 		if(exposed_temperature > bodytemperature)
 			var/discomfort = min( abs(exposed_temperature - bodytemperature)*(exposed_intensity)/2000000, 1.0)
@@ -110,7 +112,8 @@
 	proc/handle_chemicals_in_body()
 
 
-		if(reagents) reagents.metabolize(src)
+		if(reagents)
+			reagents.metabolize(src)
 
 		confused = max(0, confused - 1)
 		// decrement dizziness counter, clamped to 0

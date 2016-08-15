@@ -93,7 +93,8 @@
 	update_hud()		//TODO: remove the need for this to be here
 	overlays.len = 0
 	if(lying)
-		if(resting)					icon_state = "queen_sleep"
+		if(resting)
+			icon_state = "queen_sleep"
 		else						icon_state = "queen_l"
 		for(var/image/I in overlays_lying)
 			overlays += I

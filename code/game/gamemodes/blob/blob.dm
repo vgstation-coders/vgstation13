@@ -139,7 +139,8 @@ You must kill it all while minimizing the damage to the station."})
 
 		sleep(wait_time)
 
-		if(!mixed) send_intercept(0)
+		if(!mixed)
+			send_intercept(0)
 
 		sleep(100)
 
@@ -177,7 +178,8 @@ You must kill it all while minimizing the damage to the station."})
 				var/T = M.loc
 				if((istype(T, /turf/space)) || ((istype(T, /turf)) && (M.z!=1)))
 					pre_escapees += M
-			if(!mixed) send_intercept(1)
+			if(!mixed)
+				send_intercept(1)
 			outbreak = 1
 
 			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
@@ -186,4 +188,5 @@ You must kill it all while minimizing the damage to the station."})
 			command_alert(/datum/command_alert/biohazard_station_nuke)
 			for(var/mob/camera/blob/B in player_list)
 				to_chat(B, "<span class='blob'>The beings intend to eliminate you with a final suicidal attack, you must stop them quickly or consume the station before this occurs!</span>")
-			if(!mixed) send_intercept(2)
+			if(!mixed)
+				send_intercept(2)

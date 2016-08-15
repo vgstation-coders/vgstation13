@@ -24,20 +24,28 @@
 
 			var/percent = round((reagents.total_volume / beaker.volume) * 100)
 			switch(percent)
-				if(0 to 9)		filling.icon_state = "reagent0"
-				if(10 to 24) 	filling.icon_state = "reagent10"
-				if(25 to 49)	filling.icon_state = "reagent25"
-				if(50 to 74)	filling.icon_state = "reagent50"
-				if(75 to 79)	filling.icon_state = "reagent75"
-				if(80 to 90)	filling.icon_state = "reagent80"
-				if(91 to INFINITY)	filling.icon_state = "reagent100"
+				if(0 to 9)
+					filling.icon_state = "reagent0"
+				if(10 to 24)
+					filling.icon_state = "reagent10"
+				if(25 to 49)
+					filling.icon_state = "reagent25"
+				if(50 to 74)
+					filling.icon_state = "reagent50"
+				if(75 to 79)
+					filling.icon_state = "reagent75"
+				if(80 to 90)
+					filling.icon_state = "reagent80"
+				if(91 to INFINITY)
+					filling.icon_state = "reagent100"
 
 			filling.icon += mix_color_from_reagents(reagents.reagent_list)
 			overlays += filling
 
 /obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
 	..()
-	if(isobserver(usr)) return
+	if(isobserver(usr))
+		return
 	if(usr.incapacitated()) // Stop interacting with shit while dead pls
 		return
 	if(isanimal(usr))
@@ -58,7 +66,8 @@
 		src.update_icon()
 
 /obj/machinery/iv_drip/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isobserver(user)) return
+	if(isobserver(user))
+		return
 	if(user.stat)
 		return
 	if(iswrench(W))
@@ -113,20 +122,23 @@
 			amount = min(amount, 4)
 			// If the beaker is full, ping
 			if(amount == 0)
-				if(prob(5)) visible_message("\The [src] pings.")
+				if(prob(5))
+					visible_message("\The [src] pings.")
 				return
 
 			var/mob/living/carbon/human/T = attached
 
-			if(!istype(T)) return
+			if(!istype(T))
+				return
 			if(!T.dna)
 				return
 			if(M_NOCLONE in T.mutations)
 				return
 
 			// If the human is losing too much blood, beep.
-			if(T.vessel.get_reagent_amount(BLOOD) < BLOOD_VOLUME_SAFE) if(prob(5))
-				visible_message("\The [src] beeps loudly.")
+			if(T.vessel.get_reagent_amount(BLOOD) < BLOOD_VOLUME_SAFE)
+				if(prob(5))
+					visible_message("\The [src] beeps loudly.")
 
 			var/datum/reagent/B = T.take_blood(beaker,amount)
 

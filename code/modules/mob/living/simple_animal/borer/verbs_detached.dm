@@ -5,7 +5,8 @@
 	set desc = "Infest a suitable humanoid host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.infest()
 
 /obj/item/verbs/borer/detached/verb/ventcrawl()
@@ -14,7 +15,8 @@
 	set category = "Alien"
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.ventcrawl()
 
 /obj/item/verbs/borer/detached/verb/borer_hide()
@@ -23,7 +25,8 @@
 	set category = "Alien"
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.hide()
 
 /obj/item/verbs/borer/detached/verb/borer_reproduce()
@@ -32,5 +35,6 @@
 	set category = "Alien"
 
 	var/mob/living/simple_animal/borer/B = loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.reproduce()

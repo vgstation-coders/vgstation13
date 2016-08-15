@@ -8,7 +8,8 @@ var/research_shuttle_moving = 0
 var/research_shuttle_location = 0 // 0 = station 13, 1 = research station
 
 proc/move_research_shuttle()
-	if(research_shuttle_moving)	return
+	if(research_shuttle_moving)
+		return
 	research_shuttle_moving = 1
 	spawn(research_shuttle_tickstomove*10)
 		var/area/fromArea

@@ -25,7 +25,8 @@
 
 /obj/item/weapon/storage/briefcase/New()
 	..()
-	if (empty) return
+	if (empty)
+		return
 	new /obj/item/weapon/paper/demotion_key(src)
 	new /obj/item/weapon/paper/commendation_key(src)
 
@@ -58,7 +59,8 @@
 			M.Paralyse(time)
 		else
 			M.Stun(time)
-		if(M.stat != 2)	M.stat = 1
+		if(M.stat != 2)
+			M.stat = 1
 		for(var/mob/O in viewers(M, null))
 			O.show_message(text("<span class='danger'>[] has been knocked unconscious!</span>", M), 1, "<span class='warning'>You hear someone fall.</span>", 2)
 	else

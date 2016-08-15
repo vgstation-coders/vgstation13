@@ -108,7 +108,8 @@
 					var/bdat = null
 					for(var/obj/machinery/bot/medbot/M in machines)
 
-						if(M.z != src.z)	continue	//only find medibots on the same z-level as the computer
+						if(M.z != src.z)
+							continue	//only find medibots on the same z-level as the computer
 						var/turf/bl = get_turf(M)
 						if(bl)	//if it can't find a turf for the medibot, then it probably shouldn't be showing up
 							bdat += "[M.name] - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]]\]</b> - [M.on ? "Online" : "Offline"]<br>"

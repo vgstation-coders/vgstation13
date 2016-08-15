@@ -62,7 +62,8 @@
 	return
 
 /obj/effect/rend/cow/process()
-	if(locate(/mob) in loc) return
+	if(locate(/mob) in loc)
+		return
 	new /mob/living/simple_animal/cow(loc)
 	cowsleft--
 	if(cowsleft <= 0)
@@ -124,7 +125,8 @@
 
 /obj/item/weapon/staff/necro/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
 	charges++
 	return 1

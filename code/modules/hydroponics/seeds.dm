@@ -26,7 +26,8 @@
 
 //Updates strings and icon appropriately based on seed datum.
 /obj/item/seeds/proc/update_appearance()
-	if(!seed) return
+	if(!seed)
+		return
 	icon_state = seed.packet_icon
 	src.name = "packet of [seed.seed_name] [seed.seed_noun]"
 	src.desc = "It has a picture of [seed.display_name] on the front."

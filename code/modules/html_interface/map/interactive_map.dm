@@ -57,7 +57,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 	if (istype(hclient))
 		if(hclient && hclient.client && hclient.client.mob)
 			var/mob/living/L = hclient.client.mob
-			if(!istype(L)) return
+			if(!istype(L))
+				return
 			switch (href_list["action"])
 				if("changez")
 					var/newz = text2num(href_list["value"])
@@ -71,7 +72,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 /proc/generateMiniMaps()
 	//spawn // NO
 	for (var/z = 1 to world.maxz)
-		if(z == CENTCOMM_Z && !ALLOW_CENTCOMM) continue
+		if(z == CENTCOMM_Z && !ALLOW_CENTCOMM)
+			continue
 		generateMiniMap(z)
 
 	testing("MINIMAP: All minimaps have been generated.")
@@ -87,7 +89,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 	C << browse_rsc('map_shared.js')
 	C << browse_rsc('map_shared.css')
 	for (var/z = 1 to world.maxz)
-		if(z == CENTCOMM_Z) continue
+		if(z == CENTCOMM_Z)
+			continue
 		C << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
 
 /proc/getMinimapFile(z)
@@ -138,7 +141,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 
 			obj = locate(/obj/structure/transit_tube) in tile
 
-			if (obj) temp = "[temp]/obj/structure/transit_tube[obj.icon_state][obj.dir]"
+			if (obj)
+				temp = "[temp]/obj/structure/transit_tube[obj.icon_state][obj.dir]"
 
 			#ifdef MINIMAP_DEBUG
 			if (F["/[tile.y]/[tile.x]"] && F["/[tile.y]/[tile.x]"] != temp)
@@ -181,7 +185,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 		for(var/s = x1 to x2)
 			for(var/r = y1 to y2)
 				var/turf/tile = locate(s, r, z)
-				if (tile.flags & NO_MINIMAP) continue
+				if (tile.flags & NO_MINIMAP)
+					continue
 
 				if (tile.loc.type != /area/start && (tile.type != /turf/space || (locate(/obj/structure/lattice) in tile) || (locate(/obj/structure/transit_tube) in tile)) && !istype(tile, /turf/space/transit) && !istype(tile.loc, /area/vault))
 					if (istype(tile.loc, /area/asteroid) || istype(tile.loc, /area/mine/unexplored) || istype(tile, /turf/unsimulated/mineral) || (isspace(tile.loc) && istype(tile, /turf/unsimulated/floor/asteroid)))
@@ -195,7 +200,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 					else if (tile.type == /turf/space)
 						obj = locate(/obj/structure/lattice) in tile
 
-						if (!obj) obj = locate(/obj/structure/transit_tube) in tile
+						if (!obj)
+							obj = locate(/obj/structure/transit_tube) in tile
 
 						ASSERT(obj != null)
 
@@ -230,9 +236,11 @@ var/const/ALLOW_CENTCOMM = FALSE
 
 					map_icon.Blend(turf_icon, ICON_OVERLAY, ((tile.x - 1) * ICON_SIZE), ((tile.y - 1) * ICON_SIZE))
 
-					if ((++i) % 512 == 0) sleep(1) // deliberate delay to avoid lag spikes
+					if ((++i) % 512 == 0)
+						sleep(1) // deliberate delay to avoid lag spikes
 
-					if ((i % 1024) == 0) testing("MINIMAP: Generated [s*(y2-y1+1)+r] of [(y2-y1+1)*(x2-x1+1)] tiles.")
+					if ((i % 1024) == 0)
+						testing("MINIMAP: Generated [s*(y2-y1+1)+r] of [(y2-y1+1)*(x2-x1+1)] tiles.")
 				else
 					sleep(-1) // avoid sleeping if possible: prioritize pending procs
 

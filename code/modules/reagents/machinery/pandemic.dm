@@ -60,12 +60,16 @@
 
 
 /obj/machinery/computer/pandemic/Topic(href, href_list)
-	if(stat & (NOPOWER|BROKEN)) return
-	if(usr.stat || usr.restrained()) return
-	if(!in_range(src, usr)) return
+	if(stat & (NOPOWER|BROKEN))
+		return
+	if(usr.stat || usr.restrained())
+		return
+	if(!in_range(src, usr))
+		return
 
 	usr.set_machine(src)
-	if(!beaker) return
+	if(!beaker)
+		return
 
 	if (href_list["create_vaccine"])
 		if(!src.wait)
@@ -114,7 +118,8 @@
 					D = new type(0, null)
 			var/list/data = list("viruses"=list(D))
 			var/name = sanitize(input(usr,"Name:","Name the culture",D.name))
-			if(!name || name == " ") name = D.name
+			if(!name || name == " ")
+				name = D.name
 			B.name = "[name] culture bottle"
 			B.desc = "A small bottle. Contains [D.agent] culture in synthblood medium."
 			B.reagents.add_reagent(BLOOD,20,data)
@@ -140,9 +145,12 @@
 	else if(href_list["name_disease"])
 		var/norange = (usr.mutations && usr.mutations.len && (M_TK in usr.mutations))
 		var/new_name = stripped_input(usr, "Name the Disease", "New Name", "", MAX_NAME_LEN)
-		if(stat & (NOPOWER|BROKEN)) return
-		if(usr.stat || usr.restrained()) return
-		if(!in_range(src, usr) && !norange) return
+		if(stat & (NOPOWER|BROKEN))
+			return
+		if(usr.stat || usr.restrained())
+			return
+		if(!in_range(src, usr) && !norange)
+			return
 		var/id = href_list["name_disease"]
 		if(archive_diseases[id])
 			var/datum/disease/advance/A = archive_diseases[id]
@@ -276,7 +284,8 @@
 	if(..())
 		return 1
 	else if(istype(I, /obj/item/weapon/reagent_containers/glass))
-		if(stat & (NOPOWER|BROKEN)) return
+		if(stat & (NOPOWER|BROKEN))
+			return
 		if(src.beaker)
 			to_chat(user, "A beaker is already loaded into the machine.")
 			return

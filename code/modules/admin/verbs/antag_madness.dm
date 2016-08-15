@@ -117,7 +117,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 	switch(choice)
 		if("traitor")
-			if(istraitor(M))	return 0
+			if(istraitor(M))
+				return 0
 			ticker.mode.traitors += M.mind
 			M.mind.special_role = "traitor"
 			ticker.mode.forge_traitor_objectives(M.mind)
@@ -158,7 +159,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("changeling")
-			if(ischangeling(M))	return 0
+			if(ischangeling(M))
+				return 0
 			ticker.mode.changelings += M.mind
 			ticker.mode.grant_changeling_powers(M)
 			M.mind.special_role = "Changeling"
@@ -171,7 +173,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("vampire")
-			if(isvampire(M))	return 0
+			if(isvampire(M))
+				return 0
 			ticker.mode.vampires += M.mind
 			ticker.mode.grant_vampire_powers(M)
 			M.mind.special_role = "Vampire"
@@ -212,7 +215,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("cult")
-			if(iscult(M))	return 0
+			if(iscult(M))
+				return 0
 			ticker.mode.cult += M.mind
 			ticker.mode.update_cult_icons_added(M.mind)
 			M.mind.special_role = "Cultist"
@@ -315,7 +319,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("rev")
-			if(isrevhead(M))	return 0
+			if(isrevhead(M))
+				return 0
 			ticker.mode.head_revolutionaries += M.mind
 			ticker.mode.update_rev_icons_added(M.mind)
 			M.mind.special_role = "Head Revolutionary"
@@ -359,7 +364,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("nuke")
-			if(isnukeop(M))	return 0
+			if(isnukeop(M))
+				return 0
 			ticker.mode.syndicates += M.mind
 			ticker.mode.update_synd_icons_added(M.mind)
 			M.real_name = "[syndicate_name()] Operative"
@@ -404,7 +410,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("deathsquad")
-			if(isdeathsquad(M))	return 0
+			if(isdeathsquad(M))
+				return 0
 			ticker.mode.deathsquad += M.mind
 			M.mind.assigned_role = "MODE"
 			M.mind.special_role = "Death Commando"
@@ -468,7 +475,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("wizard")
-			if(iswizard(M))	return 0
+			if(iswizard(M))
+				return 0
 			ticker.mode.wizards += M.mind
 			M.mind.special_role = "Wizard"
 			M.mind.assigned_role = "MODE"
@@ -558,8 +566,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 		if("monkey")
-			if(M.monkeyizing)	return 0
-			if(isbadmonkey(M))	return 0
+			if(M.monkeyizing)
+				return 0
+			if(isbadmonkey(M))
+				return 0
 			ticker.mode.infected_monkeys += M.mind
 			var/mob/living/carbon/human/H = M
 			var/mob/living/carbon/monkey/K = M

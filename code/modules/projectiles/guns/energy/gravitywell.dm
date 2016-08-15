@@ -25,7 +25,8 @@
 	..()
 
 /obj/item/weapon/gun/gravitywell/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	if(charge >= maxcharge)
 		charge = 0
 		update_icon()

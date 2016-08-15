@@ -23,7 +23,8 @@
 	machine_flags = EMAGGABLE
 
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user as mob)
-	if(..()) return
+	if(..())
+		return
 	interact(user)
 
 /obj/machinery/computer/library/checkout/interact(var/mob/user)
@@ -414,7 +415,8 @@
 				bibledelay = 0
 			make_external_book(newbook)
 	if(href_list["manual"])
-		if(!href_list["manual"]) return
+		if(!href_list["manual"])
+			return
 		var/bookid = href_list["manual"]
 
 		if(!dbcon_old.IsConnected())

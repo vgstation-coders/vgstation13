@@ -52,7 +52,8 @@
 	melee_damage_upper = 50
 
 /mob/living/simple_animal/hostile/humanoid/jackal/embalmer/AttackingTarget()
-	if(!ismob(target)) return
+	if(!ismob(target))
+		return
 
 	visible_message("<span class='danger'>\The [src] performs a ritual over \the [target]'s body.</span>")
 

@@ -16,7 +16,8 @@
 				if(H.cl == M.client)
 					holder = H
 					break
-			if(holder) holder.buildmode.copycat = null
+			if(holder)
+				holder.buildmode.copycat = null
 			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
 				for(var/BM in M.client.buildmode_objs)
 					returnToPool(BM)
@@ -199,7 +200,8 @@ obj/effect/bmode/buildholder/New()
 				if(master.buildmode.varholder in locked && !check_rights(R_DEBUG,0))
 					return 1
 				var/thetype = input(usr,"Select variable type:" ,"Type") in list("text","number","mob-reference","obj-reference","turf-reference")
-				if(!thetype) return 1
+				if(!thetype)
+					return 1
 				switch(thetype)
 					if("text")
 						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", "value") as text
@@ -233,10 +235,12 @@ obj/effect/bmode/buildholder/New()
 		if(H.cl == src)
 			holder = H
 			break
-	if(!holder) return
+	if(!holder)
+		return
 	var/turf/start = get_turf(src_location)
 	var/turf/end = get_turf(over_location)
-	if(!start || !end) return
+	if(!start || !end)
+		return
 	switch(buildmode)
 		if(1 to 2)
 			var/list/fillturfs = block(start,end)
@@ -246,12 +250,14 @@ obj/effect/bmode/buildholder/New()
 						if(alert("Are you completely sure about filling [fillturfs.len] tiles?","Panic!!!!","Yes","No") != "Yes")
 							return
 					var/areaAction = alert("FILL tiles or DELETE them? areaAction will destroy EVERYTHING IN THE SELECTED AREA", "Create or destroy, your chance to be a GOD","FILL","DELETE") == "DELETE"
-					if(areaAction) areaAction = (alert("Selective(TYPE) Delete or MASS Delete?", "Scorched Earth or selective destruction?", "Selective", "MASS") == "Selective" ? 2 : 1)
+					if(areaAction)
+						areaAction = (alert("Selective(TYPE) Delete or MASS Delete?", "Scorched Earth or selective destruction?", "Selective", "MASS") == "Selective" ? 2 : 1)
 					else
 						areaAction = (alert("Mass FILL or Selective(Type => Type) FILL?", "Do they really need [fillturfs.len] of closets?", "Selective", "Mass") == "Selective" ? 3 : 0)
 
 					var/whatfill = (buildmode == 1 ? input("What are we filling with?", "So many choices") as null|anything in list(/turf/simulated/floor,/turf/simulated/wall,/turf/simulated/wall/r_wall,/obj/machinery/door/airlock, /obj/structure/window/reinforced) : holder.buildmode.objholder)
-					if(!whatfill) return
+					if(!whatfill)
+						return
 					var/msglog = "<span class='danger'>[key_name_admin(usr)] just buildmode"
 					var/strict = 1
 					var/chosen
@@ -260,12 +266,14 @@ obj/effect/bmode/buildholder/New()
 							msglog += " <big>DELETED EVERYTHING</big> in [fillturfs.len] tile\s "
 						if(SELECTIVE_DELETE)
 							chosen = easyTypeSelector()
-							if(!chosen) return
+							if(!chosen)
+								return
 							strict = alert("Delete all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
 							msglog += " <big>DELETED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
 						if(SELECTIVE_FILL)
 							chosen = easyTypeSelector()
-							if(!chosen) return
+							if(!chosen)
+								return
 							strict = alert("Change all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
 							msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [whatfill] "
 						else
@@ -283,27 +291,33 @@ obj/effect/bmode/buildholder/New()
 								deletions++
 							else
 								for(var/atom/thing in T.contents)
-									if(thing==usr) continue
+									if(thing==usr)
+										continue
 									if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
 										qdel(thing)
 									deletions++
 									tcheck(80,1)
-								if(areaAction == MASS_DELETE) T.ChangeTurf(get_base_turf(T.z))
+								if(areaAction == MASS_DELETE)
+									T.ChangeTurf(get_base_turf(T.z))
 						else
 							if(turf_op)
 								if(areaAction == SELECTIVE_FILL)
 									if(strict)
-										if(T.type != chosen) continue
+										if(T.type != chosen)
+											continue
 									else
-										if(!istype(T, chosen)) continue
+										if(!istype(T, chosen))
+											continue
 								T.ChangeTurf(whatfill)
 							else
 								if(areaAction == SELECTIVE_FILL)
 									for(var/atom/thing in T.contents)
 										if(strict)
-											if(thing.type != chosen) continue
+											if(thing.type != chosen)
+												continue
 										else
-											if(!istype(thing, chosen)) continue
+											if(!istype(thing, chosen))
+												continue
 										var/atom/A = new whatfill(T)
 										A.dir = thing.dir
 										qdel(thing)
@@ -335,7 +349,8 @@ obj/effect/bmode/buildholder/New()
 							msglog += " <big>EDITED EVERYTHING</big> in [fillturfs.len] tile\s "
 						if(SELECTIVE_DELETE)
 							chosen = easyTypeSelector()
-							if(!chosen) return
+							if(!chosen)
+								return
 							strict = alert("Edit all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
 							msglog += " <big>EDITED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
 						else
@@ -350,7 +365,8 @@ obj/effect/bmode/buildholder/New()
 							setvar(holder.buildmode.varholder, holder.buildmode.valueholder, T, reset)
 						else
 							for(var/atom/thing in T.contents)
-								if(thing==usr) continue
+								if(thing==usr)
+									continue
 								if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
 									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset)
 									edits++
@@ -368,7 +384,8 @@ obj/effect/bmode/buildholder/New()
 		if(H.cl == user.client)
 			holder = H
 			break
-	if(!holder) return
+	if(!holder)
+		return
 	var/list/pa = params2list(params)
 	var/turf/RT = get_turf(object)
 	switch(buildmode)
@@ -456,7 +473,8 @@ obj/effect/bmode/buildholder/New()
 									to_chat(usr, "<span class='notice'>Cleared filling corners.</span>")
 									return
 							var/areaAction = alert("FILL tiles or DELETE them? areaAction will destroy EVERYTHING IN THE SELECTED AREA", "Create or destroy, your chance to be a GOD","FILL","DELETE") == "DELETE"
-							if(areaAction) areaAction = (alert("Selective(TYPE) Delete or MASS Delete?", "Scorched Earth or selective destruction?", "Selective", "MASS") == "Selective" ? 2 : 1)
+							if(areaAction)
+								areaAction = (alert("Selective(TYPE) Delete or MASS Delete?", "Scorched Earth or selective destruction?", "Selective", "MASS") == "Selective" ? 2 : 1)
 							else
 								areaAction = (alert("Mass FILL or Selective(Type => Type) FILL?", "Do they really need [fillturfs.len] of closets?", "Selective", "Mass") == "Selective" ? 3 : 0)
 							var/msglog = "<span class='danger'>[key_name_admin(usr)] just buildmode"
@@ -467,12 +485,14 @@ obj/effect/bmode/buildholder/New()
 									msglog += " <big>DELETED EVERYTHING</big> in [fillturfs.len] tile\s "
 								if(SELECTIVE_DELETE)
 									chosen = easyTypeSelector()
-									if(!chosen) return
+									if(!chosen)
+										return
 									strict = alert("Delete all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
 									msglog += " <big>DELETED [!strict ? "ALL TYPES OF " :""][chosen]</big> in [fillturfs.len] tile\s "
 								if(SELECTIVE_FILL)
 									chosen = easyTypeSelector()
-									if(!chosen) return
+									if(!chosen)
+										return
 									strict = alert("Change all children of [chosen]?", "Children being all types and subtypes of [chosen]", "Yes", "No") == "No"
 									msglog += " Changed all [chosen] in [fillturfs.len] tile\s to [holder.buildmode.objholder] "
 								else
@@ -490,27 +510,33 @@ obj/effect/bmode/buildholder/New()
 										deletions++
 									else
 										for(var/atom/thing in T.contents)
-											if(thing==usr) continue
+											if(thing==usr)
+												continue
 											if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
 												qdel(thing)
 											deletions++
 											tcheck(80,1)
-										if(areaAction == MASS_DELETE) T.ChangeTurf(get_base_turf(T.z))
+										if(areaAction == MASS_DELETE)
+											T.ChangeTurf(get_base_turf(T.z))
 								else
 									if(turf_op)
 										if(areaAction == SELECTIVE_FILL)
 											if(strict)
-												if(T.type != chosen) continue
+												if(T.type != chosen)
+													continue
 											else
-												if(!istype(T, chosen)) continue
+												if(!istype(T, chosen))
+													continue
 										T.ChangeTurf(holder.buildmode.objholder)
 									else
 										if(areaAction == SELECTIVE_FILL)
 											for(var/atom/thing in T.contents)
 												if(strict)
-													if(thing.type != chosen) continue
+													if(thing.type != chosen)
+														continue
 												else
-													if(!istype(thing, chosen)) continue
+													if(!istype(thing, chosen))
+														continue
 												var/atom/A = new holder.buildmode.objholder(T)
 												A.dir = thing.dir
 												qdel(thing)
@@ -585,7 +611,8 @@ obj/effect/bmode/buildholder/New()
 					log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at [formatJumpTo(RT)]")
 			else if(pa.Find("right"))
 				log_admin("[key_name(usr)] deleted a [object] at [formatJumpTo(RT)]")
-				if(isobj(object)) del(object)
+				if(isobj(object))
+					del(object)
 			else if(pa.Find("middle"))
 				if(istype(object,/mob) && !check_rights(R_DEBUG,0))
 					to_chat(usr, "<span class='notice'>You don't have sufficient rights to clone [object.type]</span>")

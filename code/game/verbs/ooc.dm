@@ -6,13 +6,15 @@
 		to_chat(usr, "<span class='warning'>Speech is currently admin-disabled.</span>")
 		return
 
-	if(!mob)	return
+	if(!mob)
+		return
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use OOC.")
 		return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
-	if(!msg)	return
+	if(!msg)
+		return
 
 	if(!(prefs.toggles & CHAT_OOC))
 		to_chat(src, "<span class='warning'>You have OOC muted.</span>")
@@ -97,13 +99,15 @@
 		to_chat(usr, "<span class='warning'>Speech is currently admin-disabled.</span>")
 		return
 
-	if(!mob)	return
+	if(!mob)
+		return
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use OOC.")
 		return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
-	if(!msg)	return
+	if(!msg)
+		return
 
 	if(!(prefs.toggles & CHAT_LOOC))
 		to_chat(src, "<span class='warning'>You have LOOC muted.</span>")
@@ -139,7 +143,8 @@
 		AI = src.mob
 		heard = get_hearers_in_view(7, (istype(AI.eyeobj) ? AI.eyeobj : AI)) //if it doesn't have an eye somehow give it just the AI mob itself
 	for(var/mob/M in heard)
-		if(AI == M) continue
+		if(AI == M)
+			continue
 		if(!M.client)
 			continue
 		var/client/C = M.client

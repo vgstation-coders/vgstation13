@@ -203,7 +203,8 @@ var/list/datum/power/changeling/powerinstances = list()
 	set category = "Changeling"
 	set desc = "Level up!"
 
-	if(!usr || !usr.mind || !usr.mind.changeling)	return
+	if(!usr || !usr.mind || !usr.mind.changeling)
+		return
 	src = usr.mind.changeling
 
 	if(!powerinstances.len)
@@ -226,12 +227,14 @@ var/list/datum/power/changeling/powerinstances = list()
 					var filter_text = document.getElementById('filter');
 					var filter = filter_text.value.toLowerCase();
 
-					if(complete_list != null && complete_list != ""){
+					if(complete_list != null && complete_list != "")
+						{
 						var mtbl = document.getElementById("maintable_data_archive");
 						mtbl.innerHTML = complete_list;
 					}
 
-					if(filter.value == ""){
+					if(filter.value == "")
+						{
 						return;
 					}else{
 
@@ -241,7 +244,8 @@ var/list/datum/power/changeling/powerinstances = list()
 						{
 							try{
 								var tr = ltr\[i\];
-								if(tr.getAttribute("id").indexOf("data") != 0){
+								if(tr.getAttribute("id").indexOf("data") != 0)
+									{
 									continue;
 								}
 								var ltd = tr.getElementsByTagName("td");
@@ -306,7 +310,8 @@ var/list/datum/power/changeling/powerinstances = list()
 						var pass = 1;
 
 						for(var j = 0; j < locked_tabs.length; j++){
-							if(locked_tabs\[j\]==id){
+							if(locked_tabs\[j\]==id)
+								{
 								pass = 0;
 								break;
 							}
@@ -325,7 +330,8 @@ var/list/datum/power/changeling/powerinstances = list()
 				function addToLocked(id,link_id,notice_span_id){
 					var link = document.getElementById(link_id);
 					var decision = link.getAttribute("name");
-					if(decision == "1"){
+					if(decision == "1")
+						{
 						link.setAttribute("name","2");
 					}else{
 						link.setAttribute("name","1");
@@ -335,7 +341,8 @@ var/list/datum/power/changeling/powerinstances = list()
 
 					var pass = 1;
 					for(var j = 0; j < locked_tabs.length; j++){
-						if(locked_tabs\[j\]==id){
+						if(locked_tabs\[j\]==id)
+							{
 							pass = 0;
 							break;
 						}
@@ -359,7 +366,8 @@ var/list/datum/power/changeling/powerinstances = list()
 					var index = 0;
 					var pass = 0;
 					for(var j = 0; j < locked_tabs.length; j++){
-						if(locked_tabs\[j\]==id){
+						if(locked_tabs\[j\]==id)
+							{
 							pass = 1;
 							index = j;
 							break;

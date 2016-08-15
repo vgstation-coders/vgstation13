@@ -125,9 +125,11 @@
 	*/
 
 /obj/machinery/detector/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
-	if(usr) usr.set_machine(src)
+	if(usr)
+		usr.set_machine(src)
 
 	switch(href_list["action"])
 		if("idmode")
@@ -168,7 +170,8 @@
 		onclose(user, "detector")
 		return
 
-	else:
+	else
+		:
 
 		src.visible_message("<span class = 'warning'>ACCESS DENIED!</span>")
 
@@ -184,7 +187,8 @@
 	var/maxthreat = 0
 	var/sndstr = ""
 	for (var/mob/O in viewers(src, null))
-		if(isobserver(O)) continue
+		if(isobserver(O))
+			continue
 		if (get_dist(src, O) > src.range)
 			continue
 		var/list/ourretlist = src.assess_perp(O)

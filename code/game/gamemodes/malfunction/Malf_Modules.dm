@@ -88,7 +88,8 @@ rcd light flash thingy on matter drain
 			for(var/obj/item/mecha_parts/mecha_equipment/tool/rcd/rcd in world)
 				rcd.disabled = 1
 			to_chat(src, "RCD-disabling pulse emitted.")
-		else to_chat(src, "Out of uses.")
+		else
+			to_chat(src, "Out of uses.")
 
 /datum/AI_Module/small/overload_machine
 	module_name = "Machine overload"
@@ -112,8 +113,10 @@ rcd light flash thingy on matter drain
 				spawn(50)
 					explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 					qdel(M)
-			else to_chat(src, "Out of uses.")
-	else to_chat(src, "That's not a machine.")
+			else
+				to_chat(src, "Out of uses.")
+	else
+		to_chat(src, "That's not a machine.")
 
 
 /datum/AI_Module/large/place_cyborg_transformer
@@ -215,8 +218,10 @@ rcd light flash thingy on matter drain
 			for(var/obj/machinery/power/apc/apc in power_machines)
 				if(prob(30*apc.overload))
 					apc.overload_lighting()
-				else apc.overload++
-		else to_chat(src, "Out of uses.")
+				else
+					apc.overload++
+		else
+			to_chat(src, "Out of uses.")
 
 /datum/AI_Module/small/interhack
 	module_name = "Fake Centcom Announcement"
@@ -288,8 +293,10 @@ rcd light flash thingy on matter drain
 					camera.uses --
 				else
 					to_chat(src, "This camera is either active, or not repairable.")
-			else to_chat(src, "Out of uses.")
-	else to_chat(src, "That's not a camera.")
+			else
+				to_chat(src, "Out of uses.")
+	else
+		to_chat(src, "That's not a camera.")
 
 /datum/AI_Module/small/upgrade_camera
 	module_name = "Upgrade Camera"

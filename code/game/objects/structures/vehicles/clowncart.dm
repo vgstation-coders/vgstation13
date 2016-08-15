@@ -123,14 +123,18 @@
 		visible_message("<span class='notice'>[user] applies [W] to \the [src].</span>")
 		health += 10 //Banana peels repair some damage
 		empstun -= 1 //And help remove EMP stun
-		if(health > max_health) health = max_health
-		if(empstun ==0) visible_message("<span class='danger'>\The [src] comes back to life!</span>")
-		if(empstun < 0) empstun = 0
+		if(health > max_health)
+			health = max_health
+		if(empstun ==0)
+			visible_message("<span class='danger'>\The [src] comes back to life!</span>")
+		if(empstun < 0)
+			empstun = 0
 		qdel(W)
 	else if(istype(W, /obj/item/seeds/bananaseed))
 		visible_message("<span class='notice'>[user] applies [W] to \the [src].</span>")
 		health += 50
-		if(health > max_health) health = max_health
+		if(health > max_health)
+			health = max_health
 		if(empstun!=0)
 			empstun=0
 			visible_message("<span class='danger'>\The [src] comes back to life!</span>")
@@ -341,7 +345,8 @@
 
 /obj/structure/bed/chair/vehicle/clowncart/proc/feed(obj/item/W, mob/living/user)
 	var/datum/reagents/R=W.reagents
-	if(!R) return
+	if(!R)
+		return
 	if(R.has_reagent(BANANA))
 		var/added_banana=R.get_reagent_amount(BANANA)
 		if(reagents.total_volume + added_banana > 5000)

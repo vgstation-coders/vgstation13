@@ -204,7 +204,8 @@ var/const/tk_maxrange = 15
 		return 0
 	for(var/i = 1 to distance)
 		ref = get_step_to(ref, target, 0)
-	if(ref != target)	return 0
+	if(ref != target)
+		return 0
 	return 1
 */
 

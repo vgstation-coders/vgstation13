@@ -309,7 +309,8 @@
 	if (src.destroyed || gcDestroyed || !get_turf(src))
 		if(!ui)
 			ui = nanomanager.get_open_ui(user, src, ui_key)
-		if(ui) ui.close()
+		if(ui)
+			ui.close()
 		return
 
 	// this is the data which will be sent to the ui

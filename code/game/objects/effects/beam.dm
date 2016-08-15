@@ -121,7 +121,8 @@
 	beam_testing("Bumped by [AM]")
 	am_connector=1
 	var/obj/effect/beam/OB = master
-	if(!OB) OB = src
+	if(!OB)
+		OB = src
 	src._re_emit = 0
 	qdel(src)
 	OB.connect_to(AM)
@@ -206,7 +207,8 @@
 	beam_testing(" Connecting!")
 	am_connector=1
 	var/obj/effect/beam/OB = master
-	if(!OB) OB = src
+	if(!OB)
+		OB = src
 	src._re_emit = 0
 	qdel(src)
 	OB.connect_to(AM)

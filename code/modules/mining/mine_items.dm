@@ -47,7 +47,8 @@ var/mining_shuttle_moving = 0
 var/mining_shuttle_location = 0 // 0 = station 13, 1 = mining station
 
 proc/move_mining_shuttle()
-	if(mining_shuttle_moving)	return
+	if(mining_shuttle_moving)
+		return
 	mining_shuttle_moving = 1
 	spawn(mining_shuttle_tickstomove*10)
 		var/area/fromArea
@@ -801,7 +802,8 @@ proc/move_mining_shuttle()
 		if(istype(AM))
 			var/mob/living/simple_animal/M = AM
 			var/mob/living/simple_animal/hostile/H = M
-			if(!istype(H)) continue
+			if(!istype(H))
+				continue
 			for(var/things in H.friends)
 				if(capsuleowner in H.friends)
 					if(insert(AM, user) == -1) //Limit reached

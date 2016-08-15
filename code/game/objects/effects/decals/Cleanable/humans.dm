@@ -32,7 +32,8 @@ var/global/list/blood_list = list()
 	return
 
 /obj/effect/decal/cleanable/blood/update_icon()
-	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
+	if(basecolor == "rainbow")
+		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
 	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
@@ -101,7 +102,8 @@ var/global/list/blood_list = list()
 	giblets.color = fleshcolor
 
 	var/icon/blood = new(base_icon,"[icon_state]",dir)
-	if(basecolor == "rainbow") basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
+	if(basecolor == "rainbow")
+		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	blood.Blend(basecolor,ICON_MULTIPLY)
 
 	icon = blood

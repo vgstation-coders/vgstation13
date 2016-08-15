@@ -80,7 +80,8 @@
 	blocked = A.game_data["blocked"]
 
 /obj/machinery/computer/arcade/proc/export_game_data(var/obj/item/weapon/circuitboard/arcade/A)
-	if(!A) return
+	if(!A)
+		return
 	if(!A.game_data)
 		A.game_data = list()
 	A.game_data.len = 0

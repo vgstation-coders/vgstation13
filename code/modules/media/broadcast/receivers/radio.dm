@@ -142,7 +142,8 @@
 					buildstage = SYSTEMISKINDADONE
 					update_icon()
 				return 1
-			else return ..()
+			else
+				return ..()
 		if(SYSTEMISKINDADONE)
 			if(isscrewdriver(W))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

@@ -22,7 +22,8 @@
 	icon_state = "dropper[(reagents.total_volume ? 1 : 0)]"
 
 /obj/item/weapon/reagent_containers/dropper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag) return
+	if(!proximity_flag)
+		return
 
 	if(!target.reagents)
 		if(reagents.total_volume)

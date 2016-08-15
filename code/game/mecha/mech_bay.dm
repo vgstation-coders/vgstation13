@@ -24,7 +24,8 @@
 /obj/machinery/mech_bay_recharge_floor/RefreshParts()
 	var/capcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor)) capcount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+			capcount += SP.rating-1
 	capacitor_max = initial(capacitor_max)+(capcount * 750)
 
 /obj/machinery/mech_bay_recharge_floor/process()
@@ -102,7 +103,8 @@
 /obj/machinery/mech_bay_recharge_port/RefreshParts()
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
 	set_voltage(45+lasercount*10)
 
 /obj/machinery/mech_bay_recharge_port/proc/start_charge(var/obj/mecha/recharging_mecha)
@@ -155,7 +157,8 @@
 	if(!port)
 		return 0
 	if(mecha && mecha in get_turf(port.recharge_floor))
-		if(!mecha.cell)	return
+		if(!mecha.cell)
+			return
 		var/delta = min(max_charge, mecha.cell.maxcharge - mecha.cell.charge)
 		if(delta>0)
 			mecha.give_power(delta)

@@ -305,7 +305,8 @@
 					H.Paralyse(time)
 				else
 					H.Stun(time)
-				if(H.stat != 2)	H.stat = 1
+				if(H.stat != 2)
+					H.stat = 1
 				user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
 				return
 			else

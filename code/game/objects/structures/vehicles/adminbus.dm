@@ -372,13 +372,15 @@
 					return
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD(var/mob/M)
-	if(!M || !(M.hud_used))	return
+	if(!M || !(M.hud_used))
+		return
 
 	M.hud_used.adminbus_hud()
 	update_rearview()
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/remove_HUD(var/mob/M)
-	if(!M || !(M.hud_used))	return
+	if(!M || !(M.hud_used))
+		return
 
 	M.hud_used.remove_adminbus_hud()
 

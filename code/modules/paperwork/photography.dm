@@ -170,7 +170,8 @@
 	set name = "Set Camera Zoom"
 	set category = "Object"
 
-	if(usr.incapacitated()) return
+	if(usr.incapacitated())
+		return
 
 	if(photo_size == 3)
 		photo_size = 1
@@ -203,7 +204,8 @@
 
 
 /obj/item/device/camera/attack(atom/movable/M, mob/user)
-	if(istype(M, /obj/structure/table/)) return //Stop taking photos of tables while putting cameras on them
+	if(istype(M, /obj/structure/table/))
+		return //Stop taking photos of tables while putting cameras on them
 
 	return afterattack(M, user)
 
@@ -345,7 +347,8 @@
 /obj/item/device/camera/proc/camera_get_mobs(turf/the_turf)
 	var/mob_detail
 	for(var/mob/living/carbon/A in the_turf)
-		if(A.invisibility) continue
+		if(A.invisibility)
+			continue
 		var/holding = null
 		for(var/obj/item/I in A.held_items)
 			var/item_count = 0
@@ -363,13 +366,15 @@
 		else
 			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
 	for(var/mob/living/simple_animal/S in the_turf)
-		if(S.invisibility != 0) continue
+		if(S.invisibility != 0)
+			continue
 		if(!mob_detail)
 			mob_detail = "You can see [S] on the photo[S.health < (S.maxHealth/2) ? " - [S] looks hurt":""]."
 		else
 			mob_detail += "You can also see [S] on the photo[S.health < (S.maxHealth/2) ? " - [S] looks hurt":""]."
 	for(var/mob/dead/observer/O in the_turf)//in case ghosts have been made visible
-		if(O.invisibility != 0) continue
+		if(O.invisibility != 0)
+			continue
 		if(!mob_detail)
 			mob_detail = "Wait...is that [O] on the photo? "
 		else
@@ -557,7 +562,8 @@
 	del P    //so 10 thousdand pictures items are not left in memory should an AI take them and then view them all.
 
 /obj/item/device/camera/afterattack(atom/target, mob/user, flag)
-	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc))) return
+	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc)))
+		return
 	captureimage(target, user, flag)
 
 	playsound(loc, "polaroid", 75, 1, -3)

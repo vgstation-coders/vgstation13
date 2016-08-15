@@ -233,7 +233,8 @@ var/global/list/pda_app_menus = list(
 				user << browse(null, "window=pda")
 
 /datum/pda_app/minesweeper/proc/save_score()
-	if(minesweeper_game.current_difficulty == "custom")	return
+	if(minesweeper_game.current_difficulty == "custom")
+		return
 	if(minesweeper_game.end_timer < minesweeper_station_highscores[minesweeper_game.current_difficulty])
 		minesweeper_station_highscores[minesweeper_game.current_difficulty] = minesweeper_game.end_timer
 		minesweeper_best_players[minesweeper_game.current_difficulty] = pda_device.owner

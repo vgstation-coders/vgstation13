@@ -142,7 +142,8 @@
 	if(!on)
 		return
 	// New GC does this sometimes
-	if(!loc) return
+	if(!loc)
+		return
 
 
 	var/datum/gas_mixture/environment = loc.return_air()
@@ -311,7 +312,8 @@
 		if (WT.remove_fuel(1,user))
 			to_chat(user, "<span class='notice'>Now welding the scrubber.</span>")
 			if(do_after(user, src, 20))
-				if(!src || !WT.isOn()) return
+				if(!src || !WT.isOn())
+					return
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
 				if(!welded)
 					user.visible_message("[user] welds the scrubber shut.", "You weld the vent scrubber.", "You hear welding.")

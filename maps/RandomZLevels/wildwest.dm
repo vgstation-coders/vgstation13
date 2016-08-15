@@ -120,7 +120,8 @@
 
 /obj/effect/meatgrinder/Bumped(mob/M as mob|obj)
 
-	if(triggered) return
+	if(triggered)
+		return
 
 	if(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey))
 		for(var/mob/O in viewers(world.view, src.loc))

@@ -68,7 +68,8 @@
 	return
 
 /obj/machinery/ai_slipper/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(src.locked)
 		if(!istype(usr, /mob/living/silicon))
 			to_chat(usr, "<span class='warning'>Control panel is locked!</span>")

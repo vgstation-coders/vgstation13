@@ -120,7 +120,8 @@
 		force = round((5 + potency / 5), 1)
 
 /obj/item/weapon/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(!..()) return
+	if(!..())
+		return
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are heated by the warmth of the of the [name]!</span>")
 		M.bodytemperature += potency/2 * TEMPERATURE_DAMAGE_COEFFICIENT
@@ -161,7 +162,8 @@
 		to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
 
 /obj/item/weapon/grown/nettle/afterattack(atom/A as mob|obj, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	user.delayNextAttack(8)
 	if(force > 0)
 		force -= rand(1,(force/3)+1) // When you whack someone with it, leaves fall off
@@ -213,7 +215,8 @@
 			to_chat(user, "<span class='warning'>You are stunned by the Deathnettle when you try picking it up!</span>")
 
 /obj/item/weapon/grown/deathnettle/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(!..()) return
+	if(!..())
+		return
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are stunned by the powerful acid of the Deathnettle!</span>")
 
@@ -230,7 +233,8 @@
 		M.drop_item()
 
 /obj/item/weapon/grown/deathnettle/afterattack(atom/A as mob|obj, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	user.delayNextAttack(8)
 	if (force > 0)
 		force -= rand(1,(force/3)+1) // When you whack someone with it, leaves fall off

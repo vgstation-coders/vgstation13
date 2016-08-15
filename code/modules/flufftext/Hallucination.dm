@@ -20,7 +20,8 @@ mob/living/carbon/var
 	hal_crit = 0
 
 mob/living/carbon/proc/handle_hallucinations()
-	if(handling_hal) return
+	if(handling_hal)
+		return
 	handling_hal = 1
 	while(hallucination > 20)
 		sleep(rand(200,500)/(hallucination/25))
@@ -38,13 +39,18 @@ mob/living/carbon/proc/handle_hallucinations()
 				if(!halitem)
 					halitem = new
 					var/list/slots_free = list(ui_lhand,ui_rhand)
-					if(get_held_item_by_index(GRASP_LEFT_HAND)) slots_free -= ui_lhand
-					if(get_held_item_by_index(GRASP_RIGHT_HAND)) slots_free -= ui_rhand
+					if(get_held_item_by_index(GRASP_LEFT_HAND))
+						slots_free -= ui_lhand
+					if(get_held_item_by_index(GRASP_RIGHT_HAND))
+						slots_free -= ui_rhand
 					if(istype(src,/mob/living/carbon/human))
 						var/mob/living/carbon/human/H = src
-						if(!H.belt) slots_free += ui_belt
-						if(!H.l_store) slots_free += ui_storage1
-						if(!H.r_store) slots_free += ui_storage2
+						if(!H.belt)
+							slots_free += ui_belt
+						if(!H.l_store)
+							slots_free += ui_storage1
+						if(!H.r_store)
+							slots_free += ui_storage2
 					if(slots_free.len)
 						halitem.screen_loc = pick(slots_free)
 						halitem.layer = HALLUCINATION_LAYER
@@ -76,7 +82,8 @@ mob/living/carbon/proc/handle_hallucinations()
 								halitem.icon = 'icons/obj/grenade.dmi'
 								halitem.icon_state = "flashbang1"
 								halitem.name = "Flashbang"
-						if(client) client.screen += halitem
+						if(client)
+							client.screen += halitem
 						spawn(rand(100,250))
 							if(client)
 								client.screen -= halitem
@@ -102,9 +109,11 @@ mob/living/carbon/proc/handle_hallucinations()
 								halimage = image('icons/obj/grenade.dmi',target,"flashbang_active",OBJ_LAYER)
 
 
-						if(client) client.images += halimage
+						if(client)
+							client.images += halimage
 						spawn(rand(10,50)) //Only seen for a brief moment.
-							if(client) client.images -= halimage
+							if(client)
+								client.images -= halimage
 							halimage = null
 
 
@@ -113,24 +122,32 @@ mob/living/carbon/proc/handle_hallucinations()
 //				to_chat(src, "Strange Audio")
 				if(client)
 					switch(rand(1,16))
-						if(1) src << 'sound/machines/airlock.ogg'
+						if(1)
+							src << 'sound/machines/airlock.ogg'
 						if(2)
 							if(prob(50))
 								src << 'sound/effects/Explosion1.ogg'
 							else
 								src << 'sound/effects/Explosion2.ogg'
-						if(3) src << 'sound/effects/explosionfar.ogg'
-						if(4) src << 'sound/effects/Glassbr1.ogg'
-						if(5) src << 'sound/effects/Glassbr2.ogg'
-						if(6) src << 'sound/effects/Glassbr3.ogg'
-						if(7) src << 'sound/machines/twobeep.ogg'
-						if(8) src << 'sound/machines/windowdoor.ogg'
+						if(3)
+							src << 'sound/effects/explosionfar.ogg'
+						if(4)
+							src << 'sound/effects/Glassbr1.ogg'
+						if(5)
+							src << 'sound/effects/Glassbr2.ogg'
+						if(6)
+							src << 'sound/effects/Glassbr3.ogg'
+						if(7)
+							src << 'sound/machines/twobeep.ogg'
+						if(8)
+							src << 'sound/machines/windowdoor.ogg'
 						if(9)
 							//To make it more realistic, I added two gunshots (enough to kill)
 							src << 'sound/weapons/Gunshot.ogg'
 							spawn(rand(10,30))
 								src << 'sound/weapons/Gunshot.ogg'
-						if(10) src << 'sound/weapons/smash.ogg'
+						if(10)
+							src << 'sound/weapons/smash.ogg'
 						if(11)
 							//Same as above, but with tasers.
 							src << 'sound/weapons/Taser.ogg'
@@ -183,9 +200,11 @@ mob/living/carbon/proc/handle_hallucinations()
 	//						if(5)
 	//							halbody = image('xcomalien.dmi',target,"chryssalid",TURF_LAYER)
 
-						if(client) client.images += halbody
+						if(client)
+							client.images += halbody
 						spawn(rand(50,80)) //Only seen for a brief moment.
-							if(client) client.images -= halbody
+							if(client)
+								client.images -= halbody
 							halbody = null
 			if(71 to 72)
 				//Fake death
@@ -223,16 +242,26 @@ mob/living/carbon/proc/handle_hallucinations()
 						message_admins("[key_name(usr)] just got a fake delta AI message from hallucinating! [formatJumpTo(get_turf(usr))]")
 				else
 					switch(rand(1,10)) //Copied from nanites disease
-						if(1)  to_chat(src, "Your joints feel stiff.")
-						if(2)  to_chat(src, "<span class='warning'>Beep...boop..</span>")
-						if(3)  to_chat(src, "<span class='warning'>Bop...beeep...</span>")
-						if(4)  to_chat(src, "<span class='warning'>Your joints feel very stiff.</span>")
-						if(5)  src.say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
-						if(6)  to_chat(src, "Your skin feels loose.")
-						if(7)  to_chat(src, "<span class='warning'>You feel a stabbing pain in your head.</span>")
-						if(8)  to_chat(src, "<span class='warning'>You can feel something move...inside.</span>")
-						if(9)  to_chat(src, "<span class='warning'>Your skin feels very loose.</span>")
-						if(10) to_chat(src, "<span class='warning'>Your skin feels as if it's about to burst off...</span>")
+						if(1)
+							to_chat(src, "Your joints feel stiff.")
+						if(2)
+							to_chat(src, "<span class='warning'>Beep...boop..</span>")
+						if(3)
+							to_chat(src, "<span class='warning'>Bop...beeep...</span>")
+						if(4)
+							to_chat(src, "<span class='warning'>Your joints feel very stiff.</span>")
+						if(5)
+							src.say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
+						if(6)
+							to_chat(src, "Your skin feels loose.")
+						if(7)
+							to_chat(src, "<span class='warning'>You feel a stabbing pain in your head.</span>")
+						if(8)
+							to_chat(src, "<span class='warning'>You can feel something move...inside.</span>")
+						if(9)
+							to_chat(src, "<span class='warning'>Your skin feels very loose.</span>")
+						if(10)
+							to_chat(src, "<span class='warning'>Your skin feels as if it's about to burst off...</span>")
 
 			if(78 to 80) //Fake ghosts
 				to_chat(src, "<i>[pick(boo_phrases)]</i>")
@@ -422,7 +451,8 @@ proc/check_panel(mob/M)
 					my_target << sound(pick('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg'))
 					my_target.show_message("<span class='danger'>[my_target] has been attacked with [weapon_name] by [src.name] </span>", 1)
 					my_target.halloss += 8
-					if(prob(20)) my_target.eye_blurry += 3
+					if(prob(20))
+						my_target.eye_blurry += 3
 					if(prob(33))
 						if(!locate(/obj/effect/overlay) in my_target.loc)
 							fake_blood(my_target)
@@ -471,14 +501,16 @@ var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/ite
 	var/clone_weapon = null
 
 	for(var/mob/living/carbon/human/H in living_mob_list)
-		if(H.stat || H.lying) continue
+		if(H.stat || H.lying)
+			continue
 //		possible_clones += H
 		clone = H
 		break	//changed the code a bit. Less randomised, but less work to do. Should be ok, world.contents aren't stored in any particular order.
 
 //	if(!possible_clones.len) return
 //	clone = pick(possible_clones)
-	if(!clone)	return
+	if(!clone)
+		return
 
 	//var/obj/effect/fake_attacker/F = new/obj/effect/fake_attacker(outside_range(target))
 	var/obj/effect/fake_attacker/F = getFromPool(/obj/effect/fake_attacker,target.loc)

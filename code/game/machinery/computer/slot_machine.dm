@@ -118,7 +118,8 @@
 				return
 
 /obj/machinery/computer/slot_machine/proc/spin(mob/user)
-	if(spinning) return
+	if(spinning)
+		return
 
 	//Charge money:
 	if(stored_money >= spin_cost) //If there's cash in the machine
@@ -255,7 +256,8 @@
 
 //Broadcast something over the radio!
 /obj/machinery/computer/slot_machine/proc/broadcast(var/message)
-	if(!message) return
+	if(!message)
+		return
 
 	Broadcast_Message(radio, all_languages[LANGUAGE_GALACTIC_COMMON], null, radio, message, "[capitalize(src.name)]", "Money Snatcher", "Slot machine #[id]", 0, 0, list(0,1), 1459)
 

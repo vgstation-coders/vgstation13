@@ -63,7 +63,8 @@
 /mob/living/carbon/human/death(gibbed)
 	if(stat == DEAD)
 		return
-	if(healths)		healths.icon_state = "health7"
+	if(healths)
+		healths.icon_state = "health7"
 	stat = DEAD
 	dizziness = 0
 	remove_jitter()
@@ -80,7 +81,8 @@
 		//Check for last assailant's mutantrace.
 		/*if( LAssailant && ( istype( LAssailant,/mob/living/carbon/human ) ) )
 			var/mob/living/carbon/human/V = LAssailant
-			if (V.dna && (V.dna.mutantrace == "vox"))*/ //Not currently feasible due to terrible LAssailant tracking.
+			if (V.dna && (V.dna.mutantrace == "vox"))
+				*/ //Not currently feasible due to terrible LAssailant tracking.
 //		to_chat(world, "Vox kills: [vox_kills]")
 		vox_kills++ //Bad vox. Shouldn't be killing humans.
 	if(ishuman(LAssailant))

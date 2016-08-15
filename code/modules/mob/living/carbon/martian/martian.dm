@@ -34,28 +34,44 @@
 	return list()
 
 /mob/living/carbon/martian/get_held_item_ui_location(index)
-	if(!is_valid_hand_index(index)) return
+	if(!is_valid_hand_index(index))
+		return
 
 	switch(index)
-		if(1) return "CENTER-3:16,SOUTH:5"
-		if(2) return "CENTER-2:16,SOUTH:5:4"
-		if(3) return "CENTER-1:16,SOUTH:5:10"
-		if(4) return "CENTER+1:16,SOUTH:5:10"
-		if(5) return "CENTER+2:16,SOUTH:5:4"
-		if(6) return "CENTER+3:16,SOUTH:5"
-		else return ..()
+		if(1)
+			return "CENTER-3:16,SOUTH:5"
+		if(2)
+			return "CENTER-2:16,SOUTH:5:4"
+		if(3)
+			return "CENTER-1:16,SOUTH:5:10"
+		if(4)
+			return "CENTER+1:16,SOUTH:5:10"
+		if(5)
+			return "CENTER+2:16,SOUTH:5:4"
+		if(6)
+			return "CENTER+3:16,SOUTH:5"
+		else
+			return ..()
 
 /mob/living/carbon/martian/get_index_limb_name(index)
-	if(!index) index = active_hand
+	if(!index)
+		index = active_hand
 
 	switch(index)
-		if(1) return "right lower tentacle"
-		if(2) return "right middle tentacle"
-		if(3) return "right upper tentacle"
-		if(4) return "left upper tentacle"
-		if(5) return "left middle tentacle"
-		if(6) return "left lower tentacle"
-		else return "tentacle"
+		if(1)
+			return "right lower tentacle"
+		if(2)
+			return "right middle tentacle"
+		if(3)
+			return "right upper tentacle"
+		if(4)
+			return "left upper tentacle"
+		if(5)
+			return "left middle tentacle"
+		if(6)
+			return "left lower tentacle"
+		else
+			return "tentacle"
 
 /mob/living/carbon/martian/get_direction_by_index(index)
 	if(index <= 3)
@@ -89,7 +105,8 @@
 /mob/living/carbon/martian/u_equip(obj/item/W as obj, dropped = 1)
 	var/success = 0
 
-	if(!W)	return 0
+	if(!W)
+		return 0
 
 	if (W == head)
 		head = null
@@ -112,7 +129,8 @@
 	return
 
 /mob/living/carbon/martian/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
-	if(!istype(W)) return
+	if(!istype(W))
+		return
 
 	if(src.is_holding_item(W))
 		src.u_equip(W)
@@ -124,4 +142,5 @@
 	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
-	if(client) client.screen |= W
+	if(client)
+		client.screen |= W

@@ -12,7 +12,8 @@
 
 	Click()
 		var/mob/M = usr
-		if(!istype(M)) return
+		if(!istype(M))
+			return
 		M.stat_fucked = !M.stat_fucked
 
 var/global/obj/screen/fuckstat/FUCK = new
@@ -26,7 +27,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_uattack) on_uattack.holder = null
+	if(on_uattack)
+		on_uattack.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -76,123 +78,153 @@ var/global/obj/screen/fuckstat/FUCK = new
 /mob/proc/remove_screen_objs()
 	if(flash)
 		returnToPool(flash)
-		if(client) client.screen -= flash
+		if(client)
+			client.screen -= flash
 		flash = null
 	if(blind)
 		returnToPool(blind)
-		if(client) client.screen -= blind
+		if(client)
+			client.screen -= blind
 		blind = null
 	if(hands)
 		returnToPool(hands)
-		if(client) client.screen -= hands
+		if(client)
+			client.screen -= hands
 		hands = null
 	if(pullin)
 		returnToPool(pullin)
-		if(client) client.screen -= pullin
+		if(client)
+			client.screen -= pullin
 		pullin = null
 	if(visible)
 		returnToPool(visible)
-		if(client) client.screen -= visible
+		if(client)
+			client.screen -= visible
 		visible = null
 	if(purged)
 		returnToPool(purged)
-		if(client) client.screen -= purged
+		if(client)
+			client.screen -= purged
 		purged = null
 	if(internals)
 		returnToPool(internals)
-		if(client) client.screen -= internals
+		if(client)
+			client.screen -= internals
 		internals = null
 	if(oxygen)
 		returnToPool(oxygen)
-		if(client) client.screen -= oxygen
+		if(client)
+			client.screen -= oxygen
 		oxygen = null
 	if(i_select)
 		returnToPool(i_select)
-		if(client) client.screen -= i_select
+		if(client)
+			client.screen -= i_select
 		i_select = null
 	if(m_select)
 		returnToPool(m_select)
-		if(client) client.screen -= m_select
+		if(client)
+			client.screen -= m_select
 		m_select = null
 	if(toxin)
 		returnToPool(toxin)
-		if(client) client.screen -= toxin
+		if(client)
+			client.screen -= toxin
 		toxin = null
 	if(fire)
 		returnToPool(fire)
-		if(client) client.screen -= fire
+		if(client)
+			client.screen -= fire
 		fire = null
 	if(bodytemp)
 		returnToPool(bodytemp)
-		if(client) client.screen -= bodytemp
+		if(client)
+			client.screen -= bodytemp
 		bodytemp = null
 	if(healths)
 		returnToPool(healths)
-		if(client) client.screen -= healths
+		if(client)
+			client.screen -= healths
 		healths = null
 	if(throw_icon)
 		returnToPool(throw_icon)
-		if(client) client.screen -= throw_icon
+		if(client)
+			client.screen -= throw_icon
 		throw_icon = null
 	if(nutrition_icon)
 		returnToPool(nutrition_icon)
-		if(client) client.screen -= nutrition_icon
+		if(client)
+			client.screen -= nutrition_icon
 		nutrition_icon = null
 	if(pressure)
 		returnToPool(pressure)
-		if(client) client.screen -= pressure
+		if(client)
+			client.screen -= pressure
 		pressure = null
 	if(damageoverlay)
 		returnToPool(damageoverlay)
-		if(client) client.screen -= damageoverlay
+		if(client)
+			client.screen -= damageoverlay
 		damageoverlay = null
 	if(pain)
 		returnToPool(pain)
-		if(client) client.screen -= pain
+		if(client)
+			client.screen -= pain
 		pain = null
 	if(item_use_icon)
 		returnToPool(item_use_icon)
-		if(client) client.screen -= item_use_icon
+		if(client)
+			client.screen -= item_use_icon
 		item_use_icon = null
 	if(gun_move_icon)
 		returnToPool(gun_move_icon)
-		if(client) client.screen -= gun_move_icon
+		if(client)
+			client.screen -= gun_move_icon
 		gun_move_icon = null
 	if(gun_run_icon)
 		returnToPool(gun_run_icon)
-		if(client) client.screen -= gun_run_icon
+		if(client)
+			client.screen -= gun_run_icon
 		gun_run_icon = null
 	if(gun_setting_icon)
 		returnToPool(gun_setting_icon)
-		if(client) client.screen -= gun_setting_icon
+		if(client)
+			client.screen -= gun_setting_icon
 		gun_setting_icon = null
 	if(m_suitclothes)
 		returnToPool(m_suitclothes)
-		if(client) client.screen -= m_suitclothes
+		if(client)
+			client.screen -= m_suitclothes
 		m_suitclothes = null
 	if(m_suitclothesbg)
 		returnToPool(m_suitclothesbg)
-		if(client) client.screen -= m_suitclothesbg
+		if(client)
+			client.screen -= m_suitclothesbg
 		m_suitclothesbg = null
 	if(m_hat)
 		returnToPool(m_hat)
-		if(client) client.screen -= m_hat
+		if(client)
+			client.screen -= m_hat
 		m_hat = null
 	if(m_hatbg)
 		returnToPool(m_hatbg)
-		if(client) client.screen -= m_hatbg
+		if(client)
+			client.screen -= m_hatbg
 		m_hatbg = null
 	if(m_glasses)
 		returnToPool(m_glasses)
-		if(client) client.screen -= m_glasses
+		if(client)
+			client.screen -= m_glasses
 		m_glasses = null
 	if(m_glassesbg)
 		returnToPool(m_glassesbg)
-		if(client) client.screen -= m_glassesbg
+		if(client)
+			client.screen -= m_glassesbg
 		m_glasses = null
 	if(zone_sel)
 		returnToPool(zone_sel)
-		if(client) client.screen -= zone_sel
+		if(client)
+			client.screen -= zone_sel
 		zone_sel = null
 	if(hud_used)
 		for(var/obj/screen/item_action/actionitem in hud_used.item_action_list)
@@ -249,7 +281,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	set category = "Admin"
 	set hidden = 1
 
-	if(!loc) return 0
+	if(!loc)
+		return 0
 
 	var/datum/gas_mixture/environment = loc.return_air()
 
@@ -354,7 +387,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 		if(blind_drugged_message)
 			msg2 = blind_drugged_message
 	show_message( msg, 1, msg2, 2)
-	
+
 // Show a message to all mobs in sight of this atom
 // Use for objects performing visible actions
 // message is output to anyone who can see, e.g. "The [src] does something!"
@@ -376,7 +409,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return 0
 
 /mob/proc/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
 		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
@@ -481,7 +515,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 
 /mob/proc/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return
 
 //This proc is called whenever someone clicks an inventory ui slot.
@@ -511,7 +546,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 //set disable_warning to disable the 'you are unable to equip that' warning.
 //unset redraw_mob to prevent the mob from being redrawn at the end.
 /mob/proc/equip_to_slot_if_possible(obj/item/W as obj, slot, act_on_fail = 0, disable_warning = 0, redraw_mob = 1, automatic = 0)
-	if(!istype(W)) return 0
+	if(!istype(W))
+		return 0
 
 	if(!W.mob_can_equip(src, slot, disable_warning))
 		switch(act_on_fail)
@@ -596,7 +632,8 @@ var/list/slot_equipment_priority = list( \
 	return 0
 
 /mob/proc/check_for_open_slot(obj/item/W)
-	if(!istype(W)) return 0
+	if(!istype(W))
+		return 0
 	var/openslot = 0
 	for(var/slot in slot_equipment_priority)
 		if(W.mob_check_equip(src, slot, 1) == 1)
@@ -605,8 +642,10 @@ var/list/slot_equipment_priority = list( \
 	return openslot
 
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
-	if(!M) return 0
-	if(!slot) return 0
+	if(!M)
+		return 0
+	if(!slot)
+		return 0
 	if(ishuman(M))
 		//START HUMAN
 		var/mob/living/carbon/human/H = M
@@ -947,9 +986,11 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 	set src = usr
 
-	if(attack_delayer.blocked()) return
+	if(attack_delayer.blocked())
+		return
 
-	if(istype(loc,/obj/mecha)) return
+	if(istype(loc,/obj/mecha))
+		return
 
 	if(isVentCrawling())
 		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
@@ -1283,10 +1324,14 @@ var/list/slot_equipment_priority = list( \
 
 /mob/MouseDrop(mob/M as mob)
 	..()
-	if(M != usr) return
-	if(usr == src) return
-	if(!Adjacent(usr)) return
-	if(istype(M,/mob/living/silicon/ai)) return
+	if(M != usr)
+		return
+	if(usr == src)
+		return
+	if(!Adjacent(usr))
+		return
+	if(istype(M,/mob/living/silicon/ai))
+		return
 	show_inv(usr)
 
 
@@ -1408,13 +1453,20 @@ var/list/slot_equipment_priority = list( \
 
 // facing verbs
 /mob/proc/canface()
-	if(!canmove)						return 0
-	if(client.moving)					return 0
-	if(client.move_delayer.blocked())	return 0
-	if(stat==2)							return 0
-	if(anchored)						return 0
-	if(monkeyizing)						return 0
-	if(restrained())					return 0
+	if(!canmove)
+		return 0
+	if(client.moving)
+		return 0
+	if(client.move_delayer.blocked())
+		return 0
+	if(stat==2)
+		return 0
+	if(anchored)
+		return 0
+	if(monkeyizing)
+		return 0
+	if(restrained())
+		return 0
 	return 1
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
@@ -1464,7 +1516,8 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/eastface()
 	set hidden = 1
-	if(!canface())	return 0
+	if(!canface())
+		return 0
 	dir = EAST
 	Facing()
 	delayNextMove(movement_delay(),additive=1)
@@ -1473,7 +1526,8 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/westface()
 	set hidden = 1
-	if(!canface())	return 0
+	if(!canface())
+		return 0
 	dir = WEST
 	Facing()
 	delayNextMove(movement_delay(),additive=1)
@@ -1482,7 +1536,8 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/northface()
 	set hidden = 1
-	if(!canface())	return 0
+	if(!canface())
+		return 0
 	dir = NORTH
 	Facing()
 	delayNextMove(movement_delay(),additive=1)
@@ -1491,7 +1546,8 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/southface()
 	set hidden = 1
-	if(!canface())	return 0
+	if(!canface())
+		return 0
 	dir = SOUTH
 	Facing()
 	delayNextMove(movement_delay(),additive=1)
@@ -1502,8 +1558,10 @@ var/list/slot_equipment_priority = list( \
     var/datum/listener
     for(. in src.callOnFace)
         listener = locate(.)
-        if(listener) call(listener,src.callOnFace[.])(src)
-        else src.callOnFace -= .
+        if(listener)
+            call(listener,src.callOnFace[.])(src)
+        else
+            src.callOnFace -= .
 
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
@@ -1665,10 +1723,10 @@ var/list/slot_equipment_priority = list( \
 // Mobs tell access what access levels it has.
 /mob/proc/GetAccess()
 	return list()
-	
+
 /mob/proc/get_visible_id()
 	return 0
-	
+
 // Skip over all the complex list checks.
 /mob/proc/hasFullAccess()
 	return 0

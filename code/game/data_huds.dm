@@ -38,7 +38,8 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 		for(var/datum/disease/D in patient.viruses)
 			if(!D.hidden[SCANNER])
 				foundVirus++
-		if(!C) continue
+		if(!C)
+			continue
 
 		holder = patient.hud_list[HEALTH_HUD]
 		if(holder)
@@ -116,10 +117,14 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 			if(R)
 				holder = perp.hud_list[WANTED_HUD]
 				switch(R.fields["criminal"])
-					if("*Arrest*")		holder.icon_state = "hudwanted"
-					if("Incarcerated")	holder.icon_state = "hudprisoner"
-					if("Parolled")		holder.icon_state = "hudparolled"
-					if("Released")		holder.icon_state = "hudreleased"
+					if("*Arrest*")
+						holder.icon_state = "hudwanted"
+					if("Incarcerated")
+						holder.icon_state = "hudprisoner"
+					if("Parolled")
+						holder.icon_state = "hudparolled"
+					if("Released")
+						holder.icon_state = "hudreleased"
 					else
 						continue
 				C.images += holder

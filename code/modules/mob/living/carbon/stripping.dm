@@ -109,7 +109,8 @@
 			log_attack("[user.name] ([user.ckey]) has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
 
 /mob/living/carbon/proc/handle_strip_hand(var/mob/living/user, var/index)
-	if(!index || !isnum(index))	return
+	if(!index || !isnum(index))
+		return
 
 	var/obj/item/held = user.get_active_hand()
 	var/obj/item/target_item = src.held_items[index]

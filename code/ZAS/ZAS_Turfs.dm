@@ -95,8 +95,10 @@
 			overlays += wet_overlay
 
 			spawn(800)
-				if (!istype(src)) return
-				if(wet >= 2) return
+				if (!istype(src))
+					return
+				if(wet >= 2)
+					return
 				wet = 0
 				if(wet_overlay)
 					overlays -= wet_overlay
@@ -154,7 +156,8 @@
 	air=T.return_air()
 
 /turf/simulated/assume_air(datum/gas_mixture/giver)
-	if(!giver)	return 0
+	if(!giver)
+		return 0
 	if(zone && zone.air && !iscatwalk(src))
 		zone.air.merge(giver)
 		return 1
@@ -335,7 +338,8 @@
 	//Another turf as an argument checks for windoors between here and there.
 	for(var/obj/machinery/door/D in src)
 		if(isnum(O) && O)
-			if(!D.density) continue
+			if(!D.density)
+				continue
 		if(istype(D,/obj/machinery/door/window))
 			if(!istype(O))
 				continue

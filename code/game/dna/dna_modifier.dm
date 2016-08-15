@@ -430,9 +430,11 @@
 
 /obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
 	var/pos = findtext(blk,":")
-	if(!pos) return 0
+	if(!pos)
+		return 0
 	var/id = text2num(copytext(blk,1,pos))
-	if(!id) return 0
+	if(!id)
+		return 0
 	I.block = id
 	I.buf = buffer
 	return 1

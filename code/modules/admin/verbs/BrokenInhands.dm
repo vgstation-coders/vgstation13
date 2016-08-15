@@ -2,7 +2,8 @@
 	set name = "Broken Sprite List"
 	set category = "Debug"
 
-	if(!alert("Are you sure you want to get the broken sprites list?",,"Yes","No") == "Yes") return
+	if(!alert("Are you sure you want to get the broken sprites list?",,"Yes","No") == "Yes")
+		return
 	var/icon/IL = new('icons/mob/in-hand/left/items_lefthand.dmi')
 	var/list/Lstates = IL.IconStates()
 	var/icon/IR = new('icons/mob/in-hand/right/items_righthand.dmi')
@@ -12,7 +13,8 @@
 	var/text
 	for(var/A in typesof(/obj/item))
 		var/obj/item/O = new A( locate(1,1,1) )
-		if(!O) continue
+		if(!O)
+			continue
 		var/icon/J = new(O.icon)
 		var/list/istates = J.IconStates()
 		if(!Lstates.Find(O.icon_state) && !Lstates.Find(O.item_state))

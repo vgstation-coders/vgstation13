@@ -5,7 +5,8 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.abandon_host()
 
 /obj/item/verbs/borer/severed/verb/borer_speak(var/message as text)
@@ -20,5 +21,6 @@
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.borer_speak(message)

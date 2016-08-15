@@ -201,10 +201,14 @@ var/list/all_doors = list()
 
 
 /obj/machinery/door/proc/open()
-	if(!density)		return 1
-	if(operating > 0)	return
-	if(!ticker)			return 0
-	if(!operating)		operating = 1
+	if(!density)
+		return 1
+	if(operating > 0)
+		return
+	if(!ticker)
+		return 0
+	if(!operating)
+		operating = 1
 
 	door_animate("opening")
 	set_opacity(0)
@@ -291,7 +295,8 @@ var/list/all_doors = list()
 	..()
 
 /obj/machinery/door/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group) return 0
+	if(air_group)
+		return 0
 	if(istype(mover))
 		if(mover.checkpass(PASSGLASS))
 			return !opacity

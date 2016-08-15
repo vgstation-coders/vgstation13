@@ -13,14 +13,19 @@ proc/get_infection_chance(var/mob/living/carbon/M, var/vector = "Airborne")
 				score += 5
 				if(istype(M:wear_mask, /obj/item/clothing/mask/surgical) && !M.internal)
 					score += 10
-			if(istype(M:wear_suit, /obj/item/clothing/suit/space) && istype(M:head, /obj/item/clothing/head/helmet/space)) score += 15
-			if(istype(M:wear_suit, /obj/item/clothing/suit/bio_suit) && istype(M:head, /obj/item/clothing/head/bio_hood)) score += 15
+			if(istype(M:wear_suit, /obj/item/clothing/suit/space) && istype(M:head, /obj/item/clothing/head/helmet/space))
+				score += 15
+			if(istype(M:wear_suit, /obj/item/clothing/suit/bio_suit) && istype(M:head, /obj/item/clothing/head/bio_hood))
+				score += 15
 
 
 		if (vector == "Contact")
-			if(M:gloves) score += 15
-			if(istype(M:wear_suit, /obj/item/clothing/suit/space)) score += 10
-			if(istype(M:wear_suit, /obj/item/clothing/suit/bio_suit)) score += 10
+			if(M:gloves)
+				score += 15
+			if(istype(M:wear_suit, /obj/item/clothing/suit/space))
+				score += 10
+			if(istype(M:wear_suit, /obj/item/clothing/suit/bio_suit))
+				score += 10
 
 //	log_debug("[M]'s resistance to [vector] viruses: [score]")
 
@@ -107,7 +112,8 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		for (var/ID in virus2)
 			log_debug("Attempting virus [ID]")
 			var/datum/disease2/disease/V = virus2[ID]
-			if(V.spreadtype != vector) continue
+			if(V.spreadtype != vector)
+				continue
 
 			if (vector == "Airborne")
 				if(airborne_can_reach(get_turf(src), get_turf(victim)))
@@ -137,5 +143,6 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		if (nudity)
 			for (var/ID in victim.virus2)
 				var/datum/disease2/disease/V = victim.virus2[ID]
-				if(V && V.spreadtype != vector) continue
+				if(V && V.spreadtype != vector)
+					continue
 				infect_virus2(src,V, notes="(Contact with [key_name(victim)])")

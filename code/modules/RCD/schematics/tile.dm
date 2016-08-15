@@ -154,9 +154,12 @@
 		name = nname
 	else
 		switch (ftype)
-			if (PAINT_FLOOR)      name = "floor"
-			if (PAINT_REINFORCED) name = "reinforced floor"
-			if (PAINT_PLATING)    name = "plating"
+			if (PAINT_FLOOR)
+				name = "floor"
+			if (PAINT_REINFORCED)
+				name = "reinforced floor"
+			if (PAINT_PLATING)
+				name = "plating"
 
 //This is used to give the user a hint that he's a massive retard for using a floor painter on the carpet
 /datum/paint_info/proc/validate(var/turf/simulated/floor/test)

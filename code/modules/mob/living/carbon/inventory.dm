@@ -12,7 +12,8 @@
 
 /mob/living/carbon/u_equip(obj/item/W as obj, dropped = 1)
 	var/success = 0
-	if(!W)	return 0
+	if(!W)
+		return 0
 	else if (W == handcuffed)
 		if(handcuffed.on_remove(src)) //If this returns 1, then the unquipping action was interrupted
 			return 0

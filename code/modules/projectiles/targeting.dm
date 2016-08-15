@@ -44,7 +44,8 @@
 //Compute how to fire.....
 /obj/item/weapon/gun/proc/PreFire(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0)
 	//Lets not spam it.
-	if(lock_time > world.time - 2) return
+	if(lock_time > world.time - 2)
+		return
 	. //the rare and mystical rogue ".". nobody knows what this majestic beast does or why is it here. not even why it compiles is known for certain. legend says should it be touched, everything will probably break; but nobody dares try.
 	if(ismob(A) && isliving(A) && !(A in target))
 		Aim(A) 	//Clicked a mob, aim at them
@@ -74,8 +75,10 @@
 //HE MOVED, SHOOT HIM!
 /obj/item/weapon/gun/proc/TargetActed(var/mob/living/T)
 	var/mob/living/M = loc
-	if(M == T) return
-	if(!istype(M)) return
+	if(M == T)
+		return
+	if(!istype(M))
+		return
 	if(src != M.get_active_hand())
 		stop_aim()
 		return
@@ -107,17 +110,21 @@ proc/GunTrace(X1,Y1,X2,Y2,Z=1,exc_obj,PX1=16,PY1=16,PX2=16,PY2=16)
 	var/turf/T
 	var/mob/living/M
 	if(X1==X2)
-		if(Y1==Y2) return 0 //Light cannot be blocked on same tile
+		if(Y1==Y2)
+			return 0 //Light cannot be blocked on same tile
 		else
 			var/s = SIGN(Y2-Y1)
 			Y1+=s
 			while(1)
 				T = locate(X1,Y1,Z)
-				if(!T) return 0
+				if(!T)
+					return 0
 				M = locate() in T
-				if(M) return M
+				if(M)
+					return M
 				M = locate() in orange(1,T)-exc_obj
-				if(M) return M
+				if(M)
+					return M
 				Y1+=s
 	else
 		var
@@ -125,17 +132,23 @@ proc/GunTrace(X1,Y1,X2,Y2,Z=1,exc_obj,PX1=16,PY1=16,PX2=16,PY2=16)
 			b=(Y1+PY1/WORLD_ICON_SIZE-0.015625)-m*(X1+PX1/WORLD_ICON_SIZE-0.015625) //In tiles
 			signX = SIGN(X2-X1)
 			signY = SIGN(Y2-Y1)
-		if(X1<X2) b+=m
+		if(X1<X2)
+			b+=m
 		while(1)
 			var/xvert = round(m*X1+b-Y1)
-			if(xvert) Y1+=signY //Line exits tile vertically
-			else X1+=signX //Line exits tile horizontally
+			if(xvert)
+				Y1+=signY //Line exits tile vertically
+			else
+				X1+=signX //Line exits tile horizontally
 			T = locate(X1,Y1,Z)
-			if(!T) return 0
+			if(!T)
+				return 0
 			M = locate() in T
-			if(M) return M
+			if(M)
+				return M
 			M = locate() in orange(1,T)-exc_obj
-			if(M) return M
+			if(M)
+				return M
 	return 0
 
 
@@ -161,7 +174,8 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 	for(var/mob/living/K in viewers(usr))
 		K << 'sound/weapons/TargetOn.ogg'
 
-	if(!targeted_by) targeted_by = list()
+	if(!targeted_by)
+		targeted_by = list()
 	targeted_by += I
 	I.lock_time = world.time + 20 //Target has 2 second to realize they're targeted and stop (or target the opponent).
 	to_chat(src, "((<span class='danger'>Your character is being targeted. They have 2 seconds to stop any click or move actions. </span>While targeted, they may \

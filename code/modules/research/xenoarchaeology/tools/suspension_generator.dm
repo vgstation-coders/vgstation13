@@ -114,7 +114,8 @@
 	onclose(user, "suspension")
 
 /obj/machinery/suspension_gen/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 	usr.set_machine(src)
 
 	if(href_list["toggle_field"])

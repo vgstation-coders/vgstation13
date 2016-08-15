@@ -744,9 +744,12 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	var/counting = 0
 
 /datum/bomberman_arena/New(var/turf/a_center=null, var/size="",mob/user)
-	if(!a_center)	return
-	if(!size)	return
-	if(!user)	return
+	if(!a_center)
+		return
+	if(!size)
+		return
+	if(!user)
+		return
 	center = a_center
 	name += " #[rand(1,999)]"
 	open(size,user)
@@ -1089,8 +1092,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	return
 
 /datum/bomberman_arena/proc/end()
-	if(tools.len > 1)	return
-	if(status == ARENA_ENDGAME)	return
+	if(tools.len > 1)
+		return
+	if(status == ARENA_ENDGAME)
+		return
 	status = ARENA_ENDGAME
 	var/mob/living/winner = null
 	for(var/obj/item/weapon/bomberman/W in tools)
@@ -1395,7 +1400,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	spawnpoint = null
 
 /obj/structure/planner/spawnpoint/attack_ghost(mob/user)
-	if(arena.status != ARENA_AVAILABLE)	return
+	if(arena.status != ARENA_AVAILABLE)
+		return
 
 	if(spawnpoint.availability)
 		if(!(user.client in never_gladiators) && !(user.client in ready_gladiators))

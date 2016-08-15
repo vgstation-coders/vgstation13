@@ -64,7 +64,8 @@ var/shuttle_call/shuttle_calls[0]
 		return
 
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 
 	if (!(src.z in list(STATION_Z,CENTCOMM_Z)))
@@ -111,9 +112,12 @@ var/shuttle_call/shuttle_calls[0]
 			if (I && istype(I))
 				if(access_captain in I.access || access_heads in I.access) //Let heads change the alert level.
 					var/old_level = security_level
-					if(!tmp_alertlevel) tmp_alertlevel = SEC_LEVEL_GREEN
-					if(tmp_alertlevel < SEC_LEVEL_GREEN) tmp_alertlevel = SEC_LEVEL_GREEN
-					if(tmp_alertlevel > SEC_LEVEL_BLUE) tmp_alertlevel = SEC_LEVEL_BLUE //Cannot engage delta with this
+					if(!tmp_alertlevel)
+						tmp_alertlevel = SEC_LEVEL_GREEN
+					if(tmp_alertlevel < SEC_LEVEL_GREEN)
+						tmp_alertlevel = SEC_LEVEL_GREEN
+					if(tmp_alertlevel > SEC_LEVEL_BLUE)
+						tmp_alertlevel = SEC_LEVEL_BLUE //Cannot engage delta with this
 					set_security_level(tmp_alertlevel)
 					if(security_level != old_level)
 						//Only notify the admins if an actual change happened
@@ -125,7 +129,8 @@ var/shuttle_call/shuttle_calls[0]
 							if(SEC_LEVEL_BLUE)
 								feedback_inc("alert_comms_blue",1)
 					tmp_alertlevel = 0
-				else:
+				else
+					:
 					to_chat(usr, "You are not authorized to do this.")
 					tmp_alertlevel = 0
 				setMenuState(usr,COMM_SCREEN_MAIN)
@@ -134,7 +139,8 @@ var/shuttle_call/shuttle_calls[0]
 
 		if("announce")
 			if(src.authenticated==2 && !issilicon(usr))
-				if(message_cooldown)	return
+				if(message_cooldown)
+					return
 				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
 				if(!input || !(usr in view(1,src)))
 					return
@@ -164,7 +170,8 @@ var/shuttle_call/shuttle_calls[0]
 			if(!map.linked_to_centcomm)
 				to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 				return
-			if(menu_state != COMM_SCREEN_ERT) return //Not on the right screen.
+			if(menu_state != COMM_SCREEN_ERT)
+				return //Not on the right screen.
 			if ((!(ticker) || emergency_shuttle.location))
 				to_chat(usr, "<span class='warning'>Warning: The evac shuttle has already arrived.</span>")
 				return
@@ -218,7 +225,8 @@ var/shuttle_call/shuttle_calls[0]
 			if(!map.linked_to_centcomm)
 				to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 				return
-			if(issilicon(usr)) return
+			if(issilicon(usr))
+				return
 			if(src.authenticated)
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
@@ -242,8 +250,10 @@ var/shuttle_call/shuttle_calls[0]
 					var/text  = src.messagetext[id]
 					src.messagetitle.Remove(title)
 					src.messagetext.Remove(text)
-					if(currmsg==id) currmsg=0
-					if(aicurrmsg==id) aicurrmsg=0
+					if(currmsg==id)
+						currmsg=0
+					if(aicurrmsg==id)
+						aicurrmsg=0
 			setMenuState(usr,COMM_SCREEN_MESSAGES)
 
 		if("status")
@@ -563,7 +573,8 @@ var/shuttle_call/shuttle_calls[0]
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/status_signal = getFromPool(/datum/signal)
 	status_signal.source = src

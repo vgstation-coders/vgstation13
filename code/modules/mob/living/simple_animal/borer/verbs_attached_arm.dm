@@ -10,7 +10,8 @@
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.borer_speak(message)
 
 /obj/item/verbs/borer/attached_arm/verb/evolve()
@@ -19,7 +20,8 @@
 	set desc = "Upgrade yourself or your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.evolve()
 
 /obj/item/verbs/borer/attached_arm/verb/secrete_chemicals()
@@ -28,7 +30,8 @@
 	set desc = "Push some chemicals into your host's bloodstream."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.secrete_chemicals()
 
 /obj/item/verbs/borer/attached_arm/verb/abandon_host()
@@ -37,7 +40,8 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.abandon_host()
 
 //////////OFFENSE TREE/////////////////////
@@ -47,7 +51,8 @@
 	set desc = "Expend chemicals constantly to form a large blade of bone for your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.bone_sword()
 
 /mob/living/simple_animal/borer/proc/bone_sword()
@@ -111,7 +116,8 @@
 	set desc = "Expend chemicals constantly to form a large, heavy mass of bone on your host's arm."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.bone_hammer()
 
 /mob/living/simple_animal/borer/proc/bone_hammer()
@@ -176,7 +182,8 @@
 	set desc = "Expend chemicals constantly to form a large shield of bone for your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.bone_shield()
 
 /mob/living/simple_animal/borer/proc/bone_shield()
@@ -240,7 +247,8 @@
 	set desc = "Expend chemicals constantly to form a large protective cocoon of bone around your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.bone_cocoon()
 
 /mob/living/simple_animal/borer/proc/bone_cocoon()
@@ -288,7 +296,8 @@
 	set desc = "Expend a great deal of chemicals to produce a small electromagnetic pulse."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.em_pulse()
 
 /mob/living/simple_animal/borer/proc/em_pulse()
@@ -313,7 +322,8 @@
 	set desc = "Expend chemicals to repair bones in your host's arm."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.repair_bone()
 
 /mob/living/simple_animal/borer/proc/repair_bone()

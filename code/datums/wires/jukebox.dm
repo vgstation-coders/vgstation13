@@ -49,7 +49,8 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 	An unlabelled light is [J.emagged ? "dark" : "blinking occasionally"].<BR>"}
 
 /datum/wires/jukebox/UpdatePulsed(var/index)
-	if(interference) return
+	if(interference)
+		return
 	var/obj/machinery/media/jukebox/J = holder
 	switch(index)
 		if(JUKE_POWER_ONE,JUKE_POWER_TWO,JUKE_POWER_THREE)

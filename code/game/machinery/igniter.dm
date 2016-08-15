@@ -76,7 +76,8 @@ var/global/list/igniters = list()
 				src.assembly.loc=src.loc
 				qdel(src)
 				return
-		else:
+		else
+			:
 			to_chat(user, "<span class='warning'>You need more welder fuel to do that.</span>")
 			return 1
 

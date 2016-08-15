@@ -36,7 +36,8 @@
 	set category = "Object"
 	set name = "Adjust welding mask"
 	set src in usr
-	if(!usr) return //PANIC
+	if(!usr)
+		return //PANIC
 	if(!usr.incapacitated())
 		if(src.up)
 			src.up = !src.up
@@ -89,7 +90,8 @@
 		location.hotspot_expose(700, 1)
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
-	if(status > 1)	return
+	if(status > 1)
+		return
 	src.onfire = !( src.onfire )
 	if (src.onfire)
 		src.force = 3
@@ -150,8 +152,10 @@
 		icon_state = "hardhat[on]_[_color]"
 		item_state = "hardhat[on]_[_color]"
 
-		if(on)	set_light(brightness_on)
-		else	set_light(0)
+		if(on)
+			set_light(brightness_on)
+		else
+			set_light(0)
 
 /*
  * Kitty ears
@@ -166,7 +170,8 @@
 	siemens_coefficient = 1.5
 
 	update_icon(var/mob/living/carbon/human/user)
-		if(!istype(user)) return
+		if(!istype(user))
+			return
 		mob = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
 		mob2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty2")
 		mob.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)

@@ -215,7 +215,8 @@ var/list/mechtoys = list(
 
 	//Check whether the shuttle is allowed to move
 /datum/controller/supply_shuttle/proc/can_move()
-	if(moving) return 0
+	if(moving)
+		return 0
 
 	if(forbidden_atoms_check(cargo_shuttle.linked_area))
 		return 0
@@ -243,16 +244,19 @@ var/list/mechtoys = list(
 /datum/controller/supply_shuttle/proc/sell()
 
 	var/area/shuttle = cargo_shuttle.linked_area
-	if(!shuttle)	return
+	if(!shuttle)
+		return
 
 	var/datum/money_account/cargo_acct = department_accounts["Cargo"]
 
 	for(var/atom/movable/MA in shuttle)
-		if(MA.anchored)	continue
+		if(MA.anchored)
+			continue
 
 		if(istype(MA, /obj/item/stack/sheet/mineral/plasma))
 			var/obj/item/stack/sheet/mineral/plasma/P = MA
-			if(P.redeemed) continue
+			if(P.redeemed)
+				continue
 			var/datum/material/mat = materials_list.getMaterial(P.sheettype)
 			cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
 
@@ -264,7 +268,8 @@ var/list/mechtoys = list(
 			for(var/atom/A in MA)
 				if(istype(A, /obj/item/stack/sheet/mineral/plasma))
 					var/obj/item/stack/sheet/mineral/plasma/P = A
-					if(P.redeemed) continue
+					if(P.redeemed)
+						continue
 					var/datum/material/mat = materials_list.getMaterial(P.sheettype)
 					cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
 					continue
@@ -278,7 +283,8 @@ var/list/mechtoys = list(
 				SellObjToOrders(A,0)
 
 				// Delete it. (Fixes github #473)
-				if(A) qdel(A)
+				if(A)
+					qdel(A)
 		else
 			SellObjToOrders(MA,1)
 
@@ -292,15 +298,18 @@ var/list/mechtoys = list(
 
 	//Buyin
 /datum/controller/supply_shuttle/proc/buy()
-	if(!shoppinglist.len) return
+	if(!shoppinglist.len)
+		return
 
 	var/area/shuttle = cargo_shuttle.linked_area
-	if(!shuttle)	return
+	if(!shuttle)
+		return
 
 	var/list/clear_turfs = list()
 
 	for(var/turf/T in shuttle)
-		if(T.density)	continue
+		if(T.density)
+			continue
 		var/contcount
 		for(var/atom/A in T.contents)
 			if(islightingoverlay(A))
@@ -311,7 +320,8 @@ var/list/mechtoys = list(
 		clear_turfs += T
 
 	for(var/S in shoppinglist)
-		if(!clear_turfs.len)	break
+		if(!clear_turfs.len)
+			break
 		var/i = rand(1,clear_turfs.len)
 		var/turf/pickedloc = clear_turfs[i]
 		clear_turfs.Cut(i,i+1)
@@ -348,16 +358,19 @@ var/list/mechtoys = list(
 			contains = SP.contains
 
 		for(var/typepath in contains)
-			if(!typepath)	continue
+			if(!typepath)
+				continue
 			var/atom/B2 = new typepath(A)
-			if(SP.amount && B2:amount) B2:amount = SP.amount
+			if(SP.amount && B2:amount)
+				B2:amount = SP.amount
 			slip.info += "<li>[B2.name]</li>" //add the item to the manifest
 
 		//manifest finalisation
 
 		slip.info += {"</ul><br>
 			CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"}
-		if (SP.contraband) slip.loc = null	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
+		if (SP.contraband)
+			slip.loc = null	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
 
 	supply_shuttle.shoppinglist.len = 0
 	return
@@ -443,7 +456,8 @@ var/list/mechtoys = list(
 				<b>Request from: [last_viewed_group]</b><BR><BR>"}
 			for(var/supply_name in supply_shuttle.supply_packs )
 				var/datum/supply_packs/N = supply_shuttle.supply_packs[supply_name]
-				if(N.hidden || N.contraband || N.group != last_viewed_group) continue								//Have to send the type instead of a reference to
+				if(N.hidden || N.contraband || N.group != last_viewed_group)
+					continue								//Have to send the type instead of a reference to
 				temp += "<A href='?src=\ref[src];doorder=[supply_name]'>[supply_name]</A> Cost: $[num2septext(N.cost)]<BR>"		//the obj because it would get caught by the garbage
 
 	else if (href_list["doorder"])
@@ -454,12 +468,15 @@ var/list/mechtoys = list(
 
 		//Find the correct supply_pack datum
 		var/datum/supply_packs/P = supply_shuttle.supply_packs[href_list["doorder"]]
-		if(!istype(P))	return
+		if(!istype(P))
+			return
 
 		var/timeout = world.time + 600
 		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
-		if(world.time > timeout)	return
-		if(!reason)	return
+		if(world.time > timeout)
+			return
+		if(!reason)
+			return
 
 		var/idname = "*None Provided*"
 		var/idrank = "*None Provided*"
@@ -623,7 +640,8 @@ var/list/mechtoys = list(
 			temp = "The supply shuttle has been called and will arrive in [round(supply_shuttle.movetime/600,1)] minutes.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
 			post_signal("supply")
 	else if (href_list["order"])
-		if(supply_shuttle.moving) return
+		if(supply_shuttle.moving)
+			return
 		if(href_list["order"] == "categories")
 			//all_supply_groups
 			//Request what?
@@ -640,13 +658,16 @@ var/list/mechtoys = list(
 				<b>Request from: [last_viewed_group]</b><BR><BR>"}
 			for(var/supply_name in supply_shuttle.supply_packs )
 				var/datum/supply_packs/N = supply_shuttle.supply_packs[supply_name]
-				if((N.hidden && !hacked) || (N.contraband && !can_order_contraband) || N.group != last_viewed_group) continue								//Have to send the type instead of a reference to
+				if((N.hidden && !hacked) || (N.contraband && !can_order_contraband) || N.group != last_viewed_group)
+					continue								//Have to send the type instead of a reference to
 				temp += "<A href='?src=\ref[src];doorder=[supply_name]'>[supply_name]</A> Cost: [N.cost]<BR>"		//the obj because it would get caught by the garbage
 		/*temp = "Supply points: [supply_shuttle.points]<BR><HR><BR>Request what?<BR><BR>"
 		for(var/supply_name in supply_shuttle.supply_packs )
 			var/datum/supply_packs/N = supply_shuttle.supply_packs[supply_name]
-			if(N.hidden && !hacked) continue
-			if(N.contraband && !can_order_contraband) continue
+			if(N.hidden && !hacked)
+				continue
+			if(N.contraband && !can_order_contraband)
+				continue
 			temp += "<A href='?src=\ref[src];doorder=[supply_name]'>[supply_name]</A> Cost: [N.cost]<BR>"    //the obj because it would get caught by the garbage
 		temp += "<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"*/
 	else if (href_list["doorder"])
@@ -656,11 +677,14 @@ var/list/mechtoys = list(
 			return
 		//Find the correct supply_pack datum
 		var/datum/supply_packs/P = supply_shuttle.supply_packs[href_list["doorder"]]
-		if(!istype(P))	return
+		if(!istype(P))
+			return
 		var/timeout = world.time + 600
 		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
-		if(world.time > timeout)	return
-		if(!reason)	return
+		if(world.time > timeout)
+			return
+		if(!reason)
+			return
 		var/idname = "*None Provided*"
 		var/idrank = "*None Provided*"
 		var/datum/money_account/account
@@ -785,7 +809,8 @@ var/list/mechtoys = list(
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/status_signal = getFromPool(/datum/signal)
 	status_signal.source = src

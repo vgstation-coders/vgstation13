@@ -28,7 +28,8 @@
 				if(AT.z != map.zMainStation) //Only check one, it's enough.
 					skip = 1
 				break
-		if(skip) continue
+		if(skip)
+			continue
 		A.power_light = 0
 		A.power_equip = 0
 		A.power_environ = 0
@@ -41,7 +42,8 @@
 				if(istype(A,area_type))
 					skip = 1
 					break
-			if(skip) continue
+			if(skip)
+				continue
 			C.chargemode = 0
 			C.cell.charge = 0
 

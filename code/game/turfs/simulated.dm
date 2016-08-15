@@ -32,7 +32,8 @@
 
 	if (istype(A,/mob/living/carbon))
 		var/mob/living/carbon/M = A
-		if(M.lying)	return
+		if(M.lying)
+			return
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 

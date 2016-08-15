@@ -1,5 +1,6 @@
 /mob/living/silicon/hivebot/emote(var/act)
-	if(timestopped) return //under effects of time magick
+	if(timestopped)
+		return //under effects of time magick
 	var/param = null
 	if (findtext(act, "-", 1, null))
 		var/t1 = findtext(act, "-", 1, null)

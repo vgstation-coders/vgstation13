@@ -267,9 +267,11 @@ var/list/beam_master = list()
 					cleanedup = 1
 			sleep(2)
 
-		else sleep(1)
+		else
+			sleep(1)
 
-	if(cleanedup) sleep(2)
+	if(cleanedup)
+		sleep(2)
 	var/list/turf_master = beam_master[reference]
 
 	for(var/laser_state in turf_master)
@@ -358,8 +360,10 @@ var/list/beam_master = list()
 
 		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE/2)
 		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
-		if(DX==0) Pixel_x=0
-		if(DY==0) Pixel_y=0
+		if(DX==0)
+			Pixel_x=0
+		if(DY==0)
+			Pixel_y=0
 		if(Pixel_x>WORLD_ICON_SIZE)
 			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
 				X.x++
@@ -793,8 +797,10 @@ var/list/beam_master = list()
 
 		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
 		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
-		if(DX==0) Pixel_x=0
-		if(DY==0) Pixel_y=0
+		if(DX==0)
+			Pixel_x=0
+		if(DY==0)
+			Pixel_y=0
 		if(Pixel_x>WORLD_ICON_SIZE)
 			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
 				X.x++

@@ -25,7 +25,8 @@
 /obj/machinery/cooking/icemachine/proc/generateName(reagentName)
 	. = pick("Mr. ","Mrs. ","Super ","Happy ","Whippy ")
 	. += pick("Whippy","Slappy","Creamy","Dippy","Swirly","Swirl")
-	if (reagentName) . += " [reagentName]"
+	if (reagentName)
+		. += " [reagentName]"
 	return
 
 // Processing //////////////////////////////////////////////////
@@ -38,7 +39,8 @@
 				. = 1
 				to_chat(user, "<span class='notice'>You add the [I.name] to the [src.name].</span>")
 				src.updateUsrDialog()
-		else to_chat(user, "<span class='warning'>The [src.name] already has a beaker.</span>")
+		else
+			to_chat(user, "<span class='warning'>The [src.name] already has a beaker.</span>")
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/icecream))
 		if(!I.reagents.has_reagent(SPRINKLES))
 			I.reagents.add_reagent(SPRINKLES,1)
@@ -46,7 +48,8 @@
 			I.name += " with sprinkles"
 			I.desc += " It has sprinkles on top."
 			. = 1
-		else . = "<span class='warning'>The [I.name] already has sprinkles.</span>"
+		else
+			. = "<span class='warning'>The [I.name] already has sprinkles.</span>"
 	return
 
 // Interactions ////////////////////////////////////////////////
@@ -64,8 +67,10 @@
 	var/dat = ""
 	if(src.beaker)
 		dat += "<A href='?src=\ref[src];eject=1'>Eject container and end transfer.</A><BR>"
-		if(!src.beaker.reagents.total_volume) dat += "Container is empty.<BR><HR>"
-		else dat += src.showReagents(1)
+		if(!src.beaker.reagents.total_volume)
+			dat += "Container is empty.<BR><HR>"
+		else
+			dat += src.showReagents(1)
 		dat += src.showReagents(2)
 		dat += src.showToppings()
 	else
@@ -81,7 +86,8 @@
 // HTML Menu ///////////////////////////////////////////////////
 
 /obj/machinery/cooking/icemachine/Topic(href,href_list)
-	if(..()) return
+	if(..())
+		return
 	src.add_fingerprint(usr)
 	usr.set_machine(src)
 
@@ -92,16 +98,20 @@
 	else if(href_list["add"] && href_list["amount"] && src.beaker)
 		var/id = href_list["add"]
 		var/amount = text2num(href_list["amount"])
-		if(amount > 0) src.beaker.reagents.trans_id_to(src,id,amount)
+		if(amount > 0)
+			src.beaker.reagents.trans_id_to(src,id,amount)
 
 	else if(href_list["remove"] && href_list["amount"])
 		var/id = href_list["remove"]
 		var/amount = text2num(href_list["amount"])
 		if(src.reagents.has_reagent(id))
-			if(src.beaker)	reagents.trans_id_to(src.beaker,id,amount)
-			else			reagents.remove_reagent(id,amount)
+			if(src.beaker)
+				reagents.trans_id_to(src.beaker,id,amount)
+			else
+				reagents.remove_reagent(id,amount)
 
-	else if(href_list["main"]) src.attack_hand(usr)
+	else if(href_list["main"])
+		src.attack_hand(usr)
 
 	else if(href_list["eject"] && src.beaker)
 		src.reagents.trans_to(src.beaker,src.reagents.total_volume)
@@ -110,16 +120,22 @@
 
 	else if(href_list["synthcond"] && href_list["type"])
 		switch(text2num(href_list["type"]))
-			if(2) . = pick(COLA,DR_GIBB,SPACE_UP,SPACEMOUNTAINWIND)
-			if(3) . = pick(KAHLUA,VODKA,RUM,GIN)
-			if(4) . = CREAM
-			if(5) . = WATER
+			if(2)
+				. = pick(COLA,DR_GIBB,SPACE_UP,SPACEMOUNTAINWIND)
+			if(3)
+				. = pick(KAHLUA,VODKA,RUM,GIN)
+			if(4)
+				. = CREAM
+			if(5)
+				. = WATER
 		src.reagents.add_reagent(.,5)
 
 	else if(href_list["createcup"] || href_list["createcone"])
 		var/obj/item/weapon/reagent_containers/food/C
-		if(href_list["createcup"]) C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup(src.loc)
-		else C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone(src.loc)
+		if(href_list["createcup"])
+			C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup(src.loc)
+		else
+			C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone(src.loc)
 		C.name = "[src.generateName(src.reagents.get_master_reagent_name())] [C.name]"
 		C.pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
 		C.pixel_y = -16 * PIXEL_MULTIPLIER
@@ -168,6 +184,8 @@
 				dat += "<A href='?src=\ref[src];remove=[R.id];amount=15'>(15)</A> "
 				dat += "<A href='?src=\ref[src];remove=[R.id];amount=[R.volume]'>(All)</A>"
 				dat += "<BR>"
-		else dat += "No reagents. <BR>"
-	else dat += "<BR>INVALID REAGENT CONTAINER. Make a bug report.<BR>"
+		else
+			dat += "No reagents. <BR>"
+	else
+		dat += "<BR>INVALID REAGENT CONTAINER. Make a bug report.<BR>"
 	return dat

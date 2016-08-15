@@ -210,7 +210,8 @@
 //This proc return 1 if the item can be picked up and 0 if it can't.
 //Set the stop_messages to stop it from printing messages
 /obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0)
-	if(!istype(W)) return //Not an item
+	if(!istype(W))
+		return //Not an item
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
@@ -305,7 +306,8 @@
 //The stop_warning parameter will stop the insertion message from being displayed. It is intended for cases where you are inserting multiple items at once,
 //such as when picking up all the items on a tile with one click.
 /obj/item/weapon/storage/proc/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
-	if(!istype(W)) return 0
+	if(!istype(W))
+		return 0
 	if(usr)
 		usr.u_equip(W,1)
 		usr.update_icons()	//update our overlays
@@ -336,7 +338,8 @@
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
 /obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0)
-	if(!istype(W)) return 0
+	if(!istype(W))
+		return 0
 
 	if(!force && istype(new_location, /obj/item/weapon/storage))
 		var/obj/item/weapon/storage/A = new_location
@@ -589,7 +592,8 @@
 	contents = null
 
 /obj/item/weapon/storage/preattack(atom/target, mob/user, adjacent, params)
-	if(!adjacent) return 0
+	if(!adjacent)
+		return 0
 	if(use_to_pickup)
 		if(collection_mode) //Mode is set to collect all items on a tile and we clicked on a valid one.
 			var/turf/gather_location

@@ -773,7 +773,8 @@ What are the archived variables for?
 
 	if(sharer.trace_gases.len)
 		for(var/datum/gas/trace_gas in sharer.trace_gases)
-			if(trace_gas.type in trace_types_considered) continue
+			if(trace_gas.type in trace_types_considered)
+				continue
 			else
 				var/datum/gas/corresponding
 				var/delta = 0
@@ -1059,7 +1060,8 @@ What are the archived variables for?
 	//Called by: Airgroups trying to rebuild
 	//Inputs: Gas mix to compare
 	//Outputs: 1 if can rebuild, 0 if not.
-	if(!sample) return 0
+	if(!sample)
+		return 0
 
 	if((abs(oxygen-sample.oxygen) > MINIMUM_AIR_TO_SUSPEND) && \
 		((oxygen < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.oxygen) || (oxygen > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.oxygen)))

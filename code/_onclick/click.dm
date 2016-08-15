@@ -34,8 +34,10 @@
 #define MAX_ITEM_DEPTH	3 //how far we can recurse before we can't get an item
 
 /mob/proc/ClickOn( var/atom/A, var/params )
-	if(!click_delayer) click_delayer = new
-	if(timestopped) return 0 //under effects of time magick
+	if(!click_delayer)
+		click_delayer = new
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if(click_delayer.blocked())
 		return
@@ -164,7 +166,8 @@
 	animals lunging, etc.
 */
 /mob/proc/RangedAttack(var/atom/A, var/params)
-	if(!mutations || !mutations.len) return
+	if(!mutations || !mutations.len)
+		return
 	if((M_LASER in mutations) && a_intent == I_HURT)
 		LaserEyes(A) // moved into a proc below
 	else if(M_TK in mutations)

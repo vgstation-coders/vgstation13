@@ -121,17 +121,21 @@ var/list/impact_master = list()
 		super_speed = 1
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
-	if(blocked >= 2)		return 0//Full block
-	if(!isliving(atarget))	return 0
+	if(blocked >= 2)
+		return 0//Full block
+	if(!isliving(atarget))
+		return 0
 	// FUCK mice. - N3X
 	if(ismouse(atarget) && (stun+weaken+paralyze+agony)>5)
 		var/mob/living/simple_animal/mouse/M=atarget
 		to_chat(M, "<span class='warning'>What would probably not kill a human completely overwhelms your tiny body.</span>")
 		M.splat()
 		return 1
-	if(isanimal(atarget))	return 0
+	if(isanimal(atarget))
+		return 0
 	var/mob/living/L = atarget
-	if(L.flags & INVULNERABLE)			return 0
+	if(L.flags & INVULNERABLE)
+		return 0
 	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
 	if(jittery)
 		L.Jitter(jittery)
@@ -191,7 +195,8 @@ var/list/impact_master = list()
 		loc = A.loc
 		return 0 //cannot shoot yourself, unless an ablative armor sent back the projectile
 
-	if(bumped)	return 0
+	if(bumped)
+		return 0
 	var/forcedodge = 0 // force the projectile to pass
 
 	bumped = 1
@@ -353,7 +358,8 @@ var/list/impact_master = list()
 	return 1
 
 /obj/item/projectile/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	if(istype(mover, /obj/item/projectile))
 		return prob(95)

@@ -36,7 +36,8 @@
 			)
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 
-		if(wrenching)	return
+		if(wrenching)
+			return
 		wrenching = 1
 		if(do_after(user, src, 30))
 			if(src)
@@ -135,7 +136,8 @@
 			)
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 
-		if(wrenching)	return
+		if(wrenching)
+			return
 		wrenching = 1
 		if(do_after(user, src, 30))
 			if(src)
@@ -180,7 +182,8 @@
 				T.visible_message("[bicon(ring_pda)] *[src.name]*")
 
 
-		if(!radio_connection) return	//the desk bell also works like a simple send-only signaler.
+		if(!radio_connection)
+			return	//the desk bell also works like a simple send-only signaler.
 
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = src

@@ -41,7 +41,8 @@
 	return get_turf(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted)) return 1
+	if(air_group || (height==0 || wall_mounted))
+		return 1
 	return (!density)
 
 /obj/structure/closet/proc/can_open()
@@ -365,14 +366,21 @@
 
 			var/image/spooky_overlay
 			switch(rand(0,5))
-				if(0) spooky_overlay = image('icons/mob/animal.dmi',icon_state="hunter",dir=turn(L.dir,180))
-				if(1) spooky_overlay = image('icons/mob/animal.dmi',icon_state="zombie",dir=turn(L.dir,180))
-				if(2) spooky_overlay = image('icons/mob/horror.dmi',icon_state="horror_[pick("male","female")]",dir=turn(L.dir,180))
-				if(3) spooky_overlay = image('icons/mob/animal.dmi',icon_state="faithless",dir=turn(L.dir,180))
-				if(4) spooky_overlay = image('icons/mob/animal.dmi',icon_state="carp",dir=turn(L.dir,180))
-				if(5) spooky_overlay = image('icons/mob/animal.dmi',icon_state="skelly",dir=turn(L.dir,180))
+				if(0)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="hunter",dir=turn(L.dir,180))
+				if(1)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="zombie",dir=turn(L.dir,180))
+				if(2)
+					spooky_overlay = image('icons/mob/horror.dmi',icon_state="horror_[pick("male","female")]",dir=turn(L.dir,180))
+				if(3)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="faithless",dir=turn(L.dir,180))
+				if(4)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="carp",dir=turn(L.dir,180))
+				if(5)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="skelly",dir=turn(L.dir,180))
 
-			if(!spooky_overlay) return
+			if(!spooky_overlay)
+				return
 
 			temp_overlay.overlays += spooky_overlay
 
@@ -427,7 +435,8 @@
 // should be independently resolved, but this is also an interesting twist.
 /obj/structure/closet/Exit(atom/movable/AM)
 	open()
-	if(AM.loc == src) return 0
+	if(AM.loc == src)
+		return 0
 	return 1
 
 /obj/structure/closet/container_resist()

@@ -18,7 +18,8 @@
 			triggerAlarm()
 	else if (detectTime == -1)
 		for (var/mob/target in motionTargets)
-			if (target.stat == 2) lostTarget(target)
+			if (target.stat == 2)
+				lostTarget(target)
 			// If not detecting with motion camera...
 			if (!area_motion)
 				// See if the camera is still in range
@@ -27,7 +28,8 @@
 					lostTarget(target)
 
 /obj/machinery/camera/proc/newTarget(var/mob/target)
-	if (istype(target, /mob/living/silicon/ai)) return 0
+	if (istype(target, /mob/living/silicon/ai))
+		return 0
 	if (detectTime == 0)
 		detectTime = world.time // start the clock
 	if (!(target in motionTargets))
@@ -43,14 +45,17 @@
 /obj/machinery/camera/proc/cancelAlarm()
 	if (detectTime == -1)
 		for (var/mob/living/silicon/aiPlayer in player_list)
-			if (status) aiPlayer.cancelAlarm("Motion", areaMaster)
+			if (status)
+				aiPlayer.cancelAlarm("Motion", areaMaster)
 	detectTime = 0
 	return 1
 
 /obj/machinery/camera/proc/triggerAlarm()
-	if (!detectTime) return 0
+	if (!detectTime)
+		return 0
 	for (var/mob/living/silicon/aiPlayer in player_list)
-		if (status) aiPlayer.triggerAlarm("Motion", areaMaster, src)
+		if (status)
+			aiPlayer.triggerAlarm("Motion", areaMaster, src)
 	detectTime = -1
 	return 1
 

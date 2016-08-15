@@ -60,9 +60,12 @@
 	var/ph
 	var/pm
 	var/ps
-	if(hh < 10) ph = "0"
-	if(mm < 10) pm = "0"
-	if(ss < 10) ps = "0"
+	if(hh < 10)
+		ph = "0"
+	if(mm < 10)
+		pm = "0"
+	if(ss < 10)
+		ps = "0"
 	return"[ph][hh]:[pm][mm]:[ps][ss]"
 */
 

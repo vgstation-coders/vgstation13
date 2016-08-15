@@ -137,7 +137,8 @@ var/specops_shuttle_timeleft = 0
 	specops_shuttle_moving_to_centcom = 0
 
 	specops_shuttle_at_station = 1
-	if (specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom) return
+	if (specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom)
+		return
 
 	if (!specops_can_move())
 		to_chat(usr, "<span class='warning'>The Special Operations shuttle is unable to leave.</span>")
@@ -295,7 +296,8 @@ var/specops_shuttle_timeleft = 0
 		usr.machine = src
 
 	if (href_list["sendtodock"])
-		if(!specops_shuttle_at_station|| specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom) return
+		if(!specops_shuttle_at_station|| specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom)
+			return
 
 		if (!specops_can_move())
 			to_chat(usr, "<span class='notice'>Central Command will not allow the Special Operations shuttle to return yet.</span>")
@@ -316,7 +318,8 @@ var/specops_shuttle_timeleft = 0
 			specops_return()
 
 	else if (href_list["sendtostation"])
-		if(specops_shuttle_at_station || specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom) return
+		if(specops_shuttle_at_station || specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom)
+			return
 
 		if (!specops_can_move())
 			to_chat(usr, "<span class='warning'>The Special Operations shuttle is unable to leave.</span>")
@@ -400,7 +403,8 @@ var/specops_shuttle_timeleft = 0
 	specops_shuttle_moving_to_centcom = 0
 
 	specops_shuttle_at_station = 1
-	if (specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom) return
+	if (specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom)
+		return
 
 	if (!specops_can_move())
 		to_chat(usr, "<span class='warning'>The Special Operations shuttle is unable to leave.</span>")
@@ -501,8 +505,10 @@ var/specops_shuttle_timeleft = 0
 		to_chat(M, "<span class='warning'>You have arrived to [station_name]. Commence operation!</span>")
 
 /proc/specops_can_move()
-	if(specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom) return 0
-	else return 1
+	if(specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom)
+		return 0
+	else
+		return 1
 
 /obj/machinery/computer/specops_shuttle/attackby(I as obj, user as mob)
 	return attack_hand(user)
@@ -552,13 +558,15 @@ var/specops_shuttle_timeleft = 0
 	usr.set_machine(src)
 
 	if (href_list["sendtodock"])
-		if(!specops_shuttle_at_station|| specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom) return
+		if(!specops_shuttle_at_station|| specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom)
+			return
 
 		to_chat(usr, "<span class='notice'>Central Command will not allow the Special Operations shuttle to return.</span>")
 		return
 
 	else if (href_list["sendtostation"])
-		if(specops_shuttle_at_station || specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom) return
+		if(specops_shuttle_at_station || specops_shuttle_moving_to_station || specops_shuttle_moving_to_centcom)
+			return
 
 		if (!specops_can_move())
 			to_chat(usr, "<span class='warning'>The Special Operations shuttle is unable to leave.</span>")

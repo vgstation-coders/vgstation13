@@ -40,7 +40,8 @@
 		G.handle_exhale()
 
 	if( (abs(310.15 - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
-		if(H.status_flags & GODMODE)	return 1	//godmode
+		if(H.status_flags & GODMODE)
+			return 1	//godmode
 		if(breath.temperature < H.species.cold_level_1)
 			if(prob(20))
 				H << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"

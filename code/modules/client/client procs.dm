@@ -73,10 +73,14 @@
 		I.write("<small>[time_stamp()] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br />")
 
 	switch(href_list["_src_"])
-		if("holder")	hsrc = holder
-		if("usr")		hsrc = mob
-		if("prefs")		return prefs.process_link(usr,href_list)
-		if("vars")		return view_var_Topic(href,href_list,hsrc)
+		if("holder")
+			hsrc = holder
+		if("usr")
+			hsrc = mob
+		if("prefs")
+			return prefs.process_link(usr,href_list)
+		if("vars")
+			return view_var_Topic(href,href_list,hsrc)
 
 	switch(href_list["action"])
 		if ("openLink")
@@ -138,8 +142,10 @@
 
 	if(connection != "seeker")			//Invalid connection type.
 		if(connection == "web")
-			if(!holder) return null
-		else return null
+			if(!holder)
+				return null
+		else
+			return null
 
 	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
@@ -155,7 +161,8 @@
 	// Change the way they should download resources.
 	if(config.resource_urls)
 		src.preload_rsc = pick(config.resource_urls)
-	else src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
+	else
+		src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
 	to_chat(src, "<span class='warning'>If the title screen is black, resources are still downloading. Please be patient until the title screen appears.</span>")
 
@@ -357,7 +364,8 @@
 //checks if a client is afk
 //3000 frames = 5 minutes
 /client/proc/is_afk(duration=3000)
-	if(inactivity > duration)	return inactivity
+	if(inactivity > duration)
+		return inactivity
 	return 0
 
 /client/verb/resend_resources()

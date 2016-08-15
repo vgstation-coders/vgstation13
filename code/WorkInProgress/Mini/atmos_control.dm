@@ -139,7 +139,8 @@ var/global/list/atmos_controllers = list()
 
 
 /obj/machinery/computer/atmoscontrol/proc/is_in_filter(var/typepath)
-	if(!filter) return 1 // YEP.  TOTALLY.
+	if(!filter)
+		return 1 // YEP.  TOTALLY.
 	return typepath in filter
 
 //a bunch of this is copied from atmos alarms
@@ -147,7 +148,8 @@ var/global/list/atmos_controllers = list()
 	if(..())
 		return 0
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	if(href_list["reset"])
 		current = null

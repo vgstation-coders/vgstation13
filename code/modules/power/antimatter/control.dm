@@ -86,17 +86,22 @@
 /obj/machinery/power/am_control_unit/proc/produce_power()
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
 	var/core_power = reported_core_efficiency//Effectively how much fuel we can safely deal with
-	if(core_power <= 0) return 0//Something is wrong
+	if(core_power <= 0)
+		return 0//Something is wrong
 	var/core_damage = 0
 	var/fuel = fueljar.usefuel(fuel_injection)
 
 	stored_power = (fuel/core_power)*fuel*20000 // Was 200000, was too much. New value run past Aurx. - N3X
 	//Now check if the cores could deal with it safely, this is done after so you can overload for more power if needed, still a bad idea
 	if(fuel > (2*core_power))//More fuel has been put in than the current cores can deal with
-		if(prob(50))core_damage = 1//Small chance of damage
-		if((fuel-core_power) > 5)	core_damage = 5//Now its really starting to overload the cores
-		if((fuel-core_power) > 10)	core_damage = 20//Welp now you did it, they wont stand much of this
-		if(core_damage == 0) return
+		if(prob(50))
+			core_damage = 1//Small chance of damage
+		if((fuel-core_power) > 5)
+			core_damage = 5//Now its really starting to overload the cores
+		if((fuel-core_power) > 10)
+			core_damage = 20//Welp now you did it, they wont stand much of this
+		if(core_damage == 0)
+			return
 		for(var/obj/machinery/am_shielding/AMS in linked_cores)
 			AMS.stability -= core_damage
 			AMS.check_stability(1)
@@ -107,10 +112,12 @@
 /obj/machinery/power/am_control_unit/emp_act(severity)
 	switch(severity)
 		if(1)
-			if(active)	toggle_power()
+			if(active)
+				toggle_power()
 			stability -= rand(15,30)
 		if(2)
-			if(active)	toggle_power()
+			if(active)
+				toggle_power()
 			stability -= rand(10,20)
 	..()
 	return 0
@@ -160,7 +167,8 @@
 
 
 /obj/machinery/power/am_control_unit/attackby(obj/item/W, mob/user)
-	if(!istype(W) || !user) return
+	if(!istype(W) || !user)
+		return
 	if(iswrench(W))
 		if(!anchored)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
@@ -210,19 +218,24 @@
 
 
 /obj/machinery/power/am_control_unit/proc/add_shielding(var/obj/machinery/am_shielding/AMS, var/AMS_linking = 0)
-	if(!istype(AMS)) return 0
-	if(!anchored) return 0
-	if(!AMS_linking && !AMS.link_control(src)) return 0
+	if(!istype(AMS))
+		return 0
+	if(!anchored)
+		return 0
+	if(!AMS_linking && !AMS.link_control(src))
+		return 0
 	linked_shielding.Add(AMS)
 	update_shield_icons = 1
 	return 1
 
 
 /obj/machinery/power/am_control_unit/proc/remove_shielding(var/obj/machinery/am_shielding/AMS)
-	if(!istype(AMS)) return 0
+	if(!istype(AMS))
+		return 0
 	linked_shielding.Remove(AMS)
 	update_shield_icons = 2
-	if(active)	toggle_power()
+	if(active)
+		toggle_power()
 	return 1
 
 
@@ -247,11 +260,13 @@
 
 
 /obj/machinery/power/am_control_unit/proc/check_shield_icons()//Forces icon_update for all shields
-	if(shield_icon_delay) return
+	if(shield_icon_delay)
+		return
 	shield_icon_delay = 1
 	if(update_shield_icons == 2)//2 means to clear everything and rebuild
 		for(var/obj/machinery/am_shielding/AMS in linked_shielding)
-			if(AMS.processing)	AMS.shutdown_core()
+			if(AMS.processing)
+				AMS.shutdown_core()
 			AMS.control_unit = null
 			spawn(10)
 				AMS.controllerscan()
@@ -266,7 +281,8 @@
 
 /obj/machinery/power/am_control_unit/proc/check_core_stability()
 	//if(stored_core_stability_delay || linked_cores.len <= 0)	return
-	if(linked_cores.len <=0) return
+	if(linked_cores.len <=0)
+		return
 	//stored_core_stability_delay = 1
 	stored_core_stability = 0
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
@@ -338,9 +354,11 @@
 
 
 /obj/machinery/power/am_control_unit/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	//Ignore input if we are broken or guy is not touching us, AI can control from a ways away
 	if(stat & (BROKEN|NOPOWER))

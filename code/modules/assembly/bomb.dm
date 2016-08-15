@@ -92,7 +92,8 @@
 	if(isigniter(S.a_left) == isigniter(S.a_right))		//Check if either part of the assembly has an igniter, but if both parts are igniters, then fuck it
 		return
 
-	if(!M.drop_item(S)) return		//Remove the assembly from your hands
+	if(!M.drop_item(S))
+		return		//Remove the assembly from your hands
 
 	var/obj/item/device/onetankbomb/R = new /obj/item/device/onetankbomb(loc)
 

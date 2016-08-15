@@ -145,7 +145,8 @@
 				dat += "No scanner connected!<br>"
 			else
 				if (src.scanner.occupant)
-					if(scantemp == "Scanner unoccupied") scantemp = "" // Stupid check to remove the text
+					if(scantemp == "Scanner unoccupied")
+						scantemp = "" // Stupid check to remove the text
 
 					dat += "<a href='byond://?src=\ref[src];scan=1'>Scan - [src.scanner.occupant]</a><br>"
 				else

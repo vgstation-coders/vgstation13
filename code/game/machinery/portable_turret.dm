@@ -372,7 +372,8 @@ Status: []<BR>"},
 				if(prob(50))
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
 					M.amount = rand(1,4)
-				if(prob(50)) new /obj/item/device/assembly/prox_sensor(locate(x,y,z))
+				if(prob(50))
+					new /obj/item/device/assembly/prox_sensor(locate(x,y,z))
 			else
 				to_chat(user, "You remove the turret but did not manage to salvage anything.")
 			qdel(src)
@@ -381,7 +382,8 @@ Status: []<BR>"},
 	..()
 
 	if((iswrench(W)) && (!on))
-		if(raised) return
+		if(raised)
+			return
 		// This code handles moving the turret around. After all, it's a portable turret!
 
 		if(!anchored)
@@ -431,7 +433,8 @@ Status: []<BR>"},
 
 	src.health -= Proj.damage
 	..()
-	if(prob(45) && Proj.damage > 0) src.spark_system.start()
+	if(prob(45) && Proj.damage > 0)
+		src.spark_system.start()
 	if (src.health <= 0)
 		src.die() // the death process :(
 	if((src.lasercolor == "b") && (src.disabled == 0))
@@ -458,7 +461,8 @@ Status: []<BR>"},
 		criminals=pick(0,1)
 		auth_weapons=pick(0,1)
 		stun_all=pick(0,0,0,0,1) // stun_all is a pretty big deal, so it's least likely to get turned on
-		if(prob(5)) emagged=1
+		if(prob(5))
+			emagged=1
 		on=0
 		sleep(rand(60,600))
 		if(!on)
@@ -599,8 +603,10 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/proc/popUp() // pops the turret up
 	if(disabled)
 		return
-	if(raising || raised) return
-	if(stat & BROKEN) return
+	if(raising || raised)
+		return
+	if(stat & BROKEN)
+		return
 	invisibility=0
 	raising=1
 	flick("popup",cover)
@@ -615,8 +621,10 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/proc/popDown() // pops the turret down
 	if(disabled)
 		return
-	if(raising || !raised) return
-	if(stat & BROKEN) return
+	if(raising || !raised)
+		return
+	if(stat & BROKEN)
+		return
 	layer = OBJ_LAYER
 	raising=1
 	flick("popdown",cover)
@@ -632,7 +640,8 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/proc/assess_perp(mob/living/carbon/human/perp as mob)
 	var/threatcount = 0 // the integer returned
 
-	if(src.emagged) return 10 // if emagged, always return 10.
+	if(src.emagged)
+		return 10 // if emagged, always return 10.
 
 	if((stun_all && !src.allowed(perp)) || attacked && !src.allowed(perp))
 		// if the turret has been attacked or is angry, target all non-sec people
@@ -647,7 +656,8 @@ Status: []<BR>"},
 
 			for(var/obj/item/G in perp.held_items)
 				if(istype(G, /obj/item/weapon/gun))
-					if(istype(G, /obj/item/weapon/gun/projectile/shotgun)) continue
+					if(istype(G, /obj/item/weapon/gun/projectile/shotgun))
+						continue
 				else if(!istype(G, /obj/item/weapon/melee/baton))
 					continue
 				//Scan for guns and stun batons. Bartender's shotgun doesn't trigger the turret
@@ -708,7 +718,8 @@ Status: []<BR>"},
 			return
 
 	if(!emagged) // if it hasn't been emagged, it has to obey a cooldown rate
-		if(last_fired || !raised) return // prevents rapid-fire shooting, unless it's been emagged
+		if(last_fired || !raised)
+			return // prevents rapid-fire shooting, unless it's been emagged
 		last_fired = 1
 		spawn()
 			sleep(shot_delay)
@@ -824,14 +835,16 @@ Status: []<BR>"},
 
 			else if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(!WT.isOn()) return
+				if(!WT.isOn())
+					return
 				if (WT.get_fuel() < 5) // uses up 5 fuel.
 					to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
 					return
 
 				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
 				if(do_after(user, src, 20))
-					if(!src || !WT.remove_fuel(5, user)) return
+					if(!src || !WT.remove_fuel(5, user))
+						return
 					build_step = 1
 					to_chat(user, "You remove the turret's interior metal armor.")
 					//new /obj/item/stack/sheet/metal( loc, 2)
@@ -895,13 +908,15 @@ Status: []<BR>"},
 		if(7)
 			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(!WT.isOn()) return
+				if(!WT.isOn())
+					return
 				if (WT.get_fuel() < 5)
 					to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
 
 				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
 				if(do_after(user, src, 30))
-					if(!src || !WT.remove_fuel(5, user)) return
+					if(!src || !WT.remove_fuel(5, user))
+						return
 					build_step = 8
 					to_chat(user, "<span class='notice'>You weld the turret's armor down.</span>")
 
@@ -939,7 +954,8 @@ Status: []<BR>"},
 /obj/machinery/porta_turret_construct/attack_hand(mob/user as mob)
 	switch(build_step)
 		if(4)
-			if(!installation) return
+			if(!installation)
+				return
 			build_step = 3
 
 			var/obj/item/weapon/gun/energy/Gun = new installation(src.loc)
@@ -1108,7 +1124,8 @@ Status: []<BR>"},
 		Parent_Turret.on = 1
 
 	else if((iswrench(W)) && (!Parent_Turret.on))
-		if(Parent_Turret.raised) return
+		if(Parent_Turret.raised)
+			return
 
 		if(!Parent_Turret.anchored)
 			Parent_Turret.anchored = 1

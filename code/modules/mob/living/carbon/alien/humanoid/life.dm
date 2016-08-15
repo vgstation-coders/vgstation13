@@ -11,7 +11,8 @@
 	set invisibility = 0
 	//set background = 1
 
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if (monkeyizing)
 		return
@@ -92,8 +93,10 @@
 
 	proc/breathe()
 		if(reagents)
-			if(reagents.has_reagent(LEXORIN)) return
-		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
+			if(reagents.has_reagent(LEXORIN))
+				return
+		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			return
 
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
@@ -122,7 +125,8 @@
 					/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 						// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
 						breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
-					else*/
+					else
+						*/
 						// Not enough air around, take a percentage of what's there to model this properly
 					breath_moles = environment.total_moles()*BREATH_PERCENTAGE
 
@@ -260,7 +264,8 @@
 	proc/handle_chemicals_in_body()
 
 
-		if(reagents) reagents.metabolize(src)
+		if(reagents)
+			reagents.metabolize(src)
 
 		if(M_FAT in mutations)
 			if(nutrition < 100)
@@ -413,9 +418,12 @@
 		update_pull_icon()
 
 
-		if (toxin)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-		if (oxygen) oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-		if (fire) fire.icon_state = "fire[fire_alert ? 1 : 0]"
+		if (toxin)
+			toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
+		if (oxygen)
+			oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
+		if (fire)
+			fire.icon_state = "fire[fire_alert ? 1 : 0]"
 		//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 		//blame the person who coded them. Temporary fix added.
 		if (client)

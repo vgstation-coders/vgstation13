@@ -64,7 +64,8 @@ var/savefile/Banlist
 	Banlist = new("data/banlist.bdb")
 	log_admin("Loading Banlist")
 
-	if (!length(Banlist.dir)) log_admin("Banlist is empty.")
+	if (!length(Banlist.dir))
+		log_admin("Banlist is empty.")
 
 	if (!Banlist.dir.Find("base"))
 		log_admin("Banlist missing base dir.")
@@ -88,8 +89,10 @@ var/savefile/Banlist
 			message_admins("Invalid Ban.")
 			continue
 
-		if (!Banlist["temp"]) continue
-		if (CMinutes >= Banlist["minutes"]) RemoveBan(A)
+		if (!Banlist["temp"])
+			continue
+		if (CMinutes >= Banlist["minutes"])
+			RemoveBan(A)
 
 	return 1
 
@@ -129,7 +132,8 @@ var/savefile/Banlist
 	Banlist["id"] >> id
 	Banlist.cd = "/base"
 
-	if (!Banlist.dir.Remove(foldername)) return 0
+	if (!Banlist.dir.Remove(foldername))
+		return 0
 
 	if(!usr)
 		log_admin("Ban Expired: [key]")
@@ -181,8 +185,10 @@ var/savefile/Banlist
 		var/expiry
 		if(Banlist["temp"])
 			expiry = GetExp(Banlist["minutes"])
-			if(!expiry)		expiry = "Removal Pending"
-		else				expiry = "Permaban"
+			if(!expiry)
+				expiry = "Removal Pending"
+		else
+			expiry = "Permaban"
 
 		dat += text("<tr><td><A href='?src=[ref];unbanf=[key][id]'>(U)</A><A href='?src=[ref];unbane=[key][id]'>(E)</A> Key: <B>[key]</B></td><td>ComputerID: <B>[id]</B></td><td>IP: <B>[ip]</B></td><td> [expiry]</td><td>(By: [by])</td><td>(Reason: [reason])</td></tr>")
 

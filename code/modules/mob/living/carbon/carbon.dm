@@ -92,7 +92,8 @@
 			contract_disease(D, 0, 1, CONTACT_HANDS)
 
 /mob/living/carbon/attack_hand(mob/M as mob)
-	if(!istype(M, /mob/living/carbon)) return
+	if(!istype(M, /mob/living/carbon))
+		return
 	if (hasorgans(M))
 		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
 
@@ -104,7 +105,8 @@
 
 
 /mob/living/carbon/attack_paw(mob/M as mob)
-	if(!istype(M, /mob/living/carbon)) return
+	if(!istype(M, /mob/living/carbon))
+		return
 	share_contact_diseases(M)
 	return
 
@@ -286,7 +288,8 @@
 		throw_icon.icon_state = "act_throw_off"
 
 /mob/living/carbon/proc/throw_mode_on()
-	if(gcDestroyed) return
+	if(gcDestroyed)
+		return
 	in_throw_mode = 1
 	if(throw_icon)
 		throw_icon.icon_state = "act_throw_on"
@@ -303,13 +306,15 @@
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return
 
-	if(target.type == /obj/screen) return
+	if(target.type == /obj/screen)
+		return
 
 	var/atom/movable/item = src.get_active_hand()
 	if(what)
 		item=what
 
-	if(!item) return
+	if(!item)
+		return
 
 	if (istype(item, /obj/item/offhand))
 		var/obj/item/offhand/offhand = item
@@ -337,7 +342,8 @@
 				else
 					M.LAssailant = usr
 				returnToPool(G)
-	if(!item) return //Grab processing has a chance of returning null
+	if(!item)
+		return //Grab processing has a chance of returning null
 
 	var/obj/item/I = item
 	if(istype(I) && I.cant_drop > 0)
@@ -382,7 +388,8 @@
 	return 1
 
 /mob/living/carbon/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	if (handcuffed)
 		return 1
 	return
@@ -586,7 +593,8 @@
 			if(!I.part) //implanted as a nonhuman, won't have one.
 				I.part = /datum/organ/external/chest
 			for (var/datum/organ/external/affected in H.organs)
-				if(!istype(affected, I.part)) continue
+				if(!istype(affected, I.part))
+					continue
 				affected.implants += I
 
 /mob/living/carbon/proc/dropBorers(var/gibbed = null)

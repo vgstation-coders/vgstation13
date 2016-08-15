@@ -51,7 +51,8 @@
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
 
-	if(!src || !target || target.nutrilevel == 10) return //Sanity check.
+	if(!src || !target || target.nutrilevel == 10)
+		return //Sanity check.
 
 	src.nutrition -= ((10-target.nutrilevel)*5)
 	target.nutrilevel = 10
@@ -71,7 +72,8 @@
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
 
-	if(!src || !target || target.weedlevel == 0) return //Sanity check.
+	if(!src || !target || target.weedlevel == 0)
+		return //Sanity check.
 
 	src.reagents.add_reagent(NUTRIMENT, target.weedlevel)
 	target.weedlevel = 0
@@ -125,7 +127,8 @@
 	qdel(src)
 
 /mob/living/carbon/monkey/diona/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(other) other = other.GetSource()
+	if(other)
+		other = other.GetSource()
 	if (istype(other, /mob/living/carbon/human))
 		if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 			if(donors.len >= 2) // They have sucked down some blood.
@@ -144,7 +147,8 @@
 
 	var/mob/living/M = input(src,"Who do you wish to take a sample from?") in null|choices
 
-	if(!M || !src) return
+	if(!M || !src)
+		return
 
 	if(donors.Find(M.real_name))
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")

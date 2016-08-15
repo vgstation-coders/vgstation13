@@ -71,4 +71,5 @@
 
 			if(damage && organs.len)
 				var/datum/organ/external/O = pick(organs)
-				if(istype(O)) O.add_autopsy_data("Radiation Poisoning", damage)
+				if(istype(O))
+					O.add_autopsy_data("Radiation Poisoning", damage)

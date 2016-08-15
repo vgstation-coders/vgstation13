@@ -26,8 +26,10 @@
 		var/obj/L = null
 
 		for(var/obj/effect/landmark/sloc in landmarks_list)
-			if(sloc.name != C.data) continue
-			if(locate(/mob/living) in sloc.loc) continue
+			if(sloc.name != C.data)
+				continue
+			if(locate(/mob/living) in sloc.loc)
+				continue
 			L = sloc
 			break
 
@@ -154,8 +156,10 @@
 				if (M.timeofdeath + 6000 < world.time)
 					continue
 			var/turf/T = get_turf(M)
-			if(T)	continue
-			if(T.z == map.zCentcomm)	continue
+			if(T)
+				continue
+			if(T.z == map.zCentcomm)
+				continue
 			var/tmpname = M.real_name
 			if(areaindex[tmpname])
 				tmpname = "[tmpname] ([++areaindex[tmpname]])"
@@ -246,7 +250,8 @@
 	RefreshParts()
 
 /obj/machinery/teleport/hub/Crossed(AM as mob|obj)
-	if(AM == src)	return//DUH
+	if(AM == src)
+		return//DUH
 	if(istype(AM,/obj/item/projectile/beam))
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1

@@ -50,7 +50,8 @@
 	if (istype(src.loc, /obj/item/assembly))
 		icon = src.loc
 	if (!in_range(src, user))
-		if (icon == src) to_chat(user, "<span class='notice'>It's \a [bicon(icon)][src]! If you want any more information you'll need to get closer.</span>")
+		if (icon == src)
+			to_chat(user, "<span class='notice'>It's \a [bicon(icon)][src]! If you want any more information you'll need to get closer.</span>")
 		return
 
 	var/celsius_temperature = src.air_contents.temperature-T0C
@@ -163,7 +164,8 @@
 /obj/item/weapon/tank/Topic(href, href_list)
 	..()
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	if (usr.stat|| usr.restrained())
 		return 0
@@ -234,7 +236,8 @@
 
 /obj/item/weapon/tank/proc/check_status()
 	//Handle exploding, leaking, and rupturing of the tank
-	if(timestopped) return
+	if(timestopped)
+		return
 
 	var/cap = 0
 	var/uncapped = 0

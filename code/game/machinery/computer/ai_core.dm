@@ -29,7 +29,8 @@
 					return
 				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
 				if(do_after(user, src, 20))
-					if(!src || !WT.remove_fuel(0, user)) return
+					if(!src || !WT.remove_fuel(0, user))
+						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					new /obj/item/stack/sheet/plasteel( loc, 4)
 					qdel(src)
@@ -69,8 +70,10 @@
 					playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 					if(do_after(user, src, 20))
 						P:amount -= 5
-						if(!P:amount) qdel(P)
-						if(!P:amount) qdel(P)
+						if(!P:amount)
+							qdel(P)
+						if(!P:amount)
+							qdel(P)
 						to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 						state = 3
 						icon_state = "3"
@@ -92,8 +95,10 @@
 					if(do_after(user, src, 20))
 						if (P)
 							P:amount -= 2
-							if(!P:amount) qdel(P)
-							if(!P:amount) qdel(P)
+							if(!P:amount)
+								qdel(P)
+							if(!P:amount)
+								qdel(P)
 							to_chat(user, "<span class='notice'>You put in the glass panel.</span>")
 							state = 4
 							icon_state = "4"
@@ -256,21 +261,22 @@ That prevents a few funky behaviors.
 							if (!C.contents.len)
 								to_chat(U, "No AI to copy over!")//Well duh
 
-							else for(var/mob/living/silicon/ai/A in C)
-								C.icon_state = "aicard"
-								C.name = "inteliCard"
-								C.overlays.len = 0
-								A.loc = T
-								T.occupant = A
-								A.control_disabled = 1
-								if (A.stat == 2)
-									T.overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
-								else
-									T.overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
-								T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-empty")
-								A.cancel_camera()
-								to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
-								to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed.")
+							else
+								for(var/mob/living/silicon/ai/A in C)
+									C.icon_state = "aicard"
+									C.name = "inteliCard"
+									C.overlays.len = 0
+									A.loc = T
+									T.occupant = A
+									A.control_disabled = 1
+									if (A.stat == 2)
+										T.overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
+									else
+										T.overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
+									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-empty")
+									A.cancel_camera()
+									to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
+									to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed.")
 						else
 							if(!C.contents.len && T.occupant && !T.active)
 								C.name = "inteliCard - [T.occupant.name]"

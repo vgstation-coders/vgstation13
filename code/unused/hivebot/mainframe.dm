@@ -2,7 +2,8 @@
 	Namepick()
 
 /mob/living/silicon/hive_mainframe/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	if (src.stat == 2)
 		return
 	else

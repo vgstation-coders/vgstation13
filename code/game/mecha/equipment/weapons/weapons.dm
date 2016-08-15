@@ -17,7 +17,8 @@
 	name = "General Energy Weapon"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/action(atom/target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	var/turf/curloc = chassis.loc
 	var/atom/targloc = get_turf(target)
 	if (!targloc || !istype(targloc, /turf) || !curloc)
@@ -192,10 +193,12 @@
 	var/deviation = 0.7
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	var/turf/curloc = get_turf(chassis)
 	var/turf/targloc = get_turf(target)
-	if(!curloc || !targloc) return
+	if(!curloc || !targloc)
+		return
 	var/target_x = targloc.x
 	var/target_y = targloc.y
 	var/target_z = targloc.z
@@ -235,14 +238,16 @@
 	var/deviation = 0.3
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/action(atom/target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	var/turf/targloc = get_turf(target)
 	var/target_x = targloc.x
 	var/target_y = targloc.y
 	var/target_z = targloc.z
 	targloc = null
 	spawn	for(var/i=1 to min(projectiles, projectiles_per_shot))
-		if(!chassis) break
+		if(!chassis)
+			break
 		var/turf/curloc = get_turf(chassis)
 		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
 		if (!targloc || !curloc)
@@ -280,7 +285,8 @@
 	var/missile_range = 30
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/action(target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	set_ready_state(0)
 	var/obj/item/missile/M = new projectile(chassis.loc)
 	M.primed = 1
@@ -320,7 +326,8 @@
 	var/det_time = 20
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	set_ready_state(0)
 	var/obj/item/weapon/grenade/flashbang/F = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
@@ -361,7 +368,8 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar/action(target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	set_ready_state(0)
 	var/obj/item/weapon/bananapeel/B = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 60, 1)
@@ -390,7 +398,8 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar/action(target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	set_ready_state(0)
 	var/obj/item/device/assembly/mousetrap/M = new projectile(chassis.loc)
 	M.secured = 1
@@ -421,7 +430,8 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar/action(target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	set_ready_state(0)
 	var/obj/item/weapon/reagent_containers/food/snacks/pie/P = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 60, 1)
@@ -446,7 +456,8 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/action(target)
-	if(!action_checks(target)) return
+	if(!action_checks(target))
+		return
 	set_ready_state(0)
 	var/obj/item/weapon/legcuffs/bolas/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)

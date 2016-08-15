@@ -110,7 +110,8 @@
 			return tally
 
 	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45) tally += (health_deficiency / 25)
+	if(health_deficiency >= 45)
+		tally += (health_deficiency / 25)
 
 	if (bodytemperature < 183.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
@@ -140,12 +141,18 @@
 		if(!client && powerlevel > 0)
 			var/probab = 10
 			switch(powerlevel)
-				if(1 to 2) probab = 20
-				if(3 to 4) probab = 30
-				if(5 to 6) probab = 40
-				if(7 to 8) probab = 60
-				if(9) 	   probab = 70
-				if(10) 	   probab = 95
+				if(1 to 2)
+					probab = 20
+				if(3 to 4)
+					probab = 30
+				if(5 to 6)
+					probab = 40
+				if(7 to 8)
+					probab = 60
+				if(9)
+					probab = 70
+				if(10)
+					probab = 95
 			if(prob(probab))
 
 
@@ -305,7 +312,8 @@
 		to_chat(M, "You cannot attack people before the game has started.")
 		return
 
-	if(Victim) return // can't attack while eating!
+	if(Victim)
+		return // can't attack while eating!
 
 	if (health > -100)
 
@@ -345,7 +353,8 @@
 		updatehealth()
 
 /mob/living/carbon/slime/attack_paw(mob/living/carbon/monkey/M as mob)
-	if(!(istype(M, /mob/living/carbon/monkey)))	return//Fix for aliens receiving double messages when attacking other aliens.
+	if(!(istype(M, /mob/living/carbon/monkey)))
+		return//Fix for aliens receiving double messages when attacking other aliens.
 
 	if (!ticker)
 		to_chat(M, "You cannot attack people before the game has started.")
@@ -616,7 +625,8 @@
 
 
 /mob/living/carbon/slime/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return 0
 
 
@@ -1179,7 +1189,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			volunteer(O)
 
 	attack_ghost(var/mob/dead/observer/O)
-		if(!O) return
+		if(!O)
+			return
 		volunteer(O)
 
 	proc/check_observer(var/mob/dead/observer/O)

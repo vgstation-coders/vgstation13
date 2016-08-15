@@ -53,11 +53,14 @@
 
 	process()
 		charge_tick++
-		if(charge_tick < 4) return 0
+		if(charge_tick < 4)
+			return 0
 		charge_tick = 0
-		if(!power_supply) return 0
+		if(!power_supply)
+			return 0
 		if((power_supply.charge / power_supply.maxcharge) != 1)
-			if(!failcheck())	return 0
+			if(!failcheck())
+				return 0
 			power_supply.give(100)
 			update_icon()
 		return 1
@@ -66,7 +69,8 @@
 	proc
 		failcheck()
 			lightfail = 0
-			if (prob(src.reliability)) return 1 //No failure
+			if (prob(src.reliability))
+				return 1 //No failure
 			if (prob(src.reliability))
 				for (var/mob/living/M in range(0,src)) //Only a minor failure, enjoy your radiation if you're in the same tile or carrying it
 					if (src in M.contents)

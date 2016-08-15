@@ -19,7 +19,8 @@
 
 /obj/item/device/assembly/speaker/attack_self(mob/user as mob)
 	var/new_msg = sanitize(input(user,"Enter new message for the [src]","NanoSpeaker Settings",message))
-	if(!Adjacent(user)) return
+	if(!Adjacent(user))
+		return
 
 	message = new_msg
 

@@ -37,7 +37,8 @@
 		botcard = null
 
 /obj/machinery/bot/proc/turn_on()
-	if(stat)	return 0
+	if(stat)
+		return 0
 	on = 1
 	set_light(initial(luminosity))
 	return 1
@@ -86,7 +87,8 @@
 /obj/machinery/bot/attack_animal(var/mob/living/simple_animal/M as mob)
 	if(flags & INVULNERABLE)
 		return
-	if(M.melee_damage_upper == 0)	return
+	if(M.melee_damage_upper == 0)
+		return
 	src.health -= M.melee_damage_upper
 	src.visible_message("<span class='danger'>[M] has [M.attacktext] [src]!</span>")
 	add_logs(M, src, "attacked", admin=0)

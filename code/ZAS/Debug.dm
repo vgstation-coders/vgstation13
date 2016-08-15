@@ -11,10 +11,12 @@ var/image/mark = image('icons/Testing/Zone.dmi', icon_state = "mark")
 
 /turf/var/tmp/dbg_img
 /turf/proc/dbg(image/img, d = 0)
-	if(d > 0) img.dir = d
+	if(d > 0)
+		img.dir = d
 	overlays -= dbg_img
 	overlays += img
 	dbg_img = img
 
 proc/soft_assert(thing,fail)
-	if(!thing) message_admins(fail)
+	if(!thing)
+		message_admins(fail)

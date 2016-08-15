@@ -25,7 +25,8 @@
 		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/timer/activate()
-	if(!..())	return 0//Cooldown check
+	if(!..())
+		return 0//Cooldown check
 
 	timing = !timing
 
@@ -43,7 +44,8 @@
 	return secured
 
 /obj/item/device/assembly/timer/proc/timer_end()
-	if(!secured)	return 0
+	if(!secured)
+		return 0
 	pulse(0)
 	if(!holder)
 		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")

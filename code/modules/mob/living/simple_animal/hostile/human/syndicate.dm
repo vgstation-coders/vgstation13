@@ -53,7 +53,8 @@
 
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)	return
+	if(!Proj)
+		return
 	if(prob(65))
 		src.health -= Proj.damage
 	else

@@ -46,7 +46,8 @@
 /obj/effect/plantsegment/proc/do_thorns(var/mob/living/carbon/human/victim, var/chance)
 	if(!seed || !seed.thorny)
 		return
-	if(!istype(victim)) return
+	if(!istype(victim))
+		return
 	var/cuts = 0
 	for(var/datum/organ/external/Ex in victim.organs) //hahaha shit this is probably going to MINCE people
 		if(Ex && Ex.is_existing() && Ex.is_organic())
@@ -58,13 +59,15 @@
 				if(victim.stat != DEAD)
 					to_chat(victim, "<span class='danger'>Your [Ex.display_name] is pierced by the thorns on \the [src]!</span>")
 				cuts++
-				if(cuts >= 3) break
+				if(cuts >= 3)
+					break
 	last_special = world.time
 
 /obj/effect/plantsegment/proc/do_sting(var/mob/living/carbon/human/victim, var/chance)
 	if(!seed || !seed.stinging || victim.stat == DEAD)
 		return
-	if(!istype(victim)) return
+	if(!istype(victim))
+		return
 	if(victim.get_exposed_body_parts() && prob(chance))
 		if(seed.chems && seed.chems.len)
 			for(var/rid in seed.chems)

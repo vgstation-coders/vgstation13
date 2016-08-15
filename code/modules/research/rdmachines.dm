@@ -40,7 +40,8 @@ var/global/list/rnd_machines = list()
 	if(research_flags & TAKESMATIN && !materials)
 		materials = getFromPool(/datum/materials, src)
 
-	if(ticker) initialize()
+	if(ticker)
+		initialize()
 
 // Define initial output.
 /obj/machinery/r_n_d/initialize()
@@ -93,7 +94,8 @@ var/global/list/rnd_machines = list()
 	if(..())
 		return
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	usr.set_machine(src)
 	src.add_fingerprint(usr)

@@ -305,7 +305,8 @@
 
 	for(var/biotype in typesof(/datum/biogen_recipe))
 		var/datum/biogen_recipe/recipe = new biotype
-		if(recipe.id=="") continue
+		if(recipe.id=="")
+			continue
 		if(!(recipe.category in recipe_categories))
 			recipe_categories[recipe.category]=list()
 		recipe_categories[recipe.category] += recipe.id
@@ -315,8 +316,10 @@
 	var/manipcount = 0
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator)) manipcount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating
 	speed_coefficient = 2/manipcount
 	biomass_coefficient = 3*lasercount
 
@@ -441,7 +444,8 @@
 		S += 5
 		if(I.reagents.get_reagent_amount(NUTRIMENT) < 0.1)
 			points += 1
-		else points += I.reagents.get_reagent_amount(NUTRIMENT)*biomass_coefficient
+		else
+			points += I.reagents.get_reagent_amount(NUTRIMENT)*biomass_coefficient
 		qdel(I)
 	if(S)
 		processing = 1
@@ -492,7 +496,8 @@
 
 /obj/machinery/biogenerator/Topic(href, href_list)
 
-	if(..()) return 1
+	if(..())
+		return 1
 
 	usr.set_machine(src)
 

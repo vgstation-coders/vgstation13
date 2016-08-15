@@ -183,7 +183,8 @@
 			for (var/datum/organ/external/C in E.children)
 				C.status |= ORGAN_DEAD
 		H.update_body(1)
-		if(multiplier < 1) multiplier = 1
+		if(multiplier < 1)
+			multiplier = 1
 		H.adjustToxLoss(15*multiplier)
 
 /datum/disease2/effect/organs/vampire
@@ -243,7 +244,8 @@
 	stage = 4
 /datum/disease2/effect/scc/activate(var/mob/living/carbon/mob,var/multiplier)
 	//
-	if(!ishuman(mob)) return 0
+	if(!ishuman(mob))
+		return 0
 	var/mob/living/carbon/human/H = mob
 	mob.reagents.add_reagent(PACID, 10)
 	to_chat(mob, "<span class = 'warning'>Your body burns as your cells break down.</span>")

@@ -133,7 +133,8 @@
 			s.use(1)
 			upgrades += new /obj/item/stack/sheet/mineral/plasma
 		else
-			if(!user.drop_item(W, src)) return
+			if(!user.drop_item(W, src))
+				return
 			upgrades += W
 		to_chat(user, "You attach the [W] into the assembly inner circuits.")
 		return

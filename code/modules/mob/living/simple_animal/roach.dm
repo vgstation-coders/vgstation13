@@ -84,12 +84,17 @@
 		return ..()
 
 /mob/living/simple_animal/cockroach/Crossed(mob/living/O)
-	if(!istype(O)) return
+	if(!istype(O))
+		return
 
-	if(src.size > O.size - 2) return //Human sized dudes can stomp default-sized cockroaches just fine. For bigger roaches you need bigger dudes
-	if(flying) return
-	if(O.a_intent == I_HELP) return //Must be on harm intent to stomp
-	if(O.isUnconscious()) return
+	if(src.size > O.size - 2)
+		return //Human sized dudes can stomp default-sized cockroaches just fine. For bigger roaches you need bigger dudes
+	if(flying)
+		return
+	if(O.a_intent == I_HELP)
+		return //Must be on harm intent to stomp
+	if(O.isUnconscious())
+		return
 
 	if(prob(15))
 		Die(gore = 1)
@@ -183,7 +188,8 @@
 			stop_flying()
 
 /mob/living/simple_animal/cockroach/proc/start_flying(var/anim = 1)
-	if(isUnconscious()) return
+	if(isUnconscious())
+		return
 
 	speed = -4
 	turns_since_move = 5 //Remove any delay
@@ -201,7 +207,8 @@
 
 	plane = MOB_PLANE
 
-	if(anim) animate(src, pixel_y = pixel_y + 8 * PIXEL_MULTIPLIER, 10, 1, ELASTIC_EASING)
+	if(anim)
+		animate(src, pixel_y = pixel_y + 8 * PIXEL_MULTIPLIER, 10, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/stop_flying(var/anim = 1)
 	speed = initial(speed)
@@ -217,7 +224,8 @@
 
 	reset_plane_and_layer()
 
-	if(anim) animate(src, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1, ELASTIC_EASING)
+	if(anim)
+		animate(src, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/lay_eggs()
 	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
@@ -258,7 +266,8 @@
 	return //Survive nuclear blasts
 
 /mob/living/simple_animal/cockroach/reagent_act(id, method, volume)
-	if(isDead()) return
+	if(isDead())
+		return
 
 	.=..()
 
@@ -267,7 +276,8 @@
 			Die(gore = 0)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)
-	if(size >= H.size) return
+	if(size >= H.size)
+		return
 
 	playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
 	H.visible_message("<span class='notice'>[H] eats \the [src]!</span>", "<span class='notice'>You eat \the [src]!</span>")

@@ -9,7 +9,8 @@
 	if(undergoing_hypothermia() == PROFOUND_HYPOTHERMIA)
 		return PULSE_NONE
 
-	if(species && species.flags & NO_BLOOD) return PULSE_NONE //No blood, no pulse.
+	if(species && species.flags & NO_BLOOD)
+		return PULSE_NONE //No blood, no pulse.
 
 	if(stat == DEAD)
 		return PULSE_NONE //That's it, you're dead, nothing can influence your pulse

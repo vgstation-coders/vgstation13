@@ -237,7 +237,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	return
 
 /obj/machinery/requests_console/Topic(href, href_list)
-	if(..())	return
+	if(..())
+		return
 	usr.set_machine(src)
 	add_fingerprint(usr)
 
@@ -249,8 +250,10 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			message = new_message
 			screen = 9
 			switch(href_list["priority"])
-				if("2")	priority = 2
-				else	priority = -1
+				if("2")
+					priority = 2
+				else
+					priority = -1
 		else
 			dpt = "";
 			msgVerified = ""
@@ -263,15 +266,18 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		if(new_message)
 			message = new_message
 			switch(href_list["priority"])
-				if("2")	priority = 2
-				else	priority = -1
+				if("2")
+					priority = 2
+				else
+					priority = -1
 		else
 			message = ""
 			announceAuth = 0
 			screen = 0
 
 	if(href_list["sendAnnouncement"])
-		if(!announcementConsole)	return
+		if(!announcementConsole)
+			return
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player) && M.client)
 				to_chat(M, "<b><font size = 3><font color = red>[department] announcement:</font color> [message]</font size></b>")
@@ -294,7 +300,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		if (sending)
 			var/pass = 0
 			for (var/obj/machinery/message_server/MS in message_servers)
-				if(!MS.active) continue
+				if(!MS.active)
+					continue
 				MS.send_rc_message(href_list["department"],department,log_msg,msgStamped,msgVerified,priority)
 				pass = 1
 
@@ -361,7 +368,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		if(9)		//authentication
 			screen = 9
 		if(10)		//send announcement
-			if(!announcementConsole)	return
+			if(!announcementConsole)
+				return
 			screen = 10
 		else		//main menu
 			dpt = ""
@@ -374,8 +382,10 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	//Handle silencing the console
 	switch( href_list["setSilent"] )
 		if(null)	//skip
-		if("1")	silent = 1
-		else	silent = 0
+		if("1")
+			silent = 1
+		else
+			silent = 0
 
 	switch( href_list["setDepartment"] )
 		if(null)	//skip

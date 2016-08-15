@@ -254,7 +254,8 @@
 /obj/structure/table/kick_act()
 	..()
 
-	if(!usr) return
+	if(!usr)
+		return
 	do_flip()
 
 /obj/structure/table/glass/kick_act()
@@ -295,7 +296,8 @@
 	return
 
 /obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
 	if(ismob(mover))
@@ -349,7 +351,8 @@
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 
@@ -363,7 +366,8 @@
 
 
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
-	if (!W) return
+	if (!W)
+		return
 
 	var/list/params_list = params2list(params)
 
@@ -374,7 +378,8 @@
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
 					G.affecting.forceMove(loc)
-					if (prob(15))	M.Weaken(5)
+					if (prob(15))
+						M.Weaken(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -589,14 +594,16 @@
 				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
-					if(!src || !WT.isOn()) return
+					if(!src || !WT.isOn())
+						return
 					to_chat(user, "<span class='notice'>Table weakened.</span>")
 					src.status = 1
 			else
 				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
-					if(!src || !WT.isOn()) return
+					if(!src || !WT.isOn())
+						return
 					to_chat(user, "<span class='notice'>Table strengthened.</span>")
 					src.status = 2
 			return
@@ -621,7 +628,8 @@
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
-					if (prob(15))	M.Weaken(5)
+					if (prob(15))
+						M.Weaken(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -709,7 +717,8 @@
 		return
 
 /obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	return !density

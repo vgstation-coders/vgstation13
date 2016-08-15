@@ -238,13 +238,15 @@
 	..()
 	if(open && !locked)
 		declare_crit = 0
-		if(user) to_chat(user, "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>")
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		flick("medibot_spark", src)
 		src.patient = null
-		if(user) src.oldpatient = user
+		if(user)
+			src.oldpatient = user
 		src.currently_healing = 0
 		src.last_found = world.time
 		src.anchored = 0
@@ -325,7 +327,8 @@
 	if(src.patient && src.path.len == 0 && (get_dist(src,src.patient) > 1))
 		spawn(0)
 			src.path = AStar(src.loc, get_turf(src.patient), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-			if (!path) path = list()
+			if (!path)
+				path = list()
 			if(src.path.len == 0)
 				src.oldpatient = src.patient
 				src.patient = null

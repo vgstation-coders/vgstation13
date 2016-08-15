@@ -42,9 +42,12 @@
 	..()
 
 /obj/item/device/assembly_holder/attach(var/obj/item/device/assembly/D, var/obj/item/device/assembly/D2, var/mob/user)
-	if((!D)||(!D2))	return 0
-	if((!isassembly(D))||(!isassembly(D2)))	return 0
-	if((D.secured)||(D2.secured))	return 0
+	if((!D)||(!D2))
+		return 0
+	if((!isassembly(D))||(!isassembly(D2)))
+		return 0
+	if((D.secured)||(D2.secured))
+		return 0
 	if(user)
 		user.remove_from_mob(D)
 		user.remove_from_mob(D2)
@@ -66,8 +69,10 @@
 
 
 /obj/item/device/assembly_holder/attach_special(var/obj/O, var/mob/user)
-	if(!O)	return
-	if(!O.IsSpecialAssembly())	return 0
+	if(!O)
+		return
+	if(!O.IsSpecialAssembly())
+		return 0
 
 /*		if(O:Attach_Holder())
 		special_assembly = O
@@ -185,7 +190,8 @@
 				igniter.assembly=src
 				src.loc=igniter
 				to_chat(user, "<span class='notice'>You attach the assembly to the floor with a few spot welds.</span>")
-		else:
+		else
+			:
 			to_chat(user, "<span class='warning'>You need more welder fuel to do that.</span>")
 			return
 
@@ -202,8 +208,10 @@
 			return
 		if(istype(a_left,a_right.type))//If they are the same type it causes issues due to window code
 			switch(alert("Which side would you like to use?",,"Left","Right"))
-				if("Left")	a_left.attack_self(user)
-				if("Right")	a_right.attack_self(user)
+				if("Left")
+					a_left.attack_self(user)
+				if("Right")
+					a_right.attack_self(user)
 			return
 		else
 			if(!istype(a_left,/obj/item/device/assembly/igniter))
@@ -212,7 +220,8 @@
 				a_right.attack_self(user)
 	else
 		var/turf/T = get_turf(src)
-		if(!T)	return 0
+		if(!T)
+			return 0
 		if(a_left)
 			a_left:holder = null
 			a_left.loc = T
@@ -227,13 +236,15 @@
 
 
 /obj/item/device/assembly_holder/process_activation(var/obj/D, var/normal = 1, var/special = 1)
-	if(!D)	return 0
+	if(!D)
+		return 0
 	if(!secured)
 		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	if((normal) && (a_right) && (a_left))
 		if(istype(src.loc, /obj/machinery/igniter))
 			src.loc:toggle_state()
-		else:
+		else
+			:
 			if(a_right != D)
 				a_right.pulsed(0)
 			if(a_left != D)

@@ -87,7 +87,8 @@
 	..()
 
 /obj/machinery/atmospherics/binary/initialize()
-	if(node1 && node2) return
+	if(node1 && node2)
+		return
 
 	node1 = findConnecting(turn(dir, 180))
 	node2 = findConnecting(dir)

@@ -902,8 +902,10 @@
 			Delay_Antag(M, delay)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/Delay_Antag(var/mob/M,var/delay=100)
-	if(!M.mind)	return
-	if(!ishuman(M) && !ismonkey(M))	return
+	if(!M.mind)
+		return
+	if(!ishuman(M) && !ismonkey(M))
+		return
 
 	to_chat(M, "<span class='rose'>You feel like you forgot something important!</span>")
 

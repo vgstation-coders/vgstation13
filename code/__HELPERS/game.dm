@@ -118,7 +118,8 @@
 	var/rsq = radius * (radius+0.5)
 
 	for(var/turf/T in range(radius, centerturf))
-		if(!T) continue
+		if(!T)
+			continue
 		var/dx = T.x - centerturf.x
 		var/dy = T.y - centerturf.y
 		if(dx*dx + dy*dy <= rsq)
@@ -330,7 +331,8 @@ var/list/DummyCache = list()
 				. += G.client
 
 /proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
-	if(!isobj(O))	O = new /obj/screen/text()
+	if(!isobj(O))
+		O = new /obj/screen/text()
 	O.maptext = maptext
 	O.maptext_height = maptext_height
 	O.maptext_width = maptext_width
@@ -338,8 +340,10 @@ var/list/DummyCache = list()
 	return O
 
 /proc/Show2Group4Delay(obj/O, list/group, delay=0)
-	if(!isobj(O))	return
-	if(!group)	group = clients
+	if(!isobj(O))
+		return
+	if(!group)
+		group = clients
 	for(var/client/C in group)
 		C.screen += O
 	if(delay)

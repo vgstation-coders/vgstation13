@@ -102,13 +102,20 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(!icontype)
 		return
 	switch(icontype)
-		if("Replicator") subtype = "replicator"
-		if("Keeper")	 subtype = "keeper"
-		if("RepairBot")	 subtype = "repairbot"
-		if("Hover")	     subtype = "hovermommi"
-		if("Prime")	     subtype = "mommiprime"
-		if("Scout")	     subtype = "scout"
-		else			 subtype = "mommi"
+		if("Replicator")
+			subtype = "replicator"
+		if("Keeper")
+			subtype = "keeper"
+		if("RepairBot")
+			subtype = "repairbot"
+		if("Hover")
+			subtype = "hovermommi"
+		if("Prime")
+			subtype = "mommiprime"
+		if("Scout")
+			subtype = "scout"
+		else
+			subtype = "mommi"
 	updateicon()
 	var/answer = input("Is this what you want?", "Mobile MMI", null) in list("Yes", "No")
 	switch(answer)
@@ -163,8 +170,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/obj/item/device/mmi/nmmi = mmi
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
-		if(T)	nmmi.loc = T
-		if(mind)	mind.transfer_to(nmmi.brainmob)
+		if(T)
+			nmmi.loc = T
+		if(mind)
+			mind.transfer_to(nmmi.brainmob)
 		mmi = null
 		nmmi.icon = 'icons/obj/assemblies.dmi'
 		nmmi.invisibility = 0
@@ -174,7 +183,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	..()
 	if(inv_tool)
 		returnToPool(inv_tool)
-		if(client) client.screen -= inv_tool
+		if(client)
+			client.screen -= inv_tool
 		inv_tool = null
 
 /mob/living/silicon/robot/mommi/updatename(var/oldprefix as text)

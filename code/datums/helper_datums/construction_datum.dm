@@ -60,7 +60,8 @@
 	return 0
 
 /datum/construction/proc/is_right_key(mob/user as mob, atom/used_atom) // returns current step num if used_atom is of the right type.
-	if(assembling) return 0
+	if(assembling)
+		return 0
 	var/list/L = steps[steps.len]
 	if((istype(L[Co_KEY], /list) && is_type_in_list(used_atom, L[Co_KEY])) || istype(used_atom, L[Co_KEY]))
 	//if our keys are in a list, we want to check them all
@@ -213,7 +214,8 @@
 	return
 
 /datum/construction/reversible/is_right_key(mob/user as mob,atom/used_atom) // returns index step
-	if(assembling) return 0
+	if(assembling)
+		return 0
 	assembling = 1
 	var/list/step_next = get_forward_step(index)
 	var/list/step_back = get_backward_step(index)

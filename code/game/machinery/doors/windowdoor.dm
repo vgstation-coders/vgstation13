@@ -72,7 +72,8 @@
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		if(air_group) return 0
+		if(air_group)
+			return 0
 		return !density
 	else
 		return 1
@@ -90,7 +91,8 @@
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 

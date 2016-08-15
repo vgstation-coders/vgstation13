@@ -254,7 +254,8 @@
 				human_job = HM.subjectjob
 				break
 		var/lastname_index = findtext(human_name, " ")
-		if(lastname_index) human_name = copytext(human_name,lastname_index+1)
+		if(lastname_index)
+			human_name = copytext(human_name,lastname_index+1)
 		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
 		HB.name = human_name+HB.name
 		HB.job = human_job
@@ -498,7 +499,8 @@
 	. = ..()
 	if(.)
 		var/obj/item/weapon/paper/paper = locate() in container
-		if(!paper.info) . = 0
+		if(!paper.info)
+			. = 0
 	return
 
 /datum/recipe/boiledrice

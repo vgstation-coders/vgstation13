@@ -35,7 +35,8 @@
 	var/obj/item/carrot = null
 
 /mob/living/simple_animal/hostile/retaliate/snowman/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 	if(!ckey && !stat)
@@ -96,7 +97,8 @@
 
 			overlays += image('icons/mob/head.dmi', hat.icon_state)
 
-	else	..()
+	else
+		..()
 
 /obj/item/projectile/snowball
 	name = "flying snowball"

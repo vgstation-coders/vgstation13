@@ -95,19 +95,25 @@
 	return
 
 /obj/item/device/multitool/ai_detect/proc/findItem(pathToFind,atom/thingToSearch)
-	if(locate(pathToFind) in thingToSearch.contents) return 1
+	if(locate(pathToFind) in thingToSearch.contents)
+		return 1
 	for(var/mob/living/carbon/mob in thingToSearch)
-		if(.(pathToFind,mob)) return 1
+		if(.(pathToFind,mob))
+			return 1
 	return 0
 
 /obj/item/device/multitool/ai_detect/proc/findComponent(pathToFind,atom/thingToSearch)
-	if(locate(pathToFind) in thingToSearch.contents) return 1
+	if(locate(pathToFind) in thingToSearch.contents)
+		return 1
 	for(var/obj/item/device/assembly_holder/assembly in thingToSearch)
-		if(.(pathToFind,assembly)) return 1
+		if(.(pathToFind,assembly))
+			return 1
 	for(var/obj/item/device/transfer_valve/valve in thingToSearch)
-		if(.(pathToFind,valve)) return 1
+		if(.(pathToFind,valve))
+			return 1
 	for(var/mob/living/carbon/mob in thingToSearch)
-		if(.(pathToFind,mob)) return 1
+		if(.(pathToFind,mob))
+			return 1
 	return 0
 
 obj/item/device/multitool/ai_detect/update_icon()
@@ -120,17 +126,22 @@ obj/item/device/multitool/ai_detect/update_icon()
 			src.icon_state = "[initial(src.icon_state)]_yellow"
 		else if(src.detected & DETECT_ANALYZER)
 			src.icon_state = "[initial(src.icon_state)]_blue"
-	else src.icon_state = initial(src.icon_state)
+	else
+		src.icon_state = initial(src.icon_state)
 	return
 
 obj/item/device/multitool/ai_detect/examine(mob/user)
 	..()
 	if(src.detected)
 		user << "<span class='info'>The screen displays:</span>"
-		if(DETECT_AI) 		to_chat(user, "<span class='info'>AI detected</span>")
-		if(DETECT_PAI)  	to_chat(user, "<span class='info'>pAI detected></span>")
-		if(DETECT_RECORDER)	to_chat(user, "<span class='info'>Tape recorder detected</span>")
-		if(DETECT_ANALYZER)	to_chat(user, "<span class='info'>Voice analyzer detected</span>")
+		if(DETECT_AI)
+			to_chat(user, "<span class='info'>AI detected</span>")
+		if(DETECT_PAI)
+			to_chat(user, "<span class='info'>pAI detected></span>")
+		if(DETECT_RECORDER)
+			to_chat(user, "<span class='info'>Tape recorder detected</span>")
+		if(DETECT_ANALYZER)
+			to_chat(user, "<span class='info'>Voice analyzer detected</span>")
 
 ////////////////////////////////////////////////////////////////////////
 #undef DETECT_TICKER_PERIOD

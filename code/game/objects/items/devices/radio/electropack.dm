@@ -20,7 +20,8 @@
 		initialize()
 	else
 		spawn(50)
-			if(radio_controller) initialize()
+			if(radio_controller)
+				initialize()
 
 /obj/item/device/radio/electropack/initialize()
 	if(frequency < MINIMUM_FREQUENCY || frequency > MAXIMUM_FREQUENCY)

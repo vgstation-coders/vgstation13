@@ -156,7 +156,8 @@ Auto Patrol: []"},
 	return
 
 /obj/machinery/bot/secbot/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 	if((href_list["power"]) && (src.allowed(usr)))
@@ -223,12 +224,14 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
-		if(user) to_chat(user, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		src.target = null
-		if(user) src.oldtarget_name = user.name
+		if(user)
+			src.oldtarget_name = user.name
 		src.last_found = world.time
 		src.anchored = 0
 		src.emagged = 2
@@ -609,7 +612,8 @@ Auto Patrol: []"},
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
@@ -702,7 +706,8 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/proc/assess_perp(mob/living/carbon/human/perp as mob)
 	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
 
-	if(src.emagged == 2) return 10 //Everyone is a criminal!
+	if(src.emagged == 2)
+		return 10 //Everyone is a criminal!
 
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 

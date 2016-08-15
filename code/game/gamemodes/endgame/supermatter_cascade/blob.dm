@@ -24,7 +24,8 @@
 
 /turf/unsimulated/wall/supermatter/process()
 	// Only check infrequently.
-	if(next_check>world.time) return
+	if(next_check>world.time)
+		return
 
 	// No more available directions? Shut down process().
 	if(avail_dirs.len==0)

@@ -90,8 +90,10 @@
 			if(D.id_tag == src.id_tag)
 				spawn(0)
 				if(D)
-					if(D.density)	D.open()
-					else			D.close()
+					if(D.density)
+						D.open()
+					else
+						D.close()
 					return
 				if(specialfunctions & IDSCAN)
 					D.aiDisabledIdScanner = !D.aiDisabledIdScanner

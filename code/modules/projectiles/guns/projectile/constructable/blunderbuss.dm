@@ -240,7 +240,8 @@
 		speed = ((fire_force*2)/5)
 
 	speed = speed * damage_multiplier
-	if(speed>80) speed = 80 //damage cap.
+	if(speed>80)
+		speed = 80 //damage cap.
 
 	var/distance = round((20/loaded_item.w_class)*(fuel_level/10))
 

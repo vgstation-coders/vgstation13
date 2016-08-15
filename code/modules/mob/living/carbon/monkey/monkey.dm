@@ -43,7 +43,8 @@
 
 /mob/living/carbon/monkey/abiotic()
 	for(var/obj/item/I in held_items)
-		if(I.abstract) continue
+		if(I.abstract)
+			continue
 
 		return 1
 
@@ -154,7 +155,8 @@
 			return -1
 
 	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45) tally += (health_deficiency / 25)
+	if(health_deficiency >= 45)
+		tally += (health_deficiency / 25)
 
 	if (bodytemperature < 283.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
@@ -247,8 +249,10 @@
 
 /mob/living/carbon/monkey/proc/defense(var/power, var/def_zone)
 	var/armor = run_armor_check(def_zone, "melee", "Your armor has protected your [def_zone].", "Your armor has softened hit to your [def_zone].")
-	if(armor >= 2)	return 0
-	if(!power)	return 0
+	if(armor >= 2)
+		return 0
+	if(!power)
+		return 0
 
 	var/damage = power
 	if(armor)
@@ -425,7 +429,8 @@
 		to_chat(M, "You cannot attack people before the game has started.")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	if (health > -100)
 
@@ -448,12 +453,18 @@
 			var/power = M.powerlevel + rand(0,3)
 
 			switch(M.powerlevel)
-				if(1 to 2) stunprob = 20
-				if(3 to 4) stunprob = 30
-				if(5 to 6) stunprob = 40
-				if(7 to 8) stunprob = 60
-				if(9) 	   stunprob = 70
-				if(10) 	   stunprob = 95
+				if(1 to 2)
+					stunprob = 20
+				if(3 to 4)
+					stunprob = 30
+				if(5 to 6)
+					stunprob = 40
+				if(7 to 8)
+					stunprob = 60
+				if(9)
+					stunprob = 70
+				if(10)
+					stunprob = 95
 
 			if(prob(stunprob))
 				M.powerlevel -= 3
@@ -513,7 +524,8 @@
 	if(flags & INVULNERABLE)
 		return
 
-	if(wear_id) wear_id.emp_act(severity)
+	if(wear_id)
+		wear_id.emp_act(severity)
 	..()
 
 /mob/living/carbon/monkey/ex_act(severity)

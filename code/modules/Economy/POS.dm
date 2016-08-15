@@ -361,7 +361,8 @@ var/const/POS_HEADER = {"<html>
 
 /obj/machinery/pos/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN)) return
+	if(stat & (NOPOWER|BROKEN))
+		return
 	if(logged_in)
 		overlays += image(icon = icon, icon_state = "pos-working")
 	else
@@ -386,13 +387,20 @@ var/const/POS_HEADER = {"<html>
 		<a href="?src=\ref[src];screen=[POS_SCREEN_SETTINGS]">Settings</a>
 	</div>"}
 	switch(screen)
-		if(POS_SCREEN_LOGIN)    dat += LoginScreen()
-		if(POS_SCREEN_ORDER)    dat += OrderScreen()
-		if(POS_SCREEN_FINALIZE) dat += FinalizeScreen()
-		if(POS_SCREEN_PRODUCTS) dat += ProductsScreen()
-		if(POS_SCREEN_EXPORT)   dat += ExportScreen()
-		if(POS_SCREEN_IMPORT)   dat += ImportScreen()
-		if(POS_SCREEN_SETTINGS) dat += SettingsScreen()
+		if(POS_SCREEN_LOGIN)
+			dat += LoginScreen()
+		if(POS_SCREEN_ORDER)
+			dat += OrderScreen()
+		if(POS_SCREEN_FINALIZE)
+			dat += FinalizeScreen()
+		if(POS_SCREEN_PRODUCTS)
+			dat += ProductsScreen()
+		if(POS_SCREEN_EXPORT)
+			dat += ExportScreen()
+		if(POS_SCREEN_IMPORT)
+			dat += ImportScreen()
+		if(POS_SCREEN_SETTINGS)
+			dat += SettingsScreen()
 
 	dat += "</body></html>"
 	user << browse(dat, "window=pos")
@@ -400,9 +408,11 @@ var/const/POS_HEADER = {"<html>
 	return
 
 /obj/machinery/pos/Topic(var/href, var/list/href_list)
-	if(..(href,href_list)) return
+	if(..(href,href_list))
+		return
 	if("logout" in href_list)
-		if(alert(src, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes") return
+		if(alert(src, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes")
+			return
 		logged_in=null
 		screen=POS_SCREEN_LOGIN
 		update_icon()
@@ -465,13 +475,15 @@ var/const/POS_HEADER = {"<html>
 	else if("setunits" in href_list)
 		var/lid = text2num(href_list["setunits"])
 		var/newunits = input(usr,"Enter the units sold.") as num
-		if(!newunits) return
+		if(!newunits)
+			return
 		var/line_item/LI = line_items[lid]
 		LI.units = newunits
 		line_items[lid]=LI
 	else if("setpname" in href_list)
 		var/newtext = sanitize(input(usr,"Enter the product's name."))
-		if(!newtext) return
+		if(!newtext)
+			return
 		var/pid = href_list["setpname"]
 		var/line_item/LI = products[pid]
 		if(LI)
@@ -479,7 +491,8 @@ var/const/POS_HEADER = {"<html>
 			products[pid]=LI
 	else if("setprice" in href_list)
 		var/newprice = input(usr,"Enter the product's price.") as num
-		if(!newprice) return
+		if(!newprice)
+			return
 		var/pid = href_list["setprice"]
 		var/line_item/LI = products[pid]
 		LI.price = newprice

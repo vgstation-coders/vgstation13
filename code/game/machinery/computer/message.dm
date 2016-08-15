@@ -103,7 +103,8 @@
 	if(hacking || emagged)
 		screen = 2
 	else if(!auth || !linkedServer || (linkedServer.stat & (NOPOWER|BROKEN)))
-		if(!linkedServer || (linkedServer.stat & (NOPOWER|BROKEN))) message = noserver
+		if(!linkedServer || (linkedServer.stat & (NOPOWER|BROKEN)))
+			message = noserver
 		screen = 0
 
 	switch(screen)
@@ -293,7 +294,8 @@
 
 		//Turn the server on/off.
 		if (href_list["active"])
-			if(auth) linkedServer.active = !linkedServer.active
+			if(auth)
+				linkedServer.active = !linkedServer.active
 		//Find a server
 		if (href_list["find"])
 			if(message_servers && message_servers.len > 1)
@@ -406,7 +408,8 @@
 						//Get out list of viable PDAs
 						var/list/obj/item/device/pda/sendPDAs = list()
 						for(var/obj/item/device/pda/P in PDAs)
-							if(!P.owner || P.toff || P.hidden) continue
+							if(!P.owner || P.toff || P.hidden)
+								continue
 							sendPDAs += P
 						if(PDAs && PDAs.len > 0)
 							customrecepient = input(usr, "Select a PDA from the list.") as null|anything in sortNames(sendPDAs)
@@ -439,7 +442,8 @@
 
 						var/obj/item/device/pda/PDARec = null
 						for (var/obj/item/device/pda/P in PDAs)
-							if (!P.owner || P.toff || P.hidden)	continue
+							if (!P.owner || P.toff || P.hidden)
+								continue
 							if(P.owner == customsender)
 								PDARec = P
 						//Sender isn't faking as someone who exists

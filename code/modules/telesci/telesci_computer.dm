@@ -95,8 +95,10 @@
   * @return nothing
   */
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
-	if(stat & (BROKEN|NOPOWER)) return
-	if(user.stat || user.restrained()) return
+	if(stat & (BROKEN|NOPOWER))
+		return
+	if(user.stat || user.restrained())
+		return
 
 	// this is the data which will be sent to the ui
 	var/list/cell_data=null
@@ -329,7 +331,8 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 			dest = target
 		var/things=0
 		for(var/atom/movable/ROI in source)
-			if(ROI.anchored || things>=10) continue
+			if(ROI.anchored || things>=10)
+				continue
 			if(is_type_in_list(ROI,telesci_warnings))
 				message_admins("[user.real_name]/([formatPlayerPanel(user,user.ckey)]) teleported a [ROI] to [formatJumpTo(dest)] from [formatJumpTo(source)]")
 			log_admin("[user.real_name]/([formatPlayerPanel(user,user.ckey)]) teleported a [ROI] to [formatJumpTo(dest)] from [formatJumpTo(source)]")
@@ -357,7 +360,8 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 
 /obj/machinery/computer/telescience/Topic(href, href_list)
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 
 	if(..())

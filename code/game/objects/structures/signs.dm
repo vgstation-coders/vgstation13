@@ -48,7 +48,8 @@
 		S.sign_state = icon_state
 		qdel(src)
 		return
-	else ..()
+	else
+		..()
 
 /obj/item/sign
 	name = "sign"
@@ -60,7 +61,8 @@
 /obj/item/sign/attackby(obj/item/tool as obj, mob/user as mob)	//construction
 	if(isscrewdriver(tool) && isturf(user.loc))
 		var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
-		if(direction == "Cancel" || src.loc == null) return // We can get qdel'd if someone spams screwdrivers on signs before responding to the prompt.
+		if(direction == "Cancel" || src.loc == null)
+			return // We can get qdel'd if someone spams screwdrivers on signs before responding to the prompt.
 		var/obj/structure/sign/S = new(user.loc)
 		switch(direction)
 			if("North")
@@ -71,14 +73,16 @@
 				S.pixel_y = -WORLD_ICON_SIZE
 			if("West")
 				S.pixel_x = -WORLD_ICON_SIZE
-			else return
+			else
+				return
 		S.name = name
 		S.desc = desc
 		S.icon_state = sign_state
 		to_chat(user, "You fasten \the [S] with your [tool].")
 		qdel(src)
 		return
-	else ..()
+	else
+		..()
 
 /obj/structure/sign/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")

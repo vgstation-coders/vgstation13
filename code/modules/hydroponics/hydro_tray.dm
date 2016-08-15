@@ -78,9 +78,11 @@
 	//var/scancount = 0
 	var/mattercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor)) capcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+			capcount += SP.rating
 		//if(istype(SP, /obj/item/weapon/stock_parts/scanning_module)) scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin)) mattercount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
+			mattercount += SP.rating
 	//decay_reduction = scancount
 	weed_coefficient = 2/mattercount
 	internal_light = capcount
@@ -146,7 +148,8 @@
 
 //Clears out a dead plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/remove_dead(var/mob/user)
-	if(!user || !dead) return
+	if(!user || !dead)
+		return
 
 	if(closed_system)
 		to_chat(user, "You can't remove the dead plant while the lid is shut.")
@@ -164,9 +167,11 @@
 
 
 	//Remove the seed if something is already planted.
-	if(seed) remove_plant()
+	if(seed)
+		remove_plant()
 	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
-	if(!seed) return //Weed does not exist, someone fucked up.
+	if(!seed)
+		return //Weed does not exist, someone fucked up.
 
 	health = seed.endurance
 	lastcycle = world.time
@@ -205,7 +210,8 @@
 			seed = S.seed //Grab the seed datum.
 			dead = 0
 			age = 1
-			if(seed.hematophage) nutrilevel = 1
+			if(seed.hematophage)
+				nutrilevel = 1
 
 			//Snowflakey, maybe move this to the seed datum
 			health = (istype(S, /obj/item/seeds/cutting) ? round(seed.endurance/rand(2,5)) : seed.endurance)
@@ -410,8 +416,10 @@
 		to_chat(user, "[src] has nothing planted.")
 	if (Adjacent(user) || isobserver(user) || issilicon(user))
 		to_chat(user, "Water: [round(src.waterlevel,0.1)]/100")
-		if(seed && seed.hematophage) to_chat(user, "<span class='danger'>Blood:</span> [round(src.nutrilevel,0.1)]/10") //so edgy!!
-		else to_chat(user, "Nutrient: [round(src.nutrilevel,0.1)]/10")
+		if(seed && seed.hematophage)
+			to_chat(user, "<span class='danger'>Blood:</span> [round(src.nutrilevel,0.1)]/10") //so edgy!!
+		else
+			to_chat(user, "Nutrient: [round(src.nutrilevel,0.1)]/10")
 		if(src.weedlevel >= 5)
 			to_chat(user, "[src] is <span class='alert'>filled with weeds!</span>")
 		if(src.pestlevel >= 5)
@@ -502,7 +510,8 @@
 	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
 		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/lizard) && !M.locked_to && !M.anchored)
 			spawn(10)
-				if(!M || !Adjacent(M) || M.locked_to || M.anchored) return // HasProximity() will likely fire a few times almost simultaneously, so spawn() is tricky with it's sanity
+				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
+					return // HasProximity() will likely fire a few times almost simultaneously, so spawn() is tricky with it's sanity
 				visible_message("<span class='warning'>\The [seed.display_name] hungrily lashes a vine at \the [M]!</span>")
 				if(M.health > 0)
 					M.Die()

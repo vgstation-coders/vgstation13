@@ -496,8 +496,10 @@
 
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in loc)
-		if(!O.client)	continue
-		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)	continue
+		if(!O.client)
+			continue
+		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
+			continue
 		ghost = O
 		break
 
@@ -590,8 +592,10 @@
 		return this_rune.fizzle()
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in this_rune.loc)
-		if(!O.client)	continue
-		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)	continue
+		if(!O.client)
+			continue
+		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
+			continue
 		ghost = O
 		break
 	if(!ghost)

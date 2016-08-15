@@ -153,7 +153,8 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
-		if(user) to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
+		if(user)
+			to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
 
 /obj/machinery/bot/floorbot/Topic(href, href_list)
 	if(..())
@@ -268,7 +269,8 @@ var/global/list/floorbot_targets=list()
 				src.path = AStar(src.loc, src.target.loc, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=botcard)
 			else
 				src.path = AStar(src.loc, src.target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=botcard)
-			if (!src.path) src.path = list()
+			if (!src.path)
+				src.path = list()
 			if(src.path.len == 0)
 				src.oldtarget = src.target
 				floorbot_targets -= src.target
@@ -649,7 +651,8 @@ var/global/list/floorbot_targets=list()
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src

@@ -20,12 +20,16 @@
 
 	switch(src.stat)
 		if(CONSCIOUS)
-			if(!src.client)	msg += "It appears to be in stand-by mode.\n" //afk
-		if(UNCONSCIOUS)		msg += "<span class='warning'>It doesn't seem to be responding.</span>\n"
-		if(DEAD)			msg += "<span class='deadsay'>It looks completely unsalvageable.</span>\n"
+			if(!src.client)
+				msg += "It appears to be in stand-by mode.\n" //afk
+		if(UNCONSCIOUS)
+			msg += "<span class='warning'>It doesn't seem to be responding.</span>\n"
+		if(DEAD)
+			msg += "<span class='deadsay'>It looks completely unsalvageable.</span>\n"
 	msg += "*---------*</span>"
 
-	if(print_flavor_text()) msg += "[print_flavor_text()]\n"
+	if(print_flavor_text())
+		msg += "[print_flavor_text()]\n"
 
 	if (pose)
 		if( findtext(pose,".",length(pose)) == 0 && findtext(pose,"!",length(pose)) == 0 && findtext(pose,"?",length(pose)) == 0 )

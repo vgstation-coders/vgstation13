@@ -40,7 +40,8 @@
 	set category = "Preferences"
 	set desc = "Toggle seeing radiochatter from radios and speakers"
 
-	if(!holder) return
+	if(!holder)
+		return
 	prefs.toggles ^= CHAT_RADIO
 	prefs.save_preferences_sqlite(src, ckey)
 	to_chat(usr, "You will [(prefs.toggles & CHAT_RADIO) ? "now" : "no longer"] see radio chatter from radios or speakers")
@@ -51,7 +52,8 @@
 	set category = "Preferences"
 	set desc = "Toggle hearing a notification when admin PMs are recieved"
 
-	if(!holder)	return
+	if(!holder)
+		return
 	prefs.toggles ^= SOUND_ADMINHELP
 	prefs.save_preferences_sqlite(src, ckey)
 	to_chat(usr, "You will [(prefs.toggles & SOUND_ADMINHELP) ? "now" : "no longer"] hear a sound when adminhelps arrive.")
@@ -159,13 +161,16 @@
 		return
 
 	var/UI_style_new = input(usr, "Select a style, we recommend White for customization") in list("White", "Midnight", "Orange", "old")
-	if(!UI_style_new) return
+	if(!UI_style_new)
+		return
 
 	var/UI_style_alpha_new = input(usr, "Select a new alpha(transparence) parametr for UI, between 50 and 255") as num
-	if(!UI_style_alpha_new | !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50)) return
+	if(!UI_style_alpha_new | !(UI_style_alpha_new <= 255 && UI_style_alpha_new >= 50))
+		return
 
 	var/UI_style_color_new = input(usr, "Choose your UI color, dark colors are not recommended!") as color|null
-	if(!UI_style_color_new) return
+	if(!UI_style_color_new)
+		return
 
 	//update UI
 	var/list/icons = usr.hud_used.adding + usr.hud_used.other +usr.hud_used.hotkeybuttons
@@ -191,7 +196,8 @@
 	prefs.toggles ^= SOUND_STREAMING
 	prefs.save_preferences_sqlite(src, ckey)
 	to_chat(usr, "You will [(prefs.toggles & SOUND_STREAMING) ? "now" : "no longer"] hear streamed media.")
-	if(!media) return
+	if(!media)
+		return
 	if(prefs.toggles & SOUND_STREAMING)
 		media.update_music()
 	else
@@ -205,7 +211,8 @@
 	prefs.usewmp = !prefs.usewmp
 	prefs.save_preferences_sqlite(src, ckey)
 	to_chat(usr, "You will use [(prefs.usewmp) ? "WMP" : "VLC"] to hear streamed media.")
-	if(!media) return
+	if(!media)
+		return
 	media.stop_music()
 	media.playerstyle = (prefs.usewmp ? PLAYER_OLD_HTML : PLAYER_HTML)
 	if(prefs.toggles & SOUND_STREAMING)

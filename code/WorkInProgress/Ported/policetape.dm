@@ -78,12 +78,14 @@
 		var/dir
 		if (start.x == end.x)
 			var/d = end.y-start.y
-			if(d) d = d/abs(d)
+			if(d)
+				d = d/abs(d)
 			end = get_turf(locate(end.x,end.y+d,end.z))
 			dir = "v"
 		else
 			var/d = end.x-start.x
-			if(d) d = d/abs(d)
+			if(d)
+				d = d/abs(d)
 			end = get_turf(locate(end.x+d,end.y,end.z))
 			dir = "h"
 

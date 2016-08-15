@@ -206,7 +206,8 @@
 	var/list/Lines = file2list(filename)
 
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)
@@ -628,7 +629,8 @@
 /datum/configuration/proc/loadsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)
@@ -674,7 +676,8 @@
 /datum/configuration/proc/loadforumsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)

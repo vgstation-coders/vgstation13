@@ -38,7 +38,8 @@
 		to_chat(usr, "<span class='warning'>This will only work on normal organic beings.</span>")
 		return
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 
 	usr.verbs -= /proc/bioproc_cryokinesis
 	usr.verbs += /proc/bioproc_cryokinesis_cd
@@ -48,7 +49,8 @@
 		usr.verbs -= /proc/bioproc_cryokinesis_cd
 
 	C.bodytemperature = T0C + 30
-	if(C.burning) C.burning = 0
+	if(C.burning)
+		C.burning = 0
 
 	C.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [C]!</span>")
 
@@ -110,7 +112,8 @@
 	set desc = "Eat just about anything!"
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 
 	usr.verbs -= /proc/bioproc_mattereater
 	usr.verbs += /proc/bioproc_mattereater_cd
@@ -145,9 +148,11 @@
 	if(ishuman(usr))
 		for(var/A in usr.organs)
 			var/datum/organ/external/affecting = null
-			if(!usr.organs[A])    continue
+			if(!usr.organs[A])
+				continue
 			affecting = usr.organs[A]
-			if(!istype(affecting, /datum/organ/external))    continue
+			if(!istype(affecting, /datum/organ/external))
+				continue
 			affecting.heal_damage(4, 0)
 		usr:UpdateDamageIcon()
 		usr:updatehealth()
@@ -192,7 +197,8 @@
 	set desc = "Leap great distances!"
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 	if (istype(usr.loc,/mob/))
 		to_chat(usr, "<span class='warning'>You can't jump right now!</span>")
 		return
@@ -212,8 +218,10 @@
 
 		for(var/i=0, i<10, i++)
 			step(usr, usr.dir)
-			if(i < 5) usr.pixel_y += 8
-			else usr.pixel_y -= 8
+			if(i < 5)
+				usr.pixel_y += 8
+			else
+				usr.pixel_y -= 8
 			sleep(1)
 
 		if (usr:bioHolder.HasEffect("fat") && prob(66))
@@ -285,9 +293,11 @@
 		to_chat(usr, "<span class='warning'>You can only change your appearance to that of another human.</span>")
 		return
 
-	if(!ishuman(usr)) return
+	if(!ishuman(usr))
+		return
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 
 	usr.verbs -= /proc/bioproc_polymorphism
 	usr.verbs += /proc/bioproc_polymorphism_cd
@@ -505,7 +515,8 @@
 	set desc = "Wreath yourself in burning flames."
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 
 	if (istype(usr,/mob/living/))
 		var/mob/living/L = usr
@@ -552,7 +563,8 @@
 	set desc = "Transform yourself into a liquified state."
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 
 	if (istype(usr,/mob/living/carbon/human/))
 		var/mob/living/carbon/human/H = usr
@@ -612,7 +624,8 @@
 	set desc = "Unleash a gigantic fart!"
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 
 	if (istype(usr,/mob/living/))
 		var/mob/living/L = usr
@@ -691,22 +704,28 @@
 	set desc = "Shoot lasers from your eyes."
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr)) return
+	if(!can_act(usr))
+		return
 
 	var/mob/living/L = usr
 	var/turf/T = null
 	switch(L.dir)
-		if (NORTH) T = locate(L.x,L.y+1,L.z)
-		if (SOUTH) T = locate(L.x,L.y-1,L.z)
-		if (WEST) T = locate(L.x-1,L.y,L.z)
-		if (EAST) T = locate(L.x+1,L.y,L.z)
+		if (NORTH)
+			T = locate(L.x,L.y+1,L.z)
+		if (SOUTH)
+			T = locate(L.x,L.y-1,L.z)
+		if (WEST)
+			T = locate(L.x-1,L.y,L.z)
+		if (EAST)
+			T = locate(L.x+1,L.y,L.z)
 
 	if (!istype(T,/turf/))
 		return
 	L.visible_message("<span class='warning'><b>[L.name]</b> shoots eye beams!</span>")
 	var/datum/projectile/laser/eyebeams/PJ = new /datum/projectile/laser/eyebeams
 	var/obj/projectile/P = unpool("projectile", /obj/projectile)
-	if(!P)	return
+	if(!P)
+		return
 	P.set_loc(usr.loc)
 	if(PJ.shot_sound)
 		playsound(usr, PJ.shot_sound, 50)

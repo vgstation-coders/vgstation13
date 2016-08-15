@@ -58,8 +58,10 @@ var/global/list/ghdel_profiling = list()
 	appearance_flags = TILE_BOUND
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
-	if(!last_beamchecks) last_beamchecks = list()
-	if(!beams) beams = list()
+	if(!last_beamchecks)
+		last_beamchecks = list()
+	if(!beams)
+		beams = list()
 	if(!(B in beams))
 		beams.Add(B)
 	return 1
@@ -151,7 +153,8 @@ var/global/list/ghdel_profiling = list()
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
-	if(istype(beams, /list) && beams.len) beams.len = 0
+	if(istype(beams, /list) && beams.len)
+		beams.len = 0
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
@@ -335,11 +338,14 @@ its easier to just keep the beam vertical.
 				II.DrawBox(null,1,(length-N),WORLD_ICON_SIZE,WORLD_ICON_SIZE)
 				II.Turn(Angle)
 				X.icon=II
-			else X.icon=I
+			else
+				X.icon=I
 			var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
 			var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
-			if(DX==0) Pixel_x=0
-			if(DY==0) Pixel_y=0
+			if(DX==0)
+				Pixel_x=0
+			if(DY==0)
+				Pixel_y=0
 			if(Pixel_x>WORLD_ICON_SIZE)
 				for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
 					X.x++
@@ -560,8 +566,10 @@ its easier to just keep the beam vertical.
 	return
 */
 /atom/proc/add_hiddenprint(mob/living/M as mob)
-	if(isnull(M)) return
-	if(isnull(M.key)) return
+	if(isnull(M))
+		return
+	if(isnull(M.key))
+		return
 	if (!( src.flags ) & FPRINT)
 		return
 	if (ishuman(M))
@@ -585,9 +593,12 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
-	if(isnull(M)) return
-	if(isAI(M)) return
-	if(isnull(M.key)) return
+	if(isnull(M))
+		return
+	if(isAI(M))
+		return
+	if(isnull(M.key))
+		return
 	if (!( src.flags ) & FPRINT)
 		return
 	if (ishuman(M))
@@ -726,7 +737,8 @@ its easier to just keep the beam vertical.
 
 
 /atom/proc/get_global_map_pos()
-	if(!islist(global_map) || isemptylist(global_map)) return
+	if(!islist(global_map) || isemptylist(global_map))
+		return
 	var/cur_x = null
 	var/cur_y = null
 	var/list/y_arr = null

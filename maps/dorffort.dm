@@ -106,7 +106,8 @@
 		for(var/surprise_room/room in rooms)
 			var/list/w_cand=room.GetTurfs(TURF_FLOOR)
 			for(var/turf/simulated/floor/airless/F in w_cand)
-				if(!istype(F)) continue
+				if(!istype(F))
+					continue
 				F.icon_state = "barber"
 
 /obj/structure/closet/crate/secure/engisec/PA

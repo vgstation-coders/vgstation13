@@ -46,7 +46,8 @@
 		var/list/cleanables = list()
 
 		for(var/obj/effect/decal/cleanable/CC in T)
-			if(!istype(CC) || !CC) continue
+			if(!istype(CC) || !CC)
+				continue
 			cleanables += CC
 
 		for(var/obj/effect/decal/cleanable/CC in get_turf(user)) //Get all nearby decals drawn on this wall and erase them
@@ -117,7 +118,8 @@
 			"[user] honks \the [src] at you.")
 
 /obj/item/weapon/bikehorn/kick_act(mob/living/H)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	honk()
 

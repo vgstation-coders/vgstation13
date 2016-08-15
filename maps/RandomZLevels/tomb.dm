@@ -154,7 +154,8 @@
 		T.ChangeTurf(/turf/unsimulated/floor)
 		playsound(T, 'sound/effects/stonedoor_openclose.ogg', 100, 1)
 
-	if(!C) return
+	if(!C)
+		return
 	to_chat(C, "<span class='danger'>You were sacrificed to Riniel, ruler of the Underworld.</span>")
 
 /obj/structure/sacrificial_altar/attack_hand(mob/user)
@@ -162,8 +163,10 @@
 	var/mob/living/victim
 
 	for(var/mob/living/L in get_turf(src))
-		if(ishuman(L) && !L.lying) continue
-		if(L == user) continue
+		if(ishuman(L) && !L.lying)
+			continue
+		if(L == user)
+			continue
 
 		victim = L
 		mob_amount++
@@ -198,7 +201,8 @@
 	name = "Chamber of Madness"
 
 /obj/machinery/door/mineral/sandstone/tomb/open()
-	if(!unlocked) return
+	if(!unlocked)
+		return
 
 	..()
 

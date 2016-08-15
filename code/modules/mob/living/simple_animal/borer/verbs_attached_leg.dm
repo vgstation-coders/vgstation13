@@ -10,7 +10,8 @@
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.borer_speak(message)
 
 /obj/item/verbs/borer/attached_leg/verb/evolve()
@@ -19,7 +20,8 @@
 	set desc = "Upgrade yourself or your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.evolve()
 
 /obj/item/verbs/borer/attached_leg/verb/secrete_chemicals()
@@ -28,7 +30,8 @@
 	set desc = "Push some chemicals into your host's bloodstream."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.secrete_chemicals()
 
 /obj/item/verbs/borer/attached_leg/verb/abandon_host()
@@ -37,7 +40,8 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.abandon_host()
 
 /obj/item/verbs/borer/attached_leg/speed_increase/verb/speed_increase()
@@ -46,7 +50,8 @@
 	set desc = "Expend chemicals constantly in order to elevate the performance of the limb in which you reside."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.speed_increase()
 
 /mob/living/simple_animal/borer/proc/speed_increase()
@@ -98,7 +103,8 @@
 	set desc = "Expend chemicals constantly in order to support the growth of strong bony talons on your host's foot."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.bone_talons()
 
 /mob/living/simple_animal/borer/proc/bone_talons()

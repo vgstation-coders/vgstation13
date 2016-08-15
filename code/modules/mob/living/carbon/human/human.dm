@@ -101,15 +101,19 @@
 	static_overlays["letter"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
-	if(!hair_styles_list.len) buildHairLists()
-	if(!all_species.len) buildSpeciesLists()
+	if(!hair_styles_list.len)
+		buildHairLists()
+	if(!all_species.len)
+		buildSpeciesLists()
 
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
 
 	if(!src.species)
-		if(new_species_name)	src.set_species(new_species_name)
-		else					src.set_species()
+		if(new_species_name)
+			src.set_species(new_species_name)
+		else
+			src.set_species()
 
 	default_language = get_default_language()
 
@@ -267,7 +271,8 @@
 	return 0
 
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	if (health > -100)
 
@@ -295,12 +300,18 @@
 			var/power = M.powerlevel + rand(0,3)
 
 			switch(M.powerlevel)
-				if(1 to 2) stunprob = 20
-				if(3 to 4) stunprob = 30
-				if(5 to 6) stunprob = 40
-				if(7 to 8) stunprob = 60
-				if(9) 	   stunprob = 70
-				if(10) 	   stunprob = 95
+				if(1 to 2)
+					stunprob = 20
+				if(3 to 4)
+					stunprob = 30
+				if(5 to 6)
+					stunprob = 40
+				if(7 to 8)
+					stunprob = 60
+				if(9)
+					stunprob = 70
+				if(10)
+					stunprob = 95
 
 			if(prob(stunprob))
 				M.powerlevel -= 3
@@ -425,7 +436,8 @@
 //Removed the horrible safety parameter. It was only being used by ninja code anyways.
 //Now checks siemens_coefficient of the affected area by default
 /mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null)
-	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)	return 0	//godmode
+	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+		return 0	//godmode
 
 	if (!def_zone)
 		def_zone = pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
@@ -436,7 +448,8 @@
 	return ..(shock_damage, source, siemens_coeff, def_zone)
 
 /mob/living/carbon/human/hear_radio_only()
-	if(!ears) return 0
+	if(!ears)
+		return 0
 	return is_on_ears(/obj/item/device/radio/headset/headset_earmuffs)
 
 /mob/living/carbon/human/show_inv(mob/user)
@@ -804,7 +817,8 @@
 
 /mob/living/carbon/human/abiotic(var/full_body = 0)
 	for(var/obj/item/I in held_items)
-		if(I.abstract) continue
+		if(I.abstract)
+			continue
 
 		return 1
 
@@ -867,14 +881,17 @@
 				else //Look for a bucket
 
 					for(var/obj/item/weapon/reagent_containers/glass/G in (location.contents + src.get_active_hand() + src.get_inactive_hand()))
-						if(!G.reagents) continue
-						if(!G.is_open_container()) continue
+						if(!G.reagents)
+							continue
+						if(!G.is_open_container())
+							continue
 
 						src.visible_message("<span class='warning'>[src] throws up into \the [G]!</span>", "<span class='danger'>You throw up into \the [G]!</span>")
 
 						if(G.reagents.total_volume <= G.reagents.maximum_volume-7) //Container can fit 7 more units of chemicals - vomit into it
 							G.reagents.add_reagent(VOMIT, rand(3,10))
-							if(src.reagents) reagents.trans_to(G, 1 + reagents.total_volume * 0.1)
+							if(src.reagents)
+								reagents.trans_to(G, 1 + reagents.total_volume * 0.1)
 						else //Container is nearly full - fill it to the brim with vomit and spawn some more on the floor
 							G.reagents.add_reagent(VOMIT, 10)
 							spawn_vomit_on_floor = 1
@@ -984,7 +1001,8 @@
 	visible_message("<span class='notice'>\The [src] morphs and changes [get_visible_gender() == MALE ? "his" : get_visible_gender() == FEMALE ? "her" : "their"] appearance!</span>", "<span class='notice'>You change your appearance!</span>", "<span class='warning'>Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!</span>")
 /mob/living/carbon/human/proc/can_mind_interact(var/mob/M)
 //	to_chat(world, "Starting can interact on [M]")
-	if(!ishuman(M)) return 0 //Can't see non humans with your fancy human mind.
+	if(!ishuman(M))
+		return 0 //Can't see non humans with your fancy human mind.
 //	to_chat(world, "[M] is a human")
 	var/turf/temp_turf = get_turf(M)
 	var/turf/our_turf = get_turf(src)
@@ -1197,7 +1215,8 @@
 	else
 		to_chat(U, "<span class='warning'>You attempt to get a good grip on the [selection] in [S]'s [affected.display_name] with bloody fingers.</span>")
 
-	if(istype(U,/mob/living/carbon/human/)) U.bloody_hands(S)
+	if(istype(U,/mob/living/carbon/human/))
+		U.bloody_hands(S)
 
 	if(!do_after(U, src, 80))
 		return
@@ -1271,7 +1290,8 @@
 	set src in view(1)
 	var/self = 0
 
-	if(usr.isUnconscious() || usr.restrained() || !isliving(usr) || isanimal(usr) || isAI(usr)) return
+	if(usr.isUnconscious() || usr.restrained() || !isliving(usr) || isanimal(usr) || isAI(usr))
+		return
 
 	if(usr == src)
 		self = 1
@@ -1300,9 +1320,12 @@
 
 
 	if(new_species_name)
-		if(src.species && src.species.name && (src.species.name == new_species_name)) return
-	else if(src.dna)	new_species_name = src.dna.species
-	else	new_species_name = "Human"
+		if(src.species && src.species.name && (src.species.name == new_species_name))
+			return
+	else if(src.dna)
+		new_species_name = src.dna.species
+	else
+		new_species_name = "Human"
 
 	if(src.species)
 		//if(src.species.language)	src.remove_language(species.language)
@@ -1323,14 +1346,17 @@
 		add_language(species.default_language)
 	if(src.species.abilities)
 		//if(src.species.language)	src.add_language(species.language)
-		if(src.species.abilities)	src.verbs |= species.abilities
+		if(src.species.abilities)
+			src.verbs |= species.abilities
 	if(force_organs || !src.organs || !src.organs.len)
 		src.species.create_organs(src)
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
 		src.see_in_dark = E.see_in_dark //species.darksight
-	if(src.see_in_dark > 2)	src.see_invisible = SEE_INVISIBLE_LEVEL_ONE
-	else					src.see_invisible = SEE_INVISIBLE_LIVING
+	if(src.see_in_dark > 2)
+		src.see_invisible = SEE_INVISIBLE_LEVEL_ONE
+	else
+		src.see_invisible = SEE_INVISIBLE_LIVING
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
 	spawn()
@@ -1533,7 +1559,8 @@
 	if(radiations)
 		apply_effect(current_size * radiations, IRRADIATE)
 	if(shoes)
-		if(shoes.flags & NOSLIP) return 0
+		if(shoes.flags & NOSLIP)
+			return 0
 	..()
 /mob/living/carbon/human/get_default_language()
 	. = ..()

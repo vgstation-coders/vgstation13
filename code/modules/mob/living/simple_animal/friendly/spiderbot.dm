@@ -163,7 +163,8 @@
 		var/turf/T = get_turf(loc)
 		if(T)
 			mmi.loc = T
-		if(mind)	mind.transfer_to(mmi.brainmob)
+		if(mind)
+			mind.transfer_to(mmi.brainmob)
 		mmi = null
 		src.name = "Spider-bot"
 		update_icon()

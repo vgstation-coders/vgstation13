@@ -71,14 +71,16 @@ proc/sd_Alert(client/who, message, title, buttons = list("Ok"),	default, duratio
 	if(ismob(who))
 		var/mob/M = who
 		who = M.client
-	if(!istype(who)) CRASH("sd_Alert: Invalid target:[who] (\ref[who])")
+	if(!istype(who))
+		CRASH("sd_Alert: Invalid target:[who] (\ref[who])")
 
 	var/sd_alert/T = locate(tag)
 	if(T)
 		if(istype(T))
 			qdel(T)
 			T = null
-		else CRASH("sd_Alert: tag \"[tag]\" is already in use by datum '[T]' (type: [T.type])")
+		else
+			CRASH("sd_Alert: tag \"[tag]\" is already in use by datum '[T]' (type: [T.type])")
 	T = new(who, tag)
 	if(duration)
 		spawn(duration)
@@ -105,14 +107,19 @@ sd_alert
 		src.tag = tag
 
 	Topic(href,params[])
-		if(usr.client != target) return
+		if(usr.client != target)
+			return
 		response = params["clk"]
 
 	proc/Display(message,title,list/buttons,default,unfocus,size,table,style,select,flags)
-		if(unfocus) spawn() target << browse(null,null)
-		if(istext(buttons)) buttons = list(buttons)
-		if(!default) default = buttons[1]
-		if(!(flags & SD_ALERT_NOVALIDATE)) validation = buttons.Copy()
+		if(unfocus)
+			spawn() target << browse(null,null)
+		if(istext(buttons))
+			buttons = list(buttons)
+		if(!default)
+			default = buttons[1]
+		if(!(flags & SD_ALERT_NOVALIDATE))
+			validation = buttons.Copy()
 
 		var/html = {"<head><title>[title]</title>[style]<script>\
 		function c(x) {document.location.href='BYOND://?src=\ref[src];'+x;}\
@@ -135,7 +142,8 @@ sd_alert
 				L["clk"] = b
 				var/html_string=list2params(L)
 				var/focus
-				if(b == default) focus = " ID=fcs"
+				if(b == default)
+					focus = " ID=fcs"
 				html += "<A[focus] href=# onClick=\"c('[html_string]')\">[html_encode(b)]</A>\
 					<BR>"
 		else	// button style choices
@@ -144,7 +152,8 @@ sd_alert
 				L["clk"] = b
 				var/html_string=list2params(L)
 				var/focus
-				if(b == default) focus = " ID=fcs"
+				if(b == default)
+					focus = " ID=fcs"
 				html += "<INPUT[focus] TYPE=button VALUE='[html_encode(b)]' \
 					onClick=\"c('[html_string]')\"> "
 
@@ -161,10 +170,15 @@ sd_alert
 			if(response && validation)
 				if(istype(response, /list))
 					var/list/L = response - validation
-					if(L.len) response = null
-					else validated = 1
-				else if(response in validation) validated = 1
-				else response=null
-			else validated = 1
+					if(L.len)
+						response = null
+					else
+						validated = 1
+				else if(response in validation)
+					validated = 1
+				else
+					response=null
+			else
+				validated = 1
 		spawn(2) qdel(src)
 		return response

@@ -90,7 +90,8 @@
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 					if(do_after(user, src, 20))
 						P:amount -= 5
-						if(!P:amount) del(P)
+						if(!P:amount)
+							del(P)
 						to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 						src.state = 3
 						src.icon_state = "3"
@@ -139,7 +140,8 @@
 				var/obj/machinery/computer2/C= new /obj/machinery/computer2( src.loc )
 				C.setup_drive_size = 0
 				C.icon_state = src.created_icon_state
-				if(mainboard.created_name) C.name = mainboard.created_name
+				if(mainboard.created_name)
+					C.name = mainboard.created_name
 				del(mainboard)
 				if(hd)
 					C.hd = hd

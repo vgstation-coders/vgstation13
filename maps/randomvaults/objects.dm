@@ -71,7 +71,8 @@
 
 /obj/effect/landmark/catechizer_spawn/New()
 	spawn()
-		if(!isturf(loc)) return
+		if(!isturf(loc))
+			return
 
 		var/list/all_spawns = list()
 		for(var/obj/effect/landmark/catechizer_spawn/S in get_area(src))

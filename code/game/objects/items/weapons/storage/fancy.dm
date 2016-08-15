@@ -140,7 +140,8 @@
 
 /obj/item/weapon/storage/fancy/candle_box/New()
 	..()
-	if (empty) return
+	if (empty)
+		return
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/candle(src)
 	return
@@ -169,7 +170,8 @@
 
 /obj/item/weapon/storage/fancy/crayons/New()
 	..()
-	if (empty) return
+	if (empty)
+		return
 	new /obj/item/toy/crayon/red(src)
 	new /obj/item/toy/crayon/orange(src)
 	new /obj/item/toy/crayon/yellow(src)
@@ -298,7 +300,8 @@
 
 /obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location)
 	var/obj/item/clothing/mask/cigarette/C = W
-	if(!istype(C)) return // what
+	if(!istype(C))
+		return // what
 	reagents.trans_to(C, (reagents.total_volume/contents.len))
 	..()
 

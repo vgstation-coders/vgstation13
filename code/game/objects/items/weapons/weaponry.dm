@@ -129,7 +129,8 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		"<span class='info'>You attempt to create a spear by securing \the [I] to \the [src].</span>")
 
 		if(do_after(user, get_turf(src), 5 SECONDS))
-			if(!I || !src) return
+			if(!I || !src)
+				return
 
 			if(!user.drop_item(I))
 				to_chat(user, "<span class='warning'>You can't let go of \the [I]! You quickly unsecure it from \the [src].</span>")

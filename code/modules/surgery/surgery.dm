@@ -89,7 +89,8 @@
 	return null
 
 proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
-	if(!istype(user) || !istype(E)) return
+	if(!istype(user) || !istype(E))
+		return
 
 	var/germ_level = user.germ_level
 	if(user.gloves)
@@ -112,7 +113,8 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		sleep_fail = 0
 		if(S.tool_quality(tool))
 			var/canuse = S.can_use(user, M, user.zone_sel.selecting, tool)
-			if(canuse == -1) sleep_fail = 1
+			if(canuse == -1)
+				sleep_fail = 1
 			if(canuse && S.is_valid_mutantrace(M) && !(M in S.doing_surgery))
 				if(!S.can_operate(user, M, user.zone_sel.selecting, tool)) //ruh oh, we picked this step, but we can't actually do it for some special raisin
 					return 1

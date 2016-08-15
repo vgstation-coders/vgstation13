@@ -43,7 +43,8 @@ Obviously, requires DNA2.
 	return 0
 
 /datum/dna/gene/basic/grant_spell/hulk/OnMobLife(var/mob/living/carbon/human/M)
-	if(!istype(M)) return
+	if(!istype(M))
+		return
 	if(M_HULK in M.mutations)
 		var/timeleft=M.hulk_time - world.time
 		if(M.health <= 25 || timeleft <= 0)

@@ -79,7 +79,8 @@
 			S.handle_icon_updates = 1
 
 /obj/screen/movable/spell_master/proc/add_spell(var/spell/spell)
-	if(!spell) return
+	if(!spell)
+		return
 
 	if(spell.connected_button) //we have one already, for some reason
 		if(spell.connected_button in spell_objects)

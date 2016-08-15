@@ -57,7 +57,8 @@
 		wizards_alive++
 
 	if (wizards_alive)
-		if(!time_checked) time_checked = world.time
+		if(!time_checked)
+			time_checked = world.time
 		if(world.time > time_checked + 12000 && (mages_made < max_mages))
 			time_checked = world.time
 			make_more_mages()
@@ -99,7 +100,8 @@
 			exhausted_pool = 0
 			shuffle(candidates)
 			for(var/mob/i in candidates)
-				if(!i || !i.client) continue //Dont bother removing them from the list since we only grab one wizard
+				if(!i || !i.client)
+					continue //Dont bother removing them from the list since we only grab one wizard
 
 				theghost = i
 				break

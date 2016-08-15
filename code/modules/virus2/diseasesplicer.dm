@@ -22,7 +22,8 @@
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		if(!dish)
-			if(!c.drop_item(I, src)) return 1
+			if(!c.drop_item(I, src))
+				return 1
 			dish = I
 
 	if(istype(I,/obj/item/weapon/diseasedisk))
@@ -123,7 +124,8 @@
 	if(..())
 		return 1
 
-	if(usr) usr.set_machine(src)
+	if(usr)
+		usr.set_machine(src)
 
 	if (href_list["grab"])
 		memorybank = locate(href_list["grab"])

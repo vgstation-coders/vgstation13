@@ -43,7 +43,8 @@
 	var/combined_heat_capacity = internal_removed.heat_capacity() + external_removed.heat_capacity()
 	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + external_removed.heat_capacity() * external_removed.temperature
 
-	if(!combined_heat_capacity) combined_heat_capacity = 1
+	if(!combined_heat_capacity)
+		combined_heat_capacity = 1
 	var/final_temperature = combined_energy / combined_heat_capacity
 
 	external_removed.temperature = final_temperature

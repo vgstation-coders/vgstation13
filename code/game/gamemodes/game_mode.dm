@@ -198,7 +198,8 @@
 			if(suplink)
 				var/extra = 4
 				suplink.uses += extra
-				if(man.mind) man.mind.total_TC += extra
+				if(man.mind)
+					man.mind.total_TC += extra
 				to_chat(man, "<span class='warning'>We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>")
 			else
 				// Give them a warning!
@@ -436,7 +437,8 @@ proc/get_nt_opposed()
 				dudes += man
 			else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
 				dudes += man
-	if(dudes.len == 0) return null
+	if(dudes.len == 0)
+		return null
 	return pick(dudes)
 
 

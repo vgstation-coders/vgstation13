@@ -90,7 +90,8 @@ var/paperwork_library
 	set category = "Debug"
 	set name = "Modify Paperwork Mode"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG))
+		return
 
 	if(!paperwork)
 		paperwork_setup()
@@ -288,7 +289,8 @@ var/paperwork_library
 		return
 	..()
 	if(reagents.total_volume)
-		if(M.reagents) reagents.trans_to(M, 50) //used to be 150
+		if(M.reagents)
+			reagents.trans_to(M, 50) //used to be 150
 	return
 
 
@@ -306,7 +308,8 @@ var/paperwork_library
 		return
 	..()
 	if(reagents.total_volume)
-		if(M.reagents) reagents.trans_to(M, 50)
+		if(M.reagents)
+			reagents.trans_to(M, 50)
 	return
 
 

@@ -1,8 +1,10 @@
 //This is an UNSAFE proc. Use mob_can_equip() before calling this one! Or rather use equip_to_slot_if_possible() or advanced_equip_to_slot_if_possible()
 //set redraw_mob to 0 if you don't wish the hud to be updated - if you're doing it manually in your own proc.
 /mob/living/carbon/monkey/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
-	if(!slot) return
-	if(!istype(W)) return
+	if(!slot)
+		return
+	if(!istype(W))
+		return
 
 	if(src.is_holding_item(W))
 		src.u_equip(W)
@@ -38,7 +40,8 @@
 	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
-	if(client) client.screen |= W
+	if(client)
+		client.screen |= W
 
 // Return the item currently in the slot ID
 /mob/living/carbon/monkey/get_item_by_slot(slot_id)
@@ -71,7 +74,8 @@
 
 /mob/living/carbon/monkey/u_equip(obj/item/W as obj, dropped = 1)
 	var/success = 0
-	if(!W)	return 0
+	if(!W)
+		return 0
 
 	if(W == hat)
 		hat = null

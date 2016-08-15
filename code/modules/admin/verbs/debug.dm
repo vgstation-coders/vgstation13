@@ -1,7 +1,8 @@
 /client/proc/Debug2()
 	set category = "Debug"
 	set name = "Debug-Game"
-	if(!check_rights(R_DEBUG))	return
+	if(!check_rights(R_DEBUG))
+		return
 
 	if(Debug2)
 		Debug2 = 0
@@ -29,7 +30,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Debug"
 	set name = "Advanced ProcCall"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG))
+		return
 
 	spawn(0)
 		var/target = null
@@ -62,14 +64,16 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 				targetselected = 0
 
 		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
-		if(!procname)	return
+		if(!procname)
+			return
 
 		if(target && !hascall(target, procname))
 			to_chat(usr, "<span style='color: red;'>Error: callproc(): target has no such call [procname].</span>")
 			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
-		if(!argnum && (argnum!=0))	return
+		if(!argnum && (argnum!=0))
+			return
 
 		lst.len = argnum // Expand to right length
 		//TODO: make a list to store whether each argument was initialised as null.
@@ -142,7 +146,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Debug"
 	set name = "Atom ProcCall"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG))
+		return
 
 	spawn(0)
 		var/lst[] // List reference
@@ -151,13 +156,15 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		var/class = null
 
 		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
-		if(!procname)	return
+		if(!procname)
+			return
 
 		if(!hascall(target, procname))
 			to_chat(usr, "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>")
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
-		if(!argnum && (argnum!=0))	return
+		if(!argnum && (argnum!=0))
+			return
 
 		lst.len = argnum // Expand to right length
 		//TODO: make a list to store whether each argument was initialised as null.
@@ -514,7 +521,8 @@ Pressure: [env.return_pressure()]"}
 	set name = "Assume direct control"
 	set desc = "Direct intervention"
 
-	if(!check_rights(R_DEBUG|R_ADMIN))	return
+	if(!check_rights(R_DEBUG|R_ADMIN))
+		return
 	if(M.ckey)
 		if(alert("This mob is being controlled by [M.ckey]. Are you sure you wish to assume control of it? [M.ckey] will be made a ghost.",,"Yes","No") != "Yes")
 			return
@@ -1248,7 +1256,8 @@ Pressure: [env.return_pressure()]"}
 /client/proc/cmd_admin_find_bad_blood_tracks()
 	set category = "Debug"
 	set name = "Find broken blood tracks"
-	if(!holder) return
+	if(!holder)
+		return
 	message_admins("[src] used find broken blood tracks")
 	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
 	var/F =file("data/logs/profiling/[date_string]_broken_blood.log")
@@ -1367,7 +1376,8 @@ Pressure: [env.return_pressure()]"}
 	set desc = "Honk"
 
 	var/response = input(src,"How much moneys?") as num
-	if( response < 1) return
+	if( response < 1)
+		return
 	dispense_cash(response, mob.loc)
 
 var/global/blood_virus_spreading_disabled = 0
@@ -1454,7 +1464,8 @@ client/proc/delete_all_bomberman()
 	set desc = "4th wall ointment."
 	set category = "Fun"
 
-	if(!check_rights(R_FUN)) return
+	if(!check_rights(R_FUN))
+		return
 
 	if(alert(usr, "Remove all Bomberman-related objects in the game world?", "Remove Bomberman", "Yes", "No") != "Yes")
 		return
@@ -1509,7 +1520,8 @@ client/proc/create_bomberman_arena()
 	set desc = "Create a customizable Bomberman-type arena."
 	set category = "Fun"
 
-	if(!check_rights(R_FUN)) return
+	if(!check_rights(R_FUN))
+		return
 
 	var/list/arena_sizes = list(
 		"15x13 (2 players)",
@@ -1530,7 +1542,8 @@ client/proc/control_bomberman_arena()
 	set desc = "Control or Remove an existing Bomberman-type arena."
 	set category = "Fun"
 
-	if(!check_rights(R_FUN)) return
+	if(!check_rights(R_FUN))
+		return
 
 	if(!arenas.len)
 		to_chat(usr, "There are no arenas in the world!")
@@ -1612,7 +1625,8 @@ client/proc/mob_list()
 	set name = "show mob list"
 	set category = "Debug"
 
-	if(!holder) return
+	if(!holder)
+		return
 	to_chat(usr, "mob list length is [mob_list.len]")
 	var/foundnull = 0
 	for(var/mob/V in mob_list)
@@ -1708,12 +1722,14 @@ client/proc/check_bomb()
 client/proc/cure_disease()
 	set name = "Cure Disease"
 	set category = "Debug"
-	if(!holder) return
+	if(!holder)
+		return
 
 	var/list/disease_by_name = list("-Cure All-" = null) + disease2_list + active_diseases
 
 	var/disease_name = input(src, "Disease to cure?") as null|anything in sortTim(disease_by_name, /proc/cmp_text_asc)
-	if(!disease_name) return
+	if(!disease_name)
+		return
 	var/count = 0
 	if(disease_name == "-Cure All-")
 		for(var/mob/living/carbon/C in mob_list)
@@ -1746,7 +1762,8 @@ client/proc/cure_disease()
 client/proc/check_convertables()
 	set name = "Check Convertables"
 	set category = "Debug"
-	if(!holder || !ticker || !ticker.mode) return
+	if(!holder || !ticker || !ticker.mode)
+		return
 
 	var/dat = ""
 	for(var/mob/M in player_list)

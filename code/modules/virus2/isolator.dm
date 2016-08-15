@@ -26,10 +26,12 @@
 			icon_state = "isolator_in"
 
 /obj/machinery/disease2/isolator/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 
 	usr.machine = src
-	if(!beaker) return
+	if(!beaker)
+		return
 	var/datum/reagents/R = beaker:reagents
 
 	if (href_list["isolate"])

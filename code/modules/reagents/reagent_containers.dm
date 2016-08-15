@@ -132,9 +132,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		var/obj/structure/reagent_dispensers/T = target
 		target_full = T.is_full()*/
 	else
-		if(ismob(target)) return null
+		if(ismob(target))
+			return null
 		//ASSERT(istype(target.reagents))
-		if(!istype(target.reagents)) return
+		if(!istype(target.reagents))
+			return
 		target_full = target.reagents.is_full()
 		//warning("Called transfer_sub() with a non-compatible target type ([target.type], [target], \ref[target])")
 		//return
@@ -276,4 +278,5 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		for (var/datum/reagent/R in snack.reagents.reagent_list) //no reagents will be left behind
 			data += "[R.id]([R.volume] unit\s); " //Using IDs because SOME chemicals(I'm looking at you, chlorhydrate-beer) have the same names as other chemicals.
 		return data
-	else return "No reagents"
+	else
+		return "No reagents"

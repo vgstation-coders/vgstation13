@@ -11,14 +11,16 @@
 	var/amount = 0
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
-		if(C.installed != 0) amount += C.brute_damage
+		if(C.installed != 0)
+			amount += C.brute_damage
 	return amount
 
 /mob/living/silicon/robot/getFireLoss()
 	var/amount = 0
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
-		if(C.installed != 0) amount += C.electronics_damage
+		if(C.installed != 0)
+			amount += C.electronics_damage
 	return amount
 
 /mob/living/silicon/robot/adjustBruteLoss(var/amount)
@@ -46,13 +48,15 @@
 	var/list/rval = new
 	for(var/V in components)
 		var/datum/robot_component/C = components[V]
-		if(C.installed == 1) rval += C
+		if(C.installed == 1)
+			rval += C
 	return rval
 
 /mob/living/silicon/robot/proc/get_armour()
 
 
-	if(!components.len) return 0
+	if(!components.len)
+		return 0
 	var/datum/robot_component/C = components["armour"]
 	if(C && C.installed == 1)
 		return C
@@ -60,7 +64,8 @@
 
 /mob/living/silicon/robot/heal_organ_damage(var/brute, var/burn)
 	var/list/datum/robot_component/parts = get_damaged_components(brute,burn)
-	if(!parts.len)	return
+	if(!parts.len)
+		return
 	var/datum/robot_component/picked = pick(parts)
 	picked.heal_damage(brute,burn)
 
@@ -111,7 +116,8 @@
 		parts -= picked
 
 /mob/living/silicon/robot/take_overall_damage(var/brute = 0, var/burn = 0, var/sharp = 0, var/used_weapon = null)
-	if(status_flags & GODMODE)	return	//godmode
+	if(status_flags & GODMODE)
+		return	//godmode
 	var/list/datum/robot_component/parts = get_damageable_components()
 
 	 //Combat shielding absorbs a percentage of damage directly into the cell.

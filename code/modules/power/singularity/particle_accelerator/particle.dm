@@ -130,7 +130,8 @@
 
 
 /obj/effect/accelerated_particle/proc/move(var/lag)
-	if(!loc) return 0
+	if(!loc)
+		return 0
 	if(target)
 		if(movetotarget)
 			if(!step_towards(src,target))

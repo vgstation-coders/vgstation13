@@ -36,7 +36,8 @@
 
 
 /mob/new_player/proc/poll_player(var/pollid = -1)
-	if(pollid == -1) return
+	if(pollid == -1)
+		return
 	establish_db_connection()
 	if(dbcon.IsConnected())
 

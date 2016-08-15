@@ -90,7 +90,8 @@
 	return
 
 /obj/item/device/assembly_frame/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 
 	var/obj/item/device/assembly/AS = locate(href_list["assembly"])
 	var/assembly_found = 1
@@ -121,7 +122,6 @@
 		var/list/list_for_input = list()
 		for(var/A in list_to_take_from)
 			list_for_input["[assemblies.Find(A)]-[A]"] = A //The list is full of strings that are associated with assemblies
-
 
 		var/choice_input = input(usr, "Send output from [AS] to which device?", "[src]") as null|anything in list_for_input //This input only returns a string with the assembly's number and name
 		var/obj/item/device/assembly/choice = list_for_input[choice_input] //Get the ACTUAL assembly object
@@ -243,8 +243,10 @@
 		attack_self(usr)
 
 /obj/item/device/assembly_frame/proc/receive_pulse(var/obj/item/device/assembly/from)
-	if(!assemblies.Find(from)) return
-	if(!connections.Find(from)) return
+	if(!assemblies.Find(from))
+		return
+	if(!connections.Find(from))
+		return
 
 	var/list/connected_to_source = connections[from]
 

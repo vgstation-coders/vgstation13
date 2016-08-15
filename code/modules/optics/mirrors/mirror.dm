@@ -33,17 +33,25 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	if(dir in list(EAST, WEST))
 		//testing("[src]: Detected orientation: \\, in_dir=[in_dir], dir=[dir]")
 		switch(in_dir) // \\ orientation
-			if(NORTH) return list(EAST)
-			if(SOUTH) return list(WEST)
-			if(EAST)  return list(NORTH)
-			if(WEST)  return list(SOUTH)
+			if(NORTH)
+				return list(EAST)
+			if(SOUTH)
+				return list(WEST)
+			if(EAST)
+				return list(NORTH)
+			if(WEST)
+				return list(SOUTH)
 	else
 		//testing("[src]: Detected orientation: /, in_dir=[in_dir], dir=[dir]")
 		switch(in_dir) // / orientation
-			if(NORTH) return list(WEST)
-			if(SOUTH) return list(EAST)
-			if(EAST)  return list(SOUTH)
-			if(WEST)  return list(NORTH)
+			if(NORTH)
+				return list(WEST)
+			if(SOUTH)
+				return list(EAST)
+			if(EAST)
+				return list(SOUTH)
+			if(WEST)
+				return list(NORTH)
 
 /obj/machinery/mirror/Destroy()
 	kill_all_beams()
@@ -113,7 +121,8 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 /obj/machinery/mirror/proc/kill_all_beams()
 	for(var/i=1;i<=4;i++)
-		if(i > emitted_beams.len) break
+		if(i > emitted_beams.len)
+			break
 		var/obj/effect/beam/beam = emitted_beams[i]
 		qdel(beam)
 		emitted_beams[i]=null

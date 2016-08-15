@@ -32,7 +32,8 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		suit_contamination()
 
 	if(!pl_head_protected())
-		if(prob(1)) suit_contamination() //Plasma can sometimes get through such an open suit.
+		if(prob(1))
+			suit_contamination() //Plasma can sometimes get through such an open suit.
 
 //Cannot wash backpacks currently.
 //	if(istype(back,/obj/item/weapon/storage/backpack))
@@ -47,7 +48,8 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		return
 
 	//Contamination
-	if(zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION)) contaminate()
+	if(zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION))
+		contaminate()
 
 	//Anything else requires them to not be dead.
 	if(stat >= 2)
@@ -59,7 +61,8 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
 			if(!pl_head_protected() || !pl_suit_protected())
 				burn_skin(0.75)
-				if(prob(20)) to_chat(src, "<span class='warning'>Your skin burns!</span>")
+				if(prob(20))
+					to_chat(src, "<span class='warning'>Your skin burns!</span>")
 				updatehealth()
 
 		//Burn eyes if exposed.
@@ -82,7 +85,8 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		return
 	var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
 	if(E)
-		if(prob(20)) to_chat(src, "<span class='warning'>Your eyes burn!</span>")
+		if(prob(20))
+			to_chat(src, "<span class='warning'>Your eyes burn!</span>")
 		E.damage += 2.5
 		eye_blurry = min(eye_blurry+1.5,50)
 		if (prob(max(0,E.damage - 15) + 1) && !eye_blind)
@@ -103,16 +107,21 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	//Checks if the suit is adequately sealed.
 	if(wear_suit)
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
-			if(wear_suit.flags & PLASMAGUARD) return 1
+			if(wear_suit.flags & PLASMAGUARD)
+				return 1
 		else
-			if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT)) return 1
+			if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
+				return 1
 	return 0
 
 /mob/living/carbon/human/proc/suit_contamination()
 	//Runs over the things that can be contaminated and does so.
-	if(w_uniform) w_uniform.contaminate()
-	if(shoes) shoes.contaminate()
-	if(gloves) gloves.contaminate()
+	if(w_uniform)
+		w_uniform.contaminate()
+	if(shoes)
+		shoes.contaminate()
+	if(gloves)
+		gloves.contaminate()
 
 /*
 /turf/Entered(atom/movable/Obj, atom/OldLoc)

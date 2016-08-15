@@ -76,16 +76,19 @@
 
 proc/trigger_side_effect(mob/living/carbon/human/H)
 	spawn
-		if(!istype(H)) return
+		if(!istype(H))
+			return
 		var/tp = pick(typesof(/datum/genetics/side_effect) - /datum/genetics/side_effect)
 		var/datum/genetics/side_effect/S = new tp
 
 		S.start(H)
 		spawn(20)
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 			H.Weaken(rand(0, S.duration / 50))
 		sleep(S.duration)
 
-		if(!istype(H)) return
+		if(!istype(H))
+			return
 		H.SetWeakened(0)
 		S.finish(H)

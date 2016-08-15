@@ -25,7 +25,8 @@
 		return 0
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
-	if(recentpump)	return
+	if(recentpump)
+		return
 	pump(user)
 	recentpump = 1
 	spawn(10)

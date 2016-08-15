@@ -85,7 +85,8 @@
 	..()
 
 /proc/delete_profile(var/type, code = 0)
-	if(!ticker || ticker.current_state < 3) return
+	if(!ticker || ticker.current_state < 3)
+		return
 	if(code == 0)
 		if (!("[type]" in del_profiling))
 			del_profiling["[type]"] = 0
@@ -370,11 +371,13 @@
 
 	if(src.throwing)
 		for(var/atom/A in get_turf(src))
-			if(A == src) continue
+			if(A == src)
+				continue
 
 			if(isliving(A))
 				var/mob/living/L = A
-				if(L.lying) continue
+				if(L.lying)
+					continue
 				src.throw_impact(L, speed, user)
 
 				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
@@ -388,7 +391,8 @@
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
-	if(!target || !src)	return 0
+	if(!target || !src)
+		return 0
 	if(override)
 		sound_override = 1
 	//use a modified version of Bresenham's algorithm to get from the atom's current position to that of the target
@@ -550,7 +554,8 @@
 		return 1
 	else
 		var/turf/U = get_turf(A)
-		if(!U) return null
+		if(!U)
+			return null
 		return src.forceMove(U)
 
 /////////////////////////////

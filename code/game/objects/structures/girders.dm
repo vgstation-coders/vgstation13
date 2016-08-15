@@ -174,7 +174,8 @@
 						user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
 						"<span class='notice'>You finish installing plating to \the [src].</span>")
 						var/turf/Tsrc = get_turf(src)
-						if(!istype(Tsrc)) return 0
+						if(!istype(Tsrc))
+							return 0
 						var/turf/simulated/wall/X = Tsrc.ChangeTurf(/turf/simulated/wall)
 						if(X)
 							X.add_hiddenprint(user)
@@ -401,7 +402,8 @@
 		if(do_after(user,src,30))
 			to_chat(user, "<span class='notice'>Girder repaired.</span>")
 			var/turf/Tsrc = get_turf(src)
-			if(!istype(Tsrc)) return 0
+			if(!istype(Tsrc))
+				return 0
 			Tsrc.ChangeTurf(/turf/simulated/wall/cult)
 			qdel(src)
 		return 1

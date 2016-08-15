@@ -265,8 +265,10 @@ turf/simulated/floor/update_icon()
 	return 0
 
 /turf/simulated/floor/proc/break_tile()
-	if(istype(src,/turf/simulated/floor/engine)) return
-	if(broken) return
+	if(istype(src,/turf/simulated/floor/engine))
+		return
+	if(broken)
+		return
 	if(is_plasteel_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		broken = 1
@@ -286,8 +288,10 @@ turf/simulated/floor/update_icon()
 		src.icon_state = "sand[pick("1","2","3")]"
 		broken = 1
 	else if(is_mineral_floor())
-		if(material=="diamond") return //diamond doesn't break
-		if(material=="plastic") return //you can't break legos
+		if(material=="diamond")
+			return //diamond doesn't break
+		if(material=="plastic")
+			return //you can't break legos
 		if(material=="phazon") //Phazon shatters
 			spawn(rand(2,10))
 				playsound(get_turf(src), "shatter", 70, 1)
@@ -297,8 +301,10 @@ turf/simulated/floor/update_icon()
 		src.icon_state = "[material]_broken"
 
 /turf/simulated/floor/proc/burn_tile()
-	if(istype(src,/turf/simulated/floor/engine)) return
-	if(istype(src,/turf/unsimulated/floor/asteroid)) return//Asteroid tiles don't burn
+	if(istype(src,/turf/simulated/floor/engine))
+		return
+	if(istype(src,/turf/unsimulated/floor/asteroid))
+		return//Asteroid tiles don't burn
 	if(is_plasteel_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
@@ -323,7 +329,8 @@ turf/simulated/floor/update_icon()
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.
 /turf/simulated/floor/proc/make_plating()
-	if(istype(src,/turf/simulated/floor/engine)) return
+	if(istype(src,/turf/simulated/floor/engine))
+		return
 
 	if(is_grass_floor())
 		for(var/direction in cardinal)
@@ -360,7 +367,8 @@ turf/simulated/floor/update_icon()
 	burnt = 0
 	intact = 1
 	set_light(0)
-	if(floor_tile) returnToPool(floor_tile)
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/plasteel))
@@ -388,7 +396,8 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/light))
@@ -408,7 +417,8 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/grass))
@@ -427,7 +437,8 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/wood))
@@ -446,7 +457,8 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/carpet))
@@ -528,7 +540,8 @@ turf/simulated/floor/update_icon()
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					if(floor_tile) returnToPool(floor_tile)
+					if(floor_tile)
+						returnToPool(floor_tile)
 					floor_tile = null
 					floor_tile = getFromPool(T.type, null)
 					material = floor_tile.material
@@ -609,7 +622,8 @@ turf/simulated/floor/update_icon()
 						update_icon()
 
 /turf/simulated/proc/wet(delay = 800)
-	if(wet >= 1) return
+	if(wet >= 1)
+		return
 	wet = 1
 	if(wet_overlay)
 		overlays -= wet_overlay
@@ -623,8 +637,10 @@ turf/simulated/floor/update_icon()
 		return
 	drying = 1
 	spawn(delay)
-		if (!istype(src)) return
-		if(wet >= 2) return
+		if (!istype(src))
+			return
+		if(wet >= 2)
+			return
 		wet = 0
 		drying = 0
 		if(wet_overlay)
@@ -632,7 +648,8 @@ turf/simulated/floor/update_icon()
 			wet_overlay = null
 
 /turf/simulated/floor/attack_construct(mob/user as mob)
-	if(istype(src,/turf/simulated/floor/carpet))	return//carpets are cool
+	if(istype(src,/turf/simulated/floor/carpet))
+		return//carpets are cool
 	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list

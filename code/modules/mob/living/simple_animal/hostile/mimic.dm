@@ -53,7 +53,8 @@
 	return
 
 /mob/living/simple_animal/hostile/mimic/proc/environment_disguise(list/L = crate_mimic_disguises)
-	if(!L) return
+	if(!L)
+		return
 	//First, determine the environment we're in
 
 	var/our_area_type = "default"
@@ -145,8 +146,10 @@ var/global/list/crate_mimic_disguises = list(\
 				var/found_alive_mob = 0
 
 				for(var/mob/living/L in view(7,src))
-					if(L == src) continue
-					if(L.stat) continue //Dead bodies don't bother us
+					if(L == src)
+						continue
+					if(L.stat)
+						continue //Dead bodies don't bother us
 
 					found_alive_mob = 1
 					break
@@ -175,7 +178,8 @@ var/global/list/crate_mimic_disguises = list(\
 	..()
 	//Put all loot inside us!
 	for(var/obj/item/I in loc)
-		if(I.anchored || I.density) continue
+		if(I.anchored || I.density)
+			continue
 
 		I.forceMove(src)
 
@@ -218,7 +222,8 @@ var/global/list/crate_mimic_disguises = list(\
 		name = "[initial(name)] mimic"
 
 /mob/living/simple_animal/hostile/mimic/crate/proc/calm_down(change_icon = 1)
-	if(angry > 1) return //If angry is 2, can't calm down!
+	if(angry > 1)
+		return //If angry is 2, can't calm down!
 
 	angry = 0
 	if(change_icon)
@@ -502,7 +507,8 @@ var/global/list/protected_objects = list(
 		time_to_die=world.time+duration
 
 /mob/living/simple_animal/hostile/mimic/copy/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 
 	spawn()

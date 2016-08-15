@@ -155,7 +155,8 @@
 	..()
 
 /obj/effect/alien/resin/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group) return 0
+	if(air_group)
+		return 0
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return !opacity
 	return !density
@@ -229,7 +230,8 @@
 	if(linked_node)
 		linked_node.connected_weeds.Add(src)
 
-	if(icon_state == "weeds")icon_state = pick("weeds", "weeds1", "weeds2")
+	if(icon_state == "weeds")
+		icon_state = pick("weeds", "weeds1", "weeds2")
 	spawn(rand(100, 250))
 		if(src)
 			Life()

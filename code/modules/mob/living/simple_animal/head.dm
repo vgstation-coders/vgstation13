@@ -34,7 +34,8 @@
 	stop_automated_movement = 1
 
 /mob/living/simple_animal/head/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	if(stat == DEAD)
 		if(health > 0)
 			icon_state = icon_living

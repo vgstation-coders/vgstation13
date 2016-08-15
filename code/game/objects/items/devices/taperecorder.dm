@@ -112,8 +112,10 @@
 		to_chat(usr, "<span class='notice'>You can't clear the memory while playing or recording!</span>")
 		return
 	else
-		if(storedinfo)	storedinfo.Cut()
-		if(timestamp)	timestamp.Cut()
+		if(storedinfo)
+			storedinfo.Cut()
+		if(timestamp)
+			timestamp.Cut()
 		timerecorded = 0
 		to_chat(usr, "<span class='notice'>Memory cleared.</span>")
 		return

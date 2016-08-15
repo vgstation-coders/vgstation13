@@ -169,15 +169,24 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT</span>"
 				if(2)
 					dat += "<span title=\"This plant's fruit is excesively soft and juicy.\">SLIP </span>"
-			if(P.seed.immutable > 0)    dat += "<span title=\"This plant does not possess genetics that are alterable.\">NOMUT </span>"
-			if(P.seed.parasite)   		dat += "<span title=\"This plant is capable of parisitizing and gaining sustenance from tray weeds.\">PARA </span>"
-			if(P.seed.hematophage)  	dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
-			if(P.seed.alter_temp)   	dat += "<span title=\"This plant will gradually alter the local room temperature to match it's ideal habitat.\">TEMP </span>"
-			if(P.seed.exude_gasses.len) dat += "<span title=\"This plant will exude gas into the environment.\">GAS </span>"
-			if(P.seed.thorny)    		dat += "<span title=\"This plant possesses a cover of sharp thorns.\">THORN </span>"
-			if(P.seed.stinging)			dat += "<span title=\"This plant possesses a cover of fine stingers capable of releasing chemicals on touch.\">STING </span>"
-			if(P.seed.ligneous)   		dat += "<span title=\"This is a ligneous plant with strong and robust stems.\">WOOD </span>"
-			if(P.seed.teleporting) 		dat += "<span title=\"This plant possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.\">TELE </span>"
+			if(P.seed.immutable > 0)
+				dat += "<span title=\"This plant does not possess genetics that are alterable.\">NOMUT </span>"
+			if(P.seed.parasite)
+				dat += "<span title=\"This plant is capable of parisitizing and gaining sustenance from tray weeds.\">PARA </span>"
+			if(P.seed.hematophage)
+				dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
+			if(P.seed.alter_temp)
+				dat += "<span title=\"This plant will gradually alter the local room temperature to match it's ideal habitat.\">TEMP </span>"
+			if(P.seed.exude_gasses.len)
+				dat += "<span title=\"This plant will exude gas into the environment.\">GAS </span>"
+			if(P.seed.thorny)
+				dat += "<span title=\"This plant possesses a cover of sharp thorns.\">THORN </span>"
+			if(P.seed.stinging)
+				dat += "<span title=\"This plant possesses a cover of fine stingers capable of releasing chemicals on touch.\">STING </span>"
+			if(P.seed.ligneous)
+				dat += "<span title=\"This is a ligneous plant with strong and robust stems.\">WOOD </span>"
+			if(P.seed.teleporting)
+				dat += "<span title=\"This plant possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.\">TELE </span>"
 			dat += "</td>"
 		dat += "</table>"
 	dat = jointext(dat,"")
@@ -209,7 +218,8 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 		if(O.seed == S)
 			O.forceMove(src.loc)
 			amt--
-			if (amt <= 0) break
+			if (amt <= 0)
+				break
 
 	src.updateUsrDialog()
 	return
@@ -231,4 +241,5 @@ obj/machinery/seed_extractor/proc/hasSpaceCheck(mob/user as mob)
 	if(contents.len >= MAX_N_OF_ITEMS)
 		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 		return 0
-	else return 1
+	else
+		return 1

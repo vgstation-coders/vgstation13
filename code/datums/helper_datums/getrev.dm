@@ -20,9 +20,11 @@ var/global/datum/getrev/revdata = new("config/svndir.txt")
 	New(filename)
 		..()
 		var/list/Lines = file2list(filename)
-		if(!Lines.len)	return abort()
+		if(!Lines.len)
+			return abort()
 		for(var/t in Lines)
-			if(!t)	continue
+			if(!t)
+				continue
 			t = trim(t)
 			if (length(t) == 0)
 				continue

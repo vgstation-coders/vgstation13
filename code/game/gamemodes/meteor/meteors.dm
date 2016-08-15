@@ -461,7 +461,8 @@ var/list/blob_candidates = list()
 	var/projectile_type = /obj/item/projectile/meteor
 
 /obj/item/weapon/meteor_gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 
 	user.visible_message(
 		"<span class='warning'>[user] fires the [src]!</span>",

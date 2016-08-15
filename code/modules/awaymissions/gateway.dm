@@ -53,7 +53,8 @@ var/list/gateways = list() //List containing the gateways on away missions
 
 obj/machinery/gateway/centerstation/process()
 	if(stat & (NOPOWER))
-		if(active) toggleoff()
+		if(active)
+			toggleoff()
 		return
 
 	if(active)
@@ -81,9 +82,12 @@ obj/machinery/gateway/centerstation/process()
 
 
 /obj/machinery/gateway/centerstation/proc/toggleon(mob/user as mob)
-	if(!ready)			return
-	if(linked.len != 8)	return
-	if(!powered())		return
+	if(!ready)
+		return
+	if(linked.len != 8)
+		return
+	if(!powered())
+		return
 	if(!gateways.len)
 		to_chat(user, "<span class='notice'>Error: No destination found.</span>")
 		return
@@ -118,9 +122,12 @@ obj/machinery/gateway/centerstation/process()
 
 //okay, here's the good teleporting stuff
 /obj/machinery/gateway/centerstation/Bumped(atom/movable/M as mob|obj)
-	if(!ready)		return
-	if(!active)		return
-	if(!gateways.len) return
+	if(!ready)
+		return
+	if(!active)
+		return
+	if(!gateways.len)
+		return
 
 	var/obj/machinery/gateway/centeraway/dest = pick(gateways) //Pick a random gateway from an away mission
 	if(dest.calibrated) //If it's calibrated, move to it
@@ -134,7 +141,8 @@ obj/machinery/gateway/centerstation/process()
 			if(L.z == dest.z)
 				good_landmarks.Add(L)
 
-		if(!good_landmarks.len) return
+		if(!good_landmarks.len)
+			return
 		var/obj/effect/landmark/L_dest = pick(good_landmarks)
 		M.forceMove(get_turf(L_dest))
 		M.dir = SOUTH
@@ -201,8 +209,10 @@ obj/machinery/gateway/centerstation/process()
 
 
 /obj/machinery/gateway/centeraway/proc/toggleon(mob/user as mob)
-	if(!ready)			return
-	if(linked.len != 8)	return
+	if(!ready)
+		return
+	if(linked.len != 8)
+		return
 	if(!stationgate)
 		to_chat(user, "<span class='notice'>Error: No destination found.</span>")
 		return
@@ -233,8 +243,10 @@ obj/machinery/gateway/centerstation/process()
 
 
 /obj/machinery/gateway/centeraway/Bumped(atom/movable/M as mob|obj)
-	if(!ready)	return
-	if(!active)	return
+	if(!ready)
+		return
+	if(!active)
+		return
 	if(istype(M, /mob/living/carbon))
 		for(var/obj/item/weapon/implant/exile/E in M)//Checking that there is an exile implant in the contents
 			if(E.imp_in == M)//Checking that it's actually implanted vs just in their pocket

@@ -42,7 +42,8 @@
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
 		return eyes.colourmatrix
-	else return default_colour_matrix
+	else
+		return default_colour_matrix
 
 /mob/proc/update_colour(var/time = 50,var/forceupdate = 0)
 	if(!client || (client.updating_colour && !forceupdate))
@@ -111,8 +112,10 @@
 
 /proc/check_holy(var/mob/A) //checks to see if the tile the mob stands on is holy
 	var/turf/T = get_turf(A)
-	if(!T) return 0
-	if(!T.holy) return 0
+	if(!T)
+		return 0
+	if(!T.holy)
+		return 0
 	return 1  //The tile is holy. Beware!
 
 proc/hasorgans(A)
@@ -120,7 +123,8 @@ proc/hasorgans(A)
 
 
 /proc/check_zone(zone)
-	if(!zone)	return LIMB_CHEST
+	if(!zone)
+		return LIMB_CHEST
 	switch(zone)
 		if("eyes")
 			zone = LIMB_HEAD
@@ -142,18 +146,25 @@ proc/hasorgans(A)
 
 /proc/ran_zone(zone, probability)
 	zone = check_zone(zone)
-	if(!probability)	probability = 90
-	if(probability == 100)	return zone
+	if(!probability)
+		probability = 90
+	if(probability == 100)
+		return zone
 
 	if(zone == LIMB_CHEST)
-		if(prob(probability))	return LIMB_CHEST
+		if(prob(probability))
+			return LIMB_CHEST
 		var/t = rand(1, 9)
 		switch(t)
-			if(1 to 3)	return LIMB_HEAD
-			if(4 to 6)	return LIMB_LEFT_ARM
-			if(7 to 9)	return LIMB_RIGHT_ARM
+			if(1 to 3)
+				return LIMB_HEAD
+			if(4 to 6)
+				return LIMB_LEFT_ARM
+			if(7 to 9)
+				return LIMB_RIGHT_ARM
 
-	if(prob(probability * 0.75))	return zone
+	if(prob(probability * 0.75))
+		return zone
 	return LIMB_CHEST
 
 // Emulates targetting a specific body part, and miss chances
@@ -191,16 +202,26 @@ proc/hasorgans(A)
 			else
 				var/t = rand(1, 10)
 				switch(t)
-					if(1)	return LIMB_HEAD
-					if(2)	return LIMB_LEFT_ARM
-					if(3)	return LIMB_RIGHT_ARM
-					if(4) 	return LIMB_CHEST
-					if(5) 	return LIMB_LEFT_FOOT
-					if(6)	return LIMB_RIGHT_FOOT
-					if(7)	return LIMB_LEFT_HAND
-					if(8)	return LIMB_RIGHT_HAND
-					if(9)	return LIMB_LEFT_LEG
-					if(10)	return LIMB_RIGHT_LEG
+					if(1)
+						return LIMB_HEAD
+					if(2)
+						return LIMB_LEFT_ARM
+					if(3)
+						return LIMB_RIGHT_ARM
+					if(4)
+						return LIMB_CHEST
+					if(5)
+						return LIMB_LEFT_FOOT
+					if(6)
+						return LIMB_RIGHT_FOOT
+					if(7)
+						return LIMB_LEFT_HAND
+					if(8)
+						return LIMB_RIGHT_HAND
+					if(9)
+						return LIMB_LEFT_LEG
+					if(10)
+						return LIMB_RIGHT_LEG
 
 	return zone
 
@@ -237,14 +258,21 @@ proc/slur(phrase)
 	while(counter>=1)
 		newletter=copytext(phrase,(leng-counter)+1,(leng-counter)+2)
 		if(rand(1,3)==3)
-			if(lowertext(newletter)=="o")	newletter="u"
-			if(lowertext(newletter)=="s")	newletter="ch"
-			if(lowertext(newletter)=="a")	newletter="ah"
-			if(lowertext(newletter)=="c")	newletter="k"
+			if(lowertext(newletter)=="o")
+				newletter="u"
+			if(lowertext(newletter)=="s")
+				newletter="ch"
+			if(lowertext(newletter)=="a")
+				newletter="ah"
+			if(lowertext(newletter)=="c")
+				newletter="k"
 		switch(rand(1,15))
-			if(1,3,5,8)	newletter="[lowertext(newletter)]"
-			if(2,4,6,15)	newletter="[uppertext(newletter)]"
-			if(7)	newletter+="'"
+			if(1,3,5,8)
+				newletter="[lowertext(newletter)]"
+			if(2,4,6,15)
+				newletter="[uppertext(newletter)]"
+			if(7)
+				newletter+="'"
 			//if(9,10)	newletter="<b>[newletter]</b>"
 			//if(11,12)	newletter="<big>[newletter]</big>"
 			//if(13)	newletter="<small>[newletter]</small>"
@@ -340,7 +368,8 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 /mob/proc/abiotic(var/full_body = 0)
 	for(var/obj/item/I in held_items)
-		if(I.abstract) continue
+		if(I.abstract)
+			continue
 
 		return 1
 
@@ -354,16 +383,24 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 /proc/intent_numeric(argument)
 	if(istext(argument))
 		switch(argument)
-			if(I_HELP)		return 0
-			if(I_DISARM)	return 1
-			if(I_GRAB)		return 2
-			else			return 3
+			if(I_HELP)
+				return 0
+			if(I_DISARM)
+				return 1
+			if(I_GRAB)
+				return 2
+			else
+				return 3
 	else
 		switch(argument)
-			if(0)			return I_HELP
-			if(1)			return I_DISARM
-			if(2)			return I_GRAB
-			else			return I_HURT
+			if(0)
+				return I_HELP
+			if(1)
+				return I_DISARM
+			if(2)
+				return I_GRAB
+			else
+				return I_HURT
 
 //change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)

@@ -157,7 +157,8 @@ var/global/list/hidden_tech = list(
 /datum/research/proc/UpdateTech(var/ID, var/level)
 	for(var/datum/tech/KT in known_tech)
 		if(KT.id == ID)
-			if(KT.level <= level) KT.level = max((KT.level + 1), (level - 1))
+			if(KT.level <= level)
+				KT.level = max((KT.level + 1), (level - 1))
 	return
 
 /datum/research/proc/UpdateDesign(var/path)

@@ -74,7 +74,8 @@
 			to_chat(M, rendered2)
 
 /mob/proc/emote(var/act, var/type, var/message, var/auto)
-	if(timestopped) return //under effects of time magick
+	if(timestopped)
+		return //under effects of time magick
 	if(act == "me")
 		return custom_emote(type, message)
 

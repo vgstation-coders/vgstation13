@@ -197,7 +197,8 @@
 	return(OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
-	if(!throw_range) return //divide by zero, also you throw like a girl
+	if(!throw_range)
+		return //divide by zero, also you throw like a girl
 	if(usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
 		if(istype(usr, /mob/living/carbon/human)) //if the user is human
 			var/mob/living/carbon/human/H = usr
@@ -903,14 +904,18 @@ proc
         var icon{result = icon(base); temp}
 
         for(var/angle in 0 to 360 step step)
-            if(angle == 0  ) continue
-            if(angle == 360)   continue
+            if(angle == 0  )
+            	continue
+            if(angle == 360)
+            	continue
 
             temp = icon(base)
 
-            if(aa) temp.Scale(w2, h2)
+            if(aa)
+            	temp.Scale(w2, h2)
             temp.Turn(angle)
-            if(aa) temp.Scale(w,   h)
+            if(aa)
+            	temp.Scale(w,   h)
 
             result.Insert(temp, "[angle]")
 

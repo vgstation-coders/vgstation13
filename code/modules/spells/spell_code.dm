@@ -276,7 +276,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/ourz = user.z
 	if(!ourz)
 		var/turf/T = get_turf(user)
-		if(!T) return 0
+		if(!T)
+			return 0
 		ourz = T.z
 	if(map.zLevels.len < ourz || !ourz)
 		WARNING("[user] is somehow on a zlevel [(ourz > map.zLevels.len) ? "higher" : "lower"] than our zlevels list! [map.zLevels.len] level\s, [map.nameLong] - [formatJumpTo(get_turf(user))]")

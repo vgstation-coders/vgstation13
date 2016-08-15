@@ -23,7 +23,8 @@
 	to_chat(user, "<span class='info'>Has [current_shells] round\s remaining.</span>")
 
 /obj/item/weapon/gun/gatling/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
@@ -52,7 +53,8 @@
 		slowdown = 0
 
 /obj/item/weapon/gun/gatling/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	if(current_shells)
 		current_shells--
 		update_icon()
@@ -113,7 +115,8 @@
 		slowdown = 0
 
 /obj/item/weapon/gun/gatling/beegun/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	if(current_shells)
 		current_shells--
 		update_icon()

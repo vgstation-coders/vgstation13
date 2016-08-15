@@ -224,7 +224,8 @@ var/list/parallax_on_clients = list()
 	parallax_initialized = 1
 
 /obj/screen/parallax/proc/calibrate_parallax(var/i)
-	if(!i) return
+	if(!i)
+		return
 
 	/* Placement of screen objects
 	1	2	3

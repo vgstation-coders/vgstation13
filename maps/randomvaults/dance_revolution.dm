@@ -81,14 +81,20 @@
 
 	for(var/obj/effect/E in instruction_effects)
 		switch(current_instruction)
-			if(DDR_STAND) E.icon_state = "getup"
-			if(DDR_LIE) E.icon_state = "getdown"
+			if(DDR_STAND)
+				E.icon_state = "getup"
+			if(DDR_LIE)
+				E.icon_state = "getdown"
 
 /obj/structure/dance_dance_revolution/process()
-	if(!dancer) return stop_game() //No dancer
-	if(!isturf(loc)) return stop_game()
-	if(!isturf(dancer.loc)) return lose() //Dancer isn't in a turf
-	if(dancer.loc.loc != src.loc.loc) return lose() //Dancer left the area
+	if(!dancer)
+		return stop_game() //No dancer
+	if(!isturf(loc))
+		return stop_game()
+	if(!isturf(dancer.loc))
+		return lose() //Dancer isn't in a turf
+	if(dancer.loc.loc != src.loc.loc)
+		return lose() //Dancer left the area
 
 	//Check if dancer fulfilled the previous task
 	if(progress_counter > 0)
@@ -124,8 +130,10 @@
 
 	for(var/obj/effect/E in instruction_effects)
 		switch(current_instruction)
-			if(DDR_STAND) E.icon_state = "getup"
-			if(DDR_LIE) E.icon_state = "getdown"
+			if(DDR_STAND)
+				E.icon_state = "getup"
+			if(DDR_LIE)
+				E.icon_state = "getdown"
 
 	sleep(process_delay)
 	.()

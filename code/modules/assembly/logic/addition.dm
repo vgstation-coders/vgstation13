@@ -24,7 +24,8 @@
 		VALUE_LIMIT = "limit;"+VT_NUMBER)
 
 /obj/item/device/assembly/addition/activate()
-	if(!..()) return 0
+	if(!..())
+		return 0
 
 	if(++pulse_counter >= limit)
 		pulse_counter = 0
@@ -54,7 +55,8 @@
 	return
 
 /obj/item/device/assembly/addition/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 
 	if(href_list["sub_counter"])
 		pulse_counter = max(pulse_counter - text2num(href_list["sub_counter"]), 0)

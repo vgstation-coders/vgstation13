@@ -80,7 +80,8 @@
 
 
 /datum/game_mode/traitor/autotraitor/post_setup()
-	if(!mixed) ..()
+	if(!mixed)
+		..()
 	abandon_allowed = 1
 	traitorcheckloop()
 

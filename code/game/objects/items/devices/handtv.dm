@@ -30,7 +30,8 @@ var/global/list/camera_bugs = list()
 		if (C.c_tag == target)
 			target = C
 			break
-	if(user.stat) return
+	if(user.stat)
+		return
 	if(target)
 		user.client.eye = target
 		user.set_machine(src)

@@ -100,8 +100,10 @@ var/list/ai_list = list()
 	proc_holder_list = new()
 
 	//Determine the AI's lawset
-	if(L && istype(L,/datum/ai_laws)) src.laws = L
-	else src.laws = getLawset(src)
+	if(L && istype(L,/datum/ai_laws))
+		src.laws = L
+	else
+		src.laws = getLawset(src)
 
 	verbs += /mob/living/silicon/ai/proc/show_laws_verb
 
@@ -143,7 +145,8 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
 	set name = "Radio Configuration"
-	if(stat || aiRestorePowerRoutine) return
+	if(stat || aiRestorePowerRoutine)
+		return
 	radio.recalculateChannels()
 	radio.attack_self(usr)
 
@@ -167,7 +170,8 @@ var/list/ai_list = list()
 			selection = q
 			break
 
-	if(!selection) return
+	if(!selection)
+		return
 	var/choice = input(usr, "Would you like to rename or delete [selection.fields["name"]]?", "Photo Modification") in list("Rename","Delete","Cancel")
 	switch(choice)
 		if("Cancel")
@@ -208,43 +212,78 @@ var/list/ai_list = list()
 		//if(icon_state == initial(icon_state))
 	var/icontype = ""
 	/* Nuked your hidden shit.*/
-	if (custom_sprite == 1) icontype = ("Custom")//automagically selects custom sprite if one is available
+	if (custom_sprite == 1)
+		icontype = ("Custom")//automagically selects custom sprite if one is available
 	else icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal")
 	switch(icontype)
-		if("Custom") icon_state = "[src.ckey]-ai"
-		if("Clown") icon_state = "ai-clown2"
-		if("Monochrome") icon_state = "ai-mono"
-		if("Inverted") icon_state = "ai-u"
-		if("Firewall") icon_state = "ai-magma"
-		if("Green") icon_state = "ai-wierd"
-		if("Red") icon_state = "ai-malf"
-		if("Broken Output") icon_state = "ai-static"
-		if("Text") icon_state = "ai-text"
-		if("Smiley") icon_state = "ai-smiley"
-		if("Matrix") icon_state = "ai-matrix"
-		if("Angry") icon_state = "ai-angryface"
-		if("Dorf") icon_state = "ai-dorf"
-		if("Bliss") icon_state = "ai-bliss"
-		if("Triumvirate") icon_state = "ai-triumvirate"
-		if("Triumvirate Static") icon_state = "ai-triumvirate-malf"
-		if("Searif") icon_state = "ai-searif"
-		if("Ravensdale") icon_state = "ai-ravensdale"
-		if("Serithi") icon_state = "ai-serithi"
-		if("Static") icon_state = "ai-fuzz"
-		if("Wasp") icon_state = "ai-wasp"
-		if("Robert House") icon_state = "ai-president"
-		if("Red October") icon_state = "ai-soviet"
-		if("Girl") icon_state = "ai-girl"
-		if("Girl Malf") icon_state = "ai-girl-malf"
-		if("Boy") icon_state = "ai-boy"
-		if("Boy Malf") icon_state = "ai-boy-malf"
-		if("Fabulous") icon_state = "ai-fabulous"
-		if("Four-Leaf") icon_state = "ai-4chan"
-		if("Yes Man") icon_state = "yes-man"
-		if("Hourglass") icon_state = "ai-hourglass"
-		if("Patriot") icon_state = "ai-patriot"
-		if("Pirate") icon_state = "ai-pirate"
-		if("Royal") icon_state = "ai-royal"
+		if("Custom")
+			icon_state = "[src.ckey]-ai"
+		if("Clown")
+			icon_state = "ai-clown2"
+		if("Monochrome")
+			icon_state = "ai-mono"
+		if("Inverted")
+			icon_state = "ai-u"
+		if("Firewall")
+			icon_state = "ai-magma"
+		if("Green")
+			icon_state = "ai-wierd"
+		if("Red")
+			icon_state = "ai-malf"
+		if("Broken Output")
+			icon_state = "ai-static"
+		if("Text")
+			icon_state = "ai-text"
+		if("Smiley")
+			icon_state = "ai-smiley"
+		if("Matrix")
+			icon_state = "ai-matrix"
+		if("Angry")
+			icon_state = "ai-angryface"
+		if("Dorf")
+			icon_state = "ai-dorf"
+		if("Bliss")
+			icon_state = "ai-bliss"
+		if("Triumvirate")
+			icon_state = "ai-triumvirate"
+		if("Triumvirate Static")
+			icon_state = "ai-triumvirate-malf"
+		if("Searif")
+			icon_state = "ai-searif"
+		if("Ravensdale")
+			icon_state = "ai-ravensdale"
+		if("Serithi")
+			icon_state = "ai-serithi"
+		if("Static")
+			icon_state = "ai-fuzz"
+		if("Wasp")
+			icon_state = "ai-wasp"
+		if("Robert House")
+			icon_state = "ai-president"
+		if("Red October")
+			icon_state = "ai-soviet"
+		if("Girl")
+			icon_state = "ai-girl"
+		if("Girl Malf")
+			icon_state = "ai-girl-malf"
+		if("Boy")
+			icon_state = "ai-boy"
+		if("Boy Malf")
+			icon_state = "ai-boy-malf"
+		if("Fabulous")
+			icon_state = "ai-fabulous"
+		if("Four-Leaf")
+			icon_state = "ai-4chan"
+		if("Yes Man")
+			icon_state = "yes-man"
+		if("Hourglass")
+			icon_state = "ai-hourglass"
+		if("Patriot")
+			icon_state = "ai-patriot"
+		if("Pirate")
+			icon_state = "ai-pirate"
+		if("Royal")
+			icon_state = "ai-royal"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
@@ -354,7 +393,8 @@ var/list/ai_list = list()
 	return 0
 
 /mob/living/silicon/ai/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return 0
 
 /mob/living/silicon/ai/emp_act(severity)
@@ -428,16 +468,20 @@ var/list/ai_list = list()
 	if (href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
 		var/L = text2num(href_list["lawc"])
 		switch(lawcheck[L+1])
-			if ("Yes") lawcheck[L+1] = "No"
-			if ("No") lawcheck[L+1] = "Yes"
+			if ("Yes")
+				lawcheck[L+1] = "No"
+			if ("No")
+				lawcheck[L+1] = "Yes"
 //		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
 		checklaws()
 
 	if (href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
 		var/L = text2num(href_list["lawi"])
 		switch(ioncheck[L])
-			if ("Yes") ioncheck[L] = "No"
-			if ("No") ioncheck[L] = "Yes"
+			if ("Yes")
+				ioncheck[L] = "No"
+			if ("No")
+				ioncheck[L] = "Yes"
 //		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
 		checklaws()
 
@@ -591,7 +635,8 @@ var/list/ai_list = list()
 			queueAlarm(text("--- [] alarm detected in []! (No Camera)", class, A.name), class)
 	else
 		queueAlarm(text("--- [] alarm detected in []! (No Camera)", class, A.name), class)
-	if (viewalerts) ai_alerts()
+	if (viewalerts)
+		ai_alerts()
 	return 1
 
 /mob/living/silicon/ai/cancelAlarm(var/class, area/A as area, obj/origin)
@@ -608,7 +653,8 @@ var/list/ai_list = list()
 				L -= I
 	if (cleared)
 		queueAlarm(text("--- [] alarm in [] has been cleared.", class, A.name), class, 0)
-		if (viewalerts) ai_alerts()
+		if (viewalerts)
+			ai_alerts()
 	return !cleared
 
 /mob/living/silicon/ai/cancel_camera()

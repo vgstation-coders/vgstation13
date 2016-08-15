@@ -62,7 +62,8 @@
 				else
 					user.show_message(text("<span class='warning'>Unable to reset internal memory.</span>"), 1)
 					src.l_hacking = 0
-			else	src.l_hacking = 0
+			else
+				src.l_hacking = 0
 			return
 		//At this point you have exhausted all the special things to do when locked
 		// ... but it's still locked.
@@ -194,7 +195,8 @@
 						H.Paralyse(time)
 					else
 						H.Stun(time)
-					if(H.stat != 2)	H.stat = 1
+					if(H.stat != 2)
+						H.stat = 1
 					for(var/mob/O in viewers(H, null))
 						O.show_message(text("<span class='danger'>[] has been knocked unconscious!</span>", H), 1, "<span class='warning'>You hear someone fall.</span>", 2)
 				else

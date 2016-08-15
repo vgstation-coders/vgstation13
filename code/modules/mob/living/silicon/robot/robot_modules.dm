@@ -43,7 +43,8 @@
 						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0,
 						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0)
 	added_languages = list()
-	if(!isMoMMI(R)) add_languages(R)
+	if(!isMoMMI(R))
+		add_languages(R)
 	AddToProfiler()
 	src.modules += new /obj/item/device/flashlight(src)
 	src.modules += new /obj/item/device/flash(src)
@@ -239,7 +240,8 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 			src.modules -= null
 
 	recharge_tick++
-	if(recharge_tick < recharge_time) return 0
+	if(recharge_tick < recharge_time)
+		return 0
 	recharge_tick = 0
 	if(R && R.cell)
 		respawn_consumable(R)

@@ -66,15 +66,19 @@
 	var/lasercount = 0
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator)) manipcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module)) scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+			scancount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
 	max_bottle_size = initial(max_bottle_size) + lasercount*5
 	max_pill_count = initial(max_pill_count) + manipcount*5
 	handle_new_reservoir(scancount*25+100)
 
 /obj/machinery/chem_master/proc/handle_new_reservoir(var/newvol)
-	if(reagents.maximum_volume == newvol) return //Volume did not change
+	if(reagents.maximum_volume == newvol)
+		return //Volume did not change
 	if(reagents.maximum_volume>newvol)
 		reagents.remove_any(reagents.maximum_volume-newvol) //If we have more than our new max, remove equally until we reach new max
 	reagents.maximum_volume = newvol
@@ -256,7 +260,8 @@
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
 			var/count = 1
-			if(href_list["createpill_multiple"]) count = isgoodnumber(input("Select the number of pills to make.", "Amount:", last_pill_amt) as num)
+			if(href_list["createpill_multiple"])
+				count = isgoodnumber(input("Select the number of pills to make.", "Amount:", last_pill_amt) as num)
 			count = min(max_pill_count, count)
 			last_pill_amt = count
 			if(!count)

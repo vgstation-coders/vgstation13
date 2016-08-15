@@ -27,27 +27,33 @@
 
 		sleep( 10 + length(engraving) * 10)
 
-		if( !(user.loc == ST && user.get_active_hand() == src) ) return
-		if( !istype(M, /mob/living/simple_animal/sculpture) || !user || !src || !M ) return
+		if( !(user.loc == ST && user.get_active_hand() == src) )
+			return
+		if( !istype(M, /mob/living/simple_animal/sculpture) || !user || !src || !M )
+			return
 
 		M.desc += engraving
 
 /obj/item/weapon/chisel/afterattack(atom/target, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	if(istype(target,/turf/simulated/wall))
 		var/turf/simulated/wall/W = target
 		W.add_fingerprint(user)
 		if(!W.engraving)
 			var/engraving_name = sanitize(input(usr, "Depicted on the wall is an image of ...", "Basic engraving", null) as null | text)
-			if(!engraving_name) return
+			if(!engraving_name)
+				return
 
 			var/engraving = sanitize(input(usr, "Depicted on the wall is an image of [engraving_name]. ...","Details of the engraving", null) as null | text)
-			if(!engraving) return
+			if(!engraving)
+				return
 
 			var/list/engravings = list("Amyjon"="amyjon", "Face"="face", "Matt wuz here"="matt", "Vive la Revolution"="revolution", "Engi"="engie", "Killroy"="guy", "End is nigh"= "end", "Dorf"="dwarf", "Uboa"="uboa")
 
 			var/engravingdesign = input("Your engraving", null)as null|anything in engravings
-			if(!engravingdesign) return
+			if(!engravingdesign)
+				return
 
 			var/engraving_icon_state = engravings[engravingdesign]
 
@@ -56,14 +62,16 @@
 
 			user.visible_message("<span class='notice'>[user.name] starts engraving something on the [W.name].</span>", "<span class='notice'>You start engraving an image of [engraving_name] on the [W.name].</span>")
 			if(do_after(user, target, 60))
-				if( !istype(W, /turf/simulated/wall) || !user || !src || !W ) return
+				if( !istype(W, /turf/simulated/wall) || !user || !src || !W )
+					return
 				if( W.rotting )
 					user.visible_message("<span class='warning'>The [W.name] crumbles under [user.name]'s touch!</span>", "<span class='warning'>The [W.name] crumbles under your touch!</span>")
 					W.dismantle_wall()
 					return
 
 				var/quality = rand(1,10)
-				if(blessed) quality = rand(8,10)
+				if(blessed)
+					quality = rand(8,10)
 				switch(quality)
 					if(1 to 4)
 						W.engraving_quality = "an" //depicted on the wall is [quality] image of ...

@@ -63,7 +63,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
-	if(!seed || !src) return
+	if(!seed || !src)
+		return
 	//if(seed.stinging)   			//we do NOT want to transfer reagents on throw, as it would mean plantbags full of throwable chloral injectors
 	//	stinging_apply_reagents(M)  //plus all sorts of nasty stuff like throw_impact not targeting a specific bodypart to check for protection.
 
@@ -107,8 +108,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(var/mob/living/carbon/M)
 	..()
-	if(!seed) return
-	if(!istype(M)) return
+	if(!seed)
+		return
+	if(!istype(M))
+		return
 	if(!M.on_foot())
 		return
 	if(seed.thorny || seed.stinging)
@@ -131,7 +134,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pickup(mob/user)
 	..()
-	if(!seed) return
+	if(!seed)
+		return
 	if(seed.thorny || seed.stinging)
 		var/mob/living/carbon/human/H = user
 		if(!istype(H))
@@ -161,13 +165,19 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/examine(mob/user)
 	..()
-	if(!seed) return
+	if(!seed)
+		return
 	var/traits = ""
-	if(seed.stinging) traits += "<span class='alert'>It's covered in tiny stingers.</span> "
-	if(seed.thorny) traits += "<span class='alert'>It's covered in sharp thorns.</span> "
-	if(seed.juicy == 2) traits += "It looks ripe and excessively juicy. "
-	if(seed.teleporting) traits += "It seems to be spatially unstable. "
-	if(traits) to_chat(user, traits)
+	if(seed.stinging)
+		traits += "<span class='alert'>It's covered in tiny stingers.</span> "
+	if(seed.thorny)
+		traits += "<span class='alert'>It's covered in sharp thorns.</span> "
+	if(seed.juicy == 2)
+		traits += "It looks ripe and excessively juicy. "
+	if(seed.teleporting)
+		traits += "It seems to be spatially unstable. "
+	if(traits)
+		to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)

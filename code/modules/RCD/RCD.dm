@@ -258,5 +258,6 @@
 
 /obj/item/device/rcd/proc/show_default(var/mob/living/user)
 	if(selected)
-		if(selected.show(user,1)) return
+		if(selected.show(user,1))
+			return
 	user.hud_used.toggle_show_schematics_display(null, 1, src)

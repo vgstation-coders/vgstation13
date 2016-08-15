@@ -49,7 +49,8 @@ obj/structure/windoor_assembly/Destroy()
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
-		if(air_group) return 0
+		if(air_group)
+			return 0
 		return !density
 	else
 		return 1
@@ -62,7 +63,8 @@ obj/structure/windoor_assembly/Destroy()
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 
@@ -78,7 +80,8 @@ obj/structure/windoor_assembly/Destroy()
 					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
 
 					if(do_after(user, src, 40))
-						if(!src || !WT.isOn()) return
+						if(!src || !WT.isOn())
+							return
 						to_chat(user, "<span class='notice'>You dissasembled the windoor assembly!</span>")
 						if(plasma)
 							getFromPool(/obj/item/stack/sheet/glass/plasmarglass, get_turf(src), 5)
@@ -97,7 +100,8 @@ obj/structure/windoor_assembly/Destroy()
 				user.visible_message("[user] secures the windoor assembly to the floor.", "You start to secure the windoor assembly to the floor.")
 
 				if(do_after(user, src, 40))
-					if(!src) return
+					if(!src)
+						return
 					to_chat(user, "<span class='notice'>You've secured the windoor assembly!</span>")
 					src.anchored = 1
 					if(src.secure)
@@ -111,7 +115,8 @@ obj/structure/windoor_assembly/Destroy()
 				user.visible_message("[user] unsecures the windoor assembly to the floor.", "You start to unsecure the windoor assembly to the floor.")
 
 				if(do_after(user, src, 40))
-					if(!src) return
+					if(!src)
+						return
 					to_chat(user, "<span class='notice'>You've unsecured the windoor assembly!</span>")
 					src.anchored = 0
 					if(src.secure)
@@ -128,7 +133,8 @@ obj/structure/windoor_assembly/Destroy()
 				to_chat(user, "<span class='notice'>You start to reinforce the windoor with plasteel.</span>")
 
 				if(do_after(user, src,40))
-					if(!src) return
+					if(!src)
+						return
 
 					P.use(2)
 					to_chat(user, "<span class='notice'>You reinforce the windoor.</span>")
@@ -143,7 +149,8 @@ obj/structure/windoor_assembly/Destroy()
 				user.visible_message("[user] wires the windoor assembly.", "You start to wire the windoor assembly.")
 
 				if(do_after(user, src, 40))
-					if(!src) return
+					if(!src)
+						return
 					var/obj/item/stack/cable_coil/CC = W
 					CC.use(1)
 					to_chat(user, "<span class='notice'>You wire the windoor!</span>")
@@ -163,7 +170,8 @@ obj/structure/windoor_assembly/Destroy()
 				user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
 
 				if(do_after(user, src, 40))
-					if(!src || state != "02") return
+					if(!src || state != "02")
+						return
 					to_chat(user, "<span class='notice'>You cut the windoor wires!</span>")
 					new/obj/item/stack/cable_coil(get_turf(user), 1)
 					src.state = "01"
@@ -179,7 +187,8 @@ obj/structure/windoor_assembly/Destroy()
 					user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
 
 					if(do_after(user, src, 40))
-						if(!src) return
+						if(!src)
+							return
 
 						to_chat(user, "<span class='notice'>You've installed the airlock electronics!</span>")
 						src.name = "Near finished Windoor Assembly"
@@ -194,7 +203,8 @@ obj/structure/windoor_assembly/Destroy()
 				user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to uninstall electronics from the airlock assembly.")
 
 				if(do_after(user, src, 40))
-					if(!src) return
+					if(!src)
+						return
 					to_chat(user, "<span class='notice'>You've removed the airlock electronics!</span>")
 					src.name = "Wired Windoor Assembly"
 					var/obj/item/weapon/circuitboard/airlock/ae
@@ -215,7 +225,8 @@ obj/structure/windoor_assembly/Destroy()
 
 				if(do_after(user, src, 40))
 
-					if(!src) return
+					if(!src)
+						return
 					var/obj/machinery/door/window/windoor = Create()
 					density = 1 //Shouldn't matter but just incase
 					to_chat(user, "<span class='notice'>You finish the windoor!</span>")

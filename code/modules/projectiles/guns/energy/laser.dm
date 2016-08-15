@@ -94,9 +94,11 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/captain/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(100)
 	update_icon()
 	return 1
@@ -128,10 +130,12 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
-	if(charge_tick < 3) return 0
+	if(charge_tick < 3)
+		return 0
 	charge_tick = 0
 
-	if(!power_supply) return 0 //sanity
+	if(!power_supply)
+		return 0 //sanity
 	if(isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
 		if(R && R.cell)
@@ -287,9 +291,11 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/bluetag/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(100)
 	update_icon()
 	return 1
@@ -327,9 +333,11 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/redtag/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
-	if(!power_supply) return 0
+	if(!power_supply)
+		return 0
 	power_supply.give(100)
 	update_icon()
 	return 1

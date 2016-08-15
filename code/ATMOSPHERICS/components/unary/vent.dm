@@ -25,7 +25,8 @@
 		return// Turning off the vent is a PITA. - N3X
 
 	// New GC does this sometimes
-	if(!loc) return
+	if(!loc)
+		return
 
 	//air_contents.mingle_with_turf(loc)
 

@@ -24,7 +24,8 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
-	if(stat & BROKEN)	return
+	if(stat & BROKEN)
+		return
 
 	overlays += battery_online[online + 1]
 
@@ -76,8 +77,10 @@ var/global/list/battery_online =	list(
 	var/capcount = 0
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor)) capcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+			capcount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
 	capacity = initial(capacity) + capcount*5e5
 	smes_input_max = initial(smes_input_max) + lasercount*25000
 	smes_output_max = initial(smes_output_max) + lasercount*25000
@@ -211,7 +214,8 @@ var/global/list/battery_online =	list(
 	if(..())
 		return 1
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	if (usr.stat || usr.restrained() )
 		return
@@ -314,6 +318,7 @@ var/global/list/battery_online =	list(
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
 	var/href = "<A href='?src=\ref[S];rate control=1;[V]"
 	var/rate = "[href]=-[Max]'>-</A>[href]=-[Min]'>-</A> [(C?C : 0)] [href]=[Min]'>+</A>[href]=[Max]'>+</A>"
-	if(Limit) return "[href]=-[Limit]'>-</A>"+rate+"[href]=[Limit]'>+</A>"
+	if(Limit)
+		return "[href]=-[Limit]'>-</A>"+rate+"[href]=[Limit]'>+</A>"
 	return rate
 

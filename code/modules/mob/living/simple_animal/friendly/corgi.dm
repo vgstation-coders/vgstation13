@@ -40,37 +40,53 @@
 						0,0.0,0.0,1,)
 
 /mob/living/simple_animal/corgi/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	spinaroo(spin_emotes)
 	. = ..()
 	if(.)
 		if(fire)
-			if(fire_alert)							fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
-			else									fire.icon_state = "fire0"
+			if(fire_alert)
+				fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
+			else
+				fire.icon_state = "fire0"
 		update_pull_icon()
 		if(oxygen)
-			if(oxygen_alert)						oxygen.icon_state = "oxy1"
-			else									oxygen.icon_state = "oxy0"
+			if(oxygen_alert)
+				oxygen.icon_state = "oxy1"
+			else
+				oxygen.icon_state = "oxy0"
 		if(toxin)
-			if(toxins_alert)							toxin.icon_state = "tox1"
-			else									toxin.icon_state = "tox0"
+			if(toxins_alert)
+				toxin.icon_state = "tox1"
+			else
+				toxin.icon_state = "tox0"
 
 	if (healths)
 		switch(health)
-			if(30 to INFINITY)		healths.icon_state = "health0"
-			if(26 to 29)			healths.icon_state = "health1"
-			if(21 to 25)			healths.icon_state = "health2"
-			if(16 to 20)			healths.icon_state = "health3"
-			if(11 to 15)			healths.icon_state = "health4"
-			if(6 to 10)				healths.icon_state = "health5"
-			if(1 to 5)				healths.icon_state = "health6"
-			else					healths.icon_state = "health7"
+			if(30 to INFINITY)
+				healths.icon_state = "health0"
+			if(26 to 29)
+				healths.icon_state = "health1"
+			if(21 to 25)
+				healths.icon_state = "health2"
+			if(16 to 20)
+				healths.icon_state = "health3"
+			if(11 to 15)
+				healths.icon_state = "health4"
+			if(6 to 10)
+				healths.icon_state = "health5"
+			if(1 to 5)
+				healths.icon_state = "health6"
+			else
+				healths.icon_state = "health7"
 	//regenerate_icons()
 
 
 /mob/living/simple_animal/corgi/show_inv(mob/user as mob)
 	user.set_machine(src)
-	if(user.stat) return
+	if(user.stat)
+		return
 
 	var/dat = 	"<div align='center'><b>Inventory of [name]</b></div><p>"
 	if(inventory_head)
@@ -112,7 +128,8 @@
 	..()
 
 /mob/living/simple_animal/corgi/Topic(href, href_list)
-	if(usr.stat) return
+	if(usr.stat)
+		return
 
 	//Removing from inventory
 	if(href_list["remove_inv"])
@@ -220,7 +237,8 @@
 		return
 
 	if(inventory_head)
-		if(usr)	to_chat(usr, "<span class='warning'>You can't put more than one hat on [src]!</span>")
+		if(usr)
+			to_chat(usr, "<span class='warning'>You can't put more than one hat on [src]!</span>")
 		return
 	if(!item_to_add)
 		usr.visible_message("<span class='notice'>[usr] pets [src]</span>","<span class='notice'>You rest your hand on [src]'s head for a moment.</span>")
@@ -420,7 +438,8 @@
 	spin_emotes = list("dances around","chases his tail")
 
 /mob/living/simple_animal/corgi/Ian/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 
@@ -541,8 +560,10 @@
 /mob/living/simple_animal/corgi/attack_hand(mob/living/carbon/human/M)
 	. = ..()
 	switch(M.a_intent)
-		if(I_HELP)	wuv(1,M)
-		if(I_HURT)	wuv(-1,M)
+		if(I_HELP)
+			wuv(1,M)
+		if(I_HURT)
+			wuv(-1,M)
 
 /mob/living/simple_animal/corgi/proc/wuv(change, mob/M)
 	if(change)
