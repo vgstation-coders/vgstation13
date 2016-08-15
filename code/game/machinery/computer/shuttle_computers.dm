@@ -37,7 +37,7 @@
 
 /obj/item/weapon/disk/shuttle_coords/Destroy()
 	if(destination)
-		destination.dick_references.Remove(src)
+		destination.disk_references.Remove(src)
 		destination = null
 
 	..()
