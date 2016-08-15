@@ -387,6 +387,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	default_mutations=list(M_CLAWS)
 
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
+
 	flesh_color = "#AFA59E"
 
 	var/datum/speech_filter/filter = new

@@ -122,6 +122,7 @@
 	item_state = "clown_shoes"
 	slowdown = SHOES_SLOWDOWN+1
 	_color = "clown"
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
@@ -249,6 +250,7 @@
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
 
 /obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
 	..()

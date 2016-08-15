@@ -8,6 +8,7 @@
 //	flags = NOSLIP //disabled by default
 	action_button_name = "Toggle Magboots"
 	species_fit = list(VOX_SHAPED)
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 
 	var/stomp_attack_power = 20
 
