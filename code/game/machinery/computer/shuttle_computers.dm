@@ -36,8 +36,14 @@
 		header = "ERROR"
 
 /obj/item/weapon/disk/shuttle_coords/Destroy()
-	destination = null
+	if(destination)
+		destination.dick_references.Remove(src)
+		destination = null
+
 	..()
+
+/obj/item/weapon/disk/shuttle_coords/proc/compactible(datum/shuttle/S)
+	return ()
 
 /obj/item/weapon/disk/shuttle_coords/proc/reset()
 	destination = null
@@ -75,11 +81,11 @@
 	.=..()
 
 /obj/machinery/computer/shuttle_control/Destroy()
-	..()
-
 	if(disk)
 		qdel(disk)
 		disk = null
+
+	..()
 
 /obj/machinery/computer/shuttle_control/proc/announce(var/message)
 	return say(message)
@@ -167,7 +173,7 @@
 					dat += " | [text] | "
 
 			if(disk && disk.destination)
-				if((!disk.allowed_shuttles.len) || (is_type_in_list(shuttle, disk.allowed_shuttles)))
+				if(disk.compactible(shuttle))
 					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
 				else //Shuttle not allowed to use disk
 					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"
@@ -212,8 +218,10 @@
 		if(!selected_port && shuttle.docking_ports.len >= 2)
 			selected_port = pick(shuttle.docking_ports - shuttle.current_port)
 
+		//Check if the selected docking port is valid (can be selected)
 		if(!allow_selecting_all && !(selected_port in shuttle.docking_ports))
-			if(!disk || (disk.destination != selected_port))
+			//Check disks too
+			if(!disk || !disk.compactible(shuttle) || (disk.destination != selected_port))
 				return
 
 		if(selected_port.docked_with) //If used by another shuttle, don't try to move this shuttle
@@ -377,11 +385,6 @@
 	if(href_list["disk"])
 		if(!disk) //No disk inserted - grab one from user's hand
 			var/obj/item/weapon/disk/shuttle_coords/D = usr.get_active_hand()
-
-			if(!istype(D))
-				if(istype(D, /obj/item/weapon/disk))
-					to_chat(usr, "<span class='info'>\The [src] rejects \the [D].</span>")
-				return
 
 			insert_disk(D, usr)
 		else
