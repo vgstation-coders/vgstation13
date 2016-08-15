@@ -27,6 +27,10 @@
 /obj/item/weapon/disk/shuttle_coords/New()
 	..()
 
+	if(ticker)
+		initialize()
+
+/obj/item/weapon/disk/shuttle_coords/initialize()
 	if(ispath(destination))
 		spawn()
 			destination = locate(destination) in all_docking_ports
