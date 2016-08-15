@@ -11,7 +11,6 @@
 	melee_damage_upper = 10
 	poison_per_bite = 10
 	poison_type = STOXIN
-	speed=2.5
 	var/fed = 0
 	var/atom/cocoon_target
 
