@@ -172,7 +172,10 @@
 	desc = "A card used to provide ID and determine access across the station. Features a virtual wallet accessible by PDA."
 	icon_state = "id"
 	item_state = "card-id"
+
 	var/list/access = list()
+	var/list/base_access = list() //Access that can't be overwritten by ID computers
+
 	var/registered_name = "Unknown" // The name registered_name on the card
 	slot_flags = SLOT_ID
 
@@ -214,7 +217,7 @@
 	return
 
 /obj/item/weapon/card/id/GetAccess()
-	return access
+	return (access + base_access)
 
 /obj/item/weapon/card/id/GetID()
 	return src
@@ -309,6 +312,7 @@
 /obj/item/weapon/card/id/syndicate
 	name = "agent card"
 	access = list(access_maint_tunnels, access_syndicate, access_external_airlocks)
+	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
 
@@ -470,6 +474,7 @@
 	icon_state = "syndie"
 	assignment = "Syndicate Overlord"
 	access = list(access_syndicate, access_external_airlocks)
+	base_access = list(access_syndicate, access_external_airlocks)
 
 /obj/item/weapon/card/id/captains_spare
 	name = "captain's spare ID"
@@ -512,6 +517,7 @@
 	icon_state = "centcom"
 	desc = "Finders, keepers."
 	access = list(access_salvage_captain)
+	base_access = list(access_salvage_captain)
 
 /obj/item/weapon/card/id/medical
 	name = "Medical ID"
@@ -611,3 +617,4 @@
 	assignment = "visitor"
 	icon_state = "trader"
 	access = list(access_trade)
+	base_access = list(access_trade)
