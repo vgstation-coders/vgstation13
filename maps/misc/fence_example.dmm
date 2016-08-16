@@ -1,0 +1,43 @@
+"a" = (/turf/unsimulated/floor/asteroid/air,/area)
+"b" = (/turf/unsimulated/wall/other,/area)
+"c" = (/obj/structure/fence/post{dir = 4},/turf/unsimulated/floor/asteroid/air,/area)
+"d" = (/obj/structure/fence{dir = 4},/turf/unsimulated/floor/asteroid/air,/area)
+"e" = (/obj/structure/fence/door/opened,/turf/unsimulated/floor/asteroid/air,/area)
+"f" = (/obj/structure/fence/post,/turf/unsimulated/floor/asteroid/air,/area)
+"g" = (/obj/structure/fence,/turf/unsimulated/floor/asteroid/air,/area)
+"h" = (/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser,/turf/unsimulated/floor/asteroid/air,/area)
+"i" = (/obj/structure/fence/corner{dir = 8},/turf/unsimulated/floor/asteroid/air,/area)
+"j" = (/obj/structure/fence/corner{dir = 4},/turf/unsimulated/floor/asteroid/air,/area)
+"k" = (/mob/living/simple_animal/hostile/humanoid/vox,/turf/unsimulated/floor/asteroid/air,/area)
+"l" = (/obj/structure/fence/cut/small,/turf/unsimulated/floor/asteroid/air,/area)
+"m" = (/obj/structure/fence/cut/medium,/turf/unsimulated/floor/asteroid/air,/area)
+"n" = (/obj/structure/fence/corner{dir = 1},/turf/unsimulated/floor/asteroid/air,/area)
+"o" = (/obj/structure/fence/door/secure/from_south,/turf/unsimulated/floor/asteroid/air,/area)
+"p" = (/obj/structure/fence/corner,/turf/unsimulated/floor/asteroid/air,/area)
+"q" = (/obj/structure/fence/cut/large,/turf/unsimulated/floor/asteroid/air,/area)
+"r" = (/obj/structure/fence/cut/large{dir = 4},/turf/unsimulated/floor/asteroid/air,/area)
+"s" = (/obj/structure/fence/cut/medium{dir = 4},/turf/unsimulated/floor/asteroid/air,/area)
+"t" = (/obj/structure/fence/cut/small{dir = 4},/turf/unsimulated/floor/asteroid/air,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aabcddddeceddddcbaaa
+aafaaaaaafaaaaaafaaa
+aagahaaaagaaaahagaaa
+aagaaidddcdddjaagaaa
+aagaagkkkkkkkgaagaaa
+aagaagkkkkkkkgaagaaa
+aagaagkkkkkkkgaagaaa
+aagaagkkkkkkkgaagaaa
+aalaagkkkkkkkgaagaaa
+aamaandddodddpaagaaa
+aaqaaaaaaaaaaaaagaaa
+aagahaaaaaaaaahagaaa
+aafaaaaaaaaaaaaafaaa
+aabcdrstdodddddcbaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+"}

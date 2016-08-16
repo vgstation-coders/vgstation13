@@ -1454,7 +1454,7 @@
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
 	return ACL
-	
+
 /mob/living/carbon/human/get_visible_id()
 	var/id = null
 	if(wear_id)
@@ -1465,7 +1465,7 @@
 			if(id)
 				break
 	return id
-	
+
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!
@@ -1743,3 +1743,6 @@
 				grasp_organs.Add(OE)
 				organs.Add(OE)
 	..()
+
+/mob/living/carbon/human/is_fat()
+	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
