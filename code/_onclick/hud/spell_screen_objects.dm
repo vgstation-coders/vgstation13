@@ -182,7 +182,7 @@
 
 	overlays -= spell.hud_state
 
-	if(spell.charge_type == Sp_RECHARGE || spell.charge_type == Sp_CHARGES)
+	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES))
 		if(spell.charge_counter < spell.charge_max)
 			icon_state = "[spell_base]_spell_base"
 			if(spell.charge_counter > 0)

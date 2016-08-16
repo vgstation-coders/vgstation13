@@ -16,7 +16,7 @@
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 
-	var/storedPlasma = 250
+	var/plasma = 250
 	var/max_plasma = 500
 	var/neurotoxin_cooldown = 0
 
@@ -36,7 +36,7 @@
 	var/heat_protection = 0.5
 
 /mob/living/carbon/alien/adjustToxLoss(amount)
-	storedPlasma = min(max(storedPlasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
+	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
 	updatePlasmaHUD()
 	return
 
@@ -45,9 +45,15 @@
 		if(!hud_used.vampire_blood_display)
 			hud_used.plasma_hud()
 			//hud_used.human_hud(hud_used.ui_style)
+<<<<<<< f21483d241ef77ccb5c5c194d019175b911494b8
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>P:<font color='#E9DAE9' size='1'>[storedPlasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
+=======
+		hud_used.vampire_blood_display.maptext_width = 64
+		hud_used.vampire_blood_display.maptext_height = 32
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> P:<font color='#E9DAE9' size='1'>[plasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
+>>>>>>> 2a474603020de257306b4a15c5c2572f0b3c68ba
 	return
 
 /*
@@ -61,7 +67,7 @@
 //No longer weak to fire
 
 /mob/living/carbon/alien/proc/getPlasma()
-	return storedPlasma
+	return plasma
 
 /mob/living/carbon/alien/eyecheck()
 	return 2

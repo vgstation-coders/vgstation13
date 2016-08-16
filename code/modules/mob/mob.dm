@@ -1461,7 +1461,7 @@ var/list/slot_equipment_priority = list( \
 					if(Sp_CHARGES)
 						statpanel(S.panel,"[S.charge_counter]/[S.charge_max]",S.connected_button)
 					if(Sp_HOLDVAR)
-						statpanel(S.panel,"[S.holder_var_type] [S.holder_var_amount]",S.connected_button)
+						statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 

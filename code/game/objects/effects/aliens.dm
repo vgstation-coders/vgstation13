@@ -373,9 +373,11 @@
 	desc = "Burbling corrossive stuff. The radical kind."
 	icon_state = "acid-hyper"
 
-/obj/effect/alien/acid/New(loc, target)
+/obj/effect/alien/acid/New(loc, atom/target)
 	..(loc)
 	src.target = target
+	pixel_x = target.pixel_x
+	pixel_y = target.pixel_y
 
 	if(isturf(target)) // Turf take twice as long to take down.
 		target_strength = 8

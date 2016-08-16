@@ -3,7 +3,7 @@
 	caste = "h"
 	maxHealth = 250
 	health = 250
-	storedPlasma = 100
+	plasma = 100
 	max_plasma = 150
 	icon_state = "alienh_s"
 	plasma_rate = 5

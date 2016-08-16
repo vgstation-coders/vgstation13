@@ -19,7 +19,13 @@
 	if(name == "alien")
 		name = text("alien ([rand(1, 1000)])")
 	real_name = name
+	add_spells_and_verbs()
 	..()
+
+/mob/living/carbon/alien/humanoid/proc/add_spells_and_verbs()
+	add_spell(new /spell/aoe_turf/conjure/alienweeds)
+	add_spell(new /spell/targeted/alienwhisper)
+	add_spell(new /spell/targeted/alientransferplasma)
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
 	if(flags & INVULNERABLE)

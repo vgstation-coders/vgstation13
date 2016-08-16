@@ -6,7 +6,7 @@
 
 	maxHealth = 25
 	health = 25
-	storedPlasma = 50
+	plasma = 50
 	max_plasma = 50
 	size = SIZE_TINY
 

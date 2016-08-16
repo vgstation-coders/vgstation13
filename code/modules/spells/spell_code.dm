@@ -97,7 +97,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
-/spell/proc/is_valid_target(var/target)
+/spell/proc/is_valid_target(var/target, mob/user)
 	if(!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
 	if(get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
@@ -167,7 +167,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/target = list(A)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
-	if(cast_check(1, holder) && is_valid_target(A))
+	if(cast_check(1, holder) && is_valid_target(A, user))
 		target = before_cast(target) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return

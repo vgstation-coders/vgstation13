@@ -3,7 +3,7 @@
 	caste = "s"
 	maxHealth = 175
 	health = 125
-	storedPlasma = 100
+	plasma = 100
 	max_plasma = 250
 	icon_state = "aliens_s"
 	plasma_rate = 10
@@ -20,6 +20,12 @@
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
+
+/mob/living/carbon/alien/humanoid/sentinel/add_spells_and_verbs()
+	..()
+	add_spell(new /spell/targeted/alienneurotoxin)
+	add_spell(new /spell/alienacid)
+	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 
 /mob/living/carbon/alien/humanoid/sentinel
 

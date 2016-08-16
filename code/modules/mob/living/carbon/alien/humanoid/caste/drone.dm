@@ -26,6 +26,12 @@
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
 
+/mob/living/carbon/alien/humanoid/drone/add_spells_and_verbs()
+	..()
+	add_spell(new /spell/aoe_turf/conjure/choice/alienresin)
+	add_spell(new /spell/alienacid)
+	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
+
 //Drones use the same base as generic humanoids.
 //Drone verbs
 

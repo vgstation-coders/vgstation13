@@ -34,8 +34,13 @@
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
-	verbs -= /mob/living/carbon/alien/verb/ventcrawl
 
+/mob/living/carbon/alien/humanoid/queen/add_spells_and_verbs()
+	..()
+	add_spell(new /spell/alienacid)
+	add_spell(new /spell/targeted/alienneurotoxin)
+	add_spell(new /spell/aoe_turf/conjure/choice/alienresin)
+	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 
 /mob/living/carbon/alien/humanoid/queen
 
@@ -60,33 +65,6 @@
 						src.healths.icon_state = "health5"
 			else
 				src.healths.icon_state = "health6"
-
-/spell/aoe_turf/conjure/alienegg
-	name = "Lay Egg"
-	desc = "Lay an egg to produce huggers to impregnate prey with."
-	panel = "Alien"
-	hud_state = "alienegg"
-
-	charge_type = Sp_HOLDVAR
-	holder_var_type = "storedPlasma"
-	holder_var_amount = 75
-
-	spell_flags = IGNORESPACE
-
-	invocation = "<span class='alien'>The alien has laid an egg!</span>"
-	invocation_type = SpI_VISIBLEMESSAGE
-
-	summon_type = list(/obj/effect/alien/egg)
-
-/spell/aoe_turf/conjure/alienegg/before_cast(list/targets)
-	if(locate(/obj/effect/alien/egg) in targets[1])
-		to_chat(src, "<span class='warning'>There's already an egg here.</span>")
-		return 0
-	return targets
-
-/spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
-	..()
-	stat_collection.xeno.eggs_laid++
 
 /mob/living/carbon/alien/humanoid/queen/large
 	icon = 'icons/mob/giantmobs.dmi'
