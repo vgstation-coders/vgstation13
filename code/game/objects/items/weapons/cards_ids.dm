@@ -217,7 +217,7 @@
 	return
 
 /obj/item/weapon/card/id/GetAccess()
-	return (access + base_access)
+	return (access | base_access)
 
 /obj/item/weapon/card/id/GetID()
 	return src
