@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1))
+		var/tagname = pickweight(list("bloodyspai" = 100, "cowboy" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1))
 
 		switch (tagname)
 			if("bloodyspai")
@@ -94,7 +94,23 @@
 				new /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver(src)
 				new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
 				new /obj/item/weapon/card/id/syndicate(src)
-
+				
+			if("cowboy")
+				new /obj/item/clothing/accessory/storage/bandolier(src)
+					contents = list()
+					new /obj/item/ammo_storage/speedloader/a357(src)
+					new /obj/item/ammo_storage/speedloader/a357(src)
+					new /obj/item/ammo_storage/speedloader/a357(src)
+					new /obj/item/ammo_storage/speedloader/a357(src)
+					new /obj/item/ammo_storage/speedloader/a357(src)
+					new /obj/item/ammo_storage/speedloader/a357(src)
+					return
+				new /obj/item/clothing/suit/storage/det_suit(src)
+				new /obj/item/clothing/head/cowboy(src)
+				new /obj/item/weapon/gun/projectile/mateba(src)
+				new /obj/item/weapon/storage/fancy/cigarettes/dromedaryco(src)
+				new /obj/item/weapon/match/strike_anywhere(src)
+				
 
 			if("balloon")
 				new /obj/item/toy/syndicateballoon(src)
