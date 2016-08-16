@@ -67,7 +67,7 @@
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W))
+	if(iswirecutter(W) && !shock(user, 100))
 		if(!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
@@ -115,6 +115,7 @@
 
 		user.visible_message("<span class='danger'>\The [user] hits \the [src]!</span>")
 		playsound(get_turf(src), 'sound/effects/fence_smash.ogg', 30 * strength, 1) //Sound is louder the stronger you are
+		shock(user, 100)
 		return 1
 
 	if(hole_size == MEDIUM_HOLE)
@@ -125,7 +126,7 @@
 		user.visible_message("<span class='danger'>\The [user] starts climbing through \the [src]!</span>",\
 		"<span class='info'>You start climbing through \the [src]. This will take about [CLIMB_TIME / 10] seconds.</span>")
 
-		if(do_after(user, src, CLIMB_TIME))
+		if(do_after(user, src, CLIMB_TIME) && !shock(user, 70)) //70% chance to get shocked
 			user.forceMove(get_turf(src)) //Could be exploitable as it doesn't check for any other dense objects on the turf. Fix when fences are buildable!
 			user.visible_message("<span class='danger'>\The [user] climbs through \the [src]!</span>")
 
@@ -148,7 +149,12 @@
 			icon_state = "straight_cut3"
 			density = 0
 
-/obj/structure/fence/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0) //Copypasted from grilles
+/obj/structure/fence/Bumped(atom/user)
+	if(ismob(user))
+		shock(user, 60)
+
+//Mostly copied from grille.dm
+/obj/structure/fence/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
@@ -159,6 +165,25 @@
 			return prob(projectile.grillepasschance) //Fairly hit chance
 		else
 			return !density
+
+//Mostly copied from grille.dm
+/obj/structure/fence/proc/shock(mob/user, prb = 100)
+	if(!prob(prb)) //If the probability roll failed, don't go further
+		return 0
+	if(!in_range(src, user)) //To prevent TK and mech users from getting shocked
+		return 0
+	//Process the shocking via powernet, our job is done here
+	var/turf/T = get_turf(src)
+	var/obj/structure/cable/C = T.get_cable_node()
+	if(C)
+		if(electrocute_mob(user, C, src))
+			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			s.set_up(3, 1, src)
+			s.start()
+			return 1
+		else
+			return 0
+	return 0
 
 //FENCE DOORS
 
