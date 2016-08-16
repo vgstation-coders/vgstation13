@@ -397,6 +397,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(world.time>resethearers)
 		sethearing()
 	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
+		if(!hearer.attached)
+			world.log << "visible_message is attempting to call on_see on a hearer that isn't attached to anything: [hearer]. Previous type of attached: [hearer.attached_type]."
+			continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
