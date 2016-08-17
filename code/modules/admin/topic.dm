@@ -4300,7 +4300,7 @@
 
 		S.transit_port = D
 		to_chat(usr, "<span class='info'>Transit area generated successfully.</span>")
-		if(S.use_transit = NO_TRANSIT)
+		if(S.use_transit == NO_TRANSIT)
 			S.use_transit = TRANSIT_ACROSS_Z_LEVELS
 			to_chat(usr, "<span class='info'>The [S.name] will now use the transit area when traveling across z-levels. Set its use_transit to 2 to make it always use transit, or 0 to disable transit.</span>")
 

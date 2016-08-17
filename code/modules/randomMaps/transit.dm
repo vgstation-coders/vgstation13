@@ -1,11 +1,3 @@
-#define DEBUG_TRANSIT_GENERATION //Comment out if not needed
-
-#ifdef DEBUG_TRANSIT_GENERATION
-#define DEBUG_T(x) to_chat(world, x)
-#else
-#define DEBUG_T(x) to_chat(null, x)
-#endif
-
 //Dynamically generated transit areas - welcome to the future
 
 //Object used for the dungeons system (see dungeons.dm)
@@ -43,8 +35,6 @@
 	var/shuttle_width = abs(top_x - low_x)
 	var/shuttle_height= abs(top_y - low_y)
 
-	DEBUG_T("Width: [shuttle_width], height: [shuttle_height]. x1,y1;x2,y2: [low_x],[low_y];[top_x],[top_y]")
-
 	//Extra space in every direction. WIthout this, you'd be able to see z2 out of your shuttle's window
 	var/buffer_space = world.view
 
@@ -52,7 +42,6 @@
 	new_transit.name = "[shuttle.name] - transit area"
 	new_transit.width = shuttle_width + 2*buffer_space
 	new_transit.height = shuttle_height + 2*buffer_space
-	DEBUG_T("Transit map element created. Width: [new_transit.width],[new_transit.height]")
 
 	//Find a suitable location for the map_element object (done automatically)
 	load_dungeon(new_transit)
