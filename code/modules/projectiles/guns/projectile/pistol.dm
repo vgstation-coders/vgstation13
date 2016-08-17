@@ -109,8 +109,3 @@
 			user.emote("me",1,"pretends to fire a gun at [target]!")
 		else
 			user.say(pick("BANG!", "BOOM!", "PEW!", "KAPOW!"))
-		
-		if (!getAmmo()) //drop the guns after firing both shots
-			to_chat(user, "<span class = 'warning'>You wave your hands in an effort to cool them off! </span>")
-			qdel(src)
-			

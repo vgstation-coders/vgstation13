@@ -167,7 +167,7 @@
 	species_fit = list(VOX_SHAPED)
 	
 /obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots 
-	action_button_name = "Prime Gun"
+	action_button_name = "Prime Gun/Lower Aim"
 	var/obj/item/weapon/gun/projectile/handgun/current_gun = null
 	var/charging = FALSE
 	
@@ -179,6 +179,10 @@
 		to_chat(M, "<span class ='notice'>Your gun evaporates into thin air!</span>")
 		qdel(current_gun)
 		current_gun = null
+		charging = TRUE
+		spawn(50)
+			charging = FALSE
+		return
 	if(!charging)
 		if(!M.get_active_hand())
 			var/obj/item/weapon/gun/projectile/handgun/G = new
@@ -188,9 +192,6 @@
 				G.fire_sound = 'sound/weapons/Gunshot.ogg'
 			M.put_in_active_hand(G)
 			to_chat(M, "<span class ='notice'>You begin to channel an invisible gun through your fingers!</span>")
-			charging = TRUE
-			spawn(50)
-				charging = FALSE
 		else
 			to_chat(M, "<span class = 'warning'> Your hand is full! </span>")
 	else
