@@ -24,7 +24,6 @@ var/list/datum/map_element/map_elements = list()
 		location = locate(/turf) in objects
 
 /datum/map_element/proc/load(x, y, z)
-	to_chat(world, "Loading at [x],[y],[z]")
 	pre_load()
 
 	if(file_path)
