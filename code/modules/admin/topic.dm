@@ -4285,6 +4285,25 @@
 
 		S.show_outline(usr)
 
+	if(href_list["shuttle_generate_transit"])
+		feedback_inc("admin_shuttle_magic_used",1)
+		feedback_add_details("admin_shuttle_magic_used","SO")
+
+		var/datum/shuttle/S = selected_shuttle
+		if(!istype(S))
+			return
+
+		var/obj/docking_port/destination/D = generate_transit_area(S, NORTH)
+		if(!istype(D))
+			to_chat(usr, "<span class='notice'>Transit area generation failed!</span>")
+			return
+
+		S.transit_port = D
+		to_chat(usr, "<span class='info'>Transit area generated successfully.</span>")
+		if(S.use_transit = NO_TRANSIT)
+			S.use_transit = TRANSIT_ACROSS_Z_LEVELS
+			to_chat(usr, "<span class='info'>The [S.name] will now use the transit area when traveling across z-levels. Set its use_transit to 2 to make it always use transit, or 0 to disable transit.</span>")
+
 
 	//------------------------------------------------------------------Shuttle stuff end---------------------------------
 
