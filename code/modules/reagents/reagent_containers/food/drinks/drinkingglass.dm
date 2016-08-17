@@ -514,6 +514,12 @@
 		..()
 		reagents.add_reagent(COLA, 50)
 		on_reagent_change()
+		
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/blackrussian
+	New()
+		..()
+		reagents.add_reagent(BLACKRUSSIAN, 50)
+		on_reagent_change()
 
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.
 
