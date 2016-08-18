@@ -124,8 +124,8 @@
 	rev_mind.store_memory("<br/><b>Your fellow revolutionaries are:</b>")
 	for(var/datum/mind/M in head_revolutionaries)
 		if(M.assigned_role)
-			rev_mind.store_memory("[M.name] the [M.assigned_role.title]")
-			to_chat(rev_mind.current, "[M.name] the [M.assigned_role.title]")
+			rev_mind.store_memory("[M.name] the [M.assigned_role]")
+			to_chat(rev_mind.current, "[M.name] the [M.assigned_role]")
 		else
 			log_debug("Headrev for revsquad with no assigned role: [M.name]")
 			rev_mind.store_memory("[M.name]")
