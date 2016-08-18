@@ -66,6 +66,13 @@
 		if(V.map_blacklist.len)
 			if(V.map_blacklist.Find(map.nameShort) || V.map_blacklist.Find(map.nameLong))
 				list_of_vaults.Remove(V)
+				continue
+
+		//See code/modules/randomMaps/dungeons.dm
+		if(V.require_dungeons)
+			if(!dungeon_area)
+				list_of_vaults.Remove(V)
+				continue
 
 	var/failures = 0
 	var/successes = 0

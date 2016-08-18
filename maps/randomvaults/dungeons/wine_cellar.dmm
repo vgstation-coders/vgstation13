@@ -1,0 +1,66 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/unsimulated/wall/rock,/area/vault/spacepond/wine_cellar)
+"c" = (/turf/simulated/wall,/area/vault/spacepond/wine_cellar)
+"d" = (/obj/structure/closet/cabinet,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"e" = (/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"f" = (/turf/simulated/floor{dir = 8; icon_state = "ramptop"},/area/vault/spacepond/wine_cellar)
+"g" = (/turf/unsimulated/floor/asteroid/air,/area/vault/spacepond/wine_cellar)
+"h" = (/obj/structure/ladder/spacepond/winecellar,/turf/unsimulated/floor/asteroid/air,/area/vault/spacepond/wine_cellar)
+"i" = (/obj/structure/table/woodentable,/obj/item/candle,/obj/item/weapon/storage/fancy/matchbox,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"j" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"k" = (/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"l" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"m" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"n" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"o" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"p" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"q" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"r" = (/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/item/weapon/rack_parts,/obj/structure/window/reinforced/loose{dir = 4},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"s" = (/obj/structure/falsewall,/turf/unsimulated/floor/asteroid/air,/area/vault/spacepond/wine_cellar)
+"t" = (/obj/effect/landmark/corpse/mutilated,/turf/unsimulated/floor/asteroid/air,/area/vault/spacepond/wine_cellar)
+"u" = (/obj/item/clothing/head/chaplain_hood,/turf/unsimulated/floor/asteroid/air,/area/vault/spacepond/wine_cellar)
+"v" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"w" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"x" = (/obj/structure/rack,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = 8},/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{pixel_x = -8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/spacepond/wine_cellar)
+"y" = (/obj/structure/reagent_dispensers/bloodkeg,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"z" = (/mob/living/simple_animal/hostile/scarybat,/turf/unsimulated/floor/asteroid/air,/area/vault/spacepond/wine_cellar)
+"A" = (/turf/simulated/floor/carpet,/area/vault/spacepond/wine_cellar)
+"B" = (/obj/item/weapon/shard,/turf/simulated/floor/carpet,/area/vault/spacepond/wine_cellar)
+"C" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/flask/barflask,/obj/item/weapon/reagent_containers/food/drinks/flask/barflask{pixel_x = 1; pixel_y = 4},/turf/simulated/floor/carpet,/area/vault/spacepond/wine_cellar)
+"D" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/shaker,/obj/map/spawner/space/drinks,/turf/simulated/floor/carpet,/area/vault/spacepond/wine_cellar)
+"E" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass{pixel_x = -6; pixel_y = 2},/obj/item/weapon/reagent_containers/food/drinks/drinkingglass{pixel_x = 1},/turf/simulated/floor/carpet,/area/vault/spacepond/wine_cellar)
+"F" = (/obj/structure/reagent_dispensers/beerkeg{pixel_y = -4},/turf/simulated/floor/carpet,/area/vault/spacepond/wine_cellar)
+"G" = (/obj/item/clothing/suit/storage/draculacoat,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"H" = (/obj/effect/decal/cleanable/blood/drip{pixel_x = 5; pixel_y = 1},/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"I" = (/obj/item/clothing/mask/gas/death_commando,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/splatter,/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"J" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma,/obj/item/candle,/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"K" = (/obj/structure/window/reinforced/plasma,/obj/structure/closet/coffin,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/drip{pixel_x = 5; pixel_y = 1},/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+"L" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma,/obj/item/candle,/obj/effect/decal/cleanable/blood/drip{pixel_x = 5; pixel_y = 1},/turf/simulated/floor{icon_state = "grimy"},/area/vault/spacepond/wine_cellar)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaabbbbbbbbbaaaaaaaa
+aabbbbbbbbbbbbbbbbaaaaaaa
+bbbbbbbbbbbbbbbbbbbbaaaaa
+bbbbbbbbbbbbbbbbbbbbbbaaa
+bbbbbbbbbbbbbbbbbbbbbbaaa
+bbbbbbcccccccccccccbbbbba
+bbbbbbcdeefffffgghcbbbbbb
+bbbbbbcieefffffgggcbbbbbb
+bbbbbbccjccccccccccbbbbbb
+bbbbbbceeeeeekcbbbbbbbbbb
+bbbbbbclememencgbbbbbbbbb
+bbbbbbcoepepeqcggbbbbbbbb
+bbbbbbcoepepersgtubbbbbbb
+bbbbbbcvewewexcbgggbbbbbb
+bbbbbbcyeeeeeccbgztbbbbbb
+bbbbbbcyAABAAcbbcsbbbbbbb
+bbbbbbcyACDEFcbGHIbbbbbbb
+bbbbbbccccccccbJKLbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbb
+"}

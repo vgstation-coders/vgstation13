@@ -518,6 +518,10 @@
 	reinforced = 1
 	penetration_dampening = 3
 
+/obj/structure/window/reinforced/loose
+	anchored = 0
+	d_state = WINDOWLOOSE
+
 /obj/structure/window/plasma
 
 	name = "plasma window"

@@ -1185,8 +1185,17 @@ var/list/admin_verbs_mod = list(
 	var/y_coord
 	var/z_coord
 
-	switch(alert(usr, "Select a location for the new map element", "Map element loading", "Use my current location", "Input coordinates", "Cancel"))
-		if("Use my current location")
+	#define ML_CURRENT_LOC  "Use my current location"
+	#define ML_INPUT_COORDS "Input coordinates"
+	#define ML_LOAD_TO_Z2   "Find a suitable location at Z-level 2 (done automatically)"
+	var/static/list/choices = list(
+	ML_CURRENT_LOC,
+	ML_INPUT_COORDS,
+	ML_LOAD_TO_Z2
+	)
+
+	switch(input(usr, "Select a location for the new map element", "Map element loading") as null|anything in choices)
+		if(ML_CURRENT_LOC)
 			var/turf/new_location = get_turf(usr)
 			if(!new_location)
 				return
@@ -1195,7 +1204,7 @@ var/list/admin_verbs_mod = list(
 			y_coord = new_location.y
 			z_coord = new_location.z
 
-		if("Input coordinates")
+		if(ML_INPUT_COORDS)
 			x_coord = input(usr, "Input the X coordinate: ", "Map element loading") as null|num
 			if(x_coord == null)
 				return
@@ -1211,8 +1220,17 @@ var/list/admin_verbs_mod = list(
 			x_coord = Clamp(x_coord, 1, world.maxx)
 			y_coord = Clamp(y_coord, 1, world.maxy)
 
-		if("Cancel")
+		if(ML_LOAD_TO_Z2)
+			if(!dungeon_area)
+				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
+				return
+
+			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically).")
+			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)")
+			load_dungeon(ME)
+			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
 			return
+
 
 	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
 	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
