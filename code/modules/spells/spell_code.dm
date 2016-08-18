@@ -18,6 +18,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
+	var/insufficient_holder_msg //Override for still recharging msg for holder variables
 	var/datum/special_var_holder //if a holder var is stored on a different object or a datum
 
 	var/spell_flags = NEEDSCLOTHES
@@ -114,6 +115,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		return
+	if(before_target(user))
+		return
 	var/list/targets = choose_targets(user)
 	if(!cast_check(skipcharge, user))
 		return //Prevent queueing of spells by opening several choose target windows.
@@ -122,20 +125,21 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!targets.len) //before cast has rechecked what we can target
 			return
 		invocation(user, targets)
-		take_charge(user, skipcharge)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
 		if(prob(critfailchance))
 			critfail(targets, user)
 		else
-			cast(targets, user)
+			. = cast(targets, user) //return 1 to prevent take_charge
+		if(!.)
+			take_charge(user, skipcharge)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 
 //This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
 /spell/proc/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!holder)
 		holder = user //just in case
-	if(!user.spell_channeling && !force_remove)
+	if(!force_remove && !currently_channeled)
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
@@ -149,8 +153,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		user.spell_channeling = null
 		charge_counter = charge_max
 		currently_channeled = 0
-		connected_button.name = name
 		connected_button.remove_channeling()
+		connected_button.name = name
 	return 1
 
 /spell/proc/channeled_spell(var/list/args)
@@ -182,6 +186,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return 1
 	return 0
 
+/spell/proc/before_target(mob/user)
+	return
+
 /spell/proc/cast(list/targets, mob/user) //the actual meat of the spell
 	return
 
@@ -208,6 +215,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			target.AdjustWeakened(amount)
 		if("paralysis")
 			target.AdjustParalysis(amount)
+		if("plasma")
+			target.AdjustPlasma(-amount)
 		else
 			target.vars[varname] -= amount //I bear no responsibility for the runtimes that'll happen if you try to adjust non-numeric or even non-existant vars
 
@@ -216,7 +225,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 ///////////////////////////
 
 /spell/proc/before_cast(list/targets)
-	var/valid_targets[0]
+	var/list/valid_targets = list()
 	var/list/options = view_or_range(range,usr,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
@@ -338,13 +347,18 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(charge_type & Sp_HOLDVAR)
 			if(special_var_holder)
 				if(special_var_holder.vars[holder_var_type] < holder_var_amount)
-					to_chat(user, still_recharging_msg)
+					to_chat(user, holder_var_recharging_msg())
 					return 0
 			else
 				if(user.vars[holder_var_type] < holder_var_amount)
-					to_chat(user, still_recharging_msg)
+					to_chat(user, holder_var_recharging_msg())
 					return 0
 	return 1
+
+/spell/proc/holder_var_recharging_msg()
+	if(insufficient_holder_msg)
+		return insufficient_holder_msg
+	return still_recharging_msg
 
 /spell/proc/take_charge(mob/user = user, var/skipcharge)
 	if(!skipcharge)

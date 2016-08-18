@@ -33,7 +33,7 @@
 	if(statpanel("Status"))
 		stat(null, "Progress: [amount_grown]/[max_grown]")
 
-/mob/living/carbon/alien/larva/adjustToxLoss(amount)
+/mob/living/carbon/alien/larva/AdjustPlasma(amount)
 	if(stat != DEAD)
 		amount_grown = min(amount_grown + 1, max_grown)
 	..(amount)

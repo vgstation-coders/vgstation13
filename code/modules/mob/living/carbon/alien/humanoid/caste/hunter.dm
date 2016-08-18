@@ -56,7 +56,7 @@
 		if(m_intent == "run" || resting)
 			..()
 		else
-			adjustToxLoss(-heal_rate)
+			AdjustPlasma(-heal_rate)
 
 
 //Hunter verbs
@@ -71,7 +71,7 @@
 		update_icons()
 	else
 		if(powerc(50))
-			adjustToxLoss(-50)
+			AdjustPlasma(-50)
 			alien_invis = 1.0
 			update_icons()
 			to_chat(src, "<span class='good'>You are now invisible.</span>")

@@ -35,10 +35,9 @@
 
 	var/heat_protection = 0.5
 
-/mob/living/carbon/alien/adjustToxLoss(amount)
+/mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
 	updatePlasmaHUD()
-	return
 
 /mob/living/carbon/alien/proc/updatePlasmaHUD()
 	if(hud_used)
@@ -88,20 +87,15 @@
 		health = maxHealth
 		stat = CONSCIOUS
 	else
-		//oxyloss is only used for suicide
-		//toxloss isn't used for aliens, its actually used as alien powers!!
 		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 
 /mob/living/carbon/alien/proc/handle_environment(var/datum/gas_mixture/environment)
-
-
-	//If there are alien weeds on the ground then heal if needed or give some toxins
 	if(locate(/obj/effect/alien/weeds) in loc)
 		if(health < maxHealth - getCloneLoss())
 			adjustBruteLoss(-heal_rate)
 			adjustFireLoss(-heal_rate)
 			adjustOxyLoss(-heal_rate)
-		adjustToxLoss(plasma_rate)
+		AdjustPlasma(plasma_rate)
 
 	if(!environment || (flags & INVULNERABLE))
 		return
@@ -171,17 +165,17 @@
 			if(1 to 49)
 				radiation--
 				if(prob(25))
-					adjustToxLoss(1)
+					AdjustPlasma(1)
 
 			if(50 to 74)
 				radiation -= 2
-				adjustToxLoss(1)
+				AdjustPlasma(1)
 				if(prob(5))
 					radiation -= 5
 
 			if(75 to 100)
 				radiation -= 3
-				adjustToxLoss(3)
+				AdjustPlasma(3)
 
 /mob/living/carbon/alien/handle_fire()//Aliens on fire code
 	if(..())

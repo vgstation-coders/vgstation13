@@ -81,7 +81,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk/cast(list/targets, mob/user)
 	if (istype(user.loc,/mob))
 		to_chat(usr, "<span class='warning'>You can't hulk out right now!</span>")
-		return
+		return 1
 	for(var/mob/living/carbon/human/M in targets)
 		M.hulk_time = world.time + src.duration
 		M.mutations.Add(M_HULK)

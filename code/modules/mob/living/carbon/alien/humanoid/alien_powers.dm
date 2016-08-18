@@ -27,19 +27,10 @@ Doesn't work on other aliens/AI.*/
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 50
-
-	spell_flags = IGNORESPACE
-
-	invocation = "<span class='alien'>The alien has planted some alien weeds!</span>"
-	invocation_type = SpI_VISIBLEMESSAGE
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
+	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
 
 	summon_type = list(/obj/effect/alien/weeds/node)
-
-/spell/aoe_turf/conjure/alienweeds/before_cast(list/targets, mob/user)
-	if(locate(summon_type[1]) in targets[1])
-		to_chat(user, "<span class='warning'>There's already a weed here.</span>")
-		return 0
-	return targets
 
 /*
 /mob/living/carbon/alien/humanoid/verb/ActivateHuggers()
@@ -48,7 +39,7 @@ Doesn't work on other aliens/AI.*/
 	set category = "Alien"
 
 	if(powerc(5))
-		adjustToxLoss(-5)
+		AdjustPlasma(-5)
 		for(var/obj/item/clothing/mask/facehugger/F in range(8,user))
 			F.GoActive()
 		emote("roar")
@@ -64,6 +55,7 @@ Doesn't work on other aliens/AI.*/
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 10
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	range = 7
 	spell_flags = WAIT_FOR_CLICK
@@ -92,6 +84,8 @@ Doesn't work on other aliens/AI.*/
 	var/mob/M = targets[1]
 	if(!storedmessage) //Compatibility if someone reverts this to SELECTABLE from WAIT_FOR_CLICK
 		storedmessage = sanitize(input("Message:", "Alien Whisper") as text|null)
+		if(!storedmessage)
+			return 1
 	if(storedmessage)
 		var/turf/T = get_turf(user)
 		log_say("[key_name(user)] (@[T.x],[T.y],[T.z]) Alien Whisper: [storedmessage]")
@@ -106,6 +100,7 @@ Doesn't work on other aliens/AI.*/
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	range = 2
 	compatible_mobs = list(/mob/living/carbon/alien)
@@ -117,7 +112,7 @@ Doesn't work on other aliens/AI.*/
 	if(amount)
 		amount = abs(round(amount))
 		holder_var_amount = amount
-		if(check_charge(user = user))
+		if(check_charge(user = user) && get_dist(user, M) <= range) //Since input is a blocking operation
 			take_charge(user = user)
 			to_chat(M, "<span class='alien'>\The [user] has transfered [amount] plasma to you.</span>")
 			to_chat(user, "<span class='alien'>You have trasferred [amount] plasma to [M]</span>")
@@ -134,6 +129,8 @@ Doesn't work on other aliens/AI.*/
 	charge_type = Sp_HOLDVAR|Sp_RECHARGE
 	holder_var_type = "plasma"
 	holder_var_amount = 50
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
+	still_recharging_msg = "<span class='alien'>You must regenerate your neurotoxin stores first.</span>"
 	charge_max = 50
 
 	range = 7
@@ -183,14 +180,10 @@ Doesn't work on other aliens/AI.*/
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 75
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
-	spell_flags = IGNORESPACE
-
-	invocation = "<span class='alien'>The alien vomits up a thick purple substance and shapes it into some form of resin structure!</span>"
-	invocation_type = SpI_VISIBLEMESSAGE
-	summon_type = list("Resin Door" = /obj/machinery/door/mineral/resin,"Resin Wall" = /obj/effect/alien/resin/wall,"Resin Membrane" = /obj/effect/alien/resin/membrane,"Resin Nest" = /obj/structure/bed/nest)
-
-//		visible_message("<span class='alien'>\The [user] vomits up a thick purple substance and shapes it into some form of resin structure!</span>", "<span class='alien'>You shape a [choice]</span>")
+	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
+	full_list = list("Resin Door" = /obj/machinery/door/mineral/resin,"Resin Wall" = /obj/effect/alien/resin/wall,"Resin Membrane" = /obj/effect/alien/resin/membrane,"Resin Nest" = /obj/structure/bed/nest)
 
 /spell/alienacid
 	name = "Corrosive Acid"
@@ -202,6 +195,7 @@ Doesn't work on other aliens/AI.*/
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 200
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	range = 1
 
@@ -290,19 +284,17 @@ Doesn't work on other aliens/AI.*/
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 75
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
-	spell_flags = IGNORESPACE
-
-	invocation = "<span class='alien'>The alien has laid an egg!</span>"
-	invocation_type = SpI_VISIBLEMESSAGE
+	spell_flags = IGNORESPACE|NODUPLICATE
 
 	summon_type = list(/obj/effect/alien/egg)
 
 /spell/aoe_turf/conjure/alienegg/before_cast(list/targets)
 	if(locate(/obj/effect/alien/egg) in targets[1])
 		to_chat(src, "<span class='warning'>There's already an egg here.</span>")
-		return 0
-	return targets
+		return list() //no targets
+	return ..()
 
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	..()
