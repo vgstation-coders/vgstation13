@@ -54,15 +54,18 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/hookshot/flesh/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
+/obj/item/weapon/gun/hookshot/flesh/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
 	if(flag)
 		return //we're placing gun on a table or in backpack
+
 	if(check_tether())
 		if(istype(chain_datum.extremity_B,/mob/living/carbon))
 			if(parent_borer)
 				if(parent_borer.host)
 					var/mob/living/carbon/C = chain_datum.extremity_B
-					to_chat(C, "<span class='warning'>\The [parent_borer.host]'s [parent_borer.hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm reels you in!</span>")
+					var/mob/living/carbon/human/borer_owner = parent_borer.host
+					var/datum/organ/external/hostlimb = borer_owner.get_organ(parent_borer.hostlimb)
+					to_chat(C, "<span class='warning'>\The [parent_borer.host]'s [hostlimb.display_name] reels you in!</span>")
 		chain_datum.rewind_chain()
 		return
 	..()
@@ -184,21 +187,19 @@
 				if(istype(extremity_A,/mob/living))
 					var/mob/living/L = extremity_A
 					if(istype(C2, /obj/item))
-						if(parent_borer)
-							if(parent_borer.host)
-								if(istype(parent_borer.host, /mob/living/carbon/human))
-									if(L == parent_borer.host)
-										var/mob/living/carbon/human/H = L
-										if(parent_borer.hostlimb == LIMB_RIGHT_ARM)
-											if(!H.get_held_item_by_index(GRASP_RIGHT_HAND))
-												H.put_in_r_hand(C2)
-											else
-												C2.CtrlClick(H)
-										else
-											if(!H.get_held_item_by_index(GRASP_LEFT_HAND))
-												H.put_in_l_hand(C2)
-											else
-												C2.CtrlClick(H)
+						if(parent_borer && ishuman(parent_borer.host))
+							if(L == parent_borer.host)
+								var/mob/living/carbon/human/H = L
+								var/datum/organ/external/OE = H.get_organ(parent_borer.hostlimb)
+
+								//Check if the arm that the borer is occupying is holding anything
+								//If it's empty, put the item into the hand
+								//Otherwise make the owner pull the item
+								if(OE.grasp_id)
+									if(!H.get_held_item_by_index(OE.grasp_id))
+										H.put_in_hand(OE.grasp_id, C2)
+									else
+										C2.CtrlClick(H)
 					else
 						C2.CtrlClick(L)
 		C1.rewinding = 1
@@ -247,17 +248,16 @@
 /obj/item/projectile/hookshot/flesh/update_icon()
 	overlays.len = 0
 	var/obj/item/I = null
+
 	if(!parent_borer)
 		return
-	else if(parent_borer.host)
-		if(istype(parent_borer.host, /mob/living/carbon/human))
-			var/mob/living/carbon/human/L = parent_borer.host
-			if(parent_borer.hostlimb == LIMB_RIGHT_ARM)
-				if(L.get_held_item_by_index(GRASP_RIGHT_HAND))
-					I = L.get_held_item_by_index(GRASP_RIGHT_HAND)
-			else
-				if(L.get_held_item_by_index(GRASP_LEFT_HAND))
-					I = L.get_held_item_by_index(GRASP_LEFT_HAND)
+	if(ishuman(parent_borer.host))
+		var/mob/living/carbon/human/L = parent_borer.host
+		var/datum/organ/external/OE = L.get_organ(parent_borer.hostlimb)
+
+		if(OE.grasp_id)
+			I = L.get_held_item_by_index(OE.grasp_id)
+
 	if(I)
 		item_overlay = image('icons/obj/projectiles_experimental.dmi', src, "nothing")
 		item_overlay.appearance = I.appearance
@@ -351,32 +351,24 @@
 
 	var/obj/item/weapon/gun/hookshot/flesh/hookshot = shot_from
 	spawn()
-		if(parent_borer)
-			if(parent_borer.host)
-				if(istype(parent_borer.host, /mob/living/carbon/human))
-					var/mob/living/carbon/human/L = parent_borer.host
-					if(parent_borer.hostlimb == LIMB_RIGHT_ARM)
-						if(L.get_held_item_by_index(GRASP_RIGHT_HAND))
-							if(!parent_borer.attack_cooldown)
-								A.attackby(L.get_held_item_by_index(GRASP_RIGHT_HAND), L, 1, parent_borer)
-								if(!parent_borer)	//There's already a check for this above, but for some reason when it hits an airlock it gets qdel()'d before it gets to this point.
-									bullet_die()
-									return
-								parent_borer.attack_cooldown = 1
-								parent_borer.reset_attack_cooldown()
+		if(parent_borer && ishuman(parent_borer.host))
+			var/mob/living/carbon/human/L = parent_borer.host
+			var/datum/organ/external/OE = L.get_organ(parent_borer.hostlimb)
+
+			if(OE.grasp_id) //If borer is in an arm
+				var/obj/item/held = L.get_held_item_by_index(OE.grasp_id)
+				if(held)
+					if(!parent_borer.attack_cooldown)
+						A.attackby(held, L, 1, parent_borer)
+						if(!parent_borer)	//There's already a check for this above, but for some reason when it hits an airlock it gets qdel()'d before it gets to this point.
 							bullet_die()
 							return
-					else
-						if(L.get_held_item_by_index(GRASP_LEFT_HAND))
-							if(!parent_borer.attack_cooldown)
-								A.attackby(L.get_held_item_by_index(GRASP_LEFT_HAND), L, 1, parent_borer)
-								if(!parent_borer)
-									bullet_die()
-									return
-								parent_borer.attack_cooldown = 1
-								parent_borer.reset_attack_cooldown()
-							bullet_die()
-							return
+
+						parent_borer.attack_cooldown = 1
+						parent_borer.reset_attack_cooldown()
+					bullet_die()
+					return
+
 		if(isturf(A))					//if we hit a wall or an anchored atom, we pull ourselves to it
 			hookshot.clockwerk_chain(length)
 		else if(istype(A,/atom/movable))

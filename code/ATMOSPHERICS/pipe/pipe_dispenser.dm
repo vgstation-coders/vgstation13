@@ -28,9 +28,6 @@
 
 	RefreshParts()
 
-/obj/machinery/pipedispenser/attack_paw(user as mob)
-	return src.attack_hand(user)
-
 /obj/machinery/pipedispenser/attack_hand(user as mob)
 	if(..())
 		return

@@ -170,7 +170,7 @@
 
 
 /mob/living/carbon/human/proc/randorgan()
-	var/randorgan = pick(LIMB_HEAD,LIMB_CHEST,LIMB_LEFT_ARM,LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,LIMB_GROIN,LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
+	var/randorgan = pick(organs_by_name)
 	//var/randorgan = pick(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN)
 	return randorgan
 

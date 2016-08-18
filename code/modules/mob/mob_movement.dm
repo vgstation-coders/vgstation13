@@ -68,7 +68,8 @@
 					var/list/borers_in_host = H.get_brain_worms()
 					if(borers_in_host && borers_in_host.len) //to allow a host to drop an item at-range mid-extension
 						for(var/mob/living/simple_animal/borer/B in borers_in_host)
-							if((B.hostlimb == LIMB_RIGHT_ARM && H.get_active_hand() == H.get_held_item_by_index(GRASP_RIGHT_HAND)) || (B.hostlimb == "l_arm" && H.get_active_hand() == H.get_held_item_by_index(GRASP_LEFT_HAND)))
+							var/datum/organ/external/OE = H.get_organ(B.hostlimb)
+							if(OE.grasp_id == H.active_hand)
 								var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
 								F.to_be_dropped = H.get_active_hand()
 								F.item_overlay = null
@@ -84,35 +85,26 @@
 				if(!R.module_active)
 					return
 				R.uneq_active()
+			else if(isborer(usr))
+				var/mob/living/simple_animal/borer/B = usr
+				if(B.host && ishuman(B.host))
+					var/mob/living/carbon/human/H = B.host
+					var/datum/organ/external/OE = H.get_organ(B.hostlimb) //Borer is occupying an arm
+					if(OE.grasp_id)
+						if(B.extend_o_arm)
+							var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+							var/obj/item/held = H.get_held_item_by_index(OE.grasp_id)
+
+							if(held)
+								F.to_be_dropped = held
+								F.item_overlay = null
+
+							F.attack_self(H)
+							H.drop_item(held)
+							return
+						else
+							to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] [H.get_index_limb_name(OE.grasp_id)].</span>")
 			else
-				if(istype(usr, /mob/living/simple_animal/borer))
-					var/mob/living/simple_animal/borer/B = usr
-					if(B.host && ishuman(B.host))
-						var/mob/living/carbon/human/H = B.host
-						if(B.hostlimb == LIMB_RIGHT_ARM)
-							if(B.extend_o_arm)
-								var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
-								if(H.get_held_item_by_index(GRASP_RIGHT_HAND))
-									F.to_be_dropped = H.get_held_item_by_index(GRASP_RIGHT_HAND)
-									F.item_overlay = null
-								F.attack_self(H)
-								H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND))
-								return
-							else
-								to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] right hand.</span>")
-								return
-						else if(B.hostlimb == LIMB_LEFT_ARM)
-							if(B.extend_o_arm)
-								var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
-								if(H.get_held_item_by_index(GRASP_LEFT_HAND))
-									F.to_be_dropped = H.get_held_item_by_index(GRASP_LEFT_HAND)
-									F.item_overlay = null
-								F.attack_self(H)
-								H.drop_item(H.get_held_item_by_index(GRASP_LEFT_HAND))
-								return
-							else
-								to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] left hand.</span>")
-								return
 				to_chat(usr, "<span class='warning'>This mob type cannot drop items.</span>")
 
 //This gets called when you press the delete button.

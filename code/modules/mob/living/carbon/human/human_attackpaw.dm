@@ -14,7 +14,7 @@
 			src.visible_message("<span class='danger'>[M.name] bites [name]!</span>")
 
 		var/damage = rand(1, 3)
-		var/dam_zone = pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+		var/dam_zone = pick(organs_by_name)
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
 		apply_damage(damage, BRUTE, affecting, run_armor_check(affecting, "melee"))
 

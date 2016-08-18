@@ -31,11 +31,13 @@
 		visible_message("<span class='warning'><B>[M]</B> [M.attacktext] \the [src] !</span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		var/dam_zone = pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
 		if(M.zone_sel && M.zone_sel.selecting)
 			dam_zone = M.zone_sel.selecting
 		var/datum/organ/external/affecting = ran_zone(dam_zone)
+
 		apply_damage(damage,M.melee_damage_type, affecting)
 		updatehealth()
 
