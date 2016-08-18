@@ -60,7 +60,7 @@
 	else if(anchored)
 		on=!on
 		power_change()
-		to_chat(user, "<span class='warning'>You toggle \the [src] [on ? "off" : "on"].</span>")
+		to_chat(user, "<span class='warning'>You toggle \the [src] [on ? "on" : "off"].</span>")
 	else
 		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the ground first.</span>")
 
