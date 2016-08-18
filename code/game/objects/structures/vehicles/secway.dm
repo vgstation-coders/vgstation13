@@ -9,7 +9,11 @@
 	name = "secway key"
 	desc = "A keyring with a small steel key, and a rubber stun baton accessory."
 	icon_state = "keysec"
+	
+/obj/structure/bed/chair/vehicle/secway/check_key(var/mob/user)
+	return user.find_held_item_by_type(keytype) //any secway key works with any other secway
 
+/obj/structure/bed/chair/vehicle/secway/set_keys() //doesn't spawn with keys, mapped in
 
 /obj/structure/bed/chair/vehicle/secway/update_mob()
 	if(!occupant)
