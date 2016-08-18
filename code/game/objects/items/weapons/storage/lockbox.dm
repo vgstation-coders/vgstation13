@@ -166,7 +166,6 @@
 	new /obj/item/key/security(src)
 	new /obj/item/key/security(src)
 	new /obj/item/key/security(src)
-	new /obj/item/key/security(src)
 	
 /obj/item/weapon/storage/lockbox/unlockable
 	name = "semi-secure lockbox"
