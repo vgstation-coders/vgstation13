@@ -44,15 +44,9 @@
 		if(!hud_used.vampire_blood_display)
 			hud_used.plasma_hud()
 			//hud_used.human_hud(hud_used.ui_style)
-<<<<<<< f21483d241ef77ccb5c5c194d019175b911494b8
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>P:<font color='#E9DAE9' size='1'>[storedPlasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
-=======
-		hud_used.vampire_blood_display.maptext_width = 64
-		hud_used.vampire_blood_display.maptext_height = 32
 		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> P:<font color='#E9DAE9' size='1'>[plasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
->>>>>>> 2a474603020de257306b4a15c5c2572f0b3c68ba
 	return
 
 /*

@@ -277,10 +277,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/cast_check(skipcharge = 0,mob/user = usr) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
 
 
-	if(user.mind && user.mind.nospells)
-		to_chat(user, "<span class='warning'>Your power is suppressed!</span>")
-		return 0
-
 	if(!(src in user.spell_list) && holder == user)
 		to_chat(user, "<span class='warning'>You shouldn't have this spell! Something's wrong.</span>")
 		return 0
@@ -294,8 +290,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/ourz = user.z
 	if(!ourz)
 		var/turf/T = get_turf(user)
-		if(!T)
-			return 0
+		if(!T) return 0
 		ourz = T.z
 	if(map.zLevels.len < ourz || !ourz)
 		WARNING("[user] is somehow on a zlevel [(ourz > map.zLevels.len) ? "higher" : "lower"] than our zlevels list! [map.zLevels.len] level\s, [map.nameLong] - [formatJumpTo(get_turf(user))]")
@@ -390,8 +385,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				user.whisper(replacetext(invocation," ","`"))
 		if(SpI_EMOTE)
 			user.emote("me", 1, invocation) //the 1 means it's for everyone in view, the me makes it an emote, and the invocation is written accordingly.
-		if(SpI_VISIBLEMESSAGE)
-			user.visible_message(invocation)
 
 /////////////////////
 ///UPGRADING PROCS///

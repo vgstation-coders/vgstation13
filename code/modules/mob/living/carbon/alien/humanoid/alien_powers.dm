@@ -234,33 +234,10 @@ Doesn't work on other aliens/AI.*/
 					return
 			else // Not a type we can acid.
 				return
-
-<<<<<<< f21483d241ef77ccb5c5c194d019175b911494b8
-<<<<<<< 35d066db50378c75da88d77804ee180b538a9acd
-	if(powerc(75))
-		var/choice = input("Choose what you wish to shape.","Resin building") as null|anything in list("resin door","resin wall","resin membrane","resin nest") //would do it through typesof but then the player choice would have the type path and we don't want the internal workings to be exposed ICly - Urist
-		if(!choice || !powerc(75))
-			return
-		adjustToxLoss(-75)
-		visible_message("<span class='alien'>\The [src] vomits up a thick purple substance and shapes it into some form of resin structure!</span>", "<span class='alien'>You shape a [choice]</span>")
-		switch(choice)
-			if("resin door")
-				new /obj/machinery/door/mineral/resin(loc)
-			if("resin wall")
-				new /obj/effect/alien/resin/wall(loc)
-			if("resin membrane")
-				new /obj/effect/alien/resin/membrane(loc)
-			if("resin nest")
-				new /obj/structure/bed/nest(loc)
-	return
-=======
->>>>>>> 0c7a437f4298db926e05db6d7fb76efdbace8fd9
-=======
 			new /obj/effect/alien/acid(get_turf(O), O)
 			visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
 		else
 			to_chat(usr, "<span class='alien'>Target is too far away.</span>")
->>>>>>> 2a474603020de257306b4a15c5c2572f0b3c68ba
 
 /mob/living/carbon/alien/humanoid/verb/regurgitate()
 	set name = "Regurgitate"
