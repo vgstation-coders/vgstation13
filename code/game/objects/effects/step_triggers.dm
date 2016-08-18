@@ -128,5 +128,6 @@
 	teleport_z_offset = 6
 
 /obj/effect/step_trigger/teleporter/random/shuttle_transit/New()
+	..()
 	teleport_x_offset = world.maxx - 25
 	teleport_y_offset = world.maxy - 25
