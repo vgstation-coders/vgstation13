@@ -1829,7 +1829,6 @@ mob/proc/on_foot()
 //High order proc to remove a mobs spell channeling, removes channeling fully
 /mob/proc/remove_spell_channeling()
 	if(spell_channeling)
-		to_chat(world, "removed [spell_channeling]] on_uattack.handlers[spell_channeling][EVENT_OBJECT_INDEX]")
 		var/spell/thespell = on_uattack.handlers[spell_channeling][EVENT_OBJECT_INDEX]
 		thespell.channel_spell(force_remove = 1)
 		return 1

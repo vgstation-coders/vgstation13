@@ -220,14 +220,12 @@
 
 //Helper proc, does not remove channeling
 /obj/screen/spell/proc/add_channeling()
-	to_chat(world, "channeling added to [src]")
 	var/image/channel = image(icon = icon, loc = src, icon_state = "channeled", layer = src.layer + 1)
 	channeling_image = channel
 	if(spellmaster && spellmaster.spell_holder && spellmaster.spell_holder.client)
 		spellmaster.spell_holder.client.images += channeling_image
 
 /obj/screen/spell/proc/remove_channeling()
-	to_chat(world, "channeling removed from [src]")
 	if(spellmaster && spellmaster.spell_holder && spellmaster.spell_holder.client)
 		spellmaster.spell_holder.client.images -= channeling_image
 	channeling_image = null
