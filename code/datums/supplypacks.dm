@@ -559,7 +559,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Special Ops crate"
 	group = "Security"
 	hidden = 1
-
+	
+/datum/supply_packs/secway
+	name = "Secway crate"
+	contains = list(/obj/structure/bed/chair/vehicle/secway)
+	cost = 1000
+	containertype = /obj/structure/closet/crate/secure/large
+	containername = "Secway crate"
+	access = access_security
+	group = "Security"
+	
 /datum/supply_packs/beanbagammo
 	name = "Beanbag shells"
 	contains = list(/obj/item/ammo_casing/shotgun/beanbag,
