@@ -563,7 +563,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/secway
 	name = "Secway crate"
 	contains = list(/obj/structure/bed/chair/vehicle/secway)
-	cost = 1000
+	cost = 500
 	containertype = /obj/structure/closet/crate/secure/large
 	containername = "Secway crate"
 	access = access_security
