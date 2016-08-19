@@ -97,7 +97,7 @@
 				if(T.canBuildPlating(S) == BUILD_SUCCESS)
 					qdel(L)
 
-/obj/item/stack/tile/wood/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(iswrench(W))
 		if(use(4))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
