@@ -894,10 +894,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/recorder,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano)
-	name = "Random Instrument"
+	name = "Random instrument"
 	cost = 50
 	containertype = /obj/structure/closet/crate
-	containername = "Contains a random musical instrument to entertain or annoy your friends with!"
+	containername = "Random instruments crate"
 	group = "Hospitality"
 
 /datum/supply_packs/bigband
@@ -910,10 +910,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/recorder,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano)
-	name = "Big Band Instrument Collection"
+	name = "Big band instrument collection"
 	cost = 500
 	containertype = /obj/structure/largecrate
-	containername = "Contains all the equipment you need to start your very own band! Musical skill not included."
+	containername = "Big band musical instruments collection"
 	group = "Hospitality"
 
 //////ENGINEERING//////
