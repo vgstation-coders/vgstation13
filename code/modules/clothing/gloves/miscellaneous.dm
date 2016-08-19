@@ -137,3 +137,15 @@
 	icon_state = "anchorarms"
 	item_state = "anchorarms"
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/gloves/neorussian
+	name = "neo-Russian gloves"
+	desc = "Utilizes a non-slip technology that allows you to never drop your precious bottles of vodka."
+	icon_state = "nr_gloves"
+	item_state = "nr_gloves"
+
+/obj/item/clothing/gloves/neorussian/fingerless
+	name = "neo-Russian fingerless gloves"
+	desc = "For these tense combat situations when you just have to pick your nose."
+	icon_state = "nr_fgloves"
+	item_state = "nr_fgloves"

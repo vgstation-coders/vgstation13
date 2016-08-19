@@ -543,6 +543,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Grey Space-Ex Crate"
 	group = "Clothing"
 
+/datum/supply_packs/neorussian
+	name = "Neo-Russian Crate"
+	contains = list(/obj/item/clothing/suit/armor/vest/neorussian,
+					/obj/item/clothing/mask/neorussian,
+					/obj/item/clothing/head/helmet/neorussian,
+					/obj/item/clothing/accessory/storage/neorussian,
+					/obj/item/clothing/gloves/neorussian,
+					/obj/item/clothing/gloves/neorussian/fingerless,
+					/obj/item/clothing/under/neorussian)
+	cost = 200
+	containertype = /obj/structure/closet/
+	containername = "Neo-Russian Crate"
+	group = "Clothing"
+	contraband = 1
 //////SECURITY//////
 
 /datum/supply_packs/specialops
