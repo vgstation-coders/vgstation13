@@ -284,9 +284,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/mounted/poster,
 	/obj/item/stack/package_wrap/gift,
 	/obj/item/stack/package_wrap/gift,
-	/obj/item/stack/package_wrap/gift,
-	/obj/item/device/instrument/guitar)
-	cost = 30
+	/obj/item/stack/package_wrap/gift)
+	cost = 10
 	containertype = "/obj/structure/closet/crate"
 	containername = "Arts and Crafts crate"
 	group = "Supplies"
@@ -883,7 +882,39 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate
 	containername = "Festivus supplies"
 	group = "Hospitality"
+	
+/datum/supply_packs/randomised/instruments
+	num_contained = 1 //number of items picked to be contained in a randomised crate
+	contains = list(/obj/item/device/instrument/violin,
+					/obj/item/device/instrument/guitar,
+					/obj/item/device/instrument/glockenspiel,
+					/obj/item/device/instrument/accordion,
+					/obj/item/device/instrument/saxophone,
+					/obj/item/device/instrument/trombone,
+					/obj/item/device/instrument/recorder,
+					/obj/structure/piano/xylophone,
+					/obj/structure/piano)
+	name = "Random Instrument"
+	cost = 50
+	containertype = /obj/structure/closet/crate
+	containername = "Contains a random musical instrument to entertain or annoy your friends with!"
+	group = "Hospitality"
 
+/datum/supply_packs/bigband
+	contains = list(/obj/item/device/instrument/violin,
+					/obj/item/device/instrument/guitar,
+					/obj/item/device/instrument/glockenspiel,
+					/obj/item/device/instrument/accordion,
+					/obj/item/device/instrument/saxophone,
+					/obj/item/device/instrument/trombone,
+					/obj/item/device/instrument/recorder,
+					/obj/structure/piano/xylophone,
+					/obj/structure/piano)
+	name = "Big Band Instrument Collection"
+	cost = 500
+	containertype = /obj/structure/largecrate
+	containername = "Contains all the equipment you need to start your very own band! Musical skill not included."
+	group = "Hospitality"
 
 //////ENGINEERING//////
 

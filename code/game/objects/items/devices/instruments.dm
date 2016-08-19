@@ -3,8 +3,11 @@
 	name = "generic instrument"
 	var/datum/song/handheld/song
 	var/instrumentId = "generic"
-	var/instrumentExt = "ogg"
-
+	var/instrumentExt = "mid"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/musician.dmi', "right_hand" = 'icons/mob/in-hand/right/musician.dmi')
+	icon = 'icons/obj/musician.dmi'
+	force = 10
+	
 /obj/item/device/instrument/New()
 	song = new(instrumentId, src)
 	song.instrumentExt = instrumentExt
@@ -42,21 +45,55 @@
 /obj/item/device/instrument/violin
 	name = "space violin"
 	desc = "A wooden musical instrument with four strings and a bow. \"The devil went down to space, he was looking for an assistant to grief.\""
-	icon = 'icons/obj/musician.dmi'
 	icon_state = "violin"
 	item_state = "violin"
-	force = 10
 	attack_verb = list("smashed")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	instrumentId = "violin"
-	instrumentExt= "mid"
 
 /obj/item/device/instrument/guitar
 	name = "guitar"
 	desc = "It's made of wood and has bronze strings."
-	icon = 'icons/obj/musician.dmi'
 	icon_state = "guitar"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	item_state = "guitar"
-	force = 10
 	attack_verb = list("played metal on", "serenaded", "crashed", "smashed")
 	instrumentId = "guitar"
+	instrumentExt = "ogg"
+	flags = TWOHANDABLE | MUSTTWOHAND
+	
+/obj/item/device/instrument/glockenspiel
+	name = "glockenspiel"
+	desc = "Smooth metal bars perfect for marching"
+	icon_state = "glockenspiel"
+	item_state = "glockenspiel"
+	instrumentId = "glockenspiel"
+	flags = TWOHANDABLE | MUSTTWOHAND
+	
+/obj/item/device/instrument/accordion
+	name = "accordion"
+	desc = "Pun-Pun not included."
+	icon_state = "accordion"
+	item_state = "accordion"
+	instrumentId = "accordion"
+	flags = TWOHANDABLE | MUSTTWOHAND
+	
+/obj/item/device/instrument/saxophone
+	name = "saxophone"
+	desc = "This soothing sound will be sure to leave your audience in tears."
+	icon_state = "saxophone"
+	item_state = "saxophone"
+	instrumentId = "saxophone"
+	
+/obj/item/device/instrument/trombone
+	name = "trombone"
+	desc = "How can any pool table ever hope to compete?"
+	icon_state = "trombone"
+	item_state = "trombone"
+	instrumentId = "trombone"
+	
+/obj/item/device/instrument/recorder
+	name = "recorder"
+	desc = "Just like in school, playing ability and all."
+	icon_state = "recorder"
+	item_state = "recorder"
+	instrumentId = "recorder"
