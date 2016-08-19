@@ -55,12 +55,24 @@
 	name = "guitar"
 	desc = "It's made of wood and has bronze strings."
 	icon_state = "guitar"
-	item_state = "guitar"
+	item_state = "guitar0"
 	attack_verb = list("played metal on", "serenaded", "crashed", "smashed")
 	instrumentId = "guitar"
 	instrumentExt = "ogg"
-	flags = TWOHANDABLE | MUSTTWOHAND
+	flags = TWOHANDABLE
+	slot_flags = SLOT_BACK
 	
+/obj/item/device/instrument/guitar/update_wield(mob/user)
+	..()
+	item_state = "guitar[wielded ? 1 : 0]"
+	if(user)
+		user.update_inv_hands()
+		
+/obj/item/device/instrument/guitar/attack_self(mob/user as mob)
+	if(wielded) //can only play if you're two handing it
+		return ..()
+	wield(user)
+
 /obj/item/device/instrument/glockenspiel
 	name = "glockenspiel"
 	desc = "Smooth metal bars perfect for any marching band."
@@ -97,3 +109,13 @@
 	icon_state = "recorder"
 	item_state = "recorder"
 	instrumentId = "recorder"
+	
+/obj/item/device/instrument/harmonica
+	name = "harmonica"
+	desc = "For when you get a bad case of the space blues."
+	icon_state = "guitar"
+	item_state = "guitar"
+	instrumentId = "harmonica"
+	slot_flags = SLOT_MASK
+	force = 5
+	w_class = W_CLASS_SMALL

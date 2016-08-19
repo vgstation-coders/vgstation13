@@ -891,7 +891,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/accordion,
 					/obj/item/device/instrument/saxophone,
 					/obj/item/device/instrument/trombone,
-					/obj/item/device/instrument/recorder,
+					/obj/item/device/instrument/recorder
+					/obj/structure/piano/harmonica,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano)
 	name = "Random instrument"
@@ -907,7 +908,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/accordion,
 					/obj/item/device/instrument/saxophone,
 					/obj/item/device/instrument/trombone,
-					/obj/item/device/instrument/recorder,
+					/obj/item/device/instrument/recorder
+					/obj/structure/piano/harmonica,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano)
 	name = "Big band instrument collection"
