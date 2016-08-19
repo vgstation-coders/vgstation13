@@ -891,7 +891,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/accordion,
 					/obj/item/device/instrument/saxophone,
 					/obj/item/device/instrument/trombone,
-					/obj/item/device/instrument/recorder
+					/obj/item/device/instrument/recorder,
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano)
@@ -908,7 +908,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/accordion,
 					/obj/item/device/instrument/saxophone,
 					/obj/item/device/instrument/trombone,
-					/obj/item/device/instrument/recorder
+					/obj/item/device/instrument/recorder,
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano)
