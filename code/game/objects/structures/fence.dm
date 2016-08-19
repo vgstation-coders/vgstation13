@@ -95,7 +95,7 @@
 						if(user.is_fat())
 							to_chat(user, "<span class='info'>While a thinner person could climb through this hole, it's still too small for you.</span>")
 						else
-							to_chat(user, "<span class='info'>You could probably fit yourself through that hole now. Although it would be better if you made it slightly bigger.</span>")
+							to_chat(user, "<span class='info'>You could probably fit yourself through that hole now. Although climbing through would be much faster if you made it even bigger.</span>")
 					if(LARGE_HOLE)
 						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
 						to_chat(user, "<span class='info'>The hole in \the [src] is now big enough to walk through.</span>")
