@@ -63,7 +63,7 @@
 	
 /obj/item/device/instrument/glockenspiel
 	name = "glockenspiel"
-	desc = "Smooth metal bars perfect for marching"
+	desc = "Smooth metal bars perfect for any marching band."
 	icon_state = "glockenspiel"
 	item_state = "glockenspiel"
 	instrumentId = "glockenspiel"
