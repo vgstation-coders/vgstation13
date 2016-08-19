@@ -7,7 +7,7 @@
 /datum/game_mode/revsquad
 	name = "Revolution Squad"
 	config_tag = "revsquad"
-	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
+	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent", "Trader")
 
 	required_players = 4
 	required_players_secret = 25
@@ -123,8 +123,13 @@
 	to_chat(rev_mind.current, "<br/><b>Your fellow revolutionaries are:</b>")
 	rev_mind.store_memory("<br/><b>Your fellow revolutionaries are:</b>")
 	for(var/datum/mind/M in head_revolutionaries)
-		rev_mind.store_memory("[M.assigned_role] the [M.assigned_job.title]")
-		to_chat(rev_mind.current, "[M.assigned_role] the [M.assigned_job.title]")
+		if(M.assigned_role)
+			rev_mind.store_memory("[M.name] the [M.assigned_role]")
+			to_chat(rev_mind.current, "[M.name] the [M.assigned_role]")
+		else
+			log_debug("Headrev for revsquad with no assigned role: [M.name]")
+			rev_mind.store_memory("[M.name]")
+			to_chat(rev_mind.current, "[M.name]")
 
 /datum/game_mode/revsquad/proc/get_revsquad_item(var/mob/living/carbon/human/M)
 	var/obj/item/requisitioned = pick(possible_items)
