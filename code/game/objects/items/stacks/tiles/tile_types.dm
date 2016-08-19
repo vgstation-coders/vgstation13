@@ -99,14 +99,12 @@
 
 /obj/item/stack/tile/wood/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswrench(W))
-		if(amount >= 4)
+		if(use(4))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 1, user)
-			use(4)
-			return
 		else
-			to_chat(user, "<span class='warning'>You need at least 4 wooden floor tile to get a wooden plank back!</span>")
-			return
+			to_chat(user, "<span class='warning'>You need at least 4 [src] to get a wooden plank back!</span>")
+		return
 
 	. = ..()
 
