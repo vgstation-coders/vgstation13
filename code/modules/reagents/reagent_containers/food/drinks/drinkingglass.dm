@@ -4,6 +4,7 @@
 	name = "drinking glass"
 	desc = "Your standard drinking glass."
 	icon_state = "glass_empty"
+	item_state = "glass_empty"
 	isGlass = 1
 	amount_per_transfer_from_this = 10
 	volume = 50
@@ -36,6 +37,7 @@
 			light_color = null
 			set_light(0)
 			isGlass = 1
+			item_state = "glass_empty"
 			switch(reagents.get_master_reagent_id())
 				if(BEER)
 					icon_state = "beerglass"
@@ -522,6 +524,7 @@
 	desc = "A simple mug."
 	icon = 'icons/obj/cafe.dmi'
 	icon_state = "mug_empty"
+	item_state = "mug_empty"
 	isGlass = 0
 	amount_per_transfer_from_this = 10
 	volume = 30
@@ -531,6 +534,7 @@
 
 		if (reagents.reagent_list.len > 0)
 
+			item_state = "mug_empty"
 			switch(reagents.get_master_reagent_id())
 				if(TEA)
 					icon_state = TEA
