@@ -34,4 +34,3 @@ delete-after: True
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
 - rscadd: Supermatter alerts now only play on the z level they are located on
-- rscdel: Fun
