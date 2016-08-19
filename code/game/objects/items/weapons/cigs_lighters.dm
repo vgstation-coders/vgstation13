@@ -330,6 +330,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_wear_mask(0)
+		if(ishuman(loc))
+			M.update_inv_ears(0)
 		M.update_inv_hands()
 
 /obj/item/clothing/mask/cigarette/process()
