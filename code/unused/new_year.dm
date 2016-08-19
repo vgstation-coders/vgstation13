@@ -14,7 +14,7 @@
 /obj/effect/new_year_tree/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/weapon/grab))
 		return
-	W.loc = src
+	W.forceMove(src)
 	if (user.client)
 		user.client.screen -= W
 	user.u_equip(W,1)

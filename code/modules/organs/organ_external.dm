@@ -228,7 +228,7 @@
 	//Remove embedded objects and drop them on the floor
 	for(var/obj/implanted_object in implants)
 		if(!istype(implanted_object,/obj/item/weapon/implant))	//We don't want to remove REAL implants. Just shrapnel etc.
-			implanted_object.loc = owner.loc
+			implanted_object.forceMove(owner.loc)
 			implants -= implanted_object
 
 	owner.updatehealth()
@@ -931,7 +931,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(ismob(W.loc))
 		var/mob/living/H = W.loc
 		H.drop_item(W, force_drop = 1)
-	W.loc = owner
+	W.forceMove(owner)
 
 /****************************************************
 			   ORGAN DEFINES

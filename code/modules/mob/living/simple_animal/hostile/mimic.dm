@@ -537,7 +537,7 @@ var/global/list/protected_objects = list(
 /mob/living/simple_animal/hostile/mimic/copy/Die()
 
 	for(var/atom/movable/M in src)
-		M.loc = get_turf(src)
+		M.forceMove(get_turf(src))
 	..()
 
 /mob/living/simple_animal/hostile/mimic/copy/ListTargets()
@@ -561,7 +561,7 @@ var/global/list/protected_objects = list(
 
 	if(destroy_original || CheckObject(O))
 
-		O.loc = src
+		O.forceMove(src)
 
 		src.appearance = O.appearance
 		src.icon_living = src.icon_state

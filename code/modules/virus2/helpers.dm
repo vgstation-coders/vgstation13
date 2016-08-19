@@ -53,7 +53,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	for(var/i=0, i<radius, i++) if(!step_towards(dummy, target)) break
 
 	var/rval = (target.Adjacent(dummy.loc))
-	dummy.loc = null
+	dummy.forceMove(null)
 	dummy = null
 	return rval
 

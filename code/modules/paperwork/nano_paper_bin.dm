@@ -18,7 +18,7 @@
 	if(user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
 		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
 			if( !usr.get_active_hand() )		//if active hand is empty
-				src.loc = user
+				src.forceMove(user)
 				user.put_in_hands(src)
 				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You pick-up the [src]</span>")
 
@@ -34,7 +34,7 @@
 		ressources--
 		var/obj/item/weapon/paper/nano/p
 		p = new /obj/item/weapon/paper/nano
-		p.loc = user.loc
+		p.forceMove(user.loc)
 		user.put_in_hands(p)
 		to_chat(user, "<span class='notice'>\The [src] spits out a piece of nano paper.</span>")
 		if(ressources == 0)

@@ -32,7 +32,7 @@
 	var/turf/T = get_turf(src)
 	if(contents.len)
 		for(var/atom/movable/A in src)
-			A.loc = T
+			A.forceMove(T)
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 	..()
 
@@ -1643,7 +1643,7 @@
 		baconbeacon = new /obj/item/beacon/bacon(src)
 	after_consume()
 		if(!reagents.total_volume)
-			baconbeacon.loc = usr
+			baconbeacon.forceMove(usr)
 			baconbeacon.digest_delay()
 */
 

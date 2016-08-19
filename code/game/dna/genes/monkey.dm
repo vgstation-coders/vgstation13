@@ -57,7 +57,7 @@
 		D.affected_mob = O
 		M.viruses -= D
 
-	O.loc = M.loc
+	O.forceMove(M.loc)
 
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the cute little monkey
@@ -68,7 +68,7 @@
 
 	if (connected) //inside dna thing
 		var/obj/machinery/dna_scannernew/C = connected
-		O.loc = C
+		O.forceMove(C)
 		C.occupant = O
 		connected = null
 
@@ -137,7 +137,7 @@
 	//for(var/obj/T in M)
 	//	del(T)
 
-	O.loc = M.loc
+	O.forceMove(M.loc)
 
 	if(M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
@@ -148,7 +148,7 @@
 	Mo.transferBorers(O)
 	if (connected) //inside dna thing
 		var/obj/machinery/dna_scannernew/C = connected
-		O.loc = C
+		O.forceMove(C)
 		C.occupant = O
 		connected = null
 

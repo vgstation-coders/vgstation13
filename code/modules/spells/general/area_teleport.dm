@@ -66,7 +66,7 @@
 			break
 
 	if(!success)
-		user.loc = pick(L)
+		user.forceMove(pick(L))
 
 /spell/area_teleport/after_cast()
 	return

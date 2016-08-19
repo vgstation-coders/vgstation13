@@ -191,7 +191,7 @@ var/bomb_set
 		usr.set_machine(src)
 		if (href_list["auth"])
 			if (src.auth)
-				src.auth.loc = src.loc
+				src.auth.forceMove(src.loc)
 				src.yes_code = 0
 				src.auth = null
 			else

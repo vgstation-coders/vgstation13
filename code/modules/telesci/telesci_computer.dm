@@ -288,7 +288,7 @@
 				M.flash_eyes(visual = 1)
 			var/chosen = pick(hostiles)
 			var/mob/living/simple_animal/hostile/H = new chosen
-			H.loc = L
+			H.forceMove(L)
 			return
 		return
 	return

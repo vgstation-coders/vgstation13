@@ -106,11 +106,11 @@
 		if(!CC)
 			CC = new circuit( A )
 		else
-			CC.loc = A
+			CC.forceMove(A)
 		A.circuit = CC
 		A.anchored = 1
 		for (var/obj/C in src)
-			C.loc = src.loc
+			C.forceMove(src.loc)
 		if (src.stat & BROKEN)
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
 			getFromPool(/obj/item/weapon/shard, loc)

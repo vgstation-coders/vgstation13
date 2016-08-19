@@ -48,10 +48,10 @@
 
 /obj/machinery/vehicle/meteorhit(var/obj/O as obj)
 	for (var/obj/item/I in src)
-		I.loc = src.loc
+		I.forceMove(src.loc)
 
 	for (var/mob/M in src)
-		M.loc = src.loc
+		M.forceMove(src.loc)
 		if (M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
@@ -61,21 +61,21 @@
 	switch (severity)
 		if (1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.forceMove(src.loc)
 				ex_act(severity)
 			//SN src = null
 			del(src)
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				//SN src = null
 				del(src)
 
 /obj/machinery/vehicle/blob_act()
 	for(var/atom/movable/A as mob|obj in src)
-		A.loc = src.loc
+		A.forceMove(src.loc)
 	del(src)
 
 /obj/machinery/vehicle/Bump(var/atom/A)
@@ -109,7 +109,7 @@
 		return
 
 	var/mob/M = usr
-	M.loc = src.loc
+	M.forceMove(src.loc)
 	if (M.client)
 		M.client.eye = M.client.mob
 		M.client.perspective = MOB_PERSPECTIVE
@@ -131,7 +131,7 @@
 		M.client.perspective = EYE_PERSPECTIVE
 		M.client.eye = src
 
-	M.loc = src
+	M.forceMove(src)
 
 /obj/machinery/vehicle/verb/unload(var/atom/movable/A in src)
 	set src in oview(1)
@@ -140,7 +140,7 @@
 		return
 
 	if (istype(A, /atom/movable))
-		A.loc = src.loc
+		A.forceMove(src.loc)
 		for(var/mob/O in view(src, null))
 			if ((O.client && !(O.blinded)))
 				to_chat(O, text("<span class='notice'><B> [] unloads [] from []!</B></span>", usr, A, src))
@@ -164,7 +164,7 @@
 			if (src.one_person_only && !(istype(H.pulling, /obj/item/weapon)))
 				to_chat(usr, "You may only place items in.")
 			else
-				H.pulling.loc = src
+				H.pulling.forceMove(src)
 				if (ismob(H.pulling))
 					var/mob/M = H.pulling
 					if (M.client)

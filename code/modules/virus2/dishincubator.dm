@@ -106,7 +106,7 @@
 			icon_state = "incubator"
 	if (href_list["ejectdish"])
 		if(dish)
-			dish.loc = src.loc
+			dish.forceMove(src.loc)
 			dish = null
 	if (href_list["rad"])
 		radiation += 10

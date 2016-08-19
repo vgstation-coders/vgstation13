@@ -113,7 +113,7 @@
 			qdel(W)
 			W = null
 		if(EQUIP_FAILACTION_DROP)
-			W.loc=get_turf(src) // I think.
+			W.forceMove(get_turf(src)) // I think.
 	return null
 
 /mob/living/carbon/human/proc/is_on_ears(var/typepath)
@@ -436,7 +436,7 @@
 		if(slot_in_backpack)
 			if(src.get_active_hand() == W)
 				src.u_equip(W,0)
-			W.loc = src.back
+			W.forceMove(src.back)
 			return
 		else
 			to_chat(src, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. Report this to a coder!</span>")

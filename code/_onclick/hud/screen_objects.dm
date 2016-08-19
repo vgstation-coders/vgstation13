@@ -759,7 +759,7 @@
 		if("Jump to Blob")
 			if(isovermind(usr) && linked_blob)
 				var/mob/camera/blob/overmind = usr
-				overmind.loc = linked_blob.loc
+				overmind.forceMove(linked_blob.loc)
 	return 1
 
 /obj/screen/inventory/Click()

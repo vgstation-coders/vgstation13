@@ -134,7 +134,7 @@ LOOK FOR SURGERY.DM*/
 
 					if(M)
 						user.visible_message("<span class='warning'>[user] pulls an alien organism out of [M]'s chest.</span>", "<span class='warning'>You pull the alien organism out of [M]'s chest.</span>")
-						A.loc = M.loc	//alien embryo handles cleanup
+						A.forceMove(M.loc)	//alien embryo handles cleanup
 
 	else if((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
 		return ..()

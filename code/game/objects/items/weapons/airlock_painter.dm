@@ -68,7 +68,7 @@
 /obj/item/weapon/airlock_painter/attack_self(mob/user)
 	if(ink)
 		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-		ink.loc = user.loc
+		ink.forceMove(user.loc)
 		user.put_in_hands(ink)
 		to_chat(user, "<span class='notice'>You remove \the [ink] from \the [name].</span>")
 		ink = null

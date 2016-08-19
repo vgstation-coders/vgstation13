@@ -64,7 +64,7 @@
 		if(istype(src,/obj/effect/rune))
 			invocation("rune_teleport")
 
-		user.loc = allrunesloc[rand(1,index)]
+		user.forceMove(allrunesloc[rand(1,index)])
 		return
 	if(istype(src,/obj/effect/rune))
 		return	fizzle() //Use friggin manuals, Dorf, your list was of zero length.
@@ -126,14 +126,14 @@
 
 		for(var/obj/O in src.loc)//sending the items on the rune to the other rune
 			if(!O.anchored)
-				O.loc = IP.loc
+				O.forceMove(IP.loc)
 		for(var/mob/M in src.loc)
-			M.loc = IP.loc
+			M.forceMove(IP.loc)
 
 		for(var/obj/O in swapping)//bringing the items previously marked from the other rune to our rune
-			O.loc = src.loc
+			O.forceMove(src.loc)
 		for(var/mob/M in swapping)
-			M.loc = src.loc
+			M.forceMove(src.loc)
 
 		swapping = 0
 		return
@@ -1126,7 +1126,7 @@
 			return fizzle()
 		var/turf/T = get_turf(cultist)
 		T.turf_animation('icons/effects/effects.dmi',"rune_teleport")
-		cultist.loc = src.loc
+		cultist.forceMove(src.loc)
 		cultist.lying = 1
 		cultist.regenerate_icons()
 		to_chat(T, visible_message("<span class='warning'>[cultist] suddenly disappears in a flash of red light!</span>"))

@@ -414,7 +414,7 @@
 
 		/*
 		for(var/obj/O in src)
-			O.loc = src.loc
+			O.forceMove(src.loc)
 		*/
 		return
 
@@ -423,7 +423,7 @@
 
 	/*
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.forceMove(src.loc)
 	*/
 
 	if (occupant.client)
@@ -491,21 +491,21 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if (prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return

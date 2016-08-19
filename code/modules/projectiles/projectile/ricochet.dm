@@ -144,7 +144,7 @@
 		return
 
 	var/turf/newspawn = locate(T1.x + X_spawn, T1.y + Y_spawn, z)
-	src.loc = newspawn
+	src.forceMove(newspawn)
 
 	update_icon()
 	..()

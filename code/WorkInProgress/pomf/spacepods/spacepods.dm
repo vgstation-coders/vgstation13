@@ -49,7 +49,7 @@
 
 /obj/spacepod/Destroy()
 	if(src.occupant)
-		src.occupant.loc = src.loc
+		src.occupant.forceMove(src.loc)
 		src.occupant.gib()
 		src.occupant = null
 	..()
@@ -107,7 +107,7 @@
 		if(1)
 			var/mob/living/carbon/human/H = occupant
 			if(H)
-				H.loc = get_turf(src)
+				H.forceMove(get_turf(src))
 				H.ex_act(severity + 1)
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
 			del(ion_trail)

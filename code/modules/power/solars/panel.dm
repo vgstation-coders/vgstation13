@@ -30,7 +30,7 @@
 		src.glass_quality_factor = initial(G.glass_quality) //Don't use istype checks kids
 		src.maxhealth = initial(G.shealth)
 		src.health = initial(G.shealth)
-	solar_assembly.loc = src
+	solar_assembly.forceMove(src)
 	update_icon()
 
 /obj/machinery/power/solar/panel/attackby(obj/item/weapon/W, mob/user)
@@ -41,7 +41,7 @@
 		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 		if(do_after(user, src, 50))
 			if(solar_assembly)
-				solar_assembly.loc = T
+				solar_assembly.forceMove(T)
 				solar_assembly.give_glass()
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			user.visible_message("<span class='notice'>[user] takes the [initial(G.name)] off the [src].</span>",\
@@ -69,7 +69,7 @@
 			var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
 			var/shard = initial(G.shard_type)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
-			solar_assembly.loc = get_turf(src)
+			solar_assembly.forceMove(get_turf(src))
 			getFromPool(shard, loc)
 			getFromPool(shard, loc)
 			qdel(src)

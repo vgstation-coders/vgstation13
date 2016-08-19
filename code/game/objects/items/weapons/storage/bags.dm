@@ -244,7 +244,7 @@
 				qdel (S)
 				S = null
 			else
-				S.loc = src
+				S.forceMove(src)
 
 		orient2hud(usr)
 		if(usr.s_active)

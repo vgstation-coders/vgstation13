@@ -183,7 +183,7 @@
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
-			mmi.loc = T
+			mmi.forceMove(T)
 		if(mind)
 			mind.transfer_to(mmi.brainmob)
 		if(mmi.brainmob)
@@ -782,7 +782,7 @@
 				C.wrapped = W
 				C.install()
 				user.drop_item(W)
-				W.loc = null
+				W.forceMove(null)
 
 				to_chat(usr, "<span class='notice'>You install the [W.name].</span>")
 
@@ -852,7 +852,7 @@
 				var/datum/robot_component/C = components[remove]
 				var/obj/item/I = C.wrapped
 				to_chat(user, "You remove \the [I].")
-				I.loc = src.loc
+				I.forceMove(src.loc)
 
 				if(C.installed == 1)
 					C.uninstall()

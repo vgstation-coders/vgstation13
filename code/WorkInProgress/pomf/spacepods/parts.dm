@@ -73,7 +73,7 @@
 		for(var/obj/item/pod_parts/pod_frame/F in linkedparts)
 			if(1 == turn(F.dir, -F.link_angle)) //if the part links north during construction, as the bottom left part always does
 				//log_admin("Repositioning")
-				pod.loc = F.loc
+				pod.forceMove(F.loc)
 			qdel(F)
 	if(iswrench(O))
 		to_chat(user, "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>")

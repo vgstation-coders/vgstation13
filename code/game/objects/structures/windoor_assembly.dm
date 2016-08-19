@@ -211,7 +211,7 @@ obj/structure/windoor_assembly/Destroy()
 					ae = electronics
 					ae.installed = 0
 					electronics = null
-					ae.loc = src.loc
+					ae.forceMove(src.loc)
 
 
 			//Crowbar to complete the assembly, Step 7 complete.
@@ -243,7 +243,7 @@ obj/structure/windoor_assembly/Destroy()
 
 					windoor.req_access = src.electronics.conf_access
 					windoor.electronics = src.electronics
-					src.electronics.loc = windoor
+					src.electronics.forceMove(windoor)
 					qdel(src)
 
 

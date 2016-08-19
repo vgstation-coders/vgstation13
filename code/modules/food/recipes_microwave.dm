@@ -489,9 +489,9 @@
 
 /datum/recipe/fortunecookie/make_food(var/obj/container)
 	var/obj/item/weapon/paper/paper = locate() in container
-	paper.loc = null //prevent deletion
+	paper.forceMove(null) //prevent deletion
 	var/obj/item/weapon/reagent_containers/food/snacks/fortunecookie/being_cooked = ..(container)
-	paper.loc = being_cooked
+	paper.forceMove(being_cooked)
 	being_cooked.trash = paper
 	return being_cooked
 

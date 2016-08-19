@@ -108,7 +108,7 @@
 			eject_brain()
 
 			if(held_item)
-				held_item.loc = src.loc
+				held_item.forceMove(src.loc)
 				held_item = null
 
 			return 1
@@ -162,7 +162,7 @@
 	if(mmi)
 		var/turf/T = get_turf(loc)
 		if(T)
-			mmi.loc = T
+			mmi.forceMove(T)
 		if(mind)
 			mind.transfer_to(mmi.brainmob)
 		mmi = null
@@ -190,7 +190,7 @@
 	if(camera)
 		camera.status = 0
 	if(held_item && !isnull(held_item))
-		held_item.loc = src.loc
+		held_item.forceMove(src.loc)
 		held_item = null
 
 	robogibs(src.loc, viruses)
@@ -235,14 +235,14 @@
 	if(istype(held_item, /obj/item/weapon/grenade))
 		visible_message("<span class='warning'>[src] launches \the [held_item]!</span>", "<span class='warning'>You launch \the [held_item]!</span>", "You hear a skittering noise and a thump!")
 		var/obj/item/weapon/grenade/G = held_item
-		G.loc = src.loc
+		G.forceMove(src.loc)
 		G.prime()
 		held_item = null
 		return 1
 
 	visible_message("<span class='notice'>[src] drops \the [held_item]!</span>", "<span class='notice'>You drop \the [held_item]!</span>", "You hear a skittering noise and a soft thump.")
 
-	held_item.loc = src.loc
+	held_item.forceMove(src.loc)
 	held_item = null
 	return 1
 
@@ -272,7 +272,7 @@
 		for(var/obj/item/I in view(1, src))
 			if(selection == I)
 				held_item = selection
-				selection.loc = src
+				selection.forceMove(src)
 				visible_message("<span class='notice'>[src] scoops up \the [held_item]!</span>", "<span class='notice'>You grab \the [held_item]!</span>", "You hear a skittering noise and a clink.")
 				return held_item
 		to_chat(src, "<span class='warning'>\The [selection] is too far away.</span>")

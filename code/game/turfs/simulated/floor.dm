@@ -477,14 +477,14 @@ turf/simulated/floor/update_icon()
 	if(current_size >= STAGE_FIVE)
 		if(prob(75))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 			make_plating()
 		return
 	if(current_size == STAGE_FOUR)
 		if(prob(30))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 			make_plating()
 
@@ -500,7 +500,7 @@ turf/simulated/floor/update_icon()
 				to_chat(user, "<span class='warning'>You forcefully pry off the planks, destroying them in the process.</span>")
 			else
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 
 		make_plating()

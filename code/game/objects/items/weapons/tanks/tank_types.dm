@@ -79,7 +79,7 @@
 		src.master = F
 		F.ptank = src
 		user.before_take_item(src)
-		src.loc = F
+		src.forceMove(F)
 	return
 
 /obj/item/weapon/tank/plasma/plasmaman

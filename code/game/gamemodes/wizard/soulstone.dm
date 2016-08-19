@@ -105,7 +105,7 @@
 
 /obj/item/device/soulstone/proc/eject_shade(var/mob/user=null)
 	for(var/mob/living/L in src)
-		L.loc = get_turf(src)
+		L.forceMove(get_turf(src))
 		L.status_flags &= ~GODMODE
 		if(user)
 			to_chat(L, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them suceed in their goals at all costs.</b>")
@@ -345,7 +345,7 @@
 				if(C.contents.len)
 					to_chat(U, "<span class='danger'>Capture failed!: </span>The soul stone is full! Use or free an existing soul to make room.")
 				else
-					T.loc = C //put shade in stone
+					T.forceMove(C) //put shade in stone
 					T.status_flags |= GODMODE
 					T.canmove = 0
 					T.health = T.maxHealth

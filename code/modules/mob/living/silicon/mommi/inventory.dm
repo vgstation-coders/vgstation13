@@ -46,7 +46,7 @@
 		if(!is_in_modules(tool_state))
 			drop_item(TS)
 		else
-			TS.loc = src.module
+			TS.forceMove(src.module)
 		contents -= tool_state
 		if (client)
 			client.screen -= tool_state

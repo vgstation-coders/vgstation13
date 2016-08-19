@@ -239,13 +239,13 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(container)
 		var/obj/item/weapon/reagent_containers/B = container
-		B.loc = loc
+		B.forceMove(loc)
 		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = container:holder:loc
 			if(R.module_state_1 == container || R.module_state_2 == container || R.module_state_3 == container)
-				container.loc = R
+				container.forceMove(R)
 			else
-				container.loc = container:holder
+				container.forceMove(container:holder)
 		container = null
 		return 1
 

@@ -331,7 +331,7 @@ var/global/resethearers = 0
 			returnToPool(VH)
 			continue
 		for(A=VH.attached.loc, A && !isturf(A), A=A.loc);
-		VH.loc = A
+		VH.forceMove(A)
 	resethearers = world.time + 5
 
 // Returns a list of hearers in range of R from source. Used in saycode.

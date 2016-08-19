@@ -259,5 +259,5 @@
 /obj/structure/closet/fireaxecabinet/Destroy()
 	if(fireaxe)
 		visible_message("<span class='notice'>The fireaxe noisily ricochets off the ground as it slides out of \the [src].</span>")
-		fireaxe.loc = get_turf(src) //Save the axe from destruction
+		fireaxe.forceMove(get_turf(src)) //Save the axe from destruction
 	..()

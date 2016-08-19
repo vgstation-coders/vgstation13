@@ -32,7 +32,7 @@
 			src.legcuffed = W
 			update_inv_legcuffed(redraw_mob)
 		if(slot_in_backpack)
-			W.loc = src.back
+			W.forceMove(src.back)
 		else
 			to_chat(usr, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
 			return

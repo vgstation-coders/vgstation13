@@ -157,7 +157,7 @@
 					return
 			if("back")
 				if(inventory_back)
-					inventory_back.loc = src.loc
+					inventory_back.forceMove(src.loc)
 					inventory_back = null
 					regenerate_icons()
 				else
@@ -396,7 +396,7 @@
 				"You hear a friendly-sounding bark.")
 			usr.drop_item(item_to_add, src, force_drop = 1)
 		else
-			item_to_add.loc = src
+			item_to_add.forceMove(src)
 		src.inventory_head = item_to_add
 		regenerate_icons()
 

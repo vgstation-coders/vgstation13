@@ -1042,7 +1042,7 @@ Thanks.
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
 										   "<span class='notice'>You successfully remove [HC].</span>")
-						CM.legcuffed.loc = usr.loc
+						CM.legcuffed.forceMove(usr.loc)
 						CM.legcuffed = null
 						CM.update_inv_legcuffed()
 					else
@@ -1401,7 +1401,7 @@ default behaviour is:
 	if(M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
 		to_chat(src, "[M] scoops you up.")
-		src.loc = D //Only move the mob into the holder after we're sure he has been picked up!
+		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
 	else
 		returnToPool(D)
 

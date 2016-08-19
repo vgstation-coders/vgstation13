@@ -44,13 +44,13 @@
 			var/obj/item/weapon/reagent_containers/glass/beaker/large/ourbeaker = module_active
 			if(istype(ourbeaker.loc, /obj/machinery))
 				ourbeaker.loc:detach()
-				ourbeaker.loc = src
+				ourbeaker.forceMove(src)
 			else if(ismob(ourbeaker.loc))
 				var/mob/living/L = ourbeaker.loc
 				L.drop_item(ourbeaker)
-				ourbeaker.loc = src
+				ourbeaker.forceMove(src)
 			else
-				ourbeaker.loc = src
+				ourbeaker.forceMove(src)
 	if(module_state_1 == module_active)
 		uneq_module(module_state_1)
 		module_state_1 = null

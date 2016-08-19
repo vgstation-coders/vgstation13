@@ -102,7 +102,7 @@ var/const/max_assembly_amount = 300
 			compressed_matter = old_matter
 			to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Out of matter.\'</span>")
 		else
-			F.loc = src.loc//get_step(get_turf(src), src.dir)
+			F.forceMove(src.loc)//get_step(get_turf(src), src.dir)
 			F.percent_depleted = 0
 			if(compressed_matter < 0.034)
 				compressed_matter = 0

@@ -239,19 +239,19 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 		if(2.0)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 		if(3.0)
 			if (prob(5))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 
@@ -274,7 +274,7 @@
 	if ((src.connected) && (src.locked == 0))
 		for(var/atom/movable/A as mob|obj in src.connected.loc)
 			if (!( A.anchored ))
-				A.loc = src
+				A.forceMove(src)
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		qdel(src.connected)
 		src.connected = null
@@ -288,7 +288,7 @@
 			src.connected.connected = src
 			src.icon_state = "crema0"
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.connected.loc
+				A.forceMove(src.connected.loc)
 			src.connected.icon_state = "cremat"
 		else
 			qdel(src.connected)
@@ -321,7 +321,7 @@
 		src.connected.connected = src
 		src.icon_state = "crema0"
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.connected.loc
+			A.forceMove(src.connected.loc)
 			//Foreach goto(106)
 		src.connected.icon_state = "cremat"
 	else
@@ -410,7 +410,7 @@
 	if (src.connected)
 		for(var/atom/movable/A as mob|obj in src.loc)
 			if (!( A.anchored ))
-				A.loc = src.connected
+				A.forceMove(src.connected)
 		src.connected.connected = null
 		src.connected.update()
 		add_fingerprint(user)
@@ -422,7 +422,7 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
-	O.loc = src.loc
+	O.forceMove(src.loc)
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))

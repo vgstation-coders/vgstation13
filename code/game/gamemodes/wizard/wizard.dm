@@ -60,7 +60,7 @@
 		return 0
 
 	for(var/datum/mind/wwizard in wizards)
-		wwizard.current.loc = pick(wizardstart)
+		wwizard.current.forceMove(pick(wizardstart))
 
 	log_admin("Starting a round of wizard with [wizards.len] wizards.")
 	message_admins("Starting a round of wizard with [wizards.len] wizards.")

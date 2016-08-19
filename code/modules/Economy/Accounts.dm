@@ -333,7 +333,7 @@ var/global/list/all_money_accounts = list()
 					creating_new_account = 0
 			if("insert_card")
 				if(held_card)
-					held_card.loc = src.loc
+					held_card.forceMove(src.loc)
 					if(ishuman(usr) && !usr.get_active_hand())
 						usr.put_in_hands(held_card)
 					held_card = null

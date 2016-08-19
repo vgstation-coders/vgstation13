@@ -137,7 +137,7 @@
 		to_chat(usr, "<span class='notice'> <B>Subject cannot have abiotic items on.</B></span>")
 		return*/
 	usr.stop_pulling()
-	usr.loc = src
+	usr.forceMove(src)
 	usr.reset_view()
 	src.occupant = usr
 	src.icon_state = "scanner_1"
@@ -247,7 +247,7 @@
 	return ..()
 
 /obj/machinery/dna_scannernew/proc/put_in(var/mob/M)
-	M.loc = src
+	M.forceMove(src)
 	M.reset_view()
 	src.occupant = M
 	src.icon_state = "scanner_1"
@@ -805,7 +805,7 @@
 	if(href_list["ejectBeaker"])
 		if(connected.beaker)
 			var/obj/item/weapon/reagent_containers/glass/B = connected.beaker
-			B.loc = connected.loc
+			B.forceMove(connected.loc)
 			connected.beaker = null
 		return 1
 
@@ -855,7 +855,7 @@
 		if (bufferOption == "ejectDisk")
 			if (!src.disk)
 				return
-			src.disk.loc = get_turf(src)
+			src.disk.forceMove(get_turf(src))
 			src.disk = null
 			return 1
 
@@ -964,7 +964,7 @@
 					I.buf = buf
 				waiting_for_user_input=0
 				if(success)
-					I.loc = src.loc
+					I.forceMove(src.loc)
 					I.name += " ([buf.name])"
 					src.injector_ready = 0
 					spawn(connected.injector_cooldown)

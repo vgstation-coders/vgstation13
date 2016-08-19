@@ -76,7 +76,7 @@
 			return
 		else
 			to_chat(usr, "<span class='notice'>You pull out an emergency defibrillator from \the [src].</span>")
-			defib.loc = get_turf(src)
+			defib.forceMove(get_turf(src))
 			defib = null
 			update_icon()
 	if(!defib)

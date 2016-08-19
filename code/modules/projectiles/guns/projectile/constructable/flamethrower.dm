@@ -139,13 +139,13 @@
 	if(iswrench(W) && !status)//Taking this apart
 		var/turf/T = get_turf(src)
 		if(weldtool)
-			weldtool.loc = T
+			weldtool.forceMove(T)
 			weldtool = null
 		if(igniter)
-			igniter.loc = T
+			igniter.forceMove(T)
 			igniter = null
 		if(ptank)
-			ptank.loc = T
+			ptank.forceMove(T)
 			ptank = null
 		getFromPool(/obj/item/stack/rods, T)
 		qdel(src)

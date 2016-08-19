@@ -277,9 +277,9 @@
 	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 		var/mob/living/silicon/robot/R = beaker:holder:loc
 		if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-			beaker.loc = R
+			beaker.forceMove(R)
 		else
-			beaker.loc = beaker:holder
+			beaker.forceMove(beaker:holder)
 	beaker = null
 	update_icon()
 
@@ -299,7 +299,7 @@
 		return
 
 	for(var/obj/item/O in holdingitems)
-		O.loc = src.loc
+		O.forceMove(src.loc)
 		holdingitems -= O
 	holdingitems = list()
 

@@ -53,7 +53,7 @@
 
 		spawn(300)
 			for(var/mob/M in src)
-				M.loc = src.loc
+				M.forceMove(src.loc)
 				icon_state = "egg_hatched"
 				density = 0
 		return

@@ -224,7 +224,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		stack.use(amount)
 	else
 		usr.before_take_item(O)
-		O.loc = src
+		O.forceMove(src)
 	icon_state = "autolathe"
 	busy = 1
 	use_power(max(1000, (m_amt+g_amt)*amount/10))

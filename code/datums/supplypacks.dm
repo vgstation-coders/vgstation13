@@ -27,7 +27,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 			continue
 		var/atom/movable/AM = new path()
 		manifest += "<li>[AM.name]</li>"
-		AM.loc = null	//just to make sure they're deleted by the garbage collector
+		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
 	manifest += "</ul>"
 
 //////SUPPLIES//////

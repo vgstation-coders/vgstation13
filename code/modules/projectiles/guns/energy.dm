@@ -62,7 +62,7 @@
 /*
 /obj/item/weapon/gun/energy/Destroy()
 	if(power_supply)
-		power_supply.loc = get_turf(src)
+		power_supply.forceMove(get_turf(src))
 		power_supply = null
 
 	..()

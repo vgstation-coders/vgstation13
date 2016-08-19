@@ -1375,7 +1375,7 @@ var/global/num_vending_terminals = 1
 					update_icon()
 					var/obj/item/weapon/circuitboard/C
 					if(_circuitboard)
-						_circuitboard.loc=get_turf(src)
+						_circuitboard.forceMove(get_turf(src))
 						C=_circuitboard
 						_circuitboard=null
 					else
