@@ -468,8 +468,7 @@ var/global/mulebot_count = 0
 
 	load.loc = src.loc
 	load.pixel_y -= 9 * PIXEL_MULTIPLIER
-	load.layer = initial(load.layer)
-	load.plane = initial(load.plane)
+	load.reset_plane_and_layer()
 	if(ismob(load))
 		var/mob/M = load
 		if(M.client)
@@ -496,8 +495,7 @@ var/global/mulebot_count = 0
 			continue
 
 		AM.loc = src.loc
-		AM.layer = initial(AM.layer)
-		AM.plane = initial(AM.plane)
+		AM.reset_plane_and_layer()
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))
 			var/mob/M = AM
