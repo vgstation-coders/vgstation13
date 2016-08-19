@@ -58,9 +58,9 @@
  * Wood
  */
 /obj/item/stack/tile/wood
-	name = "wood floor tile"
-	singular_name = "wood floor tile"
-	desc = "an easy to fit wood floor tile"
+	name = "wooden floor tile"
+	singular_name = "wooden floor tile"
+	desc = "an easy to fit wooden floor tile"
 	icon_state = "tile-wood"
 	w_class = W_CLASS_MEDIUM
 	force = 1.0
