@@ -113,9 +113,10 @@
 /obj/item/device/instrument/harmonica
 	name = "harmonica"
 	desc = "For when you get a bad case of the space blues."
-	icon_state = "guitar"
-	item_state = "guitar"
+	icon_state = "harmonica"
+	item_state = "harmonica"
 	instrumentId = "harmonica"
 	slot_flags = SLOT_MASK
 	force = 5
 	w_class = W_CLASS_SMALL
+	action_button_name = "Use Harmonica"
