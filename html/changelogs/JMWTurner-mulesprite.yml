@@ -1,4 +1,4 @@
 author: JMWTurner
-delete-after: false
+delete-after: true
 changes:
   - bugfix: Fixed crates appearing bellow the mulebot they're currently riding.
