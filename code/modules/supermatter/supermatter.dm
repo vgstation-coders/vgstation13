@@ -168,6 +168,7 @@
 		var/list/audio_sounds = list('sound/AI/supermatter_integrity_before.ogg')
 		var/play_alert = 0
 		var/audio_offset = 0
+		var/current_zlevel = L.z
 		if((world.timeofday - lastwarning) / 10 >= WARNING_DELAY)
 			var/warning=""
 			var/offset = 0
@@ -193,16 +194,14 @@
 			speech.name = "Supermatter [short_name] Monitor"
 			speech.job = "Automated Announcement"
 			speech.as_name = "Supermatter [short_name] Monitor"
-			Broadcast_Message(speech, level = list(0,1))
+			Broadcast_Message(speech, level = current_zlevel)
 			returnToPool(speech)
 
 			lastwarning = world.timeofday - offset
 
 		if(play_alert && (world.timeofday - lastaudiowarning) / 10 >= AUDIO_WARNING_DELAY)
 			for(var/sf in audio_sounds)
-				var/sound/voice = sound(sf, wait = 1, channel = VOX_CHANNEL)
-				voice.status = SOUND_STREAM
-				world << voice
+				play_vox_sound(sf,current_zlevel,null)
 			lastaudiowarning = world.timeofday - audio_offset
 
 		if(damage > explosion_point)
