@@ -436,7 +436,7 @@ var/global/mulebot_count = 0
 
 	C.loc = src.loc
 	sleep(2)
-	if(C.loc != src.loc) //To prevent you from going onto more thano ne bot.
+	if(C.loc != src.loc) //To prevent you from going onto more than one bot.
 		return
 	C.loc = src
 	load = C
@@ -444,6 +444,7 @@ var/global/mulebot_count = 0
 	C.pixel_y += 9 * PIXEL_MULTIPLIER
 	if(C.layer < layer)
 		C.layer = layer + 0.1
+	C.plane = plane
 	overlays += C
 
 	if(ismob(C))
@@ -468,6 +469,7 @@ var/global/mulebot_count = 0
 	load.loc = src.loc
 	load.pixel_y -= 9 * PIXEL_MULTIPLIER
 	load.layer = initial(load.layer)
+	load.plane = initial(load.plane)
 	if(ismob(load))
 		var/mob/M = load
 		if(M.client)
@@ -495,6 +497,7 @@ var/global/mulebot_count = 0
 
 		AM.loc = src.loc
 		AM.layer = initial(AM.layer)
+		AM.plane = initial(AM.plane)
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))
 			var/mob/M = AM
