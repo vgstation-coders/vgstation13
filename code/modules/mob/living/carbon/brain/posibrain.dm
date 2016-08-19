@@ -171,11 +171,10 @@
 	if(searching)
 		volunteer(O)
 	else
-		var/turf/T = get_turf(src.loc)
-		for (var/mob/M in viewers(T))
-			M.show_message("<span class='notice'>\The [src] pings softly.</span>")
+		if(!brainmob.ckey)
+			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
 
 /obj/item/device/mmi/posibrain/OnMobDeath(var/mob/living/carbon/brain/B)
-	visible_message(message = "<span class='danger'>[B] begins to go dark, having seemingly thought himself to death</span>", blind_message = "<span class='danger'>You hear the wistful sigh of a hopeful machine powering off with a tone of finality.<span>")
+	visible_message(message = "<span class='danger'>[B] begins to go dark, having seemingly thought himself to death</span>", blind_message = "<span class='danger'>You hear the wistful sigh of a hopeful machine powering off with a tone of finality.</span>")
 	icon_state = "posibrain"
 	searching = 0
