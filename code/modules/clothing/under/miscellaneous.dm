@@ -654,3 +654,4 @@
 	desc = "Employs a special toshnit pattern, will render you invisible when you eat a potato on an empty stomach."
 	icon_state = "nr_uniform"
 	item_state = "nr_uniform"
+	_color = "nr_uniform"
