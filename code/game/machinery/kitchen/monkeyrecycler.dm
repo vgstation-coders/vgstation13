@@ -95,4 +95,6 @@
 	return
 
 /obj/machinery/monkey_recycler/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(!ishuman(user))
+		return
 	attackby(O,user)
