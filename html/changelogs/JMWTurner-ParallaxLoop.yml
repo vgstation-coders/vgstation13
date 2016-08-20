@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - bugfix: Fixed parallax not looping more than once, which would cause stars to go away forever if you kept moving in the same direction in space for a while
