@@ -295,7 +295,7 @@ var/bomb_set
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
 	if( bomb_location && (bomb_location.z == map.zMainStation) )
-		if( (bomb_location.x < (256-NUKERANGE)) || (bomb_location.x > (256+NUKERANGE)) || (bomb_location.y < (256-NUKERANGE)) || (bomb_location.y > (256+NUKERANGE)) )
+		if( (bomb_location.x < (world.maxx/2-NUKERANGE)) || (bomb_location.x > (world.maxx/2+NUKERANGE)) || (bomb_location.y < (world.maxy-NUKERANGE)) || (bomb_location.y > (world.maxy+NUKERANGE)) )
 			off_station = 1
 	else
 		off_station = 2
