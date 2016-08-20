@@ -553,7 +553,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/gloves/neorussian/fingerless,
 					/obj/item/clothing/under/neorussian,
 					/obj/item/clothing/shoes/jackboots/neorussian)
-	cost = 200
+	cost = 125
 	containertype = /obj/structure/closet/
 	containername = "Neo-Russian Crate"
 	group = "Clothing"
