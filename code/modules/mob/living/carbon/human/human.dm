@@ -1559,7 +1559,7 @@
 	if(radiations)
 		apply_effect(current_size * radiations, IRRADIATE)
 	if(shoes)
-		if(shoes.flags & NOSLIP && singulo.current_size <= STAGE_FOUR)
+		if(shoes.flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
 	..()
 /mob/living/carbon/human/get_default_language()
