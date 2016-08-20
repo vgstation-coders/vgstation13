@@ -14,6 +14,9 @@
 	var/minimum_monkeys = 3 //How many do we need to grind?
 	var/can_recycle_live = 0 //Can we recycle a live monkey?
 
+/obj/machinery/monkey_recycler/attack_ghost(var/mob/dead/observer/ghost)
+	return
+
 /obj/machinery/monkey_recycler/New()
 	. = ..()
 
