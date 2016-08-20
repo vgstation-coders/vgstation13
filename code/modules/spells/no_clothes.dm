@@ -1,5 +1,5 @@
 /spell/noclothes
 	name = "No Clothes"
-	desc = "This is a placeholder for knowing if you dont need clothes for any spell."
+	desc = "Removes the need of wizard robes to cast powerful spells."
 
 	spell_flags = NO_BUTTON

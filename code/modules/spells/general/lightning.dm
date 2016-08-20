@@ -187,3 +187,16 @@
 			return //bail out bail out!
 //		to_chat(world, "going one more time 'user' = [formatJumpTo(target)] (<a href='?_src_=vars;Vars=\ref[target]'>VV</a>) ; 'target' = [formatJumpTo(next_target)](<a href='?_src_=vars;Vars=\ref[next_target]'>VV</a>)")
 		zapmuthafucka("user" = target, "target" = next_target, "chained" = chained-1, "zapped" = zapped, "oursound" = oursound)
+
+/spell/lightning/get_upgrade_info(upgrade_type, level)
+	switch(upgrade_type)
+		if(Sp_POWER)
+			switch(level)
+				if(1)
+					return "Allow the spell to arc to one additional target."
+				if(2)
+					return "Allow the spell to arc up to 3 targets."
+				if(3)
+					return "Allow the spell to arc up to 5 targets."
+		else
+			return ..()

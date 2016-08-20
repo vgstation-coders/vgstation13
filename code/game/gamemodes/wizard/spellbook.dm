@@ -1,3 +1,5 @@
+#define STARTING_USES 5
+
 /obj/item/weapon/spellbook
 	name = "spell book"
 	desc = "The legendary book of spells of the wizard."
@@ -7,10 +9,58 @@
 	throw_range = 5
 	w_class = W_CLASS_TINY
 	flags = FPRINT
-	var/uses = 5
-	var/temp = null
-	var/max_uses = 5
+
+	var/list/available_spells = list(
+	/spell/targeted/projectile/magic_missile,
+	/spell/targeted/projectile/dumbfire/fireball,
+	/spell/lightning,
+	/spell/aoe_turf/disable_tech,
+	/spell/aoe_turf/smoke,
+	/spell/targeted/genetic/blind,
+	/spell/targeted/subjugation,
+	/spell/targeted/mind_transfer,
+	/spell/aoe_turf/conjure/forcewall,
+	/spell/aoe_turf/blink,
+	/spell/area_teleport,
+	/spell/targeted/genetic/mutate,
+	/spell/targeted/ethereal_jaunt,
+	/spell/aoe_turf/fall,
+	/spell/aoe_turf/knock,
+	/spell/targeted/equip_item/horsemask,
+	/spell/targeted/equip_item/clowncurse,
+	/spell/targeted/equip_item/frenchcurse,
+	/spell/targeted/shoesnatch,
+	/spell/targeted/equip_item/robesummon,
+	/spell/targeted/flesh_to_stone,
+	/spell/targeted/buttbots_revenge,
+	/spell/aoe_turf/conjure/pontiac,
+	/spell/noclothes
+	)
+
+	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
+	var/list/available_artifacts = list()
+
+	var/uses = STARTING_USES
+	var/max_uses = STARTING_USES
+
 	var/op = 1
+	var/temp = null
+
+/obj/item/weapon/spellbook/New()
+	..()
+
+	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
+
+	for(var/T in available_artifacts)
+		available_artifacts.Add(new T) //Create a new object with the path T
+		available_artifacts.Remove(T) //Remove the path from the list
+	//Result is a list full of /datum/spellbook_artifact objects
+
+/obj/item/weapon/spellbook/proc/get_available_spells()
+	return available_spells
+
+/obj/item/weapon/spellbook/proc/get_available_artifacts()
+	return available_artifacts
 
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
@@ -24,6 +74,213 @@
 			qdel (O)
 			O = null
 
+#define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
+
+/obj/item/weapon/spellbook/attack_self(mob/user = usr)
+	if(!user)
+		return
+
+	user.set_machine(src)
+
+	var/dat
+	dat += "<head><title>Spellbook ([uses] REMAINING)</title></head><body>"
+	dat += "<h1>Edvin's Catalogue Of Spells And Artifacts</h1><br>"
+	dat += "<h2>[uses] points remaining (<a href='?src=\ref[src];refund=1'>Get a refund</a>)</h2><br>"
+	dat += "<i>Penned by Edvin The Starcrusher.</i><br>"
+	dat += "<i>This book contains a list of many useful things that you'll need in your journey.</i><br>"
+	dat += "<b>SPELLS:</b><br><br>"
+
+	for(var/spell_path in available_spells)
+		var/spell/abstract_spell = spell_path
+		var/spell/spell = locate(spell_path) in user.spell_list
+
+		if(istype(spell)) //User knows the spell
+			//FORMATTING
+
+			//<b>Fireball</b> - 10 seconds<br>
+			//Requires robes to cast
+			//speed: 1/5 (upgrade) | power: 0/1 (upgrade)
+
+			var/spell_name = spell.name
+			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
+
+			dat += "<b>[spell_name]</b> - [spell_cooldown]<br>"
+
+			//Get spell properties
+			var/list/properties = get_spell_properties(spell.spell_flags, user)
+			var/property_data
+			for(var/P in properties)
+				property_data += "[P] "
+
+			if(property_data)
+				dat += "[property_data]<br>"
+
+			//Get the upgrades
+			var/upgrade_data = ""
+			for(var/upgrade in spell.spell_levels)
+				var/lvl = spell.spell_levels[upgrade]
+				var/max = spell.level_max[upgrade]
+
+				//If maximum upgrade level is 0, skip
+				if(0 == max)
+					continue
+
+				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade</a>)  "
+
+			if(upgrade_data)
+				dat += "[upgrade_data]<br><br>"
+		else //User doesn't know the spell
+			//FORMATTING
+
+			//<b>Fireball</b> - 10 seconds (buy for 1 spell point)
+			//<i>(Description)</i>
+			//Requires robes to cast
+
+			var/spell_name = initial(abstract_spell.name)
+			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+			var/spell_price = get_spell_price(abstract_spell)
+
+			dat += "<b>[spell_name]</b> - [spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+			dat += "<i>[initial(abstract_spell.desc)]</i><br>"
+			var/flags = initial(abstract_spell.spell_flags)
+			var/list/properties = get_spell_properties(flags, user)
+			var/property_data
+
+			for(var/P in properties)
+				property_data += "[P] "
+			if(property_data)
+				dat += "[property_data]"
+
+			dat += "<br><br>"
+
+	dat += "<hr><b>ARTIFACTS AND BUNDLES:</b><br><br>"
+
+	for(var/datum/spellbook_artifact/A in available_artifacts)
+		if(!A.can_buy())
+			continue
+
+		var/artifact_name = A.name
+		var/artifact_desc = A.desc
+		var/artifact_price = A.price
+
+		//FORMATTING:
+		//<b>Staff of Change</b> (buy for 1 point)
+		//<i>(description)</i>
+
+		dat += "<b>[artifact_name]</b> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
+		dat += "<i>[artifact_desc]</i><br><br>"
+
+	dat += "</body>"
+
+	user << browse(dat, "window=spellbook")
+	onclose(user, "spellbook")
+
+/obj/item/weapon/spellbook/proc/get_spell_properties(flags, mob/user)
+	var/list/properties = list()
+
+	if(flags & NEEDSCLOTHES)
+		var/new_prop = "Requires wizard robes to cast."
+
+		//If user has the robeless spell, strike the text out
+		if(user)
+			var/is_robeless = locate(/spell/noclothes) in user.spell_list
+			if(is_robeless)
+				new_prop = "<s>[new_prop]</s>"
+
+		properties.Add(new_prop)
+
+	if(flags & STATALLOWED)
+		properties.Add("Can be cast while unconscious.")
+
+	return properties
+
+/obj/item/weapon/spellbook/proc/get_spell_cooldown_string(charges, charge_type)
+	switch(charge_type)
+		if(Sp_CHARGES)
+			return "[charges] charge\s"
+		if(Sp_RECHARGE)
+			return "cooldown: [(charges/10)]s"
+
+/obj/item/weapon/spellbook/proc/get_spell_price(spell/spell_type)
+	if(ispath(spell_type, /spell))
+		return initial(spell_type.price)
+	else if(istype(spell_type))
+		return spell_type.price
+	else
+		return 0
+
+/obj/item/weapon/spellbook/proc/use(amount, no_refunds = 0)
+	if(uses >= amount)
+		uses -= amount
+		if(no_refunds)
+			max_uses -= amount
+
+		return 1
+
+	return 0
+
+/obj/item/weapon/spellbook/proc/refund(mob/user)
+	if(!istype(get_area(user), /area/wizard_station))
+		to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
+		return
+
+	uses = max_uses
+	user.spellremove()
+	to_chat(user, "All spells have been removed. You may now memorize a new set of spells.")
+
+/obj/item/weapon/spellbook/Topic(href, href_list)
+	if(..())
+		return
+
+	var/mob/living/L = usr
+	if(!istype(L))
+		return
+
+	if(href_list["refund"])
+		refund(usr)
+
+		attack_self(usr)
+
+	if(href_list["buy"])
+		var/buy_type = text2path(href_list["spell"])
+
+		if(ispath(buy_type, /spell)) //Passed a spell typepath
+			if(buy_type in get_available_spells())
+				var/spell/S = buy_type
+				if(use(initial(S.price)))
+					add_spell(new buy_type, L)
+
+		else //Passed an artifact reference
+			var/datum/spellbook_artifact/SA = locate(buy_type)
+
+			if(istype(SA) && (SA in get_available_artifacts()))
+				if(SA.can_buy() && use(SA.price, no_refunds = 1))
+					SA.purchased(usr)
+
+		attack_self(usr)
+
+	if(href_list["upgrade"])
+		var/upgrade_type = href_list["upgrade_type"]
+		var/spell/spell = locate(href_list["spell"])
+
+		if(istype(spell) && spell.can_improve(upgrade_type))
+			spell.apply_upgrade(upgrade_type)
+
+		attack_self(usr)
+
+	if(href_list["upgrade_info"])
+		var/upgrade_type = href_list["upgrade_type"]
+		var/spell/spell = locate(href_list["spell"])
+
+		if(istype(spell))
+			var/info = spell.get_upgrade_info(upgrade_type)
+			if(info)
+				to_chat(usr, "<span class='info'>[info]</span>")
+			else
+				to_chat(usr, "<span class='notice'>\The [src] doesn't contain any information about this.</span>")
+
+#undef buy_href_link
+/*
 /obj/item/weapon/spellbook/attack_self(mob/user = usr)
 	if(!user)
 		return
@@ -39,53 +296,8 @@
 			<B>Memorize which spell:</B><BR>
 			<I>The number after the spell name is the cooldown time.</I><BR>
 			[(Holiday == "Christmas" && universe.name == "Normal") ? "<A href='byond://?src=\ref[src];spell_choice=becomesanta'>Become Santa Claus</A> (One time use, uses three points, global spell)<BR><I>Guess which station's on the naughty list?</I><BR>" : ""]
-			<A href='byond://?src=\ref[src];spell_choice=magicmissile'>Magic Missile</A> (10)<BR>
-			<I>This spell fires several, slow moving, magic projectiles at nearby targets. If they hit a target, it is paralyzed and takes minor damage.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=fireball'>Fireball</A> (10)<BR>
-			<I>This spell fires a fireball in the direction you're facing and does not require wizard garb. Be careful not to fire it at people that are standing next to you. Upgrading spell power makes Fireball targetable.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=lightning'>Lightning</A> (20)<BR>
-			<I>Become Zeus and throw lightning at your foes, once you've charged the spell focus it upon any being to unleash electric fury. Upgrading this will cause your lightning to arc.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=disabletech'>Disable Technology</A> (60)<BR>
-			<I>This spell disables all weapons, cameras and most other technology in range.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=smoke'>Smoke</A> (10)<BR>
-			<I>This spell spawns a cloud of choking smoke at your location and does not require wizard garb.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=blind'>Blind</A> (30)<BR>
-			<I>This spell temporarly blinds a single person and does not require wizard garb.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=subjugation'>Subjugation</A> (30)<BR>
-			<I>This spell temporarily subjugates a target's mind and does not require wizard garb.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=mindswap'>Mind Transfer</A> (60)<BR>
-			<I>This spell allows the user to switch bodies with a target. Careful to not lose your memory in the process.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=forcewall'>Forcewall</A> (10)<BR>
-			<I>This spell creates an unbreakable wall that lasts for 30 seconds and does not need wizard garb.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=blink'>Blink</A> (2)<BR>
-			<I>This spell randomly teleports you a short distance. Useful for evasion or getting into areas if you have patience.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=teleport'>Teleport</A> (60)<BR>
-			<I>This spell teleports you to a type of area of your selection. Very useful if you are in danger, but has a decent cooldown, and is unpredictable.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=mutate'>Mutate</A> (60)<BR>
-			<I>This spell causes you to turn into a hulk and gain telekinesis for a short while.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=etherealjaunt'>Ethereal Jaunt</A> (60)<BR>
-			<I>This spell creates your ethereal form, temporarily making you invisible and able to pass through walls.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=timestop'>Time Stop</A> (90)<BR>
-			<I>Stop the flow of time for all beings but yourself in a large radius.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=knock'>Knock</A> (10)<BR>
-			<I>This spell opens nearby doors and does not require wizard garb.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=horseman'>Curse of the Horseman</A> (15)<BR>
-			<I>This spell will curse a person to wear an unremovable horse mask (it has glue on the inside) and speak like a horse. It does not require wizard garb.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=frenchcurse'>The French Curse</A> (30)<BR>
-			<I>This spell silences sombody adjacent to you, and curses them with an unremovable Mime costume. It does not require robes to cast.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=clowncurse'>The Clown Curse</A> (30)<BR>
-			<I>This spell turns an adjacent target into a miserable clown. This spell does not require robes to cast.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=shoesnatch'>Shoe Snatching Charm</A> (15)<BR>
-			<I>This spell will remove your victim's shoes and materialize them in your hands. This spell does not require robes to cast. Upgrading spell power causes the spell to summon glass shards around the victim, if they were wearing shoes.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=robesummon'>Summon Robes</A> (50)<BR>
-			<I>This spell will allow you to summon a new set of robes. Useful for stealthy wizards. This spell (quite obviously) does not require robes to cast. Upgrading spell power lets you summon a gem-encrusted hardsuit with an oxygen tank and a breath mask.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=fleshtostone'>Flesh to Stone</A> (60)<BR>
-			<I>This spell will curse a person to immediately turn into an unmoving statue. The effect will eventually wear off if the statue is not destroyed.</I><BR>
-			<A href='byond://?src=\ref[src];spell_choice=arsenath'>Butt-Bot's Revenge</A> (50)<BR>
-			<I>Summon the power of the butt gods to remove the anus of your enemy.</I><BR>
+
 			[!ticker.mode.rage ? "<A href='byond://?src=\ref[src];spell_choice=summonguns'>Summon Guns</A> (One time use, global spell)<BR><I>Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!</I><BR>" : ""]
-			<A href='byond://?src=\ref[src];spell_choice=chariot'>Summon Chariot</A> (1/1)<BR>
-			<I>Summon the most badass ride in all of wizardry.</I><BR>
 			<A href='byond://?src=\ref[src];spell_choice=noclothes'>Remove Clothes Requirement</A> <b>Warning: this takes away 2 spell choices.</b><BR>
 			<HR>
 			<B>Artefacts:</B><BR>
@@ -401,6 +613,7 @@
 		attack_self()
 
 	return
+*/
 
 //Single Use Spellbooks//
 /obj/item/weapon/spellbook/proc/add_spell(var/spell/spell_to_add,var/mob/user)
