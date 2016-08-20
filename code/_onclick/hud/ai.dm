@@ -117,5 +117,13 @@
 	using.icon_state = "change_radio"
 	using.screen_loc = ui_ai_config_radio
 	adding += using
-
+	
+//Set Sensor Augmentation
+	using = getFromPool(/obj/screen)
+	using.name = "Set Sensor Augmentation"
+	using.icon = 'icons/mob/screen_ai.dmi'
+	using.icon_state = "sight"
+	using.screen_loc = ui_ai_set_vision
+	adding += using
+	
 	mymob.client.screen += adding

@@ -40,6 +40,20 @@
 /mob/camera/aiEye/Move()
 	return 0
 	
+/mob/camera/aiEye/Life()
+	..()
+	if(!ai || !ai.client)
+		return
+	process_HUD()
+	
+/mob/camera/aiEye/proc/process_HUD()
+	regular_hud_updates()
+	switch(ai.sensor_mode)
+		if(MED_HUD)
+			process_med_hud(ai, src)
+		if(SEC_HUD)
+			process_sec_hud(ai,1,src)
+			
 /mob/camera/aiEye/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A) //proc for eye seeing visible messages from atom A, only possible with the high_res camera module
 	if(!high_res)
 		return

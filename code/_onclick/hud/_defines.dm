@@ -155,6 +155,7 @@
 #define ui_ai_take_picture "SOUTH:[6*PIXEL_MULTIPLIER],WEST+11:[16*PIXEL_MULTIPLIER]"
 #define ui_ai_view_images "SOUTH:[6*PIXEL_MULTIPLIER],WEST+12:[16*PIXEL_MULTIPLIER]"
 #define ui_ai_config_radio "SOUTH:[6*PIXEL_MULTIPLIER],WEST+13:[16*PIXEL_MULTIPLIER]"
+#define ui_ai_set_vision "SOUTH:[35*PIXEL_MULTIPLIER],WEST+13:[16*PIXEL_MULTIPLIER]"
 
 //Adminbus HUD
 #define ui_adminbus_bg "1,1"

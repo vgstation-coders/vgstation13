@@ -1,0 +1,7 @@
+author: JustSumGuy
+
+delete-after: True
+
+changes: 
+- rscadd: AIs can now enable medical and security overlays.
+

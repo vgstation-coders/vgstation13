@@ -503,7 +503,12 @@
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
 				AI.radio_interact()
-
+				
+		if("Set Sensor Augmentation")
+			if(isAI(usr))
+				var/mob/living/silicon/ai/AI = usr
+				AI.sensor_mode()
+				
 		if("Allow Walking")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
