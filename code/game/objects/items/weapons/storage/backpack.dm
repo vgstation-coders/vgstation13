@@ -6,6 +6,7 @@
 /obj/item/weapon/storage/backpack
 	name = "backpack"
 	desc = "You wear this on your back and put items into it."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	icon_state = "backpack"
 	item_state = "backpack"
 	w_class = W_CLASS_LARGE
@@ -49,7 +50,6 @@
 	desc = "It's useful for both carrying extra gear and proudly declaring your insanity."
 	icon_state = "cultpack_0skull"
 	item_state = "cultpack_0skull"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	var/skulls = 0
 
 /obj/item/weapon/storage/backpack/cultpack/attack_self(mob/user as mob)
@@ -123,6 +123,7 @@
 	name = "leather satchel"
 	desc = "It's a very fancy satchel made with fine leather."
 	icon_state = "satchel"
+	item_state = "satchel"
 
 /obj/item/weapon/storage/backpack/satchel/withwallet
 	New()
