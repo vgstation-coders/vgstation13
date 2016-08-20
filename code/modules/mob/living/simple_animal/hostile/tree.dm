@@ -54,6 +54,7 @@
 /mob/living/simple_animal/hostile/tree/Die()
 	..()
 	visible_message("<span class='warning'><b>[src]</b> is hacked into pieces!</span>")
+	playsound(loc, 'sound/effects/woodcutting.ogg', 100, 1)
 	new /obj/item/stack/sheet/wood(loc)
 	qdel(src)
 
