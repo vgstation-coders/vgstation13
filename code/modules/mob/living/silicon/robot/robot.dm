@@ -289,6 +289,7 @@
 			module_sprites["Marina-MN"] = "marinaMN"
 			module_sprites["Sleek"] = "sleekminer"
 			module_sprites["#31"] = "servbot-miner"
+			module_sprites["Kodiak"] = "kodiak-miner"
 			speed = -1
 
 		if("Medical")
@@ -304,6 +305,7 @@
 			module_sprites["Eve"] = "eve"
 			module_sprites["Sleek"] = "sleekmedic"
 			module_sprites["#17"] = "servbot-medi"
+			module_sprites["Arachne"] = "aracne"
 			speed = -2
 
 		if("Security")
@@ -333,6 +335,7 @@
 			module_sprites["Marina-EN"] = "marinaEN"
 			module_sprites["Sleek"] = "sleekengineer"
 			module_sprites["#25"] = "servbot-engi"
+			module_sprites["Kodiak"] = "kodiak-eng"
 			speed = -2
 
 		if("Janitor")
@@ -373,7 +376,7 @@
 
 	var/picked  = pick(module_sprites)
 	icon_state = module_sprites[picked]
-		
+
 	if(!forced_module)
 		choose_icon(6, module_sprites)
 
