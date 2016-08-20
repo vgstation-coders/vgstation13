@@ -8,6 +8,8 @@
 #define SCANMODE_ATMOS		5
 #define SCANMODE_DEVICE		6
 
+#define PDA_MINIMAP_WIDTH	256
+
 //The advanced pea-green monochrome lcd of tomorrow.
 
 var/global/list/obj/item/device/pda/PDAs = list()
@@ -1444,14 +1446,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("x")
 						var/new_x = input("Please input desired X coordinate.", "Station Map App", app.markx) as num
 						var/x_validate=new_x+WORLD_X_OFFSET[map.zMainStation]
-						if(x_validate < (world.maxx/2 - 128) || x_validate > (world.maxx/2 + 128))
+						if(x_validate < (world.maxx/2 - PDA_MINIMAP_WIDTH/2) || x_validate > (world.maxx/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 						else
 							app.markx = new_x
 					if("y")
 						var/new_y = input("Please input desired Y coordinate.", "Station Map App", app.marky) as num
 						var/y_validate=new_y+WORLD_Y_OFFSET[map.zMainStation]
-						if(y_validate < (world.maxy/2 - 128) || y_validate > (world.maxy/2 + 128))
+						if(y_validate < (world.maxy/2 - PDA_MINIMAP_WIDTH/2) || y_validate > (world.maxy/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 						else
 							app.marky = new_y
@@ -2372,3 +2374,5 @@ obj/item/device/pda/AltClick()
 			continue
 		. += P
 	return .
+
+#undef PDA_MINIMAP_WIDTH
