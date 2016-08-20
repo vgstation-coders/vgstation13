@@ -1,0 +1,8 @@
+
+author: JustSumGuy
+
+delete-after: True
+
+changes: 
+- bugfix: "Fixed a bug that allowed multiple people to enter the popout cake at once." 
+
