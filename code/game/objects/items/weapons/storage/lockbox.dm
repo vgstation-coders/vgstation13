@@ -155,6 +155,18 @@
 	..()
 	new /obj/item/weapon/grenade/flashbang/clusterbang(src)
 
+/obj/item/weapon/storage/lockbox/secway
+	name = "lockbox (secway keys)"
+	desc = "Nobody knows this mall better than I do."
+	req_access = list(access_security)
+	
+/obj/item/weapon/storage/lockbox/secway/New()
+	..()
+	new /obj/item/key/security(src)
+	new /obj/item/key/security(src)
+	new /obj/item/key/security(src)
+	new /obj/item/key/security(src)
+	
 /obj/item/weapon/storage/lockbox/unlockable
 	name = "semi-secure lockbox"
 	desc = "A securable locked box. Can't lock anything, but can track whoever used it."
