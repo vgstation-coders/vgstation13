@@ -139,7 +139,7 @@ var/list/alldepartments = list("Central Command")
 
 	if(href_list["remove"])
 		if(tofax)
-			tofax.loc = loc
+			tofax.forceMove(loc)
 			if(Adjacent(usr))
 				usr.put_in_hands(tofax)
 			to_chat(usr, "<span class='notice'>You take the paper out of \the [src].</span>")
