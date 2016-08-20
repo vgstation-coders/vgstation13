@@ -37,18 +37,17 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 
 /obj/machinery/field_generator/update_icon()
 	overlays.len = 0
-	if(!active)
-		if(warming_up)
-			overlays += image(icon = icon, icon_state = "+a[warming_up]")
+	if(warming_up)
+		overlays += image(icon = icon, icon_state = "+a[warming_up]")
 	if(fields.len)
 		overlays += image(icon = icon, icon_state = "+on")
 	// Power level indicator
 	// Scale % power to % num_power_levels and truncate value
-	var/level = round(num_power_levels * power / field_generator_max_power)
+	var/p_level = round(num_power_levels * power / field_generator_max_power, 1)
 	// Clamp between 0 and num_power_levels for out of range power values
-	level = Clamp(level, 0, num_power_levels)
-	if(level)
-		overlays += image(icon = icon, icon_state = "+p[level]")
+	p_level = Clamp(p_level, 0, num_power_levels)
+	if(p_level)
+		overlays += image(icon = icon, icon_state = "+p[p_level]")
 
 	return
 
@@ -61,9 +60,10 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 	return
 
 /obj/machinery/field_generator/process()
-
+	var/beams_hit = 0
 	for(var/obj/effect/beam/B in beams)
 		power += B.get_damage()
+		beams_hit = 1
 
 	if(Varedit_start == 1)
 		if(active == 0)
@@ -76,7 +76,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 			update_icon()
 		Varedit_start = 0
 
-	if(src.active == 2)
+	if((src.active == 2) || beams_hit)
 		calc_power()
 		update_icon()
 	return

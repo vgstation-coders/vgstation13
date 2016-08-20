@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - bugfix: Fixed a very old bug with Field Generators. The warm up gauge finally shows up once more. The power gauge is now also visible while the Generator is off.
