@@ -1,6 +1,0 @@
-author: Unid
-
-delete-after: True
-
-changes: 
-- experiment: Added a new admin button to shuttle magic - it generates a transit area for the selected shuttle.
