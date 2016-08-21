@@ -7,7 +7,6 @@
 
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
-	var/obj/screen/holomap/holo_box
 
 	using = getFromPool(/obj/screen)
 	using.name = "act_intent"
@@ -411,20 +410,20 @@
 				src.adding += mymob.gun_run_icon
 			src.adding += mymob.gun_move_icon
 
-	holo_box = getFromPool(/obj/screen/holomap)
-	holo_box.name = "holomap"
-	holo_box.icon = null
-	holo_box.icon_state = ""
-	holo_box.screen_loc = "CENTER-3,CENTER-3"
-	holo_box.layer = HUD_BASE_LAYER
-	holo_box.color = ui_color
-	holo_box.mouse_opacity = 0
-	holo_box.alpha = 0
-	src.holomap_obj = holo_box
+	holomap_obj = getFromPool(/obj/screen/holomap)
+	holomap_obj.name = "holomap"
+	holomap_obj.icon = null
+	holomap_obj.icon_state = ""
+	holomap_obj.screen_loc = "CENTER-7:0,CENTER-7:0"
+	holomap_obj.layer = HUD_BASE_LAYER
+	holomap_obj.color = ui_color
+	holomap_obj.mouse_opacity = 0
+	holomap_obj.alpha = 255
 
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += src.holomap_obj
 	mymob.client.screen += src.adding + src.hotkeybuttons
 	inventory_shown = 0
 

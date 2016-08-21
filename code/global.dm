@@ -426,4 +426,4 @@ var/space_color = "#050505"
 var/list/parallax_icon[27]
 
 //HUD MINIMAPS
-var/station_minimap = null
+var/list/holominimaps = list()
