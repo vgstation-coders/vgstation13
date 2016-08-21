@@ -1,5 +1,6 @@
 /spell/lightning
 	name = "Lightning"
+	desc = "Strike an enemy with a bolt of lightning."
 	charge_max = 100
 	cooldown_min = 40
 	cooldown_reduc = 30

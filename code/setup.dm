@@ -1252,7 +1252,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 //buying costs
 #define Sp_BASE_PRICE 1
-#define Sp_DOUBLE_PRICE Sp_BASE_PRICE*2
+#define Sp_UPGRADE_PRICE 1
 
 ///////WIZ END/////////
 

@@ -57,7 +57,7 @@
 	//Result is a list full of /datum/spellbook_artifact objects
 
 /obj/item/weapon/spellbook/proc/get_available_spells()
-	return available_spells
+	return available_spells.Copy()
 
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
@@ -75,6 +75,8 @@
 			O = null
 
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
+#define book_background_color "#F1F1D4"
+#define book_window_size "550x600"
 
 /obj/item/weapon/spellbook/attack_self(mob/user = usr)
 	if(!user)
@@ -83,18 +85,20 @@
 	user.set_machine(src)
 
 	var/dat
-	dat += "<head><title>Spellbook ([uses] REMAINING)</title></head><body>"
+	dat += "<head><title>Spellbook ([uses] REMAINING)</title></head><body style=\"background-color:[book_background_color]\">"
 	dat += "<h1>Edvin's Catalogue Of Spells And Artifacts</h1><br>"
 	dat += "<h2>[uses] points remaining (<a href='?src=\ref[src];refund=1'>Get a refund</a>)</h2><br>"
 	dat += "<i>Penned by Edvin The Starcrusher.</i><br>"
 	dat += "<i>This book contains a list of many useful things that you'll need in your journey.</i><br>"
 	dat += "<b>SPELLS:</b><br><br>"
 
-	for(var/spell_path in available_spells)
-		var/spell/abstract_spell = spell_path
-		var/spell/spell = locate(spell_path) in user.spell_list
+	var/list/shown_spells = get_available_spells()
 
-		if(istype(spell)) //User knows the spell
+	//Draw known spells first
+	for(var/spell/spell in user.spell_list)
+		if(shown_spells.Find(spell.type)) //User knows a spell from the book
+			shown_spells.Remove(spell.type)
+
 			//FORMATTING
 
 			//<b>Fireball</b> - 10 seconds<br>
@@ -104,7 +108,7 @@
 			var/spell_name = spell.name
 			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
 
-			dat += "<b>[spell_name]</b> - [spell_cooldown]<br>"
+			dat += "<b>[spell_name]</b>[spell_cooldown]<br>"
 
 			//Get spell properties
 			var/list/properties = get_spell_properties(spell.spell_flags, user)
@@ -113,10 +117,11 @@
 				property_data += "[P] "
 
 			if(property_data)
-				dat += "[property_data]<br>"
+				dat += "<span style=\"color:blue\">[property_data]</span><br>"
 
 			//Get the upgrades
 			var/upgrade_data = ""
+
 			for(var/upgrade in spell.spell_levels)
 				var/lvl = spell.spell_levels[upgrade]
 				var/max = spell.level_max[upgrade]
@@ -129,29 +134,33 @@
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
-		else //User doesn't know the spell
-			//FORMATTING
 
-			//<b>Fireball</b> - 10 seconds (buy for 1 spell point)
-			//<i>(Description)</i>
-			//Requires robes to cast
+	//Then draw the unknown spells
+	for(var/spell_path in shown_spells)
+		var/spell/abstract_spell = spell_path
 
-			var/spell_name = initial(abstract_spell.name)
-			var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
-			var/spell_price = get_spell_price(abstract_spell)
+		//FORMATTING
 
-			dat += "<b>[spell_name]</b> - [spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-			dat += "<i>[initial(abstract_spell.desc)]</i><br>"
-			var/flags = initial(abstract_spell.spell_flags)
-			var/list/properties = get_spell_properties(flags, user)
-			var/property_data
+		//<b>Fireball</b> - 10 seconds (buy for 1 spell point)
+		//<i>(Description)</i>
+		//Requires robes to cast
 
-			for(var/P in properties)
-				property_data += "[P] "
-			if(property_data)
-				dat += "[property_data]"
+		var/spell_name = initial(abstract_spell.name)
+		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+		var/spell_price = get_spell_price(abstract_spell)
 
-			dat += "<br><br>"
+		dat += "<b>[spell_name]</b>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+		dat += "<i>[initial(abstract_spell.desc)]</i><br>"
+		var/flags = initial(abstract_spell.spell_flags)
+		var/list/properties = get_spell_properties(flags, user)
+		var/property_data
+
+		for(var/P in properties)
+			property_data += "[P] "
+		if(property_data)
+			dat += "<span style=\"color:blue\">[property_data]</span><br>"
+
+		dat += "<br>"
 
 	dat += "<hr><b>ARTIFACTS AND BUNDLES:</b><br><br>"
 
@@ -172,7 +181,7 @@
 
 	dat += "</body>"
 
-	user << browse(dat, "window=spellbook")
+	user << browse(dat, "window=spellbook;size=[book_window_size]")
 	onclose(user, "spellbook")
 
 /obj/item/weapon/spellbook/proc/get_spell_properties(flags, mob/user)
@@ -195,11 +204,14 @@
 	return properties
 
 /obj/item/weapon/spellbook/proc/get_spell_cooldown_string(charges, charge_type)
+	if(charges == 0)
+		return
+
 	switch(charge_type)
 		if(Sp_CHARGES)
-			return "[charges] charge\s"
+			return " - [charges] charge\s"
 		if(Sp_RECHARGE)
-			return "cooldown: [(charges/10)]s"
+			return " - cooldown: [(charges/10)]s"
 
 /obj/item/weapon/spellbook/proc/get_spell_price(spell/spell_type)
 	if(ispath(spell_type, /spell))
@@ -245,13 +257,16 @@
 		var/buy_type = text2path(href_list["spell"])
 
 		if(ispath(buy_type, /spell)) //Passed a spell typepath
-			if(buy_type in get_available_spells())
+			if(locate(buy_type) in usr.spell_list)
+				to_chat(usr, "<span class='notice'>You already know that spell. Perhaps you'd like to upgrade it instead?</span>")
+
+			else if(buy_type in get_available_spells())
 				var/spell/S = buy_type
 				if(use(initial(S.price)))
 					add_spell(new buy_type, L)
 
 		else //Passed an artifact reference
-			var/datum/spellbook_artifact/SA = locate(buy_type)
+			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
 				if(SA.can_buy() && use(SA.price, no_refunds = 1))
@@ -264,7 +279,11 @@
 		var/spell/spell = locate(href_list["spell"])
 
 		if(istype(spell) && spell.can_improve(upgrade_type))
-			spell.apply_upgrade(upgrade_type)
+			if(use(Sp_UPGRADE_PRICE))
+				var/temp = spell.apply_upgrade(upgrade_type)
+
+				if(temp)
+					to_chat(usr, "<span class='info'>[temp]</span>")
 
 		attack_self(usr)
 
@@ -273,13 +292,15 @@
 		var/spell/spell = locate(href_list["spell"])
 
 		if(istype(spell))
-			var/info = spell.get_upgrade_info(upgrade_type)
+			var/info = spell.get_upgrade_info(upgrade_type, spell.spell_levels[upgrade_type] + 1)
 			if(info)
 				to_chat(usr, "<span class='info'>[info]</span>")
 			else
 				to_chat(usr, "<span class='notice'>\The [src] doesn't contain any information about this.</span>")
 
 #undef buy_href_link
+#undef book_background_color
+#undef book_window_size
 
 //Single Use Spellbooks//
 /obj/item/weapon/spellbook/proc/add_spell(var/spell/spell_to_add,var/mob/user)
