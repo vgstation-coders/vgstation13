@@ -305,7 +305,7 @@
 			module_sprites["Eve"] = "eve"
 			module_sprites["Sleek"] = "sleekmedic"
 			module_sprites["#17"] = "servbot-medi"
-			module_sprites["Arachne"] = "aracne"
+			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
 		if("Security")
