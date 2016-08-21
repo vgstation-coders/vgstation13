@@ -28,7 +28,7 @@ var/list/deathsquad_uniforms = list()
 	if(usr.isUnconscious())
 		return
 
-	if(!istype(usr,/mob/living/carbon/human))
+	if(!ishuman(usr))
 		to_chat(usr, "<span class='warning'>Only humanoids can wear this suit</span>")
 		return
 
@@ -78,7 +78,7 @@ var/list/deathsquad_uniforms = list()
 		var/turf/TD = get_turf(D)
 		if(D == src)
 			mob_indicator = 1
-		else if((TD.z == T.z) && istype(D.loc,/mob/living/carbon/human))
+		else if((TD.z == T.z) && ishuman(D.loc))
 			var/mob/living/carbon/human/H = D.loc
 			if(H.w_uniform == D)
 				if(H.stat == DEAD)
