@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - soundadd: Added a sound for when cutting wooden logs with an hatchet, killing tree pines, or cutting trees

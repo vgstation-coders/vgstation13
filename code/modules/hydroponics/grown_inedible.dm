@@ -64,7 +64,7 @@
 /obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || (istype(W, /obj/item/weapon/fireaxe) && W:wielded) || istype(W, /obj/item/weapon/melee/energy))
 		user.show_message("<span class='notice'>You make two planks out of \the [src].</span>", MESSAGE_SEE)
-
+		playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
 		drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 2, user)
 
 		qdel(src)
