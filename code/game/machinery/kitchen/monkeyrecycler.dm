@@ -41,7 +41,6 @@
 		can_recycle_live = 1
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	..()
 	if (..())
 		return 1
 	if (istype(O, /obj/item/weapon/grab))
