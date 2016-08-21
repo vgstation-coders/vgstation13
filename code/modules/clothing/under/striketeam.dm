@@ -54,6 +54,9 @@ var/list/deathsquad_uniforms = list()
 
 /obj/item/clothing/under/deathsquad/process()
 	var/turf/T = get_turf(src)
+	if(!T)//nullspace begone!
+		return
+
 	if((activator.get_item_by_slot(slot_w_uniform) != src) || (!activator.client) || (holominimaps[T.z] == null))
 		activator = null
 		holomap_activated = 0
@@ -64,7 +67,12 @@ var/list/deathsquad_uniforms = list()
 
 	holomap_images.len = 0
 
-	var/image/bgmap = image(holominimaps[T.z])
+	var/image/bgmap
+
+	if(T.z == map.zCentcomm)
+		bgmap = image(centcommminimaps["deathsquad"])
+	else
+		bgmap = image(holominimaps[T.z])
 	bgmap.pixel_x = -1*T.x + 240
 	bgmap.pixel_y = -1*T.y + 241
 	bgmap.plane = HUD_PLANE

@@ -427,3 +427,4 @@ var/list/parallax_icon[27]
 
 //HUD MINIMAPS
 var/list/holominimaps = list()
+var/list/centcommminimaps = list()
