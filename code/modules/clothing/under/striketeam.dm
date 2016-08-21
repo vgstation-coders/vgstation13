@@ -34,7 +34,7 @@ var/list/deathsquad_uniforms = list()
 
 	var/mob/living/carbon/human/H = usr
 
-	if(H.w_uniform != src)
+	if(H.get_item_by_slot(slot_w_uniform) != src)
 		to_chat(usr, "<span class='warning'>You need to wear the suit first</span>")
 		return
 
@@ -54,7 +54,7 @@ var/list/deathsquad_uniforms = list()
 
 /obj/item/clothing/under/deathsquad/process()
 	var/turf/T = get_turf(src)
-	if((activator.w_uniform != src) || (!activator.client) || (holominimaps[T.z] == null))
+	if((activator.get_item_by_slot(slot_w_uniform) != src) || (!activator.client) || (holominimaps[T.z] == null))
 		activator = null
 		holomap_activated = 0
 		processing_objects.Remove(src)
@@ -73,14 +73,14 @@ var/list/deathsquad_uniforms = list()
 	bgmap.loc = activator.hud_used.holomap_obj
 	holomap_images += bgmap
 
-	for(var/obj/item/clothing/under/deathsquad/D)
+	for(var/obj/item/clothing/under/deathsquad/D in deathsquad_uniforms)
 		var/mob_indicator = -1
 		var/turf/TD = get_turf(D)
 		if(D == src)
 			mob_indicator = 1
 		else if((TD.z == T.z) && ishuman(D.loc))
 			var/mob/living/carbon/human/H = D.loc
-			if(H.w_uniform == D)
+			if(H.get_item_by_slot(slot_w_uniform) == D)
 				if(H.stat == DEAD)
 					mob_indicator = 2
 				else
