@@ -51,7 +51,7 @@
 		return
 
 	// now generate name
-	var/soundfile = "sound/instruments/[instrumentDir]/[ascii2text(note+64)][acc][oct].[instrumentExt]"
+	var/soundfile = "sound/[instrumentDir]/[ascii2text(note+64)][acc][oct].[instrumentExt]"
 	soundfile = file(soundfile)
 	// make sure the note exists
 	if(!fexists(soundfile))
@@ -332,12 +332,3 @@
 				anchored = 0
 	else
 		..()
-		
-/obj/structure/piano/xylophone
-	name = "xylophone"
-	desc = "Is this even a real instrument?"
-	icon_state = "xylophone"
-	
-/obj/structure/piano/xylophone/New()
-	song = new("xylophone", src)
-	song.instrumentExt = "mid"
