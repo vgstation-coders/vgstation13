@@ -115,7 +115,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 
 //called whenever a null rod is blocking a spell or rune
 /turf/proc/nullding()
-	playsound(src, 'sound/piano/Ab7.ogg', 50, 1)
+	playsound(src, 'sound/instruments/piano/Ab7.ogg', 50, 1)
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "nullding"

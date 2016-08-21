@@ -1,0 +1,8 @@
+
+author: JustSumGuy
+
+delete-after: True
+
+changes: 
+- rscadd: "Added several new musical instruments to cargo, orderable via the 'Big band' and 'random instrument' crates."
+- tweak: "Guitars are no longer purchasable from the arts and crafts crate, the crate's cost has gone back down to 10 credits. Guitars must also now be two-handed to play."
