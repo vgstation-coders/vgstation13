@@ -7,15 +7,13 @@
 	density = 1
 	anchored = 1
 	use_power = 1
+	ghost_read = 0
 	idle_power_usage = 5
 	active_power_usage = 50
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/grinded = 0
 	var/minimum_monkeys = 3 //How many do we need to grind?
 	var/can_recycle_live = 0 //Can we recycle a live monkey?
-
-/obj/machinery/monkey_recycler/attack_ghost(var/mob/dead/observer/ghost)
-	return
 
 /obj/machinery/monkey_recycler/New()
 	. = ..()
@@ -44,8 +42,8 @@
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	..()
-	if (src.stat != 0) //NOPOWER etc
-		return
+	if (..())
+		return 1
 	if (istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		var/grabbed = G.affecting
@@ -82,8 +80,8 @@
 	return
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
-	if (src.stat != 0) //NOPOWER etc
-		return
+	if(..())
+		return 1
 	if(grinded >= minimum_monkeys)
 		to_chat(user, "<span class='notice'>The machine hisses loudly as it condenses the grinded monkey meat. After a moment, it dispenses a brand new monkey cube.</span>")
 		playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
@@ -94,7 +92,15 @@
 		to_chat(user, "<span class='warning'>The machine needs at least 3 monkeys worth of material to produce a monkey cube. It only has [grinded].</span>")
 	return
 
-/obj/machinery/monkey_recycler/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!ishuman(user))
+/obj/machinery/monkey_recycler/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob) //copypasted from sleepers
+	if(!ismob(O))
+		return
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
+		return
+	if(user.incapacitated() || user.lying)
+		return
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
+		return
+	if(!ishuman(user) && !isrobot(user))
 		return
 	attackby(O,user)
