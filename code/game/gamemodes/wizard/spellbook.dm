@@ -82,15 +82,18 @@
 	if(!user)
 		return
 
+	if(user.is_blind())
+		to_chat(user, "<span class='info'>You open \the [src] and run your fingers across the parchment. Suddenly, the pages coalesce in your mind!</span>")
+
 	user.set_machine(src)
 
 	var/dat
 	dat += "<head><title>Spellbook ([uses] REMAINING)</title></head><body style=\"background-color:[book_background_color]\">"
 	dat += "<h1>Edvin's Catalogue Of Spells And Artifacts</h1><br>"
 	dat += "<h2>[uses] points remaining (<a href='?src=\ref[src];refund=1'>Get a refund</a>)</h2><br>"
-	dat += "<i>Penned by Edvin The Starcrusher.</i><br>"
-	dat += "<i>This book contains a list of many useful things that you'll need in your journey.</i><br>"
-	dat += "<b>SPELLS:</b><br><br>"
+	dat += "<em>Penned by Edvin The Starcrusher.</em><br>"
+	dat += "<em>This book contains a list of many useful things that you'll need in your journey.</em><br>"
+	dat += "<strong>SPELLS:</strong><br><br>"
 
 	var/list/shown_spells = get_available_spells()
 
@@ -108,7 +111,7 @@
 			var/spell_name = spell.name
 			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
 
-			dat += "<b>[spell_name]</b>[spell_cooldown]<br>"
+			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>"
 
 			//Get spell properties
 			var/list/properties = get_spell_properties(spell.spell_flags, user)
@@ -127,7 +130,7 @@
 				var/max = spell.level_max[upgrade]
 
 				//If maximum upgrade level is 0, skip
-				if(0 == max)
+				if(!max)
 					continue
 
 				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade</a>)  "
@@ -149,8 +152,8 @@
 		var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
 		var/spell_price = get_spell_price(abstract_spell)
 
-		dat += "<b>[spell_name]</b>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
-		dat += "<i>[initial(abstract_spell.desc)]</i><br>"
+		dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
+		dat += "<em>[initial(abstract_spell.desc)]</em><br>"
 		var/flags = initial(abstract_spell.spell_flags)
 		var/list/properties = get_spell_properties(flags, user)
 		var/property_data
@@ -162,7 +165,7 @@
 
 		dat += "<br>"
 
-	dat += "<hr><b>ARTIFACTS AND BUNDLES:</b><br><br>"
+	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
 		if(!A.can_buy())
@@ -176,8 +179,8 @@
 		//<b>Staff of Change</b> (buy for 1 point)
 		//<i>(description)</i>
 
-		dat += "<b>[artifact_name]</b> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
-		dat += "<i>[artifact_desc]</i><br><br>"
+		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
+		dat += "<em>[artifact_desc]</em><br><br>"
 
 	dat += "</body>"
 
@@ -263,7 +266,9 @@
 			else if(buy_type in get_available_spells())
 				var/spell/S = buy_type
 				if(use(initial(S.price)))
-					add_spell(new buy_type, L)
+					var/spell/added = new buy_type
+					add_spell(added, L)
+					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])

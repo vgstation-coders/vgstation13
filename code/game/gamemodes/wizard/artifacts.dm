@@ -23,8 +23,8 @@
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/focus)
 
 /datum/spellbook_artifact/shards
-	name = "Six Soul Stone Shards"
-	desc = "Soul Stone Shards are ancient tools capable of capturing and harnessing the spirits of the dead and dying. The spell Artificer allows you to create arcane machines for the captured souls to pilot."
+	name = "Soul Stone Bundle"
+	desc = "Grants you a soul stone belt with six empty shards, and the Artificer spell. Soul stone shards are ancient tools capable of capturing and harnessing the spirits of the dead and dying. The Artificer spell allows you to create arcane machines for the captured souls to pilot."
 	spawned_items = list(/obj/item/weapon/storage/belt/soulstone/full)
 
 /datum/spellbook_artifact/shards/purchased(mob/living/carbon/human/H)
