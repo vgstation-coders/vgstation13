@@ -44,7 +44,6 @@
 	var/max_uses = STARTING_USES
 
 	var/op = 1
-	var/temp = null
 
 /obj/item/weapon/spellbook/New()
 	..()
