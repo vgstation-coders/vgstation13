@@ -312,34 +312,36 @@
 		Obstacle.Bumped(src)
 
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0)
-	if(destination)
-		if(loc)
-			loc.Exited(src)
 
-		last_move = get_dir(loc, destination)
-		last_moved = world.time
+	if(loc)
+		loc.Exited(src)
 
-		loc = destination
+	last_moved = world.time
+
+	var/old_loc = loc
+	loc = destination
+
+	if(loc)
+		last_move = get_dir(old_loc, loc)
 
 		loc.Entered(src)
-		if(isturf(destination))
-			var/area/A = get_area_master(destination)
+		if(isturf(loc))
+			var/area/A = get_area_master(loc)
 			A.Entered(src)
 
 			for(var/atom/movable/AM in loc)
 				AM.Crossed(src,no_tp)
 
 
-		for(var/atom/movable/AM in locked_atoms)
-			var/datum/locking_category/category = locked_atoms[AM]
-			category.update_lock(AM)
+	for(var/atom/movable/AM in locked_atoms)
+		var/datum/locking_category/category = locked_atoms[AM]
+		category.update_lock(AM)
 
-		update_client_hook(destination)
+	update_client_hook(loc)
 
-		// Update on_moved listeners.
-		INVOKE_EVENT(on_moved,list("loc"=loc))
-		return 1
-	return 0
+	// Update on_moved listeners.
+	INVOKE_EVENT(on_moved,list("loc"=loc))
+	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
 	if(locate(/mob) in src)

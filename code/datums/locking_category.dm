@@ -62,7 +62,8 @@
 				new_x = -y_offset
 				new_y = x_offset
 
-	if (new_x || new_y)
+
+	if ((new_x || new_y) && isturf(new_loc))
 		var/newer_loc = locate(owner.x + new_x, owner.y + new_y, owner.z)
 		if (newer_loc) // Edge (no pun intended) case for map borders.
 			new_loc = newer_loc
