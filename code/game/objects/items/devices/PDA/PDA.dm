@@ -9,6 +9,8 @@
 #define SCANMODE_DEVICE		6
 
 #define PDA_MINIMAP_WIDTH	256
+#define PDA_MINIMAP_OFFSET_X	8
+#define PDA_MINIMAP_OFFSET_Y	233
 
 //The advanced pea-green monochrome lcd of tomorrow.
 
@@ -973,9 +975,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_[map.nameShort].png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 233 + 128]px; left: [T.x + 8 - 128]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 233 + 128]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + 8 - 128]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 					else
@@ -984,9 +986,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_bg_notfound.png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 233 + 128]px; left: [T.x + 8 - 128]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 233 + 128]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + 8 - 128]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 /*
