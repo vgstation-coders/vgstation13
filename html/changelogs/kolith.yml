@@ -1,6 +1,0 @@
-author: kolith
-
-delete-after: True
-
-changes: 
-- rscadd: Adds three new cyborg sprites. One for engineering, one for supply, and one for medical.
