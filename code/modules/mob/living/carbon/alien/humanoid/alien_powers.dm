@@ -22,7 +22,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Plant Weeds"
 	desc = "Plants some alien weeds"
 	panel = "Alien"
-	hud_state = "alienweeds"
+	hud_state = "alien_weeds"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -50,7 +50,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Whisper"
 	desc = "Whisper to someone"
 	panel = "Alien"
-	hud_state = "alienwhisper"
+	hud_state = "alien_whisper"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -96,7 +96,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Transfer Plasma"
 	desc = "Transfer your plasma to another alien"
 	panel = "Alien"
-	hud_state = "alientransfer"
+	hud_state = "alien_transfer"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -124,7 +124,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Spit Neurotoxin"
 	desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
 	panel = "Alien"
-	hud_state = "alienneurotoxin"
+	hud_state = "alien_neurotoxin"
 
 	charge_type = Sp_HOLDVAR|Sp_RECHARGE
 	holder_var_type = "plasma"
@@ -175,7 +175,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Secrete Resin"
 	desc = "Secrete tough malleable resin."
 	panel = "Alien"
-	hud_state = "alienresin"
+	hud_state = "alien_resin"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -189,7 +189,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Corrosive Acid"
 	desc = "Drench an object in acid, destroying it over time."
 	panel = "Alien"
-	hud_state = "alienacid"
+	hud_state = "alien_acid"
 
 	spell_flags = WAIT_FOR_CLICK
 	charge_type = Sp_HOLDVAR
@@ -239,6 +239,8 @@ Doesn't work on other aliens/AI.*/
 		else
 			to_chat(usr, "<span class='alien'>Target is too far away.</span>")
 
+
+
 /mob/living/carbon/alien/humanoid/verb/regurgitate()
 	set name = "Regurgitate"
 	set desc = "Empties the contents of your stomach"
@@ -256,7 +258,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Lay Egg"
 	desc = "Lay an egg to produce huggers to impregnate prey with."
 	panel = "Alien"
-	hud_state = "alienegg"
+	hud_state = "alien_egg"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"

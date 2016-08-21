@@ -192,15 +192,6 @@
 //using the default attack_animal() in carbon.dm
 
 /mob/living/carbon/alien/humanoid/attack_hand(mob/living/carbon/human/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
-	*/
 
 	..()
 
@@ -303,15 +294,6 @@ In all, this is a lot like the monkey code. /N
 */
 
 /mob/living/carbon/alien/humanoid/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
-	*/
 	..()
 
 	switch(M.a_intent)

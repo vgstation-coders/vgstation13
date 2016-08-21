@@ -196,8 +196,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/adjust_var(mob/living/target = usr, varname, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
-	var/variable = target.vars[varname]
-	if(!isnum(variable) && !isnull(variable))
+	if(!(varname in target.vars))
 		world.log << "Spell [varname] of user [usr] adjusting non-numeric value on [target], aborting"
 		return
 	switch(varname)
@@ -341,10 +340,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				return 0
 		if(charge_type & Sp_HOLDVAR)
 			if(special_var_holder)
+				if(!(holder_var_type in special_var_holder.vars))
+					return 1 //ABORT
 				if(special_var_holder.vars[holder_var_type] < holder_var_amount)
 					to_chat(user, holder_var_recharging_msg())
 					return 0
 			else
+				if(!(holder_var_type in user.vars))
+					return 1 //ABORT
 				if(user.vars[holder_var_type] < holder_var_amount)
 					to_chat(user, holder_var_recharging_msg())
 					return 0
