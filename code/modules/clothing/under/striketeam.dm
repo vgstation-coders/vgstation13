@@ -69,7 +69,7 @@ var/list/deathsquad_uniforms = list()
 	bgmap.pixel_y = -1*T.y + 241
 	bgmap.plane = HUD_PLANE
 	bgmap.layer = 1
-	bgmap.color = "#0b74b4"
+	bgmap.color = "#0B74B4"
 	bgmap.loc = activator.hud_used.holomap_obj
 	holomap_images += bgmap
 

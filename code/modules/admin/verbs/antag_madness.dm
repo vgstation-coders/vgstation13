@@ -445,7 +445,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 					I.loc = pack
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/syndicate, slot_ears)
-			M.equip_to_slot_or_del(new/obj/item/clothing/under/color/deathsquad, slot_w_uniform)
+			M.equip_to_slot_or_del(new/obj/item/clothing/under/deathsquad, slot_w_uniform)
 			M.equip_to_slot_or_del(new/obj/item/clothing/shoes/swat, slot_shoes)
 			M.equip_to_slot_or_del(new/obj/item/clothing/mask/gas/swat, slot_wear_mask)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/backpack/security, slot_back)
