@@ -249,8 +249,11 @@
 	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
 	var/attack_cooldown = 0
 
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
+	return (..() + 1) //Somewhat slower
+
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/Bump(var/atom/A)
-	if(isliving(A))
+	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
 		if(isrobot(L))
 			src.visible_message("<span class='warning'>[src] slams into [L]!</span>")
@@ -276,12 +279,6 @@
 	attack_cooldown = 1
 	spawn(10)
 		attack_cooldown = 0
-
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/relaymove(var/mob/user, direction)
-	if(attack_cooldown)
-		return 0
-	else
-		return ..()
 
 /obj/item/syndicate_wheelchair_kit
 	name = "Compressed Wheelchair Kit"
