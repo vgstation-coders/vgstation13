@@ -1,0 +1,4 @@
+changes:
+  - experimental: "Lighting now updates 5 times faster."
+delete-after: true
+author: PJB3005
