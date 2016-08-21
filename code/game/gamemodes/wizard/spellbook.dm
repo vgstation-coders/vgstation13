@@ -89,11 +89,10 @@
 
 	var/dat
 	dat += "<head><title>Spellbook ([uses] REMAINING)</title></head><body style=\"background-color:[book_background_color]\">"
-	dat += "<h1>Edvin's Catalogue Of Spells And Artifacts</h1><br>"
+	dat += "<h1>A Wizard's Catalogue Of Spells And Artifacts</h1><br>"
 	dat += "<h2>[uses] points remaining (<a href='?src=\ref[src];refund=1'>Get a refund</a>)</h2><br>"
-	dat += "<em>Penned by Edvin The Starcrusher.</em><br>"
 	dat += "<em>This book contains a list of many useful things that you'll need in your journey.</em><br>"
-	dat += "<strong>SPELLS:</strong><br><br>"
+	dat += "<strong>KNOWN SPELLS:</strong><br><br>"
 
 	var/list/shown_spells = get_available_spells()
 
@@ -137,6 +136,8 @@
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
+
+	dat += "<strong>UNKNOWN SPELLS:</strong><br><br>"
 
 	//Then draw the unknown spells
 	for(var/spell_path in shown_spells)
