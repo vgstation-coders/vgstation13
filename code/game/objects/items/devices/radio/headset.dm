@@ -227,7 +227,7 @@
 
 /obj/item/device/radio/headset/headset_earmuffs
 	name = "headset earmuffs"
-	desc = "Protective earmuffs for sound technicians that allow one to speak on radio channels. To access service, use :d. For engineering, use :e."
+	desc = "Protective earmuffs for sound technicians that allow one to speak on radio channels."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "headset_earmuffs"
 	item_state = "earmuffs"
