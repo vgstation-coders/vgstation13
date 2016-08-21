@@ -40,9 +40,6 @@ var/list/deathsquad_uniforms = list()
 
 	if(src.holomap_activated)
 		holomap_activated = 0
-		//activator.hud_used.holomap_obj.icon = null
-		//activator.hud_used.holomap_obj.alpha = 0
-		//activator.client.screen -= activator.hud_used.holomap_obj
 		activator.client.images -= holomap_images
 		activator = null
 		holomap_images.len = 0
@@ -52,11 +49,6 @@ var/list/deathsquad_uniforms = list()
 		holomap_activated = 1
 		activator = usr
 		processing_objects.Add(src)
-		//activator.client.screen += activator.hud_used.holomap_obj
-		//activator.hud_used.holomap_obj.icon = station_minimap
-		//activator.hud_used.holomap_obj.alpha = 255
-		//var/turf/T = get_turf(src)
-		//activator.hud_used.holomap_obj.screen_loc = "CENTER:[-1*(T.x)+145],CENTER:[-1*(T.y)+146]"
 		process()
 		to_chat(usr, "<span class='notice'>You enable the holomap.</span>")
 
@@ -67,7 +59,6 @@ var/list/deathsquad_uniforms = list()
 		holomap_activated = 0
 		processing_objects.Remove(src)
 		return
-	//activator.hud_used.holomap_obj.screen_loc = "CENTER:[-1*(T.x)+145],CENTER:[-1*(T.y)+146]"
 
 	activator.client.images -= holomap_images
 
