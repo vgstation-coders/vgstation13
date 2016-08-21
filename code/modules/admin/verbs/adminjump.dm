@@ -131,7 +131,7 @@
 
 		var/datum/map_element/V = vaults[selection]
 		if(!V.location)
-			to_chat(src, "[V.file_path] doesn't have a location! Report this")
+			to_chat(src, "[V.file_path || V.name] doesn't have a location! Report this")
 			return
 
 		usr.forceMove(V.location)

@@ -6,6 +6,12 @@
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+
+	update_icon()
+
+/turf/space/transit/update_icon()
+	icon_state = ""
+
 	var/dira=""
 	var/i=0
 	switch(pushdirection)

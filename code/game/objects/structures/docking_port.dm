@@ -64,11 +64,16 @@ var/global/list/all_docking_ports = list()
 		docked_with = null
 		return 1
 
+/obj/docking_port/proc/docked(obj/docking_port/D)
+	return
+
 /obj/docking_port/proc/dock(var/obj/docking_port/D)
 	undock()
 
 	D.docked_with = src
 	src.docked_with = D
+
+	D.docked(src)
 
 /obj/docking_port/proc/get_docking_turf()
 	return get_step(get_turf(src),src.dir)
@@ -158,6 +163,34 @@ var/global/list/all_docking_ports = list()
 
 /obj/docking_port/destination/shuttle_act() //These guys don't get destroyed
 	return 0
+
+/obj/docking_port/destination/transit
+	areaname = "transit area"
+	var/generate_borders = 0
+
+/obj/docking_port/destination/transit/docked(obj/docking_port/shuttle/D)
+	.=..()
+
+	if(!istype(D))
+		return //Only deal with shuttle docking ports
+
+	if(generate_borders)
+		//Generate teleport triggers around the shuttle that prevent players from simply walking out
+		//1) Go through every turf in the newly docked shuttle
+		//2) Check all adjacent turfs of every turf (maybe this sucks but I haven't thought of a better way to do it)
+		//3) Place teleporters as needed
+
+		var/teleporter_typepath = /obj/effect/step_trigger/teleporter/random/shuttle_transit
+
+		var/area/shuttle_area = D.linked_shuttle.linked_area
+		for(var/turf/T in shuttle_area)
+			for(var/dir in cardinal)
+				var/turf/check = get_step(T, dir)
+				if(check.loc != shuttle_area) //Turf doesn't belong to a shuttle
+					if(!locate(teleporter_typepath) in check)
+						new teleporter_typepath(check)
+
+		generate_borders = 0
 
 //SILLY PROC
 /proc/select_port_from_list(var/mob/user, var/message="Select a docking port", var/title="Admin abuse", var/list/list) //like input
