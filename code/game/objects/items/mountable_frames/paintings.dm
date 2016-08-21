@@ -19,6 +19,11 @@ var/global/list/available_paintings = list(
 	"bland",
 	"Blu",
 	"Kate",
+	"jmwt0",
+	"jmwt1",
+	"jmwt2",
+	"jmwt3",
+	"jmwt4",
 
 	)
 	//The following paintings either appear under certain conditions or have to be varedited by admins
@@ -124,6 +129,21 @@ var/global/list/available_paintings = list(
 		if("Kate")
 			name = "\improper Cindy Kate"
 			desc = "Through the carnage and bloodshed she's gunning for you, champ."
+		if("jmwt0")
+			name = "\improper Self-portrait"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1799"
+		if("jmwt1")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt2")
+			name = "\improper Zurich"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt3")
+			name = "\improper The fighting Temeraire"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1838"
+		if("jmwt4")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1817"
 		if("daddy")
 			name = "\improper I <3 Daddy!"
 			desc = "'Nanotrasen respects the right for all associates and their families to be able to express their individuality though many media. However, soliciting Nanotrasen related merchandise without proper warrant is strictly prohibited. Luckily for you, you can now own your very own contraband Nanotrasen merch without the threat of *REDACTED*!'"
@@ -261,6 +281,21 @@ var/global/list/available_paintings = list(
 		if("Kate")
 			name = "\improper Cindy Kate"
 			desc = "Through the carnage and bloodshed she's gunning for you, champ."
+		if("jmwt0")
+			name = "\improper Self-portrait"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1799"
+		if("jmwt1")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt2")
+			name = "\improper Zurich"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt3")
+			name = "\improper The fighting Temeraire"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1838"
+		if("jmwt4")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1817"
 		if("daddy")
 			name = "\improper I <3 Daddy!"
 			desc = "'Nanotrasen respects the right for all associates and their families to be able to express their individuality though many media. However, soliciting Nanotrasen related merchandise without proper warrant is strictly prohibited. Luckily for you, you can now own your very own contraband Nanotrasen merch without the threat of *REDACTED*!'"
