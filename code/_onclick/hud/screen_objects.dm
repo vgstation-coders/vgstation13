@@ -60,7 +60,7 @@
 	var/hand_index
 
 /obj/screen/holomap
-	plane = HUD_PLANE-1
+	plane = HUD_PLANE
 
 /obj/screen/close
 	name = "close"
