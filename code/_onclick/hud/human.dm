@@ -7,6 +7,7 @@
 
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
+	var/obj/screen/holomap/holo_box
 
 	using = getFromPool(/obj/screen)
 	using.name = "act_intent"
@@ -410,6 +411,16 @@
 				src.adding += mymob.gun_run_icon
 			src.adding += mymob.gun_move_icon
 
+	holo_box = getFromPool(/obj/screen/holomap)
+	holo_box.name = "holomap"
+	holo_box.icon = null
+	holo_box.icon_state = ""
+	holo_box.screen_loc = "CENTER-3,CENTER-3"
+	holo_box.layer = HUD_BASE_LAYER
+	holo_box.color = ui_color
+	holo_box.mouse_opacity = 0
+	holo_box.alpha = 0
+	src.holomap_obj = holo_box
 
 	mymob.client.reset_screen()
 

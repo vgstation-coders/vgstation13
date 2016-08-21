@@ -424,3 +424,6 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 var/parallax_initialized = 0
 var/space_color = "#050505"
 var/list/parallax_icon[27]
+
+//HUD MINIMAPS
+var/station_minimap = null

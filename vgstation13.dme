@@ -1146,6 +1146,7 @@
 #include "code\modules\html_interface\html_interface_client.dm"
 #include "code\modules\html_interface\cards\cards.dm"
 #include "code\modules\html_interface\map\interactive_map.dm"
+#include "code\modules\html_interface\map\station_map.dm"
 #include "code\modules\html_interface\map\adv_sec\adv_camera.dm"
 #include "code\modules\html_interface\map\crew\crew.dm"
 #include "code\modules\html_interface\nanotrasen\nanotrasen.dm"

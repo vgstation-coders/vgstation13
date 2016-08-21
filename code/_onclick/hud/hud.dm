@@ -26,6 +26,7 @@ var/global/obj/screen/clicker/catcher = new()
 
 	var/list/adding
 	var/list/other
+	var/obj/screen/holomap/holomap_obj
 	var/list/obj/screen/hotkeybuttons
 
 	var/list/obj/screen/item_action/item_action_list = list()	//Used for the item action ui buttons.

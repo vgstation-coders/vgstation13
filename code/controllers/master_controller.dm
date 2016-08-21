@@ -108,6 +108,10 @@ datum/controller/game_controller/proc/setup()
 	create_global_parallax_icons()
 	log_startup_progress("  Finished caching space parallax simulation in [stop_watch(watch)]s.")
 
+	log_startup_progress("Generating holomap...")
+	generateStationMap()
+	log_startup_progress("  Finished holomap in [stop_watch(watch)]s.")
+
 	buildcamlist()
 
 	if(config.media_base_url)
