@@ -1,6 +1,7 @@
 /spell/area_teleport
 	name = "Teleport"
 	desc = "This spell teleports you to a type of area of your selection."
+	abbreviation = "TP"
 
 	school = "abjuration"
 	charge_max = 600

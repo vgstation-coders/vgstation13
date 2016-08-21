@@ -269,6 +269,7 @@
 					var/spell/added = new buy_type
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
+					feedback_add_details("wizard_spell_learned", added.abbreviation)
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
@@ -276,6 +277,7 @@
 			if(istype(SA) && (SA in get_available_artifacts()))
 				if(SA.can_buy() && use(SA.price, no_refunds = 1))
 					SA.purchased(usr)
+					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
 		attack_self(usr)
 

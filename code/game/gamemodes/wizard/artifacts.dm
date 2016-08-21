@@ -2,6 +2,8 @@
 /datum/spellbook_artifact
 	var/name = "artifact"
 	var/desc = ""
+	var/abbreviation //For feedback
+
 	var/list/spawned_items = list()
 	var/price = Sp_BASE_PRICE
 
@@ -16,16 +18,19 @@
 /datum/spellbook_artifact/staff_of_change
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
+	abbreviation = "ST"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff)
 
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"
 	desc = "An artefact that channels the will of the user into destructive bolts of force."
+	abbreviation = "MF"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/focus)
 
 /datum/spellbook_artifact/shards
 	name = "Soul Stone Bundle"
 	desc = "Grants you a soul stone belt with six empty shards, and the Artificer spell. Soul stone shards are ancient tools capable of capturing and harnessing the spirits of the dead and dying. The Artificer spell allows you to create arcane machines for the captured souls to pilot."
+	abbreviation = "SS"
 	spawned_items = list(/obj/item/weapon/storage/belt/soulstone/full)
 
 /datum/spellbook_artifact/shards/purchased(mob/living/carbon/human/H)
@@ -38,6 +43,7 @@
 /datum/spellbook_artifact/armor
 	name = "Mastercrafted Armor Set"
 	desc = "An artefact suit of armor that allows you to cast spells while providing more protection against attacks and the void of space."
+	abbreviation = "HS"
 	spawned_items = list(
 	/obj/item/clothing/shoes/sandal,\
 	/obj/item/clothing/gloves/purple,\
@@ -47,27 +53,32 @@
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"
 	desc = "An arcane staff capable of shooting bolts of eldritch energy which cause inanimate objects to come to life. This magic doesn't affect machines."
+	abbreviation = "SA"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/animate)
 
 /datum/spellbook_artifact/staff_of_necro
 	name = "Staff of Necromancy"
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
+	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/staff/necro)
 
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
 	desc = "A magical contract binding an apprentice wizard to your service, using it will summon them to your side."
+	abbreviation = "CT"
 	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
+	abbreviation = "SB"
 	price = 5 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
 
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
 	desc = "An incandescent orb of crackling energy, using it will allow you to ghost while alive, allowing you to spy upon the station with ease. In addition, buying it will permanently grant you x-ray vision."
+	abbreviation = "SO"
 	spawned_items = list(/obj/item/weapon/scrying)
 
 /datum/spellbook_artifact/scrying/purchased(mob/living/carbon/human/H)
@@ -84,6 +95,7 @@
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
+	abbreviation = "SG"
 
 /datum/spellbook_artifact/summon_guns/can_buy()
 	//Can't summon guns during ragin' mages

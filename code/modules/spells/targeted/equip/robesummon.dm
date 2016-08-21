@@ -6,6 +6,7 @@
 /spell/targeted/equip_item/robesummon
 	name = "Summon Robes"
 	desc = "A spell which will summon you a new set of robes."
+	abbreviation = "RS"
 
 	school = "evocation"
 	charge_max = 300

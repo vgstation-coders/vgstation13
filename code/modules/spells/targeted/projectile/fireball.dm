@@ -1,5 +1,6 @@
 /spell/targeted/projectile/dumbfire/fireball
 	name = "Fireball"
+	abbreviation = "FB"
 	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything."
 
 	proj_type = /obj/item/projectile/spell_projectile/fireball

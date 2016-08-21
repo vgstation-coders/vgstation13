@@ -1,7 +1,8 @@
 /spell/targeted/shoesnatch
-
 	name = "Shoe Snatching Charm"
 	desc = "This spell allows you to steal somebody's shoes right off of their feet!"
+	abbreviation = "SS"
+
 	school = "evocation"
 	charge_type = Sp_RECHARGE
 	charge_max = 150
