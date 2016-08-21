@@ -277,7 +277,7 @@
 		if(card)
 			card.layer = FLOAT_LAYER
 			card.plane = HUD_PLANE
-			card.pixel_x = (i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE) * PIXEL_MULTIPLIER
+			card.pixel_x = i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE
 			overlays += card
 
 /*
