@@ -1,6 +1,6 @@
 /spell/targeted/subjugation
 	name = "Subjugation"
-	desc = "This spell temporarily subjugates a target's mind and does not require wizard garb."
+	desc = "This spell temporarily subjugates a target's mind."
 
 	school = "transmutation"
 	charge_max = 300

@@ -6,6 +6,7 @@
 	var/price = Sp_BASE_PRICE
 
 /datum/spellbook_artifact/proc/purchased(mob/living/user)
+	to_chat(user, "<span class='info'>You have purchased [name].</span>")
 	for(var/T in spawned_items)
 		new T(get_turf(user))
 

@@ -1,7 +1,7 @@
 
 /spell/aoe_turf/fall
 	name = "Time Stop"
-	desc = "This spell stops time for "
+	desc = "This spell temporarily stops time for everybody around you, except for you. The spell lasts 3 seconds, and upgrading its power can further increase the duration."
 
 	spell_flags = NEEDSCLOTHES
 

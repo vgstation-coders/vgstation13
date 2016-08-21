@@ -29,6 +29,7 @@ code\game\\dna\genes\goon_powers.dm
 
 /spell/targeted/genetic/blind
 	name = "Blind"
+	desc = "Temporarily blind a single person."
 	disabilities = 1
 	duration = 300
 
