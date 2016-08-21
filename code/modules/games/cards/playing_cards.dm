@@ -276,7 +276,7 @@
 		var/obj/item/toy/singlecard/card = currenthand[i]
 		if(card)
 			card.layer = FLOAT_LAYER
-			card.plane = HUD_PLANE
+			card.plane = FLOAT_PLANE
 			card.pixel_x = i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE
 			overlays += card
 
