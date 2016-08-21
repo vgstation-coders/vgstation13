@@ -61,7 +61,7 @@
 		if(!M) //This really shouldn't be checked here, but sure
 			return
 
-		force = 15 //Smashing bottles over someoen's head hurts. //todo: check that this isn't overwriting anything it shouldn't be
+		force = 15 //Smashing bottles over someoen's head hurts. //todo: check that this isn't overwriting anything it shouldn't be //It was
 
 		var/datum/organ/external/affecting = user.zone_sel.selecting //Find what the player is aiming at
 
@@ -1098,14 +1098,13 @@
 	user.drop_item(force_drop = 1)
 	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(user.loc)
 	B.icon_state = src.icon_state
-	//B.force = src.force //Who thought this was a good idea? It makes bottles broken by throwing deal no damage and bottles smashed over someone's head continue to deal a ton.
 	B.name = src.smashname
 
 	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 		B.icon_state = "glass_empty"
 
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(M)) // Create a glass shard at the target's location!
+		getFromPool(/obj/item/weapon/shard, get_turf(M || src)) // Create a glass shard at the target's location! Or
 
 	var/icon/I = new('icons/obj/drinks.dmi', B.icon_state)
 	I.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
@@ -1143,7 +1142,6 @@
 
 		//create new broken bottle
 		var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
-		B.force = src.force
 		B.name = src.smashname
 		B.icon_state = src.icon_state
 
@@ -1243,7 +1241,7 @@
 
 
 //todo: can light cigarettes with
-//todo: is force = 15 overwriting the force?
+//todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
 
 ////////  Could be expanded upon:
 //  make it work with more chemicals and reagents, more like a chem grenade
