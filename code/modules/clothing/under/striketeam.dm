@@ -68,7 +68,7 @@ var/list/deathsquad_uniforms = list()
 	bgmap.pixel_x = -1*T.x + 240
 	bgmap.pixel_y = -1*T.y + 241
 	bgmap.plane = HUD_PLANE
-	bgmap.layer = 1
+	bgmap.layer = HUD_BASE_LAYER
 	bgmap.color = "#0B74B4"
 	bgmap.loc = activator.hud_used.holomap_obj
 	holomap_images += bgmap
@@ -93,9 +93,9 @@ var/list/deathsquad_uniforms = list()
 			I.pixel_y = TD.y - T.y + 233
 			I.plane = HUD_PLANE
 			if(mob_indicator == 1)
-				I.layer = 3
+				I.layer = HUD_ABOVE_ITEM_LAYER
 			else
-				I.layer = 2
+				I.layer = HUD_ITEM_LAYER
 			I.loc = activator.hud_used.holomap_obj
 			animate(I,alpha = 255, time = 13, loop = -1, easing = SINE_EASING)
 			animate(alpha = 0, time = 5, easing = SINE_EASING)
