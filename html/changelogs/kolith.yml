@@ -1,6 +1,0 @@
-author: kolith
-
-delete-after: True
-
-changes: 
-- bugfix: Ghosts can no longer interact with monkey recyclers.
