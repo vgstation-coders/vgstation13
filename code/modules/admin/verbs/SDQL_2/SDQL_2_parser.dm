@@ -221,7 +221,6 @@
 
 // Standardized method for handling the IN/FROM and WHERE options.
 /datum/SDQL_parser/proc/selectors(i, list/node)
-	to_chat(world, json_encode(query))
 	while (token(i))
 		var/tok = tokenl(i)
 		if (tok in list("from", "in"))

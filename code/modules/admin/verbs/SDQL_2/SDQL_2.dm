@@ -73,18 +73,13 @@
 				if("select", "delete", "update")
 					select_types = query_tree[query_tree[1]]
 
-			to_chat(world, "[json_encode(query_tree["from"])] AND ALSO [json_encode(query_tree)]")
 
 			from_objs = SDQL_from_objs(query_tree["from"])
-			to_chat(world, json_encode(from_objs))
 
 			var/list/objs = list()
 
 			for(var/type in select_types)
-				to_chat(world, type)
 				objs += SDQL_get_all(type, from_objs)
-
-			to_chat(world, json_encode(objs))
 
 			if("where" in query_tree)
 				var/objs_temp = objs
@@ -214,7 +209,7 @@
 	if("world" in tree)
 		return world
 
-	to_chat(world, "hrm")
+	, "hrm")
 
 	return SDQL_expression(world, tree)
 
@@ -224,15 +219,11 @@
 
 	// If only a single object got returned, wrap it into a list so the for loops run on it.
 	if (!islist(location) && location != world)
-		to_chat(world, "wrap")
 		location = list(location)
 
 	type = text2path(type)
 
-	to_chat(world, "type: [type]")
-
 	if(ispath(type, /mob))
-		to_chat(world, "A MOB")
 		for(var/mob/d in location)
 			if(istype(d, type))
 				out += d
@@ -431,7 +422,7 @@
 			var/list/L = v
 			var/index = SDQL_expression(source, expression[start + 2])
 			if (isnum(index) && (!IsInteger(index) || L.len < index))
-				to_chat(world, "<span class='danger'>Invalid list index: [index]</span>")
+				to_chat(usr, "<span class='danger'>Invalid list index: [index]</span>")
 				return null
 
 			return L[index]
