@@ -150,6 +150,22 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(prob(host.brainloss/20))
 					host.say("*[pick(list("blink","blink_r","choke","aflap","drool","twitch","twitch_s","gasp"))]")
 
+	if(client)
+		switch(health)
+			if(20 to INFINITY)
+				healths.icon_state = "borer_health0"
+			if(15 to 19)
+				healths.icon_state = "borer_health1"
+			if(10 to 15)
+				healths.icon_state = "borer_health2"
+			if(5 to 10)
+				healths.icon_state = "borer_health3"
+			if(1 to 5)
+				healths.icon_state = "borer_health4"
+			else
+				healths.icon_state = "borer_health5"
+
+
 /mob/living/simple_animal/borer/proc/update_verbs(var/mode)
 	if(verb_holders.len>0)
 		for(var/VH in verb_holders)

@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - imageadd: Borers now have their own Health and Zone Selection HUD icons.
