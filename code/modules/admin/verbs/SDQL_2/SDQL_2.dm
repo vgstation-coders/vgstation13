@@ -73,19 +73,18 @@
 				if("select", "delete", "update")
 					select_types = query_tree[query_tree[1]]
 
+			to_chat(world, "[json_encode(query_tree["from"])] AND ALSO [json_encode(query_tree)]")
+
 			from_objs = SDQL_from_objs(query_tree["from"])
+			to_chat(world, json_encode(from_objs))
 
 			var/list/objs = list()
 
 			for(var/type in select_types)
-				var/char = copytext(type, 1, 2)
+				to_chat(world, type)
+				objs += SDQL_get_all(type, from_objs)
 
-				if(char == "/" || char == "*")
-					for(var/from in from_objs)
-						objs += SDQL_get_all(type, from)
-
-				else if(char == "'" || char == "\"")
-					objs += locate(copytext(type, 2, length(type)))
+			to_chat(world, json_encode(objs))
 
 			if("where" in query_tree)
 				var/objs_temp = objs
@@ -213,34 +212,27 @@
 
 /proc/SDQL_from_objs(list/tree)
 	if("world" in tree)
-		return list(world)
+		return world
 
-	var/list/out = list()
+	to_chat(world, "hrm")
 
-	for(var/type in tree)
-		var/char = copytext(type, 1, 2)
-
-		if(char == "/")
-			out += SDQL_get_all(type, world)
-
-		else if(char == "'" || char == "\"")
-			out += locate(copytext(type, 2, length(type)))
-
-	return out
+	return SDQL_expression(world, tree)
 
 
 /proc/SDQL_get_all(type, location)
 	var/list/out = list()
 
-	if(type == "*")
-		for(var/datum/d in location)
-			out += d
-
-		return out
+	// If only a single object got returned, wrap it into a list so the for loops run on it.
+	if (!islist(location) && location != world)
+		to_chat(world, "wrap")
+		location = list(location)
 
 	type = text2path(type)
 
+	to_chat(world, "type: [type]")
+
 	if(ispath(type, /mob))
+		to_chat(world, "A MOB")
 		for(var/mob/d in location)
 			if(istype(d, type))
 				out += d
@@ -366,7 +358,18 @@
 		var/list/expressions_list = expression[++i]
 		val = list()
 		for(var/list/expression_list in expressions_list)
-			val += SDQL_expression(object, expression_list)
+			var/result = SDQL_expression(object, expression_list)
+			var/assoc
+			if (expressions_list[expression_list] != null)
+				assoc = SDQL_expression(object, expressions_list[expression_list])
+
+			if (assoc != null)
+				// Need to insert the key like this to prevent duplicate keys fucking up.
+				var/list/dummy = list()
+				dummy[result] = assoc
+				result = dummy
+
+			val += result
 
 	else
 		val = SDQL_var(object, expression, i, object)
@@ -379,11 +382,10 @@
 
 	var/long = start < expression.len
 
-	if (object == world && long && expression[start + 1] == ".")
-		to_chat(usr, "Sorry, but global variables are not supported at the moment.")
-		return null
+	if (object == world && (!long || expression[start + 1] == "."))
+		v = readglobal(expression[start])
 
-	if (expression [start] == "{" && long)
+	else if (expression [start] == "{" && long)
 		if (lowertext(copytext(expression[start + 1], 1, 3)) != "0x")
 			to_chat(usr, "<span class='danger'>Invalid pointer syntax: [expression[start + 1]]</span>")
 			return null
@@ -455,7 +457,7 @@
 
 
 	var/list/whitespace = list(" ", "\n", "\t")
-	var/list/single = list("(", ")", ",", "+", "-", ".", "\[", "]", "{", "}", ";")
+	var/list/single = list("(", ")", ",", "+", "-", ".", "\[", "]", "{", "}", ";", ":")
 	var/list/multi = list(
 					"=" = list("", "="),
 					"<" = list("", "=", ">"),
