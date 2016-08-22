@@ -147,4 +147,4 @@
 	SetUniversalState(/datum/universal_state/christmas)
 
 /datum/spellbook_artifact/santa_bundle/can_buy()
-	return (Holiday == "Christmas" && universe.name == "Normal")
+	return (Holiday == "Christmas" && !istype(universe, /datum/universal_state/christmas))

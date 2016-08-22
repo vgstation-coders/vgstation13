@@ -232,7 +232,6 @@
 
 		return 1
 
-	return 0
 
 /obj/item/weapon/spellbook/proc/refund(mob/user)
 	if(!istype(get_area(user), /area/wizard_station))
@@ -249,6 +248,10 @@
 
 	var/mob/living/L = usr
 	if(!istype(L))
+		return
+
+	if(L.mind.special_role == "apprentice")
+		temp = "If you got caught sneaking a peak from your teacher's spellbook, you'd likely be expelled from the Wizard Academy. Better not."
 		return
 
 	if(href_list["refund"])
