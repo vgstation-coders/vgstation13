@@ -152,19 +152,22 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	if(client)
 		var/severity = 0
-		switch(health)
-			if(20 to INFINITY)
+
+		var/healthpercent = (health/maxHealth)*100
+
+		switch(healthpercent)
+			if(100 to INFINITY)
 				healths.icon_state = "borer_health0"
-			if(15 to 19)
+			if(75 to 100)
 				healths.icon_state = "borer_health1"
 				severity = 2
-			if(10 to 15)
+			if(50 to 75)
 				healths.icon_state = "borer_health2"
 				severity = 3
-			if(5 to 10)
+			if(25 to 50)
 				healths.icon_state = "borer_health3"
 				severity = 4
-			if(1 to 5)
+			if(1 to 25)
 				healths.icon_state = "borer_health4"
 				severity = 5
 			else
