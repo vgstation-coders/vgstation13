@@ -207,9 +207,7 @@
 
 /proc/SDQL_from_objs(list/tree)
 	if("world" in tree)
-		return world
-
-	, "hrm")
+		return 
 
 	return SDQL_expression(world, tree)
 
