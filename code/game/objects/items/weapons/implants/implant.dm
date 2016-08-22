@@ -146,6 +146,7 @@ Implant Specifics:<BR>"}
 
 		var/turf/T = get_turf(M)
 
+		M.gib()
 		explosion(T, 1, 3, 4, 6)
 		T.hotspot_expose(3500, 125, surfaces = 1)
 
