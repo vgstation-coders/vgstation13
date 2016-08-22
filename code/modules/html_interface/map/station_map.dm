@@ -20,8 +20,8 @@
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
 	if(zLevel != map.zCentcomm)//The Centcomm Zlevel's minimap will remain blank for immersion purposes. Until we add a way to only draw certain areas depending on the suit's faction
-		for(var/i = 1 to 480)
-			for(var/r = 1 to 480)
+		for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 				var/turf/tile = locate(i, r, zLevel)
 				if(tile && tile.loc.holomapAlwaysDraw())
 					if((!istype(tile, /turf/space) && istype(tile.loc, /area/mine/unexplored)) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
@@ -70,8 +70,8 @@
 				/area/syndicate_mothership,
 				)
 
-	for(var/i = 1 to 480)
-		for(var/r = 1 to 480)
+	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 			var/turf/tile = locate(i, r, map.zCentcomm)
 			if(tile && (is_type_in_list(tile.loc, allowed_areas) && !is_type_in_list(tile.loc, restricted_areas)))
 				if((!istype(tile, /turf/space) && istype(tile.loc, /area/mine/unexplored)) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile) || istype(tile, /turf/simulated/shuttle/wall))
