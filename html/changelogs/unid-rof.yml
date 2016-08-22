@@ -1,0 +1,6 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: "Added a new wizard spell: Ring of Fire. When cast, it summons a stationary ring of fire with a radius of 3 turfs and a duration of 10 seconds. While the ring is active, you're immune to fire and heat. You can upgrade the spell to make the ring always centered on you."

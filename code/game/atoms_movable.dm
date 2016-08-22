@@ -260,7 +260,9 @@
 	locked_to.unlock_atom(src)
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
-	. = locking_categories_name[category]
+	var/datum/locking_category/LC = category
+	if(!initial(LC.unique))
+		. = locking_categories_name[category]
 
 	if (!.)
 		if (istext(category))

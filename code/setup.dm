@@ -1247,6 +1247,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //upgrading
 #define Sp_SPEED	"cooldown"
 #define Sp_POWER	"power"
+#define Sp_MOVE		"mobility"
 #define Sp_TOTAL	"total"
 
 //casting costs
