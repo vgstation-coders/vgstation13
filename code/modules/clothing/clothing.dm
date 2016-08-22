@@ -473,6 +473,11 @@ BLIND     // can't see anything
 		*/
 	var/displays_id = 1
 
+	//Holomap stuff
+	var/mob/living/carbon/human/activator = null
+	var/holomap_activated = 0
+	var/list/holomap_images = list()
+
 /obj/item/clothing/under/Destroy()
 	for(var/obj/machinery/computer/crew/C in machines)
 		if(C && src in C.tracked)

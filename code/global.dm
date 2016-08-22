@@ -426,5 +426,5 @@ var/space_color = "#050505"
 var/list/parallax_icon[27]
 
 //HUD MINIMAPS
-var/list/holominimaps = list()
-var/list/centcommminimaps = list()
+var/list/holoMiniMaps = list()
+var/list/centcommMiniMaps = list()

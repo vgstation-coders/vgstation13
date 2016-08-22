@@ -9,9 +9,6 @@ var/list/deathsquad_uniforms = list()
 	_color = "deathsquad"
 	flags = FPRINT  | ONESIZEFITSALL
 	action_button_name = "Toggle Holomap"
-	var/mob/living/carbon/human/activator = null
-	var/holomap_activated = 0
-	var/list/holomap_images = list()
 
 /obj/item/clothing/under/deathsquad/New()
 	..()
@@ -21,10 +18,13 @@ var/list/deathsquad_uniforms = list()
 	deathsquad_uniforms -= src
 	..()
 
-/obj/item/clothing/under/deathsquad/verb/togglemap()
-	set name = "Toggle Holomap"
-	set category = "Object"
-	set src in usr
+/obj/item/clothing/under/deathsquad/ui_action_click()
+	togglemap()
+
+/obj/item/clothing/under/deathsquad/process()
+	update_holomap()
+
+/obj/item/clothing/under/proc/togglemap()
 	if(usr.isUnconscious())
 		return
 
@@ -35,32 +35,31 @@ var/list/deathsquad_uniforms = list()
 	var/mob/living/carbon/human/H = usr
 
 	if(H.get_item_by_slot(slot_w_uniform) != src)
-		to_chat(usr, "<span class='warning'>You need to wear the suit first</span>")
+		to_chat(H, "<span class='warning'>You need to wear the suit first</span>")
 		return
 
 	if(src.holomap_activated)
-		holomap_activated = 0
-		activator.client.images -= holomap_images
-		activator = null
-		holomap_images.len = 0
-		processing_objects.Remove(src)
-		to_chat(usr, "<span class='notice'>You disable the holomap.</span>")
+		deactivate_holomap()
+		to_chat(H, "<span class='notice'>You disable the holomap.</span>")
 	else
 		holomap_activated = 1
-		activator = usr
+		activator = H
 		processing_objects.Add(src)
 		process()
-		to_chat(usr, "<span class='notice'>You enable the holomap.</span>")
+		to_chat(H, "<span class='notice'>You enable the holomap.</span>")
 
-/obj/item/clothing/under/deathsquad/process()
+#define HOLOMAP_ERROR	0
+#define HOLOMAP_YOU		1
+#define HOLOMAP_OTHER	2
+#define HOLOMAP_DEAD	3
+
+/obj/item/clothing/under/proc/update_holomap()
 	var/turf/T = get_turf(src)
 	if(!T)//nullspace begone!
 		return
 
-	if((activator.get_item_by_slot(slot_w_uniform) != src) || (!activator.client) || (holominimaps[T.z] == null))
-		activator = null
-		holomap_activated = 0
-		processing_objects.Remove(src)
+	if((activator.get_item_by_slot(slot_w_uniform) != src) || (!activator.client) || (holoMiniMaps[T.z] == null))
+		deactivate_holomap()
 		return
 
 	activator.client.images -= holomap_images
@@ -70,11 +69,11 @@ var/list/deathsquad_uniforms = list()
 	var/image/bgmap
 
 	if(T.z == map.zCentcomm)
-		bgmap = image(centcommminimaps["deathsquad"])
+		bgmap = image(centcommMiniMaps[HOLOMAP_FILTER_DEATHSQUAD])
 	else
-		bgmap = image(holominimaps[T.z])
-	bgmap.pixel_x = -1*T.x + 240
-	bgmap.pixel_y = -1*T.y + 241
+		bgmap = image(holoMiniMaps[T.z])
+	bgmap.pixel_x = -1*T.x + 7*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
+	bgmap.pixel_y = -1*T.y + 7*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
 	bgmap.plane = HUD_PLANE
 	bgmap.layer = HUD_BASE_LAYER
 	bgmap.color = "#0B74B4"
@@ -82,25 +81,25 @@ var/list/deathsquad_uniforms = list()
 	holomap_images += bgmap
 
 	for(var/obj/item/clothing/under/deathsquad/D in deathsquad_uniforms)
-		var/mob_indicator = -1
+		var/mob_indicator = HOLOMAP_ERROR
 		var/turf/TD = get_turf(D)
 		if(D == src)
-			mob_indicator = 1
+			mob_indicator = HOLOMAP_YOU
 		else if((TD.z == T.z) && ishuman(D.loc))
 			var/mob/living/carbon/human/H = D.loc
 			if(H.get_item_by_slot(slot_w_uniform) == D)
-				if(H.stat == DEAD)
-					mob_indicator = 2
+				if(H.isDead())
+					mob_indicator = HOLOMAP_DEAD
 				else
-					mob_indicator = 0
+					mob_indicator = HOLOMAP_OTHER
 			else
 				continue
 		if(mob_indicator != -1)
 			var/image/I = image('icons/12x12.dmi',"ds[mob_indicator]")
-			I.pixel_x = TD.x - T.x + 232
-			I.pixel_y = TD.y - T.y + 233
+			I.pixel_x = TD.x - T.x + 7*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
+			I.pixel_y = TD.y - T.y + 7*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
 			I.plane = HUD_PLANE
-			if(mob_indicator == 1)
+			if(mob_indicator == HOLOMAP_YOU)
 				I.layer = HUD_ABOVE_ITEM_LAYER
 			else
 				I.layer = HUD_ITEM_LAYER
@@ -112,5 +111,14 @@ var/list/deathsquad_uniforms = list()
 
 	activator.client.images |= holomap_images
 
-/obj/item/clothing/under/deathsquad/ui_action_click()
-	togglemap()
+#undef HOLOMAP_ERROR
+#undef HOLOMAP_YOU
+#undef HOLOMAP_OTHER
+#undef HOLOMAP_DEAD
+
+/obj/item/clothing/under/proc/deactivate_holomap()
+	holomap_activated = 0
+	activator.client.images -= holomap_images
+	activator = null
+	holomap_images.len = 0
+	processing_objects.Remove(src)
