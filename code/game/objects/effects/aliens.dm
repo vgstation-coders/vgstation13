@@ -382,6 +382,7 @@
 	if(istype(target,/atom/movable))
 		var/atom/movable/locker = target
 		locker.lock_atom(src, /datum/locking_category/acid)
+		glide_size = locker.glide_size
 
 	if(isturf(target)) // Turf take twice as long to take down.
 		target_strength = 8

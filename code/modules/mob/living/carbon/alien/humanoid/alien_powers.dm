@@ -365,7 +365,6 @@ Doesn't work on other aliens/AI.*/
 	panel = "Alien"
 	hud_state = "alien_hide"
 
-	holder_var
 	charge_max = 0
 
 /spell/alien_hide/cast(list/targets, mob/user)
