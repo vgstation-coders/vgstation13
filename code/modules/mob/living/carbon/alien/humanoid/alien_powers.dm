@@ -124,7 +124,7 @@ Doesn't work on other aliens/AI.*/
 			to_chat(user, "<span class='alien'>You need to be closer.</span>")
 	holder_var_amount = 0
 
-/spell/targeted/alienneurotoxin
+/spell/targeted/projectile/alienneurotoxin
 	name = "Spit Neurotoxin"
 	desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
 	panel = "Alien"
@@ -138,10 +138,13 @@ Doesn't work on other aliens/AI.*/
 	still_recharging_msg = "<span class='alien'>You must regenerate your neurotoxin stores first.</span>"
 	charge_max = 50
 
-	range = 7
 	spell_flags = WAIT_FOR_CLICK
+	proj_type = /obj/item/projectile/energy/neurotoxin
+	cast_sound = 'sound/weapons/pierce.ogg'
+	duration = 20
+	proj_step_delay = 0.2
 
-/spell/targeted/alienneurotoxin/is_valid_target(var/target, mob/user)
+/spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
 	if(!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
 	if(get_dist(usr, target) > range)
@@ -151,13 +154,9 @@ Doesn't work on other aliens/AI.*/
 		return 0
 	return !istype(target,/area)
 
-/spell/targeted/alienneurotoxin/cast(list/targets, mob/user)
+/spell/targeted/projectile/alienneurotoxin/cast(list/targets, mob/user)
 	var/atom/target = targets[1]
-	playsound(get_turf(user), 'sound/weapons/pierce.ogg', 30, 1)
-
-	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
-
 	var/visible_message_target
 	if(!istype(target,/mob))
 		var/list/nearby_mobs = list()
@@ -175,22 +174,7 @@ Doesn't work on other aliens/AI.*/
 	else
 		user.visible_message("<span class='alien'>\The [user] spits a salvo of neurotoxin !</span>", "<span class='alien'>You spit out neurotoxin !</span>")
 
-	if(!U || !T)
-		return
-	if(U == T)
-		usr.bullet_act(new /obj/item/projectile/energy/neurotoxin(usr.loc)/*, get_organ_target()*/)
-		return
-
-	var/obj/item/projectile/energy/neurotoxin/A = new /obj/item/projectile/energy/neurotoxin(usr.loc)
-	A.original = target
-	A.target = U
-	A.current = T
-	A.starting = T
-	A.yo = U.y - T.y
-	A.xo = U.x - T.x
-	spawn()
-		A.OnFired()
-		A.process()
+	. = ..()
 
 /spell/aoe_turf/conjure/choice/alienresin
 	name = "Secrete Resin"

@@ -39,7 +39,7 @@
 	..()
 	add_spell(new /spell/aoe_turf/conjure/alienegg, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 	add_spell(new /spell/alienacid, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/targeted/alienneurotoxin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/projectile/alienneurotoxin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 
