@@ -23,14 +23,16 @@ Doesn't work on other aliens/AI.*/
 	desc = "Plants some alien weeds"
 	panel = "Alien"
 	hud_state = "alien_weeds"
+	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = Sp_HOLDVAR|Sp_RECHARGE
 	holder_var_type = "plasma"
 	holder_var_amount = 50
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
 
 	summon_type = list(/obj/effect/alien/weeds/node)
+	override_base = "alien"
 
 /*
 /mob/living/carbon/alien/humanoid/verb/ActivateHuggers()
@@ -51,6 +53,7 @@ Doesn't work on other aliens/AI.*/
 	desc = "Whisper to someone"
 	panel = "Alien"
 	hud_state = "alien_whisper"
+	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -97,6 +100,7 @@ Doesn't work on other aliens/AI.*/
 	desc = "Transfer your plasma to another alien"
 	panel = "Alien"
 	hud_state = "alien_transfer"
+	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -125,6 +129,7 @@ Doesn't work on other aliens/AI.*/
 	desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
 	panel = "Alien"
 	hud_state = "alien_neurotoxin"
+	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR|Sp_RECHARGE
 	holder_var_type = "plasma"
@@ -144,15 +149,31 @@ Doesn't work on other aliens/AI.*/
 	if(isalien(target))
 		to_chat(user, "<span class='alien'>Your allies are not valid targets.</span>")
 		return 0
-	return istype(target, /mob/living)
+	return !istype(target,/area)
 
 /spell/targeted/alienneurotoxin/cast(list/targets, mob/user)
-	var/mob/living/target = targets[1]
+	var/atom/target = targets[1]
 	playsound(get_turf(user), 'sound/weapons/pierce.ogg', 30, 1)
-	user.visible_message("<span class='alien'>\The [user] spits neurotoxin at [target] !</span>", "<span class='alien'>You spit neurotoxin at [target] !</span>")
 
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
+
+	var/visible_message_target
+	if(!istype(target,/mob))
+		var/list/nearby_mobs = list()
+		for(var/mob/living/M in hearers(1, U))
+			if(isalien(M))
+				continue
+			nearby_mobs += M
+		if(nearby_mobs.len)
+			visible_message_target = pick(nearby_mobs)
+	else
+		visible_message_target = target
+
+	if(visible_message_target)
+		user.visible_message("<span class='alien'>\The [user] spits neurotoxin at [visible_message_target] !</span>", "<span class='alien'>You spit neurotoxin at [visible_message_target] !</span>")
+	else
+		user.visible_message("<span class='alien'>\The [user] spits a salvo of neurotoxin !</span>", "<span class='alien'>You spit out neurotoxin !</span>")
 
 	if(!U || !T)
 		return
@@ -176,6 +197,7 @@ Doesn't work on other aliens/AI.*/
 	desc = "Secrete tough malleable resin."
 	panel = "Alien"
 	hud_state = "alien_resin"
+	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -190,9 +212,11 @@ Doesn't work on other aliens/AI.*/
 	desc = "Drench an object in acid, destroying it over time."
 	panel = "Alien"
 	hud_state = "alien_acid"
+	override_base = "alien"
 
 	spell_flags = WAIT_FOR_CLICK
-	charge_type = Sp_HOLDVAR
+	charge_type = Sp_HOLDVAR|Sp_RECHARGE
+	charge_max = 15 SECONDS
 	holder_var_type = "plasma"
 	holder_var_amount = 200
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -236,6 +260,7 @@ Doesn't work on other aliens/AI.*/
 	desc = "Empties the contents of your stomach."
 	panel = "Alien"
 	hud_state = "alien_regurgitate"
+	override_base = "alien"
 
 /spell/aoe_turf/alienregurgitate/cast_check(skipcharge = 0, mob/user)
 	if(!istype(user, /mob/living/carbon/alien/humanoid)) //why do they have this shit anyway
@@ -255,6 +280,7 @@ Doesn't work on other aliens/AI.*/
 	desc = "Lay an egg to produce huggers to impregnate prey with."
 	panel = "Alien"
 	hud_state = "alien_egg"
+	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
 	holder_var_type = "plasma"
@@ -264,10 +290,11 @@ Doesn't work on other aliens/AI.*/
 	spell_flags = IGNORESPACE|NODUPLICATE
 
 	summon_type = list(/obj/effect/alien/egg)
-
+a
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
-	..()
-	stat_collection.xeno.eggs_laid++
+	. = ..()
+	if(!.) //Returning 1 if we failed to cast
+		stat_collection.xeno.eggs_laid++
 
 ///////////////////////////////////
 ////////// DRONE BROS /////////////
@@ -278,6 +305,7 @@ Doesn't work on other aliens/AI.*/
 	name = "Evolve"
 	panel = "Alien"
 	hud_state = "alien_evolve"
+	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
 	insufficient_holder_msg = "<span class='alien'>You are not ready for this kind of evolution.</span>"
@@ -298,9 +326,12 @@ Doesn't work on other aliens/AI.*/
 		return 0
 	return ..()
 
+/spell/aoe_turf/evolve/drone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+	user.visible_message("<span class='alien'>[src] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
+	return ..()
+
 /spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)
 	..()
-	user.visible_message("<span class='alien'>[src] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
 	var/mob/living/carbon/alien/humanoid/queen/new_xeno = new(get_turf(user))
 	for(var/datum/language/L in user.languages)
 		new_xeno.add_language(L.name)
@@ -322,16 +353,17 @@ Doesn't work on other aliens/AI.*/
 
 	var/spawning
 
-/spell/aoe_turf/evolve/larva/before_target(mob/user)
+/spell/aoe_turf/evolve/larva/spell_do_after(mob/user)
 	var/explanation_message = {"<span class='notice'><B>You are growing into a beautiful alien! It is time to choose a caste.</B><br>
 	There are three castes to choose from:<br>
 	<B>Hunters</B> are strong and agile, able to hunt away from the hive and rapidly move through ventilation shafts. Hunters generate plasma slowly and have low reserves.<br>
 	<B>Sentinels</B> are tasked with protecting the hive and are deadly up close and at a range. They are not as physically imposing nor fast as the hunters.<br>
 	<B>Drones</B> are the working class, offering the largest plasma storage and generation. They are the only caste which may evolve again, turning into the dreaded alien queen."}
-	to_chat(user,explanation_message)
-	spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) in list("Hunter","Sentinel","Drone","Repeat Explanation")|null
+	to_chat(user, explanation_message)
+	spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) as null|anything in list("Hunter","Sentinel","Drone","Repeat Explanation")
 	while(spawning == "Repeat Explanation")
-		spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) in list("Hunter","Sentinel","Drone","Repeat Explanation")|null
+		to_chat(user, explanation_message)
+		spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) as null|anything in list("Hunter","Sentinel","Drone","Repeat Explanation")
 	if(spawning == null)
 		return 0
 	switch(spawning)
@@ -341,10 +373,10 @@ Doesn't work on other aliens/AI.*/
 			spawning = /mob/living/carbon/alien/humanoid/sentinel
 		if("Drone")
 			spawning = /mob/living/carbon/alien/humanoid/drone
-	return 1
+	return ..()
 
 /spell/aoe_turf/evolve/larva/cast(list/targets, mob/living/carbon/user)
-	var/mob/living/carbon/alien/humanoid/new_xeno = new spawning
+	var/mob/living/carbon/alien/humanoid/new_xeno = new spawning(get_turf(user))
 	for(var/datum/language/L in user.languages)
 		new_xeno.add_language(L.name)
 	if(user.mind)
@@ -353,15 +385,16 @@ Doesn't work on other aliens/AI.*/
 	user.transferBorers(new_xeno)
 	qdel(user)
 
-/spell/alien_hide
+/spell/aoe_turf/alien_hide
 	name = "Hide"
 	desc = "Allows you to hide beneath tables or items laid on the ground. Toggle."
 	panel = "Alien"
 	hud_state = "alien_hide"
+	override_base = "alien"
 
 	charge_max = 0
 
-/spell/alien_hide/cast(list/targets, mob/user)
+/spell/aoe_turf/cast(list/targets, mob/user)
 	if(user.plane != HIDING_MOB_PLANE)
 		user.plane = HIDING_MOB_PLANE
 		user.visible_message("<span class='danger'>[src] scurries to the ground !</span>", "<span class='alien'>You are now hiding.</span>")

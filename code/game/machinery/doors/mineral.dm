@@ -235,3 +235,5 @@
 	playsound(get_turf(src), soundeffect, 100, 1)
 	return ..()
 
+/obj/machinery/door/mineral/resin/acidable()
+	return 0

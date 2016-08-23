@@ -137,6 +137,3 @@
 	else if( istype(M, /mob/living/silicon/robot ))
 		var/obj/effect/decal/cleanable/blood/oil/B = getFromPool(/obj/effect/decal/cleanable/blood/oil,src)
 		B.New(src)
-
-/turf/simulated/acidable()
-	return !(flags & INVULNERABLE)

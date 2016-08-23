@@ -11,7 +11,7 @@
 	screen_loc = ui_spell_master
 
 	var/mob/spell_holder
-	var/length = 7
+	var/length = 9
 
 /obj/screen/movable/spell_master/Destroy()
 	..()
@@ -73,7 +73,7 @@
 	for(var/i = 1; i <= spell_objects.len; i++)
 		var/obj/screen/spell/S = spell_objects[i]
 		var/xpos = x_position + (x_position < (world.view+1) ? 1 : -1)*(i%length)
-		var/ypos = y_position + (y_position < (world.view+1) ? round(i/7) : -round(i/length))
+		var/ypos = y_position + (y_position < (world.view+1) ? round(i/length) : -round(i/length))
 		S.screen_loc = "[encode_screen_X(xpos)]:[x_pix],[encode_screen_Y(ypos)]:[y_pix]"
 		if(spell_holder && spell_holder.client)
 			spell_holder.client.screen += S
@@ -146,8 +146,12 @@
 
 /obj/screen/movable/spell_master/alien
 	name = "Alien Abilities"
-	icon_state = "alien_spellmaster"
+	icon_state = "alien_spell_ready"
 
+	open_state = "alien_open"
+	closed_state = "alien_closed"
+
+	screen_loc = ui_alien_master
 	length = 9
 
 //////////////ACTUAL SPELLS//////////////
