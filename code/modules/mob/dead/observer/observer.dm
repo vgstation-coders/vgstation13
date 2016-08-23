@@ -39,7 +39,7 @@
 	var/lastchairspin
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
-	sight |= SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
+	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
 	see_invisible = SEE_INVISIBLE_OBSERVER
 	see_in_dark = 100
 	verbs += /mob/dead/observer/proc/dead_tele

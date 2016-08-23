@@ -63,7 +63,7 @@
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
-	sight &= ~BLIND
+	change_sight(removing = BLIND)
 	canmove = 0
 	src.loc = paicard
 	card = paicard

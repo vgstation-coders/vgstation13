@@ -10,7 +10,7 @@
 		src.eyeobj.forceMove(get_turf(src))
 	if(blind)
 		blind.layer = 0
-	sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
+	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_LEVEL_TWO
 

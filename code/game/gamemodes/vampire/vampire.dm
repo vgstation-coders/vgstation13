@@ -362,12 +362,12 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		owner.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 	if(VAMP_MATURE in powers)
-		owner.sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
+		owner.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		owner.see_in_dark = 8
 		owner.see_invisible = SEE_INVISIBLE_MINIMUM
 
 	else if(VAMP_VISION in powers)
-		owner.sight |= SEE_MOBS
+		owner.change_sight(adding = SEE_MOBS)
 
 /mob/proc/handle_bloodsucking(mob/living/carbon/human/H)
 	src.mind.vampire.draining = H

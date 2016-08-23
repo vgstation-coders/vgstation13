@@ -29,6 +29,11 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	virtualhearers += src
 	loc = get_turf(attachedto)
 	attached = attachedto
+
+	var/mob/M = attachedto
+	if(istype(M))
+		sight = M.sight
+
 	attached_type = attachedto.type //record the attached's typepath in case something goes wrong
 	attached_ref = "/ref[attachedto]" //record attached's text ref to see what is happening
 	if(is_type_in_list(attachedto,stationary_hearers))
@@ -61,3 +66,16 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 
 /mob/virtualhearer/blob_act()
 	return
+
+/mob/proc/change_sight(adding, removing, copying)
+	var/oldsight = sight
+	if(copying)
+		sight = copying
+	if(adding)
+		sight |= adding
+	if(removing)
+		sight &= ~removing
+	if(sight != oldsight)
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				VH.sight = sight

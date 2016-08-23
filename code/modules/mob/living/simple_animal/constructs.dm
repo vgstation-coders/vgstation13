@@ -334,7 +334,7 @@
 
 /mob/living/simple_animal/construct/harvester/New()
 	..()
-	sight |= SEE_MOBS
+	change_sight(adding = SEE_MOBS)
 
 ////////////////Glow//////////////////
 /mob/living/simple_animal/construct/proc/updateicon()
