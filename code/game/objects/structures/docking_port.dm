@@ -125,6 +125,8 @@ var/global/list/all_docking_ports = list()
 /obj/docking_port/destination //this guy is installed on stations and connects to shuttles
 	icon_state = "docking_station"
 
+	var/list/disk_references = list() //List of shuttle destination disks that know about this docking port
+
 	var/base_turf_type			= /turf/space
 	var/base_turf_icon			= null
 	var/base_turf_icon_state	= null
@@ -147,6 +149,13 @@ var/global/list/all_docking_ports = list()
 				base_turf_type			= T.type
 				base_turf_icon			= T.icon
 				base_turf_icon_state	= T.icon_state
+
+/obj/docking_port/destination/Destroy()
+	..()
+
+	for(var/obj/item/weapon/disk/shuttle_coords/C in disk_references)
+		C.reset()
+	disk_references = list()
 
 /obj/docking_port/destination/link_to_shuttle(var/datum/shuttle/S)
 	..()

@@ -55,7 +55,7 @@
 "bc" = (/obj/machinery/computer/communications,/turf/simulated/floor,/area/vault/listening)
 "bd" = (/obj/machinery/computer/crew,/obj/machinery/light{dir = 1},/turf/simulated/floor,/area/vault/listening)
 "be" = (/obj/structure/rack,/obj/item/device/encryptionkey/syndicate/hacked/full,/obj/item/device/encryptionkey/syndicate/hacked/full,/obj/item/device/encryptionkey/syndicate/hacked/full,/turf/simulated/floor,/area/vault/listening)
-"bf" = (/obj/structure/table,/obj/item/ammo_storage/box/c9mm,/obj/item/ammo_storage/box/c9mm,/turf/simulated/floor,/area/vault/listening)
+"bf" = (/obj/structure/table,/obj/item/ammo_storage/box/c9mm,/obj/item/ammo_storage/box/c9mm,/obj/item/weapon/disk/shuttle_coords/vault/listening,/turf/simulated/floor,/area/vault/listening)
 "bg" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/listening)
 "bh" = (/obj/item/weapon/stool,/turf/simulated/floor/carpet,/area/vault/listening)
 "bi" = (/turf/simulated/floor/carpet,/area/vault/listening)
@@ -91,6 +91,7 @@
 "bM" = (/obj/structure/rack,/obj/item/ammo_storage/magazine/mc9mm,/obj/item/ammo_storage/magazine/mc9mm,/obj/item/ammo_storage/magazine/mc9mm,/obj/item/ammo_storage/magazine/mc9mm,/turf/simulated/floor,/area/vault/listening)
 "bN" = (/obj/structure/table,/obj/machinery/recharger,/turf/simulated/floor,/area/vault/listening)
 "bO" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/vault/listening)
+"bP" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/listening{dir = 2},/turf/simulated/floor/plating,/area/vault/listening)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaa
@@ -117,5 +118,5 @@ aaaabybzbababaadbAbAadbBbbbCadbAbAadbbbbbmbnbyaaaa
 aaaaadbDbEbFbGadaaaaadbHbIbJadaaaaadbKbLbMbNadaaaa
 aaaaadadadadadadafafadadbOadadafafadadadadadadaaaa
 aaaaaaaaaaaaaaaaaaaaaaadauadaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaadbOadaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaadbPadaaaaaaaaaaaaaaaaaaaaaa
 "}
