@@ -508,6 +508,7 @@
 /obj/machinery/chem_master/condimaster
 	name = "\improper CondiMaster 3000"
 	condi = 1
+	icon_state = "condimaster"
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
 
