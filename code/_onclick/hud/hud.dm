@@ -222,8 +222,6 @@ var/global/obj/screen/clicker/catcher = new()
 		borer_hud()
 	else if(isconstruct(mymob))
 		construct_hud()
-	else if(isobserver(mymob))
-		ghost_hud()
 
 	if(isliving(mymob))
 		var/obj/screen/using
