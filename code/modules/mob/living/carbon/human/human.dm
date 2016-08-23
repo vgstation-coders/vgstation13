@@ -1442,7 +1442,7 @@
 		return 0
 	if(istype(shoes,/obj/item/clothing/shoes/magboots))
 		var/obj/item/clothing/shoes/magboots/M = shoes
-		if(M.magpulse)
+		if(M.magpulse && singulo.current_size <= STAGE_FOUR)
 			return 0
 	return 1
 // Get ALL accesses available.
@@ -1559,7 +1559,7 @@
 	if(radiations)
 		apply_effect(current_size * radiations, IRRADIATE)
 	if(shoes)
-		if(shoes.flags & NOSLIP)
+		if(shoes.flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
 	..()
 /mob/living/carbon/human/get_default_language()
