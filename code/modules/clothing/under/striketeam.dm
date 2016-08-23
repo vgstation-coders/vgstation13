@@ -99,10 +99,12 @@ var/list/holomap_cache = list()
 
 		if(mob_indicator != HOLOMAP_ERROR)
 
-			if(!("deathsquad_\ref[src]_\ref[D]" in holomap_cache))
-				holomap_cache["deathsquad_\ref[src]_\ref[D]"] = image('icons/12x12.dmi',"ds[mob_indicator]")
+			var/holomap_marker = "deathsquad_\ref[src]_\ref[D]"
 
-			var/image/I = holomap_cache["deathsquad_\ref[src]_\ref[D]"]
+			if(!(holomap_marker in holomap_cache))
+				holomap_cache[holomap_marker] = image('icons/12x12.dmi',"ds[mob_indicator]")
+
+			var/image/I = holomap_cache[holomap_marker]
 			I.pixel_x = TD.x - T.x + 7*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
 			I.pixel_y = TD.y - T.y + 7*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
 			I.plane = HUD_PLANE
