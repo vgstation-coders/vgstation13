@@ -3,7 +3,7 @@
 		var/obj/location = loc
 		location.on_logout(src)
 
-	if(!(flags & HEAR_ALWAYS))
+	if((flags & HEAR) && !(flags & HEAR_ALWAYS))
 		var/found = 0
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
