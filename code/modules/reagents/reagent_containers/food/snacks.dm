@@ -3796,7 +3796,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/slider/mime/New()
 	..()
 	reagents.add_reagent(SILENCER, 2.5)
-	bitesize = 2.5"
+	bitesize = 2.5
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
 	name = "slippery slider"
