@@ -1,7 +1,0 @@
-author: Unid
-
-delete-after: True
-
-changes: 
-- rscadd: "Added shuttle destination disks. They can be inserted into shuttle computers to unlock additional destinations."
-- rscadd: "The biodome and listening outpost vaults now contain these disks. They allow mining/science shuttles to travel to the biodome and the listening outpost, respectively."
