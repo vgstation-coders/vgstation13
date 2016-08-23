@@ -2,7 +2,7 @@
 #define HEAT_DAMAGE_LEVEL_2 4 //Amount of damage applied when your body temperature passes the 400K point
 #define HEAT_DAMAGE_LEVEL_3 8 //Amount of damage applied when your body temperature passes the 460K point and you are on fire
 
-#define LARVA_GROW_TIME 200
+#define LARVA_GROW_TIME 100
 
 /mob/living/carbon/alien
 	name = "alien" //The alien, not Alien
