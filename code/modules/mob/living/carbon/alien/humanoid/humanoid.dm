@@ -23,10 +23,10 @@
 	..()
 
 /mob/living/carbon/alien/humanoid/proc/add_spells_and_verbs()
-	add_spell(new /spell/aoe_turf/alienregurgitate)
-	add_spell(new /spell/aoe_turf/conjure/alienweeds)
-	add_spell(new /spell/targeted/alienwhisper)
-	add_spell(new /spell/targeted/alientransferplasma)
+	add_spell(new /spell/aoe_turf/alienregurgitate, /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/alienweeds, /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alienwhisper, /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alientransferplasma, /obj/screen/movable/spell_master/alien)
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
 	if(flags & INVULNERABLE)

@@ -392,6 +392,7 @@
 /obj/effect/alien/acid/proc/tick()
 	if(!target)
 		qdel(src)
+		return
 
 	ticks += 1
 

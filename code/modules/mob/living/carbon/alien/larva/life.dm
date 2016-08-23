@@ -23,8 +23,8 @@
 	if (stat != DEAD) //still breathing
 
 		// GROW!
-		if(amount_grown < max_grown)
-			amount_grown++
+		if(growth < LARVA_GROW_TIME)
+			growth++
 
 		//First, resolve location and get a breath
 		if(air_master.current_cycle%4==2)
@@ -199,7 +199,7 @@
 					mutations.Add(M_FAT)
 		else
 			if(nutrition > 500)
-				if(prob(5 + round((nutrition - max_grown) / 2)))
+				if(prob(5 + round((nutrition - LARVA_GROW_TIME) / 2)))
 					to_chat(src, "<span class='danger'>You suddenly feel blubbery!</span>")
 					mutations.Add(M_FAT)
 

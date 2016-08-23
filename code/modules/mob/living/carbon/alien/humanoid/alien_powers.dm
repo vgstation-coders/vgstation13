@@ -244,7 +244,7 @@ Doesn't work on other aliens/AI.*/
 
 /spell/aoe_turf/alienregurgitate/cast(list/targets, mob/user)
 	var/mob/living/carbon/alien/humanoid/alien = user
-	user.drop_stomach_contents()
+	alien.drop_stomach_contents()
 	user.visible_message("<span class='alien'>\The [usr] hurls out the contents of their stomach!</span>")
 
 ///////////////////////////
@@ -275,17 +275,119 @@ Doesn't work on other aliens/AI.*/
 	..()
 	stat_collection.xeno.eggs_laid++
 
-/////////////////////////////
+///////////////////////////////////
+////////// DRONE BROS /////////////
+///////////////////////////////////
 
 
+/spell/aoe_turf/evolve
+	name = "Evolve"
+	panel = "Alien"
+	hud_state = "alien_evolve"
+
+	charge_type = Sp_HOLDVAR
+	insufficient_holder_msg = "<span class='alien'>You are not ready for this kind of evolution.</span>"
+
+	cast_sound = 'sound/effects/evolve.ogg'
+	cast_delay = 50
+
+/spell/aoe_turf/evolve/drone
+	desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
+
+	holder_var_type = "plasma"
+	holder_var_amount = 500
+
+/spell/aoe_turf/evolve/drone/cast_check(skipcharge = 0, mob/user)
+	var/mob/living/carbon/alien/humanoid/queen/Q = locate(/mob/living/carbon/alien/humanoid/queen) in living_mob_list
+	if(Q && Q.key)
+		to_chat(user, "<span class='notice'>We already have an alive queen.</span>")
+		return 0
+	return ..()
+
+/spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)
+	..()
+	user.visible_message("<span class='alien'>[src] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
+	var/mob/living/carbon/alien/humanoid/queen/new_xeno = new(get_turf(user))
+	for(var/datum/language/L in user.languages)
+		new_xeno.add_language(L.name)
+	user.mind.transfer_to(new_xeno)
+	user.transferImplantsTo(new_xeno)
+	user.transferBorers(new_xeno)
+	qdel(user)
+
+////////////////////////////
+//// FOR THE LARVA BROS ////
+////////////////////////////
+
+/spell/aoe_turf/evolve/larva
+	desc = "Evolve into a fully grown Alien."
+	insufficient_holder_msg = "<span class='alien'>You are not fully grown yet.</span>"
+
+	holder_var_type = "growth"
+	holder_var_amount = LARVA_GROW_TIME
+
+	var/spawning
+
+/spell/aoe_turf/evolve/larva/before_target(mob/user)
+	var/explanation_message = {"<span class='notice'><B>You are growing into a beautiful alien! It is time to choose a caste.</B><br>
+	There are three castes to choose from:<br>
+	<B>Hunters</B> are strong and agile, able to hunt away from the hive and rapidly move through ventilation shafts. Hunters generate plasma slowly and have low reserves.<br>
+	<B>Sentinels</B> are tasked with protecting the hive and are deadly up close and at a range. They are not as physically imposing nor fast as the hunters.<br>
+	<B>Drones</B> are the working class, offering the largest plasma storage and generation. They are the only caste which may evolve again, turning into the dreaded alien queen."}
+	to_chat(user,explanation_message)
+	spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) in list("Hunter","Sentinel","Drone","Repeat Explanation")|null
+	while(spawning == "Repeat Explanation")
+		spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) in list("Hunter","Sentinel","Drone","Repeat Explanation")|null
+	if(spawning == null)
+		return 0
+	switch(spawning)
+		if("Hunter")
+			spawning = /mob/living/carbon/alien/humanoid/hunter
+		if("Sentinel")
+			spawning = /mob/living/carbon/alien/humanoid/sentinel
+		if("Drone")
+			spawning = /mob/living/carbon/alien/humanoid/drone
+	return 1
+
+/spell/aoe_turf/evolve/larva/cast(list/targets, mob/living/carbon/user)
+	var/mob/living/carbon/alien/humanoid/new_xeno = new spawning
+	for(var/datum/language/L in user.languages)
+		new_xeno.add_language(L.name)
+	if(user.mind)
+		user.mind.transfer_to(new_xeno)
+	user.transferImplantsTo(new_xeno)
+	user.transferBorers(new_xeno)
+	qdel(user)
+
+/spell/alien_hide
+	name = "Hide"
+	desc = "Allows you to hide beneath tables or items laid on the ground. Toggle."
+	panel = "Alien"
+	hud_state = "alien_hide"
+
+	holder_var
+	charge_max = 0
+
+/spell/alien_hide/cast(list/targets, mob/user)
+	if(user.plane != HIDING_MOB_PLANE)
+		user.plane = HIDING_MOB_PLANE
+		user.visible_message("<span class='danger'>[src] scurries to the ground !</span>", "<span class='alien'>You are now hiding.</span>")
+	else
+		user.plane = MOB_PLANE
+		user.visible_message("<span class='warning'>[src] slowly peeks up from the ground...</span>", "<span class='alien'>You have stopped hiding.</span>")
+
+/////////////////////////////////////////////
+
+/*
 /mob/living/carbon/alien/humanoid/AltClickOn(var/atom/A)
 	if(ismob(A))
-//		neurotoxin(A)
+		neurotoxin(A)
 		return
 	. = ..()
 
 /mob/living/carbon/alien/humanoid/CtrlClickOn(var/atom/A)
 	if(isalien(A))
-//		transfer_plasma(A)
+		transfer_plasma(A)
 		return
 	. = ..()
+*/

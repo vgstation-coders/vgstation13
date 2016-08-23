@@ -11,6 +11,7 @@
 	screen_loc = ui_spell_master
 
 	var/mob/spell_holder
+	var/length = 7
 
 /obj/screen/movable/spell_master/Destroy()
 	..()
@@ -71,8 +72,8 @@
 
 	for(var/i = 1; i <= spell_objects.len; i++)
 		var/obj/screen/spell/S = spell_objects[i]
-		var/xpos = x_position + (x_position < 8 ? 1 : -1)*(i%7)
-		var/ypos = y_position + (y_position < 8 ? round(i/7) : -round(i/7))
+		var/xpos = x_position + (x_position < (world.view+1) ? 1 : -1)*(i%length)
+		var/ypos = y_position + (y_position < (world.view+1) ? round(i/7) : -round(i/length))
 		S.screen_loc = "[encode_screen_X(xpos)]:[x_pix],[encode_screen_Y(ypos)]:[y_pix]"
 		if(spell_holder && spell_holder.client)
 			spell_holder.client.screen += S
@@ -142,6 +143,12 @@
 	closed_state = "genetics_closed"
 
 	screen_loc = ui_genetic_master
+
+/obj/screen/movable/spell_master/alien
+	name = "Alien Abilities"
+	icon_state = "alien_spellmaster"
+
+	length = 9
 
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
