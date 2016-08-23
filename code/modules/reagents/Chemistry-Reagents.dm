@@ -4895,6 +4895,12 @@
 	nutriment_factor = FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
 
+/datum/reagent/drink/silencer/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	M.silent = max(M.silent, 15)
+
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"
 	id = CHANGELINGSTING
