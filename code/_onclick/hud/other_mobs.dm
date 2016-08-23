@@ -103,14 +103,20 @@
 
 /datum/hud/proc/borer_hud()
 
+	mymob.healths = getFromPool(/obj/screen)
+	mymob.healths.icon = 'icons/mob/screen1_borer.dmi'
+	mymob.healths.icon_state = "borer_health0"
+	mymob.healths.name = "health"
+	mymob.healths.screen_loc = ui_construct_health
+
 	mymob.zone_sel = getFromPool(/obj/screen/zone_sel)
-	mymob.zone_sel.icon = 'icons/mob/screen1_shade.dmi'
+	mymob.zone_sel.icon = 'icons/mob/screen1_borer.dmi'
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.zone_sel)
+	mymob.client.screen += list(mymob.healths, mymob.zone_sel)
 
 /datum/hud/proc/construct_hud()
 	var/constructtype
