@@ -1,6 +1,0 @@
-author: kolith
-
-delete-after: True
-
-changes: 
-- rscadd: Adds a neo-russian supply crate to cargo's contraband list, under clothing.
