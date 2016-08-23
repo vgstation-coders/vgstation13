@@ -49,6 +49,9 @@
 
 	amount = amount * brute_damage_modifier
 
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+		return 0
+
 	if(amount > 0)
 		take_overall_damage(amount, 0)
 	else
@@ -58,6 +61,9 @@
 /mob/living/carbon/human/adjustFireLoss(var/amount)
 	amount = amount * burn_damage_modifier
 
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+		return 0
+
 	if(amount > 0)
 		take_overall_damage(0, amount)
 	else
@@ -66,6 +72,9 @@
 
 /mob/living/carbon/human/proc/adjustBruteLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * brute_damage_modifier
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+		return 0
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
@@ -80,6 +89,9 @@
 
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * burn_damage_modifier
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+		return 0
 
 	if (organ_name in organs_by_name)
 		var/datum/organ/external/O = get_organ(organ_name)
@@ -111,6 +123,9 @@
 	..()
 
 	amount = amount * clone_damage_modifier
+
+	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+		return 0
 
 	var/heal_prob = max(0, 80 - getCloneLoss())
 	var/mut_prob = min(80, getCloneLoss()+10)
@@ -304,11 +319,19 @@ This function restores all organs.
 		if(BRUTE)
 			damageoverlaytemp = 20
 			damage = damage * brute_damage_modifier
+
+			if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+				return 0
+
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 		if(BURN)
 			damageoverlaytemp = 20
 			damage = damage * burn_damage_modifier
+
+			if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+				return 0
+
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 

@@ -29,6 +29,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 				mind.heard_before[M] = null
 	if(on_uattack)
 		on_uattack.holder = null
+	if(on_damaged)
+		on_damaged.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -67,7 +69,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 	qdel(on_moved)
 	on_moved = null
 	qdel(on_uattack)
+	qdel(on_damaged)
 	on_uattack = null
+	on_damaged = null
 
 	..()
 
@@ -238,6 +242,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	store_position()
 	on_uattack = new("owner"=src)
 	on_logout = new("owner"=src)
+	on_damaged= new("owner"=src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
