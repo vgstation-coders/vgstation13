@@ -98,6 +98,12 @@
 	slots = 2
 	can_only_hold = list("/obj/item/weapon/hatchet", "/obj/item/weapon/kitchen/utensil/knife")
 
+/obj/item/clothing/accessory/storage/neorussian
+	name = "neo-Russian webbing"
+	desc = "These pouches can hold all kinds of rockets, grenades, magazines, and beverages."
+	icon_state = "nr_rig"
+	_color = "nr_rig"
+
 /obj/item/clothing/accessory/storage/knifeharness/attackby(var/obj/item/O as obj, mob/user as mob)
 	..()
 	update()

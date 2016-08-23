@@ -202,3 +202,9 @@
 	desc = "Deus Vult."
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+
+/obj/item/clothing/head/helmet/neorussian
+	name = "neo-Russian helmet"
+	desc = "This piece of equipment can double as a pillow, a bowl, an emergency toilet, and sometimes as a helmet."
+	icon_state = "nr_helmet"
+	item_state = "nr_helmet"

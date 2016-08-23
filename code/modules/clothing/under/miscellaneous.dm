@@ -648,3 +648,10 @@
 	_color = "mummy"
 
 	has_sensor = 0
+
+/obj/item/clothing/under/neorussian
+	name = "neo-Russian uniform"
+	desc = "Employs a special toshnit pattern, will render you invisible when you eat a potato on an empty stomach."
+	icon_state = "nr_uniform"
+	item_state = "nr_uniform"
+	_color = "nr_uniform"

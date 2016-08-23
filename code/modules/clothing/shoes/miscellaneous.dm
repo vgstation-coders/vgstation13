@@ -260,6 +260,12 @@
 	name = "batboots"
 	desc = "Criminal stomping boots for fighting crime and looking good."
 
+/obj/item/clothing/shoes/jackboots/neorussian
+	name = "neo-Russian boots"
+	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
+	icon_state = "nr_boots"
+	item_state = "nr_boots"
+
 /obj/item/clothing/shoes/cult
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
