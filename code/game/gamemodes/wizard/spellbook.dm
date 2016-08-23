@@ -377,7 +377,7 @@
 							new /obj/item/weapon/scrying(get_turf(H))
 							if (!(M_XRAY in H.mutations))
 								H.mutations.Add(M_XRAY)
-								H.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
+								H.change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
 								H.see_in_dark = 8
 								H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 								to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")

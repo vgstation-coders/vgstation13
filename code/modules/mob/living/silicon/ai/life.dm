@@ -59,9 +59,7 @@
 					//I'll get back to this when I find out  how this is -supposed- to work ~Carn //removed this shit since it was confusing as all hell --39kk9t
 			//stage = 4.5
 			if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
-				src.sight |= SEE_TURFS
-				src.sight |= SEE_MOBS
-				src.sight |= SEE_OBJS
+				change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				src.see_in_dark = 8
 				src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
@@ -97,9 +95,7 @@
 					src.blind.screen_loc = "1,1 to 15,15"
 					if (src.blind.layer != 18)
 						src.blind.layer = UNDER_HUD_LAYER
-				src.sight = src.sight&~SEE_TURFS
-				src.sight = src.sight&~SEE_MOBS
-				src.sight = src.sight&~SEE_OBJS
+				change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				src.see_in_dark = 0
 			src.see_invisible = SEE_INVISIBLE_LIVING
 

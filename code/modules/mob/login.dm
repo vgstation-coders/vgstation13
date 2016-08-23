@@ -49,7 +49,7 @@
 
 	delayNextMove(0)
 
-	sight |= SEE_SELF
+	change_sight(adding = SEE_SELF)
 
 	..()
 
