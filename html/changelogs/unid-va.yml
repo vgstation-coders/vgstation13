@@ -1,6 +1,0 @@
-author: Unid
-
-delete-after: True
-
-changes: 
-- rscadd: Added chain link fences. Currently they can't be created and are only for mapping.
