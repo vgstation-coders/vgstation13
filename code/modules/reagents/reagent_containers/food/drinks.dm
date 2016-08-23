@@ -4,6 +4,7 @@
 /obj/item/weapon/reagent_containers/food/drinks
 	name = "drink"
 	desc = "yummy"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/drinks.dmi'
 	icon_state = null
 	flags = FPRINT  | OPENCONTAINER
