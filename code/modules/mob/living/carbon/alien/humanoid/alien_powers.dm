@@ -216,7 +216,7 @@ Doesn't work on other aliens/AI.*/
 
 	spell_flags = WAIT_FOR_CLICK
 	charge_type = Sp_HOLDVAR|Sp_RECHARGE
-	charge_max = 15 SECONDS
+	charge_max = 8 SECONDS
 	holder_var_type = "plasma"
 	holder_var_amount = 200
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
