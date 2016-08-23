@@ -47,7 +47,7 @@
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
-	if(flags & HEAR && !ismob(src))
+	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
 	locked_atoms            = list()
@@ -55,14 +55,6 @@
 	locking_categories_name = list()
 
 /atom/movable/Destroy()
-	if(flags & HEAR && !ismob(src))
-		var/found = 0
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
-				found = 1
-		if(!found)
-			world.log << "Atom Movable virtualhearer for [type] could not be found for /ref[src]"
 	gcDestroyed = "Bye, world!"
 	tag = null
 
@@ -109,6 +101,15 @@
 		soft_dels += 1
 
 /atom/movable/Del()
+	if((flags & HEAR) && !ismob(src))
+		var/found = 0
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				returnToPool(VH)
+				found = 1
+		if(!found)
+			world.log << "Atom Movable virtualhearer for [type] could not be found for /ref[src]"
+
 	if (gcDestroyed)
 
 		if (hard_deleted)
