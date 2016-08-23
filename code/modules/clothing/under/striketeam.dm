@@ -1,5 +1,7 @@
 var/list/deathsquad_uniforms = list()
 
+var/list/holomap_cache = list()
+
 /obj/item/clothing/under/deathsquad
 	name = "deathsquad holosuit"
 	desc = "A state-of-the-art suit featuring an holographic map of the area, to help the squad coordinate their efforts."
@@ -94,8 +96,13 @@ var/list/deathsquad_uniforms = list()
 					mob_indicator = HOLOMAP_OTHER
 			else
 				continue
-		if(mob_indicator != -1)
-			var/image/I = image('icons/12x12.dmi',"ds[mob_indicator]")
+
+		if(mob_indicator != HOLOMAP_ERROR)
+
+			if(!("deathsquad_\ref[src]_\ref[D]" in holomap_cache))
+				holomap_cache["deathsquad_\ref[src]_\ref[D]"] = image('icons/12x12.dmi',"ds[mob_indicator]")
+
+			var/image/I = holomap_cache["deathsquad_\ref[src]_\ref[D]"]
 			I.pixel_x = TD.x - T.x + 7*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
 			I.pixel_y = TD.y - T.y + 7*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
 			I.plane = HUD_PLANE
@@ -118,7 +125,8 @@ var/list/deathsquad_uniforms = list()
 
 /obj/item/clothing/under/proc/deactivate_holomap()
 	holomap_activated = 0
-	activator.client.images -= holomap_images
+	if(activator.client)
+		activator.client.images -= holomap_images
 	activator = null
 	holomap_images.len = 0
 	processing_objects.Remove(src)
