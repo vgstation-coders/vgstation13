@@ -1848,5 +1848,8 @@ mob/proc/on_foot()
 			mind.heard_before[M.name] = M
 			M.heard_by |= mind
 
+/mob/acidable()
+	return 1
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

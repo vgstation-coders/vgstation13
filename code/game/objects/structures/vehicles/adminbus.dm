@@ -13,7 +13,6 @@
 	plane = ABOVE_HUMAN_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
-	unacidable = 1
 	var/can_move=1
 	var/list/passengers = list()
 	var/unloading = 0
@@ -624,3 +623,6 @@
 		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		bus.remove_HUD(M)
 		M.flags &= ~INVULNERABLE
+
+/obj/structure/bed/chair/vehicle/adminbus/acidable()
+	return 0

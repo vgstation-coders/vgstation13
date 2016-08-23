@@ -155,6 +155,12 @@
 		qdel(W)
 		qdel(src)
 
+/obj/item/clothing/mask/gas/clown_hat/stickymagic
+	canremove = 0
+
+/obj/item/clothing/mask/gas/clown_hat/stickymagic/acidable()
+	return 0
+
 /obj/item/clothing/mask/gas/clown_hat/wiz
 	name = "purple clown wig and mask"
 	desc = "Some pranksters are truly magical."
@@ -195,6 +201,13 @@
 /obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
 	if(src.muted)
 		speech.message=""
+
+/obj/item/clothing/mask/gas/mime/stickymagic
+	canremove = 0
+	muted = 1
+
+/obj/item/clothing/mask/gas/mime/acidable()
+	return 0
 
 /obj/item/clothing/mask/gas/monkeymask
 	name = "monkey mask"

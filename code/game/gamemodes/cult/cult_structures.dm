@@ -95,7 +95,6 @@
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "hole"
 	density = 1
-	unacidable = 1
 	anchored = 1.0
 	var/spawnable = null
 

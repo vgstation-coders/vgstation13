@@ -4,7 +4,6 @@
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "1"
 	density = 0
-	unacidable = 1
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 	var/fire_damage = 0
@@ -104,8 +103,6 @@
 	icon = 'icons/effects/plasma.dmi'
 	icon_state = null
 	density = 0
-	unacidable = 1
-	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 
 /obj/effect/gas_puff/New(turf/T, var/datum/gas_mixture/stored_gas = null, var/type_of_gas)

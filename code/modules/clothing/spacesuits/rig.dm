@@ -204,13 +204,15 @@
 	_color = "wiz"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	unacidable = 1 //No longer shall our kind be foiled by lone chemists with spray bottles!
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.7
 
 	wizard_garb = 1
 
 	species_restricted = null
+
+/obj/item/clothing/head/helmet/space/rig/wizard/acidable()
+	return 0
 
 /obj/item/clothing/suit/space/rig/wizard
 	icon_state = "rig-wiz"
@@ -219,7 +221,6 @@
 	item_state = "wiz_hardsuit"
 	slowdown = 1
 	w_class = W_CLASS_MEDIUM
-	unacidable = 1
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
@@ -228,6 +229,9 @@
 	wizard_garb = 1
 
 	species_restricted = null
+
+/obj/item/clothing/suit/space/rig/wizard/acidable()
+	return 0
 
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical

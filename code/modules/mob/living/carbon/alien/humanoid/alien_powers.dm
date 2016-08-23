@@ -199,57 +199,53 @@ Doesn't work on other aliens/AI.*/
 
 	range = 1
 
-/spell/alienacid/is_valid_target(var/obj/target, mob/user)
+/spell/alienacid/is_valid_target(var/atom/target, mob/user)
 	if(get_dist(user, target) > range) //Shouldn't be necessary but a good check in case of overrides
 		return 0
-	return (istype(target) && !target.unacidable)
+	if(!ismob(target) && target.acidable())
+		return 1
+	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
+	return 0
 
 /spell/alienacid/cast(list/targets, mob/user)
-	var/atom/O = targets[1]
-	new /obj/effect/alien/acid(get_turf(O), O)
+	acidify(targets[1], user)
 
-/mob/living/carbon/alien/humanoid/proc/corrosive_acid(O as obj|turf in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
+/mob/living/carbon/alien/humanoid/proc/corrosive_acid(atom/O as obj|turf in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
 	set name = "Corrosive Acid (200)"
 	set desc = "Drench an object in acid, destroying it over time."
-	set category = "Alien"
+	set category = null
+
+	if(ismob(O)) //This sort of thing may be possible by manually calling the verb, not sure
+		return
 
 	if(powerc(200))
 		if(O in oview(1))
-			// OBJ CHECK
-			if(isobj(O))
-				var/obj/I = O
-				if(I.unacidable)	//So the aliens don't destroy energy fields/singularies/other aliens/etc with their acid.
-					to_chat(usr, "<span class='alien'>You cannot dissolve this object.</span>")
-					return
-			// TURF CHECK
-			else if(istype(O, /turf/simulated))
-				var/turf/T = O
-				// R WALL
-				if(istype(T, /turf/simulated/wall/r_wall))
-					to_chat(usr, "<span class='alien'>You cannot dissolve this object.</span>")
-					return
-				// R FLOOR
-				if(istype(T, /turf/simulated/floor/engine))
-					to_chat(usr, "<span class='alien'>You cannot dissolve this object.</span>")
-					return
-			else // Not a type we can acid.
-				return
-			new /obj/effect/alien/acid(get_turf(O), O)
-			visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+			acidify(O, usr)
 		else
 			to_chat(usr, "<span class='alien'>Target is too far away.</span>")
 
+/proc/acidify(atom/O, mob/user)
+	if(O.acidable())
+		new /obj/effect/alien/acid(get_turf(O), O)
+		user.visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+	else
+		to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
 
+/spell/aoe_turf/alienregurgitate
+	name = "Regurgitate"
+	desc = "Empties the contents of your stomach."
+	panel = "Alien"
+	hud_state = "alien_regurgitate"
 
-/mob/living/carbon/alien/humanoid/verb/regurgitate()
-	set name = "Regurgitate"
-	set desc = "Empties the contents of your stomach"
-	set category = "Alien"
+/spell/aoe_turf/alienregurgitate/cast_check(skipcharge = 0, mob/user)
+	if(!istype(user, /mob/living/carbon/alien/humanoid)) //why do they have this shit anyway
+		return 0
+	return ..()
 
-	if(powerc())
-		drop_stomach_contents()
-		usr.visible_message("<span class='alien'>\The [usr] hurls out the contents of their stomach!</span>")
-	return
+/spell/aoe_turf/alienregurgitate/cast(list/targets, mob/user)
+	var/mob/living/carbon/alien/humanoid/alien = user
+	user.drop_stomach_contents()
+	user.visible_message("<span class='alien'>\The [usr] hurls out the contents of their stomach!</span>")
 
 ///////////////////////////
 // QUEEN SPECIFIC SPELLS //

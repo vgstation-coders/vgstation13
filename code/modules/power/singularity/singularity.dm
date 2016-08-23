@@ -12,7 +12,7 @@
 //	)
 
 
-/obj/machinery/singularity/
+/obj/machinery/singularity
 	name = "gravitational singularity" //Lower case
 	desc = "The destructive, murderous Lord Singuloth, patron saint of Engineering. They harness its power to run the station's lighting and arcades."
 	icon = 'icons/obj/singularity.dmi'
@@ -22,7 +22,6 @@
 	layer = SINGULARITY_LAYER
 	plane = EFFECTS_PLANE
 	luminosity = 6
-	unacidable = 1 //Don't comment this out.
 	use_power = 0
 
 	var/current_size = 1
@@ -575,3 +574,5 @@
 
 /obj/machinery/singularity/bite_act()
 
+/obj/machinery/singularity/acidable()
+	return 0

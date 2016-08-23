@@ -238,6 +238,13 @@
 			step_sound = sound_list[pick(sound_list)]
 	..()
 
+/obj/item/clothing/shoes/clown_shoes/stickymagic
+	canremove = 0
+	wizard_garb = 1
+
+/obj/item/clothing/shoes/clown_shoes/stickymagic/acidable()
+	return 0
+
 #undef CLOWNSHOES_RANDOM_SOUND
 
 /obj/item/clothing/shoes/jackboots

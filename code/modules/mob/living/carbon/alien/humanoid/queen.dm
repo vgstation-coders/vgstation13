@@ -37,6 +37,7 @@
 
 /mob/living/carbon/alien/humanoid/queen/add_spells_and_verbs()
 	..()
+	add_spell(new /spell/aoe_turf/conjure/alienegg)
 	add_spell(new /spell/alienacid)
 	add_spell(new /spell/targeted/alienneurotoxin)
 	add_spell(new /spell/aoe_turf/conjure/choice/alienresin)

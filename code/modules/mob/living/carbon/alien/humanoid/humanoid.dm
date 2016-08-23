@@ -23,6 +23,7 @@
 	..()
 
 /mob/living/carbon/alien/humanoid/proc/add_spells_and_verbs()
+	add_spell(new /spell/aoe_turf/alienregurgitate)
 	add_spell(new /spell/aoe_turf/conjure/alienweeds)
 	add_spell(new /spell/targeted/alienwhisper)
 	add_spell(new /spell/targeted/alientransferplasma)

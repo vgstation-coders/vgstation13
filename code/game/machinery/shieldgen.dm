@@ -6,11 +6,13 @@
 	density = 1
 	opacity = 0
 	anchored = 1
-	unacidable = 1
 	ghost_read = 0
 	ghost_write = 0
 	var/const/max_health = 200
 	var/health = max_health //The shield can only take so much beating (prevents perma-prisons)
+
+/obj/machinery/shield/acidable()
+	return 0
 
 /obj/machinery/shield/New()
 	src.dir = pick(1,2,3,4)
@@ -530,12 +532,14 @@
 	icon_state = "shieldwall"
 	anchored = 1
 	density = 1
-	unacidable = 1
 	luminosity = 3
 	var/needs_power = 0
 	var/active = 1
 	var/obj/machinery/shieldwallgen/gen_primary
 	var/obj/machinery/shieldwallgen/gen_secondary
+
+/obj/machinery/shieldwall/acidable()
+	return 0
 
 /obj/machinery/shieldwall/New(var/obj/machinery/shieldwallgen/A, var/obj/machinery/shieldwallgen/B)
 	..()

@@ -16,7 +16,6 @@ var/list/impact_master = list()
 	icon = 'icons/obj/projectiles.dmi'
 	icon_state = "bullet"
 	density = 1
-	unacidable = 1
 	plane = EFFECTS_PLANE
 	anchored = 1 //There's a reason this is here, Mport. God fucking damn it -Agouri. Find&Fix by Pete. The reason this is here is to stop the curving of emitter shots.
 	flags = FPRINT
@@ -707,3 +706,6 @@ var/list/impact_master = list()
 
 	if(ismob(A) || isturf(A) || isobj(A))
 		impact = get_hit_atom(A)
+
+/obj/item/projectile/acidable()
+	return 0

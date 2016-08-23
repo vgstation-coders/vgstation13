@@ -174,7 +174,9 @@
 
 	var/frequency = 1449 //seems to be the frequency used for all the controllers on /vg/ so why not make it default
 	var/datum/radio_frequency/radio_connection
-	unacidable = 1
+
+/obj/machinery/embedded_controller/radio/acidable()
+	return 0
 
 /obj/machinery/embedded_controller/radio/initialize()
 	set_frequency(frequency)

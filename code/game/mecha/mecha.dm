@@ -18,7 +18,6 @@
 	density = 1 //Dense. To raise the heat.
 	opacity = 1 ///opaque. Menacing.
 	anchored = 1 //no pulling around.
-	unacidable = 1 //and no deleting hoomans inside
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
@@ -1886,6 +1885,9 @@
 	else
 		icon_state = initial(icon_state)
 	return icon_state
+
+/obj/mecha/acidable()
+	return 0
 
 //////////////////////////////////////////
 ////////  Mecha global iterators  ////////

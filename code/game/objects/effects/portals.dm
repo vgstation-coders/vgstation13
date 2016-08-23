@@ -4,7 +4,6 @@
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "portal0"
 	density = 0
-	unacidable = 1//Can't destroy energy portals.
 	var/obj/target = null
 	var/obj/item/weapon/creator = null
 	var/mob/owner = null

@@ -362,3 +362,6 @@ var/const/MAX_ACTIVE_TIME = 400
 	if(C && (istype(C.wear_mask, /obj/item/clothing/mask/facehugger) || C.status_flags & XENO_HOST))
 		return 0
 	return 1
+
+/obj/item/clothing/mask/facehugger/acidable()
+	return 0

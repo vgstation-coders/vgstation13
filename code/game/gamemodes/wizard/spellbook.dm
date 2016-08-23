@@ -603,9 +603,7 @@
 /obj/item/weapon/spellbook/oneuse/clown/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
 		to_chat(user, "<span class ='warning'>You suddenly feel funny!</span>")
-		var/obj/item/clothing/mask/gas/clown_hat/magicclown = new /obj/item/clothing/mask/gas/clown_hat
-		magicclown.canremove = 0
-		magicclown.unacidable = 1
+		var/obj/item/clothing/mask/gas/clown_hat/magicclown = new /obj/item/clothing/mask/gas/clown_hat/stickymagic
 		user.flash_eyes(visual = 1)
 		user.dna.SetSEState(CLUMSYBLOCK,1)
 		genemutcheck(user,CLUMSYBLOCK,null,MUTCHK_FORCED)
@@ -623,10 +621,7 @@
 /obj/item/weapon/spellbook/oneuse/mime/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
 		to_chat(user, "<span class ='warning'>You suddenly feel very quiet.</span>")
-		var/obj/item/clothing/mask/gas/mime/magicmime = new /obj/item/clothing/mask/gas/mime
-		magicmime.canremove = 0
-		magicmime.unacidable = 1
-		magicmime.muted = 1
+		var/obj/item/clothing/mask/gas/mime/magicmime = new /obj/item/clothing/mask/gas/mime/stickymagic
 		user.flash_eyes(visual = 1)
 		user.drop_from_inventory(user.wear_mask)
 		user.equip_to_slot_if_possible(magicmime, slot_wear_mask, 1, 1)
@@ -642,10 +637,7 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/victim = user
 		to_chat(user, "<span class ='warning'>Your feet feel funny!</span>")
-		var/obj/item/clothing/shoes/clown_shoes/magicshoes = new /obj/item/clothing/shoes/clown_shoes
-		magicshoes.canremove = 0
-		magicshoes.wizard_garb = 1
-		magicshoes.unacidable = 1
+		var/obj/item/clothing/shoes/clown_shoes/magicshoes = new /obj/item/clothing/shoes/clown_shoes/stickymagic
 		user.flash_eyes(visual = 1)
 		user.drop_from_inventory(victim.shoes)
 		user.equip_to_slot(magicshoes, slot_shoes, 1, 1)
