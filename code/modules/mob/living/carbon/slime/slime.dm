@@ -652,7 +652,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		health = maxHealth
 		stat = CONSCIOUS
 	else
-		// slimes can't suffocate unless they suicide. They are also not harmed by fire
+		// slimes can't suffocate unless they suicide or they fall into crit. They are also not harmed by fire
 		health = maxHealth - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
 
 /mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
