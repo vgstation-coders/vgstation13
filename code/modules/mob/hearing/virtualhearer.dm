@@ -35,7 +35,8 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 		sight = M.sight
 
 	attached_type = attachedto.type //record the attached's typepath in case something goes wrong
-	attached_ref = "/ref[attachedto]" //record attached's text ref to see what is happening
+	attached_ref = "[attachedto]" //record attached's text ref to see what is happening
+	world.log << "Virtualhearer attached to [attachedto] of type [attachedto.type]"
 	if(is_type_in_list(attachedto,stationary_hearers))
 		virtualhearers -= src
 

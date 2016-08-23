@@ -260,10 +260,11 @@ var/global/obj/screen/fuckstat/FUCK = new
 		var/found = 0
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
+				world.log << "Virtualhearer removed from [src] of type [type]"
 				returnToPool(VH)
 				found = 1
 		if(!found)
-			world.log << "Mob virtualhearer for [type] could not be found for /ref[src]"
+			world.log << "Mob virtualhearer for [type] could not be found for [src]"
 	..()
 
 /mob/proc/is_muzzled()
