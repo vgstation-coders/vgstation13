@@ -401,6 +401,7 @@
 
 		visible_message("<span class='good'><B>[src.target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>")
 		target.acid_act()
+		qdel(src)
 
 	switch(target_strength - ticks)
 		if(6)

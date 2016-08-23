@@ -37,10 +37,10 @@
 
 /mob/living/carbon/alien/humanoid/queen/add_spells_and_verbs()
 	..()
-	add_spell(new /spell/aoe_turf/conjure/alienegg, /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/alienacid, /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/targeted/alienneurotoxin, /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/alienegg, "alien_spell_base", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/alienacid, "alien_spell_base", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alienneurotoxin, "alien_spell_base", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, "alien_spell_base", /obj/screen/movable/spell_master/alien)
 	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 
 /mob/living/carbon/alien/humanoid/queen

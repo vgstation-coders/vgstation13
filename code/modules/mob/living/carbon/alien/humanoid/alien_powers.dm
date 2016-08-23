@@ -265,12 +265,6 @@ Doesn't work on other aliens/AI.*/
 
 	summon_type = list(/obj/effect/alien/egg)
 
-/spell/aoe_turf/conjure/alienegg/before_cast(list/targets)
-	if(locate(/obj/effect/alien/egg) in targets[1])
-		to_chat(src, "<span class='warning'>There's already an egg here.</span>")
-		return list() //no targets
-	return ..()
-
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	..()
 	stat_collection.xeno.eggs_laid++
