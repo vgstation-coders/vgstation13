@@ -41,6 +41,7 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 		virtualhearers -= src
 
 /mob/virtualhearer/Destroy()
+	..()
 	virtualhearers -= src
 	attached = null
 
