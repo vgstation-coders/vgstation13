@@ -1825,6 +1825,20 @@
 		reagents.add_reagent(CARPPHEROMONES, 3)
 		bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/crab_sticks
+	name = "Not-Actually-Imitation Crab sticks"
+	desc = "Made from actual crab meat."
+	icon_state = "crab_sticks"
+	food_flags = FOOD_MEAT
+
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT, 4)
+		reagents.add_reagent(SUGAR, 1)
+		reagents.add_reagent(SODIUMCHLORIDE, 1)
+		bitesize = 2
+
+
 /obj/item/weapon/reagent_containers/food/snacks/sandwich
 	name = "Sandwich"
 	desc = "A grand creation of meat, cheese, bread, and several leaves of lettuce! Arthur Dent would be proud."
