@@ -11,9 +11,6 @@
 	var/pixel_y_offset = 0
 	var/rotate_offsets = FALSE
 
-	//If 1, create a /datum/locking_category object for every locked atom
-	var/unique = 0
-
 // Modifies the new atom according to our flags.
 /datum/locking_category/proc/lock(var/atom/movable/AM)
 	if (!AM)
@@ -104,11 +101,6 @@
 
 	AM.pixel_x -= pixel_x_offset * PIXEL_MULTIPLIER
 	AM.pixel_y -= pixel_y_offset * PIXEL_MULTIPLIER
-
-	if(unique && !locked.len)
-		AM.locking_categories.Remove(src)
-		AM.locking_categories_name[type] = locate(src.type) in AM.locking_categories
-		qdel(src)
 
 /datum/locking_category/New(var/atom/new_owner)
 	locked = list()
