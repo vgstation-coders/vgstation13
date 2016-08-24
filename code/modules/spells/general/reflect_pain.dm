@@ -34,7 +34,7 @@
 /spell/mirror_of_pain/cast(list/targets, mob/user)
 	for(var/mob/living/L in targets)
 		L.visible_message("<span class='sinister'>You feel bound to \the [L].</span>",\
-		"<span class='sinister'>You bind your life essence to this plane. Any pain endured will be also felt by everybody around you.</span>")
+		"<span class='sinister'>You bind your life essence to this plane. Any pain you endure will be also felt by everybody around you.</span>")
 		var/event_key = L.on_damaged.Add(src, "reflect")
 		L.overlays.Add(user_overlay)
 		playsound(get_turf(L), 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)
@@ -54,7 +54,6 @@
 	absorbed_damage += amount
 
 	var/affected_amount = 0
-	var/turf/start = get_turf(src.holder)
 	for(var/mob/living/L in view(world.view, src.holder))
 		if(L.isDead())
 			continue
@@ -64,12 +63,13 @@
 		affected_amount++
 
 		switch(damage_type)
-			if(BRUTE)
-				to_chat(L, "<span class='userdanger'>A bruise appears on your body!</span>")
-			if(BURN)
-				to_chat(L, "<span class='userdanger'>A burn appears on your body!</span>")
+			if(BRUTE, BURN, CLONE)
+				to_chat(L, "<span class='sinister'>\The [src.holder]'s wounds appear on your body!</span>")
 			else
-				to_chat(L, "<span class='userdanger'>You feel very weak.</span>")
+				to_chat(L, "<span class='sinister'>You feel deathly sick!</span>")
+
+		if(prob(30) && amount >= 10)
+			L.audible_scream()
 
 		L.apply_damage(amount, damage_type, ignore_events = 1) //The ignore_events part is to prevent recursion with two wizards
 		L.attack_log += "\[[time_stamp()]\] <font color='orange'>Received [amount] [damage_type] damage, reflected from [src.holder] by the [src.name] spell</font>"
