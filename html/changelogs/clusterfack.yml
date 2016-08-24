@@ -1,5 +1,0 @@
-author: clusterfack
-delete-after: True
-changes: 
-- rscadd: Toolboxes given 25% more force
-- rscdel: Floortiles throwforce reduced
