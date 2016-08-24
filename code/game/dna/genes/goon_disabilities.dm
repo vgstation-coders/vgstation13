@@ -361,7 +361,7 @@
 
 	spell_flags = INCLUDEUSER
 	invocation_type = SpI_NONE
-	range = -1
+	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
@@ -403,7 +403,7 @@
 
 	spell_flags = INCLUDEUSER | STATALLOWED
 	invocation_type = SpI_NONE
-	range = -1
+	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"
 

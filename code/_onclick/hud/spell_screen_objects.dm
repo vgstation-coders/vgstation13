@@ -185,6 +185,10 @@
 			dat += "<br>Range: Adjacency"
 		if(2 to INFINITY)
 			dat += "<br>Range: [spell.range]"
+		if(GLOBALCAST)
+			dat += "<br>Range: Global"
+		if(SELFCAST)
+			dat += "<br>Range: Self"
 	openToolTip(usr,src,params,title = name,content = dat)
 	
 /obj/screen/spell/MouseExited()
