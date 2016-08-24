@@ -9,7 +9,7 @@
 //	flags = NOREACT
 	flags = HEAR | PROXMOVE
 	var/datum/mind/mind
-
+	var/list/datum/action/actions = list()
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
 
 	var/obj/screen/hands = null

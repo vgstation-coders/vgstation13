@@ -10,7 +10,8 @@
 
 /obj/screen/movable
 	var/snap2grid = FALSE
-
+	var/moved = FALSE
+	
 /obj/screen/movable/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
 
