@@ -312,17 +312,12 @@
 		/obj/item/device/camera,
 		/obj/item/device/camera_film,
 		/obj/item/device/encryptionkey,
-		/obj/item/device/encryptionkey,
-		/obj/item/device/encryptionkey,
-		/obj/item/device/encryptionkey/syndicate,
 		/obj/item/device/encryptionkey/binary,
-		/obj/item/device/encryptionkey/syndicate/hacked,
 		/obj/item/device/hailer,
 		/obj/item/device/healthanalyzer,
 		/obj/item/device/mass_spectrometer,
 		/obj/item/device/megaphone,
 		/obj/item/device/mmi/radio_enabled,
-		/obj/item/device/powersink,
 		/obj/item/device/reagent_scanner,
 		/obj/item/device/soundsynth,
 		/obj/item/latexballon,
@@ -525,9 +520,6 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
-		/obj/item/weapon/gun/projectile/flamethrower/full,
-		/obj/item/weapon/gun/projectile/deagle/gold,
-		/obj/item/weapon/gun/projectile/russian,
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/handcuffs/cable,
 		/obj/item/weapon/hatchet,
@@ -541,17 +533,10 @@
 		/obj/item/weapon/scalpel,
 		/obj/item/weapon/shard,
 		/obj/item/weapon/stool,
-		/obj/item/device/powersink,
 		/obj/item/weapon/reagent_containers/blood/OMinus,
 		/obj/item/weapon/reagent_containers/glass/bottle/ammonia,
 		/obj/item/weapon/reagent_containers/glass/bottle/capsaicin,
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
-		/obj/item/weapon/reagent_containers/glass/bottle/cold,
 		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine,
-		/obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/flu_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
-		/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
 		/obj/item/weapon/reagent_containers/food/drinks/beer,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/cream,
@@ -586,7 +571,36 @@
 		/obj/item/weapon/reagent_containers/food/snacks/soylenviridians,
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake,
 		/obj/item/weapon/reagent_containers/food/snacks/tofurkey,
+		/obj/item/device/radio/headset/headset_earmuffs,
+		/obj/item/weapon/solder/pre_fueled,
+		/obj/item/weapon/storage/box/smokebombs,
+		/obj/item/weapon/storage/box/wind,
+		/obj/item/weapon/storage/box/foam,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		/obj/structure/popout_cake,
+		/obj/structure/bed/chair/vehicle/wheelchair/multi_people,
+		/obj/item/stack/package_wrap/syndie,
+		/obj/item/weapon/storage/toolbox/syndicate,
+		/obj/item/weapon/switchtool/swiss_army_knife
 		)
+
+/obj/map/spawner/highrisk
+	name = "high risk spawner"
+	icon_state = "maint"
+	chance = 20
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion,
+		/obj/item/weapon/reagent_containers/glass/bottle/flu_virion,
+		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
+		/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/reagent_containers/glass/bottle/cold,
+		/obj/item/device/powersink,
+		/obj/item/device/powersink,
+		/obj/item/weapon/gun/projectile/flamethrower/full,
+		/obj/item/weapon/gun/projectile/deagle/gold,
+		/obj/item/weapon/gun/projectile/russian,
+	)
 
 // Space ///////////////////////////////////////////////////////
 
