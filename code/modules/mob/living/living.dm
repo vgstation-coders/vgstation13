@@ -335,6 +335,10 @@
 /mob/living/proc/adjustBrainLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRAIN, "amount" = amount)))
+		return 0
+
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setBrainLoss(var/amount)

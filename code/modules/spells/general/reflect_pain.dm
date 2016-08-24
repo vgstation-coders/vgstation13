@@ -17,6 +17,10 @@
 
 	var/image/user_overlay
 
+	//Some statistics that will be shown at round end
+	var/absorbed_damage = 0
+	var/dealt_damage = 0
+
 /spell/mirror_of_pain/New()
 	..()
 	user_overlay = image('icons/mob/mob.dmi', icon_state = "red_glow")
@@ -29,13 +33,14 @@
 
 /spell/mirror_of_pain/cast(list/targets, mob/user)
 	for(var/mob/living/L in targets)
-		to_chat(L, "<span class='sinister'>Your life essence .</span>")
+		L.visible_message("<span class='sinister'>You feel bound to \the [L].</span>",\
+		"<span class='sinister'>You bind your life essence to this plane. Any pain endured will be also felt by everybody around you.</span>")
 		var/event_key = L.on_damaged.Add(src, "reflect")
 		L.overlays.Add(user_overlay)
 		playsound(get_turf(L), 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)
 
 		spawn(duration)
-			to_chat(L, "<span class='notice'>You no longer feel protected.</span>")
+			to_chat(L, "<span class='sinister'>Your life essence is no longer bound to this plane. You won't share received damage with your enemies anymore.</span>")
 			L.on_damaged.Remove(event_key)
 			L.overlays.Remove(user_overlay)
 
@@ -46,11 +51,17 @@
 	if(amount <= 0)
 		return
 
-	for(var/mob/living/L in view(world.view, holder))
+	absorbed_damage += amount
+
+	var/affected_amount = 0
+	var/turf/start = get_turf(src.holder)
+	for(var/mob/living/L in view(world.view, src.holder))
 		if(L.isDead())
 			continue
-		if(L == holder)
+		if(L == src.holder)
 			continue
+
+		affected_amount++
 
 		switch(damage_type)
 			if(BRUTE)
@@ -60,5 +71,13 @@
 			else
 				to_chat(L, "<span class='userdanger'>You feel very weak.</span>")
 
-		L.apply_damage(amount, damage_type)
-		L.attack_log += "\[[time_stamp()]\] <font color='orange'>Received [amount] [damage_type] damage, reflected from [holder] by the [src.name] spell</font>"
+		L.apply_damage(amount, damage_type, ignore_events = 1) //The ignore_events part is to prevent recursion with two wizards
+		L.attack_log += "\[[time_stamp()]\] <font color='orange'>Received [amount] [damage_type] damage, reflected from [src.holder] by the [src.name] spell</font>"
+		dealt_damage += amount
+
+	var/mob/living/holder = src.holder
+	if(istype(holder))
+		holder.attack_log += "\[[time_stamp()]\] <font color='orange'>Received [amount] [damage_type] damage with [src.name] active. Reflected to [affected_amount] people.</font>"
+
+/spell/mirror_of_pain/get_scoreboard_suffix()
+	return " ([absorbed_damage] damage taken, [dealt_damage] damage dealt)"

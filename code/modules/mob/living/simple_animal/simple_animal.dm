@@ -611,11 +611,19 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			adjustBruteLoss(30)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+		return 0
+
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+		return 0
+
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
