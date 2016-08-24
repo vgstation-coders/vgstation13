@@ -32,9 +32,9 @@
 /obj/item/mecha_parts/chassis/ripley
 	name = "Ripley Chassis"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/ripley(src)
+/obj/item/mecha_parts/chassis/ripley/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/ripley(src)
 
 /obj/item/mecha_parts/part/ripley_torso
 	name="Ripley Torso"
@@ -71,9 +71,9 @@
 /obj/item/mecha_parts/chassis/gygax
 	name = "Gygax Chassis"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/gygax(src)
+/obj/item/mecha_parts/chassis/gygax/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/gygax(src)
 
 /obj/item/mecha_parts/part/gygax_torso
 	name="Gygax Torso"
@@ -120,9 +120,9 @@
 /obj/item/mecha_parts/chassis/durand
 	name = "Durand Chassis"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/durand(src)
+/obj/item/mecha_parts/chassis/durand/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/durand(src)
 
 /obj/item/mecha_parts/part/durand_torso
 	name="Durand Torso"
@@ -166,9 +166,9 @@
 /obj/item/mecha_parts/chassis/marauder
 	name = "Marauder Chassis"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/marauder(src)
+/obj/item/mecha_parts/chassis/marauder/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/marauder(src)
 
 /obj/item/mecha_parts/part/marauder_torso
 	name="Marauder Torso"
@@ -212,9 +212,9 @@
 /obj/item/mecha_parts/chassis/firefighter
 	name = "Firefighter Chassis"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/firefighter(src)
+/obj/item/mecha_parts/chassis/firefighter/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/firefighter(src)
 /*
 /obj/item/mecha_parts/part/firefighter_torso
 	name="Ripley-on-Fire Torso"
@@ -242,9 +242,9 @@
 /obj/item/mecha_parts/chassis/honker
 	name = "H.O.N.K Chassis"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/honker(src)
+/obj/item/mecha_parts/chassis/honker/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/honker(src)
 
 /obj/item/mecha_parts/part/honker_torso
 	name="H.O.N.K Torso"
@@ -277,9 +277,9 @@
 	name = "Phazon Chassis"
 	origin_tech = Tc_MATERIALS + "=7"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/phazon(src)
+/obj/item/mecha_parts/chassis/phazon/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/phazon(src)
 
 /obj/item/mecha_parts/part/phazon_torso
 	name="Phazon Torso"
@@ -322,9 +322,9 @@
 /obj/item/mecha_parts/chassis/odysseus
 	name = "Odysseus Chassis"
 
-	New()
-		..()
-		construct = new /datum/construction/mecha_chassis/odysseus(src)
+/obj/item/mecha_parts/chassis/odysseus/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/odysseus(src)
 
 /obj/item/mecha_parts/part/odysseus_head
 	name="Odysseus Head"

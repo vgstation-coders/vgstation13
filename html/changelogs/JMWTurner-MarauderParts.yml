@@ -1,3 +1,4 @@
 author: JMWTurner
-changes: []
-delete-after: false
+delete-after: true
+changes:
+  - rscadd: Added Marauder mecha parts. Can currently only be spawned by admins or scavenged from marauder wreckages. Built Marauders spawn without any equipment.

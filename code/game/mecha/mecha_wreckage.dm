@@ -113,12 +113,12 @@
 		/obj/item/mecha_parts/part/marauder_left_leg,
 		/obj/item/mecha_parts/part/marauder_right_leg,
 		)
+
 	for(var/i=0;i<2;i++)
-		if(!isemptylist(parts) && prob(40))
+		if(prob(40))
 			var/part = pick(parts)
 			welder_salvage += part
 			parts -= part
-	return
 
 /obj/effect/decal/mecha_wreckage/mauler
 	name = "Mauler Wreckage"
