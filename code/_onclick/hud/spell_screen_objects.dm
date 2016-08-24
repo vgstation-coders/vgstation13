@@ -33,7 +33,13 @@
 		return
 
 	return ..()
-
+	
+/obj/screen/movable/spell_master/MouseEntered(location,control,params)	
+	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
+	
+/obj/screen/movable/spell_master/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
 		returnToPool(src)
