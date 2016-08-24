@@ -49,7 +49,7 @@ Notes:
 		//Initialize some vars
 		src.init = 1
 		src.owner << output(list2params(list(world.icon_size, src.control)), "[src.control]:tooltip.init")
-		src.showing = 1
+	src.showing = 1
 		
 	if (title && content)
 		title = "<h1>[title]</h1>"
