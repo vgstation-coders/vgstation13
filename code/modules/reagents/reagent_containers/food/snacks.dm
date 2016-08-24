@@ -1826,7 +1826,7 @@
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
-	name = "Not-Actually-Imitation Crab sticks"
+	name = "\improper Not-Actually-Imitation Crab sticks"
 	desc = "Made from actual crab meat."
 	icon_state = "crab_sticks"
 	food_flags = FOOD_MEAT
