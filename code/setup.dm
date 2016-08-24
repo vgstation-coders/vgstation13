@@ -1223,11 +1223,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 //AOE spells
 #define IGNOREDENSE		64	//are dense turfs ignored in selection?
 #define IGNORESPACE		128	//are space turfs ignored in selection?
+#define NODUPLICATE		256 //can we put the same summon type on the same tile?
 //End split flags
-#define CONSTRUCT_CHECK	256	//used by construct spells - checks for nullrods
-#define NO_BUTTON		512	//spell won't show up in the HUD with this
-#define WAIT_FOR_CLICK	1024//spells wait for you to click on a target to cast
-#define TALKED_BEFORE	2048//spells require you to have heard the person you are casting it upon
+#define CONSTRUCT_CHECK	512	//used by construct spells - checks for nullrods
+#define NO_BUTTON		1024	//spell won't show up in the HUD with this
+#define WAIT_FOR_CLICK	2048//spells wait for you to click on a target to cast
+#define TALKED_BEFORE	4096//spells require you to have heard the person you are casting it upon
 
 //invocation
 #define SpI_SHOUT	"shout"
@@ -1241,9 +1242,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define Sp_TOTAL	"total"
 
 //casting costs
-#define Sp_RECHARGE	"recharge"
-#define Sp_CHARGES	"charges"
-#define Sp_HOLDVAR	"holdervar"
+#define Sp_RECHARGE	1
+#define Sp_CHARGES	2
+#define Sp_HOLDVAR	4
 
 ///////WIZ END/////////
 

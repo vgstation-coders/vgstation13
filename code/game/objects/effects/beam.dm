@@ -27,7 +27,6 @@
 
 /obj/effect/beam
 	name = "beam"
-	unacidable = 1//Just to be sure.
 	anchored = 1
 	density = 0
 

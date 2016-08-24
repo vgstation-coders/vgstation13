@@ -10,7 +10,6 @@
 	name = ""
 	icon = 'icons/mob/screen1.dmi'
 	layer = HUD_BASE_LAYER
-	unacidable = 1
 	var/obj/master = null	//A reference to the object in the slot. Grabs or items, generally.
 	var/gun_click_time = -100 //I'm lazy.
 	var/globalscreen = 0 //This screen object is not unique to one screen, can be seen by many
@@ -780,3 +779,6 @@
 		if(!objects.globalscreen)
 			returnToPool(objects)
 	src.screen = null
+
+/obj/screen/acidable()
+	return 0

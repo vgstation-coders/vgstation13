@@ -3,7 +3,6 @@
 
 /obj/effect/tracker
 	name = "tracker"
-	unacidable = 1
 	w_type=NOT_RECYCLABLE
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "soul2"

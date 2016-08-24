@@ -27,7 +27,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "1"
 	var/visibility = 0
-	unacidable = 1
 	layer = RUNE_LAYER
 	plane = ABOVE_TURF_PLANE
 

@@ -20,9 +20,9 @@
 
 /spell/targeted/equip_item/clowncurse/New()
 	..()
-	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/gas/clown_hat,
+	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/gas/clown_hat/stickymagic,
 							"[slot_w_uniform]" = /obj/item/clothing/under/rank/clown,
-							"[slot_shoes]" = /obj/item/clothing/shoes/clown_shoes)
+							"[slot_shoes]" = /obj/item/clothing/shoes/clown_shoes/stickymagic)
 
 /spell/targeted/equip_item/clowncurse/cast(list/targets, mob/user = usr)
 	..()
@@ -34,7 +34,6 @@
 
 /spell/targeted/equip_item/clowncurse/summon_item(var/newtype)
 	var/obj/item/new_item = new newtype
-	new_item.unacidable = 1
 	new_item.canremove = 0
 	if(istype(new_item, /obj/item/clothing/mask))
 		var/obj/item/clothing/mask/M = new_item

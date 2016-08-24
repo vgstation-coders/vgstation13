@@ -653,7 +653,8 @@ turf/simulated/floor/update_icon()
 	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
-			S.perform(user,0,src)
+			S.turf_override = src
+			S.perform(user,0)
 			var/obj/screen/spell/SS = S.connected_button
 			SS.update_charge(1)
 			return 1

@@ -89,7 +89,6 @@
 	else
 		//remove overlay
 		connected_button.name = name
-		user.spell_channeling = null
 		charge_counter = charge_max
 		user.overlays -= chargeoverlay
 		if(zapzap != multicast) //partial cast

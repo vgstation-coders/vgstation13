@@ -5,7 +5,6 @@
 	icon_state = "secure_vial"
 	flags = FPRINT
 	w_class = 1
-	unacidable = 1
 	var/genomes_to_give = 10 //seeing as the new changeling won't have had a whole round to prepare, they get some genomes free
 
 /obj/item/changeling_vial/attack_self(mob/user as mob)
@@ -31,3 +30,6 @@
 				to_chat(user, "<span class='notice'>You attempt to remove \the [src]'s cap, but the changeling inside it informs you of its presence. You decide to leave it be.</span>")
 	else
 		to_chat(user, "<span class='notice'>You try to remove \the [src]'s cap, but it won't budge.</span>")
+
+/obj/item/changeling_vial/acidable()
+	return 0

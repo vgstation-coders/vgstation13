@@ -1458,11 +1458,11 @@ var/list/slot_equipment_priority = list( \
 					continue //Not showing the noclothes spell
 				switch(S.charge_type)
 					if(Sp_RECHARGE)
-						statpanel(S.panel,"[S.charge_counter/10.0]/[S.charge_max/10]",S.connected_button)
+						statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10]" : "Free"]",S.connected_button)
 					if(Sp_CHARGES)
-						statpanel(S.panel,"[S.charge_counter]/[S.charge_max]",S.connected_button)
+						statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max]" : "Free"]",S.connected_button)
 					if(Sp_HOLDVAR)
-						statpanel(S.panel,"[S.holder_var_type] [S.holder_var_amount]",S.connected_button)
+						statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
@@ -1838,6 +1838,9 @@ mob/proc/on_foot()
 /mob/proc/heard(var/mob/living/M)
 	return
 
+/mob/proc/AdjustPlasma()
+	return
+
 /mob/living/carbon/heard(var/mob/living/carbon/human/M)
 	if(M == src || !istype(M))
 		return
@@ -1845,6 +1848,9 @@ mob/proc/on_foot()
 		if(!(mind.heard_before[M.name]))
 			mind.heard_before[M.name] = M
 			M.heard_by |= mind
+
+/mob/acidable()
+	return 1
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

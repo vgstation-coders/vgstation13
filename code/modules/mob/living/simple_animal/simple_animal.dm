@@ -475,7 +475,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 			if(stat != DEAD)
 				adjustBruteLoss(damage)
-				L.amount_grown = min(L.amount_grown + damage, L.max_grown)
+				L.growth = min(L.growth + damage, LARVA_GROW_TIME)
 
 
 /mob/living/simple_animal/attack_slime(mob/living/carbon/slime/M as mob)

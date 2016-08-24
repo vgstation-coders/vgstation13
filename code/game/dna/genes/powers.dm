@@ -133,7 +133,7 @@
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
 
 	if(!say)
-		return
+		return 1
 
 	for(var/T in targets)
 		var/mob/living/carbon/human/target = T

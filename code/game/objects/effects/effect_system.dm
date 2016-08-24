@@ -10,10 +10,12 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	name = "effect"
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
-	unacidable = 1 // so effect are not targeted by alien acid.
 	flags = 0
 	w_type=NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
+
+/obj/effect/acidable()
+	return 0
 
 /obj/effect/effect/water
 	name = "water"

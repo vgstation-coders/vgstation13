@@ -68,7 +68,6 @@
 	desc = "A display case for prized possessions. It tempts you to kick it."
 	density = 1
 	anchored = 1
-	unacidable = 1//Dissolving the case would also delete the gun.
 	var/health = 30
 	var/obj/item/occupant = null
 	var/destroyed = 0
@@ -279,6 +278,9 @@
 			user.visible_message("[user.name] gently runs their hands over \the [src] in appreciation of its contents.", \
 				"You gently run your hands over \the [src] in appreciation of its contents.", \
 				"You hear someone streaking glass with their greasy hands.")
+
+/obj/structure/displaycase/acidable()
+	return 0
 
 
 /obj/structure/displaycase/broken

@@ -6,12 +6,11 @@
 
 	maxHealth = 25
 	health = 25
-	storedPlasma = 50
+	plasma = 50
 	max_plasma = 50
 	size = SIZE_TINY
 
-	var/amount_grown = 0
-	var/max_grown = 200
+	var/growth = 0
 	var/time_of_birth
 
 //This is fine right now, if we're adding organ specific damage this needs to be updated
@@ -27,15 +26,18 @@
 	default_language = all_languages[LANGUAGE_XENO]
 	..()
 
+	add_spell(new /spell/aoe_turf/alien_hide, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/evolve/larva, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+
 //This needs to be fixed
 /mob/living/carbon/alien/larva/Stat()
 	..()
 	if(statpanel("Status"))
-		stat(null, "Progress: [amount_grown]/[max_grown]")
+		stat(null, "Progress: [growth]/[LARVA_GROW_TIME]")
 
-/mob/living/carbon/alien/larva/adjustToxLoss(amount)
+/mob/living/carbon/alien/larva/AdjustPlasma(amount)
 	if(stat != DEAD)
-		amount_grown = min(amount_grown + 1, max_grown)
+		growth = min(growth + 1, LARVA_GROW_TIME)
 	..(amount)
 
 
