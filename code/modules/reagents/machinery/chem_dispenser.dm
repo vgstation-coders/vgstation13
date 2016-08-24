@@ -272,7 +272,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
 		if(src.beaker)
-			to_chat(user, "A beaker is already loaded into the machine.")
+			to_chat(user, "\A [src.beaker] is already loaded into the machine.")
 			return
 		else if(!panel_open)
 			if(!user.drop_item(D, src))
@@ -284,12 +284,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				var/mob/living/silicon/robot/R = user
 				R.uneq_active()
 
-			to_chat(user, "You add the beaker to the machine!")
+			to_chat(user, "You add \the [D] to the machine!")
 
 			nanomanager.update_uis(src) // update all UIs attached to src
 			return 1
 		else
-			to_chat(user, "You can't add a beaker to the machine while the panel is open.")
+			to_chat(user, "You can't add \a [D] to the machine while the panel is open.")
 			return
 
 /obj/machinery/chem_dispenser/attack_ai(mob/user as mob)
