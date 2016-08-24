@@ -270,7 +270,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(!can_use(user))
 			return
 
-	if(istype(D, /obj/item/weapon/reagent_containers/glass))
+	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
 		if(src.beaker)
 			to_chat(user, "A beaker is already loaded into the machine.")
 			return
