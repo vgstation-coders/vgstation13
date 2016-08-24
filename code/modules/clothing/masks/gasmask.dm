@@ -89,7 +89,7 @@
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
 	action_button_name = "Toggle Mask"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
 
 /obj/item/clothing/mask/gas/voice/New()
