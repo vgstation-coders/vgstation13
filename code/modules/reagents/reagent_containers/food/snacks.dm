@@ -1830,13 +1830,13 @@
 	desc = "Made from actual crab meat."
 	icon_state = "crab_sticks"
 	food_flags = FOOD_MEAT
+	bitesize = 2
 
-	New()
+/obj/item/weapon/reagent_containers/food/snacks/crab_sticks/New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 4)
 		reagents.add_reagent(SUGAR, 1)
 		reagents.add_reagent(SODIUMCHLORIDE, 1)
-		bitesize = 2
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sandwich
