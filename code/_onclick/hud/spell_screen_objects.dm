@@ -171,8 +171,22 @@
 	var/channeling_image
 	
 /obj/screen/spell/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = desc)
-
+	if(!spell)
+		return
+	var/dat = ""
+	if(spell.charge_type & Sp_RECHARGE)
+		dat += "<br>Charge Cooldown: [spell.charge_max/10] second\s"
+	if(spell.charge_type & Sp_CHARGES)
+		dat += "<br>Has [spell.charge_counter] charge\s left"
+	if(spell.charge_type & Sp_HOLDVAR)
+		dat += "<br>Requires [spell.holder_var_amount] [spell.holder_var_type]"
+	switch(spell.range)
+		if(1)
+			dat += "<br>Range: Adjacency"
+		if(2 to INFINITY)
+			dat += "<br>Range: [spell.range]"
+	openToolTip(usr,src,params,title = name,content = dat)
+	
 /obj/screen/spell/MouseExited()
 	closeToolTip(usr)
 	
