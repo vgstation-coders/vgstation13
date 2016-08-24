@@ -169,7 +169,13 @@
 
 	var/icon/last_charged_icon
 	var/channeling_image
+	
+/obj/screen/spell/MouseEntered(location,control,params)
+	openToolTip(usr,src,params,title = name,content = desc)
 
+/obj/screen/spell/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/spell/Destroy()
 	..()
 	spell = null

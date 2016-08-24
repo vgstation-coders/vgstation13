@@ -11,13 +11,16 @@
 /obj/screen/movable
 	var/snap2grid = FALSE
 
+/obj/screen/movable/MouseEntered(location,control,params)
+	openToolTip(usr,src,params,title = name,content = desc)
 
+/obj/screen/movable/MouseExited()
+	closeToolTip(usr)
 //Snap Screen Object
 //Tied to the grid, snaps to the nearest turf
 
 /obj/screen/movable/snap
 	snap2grid = TRUE
-
 
 /obj/screen/movable/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
 	var/list/PM = params2list(params)
