@@ -24,6 +24,9 @@ var/global/obj/screen/clicker/catcher = new()
 	var/obj/screen/action_intent
 	var/obj/screen/move_intent
 
+	var/obj/screen/movable/action_button/hide_toggle/hide_actions_toggle
+	var/action_buttons_hidden = 0
+	
 	var/list/adding
 	var/list/other
 	var/obj/screen/holomap/holomap_obj
