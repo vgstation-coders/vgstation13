@@ -175,7 +175,7 @@
 		return
 	var/dat = ""
 	if(spell.charge_type & Sp_RECHARGE)
-		dat += "<br>Charge Cooldown: [spell.charge_max/10] second\s"
+		dat += "<br>Cooldown: [spell.charge_max/10] second\s"
 	if(spell.charge_type & Sp_CHARGES)
 		dat += "<br>Has [spell.charge_counter] charge\s left"
 	if(spell.charge_type & Sp_HOLDVAR)
