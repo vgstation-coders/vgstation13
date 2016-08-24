@@ -31,7 +31,7 @@
 		animate(screen, alpha = 0, time = animate)
 		sleep(animate)
 
-	screens -= category
+	screens -= screen
 	if(client)
 		client.screen -= screen
 	qdel(screen)
