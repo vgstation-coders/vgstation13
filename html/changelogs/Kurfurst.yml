@@ -1,6 +1,0 @@
-author: Kurfurst
-delete-after: True
-
-changes: 
-- rscdel: The maint loot spawner has had several items moved to a separate high risk spawner, including guns and viruses. They will no longer appear in Defficiency maintenance.
-- rscadd: The maint loot spawner now spawns several new items including (normally unobtainable) multi-person wheelchair, peanuts, headset earmuffs, box of wind grenades, and swiss army knife among other things.
