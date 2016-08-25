@@ -86,4 +86,26 @@
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""][chambered ? "" : "-e"]"
 	return
 
+/obj/item/weapon/gun/projectile/handgun //mime fingergun 
+	name = "hand-gun"
+	desc = "This is a stickup!"
+	icon_state = "handgun"
+	inhand_states = list("left_hand" = null, "right_hand" = null)
+	ammo_type = "/obj/item/ammo_casing/invisible"
+	mag_type = "/obj/item/ammo_storage/magazine/invisible"
+	cant_drop = TRUE
+	gun_flags = 0
+	silenced = TRUE
+	fire_sound = null
+	load_method = MAGAZINE
+	
+	
+/obj/item/weapon/gun/projectile/handgun/RemoveMag(var/mob/user)
+	to_chat(user, "<span class = 'warning'>Try as you might, you can't seem to find a magazine on \the [src]!</span>")
 
+/obj/item/weapon/gun/projectile/handgun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+	if(..())
+		if(silenced)
+			user.emote("me",1,"pretends to fire a gun at [target]!")
+		else
+			user.say(pick("BANG!", "BOOM!", "PEW!", "KAPOW!"))

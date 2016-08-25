@@ -50,6 +50,11 @@
 	desc = "You have a bad feeling about this."
 	invisibility = 0
 
+/obj/effect/forcefield/mime/Cross(atom/movable/mover, turf/target, height = 0)
+	if(istype(mover, /obj/item/projectile/bullet/invisible))
+		return 1
+	..()
+	
 /obj/effect/forcefield/cultify()
 	new /obj/effect/forcefield/cult(get_turf(src))
 	qdel(src)
