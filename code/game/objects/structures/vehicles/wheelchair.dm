@@ -243,14 +243,17 @@
 		..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate
+	name = "medical malpractice"
 	nick = "medical malpractice"
-	desc = "A chair with fitted wheels which is powered by an internal cell. It seems to ride higher than other wheelchairs."
+	icon_state = "wheelchair-syndie"
+	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
+	var/attack_cooldown = 0
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
 	return (..() + 1) //Somewhat slower
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/Bump(var/atom/A)
-	if(isliving(A))
+	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
 		if(isrobot(L))
 			src.visible_message("<span class='warning'>[src] slams into [L]!</span>")
@@ -273,6 +276,9 @@
 	H.apply_damage(damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(damage, BRUTE, LIMB_LEFT_LEG)
 	H.apply_damage(damage, BRUTE, LIMB_RIGHT_LEG)
+	attack_cooldown = 1
+	spawn(10)
+		attack_cooldown = 0
 
 /obj/item/syndicate_wheelchair_kit
 	name = "Compressed Wheelchair Kit"
