@@ -16,13 +16,6 @@
 //Overlays that cover the entire screen
 #define ui_entire_screen "WEST,SOUTH TO EAST,NORTH"
 
-//Upper left action buttons, displayed when you pick up an item that has this enabled.
-#define ui_action_slot1 "WEST:[6*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot2 "WEST+1:[8*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot3 "WEST+2:[10*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot4 "WEST+3:[12*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot5 "WEST+4:[14*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-
 //Lower left, persistant menu
 #define ui_inventory "WEST:[6*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 
