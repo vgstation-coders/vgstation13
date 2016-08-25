@@ -13,7 +13,7 @@
 	var/obj/screen/movable/action_button/button = null
 	var/button_icon = 'icons/mob/actions.dmi'
 	var/background_icon_state = "bg_default"
-	var/buttontooltipstyle = ""
+	//var/buttontooltipstyle = "" comment this out when tooltips merged
 
 	var/icon_icon = 'icons/mob/actions.dmi'
 	var/button_icon_state = "default"
@@ -24,7 +24,7 @@
 	button = new
 	button.linked_action = src
 	button.name = name
-	button.actiontooltipstyle = buttontooltipstyle
+	//button.actiontooltipstyle = buttontooltipstyle comment this back when tooltips merged
 	if(desc)
 		button.desc = desc
 
@@ -94,13 +94,13 @@
 			return 1
 
 /datum/action/proc/ApplyIcon(obj/screen/movable/action_button/current_button)
-	current_button.cut_overlays()
+	current_button.overlays = null
 	if(icon_icon && button_icon_state)
 		var/image/img
 		img = image(icon_icon, current_button, button_icon_state)
 		img.pixel_x = 0
 		img.pixel_y = 0
-		current_button.add_overlay(img)
+		current_button.overlays += img
 
 
 
@@ -130,7 +130,7 @@
 	return 1
 
 /datum/action/item_action/ApplyIcon(obj/screen/movable/action_button/current_button)
-	current_button.cut_overlays()
+	current_button.overlays = null
 
 	if(button_icon && button_icon_state)
 		// If set, use the custom icon that we set instead
@@ -140,14 +140,14 @@
 		var/obj/item/I = target
 		var/old = I.layer
 		I.layer = FLOAT_LAYER //AAAH
-		current_button.add_overlay(I)
+		current_button.overlays += I
 		I.layer = old
 
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
 
-/datum/action/item_action/toggle_hood
-	name = "Toggle Hood"
+/datum/action/item_action/toggle_mask
+	name = "Toggle Mask"
 
 /datum/action/item_action/toggle_firemode
 	name = "Toggle Firemode"
@@ -238,115 +238,15 @@
 	
 /datum/action/item_action/jetpack_stabilization
 	name = "Toggle Jetpack Stabilization"
-
+	
+/datum/action/item_action/instrument
+	name = "Play Instrument"
+	
 /datum/action/item_action/jetpack_stabilization/IsAvailable()
 	var/obj/item/weapon/tank/jetpack/J = target
 	if(!istype(J) || !J.on)
 		return 0
 	return ..()
-
-/datum/action/item_action/hands_free
-	check_flags = AB_CHECK_CONSCIOUS
-
-/datum/action/item_action/hands_free/activate
-	name = "Activate"
-
-
-/datum/action/item_action/hands_free/shift_nerves
-	name = "Shift Nerves"
-
-
-/datum/action/item_action/toggle_research_scanner
-	name = "Toggle Research Scanner"
-	button_icon_state = "scan_mode"
-
-/datum/action/item_action/toggle_research_scanner/Trigger()
-	if(IsAvailable())
-		owner.research_scanner = !owner.research_scanner
-		owner << "<span class='notice'>Research analyzer is now [owner.research_scanner ? "active" : "deactivated"].</span>"
-		return 1
-
-/datum/action/item_action/toggle_research_scanner/Remove(mob/M)
-	if(owner)
-		owner.research_scanner = 0
-	..()
-
-/datum/action/item_action/toggle_research_scanner/ApplyIcon(obj/screen/movable/action_button/current_button)
-	current_button.cut_overlays()
-	if(button_icon && button_icon_state)
-		var/image/img = image(button_icon, current_button, "scan_mode")
-		current_button.add_overlay(img)
-
-/datum/action/item_action/organ_action
-	check_flags = AB_CHECK_CONSCIOUS
-
-/datum/action/item_action/organ_action/IsAvailable()
-	var/obj/item/organ/I = target
-	if(!I.owner)
-		return 0
-	return ..()
-
-/datum/action/item_action/organ_action/toggle/New(Target)
-	..()
-	name = "Toggle [target.name]"
-	button.name = name
-
-/datum/action/item_action/organ_action/use/New(Target)
-	..()
-	name = "Use [target.name]"
-	button.name = name
-
-
-
-
-//Preset for spells
-/datum/action/spell_action
-	check_flags = 0
-	background_icon_state = "bg_spell"
-
-/datum/action/spell_action/New(Target)
-	..()
-	var/obj/effect/proc_holder/spell/S = target
-	S.action = src
-	name = S.name
-	button_icon = S.action_icon
-	button_icon_state = S.action_icon_state
-	background_icon_state = S.action_background_icon_state
-	button.name = name
-
-/datum/action/spell_action/Destroy()
-	var/obj/effect/proc_holder/spell/S = target
-	S.action = null
-	return ..()
-
-/datum/action/spell_action/Trigger()
-	if(!..())
-		return 0
-	if(target)
-		var/obj/effect/proc_holder/spell = target
-		spell.Click()
-		return 1
-
-/datum/action/spell_action/IsAvailable()
-	if(!target)
-		return 0
-	var/obj/effect/proc_holder/spell/spell = target
-	if(owner)
-		return spell.can_cast(owner)
-	return 0
-
-
-/datum/action/spell_action/alien
-
-/datum/action/spell_action/alien/IsAvailable()
-	if(!target)
-		return 0
-	var/obj/effect/proc_holder/alien/ab = target
-	if(owner)
-		return ab.cost_check(ab.check_turf,owner,1)
-	return 0
-
-
 
 //Preset for general and toggled actions
 /datum/action/innate
