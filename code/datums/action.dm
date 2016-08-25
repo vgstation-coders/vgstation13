@@ -152,23 +152,8 @@
 /datum/action/item_action/toggle_firemode
 	name = "Toggle Firemode"
 
-/datum/action/item_action/startchainsaw
-	name = "Pull The Starting Cord"
-
-/datum/action/item_action/toggle_gunlight
-	name = "Toggle Gunlight"
-
 /datum/action/item_action/toggle_mode
 	name = "Toggle Mode"
-
-/datum/action/item_action/toggle_barrier_spread
-	name = "Toggle Barrier Spread"
-
-/datum/action/item_action/equip_unequip_TED_Gun
-	name = "Equip/Unequip TED Gun"
-
-/datum/action/item_action/toggle_paddles
-	name = "Toggle Paddles"
 
 /datum/action/item_action/set_internals
 	name = "Set Internals"
@@ -180,21 +165,6 @@
 			if(target == C.internal)
 				button.icon_state = "bg_default_on"
 
-/datum/action/item_action/toggle_mister
-	name = "Toggle Mister"
-
-/datum/action/item_action/activate_injector
-	name = "Activate Injector"
-
-/datum/action/item_action/toggle_helmet_light
-	name = "Toggle Helmet Light"
-
-/datum/action/item_action/toggle_helmet_flashlight
-	name = "Toggle Helmet Flashlight"
-
-/datum/action/item_action/toggle_helmet_mode
-	name = "Toggle Helmet Mode"
-
 /datum/action/item_action/toggle
 
 /datum/action/item_action/toggle/New(Target)
@@ -202,34 +172,13 @@
 	name = "Toggle [target.name]"
 	button.name = name
 
-/datum/action/item_action/halt
-	name = "HALT!"
-
-/datum/action/item_action/toggle_voice_box
-	name = "Toggle Voice Box"
-
-/datum/action/item_action/change
-	name = "Change"
-
 /datum/action/item_action/adjust
 
 /datum/action/item_action/adjust/New(Target)
 	..()
 	name = "Adjust [target.name]"
 	button.name = name
-
-/datum/action/item_action/switch_hud
-	name = "Switch HUD"
-
-/datum/action/item_action/toggle_wings
-	name = "Toggle Wings"
-
-/datum/action/item_action/toggle_human_head
-	name = "Toggle Human Head"
-
-/datum/action/item_action/toggle_helmet
-	name = "Toggle Helmet"
-
+	
 /datum/action/item_action/toggle_jetpack
 	name = "Toggle Jetpack"
 	
@@ -279,15 +228,3 @@
 	if(target && procname)
 		call(target, procname)(usr)
 	return 1
-
-//Stickmemes
-/datum/action/item_action/stickmen
-	name = "Summon Stick Minions"
-	desc = "Allows you to summon faithful stickmen allies to aide you in battle."
-	button_icon_state = "art_summon"
-
-//surf_ss13
-/datum/action/item_action/bhop
-	name = "Activate Jump Boots"
-	desc = "Activates the jump boot's internal propulsion system, allowing the user to dash over 4-wide gaps."
-	button_icon_state = "jetboot"
