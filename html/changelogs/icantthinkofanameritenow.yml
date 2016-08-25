@@ -1,8 +1,0 @@
-
-author: Icantthinkofanameritenow
-
-delete-after: True
-
-changes: 
-- rscadd: Assault Rifle does slightly more damage.
-- rscdel: "Price of Assault Rifle and ammunition increased, and Assault Rifle and SMG start with empty magazines. Assault Rifle shots no longer stun people." 
