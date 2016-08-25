@@ -1,0 +1,5 @@
+author: Kurfurst
+delete-after: True
+
+changes: 
+- tweak: The recipe for vinegar now requires water, which means that you can make wine without it instantly turning to vinegar.

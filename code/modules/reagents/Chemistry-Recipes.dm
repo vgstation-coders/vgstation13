@@ -1950,9 +1950,9 @@
 	name = "Malt Vinegar"
 	id = VINEGAR
 	result = VINEGAR
-	required_reagents = list(ETHANOL = 5)
+	required_reagents = list(ETHANOL = 1, WATER = 1)
 	required_catalysts = list(ENZYME = 1)
-	result_amount = 5
+	result_amount = 2
 
 /datum/chemical_reaction/sprinkles
 	name = "Sprinkles"
