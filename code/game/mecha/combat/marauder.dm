@@ -60,8 +60,7 @@
 
 /obj/mecha/combat/marauder/series/New()//Manually-built marauders have no equipments
 	..()
-	var/obj/item/mecha_parts/mecha_equipment/ME
-	for(ME in equipment)
+	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 		equipment -= ME
 		qdel(ME)
 
