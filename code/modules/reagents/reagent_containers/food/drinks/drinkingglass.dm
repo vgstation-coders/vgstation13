@@ -501,6 +501,7 @@
 				viewcontents = 0
 		else
 			icon_state = "glass_empty"
+			item_state = "glass_empty"
 			name = "drinking glass"
 			desc = "Your standard drinking glass."
 
