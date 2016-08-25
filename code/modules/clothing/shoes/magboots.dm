@@ -98,3 +98,11 @@
 	icon_state = "DS-magboots0"
 	base_state = "DS-magboots"
 	mag_slow = 0
+
+//Syndicate
+/obj/item/clothing/shoes/magboots/syndie
+	name = "blood-red magboots"
+	desc = "Reverse-engineered magnetic boots that have a heavy magnetic pull. Property of Gorlex Marauders."
+	icon_state = "syndiemag0"
+	base_state = "syndiemag"
+	species_fit = list(VOX_SHAPED)
