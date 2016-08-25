@@ -76,6 +76,7 @@
 
 			from_objs = SDQL_from_objs(query_tree["from"])
 
+			to_chat(world, json_encode(from_objs))
 			var/list/objs = list()
 
 			for(var/type in select_types)
@@ -368,10 +369,10 @@
 
 /proc/SDQL_var(datum/object, list/expression, start = 1, source)
 	var/v
-
+	var/static/list/exclude = list("usr", "src", "marked", "global")
 	var/long = start < expression.len
 
-	if (object == world && (!long || expression[start + 1] == "."))
+	if (object == world && (!long || expression[start + 1] == ".") && !(expression[start] in exclude))
 		v = readglobal(expression[start])
 
 	else if (expression [start] == "{" && long)

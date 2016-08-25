@@ -126,6 +126,8 @@
 	node += "select"
 	node["select"] = select
 
+	selectors(i, node)
+
 	return i
 
 
