@@ -75,12 +75,13 @@
 
 
 			from_objs = SDQL_from_objs(query_tree["from"])
+			CHECK_TICK
 
-			to_chat(world, json_encode(from_objs))
 			var/list/objs = list()
 
 			for(var/type in select_types)
 				objs += SDQL_get_all(type, from_objs)
+				CHECK_TICK
 
 			if("where" in query_tree)
 				var/objs_temp = objs
@@ -88,15 +89,18 @@
 				for(var/datum/d in objs_temp)
 					if(SDQL_expression(d, query_tree["where"]))
 						objs += d
+					CHECK_TICK
 
 			switch(query_tree[1])
 				if("call")
 					for(var/datum/d in objs)
 						SDQL_var(d, query_tree["call"][1], source = d)
+						CHECK_TICK
 
 				if("delete")
 					for(var/datum/d in objs)
 						qdel(d)
+						CHECK_TICK
 
 				if("select")
 					var/text = ""
@@ -116,7 +120,7 @@
 
 						else
 							text += ": [t]<br>"
-
+						CHECK_TICK
 					usr << browse(text, "window=SDQL-result")
 
 				if("update")
@@ -140,6 +144,7 @@
 									else
 										break
 
+							CHECK_TICK
 	catch(var/exception/e)
 		to_chat(usr, "<span class='danger'>An exception has occured during the execution of your query and your query has been aborted.</span>")
 		to_chat(usr, "exception name: [e.name]")
