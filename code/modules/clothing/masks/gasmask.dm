@@ -94,7 +94,7 @@
 
 /obj/item/clothing/mask/gas/voice/New()
 	..()
-	for(var/Type in typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
+	for(var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
 		clothing_choices += new Type
 	return
 
