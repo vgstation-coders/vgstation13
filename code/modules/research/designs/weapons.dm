@@ -94,6 +94,7 @@
 	locked = 1
 	req_lock_access = list(access_armory)
 
+/*
 /datum/design/xcomar
 	name = "Assault Rifle"
 	desc = "An Assault Rifle."
@@ -105,6 +106,7 @@
 	build_path = /obj/item/weapon/gun/projectile/automatic/xcom
 	locked = 1
 	req_lock_access = list(access_armory)
+*/
 
 /datum/design/ammo_12mm
 	name = "Ammunition Box (12mm)"
