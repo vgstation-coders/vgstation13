@@ -238,7 +238,16 @@
 		to_chat(usr, "You will no longer use nanoUI on cross compatible UIs.")
 	else
 		to_chat(usr, "You will now use nanoUI on cross compatible UIs.")
-
+		
+/client/verb/toggle_tooltips()
+	set name = "Toggle Tooltips"
+	set category = "Preferences"
+	set desc = "Toggle tooltips on mouseover."
+	
+	prefs.tooltips = !prefs.tooltips
+	prefs.save_preferences_sqlite(src,ckey)
+	to_chat(usr, "Tooltips are now [prefs.tooltips ? "enabled." : "disabled."]")
+	
 /client/verb/toggle_progress_bars()
 	set name = "Toggle Progress Bars"
 	set category = "Preferences"
