@@ -49,6 +49,9 @@
 	else
 		..()
 
+/obj/item/weapon/gun/projectile/automatic/lockbox
+	mag_type = "/obj/item/ammo_storage/magazine/smg9mm/empty"
+
 /obj/item/weapon/gun/projectile/automatic/mini_uzi
 	name = "Uzi"
 	desc = "A lightweight, fast firing gun, for when you want someone dead. Uses .45 rounds."
@@ -103,12 +106,15 @@
 	max_shells = 20
 	burst_count = 4
 	caliber = list("12mm" = 1)
-	ammo_type = "/obj/item/ammo_casing/a12mm"
+	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	load_method = 2
-
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/automatic/xcom/lockbox
+	mag_type = "/obj/item/ammo_storage/magazine/a12mm/empty"
+
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw
 	name = "\improper L6 SAW"

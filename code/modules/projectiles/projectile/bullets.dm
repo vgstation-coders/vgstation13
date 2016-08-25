@@ -67,8 +67,15 @@
 	weaken = 0
 	superspeed = 1
 
+/obj/item/projectile/bullet/midbullet/assault
+	damage = 20
+	stun = 0
+	weaken = 0
+
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
+	stun = 0
+	weaken = 0
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
