@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - tweak: Doubled-up the maximum number of music lines on an instrument, from 50 to 100.
