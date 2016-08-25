@@ -145,7 +145,7 @@
 		else
 			wrapped.forceMove(get_turf(src))
 		qdel(src)
-		
+
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/O = W
@@ -178,7 +178,7 @@
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
-/obj/item/delivery/large/New(turf/loc, atom/movable/target)
+/obj/item/delivery/large/New(turf/loc, atom/movable/target, var/size = W_CLASS_GIANT)
 	..()
 	wrapped = target
 	if(istype(wrapped,/obj/structure/closet/crate) || ishuman(target))
@@ -189,6 +189,9 @@
 		icon_state = "deliverystack"
 	else if(istype(wrapped,/obj/structure/closet))
 		icon_state = "deliverycloset" //Only IF it isn't a crate-type
+
+/obj/item/delivery/large/attack_paw(mob/user as mob)
+	return attack_hand(user)
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
 	if(wrapped)
