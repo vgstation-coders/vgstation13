@@ -93,6 +93,28 @@
 	return
 
 
+//         MARAUDER        //
+
+/datum/construction/mecha_chassis/marauder
+	steps = list(list(Co_KEY=/obj/item/mecha_parts/part/marauder_torso),//1
+				 list(Co_KEY=/obj/item/mecha_parts/part/marauder_left_arm),//2
+				 list(Co_KEY=/obj/item/mecha_parts/part/marauder_right_arm),//3
+				 list(Co_KEY=/obj/item/mecha_parts/part/marauder_left_leg),//4
+				 list(Co_KEY=/obj/item/mecha_parts/part/marauder_right_leg),//5
+				 list(Co_KEY=/obj/item/mecha_parts/part/marauder_head)
+				)
+
+/datum/construction/mecha_chassis/marauder/spawn_result(mob/user as mob)
+	var/obj/item/mecha_parts/chassis/const_holder = holder
+	const_holder.construct = new /datum/construction/reversible/mecha/combat/marauder(const_holder)
+	const_holder.icon = 'icons/mecha/mech_construction.dmi'
+	const_holder.icon_state = "marauder0"
+	const_holder.density = 1
+	spawn()
+		qdel (src)
+	return
+
+
 //        ODYSSEUS         //
 /datum/construction/mecha_chassis/odysseus
 	steps = list(list(Co_KEY=/obj/item/mecha_parts/part/odysseus_torso),//1

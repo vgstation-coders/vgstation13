@@ -128,6 +128,38 @@
 	category = "Mecha Boards"
 	build_path = /obj/item/weapon/circuitboard/mecha/durand/targeting
 
+//MARAUDER
+
+/datum/design/marauder_main
+	name = "Circuit Design (\"Marauder\" Central Control module)"
+	desc = "Allows for the construction of a \"Marauder\" Central Control module."
+	id = "marauder_main"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Mecha Boards"
+	build_path = /obj/item/weapon/circuitboard/mecha/marauder/main
+
+/datum/design/marauder_peri
+	name = "Circuit Design (\"Marauder\" Peripherals Control module)"
+	desc = "Allows for the construction of a \"Marauder\" Peripheral Control module."
+	id = "marauder_peri"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Mecha Boards"
+	build_path = /obj/item/weapon/circuitboard/mecha/marauder/peripherals
+
+/datum/design/marauder_targ
+	name = "Circuit Design (\"Marauder\" Weapons & Targeting Control module)"
+	desc = "Allows for the construction of a \"Marauder\" Weapons & Targeting Control module."
+	id = "marauder_targ"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_COMBAT = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Mecha Boards"
+	build_path = /obj/item/weapon/circuitboard/mecha/marauder/targeting
+
 //HONKER FUK U PJB
 
 /datum/design/honker_main

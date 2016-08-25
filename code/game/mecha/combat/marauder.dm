@@ -58,6 +58,12 @@
 	src.smoke_system.attach(src)
 	return
 
+/obj/mecha/combat/marauder/series/New()//Manually-built marauders have no equipments
+	..()
+	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+		equipment -= ME
+		qdel(ME)
+
 /obj/mecha/combat/marauder/seraph/New()
 	..()//Let it equip whatever is needed.
 	var/obj/item/mecha_parts/mecha_equipment/ME
