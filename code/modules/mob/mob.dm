@@ -40,7 +40,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
 		spell_masters = null
-		spells = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/screen/screenobj = AM
