@@ -185,6 +185,7 @@
 					desc = "Whoah, this thing is on FIRE!"
 				if(BEEPSKYSMASH)
 					icon_state = "beepskysmashglass"
+					item_state = "beepskysmashglass"
 					name = "\improper Beepsky Smash"
 					desc = "Heavy, hot and strong. Just like the Iron fist of the LAW."
 				if(DOCTORSDELIGHT)
@@ -500,9 +501,13 @@
 				viewcontents = 0
 		else
 			icon_state = "glass_empty"
+			item_state = "glass_empty"
 			name = "drinking glass"
 			desc = "Your standard drinking glass."
-			return
+
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
 
 // for /obj/machinery/vending/sovietsoda
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda
