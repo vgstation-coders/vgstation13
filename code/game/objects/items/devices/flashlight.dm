@@ -154,7 +154,7 @@
 	light_power = 2.5
 	icon_state = "flare"
 	item_state = "flare"
-	actions_types = list(/datum/action/item_action/set_internals, /datum/action/item_action/jetpack_mode)
+	actions_types = list(/datum/action/item_action/toggle_light)
 	sound_on = "sound/items/flare_on.ogg"
 	sound_off = ""
 	var/fuel = 0
