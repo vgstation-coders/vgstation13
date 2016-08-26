@@ -72,7 +72,7 @@
 		invocation(user, targets)
 		take_charge(user, skipcharge)
 
-		targets = before_cast(targets)
+		targets = before_cast(targets, user)
 		if(!targets.len)
 			return
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")

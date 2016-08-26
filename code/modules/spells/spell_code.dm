@@ -121,12 +121,13 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!cast_check(skipcharge, user))
 		return //Prevent queueing of spells by opening several choose target windows.
 	if(targets && targets.len)
-		targets = before_cast(targets) //applies any overlays and effects
+		targets = before_cast(targets, user) //applies any overlays and effects
 		if(!targets.len) //before cast has rechecked what we can target
 			return
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+
 		if(prob(critfailchance))
 			critfail(targets, user)
 		else
@@ -172,7 +173,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
 	if(cast_check(1, holder) && is_valid_target(A, user))
-		target = before_cast(target) //applies any overlays and effects
+		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
 		if(prob(critfailchance))
@@ -223,9 +224,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////CASTING WRAPPERS//////
 ///////////////////////////
 
-/spell/proc/before_cast(list/targets)
+/spell/proc/before_cast(list/targets, user)
 	var/list/valid_targets = list()
-	var/list/options = view_or_range(range,usr,selection_type)
+	var/list/options = view_or_range(range,user,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
 		if(!(target in options))
@@ -247,6 +248,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			spawn(overlay_lifespan)
 				qdel(spell)
 				spell = null
+	if(spell_flags & INCLUDEUSER)
+		valid_targets |= user
 	return valid_targets
 
 /spell/proc/after_cast(list/targets)
