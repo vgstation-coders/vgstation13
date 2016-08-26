@@ -121,7 +121,7 @@
 	icon_state = "welding-g"
 	item_state = "welding-g"
 	origin_tech = Tc_ENGINEERING + "=1;" + Tc_MATERIALS + "=2"
-	action_button_name = "Toggle Welding Goggles"
+	actions_types = list(/datum/action/item_action/toggle_goggles)
 	var/up = 0
 	eyeprot = 3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -130,10 +130,7 @@
 	toggle()
 
 
-/obj/item/clothing/glasses/welding/verb/toggle()
-	set category = "Object"
-	set name = "Adjust welding goggles"
-	set src in usr
+/obj/item/clothing/glasses/welding/proc/toggle()
 	var/mob/C = usr
 	if(!usr)
 		if(!ismob(loc))

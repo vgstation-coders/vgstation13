@@ -25,7 +25,7 @@
 	eyeprot = 3
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	body_parts_covered = FACE
-	action_button_name = "Toggle Welding Helmet"
+	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED)
 
@@ -33,10 +33,7 @@
 	toggle()
 
 
-/obj/item/clothing/head/welding/verb/toggle()
-	set category = "Object"
-	set name = "Adjust welding mask"
-	set src in usr
+/obj/item/clothing/head/welding/proc/toggle()
 	if(!usr)
 		return //PANIC
 	if(!usr.incapacitated())

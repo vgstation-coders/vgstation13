@@ -374,9 +374,7 @@ BLIND     // can't see anything
 /obj/item/clothing/mask/New()
 	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
-		action_button_name = null
-		verbs -= /obj/item/clothing/mask/verb/togglemask
-
+		actions_types = null
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()

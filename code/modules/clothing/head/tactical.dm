@@ -1,5 +1,5 @@
 /obj/item/clothing/head/helmet/tactical
-	action_button_name = "Toggle Helmet Light"
+	actions_types = list(/datum/action/item_action/toggle_light)
 	light_power = 1.5
 	var/obj/item/device/flashlight/flashlight = null
 	var/preattached = FALSE
@@ -57,10 +57,10 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 /obj/item/clothing/head/helmet/tactical/update_icon()
 	if(flashlight)
 		icon_state = "[initial(icon_state)]_[flashlight.on]"
-		action_button_name = "Toggle Helmet Light"
+		actions_types = list(/datum/action/item_action/toggle_light)
 	else
 		icon_state = initial(icon_state)
-		action_button_name = null
+		actions_types = null
 
 /obj/item/clothing/head/helmet/tactical/sec
 	name = "tactical helmet"

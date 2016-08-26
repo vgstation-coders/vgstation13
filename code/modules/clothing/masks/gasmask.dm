@@ -5,7 +5,7 @@
 	clothing_flags = BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
 	w_class = W_CLASS_MEDIUM
 	can_flip = 1
-	action_button_name = "Toggle Mask"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	item_state = "gas_alt"
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -98,7 +98,7 @@
 	var/vchange = 1//This didn't do anything before. It now checks if the mask has special functions/N
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
-	action_button_name = "Toggle Mask"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
 
