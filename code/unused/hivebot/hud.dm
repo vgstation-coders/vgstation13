@@ -204,28 +204,11 @@
 	mymob.fire.name = "fire"
 	mymob.fire.screen_loc = ui_fire
 
-
-
 	mymob.pullin = new /obj/screen( null )
 	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull
-
-	mymob.blind = new /obj/screen( null )
-	mymob.blind.icon = 'icons/mob/screen1_full.dmi''
-	mymob.blind.icon_state = "blackimageoverlay"
-	mymob.blind.name = " "
-	mymob.blind.screen_loc = "1,1"
-	mymob.blind.layer = 0
-	mymob.blind.mouse_opacity = 0
-
-	mymob.flash = new /obj/screen( null )
-	mymob.flash.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = "1,1 to 15,15"
-	mymob.flash.layer = UNDER_HUD_LAYER
 
 	mymob.sleep = new /obj/screen( null )
 	mymob.sleep.icon = 'icons/mob/screen1_robot.dmi'
@@ -246,7 +229,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.blind, mymob.flash, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.rest, mymob.sleep) //, mymob.mach )
 	mymob.client.screen += src.adding + src.other
 
 	return

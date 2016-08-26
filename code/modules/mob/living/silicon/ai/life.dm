@@ -42,29 +42,20 @@
 			// Gain Power
 			adjustOxyLoss(-1)
 
-		//stage = 1
-		//if (istype(src, /mob/living/silicon/ai)) // Are we not sure what we are?
-		var/blind = 0
-		//stage = 2
+		var/blindme = 0
 		var/area/loc = null
 		if (istype(T, /turf))
-			//stage = 3
 			loc = T.loc
 			if (istype(loc, /area))
-				//stage = 4
 				if (!loc.power_equip && !istype(src.loc,/obj/item))
-					//stage = 5
-					blind = 1
-		if (!blind)	//lol? if(!blind)	#if(src.blind.layer)    <--something here is clearly wrong :P
-					//I'll get back to this when I find out  how this is -supposed- to work ~Carn //removed this shit since it was confusing as all hell --39kk9t
-			//stage = 4.5
+					blindme = 1
+		if (!blindme)
 			if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
 				change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				src.see_in_dark = 8
 				src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 			var/area/home = get_area(src)
-			//if(!home)	return//something to do with malf fucking things up I guess. <-- aisat is gone. is this still necessary? ~Carn
 			if(home && home.powered(EQUIP))
 				home.use_power(1000, EQUIP)
 
@@ -88,8 +79,6 @@
 				return
 
 		else
-
-			//stage = 6
 			if(client)
 				if(src.blind)
 					src.blind.screen_loc = "1,1 to 15,15"

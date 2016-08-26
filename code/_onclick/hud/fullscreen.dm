@@ -25,6 +25,7 @@
 	set waitfor = 0
 	var/obj/screen/fullscreen/screen = screens[category]
 	if(!screen)
+		screens -= category
 		return
 
 	if(animate)
@@ -32,6 +33,8 @@
 		sleep(animate)
 
 	screens -= screen
+	screens[category] = null
+	screens -= category
 	if(client)
 		client.screen -= screen
 	qdel(screen)

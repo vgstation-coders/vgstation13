@@ -186,7 +186,7 @@
 			src.client.screen -= src.hud_used.druggy
 			src.client.screen -= src.hud_used.vimpaired
 
-			if ((src.blind && src.stat != 2))
+			if ((src.stat != 2))
 				if ((src.blinded))
 					src.blind.layer = 18
 				else
