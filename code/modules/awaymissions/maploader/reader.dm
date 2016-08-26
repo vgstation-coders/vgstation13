@@ -198,6 +198,11 @@ var/global/dmm_suite/preloader/_preloader = null
 	if(_preloader && instance)
 		_preloader.load(instance)
 
+	//The areas list doesn't contain areas without objects by default
+	//We have to add it manually
+	if(!areas.Find(instance))
+		areas.Add(instance)
+
 	members.Remove(members[index])
 
 	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
