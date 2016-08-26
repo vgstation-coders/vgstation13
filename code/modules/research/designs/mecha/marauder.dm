@@ -2,7 +2,7 @@
 	name = "Exosuit Structure (Marauder chassis)"
 	desc = "Used to build a Marauder chassis."
 	id = "durand_chassis"
-	req_tech = list(Tc_COMBAT = 2, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 2, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/chassis/durand
 	category = "Durand"
@@ -12,7 +12,7 @@
 	name = "Exosuit Structure (Marauder torso)"
 	desc = "Used to build a Marauder torso."
 	id = "durand_torso"
-	req_tech = list(Tc_COMBAT = 2, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 2, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/marauder_torso
 	category = "Durand"
@@ -22,7 +22,7 @@
 	name = "Exosuit Structure (Marauder left arm)"
 	desc = "Used to build a Marauder left arm."
 	id = "durand_larm"
-	req_tech = list(Tc_COMBAT = 5, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 5, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/marauder_left_arm
 	category = "Durand"
@@ -32,7 +32,7 @@
 	name = "Exosuit Structure (Marauder right arm)"
 	desc = "Used to build a Marauder right arm."
 	id = "durand_rarm"
-	req_tech = list(Tc_COMBAT = 4, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 4, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/marauder_right_arm
 	category = "Durand"
@@ -42,7 +42,7 @@
 	name = "Exosuit Structure (Marauder left leg)"
 	desc = "Used to build a Marauder left leg."
 	id = "durand_lleg"
-	req_tech = list(Tc_COMBAT = 2, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 2, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/marauder_left_leg
 	category = "Durand"
@@ -52,7 +52,7 @@
 	name = "Exosuit Structure (Marauder right leg)"
 	desc = "Used to build a Marauder right leg."
 	id = "durand_rleg"
-	req_tech = list(Tc_COMBAT = 2, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 2, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/marauder_right_leg
 	category = "Durand"
@@ -62,7 +62,7 @@
 	name = "Exosuit Structure (Marauder head)"
 	desc = "Used to build a Marauder head."
 	id = "durand_head"
-	req_tech = list(Tc_COMBAT = 2, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 2, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/marauder_head
 	category = "Durand"
@@ -72,7 +72,7 @@
 	name = "Exosuit Structure (Marauder plates)"
 	desc = "Used to build Marauder armor plates."
 	id = "durand_armor"
-	req_tech = list(Tc_COMBAT = 4, Tc_MAGNETS = 5, NANOTRASEN = 5)
+	req_tech = list(Tc_COMBAT = 4, Tc_MAGNETS = 5, Tc_NANOTRASEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/marauder_armour
 	category = "Durand"
