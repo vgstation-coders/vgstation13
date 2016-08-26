@@ -99,9 +99,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
+	if(!(spell_flags & INCLUDEUSER) && target == user)
 		return 0
-	if(get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
+	if(get_dist(user, target) > range && !(range == SELFCAST && target == user) && !(range == GLOBALCAST)) //Shouldn't be necessary but a good check in case of overrides
 		return 0
 	return istype(target, /mob/living)
 
@@ -226,10 +226,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/before_cast(list/targets, user)
 	var/list/valid_targets = list()
-	var/list/options = view_or_range(range,user,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
-		if(!(target in options))
+		if(!is_valid_target(target, user))
 			continue
 
 		valid_targets += target
@@ -248,8 +247,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			spawn(overlay_lifespan)
 				qdel(spell)
 				spell = null
-	if(spell_flags & INCLUDEUSER)
-		valid_targets |= user
 	return valid_targets
 
 /spell/proc/after_cast(list/targets)
