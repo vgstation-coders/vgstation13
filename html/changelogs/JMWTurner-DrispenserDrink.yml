@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: You can now place drinks, glasses, and shakers inside chem dispensers
