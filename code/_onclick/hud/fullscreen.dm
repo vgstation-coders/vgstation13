@@ -48,8 +48,8 @@
 			if(!A)
 				log_debug("screens\[[category]\] is null on [mymob]")
 				continue
-			if(istype(A, /atom)
-			 	if(!istype(A, /obj/screen)))
+			if(istype(A, /atom))
+			 	if(!istype(A, /obj/screen))
 					log_debug("Wrong type of object in screens, type [A.type] [mymob]")
 					continue
 			else // not even an atom, shouldnt go in list anyway
