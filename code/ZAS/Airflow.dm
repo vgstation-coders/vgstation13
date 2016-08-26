@@ -301,7 +301,7 @@ proc/AirflowSpace(zone/A)
 		density = 1
 		od = 1
 	spawn(0)
-		while(airflow_speed > 0 && Process_Spacemove(1))
+		while(airflow_speed > 0)
 			airflow_speed = min(airflow_speed,15)
 			airflow_speed -= zas_settings.Get(/datum/ZAS_Setting/airflow_speed_decay)
 			if(airflow_speed > 7)
