@@ -201,7 +201,12 @@ var/global/dmm_suite/preloader/_preloader = null
 	//The areas list doesn't contain areas without objects by default
 	//We have to add it manually
 	if(!areas.Find(instance))
-		areas.Add(instance)
+		var/area/A = instance
+
+		if(istype(A))
+			areas.Add(instance)
+			A.addSorted()
+
 
 	members.Remove(members[index])
 
