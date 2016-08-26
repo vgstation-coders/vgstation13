@@ -13,8 +13,8 @@
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle)
 	var/affected_area = 3
 	var/inserted_cores = 0
-	var/obj/item/slime_extract/E = null	//for large and Ex grenades
-	var/obj/item/slime_extract/C = null	//for Ex grenades
+	var/obj/item/slime_extract/firstExtract = null	//for large and Ex grenades
+	var/obj/item/slime_extract/secondExtract = null	//for Ex grenades
 	var/obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade/reservoir = null
 	var/extract_uses = 0
 	var/mob/primed_by = "N/A" //"name (ckey)". For logging purposes
@@ -33,8 +33,8 @@
 				if(istype(B))
 					beakers -= B
 					user.put_in_hands(B)
-					E = null
-					C = null
+					firstExtract = null
+					secondExtract = null
 					inserted_cores = 0
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 	if(stage > 1 && !active && clown_check(user))
@@ -117,6 +117,8 @@
 				else
 					if(user.drop_item(W, src))
 						to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
+						inserted_cores++
+						firstExtract = W
 						beakers += W
 						stage = 1
 						name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
@@ -210,32 +212,32 @@
 		G.reagents.trans_to(reservoir, G.reagents.total_volume)
 	for(var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts
 		S.reagents.trans_to(reservoir, S.reagents.total_volume)
-	if (E != null)
-		extract_uses = E.Uses
+	if (firstExtract != null)
+		extract_uses = firstExtract.Uses
 		for(var/i=1,i<=extract_uses,i++)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
 			if (reservoir.reagents.has_reagent(PLASMA, 5))
-				reservoir.reagents.trans_id_to(E, PLASMA, 5)		//If the grenade contains a slime extract, the grenade will check in this order
+				reservoir.reagents.trans_id_to(firstExtract, PLASMA, 5)		//If the grenade contains a slime extract, the grenade will check in this order
 			else if (reservoir.reagents.has_reagent(BLOOD, 5))	//for any Plasma -> Blood ->or Water among the reagents of the other containers
-				reservoir.reagents.trans_id_to(E, BLOOD, 5)		//and inject 5u of it into the slime extract.
+				reservoir.reagents.trans_id_to(firstExtract, BLOOD, 5)		//and inject 5u of it into the slime extract.
 			else if (reservoir.reagents.has_reagent(WATER, 5))
-				reservoir.reagents.trans_id_to(E, WATER, 5)
+				reservoir.reagents.trans_id_to(firstExtract, WATER, 5)
 			else if (reservoir.reagents.has_reagent(SUGAR, 5))
-				reservoir.reagents.trans_id_to(E, SUGAR, 5)
-		if(E.reagents.total_volume)						  //<-------//exception for slime reactions that produce new reagents. The grenade checks if any
-			E.reagents.trans_to(reservoir, E.reagents.total_volume)	//reagents are left in the slime extracts after the slime reactions occured
-		if (C != null)
-			extract_uses = C.Uses
+				reservoir.reagents.trans_id_to(firstExtract, SUGAR, 5)
+		if(firstExtract.reagents.total_volume)						  //<-------//exception for slime reactions that produce new reagents. The grenade checks if any
+			firstExtract.reagents.trans_to(reservoir, firstExtract.reagents.total_volume)	//reagents are left in the slime extracts after the slime reactions occured
+		if (secondExtract != null)
+			extract_uses = secondExtract.Uses
 			for(var/j=1,j<=extract_uses,j++)	//why don't anyone ever uses "while" directives anyway?
 				if (reservoir.reagents.has_reagent(PLASMA, 5))
-					reservoir.reagents.trans_id_to(C, PLASMA, 5)	//since the order in which slime extracts are inserted matters (in the case of an Ex grenade)
+					reservoir.reagents.trans_id_to(secondExtract, PLASMA, 5)	//since the order in which slime extracts are inserted matters (in the case of an Ex grenade)
 				else if (reservoir.reagents.has_reagent(BLOOD, 5))//this allow users to plannify which reagent will get into which extract.
-					reservoir.reagents.trans_id_to(C, BLOOD, 5)
+					reservoir.reagents.trans_id_to(secondExtract, BLOOD, 5)
 				else if (reservoir.reagents.has_reagent(WATER, 5))
-					reservoir.reagents.trans_id_to(C, WATER, 5)
+					reservoir.reagents.trans_id_to(secondExtract, WATER, 5)
 				else if (reservoir.reagents.has_reagent(SUGAR, 5))
-					reservoir.reagents.trans_id_to(C, SUGAR, 5)
-			if(C.reagents.total_volume)
-				C.reagents.trans_to(reservoir, C.reagents.total_volume)
+					reservoir.reagents.trans_id_to(secondExtract, SUGAR, 5)
+			if(secondExtract.reagents.total_volume)
+				secondExtract.reagents.trans_to(reservoir, secondExtract.reagents.total_volume)
 
 		reservoir.reagents.update_total()
 
@@ -338,6 +340,11 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 					if(user.drop_item(W, src))
 						to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
 						beakers += W
+						if(!firstExtract)
+							firstExtract = W
+						else
+							secondExtract = W
+						inserted_cores++
 						stage = 1
 						name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 			else if(W.reagents.total_volume)
