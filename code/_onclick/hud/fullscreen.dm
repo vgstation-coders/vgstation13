@@ -53,7 +53,7 @@
 					log_debug("Wrong type of object in screens, type [A.type] [mymob]")
 					continue
 			else // not even an atom, shouldnt go in list anyway
-				log_debug("screens[\[category]\] is a non-atom, WHY IS THIS IN SCREENS [mymob]")
+				log_debug("screens\[[category]\] is a non-atom, WHY IS THIS IN SCREENS [mymob]")
 				continue
 			mymob.client.screen |= A
 
