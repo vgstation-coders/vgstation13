@@ -99,11 +99,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == user)
-		return 0
-	if(get_dist(user, target) > range && !(range == SELFCAST && target == user) && !(range == GLOBALCAST)) //Shouldn't be necessary but a good check in case of overrides
-		return 0
-	return istype(target, /mob/living)
+	return (target in view_or_range(range, user, selection_type))
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
 	if(!holder)
