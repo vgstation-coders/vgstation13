@@ -79,3 +79,11 @@ The database is automatically installed during server startup, but you need to e
 ### IRC Bot Setup
 
 Included in the repo is an IRC bot capable of relaying adminhelps to a specified IRC channel/server (replaces the older one by Skibiliano).  Instructions for bot setup are included in the /bot/ folder along with the bot/relay script itself.
+
+### LICENSE
+
+All code after commit f8bfd6d83ad2772ef803ce503de9af9a6cf7eba4 on August 26th, 2016 at 9:51 AM PDT (https://github.com/d3athrow/vgstation13/commit/f8bfd6d83ad2772ef803ce503de9af9a6cf7eba4) is licensed under GNU AGPL v3 (http://www.gnu.org/licenses/agpl-3.0.html).
+
+All code before commit f8bfd6d83ad2772ef803ce503de9af9a6cf7eba4 on August 26th, 2016 at 9:51 AM PDT (https://github.com/d3athrow/vgstation13/commit/f8bfd6d83ad2772ef803ce503de9af9a6cf7eba4) is licensed under GNU GPL v3 (http://www.gnu.org/licenses/gpl-3.0.html). (Including tools unless their readme specifies otherwise.)
+
+See LICENSE-AGPLv3.txt and LICENSE-GPLv3.txt for more details.
