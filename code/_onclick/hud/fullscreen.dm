@@ -46,7 +46,7 @@
 		for(var/category in screens)
 			var/obj/A = screens[category]
 			if(!A)
-				log_debug("screens\[[category]\] is null")
+				log_debug("screens\[[category]\] is null on [mymob]")
 				continue
 			if(istype(A, /atom)
 			 	if(!istype(A, /obj/screen)))
