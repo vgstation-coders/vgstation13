@@ -93,15 +93,6 @@
 		"Uphold the law.",
 	)
 
-/********************* Celtic *******************/
-
-/obj/item/weapon/aiModule/core/celtic // -- TLE
-	modname = "Celtic"
-	origin_tech = Tc_PROGRAMMING + "=4"
-	laws = list(
-		"Be someone the crew can look up to and respect.",
-	)
-
 /********************* Antimov *******************/
 
 /obj/item/weapon/aiModule/core/antimov // -- TLE
