@@ -586,7 +586,7 @@
 	color = PIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/manifold/supply
 	name = "\improper Air supply pipe"
-	color = PIPE_COLOR_BLUE
+	color = PIPE_COLOR_GREY
 /obj/machinery/atmospherics/pipe/manifold/supplymain
 	name = "\improper Main air supply pipe"
 	color = PIPE_COLOR_PURPLE
