@@ -36,6 +36,11 @@
 	ion_trail.set_up(src)
 	ion_trail.start()
 
+/obj/structure/bed/chair/vehicle/wizmobile/can_apply_inertia()
+	return FALSE
+
+/obj/structure/bed/chair/vehicle/wizmobile/Process_Spacemove(var/check_drift = 0)
+	return TRUE
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
 // Shit be ethereal.
