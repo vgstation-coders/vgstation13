@@ -990,8 +990,6 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	var/list/copiedobjs = list()
 
-	to_chat(world, "[refined_src.len] - [refined_trg.len]")
-
 	moving:
 		for (var/turf/T in refined_src)
 			var/datum/coords/C_src = refined_src[T]
@@ -1081,9 +1079,6 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	for(var/obj/O in doors)
 		O:update_nearby_tiles()
-
-
-	to_chat(world, copiedobjs.len)
 
 	return copiedobjs
 

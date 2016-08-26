@@ -90,7 +90,7 @@
 
 	src.loadZLevels(src.zLevels)
 
-	spawn(10)
+	spawn()
 		to_chat(world, "[load_map_elements.len]")
 		for(var/T in load_map_elements)
 			load_dungeon(T)
