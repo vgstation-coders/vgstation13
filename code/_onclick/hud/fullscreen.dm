@@ -45,8 +45,15 @@
 		var/list/screens = mymob.screens
 		for(var/category in screens)
 			var/obj/A = screens[category]
-			if(istype(A, /atom) && !istype(A, /obj/screen))
-				log_debug("Wrong type of object in screens, type [A.type]")
+			if(!A)
+				log_debug("screens\[[category]\] is null")
+				continue
+			if(istype(A, /atom)
+			 	if(!istype(A, /obj/screen)))
+					log_debug("Wrong type of object in screens, type [A.type] [mymob]")
+					continue
+			else // not even an atom, shouldnt go in list anyway
+				log_debug("screens[\[category]\] is a non-atom, WHY IS THIS IN SCREENS [mymob]")
 				continue
 			mymob.client.screen |= A
 
