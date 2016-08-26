@@ -1,0 +1,6 @@
+author: Unid
+
+delete-after: False
+
+changes: 
+- bugfix: Fixed firebird not moving in space.
