@@ -1,0 +1,7 @@
+
+author: JustSumGuy
+
+delete-after: True
+
+changes: 
+- rscadd: "Tooltips have been added to some UI elements such as spells and item action buttons."

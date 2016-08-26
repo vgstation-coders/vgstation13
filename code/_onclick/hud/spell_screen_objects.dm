@@ -33,7 +33,13 @@
 		return
 
 	return ..()
-
+	
+/obj/screen/movable/spell_master/MouseEntered(location,control,params)	
+	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
+	
+/obj/screen/movable/spell_master/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
 		returnToPool(src)
@@ -169,7 +175,31 @@
 
 	var/icon/last_charged_icon
 	var/channeling_image
-
+	
+/obj/screen/spell/MouseEntered(location,control,params)
+	if(!spell)
+		return
+	var/dat = ""
+	if(spell.charge_type & Sp_RECHARGE)
+		dat += "<br>Cooldown: [spell.charge_max/10] second\s"
+	if(spell.charge_type & Sp_CHARGES)
+		dat += "<br>Has [spell.charge_counter] charge\s left"
+	if(spell.charge_type & Sp_HOLDVAR)
+		dat += "<br>Requires [spell.holder_var_amount] [spell.holder_var_type]"
+	switch(spell.range)
+		if(1)
+			dat += "<br>Range: Adjacency"
+		if(2 to INFINITY)
+			dat += "<br>Range: [spell.range]"
+		if(GLOBALCAST)
+			dat += "<br>Range: Global"
+		if(SELFCAST)
+			dat += "<br>Range: Self"
+	openToolTip(usr,src,params,title = name,content = dat)
+	
+/obj/screen/spell/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/spell/Destroy()
 	..()
 	spell = null

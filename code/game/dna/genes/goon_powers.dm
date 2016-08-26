@@ -423,7 +423,7 @@
 	name = "Jump"
 	desc = "Leap great distances!"
 	panel = "Mutant Powers"
-	range = -1
+	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
 	charge_max = 60
