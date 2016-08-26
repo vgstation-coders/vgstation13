@@ -12,7 +12,7 @@
 	var/max_energy = 50
 	var/rechargerate = 2
 	var/amount = 30
-	var/obj/item/weapon/reagent_containers/glass/container = null
+	var/obj/item/weapon/reagent_containers/container = null
 	var/recharged = 0
 	var/custom = 0
 	var/useramount = 30 // Last used amount
@@ -213,7 +213,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(href_list["dispense"])
 		if (dispensable_reagents.Find(href_list["dispense"]) && container != null)
-			var/obj/item/weapon/reagent_containers/glass/B = src.container
+			var/obj/item/weapon/reagent_containers/B = src.container
 			var/datum/reagents/R = B.reagents
 			if(!R)
 				if(!B.gcDestroyed)
@@ -238,7 +238,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	targetMoveKey=null
 
 	if(container)
-		var/obj/item/weapon/reagent_containers/glass/B = container
+		var/obj/item/weapon/reagent_containers/B = container
 		B.loc = loc
 		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = container:holder:loc
