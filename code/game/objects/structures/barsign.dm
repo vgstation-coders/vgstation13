@@ -48,6 +48,7 @@
 		return
 
 	if (!(get_dir(src, usr) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
+		to_chat(user, "<span class='warning'>You must stand south of the bar sign to change its design.</span>")
 		return
 
 	barsigns.len = 0
@@ -71,9 +72,7 @@
 		desc = "It displays \"[name]\"."
 
 /obj/structure/sign/double/barsign/cultify()
-	if(cult)
-		return
-	else
+	if(!cult)
 		icon_state = "narsiebistro"
 		name = "Narsie Bistro"
 		desc = "The last pub before the World's End."
