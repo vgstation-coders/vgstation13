@@ -13,7 +13,7 @@
 	var/obj/screen/movable/action_button/button = null
 	var/button_icon = 'icons/mob/actions.dmi'
 	var/background_icon_state = "bg_default"
-	//var/buttontooltipstyle = "" comment this out when tooltips merged
+	var/buttontooltipstyle = "" 
 
 	var/icon_icon = 'icons/mob/actions.dmi'
 	var/button_icon_state = "default"
@@ -24,7 +24,7 @@
 	button = new
 	button.linked_action = src
 	button.name = name
-	//button.actiontooltipstyle = buttontooltipstyle comment this back when tooltips merged
+	button.actiontooltipstyle = buttontooltipstyle
 	if(desc)
 		button.desc = desc
 
@@ -143,21 +143,6 @@
 		current_button.overlays += I
 		I.layer = old
 
-/datum/action/item_action/toggle_light
-	name = "Toggle Light"
-
-/datum/action/item_action/toggle_mask
-	name = "Toggle Mask"
-
-/datum/action/item_action/toggle_firemode
-	name = "Toggle Firemode"
-
-/datum/action/item_action/toggle_mode
-	name = "Toggle Mode"
-
-/datum/action/item_action/set_internals
-	name = "Set Internals"
-
 /datum/action/item_action/set_internals/UpdateButtonIcon()
 	if(..()) //button available
 		if(iscarbon(owner))
@@ -182,15 +167,42 @@
 /datum/action/item_action/toggle_jetpack
 	name = "Toggle Jetpack"
 	
-/datum/action/item_action/jetpack_mode
-	name = "Jetpack Mode"
-	
 /datum/action/item_action/jetpack_stabilization
 	name = "Toggle Jetpack Stabilization"
+	
+/datum/action/item_action/set_internals
+	name = "Set Internals"
 	
 /datum/action/item_action/instrument
 	name = "Play Instrument"
 	
+/datum/action/item_action/toggle_goggles
+	name = "Toggle Goggles"
+	
+/datum/action/item_action/toggle_helmet
+	name = "Toggle Helmet"
+	
+/datum/action/item_action/toggle_mask
+	name = "Toggle Mask"
+	
+/datum/action/item_action/toggle_magboots
+	name = "Toggle Magboots"
+	
+/datum/action/item_action/toggle_gun
+	name = "Toggle Gun"
+	
+/datum/action/item_action/toggle_light
+	name = "Toggle Light"
+	
+/datum/action/item_action/activate_siren
+	name = "Activate Siren"
+	
+/datum/action/item_action/toggle_helmet_camera
+	name = "Toggle Helmet Camera"
+	
+/datum/action/item_action/toggle_firemode
+	name = "Toggle Firemode"
+
 /datum/action/item_action/jetpack_stabilization/IsAvailable()
 	var/obj/item/weapon/tank/jetpack/J = target
 	if(!istype(J) || !J.on)

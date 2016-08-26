@@ -11,7 +11,7 @@
 	var/on = 0.0
 	var/stabilization_on = 0
 	var/volume_rate = 500              //Needed for borg jetpack transfer
-	actions_types = list(/datum/action/item_action/set_internals, /datum/action/item_action/jetpack_mode,/datum/action/item_action/toggle_jetpack)
+	actions_types = list(/datum/action/item_action/set_internals, /datum/action/item_action/jetpack_stabilization,/datum/action/item_action/toggle_jetpack)
 	
 /obj/item/weapon/tank/jetpack/proc/toggle_rockets()
 	src.stabilization_on = !( src.stabilization_on )
@@ -50,10 +50,10 @@
 	return
 
 /obj/item/weapon/tank/jetpack/ui_action_click(mob/user, actiontype)
-	if(actiontype == /datum/action/item_action/jetpack_mode)
+	if(actiontype == /datum/action/item_action/jetpack_stabilization)
 		toggle_rockets()
-	if(actiontype == /datum/action/item_action/toggle_jetpack)
-		toggle_rockets()
+	else if(actiontype == /datum/action/item_action/toggle_jetpack)
+		toggle()
 	else
 		attack_self(user)
 

@@ -53,7 +53,6 @@ var/global/obj/screen/clicker/catcher = new()
 	adding = null
 	other = null
 	hotkeybuttons = null
-	item_action_list = null
 	mymob = null
 
 
