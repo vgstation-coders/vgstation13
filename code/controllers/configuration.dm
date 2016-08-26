@@ -180,6 +180,10 @@
 	var/error_silence_time = 6000 // How long a unique error will be silenced for
 	var/error_msg_delay = 50 // How long to wait between messaging admins about occurrences of a unique error
 
+	// Discord crap.
+	var/discord_url
+	var/discord_password
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -231,10 +235,10 @@
 			switch (name)
 				if ("resource_urls")
 					config.resource_urls = splittext(value, " ")
-					
-				if("tts_server")	
+
+				if("tts_server")
 					config.tts_server = value
-					
+
 				if ("admin_legacy_system")
 					config.admin_legacy_system = 1
 
@@ -558,6 +562,10 @@
 					error_silence_time = value
 				if("error_msg_delay")
 					error_msg_delay = value
+				if("discord_url")
+					discord_url = value
+				if("discord_password")
+					discord_password = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"

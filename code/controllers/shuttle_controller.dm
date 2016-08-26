@@ -243,6 +243,7 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 				settimeleft(SHUTTLELEAVETIME)
 				send2mainirc("The Emergency Shuttle has docked with the station.")
+				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
 				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
 				world << sound('sound/AI/shuttledock.ogg')
 
@@ -362,4 +363,3 @@ datum/shuttle_controller/emergency_shuttle/process()
 			S.direction = spawndir
 			spawn()
 				S.startmove()
-
