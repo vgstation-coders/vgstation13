@@ -1,6 +1,6 @@
 //A variant of revolution, with an emphasis on a small group with co-ordinated efforts instead of greytiding
 
-#define REVSQUAD_FLASH_USES 1 // Number of times a specially spawned flash can convert normal crew members.
+#define REVSQUAD_FLASH_USES 2 // Number of times a specially spawned flash can convert normal crew members.
 
 #define REVSQUAD_VICTORY_REVS 1
 #define REVSQUAD_VICTORY_HEADS 2
@@ -134,7 +134,7 @@
 /datum/game_mode/revsquad/proc/get_revsquad_item(var/mob/living/carbon/human/M)
 	var/obj/item/requisitioned = pick(possible_items)
 	if(istype(requisitioned, /obj/item/device/flash/revsquad))
-		var/obj/item/device/flash/revsquad/FR = new(M, uses = REVSQUAD_FLASH_USES)
+		var/obj/item/device/flash/revsquad/FR = new(M)
 		requisitioned = FR
 	else
 		requisitioned = new requisitioned(M)

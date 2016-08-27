@@ -245,6 +245,5 @@
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
 
-/obj/item/device/flash/revsquad/New(var/uses = 1)
-	..()
-	limited_conversions = uses
+/obj/item/device/flash/revsquad
+	limited_conversions = REVSQUAD_FLASH_USES
