@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - bugfix: Fixed camera pictures disregarding planes when sorting which atoms are on top
