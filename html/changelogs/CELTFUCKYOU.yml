@@ -1,0 +1,4 @@
+author: PJB3005
+changes:
+  - bugfix: "The icons of insulated pipe manifolds properly color depending on adjacent pipes now."
+delete-after: true
