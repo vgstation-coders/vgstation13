@@ -32,7 +32,6 @@
 		animate(screen, alpha = 0, time = animate)
 		sleep(animate)
 
-	screens -= screen
 	screens[category] = null
 	screens -= category
 	if(client)

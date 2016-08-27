@@ -2,13 +2,12 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 
-	if (src.stat == 2)
+	if (src.stat == DEAD)
 		return
-	else //I'm not removing that shitton of tabs, unneeded as they are. -- Urist
-		//Being dead doesn't mean your temperature never changes
+	else
 		var/turf/T = get_turf(src)
 
-		if (src.stat!=0)
+		if (src.stat!=CONSCIOUS)
 			src.cameraFollow = null
 			src.reset_view(null)
 			src.unset_machine()
@@ -35,21 +34,22 @@
 					reset_view(null)
 
 		// Handle power damage (oxy)
-		if(src:aiRestorePowerRoutine != 0)
+		if(src.aiRestorePowerRoutine != 0)
 			// Lost power
 			adjustOxyLoss(1)
 		else
 			// Gain Power
 			adjustOxyLoss(-1)
 
-		var/blindme = 0
+		var/unpowered_core = 0
 		var/area/loc = null
 		if (istype(T, /turf))
 			loc = T.loc
 			if (istype(loc, /area))
 				if (!loc.power_equip && !istype(src.loc,/obj/item))
-					blindme = 1
-		if (!blindme)
+					unpowered_core = 1
+		if (!unpowered_core)
+			var/unblindme = 0
 			if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
 				change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				src.see_in_dark = 8
@@ -59,93 +59,70 @@
 			if(home && home.powered(EQUIP))
 				home.use_power(1000, EQUIP)
 
-			if (src:aiRestorePowerRoutine==2)
+			if (src.aiRestorePowerRoutine==2)
 				to_chat(src, "Alert cancelled. Power has been restored without our assistance.")
-				src:aiRestorePowerRoutine = 0
-				if(src.blind)
-					src.blind.layer = 0
-				return
-			else if (src:aiRestorePowerRoutine==3)
+				src.aiRestorePowerRoutine = 0
+				unblindme = 1
+			else if (src.aiRestorePowerRoutine==3)
 				to_chat(src, "Alert cancelled. Power has been restored.")
-				src:aiRestorePowerRoutine = 0
-				if(src.blind)
-					src.blind.layer = 0
-				return
+				src.aiRestorePowerRoutine = 0
+				unblindme = 1
 			else if (src.aiRestorePowerRoutine == -1)
 				to_chat(src, "Alert cancelled. External power source detected.")
-				src:aiRestorePowerRoutine = 0
-				if(src.blind)
-					src.blind.layer = 0
-				return
+				src.aiRestorePowerRoutine = 0
+				unblindme = 1
+			if(unblindme)
+				clear_fullscreen("blind")
+			return
 
-		else
+		else // We are in an AI core and are unpowered.
+			var/unblindme = 0
+
+			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 			if(client)
-				if(src.blind)
-					src.blind.screen_loc = "1,1 to 15,15"
-					if (src.blind.layer != 18)
-						src.blind.layer = UNDER_HUD_LAYER
 				change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				src.see_in_dark = 0
 			src.see_invisible = SEE_INVISIBLE_LIVING
 
 			if (((!loc.power_equip) || istype(T, /turf/space)) && !istype(src.loc,/obj/item))
-				if (src:aiRestorePowerRoutine==0)
-					src:aiRestorePowerRoutine = 1
+				if (src.aiRestorePowerRoutine==0)
+					src.aiRestorePowerRoutine = 1
 
 					to_chat(src, "You've lost power!")
-//							to_chat(world, "DEBUG CODE TIME! [loc] is the area the AI is sucking power from")
-					if (!is_special_character(src))
-						src.set_zeroth_law("")
-					//src.clear_supplied_laws() // Don't reset our laws.
-					//var/time = time2text(world.realtime,"hh:mm:ss")
-					//lawchanges.Add("[time] <b>:</b> [src.name]'s noncore laws have been reset due to power failure")
 					spawn(20)
 						if(!src.aiRestorePowerRoutine)
-							blind = 0
 							return // Checking for premature changes.
 						to_chat(src, "Backup battery online. Scanners, camera, and radio interface offline. Beginning fault-detection.")
 						sleep(50)
 						if(!src.aiRestorePowerRoutine)
-							blind = 0
 							return // Checking for premature changes.
 						if (loc.power_equip)
 							if (!istype(T, /turf/space))
 								to_chat(src, "Alert cancelled. Power has been restored without our assistance.")
-								src:aiRestorePowerRoutine = 0
-								if(src.blind)
-									src.blind.layer = 0
+								src.aiRestorePowerRoutine = 0
+								unblindme = 1
 								return
 						to_chat(src, "Fault confirmed: missing external power. Shutting down main control system to save power.")
 						sleep(20)
 						if(!src.aiRestorePowerRoutine)
-							blind = 0
 							return // Checking for premature changes.
 						to_chat(src, "Emergency control system online. Verifying connection to power network.")
 						sleep(50)
 						if(!src.aiRestorePowerRoutine)
-							blind = 0
 							return // Checking for premature changes.
 						if (istype(T, /turf/space))
 							to_chat(src, "Unable to verify! No power connection detected!")
-							src:aiRestorePowerRoutine = 2
+							src.aiRestorePowerRoutine = 2
 							return
 						to_chat(src, "Connection verified. Searching for APC in power network.")
 						sleep(50)
 						if(!src.aiRestorePowerRoutine)
-							blind = 0
 							return // Checking for premature changes.
 						var/obj/machinery/power/apc/theAPC = null
-/*
-						for (var/something in loc)
-							if (istype(something, /obj/machinery/power/apc))
-								if (!(something:stat & BROKEN))
-									theAPC = something
-									break
-*/
+
 						var/PRP //like ERP with the code, at least this stuff is no more 4x sametext
 						for (PRP=1, PRP<=4, PRP++)
 							if(!src.aiRestorePowerRoutine)
-								blind = 0
 								return // Checking for premature changes.
 							var/area/AIarea = get_area(src)
 							for (var/obj/machinery/power/apc/APC in AIarea)
@@ -158,14 +135,13 @@
 										to_chat(src, "Unable to locate APC!")
 									else
 										to_chat(src, "Lost connection with the APC!")
-								src:aiRestorePowerRoutine = 2
+								src.aiRestorePowerRoutine = 2
 								return
 							if (loc.power_equip)
 								if (!istype(T, /turf/space))
 									to_chat(src, "Alert cancelled. Power has been restored without our assistance.")
-									src:aiRestorePowerRoutine = 0
-									if(src.blind)
-										src.blind.layer = 0 //This, too, is a fix to issue 603
+									src.aiRestorePowerRoutine = 0
+									unblindme = 1
 									return
 							switch(PRP)
 								if (1)
@@ -179,17 +155,15 @@
 									sleep(50)
 									if(!src.aiRestorePowerRoutine)
 										theAPC = null
-										blind = 0
 										return // Checking for premature changes.
 									to_chat(src, "Receiving control information from APC.")
 									sleep(2)
 									if(!src.aiRestorePowerRoutine)
 										theAPC = null
-										blind = 0
 										return // Checking for premature changes.
 									//bring up APC dialog
 									theAPC.attack_ai(src)
-									src:aiRestorePowerRoutine = 3
+									src.aiRestorePowerRoutine = 3
 									to_chat(src, "Here are your current laws:")
 									src.show_laws()
 							sleep(50)
