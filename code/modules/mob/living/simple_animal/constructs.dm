@@ -159,7 +159,7 @@
 	melee_damage_lower = 30
 	melee_damage_upper = 30
 	attacktext = "smashes their armoured gauntlet into"
-	speed = 7
+	speed = 3
 	environment_smash = 2
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
