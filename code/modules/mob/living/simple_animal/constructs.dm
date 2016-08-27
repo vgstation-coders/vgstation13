@@ -276,7 +276,7 @@
 	melee_damage_lower = 50
 	melee_damage_upper = 50
 	attacktext = "brutally crushes"
-	speed = 10
+	speed = 5
 	environment_smash = 2
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	var/energy = 0
