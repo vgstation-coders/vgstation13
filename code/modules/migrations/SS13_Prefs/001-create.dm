@@ -15,6 +15,7 @@
 	`age`					INTEGER,
 	`species`				TEXT,
 	`language`				TEXT,
+	`flavor_text`			TEXT,
 	`med_record`			TEXT,
 	`sec_record`			TEXT,
 	`gen_record`			TEXT,
