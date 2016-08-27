@@ -1456,13 +1456,13 @@ var/list/slot_equipment_priority = list( \
 			for(var/spell/S in spell_list)
 				if((!S.connected_button) || !statpanel(S.panel))
 					continue //Not showing the noclothes spell
-				switch(S.charge_type)
-					if(Sp_RECHARGE)
-						statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10]" : "Free"]",S.connected_button)
-					if(Sp_CHARGES)
-						statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max]" : "Free"]",S.connected_button)
-					if(Sp_HOLDVAR)
-						statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
+				var/charge_type = S.charge_type
+				if(charge_type & Sp_HOLDVAR)
+					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
+				else if(charge_type & Sp_CHARGES)
+					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
+				else if(charge_type & Sp_RECHARGE)
+					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
