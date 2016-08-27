@@ -379,7 +379,7 @@
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire(atom/ttarget)
 	if(istype(ttarget))
- 		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
+		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
 
 	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
 	var/tturf = get_turf(ttarget)

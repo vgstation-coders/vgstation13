@@ -542,9 +542,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/movement_delay()
 	var/tally = 0 //Incase I need to add stuff other than "speed" later
 
-	//BANDAID: player controlled animals moved roughly twice as slower than NPC controlled ones
-	//Halving the speed and subtracting 1 makes it more or less accurate
-	tally = (speed * 0.5) - 1
+	tally = speed
 
 	if(purge)//Purged creatures will move more slowly. The more time before their purge stops, the slower they'll move. (muh dotuh)
 		if(tally <= 0)
