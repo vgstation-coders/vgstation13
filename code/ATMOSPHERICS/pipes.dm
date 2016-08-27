@@ -409,7 +409,6 @@
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/insulated
 	name = "\improper Insulated pipe"
-	//icon = 'icons/obj/atmospherics/red_pipe.dmi'
 	minimum_temperature_difference = 10000
 	thermal_conductivity = 0
 
@@ -417,19 +416,16 @@
 	fatigue_pressure =  900000 // 900k kPa
 	alert_pressure   =  900000
 
-	can_be_coloured = 1
 	color = IPIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/simple/insulated/visible
 	icon_state = "intact"
 	level = 2
-	color=IPIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden
 	icon_state = "intact"
 	alpha=128
 	level = 1
-	color=IPIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue
 	color= IPIPE_COLOR_BLUE
 
@@ -604,12 +600,8 @@
 	color = PIPE_COLOR_GREEN
 /obj/machinery/atmospherics/pipe/manifold/insulated
 	name = "\improper Insulated pipe"
-	//icon = 'icons/obj/atmospherics/red_pipe.dmi'
-	icon_state = "manifold"
 	alert_pressure = 900*ONE_ATMOSPHERE
 	color=IPIPE_COLOR_RED
-	level = 2
-	can_be_coloured = 1
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/visible
 	level = 2
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden
@@ -632,12 +624,10 @@
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible
 	level = 2
-	color=IPIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden
 	level = 1
-	color=IPIPE_COLOR_RED
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue
 	color=IPIPE_COLOR_BLUE
@@ -828,9 +818,6 @@
 	name = "\improper Insulated pipe"
 	color = IPIPE_COLOR_RED
 	alert_pressure = 900*ONE_ATMOSPHERE
-	color=IPIPE_COLOR_RED
-	level = 2
-	can_be_coloured = 1
 
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/visible
 	level = 2
