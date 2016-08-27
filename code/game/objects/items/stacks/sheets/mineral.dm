@@ -13,7 +13,6 @@ Mineral Sheets
 	Others:
 		- Adamantine
 		- Mythril
-		- Enriched Uranium
 */
 
 /obj/item/stack/sheet/mineral
