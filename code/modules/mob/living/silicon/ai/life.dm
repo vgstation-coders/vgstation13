@@ -168,6 +168,8 @@
 									src.show_laws()
 							sleep(50)
 							theAPC = null
+			if(unblindme)
+				clear_fullscreen("blind")
 
 /mob/living/silicon/ai/updatehealth()
 	if(status_flags & GODMODE)
