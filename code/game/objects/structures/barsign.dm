@@ -47,10 +47,6 @@
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	if (!(get_dir(src, usr) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
-		to_chat(user, "<span class='warning'>You must stand south of the bar sign to change its design.</span>")
-		return
-
 	barsigns.len = 0
 	for(var/bartype in typesof(/datum/barsign))
 		var/datum/barsign/signinfo = new bartype
