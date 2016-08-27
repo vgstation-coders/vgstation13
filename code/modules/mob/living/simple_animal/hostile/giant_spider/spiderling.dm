@@ -23,7 +23,7 @@
 	vision_range = 3
 	aggro_vision_range = 9
 	idle_vision_range = 3
-	speed = 3
+	move_to_delay = 3
 	friendly = "harmlessly skitters into"
 	maxHealth = 12
 	health = 12
@@ -141,7 +141,7 @@
 	//ventcrawl!
 	if(!v.welded)
 		entry_vent = v
-		Goto(get_turf(v), speed)
+		Goto(get_turf(v),move_to_delay)
 
 //Virologist's little friend!
 /mob/living/simple_animal/hostile/giant_spider/spiderling/salk

@@ -18,7 +18,8 @@
 	health = 100
 	maxHealth = 100
 
-	speed = 4
+	move_to_delay = 4
+	speed = 1
 
 	melee_damage_lower = 5
 	melee_damage_upper = 7
