@@ -175,15 +175,15 @@
 		for(var/datum/objective/objective in rev_mind.objectives)
 			if(!objective.check_completion())
 				return 0
-
 		return 1
 
 /datum/game_mode/revsquad/proc/check_heads_victory()
 	for(var/datum/mind/rev_mind in head_revolutionaries)
 		var/turf/T = get_turf(rev_mind.current)
-		if(rev_mind && rev_mind.current && rev_mind.current.isDead() && T && T.z == map.zMainStation)
+		if(rev_mind && rev_mind.current && !rev_mind.current.isDead() && T && T.z == map.zMainStation)
 			if(ishuman(rev_mind.current))
 				return 0
+
 	return 1
 
 
