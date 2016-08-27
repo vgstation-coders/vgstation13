@@ -9,7 +9,7 @@
 	response_disarm = "flails at"
 	response_harm   = "punches"
 	icon_dead = "shade_dead"
-	speed = 2
+	speed = 5
 	a_intent = I_HURT
 	stop_automated_movement = 1
 	status_flags = CANPUSH
@@ -159,7 +159,7 @@
 	melee_damage_lower = 30
 	melee_damage_upper = 30
 	attacktext = "smashes their armoured gauntlet into"
-	speed = 3
+	speed = 7
 	environment_smash = 2
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
@@ -220,7 +220,7 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "slashes"
-	speed = 2
+	speed = 5
 	environment_smash = 1
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
@@ -276,7 +276,7 @@
 	melee_damage_lower = 50
 	melee_damage_upper = 50
 	attacktext = "brutally crushes"
-	speed = 5
+	speed = 10
 	environment_smash = 2
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	var/energy = 0
@@ -321,7 +321,7 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "violently stabs"
-	speed = 2
+	speed = 3
 	environment_smash = 1
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'
