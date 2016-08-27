@@ -98,7 +98,6 @@
 		vox.set_species("Vox")
 		vox.generate_name()
 		//vox.languages = HUMAN // Removing language from chargen.
-		vox.flavor_text = ""
 		vox.default_language = all_languages[LANGUAGE_VOX]
 		vox.species.default_language = LANGUAGE_VOX
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)

@@ -153,7 +153,6 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/list/player_alt_titles = new()		// the default name of a job like "Medical Doctor"
 
-	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -293,7 +292,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Ghost PDA:</b> <a href='?_src_=prefs;preference=ghost_pda'><b>[(toggles & CHAT_GHOSTPDA) ? "All PDA Messages" : "No PDA Messages"]</b></a><br>
 	<b>Special Windows: </b><a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Character Records:<b> [jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
-	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
 	<b>Show Tooltips:</b> <a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
 	"}
 
@@ -1298,13 +1296,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(new_relation)
 						nanotrasen_relation = new_relation
 
-				if("flavor_text")
-					var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
-					if(msg != null)
-						msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-						msg = html_encode(msg)
-
-						flavor_text = msg
 
 				if("limbs")
 					var/list/limb_input = list(
@@ -1556,7 +1547,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	if(character.dna)
 		character.dna.real_name = character.real_name
 
-	character.flavor_text = flavor_text
 	character.med_record = med_record
 	character.sec_record = sec_record
 	character.gen_record = gen_record
