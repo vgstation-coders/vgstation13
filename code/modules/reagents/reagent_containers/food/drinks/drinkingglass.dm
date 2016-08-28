@@ -209,6 +209,7 @@
 					desc = "A healthy mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
 				if(MANLYDORF)
 					icon_state = "manlydorfglass"
+					item_state = "manlydorfglass"
 					name = "The Manly Dorf"
 					desc = "A manly concotion made from Ale and Beer. Intended for true men only."
 				if(IRISHCREAM)
@@ -533,6 +534,7 @@
 					desc = "If you like this and getting caught in the rain, come with me and escape."
 				else
 					icon_state ="glass_colour"
+					item_state ="glass_colour"
 					get_reagent_name(src)
 					var/image/filling = image('icons/obj/reagentfillings.dmi', src, "glass")
 					filling.icon += mix_color_from_reagents(reagents.reagent_list)
