@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: MoMMI now have a Silicate Sprayer among their modules. Allowing them to repair damaged windows.
