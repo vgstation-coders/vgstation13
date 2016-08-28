@@ -52,6 +52,7 @@ var/global/obj/screen/clicker/catcher = new()
 	move_intent = null
 	adding = null
 	other = null
+	hide_actions_toggle = null
 	hotkeybuttons = null
 	mymob = null
 
@@ -293,7 +294,7 @@ var/global/obj/screen/clicker/catcher = new()
 
 			hud_used.hidden_inventory_update()
 			hud_used.persistant_inventory_update()
-			update_action_buttons()
+			update_action_buttons(1)
 		else
 			to_chat(usr, "<span class='warning'>Inventory hiding is currently only supported for human mobs, sorry.</span>")
 	else
