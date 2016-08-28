@@ -19,7 +19,7 @@
 	build_path = /obj/item/device/depth_scanner
 
 /datum/design/ano_scanner
-	name = "Alden-Saraspova counter"
+	name = "Alden-Saraspova Counter"
 	desc = "Aids in triangulation of exotic particles."
 	id = "ano_scanner"
 	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 6)
