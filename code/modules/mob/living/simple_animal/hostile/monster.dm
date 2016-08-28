@@ -15,8 +15,9 @@
 	attacktext = "slashes"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	faction = "creature"
-	size = SIZE_BIG
 	speed = 4
+	size = SIZE_BIG
+	move_to_delay = 4
 	canRegenerate = 1
 	minRegenTime = 300
 	maxRegenTime = 1200
@@ -56,7 +57,7 @@
 	projectiletype = /obj/item/projectile/energy/neurotox
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1
-	speed = 7
+	move_to_delay = 7
 
 /obj/item/projectile/energy/neurotox
 	damage = 10
@@ -79,7 +80,7 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 15
 	attacktext = "flails around and hits"
-	speed = 5
+	move_to_delay = 5
 	can_butcher = 0
 	attack_sound = 'sound/weapons/hivehand_empty.ogg'
 

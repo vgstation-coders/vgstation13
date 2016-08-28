@@ -303,7 +303,7 @@
 	for(var/mob/living/simple_animal/hostile/blobspore/BS in living_mob_list)
 		if(isturf(BS.loc) && get_dist(BS, T) <= 35)
 			BS.LoseTarget()
-			BS.Goto(pick(surrounding_turfs), BS.speed)
+			BS.Goto(pick(surrounding_turfs), BS.move_to_delay)
 	return
 
 /mob/camera/blob/verb/telepathy(message as text)

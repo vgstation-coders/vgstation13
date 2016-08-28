@@ -9,7 +9,7 @@
 	response_disarm = "flails at"
 	response_harm   = "punches"
 	icon_dead = "shade_dead"
-	speed = 2
+	speed = -1
 	a_intent = I_HURT
 	stop_automated_movement = 1
 	status_flags = CANPUSH
@@ -220,7 +220,7 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "slashes"
-	speed = 2
+	speed = -1
 	environment_smash = 1
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
@@ -321,7 +321,7 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "violently stabs"
-	speed = 2
+	speed = -1
 	environment_smash = 1
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'

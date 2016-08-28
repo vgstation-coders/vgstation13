@@ -11,7 +11,8 @@
 	health = 140
 	maxHealth = 140
 
-	speed = 30
+	move_to_delay = 30
+	speed = 5
 
 	min_oxy = 0
 	max_oxy = 0
@@ -55,7 +56,8 @@
 	health = 180
 	maxHealth = 180
 
-	speed = 2
+	move_to_delay = 2
+	speed = -1
 
 	attacktext = "chops"
 	attack_sound = 'sound/weapons/bladeslice.ogg'

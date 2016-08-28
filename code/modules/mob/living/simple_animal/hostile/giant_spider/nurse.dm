@@ -38,7 +38,7 @@
 					if(C.stat && !istype(C,/mob/living/simple_animal/hostile/giant_spider))
 						cocoon_target = C
 						busy = MOVING_TO_TARGET
-						Goto(C, speed)
+						Goto(C, move_to_delay)
 						//give up if we can't reach them after 10 seconds
 						GiveUp(C)
 						return
@@ -104,7 +104,7 @@
 						cocoon_target = O
 						busy = MOVING_TO_TARGET
 						stop_automated_movement = 1
-						Goto(O, speed)
+						Goto(O, move_to_delay)
 						//give up if we can't reach them after 10 seconds
 						GiveUp(O)
 

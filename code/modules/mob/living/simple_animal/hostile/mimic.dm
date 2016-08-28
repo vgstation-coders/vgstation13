@@ -15,6 +15,7 @@
 	response_help = "touches"
 	response_disarm = "pushes"
 	response_harm = "hits"
+	speed = -1
 	maxHealth = 250
 	health = 250
 
@@ -35,7 +36,7 @@
 	minbodytemp = 0
 
 	faction = "mimic"
-	speed = 8
+	move_to_delay = 8
 
 	var/atom/copied_object = /obj/structure/closet/crate
 	var/angry = 0
@@ -218,7 +219,7 @@ var/global/list/crate_mimic_disguises = list(\
 		angry = 2 //Can't calm down
 		melee_damage_lower = initial(melee_damage_lower) + 4
 		melee_damage_upper = initial(melee_damage_upper) + 4 //Increase damage
-		speed = 0 //Remove delay for automated movement
+		move_to_delay = 0 //Remove delay for automated movement
 		name = "[initial(name)] mimic"
 
 /mob/living/simple_animal/hostile/mimic/crate/proc/calm_down(change_icon = 1)
@@ -394,7 +395,7 @@ var/global/list/item_mimic_disguises = list(
 	name = "item mimic"
 	density = 0
 
-	speed = 2 //Faster than crate mimics
+	move_to_delay = 2 //Faster than crate mimics
 	maxHealth = 60
 	health = 60 //Slightly less robust
 
@@ -601,7 +602,7 @@ var/global/list/protected_objects = list(
 			health = 15 * I.w_class
 			melee_damage_lower = 2 + I.force
 			melee_damage_upper = 2 + I.force
-			speed = 2 * I.w_class
+			move_to_delay = 2 * I.w_class
 
 		maxHealth = health
 
