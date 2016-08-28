@@ -1,6 +1,0 @@
-author: JustSumGuy
-
-delete-after: True
-
-changes: 
-- rscadd: "Placed a 'safety filter' on OOC warning them if a message seems like it was intended for IC."
