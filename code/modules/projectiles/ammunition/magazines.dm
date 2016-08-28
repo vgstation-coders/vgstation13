@@ -21,7 +21,7 @@
 	name = "magazine (12mm)"
 	icon_state = "12mm"
 	origin_tech = Tc_COMBAT + "=2"
-	ammo_type = "/obj/item/ammo_casing/a12mm"
+	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
 	max_ammo = 20
 	multiple_sprites = 1
 	sprite_modulo = 2
@@ -159,7 +159,7 @@
 /obj/item/ammo_storage/magazine/lawgiver/demolition
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."
 	flare_ammo_type = "/obj/item/ammo_casing/a75"
-	
+
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."
 	ammo_type = "/obj/item/ammo_casing/invisible"
