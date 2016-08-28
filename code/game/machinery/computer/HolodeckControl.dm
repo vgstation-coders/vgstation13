@@ -1,3 +1,7 @@
+/datum/map_element/dungeon/holodeck
+	name = "holodeck"
+	file_path = "maps/misc/holodeck.dmm"
+
 /obj/machinery/computer/HolodeckControl
 	name = "Holodeck Control Computer"
 	desc = "A computer used to control a nearby holodeck."

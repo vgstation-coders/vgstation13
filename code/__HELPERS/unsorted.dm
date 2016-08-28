@@ -988,8 +988,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	var/list/toupdate = new/list()
 
-	var/copiedobjs = list()
-
+	var/list/copiedobjs = list()
 
 	moving:
 		for (var/turf/T in refined_src)
@@ -1080,9 +1079,6 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	for(var/obj/O in doors)
 		O:update_nearby_tiles()
-
-
-
 
 	return copiedobjs
 
