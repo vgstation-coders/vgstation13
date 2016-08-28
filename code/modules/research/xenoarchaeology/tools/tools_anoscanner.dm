@@ -1,5 +1,5 @@
 /obj/item/device/ano_scanner
-	name = "Alden-Saraspova counter"
+	name = "\improper Alden-Saraspova counter"
 	desc = "Aids in triangulation of exotic particles."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "ano_scanner"

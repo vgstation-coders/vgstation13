@@ -74,6 +74,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	var/part_sets = list(
 		"Stock Parts" = list(),
 		"Bluespace" = list(),
+		"Anomaly" = list(),
 		"Data" = list(),
 		"Engineering" = list(),
 		"Medical" = list(),

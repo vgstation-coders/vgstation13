@@ -74,7 +74,7 @@
 				instructions.name = "instructions ([machine.name])"
 				instructions.info = inst_list["instructions"]
 				if(inst_list["misprint"])
-					instructions.overlays += image(icon = icon, icon_state = "paper_stamped_denied")
+					instructions.overlays += image(icon = icon, icon_state = "paper_stamp-deny")
 					instructions.name = "misprinted " + instructions.name
 				instructions.update_icon()
 */
