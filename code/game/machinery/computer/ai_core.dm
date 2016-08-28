@@ -233,7 +233,7 @@ That prevents a few funky behaviors.
 							//fix blindness from powerloss
 							if(T.aiRestorePowerRoutine)
 								T.aiRestorePowerRoutine = -1
-								T.blind.layer = 0
+								T.clear_fullscreen("blind")
 
 			if("INACTIVE")//Inactive AI object.
 				var/obj/structure/AIcore/deactivated/T = target

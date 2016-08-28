@@ -75,16 +75,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return PROJREACT_MOBS
 
 /mob/proc/remove_screen_objs()
-	if(flash)
-		returnToPool(flash)
-		if(client)
-			client.screen -= flash
-		flash = null
-	if(blind)
-		returnToPool(blind)
-		if(client)
-			client.screen -= blind
-		blind = null
 	if(hands)
 		returnToPool(hands)
 		if(client)
