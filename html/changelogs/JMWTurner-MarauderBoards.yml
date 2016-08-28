@@ -1,5 +1,0 @@
-author: JMWTurner
-delete-after: true
-changes:
-  - rscadd: Added design datums for Marauder parts.
-  - tweak: Marauder parts and boards now require Nanotrasen tech FIVE. Which only admins can grant. So they won't appear on the R&D computers by default anymore.
