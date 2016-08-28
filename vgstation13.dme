@@ -1775,6 +1775,7 @@
 #include "code\modules\research\designs\mecha\durand.dm"
 #include "code\modules\research\designs\mecha\gygax.dm"
 #include "code\modules\research\designs\mecha\honker.dm"
+#include "code\modules\research\designs\mecha\marauder.dm"
 #include "code\modules\research\designs\mecha\misc.dm"
 #include "code\modules\research\designs\mecha\odysseus.dm"
 #include "code\modules\research\designs\mecha\phazon.dm"
