@@ -166,6 +166,9 @@
 	src.dir = turn(src.dir, 90)
 	return 1
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/exposed()
+	return TRUE
+
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "Heater"
@@ -332,3 +335,6 @@
 		return 0
 	src.dir = turn(src.dir, 90)
 	return 1
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/exposed()
+	return TRUE

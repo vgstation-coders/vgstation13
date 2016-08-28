@@ -150,7 +150,7 @@
 			returnToPool(network2)
 		node2 = null
 
-	return null
+	return ..()
 
 /obj/machinery/atmospherics/binary/unassign_network(datum/pipe_network/reference)
 	if(network1 == reference)

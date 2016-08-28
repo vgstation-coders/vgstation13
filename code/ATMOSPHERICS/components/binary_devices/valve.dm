@@ -110,6 +110,9 @@
 		open()
 		openDuringInit = 0
 
+	else
+		update_icon()
+
 /obj/machinery/atmospherics/binary/valve/digital		// can be controlled by AI
 	name = "digital valve"
 	desc = "A digitally controlled valve."

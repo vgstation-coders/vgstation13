@@ -65,22 +65,17 @@
 	air_contents.volume = 1000
 
 /obj/machinery/atmospherics/unary/vent_pump/update_icon()
-	if(welded)
-		icon_state = "hweld"
+	var/prefix = exposed() ? "" : "h"
+	if (welded)
+		icon_state = prefix + "weld"
 		return
-	if(on && !(stat & (NOPOWER|BROKEN)))
-		if(pump_direction)
-			icon_state = "hout"
-		else
-			icon_state = "hin"
-	else
-		icon_state = "hoff"
+
+	icon_state = prefix + "off"
+
+	if (on && ~stat & (NOPOWER|BROKEN))
+		overlays += pump_direction ? "out" : "in"
+
 	..()
-	if (istype(loc, /turf/simulated/floor) && node)
-		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
-			underlays.Cut()
-	return
 
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	. = ..()
@@ -280,7 +275,6 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/hide(var/i) //to make the little pipe section invisible, the icon changes.
 	update_icon()
-	return
 
 /obj/machinery/atmospherics/unary/vent_pump/examine(mob/user)
 	..()

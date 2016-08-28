@@ -199,7 +199,7 @@ obj/machinery/atmospherics/trinary/disconnect(obj/machinery/atmospherics/referen
 			returnToPool(network3)
 		node3 = null
 
-	return null
+	return ..()
 
 /obj/machinery/atmospherics/trinary/unassign_network(datum/pipe_network/reference)
 	if(network1 == reference)

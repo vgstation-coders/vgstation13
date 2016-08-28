@@ -68,6 +68,32 @@ Pipelines + Other Objects -> Pipe network
 		A.ex_act(severity)
 	..()
 
+/obj/machinery/atmospherics/proc/icon_node_con(var/dir)
+	var/static/list/node_con = list(
+		"[NORTH]" = image('icons/obj/pipes.dmi', "pipe_intact", dir = NORTH),
+		"[SOUTH]" = image('icons/obj/pipes.dmi', "pipe_intact", dir = SOUTH),
+		"[EAST]"  = image('icons/obj/pipes.dmi', "pipe_intact", dir = EAST),
+		"[WEST]"  = image('icons/obj/pipes.dmi', "pipe_intact", dir = WEST)
+	)
+
+	return node_con["[dir]"]
+
+/obj/machinery/atmospherics/proc/icon_node_ex(var/dir)
+	var/static/list/node_ex = list(
+		"[NORTH]" = image('icons/obj/pipes.dmi', "pipe_exposed", dir = NORTH),
+		"[SOUTH]" = image('icons/obj/pipes.dmi', "pipe_exposed", dir = SOUTH),
+		"[EAST]"  = image('icons/obj/pipes.dmi', "pipe_exposed", dir = EAST),
+		"[WEST]"  = image('icons/obj/pipes.dmi', "pipe_exposed", dir = WEST)
+	)
+
+	return node_ex["[dir]"]
+
+/obj/machinery/atmospherics/proc/icon_directions()
+	. = list()
+	for(var/direction in cardinal)
+		if(direction & initialize_directions)
+			. += direction
+
 /obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list)
 	if(!can_be_coloured && color)
 		default_colour = color
@@ -75,28 +101,16 @@ Pipelines + Other Objects -> Pipe network
 	else if(can_be_coloured && default_colour)
 		color = default_colour
 		default_colour = null
-	if((!node_con.len)||(!node_ex.len))
-		node_con["[NORTH]"] = image('icons/obj/pipes.dmi',"pipe_intact",dir = 1)
-		node_con["[SOUTH]"] = image('icons/obj/pipes.dmi',"pipe_intact",dir = 2)
-		node_con["[EAST]"] = image('icons/obj/pipes.dmi',"pipe_intact",dir = 4)
-		node_con["[WEST]"] = image('icons/obj/pipes.dmi',"pipe_intact",dir = 8)
-		node_ex["[NORTH]"] = image('icons/obj/pipes.dmi',"pipe_exposed",dir = 1)
-		node_ex["[SOUTH]"] = image('icons/obj/pipes.dmi',"pipe_exposed",dir = 2)
-		node_ex["[EAST]"] = image('icons/obj/pipes.dmi',"pipe_exposed",dir = 4)
-		node_ex["[WEST]"] = image('icons/obj/pipes.dmi',"pipe_exposed",dir = 8)
 	alpha = invisibility ? 128 : 255
 	if (!update_icon_ready)
 		update_icon_ready = 1
 	else
 		underlays.Cut()
-	var/list/missing_nodes = list()
-	for(var/direction in cardinal)
-		if(direction & initialize_directions)
-			missing_nodes += direction
+	var/list/missing_nodes = icon_directions()
 	for (var/obj/machinery/atmospherics/connected_node in node_list)
 		var/con_dir = get_dir(src, connected_node)
 		missing_nodes -= con_dir // finds all the directions that aren't pointed to by a node
-		var/image/nodecon = node_con["[con_dir]"]
+		var/image/nodecon = icon_node_con(con_dir)
 		if(nodecon)
 			if (default_colour && connected_node.default_colour && (connected_node.default_colour != default_colour)) // if both pipes have special colours - average them
 				var/list/centre_colour = GetHexColors(default_colour)
@@ -117,7 +131,7 @@ Pipelines + Other Objects -> Pipe network
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))
 			connected_node.update_icon(1)
 	for (var/missing_dir in missing_nodes)
-		var/image/nodeex = node_ex["[missing_dir]"]
+		var/image/nodeex = icon_node_ex(missing_dir)
 		if(!color)
 			nodeex.color = default_colour ? default_colour : "#B4B4B4"
 		else
@@ -217,6 +231,7 @@ Pipelines + Other Objects -> Pipe network
 	// Is permitted to return null
 
 /obj/machinery/atmospherics/proc/disconnect(obj/machinery/atmospherics/reference)
+	update_icon()
 
 /obj/machinery/atmospherics/proc/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	error("[src] does not define a buildFrom!")
@@ -312,3 +327,12 @@ Pipelines + Other Objects -> Pipe network
 
 /obj/machinery/atmospherics/is_airtight() //Technically, smoke would be able to pop up from a vent, but enabling ventcrawling mobs to do that still doesn't sound like a good idea
 	return 1
+
+// Tiny helper to see if the object is "exposed".
+// Basically whether it's partially covered up by a floor tile or not.
+/obj/machinery/atmospherics/proc/exposed()
+	if (level == 2 || !isturf(loc))
+		return TRUE
+
+	var/turf/T = loc
+	return !T.intact

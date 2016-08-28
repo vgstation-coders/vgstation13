@@ -19,6 +19,11 @@
 	node_list = list(node)
 	..(adjacent_procd,node_list)
 
+	if (!exposed())
+		var/turf/simulated/floor/floor = loc
+		if(floor.floor_tile)
+			underlays.Cut()
+
 /obj/machinery/atmospherics/unary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
@@ -94,7 +99,7 @@
 		if(network)
 			returnToPool(network)
 		node = null
-	return null
+	return ..()
 
 /obj/machinery/atmospherics/unary/unassign_network(datum/pipe_network/reference)
 	if(network == reference)

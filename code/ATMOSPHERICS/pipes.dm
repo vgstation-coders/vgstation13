@@ -912,6 +912,9 @@
 
 	pipe_flags = ALL_LAYER
 
+	color = PIPE_COLOR_GREY
+	can_be_coloured = 1
+
 	var/list/layer_nodes = list()
 	var/obj/machinery/atmospherics/other_node = null
 
@@ -986,17 +989,18 @@
 
 	..()
 
-/obj/machinery/atmospherics/pipe/layer_manifold/update_icon()
+/obj/machinery/atmospherics/pipe/layer_manifold/icon_directions()
+	return list(turn(dir, 180))
+
+/obj/machinery/atmospherics/pipe/layer_manifold/update_icon(var/adjacent_procd)
 	overlays.len = 0
 	alpha = invisibility ? 128 : 255
 	icon_state = baseicon
-	if(other_node)
-		var/icon/con = new/icon(icon,"manifoldl_other_con")
-
-		overlays += new/image(con, dir = turn(src.dir, 180)) //adds the back connector
+	..(adjacent_procd, list(other_node))//adds the back connector
 
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
-		if(layer_nodes[pipelayer]) //we are connected at this layer
+		var/obj/machinery/atmospherics/node = layer_nodes[pipelayer]
+		if(node) //we are connected at this layer
 
 			var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
 
@@ -1005,6 +1009,8 @@
 			con.pixel_y = layer_diff * PIPING_LAYER_P_Y
 
 			overlays += con
+
+			node.update_icon(TRUE)
 
 	if(!other_node && !(locate(/obj/machinery/atmospherics) in layer_nodes))
 		qdel(src)
@@ -1172,8 +1178,6 @@
 		if(istype(layer_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		layer_node = null
-
-	update_icon()
 
 	..()
 

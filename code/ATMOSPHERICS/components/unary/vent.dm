@@ -40,16 +40,12 @@
 
 
 /obj/machinery/atmospherics/unary/vent/update_icon()
-	if(node)
+	if(exposed())
 		icon_state = "intact"
 	else
-		icon_state = "exposed"
-	..()
-	if (istype(loc, /turf/simulated/floor) && node)
-		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
-			underlays.Cut()
+		icon_state = "hvent"
 
+	..()
 
 
 /obj/machinery/atmospherics/unary/vent/initialize()
