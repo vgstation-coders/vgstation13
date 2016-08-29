@@ -2,6 +2,7 @@
 	if(!spell_masters)
 		spell_masters = list()
 
+	spell_to_add.holder = src
 	if(spell_masters.len)
 		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
 			if(spell_master.type == master_type)
@@ -13,7 +14,6 @@
 	if(client)
 		src.client.screen += new_spell_master
 	new_spell_master.spell_holder = src
-	spell_to_add.holder = src
 	new_spell_master.add_spell(spell_to_add)
 	if(spell_base)
 		new_spell_master.icon_state = spell_base
