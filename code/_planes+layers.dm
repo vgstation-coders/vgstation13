@@ -122,6 +122,7 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_OBJ_PLANE			-12			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
 	#define BLANKIES_LAYER			0
+	#define FACEHUGGER_LAYER		1
 
 #define HUMAN_PLANE 			-11			// For Humans that are standing up.
 
