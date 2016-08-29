@@ -8,7 +8,7 @@
 	icon_state = "term"
 	desc = "It's an underfloor wiring terminal for power equipment."
 	level = 1
-	plane = ABOVE_TURF_PLANE
+	plane = ABOVE_PLATING_PLANE
 	var/obj/machinery/power/master
 	anchored = 1
 	layer = WIRE_TERMINAL_LAYER

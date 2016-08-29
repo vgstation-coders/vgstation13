@@ -669,7 +669,7 @@
 	dir = 0				// dir will contain dominant direction for junction pipes
 	var/health = 10 	// health points 0-10
 	layer = DISPOSALS_PIPE_LAYER
-	plane = ABOVE_TURF_PLANE
+	plane = ABOVE_PLATING_PLANE
 	var/base_icon_state	// initial icon state on map
 
 	// new pipe, set the icon_state as on map

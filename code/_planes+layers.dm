@@ -67,32 +67,37 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define BELOW_TURF_PLANE 		-20 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
+#define BELOW_TURF_PLANE 		-22 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
 	// todo: use this for asteroids to make them be faster
 
-#define TURF_PLANE 				-19			// For turfs.
+#define TURF_PLANE 				-21			// For turfs.
+
+
+#define ABOVE_PLATING_PLANE		-20
+
+	#define CATWALK_LAYER			0
+	#define DISPOSALS_PIPE_LAYER	1
+	#define LATTICE_LAYER			2
+	#define PIPE_LAYER				3
+	#define WIRE_LAYER				4
+	#define WIRE_TERMINAL_LAYER		5
+
+#define TURF_PLANE				-19
 
 	#define TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD	-999
 
 #define ABOVE_TURF_PLANE 		-18			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
-	#define CATWALK_LAYER			0
-	#define DECAL_LAYER				1
-	#define TURF_FIRE_LAYER			2
-	#define DISPOSALS_PIPE_LAYER	3
-	#define LATTICE_LAYER			4
-	#define PIPE_LAYER				5
-	#define WIRE_LAYER				6
-	#define RUNE_LAYER				7
-	#define WIRE_TERMINAL_LAYER		8
-	#define ABOVE_TILE_LAYER		9
-	#define UNARY_PIPE_LAYER		10
-	#define BINARY_PIPE_LAYER		11
-	#define MOUSETRAP_LAYER 		12
-	#define FIREAXE_LOCKER_LAYER	13
-	#define BLOOD_LAYER				14
-	#define WEED_LAYER				15
-
+	#define RUNE_LAYER				1
+	#define DECAL_LAYER				2
+	#define TURF_FIRE_LAYER			3
+	#define ABOVE_TILE_LAYER		4
+	#define UNARY_PIPE_LAYER		5
+	#define BINARY_PIPE_LAYER		6
+	#define MOUSETRAP_LAYER 		7
+	#define FIREAXE_LOCKER_LAYER	8
+	#define BLOOD_LAYER				9
+	#define WEED_LAYER				420
 
 #define NOIR_BLOOD_PLANE 		-17		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
 

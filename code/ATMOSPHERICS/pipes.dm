@@ -1014,8 +1014,6 @@
 
 	if(!other_node && !(locate(/obj/machinery/atmospherics) in layer_nodes))
 		qdel(src)
-	return
-
 
 /obj/machinery/atmospherics/pipe/layer_manifold/initialize(var/skip_update_icon=0)
 
