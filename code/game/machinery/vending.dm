@@ -2067,6 +2067,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/purple = 10,
 		/obj/item/clothing/shoes/red = 10,
 		/obj/item/clothing/shoes/white = 10,
+		/obj/item/clothing/shoes/workboots = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/shoes/jackboots = 5,
