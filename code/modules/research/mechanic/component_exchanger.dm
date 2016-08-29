@@ -43,8 +43,8 @@
 //Redirect the attack only if it's a machine, otherwise don't bother
 /obj/item/weapon/storage/component_exchanger/preattack(var/atom/A, var/mob/user, proximity_flag)
 
-	if(!Adjacent(user))
-		return
+	if(!A.Adjacent(user))
+		return 1
 
 	if(istype(A, /obj/machinery))
 
@@ -52,11 +52,11 @@
 
 		if(!M.panel_open)
 			to_chat(user, "<span class='warning'>The maintenance hatch of \the [M] is closed, you can't just stab \the [src] into it and hope it'll work.</span>")
-			return
+			return 1
 
 		if(working) //We are already using the RMCE
 			to_chat(user, "<span class='warning'>You are aleady using \the [src] on another machine. You'll have to pull it out or wait.</span>")
-			return
+			return 1
 
 		user.visible_message("<span class='notice'>[user] starts setting up \the [src] in \the [M]'s maintenance hatch</span>", \
 		"<span class='notice'>You carefully insert \the [src] through \the [M]'s maintenance hatch, it starts scanning the machine's components.</span>")
@@ -68,26 +68,26 @@
 			if(!M.Adjacent(user))
 				to_chat(user, "<span class='warning'>An error message flashes on \the [src]'s HUD, stating its scan was disrupted.</span>")
 				working = 0
-				return
+				return 1
 
 			if(!M.component_parts) //This machine does not use components
 				to_chat(user, "<span class='warning'>A massive error dump scrolls through \the [src]'s HUD. It looks like \the [M] has yet to be made compatible with this tool.</span>")
 				working = 0
-				return
+				return 1
 
 			playsound(get_turf(src), 'sound/machines/Ping.ogg', 50, 1) //User feedback
 			to_chat(user, "<span class='notice'>\The [src] pings softly. A small message appears on its HUD, instructing to not move until finished.")
 
 			component_interaction(M, user) //Our job is done here, we transfer to the second proc (it needs to be recalled if needed)
 
-			return
+			return 1
 
 		else //Interrupted in some way
 			to_chat(user, "<span class='warning'>An error message flashes on \the [src]'s HUD, stating its scan was disrupted.</span>")
 			working = 0
 
-			return
-	return
+			return 1
+	return 1
 
 /obj/item/weapon/storage/component_exchanger/proc/component_interaction(obj/machinery/M, mob/user)
 
@@ -139,7 +139,7 @@
 		"<span class='notice'>\The [src]'s HUD flashes, a message appears stating it has started scanning and replacing \the [M]'s components.</span>")
 
 		for(var/obj/item/weapon/stock_parts/P in M.component_parts)
-			if(!Adjacent(user)) //Make sure the user doesn't move
+			if(!M.Adjacent(user)) //Make sure the user doesn't move
 				to_chat(user, "<span class='warning'>A blue screen suddenly flashes on \the [src]'s HUD. It appears the critical failure was caused by suddenly yanking it out of \the [M]'s maintenance hatch.</span>")
 				return
 			//Yes, an istype list. We don't have helpers for this, and this coder is not that sharp
