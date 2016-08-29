@@ -47,6 +47,16 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
+	name = "crab meat"
+	desc = "Something killed the crab, and this is the result."
+	icon_state = "raw_crab"
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"

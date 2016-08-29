@@ -1459,6 +1459,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_fillet
 
+/datum/recipe/crab_sticks
+	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
+
 /datum/recipe/gigapuddi
 	reagents = list(MILK = 15)
 	items = list(
