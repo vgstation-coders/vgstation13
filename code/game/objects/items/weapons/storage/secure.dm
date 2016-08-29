@@ -147,7 +147,7 @@
 	throw_range = 4
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/storage/secure/briefcase/New()
+/obj/item/weapon/storage/secure/briefcase/paperpen/New()
 	..()
 	new /obj/item/weapon/paper(src)
 	new /obj/item/weapon/pen(src)
@@ -228,7 +228,7 @@
 //        Secure Safe
 // -----------------------------
 
-/obj/item/weapon/storage/secure/safe
+/obj/item/weapon/storage/secure/safe//Why the fuck isn't this a structure
 	name = "secure safe"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "safe"
