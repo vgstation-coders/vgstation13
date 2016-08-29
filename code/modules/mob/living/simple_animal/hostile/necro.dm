@@ -143,53 +143,60 @@
 	Otherwise, start wandering and bust down some doors to find more food
 	*/
 	if(!isUnconscious())
-		if(stance == HOSTILE_STANCE_IDLE) //Not doing anything at the time
+		if(stance == HOSTILE_STANCE_IDLE && (!client)) //Not doing anything at the time
 			var/list/can_see = view(src, vision_range)
 			if(!busy)
 				if(can_evolve)//Can we evolve, and have we fed
 					busy = EVOLVING
 					check_evolve()
 					busy = 0
-				if((health < maxHealth) || (maxHealth < health_cap)) //Is there something to eat in range?
-					for(var/mob/living/carbon/human/C in can_see) //If so, chow down
-						if(C.isDead() && !busy && check_edibility(C))
-							Goto(C, speed)
-							busy = MOVING_TO_TARGET
-							give_up(C) //If we're not there in 10 seconds, give up
-
-							if(C.Adjacent(src) && busy != EATING) //Once we've finally caught up
-								busy = EATING
-								eat(C)
+				if((health < maxHealth) || (maxHealth < health_cap) && !busy)
+					var/mob/living/carbon/human/C = find_food(can_see)//Is there something to eat in range?
+					if(C) //If so, chow down
+						Goto(C, speed)
+						busy = MOVING_TO_TARGET
+						give_up(C) //If we're not there in 10 seconds, give up
+						if(C.Adjacent(src) && busy != EATING) //Once we've finally caught up
+							busy = EATING
+							eat(C)
+							C = null
+							walk(src, 0)
 				if(!busy && break_doors != CANT)//So we don't try to eat and open doors
-					/*for(var/obj/machinery/light/L in can_see)
-						if(L.status != 1 && L.status !=2)
-							Goto(L, speed)
-							busy = MOVING_TO_TARGET
-							if(L.Adjacent(src) && busy != SMASHING_LIGHT)
-								L.attack_animal(src)*/
-
-					for(var/obj/machinery/door/D in can_see)//Else, let's open some doors and see what's around
-						if(can_open_door(D) && !busy)
+					var/obj/machinery/door/D = find_door(can_see)//Is there a door to open in range?
+					if(D)
+						if(D.Adjacent(src) && busy != OPENING_DOOR)
+							busy = OPENING_DOOR
+							force_door(D)
+							D = null
+							walk(src, 0)
+						else
 							Goto(D, speed)
 							busy = MOVING_TO_TARGET
 							give_up(D)
-
-							if(D.Adjacent(src) && busy != OPENING_DOOR)
-								busy = OPENING_DOOR
-								force_door(D)
-
 		else
 			busy = 0
 			stop_automated_movement = 0
+	else
+		walk(src,0)
 
+/mob/living/simple_animal/hostile/necro/zombie/proc/find_food(var/list/can_see)
+	for(var/mob/living/carbon/human/C in can_see) //Because of how can_see lists things, it'll go in order of closest to furthest
+		if(C.isDead() && !busy && check_edibility(C))
+			return(C) //This would get the closest one
+
+/mob/living/simple_animal/hostile/necro/zombie/proc/find_door(var/list/can_see)
+	for(var/obj/machinery/door/D in can_see)
+		if(can_open_door(D) && !busy)
+			return(D)
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/give_up(var/C)
 	spawn(100)
 		if(busy == MOVING_TO_TARGET)
-			if(target == C && !Adjacent(target))
-				target = null
-			busy = 0
-			stop_automated_movement = 0
+			if(C && !Adjacent(C))
+				C = null
+		busy = 0
+		stop_automated_movement = 0
+		walk(src,0)
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D)
 	if(istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window))
@@ -334,8 +341,7 @@
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
 		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
 			var/obj/item/weapon/storage/bible/bible = W
-			visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.")
-			to_chat (user, "<span class='notice'>You attempt to invoke the power of [bible.deity_name] to bring this poor soul back from the brink.</span>")
+			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
 			if(user.mind && (user.mind.assigned_role == "Chaplain"))
