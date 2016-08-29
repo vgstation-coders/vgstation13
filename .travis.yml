@@ -11,6 +11,8 @@ env:
     - DM_MAPFILE="metaclub"
     - DM_MAPFILE="defficiency"
     - DM_MAPFILE="taxistation"
+    - DM_MAPFILE="test_box"
+    - DM_MAPFILE="test_tiny"
 
 cache:
   directories:
