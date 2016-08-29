@@ -392,7 +392,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
 	if(world.time>resethearers)
 		sethearing()
-	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
+	var/location = get_holder_at_turf_level(src) || get_turf(src)
+	for(var/mob/virtualhearer/hearer in viewers(location))
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
