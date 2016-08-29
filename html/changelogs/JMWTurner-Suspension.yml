@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: Added Floodlights (under Supplies), Suspension Field generator, and Excavation equipment (both under Science) supply packs to cargo.
