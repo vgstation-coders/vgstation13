@@ -48,6 +48,8 @@
 		var/pix_Y = text2num(screen_loc_Y[2]) - WORLD_ICON_SIZE/2
 		screen_loc = "[screen_loc_X[1]]:[pix_X],[screen_loc_Y[1]]:[pix_Y]"
 
+	moved = screen_loc
+	
 /obj/screen/movable/proc/get_view_size()
 	if(usr && usr.client)
 		. = usr.client.view
