@@ -302,13 +302,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return 1 // update UIs attached to this object
 /obj/machinery/atmospherics/unary/cryo_cell/proc/detach()
 	if(beaker)
-		beaker.loc = get_step(loc, SOUTH)
+		beaker.forceMove(get_step(loc, SOUTH))
 		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = beaker:holder:loc
 			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-				beaker.loc = R
+				beaker.forceMove(R)
 			else
-				beaker.loc = beaker:holder
+				beaker.forceMove(beaker:holder)
 		beaker = null
 
 /obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user)
@@ -501,7 +501,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(usr.pulling == M)
 		usr.stop_pulling()
 	M.stop_pulling()
-	M.loc = src
+	M.forceMove(src)
 	M.reset_view()
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
 		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")

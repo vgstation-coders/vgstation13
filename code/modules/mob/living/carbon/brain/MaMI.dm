@@ -20,7 +20,7 @@
 		src.visible_message("<span class='notice'>[user] sticks \a [O] into \the [src].</span>")
 
 		brainmob = posibrain.brainmob
-		brainmob.loc = src
+		brainmob.forceMove(src)
 		brainmob.container = src
 
 		to_chat(src.brainmob, "<b><font color='red' size=3>Recall your positronic directives!</font></b>")
@@ -39,10 +39,10 @@
 		posibrain.reset_search()
 	if(posibrain)
 		to_chat(user, "You upend \the [src], dropping its contents onto the floor.")
-		posibrain.loc = user.loc
+		posibrain.forceMove(user.loc)
 		posibrain.brainmob = brainmob
 		brainmob.container = posibrain
-		brainmob.loc = posibrain
+		brainmob.forceMove(posibrain)
 
 		icon_state = "mami_empty"
 		name = initial(name)

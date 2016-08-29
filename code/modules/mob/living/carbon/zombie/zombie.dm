@@ -62,7 +62,7 @@
 		else if(ismob(AM))
 			spawn(0)
 				var/turf/T = get_turf(src)
-				AM:loc = T
+				AM:forceMove(T)
 
 	Bump(atom/A)
 		if(istype(A, /mob/living/carbon/human/zombie))
@@ -71,7 +71,7 @@
 			src.target = A
 			set_attack()
 		else if(ismob(A))
-			src.loc = A:loc
+			src.forceMove(A:loc)
 
 
 	proc/set_attack()
@@ -434,10 +434,10 @@
 	//O.body_standing = body_standing
 	//O.body_lying = body_lying
 	for(var/obj/Q in src)
-		Q.loc = O
+		Q.forceMove(O)
 	O.update_icons()//update_clothing()
 	src.ghostize()
-	O.loc = src.loc
+	O.forceMove(src.loc)
 	qdel(src)
 	return
 
@@ -595,4 +595,4 @@ datum/reagent/zed
 	//var/a = pick("Janitor", "Medical Doctor", "Assistant", "Atmospheric Technician", "Security Officer", "Botanist", "Cargo Technician")
 	//Z.Equip_Rank(a, 0)
 	//Commented out by pygmy. Reason: Triggers my anti-spawn-at-menu code. Compromising this risks server.
-	Z.loc = s.loc
+	Z.forceMove(s.loc)

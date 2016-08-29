@@ -146,7 +146,7 @@
 			close_spawn_windows()
 			var/obj/O = locate("landmark*Observer-Start")
 			to_chat(src, "<span class='notice'>Now teleporting.</span>")
-			observer.loc = O.loc
+			observer.forceMove(O.loc)
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
 			client.prefs.update_preview_icon(1)
@@ -315,7 +315,7 @@
 	EquipCustomItems(character)
 
 	// TODO:  Job-specific latejoin overrides.
-	character.loc = pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin)
+	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 	//Give them their fucking wheelchair where they spawn instead of inside of the splash screen
 	var/datum/organ/external/left_leg = character.get_organ(LIMB_LEFT_FOOT)
 	var/datum/organ/external/right_leg = character.get_organ(LIMB_RIGHT_FOOT)
@@ -332,12 +332,12 @@
 		if(character.wear_suit)
 			var/obj/item/O = character.wear_suit
 			character.u_equip(O,1)
-			O.loc = character.loc
+			O.forceMove(character.loc)
 			//O.dropped(character)
 		if(character.head)
 			var/obj/item/O = character.head
 			character.u_equip(O,1)
-			O.loc = character.loc
+			O.forceMove(character.loc)
 			//O.dropped(character)
 		character.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(character), slot_head)
 		character.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(character), slot_wear_suit)

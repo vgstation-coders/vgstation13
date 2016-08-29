@@ -59,7 +59,7 @@
 		attack_hand(usr)
 		return
 	else if (href_list["eject"])
-		beaker:loc = src.loc
+		beaker:forceMove(src.loc)
 		beaker = null
 		icon_state = "isolator"
 		src.updateUsrDialog()

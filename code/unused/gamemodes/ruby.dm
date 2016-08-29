@@ -32,7 +32,7 @@
 			to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
 		else
 			var/starting_loc = pick(wizardstart)
-			wizard.current.loc = starting_loc
+			wizard.current.forceMove(starting_loc)
 
 	for (var/obj/effect/landmark/A in world)
 		if (A.name == "Teleport-Scroll")
@@ -161,9 +161,9 @@
 			if(istype(w.loc, /mob))
 				var/mob/M = w.loc
 				M.drop_item()
-				w.loc = usr.loc
+				w.forceMove(usr.loc)
 			else
-				w.loc = usr.loc
+				w.forceMove(usr.loc)
 		src.verbs -= /client/proc/summon_weapon
 		spawn(300) src.verbs += /client/proc/summon_weapon
 		return

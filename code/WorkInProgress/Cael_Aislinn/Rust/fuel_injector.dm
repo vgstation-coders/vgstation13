@@ -141,7 +141,7 @@
 
 	if( href_list["emergency_fuel_assembly"] )
 		if(cur_assembly)
-			cur_assembly.loc = src.loc
+			cur_assembly.forceMove(src.loc)
 			cur_assembly = null
 			//irradiate!
 		else
@@ -227,14 +227,14 @@
 		if(cur_assembly)
 			if(!check_port.cur_assembly)
 				check_port.cur_assembly = cur_assembly
-				cur_assembly.loc = check_port
+				cur_assembly.forceMove(check_port)
 				cur_assembly = null
 				check_port.icon_state = "port1"
 				success = 1
 		else
 			if(check_port.cur_assembly)
 				cur_assembly = check_port.cur_assembly
-				cur_assembly.loc = src
+				cur_assembly.forceMove(src)
 				check_port.cur_assembly = null
 				check_port.icon_state = "port0"
 				success = 1

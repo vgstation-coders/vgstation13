@@ -214,7 +214,7 @@
 		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 	in_chamber.original = target
-	in_chamber.loc = get_turf(user)
+	in_chamber.forceMove(get_turf(user))
 	in_chamber.starting = get_turf(user)
 	in_chamber.shot_from = src
 	user.delayNextAttack(4) // TODO: Should be delayed per-gun.

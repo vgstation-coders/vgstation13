@@ -55,7 +55,7 @@
 
 /obj/item/weapon/gun/projectile/proc/RemoveMag(var/mob/user)
 	if(stored_magazine)
-		stored_magazine.loc = get_turf(src.loc)
+		stored_magazine.forceMove(get_turf(src.loc))
 		if(user)
 			user.put_in_hands(stored_magazine)
 			to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
@@ -84,7 +84,7 @@
 		var/obj/item/ammo_casing/round = stored_magazine.get_round()
 		if(istype(round))
 			chambered = round
-			chambered.loc = src
+			chambered.forceMove(src)
 			return 1
 	return 0
 
@@ -108,10 +108,10 @@
 	else
 		loaded -= AC //Remove casing from loaded list.
 	if(gun_flags &EMPTYCASINGS)
-		AC.loc = get_turf(src) //Eject casing onto ground.
+		AC.forceMove(get_turf(src)) //Eject casing onto ground.
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
-		AC.BB.loc = src //Set projectile loc to gun.
+		AC.BB.forceMove(src) //Set projectile loc to gun.
 		AC.BB = null //Empty casings
 		AC.update_icon()
 		return 1
@@ -173,7 +173,7 @@
 		if (load_method == SPEEDLOADER)
 			var/obj/item/ammo_casing/AC = loaded[1]
 			loaded -= AC
-			AC.loc = get_turf(src) //Eject casing onto ground.
+			AC.forceMove(get_turf(src)) //Eject casing onto ground.
 			to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
 			update_icon()
 			return
@@ -182,7 +182,7 @@
 	else if(loc == user)
 		if(chambered) // So it processing unloading of a bullet first
 			var/obj/item/ammo_casing/AC = chambered
-			AC.loc = get_turf(src) //Eject casing onto ground.
+			AC.forceMove(get_turf(src)) //Eject casing onto ground.
 			chambered = null
 			to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
 			update_icon()

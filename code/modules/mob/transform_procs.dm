@@ -30,7 +30,7 @@
 	O.dna = dna.Clone()
 	O.dna.SetSEState(MONKEYBLOCK,1)
 	O.dna.SetSEValueRange(MONKEYBLOCK,0xDAC, 0xFFF)
-	O.loc = loc
+	O.forceMove(loc)
 	O.viruses = viruses
 	viruses = list()
 	for(var/datum/disease/D in O.viruses)
@@ -137,7 +137,7 @@
 			if (sloc.name == "AI")
 				loc_landmark = sloc
 
-	O.loc = loc_landmark.loc
+	O.forceMove(loc_landmark.loc)
 	for (var/obj/item/device/radio/intercom/comm in O.loc)
 		comm.ai += O
 
@@ -203,7 +203,7 @@
 	else
 		O.key = key
 
-	O.loc = loc
+	O.forceMove(loc)
 	O.job = "Cyborg"
 
 	O.mmi = new /obj/item/device/mmi(O)
@@ -252,7 +252,7 @@
 	else
 		O.key = key
 
-	O.loc = loc
+	O.forceMove(loc)
 	O.job = "Cyborg"
 
 	O.mmi = new /obj/item/device/mmi(O)

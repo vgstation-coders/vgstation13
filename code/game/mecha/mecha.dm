@@ -613,7 +613,7 @@
 				var/obj/mecha/working/ripley/R = src
 				if(R.cargo)
 					for(var/obj/O in R.cargo) //Dump contents of stored cargo
-						O.loc = T
+						O.forceMove(T)
 						R.cargo -= O
 						T.Entered(O)
 
@@ -1179,9 +1179,9 @@
 		brainmob.client.perspective = EYE_PERSPECTIVE
 	*/
 		occupant = brainmob
-		brainmob.loc = src //should allow relaymove
+		brainmob.forceMove(src) //should allow relaymove
 		brainmob.canmove = 1
-		mmi_as_oc.loc = src
+		mmi_as_oc.forceMove(src)
 		mmi_as_oc.mecha = src
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
@@ -1245,7 +1245,7 @@
 /obj/mecha/proc/empty_bad_contents() //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
 	for(var/obj/O in src)
 		if(!is_type_in_list(O,mech_parts))
-			O.loc = src.loc
+			O.forceMove(src.loc)
 	return
 
 /obj/mecha/proc/go_out(var/exit = loc)
@@ -1293,7 +1293,7 @@
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
-				occupant.loc = mmi
+				occupant.forceMove(mmi)
 			mmi.mecha = null
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject

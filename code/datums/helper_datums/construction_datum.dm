@@ -304,7 +304,7 @@
 		var/obj/item/stack/S
 		if(used_atoms["[index][diff == FORWARD ? "+" : "-"]"])
 			for(var/atom/movable/A in used_atoms["[index][diff == FORWARD ? "+" : "-"]"])
-				A.loc = holder.loc
+				A.forceMove(holder.loc)
 			used_atoms.Remove("[index][diff == FORWARD ? "+" : "-"]")
 		else
 			var/working_type = (islist(current_step[Co_KEY]) ? pick(current_step[Co_KEY]) : current_step[Co_KEY])
@@ -399,7 +399,7 @@
 					to_drop.Add(new to_create)
 
 		for(var/atom/movable/this_drop in to_drop)
-			this_drop.loc = holder.loc
+			this_drop.forceMove(holder.loc)
 	return 1
 
 /datum/construction/reversible/proc/get_forward_step(index)

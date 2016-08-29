@@ -239,7 +239,7 @@
 	else if(put_in_inactive_hand(W))
 		return 1
 	else
-		W.loc = get_turf(src)
+		W.forceMove(get_turf(src))
 		W.reset_plane_and_layer()
 		W.dropped()
 		return 0
@@ -328,7 +328,7 @@
 
 //TODO: phase out this proc
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?
-	W.loc = null
+	W.forceMove(null)
 	W.reset_plane_and_layer()
 	u_equip(W,0)
 	update_icons()
@@ -472,20 +472,20 @@
 			if (src.back && istype(src.back, /obj/item/weapon/storage/backpack))
 				var/obj/item/weapon/storage/backpack/B = src.back
 				if(B.contents.len < B.storage_slots && W.w_class <= B.fits_max_w_class)
-					W.loc = B
+					W.forceMove(B)
 					equipped = 1
 
 	if(equipped)
 		W.hud_layerise()
 		if(src.back && W.loc != src.back)
-			W.loc = src
+			W.forceMove(src)
 	else
 		switch(act_on_fail)
 			if(EQUIP_FAILACTION_DELETE)
 				qdel(W)
 				W = null
 			if(EQUIP_FAILACTION_DROP)
-				W.loc=get_turf(src) // I think.
+				W.forceMove(get_turf(src)) // I think.
 	return equipped
 
 /mob/proc/get_id_card()

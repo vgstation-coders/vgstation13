@@ -265,7 +265,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 			CF.set_master(src,G)
 			fields += CF
 			G.fields += CF
-			CF.loc = T
+			CF.forceMove(T)
 			CF.dir = field_dir
 	var/listcheck = 0
 	for(var/obj/machinery/field_generator/FG in connected_gens)

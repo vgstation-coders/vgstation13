@@ -1361,7 +1361,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					var/turf/T = loc
 					if(ismob(T))
 						T = T.loc
-					cartridge.loc = T
+					cartridge.forceMove(T)
 					scanmode = SCANMODE_NONE
 					if (cartridge.radio)
 						cartridge.radio.hostpda = null
@@ -1854,7 +1854,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("2")		// Eject pAI device
 						var/turf/T = get_turf(src.loc)
 						if(T)
-							pai.loc = T
+							pai.forceMove(T)
 
 //LINK FUNCTIONS===================================
 
@@ -1962,7 +1962,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			M.put_in_hands(id)
 			to_chat(usr, "<span class='notice'>You remove the ID from the [name].</span>")
 		else
-			id.loc = get_turf(src)
+			id.forceMove(get_turf(src))
 		id = null
 
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P)
@@ -2092,7 +2092,7 @@ obj/item/device/pda/CtrlClick()
 					M.put_in_hands(O)
 					to_chat(usr, "<span class='notice'>You remove \the [O] from \the [src].</span>")
 					return
-			O.loc = get_turf(src)
+			O.forceMove(get_turf(src))
 		else
 			to_chat(usr, "<span class='notice'>This PDA does not have a pen in it.</span>")
 	else
@@ -2284,9 +2284,9 @@ obj/item/device/pda/AltClick()
 /obj/item/device/pda/Destroy()
 	PDAs -= src
 	if (src.id)
-		src.id.loc = get_turf(src.loc)
+		src.id.forceMove(get_turf(src.loc))
 	if(src.pai)
-		src.pai.loc = get_turf(src.loc)
+		src.pai.forceMove(get_turf(src.loc))
 	..()
 
 /obj/item/device/pda/Del()

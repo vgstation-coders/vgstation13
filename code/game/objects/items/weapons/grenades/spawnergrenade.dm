@@ -24,7 +24,7 @@
 		for(var/i=1, i<=deliveryamt, i++)
 			var/atom/movable/x = new spawner_type
 			spawned_atoms += x
-			x.loc = T
+			x.forceMove(T)
 			if(prob(50))
 				for(var/j = 1, j <= rand(1, 3), j++)
 					step(x, pick(NORTH,SOUTH,EAST,WEST))

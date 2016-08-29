@@ -158,7 +158,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 		else
 			to_chat(user, "<span class='notice'>You put the [fuel_container] into the [src].</span>")
 			user.drop_item(W, src)
-			fuel_container.loc = src
+			fuel_container.forceMove(src)
 			fuel_container = W
 			updateDialog()*/
 	else
@@ -191,10 +191,10 @@ obj/machinery/anomaly/Topic(href, href_list)
 		usr << browse(null, "window=anomaly")
 		usr.machine = null
 	if(href_list["eject_beaker"])
-		held_container.loc = src.loc
+		held_container.forceMove(src.loc)
 		held_container = null
 	if(href_list["eject_fuel"])
-		fuel_container.loc = src.loc
+		fuel_container.forceMove(src.loc)
 		fuel_container = null
 	if(href_list["begin"])
 		if(temperature >= 350)

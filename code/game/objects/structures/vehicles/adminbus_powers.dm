@@ -564,7 +564,7 @@
 			for(var/obj/item/I in M)
 				M.u_equip(I)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					I.dropped(M)
 					I.z = map.zCentcomm
@@ -697,10 +697,10 @@
 					continue
 			M.u_equip(I)
 			if(I)
-				I.loc = M.loc
+				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				I.dropped(M)
-				I.loc = pack
+				I.forceMove(pack)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 
@@ -732,13 +732,13 @@
 					if(K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
-						olduniform.loc = pack
+						olduniform.forceMove(pack)
 					K.uniform = JS
-					K.uniform.loc = K
+					K.uniform.forceMove(K)
 					if(K.hat)
 						oldhat = K.hat
 						K.hat = null
-						oldhat.loc = pack
+						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/green(K))
 					K.regenerate_icons()
@@ -759,13 +759,13 @@
 					if(K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
-						olduniform.loc = pack
+						olduniform.forceMove(pack)
 					K.uniform = JS
-					K.uniform.loc = K
+					K.uniform.forceMove(K)
 					if(K.hat)
 						oldhat = K.hat
 						K.hat = null
-						oldhat.loc = pack
+						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/red(K))
 					K.regenerate_icons()
@@ -775,9 +775,9 @@
 
 		switch(team)
 			if("Green")
-				M.loc = pick(tdome1)
+				M.forceMove(pick(tdome1))
 			if("Red")
-				M.loc = pick(tdome2)
+				M.forceMove(pick(tdome2))
 
 		to_chat(M, "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
 		"The wheel of fate is turning!",\
@@ -798,9 +798,9 @@
 
 		switch(team)
 			if("Green")
-				B.loc = pick(tdome1)
+				B.forceMove(pick(tdome1))
 			if("Red")
-				B.loc = pick(tdome2)
+				B.forceMove(pick(tdome2))
 
 	var/turf/T = get_turf(A)
 	if(T)
@@ -823,7 +823,7 @@
 /obj/item/packobelongings/attack_self(mob/user as mob)
 	var/turf/T = get_turf(user)
 	for(var/obj/O in src)
-		O.loc = T
+		O.forceMove(T)
 	qdel(src)
 
 /obj/item/packobelongings/green

@@ -119,7 +119,7 @@
 	if(cartridge)
 		to_chat(usr, "<span class='notice'>You pop the cartridge out of [src].</span>")
 		var/obj/item/weapon/dart_cartridge/C = cartridge
-		C.loc = get_turf(src)
+		C.forceMove(get_turf(src))
 		C.update_icon()
 		cartridge = null
 		src.update_icon()
@@ -308,7 +308,7 @@
 				to_chat(usr, "You remove [B] from [src].")
 				mixing -= B
 				beakers -= B
-				B.loc = get_turf(src)
+				B.forceMove(get_turf(src))
 	else if (href_list["eject_cart"])
 		remove_cartridge()
 	else if (href_list["close"])

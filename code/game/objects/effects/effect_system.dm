@@ -925,7 +925,7 @@ steam.start() -- spawns the effect
 	user.delayNextAttack(10)
 	if (istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
-		G.affecting.loc = src.loc
+		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		returnToPool(I)
 		qdel(src)
@@ -988,7 +988,7 @@ steam.start() -- spawns the effect
 	user.delayNextAttack(10)
 	if (istype(C, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = C
-		G.affecting.loc = src.loc
+		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		returnToPool(C)
 		src.ChangeTurf(get_base_turf(src.z))

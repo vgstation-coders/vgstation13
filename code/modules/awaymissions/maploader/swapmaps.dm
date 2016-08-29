@@ -180,7 +180,7 @@ swapmap
 						if(!M.key)
 							del(M)
 						else
-							M.loc=null
+							M.forceMove(null)
 					areas[A.loc]=null
 					del(A)
 				// delete areas that belong only to this map
@@ -300,7 +300,7 @@ swapmap
 						if(!M.key)
 							del(M)
 						else
-							M.loc=null
+							M.forceMove(null)
 					// finish the read
 					T.Read(S)
 					S.cd=".."

@@ -330,7 +330,7 @@ This function restores all organs.
 				if(ismob(W.loc))
 					var/mob/living/H = W.loc
 					H.drop_item(W, src)
-				W.loc = src
+				W.forceMove(src)
 */
 	if(istype(used_weapon,/obj/item/projectile/bullet)) //We don't want to use the actual projectile item, so we spawn some shrapnel.
 		var/obj/item/projectile/bullet/P = used_weapon
@@ -338,7 +338,7 @@ This function restores all organs.
 			var/obj/item/weapon/shard/shrapnel/S = new()
 			S.name = "[P.name] shrapnel"
 			S.desc = "[S.desc] It looks like it was fired from [P.shot_from]."
-			S.loc = src
+			S.forceMove(src)
 			organ.implants += S
 			visible_message("<span class='danger'>The projectile sticks in the wound!</span>")
 			S.add_blood(src)
@@ -348,7 +348,7 @@ This function restores all organs.
 			var/obj/item/device/flashlight/flare/FS = new
 			FS.name = "shot [FS.name]"
 			FS.desc = "[FS.desc]. It looks like it was fired from [F.shot_from]."
-			FS.loc = src
+			FS.forceMove(src)
 			organ.implants += FS
 			visible_message("<span class='danger'>The flare sticks in the wound!</span>")
 			FS.add_blood(src)

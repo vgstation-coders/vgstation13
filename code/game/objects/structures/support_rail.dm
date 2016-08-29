@@ -46,7 +46,7 @@
 		user.visible_message(
 				"<span class='notice'>[supported_mob.name] grabbed the rail.</span>")
 		user.anchored = 1
-		user.loc = src.loc
+		user.forceMove(src.loc)
 		user.dir = src.dir
 		user.update_canmove()
 		add_fingerprint(user)

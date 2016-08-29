@@ -582,7 +582,7 @@
 				M.current.unlock_from()
 			var/turf/T = get_turf(M.current)
 			T.turf_animation('icons/effects/effects.dmi',"shadowstep")
-			usr.loc = picked
+			usr.forceMove(picked)
 		M.current.verbs -= /client/proc/vampire_shadowstep
 		sleep(20 SECONDS)
 		if(M && M.current)

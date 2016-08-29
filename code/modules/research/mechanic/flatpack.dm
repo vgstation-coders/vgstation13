@@ -88,10 +88,10 @@
 		return
 
 /obj/structure/closet/crate/flatpack/proc/Finalize()
-	machine.loc = get_turf(src)
+	machine.forceMove(get_turf(src))
 	machine.RefreshParts()
 	for(var/atom/movable/AM in src)
-		AM.loc = get_turf(src)
+		AM.forceMove(get_turf(src))
 	qdel(src)
 
 /obj/structure/closet/crate/flatpack/attack_hand(mob/user, params)
@@ -157,7 +157,7 @@
 	if(!flatpack)
 		return
 
-	flatpack.loc = src
+	flatpack.forceMove(src)
 
 	var/image/flatimage = image(flatpack.icon, icon_state = flatpack.icon_state)
 

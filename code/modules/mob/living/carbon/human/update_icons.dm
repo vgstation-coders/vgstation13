@@ -571,7 +571,7 @@ var/global/list/damage_icon_parts = list()
 					client.screen -= thing														//
 																								//
 				if (thing)																		//
-					thing.loc = loc																//
+					thing.forceMove(loc)																//
 					//thing.dropped(src)														//
 					thing.reset_plane_and_layer()
 	if(update_icons)

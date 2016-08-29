@@ -162,7 +162,7 @@
 
 	if(href_list["ejectp"])
 		if(loaded_pill_bottle)
-			loaded_pill_bottle.loc = src.loc
+			loaded_pill_bottle.forceMove(src.loc)
 			loaded_pill_bottle = null
 		src.updateUsrDialog()
 		return 1
@@ -293,7 +293,7 @@
 				reagents.trans_to(P,amount_per_pill)
 				if(src.loaded_pill_bottle)
 					if(loaded_pill_bottle.contents.len < loaded_pill_bottle.storage_slots)
-						P.loc = loaded_pill_bottle
+						P.forceMove(loaded_pill_bottle)
 				if(count == 0) //only do this ONCE
 					logged_message += "[P.reagents.get_reagent_ids(1)]"
 
@@ -361,15 +361,15 @@
 
 /obj/machinery/chem_master/proc/detach()
 	if(beaker)
-		beaker.loc = src.loc
+		beaker.forceMove(src.loc)
 		beaker.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
 		beaker.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
 		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = beaker:holder:loc
 			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-				beaker.loc = R
+				beaker.forceMove(R)
 			else
-				beaker.loc = beaker:holder
+				beaker.forceMove(beaker:holder)
 		beaker = null
 		reagents.clear_reagents()
 		update_icon()

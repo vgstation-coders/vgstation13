@@ -136,10 +136,10 @@
 
 	if(istype(AM, /obj))
 		var/obj/O = AM
-		O.loc = src
+		O.forceMove(src)
 	else if(istype(AM, /mob))
 		var/mob/M = AM
-		M.loc = src
+		M.forceMove(src)
 	//src.flush() This spams audio like fucking crazy.
 	// Instead, we queue up for the next process.
 	doFlushIn=5 // Ticks, adjust if delay is too long or too short

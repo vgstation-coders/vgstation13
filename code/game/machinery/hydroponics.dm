@@ -68,7 +68,7 @@
 obj/machinery/hydroponics/process()
 
 	if(myseed && (myseed.loc != src))
-		myseed.loc = src
+		myseed.forceMove(src)
 
 	if(world.time > (lastcycle + cycledelay))
 		lastcycle = world.time
@@ -728,7 +728,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			age = 1
 			health = myseed.endurance
 			lastcycle = world.time
-			O.loc = src
+			O.forceMove(src)
 			if((user.client  && user.s_active != src))
 				user.client.screen -= O
 			O.dropped(user)

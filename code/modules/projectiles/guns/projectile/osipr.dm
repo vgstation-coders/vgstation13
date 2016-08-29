@@ -61,7 +61,7 @@
 			to_chat(user, "There is another magazine already inserted. Remove it first.")
 		else
 			user.u_equip(A,1)
-			A.loc = src
+			A.forceMove(src)
 			magazine = A
 			update_icon()
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)

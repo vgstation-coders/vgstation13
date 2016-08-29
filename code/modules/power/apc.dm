@@ -632,7 +632,7 @@
 					interact(user)
 					return
 				else if(issilicon(user) && !isMoMMI(user)) // MoMMIs can hold one item in their tool slot.
-					cell.loc=src.loc // Drop it, whoops.
+					cell.forceMove(src.loc) // Drop it, whoops.
 				else
 					user.put_in_hands(cell)
 
@@ -995,7 +995,7 @@
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
-			src.occupant.loc = src.loc
+			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
 			for(var/obj/item/weapon/pinpointer/point in world)
@@ -1306,7 +1306,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		malfvacate(1)
 
 	if(cell)
-		cell.loc = loc
+		cell.forceMove(loc)
 		cell = null
 
 	if(terminal)

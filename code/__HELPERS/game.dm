@@ -259,7 +259,7 @@ var/list/DummyCache = list()
 		D = new /obj/item/weapon/dummy( srcturf )
 	else
 		DummyCache.Remove(D)
-		D.loc = srcturf
+		D.forceMove(srcturf)
 
 	D.flags=initial(D.flags)
 	D.pass_flags=initial(D.pass_flags)
@@ -273,7 +273,7 @@ var/list/DummyCache = list()
 	for(var/obj/border_obstacle in srcturf)
 		if(border_obstacle.flags & ON_BORDER)
 			if(!border_obstacle.Uncross(D, targetturf))
-				D.loc = null
+				D.forceMove(null)
 				DummyCache.Add(D)
 				return 0
 
@@ -281,11 +281,11 @@ var/list/DummyCache = list()
 	for(var/obj/border_obstacle in targetturf)
 		if((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
 			if(!border_obstacle.Cross(D, srcturf, 1, 0))
-				D.loc = null
+				D.forceMove(null)
 				DummyCache.Add(D)
 				return 0
 
-	D.loc = null
+	D.forceMove(null)
 	DummyCache.Add(D)
 	return 1
 

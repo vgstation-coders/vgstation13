@@ -107,18 +107,18 @@
 		if(O in cargo) //mom's spaghetti
 			continue
 		if(!is_type_in_list(O,mech_parts))
-			O.loc = src.loc
+			O.forceMove(src.loc)
 	return
 
 /obj/mecha/working/ripley/Destroy()
 	for(var/mob/M in src)
 		if(M==src.occupant)
 			continue
-		M.loc = get_turf(src)
+		M.forceMove(get_turf(src))
 		M.loc.Entered(M)
 		step_rand(M)
 	for(var/atom/movable/A in src.cargo)
-		A.loc = get_turf(src)
+		A.forceMove(get_turf(src))
 		var/turf/T = get_turf(A)
 		if(T)
 			T.Entered(A)

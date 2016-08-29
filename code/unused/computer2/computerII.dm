@@ -216,35 +216,35 @@
 		switch(href_list["id"])
 			if("auth")
 				if(!isnull(src.authid))
-					src.authid.loc = get_turf(src)
+					src.authid.forceMove(get_turf(src))
 					src.authid = null
 				else
 					var/obj/item/I = usr.equipped()
 					if (istype(I, /obj/item/weapon/card/id))
 						usr.drop_item()
-						I.loc = src
+						I.forceMove(src)
 						src.authid = I
 			if("aux")
 				if(!isnull(src.auxid))
-					src.auxid.loc = get_turf(src)
+					src.auxid.forceMove(get_turf(src))
 					src.auxid = null
 				else
 					var/obj/item/I = usr.equipped()
 					if (istype(I, /obj/item/weapon/card/id))
 						usr.drop_item()
-						I.loc = src
+						I.forceMove(src)
 						src.auxid = I
 
 	//Same but for a data disk
 	else if (href_list["disk"])
 		if(!isnull(src.diskette))
-			src.diskette.loc = get_turf(src)
+			src.diskette.forceMove(get_turf(src))
 			src.diskette = null
 /*		else
 			var/obj/item/I = usr.equipped()
 			if (istype(I, /obj/item/weapon/disk/data))
 				usr.drop_item()
-				I.loc = src
+				I.forceMove(src)
 				src.diskette = I
 */
 	src.add_fingerprint(usr)
@@ -281,7 +281,7 @@
 		if ((!src.diskette) && W:portable)
 			user.machine = src
 			user.drop_item()
-			W.loc = src
+			W.forceMove(src)
 			src.diskette = W
 			to_chat(user, "You insert [W].")
 			src.updateUsrDialog()
@@ -303,21 +303,21 @@
 				A.icon_state = "4"
 
 			for (var/obj/item/weapon/peripheral/C in src.peripherals)
-				C.loc = A
+				C.forceMove(A)
 				A.peripherals.Add(C)
 
 			if(src.diskette)
-				src.diskette.loc = src.loc
+				src.diskette.forceMove(src.loc)
 
 			//TO-DO: move card reading to peripheral cards instead
 			if(src.authid)
-				src.authid.loc = src.loc
+				src.authid.forceMove(src.loc)
 
 			if(src.auxid)
-				src.auxid.loc = src.loc
+				src.auxid.forceMove(src.loc)
 
 			if(src.hd)
-				src.hd.loc = A
+				src.hd.forceMove(A)
 				A.hd = src.hd
 
 			A.mainboard = new /obj/item/weapon/motherboard(A)

@@ -29,7 +29,7 @@
 	if(charging)
 		charging.appearance = appearance_backup
 		charging.update_icon()
-		charging.loc = loc
+		charging.forceMove(loc)
 		charging = null
 	appearance_backup=null
 	..()
@@ -88,7 +88,7 @@
 	if(charging && Adjacent(user))
 		charging.appearance = appearance_backup
 		charging.update_icon()
-		charging.loc = loc
+		charging.forceMove(loc)
 		user.put_in_hands(charging)
 		charging = null
 		if(!self_powered)
@@ -108,7 +108,7 @@
 		if(charging)//Spit out anything being charged if it loses power or breaks
 			charging.appearance = appearance_backup
 			charging.update_icon()
-			charging.loc = loc
+			charging.forceMove(loc)
 			visible_message("<span class='notice'>[src] powers down and ejects \the [charging].</span>")
 			charging = null
 			use_power = 1

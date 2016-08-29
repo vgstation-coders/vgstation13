@@ -149,7 +149,7 @@
 
 	user.u_equip(W,1)
 	playsound(get_turf(src), "rustle", 50, 1, -5)
-	W.loc = src
+	W.forceMove(src)
 	if ((user.client && user.s_active != src))
 		user.client.screen -= W
 	src.orient2hud(user)

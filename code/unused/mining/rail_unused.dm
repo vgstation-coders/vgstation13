@@ -257,9 +257,9 @@ for (var/client/C)
 		return
 	//mode = 1
 
-	C.loc = src.loc
+	C.forceMove(src.loc)
 	sleep(2)
-	C.loc = src
+	C.forceMove(src)
 	load = C
 
 	C.pixel_y += 9
@@ -282,7 +282,7 @@ for (var/client/C)
 
 	overlays.len = 0
 
-	load.loc = src.loc
+	load.forceMove(src.loc)
 	load.pixel_y -= 9
 	load.reset_plane_and_layer()
 	if(ismob(load))
@@ -302,7 +302,7 @@ for (var/client/C)
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		AM.loc = src.loc
+		AM.forceMove(src.loc)
 		AM.reset_plane_and_layer()
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))

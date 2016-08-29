@@ -1497,7 +1497,7 @@
 		for(var/obj/item/I in M)
 			M.u_equip(I,1)
 			if(I)
-				I.loc = locker
+				I.forceMove(locker)
 				I.reset_plane_and_layer()
 				//I.dropped(M)
 
@@ -1517,7 +1517,7 @@
 
 		// TODO: play sound here.  Thinking of using Wolfenstein 3D's cell door closing sound.
 
-		M.loc = prison_cell
+		M.forceMove(prison_cell)
 
 		/*
 		if(istype(M, /mob/living/carbon/human))
@@ -1576,10 +1576,10 @@
 					continue
 			M.u_equip(I,1)
 			if(I)
-				I.loc = M.loc
+				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				//I.dropped(M)
-				I.loc = pack
+				I.forceMove(pack)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 
@@ -1611,13 +1611,13 @@
 					if(K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
-						olduniform.loc = pack
+						olduniform.forceMove(pack)
 					K.uniform = JS
-					K.uniform.loc = K
+					K.uniform.forceMove(K)
 					if(K.hat)
 						oldhat = K.hat
 						K.hat = null
-						oldhat.loc = pack
+						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/green(K))
 					K.regenerate_icons()
@@ -1638,13 +1638,13 @@
 					if(K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
-						olduniform.loc = pack
+						olduniform.forceMove(pack)
 					K.uniform = JS
-					K.uniform.loc = K
+					K.uniform.forceMove(K)
 					if(K.hat)
 						oldhat = K.hat
 						K.hat = null
-						oldhat.loc = pack
+						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/red(K))
 					K.regenerate_icons()
@@ -1656,11 +1656,11 @@
 			if("Green")
 				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Green)")
 				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Green)", 1)
-				M.loc = pick(tdome1)
+				M.forceMove(pick(tdome1))
 			if("Red")
 				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Red)")
 				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Red)", 1)
-				M.loc = pick(tdome2)
+				M.forceMove(pick(tdome2))
 
 		to_chat(M, "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
 		"The wheel of fate is turning!",\
@@ -1688,7 +1688,7 @@
 
 		M.Paralyse(5)
 		sleep(5)
-		M.loc = pick(tdomeadmin)
+		M.forceMove(pick(tdomeadmin))
 		spawn(50)
 			to_chat(M, "<span class='notice'>You have been sent to the Thunderdome.</span>")
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Admin.)")
@@ -1712,7 +1712,7 @@
 		for(var/obj/item/I in M)
 			M.u_equip(I,1)
 			if(I)
-				I.loc = M.loc
+				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				//I.dropped(M)
 
@@ -1722,7 +1722,7 @@
 			observer.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(observer), slot_shoes)
 		M.Paralyse(5)
 		sleep(5)
-		M.loc = pick(tdomeobserve)
+		M.forceMove(pick(tdomeobserve))
 		spawn(50)
 			to_chat(M, "<span class='notice'>You have been sent to the Thunderdome.</span>")
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Observer.)")
@@ -2126,7 +2126,7 @@
 		var/obj/effect/stop/S
 		S = new /obj/effect/stop
 		S.victim = M
-		S.loc = M.loc
+		S.forceMove(M.loc)
 		spawn(20)
 			del(S)
 
@@ -2478,7 +2478,7 @@
 					del(O)
 /*					for(var/obj/machinery/vehicle/pod/O in world)
 					for(var/mob/M in src)
-						M.loc = src.loc
+						M.forceMove(src.loc)
 						if (M.client)
 							M.client.perspective = MOB_PERSPECTIVE
 							M.client.eye = M
@@ -2654,13 +2654,13 @@
 							for (var/obj/item/I in H.get_all_slots())
 								H.drop_from_inventory(I)
 
-							H.loc = pick(prisonwarp) // teleport person to cell
+							H.forceMove(pick(prisonwarp)) // teleport person to cell
 
 							H.equip_to_slot_or_del(new /obj/item/clothing/under/color/prisoner(H), slot_w_uniform)
 
 							H.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(H), slot_shoes)
 						else
-							H.loc = pick(prisonsecuritywarp) // teleport security person
+							H.forceMove(pick(prisonsecuritywarp)) // teleport security person
 
 						prisonwarped += H
 			if("traitor_all")
@@ -3224,12 +3224,12 @@
 						if(M.wear_suit)
 							var/obj/item/O = M.wear_suit
 							M.u_equip(O,1)
-							O.loc = M.loc
+							O.forceMove(M.loc)
 							//O.dropped(M)
 						if(M.head)
 							var/obj/item/O = M.head
 							M.u_equip(O,1)
-							O.loc = M.loc
+							O.forceMove(M.loc)
 							//O.dropped(M)
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
@@ -4121,7 +4121,7 @@
 
 			var/obj/machinery/computer/shuttle_control/C = pick(S.control_consoles)
 			if(C)
-				usr.loc = C.loc
+				usr.forceMove(C.loc)
 
 	if(href_list["shuttle_shuttlify"])
 		feedback_inc("admin_shuttle_magic_used",1)

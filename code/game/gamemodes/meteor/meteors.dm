@@ -360,7 +360,7 @@
 		return
 
 	if(ismob(A))
-		src.loc = A.loc
+		src.forceMove(A.loc)
 		A.blob_act()
 		return
 

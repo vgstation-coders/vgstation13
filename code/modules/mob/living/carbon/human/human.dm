@@ -1229,7 +1229,7 @@
 	else
 		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s [affected.display_name] in a welter of blood.</b></span>","<span class='warning'>[usr] rips [selection] out of your [affected] in a welter of blood.</span>")
 
-	selection.loc = get_turf(src)
+	selection.forceMove(get_turf(src))
 	affected.implants -= selection
 	shock_stage+=10
 

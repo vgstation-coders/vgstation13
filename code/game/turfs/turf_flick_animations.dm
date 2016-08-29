@@ -93,7 +93,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		flick("cultification",c_animation)
 		spawn(10)
 			c_animation.master = null
-			c_animation.loc = null
+			c_animation.forceMove(null)
 			qdel(c_animation)
 
 //called by various cult runes

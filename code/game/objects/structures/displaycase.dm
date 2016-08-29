@@ -44,7 +44,7 @@
 				qdel(src)
 				return
 			if(iscrowbar(W))
-				circuit.loc=T
+				circuit.forceMove(T)
 				circuit.installed = 0
 				circuit=null
 				state--
@@ -116,7 +116,7 @@
 
 /obj/structure/displaycase/proc/dump()
 	if(occupant)
-		occupant.loc=get_turf(src)
+		occupant.forceMove(get_turf(src))
 		occupant=null
 	occupant_overlay=null
 
@@ -214,10 +214,10 @@
 			var/obj/structure/displaycase_frame/F=new(T)
 			F.state=1
 			F.circuit=C
-			F.circuit.loc=F
+			F.circuit.forceMove(F)
 			F.update_icon()
 		else
-			C.loc=T
+			C.forceMove(T)
 			C.installed = 0
 			circuit=null
 			new /obj/machinery/constructable_frame/machine_frame(T)

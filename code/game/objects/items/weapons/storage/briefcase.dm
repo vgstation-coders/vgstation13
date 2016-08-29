@@ -124,7 +124,7 @@
 
 		stored_item = item
 		fits_max_w_class = W_CLASS_MEDIUM - stored_item.w_class
-		item.loc = null //null space here we go - to stop it showing up in the briefcase
+		item.forceMove(null) //null space here we go - to stop it showing up in the briefcase
 		to_chat(user, "You place \the [item] into the false bottom of the briefcase.")
 	else
 		return ..()

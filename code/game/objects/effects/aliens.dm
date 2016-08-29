@@ -134,7 +134,7 @@
 				if(G.state<2)
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
-				G.affecting.loc = src
+				G.affecting.forceMove(src)
 				G.affecting.paralysis = 10
 				for(var/mob/O in viewers(world.view, src))
 					if (O.client)

@@ -41,7 +41,7 @@
 				hookshot.cancel_chain()
 				bullet_die()
 				return
-			HC.loc = loc
+			HC.forceMove(loc)
 			HC.pixel_x = pixel_x
 			HC.pixel_y = pixel_y
 			if(last_link)

@@ -73,7 +73,7 @@
 	if(stat != 0)
 		if(pda_device)
 			to_chat(usr, "You remove \the [pda_device] from \the [src].")
-			pda_device.loc = get_turf(src)
+			pda_device.forceMove(get_turf(src))
 			if(!usr.get_active_hand())
 				usr.put_in_hands(pda_device)
 			pda_device = null
@@ -111,12 +111,12 @@
 		if ("pda_device")
 			if (pda_device)
 				if(ishuman(usr))
-					pda_device.loc = usr.loc
+					pda_device.forceMove(usr.loc)
 					if(!usr.get_active_hand())
 						usr.put_in_hands(pda_device)
 					pda_device = null
 				else
-					pda_device.loc = loc
+					pda_device.forceMove(loc)
 					pda_device = null
 			else
 				var/obj/item/I = usr.get_active_hand()

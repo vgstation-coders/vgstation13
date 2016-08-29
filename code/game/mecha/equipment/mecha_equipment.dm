@@ -101,7 +101,7 @@
 /obj/item/mecha_parts/mecha_equipment/proc/attach(obj/mecha/M as obj)
 	M.equipment += src
 	chassis = M
-	src.loc = M
+	src.forceMove(M)
 	M.log_message("[src] initialized.")
 	if(!M.selected)
 		M.selected = src
@@ -111,7 +111,7 @@
 /obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
 	if(!moveto)
 		moveto = get_turf(chassis)
-	src.loc = moveto
+	src.forceMove(moveto)
 	chassis.equipment -= src
 	if(chassis.selected == src)
 		chassis.selected = null

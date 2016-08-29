@@ -313,7 +313,7 @@
 	if(!src.HELMET)
 		return //Do I even need this sanity check? Nyoro~n
 	else
-		src.HELMET.loc = src.loc
+		src.HELMET.forceMove(src.loc)
 		src.HELMET = null
 		return
 
@@ -322,7 +322,7 @@
 	if(!src.SUIT)
 		return
 	else
-		src.SUIT.loc = src.loc
+		src.SUIT.forceMove(src.loc)
 		src.SUIT = null
 		return
 
@@ -331,7 +331,7 @@
 	if(!src.MASK)
 		return
 	else
-		src.MASK.loc = src.loc
+		src.MASK.forceMove(src.loc)
 		src.MASK = null
 		return
 
@@ -340,7 +340,7 @@
 	if(!src.BOOTS)
 		return
 	else
-		src.BOOTS.loc = src.loc
+		src.BOOTS.forceMove(src.loc)
 		src.BOOTS = null
 		return
 
@@ -348,16 +348,16 @@
 /obj/machinery/suit_storage_unit/proc/dump_everything()
 	src.islocked = 0 //locks go free
 	if(src.SUIT)
-		src.SUIT.loc = src.loc
+		src.SUIT.forceMove(src.loc)
 		src.SUIT = null
 	if(src.HELMET)
-		src.HELMET.loc = src.loc
+		src.HELMET.forceMove(src.loc)
 		src.HELMET = null
 	if(src.MASK)
-		src.MASK.loc = src.loc
+		src.MASK.forceMove(src.loc)
 		src.MASK = null
 	if(src.BOOTS)
-		src.BOOTS.loc = src.loc
+		src.BOOTS.forceMove(src.loc)
 		src.BOOTS = null
 	if(src.OCCUPANT)
 		src.eject_occupant(OCCUPANT)
@@ -463,7 +463,7 @@
 
 		src.OCCUPANT.client.eye = src.OCCUPANT.client.mob
 		src.OCCUPANT.client.perspective = MOB_PERSPECTIVE
-	src.OCCUPANT.loc = src.loc
+	src.OCCUPANT.forceMove(src.loc)
 	src.OCCUPANT = null
 	if(!src.isopen)
 		src.isopen = 1
@@ -506,7 +506,7 @@
 		usr.stop_pulling()
 		usr.client.perspective = EYE_PERSPECTIVE
 		usr.client.eye = src
-		usr.loc = src
+		usr.forceMove(src)
 //		usr.metabslow = 1
 		src.OCCUPANT = usr
 		src.isopen = 0 //Close the thing after the guy gets inside
@@ -567,7 +567,7 @@
 			if (M.client)
 				M.client.perspective = EYE_PERSPECTIVE
 				M.client.eye = src
-			M.loc = src
+			M.forceMove(src)
 			src.OCCUPANT = M
 			src.isopen = 0 //close ittt
 

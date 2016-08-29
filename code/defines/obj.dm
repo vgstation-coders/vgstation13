@@ -13,7 +13,7 @@
 				if(user.z != src.z)
 					return
 				user.loc.loc.Exited(user)
-				user.loc = pick(latejoin)
+				user.forceMove(pick(latejoin))
 			if("No")
 				return
 

@@ -487,7 +487,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		else
 			to_chat(usr, "No area available.")
 
-	usr.loc = pick(L)
+	usr.forceMove(pick(L))
 	if(locked_to)
 		manual_stop_follow(locked_to)
 
@@ -567,7 +567,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			var/turf/T = get_turf(M) //Turf of the destination mob
 
 			if(T && isturf(T))	//Make sure the turf exists, then move the source to that destination.
-				A.loc = T
+				A.forceMove(T)
 				if(locked_to)
 					manual_stop_follow(locked_to)
 			else
@@ -852,7 +852,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/datum/bomberman_arena/arena_target = input("Which arena do you wish to reach?", "Arena Search Panel") in arenas
 	to_chat(usr, "Reached [arena_target]")
 
-	usr.loc = arena_target.center
+	usr.forceMove(arena_target.center)
 	to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
 
 /mob/dead/observer/Topic(href, href_list)
@@ -895,7 +895,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	if(href_list["jumptoarenacood"])
 		var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
-		usr.loc = targetarena.center
+		usr.forceMove(targetarena.center)
 		to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
 
 	..()

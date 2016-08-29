@@ -96,7 +96,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		return
 	if (loaded_item && !panel_open && !busy)
 		to_chat(user, "<span class='notice'>You remove the [loaded_item.name] from the [src].</span>")
-		loaded_item.loc = src.loc
+		loaded_item.forceMove(src.loc)
 		loaded_item = null
 		icon_state = "d_analyzer"
 

@@ -124,7 +124,7 @@
 			return
 		if(caliber[AC.caliber])
 			user.drop_item(AC)
-			AC.loc = src
+			AC.forceMove(src)
 			loaded += AC
 			loaded -= null //ensure that the list constantly has 6 entries
 			num_loaded++
@@ -136,7 +136,7 @@
 				to_chat(user, "<span class='warning'>It's already full of ammo.</span>")
 				return
 			if(caliber[AC.caliber] && getAmmo() < max_shells)
-				AC.loc = src
+				AC.forceMove(src)
 				AM.stored_ammo -= AC
 				loaded += AC
 				loaded -= null //same here
@@ -187,7 +187,7 @@
 				return
 			if(AC.BB)
 				in_chamber = AC.BB //Load projectile into chamber.
-				AC.BB.loc = src //Set projectile loc to gun.
+				AC.BB.forceMove(src) //Set projectile loc to gun.
 				AC.BB = null //Empty casings
 				AC.update_icon()
 			if(!in_chamber)

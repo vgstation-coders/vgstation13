@@ -65,7 +65,7 @@
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	change_sight(removing = BLIND)
 	canmove = 0
-	src.loc = paicard
+	src.forceMove(paicard)
 	card = paicard
 	sradio = new(src)
 	if(!radio)

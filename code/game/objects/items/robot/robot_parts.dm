@@ -120,7 +120,7 @@
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
 		var/obj/item/weapon/ed209_assembly/B = new /obj/item/weapon/ed209_assembly
-		B.loc = get_turf(src)
+		B.forceMove(get_turf(src))
 		to_chat(user, "You armed the robot frame")
 		W:use(1)
 		if (user.get_inactive_hand()==src)
@@ -212,7 +212,7 @@
 			for(var/P in M.mommi_assembly_parts) //Let's give back all those mommi creation components
 				for(var/obj/item/L in M.contents)
 					if(L == P)
-						L.loc = T
+						L.forceMove(T)
 						M.contents -= L
 
 			if(!O)
@@ -231,8 +231,8 @@
 			O.job = "Cyborg"
 
 			O.cell = chest.cell
-			O.cell.loc = O
-			W.loc = O //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+			O.cell.forceMove(O)
+			W.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 
 			// Since we "magically" installed a cell, we also have to update the correct component.
 			if(O.cell)

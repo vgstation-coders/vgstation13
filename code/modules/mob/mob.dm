@@ -441,8 +441,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		narsimage.pixel_y = old_pixel_y
 		narglow.pixel_x = old_pixel_x
 		narglow.pixel_y = old_pixel_y
-		narsimage.loc = src.loc
-		narglow.loc = src.loc
+		narsimage.forceMove(src.loc)
+		narglow.forceMove(src.loc)
 		//Animate narsie based on dir
 		if(dir)
 			var/x_diff = 0
@@ -895,7 +895,7 @@ var/list/slot_equipment_priority = list( \
 			if (L.master == src)
 				var/list/temp = list(  )
 				temp += L.container
-				L.loc = null
+				L.forceMove(null)
 				return temp
 			else
 				return L.container
@@ -1708,7 +1708,7 @@ var/list/slot_equipment_priority = list( \
 	else
 		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'>[usr] rips [selection] out of your body.</span>")
 
-	selection.loc = get_turf(src)
+	selection.forceMove(get_turf(src))
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)

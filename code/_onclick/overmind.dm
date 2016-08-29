@@ -24,4 +24,4 @@ mob/camera/blob/DblClickOn(var/atom/A) //Teleport view to another blob
 	if(!B)
 		return
 	else
-		usr.loc = T
+		usr.forceMove(T)

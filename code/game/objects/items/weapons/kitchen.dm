@@ -493,7 +493,7 @@
 		to_chat(user, "<span class='warning'>This doesn't seem like a good idea.</span>")
 		return
 	if(user.drop_item(W, user.loc))
-		W.loc = src
+		W.forceMove(src)
 		carrying.Add(W)
 		var/list/params_list = params2list(params)
 		if(params_list.len)
@@ -537,7 +537,7 @@
 			if(calc_carry() + add >= max_carry)
 				break
 
-			I.loc = src
+			I.forceMove(src)
 			carrying.Add(I)
 
 			var/image/image = image(icon = null) //image(appearance = ...) doesn't work, and neither does image().

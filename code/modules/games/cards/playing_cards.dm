@@ -121,7 +121,7 @@
 				for(var/obj/item/toy/singlecard/card in C.currenthand)
 					if(card.flipped == 0)
 						card.Flip()
-					card.loc = src
+					card.forceMove(src)
 					cards += card
 				user.visible_message("<span class = 'notice'>[user] puts their hand of cards into the deck.</span>",
 									 "<span class = 'notice'>You put the hand into the deck.</span>")

@@ -64,7 +64,7 @@
 		to_chat(user, "<span class='notice'>You add [W] to the metal casing.</span>")
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
 		user.remove_from_mob(det)
-		det.loc = src
+		det.forceMove(src)
 		detonator = det
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
@@ -263,7 +263,7 @@
 		icon_state = initial(icon_state) + "_locked"
 		crit_fail = 1
 		for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
-			G.loc = get_turf(src.loc)*/
+			G.forceMove(get_turf(src.loc))*/
 
 /obj/item/weapon/grenade/chem_grenade/New()
 	. = ..()
@@ -298,7 +298,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 		to_chat(user, "<span class='notice'>You insert [W] into the grenade.</span>")
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
 		user.remove_from_mob(det)
-		det.loc = src
+		det.forceMove(src)
 		detonator = det
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"

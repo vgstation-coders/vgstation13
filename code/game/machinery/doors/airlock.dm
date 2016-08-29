@@ -1174,7 +1174,7 @@ About the new airlock wires panel:
 	else
 		A = electronics
 		electronics = null
-		A.loc = loc
+		A.forceMove(loc)
 		A.installed = 0
 
 	if (operating == -1)
@@ -1247,7 +1247,7 @@ About the new airlock wires panel:
 				L.SetStunned(5)
 				L.SetWeakened(5)
 				var/obj/effect/stop/S = new()
-				S.loc = loc
+				S.forceMove(loc)
 				S.victim = L
 
 				spawn (20)

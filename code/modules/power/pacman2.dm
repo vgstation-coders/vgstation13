@@ -80,7 +80,7 @@
 			return
 		P = O
 		user.drop_item()
-		O.loc = src
+		O.forceMove(src)
 		to_chat(user, "<span class='notice'>You add the plasma tank to the generator.</span>")
 	else if (istype(O, /obj/item/weapon/card/emag))
 		var/obj/item/weapon/card/emag/E = O
@@ -111,7 +111,7 @@
 			for(var/obj/item/I in component_parts)
 				if(I.reliability < 100)
 					I.crit_fail = 1
-				I.loc = src.loc
+				I.forceMove(src.loc)
 			new_frame.state = 1
 			new_frame.set_build_state(2)
 			qdel(src)

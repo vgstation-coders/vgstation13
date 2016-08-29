@@ -96,7 +96,7 @@
 
 				state = 4
 				var/obj/machinery/camera/C = new(src.loc)
-				src.loc = C
+				src.forceMove(C)
 				C.assembly = src
 
 				C.auto_turn()
@@ -145,7 +145,7 @@
 		if(U)
 			to_chat(user, "You unattach \the [U] from the assembly.")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			U.loc = get_turf(src)
+			U.forceMove(get_turf(src))
 			upgrades -= U
 		return
 
