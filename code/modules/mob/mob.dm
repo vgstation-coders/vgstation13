@@ -246,14 +246,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
-		var/found = 0
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				world.log << "Virtualhearer removed from [src] of type [type]"
 				returnToPool(VH)
-				found = 1
-		if(!found)
-			world.log << "Mob virtualhearer for [type] could not be found for [src]"
 	..()
 
 /mob/proc/is_muzzled()
@@ -398,9 +393,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(world.time>resethearers)
 		sethearing()
 	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
-		if(!hearer.attached)
-			world.log << "visible_message is attempting to call on_see on a hearer that isn't attached to anything: [hearer]. Previous type of attached: [hearer.attached_type]. Attached text reference [hearer.attached_ref]"
-			continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
