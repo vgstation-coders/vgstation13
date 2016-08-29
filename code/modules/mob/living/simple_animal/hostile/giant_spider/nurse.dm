@@ -188,5 +188,6 @@
 	damage_type = BRUTE
 
 /obj/item/projectile/web/Bump(atom/A)
-	new /obj/effect/spider/stickyweb(src.loc)
+	if(!(locate(/obj/effect/spider/stickyweb) in get_turf(src)))
+		new /obj/effect/spider/stickyweb(get_turf(src))
 	qdel(src)
