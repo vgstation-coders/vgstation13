@@ -378,7 +378,7 @@ a
 
 	charge_max = 0
 
-/spell/aoe_turf/cast(list/targets, mob/user)
+/spell/aoe_turf/alien_hide/cast(list/targets, mob/user)
 	if(user.plane != HIDING_MOB_PLANE)
 		user.plane = HIDING_MOB_PLANE
 		user.visible_message("<span class='danger'>[src] scurries to the ground !</span>", "<span class='alien'>You are now hiding.</span>")
