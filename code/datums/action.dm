@@ -21,12 +21,6 @@
 
 /datum/action/New(Target)
 	target = Target
-	button = new
-	button.linked_action = src
-	button.name = name
-	button.actiontooltipstyle = buttontooltipstyle
-	if(desc)
-		button.desc = desc
 
 /datum/action/Destroy()
 	if(owner)
@@ -43,6 +37,12 @@
 		Remove(owner)
 	owner = M
 	M.actions += src
+	button = new
+	button.linked_action = src
+	button.name = name
+	button.actiontooltipstyle = buttontooltipstyle
+	if(desc)
+		button.desc = desc
 	if(M.client)
 		M.client.screen += button
 	M.update_action_buttons()
