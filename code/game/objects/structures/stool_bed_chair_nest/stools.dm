@@ -25,10 +25,9 @@
 	fire_fuel = 3
 	sheet_path = /obj/item/stack/sheet/wood
 
-/obj/item/weapon/stool/piano/New()
+/obj/item/weapon/stool/piano/initialize()
 	..()
-	spawn(3)
-		handle_layer()
+	handle_layer()
 
 //So they don't get picked up.
 /obj/item/weapon/stool/piano/attack_hand()

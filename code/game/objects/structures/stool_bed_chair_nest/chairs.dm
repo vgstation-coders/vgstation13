@@ -9,10 +9,9 @@
 
 	lock_type = /datum/locking_category/chair
 
-/obj/structure/bed/chair/New()
+/obj/structure/bed/chair/initialize()
 	..()
-	spawn(3)
-		handle_layer()
+	handle_layer()
 
 /obj/structure/bed/chair/can_spook()
 	. = ..()
