@@ -12,9 +12,8 @@
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
 
 /obj/item/weapon/gun/energy/emp_act(severity)
-	power_supply.use(round(power_supply.maxcharge / severity))
+	..() //parent emps the battery removing charge
 	update_icon()
-	..()
 
 /obj/item/weapon/gun/energy/process_chambered()
 	if(in_chamber)
