@@ -1,0 +1,5 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: Pianos can now get broken by explosions and firearms
+  - imageadd: Pianos now have sprites for all directions!
