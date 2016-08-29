@@ -1319,7 +1319,9 @@ var/proccalls = 1
 #define ORE_PROCESSING_GENERAL 1
 #define ORE_PROCESSING_ALLOY 2
 
-#define SOUND_AMBIANCE			485	//Literally arbitrary.
+//SOUND CHANNELS
+#define CHANNEL_AMBIENCE			1023
+#define CHANNEL_ADMINMUSIC			1024
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
