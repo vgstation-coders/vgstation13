@@ -443,3 +443,16 @@
 	if(!(colour_to.len))
 		colour_to = default_colour_matrix
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
+
+/client/proc/changeView(var/newView)
+	if(!newView)
+		view = world.view
+	else
+		view = newView
+
+	if(mob && ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		H.hud_used.holomap_obj.screen_loc = "CENTER-[view]:0,CENTER-[view]:0"
+		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
+		if(istype(U))
+			U.update_holomap()

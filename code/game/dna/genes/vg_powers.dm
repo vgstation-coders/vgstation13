@@ -109,12 +109,12 @@ Obviously, requires DNA2.
 /datum/dna/gene/basic/farsight/activate(var/mob/M)
 	..()
 	if(M.client)
-		M.client.view = max(M.client.view, world.view+1)
+		M.client.changeView(max(M.client.view, world.view+1))
 
 /datum/dna/gene/basic/farsight/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
 		if(M.client && M.client.view == world.view + 1)
-			M.client.view = world.view
+			M.client.changeView()
 
 /datum/dna/gene/basic/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
