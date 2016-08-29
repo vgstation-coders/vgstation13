@@ -9,6 +9,11 @@
 
 	lock_type = /datum/locking_category/chair
 
+/obj/structure/bed/chair/New()
+	..()
+	if(ticker)
+		initialize()
+
 /obj/structure/bed/chair/initialize()
 	..()
 	handle_layer()
