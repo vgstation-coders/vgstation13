@@ -334,7 +334,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/floodlight
 	name = "Emergency Floodlight crate"
 	contains = list(/obj/machinery/floodlight)
-	cost = 5
+	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "emergency floodlight crate"
 	group = "Supplies"
@@ -1389,7 +1389,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/suspension_gen
 	name = "Suspension Field Generator crate"
 	contains = list(/obj/machinery/suspension_gen)
-	cost = 20
+	cost = 50
 	containertype = /obj/structure/largecrate
 	containername = "suspension field generator crate"
 	access = access_research
@@ -1408,7 +1408,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 		/obj/item/device/measuring_tape,
 		/obj/item/weapon/pickaxe/hand,
 		)
-	cost = 10
+	cost = 30
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "excavation equipment"
 	access = access_research
