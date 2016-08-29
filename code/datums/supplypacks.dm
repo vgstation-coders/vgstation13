@@ -1398,15 +1398,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/suspension_gen
 	name = "Excavation equipment"
 	contains = list(
-		/obj/item/weapon/storage/belt/archaeology
-		/obj/item/weapon/storage/box/excavation
-		/obj/item/device/flashlight/lantern
-		/obj/item/device/depth_scanner
-		/obj/item/device/core_sampler
-		/obj/item/clothing/glasses/scanner/meson
-		/obj/item/weapon/pickaxe
-		/obj/item/device/measuring_tape
-		/obj/item/weapon/pickaxe/hand
+		/obj/item/weapon/storage/belt/archaeology,
+		/obj/item/weapon/storage/box/excavation,
+		/obj/item/device/flashlight/lantern,
+		/obj/item/device/depth_scanner,
+		/obj/item/device/core_sampler,
+		/obj/item/clothing/glasses/scanner/meson,
+		/obj/item/weapon/pickaxe,
+		/obj/item/device/measuring_tape,
+		/obj/item/weapon/pickaxe/hand,
 		)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/scisec
