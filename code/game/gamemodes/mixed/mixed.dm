@@ -62,7 +62,7 @@ var/global/list/mixed_allowed = list(
 				break
 			var/datum/game_mode/ourmode = pick(possible)
 			possible -= ourmode
-			if(!inital(ourmode.can_be_mixed))
+			if(!initial(ourmode.can_be_mixed))
 				qdel(M)
 				continue
 			var/datum/game_mode/M = new ourmode
