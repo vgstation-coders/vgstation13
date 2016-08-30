@@ -35,6 +35,8 @@
 
 
 /datum/game_mode/revsquad/pre_setup()
+	if(ticker.mode.name == "mixed") // If we're running mixed immediately return 0 so mixed doesnt pick this, because it is incredibly broken
+		return 0
 
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
@@ -74,7 +76,7 @@
 
 	log_admin("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
 	message_admins("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
-	return 1
+	return 0
 
 /datum/game_mode/revsquad/post_setup()
 	var/list/heads = get_living_heads()
