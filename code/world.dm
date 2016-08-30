@@ -12,6 +12,7 @@
 
 var/savefile/panicfile
 /world/New()
+	SetupHooks()
 	//populate_seed_list()
 	plant_controller = new()
 
@@ -84,7 +85,6 @@ var/savefile/panicfile
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
-	SetupHooks() // /vg/
 
 	library_catalog.initialize()
 

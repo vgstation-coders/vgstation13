@@ -534,18 +534,14 @@
 	if(gas_jet)
 		if(gas_jet.total_moles())
 			var/total_moles = gas_jet.total_moles()
-			var/o2_concentration = gas_jet.oxygen/total_moles
-			var/n2_concentration = gas_jet.nitrogen/total_moles
-			var/co2_concentration = gas_jet.carbon_dioxide/total_moles
-			var/plasma_concentration = gas_jet.toxins/total_moles
-			var/n2o_concentration = null
+			var/o2_concentration = gas_jet.gas[GAS_OXYGEN]/total_moles
+			var/n2_concentration = gas_jet.gas[GAS_NITROGEN]/total_moles
+			var/co2_concentration = gas_jet.gas[GAS_CARBON]/total_moles
+			var/plasma_concentration = gas_jet.gas[GAS_PLASMA]/total_moles
+			var/n2o_concentration = gas_jet.gas[GAS_SLEEPING]/total_moles
 
 			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
 
-			if(gas_jet.trace_gases.len)
-				for(var/datum/gas/G in gas_jet.trace_gases)
-					if(istype(G, /datum/gas/sleeping_agent))
-						n2o_concentration = G.moles/total_moles
 
 			var/gas_type = null
 
@@ -557,7 +553,7 @@
 				gas_type = "CO2"
 			if(plasma_concentration > 0.5)
 				gas_type = "plasma"
-			if(n2o_concentration && n2o_concentration > 0.5)
+			if(n2o_concentration > 0.5)
 				gas_type = "N2O"
 
 			new /obj/effect/gas_puff(get_turf(src.loc), gas_dispersal, gas_type)
@@ -568,7 +564,7 @@
 
 	if(gas_jet.total_moles())
 		var/jet_total_moles = gas_jet.total_moles()
-		var/toxin_concentration = gas_jet.toxins/jet_total_moles
+		var/toxin_concentration = gas_jet.gas[GAS_PLASMA]/jet_total_moles
 		if(!(toxin_concentration > 0.01))
 			create_puff()
 			return
@@ -580,7 +576,7 @@
 		var/datum/gas_mixture/turf_gases = location.return_air()
 		var/turf_total_moles = turf_gases.total_moles()
 		if(turf_total_moles)
-			var/o2_concentration = turf_gases.oxygen/turf_total_moles
+			var/o2_concentration = turf_gases.gas[GAS_OXYGEN]/turf_total_moles
 			if(!(o2_concentration > 0.01))
 				create_puff()
 				return
@@ -739,13 +735,13 @@
 			spawn()
 				B.process()
 	..()
-	
+
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
 	icon_state = null
 	damage = 25
 	fire_sound = null
-	
+
 /obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
 	if (..(target, blocked))
 		var/mob/living/L = target

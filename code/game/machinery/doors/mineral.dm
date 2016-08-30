@@ -176,8 +176,8 @@
 
 		var/toxinsToDeduce = temperature/10
 
-		napalm.toxins = toxinsToDeduce
 		napalm.temperature = 200+T0C
+		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 
 		target_tile.assume_air(napalm)
 		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)

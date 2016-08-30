@@ -152,13 +152,13 @@ var/list/valid_secondary_effect_types = list(\
 			else if(env.temperature > 375)
 				trigger_hot = 1
 
-			if(env.toxins >= 10)
+			if(env.gas[GAS_PLASMA] >= 10)
 				trigger_plasma = 1
-			if(env.oxygen >= 10)
+			if(env.gas[GAS_OXYGEN] >= 10)
 				trigger_oxy = 1
-			if(env.carbon_dioxide >= 10)
+			if(env.gas[GAS_CARBON] >= 10)
 				trigger_co2 = 1
-			if(env.nitrogen >= 10)
+			if(env.gas[GAS_NITROGEN] >= 10)
 				trigger_nitro = 1
 
 	//COLD ACTIVATION

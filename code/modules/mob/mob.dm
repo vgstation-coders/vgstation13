@@ -295,19 +295,17 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(!loc)
 		return 0
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/env = loc.return_air()
 
-	var/t = "<span class='notice'> Coordinates: [x],[y] \n</span>"
+	var/t = "<span class='notice'>Coordinates: [x],[y]"
+	t += "<br />Temperature: [env.return_temperature()] K"
 
-	t += {"<span class='warning'> Temperature: [environment.temperature] \n</span>
-<span class='notice'> Nitrogen: [environment.nitrogen] \n</span>
-<span class='notice'> Oxygen: [environment.oxygen] \n</span>
-<span class='notice'> Plasma : [environment.toxins] \n</span>
-<span class='notice'> Carbon Dioxide: [environment.carbon_dioxide] \n</span>"}
-	for(var/datum/gas/trace_gas in environment.trace_gases)
-		to_chat(usr, "<span class='notice'> [trace_gas.type]: [trace_gas.moles] \n</span>")
+	for (var/gasid in env.gas)
+		t += "<br />[gas_data.name[gasid]]: [env.gas[gasid]] moles"
 
-	usr.show_message(t, 1)
+	t += "</span>"
+
+	to_chat(usr, t)
 
 /mob/proc/simple_message(var/msg, var/hallucination_msg) // Same as M << "message", but with additinal message for hallucinations.
 	if(hallucinating() && hallucination_msg)

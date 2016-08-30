@@ -576,10 +576,10 @@
 		dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 
 		if (total_moles)
-			var/o2_level = environment.oxygen/total_moles
-			var/n2_level = environment.nitrogen/total_moles
-			var/co2_level = environment.carbon_dioxide/total_moles
-			var/plasma_level = environment.toxins/total_moles
+			var/o2_level = environment.gas[GAS_OXYGEN]/total_moles
+			var/n2_level = environment.gas[GAS_NITROGEN]/total_moles
+			var/co2_level = environment.gas[GAS_CARBON]/total_moles
+			var/plasma_level = environment.gas[GAS_PLASMA]/total_moles
 			var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
 			dat += {"Nitrogen: [round(n2_level*100)]%<br>

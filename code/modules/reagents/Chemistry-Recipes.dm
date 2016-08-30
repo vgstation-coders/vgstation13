@@ -482,11 +482,8 @@
 
 		for(var/turf/simulated/floor/target_tile in range(0,location))
 			var/datum/gas_mixture/napalm = new
-			var/datum/gas/volatile_fuel/fuel = new
-			fuel.moles = created_volume
-			napalm.trace_gases += fuel
-			napalm.temperature = 400+T0C
-			napalm.update_values()
+			napalm.temperature = 400 + T0C
+			napalm.adjust_gas(GAS_VOLATILE, created_volume)
 			target_tile.assume_air(napalm)
 			spawn(0)
 				target_tile.hotspot_expose(700, 400, surfaces = 1)
@@ -562,6 +559,7 @@
 	id = "vaporize"
 	result_amount = 52
 	result = null
+	var/gas
 
 /datum/chemical_reaction/vaporize/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/turf/T = get_turf(holder.my_atom)
@@ -569,38 +567,27 @@
 		return
 	var/datum/gas_mixture/G = new
 	G.temperature = T20C
-	disperse(T,G,created_volume)
-
-/datum/chemical_reaction/vaporize/proc/disperse(turf/T,datum/gas_mixture/G,var/vol)
+	G.adjust_gas(gas, created_volume)
 	T.assume_air(G)
 
 /datum/chemical_reaction/vaporize/oxygen
 	name = "Vaporize Oxygen"
 	id = "vaporizeoxygen"
 	required_reagents = list(VAPORSALT = 1, OXYGEN = 1)
-
-/datum/chemical_reaction/vaporize/oxygen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(vol,0,0,0)
-	..()
+	gas = GAS_OXYGEN
 
 /datum/chemical_reaction/vaporize/nitrogen
 	name = "Vaporize Nitrogen"
 	id = "vaporizenitrogen"
 	required_reagents = list(VAPORSALT = 1, NITROGEN = 1)
-
-/datum/chemical_reaction/vaporize/nitrogen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,vol,0)
-	..()
+	gas = GAS_NITROGEN
 
 /datum/chemical_reaction/vaporize/plasma
 	name = "Vaporize Plasma"
 	id = "vaporizeplasma"
 	result_amount = 5 //Let's not go overboard with the plasma, alright?
 	required_reagents = list(VAPORSALT = 1, PLASMA = 1)
-
-/datum/chemical_reaction/vaporize/plasma/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,0,vol)
-	..()
+	gas = GAS_PLASMA
 
 /datum/chemical_reaction/plasmasolidification
 	name = "Solid Plasma"
@@ -1372,10 +1359,8 @@
 
 	var/turf/location = get_turf(holder.my_atom.loc)
 	for(var/turf/simulated/floor/target_tile in range(0, location))
-
 		var/datum/gas_mixture/napalm = new
-		napalm.toxins = 25
-		napalm.temperature = 1400
+		napalm.adjust_gas_temp(GAS_PLASMA, 25, 1400)
 		target_tile.assume_air(napalm)
 		spawn(0)
 			target_tile.hotspot_expose(700, 400,surfaces = 1)

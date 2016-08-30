@@ -382,6 +382,7 @@
 /datum/disease2/effect/plasma
 	name = "Toxin Sublimation"
 	stage = 4
+
 /datum/disease2/effect/plasma/activate(var/mob/living/carbon/mob,var/multiplier)
 	//var/src = mob
 	var/hack = mob.loc
@@ -390,11 +391,11 @@
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
+		GM.adjust_gas(GAS_PLASMA, 100)
 		//GM.temperature = 1500+T0C //should be enough to start a fire
 		to_chat(mob, "<span class='warning'>You exhale a large plume of toxic gas!</span>")
 	else
-		GM.toxins += 10
+		GM.adjust_gas(GAS_PLASMA, 10)
 		GM.temperature = istype(T) ? T.air.temperature : T20C
 		to_chat(mob, "<span class = 'warning'> A toxic gas emanates from your pores!</span>")
 	T.assume_air(GM)
