@@ -56,7 +56,7 @@ var/global/list/mixed_allowed = list(
 			else
 				qdel(GM)
 	else
-		var/list/datum/game_mode/possible = typesof(/datum/game_mode) - list(/datum/game_mode, datum/game_mode/mixed)
+		var/list/datum/game_mode/possible = typesof(/datum/game_mode) - list(/datum/game_mode, /datum/game_mode/mixed)
 		while(modes.len < 3)
 			if(!possible.len)
 				break
