@@ -1395,7 +1395,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_research
 	group = "Science"
 
-/datum/supply_packs/suspension_gen
+/datum/supply_packs/excavation_gear
 	name = "Excavation equipment"
 	contains = list(
 		/obj/item/weapon/storage/belt/archaeology,
