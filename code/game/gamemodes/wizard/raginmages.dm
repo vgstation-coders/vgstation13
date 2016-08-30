@@ -10,7 +10,7 @@
 	var/exhausted_pool = 0
 	rage = 1
 
-	can_be_mixed = 0
+	can_be_mixed = FALSE
 
 /datum/game_mode/wizard/announce()
 	to_chat(world, "<B>The current game mode is - Ragin' Mages!</B>")

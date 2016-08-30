@@ -79,7 +79,7 @@
 	var/escaped_pod = 0
 	var/survivors = 0
 
-	can_be_mixed = 1
+	can_be_mixed = TRUE
 
 /datum/game_mode/cult/announce()
 	to_chat(world, "<B>The current game mode is - Cult!</B>")

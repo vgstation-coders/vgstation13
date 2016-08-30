@@ -39,7 +39,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 	var/changeling_amount = 4
 
-	can_be_mixed = 1
+	can_be_mixed = TRUE
 
 /datum/game_mode/changeling/announce()
 	to_chat(world, "<B>The current game mode is - Changeling!</B>")

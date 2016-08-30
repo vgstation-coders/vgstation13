@@ -8,7 +8,7 @@
 
 	var/list/possible_traitors
 	var/num_players = 0
-	can_be_mixed = 1
+	can_be_mixed = TRUE
 
 /datum/game_mode/traitor/autotraitor/announce()
 	..()

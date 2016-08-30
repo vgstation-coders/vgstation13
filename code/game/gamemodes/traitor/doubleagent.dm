@@ -10,7 +10,7 @@
 
 	var/list/target_list = list()
 
-	can_be_mixed = 0
+	can_be_mixed = FALSE
 
 /datum/game_mode/traitor/double_agents/announce()
 	to_chat(world, "<B>The current game mode is - Double Agents!</B>")
