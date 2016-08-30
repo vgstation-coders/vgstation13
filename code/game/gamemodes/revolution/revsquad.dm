@@ -76,7 +76,7 @@
 
 	log_admin("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
 	message_admins("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
-	return 0
+	return 1
 
 /datum/game_mode/revsquad/post_setup()
 	var/list/heads = get_living_heads()
