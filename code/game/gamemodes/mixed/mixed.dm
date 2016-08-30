@@ -60,13 +60,13 @@ var/global/list/mixed_allowed = list(
 		while(modes.len < 3)
 			if(!possible.len)
 				break
-			var/ourmode = pick(possible)
+			var/datum/game_mode/ourmode = pick(possible)
 			possible -= ourmode
-			var/datum/game_mode/M = new ourmode
-			// I put this in a separate block just in case BYOND does something silly with &&
-			if(!M.can_be_mixed)
+			if(!inital(ourmode.can_be_mixed))
 				qdel(M)
 				continue
+			var/datum/game_mode/M = new ourmode
+			// I put this in a separate block just in case BYOND does something silly with &&
 
 			M.mixed = 1
 
