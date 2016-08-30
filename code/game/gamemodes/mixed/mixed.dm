@@ -63,7 +63,6 @@ var/global/list/mixed_allowed = list(
 			var/datum/game_mode/ourmode = pick(possible)
 			possible -= ourmode
 			if(!initial(ourmode.can_be_mixed))
-				qdel(M)
 				continue
 			var/datum/game_mode/M = new ourmode
 			// I put this in a separate block just in case BYOND does something silly with &&
