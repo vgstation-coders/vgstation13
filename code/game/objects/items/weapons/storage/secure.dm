@@ -228,7 +228,7 @@
 //        Secure Safe
 // -----------------------------
 
-/obj/item/weapon/storage/secure/safe//Why the fuck isn't this a structure
+/obj/item/weapon/storage/secure/safe
 	name = "secure safe"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "safe"
