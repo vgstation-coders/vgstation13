@@ -20,6 +20,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 #define	MECH_SCREEN_DURAND		34
 #define	MECH_SCREEN_HONK		35
 #define	MECH_SCREEN_PHAZON		36
+#define	MECH_SCREEN_NANOTRASEN	37
 
 #define	MECH_SCREEN_MISC		41
 
@@ -98,6 +99,11 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 		{{:helper.link('H.O.N.K',	 'gear',{'screen':35},(data.screen==35)?'linkOn':'', 'fixedLeft')}}
 		{{:helper.link('Phazon',	 'gear',{'screen':36},(data.screen==36)?'linkOn':'', 'fixedLeft')}}
 	</div>
+	{{if data.parts.Nanotrasen.length > 1}}
+		<div class="line">
+			{{:helper.link('Nanotrasen', 'gear',{'screen':37},(data.screen==37)?'linkOn':'', 'fixedLeft')}}
+		</div>
+	{{/if}}
 	<br>
 	<div class="itemLabel">
 		Other
@@ -475,6 +481,31 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 		<div class="statusDisplay">
 			<div class="line">
 					{{for data.parts.Phazon}}
+						<div class="line">
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+								{{:helper.link(value.cost, null, null, null, null, 'cost')}}
+								{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+							</div>
+						</div>
+					{{empty}}
+						<i>No parts in memory</i>
+					{{/for}}
+				</div>
+			</div>
+		</div>
+	</div>
+{{/if}}
+
+{{if data.screen == 37}}
+	<div class="item">
+		<div class="itemLabel">
+			Top Secret Parts
+		</div>
+	<div class="itemContentWide" style="width:100%;">
+		<div class="statusDisplay">
+			<div class="line">
+					{{for data.parts.Nanotrasen}}
 						<div class="line">
 							<div class="statusValue">
 								{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
