@@ -7,14 +7,14 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/glasses/science
-	name = "science goggles"
+	name = "Science Goggles"
 	desc = "nothing"
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
 
 /obj/item/clothing/glasses/night
-	name = "night vision goggles"
+	name = "Night Vision Goggles"
 	desc = "You can totally see in the dark now!."
 	icon_state = "night"
 	item_state = "glasses"
