@@ -147,7 +147,7 @@
 	throw_range = 4
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/storage/secure/briefcase/New()
+/obj/item/weapon/storage/secure/briefcase/paperpen/New()
 	..()
 	new /obj/item/weapon/paper(src)
 	new /obj/item/weapon/pen(src)

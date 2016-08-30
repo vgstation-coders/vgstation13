@@ -11,23 +11,19 @@
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
-	var/empty = 0
 
-/obj/item/weapon/storage/briefcase/empty
-	empty = 1
+/obj/item/weapon/storage/briefcase/centcomm
+	icon_state = "briefcase-centcomm"
 
 /obj/item/weapon/storage/briefcase/biogen
-	empty = 1
 	desc = "Smells faintly of potato."
 
 /obj/item/weapon/storage/briefcase/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'><b>[user] is smashing \his head inside the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (BRUTELOSS)
 
-/obj/item/weapon/storage/briefcase/New()
+/obj/item/weapon/storage/briefcase/centcomm/New()
 	..()
-	if (empty)
-		return
 	new /obj/item/weapon/paper/demotion_key(src)
 	new /obj/item/weapon/paper/commendation_key(src)
 

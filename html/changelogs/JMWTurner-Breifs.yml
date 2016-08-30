@@ -1,0 +1,5 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - tweak: Briefcases and Secure Briefcases are now empty by default.
+  - rscadd: IAA now spawn with a sweet Nanotrasen themed Briefcase. Only those spawn with the encryption keys for commendations and demotions.
