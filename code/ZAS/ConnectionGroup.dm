@@ -61,6 +61,8 @@ Class Procs:
 /connection_edge/var/zone/A
 
 /connection_edge/var/list/connecting_turfs = list()
+/connection_edge/var/direct = 0
+/connection_edge/var/sleeping = 1
 
 /connection_edge/var/coefficient = 0
 
@@ -69,73 +71,55 @@ Class Procs:
 
 /connection_edge/proc/add_connection(connection/c)
 	coefficient++
-//	to_chat(world, "Connection added: [type] Coefficient: [coefficient]")
+	if(c.direct()) direct++
+	//world << "Connection added: [type] Coefficient: [coefficient]"
 
 /connection_edge/proc/remove_connection(connection/c)
-//	to_chat(world, "Connection removed: [type] Coefficient: [coefficient-1]")
+	//world << "Connection removed: [type] Coefficient: [coefficient-1]"
 	coefficient--
 	if(coefficient <= 0)
 		erase()
+	if(c.direct()) direct--
 
 /connection_edge/proc/contains_zone(zone/Z)
 
 /connection_edge/proc/erase()
 	air_master.remove_edge(src)
-//	to_chat(world, "[type] Erased.")
+	//world << "[type] Erased."
 
 /connection_edge/proc/tick()
 
-/connection_edge/proc/flow(list/movable, differential, repelled, flipped = 0)
-	//Flipped tells us if we are going from A to B or from B to A.
-	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
-		return
-	for(var/atom/movable/M in movable)
-		if(!M.AirflowCanPush())
-			continue
+/connection_edge/proc/recheck()
+
+/connection_edge/proc/flow(list/movable, differential, repelled)
+	for(var/i = 1; i <= movable.len; i++)
+		var/atom/movable/M = movable[i]
+
 		//If they're already being tossed, don't do it again.
-		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
-			continue
-		if(M.airflow_speed)
-			continue
+		if(M.last_airflow > world.time - vsc.airflow_delay) continue
+		if(M.airflow_speed) continue
 
 		//Check for knocking people over
-		if(ismob(M) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
-			if(M:status_flags & GODMODE)
-				continue
+		if(ismob(M) && differential > vsc.airflow_stun_pressure)
+			if(M:status_flags & GODMODE) continue
 			M:airflow_stun()
 
 		if(M.check_airflow_movable(differential))
 			//Check for things that are in range of the midpoint turfs.
 			var/list/close_turfs = list()
 			for(var/turf/U in connecting_turfs)
-				if(get_dist(M,U) < world.view)
-					close_turfs += U
-			if(!close_turfs.len)
-				continue
+				if(get_dist(M,U) < world.view) close_turfs += U
+			if(!close_turfs.len) continue
 
 			M.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
 
-			if(M)
-				if(repelled)
-					if(flipped)
-						if(!(M.loc in src:A.contents))
-							continue
-					else if(!(M.loc in src:B.contents))
-						continue
-					M.RepelAirflowDest(differential/5)
-				else
-					if(flipped)
-						if(!(M.loc in src:B.contents))
-							continue
-					else if(!(M.loc in src:A.contents))
-						continue
-					M.GotoAirflowDest(differential/10)
+			if(repelled) spawn if(M) M.RepelAirflowDest(differential/5)
+			else spawn if(M) M.GotoAirflowDest(differential/10)
 
 
 
 
 /connection_edge/zone/var/zone/B
-/connection_edge/zone/var/direct = 0
 
 /connection_edge/zone/New(zone/A, zone/B)
 
@@ -144,18 +128,14 @@ Class Procs:
 	A.edges.Add(src)
 	B.edges.Add(src)
 	//id = edge_id(A,B)
-//	to_chat(world, "New edge between [A] and [B]")
+	//world << "New edge between [A] and [B]"
 
 /connection_edge/zone/add_connection(connection/c)
 	. = ..()
 	connecting_turfs.Add(c.A)
-	if(c.direct())
-		direct++
 
 /connection_edge/zone/remove_connection(connection/c)
 	connecting_turfs.Remove(c.A)
-	if(c.direct())
-		direct--
 	. = ..()
 
 /connection_edge/zone/contains_zone(zone/Z)
@@ -170,45 +150,43 @@ Class Procs:
 	if(A.invalid || B.invalid)
 		erase()
 		return
-//	to_chat(world, "[id]: Tick [air_master.current_cycle]: \...")
-	if(direct)
-		if(air_master.equivalent_pressure(A, B))
-//			to_chat(world, "merged.")
-			erase()
-			air_master.merge(A, B)
-//			to_chat(world, "zones merged.")
-			return
 
-	//air_master.equalize(A, B)
-	ShareRatio(A.air,B.air,coefficient)
-	air_master.mark_zone_update(A)
-	air_master.mark_zone_update(B)
-//	to_chat(world, "equalized.")
+	var/equiv = A.air.share_ratio(B.air, coefficient)
 
 	var/differential = A.air.return_pressure() - B.air.return_pressure()
-	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		return
+	if(abs(differential) >= vsc.airflow_lightest_pressure)
+		var/list/attracted
+		var/list/repelled
+		if(differential > 0)
+			attracted = A.movables()
+			repelled = B.movables()
+		else
+			attracted = B.movables()
+			repelled = A.movables()
 
-	var/list/attracted
-	var/list/repelled
-	var/flipped = 0
-	if(differential > 0)
-		attracted = A.movables()
-		repelled = B.movables()
-	else
-		flipped = 1
-		attracted = B.movables()
-		repelled = A.movables()
+		flow(attracted, abs(differential), 0)
+		flow(repelled, abs(differential), 1)
 
-	flow(attracted, abs(differential), 0, flipped)
-	flow(repelled, abs(differential), 1, flipped)
+	if(equiv)
+		if(direct)
+			erase()
+			air_master.merge(A, B)
+			return
+		else
+			A.air.equalize(B.air)
+			air_master.mark_edge_sleeping(src)
+
+	air_master.mark_zone_update(A)
+	air_master.mark_zone_update(B)
+
+/connection_edge/zone/recheck()
+	if(!A.air.compare(B.air))
+		air_master.mark_edge_active(src)
 
 //Helper proc to get connections for a zone.
 /connection_edge/zone/proc/get_connected_zone(zone/from)
-	if(A == from)
-		return B
-	else
-		return A
+	if(A == from) return B
+	else return A
 
 /connection_edge/unsimulated/var/turf/B
 /connection_edge/unsimulated/var/datum/gas_mixture/air
@@ -219,7 +197,7 @@ Class Procs:
 	A.edges.Add(src)
 	air = B.return_air()
 	//id = 52*A.id
-//	to_chat(world, "New edge from [A] to [B].")
+	//world << "New edge from [A] to [B]."
 
 /connection_edge/unsimulated/add_connection(connection/c)
 	. = ..()
@@ -242,21 +220,27 @@ Class Procs:
 	if(A.invalid)
 		erase()
 		return
-//	to_chat(world, "[id]: Tick [air_master.current_cycle]: To [B]!")
-	//A.air.mimic(B, coefficient)
-	ShareSpace(A.air,air,dbg_out)
-	air_master.mark_zone_update(A)
+
+	var/equiv = A.air.share_space(air)
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
-	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		return
+	if(abs(differential) >= vsc.airflow_lightest_pressure)
+		var/list/attracted = A.movables()
+		flow(attracted, abs(differential), differential < 0)
 
-	var/list/attracted = A.movables()
-	flow(attracted, abs(differential), differential < 0)
+	if(equiv)
+		A.air.copy_from(air)
+		air_master.mark_edge_sleeping(src)
+
+	air_master.mark_zone_update(A)
+
+/connection_edge/unsimulated/recheck()
+	if(!A.air.compare(air))
+		air_master.mark_edge_active(src)
 
 proc/ShareHeat(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	//This implements a simplistic version of the Stefan-Boltzmann law.
-	var/energy_delta = ((A.temperature - B.temperature) ** 4) * 5.6704e-8 * connecting_tiles * 2.5
+	var/energy_delta = ((A.temperature - B.temperature) ** 4) * STEFAN_BOLTZMANN_CONSTANT * connecting_tiles * 2.5
 	var/maximum_energy_delta = max(0, min(A.temperature * A.heat_capacity() * A.group_multiplier, B.temperature * B.heat_capacity() * B.group_multiplier))
 	if(maximum_energy_delta > abs(energy_delta))
 		if(energy_delta < 0)

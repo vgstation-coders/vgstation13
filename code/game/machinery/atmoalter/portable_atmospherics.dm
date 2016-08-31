@@ -108,7 +108,7 @@
 			if(possible_port)
 				if(connect(possible_port))
 					to_chat(user, "<span class='notice'>You connect [name] to the port.</span>")
-					if(air_contents.gas[GAS_PLASMA] > 0 || air_contents.gas[GAS_SLEEPING] > 0))
+					if(air_contents.gas[GAS_PLASMA] > 0 || air_contents.gas[GAS_SLEEPING] > 0)
 						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.gas[GAS_PLASMA] > 0 ? "Toxins" : ""] [src.air_contents.gas[GAS_PLASMA] > 0 ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					update_icon()
 					pixel_x = possible_port.pixel_x

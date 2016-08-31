@@ -31,7 +31,7 @@
 	name = "Plasma"
 
 	//Note that this has a significant impact on TTV yield.
-	//Because it is so high, any leftover phoron soaks up a lot of heat and drops the yield pressure.
+	//Because it is so high, any leftover plasma soaks up a lot of heat and drops the yield pressure.
 	specific_heat = 200	// J/(mol*K)
 
 	//Hypothetical group 14 (same as carbon), period 8 element.
