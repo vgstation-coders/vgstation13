@@ -532,6 +532,11 @@
 					icon_state = PINACOLADA
 					name = "\improper Pina Colada"
 					desc = "If you like this and getting caught in the rain, come with me and escape."
+				if(SANGRIA)
+					icon_state = SANGRIA
+					item_state = SANGRIA
+					name = "\improper Sangria"
+					desc = "So sweet, you won't feel the alcohol until you're wasted."
 				else
 					icon_state ="glass_colour"
 					item_state ="glass_colour"
