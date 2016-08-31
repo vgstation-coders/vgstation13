@@ -126,21 +126,7 @@
 	node += "select"
 	node["select"] = select
 
-	var/list/from = list()
-	if(tokenl(i) in list("from", "in"))
-		i = from_list(i + 1, from)
-	else
-		from += "world"
-
-	node += "from"
-	node["from"] = from
-
-	if(tokenl(i) == "where")
-		var/list/where = list()
-		i = bool_expression(i + 1, where)
-
-		node += "where"
-		node["where"] = where
+	selectors(i, node)
 
 	return i
 
@@ -153,21 +139,7 @@
 	node += "delete"
 	node["delete"] = select
 
-	var/list/from = list()
-	if(tokenl(i) in list("from", "in"))
-		i = from_list(i + 1, from)
-	else
-		from += "world"
-
-	node += "from"
-	node["from"] = from
-
-	if(tokenl(i) == "where")
-		var/list/where = list()
-		i = bool_expression(i + 1, where)
-
-		node += "where"
-		node["where"] = where
+	selectors(i, node)
 
 	return i
 
@@ -180,15 +152,6 @@
 	node += "update"
 	node["update"] = select
 
-	var/list/from = list()
-	if(tokenl(i) in list("from", "in"))
-		i = from_list(i + 1, from)
-	else
-		from += "world"
-
-	node += "from"
-	node["from"] = from
-
 	if(tokenl(i) != "set")
 		i = parse_error("UPDATE has misplaced SET")
 
@@ -198,12 +161,7 @@
 	node += "set"
 	node["set"] = set_assignments
 
-	if(tokenl(i) == "where")
-		var/list/where = list()
-		i = bool_expression(i + 1, where)
-
-		node += "where"
-		node["where"] = where
+	selectors(i, node)
 
 	return i
 
@@ -225,21 +183,7 @@
 	node += "on"
 	node["on"] = select
 
-	var/list/from = list()
-	if(tokenl(i) in list("from", "in"))
-		i = from_list(i + 1, from)
-	else
-		from += "world"
-
-	node += "from"
-	node["from"] = from
-
-	if(tokenl(i) == "where")
-		var/list/where = list()
-		i = bool_expression(i + 1, where)
-
-		node += "where"
-		node["where"] = where
+	selectors(i, node)
 
 	return i
 
@@ -251,17 +195,6 @@
 		i = select_list(i + 1, node)
 
 	return i
-
-
-//from_list:	from_item [',' from_list]
-/datum/SDQL_parser/proc/from_list(i, list/node)
-	i = from_item(i, node)
-
-	if(token(i) == ",")
-		i = from_list(i + 1, node)
-
-	return i
-
 
 //assignments:	assignment, [',' assignments]
 /datum/SDQL_parser/proc/assignments(i, list/node)
@@ -288,16 +221,40 @@
 
 	return i
 
+// Standardized method for handling the IN/FROM and WHERE options.
+/datum/SDQL_parser/proc/selectors(i, list/node)
+	while (token(i))
+		var/tok = tokenl(i)
+		if (tok in list("from", "in"))
+			var/list/from = list()
+			i = from_item(i + 1, from)
+
+			node["from"] = from
+			continue
+
+		if (tok == "where")
+			var/list/where = list()
+			i = bool_expression(i + 1, where)
+
+			node["where"] = where
+			continue
+
+		parse_error("Expected either FROM, IN or WHERE token, found [token(i)] instead.")
+		return i + 1
+
+	if (!node.Find("from"))
+		node["from"] = list("world")
+
+	return i
 
 //from_item:	'world' | object_type
 /datum/SDQL_parser/proc/from_item(i, list/node)
-
 	if(token(i) == "world")
 		node += "world"
 		i++
 
 	else
-		i = object_type(i, node)
+		i = expression(i, node)
 
 	return i
 
@@ -432,24 +389,43 @@
 
 	var/list/expression_list = list()
 
-	if(token(i + 1) != "]")
+	i++
+	if(token(i) != "]")
 		var/list/temp_expression_list = list()
-
+		var/tok
 		do
-			i = expression(i + 1, temp_expression_list)
+			tok = token(i)
+			if (tok == "," || tok == ":")
+				if (temp_expression_list == null)
+					parse_error("Found ',' or ':' without expression in an array.")
+					return i + 1
 
-			if(token(i) == ",")
 				expression_list[++expression_list.len] = temp_expression_list
+				temp_expression_list = null
+				if (tok == ":")
+					temp_expression_list = list()
+					i = expression(i + 1, temp_expression_list)
+					expression_list[expression_list[expression_list.len]] = temp_expression_list
+					temp_expression_list = null
+					tok = token(i)
+					if (tok != ",")
+						if (tok == "]")
+							break
 
-				temp_expression_list = list()
+						parse_error("Expected ',' or ']' after array assoc value, but found '[token(i)]'")
+						return i
+
+
+				i++
+				continue
+
+			temp_expression_list = list()
+			i = expression(i, temp_expression_list)
 
 		while(token(i) && token(i) != "]")
 
-		expression_list[++expression_list.len] = temp_expression_list
-
-	else
-
-		i++
+		if (temp_expression_list)
+			expression_list[++expression_list.len] = temp_expression_list
 
 	node[++node.len] = expression_list
 

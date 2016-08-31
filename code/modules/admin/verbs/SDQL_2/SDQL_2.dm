@@ -73,19 +73,15 @@
 				if("select", "delete", "update")
 					select_types = query_tree[query_tree[1]]
 
+
 			from_objs = SDQL_from_objs(query_tree["from"])
+			CHECK_TICK
 
 			var/list/objs = list()
 
 			for(var/type in select_types)
-				var/char = copytext(type, 1, 2)
-
-				if(char == "/" || char == "*")
-					for(var/from in from_objs)
-						objs += SDQL_get_all(type, from)
-
-				else if(char == "'" || char == "\"")
-					objs += locate(copytext(type, 2, length(type)))
+				objs += SDQL_get_all(type, from_objs)
+				CHECK_TICK
 
 			if("where" in query_tree)
 				var/objs_temp = objs
@@ -93,15 +89,18 @@
 				for(var/datum/d in objs_temp)
 					if(SDQL_expression(d, query_tree["where"]))
 						objs += d
+					CHECK_TICK
 
 			switch(query_tree[1])
 				if("call")
 					for(var/datum/d in objs)
 						SDQL_var(d, query_tree["call"][1], source = d)
+						CHECK_TICK
 
 				if("delete")
 					for(var/datum/d in objs)
 						qdel(d)
+						CHECK_TICK
 
 				if("select")
 					var/text = ""
@@ -121,7 +120,7 @@
 
 						else
 							text += ": [t]<br>"
-
+						CHECK_TICK
 					usr << browse(text, "window=SDQL-result")
 
 				if("update")
@@ -145,6 +144,7 @@
 									else
 										break
 
+							CHECK_TICK
 	catch(var/exception/e)
 		to_chat(usr, "<span class='danger'>An exception has occured during the execution of your query and your query has been aborted.</span>")
 		to_chat(usr, "exception name: [e.name]")
@@ -213,30 +213,17 @@
 
 /proc/SDQL_from_objs(list/tree)
 	if("world" in tree)
-		return list(world)
+		return world
 
-	var/list/out = list()
-
-	for(var/type in tree)
-		var/char = copytext(type, 1, 2)
-
-		if(char == "/")
-			out += SDQL_get_all(type, world)
-
-		else if(char == "'" || char == "\"")
-			out += locate(copytext(type, 2, length(type)))
-
-	return out
+	return SDQL_expression(world, tree)
 
 
 /proc/SDQL_get_all(type, location)
 	var/list/out = list()
 
-	if(type == "*")
-		for(var/datum/d in location)
-			out += d
-
-		return out
+	// If only a single object got returned, wrap it into a list so the for loops run on it.
+	if (!islist(location) && location != world)
+		location = list(location)
 
 	type = text2path(type)
 
@@ -366,7 +353,18 @@
 		var/list/expressions_list = expression[++i]
 		val = list()
 		for(var/list/expression_list in expressions_list)
-			val += SDQL_expression(object, expression_list)
+			var/result = SDQL_expression(object, expression_list)
+			var/assoc
+			if (expressions_list[expression_list] != null)
+				assoc = SDQL_expression(object, expressions_list[expression_list])
+
+			if (assoc != null)
+				// Need to insert the key like this to prevent duplicate keys fucking up.
+				var/list/dummy = list()
+				dummy[result] = assoc
+				result = dummy
+
+			val += result
 
 	else
 		val = SDQL_var(object, expression, i, object)
@@ -376,14 +374,13 @@
 
 /proc/SDQL_var(datum/object, list/expression, start = 1, source)
 	var/v
-
+	var/static/list/exclude = list("usr", "src", "marked", "global")
 	var/long = start < expression.len
 
-	if (object == world && long && expression[start + 1] == ".")
-		to_chat(usr, "Sorry, but global variables are not supported at the moment.")
-		return null
+	if (object == world && (!long || expression[start + 1] == ".") && !(expression[start] in exclude))
+		v = readglobal(expression[start])
 
-	if (expression [start] == "{" && long)
+	else if (expression [start] == "{" && long)
 		if (lowertext(copytext(expression[start + 1], 1, 3)) != "0x")
 			to_chat(usr, "<span class='danger'>Invalid pointer syntax: [expression[start + 1]]</span>")
 			return null
@@ -429,7 +426,7 @@
 			var/list/L = v
 			var/index = SDQL_expression(source, expression[start + 2])
 			if (isnum(index) && (!IsInteger(index) || L.len < index))
-				to_chat(world, "<span class='danger'>Invalid list index: [index]</span>")
+				to_chat(usr, "<span class='danger'>Invalid list index: [index]</span>")
 				return null
 
 			return L[index]
@@ -455,7 +452,7 @@
 
 
 	var/list/whitespace = list(" ", "\n", "\t")
-	var/list/single = list("(", ")", ",", "+", "-", ".", "\[", "]", "{", "}", ";")
+	var/list/single = list("(", ")", ",", "+", "-", ".", "\[", "]", "{", "}", ";", ":")
 	var/list/multi = list(
 					"=" = list("", "="),
 					"<" = list("", "=", ">"),
