@@ -909,7 +909,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
     var/last_known_language = H.languages[1]
     to_chat(H, "You can't seem to remember any language but [last_known_language]. Odd.")
 
-/datum/disease/effect/babel/deactivate()
+/datum/disease/effect/babel/deactivate(var/mob/living/carbon/H,var/multiplier)
     if(original_languages.len)
         for(var/forgotten in original_languages)
             H.add_language(forgotten)
