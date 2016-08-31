@@ -452,7 +452,6 @@
 
 	if(mob && ishuman(mob))
 		var/mob/living/carbon/human/H = mob
-		H.hud_used.holomap_obj.screen_loc = "CENTER-[view]:0,CENTER-[view]:0"
 		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
 		if(istype(U))
 			U.update_holomap()

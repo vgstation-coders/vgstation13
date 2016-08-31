@@ -21,9 +21,6 @@ var/list/holomap_cache = list()
 
 	for(var/cacheIcon in holomap_cache)
 		if(findtext(cacheIcon, "\ref[src]"))
-			var/image/I = holomap_cache[cacheIcon]
-			animate(I)
-			qdel(I)
 			holomap_cache -= cacheIcon
 	..()
 
@@ -139,5 +136,9 @@ var/list/holomap_cache = list()
 	if(activator.client)
 		activator.client.images -= holomap_images
 	activator = null
+
+	for(var/image/I in holomap_images)
+		animate(I)
+
 	holomap_images.len = 0
 	processing_objects.Remove(src)
