@@ -893,7 +893,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 /datum/disease/effect/babel
 	name = "Babel Syndrome"
 	stage = 4
-	var/list/-original_languages = list()
+	var/list/original_languages = list()
 
 
 /datum/disease/effect/babel/activate(var/mob/living/carbon/H,var/multiplier)
