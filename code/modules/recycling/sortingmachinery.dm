@@ -509,6 +509,7 @@
 		var/idx = Clamp(text2num(href_list["remove_dest"]), 0, destinations.len)
 		sorting -= destinations[idx]
 		destinations -= destinations[idx]
+		currTag = 0 // In case the index was at the end of the list
 		updateUsrDialog()
 		return 1
 
