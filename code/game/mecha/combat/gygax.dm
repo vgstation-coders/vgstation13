@@ -78,6 +78,19 @@
 	src.log_message("Toggled leg actuators overload.")
 	return
 
+/obj/mecha/proc/startMechWalking()
+	if(overload)
+		icon_state = initial_icon + "-gofast-move"
+	else
+		icon_state = initial_icon + "-move"
+
+
+/obj/mecha/proc/stopMechWalking()
+	if(overload)
+		icon_state = initial_icon + "-gofast"
+	else
+		icon_state = initial_icon
+
 /obj/mecha/combat/gygax/dyndomove(direction)
 	if(!..())
 		return
