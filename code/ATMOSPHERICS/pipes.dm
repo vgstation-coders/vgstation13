@@ -17,10 +17,21 @@
 	var/datum/pipeline/parent
 	var/volume = 0
 	force = 20
+	plane = ABOVE_PLATING_PLANE
 	layer = PIPE_LAYER
 	use_power = 0
 	var/alert_pressure = 80*ONE_ATMOSPHERE
 	var/baseicon=""
+
+/obj/machinery/atmospherics/pipe/update_planes_and_layers()
+	if (level == 1)
+		plane = ABOVE_PLATING_PLANE
+		layer = PIPE_LAYER
+	else
+		plane = ABOVE_TURF_PLANE
+		layer = EXPOSED_PIPE_LAYER
+
+	layer = PIPING_LAYER(layer, piping_layer)
 
 /obj/machinery/atmospherics/pipe/proc/mass_colouration(var/mass_colour)
 	if (findtext(mass_colour,"#"))
@@ -141,6 +152,7 @@
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
+	update_planes_and_layers()
 	initialize(1)
 	if(!node1&&!node2)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
@@ -157,8 +169,6 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 
@@ -309,6 +319,11 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/update_icon(var/adjacent_procd)
+	if (exposed() || (node1 && node1.exposed()) || (node2 && node2.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
+
 	var/node_list = list(node1,node2)
 	if(!node1||!node2)
 		icon_state = "exposed"
@@ -451,6 +466,8 @@
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
+	update_planes_and_layers()
+
 	initialize(1)
 	if(!node1&&!node2&&!node3)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
@@ -487,8 +504,6 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 
@@ -559,11 +574,15 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/update_icon(var/adjacent_procd)
+	if (exposed() || (node1 && node1.exposed()) || (node2 && node2.exposed()) || (node3 && node3.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
+
 	var/node_list = list(node1,node2,node3)
 	..(adjacent_procd,node_list)
 	if(!node1 && !node2 && !node3)
 		qdel(src)
-
 
 /obj/machinery/atmospherics/pipe/manifold/initialize(var/skip_icon_update=0)
 	var/connect_directions = (NORTH|SOUTH|EAST|WEST)&(~dir)
@@ -671,6 +690,7 @@
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
+	update_planes_and_layers()
 	initialize(1)
 	if(!node1 && !node2 && !node3 && !node4)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
@@ -699,8 +719,6 @@
 	overlays += centre_overlay
 
 /obj/machinery/atmospherics/pipe/manifold4w/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 
@@ -778,12 +796,15 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold4w/update_icon(var/adjacent_procd)
+	if (exposed() || (node1 && node1.exposed()) || (node2 && node2.exposed()) || (node3 && node3.exposed()) || (node4 && node4.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
+
 	var/node_list = list(node1,node2,node3,node4)
 	..(adjacent_procd,node_list)
 	if(!node1 && !node2 && !node3 && !node4)
 		qdel(src)
-	return
-
 
 /obj/machinery/atmospherics/pipe/manifold4w/initialize(var/skip_update_icon=0)
 
@@ -902,8 +923,8 @@
 	name = "pipe-layer manifold"
 
 	icon = 'icons/obj/atmospherics/pipe_manifold.dmi'
-	icon_state = "manifoldlayer"
-	baseicon = "manifoldlayer"
+	icon_state = "map_layer"
+	baseicon = ""
 
 	dir = SOUTH
 	initialize_directions = NORTH|SOUTH
@@ -913,10 +934,10 @@
 	pipe_flags = ALL_LAYER
 
 	color = PIPE_COLOR_GREY
-	can_be_coloured = 1
 
 	var/list/layer_nodes = list()
 	var/obj/machinery/atmospherics/other_node = null
+	var/static/image/centre_image = image('icons/obj/atmospherics/pipe_manifold.dmi', "layer_center")
 
 /obj/machinery/atmospherics/pipe/layer_manifold/New()
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
@@ -926,6 +947,11 @@
 			initialize_directions = NORTH|SOUTH
 		if(EAST,WEST)
 			initialize_directions = EAST|WEST
+
+	centre_overlay = centre_image
+	centre_overlay.color = color
+	overlays += centre_overlay
+	icon_state = ""
 	..()
 
 /obj/machinery/atmospherics/pipe/layer_manifold/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
@@ -936,6 +962,7 @@
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
+	update_planes_and_layers()
 	initialize(1)
 	if(!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
@@ -951,8 +978,6 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/layer_manifold/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 /obj/machinery/atmospherics/pipe/layer_manifold/pipeline_expansion()
@@ -993,27 +1018,41 @@
 	return list(turn(dir, 180))
 
 /obj/machinery/atmospherics/pipe/layer_manifold/update_icon(var/adjacent_procd)
-	overlays.len = 0
-	alpha = invisibility ? 128 : 255
-	icon_state = baseicon
-	..(adjacent_procd, list(other_node))//adds the back connector
+	..(adjacent_procd, list(other_node)) // Adds the back connector
+
+	var/is_partially_exposed = exposed()
 
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
 		var/obj/machinery/atmospherics/node = layer_nodes[pipelayer]
+		var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
+
+		var/image/ex = image(icon, "layer_[pipelayer]", layer = 100, dir = dir)
 		if(node) //we are connected at this layer
-
-			var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
-
-			var/image/con = image(icon(src.icon,"manifoldl_con",src.dir))
+			var/node_color = node_color_for(node)
+			var/image/con = image('icons/obj/pipes.dmi', "pipe_intact", layer = 200, dir = dir)
 			con.pixel_x = layer_diff * PIPING_LAYER_P_X
 			con.pixel_y = layer_diff * PIPING_LAYER_P_Y
+			con.color = node_color
+			ex.color = node_color
 
-			overlays += con
+			underlays += con
 
-			node.update_icon(TRUE)
+			if (!adjacent_procd && node.update_icon_ready && !istype(node,/obj/machinery/atmospherics/pipe/simple))
+				node.update_icon(TRUE)
+
+			if (node.exposed())
+				is_partially_exposed = TRUE
+
+		else
+			ex.color = default_colour || "#B4B4B4"
+
+		underlays += ex
 
 	if(!other_node && !(locate(/obj/machinery/atmospherics) in layer_nodes))
 		qdel(src)
+
+	invisibility = is_partially_exposed ? 0 : 101
+	alpha = is_partially_exposed ? 255 : 128
 
 /obj/machinery/atmospherics/pipe/layer_manifold/initialize(var/skip_update_icon=0)
 
@@ -1131,6 +1170,7 @@
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
+	update_planes_and_layers()
 	initialize(1)
 	if(!mid_node && !layer_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this adapter to! A pipe segment must be connected to at least one other object!</span>")
@@ -1146,8 +1186,6 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/layer_adapter/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 /obj/machinery/atmospherics/pipe/layer_adapter/pipeline_expansion()
@@ -1193,8 +1231,11 @@
 		overlays += con
 	if(!mid_node && !layer_node)
 		qdel(src)
-	return
 
+	if (exposed() || (mid_node && mid_node.exposed()) || (layer_node && layer_node.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
 
 /obj/machinery/atmospherics/pipe/layer_adapter/initialize(var/skip_update_icon=0)
 

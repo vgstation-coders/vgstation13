@@ -17,6 +17,14 @@ obj/machinery/atmospherics/trinary
 
 	var/activity_log = ""
 
+/obj/machinery/atmospherics/trinary/update_planes_and_layers()
+	if (level == 1)
+		layer = TRINARY_PIPE_LAYER
+	else
+		layer = EXPOSED_BINARY_PIPE_LAYER
+
+	layer = PIPING_LAYER(layer, piping_layer)
+
 /obj/machinery/atmospherics/trinary/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2,node3)
 	..(adjacent_procd,node_list)
@@ -55,6 +63,7 @@ obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 		name = pipe.pipename
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
+	update_planes_and_layers()
 	initialize()
 	build_network()
 	if (node1)

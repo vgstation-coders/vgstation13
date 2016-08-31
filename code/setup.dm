@@ -23,6 +23,8 @@ var/global/disable_vents     = 0
 #define CHECK_DISABLED(TYPE) /* DO NOTHINK */
 #endif
 
+#define PIPING_LAYER(base, piping_layer) base + ((piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE)
+
 #define PIPING_LAYER_DEFAULT	3 //starting value - this is the "central" pipe
 #define PIPING_LAYER_INCREMENT	1 //how much the smallest step in piping_layer is
 

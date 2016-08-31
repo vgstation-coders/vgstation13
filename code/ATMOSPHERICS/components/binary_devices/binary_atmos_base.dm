@@ -35,6 +35,14 @@
 	air1.volume = 200
 	air2.volume = 200
 
+/obj/machinery/atmospherics/binary/update_planes_and_layers()
+	if (level == 1)
+		layer = BINARY_PIPE_LAYER
+	else
+		layer = EXPOSED_BINARY_PIPE_LAYER
+
+	layer = PIPING_LAYER(layer, piping_layer)
+
 /obj/machinery/atmospherics/binary/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2)
 	..(adjacent_procd,node_list)
@@ -46,6 +54,7 @@
 		name = pipe.pipename
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
+	update_planes_and_layers()
 	initialize()
 	build_network()
 	if (node1)

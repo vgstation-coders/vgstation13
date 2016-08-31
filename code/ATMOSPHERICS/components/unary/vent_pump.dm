@@ -1,6 +1,6 @@
 /obj/machinery/atmospherics/unary/vent_pump
 	icon = 'icons/obj/atmospherics/vent_pump.dmi'
-	icon_state = "hoff"
+	icon_state = "base"
 
 	name = "Air Vent"
 	desc = "Has a valve and pump attached to it."
@@ -34,6 +34,10 @@
 
 	starting_volume = 400 // Previously 200
 
+	ex_node_offset = 3
+
+	var/static/image/bezel      = image('icons/obj/atmospherics/vent_pump.dmi', "bezel")
+
 /obj/machinery/atmospherics/unary/vent_pump/on
 	on = 1
 	icon_state = "hout"
@@ -65,17 +69,22 @@
 	air_contents.volume = 1000
 
 /obj/machinery/atmospherics/unary/vent_pump/update_icon()
-	var/prefix = exposed() ? "" : "h"
-	if (welded)
-		icon_state = prefix + "weld"
-		return
-
-	icon_state = prefix + "off"
+	icon_state = welded ? "weld" : "base"
 
 	if (on && ~stat & (NOPOWER|BROKEN))
 		overlays += pump_direction ? "out" : "in"
 
 	..()
+
+	if (level == 1)
+		bezel.layer = VENT_BEZEL_LAYER
+		bezel.plane = ABOVE_PLATING_PLANE
+
+	else
+		bezel.layer = EXPOSED_PIPE_LAYER
+		bezel.plane = ABOVE_TURF_PLANE
+
+	underlays += bezel
 
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	. = ..()

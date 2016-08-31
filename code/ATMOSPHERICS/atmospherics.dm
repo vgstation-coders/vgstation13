@@ -44,10 +44,14 @@ Pipelines + Other Objects -> Pipe network
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
 	holomap = TRUE
 
+	// If a pipe node isn't connected, should it be pixel shifted to fit the object?
+	var/ex_node_offset = 0
+
 /obj/machinery/atmospherics/New()
 	..()
 	machines.Remove(src)
 	atmos_machines |= src
+	update_planes_and_layers()
 
 /obj/machinery/atmospherics/Destroy()
 	for(var/mob/living/M in src) //ventcrawling is serious business
@@ -67,6 +71,9 @@ Pipelines + Other Objects -> Pipe network
 	for(var/atom/movable/A in src) //ventcrawling is serious business
 		A.ex_act(severity)
 	..()
+
+/obj/machinery/atmospherics/proc/update_planes_and_layers()
+	return
 
 /obj/machinery/atmospherics/proc/icon_node_con(var/dir)
 	var/static/list/node_con = list(
@@ -94,7 +101,33 @@ Pipelines + Other Objects -> Pipe network
 		if(direction & initialize_directions)
 			. += direction
 
+/obj/machinery/atmospherics/proc/node_color_for(var/obj/machinery/atmospherics/other)
+	if (default_colour && other.default_colour && (other.default_colour != default_colour)) // if both pipes have special colours - average them
+		var/list/centre_colour = GetHexColors(default_colour)
+		var/list/other_colour = GetHexColors(other.default_colour)
+		var/list/average_colour = list(((centre_colour[1]+other_colour[1])/2),((centre_colour[2]+other_colour[2])/2),((centre_colour[3]+other_colour[3])/2))
+		return rgb(average_colour[1],average_colour[2],average_colour[3])
+	if (color)
+		return null
+	if (other.color)
+		return other.color
+
+	if (default_colour)
+		return default_colour
+
+	if (other.default_colour && other.default_colour != "#B4B4B4")
+		return other.default_colour
+
+	return "#B4B4B4"
+
+/obj/machinery/atmospherics/proc/node_layer()
+	return level == 1 ? PIPE_LAYER : EXPOSED_PIPE_LAYER
+
+/obj/machinery/atmospherics/proc/node_plane()
+	return level == 1 ? ABOVE_PLATING_PLANE : ABOVE_TURF_PLANE
+
 /obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list)
+	update_planes_and_layers()
 	if(!can_be_coloured && color)
 		default_colour = color
 		color = null
@@ -112,21 +145,9 @@ Pipelines + Other Objects -> Pipe network
 		missing_nodes -= con_dir // finds all the directions that aren't pointed to by a node
 		var/image/nodecon = icon_node_con(con_dir)
 		if(nodecon)
-			if (default_colour && connected_node.default_colour && (connected_node.default_colour != default_colour)) // if both pipes have special colours - average them
-				var/list/centre_colour = GetHexColors(default_colour)
-				var/list/other_colour = GetHexColors(connected_node.default_colour)
-				var/list/average_colour = list(((centre_colour[1]+other_colour[1])/2),((centre_colour[2]+other_colour[2])/2),((centre_colour[3]+other_colour[3])/2))
-				nodecon.color = rgb(average_colour[1],average_colour[2],average_colour[3])
-			else if (color)
-				nodecon.color = null
-			else if (connected_node.color)
-				nodecon.color = connected_node.color
-			else if(default_colour)
-				nodecon.color = default_colour
-			else if(connected_node.default_colour && connected_node.default_colour != "#B4B4B4")
-				nodecon.color = connected_node.default_colour
-			else
-				nodecon.color = "#B4B4B4"
+			nodecon.color = node_color_for(connected_node)
+			nodecon.plane = node_plane()
+			nodecon.layer = node_layer()
 			underlays += nodecon
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))
 			connected_node.update_icon(1)
@@ -136,6 +157,21 @@ Pipelines + Other Objects -> Pipe network
 			nodeex.color = default_colour ? default_colour : "#B4B4B4"
 		else
 			nodeex.color = null
+		nodeex.plane = node_plane()
+		nodeex.layer = node_layer()
+		switch (missing_dir)
+			if (NORTH)
+				nodeex.pixel_y = ex_node_offset
+
+			if (SOUTH)
+				nodeex.pixel_y = -ex_node_offset
+
+			if (EAST)
+				nodeex.pixel_x = ex_node_offset
+
+			if (WEST)
+				nodeex.pixel_x = -ex_node_offset
+
 		underlays += nodeex
 
 
@@ -143,7 +179,7 @@ Pipelines + Other Objects -> Pipe network
 	piping_layer = new_layer
 	pixel_x = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X
 	pixel_y = (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
-	layer = initial(layer) + ((piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE)
+	update_planes_and_layers()
 
 // Find a connecting /obj/machinery/atmospherics in specified direction.
 /obj/machinery/atmospherics/proc/findConnecting(var/direction, var/given_layer = src.piping_layer)
