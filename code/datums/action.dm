@@ -208,35 +208,3 @@
 	if(!istype(J) || !J.on)
 		return 0
 	return ..()
-
-//Preset for general and toggled actions
-/datum/action/innate
-	check_flags = 0
-	var/active = 0
-
-/datum/action/innate/Trigger()
-	if(!..())
-		return 0
-	if(!active)
-		Activate()
-	else
-		Deactivate()
-	return 1
-
-/datum/action/innate/proc/Activate()
-	return
-
-/datum/action/innate/proc/Deactivate()
-	return
-
-//Preset for action that call specific procs (consider innate).
-/datum/action/generic
-	check_flags = 0
-	var/procname
-
-/datum/action/generic/Trigger()
-	if(!..())
-		return 0
-	if(target && procname)
-		call(target, procname)(usr)
-	return 1
