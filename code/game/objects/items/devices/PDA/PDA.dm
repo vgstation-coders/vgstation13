@@ -1804,8 +1804,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						if(M.id_tag == cartridge.remote_door_id)
 							if(M.density)
 								M.open()
+								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now open!</span>")
 							else
 								M.close()
+								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now closed!</span>")
 
 			if("Detonate")//Detonate PDA
 				if(istype(cartridge, /obj/item/weapon/cartridge/syndicate))
