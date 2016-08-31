@@ -435,7 +435,7 @@ var/global/ingredientLimit = 10
 		src.ingredient.color = "#FFAD33"
 		src.ingredient.forceMove(src.loc)
 		for(var/obj/item/embedded in src.ingredient.contents)
-			embedded.forceMove(src.loc)
+			embedded.forceMove(ingredient)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 		if(cooks_in_reagents)
@@ -454,7 +454,7 @@ var/global/ingredientLimit = 10
 				qdel(H.stored_mob)
 
 		for(var/obj/item/embedded in src.ingredient.contents)
-			embedded.forceMove(src.loc)
+			embedded.forceMove(D)
 
 		qdel(src.ingredient)
 
