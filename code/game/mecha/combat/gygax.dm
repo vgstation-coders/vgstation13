@@ -79,14 +79,14 @@
 	return
 
 /*
-/obj/mecha/proc/startMechWalking()
+/obj/mecha/combat/gygax/startMechWalking()
 	if(overload)
 		icon_state = initial_icon + "-gofast-move"
 	else
 		icon_state = initial_icon + "-move"
 */
 
-/obj/mecha/proc/stopMechWalking()
+/obj/mecha/combat/gygax/stopMechWalking()
 	if(overload)
 		icon_state = initial_icon + "-gofast"
 	else
