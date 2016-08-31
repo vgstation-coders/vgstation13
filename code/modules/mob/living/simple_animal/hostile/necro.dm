@@ -143,7 +143,7 @@
 	Otherwise, start wandering and bust down some doors to find more food
 	*/
 	if(!isUnconscious())
-		if(stance == HOSTILE_STANCE_IDLE && (!client)) //Not doing anything at the time
+		if(stance == HOSTILE_STANCE_IDLE && !client) //Not doing anything at the time
 			var/list/can_see = view(src, vision_range)
 			if(!busy)
 				if(can_evolve)//Can we evolve, and have we fed
@@ -164,15 +164,15 @@
 				if(!busy && break_doors != CANT)//So we don't try to eat and open doors
 					var/obj/machinery/door/D = find_door(can_see)//Is there a door to open in range?
 					if(D)
+						Goto(D, speed)
+						busy = MOVING_TO_TARGET
+						give_up(D)
 						if(D.Adjacent(src) && busy != OPENING_DOOR)
 							busy = OPENING_DOOR
 							force_door(D)
 							D = null
 							walk(src, 0)
-						else
-							Goto(D, speed)
-							busy = MOVING_TO_TARGET
-							give_up(D)
+
 		else
 			busy = 0
 			stop_automated_movement = 0
@@ -181,23 +181,22 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/find_food(var/list/can_see)
 	for(var/mob/living/carbon/human/C in can_see) //Because of how can_see lists things, it'll go in order of closest to furthest
-		if(C.isDead() && !busy && check_edibility(C))
+		if(C.isDead() && check_edibility(C))
 			return(C) //This would get the closest one
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/find_door(var/list/can_see)
 	for(var/obj/machinery/door/D in can_see)
-		if(can_open_door(D) && !busy)
+		if(can_open_door(D))
 			return(D)
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/give_up(var/C)
 	spawn(100)
 		if(busy == MOVING_TO_TARGET)
-			if(C && !Adjacent(C))
-				C = null
-		busy = 0
-		stop_automated_movement = 0
-		walk(src,0)
-
+			if(target == C && !Adjacent(target))
+				target = null
+			busy = 0
+			stop_automated_movement = 0
+			walk(src,0)
 /mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D)
 	if(istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window))
 		return 0
