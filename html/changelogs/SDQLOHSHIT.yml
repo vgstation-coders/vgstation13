@@ -1,8 +1,0 @@
-author: PJB3005
-delete-after: true
-changes:
-  - rscadd: "SDQL has been upgraded and now supports the following:"
-  - rscadd: "Assoc lists, ['yes': 10]."
-  - rscadd: "Using any expressions in the IN statement. The expression should return a list of either objects, world, or a single object."
-  - rscadd: "Access to all global variables by doing global.living_mob_list, for example."
-  - rscadd: "Wrappers around a big chunk of the BYOND builtins. You can now animate everybody at once too."
