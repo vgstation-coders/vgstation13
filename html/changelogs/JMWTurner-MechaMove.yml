@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - imageadd: HONK mechs are now animated when they move.
