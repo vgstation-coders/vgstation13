@@ -893,10 +893,10 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 /datum/disease/effect/babel
 	name = "Babel Syndrome"
 	stage = 4
-	var/list/original_languages = list()
+	var/list/-original_languages = list()
 
 
-/datum/disease/effect/babel/activate()
+/datum/disease/effect/babel/activate(var/mob/living/carbon/H,var/multiplier)
     if(H.languages.len <= 1)
         to_chat(H, "You realize your knowledge of language is just fine, and that you were panicking over nothing.")
         return
