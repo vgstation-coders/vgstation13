@@ -28,12 +28,12 @@
 		open()
 	else if (istype(user, /obj/machinery/bot))
 		open()
-	else if(ismob(user))
-		var/mob/M = user
 #warn fix this
+//	else if(ismob(user))
+//		var/mob/M = user
 //		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
 //			return
-		TryToSwitchState(user)
+//		TryToSwitchState(user)
 	return
 
 

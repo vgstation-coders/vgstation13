@@ -3689,8 +3689,8 @@
 			populate_inactive_customitems_list(src.owner)
 
 	else if(href_list["vsc"])
-		if(check_rights(R_ADMIN|R_SERVER))
 #warn wtf
+//		if(check_rights(R_ADMIN|R_SERVER))
 //			if(href_list["vsc"] == "airflow")
 //				zas_settings.ChangeSettingsDialog(usr,zas_settings.settings)
 //			if(href_list["vsc"] == "default")

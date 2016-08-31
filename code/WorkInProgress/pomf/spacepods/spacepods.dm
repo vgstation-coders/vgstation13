@@ -384,7 +384,7 @@
 	delay = 20
 
 	process(var/obj/spacepod/spacepod)
-		if(spacepod.cabin_air && spacepod.cabin_air. > 0)
+		if(spacepod.cabin_air && spacepod.cabin_air.volume > 0)
 			var/delta = spacepod.cabin_air.temperature - T20C
 			spacepod.cabin_air.temperature -= max(-10, min(10, round(delta/4,0.1)))
 		return

@@ -26,6 +26,9 @@ var/savefile/panicfile
 	on_ban   = new ()
 	on_unban = new ()
 
+#warn temporary hopefully
+	StartXGM()
+
 
 	/*Runtimes, not sure if i need it still so commenting out for now
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
