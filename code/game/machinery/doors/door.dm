@@ -100,9 +100,8 @@ var/list/all_doors = list()
 				door_animate("deny")
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
-#warn TODO: ANALYZE THIS
-//	// TODO: analyze this
-//	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
+//Prevents zas from forcing you to open doors
+//	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
 //		return
 
 	add_fingerprint(user)

@@ -6,7 +6,7 @@ Contains helper procs for airflow, handled in /connection_group.
 /mob/proc/airflow_stun()
 	if(stat == 2)
 		return 0
-	if(last_airflow_stun > world.time - vsc.airflow_stun_cooldown)	return 0
+	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))	return 0
 
 	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
 		src << "<span class='notice'>You stay upright as the air rushes past you.</span>"
@@ -35,12 +35,12 @@ Contains helper procs for airflow, handled in /connection_group.
 
 	if(anchored && !ismob(src)) return 0
 
-	if(!isobj(src) && n < vsc.airflow_dense_pressure) return 0
+	if(!isobj(src) && n < zas_settings.Get(/datum/ZAS_Setting/airflow_medium_pressure)) return 0
 
 	return 1
 
 /mob/check_airflow_movable(n)
-	if(n < vsc.airflow_heavy_pressure)
+	if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_heavy_pressure))
 		return 0
 	return 1
 
@@ -50,19 +50,19 @@ Contains helper procs for airflow, handled in /connection_group.
 
 /obj/item/check_airflow_movable(n)
 	if(isnull(w_class))
-		if(n < vsc.airflow_dense_pressure) return 0 //most non-item objs don't have a w_class yet
+		if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure)) return 0 //most non-item objs don't have a w_class yet
 	else
 		switch(w_class)
 			if(1,2)
-				if(n < vsc.airflow_lightest_pressure) return 0
+				if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure)) return 0
 			if(3)
-				if(n < vsc.airflow_light_pressure) return 0
+				if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_light_pressure)) return 0
 			if(4,5)
-				if(n < vsc.airflow_medium_pressure) return 0
+				if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_medium_pressure)) return 0
 			if(6)
-				if(n < vsc.airflow_heavy_pressure) return 0
+				if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_heavy_pressure)) return 0
 			if(7 to INFINITY)
-				if(n < vsc.airflow_dense_pressure) return 0
+				if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure)) return 0
 	return ..()
 
 
@@ -92,7 +92,7 @@ Contains helper procs for airflow, handled in /connection_group.
 /atom/movable/proc/GotoAirflowDest(n)
 	if(!airflow_dest) return
 	if(airflow_speed < 0) return
-	if(last_airflow > world.time - vsc.airflow_delay) return
+	if(last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) return
 	if(airflow_speed)
 		airflow_speed = n/max(get_dist(src,airflow_dest),1)
 		return
@@ -119,7 +119,7 @@ Contains helper procs for airflow, handled in /connection_group.
 	while(airflow_speed > 0)
 		if(airflow_speed <= 0) break
 		airflow_speed = min(airflow_speed,15)
-		airflow_speed -= vsc.airflow_speed_decay
+		airflow_speed -= zas_settings.Get(/datum/ZAS_Setting/airflow_speed_decay)
 		if(airflow_speed > 7)
 			if(airflow_time++ >= airflow_speed - 7)
 				if(od)
@@ -140,7 +140,7 @@ Contains helper procs for airflow, handled in /connection_group.
 		step_towards(src, src.airflow_dest)
 		var/mob/M = src
 		if(istype(M) && M.client)
-			M.delayNextMove(vsc.airflow_mob_slowdown)
+			M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
 	airflow_dest = null
 	airflow_speed = 0
 	airflow_time = 0
@@ -151,7 +151,7 @@ Contains helper procs for airflow, handled in /connection_group.
 /atom/movable/proc/RepelAirflowDest(n)
 	if(!airflow_dest) return
 	if(airflow_speed < 0) return
-	if(last_airflow > world.time - vsc.airflow_delay) return
+	if(last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) return
 	if(airflow_speed)
 		airflow_speed = n/max(get_dist(src,airflow_dest),1)
 		return
@@ -178,7 +178,7 @@ Contains helper procs for airflow, handled in /connection_group.
 	while(airflow_speed > 0)
 		if(airflow_speed <= 0) return
 		airflow_speed = min(airflow_speed,15)
-		airflow_speed -= vsc.airflow_speed_decay
+		airflow_speed -= zas_settings.Get(/datum/ZAS_Setting/airflow_speed_decay)
 		if(airflow_speed > 7)
 			if(airflow_time++ >= airflow_speed - 7)
 				sleep(1 * tick_multiplier)
@@ -193,7 +193,7 @@ Contains helper procs for airflow, handled in /connection_group.
 		step_towards(src, src.airflow_dest)
 		if(ismob(src) && src:client)
 			var/mob/M = src
-			M.delayNextMove(vsc.airflow_mob_slowdown)
+			M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
 	airflow_dest = null
 	airflow_speed = 0
 	airflow_time = 0
@@ -237,7 +237,7 @@ mob/living/carbon/human/airflow_hit(atom/A)
 	if (prob(33))
 		loc:add_blood(src)
 		bloody_body(src)
-	var/b_loss = airflow_speed * vsc.airflow_damage
+	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
 
 	var/blocked = run_armor_check(LIMB_HEAD,"melee")
 	apply_damage(b_loss/3, BRUTE, LIMB_HEAD, blocked, 0, "Airflow")
@@ -249,10 +249,10 @@ mob/living/carbon/human/airflow_hit(atom/A)
 	apply_damage(b_loss/3, BRUTE, LIMB_GROIN, blocked, 0, "Airflow")
 
 	if(airflow_speed > 10)
-		Paralyse(round(airflow_speed * vsc.airflow_stun))
+		Paralyse(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)))
 		Stun(paralysis + 3)
 	else
-		Stun(round(airflow_speed * vsc.airflow_stun/2))
+		Stun(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2))
 	. = ..()
 
 zone/proc/movables()

@@ -83,8 +83,3 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 			mob << "the initial turf cannot merge."
 		else
 			mob << "both turfs can merge."
-
-client/proc/ZASSettings()
-	set category = "Debug"
-
-	vsc.SetDefault(mob)

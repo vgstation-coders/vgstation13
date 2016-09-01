@@ -149,7 +149,7 @@ Class Procs:
 	if(air.temperature >= PLASMA_FLASHPOINT && !(src in air_master.active_fire_zones) && air.check_combustability() && contents.len)
 		var/turf/T = pick(contents)
 		if(istype(T))
-			T.create_fire(vsc.fire_firelevel_multiplier)
+			T.create_fire(zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier))
 
 	if(air.check_tile_graphic(graphic_add, graphic_remove))
 		for(var/turf/simulated/T in contents)
