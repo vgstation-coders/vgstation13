@@ -147,6 +147,8 @@
 		else
 			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
 		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
+		log_admin("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
+		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
 		for(var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
 
