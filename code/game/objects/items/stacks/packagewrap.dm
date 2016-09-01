@@ -178,8 +178,9 @@
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
-/obj/item/delivery/large/New(turf/loc, atom/movable/target, var/size = W_CLASS_GIANT)
+/obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()
+	w_class = W_CLASS_GIANT
 	wrapped = target
 	if(istype(wrapped,/obj/structure/closet/crate) || ishuman(target))
 		icon_state = "deliverycrate"
