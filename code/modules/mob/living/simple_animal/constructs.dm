@@ -386,26 +386,29 @@
 		return 0 //under effects of time magick
 
 	. = ..()
+
 	if(.)
-		if(fire)
-			if(fire_alert)
-				fire.icon_state = "fire1"
-			else
-				fire.icon_state = "fire0"
-		update_pull_icon()
+		regular_hud_updates()
 
-		if(purged)
-			if(purge > 0)
-				purged.icon_state = "purge1"
-			else
-				purged.icon_state = "purge0"
 
-		silence_spells(purge)
+/mob/living/simple_animal/construct/regular_hud_updates()
+	if(fire)
+		if(fire_alert)
+			fire.icon_state = "fire1"
+		else
+			fire.icon_state = "fire0"
+	update_pull_icon()
 
-/mob/living/simple_animal/construct/armoured/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
+	if(purged)
+		if(purge > 0)
+			purged.icon_state = "purge1"
+		else
+			purged.icon_state = "purge0"
 
+	silence_spells(purge)
+
+
+/mob/living/simple_animal/construct/armoured/regular_hud_updates()
 	..()
 	if(healths)
 		switch(health)
@@ -427,10 +430,7 @@
 				healths.icon_state = "juggernaut_health7"
 
 
-/mob/living/simple_animal/construct/behemoth/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-
+/mob/living/simple_animal/construct/behemoth/regular_hud_updates()
 	..()
 	if(healths)
 		switch(health)
@@ -451,10 +451,7 @@
 			else
 				healths.icon_state = "juggernaut_health7"
 
-/mob/living/simple_animal/construct/builder/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-
+/mob/living/simple_animal/construct/builder/regular_hud_updates()
 	..()
 	if(healths)
 		switch(health)
@@ -477,10 +474,7 @@
 
 
 
-/mob/living/simple_animal/construct/wraith/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-
+/mob/living/simple_animal/construct/wraith/regular_hud_updates()
 	..()
 	if(healths)
 		switch(health)
@@ -502,10 +496,7 @@
 				healths.icon_state = "wraith_health7"
 
 
-/mob/living/simple_animal/construct/harvester/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-
+/mob/living/simple_animal/construct/harvester/regular_hud_updates()
 	..()
 	if(healths)
 		switch(health)

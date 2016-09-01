@@ -44,6 +44,8 @@
 	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
 
+	regular_hud_updates()
+
 	if(round_end_info == "")
 		winset(client, "rpane.round_end", "is-visible=false")
 
