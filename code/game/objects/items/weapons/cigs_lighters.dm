@@ -343,8 +343,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	smoketime--
 	if(smoketime <= 0)
 		if(!inside_item)
-			new type_butt(location) //Spawn the cigarette butt
-			var/atom/new_butt = new type_butt(location)
+			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
 		lit = 0 //Actually unlight the cigarette so that the lighting can update correctly
 		update_brightness()
