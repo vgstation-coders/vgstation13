@@ -362,7 +362,7 @@
 		MB.RunOverCreature(src,species.blood_color)
 	else
 		var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
-		if(istype(WC))
+		if(istype(WC) && !WC.attack_cooldown)
 			WC.crush(src,species.blood_color)
 		else
 			return //Don't make blood
