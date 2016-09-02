@@ -169,7 +169,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				if(istype(I, /obj/item/weapon/evidencebag))
 					scanning = I.contents[1]
 					scanning.forceMove(src)
-					I.overlays -= scanning
+					I.overlays.len = 0
 					I.icon_state = "evidenceobj"
 				else
 					if(M.drop_item(I, src))
