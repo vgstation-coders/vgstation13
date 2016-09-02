@@ -101,7 +101,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/is_valid_target(var/target, mob/user, options)
 	if(options)
 		return (target in options)
-	return 1
+	return (target in view_or_range(range, user, selection_type))
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
 	if(!holder)
@@ -170,7 +170,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/target = list(A)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
-	if(cast_check(1, holder))
+	if(cast_check(1, holder) && is_valid_target(A, user))
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
