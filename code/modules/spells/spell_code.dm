@@ -98,8 +98,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
-/spell/proc/is_valid_target(var/target, mob/user)
-	return (target in view_or_range(range, user, selection_type))
+/spell/proc/is_valid_target(var/target, mob/user, options)
+	if(options)
+		return (target in options)
+	return 1
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
 	if(!holder)
@@ -168,10 +170,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/target = list(A)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
-	if(cast_check(1, holder) && is_valid_target(A, user))
+	if(cast_check(1, holder))
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
+		invocation(user, targets)
+
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+
 		if(prob(critfailchance))
 			critfail(target, holder)
 		else
@@ -222,9 +228,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/before_cast(list/targets, user)
 	var/list/valid_targets = list()
+	var/list/options = view_or_range(range,user,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
-		if(!is_valid_target(target, user))
+		if(!is_valid_target(target, user, options))
 			continue
 
 		valid_targets += target
