@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - bugfix: Fixed evidence bags always appearing empty in your hands or inventory. Emptying the bag in the Forensic Scanner will now properly remove the bag's overlays.
