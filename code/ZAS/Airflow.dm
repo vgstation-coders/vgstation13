@@ -47,7 +47,7 @@ Contains helper procs for airflow, handled in /connection_group.
 /mob/living/silicon/check_airflow_movable()
 	return 0
 
-
+#warn DEFINES GO HERE
 /obj/item/check_airflow_movable(n)
 	if(isnull(w_class))
 		if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure)) return 0 //most non-item objs don't have a w_class yet

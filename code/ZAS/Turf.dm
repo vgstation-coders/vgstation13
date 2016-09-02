@@ -235,21 +235,22 @@
 			W.fire_act(adj_air, adj_temp, adj_volume)
 
 /turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
-	burn(adj_temp)
-//	if(adj_temp > melt_temperature)
-//		take_damage(log(RAND_F(0.9, 1.1) * (adj_temp - melt_temperature)))
+//	burn(adj_temp)
+#warn hilarity ensuing
+	if(adj_temp > melt_temperature && prob(1))
+		dismantle_wall(1)
 
 	return ..()
-
+/*
 /turf/simulated/wall/proc/burn(temperature)
-/*	if(material.combustion_effect(src, temperature, 0.7))
+	if(material.combustion_effect(src, temperature, 0.7))
 		spawn(2)
 			new /obj/structure/girder(src)
 			src.ChangeTurf(/turf/simulated/floor)
 			for(var/turf/simulated/wall/W in range(3,src))
 				W.burn((temperature/4))
-//			for(var/obj/machinery/door/airlock/phoron/D in range(3,src))
-//				D.ignite(temperature/4)
+			for(var/obj/machinery/door/airlock/phoron/D in range(3,src))
+				D.ignite(temperature/4)
 */
 /turf/assume_air(datum/gas_mixture/giver) //use this for machines to adjust air
 	return 0
