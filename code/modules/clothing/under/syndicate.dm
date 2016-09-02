@@ -24,5 +24,3 @@
 	_color = "tactifool"
 	species_fit = list(VOX_SHAPED)
 	siemens_coefficient = 1
-
-
