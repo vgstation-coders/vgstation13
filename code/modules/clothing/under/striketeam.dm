@@ -80,8 +80,8 @@ var/list/holomap_cache = list()
 		bgmap = image(centcommMiniMaps[HOLOMAP_FILTER_DEATHSQUAD])
 	else
 		bgmap = image(holoMiniMaps[T.z])
-	bgmap.pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
-	bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
+	animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+	animate(bgmap,pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 	bgmap.plane = HUD_PLANE
 	bgmap.layer = HUD_BASE_LAYER
 	bgmap.color = "#0B74B4"
@@ -111,8 +111,8 @@ var/list/holomap_cache = list()
 				holomap_cache[holomap_marker] = image('icons/12x12.dmi',"ds[mob_indicator]")
 
 			var/image/I = holomap_cache[holomap_marker]
-			I.pixel_x = TD.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
-			I.pixel_y = TD.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
+			animate(I,pixel_x = TD.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+			animate(I,pixel_y = TD.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 			I.plane = HUD_PLANE
 			if(mob_indicator == HOLOMAP_YOU)
 				I.layer = HUD_ABOVE_ITEM_LAYER
