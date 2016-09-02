@@ -174,7 +174,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
-		invocation(user, targets)
+		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
 
