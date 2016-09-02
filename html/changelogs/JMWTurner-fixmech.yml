@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - bugfix: Fixed Ripleys turning invisible when moving.
