@@ -416,7 +416,6 @@
 	holomap_obj.icon_state = ""
 	holomap_obj.screen_loc = "SOUTH,WEST"
 	holomap_obj.layer = HUD_BASE_LAYER
-	holomap_obj.color = ui_color
 	holomap_obj.mouse_opacity = 0
 	holomap_obj.alpha = 255
 
