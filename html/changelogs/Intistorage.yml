@@ -1,0 +1,4 @@
+author: Intigracy
+delete-after: True
+changes: 
+- tweak: "Socket wrenches and large extinguishers no longer fit in ordinary toolbelts. CE toolbelt remains unchanged."

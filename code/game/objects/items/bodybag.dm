@@ -16,6 +16,7 @@
 	name = "body bag kit"
 	desc = "A kit specifically designed to fit bodybags."
 	icon_state = "bodybags" //Consider respriting this to a kit some day
+	fits_max_w_class = 3
 	max_combined_w_class = 21
 	can_only_hold = list("/obj/item/bodybag") //Needed due to the last two variables, figures
 
