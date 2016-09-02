@@ -37,7 +37,7 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
-#define isslime(A) istype(A, /mob/living/carbon/slime)
+#define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
