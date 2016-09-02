@@ -294,7 +294,14 @@
 			apply_prefix = 0
 
 			if(istype(new_item, /obj/item/weapon/claymore))
-				new_item.force = 10
+				new_item.force = pick(50;10,40;20,10;40)
+				switch(new_item.force)
+					if(10)
+						new_item.icon_state += "-rust"
+						name = "rusted claymore"
+					if(20)
+						new_item.icon_state += "-dull"
+						name = "dull claymore"
 
 			item_type = new_item.name
 		if(20)
@@ -337,7 +344,14 @@
 		if(25)
 			apply_prefix = 0
 			new_item = new /obj/item/weapon/katana(src.loc)
-			new_item.force = 10
+			new_item.force = pick(50;10,40;20,10;40)
+			switch(new_item.force)
+				if(10)
+					new_item.icon_state += "-rust"
+					name = "rusted katana"
+				if(20)
+					new_item.icon_state += "-dull"
+					name = "dull katana"
 			item_type = new_item.name
 		if(26)
 			//energy gun
