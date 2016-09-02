@@ -1,5 +1,0 @@
-author: JMWTurner
-delete-after: true
-changes:
-  - rscadd: Deathsquad finally have their own jumpsuits.
-  - experiment: Deathsquad jumpsuits are equipped with a toggleable HUD Holographic Minimap of the ZLevel they're currently in. More info on GitHub.
