@@ -2698,6 +2698,12 @@
 	required_reagents = list(MINDBREAKER = 1, OXYGEN = 1, INAPROVALINE = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/antivenom
+	name = "Anti venom"
+	id = AVENOM
+	result = AVENOM
+	required_reagents = list(MERCURY = 1, SVENOM = 1, ANTI_TOXIN = 1)
+	result_amount = 3
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

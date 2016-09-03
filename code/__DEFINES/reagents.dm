@@ -311,6 +311,8 @@
 #define RED_MEAD		"red_mead"
 #define ICED_BEER		"iced_beer"
 #define CHARCOAL		"charcoal"
+#define SVENOM			"svenom"
+#define AVENOM			"avenom"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
