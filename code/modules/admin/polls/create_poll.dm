@@ -72,13 +72,14 @@
 	if(polltype == "TEXT")
 		return
 	var/add_option = 1
+	var/i = 1
 	while(add_option)
-		var/option = input("Write your option","Option") as message
+		var/option = input("Write your option [i]","Option") as message
 		if(!option)
 			return
 		option = sanitizeSQL(option)
 		var/percentagecalc
-		switch(alert("Calculate option results as percentage?",,"Yes","No","Cancel"))
+		switch(alert("Calculate option [i] results as percentage?",,"Yes","No","Cancel"))
 			if("Yes")
 				percentagecalc = 1
 			if("No")
@@ -114,10 +115,10 @@
 			var/err = query_polladd_option.ErrorMsg()
 			log_game("SQL ERROR adding new poll option to table. Error : \[[err]\]\n")
 			return
-		switch(alert(" ",,"Add option","Finish","Cancel"))
+		else
+			i++
+		switch(alert("Add more options?",,"Add option","Finish"))
 			if("Add option")
 				add_option = 1
 			if("Finish")
 				add_option = 0
-			else
-				return
