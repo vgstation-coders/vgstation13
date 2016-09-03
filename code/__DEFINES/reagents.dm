@@ -306,6 +306,8 @@
 #define ICED_BEER		"iced_beer"
 #define CHARCOAL		"charcoal"
 #define SANGRIA			"sangria"
+#define SVENOM			"svenom"
+#define AVENOM			"avenom"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

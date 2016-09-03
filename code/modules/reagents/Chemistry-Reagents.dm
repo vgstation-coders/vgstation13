@@ -501,6 +501,8 @@
 		holder.remove_reagent("zombiepowder", 0.5 * REM)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 2 * REM)
+	if(holder.has_reagent("svenom"))
+		holder.remove_reagent("svenom", 0.5 * REM)
 	M.hallucination = max(0, M.hallucination - 5 * REM)
 	M.adjustToxLoss(-2 * REM)
 
@@ -5292,3 +5294,39 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Vox")
 			M.adjustToxLoss(-4 * REM) //chicken and gravy just go together
+
+
+//// VENOM ////
+
+datum/reagent/snakevenom
+	name = "Snake Venom"
+	id = SVENOM
+	description = "Venom straight from the deadliest of space snakes."
+	reagent_state = LIQUID
+	color = "#055400"
+
+datum/reagent/snakevenom/on_mob_life(var/mob/living/M as mob)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Unathi") //filthy lizards are immune to snake venom
+			return
+		else
+			M.adjustToxLoss(1)
+			if(prob(25))
+				M.AdjustWeakened(2)
+
+datum/reagent/antivenom
+	name = "Anti Venom"
+	id = AVENOM
+	description = "A strong serum used to neutralise snake venom."
+	reagent_state = LIQUID
+	color = "#004A7F"
+
+datum/reagent/antivenom/on_mob_life(var/mob/living/M as mob)
+	if(..())
+		return 1
+
+	if(holder.has_reagent("svenom"))
+		holder.remove_reagent("svenom", REM)
