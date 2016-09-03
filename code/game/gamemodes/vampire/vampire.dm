@@ -38,6 +38,7 @@
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
 	var/vampire_amount = 4
+	can_be_mixed = TRUE
 
 
 /datum/game_mode/vampire/announce()
