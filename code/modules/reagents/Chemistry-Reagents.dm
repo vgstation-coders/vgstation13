@@ -4765,6 +4765,16 @@
 	dizzy_adj = 15
 	slurr_adj = 15
 
+/datum/reagent/ethanol/deadrum/sangria
+	name = "Sangria"
+	id = SANGRIA
+	description = "So tasty you won't believe it's alcohol!"
+	reagent_state = LIQUID
+	color = "#53181A" //rgb: 83, 24, 26
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
+
 /datum/reagent/ethanol/deadrum/sbiten
 	name = "Sbiten"
 	id = SBITEN
