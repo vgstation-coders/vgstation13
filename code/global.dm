@@ -347,3 +347,4 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 //HUD MINIMAPS
 var/list/holoMiniMaps = list()
 var/list/centcommMiniMaps = list()
+var/list/extraMiniMaps = list()

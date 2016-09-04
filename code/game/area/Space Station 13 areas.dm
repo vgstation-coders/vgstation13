@@ -66,6 +66,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/general_area = /area/station	// the highest parent bellow /area,
 	var/general_area_name = "Station"
 
+	var/holomap_color = null
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -124,10 +126,6 @@ proc/process_adminbus_teleport_locs()
 	power_environ = 0
 	always_unpowered = 0
 	dynamic_lighting = 1
-
-/area/engineering/
-
-/area/turret_protected/
 
 /area/arrival
 	requires_power = 0
@@ -670,6 +668,7 @@ proc/process_adminbus_teleport_locs()
 /area/prison
 	name = "\improper Prison Station"
 	icon_state = "brig"
+	holomap_color = HOLOMAP_AREACOLOR_SECURITY
 
 /area/prison/arrival_airlock
 	name = "\improper Prison Station Airlock"
@@ -824,10 +823,12 @@ proc/process_adminbus_teleport_locs()
 /area/maintenance/secdisposal
 	name = "Security Disposals"
 	icon_state = "secdisp"
+	holomap_color = HOLOMAP_AREACOLOR_SECURITY
 
 /area/maintenance/auxcharge
 	name = "Auxiliary Cyborg Recharge"
 	icon_state = "auxcharge"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/maintenance/ghettobar
 	name = "Ghetto Bar"
@@ -842,6 +843,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "ghettomorgue"
 
 //Hallway
+/area/hallway/primary
+	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
 
 /area/hallway/primary/fore
 	name = "\improper Fore Primary Hallway"
@@ -866,6 +869,7 @@ proc/process_adminbus_teleport_locs()
 /area/hallway/secondary/exit
 	name = "\improper Escape Shuttle Hallway"
 	icon_state = "escape"
+	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
 /area/hallway/secondary/construction
 	name = "\improper Construction Area"
@@ -874,6 +878,7 @@ proc/process_adminbus_teleport_locs()
 /area/hallway/secondary/entry
 	name = "\improper Arrival Shuttle Hallway"
 	icon_state = "entry"
+	holomap_color = HOLOMAP_AREACOLOR_ARRIVALS
 
 //Command
 
@@ -881,6 +886,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Bridge"
 	icon_state = "bridge"
 	music = "signal"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/bridge/meeting_room
@@ -892,9 +898,12 @@ proc/process_adminbus_teleport_locs()
 /area/crew_quarters/captain
 	name = "\improper Captain's Office"
 	icon_state = "captain"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/crew_quarters/heads
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+
 /area/crew_quarters/heads/hop
 	name = "\improper Head of Personnel's Quarters"
 	icon_state = "head_quarters"
@@ -923,10 +932,12 @@ proc/process_adminbus_teleport_locs()
 /area/crew_quarters/courtroom
 	name = "\improper Courtroom"
 	icon_state = "courtroom"
+	holomap_color = HOLOMAP_AREACOLOR_SECURITY
 
 /area/crew_quarters/hop
 	name = "\improper Head of Personnel's Office"
 	icon_state = "head_quarters"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/mint
@@ -936,10 +947,12 @@ proc/process_adminbus_teleport_locs()
 /area/comms
 	name = "\improper Communications Relay"
 	icon_state = "tcomsatcham"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/server
 	name = "\improper Messaging Server Room"
 	icon_state = "server"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 //Crew
 
@@ -1014,6 +1027,7 @@ proc/process_adminbus_teleport_locs()
 /area/lawoffice
 	name = "\improper Law Office"
 	icon_state = "law"
+	holomap_color = HOLOMAP_AREACOLOR_SECURITY
 
 /area/crew_quarters/casino
 	name = "Casino"
@@ -1104,7 +1118,8 @@ proc/process_adminbus_teleport_locs()
 
 //Engineering
 
-/area/engineering
+/area/engineering/
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/engineering/engine_smes
 	name = "\improper Engineering SMES"
@@ -1126,6 +1141,7 @@ proc/process_adminbus_teleport_locs()
 /area/engineering/ce
 	name = "\improper Chief Engineer's Office"
 	icon_state = "head_quarters"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/engineering/burn_chamber
@@ -1162,6 +1178,7 @@ proc/process_adminbus_teleport_locs()
 /area/solar
 	requires_power = 0
 	dynamic_lighting = 0
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/solar/fport
 	name = "\improper Fore Port Solar Array"
@@ -1198,26 +1215,32 @@ proc/process_adminbus_teleport_locs()
 /area/maintenance/auxsolarstarboard
 	name = "Auxillary Starboard Solar Maintenance"
 	icon_state = "SolarcontrolS"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/maintenance/auxsolarport
 	name = "Auxillary Port Solar Maintenance"
 	icon_state = "SolarcontrolP"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/maintenance/fportsolar
 	name = "Fore Port Solar Maintenance"
 	icon_state = "SolarcontrolA"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/maintenance/astarboardsolar
 	name = "Aft Starboard Solar Maintenance"
 	icon_state = "SolarcontrolS"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/maintenance/aportsolar
 	name = "Aft Port Solar Maintenance"
 	icon_state = "SolarcontrolP"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/maintenance/fstarboardsolar
 	name = "Fore Starboard Solar Maintenance"
 	icon_state = "SolarcontrolA"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/maintenance/virology_maint
 	name = "Virology Maintenance"
@@ -1240,19 +1263,24 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Teleporter"
 	icon_state = "teleporter"
 	music = "signal"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/gateway
 	name = "\improper Gateway"
 	icon_state = "teleporter"
 	music = "signal"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/AIsattele
 	name = "\improper AI Satellite Teleporter Room"
 	icon_state = "teleporter"
 	music = "signal"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 //MedBay
+/area/medical
+	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
 
 /area/medical/medbay
 	name = "Medbay"
@@ -1295,6 +1323,7 @@ proc/process_adminbus_teleport_locs()
 /area/medical/cmo
 	name = "\improper Chief Medical Officer's Office"
 	icon_state = "CMO"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/medical/virology
@@ -1346,6 +1375,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "paramedics"
 
 //Security
+/area/security
+	holomap_color = HOLOMAP_AREACOLOR_SECURITY
 
 /area/security/main
 	name = "\improper Security Office"
@@ -1375,6 +1406,7 @@ proc/process_adminbus_teleport_locs()
 /area/security/medical
 	name = "\improper Brig Medbay"
 	icon_state = "sec_medbay"
+	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
 
 /area/security/toilet
 	name = "\improper Brig Toilets"
@@ -1419,11 +1451,13 @@ proc/process_adminbus_teleport_locs()
 /area/security/armory
 	name = "\improper Secure Armory"
 	icon_state = "Armory"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/security/hos
 	name = "\improper Head of Security's Office"
 	icon_state = "sec_hos"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/security/detectives_office
@@ -1478,14 +1512,17 @@ proc/process_adminbus_teleport_locs()
 /area/security/vacantoffice
 	name = "\improper Vacant Office"
 	icon_state = "security"
+	holomap_color = null
 
 /area/security/vacantoffice2
 	name = "\improper Vacant Office"
 	icon_state = "security"
+	holomap_color = null
 
 /area/supply
 	name = "\improper Quartermasters"
 	icon_state = "quart"
+	holomap_color = HOLOMAP_AREACOLOR_CARGO
 
 ///////////WORK IN PROGRESS//////////
 
@@ -1541,6 +1578,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "hydro"
 
 //Toxins
+/area/science
+	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 
 /area/science/lab
 	name = "\improper Research and Development"
@@ -1553,6 +1592,7 @@ proc/process_adminbus_teleport_locs()
 /area/science/rd
 	name = "\improper Research Director's Office"
 	icon_state = "head_quarters"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/science/supermatter
@@ -1622,6 +1662,7 @@ proc/process_adminbus_teleport_locs()
 /area/science/server
 	name = "\improper Server Room"
 	icon_state = "server"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 //Storage
@@ -1649,16 +1690,19 @@ proc/process_adminbus_teleport_locs()
 /area/storage/eva
 	name = "EVA Storage"
 	icon_state = "eva"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/storage/secure
 	name = "Secure Storage"
 	icon_state = "storage"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/storage/nuke_storage
 	name = "\improper Vault"
 	icon_state = "nuke_storage"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/storage/emergency
 	name = "Starboard Emergency Storage"
@@ -1671,6 +1715,7 @@ proc/process_adminbus_teleport_locs()
 /area/storage/tech
 	name = "Technical Storage"
 	icon_state = "auxstorage"
+	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 	jammed=1
 
 /area/storage/testroom
@@ -1803,6 +1848,7 @@ proc/process_adminbus_teleport_locs()
 /area/construction/mommi_nest
 	name = "\improper MoMMI Nest"
 	icon_state = "yellow"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/construction/supplyshuttle
 	name = "\improper Supply Shuttle"
@@ -1837,15 +1883,20 @@ proc/process_adminbus_teleport_locs()
 /area/ai_monitored/storage/eva
 	name = "EVA Storage"
 	icon_state = "eva"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
 
 /area/ai_monitored/storage/secure
 	name = "Secure Storage"
 	icon_state = "storage"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/ai_monitored/storage/emergency
 	name = "Emergency Storage"
 	icon_state = "storage"
+
+/area/turret_protected/
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/turret_protected/ai_upload
 	name = "\improper AI Upload Chamber"
@@ -2011,6 +2062,7 @@ proc/process_adminbus_teleport_locs()
 
 	general_area = /area/tcommsat
 	general_area_name = "Telecommunications Satellite"
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/tcommsat/entrance
 	name = "\improper Satellite Teleporter"
@@ -2019,6 +2071,9 @@ proc/process_adminbus_teleport_locs()
 /area/tcommsat/chamber
 	name = "\improper Telecoms Central Compartment"
 	icon_state = "tcomsatcham"
+
+/area/tcomms
+	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 
 /area/tcomms/chamber
 	name = "\improper Telecoms Chamber"

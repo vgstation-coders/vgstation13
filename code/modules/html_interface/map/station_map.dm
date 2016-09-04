@@ -16,6 +16,8 @@
 		holoMiniMaps |= z
 		generateHoloMinimap(z)
 
+	generateStationMinimap()
+
 /proc/generateHoloMinimap(var/zLevel=1)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
@@ -80,3 +82,36 @@
 					canvas.DrawBox("#66666699", i, r)
 
 	centcommMiniMaps[filter] = canvas
+
+/proc/generateStationMinimap()
+	var/icon/canvas = icon('icons/480x480.dmi', "blank")
+
+	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			var/turf/tile = locate(i, r, map.zMainStation)
+			if(tile && tile.loc)
+				var/area/areaToPaint = tile.loc
+				if(areaToPaint.holomap_color)
+					canvas.DrawBox(areaToPaint.holomap_color, i, r)
+
+	extraMiniMaps |= "stationareas"
+	extraMiniMaps["stationareas"] = canvas
+
+	var/icon/big_map = icon('icons/480x480.dmi', "stationmap")
+	var/icon/small_map = icon('icons/480x480.dmi', "blank")
+	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
+
+	small_map.Blend(map_base,ICON_OVERLAY)
+	small_map.Blend(canvas,ICON_OVERLAY)
+	small_map.Scale(32,32)
+
+	map_base.Blend("#79ff79",ICON_MULTIPLY)
+
+	big_map.Blend(map_base,ICON_OVERLAY)
+	big_map.Blend(canvas,ICON_OVERLAY)
+
+	extraMiniMaps |= "stationmapformated"
+	extraMiniMaps["stationmapformated"] = big_map
+
+	extraMiniMaps |= "stationmapsmall"
+	extraMiniMaps["stationmapsmall"] = small_map

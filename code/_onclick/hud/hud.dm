@@ -234,6 +234,17 @@ var/global/obj/screen/clicker/catcher = new()
 		src.adding += using
 		mymob:schematics_background = using
 
+	holomap_obj = getFromPool(/obj/screen/holomap)
+	holomap_obj.name = "holomap"
+	holomap_obj.icon = null
+	holomap_obj.icon_state = ""
+	holomap_obj.screen_loc = "SOUTH,WEST"
+	holomap_obj.layer = HUD_BASE_LAYER
+	holomap_obj.mouse_opacity = 0
+	holomap_obj.alpha = 255
+
+	mymob.client.screen += src.holomap_obj
+
 	reload_fullscreen()
 	update_parallax_existence()
 
