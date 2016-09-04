@@ -297,6 +297,7 @@
 			*/
 			being_built.forceMove(L) //Put the thing in the lockbox
 			L.name += " ([being_built.name])"
+			L.fits_max_w_class = 0 //You can't put things back into these boxes to prevent breaking arbitrary items
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))

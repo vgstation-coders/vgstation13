@@ -18,7 +18,9 @@
 	var/tracked_access = "It doesn't look like it's ever been used."
 	health = 50
 
-
+/obj/item/weapon/storage/lockbox/proc/damage()
+	if(istype(src, /obj/item/weapon/gun))
+		damaged = 1
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
@@ -46,7 +48,7 @@
 		desc = "It appears to be broken."
 		icon_state = src.icon_broken
 		for(var/mob/O in viewers(user, 3))
-			O.show_message(text("<span class='notice'>The locker has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
+			O.show_message(text("<span class='notice'>The lockbox has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
 
 	if(!locked)
 		. = ..()
@@ -72,17 +74,27 @@
 	if(health <= 0)
 		for(var/atom/movable/A as mob|obj in src)
 			remove_from_storage(A, loc)
+			damage()
 		qdel(src)
 	return
 
 /obj/item/weapon/storage/lockbox/ex_act(severity)
-	var/newsev = max(3,severity+1)
-	for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
-		remove_from_storage(A, loc)
-		A.ex_act(newsev)
-	newsev=4-severity
-	if(prob(newsev*25)+25) // 1=100, 2=75, 3=50
-		qdel(src)
+	switch(severity)
+		if(3)
+			if(prob(25))
+				for(var/atom/movable/A as mob|obj in src)
+					remove_from_storage(A, loc)
+					damage()
+				qdel(src)
+		if(2)
+			if(prob(80))
+				for(var/atom/movable/A as mob|obj in src)
+					remove_from_storage(A, loc)
+					damage()
+					A.ex_act(1)
+				qdel(src)
+		if(1)
+			qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
@@ -92,14 +104,23 @@
 				if(prob(80))
 					locked = !locked
 					src.update_icon()
+					for(var/atom/movable/A as mob|obj in src)
+						remove_from_storage(A, loc)
+						damage()
 			if(2)
 				if(prob(50))
 					locked = !locked
 					src.update_icon()
+					for(var/atom/movable/A as mob|obj in src)
+						remove_from_storage(A, loc)
+						damage()
 			if(3)
 				if(prob(25))
 					locked = !locked
 					src.update_icon()
+					for(var/atom/movable/A as mob|obj in src)
+						remove_from_storage(A, loc)
+						damage()
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()

@@ -27,6 +27,24 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
 
+/obj/item/weapon/gun/energy/laser/pistol/special_check(var/mob/living/carbon/human/M)
+	if(damaged && projectile_type == /obj/item/projectile/beam/lightlaser && prob(15))
+		projectile_type = /obj/item/projectile/beam/weaklaser
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && projectile_type == /obj/item/projectile/beam/weaklaser && prob(10))
+		projectile_type = /obj/item/projectile/beam/veryweaklaser
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && prob(1))
+		power_supply.rigged = 1
+		to_chat(M, "<span class='warning'>A light on [name] flashes angrily.</span>")
+		return 0
+	return 1
+
+
 /obj/item/weapon/gun/energy/laser/rifle
 	name = "laser rifle"
 	desc = "A laser rifle issued to high ranking members of a certain shadow corporation."
@@ -35,6 +53,28 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 50
+
+/obj/item/weapon/gun/energy/laser/rifle/special_check(var/mob/living/carbon/human/M)
+	if(damaged && projectile_type == /obj/item/projectile/beam && prob(25))
+		projectile_type = /obj/item/projectile/beam/lightlaser
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && projectile_type == /obj/item/projectile/beam/lightlaser && prob(20))
+		projectile_type = /obj/item/projectile/beam/weaklaser
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && projectile_type == /obj/item/projectile/beam/weaklaser && prob(15))
+		projectile_type = /obj/item/projectile/beam/veryweaklaser
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && prob(1))
+		power_supply.rigged = 1
+		to_chat(M, "<span class='warning'>A light on [name] flashes angrily.</span>")
+		return 0
+	return 1
 
 /obj/item/weapon/gun/energy/laser/admin
 	name = "infinite laser gun"
@@ -168,6 +208,32 @@ obj/item/weapon/gun/energy/laser/retro
 	isHandgun()
 		return 0
 
+/obj/item/weapon/gun/energy/lasercannon/special_check(var/mob/living/carbon/human/M)
+	if(damaged && projectile_type == /obj/item/projectile/beam/heavylaser && prob(33))
+		projectile_type = /obj/item/projectile/beam
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && projectile_type == /obj/item/projectile/beam && prob(20))
+		projectile_type = /obj/item/projectile/beam/lightlaser
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && projectile_type == /obj/item/projectile/beam/lightlaser && prob(15))
+		projectile_type = /obj/item/projectile/beam/weaklaser
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && projectile_type == /obj/item/projectile/beam/weaklaser && prob(10))
+		projectile_type = /obj/item/projectile/beam/veryweaklaser
+		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
+		return 1
+	if(damaged && prob(2))
+		var/turf/T = get_turf(loc)
+		explosion(T, 0, 0, 2, 4)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
+		return 0
+	return 1
+
 /obj/item/weapon/gun/energy/lasercannon/empty/New()
 	..()
 
@@ -213,6 +279,30 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2"
 	projectile_type = /obj/item/projectile/energy/plasma
 	charge_cost = 50
+
+/obj/item/weapon/gun/energy/plasma/special_check(var/mob/living/carbon/human/M)
+	if(damaged && prob(25))
+		fire_delay += rand(6, 12)
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(3, 1, src)
+		s.start()
+		to_chat(M, "<span class='warning'>The [name] sparks violently.</span>")
+		return 1
+	if(damaged && prob(10))
+		M.drop_item()
+		M.emote("scream",,, 1)
+		M.adjustFireLossByPart(10, LIMB_LEFT_HAND, src)
+		M.adjustFireLossByPart(10, LIMB_RIGHT_HAND, src)
+		to_chat(M, "<span class='danger'>The [name] burns your hands!.</span>")
+		return 0
+	if(damaged && prob(1+fire_delay/3))
+		var/turf/T = get_turf(loc)
+		explosion(T, 0, 1, 2, 4)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
+		return 0
+	return 1
 
 /obj/item/weapon/gun/energy/plasma/pistol
 	name = "plasma pistol"

@@ -41,6 +41,8 @@
 			return
 		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
+		if(damaged && prob(20))
+			to_shoot = getAmmo()
 		for(var/i = 1; i <= to_shoot; i++)
 			..()
 			shots_fired++

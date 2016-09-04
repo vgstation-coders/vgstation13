@@ -48,6 +48,7 @@
 	var/last_fired = 0
 
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
+	var/damaged = 0 //Set to one if in a lockbox that was broken open
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -241,6 +242,15 @@
 	update_icon()
 
 	user.update_inv_hand(user.active_hand)
+
+	if(damaged && recoil && prob(10))
+		var/list/turf/possible_turfs = list()
+		for(var/turf/T in orange(user,3))
+			possible_turfs += T
+		var/throwturf = pick(possible_turfs)
+		user.drop_item()
+		throw_at(throwturf)
+		user.visible_message("The [src] jumps out of [user]'s hands!","The [src] jumps out of your hands!")
 
 	return 1
 
