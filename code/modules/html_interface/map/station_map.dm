@@ -117,19 +117,8 @@
 
 	//Adding Bar Marker
 	for(var/area/crew_quarters/bar/BAR in areas)
-		if(BAR.area_turfs.len == 0)
-			continue
-		var/center_x = 0
-		var/center_y = 0
-		for(var/turf/T in BAR.area_turfs)
-			if(T.z == map.zMainStation)
-				center_x += T.x
-				center_y += T.y
-		center_x = round(center_x / BAR.area_turfs.len)
-		center_y = round(center_y / BAR.area_turfs.len)
-		if(!center_x || !center_y)
-			continue
-		big_map.Blend(icon('icons/12x12.dmi',"bar"), ICON_OVERLAY, center_x-8, center_y-8)
+		var/turf/T = BAR.getAreaCenter(map.zMainStation)
+		big_map.Blend(icon('icons/holomap_markers.dmi',"bar"), ICON_OVERLAY, T.x-8, T.y-8)
 
 	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP
 	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP] = big_map
