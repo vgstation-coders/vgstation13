@@ -12,6 +12,11 @@ var/list/station_holomaps = list()
 	active_power_usage = 10
 	dir = NORTH
 
+	use_auto_lights = 1
+	light_color = "#64C864"
+	light_power_on = 1
+	light_range_on = 2
+
 	machine_flags = SCREWTOGGLE | FIXED2WORK | CROWDESTROY
 
 	layer = ABOVE_WINDOW_LAYER
