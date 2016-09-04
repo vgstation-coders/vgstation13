@@ -318,6 +318,7 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
+		Facing()
 		return
 
 	if(abs(dx) < abs(dy))
@@ -330,3 +331,5 @@
 			change_dir(EAST)
 		else
 			change_dir(WEST)
+
+	Facing()
