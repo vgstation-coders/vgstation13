@@ -142,27 +142,6 @@
 		I.layer = FLOAT_LAYER //AAAH
 		current_button.overlays += I
 		I.layer = old
-
-/datum/action/item_action/set_internals/UpdateButtonIcon()
-	if(..()) //button available
-		if(iscarbon(owner))
-			var/mob/living/carbon/C = owner
-			if(target == C.internal)
-				button.icon_state = "bg_default_on"
-
-/datum/action/item_action/toggle
-
-/datum/action/item_action/toggle/New(Target)
-	..()
-	name = "Toggle [target.name]"
-	button.name = name
-
-/datum/action/item_action/adjust
-
-/datum/action/item_action/adjust/New(Target)
-	..()
-	name = "Adjust [target.name]"
-	button.name = name
 	
 /datum/action/item_action/toggle_jetpack
 	name = "Toggle Jetpack"
@@ -202,7 +181,16 @@
 	
 /datum/action/item_action/toggle_firemode
 	name = "Toggle Firemode"
+	
+/datum/action/item_action/change_appearance
+	name = "Change Appearance"
+	
+/datum/action/item_action/toggle_voicechanger
+	name = "Toggle Voice Changer"
 
+/datum/action/item_action/tip_fedora
+	name = "Tip Fedora"
+	
 /datum/action/item_action/jetpack_stabilization/IsAvailable()
 	var/obj/item/weapon/tank/jetpack/J = target
 	if(!istype(J) || !J.on)
