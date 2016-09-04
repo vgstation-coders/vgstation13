@@ -187,7 +187,10 @@
 	
 /datum/action/item_action/toggle_voicechanger
 	name = "Toggle Voice Changer"
-
+	
+/datum/action/item_action/toggle_minimap
+	name = "Toggle Minimap"
+	
 /datum/action/item_action/tip_fedora
 	name = "Tip Fedora"
 	
