@@ -495,7 +495,7 @@
 				new_objective.owner = src
 
 			if ("survive")
-				new_objective = new /datum/objective/survive
+				new_objective = current.get_survive_objective()
 				new_objective.owner = src
 
 			if ("die")
