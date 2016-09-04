@@ -1245,7 +1245,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SpI_NONE	"none"
 
 //upgrading
-#define Sp_SPEED	"speed"
+#define Sp_SPEED	"cooldown"
 #define Sp_POWER	"power"
 #define Sp_TOTAL	"total"
 
@@ -1253,9 +1253,15 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define Sp_RECHARGE	1
 #define Sp_CHARGES	2
 #define Sp_HOLDVAR	4
+
 //spell range
 #define SELFCAST -1
 #define GLOBALCAST -2
+
+//buying costs
+#define Sp_BASE_PRICE 1
+#define Sp_UPGRADE_PRICE 1
+
 ///////WIZ END/////////
 
 //Some alien checks for reagents for alien races.

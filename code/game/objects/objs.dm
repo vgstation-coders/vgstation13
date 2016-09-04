@@ -115,7 +115,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(in_use)
 		var/is_in_use = 0
 		if(_using && _using.len)
-			var/list/nearby = viewers(1, src)
+			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
 			for(var/mob/M in _using) // Only check things actually messing with us.
 				if (!M || !M.client || M.machine != src)
 					_using.Remove(M)

@@ -1,7 +1,8 @@
 
 /spell/aoe_turf/fall
 	name = "Time Stop"
-	desc = "This spell stops time for "
+	desc = "This spell temporarily stops time for everybody around you, except for you. The spell lasts 3 seconds, and upgrading its power can further increase the duration."
+	abbreviation = "MS"
 
 	spell_flags = NEEDSCLOTHES
 
@@ -22,18 +23,27 @@
 	var/the_world_chance = 30
 	var/sleeptime = 30
 
+#define duration_increase_per_level 10
+
 /spell/aoe_turf/fall/empower_spell()
 	if(!can_improve(Sp_POWER))
 		return 0
 	spell_levels[Sp_POWER]++
 	var/temp = ""
 	range++
-	sleeptime += 10
+	sleeptime += duration_increase_per_level
 	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
 		if(2)
 			temp = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
 
 	return temp
+
+/spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Increase the spell's duration by [duration_increase_per_level/10] second\s and radius by 2 meters."
+	return ..()
+
+#undef duration_increase_per_level
 
 /spell/aoe_turf/fall/New()
 	..()

@@ -1,6 +1,7 @@
 /spell/targeted/buttbots_revenge
 	name = "Butt-Bot's Revenge"
 	desc = "This spell removes the target's ass in a firey explosion."
+	abbreviation = "AN"
 
 	school = "evocation"
 	charge_max = 500
