@@ -18,6 +18,11 @@
 
 	generateStationMinimap()
 
+	holomaps_initialized = 1
+
+	for (var/obj/machinery/station_map/S in station_holomaps)
+		S.initialize()
+
 /proc/generateHoloMinimap(var/zLevel=1)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 

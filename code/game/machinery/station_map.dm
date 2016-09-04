@@ -1,3 +1,4 @@
+var/list/station_holomaps = list()
 
 /obj/machinery/station_map
 	name = "station holomap"
@@ -18,13 +19,16 @@
 	var/image/station_map = null
 	var/image/small_station_map = null
 	var/image/cursor = null
+	var/image/legend = null
 
 /obj/machinery/station_map/New()
 	..()
-	if(ticker)
+	station_holomaps += src
+	if(ticker && holomaps_initialized)
 		initialize()
 
 /obj/machinery/station_map/Destroy()
+	station_holomaps -= src
 	stopWatching()
 	..()
 
@@ -36,16 +40,18 @@
 	cursor = image('icons/12x12.dmi', "you")
 	cursor.pixel_x = x-6
 	cursor.pixel_y = y-6
+	legend = image('icons/effects/64x64.dmi', "legend")
+	legend.pixel_x = 96
+	legend.pixel_y = 96
 	station_map.overlays |= cursor
+	station_map.overlays |= legend
 	update_icon()
 
-/obj/machinery/station_map/Crossed(atom/movable/O)
-	..()
-	if(watching_mob && (watching_mob != O))
-		stopWatching()
+/obj/machinery/station_map/attack_hand(var/mob/user)
+	if(watching_mob && (watching_mob != user))
+		to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
 
-	if(isliving(O) && anchored && !(stat & (NOPOWER|BROKEN)))
-		var/mob/user = O
+	if(isliving(user) && anchored && !(stat & (NOPOWER|BROKEN)))
 		if(user.hud_used && user.hud_used.holomap_obj)
 			station_map.loc = user.hud_used.holomap_obj
 			station_map.alpha = 0
@@ -53,27 +59,38 @@
 			watching_mob = user
 			flick("[icon_state]_activate", src)
 			watching_mob.client.images |= station_map
+			watching_mob.callOnFace |= "\ref[src]"
+			watching_mob.callOnFace["\ref[src]"] = "checkPosition"
 			to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
 
-/obj/machinery/station_map/Uncrossed(atom/movable/O)
-	if(watching_mob == O)
-		stopWatching()
-	..()
+/obj/machinery/station_map/attack_paw(var/mob/user)
+	src.attack_hand(user)
+
+/obj/machinery/station_map/attack_animal(var/mob/user)
+	src.attack_hand(user)
+
+/obj/machinery/station_map/attack_ai(var/mob/user)
+	return//TODO: Give AIs their own holomap
 
 /obj/machinery/station_map/process()
 	if((stat & (NOPOWER|BROKEN)) || !anchored)
 		stopWatching()
 
-	if(watching_mob && !(watching_mob in range(src,0)))
-		stopWatching()
+	checkPosition()
 
 	update_icon()
 
+/obj/machinery/station_map/proc/checkPosition()
+	if(!watching_mob || !(watching_mob in range(src,1)) || (get_dir(watching_mob,src) != watching_mob.dir))
+		stop_watching()
+
 /obj/machinery/station_map/proc/stopWatching()
-	if(watching_mob && watching_mob.client)
-		var/mob/M = watching_mob
-		spawn(5)//we give it time to fade out
-			M.client.images -= station_map
+	if(watching_mob)
+		if(watching_mob.client)
+			var/mob/M = watching_mob
+			spawn(5)//we give it time to fade out
+				M.client.images -= station_map
+		watching_mob.callOnFace -= "\ref[src]"
 	watching_mob = null
 	animate(station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
@@ -91,6 +108,7 @@
 		cursor.pixel_x = x-6
 		cursor.pixel_y = y-6
 		station_map.overlays |= cursor
+		station_map.overlays |= legend
 
 /obj/machinery/station_map/ex_act(severity)
 	switch(severity)
