@@ -90,7 +90,7 @@ var/list/station_holomaps = list()
 			station_map.alpha = 0
 			animate(station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
 			watching_mob = user
-			flick("[icon_state]_activate", src)
+			flick("station_map_activate", src)
 			watching_mob.client.images |= station_map
 			watching_mob.callOnFace |= "\ref[src]"
 			watching_mob.callOnFace["\ref[src]"] = "checkPosition"
@@ -111,8 +111,6 @@ var/list/station_holomaps = list()
 
 	checkPosition()
 
-	update_icon()
-
 /obj/machinery/station_map/proc/checkPosition()
 	if(!watching_mob || (watching_mob.loc != loc) || (dir != watching_mob.dir))
 		stopWatching()
@@ -126,6 +124,14 @@ var/list/station_holomaps = list()
 		watching_mob.callOnFace -= "\ref[src]"
 	watching_mob = null
 	animate(station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
+
+/obj/machinery/station_map/power_change()
+	. = ..()
+	update_icon()
+
+/obj/machinery/station_map/proc/set_broken()
+	stat |= BROKEN
+	update_icon()
 
 /obj/machinery/station_map/update_icon()
 	overlays.len = 0
@@ -186,8 +192,7 @@ var/list/station_holomaps = list()
 			if (prob(50))
 				qdel(src)
 			else
-				stat |= BROKEN
+				set_broken()
 		if(3.0)
 			if (prob(25))
-				stat |= BROKEN
-	update_icon()
+				set_broken()

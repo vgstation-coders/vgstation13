@@ -25,7 +25,7 @@
 /obj/machinery/station_map_frame/New(turf/loc, var/ndir)
 	..()
 	dir = ndir
-	switch(dir)
+	switch(ndir)
 		if(NORTH)
 			pixel_x = 0
 			pixel_y = WORLD_ICON_SIZE
