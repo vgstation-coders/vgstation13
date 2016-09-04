@@ -1,5 +1,0 @@
-author: JMWTurner
-delete-after: true
-changes:
-  - imageadd: New cultblade sprites.
-  - imageadd: Katanas and Claymores found in xenoarch can now be either normal, dull or rusted, which affects their damage. Rusted Katanas and Claymores deal as much damage as those previously found through Xenoarch used to.
