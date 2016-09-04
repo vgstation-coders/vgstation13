@@ -11,8 +11,6 @@ var/list/station_holomaps = list()
 	idle_power_usage = 10
 	active_power_usage = 10
 	dir = NORTH
-	pixel_x = 0
-	pixel_y = WORLD_ICON_SIZE
 
 	machine_flags = SCREWTOGGLE | FIXED2WORK | CROWDESTROY
 
