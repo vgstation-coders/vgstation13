@@ -7,6 +7,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_lmg
@@ -18,6 +19,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_taser
@@ -29,6 +31,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/taser
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_honker
@@ -80,6 +83,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=20000)
 
 /datum/design/mech_laser
@@ -91,6 +95,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_laser_heavy
@@ -102,6 +107,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/heavy
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_grenade_launcher
@@ -113,6 +119,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
 /datum/design/clusterbang_launcher
@@ -124,4 +131,5 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited
 	category = "Exosuit_Weapons"
 	locked = 1
+	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=20000,MAT_GOLD=6000,MAT_URANIUM=6000)
