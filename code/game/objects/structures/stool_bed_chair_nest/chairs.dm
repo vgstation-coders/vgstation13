@@ -175,6 +175,30 @@
 		if(secondary_buckle_overlay)
 			overlays -= secondary_buckle_overlay
 
+/obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
+	if (iswrench(W))
+		for (var/atom/movable/AM in src)
+			AM.forceMove(loc)
+
+		return ..()
+
+	if (W.w_class <= W_CLASS_SMALL)
+		if (contents.len)
+			to_chat(user, "There is already an item between \the [src]'s cushions.")
+			return
+
+		if (user.drop_item(W, src))
+			to_chat(user, "You hide \the [W] between \the [src]'s cushions.")
+
+		return TRUE
+
+	return ..()
+
+/obj/structure/bed/chair/comfy/attack_hand(var/mob/user)
+	for (var/obj/item/I in src)
+		user.put_in_hands(I)
+		to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
+
 /obj/structure/bed/chair/comfy/brown
 	icon_state = "comfychair_brown"
 
