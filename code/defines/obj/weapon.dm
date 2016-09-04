@@ -797,6 +797,12 @@
 	icon_state = "power_mod"
 	desc = "Heavy-duty switching circuits for power control."
 
+/obj/item/weapon/circuitboard/station_map
+	icon = 'icons/obj/module.dmi'
+	name = "holomap module"
+	icon_state = "card_mod"
+	desc = "Holographic circuits for station holomaps."
+
 /obj/item/weapon/module/id_auth
 	name = "\improper ID authentication module"
 	icon_state = "id_mod"

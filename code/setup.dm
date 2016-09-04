@@ -1534,4 +1534,9 @@ var/proccalls = 1
 #define HOLOMAP_AREACOLOR_ARRIVALS		"#0000FFCC"
 #define HOLOMAP_AREACOLOR_ESCAPE		"#FF0000CC"
 
-#define HOLOFLAG_STATIONMAP		1
+#define HOLOMAP_EXTRA_STATIONMAP				"stationmapformatted"
+#define HOLOMAP_EXTRA_STATIONMAPAREAS			"stationareas"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH		"stationmapsmallnorth"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"

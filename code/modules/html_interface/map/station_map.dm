@@ -99,8 +99,8 @@
 				if(areaToPaint.holomap_color)
 					canvas.DrawBox(areaToPaint.holomap_color, i, r)
 
-	extraMiniMaps |= "stationareas"
-	extraMiniMaps["stationareas"] = canvas
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPAREAS
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS] = canvas
 
 	var/icon/big_map = icon('icons/480x480.dmi', "stationmap")
 	var/icon/small_map = icon('icons/480x480.dmi', "blank")
@@ -115,8 +115,20 @@
 	big_map.Blend(map_base,ICON_OVERLAY)
 	big_map.Blend(canvas,ICON_OVERLAY)
 
-	extraMiniMaps |= "stationmapformatted"
-	extraMiniMaps["stationmapformatted"] = big_map
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP] = big_map
 
-	extraMiniMaps |= "stationmapsmall"
-	extraMiniMaps["stationmapsmall"] = small_map
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH] = small_map
+
+	var/icon/small_map_east = turn(icon(small_map), 90)
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_EAST
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_EAST] = small_map_east
+
+	var/icon/small_map_south = turn(icon(small_map_east), 90)
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH] = small_map_south
+
+	var/icon/small_map_west = turn(icon(small_map_south), 90)
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_WEST
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_WEST] = small_map_west
