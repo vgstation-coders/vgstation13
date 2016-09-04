@@ -98,7 +98,7 @@
 	var/vchange = 1//This didn't do anything before. It now checks if the mask has special functions/N
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
-	actions_types = list(/datum/action/item_action/toggle_mask)
+	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance, /datum/action/item_action/toggle_voicechanger)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
 
@@ -122,10 +122,7 @@
 		return 1
 	return 0
 
-/obj/item/clothing/mask/gas/voice/verb/change()
-	set name = "Change Mask Form"
-	set category = "Object"
-	set src in usr
+/obj/item/clothing/mask/gas/voice/proc/change()
 
 	var/obj/item/clothing/mask/A
 	A = input("Select Form to change it to", "BOOYEA", A) as null|anything in clothing_choices
@@ -149,6 +146,14 @@
 	vchange = !vchange
 	to_chat(user, "<span class='notice'>The voice changer is now [vchange ? "on" : "off"]!</span>")
 
+/obj/item/clothing/mask/gas/voice/ui_action_click(mob/user, actiontype)
+	if(actiontype == /datum/action/item_action/change_appearance)
+		change()
+	else if(actiontype == /datum/action/item_action/toggle_mask)
+		togglemask()
+	else if(actiontype == /datum/action/item_action/toggle_voicechanger)
+		attack_self(user)
+		
 /obj/item/clothing/mask/gas/clown_hat
 	name = "clown wig and mask"
 	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."
