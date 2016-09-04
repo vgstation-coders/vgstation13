@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: Added Station Holomaps. Stand on top of them to get a neat view of the entire station.
