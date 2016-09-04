@@ -115,8 +115,8 @@
 	big_map.Blend(map_base,ICON_OVERLAY)
 	big_map.Blend(canvas,ICON_OVERLAY)
 
-	extraMiniMaps |= "stationmapformated"
-	extraMiniMaps["stationmapformated"] = big_map
+	extraMiniMaps |= "stationmapformatted"
+	extraMiniMaps["stationmapformatted"] = big_map
 
 	extraMiniMaps |= "stationmapsmall"
 	extraMiniMaps["stationmapsmall"] = small_map

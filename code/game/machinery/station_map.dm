@@ -24,6 +24,7 @@ var/list/station_holomaps = list()
 /obj/machinery/station_map/New()
 	..()
 	station_holomaps += src
+	flags |= ON_BORDER
 	if(ticker && holomaps_initialized)
 		initialize()
 
@@ -33,7 +34,7 @@ var/list/station_holomaps = list()
 	..()
 
 /obj/machinery/station_map/initialize()
-	station_map = image(extraMiniMaps["stationmapformated"])
+	station_map = image(extraMiniMaps["stationmapformatted"])
 	small_station_map = image(extraMiniMaps["stationmapsmall"])
 	small_station_map.plane = LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
@@ -82,7 +83,7 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/proc/checkPosition()
 	if(!watching_mob || !(watching_mob in range(src,1)) || (get_dir(watching_mob,src) != watching_mob.dir))
-		stop_watching()
+		stopWatching()
 
 /obj/machinery/station_map/proc/stopWatching()
 	if(watching_mob)
