@@ -115,6 +115,7 @@
 	big_map.Blend(map_base,ICON_OVERLAY)
 	big_map.Blend(canvas,ICON_OVERLAY)
 
+	//Adding Bar Marker
 	for(var/area/crew_quarters/bar/BAR in areas)
 		if(BAR.area_turfs.len == 0)
 			continue
@@ -124,11 +125,11 @@
 			if(T.z == map.zMainStation)
 				center_x += T.x
 				center_y += T.y
-			center_x = center_x / BAR.area_turfs.len
-			center_y = center_y / BAR.area_turfs.len
-			if(!center_x || !center_y)
-				continue
-			big_map.Blend(icon('icons/12x12.dmi',"bar"), ICON_OVERLAY, -8, -8)
+		center_x = round(center_x / BAR.area_turfs.len)
+		center_y = round(center_y / BAR.area_turfs.len)
+		if(!center_x || !center_y)
+			continue
+		big_map.Blend(icon('icons/12x12.dmi',"bar"), ICON_OVERLAY, center_x-8, center_y-8)
 
 	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP
 	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP] = big_map
