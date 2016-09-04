@@ -11,8 +11,12 @@
 
 /obj/structure/bed/chair/New()
 	..()
-	spawn(3)
-		handle_layer()
+	if(ticker)
+		initialize()
+
+/obj/structure/bed/chair/initialize()
+	..()
+	handle_layer()
 
 /obj/structure/bed/chair/can_spook()
 	. = ..()

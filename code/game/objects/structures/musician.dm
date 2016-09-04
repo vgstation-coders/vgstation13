@@ -71,6 +71,10 @@
 	if(instrumentObj)
 		if(!instrumentObj.Adjacent(user) || user.stat)
 			return 1
+		else if(istype(instrumentObj,/obj/structure/piano))
+			var/obj/structure/piano/P = instrumentObj
+			if(P.broken)
+				return 1
 		return !instrumentObj.anchored		// add special cases to stop in subclasses
 	else
 		return 1
@@ -276,6 +280,7 @@
 	icon_state = "minimoog"
 	anchored = 1
 	density = 1
+	var/broken = 0
 	var/datum/song/song
 /obj/structure/piano/New()
 	song = new("piano", src)
@@ -297,7 +302,10 @@
 
 /obj/structure/piano/attack_hand(mob/user)
 	if(!user.IsAdvancedToolUser())
-		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 1
+	if(broken)
+		to_chat(user, "<span class='warning'>That [src] is broken for good.</span>")
 		return 1
 	interact(user)
 
@@ -333,6 +341,28 @@
 				anchored = 0
 	else
 		..()
+
+/obj/structure/piano/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+		if(2.0)
+			if(broken)
+				qdel(src)
+			else
+				broken = 1
+				icon_state += "-broken"
+		if(3.0)
+			if(!broken && prob(33))
+				broken = 1
+				icon_state += "-broken"
+
+/obj/structure/piano/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.destroy)
+		src.ex_act(2)
+	else if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(prob(Proj.damage))
+			src.ex_act(2)
 
 /obj/structure/piano/xylophone
 	name = "xylophone"
