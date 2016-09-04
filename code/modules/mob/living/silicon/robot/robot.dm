@@ -183,7 +183,7 @@
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
-			mmi.loc = T
+			mmi.forceMove(T)
 		if(mind)
 			mind.transfer_to(mmi.brainmob)
 		if(mmi.brainmob)
@@ -289,6 +289,7 @@
 			module_sprites["Marina-MN"] = "marinaMN"
 			module_sprites["Sleek"] = "sleekminer"
 			module_sprites["#31"] = "servbot-miner"
+			module_sprites["Kodiak"] = "kodiak-miner"
 			speed = -1
 
 		if("Medical")
@@ -304,6 +305,7 @@
 			module_sprites["Eve"] = "eve"
 			module_sprites["Sleek"] = "sleekmedic"
 			module_sprites["#17"] = "servbot-medi"
+			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
 		if("Security")
@@ -333,6 +335,7 @@
 			module_sprites["Marina-EN"] = "marinaEN"
 			module_sprites["Sleek"] = "sleekengineer"
 			module_sprites["#25"] = "servbot-engi"
+			module_sprites["Kodiak"] = "kodiak-eng"
 			speed = -2
 
 		if("Janitor")
@@ -373,7 +376,7 @@
 
 	var/picked  = pick(module_sprites)
 	icon_state = module_sprites[picked]
-		
+
 	if(!forced_module)
 		choose_icon(6, module_sprites)
 
@@ -779,7 +782,7 @@
 				C.wrapped = W
 				C.install()
 				user.drop_item(W)
-				W.loc = null
+				W.forceMove(null)
 
 				to_chat(usr, "<span class='notice'>You install the [W.name].</span>")
 
@@ -849,7 +852,7 @@
 				var/datum/robot_component/C = components[remove]
 				var/obj/item/I = C.wrapped
 				to_chat(user, "You remove \the [I].")
-				I.loc = src.loc
+				I.forceMove(src.loc)
 
 				if(C.installed == 1)
 					C.uninstall()

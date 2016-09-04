@@ -75,7 +75,7 @@
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
 		if(src.beaker)
-			src.beaker.loc = get_turf(src)
+			src.beaker.forceMove(get_turf(src))
 			src.beaker = null
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
@@ -157,7 +157,7 @@
 		src.attached = null
 		src.update_icon()
 	else if(src.beaker)
-		src.beaker.loc = get_turf(src)
+		src.beaker.forceMove(get_turf(src))
 		src.beaker = null
 		update_icon()
 	else

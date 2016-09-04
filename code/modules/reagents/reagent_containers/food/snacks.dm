@@ -32,7 +32,7 @@
 	var/turf/T = get_turf(src)
 	if(contents.len)
 		for(var/atom/movable/A in src)
-			A.loc = T
+			A.forceMove(T)
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 	..()
 
@@ -873,7 +873,9 @@
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 4, data)
 */
+
 		reagents.add_reagent(NUTRIMENT, 6)
+		reagents.add_reagent(HONKSERUM, 6)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger
@@ -883,6 +885,7 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 6)
+		reagents.add_reagent(SILENCER, 6)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
@@ -1640,7 +1643,7 @@
 		baconbeacon = new /obj/item/beacon/bacon(src)
 	after_consume()
 		if(!reagents.total_volume)
-			baconbeacon.loc = usr
+			baconbeacon.forceMove(usr)
 			baconbeacon.digest_delay()
 */
 
@@ -1821,6 +1824,20 @@
 		reagents.add_reagent(NUTRIMENT, 6)
 		reagents.add_reagent(CARPPHEROMONES, 3)
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/crab_sticks
+	name = "\improper Not-Actually-Imitation Crab sticks"
+	desc = "Made from actual crab meat."
+	icon_state = "crab_sticks"
+	food_flags = FOOD_MEAT
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/crab_sticks/New()
+		..()
+		reagents.add_reagent(NUTRIMENT, 4)
+		reagents.add_reagent(SUGAR, 1)
+		reagents.add_reagent(SODIUMCHLORIDE, 1)
+
 
 /obj/item/weapon/reagent_containers/food/snacks/sandwich
 	name = "Sandwich"
@@ -3789,6 +3806,11 @@
 	name = "quiet Slider"
 	desc = "..."
 	icon_state = "slider_mime"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/mime/New()
+	..()
+	reagents.add_reagent(SILENCER, 2.5)
+	bitesize = 2.5
 
 /obj/item/weapon/reagent_containers/food/snacks/slider/slippery
 	name = "slippery slider"

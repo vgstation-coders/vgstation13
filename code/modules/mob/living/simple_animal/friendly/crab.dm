@@ -16,6 +16,7 @@
 	stop_automated_movement = 1
 	friendly = "pinches"
 	size = SIZE_TINY
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
 
 	var/obj/item/inventory_head
 	var/obj/item/inventory_mask

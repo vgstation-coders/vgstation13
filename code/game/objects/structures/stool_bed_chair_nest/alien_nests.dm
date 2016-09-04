@@ -104,6 +104,9 @@
 		if(!gcDestroyed && locked_atoms.len)
 			stabilize()
 
+/obj/structure/bed/nest/acidable()
+	return 0
+
 #undef ALIEN_NEST_LOCKED_Y_OFFSET
 
 /datum/locking_category/bed/nest

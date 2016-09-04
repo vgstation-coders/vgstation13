@@ -144,7 +144,7 @@
 		return
 
 	var/turf/newspawn = locate(T1.x + X_spawn, T1.y + Y_spawn, z)
-	src.loc = newspawn
+	src.forceMove(newspawn)
 
 	update_icon()
 	..()
@@ -357,9 +357,11 @@
 	icon_state = "ricochet"
 	opacity = 0
 	density = 0
-	unacidable = 1
 	anchored = 1
 	layer = BELOW_PROJECTILE_LAYER
+
+/obj/structure/ricochet_trail/acidable()
+	return 0
 
 /obj/structure/ricochet_trail/New()
 	. = ..()
@@ -372,9 +374,11 @@
 	icon_state = "ricochet_bounce"
 	opacity = 0
 	density = 0
-	unacidable = 1
 	anchored = 1
 	layer = ABOVE_PROJECTILE_LAYER
+
+/obj/structure/ricochet_bump/acidable()
+	return 0
 
 /obj/structure/ricochet_bump/New()
 	. = ..()

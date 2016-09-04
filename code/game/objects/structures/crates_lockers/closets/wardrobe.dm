@@ -172,9 +172,9 @@
 	new /obj/item/clothing/under/rank/atmospheric_technician(src)
 	new /obj/item/clothing/under/rank/atmospheric_technician(src)
 	new /obj/item/clothing/under/rank/atmospheric_technician(src)
-	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/clothing/shoes/black(src)
-	new /obj/item/clothing/shoes/black(src)
+	new /obj/item/clothing/shoes/workboots(src)
+	new /obj/item/clothing/shoes/workboots(src)
+	new /obj/item/clothing/shoes/workboots(src)
 	AddToProfiler()
 	return
 
@@ -194,9 +194,9 @@
 	new /obj/item/clothing/under/rank/maintenance_tech(src)
 	new /obj/item/clothing/under/rank/electrician(src)
 	new /obj/item/clothing/under/rank/electrician(src)
-	new /obj/item/clothing/shoes/orange(src)
-	new /obj/item/clothing/shoes/orange(src)
-	new /obj/item/clothing/shoes/orange(src)
+	new /obj/item/clothing/shoes/workboots(src)
+	new /obj/item/clothing/shoes/workboots(src)
+	new /obj/item/clothing/shoes/workboots(src)
 	AddToProfiler()
 	return
 

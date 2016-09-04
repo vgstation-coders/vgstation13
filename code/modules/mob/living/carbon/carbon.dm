@@ -587,7 +587,7 @@
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
-		I.loc = newmob
+		I.forceMove(newmob)
 		I.implanted = 1
 		I.imp_in = newmob
 		if(istype(newmob, /mob/living/carbon/human))

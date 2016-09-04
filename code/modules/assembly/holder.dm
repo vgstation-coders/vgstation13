@@ -53,8 +53,8 @@
 		user.remove_from_mob(D2)
 	D.holder = src
 	D2.holder = src
-	D.loc = src
-	D2.loc = src
+	D.forceMove(src)
+	D2.forceMove(src)
 
 	D.connected(D2)
 	D2.connected(D)
@@ -188,7 +188,7 @@
 			if (do_after(user, src, 40))
 				var/obj/machinery/igniter/igniter=new(src.loc)
 				igniter.assembly=src
-				src.loc=igniter
+				src.forceMove(igniter)
 				to_chat(user, "<span class='notice'>You attach the assembly to the floor with a few spot welds.</span>")
 		else
 			:
@@ -224,11 +224,11 @@
 			return 0
 		if(a_left)
 			a_left:holder = null
-			a_left.loc = T
+			a_left.forceMove(T)
 			a_left.disconnected(a_right)
 		if(a_right)
 			a_right:holder = null
-			a_right.loc = T
+			a_right.forceMove(T)
 			a_right.disconnected(a_left)
 		spawn(0)
 			del(src)

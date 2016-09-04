@@ -147,8 +147,8 @@ var/global/list/all_money_accounts = list()
 /obj/machinery/account_database
 	name = "Accounts database"
 	desc = "Holds transaction logs, account data and all kinds of other financial records."
-	icon = 'icons/obj/virology.dmi'
-	icon_state = "analyser"
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "account_db"
 	density = 1
 	req_one_access = list(access_hop, access_captain)
 	var/receipt_num
@@ -333,7 +333,7 @@ var/global/list/all_money_accounts = list()
 					creating_new_account = 0
 			if("insert_card")
 				if(held_card)
-					held_card.loc = src.loc
+					held_card.forceMove(src.loc)
 					if(ishuman(usr) && !usr.get_active_hand())
 						usr.put_in_hands(held_card)
 					held_card = null

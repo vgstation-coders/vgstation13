@@ -673,7 +673,7 @@
 				continue
 
 			if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
-				AM.loc = null //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
+				AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
 
 				spawn()
 					AM.forceMove(new_turf)

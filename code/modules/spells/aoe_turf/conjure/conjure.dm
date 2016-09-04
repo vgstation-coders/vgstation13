@@ -22,11 +22,10 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 	var/list/newVars = list() //vars of the summoned objects will be replaced with those where they meet
 	//should have format of list("emagged" = 1,"name" = "Wizard's Justicebot"), for example
 
-	cast_sound = 'sound/items/welder.ogg'
-
 /spell/aoe_turf/conjure/cast(list/targets, mob/user)
 	playsound(get_turf(user), cast_sound, 50, 1)
 
+	var/placed_successfully = 0
 	for(var/i=1,i <= summon_amt,i++)
 		if(!targets.len)
 			break
@@ -39,10 +38,23 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 		else
 			summoned_object_type = pick(summon_type)
 		var/turf/spawn_place = pick(targets)
+
+		if(spell_flags & NODUPLICATE) //No spawning duplicates
+			var/list/possible_targets = targets.Copy()
+			while((locate(summoned_object_type) in spawn_place) && possible_targets.len)
+				possible_targets -= spawn_place
+				if(possible_targets.len)
+					spawn_place = pick(possible_targets)
+			if(!possible_targets.len)
+				continue
+
 		if(spell_flags & IGNOREPREV)
 			targets -= spawn_place
 
 		var/atom/summoned_object
+
+		placed_successfully = 1
+
 		if(ispath(summoned_object_type,/turf))
 			if(istype(get_turf(user),/turf/simulated/shuttle) || istype(spawn_place, /turf/simulated/shuttle))
 				to_chat(user, "<span class='warning>You can't build things on shuttles!</span>")
@@ -51,6 +63,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 			summoned_object = spawn_place
 		else
 			summoned_object = new summoned_object_type(spawn_place)
+
 		var/atom/movable/overlay/animation = new /atom/movable/overlay(spawn_place)
 		animation.name = "conjure"
 		animation.density = 0
@@ -68,8 +81,23 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 				if(summoned_object && !istype(summoned_object, /turf))
 					qdel(summoned_object)
 		conjure_animation(animation, spawn_place)
-	return
+
+	return !placed_successfully //prevent charge if we didn't cast anything
 
 /spell/aoe_turf/conjure/proc/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	qdel(animation)
 	animation = null
+
+/spell/aoe_turf/conjure/choice
+	var/input_message = "What would you like to spawn?"
+	var/input_title = "Spawn Object"
+	//full list should be formatted an associated list of "Choice name" = Choicepath
+	var/full_list = list()
+
+//We're going to pick which of the things we would like to try spawning and set it
+/spell/aoe_turf/conjure/choice/before_target(mob/user)
+	var/choice = input(user, input_message, input_title) as null|anything in full_list
+	if(!choice)
+		return 1
+	summon_type = list(full_list[choice])
+	return ..()

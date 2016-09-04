@@ -10,6 +10,8 @@
 
 	var/list/target_list = list()
 
+	can_be_mixed = FALSE
+
 /datum/game_mode/traitor/double_agents/announce()
 	to_chat(world, "<B>The current game mode is - Double Agents!</B>")
 	to_chat(world, "<B>There are double agents killing eachother! Do not let them succeed!</B>")

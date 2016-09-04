@@ -373,6 +373,16 @@
 	name = "packet of cinnamomum seeds"
 	seed_type = "cinnamomum"
 	vending_cat = "trees"
+	
+/obj/item/seeds/test
+	name = "packet of testing data seed"
+	seed_type = "test"
+	vending_cat = "non-sentient"
+
+/obj/item/seeds/clown
+	name = "packet of clown pod seeds"
+	seed_type = "clown"
+	vending_cat = "non-sentient"
 
 /obj/item/seeds/nofruitseed
 	name = "packet of no-fruit seeds"

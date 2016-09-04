@@ -652,7 +652,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		health = maxHealth
 		stat = CONSCIOUS
 	else
-		// slimes can't suffocate unless they suicide. They are also not harmed by fire
+		// slimes can't suffocate unless they suicide or they fall into crit. They are also not harmed by fire
 		health = maxHealth - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
 
 /mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
@@ -694,7 +694,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_1 = 0
 
-			D.loc = src.loc
+			D.forceMove(src.loc)
 			if(step_to(D, Step_2))
 				check_2 = 1
 
@@ -728,7 +728,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 	//del(D)
 	//Garbage Collect Dummy
-	D.loc = null
+	D.forceMove(null)
 	D = null
 	if (!( ok ))
 
@@ -1054,7 +1054,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 	var/mob/living/carbon/slime/S = new M.primarytype // don't let's start
 	S.tame = M.tame
-	S.loc = get_turf(M)
+	S.forceMove(get_turf(M))
 	qdel(src)
 
 /obj/item/weapon/slimeres
@@ -1108,8 +1108,9 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	item_state = "golem"
 	canremove = 0
 	siemens_coefficient = 0
-	unacidable = 1
 
+/obj/item/clothing/mask/gas/golem/acidable()
+	return 0
 
 /obj/item/clothing/gloves/golem
 	name = "golem's hands"
@@ -1127,12 +1128,14 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	name = "golem's head"
 	desc = "a golem's head"
 	canremove = 0
-	unacidable = 1
 	flags = FPRINT
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	armor = list(melee = 80, bullet = 20, laser = 20, energy = 10, bomb = 0, bio = 0, rad = 0)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/head/space/golem/acidable()
+	return 0
 
 /obj/effect/golem_rune
 	anchored = 1
@@ -1140,7 +1143,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	name = "rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
-	unacidable = 1
 	plane = ABOVE_TURF_PLANE
 	layer = RUNE_LAYER
 	var/list/mob/dead/observer/ghosts[0]

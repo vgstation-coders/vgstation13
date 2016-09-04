@@ -5,7 +5,7 @@
 	response_help = "pokes"
 	response_disarm = "shoves"
 	response_harm = "hits"
-	speed = 2
+	speed = -1
 	stop_automated_movement_when_pulled = 0
 	maxHealth = 100
 	health = 100
@@ -30,6 +30,11 @@
 	var/obj/effect/landmark/corpse/corpse = /obj/effect/landmark/corpse
 	var/list/items_to_drop = list()
 
+	//A list with icons associated with icon states
+	//The icons are shown on top of the mob, in the order of the list
+	//Example: list('icons/mob/in-hand/right/items_righthand.dmi' = "cultblade")
+	//
+	//Intended for animated items that aren't so easy to add to the base sprite
 	var/list/visible_items = list()
 
 /mob/living/simple_animal/hostile/humanoid/New()

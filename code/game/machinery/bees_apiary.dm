@@ -97,10 +97,10 @@
 			created_tray.component_parts = list()
 			for(var/obj/I in src.component_parts)
 				created_tray.component_parts += I
-				I.loc = created_tray
+				I.forceMove(created_tray)
 				component_parts -= I
 			for(var/obj/I in src.contents)
-				I.loc = created_tray
+				I.forceMove(created_tray)
 				contents -= I
 			new /obj/item/apiary(src.loc)
 			if(health > 0)

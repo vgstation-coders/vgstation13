@@ -117,7 +117,7 @@ var/global/list/rad_collectors = list()
 	if(isnull(P))
 		return
 
-	P.loc = get_turf(src)
+	P.forceMove(get_turf(src))
 	P.reset_plane_and_layer()
 	P = null
 

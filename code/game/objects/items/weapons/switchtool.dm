@@ -103,7 +103,7 @@
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
 	deployed.cant_drop = 0
-	deployed.loc = get_turf(user)
+	deployed.forceMove(get_turf(user))
 	for(var/module in stored_modules)
 		if(stored_modules[module] == deployed)
 			stored_modules[module] = null

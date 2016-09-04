@@ -5,7 +5,6 @@
 	desc = "A glass lab container for storing interesting creatures."
 	density = 1
 	anchored = 1
-	unacidable = 1//Dissolving the case would also delete Lamarr
 	var/health = 30
 	var/occupied = 1
 	var/destroyed = 0
@@ -87,6 +86,9 @@
 	update_icon()
 	return
 
+/obj/structure/lamarr/acidable()
+	return 0
+
 /obj/item/clothing/mask/facehugger/lamarr
 	name = "Lamarr"
 	desc = "The worst she might do is attempt to... couple with your head."//hope we don't get sued over a harmless reference, rite?
@@ -122,3 +124,4 @@
 	else
 		..(W, user)
 		return
+

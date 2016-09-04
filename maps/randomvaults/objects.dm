@@ -5,6 +5,9 @@
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
+/area/vault/holomapAlwaysDraw()
+	return 0
+
 /area/vault/icetruck
 
 /area/vault/asteroid
@@ -41,8 +44,20 @@
 /area/vault/listening
 	requires_power = 1
 
+/obj/item/weapon/disk/shuttle_coords/vault/listening
+	destination = /obj/docking_port/destination/vault/listening
+
+/obj/docking_port/destination/vault/listening
+	areaname = "outpost V-24"
+
 /area/vault/biodome
 	requires_power = 1
+
+/obj/item/weapon/disk/shuttle_coords/vault/biodome
+	destination = /obj/docking_port/destination/vault/biodome
+
+/obj/docking_port/destination/vault/biodome
+	areaname = "biodome"
 
 /area/vault/brokeufo
 	requires_power = 1

@@ -47,9 +47,6 @@
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	if (!(get_dir(src, usr) in list(SOUTHWEST, SOUTH, SOUTHEAST)))
-		return
-
 	barsigns.len = 0
 	for(var/bartype in typesof(/datum/barsign))
 		var/datum/barsign/signinfo = new bartype
@@ -71,9 +68,7 @@
 		desc = "It displays \"[name]\"."
 
 /obj/structure/sign/double/barsign/cultify()
-	if(cult)
-		return
-	else
+	if(!cult)
 		icon_state = "narsiebistro"
 		name = "Narsie Bistro"
 		desc = "The last pub before the World's End."

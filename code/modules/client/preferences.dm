@@ -98,7 +98,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/space_dust = 1
 	var/parallax_speed = 2
 	var/special_popup = 0
-
+	var/tooltips = 1
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -294,6 +294,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Special Windows: </b><a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Character Records:<b> [jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
 	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
+	<b>Show Tooltips:</b> <a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
 	"}
 
 	if(config.allow_Metadata)
@@ -1491,6 +1492,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					usewmp = !usewmp
 				if("nanoui")
 					usenanoui = !usenanoui
+				if("tooltips")
+					tooltips = !tooltips
 				if("progbar")
 					progress_bars = !progress_bars
 				if("ghost_ears")

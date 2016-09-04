@@ -98,7 +98,7 @@
 	name = "\improper Mining Satchel" //need the improper for the
 	desc = "This little bugger can be used to store and transport ores."
 	icon = 'icons/obj/mining.dmi'
-	icon_state = "satchel"
+	icon_state = "mining_satchel"
 	slot_flags = SLOT_BELT | SLOT_POCKET
 	w_class = W_CLASS_MEDIUM
 	storage_slots = 50
@@ -244,7 +244,7 @@
 				qdel (S)
 				S = null
 			else
-				S.loc = src
+				S.forceMove(src)
 
 		orient2hud(usr)
 		if(usr.s_active)

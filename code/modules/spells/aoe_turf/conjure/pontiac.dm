@@ -3,6 +3,7 @@
 /spell/aoe_turf/conjure/pontiac
 	name = "Chariot"
 	desc = "This spell summons a glorious, flaming chariot that can move in space."
+	abbreviation = "WM"
 
 	charge_type = Sp_CHARGES
 	charge_max = 1

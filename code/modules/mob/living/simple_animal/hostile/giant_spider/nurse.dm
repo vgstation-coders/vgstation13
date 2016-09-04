@@ -38,7 +38,7 @@
 					if(C.stat && !istype(C,/mob/living/simple_animal/hostile/giant_spider))
 						cocoon_target = C
 						busy = MOVING_TO_TARGET
-						Goto(C, speed)
+						Goto(C, move_to_delay)
 						//give up if we can't reach them after 10 seconds
 						GiveUp(C)
 						return
@@ -104,7 +104,7 @@
 						cocoon_target = O
 						busy = MOVING_TO_TARGET
 						stop_automated_movement = 1
-						Goto(O, speed)
+						Goto(O, move_to_delay)
 						//give up if we can't reach them after 10 seconds
 						GiveUp(O)
 
@@ -141,19 +141,19 @@
 										large_cocoon = 1
 										fed++
 										src.visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
-										M.loc = C
+										M.forceMove(C)
 										C.pixel_x = M.pixel_x
 										C.pixel_y = M.pixel_y
 										break
 									for(var/obj/item/I in C.loc)
-										I.loc = C
+										I.forceMove(C)
 									for(var/obj/structure/S in C.loc)
 										if(!S.anchored)
-											S.loc = C
+											S.forceMove(C)
 											large_cocoon = 1
 									for(var/obj/machinery/M in C.loc)
 										if(!M.anchored)
-											M.loc = C
+											M.forceMove(C)
 											large_cocoon = 1
 									if(large_cocoon)
 										C.icon_state = pick("cocoon_large1","cocoon_large2","cocoon_large3")
@@ -188,5 +188,6 @@
 	damage_type = BRUTE
 
 /obj/item/projectile/web/Bump(atom/A)
-	new /obj/effect/spider/stickyweb(src.loc)
+	if(!(locate(/obj/effect/spider/stickyweb) in get_turf(src)))
+		new /obj/effect/spider/stickyweb(get_turf(src))
 	qdel(src)

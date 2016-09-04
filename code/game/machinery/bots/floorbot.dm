@@ -343,7 +343,7 @@ var/global/list/floorbot_targets=list()
 		if(src.maketiles && !src.have_target())
 			if(src.hunt_for_metal(shitICanSee, floorbottargets))
 				return 1
-		else
+		else if(amount <= 0)
 			return 0
 
 	if(prob(5))

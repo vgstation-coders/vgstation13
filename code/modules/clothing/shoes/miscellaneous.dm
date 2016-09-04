@@ -238,6 +238,13 @@
 			step_sound = sound_list[pick(sound_list)]
 	..()
 
+/obj/item/clothing/shoes/clown_shoes/stickymagic
+	canremove = 0
+	wizard_garb = 1
+
+/obj/item/clothing/shoes/clown_shoes/stickymagic/acidable()
+	return 0
+
 #undef CLOWNSHOES_RANDOM_SOUND
 
 /obj/item/clothing/shoes/jackboots
@@ -259,6 +266,12 @@
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
 	desc = "Criminal stomping boots for fighting crime and looking good."
+
+/obj/item/clothing/shoes/jackboots/neorussian
+	name = "neo-Russian boots"
+	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
+	icon_state = "nr_boots"
+	item_state = "nr_boots"
 
 /obj/item/clothing/shoes/cult
 	name = "boots"
@@ -363,3 +376,11 @@
 	desc = ""
 	icon_state = "doom"
 	item_state = "doom"
+
+/obj/item/clothing/shoes/workboots
+	name = "Workboots"
+	desc = "Thick-soled boots for industrial work environments."
+	icon_state = "workboots"
+	item_state = "workboots"
+	species_fit = list(VOX_SHAPED)
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots

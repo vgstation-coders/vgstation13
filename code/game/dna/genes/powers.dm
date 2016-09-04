@@ -34,7 +34,7 @@
 	charge_max = 50
 
 	invocation_type = SpI_NONE
-	range = -2
+	range = GLOBALCAST
 	max_targets = 1
 	spell_flags = SELECTABLE | INCLUDEUSER | TALKED_BEFORE
 
@@ -115,7 +115,7 @@
 	charge_max = 50
 
 	invocation_type = SpI_NONE
-	range = -2 //the world
+	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
 	spell_flags = SELECTABLE|TALKED_BEFORE
@@ -133,7 +133,7 @@
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
 
 	if(!say)
-		return
+		return 1
 
 	for(var/T in targets)
 		var/mob/living/carbon/human/target = T

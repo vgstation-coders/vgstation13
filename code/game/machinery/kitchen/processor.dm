@@ -103,7 +103,7 @@
 				var/mob/living/carbon/slime/S = what
 				var/C = S.cores
 				if(S.stat != DEAD)
-					S.loc = loc
+					S.forceMove(loc)
 					S.visible_message("<span class='notice'>[C] crawls free of the processor!</span>")
 					return
 				for(var/i = 1, i <= C, i++)
@@ -117,7 +117,7 @@
 			process(loc, what)
 				var/mob/living/carbon/monkey/O = what
 				if (O.client) //grief-proof
-					O.loc = loc
+					O.forceMove(loc)
 					O.visible_message("<span class='notice'>[O] suddenly jumps out of [src]!</span>", \
 							"You jump out from the processor", \
 							"You hear a slimy sound")
@@ -173,7 +173,7 @@
 					for(var/turf/T in orange(loc,4))
 						throwzone += T
 					for(var/obj/I in target.contents)
-						I.loc = loc
+						I.forceMove(loc)
 						I.throw_at(pick(throwzone),rand(2,5),0)
 					hgibs(loc, target.viruses, target.dna, target.species.flesh_color, target.species.blood_color)
 					qdel(target)
@@ -183,7 +183,7 @@
 						sleep(2)
 					..()
 				else
-					target.loc = loc
+					target.forceMove(loc)
 					target.visible_message("<span class='danger'>The processor's safety protocols won't allow it to cut something that looks human!</span>")
 			input = /mob/living/carbon/human
 			output = null
@@ -228,7 +228,7 @@
 	else
 		if(O.loc == user)
 			user.drop_item(O)
-		what.loc = src
+		what.forceMove(src)
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)

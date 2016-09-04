@@ -57,7 +57,7 @@
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				state = 1
 				icon_state = "0"
-				circuit.loc = loc
+				circuit.forceMove(loc)
 				circuit = null
 		if(2)
 			if(isscrewdriver(P) && circuit)
@@ -157,7 +157,7 @@
 			if(iscrowbar(P) && brain)
 				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You remove the brain.</span>")
-				brain.loc = loc
+				brain.forceMove(loc)
 				brain = null
 				icon_state = "3"
 
@@ -221,7 +221,7 @@ That prevents a few funky behaviors.
 							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
 							//T.aiRestorePowerRoutine = 0//So the AI initially has power.
 							T.control_disabled = 1//Can't control things remotely if you're stuck in a card!
-							T.loc = C//Throw AI into the card.
+							T.forceMove(C)//Throw AI into the card.
 							C.name = "inteliCard - [T.name]"
 							if (T.stat == 2)
 								C.icon_state = "aicard-404"
@@ -233,7 +233,7 @@ That prevents a few funky behaviors.
 							//fix blindness from powerloss
 							if(T.aiRestorePowerRoutine)
 								T.aiRestorePowerRoutine = -1
-								T.blind.layer = 0
+								T.clear_fullscreen("blind")
 
 			if("INACTIVE")//Inactive AI object.
 				var/obj/structure/AIcore/deactivated/T = target
@@ -243,7 +243,7 @@ That prevents a few funky behaviors.
 						var/mob/living/silicon/ai/A = locate() in C//I love locate(). Best proc ever.
 						if(A)//If AI exists on the card. Else nothing since both are empty.
 							A.control_disabled = 0
-							A.loc = T.loc//To replace the terminal.
+							A.forceMove(T.loc)//To replace the terminal.
 							C.icon_state = "aicard"
 							C.name = "inteliCard"
 							C.overlays.len = 0
@@ -266,7 +266,7 @@ That prevents a few funky behaviors.
 									C.icon_state = "aicard"
 									C.name = "inteliCard"
 									C.overlays.len = 0
-									A.loc = T
+									A.forceMove(T)
 									T.occupant = A
 									A.control_disabled = 1
 									if (A.stat == 2)
@@ -289,7 +289,7 @@ That prevents a few funky behaviors.
 									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-full")
 								to_chat(T.occupant, "You have been downloaded to a mobile storage device. Still no remote access.")
 								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
-								T.occupant.loc = C
+								T.occupant.forceMove(C)
 								T.occupant.cancel_camera()
 								T.occupant = null
 							else if (C.contents.len)

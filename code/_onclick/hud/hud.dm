@@ -26,6 +26,7 @@ var/global/obj/screen/clicker/catcher = new()
 
 	var/list/adding
 	var/list/other
+	var/obj/screen/holomap/holomap_obj
 	var/list/obj/screen/hotkeybuttons
 
 	var/list/obj/screen/item_action/item_action_list = list()	//Used for the item action ui buttons.
@@ -216,12 +217,12 @@ var/global/obj/screen/clicker/catcher = new()
 		ghost_hud()
 	else if(isshade(mymob))
 		shade_hud()
+	else if(isslime(mymob))
+		slime_hud()
 	else if(isborer(mymob))
 		borer_hud()
 	else if(isconstruct(mymob))
 		construct_hud()
-	else if(isobserver(mymob))
-		ghost_hud()
 
 	if(isliving(mymob))
 		var/obj/screen/using

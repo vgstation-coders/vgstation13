@@ -164,6 +164,13 @@ var/list/uplink_items = list()
 	cost = 3
 	job = list("Clown", "Mime")
 
+/datum/uplink_item/jobspecific/advancedmime
+	name = "Advanced Mime Gloves"
+	desc = "Grants the user the ability to periodically fire an invisible gun from their hands!"
+	item = /obj/item/clothing/gloves/white/advanced
+	cost = 6
+	job = list("Mime")
+	
 //Security
 /datum/uplink_item/jobspecific/syndicuffs
 	name = "Syndicate Cuffs"

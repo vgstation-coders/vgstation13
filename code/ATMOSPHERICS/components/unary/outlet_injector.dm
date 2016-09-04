@@ -20,6 +20,13 @@
 
 	machine_flags = MULTITOOL_MENU
 
+/obj/machinery/atmospherics/unary/outlet_injector/acid_proof
+	name = "Acid-Proof Air Injector"
+	desc = "Has a valve and pump attached to it. This one has an acid proof coating."
+
+/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/acidable()
+	return 0
+
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
 	if(node)
 		if(on && !(stat & NOPOWER))

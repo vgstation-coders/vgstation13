@@ -12,8 +12,6 @@
 
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
 
-	var/obj/screen/flash = null
-	var/obj/screen/blind = null
 	var/obj/screen/hands = null
 	var/obj/screen/pullin = null
 	var/obj/screen/kick_icon = null
@@ -97,7 +95,6 @@
 	var/druggy = 0			//Carbon
 	var/confused = 0		//Carbon
 	var/antitoxs = null
-	var/plasma = null
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
 	var/lying = 0
@@ -105,7 +102,6 @@
 	var/canmove = 1
 	var/candrop = 1
 	var/lastpuke = 0
-	var/unacidable = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers

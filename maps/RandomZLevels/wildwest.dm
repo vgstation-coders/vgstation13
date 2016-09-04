@@ -57,7 +57,7 @@
 					to_chat(user, "\blue Your skin feels icy to the touch.")
 				if (!(M_XRAY in user.mutations))
 					user.mutations.Add(M_XRAY)
-					user.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
+					user.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 					user.see_in_dark = 8
 					user.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 					to_chat(user, "\blue The walls suddenly disappear.")

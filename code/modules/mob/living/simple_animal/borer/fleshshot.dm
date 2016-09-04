@@ -43,7 +43,7 @@
 				HC.shot_from = src
 				links["[i]"] = HC
 			else
-				HC.loc = src
+				HC.forceMove(src)
 		panic = 0
 
 	if(!hook && !rewinding && !clockwerk && !check_tether())//if there is no projectile already, and we aren't currently rewinding the chain, or reeling in toward a target,
@@ -93,7 +93,7 @@
 			if(!HC0)
 				cancel_chain()
 				return
-			HC.loc = HC0.loc
+			HC.forceMove(HC0.loc)
 			HC.pixel_x = HC0.pixel_x
 			HC.pixel_y = HC0.pixel_y
 		var/obj/effect/overlay/hookchain/chain_end = links["[end_of_chain]"]
@@ -165,7 +165,7 @@
 
 		if(istype(C2))
 			var/turf/T = C1.loc
-			C1.loc = extremity_A.loc
+			C1.forceMove(extremity_A.loc)
 			C2.follow(C1,T)
 			C2.extremity_A = extremity_A
 			C2.update_overlays(C1)
@@ -178,7 +178,7 @@
 			else
 				var/turf/U = C1.loc
 				if(U && U.Enter(C2,C2.loc))//if we cannot pull the target through the turf, we just let him go.
-					C2.loc = C1.loc
+					C2.forceMove(C1.loc)
 				else
 					extremity_B.tether = null
 					extremity_B = null
@@ -315,7 +315,7 @@
 				hookshot.cancel_chain()
 				bullet_die()
 				return
-			HC.loc = loc
+			HC.forceMove(loc)
 			HC.pixel_x = pixel_x
 			HC.pixel_y = pixel_y
 			if(last_link)

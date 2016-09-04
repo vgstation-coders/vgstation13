@@ -80,8 +80,8 @@ obj/item/device/mmi/Destroy()
 		M.job = "MoMMI"
 
 		M.cell = locate(/obj/item/weapon/cell) in contents
-		M.cell.loc = M
-		src.loc = M//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+		M.cell.forceMove(M)
+		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 		M.mmi = src
 		return TRUE
 	for(var/t in mommi_assembly_parts)
@@ -136,7 +136,7 @@ obj/item/device/mmi/Destroy()
 
 		brainmob = BO.brainmob
 		BO.brainmob = null
-		brainmob.loc = src
+		brainmob.forceMove(src)
 		brainmob.container = src
 		brainmob.stat = 0
 		brainmob.resurrect()
@@ -179,7 +179,7 @@ obj/item/device/mmi/Destroy()
 		to_chat(user, "<span class='notice'>You upend \the [src], spilling the brain onto the floor.</span>")
 		var/obj/item/organ/brain/brain = new(user.loc)
 		brainmob.container = null//Reset brainmob mmi var.
-		brainmob.loc = brain//Throw mob into brain.
+		brainmob.forceMove(brain)//Throw mob into brain.
 		living_mob_list -= brainmob//Get outta here
 		brain.brainmob = brainmob//Set the brain to use the brainmob
 		brainmob = null//Set mmi brainmob var to null

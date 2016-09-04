@@ -64,12 +64,12 @@
 	src.overlays -= image(icon = icon, icon_state = "[base_state]_ani")
 	if(being_built)
 		var/obj/structure/closet/crate/flatpack/FP = new
-		being_built.loc = FP
+		being_built.forceMove(FP)
 		FP.name += " ([being_built.name])"
 		FP.machine = being_built
 		FP.update_icon()
 		var/turf/output = get_output()
-		FP.loc = get_turf(output)
+		FP.forceMove(get_turf(output))
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
 		src.being_built = null
 

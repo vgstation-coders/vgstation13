@@ -22,36 +22,13 @@
 	if(src.name == "alien drone")
 		src.name = text("alien drone ([rand(1, 1000)])")
 	src.real_name = src.name
-	verbs.Add(/mob/living/carbon/alien/humanoid/proc/resin,/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
 
-//Drones use the same base as generic humanoids.
-//Drone verbs
-
-/mob/living/carbon/alien/humanoid/drone/verb/evolve() // -- TLE
-	set name = "Evolve (500)"
-	set desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
-	set category = "Alien"
-
-	if(powerc(500))
-		// Queen check
-		var/no_queen = 1
-		for(var/mob/living/carbon/alien/humanoid/queen/Q in living_mob_list)
-			if(!Q.key && Q.has_brain())
-				continue
-			no_queen = 0
-
-		if(no_queen)
-			adjustToxLoss(-500)
-			visible_message("<span class='alien'>[src] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
-			if(do_after(src, src, 50))
-				var/mob/living/carbon/alien/humanoid/queen/new_xeno = new(loc)
-				mind.transfer_to(new_xeno)
-				transferImplantsTo(new_xeno)
-				transferBorers(new_xeno)
-				qdel(src)
-		else
-			to_chat(src, "<span class='notice'>We already have an alive queen.</span>")
-	return
+/mob/living/carbon/alien/humanoid/drone/add_spells_and_verbs()
+	..()
+	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/alienacid, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/evolve/drone, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)

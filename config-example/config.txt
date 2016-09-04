@@ -308,3 +308,7 @@ SKIP_MINIMAP_GENERATION
 ## ENABLE_WAGES
 ## Comment out to disable wages being enabled by default.
 ENABLE_WAGES
+
+# HTTP URL to send Discord messages to.
+# DISCORD_URL
+# DISCORD_PASSWORD

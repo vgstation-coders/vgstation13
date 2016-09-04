@@ -44,7 +44,7 @@
 				qdel(src)
 				return
 			if(iscrowbar(W))
-				circuit.loc=T
+				circuit.forceMove(T)
 				circuit.installed = 0
 				circuit=null
 				state--
@@ -68,7 +68,6 @@
 	desc = "A display case for prized possessions. It tempts you to kick it."
 	density = 1
 	anchored = 1
-	unacidable = 1//Dissolving the case would also delete the gun.
 	var/health = 30
 	var/obj/item/occupant = null
 	var/destroyed = 0
@@ -117,7 +116,7 @@
 
 /obj/structure/displaycase/proc/dump()
 	if(occupant)
-		occupant.loc=get_turf(src)
+		occupant.forceMove(get_turf(src))
 		occupant=null
 	occupant_overlay=null
 
@@ -215,10 +214,10 @@
 			var/obj/structure/displaycase_frame/F=new(T)
 			F.state=1
 			F.circuit=C
-			F.circuit.loc=F
+			F.circuit.forceMove(F)
 			F.update_icon()
 		else
-			C.loc=T
+			C.forceMove(T)
 			C.installed = 0
 			circuit=null
 			new /obj/machinery/constructable_frame/machine_frame(T)
@@ -279,6 +278,9 @@
 			user.visible_message("[user.name] gently runs their hands over \the [src] in appreciation of its contents.", \
 				"You gently run your hands over \the [src] in appreciation of its contents.", \
 				"You hear someone streaking glass with their greasy hands.")
+
+/obj/structure/displaycase/acidable()
+	return 0
 
 
 /obj/structure/displaycase/broken

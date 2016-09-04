@@ -184,7 +184,7 @@
 
 		if(Toxins_pp) // Detect toxins in air
 
-			adjustToxLoss(breath.toxins*250)
+			AdjustPlasma(breath.toxins*250)
 			toxins_alert = max(toxins_alert, 1)
 
 			toxins_used = breath.toxins
@@ -385,15 +385,11 @@
 
 
 		if (stat == 2 || (M_XRAY in mutations))
-			sight |= SEE_TURFS
-			sight |= SEE_MOBS
-			sight |= SEE_OBJS
+			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			see_invisible = SEE_INVISIBLE_MINIMUM
 		else if (stat != 2)
-			sight |= SEE_MOBS
-			sight &= ~SEE_TURFS
-			sight &= ~SEE_OBJS
+			change_sight(adding = SEE_MOBS, removing = SEE_TURFS|SEE_OBJS)
 			see_in_dark = 4
 			see_invisible = SEE_INVISIBLE_MINIMUM
 

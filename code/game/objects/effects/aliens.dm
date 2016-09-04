@@ -14,7 +14,6 @@
 	name = "alien thing"
 	desc = "theres something alien about this"
 	icon = 'icons/mob/alien.dmi'
-//	unacidable = 1 //Aliens won't ment their own.
 	w_type=NOT_RECYCLABLE
 
 /*
@@ -135,7 +134,7 @@
 				if(G.state<2)
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
-				G.affecting.loc = src
+				G.affecting.forceMove(src)
 				G.affecting.paralysis = 10
 				for(var/mob/O in viewers(world.view, src))
 					if (O.client)
@@ -363,7 +362,7 @@
 	opacity = 0
 	anchored = 1
 	layer = ABOVE_DOOR_LAYER
-	
+
 	var/atom/target
 	var/ticks = 0
 	var/target_strength = 0
@@ -373,9 +372,17 @@
 	desc = "Burbling corrossive stuff. The radical kind."
 	icon_state = "acid-hyper"
 
-/obj/effect/alien/acid/New(loc, target)
+/datum/locking_category/acid
+
+/obj/effect/alien/acid/New(loc, atom/target)
 	..(loc)
 	src.target = target
+	pixel_x = target.pixel_x
+	pixel_y = target.pixel_y
+	if(istype(target,/atom/movable))
+		var/atom/movable/locker = target
+		locker.lock_atom(src, /datum/locking_category/acid)
+		glide_size = locker.glide_size
 
 	if(isturf(target)) // Turf take twice as long to take down.
 		target_strength = 8
@@ -386,19 +393,14 @@
 /obj/effect/alien/acid/proc/tick()
 	if(!target)
 		qdel(src)
+		return
 
 	ticks += 1
 
 	if(ticks >= target_strength)
 
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='good'><B>[src.target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>", 1)
-
-		if(istype(target, /turf/simulated/wall)) // I hate turf code.
-			var/turf/simulated/wall/W = target
-			W.dismantle_wall(1)
-		else
-			qdel(target)
+		visible_message("<span class='good'><B>[src.target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>")
+		target.acid_act()
 		qdel(src)
 		return
 
@@ -412,6 +414,14 @@
 		if(0 to 1)
 			visible_message("<span class='good'><B>[src.target] begins to crumble under the acid!</B></span>")
 	spawn(rand(150, 200)) tick()
+
+/atom/proc/acid_act()
+
+/obj/acid_act()
+	qdel(src)
+
+/turf/simulated/wall/acid_act()
+	dismantle_wall(1)
 
 /obj/effect/alien/acid/hyper/tick()
 	visible_message("<span class='good'><B>[src.target] begins to crumble under the acid!</B></span>")

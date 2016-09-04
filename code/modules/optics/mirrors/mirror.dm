@@ -146,7 +146,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	var/list/spawners = list(src)
 
 	//testing("Beam count: [beams.len]")
-	if(beams.len>0 && anchored)
+	if(beams && beams.len>0 && anchored)
 		// Figure out what we're getting hit by.
 		//var/BN=0
 		for(var/obj/effect/beam/B in beams)

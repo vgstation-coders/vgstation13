@@ -8,7 +8,6 @@
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0
 	gas_transfer_coefficient = 0.90
-	unacidable = 1
 
 /obj/item/clothing/mask/happy/equipped(M as mob, wear_mask)
 	var/mob/living/carbon/human/H = M
@@ -71,3 +70,6 @@
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Oh joy! [M.real_name]'s decided to join the party!</span>")
 		to_chat(S, "<span class='sinister'>You have been given form by the power of the happiest mask! Go forth and cause joyful chaos for [H.real_name]!</span>")
+
+/obj/item/clothing/mask/happy/acidable()
+	return 0

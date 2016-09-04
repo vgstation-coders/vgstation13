@@ -265,7 +265,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		t_disk.stored = null
 
 	else if(href_list["eject_tech"]) //Eject the technology disk.
-		t_disk:loc = src.loc
+		t_disk:forceMove(src.loc)
 		t_disk = null
 		screen = 1.0
 
@@ -288,7 +288,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		d_disk.blueprint = null
 
 	else if(href_list["eject_design"]) //Eject the design disk.
-		d_disk:loc = src.loc
+		d_disk:forceMove(src.loc)
 		d_disk = null
 		screen = 1.0
 
@@ -305,7 +305,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
 
 			else if(linked_destroy.loaded_item)
-				linked_destroy.loaded_item.loc = linked_destroy.loc
+				linked_destroy.loaded_item.forceMove(linked_destroy.loc)
 				linked_destroy.loaded_item = null
 				linked_destroy.icon_state = "d_analyzer"
 				screen = 2.1

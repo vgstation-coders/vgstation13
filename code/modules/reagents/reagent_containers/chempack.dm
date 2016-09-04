@@ -220,9 +220,9 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				if (iscrowbar(W) && src.beaker && auxiliary)
 					var/obj/item/weapon/reagent_containers/glass/B = beaker
 					if ((user.get_inactive_hand() == src) || (user.back == src))
-						B.loc = user.loc
+						B.forceMove(user.loc)
 					else
-						B.loc = loc
+						B.forceMove(loc)
 					beaker = null
 					to_chat(user, "You pry the beaker out of \the [src].")
 					if(user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))

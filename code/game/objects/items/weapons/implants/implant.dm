@@ -146,6 +146,7 @@ Implant Specifics:<BR>"}
 
 		var/turf/T = get_turf(M)
 
+		M.gib()
 		explosion(T, 1, 3, 4, 6)
 		T.hotspot_expose(3500, 125, surfaces = 1)
 
@@ -506,7 +507,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if (imp_in)
 		imp_in.put_in_hands(scanned)
 	else
-		scanned.loc = t
+		scanned.forceMove(t)
 	qdel (src)
 
 /obj/item/weapon/implant/compressed/implanted(mob/source as mob)

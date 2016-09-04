@@ -118,3 +118,16 @@
 				A.y = rand(teleport_y, teleport_y_offset)
 				A.z = rand(teleport_z, teleport_z_offset)
 
+/obj/effect/step_trigger/teleporter/random/shuttle_transit
+	teleport_x = 25
+	teleport_y = 25
+	teleport_z = 6
+
+	//x and y offsets depend on the map size
+
+	teleport_z_offset = 6
+
+/obj/effect/step_trigger/teleporter/random/shuttle_transit/New()
+	..()
+	teleport_x_offset = world.maxx - 25
+	teleport_y_offset = world.maxy - 25

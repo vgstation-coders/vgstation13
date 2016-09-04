@@ -362,7 +362,7 @@
 		MB.RunOverCreature(src,species.blood_color)
 	else
 		var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
-		if(istype(WC))
+		if(istype(WC) && !WC.attack_cooldown)
 			WC.crush(src,species.blood_color)
 		else
 			return //Don't make blood
@@ -1229,7 +1229,7 @@
 	else
 		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s [affected.display_name] in a welter of blood.</b></span>","<span class='warning'>[usr] rips [selection] out of your [affected] in a welter of blood.</span>")
 
-	selection.loc = get_turf(src)
+	selection.forceMove(get_turf(src))
 	affected.implants -= selection
 	shock_stage+=10
 
@@ -1442,7 +1442,7 @@
 		return 0
 	if(istype(shoes,/obj/item/clothing/shoes/magboots))
 		var/obj/item/clothing/shoes/magboots/M = shoes
-		if(M.magpulse)
+		if(M.magpulse && singulo.current_size <= STAGE_FOUR)
 			return 0
 	return 1
 // Get ALL accesses available.
@@ -1454,7 +1454,7 @@
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
 	return ACL
-	
+
 /mob/living/carbon/human/get_visible_id()
 	var/id = null
 	if(wear_id)
@@ -1465,7 +1465,7 @@
 			if(id)
 				break
 	return id
-	
+
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!
@@ -1559,7 +1559,7 @@
 	if(radiations)
 		apply_effect(current_size * radiations, IRRADIATE)
 	if(shoes)
-		if(shoes.flags & NOSLIP)
+		if(shoes.flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
 	..()
 /mob/living/carbon/human/get_default_language()
@@ -1743,3 +1743,6 @@
 				grasp_organs.Add(OE)
 				organs.Add(OE)
 	..()
+
+/mob/living/carbon/human/is_fat()
+	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)

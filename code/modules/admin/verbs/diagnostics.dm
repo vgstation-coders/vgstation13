@@ -163,7 +163,7 @@
 		if (!group.group_processing)
 			dead_groups += group
 	var/datum/air_group/dest_group = pick(dead_groups)
-	usr.loc = pick(dest_group.members)
+	usr.forceMove(pick(dest_group.members))
 	feedback_add_details("admin_verb","JDAG") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
 	*/

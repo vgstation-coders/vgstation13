@@ -37,7 +37,7 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
-#define isslime(A) istype(A, /mob/living/carbon/slime)
+#define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -183,7 +183,7 @@
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
 
 #define FOR_DVIEW(type, range, center, invis_flags) \
-	dview_mob.loc = center; \
+	dview_mob.forceMove(center);           \
 	dview_mob.see_invisible = invis_flags; \
 	for(type in view(range, dview_mob))
 
@@ -199,3 +199,6 @@
 
 //Helper macro for eggs, called in process() of all fertilized eggs. If it returns 0, the egg will no longer be able to hatch
 #define is_in_valid_nest(egg) (isturf(egg.loc))
+
+
+#define CHECK_TICK if(world.tick_usage > 90) sleep(world.tick_lag)

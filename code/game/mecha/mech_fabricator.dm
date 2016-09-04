@@ -18,6 +18,7 @@
 #define	MECH_SCREEN_DURAND		34
 #define	MECH_SCREEN_HONK		35
 #define	MECH_SCREEN_PHAZON		36
+#define	MECH_SCREEN_NANOTRASEN	37
 
 #define	MECH_SCREEN_MISC		41
 
@@ -57,6 +58,8 @@
 		),
 		"Phazon"=list(
 		),
+		"Nanotrasen"=list(
+		),
 		"Exosuit_Tools"=list(
 			/obj/item/mecha_parts/mecha_equipment/tool/sleeper,
 			/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun,
@@ -86,3 +89,5 @@
 	)
 
 	RefreshParts()
+
+

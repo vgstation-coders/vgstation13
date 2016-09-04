@@ -191,7 +191,7 @@ var/bomb_set
 		usr.set_machine(src)
 		if (href_list["auth"])
 			if (src.auth)
-				src.auth.loc = src.loc
+				src.auth.forceMove(src.loc)
 				src.yes_code = 0
 				src.auth = null
 			else
@@ -295,7 +295,7 @@ var/bomb_set
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
 	if( bomb_location && (bomb_location.z == map.zMainStation) )
-		if( (bomb_location.x < (128-NUKERANGE)) || (bomb_location.x > (128+NUKERANGE)) || (bomb_location.y < (128-NUKERANGE)) || (bomb_location.y > (128+NUKERANGE)) )
+		if( (bomb_location.x < (world.maxx/2-NUKERANGE)) || (bomb_location.x > (world.maxx/2+NUKERANGE)) || (bomb_location.y < (world.maxy-NUKERANGE)) || (bomb_location.y > (world.maxy+NUKERANGE)) )
 			off_station = 1
 	else
 		off_station = 2

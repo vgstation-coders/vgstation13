@@ -236,7 +236,7 @@
 					src.icon_state = "bees[B.strength]"
 					var/turf/simulated/floor/T = get_turf(get_step(src, pick(1,2,4,8)))
 					if(T.Enter(src, get_turf(src)))
-						src.loc = T
+						src.forceMove(T)
 				break
 
 		if(target)

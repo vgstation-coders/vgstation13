@@ -215,7 +215,10 @@
 
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
-
+	//This is down here because of the browse() calls in tooltip/New()
+	if(!tooltips)
+		tooltips = new /datum/tooltip(src)
+		
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -443,3 +446,15 @@
 	if(!(colour_to.len))
 		colour_to = default_colour_matrix
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
+
+/client/proc/changeView(var/newView)
+	if(!newView)
+		view = world.view
+	else
+		view = newView
+
+	if(mob && ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
+		if(istype(U))
+			U.update_holomap()

@@ -2,6 +2,7 @@
 	desc = "Autonomous Power Loader Unit. The workhorse of the exosuit world."
 	name = "APLU \"Ripley\""
 	icon_state = "ripley"
+	initial_icon = "ripley"
 	step_in = 4
 	max_temperature = 20000
 	health = 200
@@ -21,6 +22,7 @@
 	desc = "Standard APLU chassis, refitted with additional thermal protection and cistern."
 	name = "APLU \"Firefighter\""
 	icon_state = "firefighter"
+	initial_icon = "firefighter"
 	max_temperature = 65000
 	health = 250
 	lights_power = 8
@@ -31,6 +33,7 @@
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
 	name = "DEATH-RIPLEY"
 	icon_state = "deathripley"
+	initial_icon = "deathripley"
 	step_in = 2
 	opacity = 0
 	lights_power = 60
@@ -107,18 +110,18 @@
 		if(O in cargo) //mom's spaghetti
 			continue
 		if(!is_type_in_list(O,mech_parts))
-			O.loc = src.loc
+			O.forceMove(src.loc)
 	return
 
 /obj/mecha/working/ripley/Destroy()
 	for(var/mob/M in src)
 		if(M==src.occupant)
 			continue
-		M.loc = get_turf(src)
+		M.forceMove(get_turf(src))
 		M.loc.Entered(M)
 		step_rand(M)
 	for(var/atom/movable/A in src.cargo)
-		A.loc = get_turf(src)
+		A.forceMove(get_turf(src))
 		var/turf/T = get_turf(A)
 		if(T)
 			T.Entered(A)

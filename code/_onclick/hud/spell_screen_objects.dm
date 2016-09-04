@@ -11,6 +11,7 @@
 	screen_loc = ui_spell_master
 
 	var/mob/spell_holder
+	var/length = 9
 
 /obj/screen/movable/spell_master/Destroy()
 	..()
@@ -32,7 +33,13 @@
 		return
 
 	return ..()
-
+	
+/obj/screen/movable/spell_master/MouseEntered(location,control,params)	
+	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
+	
+/obj/screen/movable/spell_master/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
 		returnToPool(src)
@@ -71,8 +78,8 @@
 
 	for(var/i = 1; i <= spell_objects.len; i++)
 		var/obj/screen/spell/S = spell_objects[i]
-		var/xpos = x_position + (x_position < 8 ? 1 : -1)*(i%7)
-		var/ypos = y_position + (y_position < 8 ? round(i/7) : -round(i/7))
+		var/xpos = x_position + (x_position < (world.view+1) ? 1 : -1)*(i%length)
+		var/ypos = y_position + (y_position < (world.view+1) ? round(i/length) : -round(i/length))
 		S.screen_loc = "[encode_screen_X(xpos)]:[x_pix],[encode_screen_Y(ypos)]:[y_pix]"
 		if(spell_holder && spell_holder.client)
 			spell_holder.client.screen += S
@@ -143,6 +150,16 @@
 
 	screen_loc = ui_genetic_master
 
+/obj/screen/movable/spell_master/alien
+	name = "Alien Abilities"
+	icon_state = "alien_spell_ready"
+
+	open_state = "alien_open"
+	closed_state = "alien_closed"
+
+	screen_loc = ui_alien_master
+	length = 9
+
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
 /////////////////////////////////////////
@@ -158,7 +175,31 @@
 
 	var/icon/last_charged_icon
 	var/channeling_image
-
+	
+/obj/screen/spell/MouseEntered(location,control,params)
+	if(!spell)
+		return
+	var/dat = ""
+	if(spell.charge_type & Sp_RECHARGE)
+		dat += "<br>Cooldown: [spell.charge_max/10] second\s"
+	if(spell.charge_type & Sp_CHARGES)
+		dat += "<br>Has [spell.charge_counter] charge\s left"
+	if(spell.charge_type & Sp_HOLDVAR)
+		dat += "<br>Requires [spell.holder_var_amount] [spell.holder_var_type]"
+	switch(spell.range)
+		if(1)
+			dat += "<br>Range: Adjacency"
+		if(2 to INFINITY)
+			dat += "<br>Range: [spell.range]"
+		if(GLOBALCAST)
+			dat += "<br>Range: Global"
+		if(SELFCAST)
+			dat += "<br>Range: Self"
+	openToolTip(usr,src,params,title = name,content = dat)
+	
+/obj/screen/spell/MouseExited()
+	closeToolTip(usr)
+	
 /obj/screen/spell/Destroy()
 	..()
 	spell = null
@@ -182,7 +223,7 @@
 
 	overlays -= spell.hud_state
 
-	if(spell.charge_type == Sp_RECHARGE || spell.charge_type == Sp_CHARGES)
+	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES))
 		if(spell.charge_counter < spell.charge_max)
 			icon_state = "[spell_base]_spell_base"
 			if(spell.charge_counter > 0)
@@ -222,8 +263,10 @@
 /obj/screen/spell/proc/add_channeling()
 	var/image/channel = image(icon = icon, loc = src, icon_state = "channeled", layer = src.layer + 1)
 	channeling_image = channel
-	spellmaster.spell_holder.client.images += channeling_image
+	if(spellmaster && spellmaster.spell_holder && spellmaster.spell_holder.client)
+		spellmaster.spell_holder.client.images += channeling_image
 
 /obj/screen/spell/proc/remove_channeling()
-	spellmaster.spell_holder.client.images -= channeling_image
+	if(spellmaster && spellmaster.spell_holder && spellmaster.spell_holder.client)
+		spellmaster.spell_holder.client.images -= channeling_image
 	channeling_image = null

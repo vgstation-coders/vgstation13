@@ -7,7 +7,6 @@
 	body_parts_covered = FACE
 	w_class = 2
 	siemens_coefficient = 0 //it's made of stone, after all
-	unacidable = 1
 	var/spikes_out = 0 //whether the spikes are extended
 	var/infinite = 0 //by default the mask is destroyed after one use
 	var/blood_to_give = 300 //seeing as the new vampire won't have had a whole round to prepare, they get some blood free
@@ -66,6 +65,9 @@
 	else
 		visible_message("<span class='info'>\The [src] crumbles into dust...</span>")
 	qdel(src)
+
+/obj/item/clothing/mask/stone/acidable()
+	return 0
 
 /obj/item/clothing/mask/stone/infinite //this mask can be used any number of times
 	infinite = 1

@@ -592,7 +592,7 @@
 	color = PIPE_COLOR_PURPLE
 /obj/machinery/atmospherics/pipe/manifold/general
 	name = "\improper Gas pipe"
-	color = PIPE_COLOR_BLUE
+	color = PIPE_COLOR_GREY
 /obj/machinery/atmospherics/pipe/manifold/yellow
 	name = "\improper Air supply pipe"
 	color = PIPE_COLOR_ORANGE

@@ -132,25 +132,25 @@ datum/hSB
 					var/mob/living/carbon/human/P = usr
 					//There really should be a drop_old_and_equip_to_slot() proc.
 					if(P.wear_suit)
-						P.wear_suit.loc = P.loc
+						P.wear_suit.forceMove(P.loc)
 						P.wear_suit.layer = initial(P.wear_suit.layer)
 						P.wear_suit = null
 					P.wear_suit = new/obj/item/clothing/suit/space/nasavoid(P)
 					P.wear_suit.hud_layerise()
 					if(P.head)
-						P.head.loc = P.loc
+						P.head.forceMove(P.loc)
 						P.head.layer = initial(P.head.layer)
 						P.head = null
 					P.head = new/obj/item/clothing/head/helmet/space/nasavoid(P)
 					P.head.hud_layerise()
 					if(P.wear_mask)
-						P.wear_mask.loc = P.loc
+						P.wear_mask.forceMove(P.loc)
 						P.wear_mask.layer = initial(P.wear_mask.layer)
 						P.wear_mask = null
 					P.wear_mask = new/obj/item/clothing/mask/gas(P)
 					P.wear_mask.hud_layerise()
 					if(P.back)
-						P.back.loc = P.loc
+						P.back.forceMove(P.loc)
 						P.back.layer = initial(P.back.layer)
 						P.back = null
 					P.back = new/obj/item/weapon/tank/jetpack/void(P)
@@ -160,19 +160,19 @@ datum/hSB
 				if("hsbmetal")
 					var/obj/item/stack/sheet/hsb = getFromPool(/obj/item/stack/sheet/metal,get_turf(usr))
 					hsb.amount = 50
-					hsb.loc = usr.loc
+					hsb.forceMove(usr.loc)
 				if("hsbglass")
 					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/glass/glass
 					hsb.amount = 50
-					hsb.loc = usr.loc
+					hsb.forceMove(usr.loc)
 				if("hsbplasma")
 					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/plasma
 					hsb.amount = 50
-					hsb.loc = usr.loc
+					hsb.forceMove(usr.loc)
 				if("phazon")
 					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/phazon
 					hsb.amount = 50
-					hsb.loc = usr.loc
+					hsb.forceMove(usr.loc)
 				if("hsbcanister")
 					var/list/hsbcanisters = typesof(/obj/machinery/portable_atmospherics/canister/) - /obj/machinery/portable_atmospherics/canister/
 //					hsbcanisters -= /obj/machinery/portable_atmospherics/canister/sleeping
@@ -188,7 +188,7 @@ datum/hSB
 					for(var/obj/item/device/radio/T in hsb)
 						qdel(T)
 					new/obj/item/weapon/crowbar (hsb)
-					hsb.loc = usr.loc
+					hsb.forceMove(usr.loc)
 				if("hsbmedkit")
 					var/obj/item/weapon/storage/firstaid/hsb = new/obj/item/weapon/storage/firstaid/regular
-					hsb.loc = usr.loc
+					hsb.forceMove(usr.loc)

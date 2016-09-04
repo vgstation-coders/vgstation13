@@ -43,7 +43,7 @@
 
 	if(tank)
 		to_chat(usr, "You twist the valve and pop the tank out of [src].")
-		tank.loc = usr.loc
+		tank.forceMove(usr.loc)
 		tank = null
 		icon_state = "pneumatic"
 		item_state = "pneumatic"

@@ -183,7 +183,7 @@
 
 	else if (href_list["eject"] && (!isnull(src.reagent_glass)))
 		if(!src.locked)
-			src.reagent_glass.loc = get_turf(src)
+			src.reagent_glass.forceMove(get_turf(src))
 			src.reagent_glass = null
 		else
 			to_chat(usr, "<span class='notice'>You cannot eject the beaker because the panel is locked.</span>")
@@ -498,7 +498,7 @@
 	new /obj/item/device/healthanalyzer(Tsec)
 
 	if(src.reagent_glass)
-		src.reagent_glass.loc = Tsec
+		src.reagent_glass.forceMove(Tsec)
 		src.reagent_glass = null
 
 	if (prob(50))
@@ -517,7 +517,7 @@
 			D.open()
 			src.frustration = 0
 	else if ((istype(M, /mob/living/)) && (!src.anchored))
-		src.loc = M:loc
+		src.forceMove(M:loc)
 		src.frustration = 0
 	return
 
@@ -526,7 +526,7 @@
 	spawn(0)
 		if (M)
 			var/turf/T = get_turf(src)
-			M:loc = T
+			M:forceMove(T)
 */
 
 /*

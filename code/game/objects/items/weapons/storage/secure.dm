@@ -37,7 +37,7 @@
 			emagged = 1
 			src.overlays += image('icons/obj/storage.dmi', icon_sparking)
 			sleep(6)
-			src.overlays = null
+			overlays.len = 0
 			overlays += image('icons/obj/storage.dmi', icon_locking)
 			locked = 0
 			to_chat(user, "You short out the lock on [src].")
@@ -136,8 +136,9 @@
 /obj/item/weapon/storage/secure/briefcase
 	name = "secure briefcase"
 	icon = 'icons/obj/storage.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	icon_state = "secure"
-	item_state = "sec-case"
+	item_state = "secure-r"
 	desc = "A large briefcase with a digital locking system."
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=1"
 	flags = FPRINT
@@ -146,7 +147,7 @@
 	throw_range = 4
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/storage/secure/briefcase/New()
+/obj/item/weapon/storage/secure/briefcase/paperpen/New()
 	..()
 	new /obj/item/weapon/paper(src)
 	new /obj/item/weapon/pen(src)
@@ -167,6 +168,24 @@
 		src.orient2hud(user)
 	src.add_fingerprint(user)
 	return
+
+/obj/item/weapon/storage/secure/briefcase/attackby(var/obj/item/weapon/W, var/mob/user)
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/secure/briefcase/Topic(href, href_list)
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/secure/briefcase/update_icon()
+	if(locked || emagged)
+		item_state = "secure-g"
+	else
+		item_state = "secure-r"
+
+	if(ismob(loc))
+		var/mob/M = loc
+		M.update_inv_hands()
 
 	//I consider this worthless but it isn't my code so whatever.  Remove or uncomment.
 	/*attack(mob/M as mob, mob/living/user as mob)

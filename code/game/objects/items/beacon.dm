@@ -24,7 +24,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	var/newfreq = input(user, "Input a new frequency for the beacon", "Frequency", null) as num
 	if(!newfreq)
 		return
-	frequency = sanitize_frequency(format_frequency(newfreq))
+	frequency = format_frequency(sanitize_frequency(newfreq))
 
 /obj/item/beacon/verb/alter_signal(t as text)
 	set name = "Alter Beacon's Signal"

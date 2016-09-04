@@ -115,7 +115,7 @@
 
 	else if(href_list["eject"] && src.beaker)
 		src.reagents.trans_to(src.beaker,src.reagents.total_volume)
-		src.beaker.loc = src.loc
+		src.beaker.forceMove(src.loc)
 		src.beaker = null
 
 	else if(href_list["synthcond"] && href_list["type"])

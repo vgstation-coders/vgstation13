@@ -758,7 +758,7 @@ Auto Patrol: []"},
 			D.open()
 			src.frustration = 0
 	else if((istype(M, /mob/living/)) && (!src.anchored))
-		src.loc = M:loc
+		src.forceMove(M:loc)
 		src.frustration = 0
 	return
 
@@ -767,7 +767,7 @@ Auto Patrol: []"},
 	spawn(0)
 		if(M)
 			var/turf/T = get_turf(src)
-			M:loc = T
+			M:forceMove(T)
 */
 
 /obj/machinery/bot/secbot/proc/speak(var/message)
@@ -854,7 +854,7 @@ Auto Patrol: []"},
 			src.build_step++
 			to_chat(user, "You complete the Securitron! Beep boop.")
 			var/obj/machinery/bot/secbot/S = new /obj/machinery/bot/secbot
-			S.loc = get_turf(src)
+			S.forceMove(get_turf(src))
 			S.name = src.created_name
 			qdel(W)
 			qdel(src)

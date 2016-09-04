@@ -1126,7 +1126,7 @@ Pressure: [env.return_pressure()]"}
 				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
-				Plasma.loc = Rad
+				Plasma.forceMove(Rad)
 
 			if(!Rad.active)
 				Rad.toggle_power()
@@ -1485,7 +1485,7 @@ client/proc/delete_all_bomberman()
 		if(istype(O.loc, /mob/living/carbon/))
 			var/mob/living/carbon/C = O.loc
 			C.u_equip(O,1)
-			O.loc = C.loc
+			O.forceMove(C.loc)
 			//O.dropped(C)
 		qdel(O)
 
@@ -1493,7 +1493,7 @@ client/proc/delete_all_bomberman()
 		if(istype(O.loc, /mob/living/carbon/))
 			var/mob/living/carbon/C = O.loc
 			C.u_equip(O,1)
-			O.loc = C.loc
+			O.forceMove(C.loc)
 			//O.dropped(C)
 		qdel(O)
 
@@ -1501,7 +1501,7 @@ client/proc/delete_all_bomberman()
 		if(istype(O.loc, /mob/living/carbon/))
 			var/mob/living/carbon/C = O.loc
 			C.u_equip(O,1)
-			O.loc = C.loc
+			O.forceMove(C.loc)
 			//O.dropped(C)
 		qdel(O)
 

@@ -10,10 +10,12 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	name = "effect"
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
-	unacidable = 1 // so effect are not targeted by alien acid.
 	flags = 0
 	w_type=NOT_RECYCLABLE
 	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
+
+/obj/effect/acidable()
+	return 0
 
 /obj/effect/effect/water
 	name = "water"
@@ -923,7 +925,7 @@ steam.start() -- spawns the effect
 	user.delayNextAttack(10)
 	if (istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
-		G.affecting.loc = src.loc
+		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		returnToPool(I)
 		qdel(src)
@@ -986,7 +988,7 @@ steam.start() -- spawns the effect
 	user.delayNextAttack(10)
 	if (istype(C, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = C
-		G.affecting.loc = src.loc
+		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		returnToPool(C)
 		src.ChangeTurf(get_base_turf(src.z))

@@ -1375,7 +1375,7 @@ var/global/num_vending_terminals = 1
 					update_icon()
 					var/obj/item/weapon/circuitboard/C
 					if(_circuitboard)
-						_circuitboard.loc=get_turf(src)
+						_circuitboard.forceMove(get_turf(src))
 						C=_circuitboard
 						_circuitboard=null
 					else
@@ -2067,6 +2067,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/purple = 10,
 		/obj/item/clothing/shoes/red = 10,
 		/obj/item/clothing/shoes/white = 10,
+		/obj/item/clothing/shoes/workboots = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/shoes/jackboots = 5,

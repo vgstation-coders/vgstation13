@@ -313,7 +313,7 @@
 	to_chat(L, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	connected.process()
 	for(var/obj/OO in src)
-		OO.loc = src.loc
+		OO.forceMove(src.loc)
 	src.add_fingerprint(user)
 	if(user.pulling == L)
 		user.stop_pulling()
@@ -369,7 +369,7 @@
 /obj/machinery/sleeper/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.loc
+			A.forceMove(src.loc)
 			A.blob_act()
 		qdel(src)
 	return
@@ -426,7 +426,7 @@
 	to_chat(M, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	connected.process()
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.forceMove(src.loc)
 	src.add_fingerprint(user)
 	qdel(G)
 	if(!(stat & (BROKEN|NOPOWER)))
@@ -441,21 +441,21 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
@@ -588,7 +588,7 @@
 		if(usr.locked_to)
 			return
 		usr.stop_pulling()
-		usr.loc = src
+		usr.forceMove(src)
 		usr.reset_view()
 		src.occupant = usr
 		connected.process()

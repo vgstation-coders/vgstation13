@@ -69,6 +69,7 @@
 		if(W.is_sharp() >= 1.2) //As sharp as a knife
 			if(W.w_class <= W_CLASS_SMALL) //Big enough to use to cut down trees
 				health -= (user.get_strength() * W.force)
+				playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
 			else
 				to_chat(user, "<span class='info'>\The [W] doesn't appear to be big enough to cut into \the [src]. Try something bigger.</span>")
 		else
@@ -84,6 +85,8 @@
 
 	var/turf/our_turf = get_turf(src) //Turf at which this tree is located
 	var/turf/current_turf = get_turf(src) //Turf in which to spawn a log. Updated in the loop
+
+	playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
 
 	qdel(src)
 
@@ -233,7 +236,7 @@
 		user.put_in_active_hand(I)
 	else
 		to_chat(user, "You root around in the roots.")
-		
+
 /obj/structure/flora/pottedplant/attack_paw(mob/user)
 	return attack_hand(user)
 

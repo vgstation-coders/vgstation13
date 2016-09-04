@@ -2,6 +2,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell
 	var/name = "Spell"
+	var/abbreviation = "" //Used for feedback gathering
+
 	var/desc = "A spell"
 	parent_type = /datum
 	var/panel = "Spells"//What panel the proc holder needs to go on.
@@ -16,8 +18,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
 
+	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
+
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
-	var/holder_var_amount = 20 //same. The amount adjusted with the mob's var when the spell is used
+	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
+	var/insufficient_holder_msg //Override for still recharging msg for holder variables
+	var/datum/special_var_holder //if a holder var is stored on a different object or a datum
 
 	var/spell_flags = NEEDSCLOTHES
 	//Possible spell flags:
@@ -96,12 +102,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
-/spell/proc/is_valid_target(var/target)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
-		return 0
-	if(get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
-		return 0
-	return istype(target, /mob/living)
+/spell/proc/is_valid_target(var/target, mob/user, options)
+	if(options)
+		return (target in options)
+	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
 	if(!holder)
@@ -113,26 +117,32 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		return
+	if(before_target(user))
+		return
 	var/list/targets = choose_targets(user)
 	if(!cast_check(skipcharge, user))
 		return //Prevent queueing of spells by opening several choose target windows.
 	if(targets && targets.len)
+		targets = before_cast(targets, user) //applies any overlays and effects
+		if(!targets.len) //before cast has rechecked what we can target
+			return
 		invocation(user, targets)
-		take_charge(user, skipcharge)
 
-		before_cast(targets) //applies any overlays and effects
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+
 		if(prob(critfailchance))
 			critfail(targets, user)
 		else
-			cast(targets, user)
+			. = cast(targets, user) //return 1 to prevent take_charge
+		if(!.)
+			take_charge(user, skipcharge)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 
 //This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
 /spell/proc/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!holder)
 		holder = user //just in case
-	if(!user.spell_channeling && !force_remove)
+	if(!force_remove && !currently_channeled)
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
@@ -146,8 +156,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		user.spell_channeling = null
 		charge_counter = charge_max
 		currently_channeled = 0
-		connected_button.name = name
 		connected_button.remove_channeling()
+		connected_button.name = name
 	return 1
 
 /spell/proc/channeled_spell(var/list/args)
@@ -164,8 +174,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/target = list(A)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
-	if(cast_check(1, holder) && is_valid_target(A))
-		before_cast(target)
+	if(cast_check(1, holder) && is_valid_target(A, user))
+		target = before_cast(target, user) //applies any overlays and effects
+		if(!target.len) //before cast has rechecked what we can target
+			return
+		invocation(user, target)
+
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+
 		if(prob(critfailchance))
 			critfail(target, holder)
 		else
@@ -177,14 +193,20 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return 1
 	return 0
 
+/spell/proc/before_target(mob/user)
+	return
+
 /spell/proc/cast(list/targets, mob/user) //the actual meat of the spell
 	return
 
 /spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow
 	return
 
-/spell/proc/adjust_var(mob/living/target = usr, type, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
-	switch(type)
+/spell/proc/adjust_var(mob/living/target = usr, varname, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
+	if(!(varname in target.vars))
+		world.log << "Spell [varname] of user [usr] adjusting non-numeric value on [target], aborting"
+		return
+	switch(varname)
 		if("bruteloss")
 			target.adjustBruteLoss(amount)
 		if("fireloss")
@@ -199,19 +221,21 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			target.AdjustWeakened(amount)
 		if("paralysis")
 			target.AdjustParalysis(amount)
+		if("plasma")
+			target.AdjustPlasma(-amount)
 		else
-			target.vars[type] += amount //I bear no responsibility for the runtimes that'll happen if you try to adjust non-numeric or even non-existant vars
-	return
+			target.vars[varname] -= amount //I bear no responsibility for the runtimes that'll happen if you try to adjust non-numeric or even non-existant vars
 
 ///////////////////////////
 /////CASTING WRAPPERS//////
 ///////////////////////////
 
-/spell/proc/before_cast(list/targets)
-	var/valid_targets[0]
+/spell/proc/before_cast(list/targets, user)
+	var/list/valid_targets = list()
+	var/list/options = view_or_range(range,user,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
-		if(!(target in view_or_range(range,usr,selection_type)))
+		if(!is_valid_target(target, user, options))
 			continue
 
 		valid_targets += target
@@ -259,10 +283,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/cast_check(skipcharge = 0,mob/user = usr) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
 
 
-	if(user.mind && user.mind.nospells)
-		to_chat(user, "<span class='warning'>Your power is suppressed!</span>")
-		return 0
-
 	if(!(src in user.spell_list) && holder == user)
 		to_chat(user, "<span class='warning'>You shouldn't have this spell! Something's wrong.</span>")
 		return 0
@@ -276,8 +296,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/ourz = user.z
 	if(!ourz)
 		var/turf/T = get_turf(user)
-		if(!T)
-			return 0
+		if(!T) return 0
 		ourz = T.z
 	if(map.zLevels.len < ourz || !ourz)
 		WARNING("[user] is somehow on a zlevel [(ourz > map.zLevels.len) ? "higher" : "lower"] than our zlevels list! [map.zLevels.len] level\s, [map.nameLong] - [formatJumpTo(get_turf(user))]")
@@ -318,32 +337,47 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/check_charge(var/skipcharge, mob/user)
 	if(!skipcharge)
-		switch(charge_type)
-			if(Sp_RECHARGE)
-				if(charge_counter < charge_max)
-					to_chat(user, still_recharging_msg)
+		if(charge_type & Sp_RECHARGE)
+			if(charge_counter < charge_max)
+				to_chat(user, still_recharging_msg)
+				return 0
+		if(charge_type & Sp_CHARGES)
+			if(!charge_counter)
+				to_chat(user, "<span class='notice'>[name] has no charges left.</span>")
+				return 0
+		if(charge_type & Sp_HOLDVAR)
+			if(special_var_holder)
+				if(!(holder_var_type in special_var_holder.vars))
+					return 1 //ABORT
+				if(special_var_holder.vars[holder_var_type] < holder_var_amount)
+					to_chat(user, holder_var_recharging_msg())
 					return 0
-			if(Sp_CHARGES)
-				if(!charge_counter)
-					to_chat(user, "<span class='notice'>[name] has no charges left.</span>")
+			else
+				if(!(holder_var_type in user.vars))
+					return 1 //ABORT
+				if(user.vars[holder_var_type] < holder_var_amount)
+					to_chat(user, holder_var_recharging_msg())
 					return 0
 	return 1
 
+/spell/proc/holder_var_recharging_msg()
+	if(insufficient_holder_msg)
+		return insufficient_holder_msg
+	return still_recharging_msg
+
 /spell/proc/take_charge(mob/user = user, var/skipcharge)
 	if(!skipcharge)
-		switch(charge_type)
-			if(Sp_RECHARGE)
-				charge_counter = 0 //doesn't start recharging until the targets selecting ends
-				src.process()
-				return 1
-			if(Sp_CHARGES)
-				charge_counter-- //returns the charge if the targets selecting fails
-				return 1
-			if(Sp_HOLDVAR)
+		if(charge_type & Sp_RECHARGE)
+			charge_counter = 0 //doesn't start recharging until the targets selecting ends
+			src.process()
+		if(charge_type & Sp_CHARGES)
+			charge_counter-- //returns the charge if the targets selecting fails
+		if(charge_type & Sp_HOLDVAR)
+			if(special_var_holder)
+				adjust_var(special_var_holder, holder_var_type, holder_var_amount)
+			else
 				adjust_var(user, holder_var_type, holder_var_amount)
-				return 1
-		return 0
-	return 1
+
 
 /spell/proc/invocation(mob/user = usr, var/list/targets) //spelling the spell out and setting it on recharge/reducing charges amount
 
@@ -433,3 +467,20 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
 			return 0
 	return 1
+
+//UPGRADES
+/spell/proc/apply_upgrade(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return quicken_spell()
+		if(Sp_POWER)
+			return empower_spell()
+
+///INFO
+
+/spell/proc/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return "Reduce this spell's cooldown."
+		if(Sp_POWER)
+			return "Increase this spell's power."

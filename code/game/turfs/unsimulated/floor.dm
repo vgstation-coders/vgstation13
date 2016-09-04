@@ -30,3 +30,23 @@
 /turf/unsimulated/floor/grass/New()
 	..()
 	icon_state = "grass[rand(1,4)]"
+
+/turf/unsimulated/floor/mars
+	icon_state = "ironsand1"
+
+	carbon_dioxide = MOLES_CO2MARS
+	nitrogen = MOLES_N2MARS
+	oxygen = 0
+	temperature = T20C
+
+/turf/unsimulated/floor/mars/New()
+	..()
+
+	if(prob(30))
+		icon_state = "ironsand[rand(1,15)]"
+
+/turf/unsimulated/floor/mars/air
+	carbon_dioxide = 0
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C

@@ -29,6 +29,11 @@
 	icon_state = "warden_jacket"
 	item_state = "armor"
 
+/obj/item/clothing/suit/armor/vest/neorussian
+	name = "neo-Russian vest"
+	desc = "The narkotiki camo pattern will come useful for botany raids."
+	icon_state = "nr_vest"
+	item_state = "nr_vest"
 
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"

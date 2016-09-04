@@ -353,7 +353,8 @@
 /turf/simulated/wall/attack_construct(mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
 		var/spell/aoe_turf/conjure/wall/S = locate() in user.spell_list
-		S.perform(user,0,src)
+		S.turf_override = src
+		S.perform(user,0)
 		var/obj/screen/spell/SS = S.connected_button
 		SS.update_charge(1)
 		return 1
@@ -375,3 +376,6 @@
 		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
 		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+
+/turf/simulated/wall/acidable()
+	return !(flags & INVULNERABLE)

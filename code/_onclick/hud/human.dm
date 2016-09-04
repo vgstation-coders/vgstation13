@@ -410,10 +410,19 @@
 				src.adding += mymob.gun_run_icon
 			src.adding += mymob.gun_move_icon
 
+	holomap_obj = getFromPool(/obj/screen/holomap)
+	holomap_obj.name = "holomap"
+	holomap_obj.icon = null
+	holomap_obj.icon_state = ""
+	holomap_obj.screen_loc = "SOUTH,WEST"
+	holomap_obj.layer = HUD_BASE_LAYER
+	holomap_obj.mouse_opacity = 0
+	holomap_obj.alpha = 255
 
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list( mymob.throw_icon, mymob.kick_icon, mymob.bite_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += src.holomap_obj
 	mymob.client.screen += src.adding + src.hotkeybuttons
 	inventory_shown = 0
 

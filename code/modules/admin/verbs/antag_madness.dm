@@ -130,10 +130,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			for(var/obj/item/I in M)
 				M.u_equip(I,1)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
-					I.loc = pack
+					I.forceMove(pack)
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset, slot_ears)
 			M.equip_to_slot_or_del(new/obj/item/clothing/under/chameleon, slot_w_uniform)
@@ -190,10 +190,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			for(var/obj/item/I in M)
 				M.u_equip(I,1)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
-					I.loc = pack
+					I.forceMove(pack)
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset, slot_ears)
 			M.equip_to_slot_or_del(new/obj/item/clothing/under/batmansuit, slot_w_uniform)
@@ -249,10 +249,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			for(var/obj/item/I in M)
 				M.u_equip(I,1)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
-					I.loc = pack
+					I.forceMove(pack)
 
 			var/obj/item/weapon/tome/T = new/obj/item/weapon/tome(M)
 			var/obj/item/weapon/paper/talisman/supply/A = new/obj/item/weapon/paper/talisman/supply(M)
@@ -278,9 +278,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				var/obj/item/weapon/storage/backpack/cultpack/P = new/obj/item/weapon/storage/backpack/cultpack(K)
 				K.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/death_commando(K), slot_wear_mask)
 				K.equip_to_slot_or_del(P, slot_back)
-				pack.loc = P
-				T.loc = P
-				A.loc = P
+				pack.forceMove(P)
+				T.forceMove(P)
+				A.forceMove(P)
 				K.put_in_hands(new /obj/item/weapon/melee/cultblade(K))
 				var/obj/item/clothing/monkeyclothes/cultrobes/JS = new /obj/item/clothing/monkeyclothes/cultrobes(K)
 				var/obj/item/clothing/head/culthood/alt/CH = new /obj/item/clothing/head/culthood/alt(K)
@@ -289,15 +289,15 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				if(K.uniform)
 					olduniform = K.uniform
 					K.uniform = null
-					olduniform.loc = pack
+					olduniform.forceMove(pack)
 				K.uniform = JS
-				K.uniform.loc = K
+				K.uniform.forceMove(K)
 				if(K.hat)
 					oldhat = K.hat
 					K.hat = null
-					oldhat.loc = pack
+					oldhat.forceMove(pack)
 				K.hat = CH
-				K.hat.loc = K
+				K.hat.forceMove(K)
 
 			M.regenerate_icons()
 
@@ -333,10 +333,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			for(var/obj/item/I in M)
 				M.u_equip(I,1)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
-					I.loc = pack
+					I.forceMove(pack)
 
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/syndicate, slot_ears)
 			M.equip_to_slot_or_del(new/obj/item/clothing/under/soviet, slot_w_uniform)
@@ -381,10 +381,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			for(var/obj/item/I in M)
 				M.u_equip(I,1)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
-					I.loc = pack
+					I.forceMove(pack)
 
 			ticker.mode.equip_syndicate(M)
 
@@ -439,14 +439,14 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			for(var/obj/item/I in M)
 				M.u_equip(I,1)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
-					I.loc = pack
+					I.forceMove(pack)
 
-			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/syndicate, slot_ears)
-			M.equip_to_slot_or_del(new/obj/item/clothing/under/color/green, slot_w_uniform)
-			M.equip_to_slot_or_del(new/obj/item/clothing/shoes/swat, slot_shoes)
+			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/deathsquad, slot_ears)
+			M.equip_to_slot_or_del(new/obj/item/clothing/under/deathsquad, slot_w_uniform)
+			M.equip_to_slot_or_del(new/obj/item/clothing/shoes/magboots/deathsquad, slot_shoes)
 			M.equip_to_slot_or_del(new/obj/item/clothing/mask/gas/swat, slot_wear_mask)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/backpack/security, slot_back)
 			var/obj/item/weapon/card/id/centcom/ID = new(M)
@@ -490,10 +490,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			for(var/obj/item/I in M)
 				M.u_equip(I,1)
 				if(I)
-					I.loc = M.loc
+					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
-					I.loc = pack
+					I.forceMove(pack)
 
 			if(M.gender == "male")
 				M.equip_to_slot_or_del(new/obj/item/clothing/shoes/sandal, slot_shoes)

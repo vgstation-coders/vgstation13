@@ -8,3 +8,4 @@
 #define Tc_COMBAT            "combat"
 #define Tc_BIOTECH           "biotech"
 #define Tc_POWERSTORAGE      "powerstorage"
+#define Tc_NANOTRASEN        "nanotrasen"

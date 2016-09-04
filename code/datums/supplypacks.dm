@@ -27,7 +27,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 			continue
 		var/atom/movable/AM = new path()
 		manifest += "<li>[AM.name]</li>"
-		AM.loc = null	//just to make sure they're deleted by the garbage collector
+		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
 	manifest += "</ul>"
 
 //////SUPPLIES//////
@@ -284,9 +284,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/mounted/poster,
 	/obj/item/stack/package_wrap/gift,
 	/obj/item/stack/package_wrap/gift,
-	/obj/item/stack/package_wrap/gift,
-	/obj/item/device/instrument/guitar)
-	cost = 30
+	/obj/item/stack/package_wrap/gift)
+	cost = 10
 	containertype = "/obj/structure/closet/crate"
 	containername = "Arts and Crafts crate"
 	group = "Supplies"
@@ -330,6 +329,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 10
 	containertype = /obj/structure/closet/crate
 	containername = "EFTPOS crate"
+	group = "Supplies"
+
+/datum/supply_packs/floodlight
+	name = "Emergency Floodlight crate"
+	contains = list(/obj/machinery/floodlight)
+	cost = 10
+	containertype = /obj/structure/largecrate
+	containername = "emergency floodlight crate"
 	group = "Supplies"
 
 //////CLOTHING//////
@@ -544,6 +551,21 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Grey Space-Ex Crate"
 	group = "Clothing"
 
+/datum/supply_packs/neorussian
+	name = "Neo-Russian Crate"
+	contains = list(/obj/item/clothing/suit/armor/vest/neorussian,
+					/obj/item/clothing/mask/neorussian,
+					/obj/item/clothing/head/helmet/neorussian,
+					/obj/item/clothing/accessory/storage/neorussian,
+					/obj/item/clothing/gloves/neorussian,
+					/obj/item/clothing/gloves/neorussian/fingerless,
+					/obj/item/clothing/under/neorussian,
+					/obj/item/clothing/shoes/jackboots/neorussian)
+	cost = 225
+	containertype = /obj/structure/closet/
+	containername = "Neo-Russian Crate"
+	group = "Clothing"
+	contraband = 1
 //////SECURITY//////
 
 /datum/supply_packs/specialops
@@ -559,7 +581,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Special Ops crate"
 	group = "Security"
 	hidden = 1
-	
+
 /datum/supply_packs/secway
 	name = "Secway crate"
 	contains = list(/obj/structure/bed/chair/vehicle/secway)
@@ -568,7 +590,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Secway crate"
 	access = access_security
 	group = "Security"
-	
+
 /datum/supply_packs/beanbagammo
 	name = "Beanbag shells"
 	contains = list(/obj/item/ammo_casing/shotgun/beanbag,
@@ -893,6 +915,40 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Festivus supplies"
 	group = "Hospitality"
 
+/datum/supply_packs/randomised/instruments
+	num_contained = 1 //number of items picked to be contained in a randomised crate
+	contains = list(/obj/item/device/instrument/violin,
+					/obj/item/device/instrument/guitar,
+					/obj/item/device/instrument/glockenspiel,
+					/obj/item/device/instrument/accordion,
+					/obj/item/device/instrument/saxophone,
+					/obj/item/device/instrument/trombone,
+					/obj/item/device/instrument/recorder,
+					/obj/item/device/instrument/harmonica,
+					/obj/structure/piano/xylophone,
+					/obj/structure/piano)
+	name = "Random instrument"
+	cost = 50
+	containertype = /obj/structure/closet/crate
+	containername = "Random instruments crate"
+	group = "Hospitality"
+
+/datum/supply_packs/bigband
+	contains = list(/obj/item/device/instrument/violin,
+					/obj/item/device/instrument/guitar,
+					/obj/item/device/instrument/glockenspiel,
+					/obj/item/device/instrument/accordion,
+					/obj/item/device/instrument/saxophone,
+					/obj/item/device/instrument/trombone,
+					/obj/item/device/instrument/recorder,
+					/obj/item/device/instrument/harmonica,
+					/obj/structure/piano/xylophone,
+					/obj/structure/piano)
+	name = "Big band instrument collection"
+	cost = 500
+	containertype = /obj/structure/largecrate
+	containername = "Big band musical instruments collection"
+	group = "Hospitality"
 
 //////ENGINEERING//////
 
@@ -1328,6 +1384,34 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "Robotics Assembly"
 	access = access_robotics
+	group = "Science"
+
+/datum/supply_packs/suspension_gen
+	name = "Suspension Field Generator crate"
+	contains = list(/obj/machinery/suspension_gen)
+	cost = 50
+	containertype = /obj/structure/largecrate
+	containername = "suspension field generator crate"
+	access = access_research
+	group = "Science"
+
+/datum/supply_packs/excavation_gear
+	name = "Excavation equipment"
+	contains = list(
+		/obj/item/weapon/storage/belt/archaeology,
+		/obj/item/weapon/storage/box/excavation,
+		/obj/item/device/flashlight/lantern,
+		/obj/item/device/depth_scanner,
+		/obj/item/device/core_sampler,
+		/obj/item/clothing/glasses/scanner/meson,
+		/obj/item/weapon/pickaxe,
+		/obj/item/device/measuring_tape,
+		/obj/item/weapon/pickaxe/hand,
+		)
+	cost = 30
+	containertype = /obj/structure/closet/crate/secure/scisec
+	containername = "excavation equipment"
+	access = access_research
 	group = "Science"
 
 /datum/supply_packs/plasma

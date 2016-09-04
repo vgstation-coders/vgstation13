@@ -264,7 +264,7 @@
 			src.name = "Near finished Airlock Assembly"
 			src.electronics = W
 		else
-			W.loc = src.loc
+			W.forceMove(src.loc)
 		busy = 0
 
 	else if(iscrowbar(W) && state == 2 )
@@ -285,7 +285,7 @@
 				ae = electronics
 				electronics.installed = 0
 				electronics = null
-				ae.loc = src.loc
+				ae.forceMove(src.loc)
 		busy = 0
 
 	else if(istype(W, /obj/item/stack/sheet) && !glass)
@@ -342,7 +342,7 @@
 				door.name = created_name
 			else
 				door.name = "[istext(glass) ? "[glass] airlock" : base_name]"
-			src.electronics.loc = door
+			src.electronics.forceMove(door)
 			src.electronics.installed = 1
 			qdel(src)
 		busy = 0

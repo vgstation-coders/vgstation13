@@ -105,14 +105,14 @@
 		item_quants[N] -= 1
 		for(var/obj/O in contents)
 			if(O.name == N)
-				O.loc = get_turf(src)
+				O.forceMove(get_turf(src))
 				usr.put_in_hands(O)
 				break
 
 	else if ( href_list["unload"] )
 		item_quants.len = 0
 		for(var/obj/O in contents )
-			O.loc = get_turf(src)
+			O.forceMove(get_turf(src))
 
 	src.updateUsrDialog()
 	return

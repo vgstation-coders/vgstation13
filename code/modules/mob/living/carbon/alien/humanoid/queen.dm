@@ -31,12 +31,17 @@
 			break
 
 	real_name = src.name
-	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid,/mob/living/carbon/alien/humanoid/proc/neurotoxin,/mob/living/carbon/alien/humanoid/proc/resin)
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
-	verbs -= /mob/living/carbon/alien/verb/ventcrawl
 
+/mob/living/carbon/alien/humanoid/queen/add_spells_and_verbs()
+	..()
+	add_spell(new /spell/aoe_turf/conjure/alienegg, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/alienacid, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/projectile/alienneurotoxin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 
 /mob/living/carbon/alien/humanoid/queen
 
@@ -61,27 +66,6 @@
 						src.healths.icon_state = "health5"
 			else
 				src.healths.icon_state = "health6"
-
-
-//Queen verbs
-/mob/living/carbon/alien/humanoid/queen/verb/lay_egg()
-
-
-	set name = "Lay Egg (75)"
-	set desc = "Lay an egg to produce huggers to impregnate prey with."
-	set category = "Alien"
-
-	if(locate(/obj/effect/alien/egg) in get_turf(src))
-		to_chat(src, "<span class='warning'>There's already an egg here.</span>")
-		return
-
-	if(powerc(75, 1))//Can't plant eggs on spess tiles. That's silly.
-		adjustToxLoss(-75)
-		visible_message("<span class='alien'>[src] has laid an egg!</span>")
-		stat_collection.xeno.eggs_laid++
-		new /obj/effect/alien/egg(loc)
-	return
-
 
 /mob/living/carbon/alien/humanoid/queen/large
 	icon = 'icons/mob/giantmobs.dmi'

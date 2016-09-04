@@ -55,7 +55,7 @@
 				for(var/obj/O in CB.component_parts)
 					returnToPool(O)
 				CB.component_parts = list()
-				circuit.loc = null //I swear this is what happens for constructable frames
+				circuit.forceMove(null) //I swear this is what happens for constructable frames
 				CB.component_parts += circuit
 				circuit = null
 				qdel(src)

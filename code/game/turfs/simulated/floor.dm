@@ -477,14 +477,14 @@ turf/simulated/floor/update_icon()
 	if(current_size >= STAGE_FIVE)
 		if(prob(75))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 			make_plating()
 		return
 	if(current_size == STAGE_FOUR)
 		if(prob(30))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 			make_plating()
 
@@ -500,7 +500,7 @@ turf/simulated/floor/update_icon()
 				to_chat(user, "<span class='warning'>You forcefully pry off the planks, destroying them in the process.</span>")
 			else
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 
 		make_plating()
@@ -653,7 +653,8 @@ turf/simulated/floor/update_icon()
 	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
-			S.perform(user,0,src)
+			S.turf_override = src
+			S.perform(user,0)
 			var/obj/screen/spell/SS = S.connected_button
 			SS.update_charge(1)
 			return 1

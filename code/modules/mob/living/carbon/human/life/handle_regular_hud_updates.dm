@@ -4,7 +4,7 @@
 	if(!client)
 		return 0
 
-	sight &= ~BLIND
+	change_sight(removing = BLIND)
 
 	regular_hud_updates()
 
@@ -79,7 +79,7 @@
 			clear_fullscreen("brute")
 			//damageoverlay.overlays += I
 	if(stat == DEAD)
-		sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		if(!druggy)
 			see_invisible = SEE_INVISIBLE_LEVEL_TWO
@@ -87,7 +87,7 @@
 			healths.icon_state = "health7" //DEAD healthmeter
 		return
 	else
-		sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
@@ -106,7 +106,7 @@
 					see_in_dark = 8
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 		if(M_XRAY in mutations)
-			sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
+			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			if(!druggy)
 				see_invisible = SEE_INVISIBLE_LEVEL_TWO
@@ -127,7 +127,7 @@
 					see_in_dark = max(see_in_dark, G.see_in_dark)
 				see_in_dark += G.darkness_view
 				if(G.vision_flags) //MESONS
-					sight |= G.vision_flags
+					change_sight(adding = G.vision_flags)
 					if(!druggy)
 						see_invisible = SEE_INVISIBLE_MINIMUM
 				if(G.see_invisible)
@@ -327,7 +327,7 @@
 				reset_view(null)
 			if(iscamera(client.eye))
 				var/obj/machinery/camera/C = client.eye
-				sight = C.vision_flags
+				change_sight(copying = C.vision_flags)
 
 		else
 			var/isRemoteObserve = 0

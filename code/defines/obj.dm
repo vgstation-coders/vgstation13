@@ -13,7 +13,7 @@
 				if(user.z != src.z)
 					return
 				user.loc.loc.Exited(user)
-				user.loc = pick(latejoin)
+				user.forceMove(pick(latejoin))
 			if("No")
 				return
 
@@ -23,16 +23,12 @@
 	icon_state = "blank"
 	anchored = 1
 	mouse_opacity = 0
-	unacidable = 1//Just to be sure.
-
-
 
 /obj/effect/begin
 	name = "begin"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "begin"
 	anchored = 1.0
-	unacidable = 1
 
 /*
  * This item is completely unused, but removing it will break something in R&D and Radio code causing PDA and Ninja code to fail on compile
@@ -311,7 +307,6 @@ var/global/list/PDA_Manifest = list()
 	desc = "A stand with the empty body of a cyborg bolted to it."
 	density = 1
 	anchored = 1
-	unacidable = 1//temporary until I decide whether the borg can be removed. -veyveyr
 
 /obj/item/mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 

@@ -38,7 +38,7 @@
 		return 1
 	else if(current_shell && current_shell.BB)
 		in_chamber = current_shell.BB //Load projectile into chamber.
-		current_shell.BB.loc = src //Set projectile loc to gun.
+		current_shell.BB.forceMove(src) //Set projectile loc to gun.
 		current_shell.BB = null
 		current_shell.update_icon()
 		return 1
@@ -48,7 +48,7 @@
 	playsound(M, 'sound/weapons/nagantreload.ogg', 100, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
-		current_shell.loc = get_turf(src)//Eject casing
+		current_shell.forceMove(get_turf(src))//Eject casing
 		current_shell = null
 		if(in_chamber)
 			in_chamber = null

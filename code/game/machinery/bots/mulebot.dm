@@ -434,11 +434,11 @@ var/global/mulebot_count = 0
 	if(istype(crate))
 		crate.close()
 
-	C.loc = src.loc
+	C.forceMove(src.loc)
 	sleep(2)
 	if(C.loc != src.loc) //To prevent you from going onto more than one bot.
 		return
-	C.loc = src
+	C.forceMove(src)
 	load = C
 
 	C.pixel_y += 9 * PIXEL_MULTIPLIER
@@ -466,7 +466,7 @@ var/global/mulebot_count = 0
 	mode = 1
 	overlays.len = 0
 
-	load.loc = src.loc
+	load.forceMove(src.loc)
 	load.pixel_y -= 9 * PIXEL_MULTIPLIER
 	load.reset_plane_and_layer()
 	if(ismob(load))
@@ -482,7 +482,7 @@ var/global/mulebot_count = 0
 		if(Cross(load,T))//Can't get off onto anything that wouldn't let you pass normally
 			step(load, dirn)
 		else
-			load.loc = src.loc//Drops you right there, so you shouldn't be able to get yourself stuck
+			load.forceMove(src.loc)//Drops you right there, so you shouldn't be able to get yourself stuck
 
 	load = null
 
@@ -494,7 +494,7 @@ var/global/mulebot_count = 0
 		if(AM == cell || AM == botcard)
 			continue
 
-		AM.loc = src.loc
+		AM.forceMove(src.loc)
 		AM.reset_plane_and_layer()
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))
@@ -910,7 +910,7 @@ var/global/mulebot_count = 0
 	new /obj/item/stack/rods(Tsec)
 	new /obj/item/stack/cable_coil/cut(Tsec)
 	if (cell)
-		cell.loc = Tsec
+		cell.forceMove(Tsec)
 		cell.update_icon()
 		cell = null
 

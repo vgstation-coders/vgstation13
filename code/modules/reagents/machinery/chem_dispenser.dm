@@ -12,7 +12,7 @@
 	var/max_energy = 50
 	var/rechargerate = 2
 	var/amount = 30
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/obj/item/weapon/reagent_containers/container = null
 	var/recharged = 0
 	var/custom = 0
 	var/useramount = 30 // Last used amount
@@ -153,20 +153,20 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	data["amount"] = amount
 	data["energy"] = energy
 	data["maxEnergy"] = max_energy
-	data["isBeakerLoaded"] = beaker ? 1 : 0
+	data["isBeakerLoaded"] = container ? 1 : 0
 	data["custom"] = custom
 
-	var beakerContents[0]
-	var beakerCurrentVolume = 0
-	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
-			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
-			beakerCurrentVolume += R.volume
-	data["beakerContents"] = beakerContents
+	var containerContents[0]
+	var containerCurrentVolume = 0
+	if(container && container.reagents && container.reagents.reagent_list.len)
+		for(var/datum/reagent/R in container.reagents.reagent_list)
+			containerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
+			containerCurrentVolume += R.volume
+	data["beakerContents"] = containerContents
 
-	if (beaker)
-		data["beakerCurrentVolume"] = beakerCurrentVolume
-		data["beakerMaxVolume"] = beaker.volume
+	if (container)
+		data["beakerCurrentVolume"] = containerCurrentVolume
+		data["beakerMaxVolume"] = container.volume
 	else
 		data["beakerCurrentVolume"] = null
 		data["beakerMaxVolume"] = null
@@ -212,8 +212,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			useramount = amount
 
 	if(href_list["dispense"])
-		if (dispensable_reagents.Find(href_list["dispense"]) && beaker != null)
-			var/obj/item/weapon/reagent_containers/glass/B = src.beaker
+		if (dispensable_reagents.Find(href_list["dispense"]) && container != null)
+			var/obj/item/weapon/reagent_containers/B = src.container
 			var/datum/reagents/R = B.reagents
 			if(!R)
 				if(!B.gcDestroyed)
@@ -228,7 +228,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 
 	if(href_list["ejectBeaker"])
-		if(beaker)
+		if(container)
 			detach()
 
 	add_fingerprint(usr)
@@ -237,27 +237,27 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/proc/detach()
 	targetMoveKey=null
 
-	if(beaker)
-		var/obj/item/weapon/reagent_containers/glass/B = beaker
-		B.loc = loc
-		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/mob/living/silicon/robot/R = beaker:holder:loc
-			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-				beaker.loc = R
+	if(container)
+		var/obj/item/weapon/reagent_containers/B = container
+		B.forceMove(loc)
+		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
+			var/mob/living/silicon/robot/R = container:holder:loc
+			if(R.module_state_1 == container || R.module_state_2 == container || R.module_state_3 == container)
+				container.forceMove(R)
 			else
-				beaker.loc = beaker:holder
-		beaker = null
+				container.forceMove(container:holder)
+		container = null
 		return 1
 
 /obj/machinery/chem_dispenser/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
 
 /obj/machinery/chem_dispenser/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(beaker)
-		to_chat(user, "You can't reach the maintenance panel with a beaker in the way!")
+	if(container)
+		to_chat(user, "You can't reach the maintenance panel with \a [container] in the way!")
 		return
 	return ..()
 
@@ -270,26 +270,26 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(!can_use(user))
 			return
 
-	if(istype(D, /obj/item/weapon/reagent_containers/glass))
-		if(src.beaker)
-			to_chat(user, "A beaker is already loaded into the machine.")
+	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
+		if(src.container)
+			to_chat(user, "\A [src.container] is already loaded into the machine.")
 			return
 		else if(!panel_open)
 			if(!user.drop_item(D, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [D]!</span>")
 				return
 
-			src.beaker =  D
+			src.container =  D
 			if(user.type == /mob/living/silicon/robot)
 				var/mob/living/silicon/robot/R = user
 				R.uneq_active()
 
-			to_chat(user, "You add the beaker to the machine!")
+			to_chat(user, "You add \the [D] to the machine!")
 
 			nanomanager.update_uis(src) // update all UIs attached to src
 			return 1
 		else
-			to_chat(user, "You can't add a beaker to the machine while the panel is open.")
+			to_chat(user, "You can't add \a [D] to the machine while the panel is open.")
 			return
 
 /obj/machinery/chem_dispenser/attack_ai(mob/user as mob)

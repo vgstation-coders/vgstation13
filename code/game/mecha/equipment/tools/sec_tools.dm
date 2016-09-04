@@ -35,7 +35,7 @@
 		var/celldetails = cells[cell]
 		if(celldetails["mob"])
 			var/mob/living/carbon/occupant = celldetails["mob"]
-			occupant.loc = get_turf(src)
+			occupant.forceMove(get_turf(src))
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/Exit(atom/movable/O)

@@ -986,7 +986,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		return
 	if(istype(photo,/obj/item/weapon/photo))
 		var/obj/item/weapon/photo/P = photo
-		P.loc = src.loc
+		P.forceMove(src.loc)
 
 		photo = null
 	else if(istype(photo,/datum/picture))
@@ -1227,7 +1227,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		NEWSPAPER.news_content += FC
 	if(news_network.wanted_issue)
 		NEWSPAPER.important_message = news_network.wanted_issue
-	NEWSPAPER.loc = get_turf(src)
+	NEWSPAPER.forceMove(get_turf(src))
 	src.paper_remaining--
 	return
 

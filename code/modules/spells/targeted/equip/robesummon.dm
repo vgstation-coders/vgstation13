@@ -6,6 +6,7 @@
 /spell/targeted/equip_item/robesummon
 	name = "Summon Robes"
 	desc = "A spell which will summon you a new set of robes."
+	abbreviation = "RS"
 
 	school = "evocation"
 	charge_max = 300
@@ -13,7 +14,7 @@
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 	invocation = "I PUT ON MY ROBE AND WIZARD HAT!"
 	invocation_type = SpI_SHOUT
-	range = -1
+	range = SELFCAST
 	spell_flags = INCLUDEUSER | Z2NOCAST //z2nocast to prevent wizards from summoning the spacesuit and getting a refund
 
 	delete_old = 0 //Players shouldn't lose their hardsuits because they decided to summon some robes.
@@ -66,6 +67,12 @@
 	desc = "A spell which will summon you a wizard hardsuit."
 	delete_old = 1
 	return "You have improved Summon Robes into [name]. It will now summon a gem-encrusted hardsuit with internals."
+
+
+/spell/targeted/equip_item/robesummon/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Make the spell summon a gem-encrusted hardsuit and internals."
+	return ..()
 
 #undef ROBES_BLUE
 #undef ROBES_RED

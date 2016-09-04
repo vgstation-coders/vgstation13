@@ -8,6 +8,10 @@
 #define SCANMODE_ATMOS		5
 #define SCANMODE_DEVICE		6
 
+#define PDA_MINIMAP_WIDTH	256
+#define PDA_MINIMAP_OFFSET_X	8
+#define PDA_MINIMAP_OFFSET_Y	233
+
 //The advanced pea-green monochrome lcd of tomorrow.
 
 var/global/list/obj/item/device/pda/PDAs = list()
@@ -971,9 +975,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_[map.nameShort].png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation]-8]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 					else
@@ -982,9 +986,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_bg_notfound.png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation]-8]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 /*
@@ -1357,7 +1361,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					var/turf/T = loc
 					if(ismob(T))
 						T = T.loc
-					cartridge.loc = T
+					cartridge.forceMove(T)
 					scanmode = SCANMODE_NONE
 					if (cartridge.radio)
 						cartridge.radio.hostpda = null
@@ -1444,14 +1448,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("x")
 						var/new_x = input("Please input desired X coordinate.", "Station Map App", app.markx) as num
 						var/x_validate=new_x+WORLD_X_OFFSET[map.zMainStation]
-						if(x_validate < 1 || x_validate > 255)
+						if(x_validate < (world.maxx/2 - PDA_MINIMAP_WIDTH/2) || x_validate > (world.maxx/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 						else
 							app.markx = new_x
 					if("y")
 						var/new_y = input("Please input desired Y coordinate.", "Station Map App", app.marky) as num
 						var/y_validate=new_y+WORLD_Y_OFFSET[map.zMainStation]
-						if(y_validate < 1 || y_validate > 255)
+						if(y_validate < (world.maxy/2 - PDA_MINIMAP_WIDTH/2) || y_validate > (world.maxy/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 						else
 							app.marky = new_y
@@ -1800,8 +1804,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						if(M.id_tag == cartridge.remote_door_id)
 							if(M.density)
 								M.open()
+								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now open!</span>")
 							else
 								M.close()
+								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now closed!</span>")
 
 			if("Detonate")//Detonate PDA
 				if(istype(cartridge, /obj/item/weapon/cartridge/syndicate))
@@ -1850,7 +1856,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("2")		// Eject pAI device
 						var/turf/T = get_turf(src.loc)
 						if(T)
-							pai.loc = T
+							pai.forceMove(T)
 
 //LINK FUNCTIONS===================================
 
@@ -1958,7 +1964,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			M.put_in_hands(id)
 			to_chat(usr, "<span class='notice'>You remove the ID from the [name].</span>")
 		else
-			id.loc = get_turf(src)
+			id.forceMove(get_turf(src))
 		id = null
 
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P)
@@ -2088,7 +2094,7 @@ obj/item/device/pda/CtrlClick()
 					M.put_in_hands(O)
 					to_chat(usr, "<span class='notice'>You remove \the [O] from \the [src].</span>")
 					return
-			O.loc = get_turf(src)
+			O.forceMove(get_turf(src))
 		else
 			to_chat(usr, "<span class='notice'>This PDA does not have a pen in it.</span>")
 	else
@@ -2280,9 +2286,9 @@ obj/item/device/pda/AltClick()
 /obj/item/device/pda/Destroy()
 	PDAs -= src
 	if (src.id)
-		src.id.loc = get_turf(src.loc)
+		src.id.forceMove(get_turf(src.loc))
 	if(src.pai)
-		src.pai.loc = get_turf(src.loc)
+		src.pai.forceMove(get_turf(src.loc))
 	..()
 
 /obj/item/device/pda/Del()
@@ -2372,3 +2378,5 @@ obj/item/device/pda/AltClick()
 			continue
 		. += P
 	return .
+
+#undef PDA_MINIMAP_WIDTH

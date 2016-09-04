@@ -1,13 +1,14 @@
 /spell/targeted/ethereal_jaunt
 	name = "Ethereal Jaunt"
 	desc = "This spell creates your ethereal form, temporarily making you invisible and able to pass through walls."
+	abbreviation = "EJ"
 
 	school = "transmutation"
 	charge_max = 300
 	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
 	invocation = "Rah'dee K'Alari"
 	invocation_type = SpI_SHOUT
-	range = -1
+	range = SELFCAST
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
 	duration = 50 //in deciseconds
@@ -127,7 +128,7 @@
 	charge_max = 200
 	spell_flags = Z2NOCAST | INCLUDEUSER | CONSTRUCT_CHECK
 	invocation_type = SpI_NONE
-	range = -1
+	range = SELFCAST
 	duration = 50 //in deciseconds
 
 	hud_state = "const_shift"

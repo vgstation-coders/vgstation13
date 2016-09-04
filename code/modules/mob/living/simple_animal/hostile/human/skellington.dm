@@ -62,6 +62,32 @@
 	corpse = /obj/effect/landmark/corpse/skellington/cannoneer
 	items_to_drop = list(/obj/item/weapon/gun/energy/lasercannon/empty)
 
+//Skellington petards
+//Explode on attack or death
+//Thankfully they're pretty slow
+
+/mob/living/simple_animal/hostile/humanoid/skellington/petard
+	name = "skellington petard"
+	desc = "A skeleton carrying a bunch of bombs. Highly explosive."
+
+	icon_state = "petard"
+	speed = 8
+
+	faction = "pirate"
+	attacktext = "blows up"
+
+	corpse = /obj/effect/landmark/corpse/skellington/petard
+
+/mob/living/simple_animal/hostile/humanoid/skellington/petard/AttackingTarget()
+	Die()
+
+/mob/living/simple_animal/hostile/humanoid/skellington/petard/Die()
+	var/turf/T = get_turf(src)
+
+	..()
+
+	explosion(T, -1, 1, 2)
+
 /obj/effect/landmark/corpse/skellington
 	name = "skellington"
 	mutantrace = "Skellington"
@@ -81,3 +107,10 @@
 	corpseshoes = /obj/item/clothing/shoes/jackboots
 	corpsehelmet = /obj/item/clothing/head/helmet/space/pirate
 	corpsegloves = /obj/item/clothing/gloves/black
+
+/obj/effect/landmark/corpse/skellington/petard
+	name = "skellington petard"
+	corpseuniform = /obj/item/clothing/under/redpants
+	corpsesuit = /obj/item/clothing/suit/suspenders
+	corpsemask = /obj/item/clothing/mask/scarf/red
+	corpsehelmet = /obj/item/clothing/head/bandana

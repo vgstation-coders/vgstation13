@@ -388,7 +388,7 @@
 					to_chat(H, "<span class='warning'>Your helmet protects you from the water!</span>")
 					return
 
-				if(!M.unacidable)
+				if(M.acidable())
 					if(prob(15) && volume >= 30)
 						var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 						if(affecting)
@@ -399,7 +399,7 @@
 					else
 						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
-				if(!M.unacidable)
+				if(M.acidable())
 					M.take_organ_damage(min(15, volume * 2))
 
 		else if(H.dna.mutantrace == "slime")
@@ -663,7 +663,7 @@
 					qdel(W)
 					continue
 				W.reset_plane_and_layer()
-				W.loc = C.loc
+				W.forceMove(C.loc)
 				W.dropped(C)
 			var/mob/living/carbon/slime/new_mob = new /mob/living/carbon/slime(C.loc)
 			new_mob.a_intent = I_HURT
@@ -838,7 +838,7 @@
 						to_chat(H, "<span class='warning'>Your helmet protects you from the holy water!</span>")
 						return
 
-					if(!H.unacidable)
+					if(H.acidable())
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 							if(affecting)
@@ -862,7 +862,7 @@
 								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
 								H.mind.vampire.smitecounter += volume * 0.4
 				else
-					if(!H.unacidable)
+					if(H.acidable())
 						H.take_organ_damage(min(15, volume * 2))
 						H.mind.vampire.smitecounter += 5
 
@@ -1111,7 +1111,7 @@
 			var/mob/living/carbon/human/H = M
 
 			if(H.wear_mask)
-				if(!H.wear_mask.unacidable)
+				if(H.wear_mask.acidable())
 					qdel(H.wear_mask)
 					H.wear_mask = null
 					H.update_inv_wear_mask()
@@ -1121,7 +1121,7 @@
 				return
 
 			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
-				if(prob(15) && !H.head.unacidable)
+				if(prob(15) && H.head.acidable())
 					qdel(H.head)
 					H.head = null
 					H.update_inv_head()
@@ -1133,7 +1133,7 @@
 		else if(ismonkey(M))
 			var/mob/living/carbon/monkey/MK = M
 			if(MK.wear_mask)
-				if(!MK.wear_mask.unacidable)
+				if(MK.wear_mask.acidable())
 					qdel(MK.wear_mask)
 					MK.wear_mask = null
 					MK.update_inv_wear_mask()
@@ -1142,7 +1142,7 @@
 					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
 				return
 
-		if(!M.unacidable)
+		if(M.acidable())
 			if(prob(15) && ishuman(M) && volume >= 30)
 				var/mob/living/carbon/human/H = M
 				if(H.species.name == "Grey")
@@ -1156,7 +1156,7 @@
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
-		if(!M.unacidable)
+		if(M.acidable())
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name=="Grey")
@@ -1168,7 +1168,7 @@
 	if(..())
 		return 1
 
-	if(O.unacidable)
+	if(!O.acidable())
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)) && prob(10))
@@ -1201,7 +1201,7 @@
 			var/mob/living/carbon/human/H = M
 
 			if(H.wear_mask)
-				if(!H.wear_mask.unacidable)
+				if(H.wear_mask.acidable())
 					qdel(H.wear_mask)
 					H.wear_mask = null
 					H.update_inv_wear_mask()
@@ -1211,7 +1211,7 @@
 				return
 
 			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
-				if(prob(15) && !H.head.unacidable)
+				if(prob(15) && H.head.acidable())
 					qdel(H.head)
 					H.head = null
 					H.update_inv_head()
@@ -1220,7 +1220,7 @@
 					to_chat(H, "<span class='warning'>Your helmet protects you from the acid!</span>")
 				return
 
-			if(!H.unacidable)
+			if(H.acidable())
 				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 				if(affecting.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
@@ -1229,7 +1229,7 @@
 		else if(ismonkey(M))
 			var/mob/living/carbon/monkey/MK = M
 			if(MK.wear_mask)
-				if(!MK.wear_mask.unacidable)
+				if(MK.wear_mask.acidable())
 					qdel(MK.wear_mask)
 					MK.wear_mask = null
 					MK.update_inv_wear_mask()
@@ -1238,10 +1238,10 @@
 					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
 				return
 
-			if(!MK.unacidable)
+			if(MK.acidable())
 				MK.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
 	else
-		if(!M.unacidable)
+		if(M.acidable()) //I think someone doesn't know what this does
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
@@ -1257,7 +1257,7 @@
 	if(..())
 		return 1
 
-	if(O.unacidable)
+	if(!O.acidable())
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
@@ -4894,6 +4894,12 @@
 	description = "A drink from Mime Heaven."
 	nutriment_factor = FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
+
+/datum/reagent/drink/silencer/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	M.silent = max(M.silent, 15)
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"

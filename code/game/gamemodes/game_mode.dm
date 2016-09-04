@@ -39,6 +39,7 @@
 	var/list/datum/mind/deathsquad = list()
 	var/list/datum/mind/ert = list()
 	var/rage = 0
+	var/can_be_mixed = FALSE
 
 /datum/game_mode/proc/announce() //to be calles when round starts
 	to_chat(world, "<B>Notice</B>: [src] did not define announce()")
@@ -164,6 +165,7 @@
 		feedback_set("escaped_on_pod_5",escaped_on_pod_5)
 
 	send2mainirc("A round of [src.name] has ended - [surviving_total] survivors, [ghosts] ghosts.")
+	send2maindiscord("A round of **[name]** has ended - **[surviving_total]** survivors, **[ghosts]** ghosts.")
 
 	return 0
 

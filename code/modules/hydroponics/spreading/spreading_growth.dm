@@ -104,7 +104,7 @@
 				for(var/obj/effect/plantsegment/neighbor in range(1,target_turf))
 					neighbor.neighbors -= target_turf
 				spawn(1) // This should do a little bit of animation.
-					child.loc = target_turf
+					child.forceMove(target_turf)
 					child.update_icon()
 
 	// We shouldn't have spawned if the controller doesn't exist.

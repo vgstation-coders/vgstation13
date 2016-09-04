@@ -248,7 +248,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/projectile_check()
 	return
-	
+
 //Override this to have source respond differently to visible_messages said by an atom A
 /atom/proc/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 
@@ -798,3 +798,9 @@ its easier to just keep the beam vertical.
 	blessed = 1
 
 /atom/proc/update_icon()
+
+/atom/proc/acidable()
+	return 0
+
+/atom/proc/holomapAlwaysDraw()
+	return 1

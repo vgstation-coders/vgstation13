@@ -808,7 +808,7 @@ Auto Patrol: []"},
 			D.open()
 			src.frustration = 0
 	else if ((istype(M, /mob/living/)) && (!src.anchored))
-		src.loc = M:loc
+		src.forceMove(M:loc)
 		src.frustration = 0
 	return
 
@@ -817,7 +817,7 @@ Auto Patrol: []"},
 	spawn(0)
 		if (M)
 			var/turf/T = get_turf(src)
-			M:loc = T
+			M:forceMove(T)
 */
 
 /obj/machinery/bot/ed209/proc/speak(var/message)

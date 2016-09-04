@@ -89,12 +89,12 @@
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
 	action_button_name = "Toggle Mask"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
 
 /obj/item/clothing/mask/gas/voice/New()
 	..()
-	for(var/Type in typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
+	for(var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
 		clothing_choices += new Type
 	return
 
@@ -155,6 +155,12 @@
 		qdel(W)
 		qdel(src)
 
+/obj/item/clothing/mask/gas/clown_hat/stickymagic
+	canremove = 0
+
+/obj/item/clothing/mask/gas/clown_hat/stickymagic/acidable()
+	return 0
+
 /obj/item/clothing/mask/gas/clown_hat/wiz
 	name = "purple clown wig and mask"
 	desc = "Some pranksters are truly magical."
@@ -195,6 +201,13 @@
 /obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
 	if(src.muted)
 		speech.message=""
+
+/obj/item/clothing/mask/gas/mime/stickymagic
+	canremove = 0
+	muted = 1
+
+/obj/item/clothing/mask/gas/mime/acidable()
+	return 0
 
 /obj/item/clothing/mask/gas/monkeymask
 	name = "monkey mask"

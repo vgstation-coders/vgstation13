@@ -263,7 +263,7 @@
 		var/obj/item/stack/rods/R = W
 		R.use(1)
 		var/obj/item/weapon/gun/projectile/flamethrower/F = new/obj/item/weapon/gun/projectile/flamethrower(user.loc)
-		src.loc = F
+		src.forceMove(F)
 		F.weldtool = src
 		if (user.client)
 			user.client.screen -= src
@@ -275,7 +275,7 @@
 		user.u_equip(src,0)
 		if (user.client)
 			user.client.screen -= src
-		src.loc = F
+		src.forceMove(F)
 		src.add_fingerprint(user)
 		return
 

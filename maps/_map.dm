@@ -82,11 +82,18 @@
 
 	var/list/enabled_jobs = list()
 
-/datum/map/New()
+	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
+	var/list/load_map_elements = list()
 
+/datum/map/New()
 	. = ..()
+
 	src.loadZLevels(src.zLevels)
-	return
+
+	//The spawn below is needed
+	spawn()
+		for(var/T in load_map_elements)
+			load_dungeon(T)
 
 /datum/map/proc/loadZLevels(list/levelPaths)
 

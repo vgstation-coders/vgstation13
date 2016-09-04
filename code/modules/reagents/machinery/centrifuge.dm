@@ -60,7 +60,7 @@
 	add_fingerprint(user)
 	if(cans.len || beaker)
 		for(var/obj/item/O in cans)
-			O.loc = src.loc
+			O.forceMove(src.loc)
 			cans -= O
 		if(beaker)
 			detach()
@@ -86,7 +86,7 @@
 		var/obj/item/weapon/reagent_containers/C = cans[1]
 		var/datum/reagent/R = beaker.reagents.reagent_list[1]
 		beaker.reagents.trans_id_to(C,R.id,50)
-		C.loc = src.loc
+		C.forceMove(src.loc)
 		cans -= C
 	if(!cans.len&&beaker.reagents.reagent_list.len)
 		to_chat(usr, "<span class='warning'>With no remaining containers, the rest of the concoction swirls down the drain...</span>")
@@ -108,8 +108,8 @@
 		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = beaker:holder:loc
 			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-				beaker.loc = R
+				beaker.forceMove(R)
 			else
-				beaker.loc = beaker:holder
+				beaker.forceMove(beaker:holder)
 		beaker = null
 		return

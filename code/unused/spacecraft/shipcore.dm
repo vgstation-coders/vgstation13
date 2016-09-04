@@ -102,14 +102,14 @@
 					_x = Center.x + O.x - xsav
 					_y = Center.y + O.y - ysav
 					_z = Center.z + O.z - zsav
-				O.loc = locate(_x, _y, _z)
+				O.forceMove(locate(_x, _y, _z))
 
 			for(var/mob/M in T)
 				var/
 					_x = Center.x + M.x - xsav
 					_y = Center.y + M.y - ysav
 					_z = Center.z + M.z - zsav
-				M.loc = locate(_x, _y, _z)
+				M.forceMove(locate(_x, _y, _z))
 
 			var/
 				_x = Center.x + T.x - xsav
@@ -316,7 +316,7 @@ obj/machinery/ship_component/control_panel
 				break
 			else
 				core.receive_turf(src.loc)
-				src.loc = get_step(src, src.dir)
+				src.forceMove(get_step(src, src.dir))
 			sleep(0)
 		cleanup_self()
 	proc/cleanup_self()

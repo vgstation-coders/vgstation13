@@ -3,7 +3,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
 	var/crit_fail = 0
-	var/unacidable = 0 //universal "unacidabliness" var, here so you can use it in any obj.
 	animate_movement = 2
 	var/throwforce = 1
 	var/siemens_coefficient = 0 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
@@ -116,7 +115,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(in_use)
 		var/is_in_use = 0
 		if(_using && _using.len)
-			var/list/nearby = viewers(1, src)
+			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
 			for(var/mob/M in _using) // Only check things actually messing with us.
 				if (!M || !M.client || M.machine != src)
 					_using.Remove(M)
@@ -377,3 +376,6 @@ a {
 // Dummy to give items special techlist for the purposes of the Device Analyser, in case you'd ever need them to give them different tech levels depending on special checks.
 /obj/proc/give_tech_list()
 	return null
+
+/obj/acidable()
+	return !(flags & INVULNERABLE)

@@ -51,7 +51,7 @@
 /obj/effect/explosion/New()
 	..()
 	spawn (10)
-		src.loc = null
+		src.forceMove(null)
 	return
 
 /datum/effect/system/explosion
@@ -89,7 +89,7 @@
 	pixel_y += pY
 	icon_state = ex_iconstate
 	spawn (20)
-		src.loc = null
+		src.forceMove(null)
 	return
 
 /datum/effect/system/small_explosion

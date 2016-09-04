@@ -1,4 +1,5 @@
-
+#define INSTRUMENT_MAX_LINE_NUMBER	100
+#define INSTRUMENT_MAX_LINE_LENGTH	50
 
 /datum/song
 	var/name = "Untitled"
@@ -51,7 +52,7 @@
 		return
 
 	// now generate name
-	var/soundfile = "sound/[instrumentDir]/[ascii2text(note+64)][acc][oct].[instrumentExt]"
+	var/soundfile = "sound/instruments/[instrumentDir]/[ascii2text(note+64)][acc][oct].[instrumentExt]"
 	soundfile = file(soundfile)
 	// make sure the note exists
 	if(!fexists(soundfile))
@@ -186,11 +187,11 @@
 			t = html_encode(input(usr, "Please paste the entire song, formatted:", text("[]", name), t)  as message)
 			if(!in_range(instrumentObj, usr))
 				return
-			if(lentext(t) >= 3072)
+			if(lentext(t) >= INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
 				var/cont = input(usr, "Your message is too long! Would you like to continue editing it?", "", "yes") in list("yes", "no")
 				if(cont == "no")
 					break
-		while(lentext(t) > 3072)
+		while(lentext(t) > INSTRUMENT_MAX_LINE_LENGTH*INSTRUMENT_MAX_LINE_NUMBER)
 		//split into lines
 		spawn()
 			lines = splittext(t, "\n")
@@ -199,12 +200,12 @@
 				lines.Cut(1,2)
 			else
 				tempo = sanitize_tempo(5) // default 120 BPM
-			if(lines.len > 50)
+			if(lines.len > INSTRUMENT_MAX_LINE_NUMBER)
 				usr << "Too many lines!"
-				lines.Cut(51)
+				lines.Cut(INSTRUMENT_MAX_LINE_NUMBER+1)
 			var/linenum = 1
 			for(var/l in lines)
-				if(lentext(l) > 50)
+				if(lentext(l) > INSTRUMENT_MAX_LINE_LENGTH)
 					usr << "Line [linenum] too long!"
 					lines.Remove(l)
 				else
@@ -232,10 +233,10 @@
 		var/newline = html_encode(input("Enter your line: ", instrumentObj.name) as text|null)
 		if(!newline || !in_range(instrumentObj, usr))
 			return
-		if(lines.len > 50)
+		if(lines.len > INSTRUMENT_MAX_LINE_NUMBER)
 			return
-		if(lentext(newline) > 50)
-			newline = copytext(newline, 1, 50)
+		if(lentext(newline) > INSTRUMENT_MAX_LINE_LENGTH)
+			newline = copytext(newline, 1, INSTRUMENT_MAX_LINE_LENGTH)
 		lines.Add(newline)
 	else if(href_list["deleteline"])
 		var/num = round(text2num(href_list["deleteline"]))
@@ -247,8 +248,8 @@
 		var/content = html_encode(input("Enter your line: ", instrumentObj.name, lines[num]) as text|null)
 		if(!content || !in_range(instrumentObj, usr))
 			return
-		if(lentext(content) > 50)
-			content = copytext(content, 1, 50)
+		if(lentext(content) > INSTRUMENT_MAX_LINE_LENGTH)
+			content = copytext(content, 1, INSTRUMENT_MAX_LINE_LENGTH)
 		if(num > lines.len || num < 1)
 			return
 		lines[num] = content
@@ -332,3 +333,12 @@
 				anchored = 0
 	else
 		..()
+
+/obj/structure/piano/xylophone
+	name = "xylophone"
+	desc = "Is this even a real instrument?"
+	icon_state = "xylophone"
+
+/obj/structure/piano/xylophone/New()
+	song = new("xylophone", src)
+	song.instrumentExt = "mid"

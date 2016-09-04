@@ -9,7 +9,6 @@
 	density = 1 //Dense. To raise the heat.
 	opacity = 0
 	anchored = 1
-	unacidable = 1
 	layer = ABOVE_DOOR_LAYER
 	infra_luminosity = 15
 	internal_gravity = 1 // Can move in 0-gravity
@@ -50,7 +49,7 @@
 
 /obj/spacepod/Destroy()
 	if(src.occupant)
-		src.occupant.loc = src.loc
+		src.occupant.forceMove(src.loc)
 		src.occupant.gib()
 		src.occupant = null
 	..()
@@ -108,7 +107,7 @@
 		if(1)
 			var/mob/living/carbon/human/H = occupant
 			if(H)
-				H.loc = get_turf(src)
+				H.forceMove(get_turf(src))
 				H.ex_act(severity + 1)
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
 			del(ion_trail)
@@ -504,6 +503,9 @@
 	sleep(10)
 	new /obj/spacepod/random(get_turf(src))
 	qdel(src)
+
+/obj/spacepod/acidable()
+	return 0
 
 #undef DAMAGE
 #undef FIRE

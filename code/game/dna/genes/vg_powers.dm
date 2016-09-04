@@ -60,7 +60,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk
 	name = "Hulk Out"
 	panel = "Mutant Powers"
-	range = -1
+	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
 	charge_max = HULK_COOLDOWN
@@ -81,7 +81,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk/cast(list/targets, mob/user)
 	if (istype(user.loc,/mob))
 		to_chat(usr, "<span class='warning'>You can't hulk out right now!</span>")
-		return
+		return 1
 	for(var/mob/living/carbon/human/M in targets)
 		M.hulk_time = world.time + src.duration
 		M.mutations.Add(M_HULK)
@@ -109,12 +109,12 @@ Obviously, requires DNA2.
 /datum/dna/gene/basic/farsight/activate(var/mob/M)
 	..()
 	if(M.client)
-		M.client.view = max(M.client.view, world.view+1)
+		M.client.changeView(max(M.client.view, world.view+1))
 
 /datum/dna/gene/basic/farsight/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
 		if(M.client && M.client.view == world.view + 1)
-			M.client.view = world.view
+			M.client.changeView()
 
 /datum/dna/gene/basic/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.

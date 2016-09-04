@@ -40,7 +40,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
 		spell_masters = null
-		spells = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/screen/screenobj = AM
@@ -76,16 +75,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return PROJREACT_MOBS
 
 /mob/proc/remove_screen_objs()
-	if(flash)
-		returnToPool(flash)
-		if(client)
-			client.screen -= flash
-		flash = null
-	if(blind)
-		returnToPool(blind)
-		if(client)
-			client.screen -= blind
-		blind = null
 	if(hands)
 		returnToPool(hands)
 		if(client)
@@ -255,6 +244,13 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
 
+/mob/Del()
+	if(flags & HEAR_ALWAYS)
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				returnToPool(VH)
+	..()
+
 /mob/proc/is_muzzled()
 	return 0
 
@@ -396,10 +392,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
 	if(world.time>resethearers)
 		sethearing()
-	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
-		if(!hearer.attached)
-			world.log << "visible_message is attempting to call on_see on a hearer that isn't attached to anything: [hearer]. Previous type of attached: [hearer.attached_type]. Attached text reference [hearer.attached_ref]"
-			continue
+	var/location = get_holder_at_turf_level(src) || get_turf(src)
+	for(var/mob/virtualhearer/hearer in viewers(location))
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
@@ -447,8 +441,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		narsimage.pixel_y = old_pixel_y
 		narglow.pixel_x = old_pixel_x
 		narglow.pixel_y = old_pixel_y
-		narsimage.loc = src.loc
-		narglow.loc = src.loc
+		narsimage.forceMove(src.loc)
+		narglow.forceMove(src.loc)
 		//Animate narsie based on dir
 		if(dir)
 			var/x_diff = 0
@@ -901,7 +895,7 @@ var/list/slot_equipment_priority = list( \
 			if (L.master == src)
 				var/list/temp = list(  )
 				temp += L.container
-				L.loc = null
+				L.forceMove(null)
 				return temp
 			else
 				return L.container
@@ -1444,13 +1438,13 @@ var/list/slot_equipment_priority = list( \
 			for(var/spell/S in spell_list)
 				if((!S.connected_button) || !statpanel(S.panel))
 					continue //Not showing the noclothes spell
-				switch(S.charge_type)
-					if(Sp_RECHARGE)
-						statpanel(S.panel,"[S.charge_counter/10.0]/[S.charge_max/10]",S.connected_button)
-					if(Sp_CHARGES)
-						statpanel(S.panel,"[S.charge_counter]/[S.charge_max]",S.connected_button)
-					if(Sp_HOLDVAR)
-						statpanel(S.panel,"[S.holder_var_type] [S.holder_var_amount]",S.connected_button)
+				var/charge_type = S.charge_type
+				if(charge_type & Sp_HOLDVAR)
+					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
+				else if(charge_type & Sp_CHARGES)
+					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
+				else if(charge_type & Sp_RECHARGE)
+					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
@@ -1714,7 +1708,7 @@ var/list/slot_equipment_priority = list( \
 	else
 		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'>[usr] rips [selection] out of your body.</span>")
 
-	selection.loc = get_turf(src)
+	selection.forceMove(get_turf(src))
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)
@@ -1826,6 +1820,9 @@ mob/proc/on_foot()
 /mob/proc/heard(var/mob/living/M)
 	return
 
+/mob/proc/AdjustPlasma()
+	return
+
 /mob/living/carbon/heard(var/mob/living/carbon/human/M)
 	if(M == src || !istype(M))
 		return
@@ -1833,6 +1830,9 @@ mob/proc/on_foot()
 		if(!(mind.heard_before[M.name]))
 			mind.heard_before[M.name] = M
 			M.heard_by |= mind
+
+/mob/acidable()
+	return 1
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

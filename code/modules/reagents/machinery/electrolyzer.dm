@@ -112,7 +112,7 @@
 
 /obj/item/weapon/electrolyzer/proc/insert_beaker(obj/item/weapon/W as obj, mob/user as mob)
 	if(user.drop_item(W, src))
-		W.loc = src
+		W.forceMove(src)
 		beakers += W
 	else
 		to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
