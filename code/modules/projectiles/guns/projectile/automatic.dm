@@ -81,7 +81,7 @@
 	caliber = list("12mm" = 1)
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
-	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
+	mag_type = "/obj/item/ammo_storage/magazine/a12mm/ops"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	load_method = 2
 
