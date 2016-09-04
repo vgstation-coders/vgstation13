@@ -495,7 +495,7 @@
 				new_objective.owner = src
 
 			if ("survive")
-				new_objective = new /datum/objective/survive
+				new_objective = new (issilicon(current) ? /datum/objective/siliconsurvive : /datum/objective/survive)
 				new_objective.owner = src
 
 			if ("die")
