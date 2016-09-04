@@ -4,7 +4,7 @@
 	if(!check_rights(R_POLLING))
 		return
 	if(!dbcon.IsConnected())
-		src << "<span class='danger'>Failed to establish database connection.</span>"
+		to_chat(src, "<span class='danger'>Failed to establish database connection.</span>")
 		return
 	var/polltype = input("Choose poll type.","Poll Type") in list("Single Option","Text Reply","Rating","Multiple Choice")
 	var/choice_amount = 0
@@ -41,7 +41,7 @@
 	if(query_time_later.NextRow())
 		var/checklate = text2num(query_time_later.item[1])
 		if(checklate)
-			src << "Datetime entered is not later than current server time."
+			to_chat(src, "Datetime entered is not later than current server time.")
 			return
 	var/adminonly
 	switch(alert("Admin only poll?",,"Yes","No","Cancel"))
@@ -99,7 +99,7 @@
 			if(!maxval)
 				return
 			if(minval >= maxval)
-				src << "Minimum rating value can't be more than maximum rating value"
+				to_chat(src, "Minimum rating value can't be more than maximum rating value")
 				return
 			descmin = input("Optional: Set description for minimum rating","Minimum rating description") as message
 			if(descmin)

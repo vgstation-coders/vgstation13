@@ -4,7 +4,7 @@
 	if(!check_rights(R_POLLING))
 		return
 	if(!dbcon.IsConnected())
-		src << "<span class='danger'>Failed to establish database connection.</span>"
+		to_chat(src, "<span class='danger'>Failed to establish database connection.</span>")
 		return
 
 	var/DBQuery/get_broken_polls = dbcon.NewQuery("SELECT question FROM erro_poll_question WHERE option IS NULL AND polltype != 'TEXT' AND DATE(endtime) > NOW()") //all polls that end in the future, don't have options, and aren't text response polls
@@ -66,7 +66,7 @@
 			if(!maxval)
 				return
 			if(minval >= maxval)
-				src << "Minimum rating value can't be more than maximum rating value"
+				to_chat(src, "Minimum rating value can't be more than maximum rating value")
 				return
 			descmin = input("Optional: Set description for minimum rating","Minimum rating description") as message
 			if(descmin)
