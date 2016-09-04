@@ -14,6 +14,18 @@
 	var/datum/organ/internal/organ_data       // Stores info when removed.
 	var/prosthetic_name = "prosthetic organ"  // Flavour string for robotic organ.
 	var/prosthetic_icon                       // Icon for robotic organ.
+	var/organ_tier = 0
+	var/internal_module_slots = 0
+	var/external_module_slots = 0
+	var/contained_modules = list() //Where modules are kept
+
+/obj/item/organ/proc/reload_slots(var/internal_slots, var/external_slots)
+//Reloads the slots, and tells the modules to drop themselves and undo their upgrades.
+	internal_module_slots = internal_slots
+	external_module_slots = external_slots
+	if(contained_modules)
+		for(var/obj/item/cybernetics/upgrade/module_to_drop in contained_modules)
+			module_to_drop.unmount(src)
 
 /obj/item/organ/attack_self(mob/user as mob)
 

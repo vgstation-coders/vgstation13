@@ -8,7 +8,12 @@
 	slot_flags = SLOT_BELT
 	w_type=RECYK_ELECTRONIC
 	var/list/part = null
+	var/limb_tier = 0 //For external limb nonsense
 	var/sabotaged = 0 //Emagging limbs can have repercussions when installed as prosthetics.
+
+	var/internal_module_slots = 0
+	var/external_module_slots = 0
+	var/contained_modules = list()
 
 /*
 /obj/item/robot_parts/recycle(var/datum/materials/rec)

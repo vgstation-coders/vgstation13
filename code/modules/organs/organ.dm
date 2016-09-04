@@ -11,6 +11,11 @@
 	var/germ_level = 0 //INTERNAL germs inside the organ, this is BAD if it's greater than INFECTION_LEVEL_ONE
 	var/cancer_stage = 0 //Cancer growth inside the organ, anything above 0 is very bad. See handle_cancer() below
 
+	//Start at 1 (full damage), and work their way down to 0 (No damage)
+	var/emp_resist = 1 //For when an EMP is applied to a limb
+	var/brute_resist = 0.66 //For when brute damage is applied to a limb, defaults to 0.66 for robotic and peg limbs
+	var/burn_resist = 0.66 //for when burn damage is applied to a limb
+
 /datum/organ/proc/CanInsert(var/mob/living/carbon/human/H, var/mob/surgeon=null, var/quiet=0)
 	return 1
 /datum/organ/proc/Insert(var/mob/living/carbon/human/H, var/mob/surgeon=null)
