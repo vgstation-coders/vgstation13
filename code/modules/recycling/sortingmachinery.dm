@@ -92,8 +92,9 @@
 
 	if(href_list["remove_dest"] && mode)
 		var/idx = Clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
+		if(currTag == destinations[idx])
+			currTag = 0 // In case the index was at the end of the list
 		destinations -= destinations[idx]
-		currTag = 0 // In case the index was at the end of the list
 		interact(usr)
 		return 1
 
