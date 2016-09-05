@@ -292,6 +292,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define PASSMACHINE	32 //computers, vending machines, rnd machines
 #define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
 
+#define PASSALL 127
+
 
 /*
 	These defines are used specifically with the atom/movable/languages bitmask.

@@ -25,9 +25,6 @@
 	..()
 	user_overlay = image('icons/mob/mob.dmi', icon_state = "red_glow")
 
-/spell/mirror_of_pain/before_cast()
-	return
-
 /spell/mirror_of_pain/choose_targets(mob/user = usr)
 	return list(user)
 
@@ -61,6 +58,23 @@
 			continue
 
 		affected_amount++
+
+		var/obj/item/projectile/beam/pain/projectile = new(get_turf(src.holder), get_dir(src.holder, L))
+
+		projectile.damage_type = damage_type
+		projectile.damage = amount
+
+		projectile.original = L
+		projectile.starting = get_turf(src.holder)
+		projectile.target = get_turf(L)
+		projectile.shot_from = src.holder //fired from the user
+		projectile.current = projectile.original
+		projectile.yo = L.y - src.holder.y
+		projectile.xo = L.x - src.holder.x
+
+		spawn()
+			projectile.OnFired()
+			projectile.process()
 
 		switch(damage_type)
 			if(BRUTE, BURN, CLONE)
