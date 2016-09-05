@@ -3,6 +3,8 @@
 #define SUPPLY_STATIONZ 1       //Z-level of the Station.
 
 #define SUPPLY_TAX 10 // Credits to charge per order.
+#define SCREEN_WIDTH 480 // Dimensions of supply computer windows
+#define SCREEN_HEIGHT 590
 var/datum/controller/supply_shuttle/supply_shuttle = new
 
 var/list/mechtoys = list(
@@ -104,11 +106,10 @@ var/list/mechtoys = list(
 	icon_state = "supply"
 	req_access = list(access_cargo)
 	circuit = "/obj/item/weapon/circuitboard/supplycomp"
-	var/temp = null
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/hacked = 0
 	var/can_order_contraband = 0
-	var/last_viewed_group = "categories"
+	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
 
 	light_color = LIGHT_COLOR_BROWN
@@ -118,9 +119,8 @@ var/list/mechtoys = list(
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "request"
 	circuit = "/obj/item/weapon/circuitboard/ordercomp"
-	var/temp = null
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
-	var/last_viewed_group = "categories"
+	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
 
 	light_color = LIGHT_COLOR_BROWN
@@ -408,21 +408,57 @@ var/list/mechtoys = list(
 		return
 	current_acct = user.get_worn_id_account()
 	user.set_machine(src)
-	var/dat
-	if(temp)
-		dat = temp
-	else
-		dat += {"<BR><B>Supply shuttle</B><HR>
-		Location: [supply_shuttle.moving ? "Moving to station ([supply_shuttle.eta] Mins.)":supply_shuttle.at_station ? "Station":"Dock"]<BR>
-		<HR>Bank account credits: [current_acct ? current_acct.fmtBalance() : "PANIC"]<BR>
-		<BR>\n<A href='?src=\ref[src];order=categories'>Request items</A><BR><BR>
-		<A href='?src=\ref[src];vieworders=1'>View approved orders</A><BR><BR>
-		<A href='?src=\ref[src];viewrequests=1'>View requests</A><BR><BR>
-		<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
-
-	user << browse(dat, "window=computer;size=575x450")
+	ui_interact(usr)
 	onclose(user, "computer")
 	return
+
+/obj/machinery/computer/ordercomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+	// ui data
+	var/data[0]
+	// make assoc list for supply groups because either I'm retarded or nanoui is retarded
+	var/supply_group_data[0]
+	for(var/i = 1; i <= all_supply_groups.len; i++)
+		supply_group_data.Add(list(list("category" = all_supply_groups[i])))
+	data["all_supply_groups"] = supply_group_data
+	data["last_viewed_group"] = last_viewed_group
+
+	// current supply group packs being displayed
+	var/packs_list[0]
+	for(var/set_name in supply_shuttle.supply_packs)
+		var/datum/supply_packs/pack = supply_shuttle.supply_packs[set_name]
+		if(!pack.contraband && !pack.hidden)
+			if(last_viewed_group == pack.group)
+				packs_list.Add(list(list("name" = pack.name, "amount" = pack.amount, "cost" = pack.cost, "command1" = list("doorder" = "[set_name]0"), "command2" = list("doorder" = "[set_name]1"))))
+				// command1 is for a single crate order, command2 is for multi crate order
+	data["supply_packs"] = packs_list
+
+	var/obj/item/weapon/card/id/I = usr.get_id_card()
+	// current usr's cargo requests
+	var/requests_list[0]
+	for(var/set_name in supply_shuttle.requestlist)
+		var/datum/supply_order/SO = set_name
+		if(SO)
+			// Check if usr owns the request
+			if(I && SO.orderedby == I.registered_name)
+				requests_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "command1" = list("rreq" = SO.ordernum))))
+	data["requests"] = requests_list
+
+	var/orders_list[0]
+	for(var/set_name in supply_shuttle.shoppinglist)
+		var/datum/supply_order/SO = set_name
+		if(SO )
+			// Check if usr owns the order
+			if(I && SO.orderedby == I.registered_name)
+				orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name)))
+	data["orders"] = orders_list
+
+	data["money"] = current_acct.fmtBalance()
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	if(!ui)
+		ui = new(user, src, ui_key, "order_console.tmpl", name, SCREEN_WIDTH, SCREEN_HEIGHT)
+		ui.set_initial_data(data)
+		ui.open()
 
 /obj/machinery/computer/ordercomp/Topic(href, href_list)
 	if(..())
@@ -431,46 +467,26 @@ var/list/mechtoys = list(
 	if( isturf(loc) && (in_range(src, usr) || istype(usr, /mob/living/silicon)) )
 		usr.set_machine(src)
 
-	if(href_list["order"])
-		if(href_list["order"] == "categories")
-			//all_supply_groups
-			//Request what?
-			last_viewed_group = "categories"
-
-			temp = {"<b>Bank account credits: [current_acct ? current_acct.fmtBalance() : "PANIC"]</b><BR>
-				<A href='?src=\ref[src];mainmenu=1'>Main Menu</A><HR><BR><BR>
-				<b>Select a category</b><BR><BR>"}
-			for(var/supply_group_name in all_supply_groups )
-				temp += "<A href='?src=\ref[src];order=[supply_group_name]'>[supply_group_name]</A><BR>"
-		else
-			last_viewed_group = href_list["order"]
-
-			temp = {"<b>Bank account credits: [current_acct ? current_acct.fmtBalance() : "PANIC"]</b><BR>
-				<A href='?src=\ref[src];order=categories'>Back to all categories</A><HR><BR><BR>
-				<b>Request from: [last_viewed_group]</b><BR><BR>"}
-			for(var/supply_name in supply_shuttle.supply_packs )
-				var/datum/supply_packs/N = supply_shuttle.supply_packs[supply_name]
-				if(N.hidden || N.contraband || N.group != last_viewed_group)
-					continue								//Have to send the type instead of a reference to
-				temp += "<A href='?src=\ref[src];doorder=[supply_name]'>[supply_name]</A> Cost: $[num2septext(N.cost)]<BR>"		//the obj because it would get caught by the garbage
-
-	else if (href_list["doorder"])
+	if (href_list["doorder"])
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
 			return
 
-		//Find the correct supply_pack datum
-		var/datum/supply_packs/P = supply_shuttle.supply_packs[href_list["doorder"]]
+		var/timeout = world.time + 600
+		// Get ordered pack name and multi crate order boolean
+		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/multi = text2num(copytext(href_list["doorder"], -1))
+		if(!isnum(multi))
+			return
+		var/datum/supply_packs/P = supply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
-
-		var/timeout = world.time + 600
-		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
-		if(world.time > timeout)
-			return
-		if(!reason)
-			return
+		var/crates = 1
+		if(multi)
+			var/num_input = input(usr, "Amount:", "How many crates?", "") as num
+			// Maximum 20 crates ordered at a time
+			crates = Clamp(round(text2num(num_input)), 1, 20)
 
 		var/idname = "*None Provided*"
 		var/idrank = "*None Provided*"
@@ -484,14 +500,32 @@ var/list/mechtoys = list(
 			else
 				to_chat(usr, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
 				return
-			to_chat(usr, "[bicon(src)]<span class='notice'>Your request has been saved. The transaction will be performed to your bank account when it has been accepted by cargo staff.</span>")
-			if(account && (account.money < P.cost))
-				to_chat(usr, "[bicon(src)]<span class='warning'>Your bank account doesn't have enough funds to order this pack. Your request will be on hold until you provide your bank account with the necessary funds.</span>")
+
+
 		else if(issilicon(usr))
 			idname = usr.real_name
 			account = station_account
 
-		supply_shuttle.ordernum++
+		// Calculate money tied up in usr's requests
+		var/total_money_req = 0
+		for(var/i = 1; i <= length(supply_shuttle.requestlist); i++)
+			var/datum/supply_order/R = supply_shuttle.requestlist[i]
+			var/datum/money_account/R_acc = R.account
+			if(R_acc.account_number == account.account_number)
+				var/datum/supply_packs/R_pack = R.object
+				total_money_req += R_pack.cost + SUPPLY_TAX
+		// Check they have enough cash to order another crate
+		if(((P.cost + SUPPLY_TAX) * crates + total_money_req > account.money))
+			// Tell them how many they can actually afford if they can't afford their order
+			var/max_crates = round((account.money - total_money_req) / (P.cost + SUPPLY_TAX))
+			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
+			return
+		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
+		if(world.time > timeout)
+			return
+		if(!reason)
+			return
+
 		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(loc)
 		reqform.name = "[P.name] Requisition Form - [idname], [idrank]"
 
@@ -501,6 +535,7 @@ var/list/mechtoys = list(
 			RANK: [idrank]<br>
 			REASON: [reason]<br>
 			SUPPLY CRATE TYPE: [P.name]<br>
+			NUMBER OF CRATES: [crates]<br>
 			ACCESS RESTRICTION: [get_access_desc(P.access)]<br>
 			CONTENTS:<br>"}
 		reqform.info += P.manifest
@@ -511,33 +546,32 @@ var/list/mechtoys = list(
 		reqtime = (world.time + 5) % 1e5
 
 		//make our supply_order datum
-		var/datum/supply_order/O = new /datum/supply_order()
-		O.ordernum = supply_shuttle.ordernum
-		O.object = P
-		O.orderedby = idname
-		O.account = account
-		supply_shuttle.requestlist += O
-		stat_collection.crates_ordered++
+		for(var/i = 1; i <= crates; i++)
+			supply_shuttle.ordernum++
+			var/datum/supply_order/O = new /datum/supply_order()
+			O.ordernum = supply_shuttle.ordernum
+			O.object = P
+			O.orderedby = idname
+			O.account = account
+			O.comment = reason
+			supply_shuttle.requestlist += O
+			stat_collection.crates_ordered++
 
+	else if (href_list["last_viewed_group"])
+		last_viewed_group = href_list["last_viewed_group"]
+	
+	else if (href_list["rreq"])
+		var/ordernum = text2num(href_list["rreq"])
+		for(var/i=1, i<=supply_shuttle.requestlist.len, i++)
+			var/datum/supply_order/SO = supply_shuttle.requestlist[i]
+			if(SO.ordernum == ordernum)
+				supply_shuttle.requestlist.Cut(i,i+1)
+				break
 
-		temp = {"Thanks for your request. The cargo team will process it as soon as possible.<BR>
-			<BR><A href='?src=\ref[src];order=[last_viewed_group]'>Back</A> <A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"}
-	else if (href_list["vieworders"])
-		temp = "Current approved orders: <BR><BR>"
-		for(var/S in supply_shuttle.shoppinglist)
-			var/datum/supply_order/SO = S
-			temp += "[SO.object.name] approved by [SO.orderedby] [SO.comment ? "([SO.comment])":""]<BR>"
-		temp += "<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
-
-	else if (href_list["viewrequests"])
-		temp = "Current requests: <BR><BR>"
-		for(var/S in supply_shuttle.requestlist)
-			var/datum/supply_order/SO = S
-			temp += "#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]<BR>"
-		temp += "<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
-
-	else if (href_list["mainmenu"])
-		temp = null
+	else if (href_list["close"])
+		if(usr.machine == src)
+			usr.unset_machine()
+		return 1
 
 	add_fingerprint(usr)
 	updateUsrDialog()
@@ -556,20 +590,8 @@ var/list/mechtoys = list(
 	user.set_machine(src)
 	post_signal("supply")
 
-	var/dat
-	if (temp)
-		dat = temp
-	else
-		dat += {"<BR><B>Supply shuttle</B><HR>
-		\nLocation: [supply_shuttle.moving ? "Moving to station ([supply_shuttle.eta] Mins.)":supply_shuttle.at_station ? "Station":"Away"]<BR>
-		<HR>\nAvailable Credits: [current_acct ? current_acct.fmtBalance() : "N/A"]<BR>\n<BR>
-		[supply_shuttle.moving ? "\n*Must be away to order items*<BR>\n<BR>":supply_shuttle.at_station ? "\n*Must be away to order items*<BR>\n<BR>":"\n<A href='?src=\ref[src];order=categories'>Order items</A><BR>\n<BR>"]
-		[supply_shuttle.moving ? "\n*Shuttle already called*<BR>\n<BR>":supply_shuttle.at_station ? "\n<A href='?src=\ref[src];send=1'>Send away</A><BR>\n<BR>":"\n<A href='?src=\ref[src];send=1'>Send to station</A><BR>\n<BR>"]
-		\n<A href='?src=\ref[src];viewrequests=1'>View requests</A><BR>\n<BR>
-		\n<A href='?src=\ref[src];vieworders=1'>View orders</A><BR>\n<BR>
-		\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
+	ui_interact(user)
 
-	user << browse(dat, "window=computer;size=575x450")
 	onclose(user, "computer")
 	return
 
@@ -609,6 +631,55 @@ var/list/mechtoys = list(
 	else
 		return ..()
 
+/obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+	// data to send to ui
+	var/data[0]
+	// make assoc list for supply groups because either I'm retarded or nanoui is retarded
+	var/supply_group_data[0]
+	for(var/i = 1; i <= all_supply_groups.len; i++)
+		supply_group_data.Add(list(list("category" = all_supply_groups[i])))
+	data["all_supply_groups"] = supply_group_data
+	data["last_viewed_group"] = last_viewed_group
+
+	// list of packs we are displaying
+	var/packs_list[0]
+	for(var/set_name in supply_shuttle.supply_packs)
+		var/datum/supply_packs/pack = supply_shuttle.supply_packs[set_name]
+		// Check if the pack is allowed to be shown
+		if((pack.hidden && src.hacked) || (pack.contraband && src.can_order_contraband) || (!pack.contraband && !pack.hidden))
+			if(last_viewed_group == pack.group)
+				packs_list.Add(list(list("name" = pack.name, "amount" = pack.amount, "cost" = pack.cost, "command1" = list("doorder" = "[set_name]0"), "command2" = list("doorder" = "[set_name]1"))))
+				// command1 is for a single crate order, command2 is for multi crate order
+
+	data["supply_packs"] = packs_list
+
+	var/requests_list[0]
+	for(var/set_name in supply_shuttle.requestlist)
+		var/datum/supply_order/SO = set_name
+		if(SO)
+			if(!SO.comment)
+				SO.comment = "No reason provided."
+			requests_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment, "command1" = list("confirmorder" = SO.ordernum), "command2" = list("rreq" = SO.ordernum))))
+	data["requests"] = requests_list
+
+	var/orders_list[0]
+	for(var/set_name in supply_shuttle.shoppinglist)
+		var/datum/supply_order/SO = set_name
+		if(SO)
+			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
+	data["orders"] = orders_list
+
+	data["money"] = current_acct.fmtBalance()
+	data["send"] = list("send" = 1)
+	data["moving"] = supply_shuttle.moving
+	data["at_station"] = supply_shuttle.at_station
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	if (!ui)
+		ui = new(user, src, ui_key, "supply_console.tmpl", name, SCREEN_WIDTH, SCREEN_HEIGHT)
+		ui.set_initial_data(data)
+		ui.open()
+
 /obj/machinery/computer/supplycomp/Topic(href, href_list)
 
 	if(!supply_shuttle)
@@ -619,66 +690,37 @@ var/list/mechtoys = list(
 	//Calling the shuttle
 	if(href_list["send"])
 		if(!map.linked_to_centcomm)
-			temp = "You aren't able to establish contact with central command, so the shuttle won't move. <BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
+			to_chat(usr, "<span class='warning'>You aren't able to establish contact with central command, so the shuttle won't move.</span>")
 		else if(!supply_shuttle.can_move())
-			temp = "For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
+			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.</span>")
 		else if(supply_shuttle.at_station)
 			supply_shuttle.moving = -1
 			supply_shuttle.sell()
 			supply_shuttle.send()
-			temp = "The supply shuttle has departed.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
 		else
 			supply_shuttle.moving = 1
 			supply_shuttle.buy()
 			supply_shuttle.eta_timeofday = (world.timeofday + supply_shuttle.movetime) % 864000
-			temp = "The supply shuttle has been called and will arrive in [round(supply_shuttle.movetime/600,1)] minutes.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
 			post_signal("supply")
-	else if (href_list["order"])
-		if(supply_shuttle.moving)
-			return
-		if(href_list["order"] == "categories")
-			//all_supply_groups
-			//Request what?
-			last_viewed_group = "categories"
-			temp = {"<b>Available credits: [current_acct ? current_acct.fmtBalance() : "PANIC"]</b><BR>
-				<A href='?src=\ref[src];mainmenu=1'>Main Menu</A><HR><BR><BR>
-				<b>Select a category</b><BR><BR>"}
-			for(var/supply_group_name in all_supply_groups )
-				temp += "<A href='?src=\ref[src];order=[supply_group_name]'>[supply_group_name]</A><BR>"
-		else
-			last_viewed_group = href_list["order"]
-			temp = {"<b>Available credits: [current_acct ? current_acct.fmtBalance() : "PANIC"]</b><BR>
-				<A href='?src=\ref[src];order=categories'>Back to all categories</A><HR><BR><BR>
-				<b>Request from: [last_viewed_group]</b><BR><BR>"}
-			for(var/supply_name in supply_shuttle.supply_packs )
-				var/datum/supply_packs/N = supply_shuttle.supply_packs[supply_name]
-				if((N.hidden && !hacked) || (N.contraband && !can_order_contraband) || N.group != last_viewed_group)
-					continue								//Have to send the type instead of a reference to
-				temp += "<A href='?src=\ref[src];doorder=[supply_name]'>[supply_name]</A> Cost: [N.cost]<BR>"		//the obj because it would get caught by the garbage
-		/*temp = "Supply points: [supply_shuttle.points]<BR><HR><BR>Request what?<BR><BR>"
-		for(var/supply_name in supply_shuttle.supply_packs )
-			var/datum/supply_packs/N = supply_shuttle.supply_packs[supply_name]
-			if(N.hidden && !hacked)
-				continue
-			if(N.contraband && !can_order_contraband)
-				continue
-			temp += "<A href='?src=\ref[src];doorder=[supply_name]'>[supply_name]</A> Cost: [N.cost]<BR>"    //the obj because it would get caught by the garbage
-		temp += "<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"*/
+		
 	else if (href_list["doorder"])
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
 			return
+
+		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/multi = text2num(copytext(href_list["doorder"], -1))
+		if(!isnum(multi))
+			return
 		//Find the correct supply_pack datum
-		var/datum/supply_packs/P = supply_shuttle.supply_packs[href_list["doorder"]]
+		var/datum/supply_packs/P = supply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
-		var/timeout = world.time + 600
-		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
-		if(world.time > timeout)
-			return
-		if(!reason)
-			return
+		var/crates = 1
+		if(multi)
+			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
+			crates = Clamp(round(text2num(tempcount)), 1, 20)
 		var/idname = "*None Provided*"
 		var/idrank = "*None Provided*"
 		var/datum/money_account/account
@@ -691,13 +733,30 @@ var/list/mechtoys = list(
 			else
 				to_chat(usr, "[bicon(src)]<span class='warning'>Please wear an ID with an associated bank account.</span>")
 				return
-			to_chat(usr, "[bicon(src)]<span class='notice'>Your request has been saved. The transaction will be performed to your bank account when it has been accepted by cargo staff.</span>")
-			if(account && (account.money < P.cost))
-				to_chat(usr, "[bicon(src)]<span class='warning'>Your bank account doesn't have enough funds to order this pack. Your request will be on hold until you provide your bank account with the necessary funds.</span>")
 		else if(issilicon(usr))
 			idname = usr.real_name
 			account = station_account
-		supply_shuttle.ordernum++
+
+		// Calculate money tied up in requests
+		var/total_money_req = 0
+		for(var/i = 1; i <= length(supply_shuttle.requestlist); i++)
+			var/datum/supply_order/R = supply_shuttle.requestlist[i]
+			var/datum/money_account/R_acc = R.account
+			if(R_acc.account_number == account.account_number)
+				var/datum/supply_packs/R_pack = R.object
+				total_money_req += R_pack.cost + SUPPLY_TAX
+		// check they can afford the order
+		if((P.cost + SUPPLY_TAX) * crates + total_money_req > account.money)
+			var/max_crates = round((account.money - total_money_req) / (P.cost + SUPPLY_TAX))
+			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
+			return
+		var/timeout = world.time + 600
+		var/reason = copytext(sanitize(input(usr, "Reason:", "Why do you require this item?", "") as null|text), 1, MAX_MESSAGE_LEN)
+		if(world.time > timeout)
+			return
+		if(!reason)
+			return
+
 		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(loc)
 		reqform.name = "[P.name] Requisition Form - [idname], [idrank]"
 		reqform.info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
@@ -706,6 +765,7 @@ var/list/mechtoys = list(
 			RANK: [idrank]<br>
 			REASON: [reason]<br>
 			SUPPLY CRATE TYPE: [P.name]<br>
+			NUMBER OF CRATES: [crates]<br>
 			ACCESS RESTRICTION: [get_access_desc(P.access)]<br>
 			CONTENTS:<br>"}
 		reqform.info += P.manifest
@@ -714,14 +774,17 @@ var/list/mechtoys = list(
 		reqform.update_icon()	//Fix for appearing blank when printed.
 		reqtime = (world.time + 5) % 1e5
 		//make our supply_order datum
-		var/datum/supply_order/O = new /datum/supply_order()
-		O.ordernum = supply_shuttle.ordernum
-		O.object = P
-		O.orderedby = idname
-		O.account = account
-		supply_shuttle.requestlist += O
-		temp = {"Order request placed.<BR>
-			<BR><A href='?src=\ref[src];order=[last_viewed_group]'>Back</A> | <A href='?src=\ref[src];mainmenu=1'>Main Menu</A> | <A href='?src=\ref[src];confirmorder=[O.ordernum]'>Authorize Order</A>"}
+		for(var/i = 1; i <= crates; i++)
+			supply_shuttle.ordernum++
+			var/datum/supply_order/O = new /datum/supply_order()
+			O.ordernum = supply_shuttle.ordernum
+			O.object = P
+			O.orderedby = idname
+			O.account = account
+			O.comment = reason
+
+			supply_shuttle.requestlist += O
+
 	else if(href_list["confirmorder"])
 		//Find the correct supply_order datum
 		var/ordernum = text2num(href_list["confirmorder"])
@@ -729,71 +792,38 @@ var/list/mechtoys = list(
 		var/datum/supply_packs/P
 		var/datum/money_account/A
 		var/datum/money_account/cargo_acct = department_accounts["Cargo"]
-		temp = "Invalid Request. <br /><A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
 		for(var/i=1, i<=supply_shuttle.requestlist.len, i++)
 			var/datum/supply_order/SO = supply_shuttle.requestlist[i]
 			if(SO.ordernum == ordernum)
 				O = SO
 				P = O.object
 				A = SO.account
-				if(A && A.money >= P.cost)
+				if(A && A.money >= P.cost + SUPPLY_TAX)
 					supply_shuttle.requestlist.Cut(i,i+1)
-					var/cargo_share = round((P.cost/100)*20)
-					var/centcom_share = P.cost-cargo_share
+					var/cargo_share = round(((P.cost)/100)*20)
+					var/centcom_share = (P.cost)-cargo_share
 					A.charge(centcom_share,null,"Supply Order #[SO.ordernum] ([P.name])",src.name,dest_name = "CentComm")
 					A.charge(cargo_share,cargo_acct,"Order Tax",src.name)
 					supply_shuttle.shoppinglist += O
-					temp = {"Thanks for your order.<BR>
-						<BR><A href='?src=\ref[src];viewrequests=1'>Back</A> <A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"}
 				else
-					temp = {"Not enough credit.<BR>
-						<BR><A href='?src=\ref[src];viewrequests=1'>Back</A> <A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"}
+					to_chat(usr, "<span class='warning'>[SO.orderedby] does not have enough funds for this request.</span>")
 				break
-	else if (href_list["vieworders"])
-		temp = "Current approved orders: <BR><BR>"
-		for(var/S in supply_shuttle.shoppinglist)
-			var/datum/supply_order/SO = S
-			temp += "#[SO.ordernum] - [SO.object.name] approved by [SO.orderedby][SO.comment ? " ([SO.comment])":""]<BR>"// <A href='?src=\ref[src];cancelorder=[S]'>(Cancel)</A><BR>"
-		temp += "<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
-/*
-	else if (href_list["cancelorder"])
-		var/datum/supply_order/remove_supply = href_list["cancelorder"]
-		supply_shuttle_shoppinglist -= remove_supply
-		supply_shuttle_points += remove_supply.object.cost
-		temp += "Canceled: [remove_supply.object.name]<BR><BR><BR>"
-		for(var/S in supply_shuttle_shoppinglist)
-			var/datum/supply_order/SO = S
-			temp += "[SO.object.name] approved by [SO.orderedby][SO.comment ? " ([SO.comment])":""] <A href='?src=\ref[src];cancelorder=[S]'>(Cancel)</A><BR>"
-		temp += "<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
-*/
-	else if (href_list["viewrequests"])
-		temp = "Current requests: <BR><BR>"
-		for(var/S in supply_shuttle.requestlist)
-			var/datum/supply_order/SO = S
-			temp += "#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]  [supply_shuttle.moving ? "":supply_shuttle.at_station ? "":"<A href='?src=\ref[src];confirmorder=[SO.ordernum]'>Approve</A> <A href='?src=\ref[src];rreq=[SO.ordernum]'>Remove</A>"]<BR>"
-
-
-		temp += {"<BR><A href='?src=\ref[src];clearreq=1'>Clear list</A>
-			<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"}
 	else if (href_list["rreq"])
 		var/ordernum = text2num(href_list["rreq"])
-		temp = "Invalid Request.<BR>"
 		for(var/i=1, i<=supply_shuttle.requestlist.len, i++)
 			var/datum/supply_order/SO = supply_shuttle.requestlist[i]
 			if(SO.ordernum == ordernum)
 				supply_shuttle.requestlist.Cut(i,i+1)
-				temp = "Request removed.<BR>"
 				break
-		temp += "<BR><A href='?src=\ref[src];viewrequests=1'>Back</A> <A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
 
-	else if (href_list["clearreq"])
-		supply_shuttle.requestlist.len = 0
+	else if (href_list["last_viewed_group"])
+		last_viewed_group = href_list["last_viewed_group"]
 
-		temp = {"List cleared.<BR>
-			<BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"}
-	else if (href_list["mainmenu"])
-		temp = null
-
+	else if (href_list["close"])
+		if(usr.machine == src)
+			usr.unset_machine()
+		return 1
+		
 	add_fingerprint(usr)
 	updateUsrDialog()
 	return
