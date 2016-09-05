@@ -890,29 +890,37 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	if (mob.reagents.get_reagent_amount(TRICORDRAZINE) < 1)
 		mob.reagents.add_reagent(TRICORDRAZINE, 1)
 
-/datum/disease/effect/babel
+/datum/disease2/effect/babel
 	name = "Babel Syndrome"
 	stage = 4
 	var/list/original_languages = list()
 
 
-/datum/disease/effect/babel/activate(var/mob/living/carbon/H,var/multiplier)
-    if(H.languages.len <= 1)
-        to_chat(H, "You realize your knowledge of language is just fine, and that you were panicking over nothing.")
-        return
+/datum/disease2/effect/babel/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(mob.languages.len <= 1)
+		to_chat(mob, "You realize your knowledge of language is just fine, and that you were panicking over nothing.")
+		return
 
-    while(H.languages.len > 1)
-        var/datum/language/L = pick(H.languages)
-        original_languages += L.name
-        H.remove_language(L)
+	while(mob.languages.len > 0)
+		var/datum/language/L = pick(mob.languages)
+		original_languages += L.name
+		mob.remove_language(L)
 
-    var/last_known_language = H.languages[1]
-    to_chat(H, "You can't seem to remember any language but [last_known_language]. Odd.")
+	var/list/new_languages = list()
+	for(var/L in all_languages)
+		var/datum/language/lang = all_languages[L]
+		if(!(lang.flags & RESTRICTED))
+			new_languages += lang.name
 
-/datum/disease/effect/babel/deactivate(var/mob/living/carbon/H,var/multiplier)
-    if(original_languages.len)
-        for(var/forgotten in original_languages)
-            H.add_language(forgotten)
+	var/picked_lang = pick(new_languages)
+	mob.add_language(picked_lang)
 
-        to_chat(H, "Suddenly, your knowledge of languages comes back to you.")
-    ..()
+	to_chat(mob, "You can't seem to remember any language but [picked_lang]. Odd.")
+
+/datum/disease2/effect/babel/deactivate(var/mob/living/carbon/mob,var/multiplier)
+	if(original_languages.len)
+		for(var/forgotten in original_languages)
+			mob.add_language(forgotten)
+
+		to_chat(mob, "Suddenly, your knowledge of languages comes back to you.")
+	..()
